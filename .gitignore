@@ -4,3 +4,13 @@ __pycache__/
 .venv/
 tmp/
 *.swp
+
+# Symlinks/Local Config
+gemini_settings.json
+HomeLabAI_Dev
+
+# Editors
+.vscode/
+
+# Python
+*.pyc
