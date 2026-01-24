@@ -1,0 +1,169 @@
+:root {
+    --bg-color: #1a1a1a;
+    --sidebar-bg: #252526;
+    --text-color: #e0e0e0;
+    --heading-color: #ffffff;
+    --accent-color: #4daafc;
+    --border-color: #3e3e42;
+    --code-bg: #2d2d2d;
+    --hover-color: #37373d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Navigation */
+nav {
+    width: 300px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+nav h1 {
+    font-size: 1.2rem;
+    color: var(--heading-color);
+    margin-bottom: 5px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+}
+
+nav .subtitle {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+nav h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    margin-bottom: 4px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+nav a:hover {
+    background-color: var(--hover-color);
+    color: var(--heading-color);
+}
+
+nav a.mission-link {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+/* Main Content */
+main {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 40px 60px;
+    max-width: 1200px; /* Readability limit */
+}
+
+section {
+    margin-bottom: 60px;
+    scroll-margin-top: 40px; /* Offset for anchors */
+}
+
+h2.section-title {
+    font-size: 2rem;
+    color: var(--heading-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+article {
+    margin-bottom: 40px;
+}
+
+article h3 {
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+article .meta {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 15px;
+    font-family: monospace;
+}
+
+p {
+    margin-bottom: 16px;
+    max-width: 80ch; /* Optimal reading width */
+}
+
+code {
+    background-color: var(--code-bg);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+}
+
+ul.tbd-list {
+    color: #777;
+    font-style: italic;
+    border-left: 3px solid var(--border-color);
+    padding-left: 20px;
+}
+
+/* Scrollbar styling for Webkit */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
