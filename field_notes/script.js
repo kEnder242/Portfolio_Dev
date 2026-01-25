@@ -1,21 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Quick Filter
+    // 1. Load Search Index
+    let searchIndex = {};
+    fetch('search_index.json')
+        .then(response => response.json())
+        .then(data => {
+            searchIndex = data;
+        })
+        .catch(err => console.error('Error loading search index:', err));
+
+    // 2. Quick Filter
     const searchInput = document.getElementById('nav-filter');
-    // Select all list items in the nav, but exclude the Mission Control links if we want them to always stay visible,
-    // or include them. Let's include all for now, but maybe we want to keep headers visible?
-    // A simple approach: filter LI elements.
     const navLists = document.querySelectorAll('nav ul');
     
     searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
+        const term = e.target.value.toLowerCase().trim();
+        
+        // Find ID matches from the index
+        let matchedIds = new Set();
+        if (term && searchIndex[term]) {
+            searchIndex[term].forEach(id => matchedIds.add(id));
+        }
+
+        // Also check if the term partially matches any index keys (fuzzy-ish)
+        if (term) {
+            Object.keys(searchIndex).forEach(key => {
+                if (key.includes(term)) {
+                    searchIndex[key].forEach(id => matchedIds.add(id));
+                }
+            });
+        }
         
         navLists.forEach(list => {
             const items = list.querySelectorAll('li');
             let hasVisibleItems = false;
             
             items.forEach(item => {
+                const link = item.querySelector('a');
                 const text = item.textContent.toLowerCase();
-                if (text.includes(term)) {
+                const href = link ? link.getAttribute('href') : '';
+                const id = href.startsWith('#') ? href.substring(1) : '';
+
+                // Visible if:
+                // 1. Text matches term
+                // 2. ID is in the matched set from JSON index
+                if (text.includes(term) || matchedIds.has(id)) {
                     item.style.display = '';
                     hasVisibleItems = true;
                 } else {
@@ -23,17 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Optional: Hide headers if no items are visible in that section
-            // This requires the H2 to be associated with the UL. 
-            // Given the HTML structure (H2 followed by UL), we can try:
+            // Hide headers if no items are visible in that section
             const prevHeader = list.previousElementSibling;
-            if (prevHeader && prevHeader.tagName === 'H2') {
+            if (prevHeader && (prevHeader.tagName === 'H2')) {
                 prevHeader.style.display = hasVisibleItems || term === '' ? '' : 'none';
             }
         });
     });
 
-    // 2. Permalink Anchors
+    // 3. Permalink Anchors
     const articles = document.querySelectorAll('article');
     articles.forEach(article => {
         const id = article.id;
@@ -44,10 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
             anchor.className = 'permalink';
             anchor.textContent = '#';
             anchor.ariaLabel = 'Permalink to this section';
-            
-            // Add click listener to smooth scroll (optional, default browser behavior is usually fine)
-            // But we specifically want it to update URL
-            
             heading.appendChild(anchor);
         }
     });

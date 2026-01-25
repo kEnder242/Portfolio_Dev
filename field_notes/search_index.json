@@ -1,0 +1,23 @@
+{
+    "ipmi": ["rakp-security", "rmcp-optimization", "cygwin-wall", "failed-demo"],
+    "bmc": ["rakp-security", "rmcp-optimization", "synergy"],
+    "security": ["rakp-security", "texas-power-on", "failed-demo", "conflict-management"],
+    "python": ["rapl-matplotlib", "pythonsv-thrash", "venv-glue"],
+    "automation": ["xslt-parsing", "visa-tool", "serial-fragments", "scm-integration", "pythonsv-thrash"],
+    "validation": ["reading-robot", "negative-testing", "synergy", "serial-fragments", "count-oks"],
+    "debug": ["visa-tool", "reading-robot", "first-error", "crazy-callbacks"],
+    "architecture": ["visa-tool", "xslt-parsing", "config-file", "kernel-patch", "scm-integration"],
+    "leadership": ["texas-power-on", "scm-integration", "estimates", "conflict-management", "count-oks"],
+    "fail": ["failed-demo", "first-error", "cygwin-wall"],
+    "ddr": ["fleet-scale"],
+    "bios": ["fleet-scale"],
+    "yield": ["negative-testing"],
+    "cve": ["rakp-security"],
+    "kernel": ["kernel-patch"],
+    "networking": ["rmcp-optimization", "throughput-gotchas", "crazy-callbacks"],
+    "hardware": ["quakecon", "fleet-scale", "negative-testing"],
+    "tools": ["rapl-matplotlib", "curl-postman", "venv-glue", "visa-tool"],
+    "legacy": ["ti-basic", "quakecon", "cygwin-wall"],
+    "2019": ["rapl-matplotlib"],
+    "2001": ["quakecon"]
+}
