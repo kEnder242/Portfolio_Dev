@@ -22,7 +22,8 @@
 ...
 - [x] **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
 - [x] **Refinement (v2.0):** Added Quick-Filter, Permalinks, Print Mode (@media print), and simulated Status Indicators.
-- [x] **Search Index (v2.1):** Implemented `search_index.json` for "silent tag" filtering (IPMI, BMC, Yield) grounded in War Stories.
+- [x] **Search Index (v2.1):** Implemented `search_index.json` for "silent tag" filtering.
+- [x] **Timeline (v2.2):** Created `timeline.html` visualizing 18 years of "Pinky-scanned" data (Strategy vs. Tactics).
 
 ## 🚧 PHASE 3: OBSERVABILITY LAB (Complete)
 **Master Plan:** [PHASE_3_LEARNING_PRIMER.md](./PHASE_3_LEARNING_PRIMER.md)

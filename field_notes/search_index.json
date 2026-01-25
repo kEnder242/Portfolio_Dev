@@ -1,23 +1,196 @@
 {
-    "ipmi": ["rakp-security", "rmcp-optimization", "cygwin-wall", "failed-demo"],
-    "bmc": ["rakp-security", "rmcp-optimization", "synergy"],
-    "security": ["rakp-security", "texas-power-on", "failed-demo", "conflict-management"],
-    "python": ["rapl-matplotlib", "pythonsv-thrash", "venv-glue"],
-    "automation": ["xslt-parsing", "visa-tool", "serial-fragments", "scm-integration", "pythonsv-thrash"],
-    "validation": ["reading-robot", "negative-testing", "synergy", "serial-fragments", "count-oks"],
-    "debug": ["visa-tool", "reading-robot", "first-error", "crazy-callbacks"],
-    "architecture": ["visa-tool", "xslt-parsing", "config-file", "kernel-patch", "scm-integration"],
-    "leadership": ["texas-power-on", "scm-integration", "estimates", "conflict-management", "count-oks"],
-    "fail": ["failed-demo", "first-error", "cygwin-wall"],
-    "ddr": ["fleet-scale"],
-    "bios": ["fleet-scale"],
-    "yield": ["negative-testing"],
-    "cve": ["rakp-security"],
-    "kernel": ["kernel-patch"],
-    "networking": ["rmcp-optimization", "throughput-gotchas", "crazy-callbacks"],
-    "hardware": ["quakecon", "fleet-scale", "negative-testing"],
-    "tools": ["rapl-matplotlib", "curl-postman", "venv-glue", "visa-tool"],
-    "legacy": ["ti-basic", "quakecon", "cygwin-wall"],
-    "2019": ["rapl-matplotlib"],
-    "2001": ["quakecon"]
+  "ipmi": [
+    "rakp-security",
+    "rmcp-optimization",
+    "cygwin-wall",
+    "failed-demo"
+  ],
+  "bmc": [
+    "rakp-security",
+    "rmcp-optimization",
+    "synergy"
+  ],
+  "security": [
+    "rakp-security",
+    "texas-power-on",
+    "failed-demo",
+    "conflict-management"
+  ],
+  "python": [
+    "rapl-matplotlib",
+    "pythonsv-thrash",
+    "venv-glue"
+  ],
+  "automation": [
+    "xslt-parsing",
+    "visa-tool",
+    "serial-fragments",
+    "scm-integration",
+    "pythonsv-thrash"
+  ],
+  "validation": [
+    "reading-robot",
+    "negative-testing",
+    "synergy",
+    "serial-fragments",
+    "count-oks"
+  ],
+  "debug": [
+    "visa-tool",
+    "reading-robot",
+    "first-error",
+    "crazy-callbacks"
+  ],
+  "architecture": [
+    "visa-tool",
+    "xslt-parsing",
+    "config-file",
+    "kernel-patch",
+    "scm-integration"
+  ],
+  "leadership": [
+    "texas-power-on",
+    "scm-integration",
+    "estimates",
+    "conflict-management",
+    "count-oks"
+  ],
+  "fail": [
+    "failed-demo",
+    "first-error",
+    "cygwin-wall"
+  ],
+  "ddr": [
+    "fleet-scale"
+  ],
+  "bios": [
+    "fleet-scale",
+    "xslt-parsing",
+    "config-file",
+    "visa-tool"
+  ],
+  "yield": [
+    "negative-testing"
+  ],
+  "cve": [
+    "rakp-security"
+  ],
+  "kernel": [
+    "kernel-patch"
+  ],
+  "networking": [
+    "rmcp-optimization",
+    "throughput-gotchas",
+    "crazy-callbacks"
+  ],
+  "hardware": [
+    "quakecon",
+    "fleet-scale",
+    "negative-testing"
+  ],
+  "tools": [
+    "rapl-matplotlib",
+    "curl-postman",
+    "venv-glue",
+    "visa-tool"
+  ],
+  "legacy": [
+    "ti-basic",
+    "quakecon",
+    "cygwin-wall"
+  ],
+  "2019": [
+    "rapl-matplotlib"
+  ],
+  "2001": [
+    "quakecon"
+  ],
+  "firmware testing": [
+    "cygwin-wall",
+    "rmcp-optimization"
+  ],
+  "lan": [
+    "cygwin-wall",
+    "rmcp-optimization"
+  ],
+  "api": [
+    "cygwin-wall",
+    "rmcp-optimization"
+  ],
+  "npk": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool"
+  ],
+  "ipc": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool"
+  ],
+  "trace32": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool"
+  ],
+  "simics": [
+    "xslt-parsing",
+    "negative-testing",
+    "visa-tool",
+    "reading-robot",
+    "config-file"
+  ],
+  "fulsim": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool",
+    "reading-robot"
+  ],
+  "crc mismatch": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool",
+    "reading-robot"
+  ],
+  "pci cfg write": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool",
+    "reading-robot"
+  ],
+  "onstatsupdate": [
+    "xslt-parsing",
+    "config-file",
+    "visa-tool",
+    "reading-robot"
+  ],
+  "hardware validation": [
+    "fleet-scale"
+  ],
+  "system debug": [
+    "fleet-scale"
+  ],
+  "firmware validation": [
+    "fleet-scale"
+  ],
+  "memory controller validation": [
+    "fleet-scale"
+  ],
+  "pcie validation": [
+    "fleet-scale"
+  ],
+  "dmr": [
+    "negative-testing"
+  ],
+  "peci": [
+    "negative-testing"
+  ],
+  "mctp": [
+    "negative-testing"
+  ],
+  "pythonsv": [
+    "negative-testing"
+  ],
+  "kayak": [
+    "negative-testing"
+  ]
 }

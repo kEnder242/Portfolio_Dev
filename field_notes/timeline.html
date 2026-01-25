@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline | Jason Allred</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Timeline Overrides */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* The Center Line */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--border-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .year-block {
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            padding: 10px 40px;
+            margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        /* Left side (Strategy) */
+        .year-block.left {
+            left: 0;
+            text-align: right;
+        }
+
+        /* Right side (Tactics) */
+        .year-block.right {
+            left: 50%;
+            text-align: left;
+        }
+
+        /* The Year Circle */
+        .year-badge {
+            position: absolute;
+            top: 15px;
+            right: -25px; /* For left items */
+            background-color: var(--accent-color);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            z-index: 10;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            border: 4px solid var(--bg-color);
+        }
+
+        .year-block.right .year-badge {
+            left: -25px;
+        }
+
+        /* Content Cards */
+        .content {
+            padding: 20px;
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .left .content { border-right: 4px solid var(--accent-color); }
+        .right .content { border-left: 4px solid var(--accent-color); }
+
+        .theme-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .theme-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--heading-color);
+        }
+
+        .event-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .event-list li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        .event-list li:last-child { border-bottom: none; }
+
+        .event-date {
+            font-family: monospace;
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 600px) {
+            .timeline-container::after { left: 31px; }
+            .year-block { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .year-block.left { text-align: left; }
+            .year-block.left, .year-block.right { left: 0; }
+            .year-badge { left: 6px !important; } /* Force badge to left */
+            .left .content { border-right: none; border-left: 4px solid var(--accent-color); }
+        }
+        
+        /* Navigation Override for full width if desired, but let's keep sidebar */
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>The Field Manual</h1>
+        <div class="subtitle">Jason Allred</div>
+        <a href="index.html">← Back to Dashboard</a>
+        
+        <h2>Timeline Navigation</h2>
+        <ul id="timeline-nav">
+            <!-- Populated by JS -->
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2 class="section-title">Career Timeline (Strategy vs. Tactics)</h2>
+            <p>A synthesis of 18 years of performance reviews (Strategy) and raw engineering logs (Tactics), correlated by Pinky (Mistral-7B).</p>
+            
+            <div class="timeline-container" id="timeline-root">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('pinky_index_full.json')
+                .then(r => r.json())
+                .then(data => {
+                    const root = document.getElementById('timeline-root');
+                    const nav = document.getElementById('timeline-nav');
+                    
+                    // Sort years descending
+                    const years = Object.keys(data).sort((a, b) => b - a);
+
+                    years.forEach(year => {
+                        const item = data[year];
+                        if (year === "Unknown") return;
+
+                        // 1. Build Nav Link
+                        const navLi = document.createElement('li');
+                        navLi.innerHTML = `<a href="#year-${year}">${year}</a>`;
+                        nav.appendChild(navLi);
+
+                        // 2. Build Timeline Blocks
+                        
+                        // LEFT SIDE: Strategy
+                        const leftBlock = document.createElement('div');
+                        leftBlock.className = 'year-block left';
+                        leftBlock.id = `year-${year}`;
+                        leftBlock.innerHTML = `
+                            <div class="year-badge">${year}</div>
+                            <div class="content">
+                                <div class="theme-header">Strategic Theme</div>
+                                <div class="theme-text">${item.strategic_theme || "No strategic data available."}</div>
+                                <div class="theme-header">Technical Focus</div>
+                                <div>${(item.technical_tags || []).map(t => `<code>${t}</code>`).join(' ')}</div>
+                            </div>
+                        `;
+                        root.appendChild(leftBlock);
+
+                        // RIGHT SIDE: Tactics
+                        const rightBlock = document.createElement('div');
+                        rightBlock.className = 'year-block right';
+                        rightBlock.innerHTML = `
+                            <div class="content">
+                                <div class="theme-header">Key Tactical Events</div>
+                                <ul class="event-list">
+                                    ${(item.key_events || []).map(e => `
+                                        <li>
+                                            <span class="event-date">${e.date}</span>
+                                            ${e.summary}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        root.appendChild(rightBlock);
+                    });
+                })
+                .catch(e => console.error("Failed to load timeline:", e));
+        });
+    </script>
+</body>
+</html>
