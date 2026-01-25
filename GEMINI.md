@@ -22,12 +22,12 @@
 ...
 - [x] **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
 
-## 🚧 PHASE 3: OBSERVABILITY LAB (Active)
+## 🚧 PHASE 3: OBSERVABILITY LAB (Complete)
 **Master Plan:** [PHASE_3_LEARNING_PRIMER.md](./PHASE_3_LEARNING_PRIMER.md)
 - [x] **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
 - [x] **Telemetry:** RAPL-Sim custom exporter reading real system thermal/load data.
 - [x] **Access:** `monitor.jason-lab.dev` mapped and secured (Admin Only).
-- [ ] **Visualization:** Create "Field Notes" Dashboard in Grafana.
+- [x] **Visualization:** Grafana is live; user has verified login and data flow (DNS propagation final step).
 
 ## 🎯 THE MISSION
 To integrate the collection of technical notes and stories into a cohesive "Technical Dashboard." This is a full-spectrum integration—not a "best of" list. It must reflect the rigor of a Validation Engineer.
