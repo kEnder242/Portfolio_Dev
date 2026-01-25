@@ -73,4 +73,30 @@ document.addEventListener('DOMContentLoaded', () => {
             heading.appendChild(anchor);
         }
     });
+
+    // 4. Mobile Menu Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const nav = document.getElementById('sidebar');
+
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link (optional UX improvement)
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+
+        // Close when clicking outside (on main content)
+        document.querySelector('main').addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                nav.classList.remove('active');
+            }
+        });
+    }
 });

@@ -54,3 +54,25 @@
 2.  Transcribe "War Stories" into semantic HTML in `index.html`.
 3.  Apply CSS styling in `main.css`.
 4.  Launch local preview for user verification.
+
+## Phase 4: AI Integration & Privacy (The "Class 2" Evolution)
+**Goal:** Transform the static site into a "Living Archive" managed by Pinky (Local AI).
+
+### 4.1 Privacy & Governance ("The Censor Node")
+- [ ] **Privacy Filter:** Update `scan_pinky.py` to classify extracted events as `Public`, `Private`, or `Sensitive`.
+- [ ] **Audit Log:** Maintain `privacy_audit.json` to review Pinky's filtering decisions.
+- [ ] **Heuristics:** Train Pinky to recognize PII (names, internal codenames) and scrub them.
+
+### 4.2 The "Slow Burn" (Continuous Refinement)
+- [ ] **Automation:** Systemd timer to run `scan_pinky.py` nightly (3 AM).
+- [ ] **Iterative Indexing:** Pinky re-scans notes to find connections missed in previous passes.
+- [ ] **ChromaDB Sync:** Push `pinky_index_full.json` to HomeLabAI's vector store for voice-query access ("Pinky, when did I work on Simics?").
+
+### 4.3 Interactive Discovery ("Deep Dive")
+- [ ] **Concept:** "Silent Prefetching" on the Timeline.
+- [ ] **Mechanism:** As user scrolls to "2016", browser requests a "Deep Dive" summary from Pinky.
+- [ ] **UX:** Subtle expansion of cards with more context, powered by real-time RAG (requires lightweight backend).
+
+## Phase 5: Visual Polish
+- [ ] **Grafana Landing:** Replace "Welcome" with a live "Lab Pulse" dashboard (Temp, Load, AI Status).
+- [ ] **Mobile Layout:** Ensure sidebars dock cleanly (Done).

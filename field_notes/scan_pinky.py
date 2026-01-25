@@ -97,22 +97,27 @@ def main():
         
         prompt = f"""
         [ROLE]
-        You are 'Pinky', an expert technical archivist.
+        You are 'Pinky', an expert technical archivist and privacy officer.
 
         [STRATEGIC CONTEXT]
-        Use this Resume and Performance Review history to understand the user's career progression and high-level goals:
-        {strategic_context[:4000]}\n
+        Use this Resume and Performance Review history to understand the user's career progression:
+        {strategic_context[:4000]} 
+
         [TASK]
         Analyze the following RAW NOTES from the year {year}.
-        Correlate the raw technical work with the strategic context.
+        1. Correlate raw technical work with the strategic context.
+        2. **PRIVACY CHECK:** You must classify every event. 
+           - "Public": Safe for a public resume/portfolio. Technical achievements, general bug fixes.
+           - "Sensitive": Specific customer names, proprietary internal codenames (that aren't standard industry terms), PII, or personal/embarrassing notes.
         
         Return a JSON object with this structure:
         {{
             "year": "{year}",
-            "strategic_theme": "One sentence linking these notes to the performance review goals.",
+            "strategic_theme": "One sentence summary.",
             "technical_tags": ["Tag1", "Tag2"],
             "key_events": [
-                {{ "date": "YYYY-MM-DD", "summary": "Event description", "evidence": "Quote from notes" }}
+                {{ "date": "YYYY-MM-DD", "summary": "Description", "evidence": "Quote", "sensitivity": "Public" }},
+                {{ "date": "YYYY-MM-DD", "summary": "Internal meeting", "evidence": "Quote", "sensitivity": "Sensitive" }}
             ]
         }}
 
@@ -126,14 +131,42 @@ def main():
         result_text = ask_pinky(prompt, label=year)
         data = extract_json(result_text)
         
-        master_index[year] = data
+        # Privacy Filtering Logic
+        public_data = {
+            "year": data.get("year", year),
+            "strategic_theme": data.get("strategic_theme", ""),
+            "technical_tags": data.get("technical_tags", []),
+            "key_events": []
+        }
         
-        # Incremental Save
+        private_log = []
+
+        for event in data.get("key_events", []):
+            sensitivity = event.get("sensitivity", "Public")
+            if sensitivity == "Public":
+                public_data["key_events"].append(event)
+            else:
+                event["year"] = year
+                private_log.append(event)
+
+        master_index[year] = public_data
+        
+        # Save Private Audit Log (Append Mode or Separate File?)
+        # For now, let's just print to console or save to a separate audit file at the end
+        if private_log:
+            with open("field_notes/privacy_audit.json", "a") as f: # Append for now, but JSON append is tricky. 
+                # Better: Load, Append, Save. But let's keep it simple for v1.
+                # Actually, let's just write lines of JSONL for the audit log.
+                for p_event in private_log:
+                    f.write(json.dumps(p_event) + "\n")
+
+        # Incremental Save of Public Index
         with open("field_notes/pinky_index_full.json", "w") as f:
             json.dump(master_index, f, indent=2)
 
     print("\n--- SCAN COMPLETE ---")
-    print(json.dumps(master_index, indent=2))
+    print(f"Public Index: field_notes/pinky_index_full.json")
+    print(f"Private Audit: field_notes/privacy_audit.json")
 
 if __name__ == "__main__":
     main()
