@@ -74,40 +74,56 @@ def clean_json():
     #   Find Articles associated with that Year (e.g. "visa-tool")
     #   Add "visa-tool" to the "simics" key in search_index.
     
-    new_tags_count = 0
-    
+    # 1. Merge Pinky Index (Full Scan)
+    print("Merging Pinky Index...")
     for year, content in data.items():
         if "technical_tags" not in content: continue
-        
         tags = content["technical_tags"]
-        # Find articles for this year
-        relevant_articles = []
-        for art_id, years in article_year_map.items():
-            if year in years:
-                relevant_articles.append(art_id)
-        
-        if not relevant_articles: continue
+        map_tags_to_articles(tags, year, article_year_map, search_index)
 
-        for tag in tags:
-            tag_lower = tag.lower()
-            if tag_lower not in search_index:
-                search_index[tag_lower] = []
+    # 2. Merge Acronym Map (Hunter Scan)
+    print("Merging Acronym Map...")
+    try:
+        with open("field_notes/acronym_map.json", "r") as f:
+            acronym_map = json.load(f)
             
-            # Add unique articles
-            current_set = set(search_index[tag_lower])
-            for art in relevant_articles:
-                if art not in current_set:
-                    current_set.add(art)
-                    new_tags_count += 1
-            search_index[tag_lower] = list(current_set)
+        for acr, years in acronym_map.items():
+            # Acronyms are tags too
+            for year in years:
+                map_tags_to_articles([acr], year, article_year_map, search_index)
+                
+    except FileNotFoundError:
+        print("No acronym_map.json found, skipping.")
 
     with open("field_notes/pinky_index_full.json", "w") as f:
         json.dump(data, f, indent=2)
         
     with open("field_notes/search_index.json", "w") as f:
-        json.dump(search_index, f, indent=2)
+        # Sort keys for cleanliness
+        sorted_index = {k: sorted(v) for k, v in sorted(search_index.items())}
+        json.dump(sorted_index, f, indent=2)
 
-    print(f"Cleaned JSON and added {new_tags_count} new search hits.")
+    print(f"Cleaned JSON and merged indices.")
+
+def map_tags_to_articles(tags, year, article_map, search_index):
+    # Find articles for this year
+    relevant_articles = []
+    for art_id, years in article_map.items():
+        if year in years:
+            relevant_articles.append(art_id)
+    
+    if not relevant_articles: return
+
+    for tag in tags:
+        tag_lower = tag.lower()
+        if tag_lower not in search_index:
+            search_index[tag_lower] = []
+        
+        # Add unique articles
+        current_set = set(search_index[tag_lower])
+        for art in relevant_articles:
+            current_set.add(art)
+        search_index[tag_lower] = list(current_set)
 
 if __name__ == "__main__":
     clean_json()
