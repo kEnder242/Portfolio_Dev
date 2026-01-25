@@ -167,3 +167,126 @@ ul.tbd-list {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* --- Dashboard 2.0 Additions --- */
+
+/* Search Input */
+#nav-filter {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+#nav-filter:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Status Dots */
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: #555; /* Default/Offline */
+}
+
+.status-dot.online {
+    background-color: #4cd964; /* Green */
+    box-shadow: 0 0 5px rgba(76, 217, 100, 0.4);
+}
+
+/* Permalinks */
+article h3 {
+    position: relative; /* Context for absolute anchor if needed, though inline is fine */
+}
+
+.permalink {
+    margin-left: 10px;
+    font-size: 0.8em;
+    color: #444;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+article h3:hover .permalink {
+    opacity: 1;
+}
+
+.permalink:hover {
+    color: var(--accent-color);
+}
+
+/* Print Friendly Mode */
+@media print {
+    body {
+        display: block;
+        height: auto;
+        overflow: visible;
+        background-color: white;
+        color: black;
+    }
+
+    nav {
+        display: none;
+    }
+
+    main {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+    }
+
+    /* Typography Overrides for Print */
+    h2.section-title {
+        color: black;
+        border-bottom-color: black;
+    }
+
+    article h3 {
+        color: black;
+    }
+
+    article .meta {
+        color: #555;
+        border: 1px solid #ddd;
+        padding: 5px;
+        display: inline-block;
+    }
+
+    p {
+        max-width: 100%;
+        color: black;
+    }
+
+    a {
+        text-decoration: underline;
+        color: black;
+    }
+    
+    .permalink {
+        display: none;
+    }
+
+    /* Page Breaks */
+    article {
+        page-break-inside: avoid;
+    }
+
+    section {
+        page-break-after: always;
+    }
+
+    /* Remove scrollbars */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}

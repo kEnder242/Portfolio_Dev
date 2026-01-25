@@ -12,11 +12,13 @@
         <h1>The Field Manual</h1>
         <div class="subtitle">Jason Allred</div>
 
+        <input type="text" id="nav-filter" placeholder="Filter nodes..." aria-label="Filter navigation">
+
         <h2>Mission Control</h2>
         <ul>
-            <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
-            <li><a href="https://pager.jason-lab.dev" target="_blank" class="mission-link">Pager (Logs)</a></li>
-            <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link">Observability (Grafana)</a></li>
+            <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
+            <li><a href="https://pager.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
+            <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Observability (Grafana)</a></li>
         </ul>
 
         <h2>Systems Architecture</h2>
@@ -315,5 +317,6 @@
 
     </main>
 
+    <script src="script.js"></script>
 </body>
 </html>

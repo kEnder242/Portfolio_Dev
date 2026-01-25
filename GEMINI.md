@@ -21,6 +21,7 @@
 ## 🚧 PHASE 2: FIELD NOTES IMPLEMENTATION (Complete)
 ...
 - [x] **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
+- [x] **Refinement (v2.0):** Added Quick-Filter, Permalinks, Print Mode (@media print), and simulated Status Indicators.
 
 ## 🚧 PHASE 3: OBSERVABILITY LAB (Complete)
 **Master Plan:** [PHASE_3_LEARNING_PRIMER.md](./PHASE_3_LEARNING_PRIMER.md)
