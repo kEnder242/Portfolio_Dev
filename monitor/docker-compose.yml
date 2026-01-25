@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # 1. The Time-Series Database
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: field_prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=15d'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+
+  # 2. The Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: field_grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Change on first login
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+  # 3. The "Base" Telemetry (Real Linux Metrics)
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: field_node_exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring
+
+  # 4. The "RAPL Sim" (Custom Validation Logic)
+  rapl-sim:
+    build: ./rapl_sim
+    container_name: field_rapl_sim
+    volumes:
+      - /sys/class/thermal:/host/sys/class/thermal:ro  # Read real temps
+      - /proc/stat:/host/proc/stat:ro                  # Read real CPU load
+    ports:
+      - "8000:8000"
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

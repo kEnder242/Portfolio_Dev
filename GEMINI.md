@@ -18,14 +18,16 @@
 - **Pinky Location:** `~/HomeLabAI_Dev` (Dev) and `~/AcmeLab` (Runtime).
 - **Google Workspace:** I have native access to Drive/Docs via the `google-workspace` extension.
 
-## 🚧 PHASE 2: FIELD NOTES IMPLEMENTATION (Active)
-**Master Plan:** [FIELD_NOTES_PLAN.md](./FIELD_NOTES_PLAN.md)
-- [x] **Scaffolding:** Directory structure created.
-- [x] **Content:** "War Stories" transcribed to `index.html`.
-- [x] **Styling:** `style.css` applied ("Class 1" Dark Mode).
-- [x] **Verification:** User review of local preview (Live on port 9001).
-- [x] **Deployment:** `field-notes.service` (systemd) is active and tunnel is configured.
-- [ ] **Security:** User to configure Cloudflare Access policy (Manual).
+## 🚧 PHASE 2: FIELD NOTES IMPLEMENTATION (Complete)
+...
+- [x] **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
+
+## 🚧 PHASE 3: OBSERVABILITY LAB (Active)
+**Master Plan:** [PHASE_3_LEARNING_PRIMER.md](./PHASE_3_LEARNING_PRIMER.md)
+- [x] **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
+- [x] **Telemetry:** RAPL-Sim custom exporter reading real system thermal/load data.
+- [x] **Access:** `monitor.jason-lab.dev` mapped and secured (Admin Only).
+- [ ] **Visualization:** Create "Field Notes" Dashboard in Grafana.
 
 ## 🎯 THE MISSION
 To integrate the collection of technical notes and stories into a cohesive "Technical Dashboard." This is a full-spectrum integration—not a "best of" list. It must reflect the rigor of a Validation Engineer.
