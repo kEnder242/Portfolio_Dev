@@ -73,6 +73,25 @@
 - [ ] **Mechanism:** As user scrolls to "2016", browser requests a "Deep Dive" summary from Pinky.
 - [ ] **UX:** Subtle expansion of cards with more context, powered by real-time RAG (requires lightweight backend).
 
-## Phase 5: Visual Polish
-- [ ] **Grafana Landing:** Replace "Welcome" with a live "Lab Pulse" dashboard (Temp, Load, AI Status).
-- [ ] **Mobile Layout:** Ensure sidebars dock cleanly (Done).
+## Phase 5: The "Smoke & Mirrors" Architecture (Refined V3)
+**Goal:** Create a timeline that *feels* alive and reactive without relying on a live AI backend (Class 1 Philosophy).
+
+### 5.1 The "Date-Aware" Scanner (Data Prep)
+- [ ] **Logic Upgrade:** `scan_pinky.py` must parse internal date headers (e.g., "10/12/2016") within `notes_*.txt` files.
+- [ ] **Granularity:** Move from "Yearly Buckets" to "Dated Events".
+- [ ] **Cross-Year Handling:** Detect when a `notes_2016.txt` file actually contains entries from late 2015 or early 2017.
+
+### 5.2 Layered Data Structure
+- [ ] **Schema Change:** Refactor `pinky_index_full.json` to support visibility layers.
+    - **Layer 1 (Surface):** Strategic Themes (Focal Reviews). Always visible.
+    - **Layer 2 (Pop-in):** High-relevance tactical events. appear on hover/scroll.
+    - **Layer 3 (Deep):** Raw log excerpts. Loaded only on "Deep Dive".
+
+### 5.3 The Frontend Trick (Smoke & Mirrors)
+- [ ] **Interaction:** User scrolls timeline -> specific date comes into view -> "Pop-in" events animate into existence.
+- [ ] **Implementation:** Lazy-loaded JSON chunks (e.g., `data/2016_Q3.json`) to keep initial load light.
+
+### 5.4 HomeLabAI Bridge (The Contract)
+- [ ] **Protocol:** Define `HomeLabAI_Integration.md`.
+- [ ] **Direction:** Portfolio *consumes* data prepared by the Lab. Lab *consumes* raw notes via the Portfolio's symlink.
+- [ ] **ChromaDB:** Future target for the "Deep Layer" storage.
