@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=6.2">
+    <link rel="stylesheet" href="style.css?v=7.0">
+    <style>
+        .safe-nav-bar { margin-bottom: 20px; }
+        .safe-btn { color: #888; text-decoration: none; border: 1px solid #444; padding: 5px 10px; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
 
@@ -21,25 +25,36 @@
     </nav>
 
     <main>
+        <div class="safe-nav-bar">
+            <a href="index.html" class="safe-btn">← DASHBOARD</a>
+        </div>
+
+        <div id="sys-console">
+            <div>[INIT] System bootstrap...</div>
+        </div>
+
         <section>
-            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Career Timeline</h2>
+            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">/home/jason/career_history</h2>
             
             <div class="timeline-container" id="tree-root">
                 <div style="color: #666; padding: 20px;">[WAIT] Loading archives...</div>
-            </div>
-
-            <div class="terminal-viewer" id="main-terminal">
-                <div class="terminal-header">LOG VIEWER</div>
-                <div id="terminal-content" style="color: #ccc;">Select a month to query...<span class="cursor"></span></div>
             </div>
         </section>
     </main>
 
     <script>
+        const root = document.getElementById('tree-root');
+        const consoleEl = document.getElementById('sys-console');
         const yearCache = {};
-        let typeInterval;
+        let activeInterval = null;
 
-        // FAIL-SAFE DATA (Inlined to prevent empty screen on fetch fail)
+        function log(msg) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            consoleEl.appendChild(div);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
         const FALLBACK_THEMES = {
             "2024": { "strategic_theme": "Implementing manageability features." },
             "2018": { "strategic_theme": "Hardware validation." },
@@ -48,80 +63,56 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const root = document.getElementById('tree-root');
-            const nav = document.getElementById('timeline-nav');
-            
-            // 1. Mobile Menu
+            // Mobile Menu
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
             if (menuToggle && sidebar) {
-                menuToggle.onclick = (e) => {
-                    sidebar.classList.toggle('active');
-                    e.stopPropagation();
-                };
+                menuToggle.onclick = (e) => { sidebar.classList.toggle('active'); e.stopPropagation(); };
                 document.querySelector('main').onclick = () => sidebar.classList.remove('active');
             }
 
-            // 2. Load Data
+            // Fetch Data
             let fetched = false;
             fetch('data/themes.json?t=' + new Date().getTime())
                 .then(r => r.json())
-                .then(themes => {
-                    fetched = true;
-                    renderYears(themes);
-                })
-                .catch(() => {
-                    if (!fetched) renderYears(FALLBACK_THEMES);
-                });
+                .then(data => { fetched = true; log(`Themes loaded.`); renderYears(data); })
+                .catch(err => { if(!fetched) { log("Fetch failed. Using Fallback."); renderYears(FALLBACK_THEMES); } });
 
-            // 2s Timeout
-            setTimeout(() => {
-                if (!fetched) renderYears(FALLBACK_THEMES);
-            }, 2000);
-
-            function renderYears(themes) {
-                root.innerHTML = "";
-                const sortedYears = Object.keys(themes).sort((a, b) => b - a);
-
-                sortedYears.forEach(year => {
-                    const item = themes[year];
-                    const desc = item.strategic_theme || "Archive active.";
-                    
-                    // Nav Link
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="#year-${year}">./${year}</a>`;
-                    nav.appendChild(li);
-
-                    // Tree Node
-                    const yearNode = document.createElement('div');
-                    yearNode.className = 'tree-year';
-                    yearNode.id = `year-${year}`;
-                    
-                    yearNode.innerHTML = "
-                        <div class=\"year-label\" onclick=\"toggleYear('\'' + year + '\'')\">
-                            <span>${year}</span>
-                            <span style=\"font-size: 0.8rem; opacity: 0.5;\">▼</span>
-                        </div>
-                        <div class=\"year-content\" id=\"content-${year}\">
-                            <div class=\"strategy-block\">
-                                <div class=\"strategy-title\">STRATEGIC THEME</div>
-                                ${desc}
-                            </div>
-                            <ul class=\"file-list\" id=\"files-${year}\">
-                                <li style=\"color: #555;\">Loading...</li>
-                            </ul>
-                        </div>
-                    ";
-                    root.appendChild(yearNode);
-                });
-            }
+            setTimeout(() => { if(!fetched) { log("Timeout. Using Fallback."); renderYears(FALLBACK_THEMES); } }, 2000);
         });
 
-        // Global Scope Functions
+        function renderYears(themes) {
+            root.innerHTML = "";
+            const sortedYears = Object.keys(themes).sort((a, b) => b - a);
+
+            sortedYears.forEach(year => {
+                const item = themes[year];
+                const desc = item.strategic_theme || "Archive active.";
+                const yearNode = document.createElement('div');
+                yearNode.className = 'tree-year';
+                yearNode.id = `year-${year}`;
+                
+                // Tree Layout (Matches CSS)
+                yearNode.innerHTML = `
+                    <div class="year-label" onclick="window.toggleYear('${year}')">
+                        ${year}
+                    </div>
+                    <div class="year-content" id="content-${year}">
+                        <div class="strategy-block">
+                            <span style="color: #4daafc; font-weight: bold;">STRATEGY:</span> ${desc}
+                        </div>
+                        <ul class="file-list" id="files-${year}">
+                            <li style="color: #555; padding-left: 20px;">Scanning...</li>
+                        </ul>
+                    </div>
+                `;
+                root.appendChild(yearNode);
+            });
+        }
+
         window.toggleYear = function(year) {
+            log(`Expanding ${year}`);
             const node = document.getElementById(`year-${year}`);
-            const fileList = document.getElementById(`files-${year}`);
-            
             if (node.classList.contains('open')) {
                 node.classList.remove('open');
                 return;
@@ -136,7 +127,7 @@
                         renderFileList(year, events);
                     })
                     .catch(() => {
-                        fileList.innerHTML = `<li style="color: #d55;">Log Missing</li>`;
+                        document.getElementById(`files-${year}`).innerHTML = `<li style="color: #d55; padding-left: 20px;">Log Missing</li>`;
                     });
             } else {
                 renderFileList(year, yearCache[year]);
@@ -153,40 +144,59 @@
                 groups[month].push(e);
             });
 
-            const sortedMonths = Object.keys(groups).sort().reverse();
-
-            sortedMonths.forEach(month => {
+            Object.keys(groups).sort().reverse().forEach(month => {
                 const monthData = groups[month];
                 const li = document.createElement('li');
                 li.className = 'file-item';
-                const parts = month.split('-');
-                let mName = "Misc";
-                try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'long'}); } catch(e){}
                 
-                li.innerHTML = `<strong>${mName}</strong> <span style="opacity: 0.6;">(${monthData.length})</span>`;
-                li.onclick = () => printLog(mName + " " + parts[0], monthData);
+                const parts = month.split('-');
+                let mName = "misc";
+                try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
+                
+                const filename = `${mName}_${parts[0]}.log`;
+
+                // Inline Terminal Structure
+                const row = document.createElement('div');
+                row.className = 'file-row';
+                row.innerHTML = `<strong>${filename}</strong> (${monthData.length})`;
+                
+                const term = document.createElement('div');
+                term.className = 'inline-terminal';
+                
+                li.appendChild(row);
+                li.appendChild(term);
+                
+                row.onclick = () => toggleTerminal(term, filename, monthData);
                 list.appendChild(li);
             });
         }
 
-        let typeInterval;
-        function printLog(title, events) {
-            const term = document.getElementById('terminal-content');
-            if (typeInterval) clearInterval(typeInterval);
+        function toggleTerminal(termElement, title, events) {
+            if (termElement.style.display === 'block') {
+                termElement.style.display = 'none';
+                return;
+            }
+            if (activeInterval) clearInterval(activeInterval);
+
+            termElement.style.display = 'block';
+            termElement.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}...</span>`;
             
-            term.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}...</span>`; 
+            log(`Reading ${title}`);
+
             let buffer = `\n\n`;
             events.forEach(e => {
                 buffer += `[${e.date}] ${e.summary}\n`;
-                if (e.evidence) buffer += `   ↳ ${e.evidence.substring(0, 150)}...\n\n`;
+                if (e.evidence) buffer += `   ↳ ${e.evidence.substring(0, 120)}\n\n`;
             });
 
             let i = 0;
-            typeInterval = setInterval(() => {
-                term.textContent += buffer.charAt(i);
+            activeInterval = setInterval(() => {
+                termElement.append(buffer.charAt(i));
                 i++;
-                if (i >= buffer.length) clearInterval(typeInterval);
-                document.getElementById('main-terminal').scrollTop = 99999;
+                if (i >= buffer.length) {
+                    clearInterval(activeInterval);
+                    termElement.innerHTML += '<span class="cursor"></span>';
+                }
             }, 2);
         }
     </script>
