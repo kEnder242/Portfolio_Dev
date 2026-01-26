@@ -3,173 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline | Jason Allred</title>
+    <title>System Logs | Jason Allred</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .timeline-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 0;
-        }
-
-        /* Year Card */
-        .year-card {
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .year-card:hover {
-            border-color: var(--accent-color);
-        }
-
-        .year-header {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .year-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--heading-color);
-            margin-right: 20px;
-            font-family: monospace;
-        }
-
-        .year-theme {
-            color: #888;
-            font-size: 0.9rem;
-            flex-grow: 1;
-        }
-
-        .toggle-icon {
-            color: var(--accent-color);
-            font-weight: bold;
-            transition: transform 0.3s;
-        }
-
-        .year-card.active .toggle-icon {
-            transform: rotate(90deg);
-        }
-
-        /* Expanded Content */
-        .year-body {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease-out;
-            background-color: rgba(0,0,0,0.2);
-        }
-
-        .year-card.active .year-body {
-            height: auto;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .year-inner {
-            padding: 20px;
-        }
-
-        /* Month Grid */
-        .month-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .month-btn {
-            background: #333;
-            border: 1px solid #444;
-            color: #aaa;
-            padding: 8px 0;
-            text-align: center;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-
-        .month-btn:hover {
-            background: #444;
-            color: #fff;
-        }
-
-        .month-btn.has-data {
-            border-color: var(--accent-color);
-            color: var(--text-color);
-            font-weight: bold;
-        }
-
-        .month-btn.has-data:hover {
-            background-color: var(--accent-color);
-            color: #1a1a1a;
-        }
-
-        .month-btn.selected {
-            background-color: var(--accent-color);
-            color: #1a1a1a;
-            box-shadow: 0 0 10px rgba(77, 170, 252, 0.4);
-        }
-
-        /* Terminal Output */
-        .terminal-window {
-            background-color: #111;
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 15px;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.9rem;
-            min-height: 100px;
-            color: #4cd964; /* Terminal Green */
-            white-space: pre-wrap;
-            position: relative;
-        }
-
-        .cursor::after {
-            content: '█';
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-
-        .hidden { display: none; }
-    </style>
 </head>
 <body>
 
-    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+    <button id="menu-toggle">☰</button>
 
     <nav id="sidebar">
-        <h1>The Field Manual</h1>
-        <div class="subtitle">Jason Allred</div>
-        <a href="index.html">← Back to Dashboard</a>
+        <h1>System Logs</h1>
+        <div class="subtitle">Root Access Granted</div>
+        <a href="index.html">← /var/dashboard</a>
         
-        <h2>Timeline Index</h2>
-        <ul id="timeline-nav"></ul>
+        <h2>Directory</h2>
+        <ul id="timeline-nav">
+            <!-- Populated by JS -->
+        </ul>
     </nav>
 
     <main>
         <section>
-            <h2 class="section-title">Career Timeline</h2>
-            <p>Explore the archives. Click a Year to power it on. Select a Month to query the tactical logs.</p>
+            <h2 style="color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">/home/jason/career_history</h2>
             
-            <div class="timeline-container" id="timeline-root"></div>
+            <div class="timeline-tree" id="tree-root">
+                <!-- Tree Injected Here -->
+            </div>
+
+            <div class="terminal-viewer" id="main-terminal">
+                <div class="terminal-header">OUTPUT BUFFER</div>
+                <div id="terminal-content">Select a log file to view contents...<span class="cursor"></span></div>
+            </div>
         </section>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const root = document.getElementById('timeline-root');
+            const root = document.getElementById('tree-root');
+            const terminal = document.getElementById('terminal-content');
             const nav = document.getElementById('timeline-nav');
-            const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            
+            // Cache for Year Data
+            const yearCache = {};
 
             // 1. Load Skeleton
             fetch('data/themes.json')
@@ -180,35 +54,29 @@
                     sortedYears.forEach(year => {
                         const item = themes[year];
                         
-                        // Nav Link
+                        // Nav Link (Quick Jump)
                         const li = document.createElement('li');
-                        li.innerHTML = `<a href="#year-${year}">${year}</a>`;
+                        li.innerHTML = `<a href="#year-${year}">./${year}</a>`;
                         nav.appendChild(li);
 
-                        // Year Card
-                        const card = document.createElement('div');
-                        card.className = 'year-card';
-                        card.id = `year-${year}`;
+                        // Build Tree Node
+                        const yearNode = document.createElement('div');
+                        yearNode.className = 'tree-year';
+                        yearNode.id = `year-${year}`;
                         
-                        card.innerHTML = `
-                            <div class="year-header" onclick="toggleYear('${year}')">
-                                <span class="toggle-icon">▶</span>
-                                <span class="year-title">${year}</span>
-                                <span class="year-theme">${item.strategic_theme}</span>
-                            </div>
-                            <div class="year-body" id="body-${year}">
-                                <div class="year-inner">
-                                    <div class="month-grid" id="grid-${year}">
-                                        <!-- Months injected here -->
-                                        <div style="grid-column: 1/-1; color: #666; font-style: italic;">Loading archive...</div>
-                                    </div>
-                                    <div class="terminal-window hidden" id="term-${year}">
-                                        <div id="output-${year}" class="cursor"></div>
-                                    </div>
+                        yearNode.innerHTML = `
+                            <div class="year-label" onclick="toggleYear('${year}')">${year}</div>
+                            <div class="year-content" id="content-${year}">
+                                <div class="strategy-block">
+                                    <div class="strategy-title">STRATEGIC_OBJECTIVE</div>
+                                    ${item.strategic_theme}
                                 </div>
+                                <ul class="file-list" id="files-${year}">
+                                    <li style="color: #555; padding-left: 20px;">Scanning...</li>
+                                </ul>
                             </div>
                         `;
-                        root.appendChild(card);
+                        root.appendChild(yearNode);
                     });
                 });
 
@@ -220,127 +88,99 @@
             }
         });
 
-        // Global Scope for onclick handlers
-        const yearCache = {};
-
         function toggleYear(year) {
-            const card = document.getElementById(`year-${year}`);
-            const body = document.getElementById(`body-${year}`);
-            const grid = document.getElementById(`grid-${year}`);
-            const isActive = card.classList.contains('active');
+            const node = document.getElementById(`year-${year}`);
+            const fileList = document.getElementById(`files-${year}`);
+            const isOpen = node.classList.contains('open');
 
-            // Close others? Optional. Let's keep multiple open.
-            
-            if (isActive) {
-                card.classList.remove('active');
+            if (isOpen) {
+                node.classList.remove('open');
                 return;
             }
 
-            card.classList.add('active');
+            node.classList.add('open');
 
-            // Load Data if not cached
-            if (!yearCache[year]) {
-                fetch(`data/${year}.json`)
-                    .then(r => {
-                        if (!r.ok) throw new Error("No data");
-                        return r.json();
-                    })
-                    .then(events => {
-                        yearCache[year] = processEvents(events);
-                        renderMonthGrid(year, yearCache[year]);
-                    })
-                    .catch(() => {
-                        grid.innerHTML = `<div style="color: #ff5555;">Archive corrupted or empty.</div>`;
-                    });
-            } else {
-                // Already rendered?
-                // renderMonthGrid(year, yearCache[year]); 
-                // No need to re-render if we didn't wipe it.
-            }
+            // Fetch Data if needed
+            // We use the aggregated Year JSON
+            fetch(`data/${year}.json`)
+                .then(r => {
+                    if (!r.ok) throw new Error("404");
+                    return r.json();
+                })
+                .then(events => {
+                    renderFileList(year, events);
+                })
+                .catch(() => {
+                    fileList.innerHTML = `<li style="color: #d00;">Error: Log Missing</li>`;
+                });
         }
 
-        function processEvents(events) {
-            const map = {};
+        function renderFileList(year, events) {
+            const list = document.getElementById(`files-${year}`);
+            list.innerHTML = ""; // Clear "Scanning..."
+
+            // Group by Month
+            const groups = {};
             events.forEach(e => {
-                // Parse date YYYY-MM-DD
-                // Some dates might be "2016-ww31". Handle loosely.
-                const parts = e.date.split('-');
-                if (parts.length >= 2) {
-                    const mIndex = parseInt(parts[1]) - 1; // 0-11
-                    if (!isNaN(mIndex) && mIndex >= 0 && mIndex <= 11) {
-                        if (!map[mIndex]) map[mIndex] = [];
-                        map[mIndex].push(e);
-                    } else {
-                        // Overflow bucket
-                        if (!map[12]) map[12] = [];
-                        map[12].push(e);
-                    }
-                }
+                const date = e.date || "Unknown";
+                const month = date.substring(0, 7); // YYYY-MM
+                if (!groups[month]) groups[month] = [];
+                groups[month].push(e);
             });
-            return map;
-        }
 
-        function renderMonthGrid(year, dataMap) {
-            const grid = document.getElementById(`grid-${year}`);
-            grid.innerHTML = "";
-            const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Misc"];
+            // Sort reverse chrono
+            const sortedMonths = Object.keys(groups).sort().reverse();
 
-            MONTHS.forEach((mName, idx) => {
-                const btn = document.createElement('div');
-                btn.className = 'month-btn';
-                btn.textContent = mName;
+            sortedMonths.forEach(month => {
+                const monthData = groups[month];
+                const li = document.createElement('li');
+                li.className = 'file-item';
+                // Convert 2016-07 to "jul_2016.log" style
+                const parts = month.split('-');
+                const mName = new Date(month + "-01").toLocaleString('default', { month: 'short' }).toLowerCase();
+                const fileName = `${mName}_${parts[0]}.log`;
                 
-                if (dataMap[idx] && dataMap[idx].length > 0) {
-                    btn.classList.add('has-data');
-                    btn.onclick = () => activateMonth(year, idx, btn);
-                } else {
-                    btn.style.opacity = '0.3';
-                    btn.style.cursor = 'default';
-                }
-                
-                grid.appendChild(btn);
+                li.innerHTML = `${fileName} <span style="color: #444; margin-left: 10px;">(${monthData.length} lines)</span>`;
+                li.onclick = () => printLog(fileName, monthData);
+                list.appendChild(li);
             });
         }
 
-        let typeWriterInterval = null;
+        let typeInterval;
 
-        function activateMonth(year, monthIdx, btnElement) {
-            // Visual Selection
-            const grid = document.getElementById(`grid-${year}`);
-            grid.querySelectorAll('.month-btn').forEach(b => b.classList.remove('selected'));
-            btnElement.classList.add('selected');
-
-            // Setup Terminal
-            const term = document.getElementById(`term-${year}`);
-            const output = document.getElementById(`output-${year}`);
-            term.classList.remove('hidden');
-            output.textContent = ""; // Clear
-
-            const events = yearCache[year][monthIdx];
+        function printLog(filename, events) {
+            const term = document.getElementById('terminal-content');
             
-            // Build Text Buffer
-            let textBuffer = `> QUERY: LOGS ${year}-${String(monthIdx+1).padStart(2, '0')}\n> STATUS: FOUND ${events.length} RECORDS\n\n`;
+            // 1. Clear previous
+            if (typeInterval) clearInterval(typeInterval);
+            term.textContent = ""; 
+
+            // 2. Build Buffer
+            let buffer = `> cat ${filename}\n`;
+            buffer += `> # ACCESSING ARCHIVE... OK\n\n`;
             
             events.forEach(e => {
-                textBuffer += `[${e.date}] ${e.summary}\n`;
-                if (e.evidence) textBuffer += `   ↳ "${e.evidence.substring(0, 60)}"...\n`;
-                textBuffer += `\n`;
-            });
-
-            // Typewriter Effect
-            if (typeWriterInterval) clearInterval(typeWriterInterval);
-            
-            let charIndex = 0;
-            typeWriterInterval = setInterval(() => {
-                output.textContent += textBuffer.charAt(charIndex);
-                charIndex++;
-                // Scroll to bottom
-                // term.scrollTop = term.scrollHeight; 
-                
-                if (charIndex >= textBuffer.length) {
-                    clearInterval(typeWriterInterval);
+                buffer += `[${e.date}] ${e.summary.toUpperCase()}\n`;
+                if (e.evidence) {
+                    buffer += `   >> ${e.evidence}\n`;
                 }
-            }, 10); // Speed: 10ms per char
+                buffer += `\n`;
+            });
+            
+            buffer += `> _\n`; // End cursor
+
+            // 3. Typewriter
+            let i = 0;
+            // Faster speed for "Hacker" feel
+            typeInterval = setInterval(() => {
+                term.textContent += buffer.charAt(i);
+                i++;
+                if (i >= buffer.length) clearInterval(typeInterval);
+                
+                // Auto scroll
+                const viewer = document.getElementById('main-terminal');
+                viewer.scrollTop = viewer.scrollHeight;
+            }, 5); 
         }
     </script>
 </body>

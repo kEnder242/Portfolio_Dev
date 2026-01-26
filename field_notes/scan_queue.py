@@ -62,10 +62,20 @@ def parse_chunks(text, filename):
     # Join lists into single strings
     return {k: "\n".join(v) for k, v in chunks.items()}
 
+MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
+
 def main():
-    print("--- Scan Queue Manager v1.0 ---")
+    print("--- Scan Queue Manager v2.0 (Librarian Aware) ---")
     ensure_dirs()
     
+    # Load Manifest
+    if os.path.exists(MANIFEST_FILE):
+        with open(MANIFEST_FILE, 'r') as f:
+            manifest = json.load(f)
+    else:
+        print("Warning: No manifest found. Run scan_librarian.py first.")
+        manifest = {}
+
     # Load State
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, 'r') as f:
@@ -86,9 +96,22 @@ def main():
     for filepath in files:
         filename = os.path.basename(filepath)
         
-        # Exclude Reference Files
-        if "GIT" in filename or "resume" in filename.lower():
-            print(f"Skipping Reference File: {filename}")
+        # Classification Logic
+        info = manifest.get(filename, {})
+        file_type = info.get("type", "UNKNOWN")
+        
+        # Rule: Log if Manifest says LOG, or if it looks like a Log (notes_YYYY) and isn't META/GIT
+        is_log = False
+        if file_type == "LOG":
+            is_log = True
+        elif "notes_" in filename and "GIT" not in filename:
+            # Overrule "REFERENCE" if it follows the naming convention
+            # But respect "META" (e.g. resumes)
+            if file_type != "META":
+                is_log = True
+        
+        if not is_log:
+            # print(f"Skipping {filename} ({file_type})")
             continue
 
         text = read_file(filepath)

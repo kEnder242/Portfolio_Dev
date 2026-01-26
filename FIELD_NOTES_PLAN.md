@@ -59,19 +59,19 @@
 **Goal:** Transform the static site into a "Living Archive" managed by Pinky (Local AI).
 
 ### 4.1 Privacy & Governance ("The Censor Node")
-- [ ] **Privacy Filter:** Update `scan_pinky.py` to classify extracted events as `Public`, `Private`, or `Sensitive`.
-- [ ] **Audit Log:** Maintain `privacy_audit.json` to review Pinky's filtering decisions.
-- [ ] **Heuristics:** Train Pinky to recognize PII (names, internal codenames) and scrub them.
+- [x] **Privacy Filter:** Update `scan_pinky.py` to classify extracted events as `Public`, `Private`, or `Sensitive`.
+- [x] **Audit Log:** Maintain `privacy_audit.json` to review Pinky's filtering decisions.
+- [x] **Heuristics:** Train Pinky to recognize PII (names, internal codenames) and scrub them.
 
 ### 4.2 The "Slow Burn" (Continuous Refinement)
-- [ ] **Automation:** Systemd timer to run `scan_pinky.py` nightly (3 AM).
-- [ ] **Iterative Indexing:** Pinky re-scans notes to find connections missed in previous passes.
+- [x] **Automation:** Systemd timer to run `scan_pinky.py` nightly (3 AM).
+- [x] **Iterative Indexing:** Pinky re-scans notes to find connections missed in previous passes.
 - [ ] **ChromaDB Sync:** Push `pinky_index_full.json` to HomeLabAI's vector store for voice-query access ("Pinky, when did I work on Simics?").
 
 ### 4.3 Interactive Discovery ("Deep Dive")
-- [ ] **Concept:** "Silent Prefetching" on the Timeline.
-- [ ] **Mechanism:** As user scrolls to "2016", browser requests a "Deep Dive" summary from Pinky.
-- [ ] **UX:** Subtle expansion of cards with more context, powered by real-time RAG (requires lightweight backend).
+- [x] **Concept:** "Silent Prefetching" on the Timeline.
+- [x] **Mechanism:** As user scrolls to "2016", browser requests a "Deep Dive" summary from Pinky.
+- [x] **UX:** Subtle expansion of cards with more context, powered by real-time RAG (requires lightweight backend).
 
 ## Phase 5: The "Smoke & Mirrors" Architecture (Refined V3)
 **Goal:** Create a timeline that *feels* alive and reactive without relying on a live AI backend (Class 1 Philosophy).
@@ -94,3 +94,30 @@
 - [x] **Protocol:** Defined `FIELD_NOTES_INTEGRATION.md`.
 - [x] **Direction:** Implemented `ai_engine.py` abstraction layer.
 - [x] **Safety:** `nibble.py` checks Prometheus load before running.
+
+## Phase 6: The "Librarian" Architecture (Data Governance)
+**Goal:** Replace brittle filename guessing with AI-driven content classification.
+
+### 6.1 The Manifest (`file_manifest.json`)
+- [ ] **Scanner:** Create `scan_librarian.py`.
+- [ ] **Logic:** Pinky reads the file header (first 1KB) and classifies it:
+    - `LOG`: Chronological engineering notes (Timeline source).
+    - `REFERENCE`: Cheat sheets, config snippets (RAG source).
+    - `META`: Resumes, performance reviews (Context source).
+- [ ] **Hierarchy:** Infer relationships (e.g., "This project plan belongs to the 2018 era").
+
+### 6.2 The Queue Logic
+- [ ] **Refactor:** Update `scan_queue.py` to consult `file_manifest.json`.
+- [ ] **Routing:** Only `LOG` files go to the Timeline Queue. `REFERENCE` files go to the Knowledge Graph Queue.
+
+## Phase 7: The "System Admin" UI Overhaul
+**Goal:** A professional, "Hackers"-inspired aesthetic that favors density and function over standard web tropes.
+
+### 7.1 The Visuals
+- [ ] **No Icons:** Use ASCII/Text structure (`+`, `|--`).
+- [ ] **Layout:** Monospace Tree View for navigation.
+- [ ] **Interaction:** Click to expand. No "Loading" spinners. Use blinking cursors `_`.
+- [ ] **Animation:** Fast typewriter effect. Precise, mechanical.
+
+### 7.2 The Librarian Backend
+- [ ] **Refactor:** Implement `scan_librarian.py` (Phase 6) to ensure the data feeding this UI is strictly categorized (Logs vs. Reference).
