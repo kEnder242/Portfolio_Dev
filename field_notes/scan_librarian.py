@@ -77,13 +77,26 @@ def classify_file(filename, text_sample):
     return extract_json(response)
 
 def main():
-    print("--- Pinky Librarian v1.1 ---")
+    print("--- Pinky Librarian v1.2 ---")
+    
+    # Force overrides for known tricky files
+    OVERRIDES = {
+        "notes_2024_PIAV.txt": "LOG",
+        "Performance review 2008-2018 .txt": "META",
+        "11066402 Insights 2019-2024.txt": "META"
+    }
     
     manifest = {}
     files = sorted(glob.glob(NOTES_GLOB))
     
     for filepath in files:
         filename = os.path.basename(filepath)
+        
+        if filename in OVERRIDES:
+            print(f"   --> {filename}: {OVERRIDES[filename]} (Manual Override)")
+            manifest[filename] = {"type": OVERRIDES[filename], "note": "Manual Override"}
+            continue
+
         text_sample = read_sample(filepath)
         
         info = classify_file(filename, text_sample)
