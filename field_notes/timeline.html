@@ -4,21 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=6.0">
-    <style>
-        #debug-log {
-            background: #000;
-            color: #4daafc;
-            font-family: monospace;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-            font-size: 0.7rem;
-            max-height: 100px;
-            overflow-y: auto;
-            display: none; /* Hidden by default for clean look, toggle via console? */
-        }
-    </style>
+    <link rel="stylesheet" href="style.css?v=6.2">
 </head>
 <body>
 
@@ -35,77 +21,37 @@
     </nav>
 
     <main>
-        <div id="debug-log"></div>
-
         <section>
-            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">/home/jason/career_history</h2>
+            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Career Timeline</h2>
             
             <div class="timeline-container" id="tree-root">
                 <div style="color: #666; padding: 20px;">[WAIT] Loading archives...</div>
             </div>
 
             <div class="terminal-viewer" id="main-terminal">
-                <div class="terminal-header">LOG VIEWER (STDOUT)</div>
-                <div id="terminal-content">Select a month to query...<span class="cursor"></span></div>
+                <div class="terminal-header">LOG VIEWER</div>
+                <div id="terminal-content" style="color: #ccc;">Select a month to query...<span class="cursor"></span></div>
             </div>
         </section>
     </main>
 
     <script>
-        const root = document.getElementById('tree-root');
-        const debug = document.getElementById('debug-log');
         const yearCache = {};
         let typeInterval;
 
-        // Fail-Safe Data
+        // FAIL-SAFE DATA (Inlined to prevent empty screen on fetch fail)
         const FALLBACK_THEMES = {
-            "2024": "Implementing manageability features across Intel datacenter platforms.",
-            "2023": "Tactical archive active.",
-            "2022": "Tactical archive active.",
-            "2021": "Tactical archive active.",
-            "2020": "Tactical archive active.",
-            "2019": "Historical data.",
-            "2018": "Addressing hardware issues and system validation in datacenter.",
-            "2016": "Debugging issues with Fulsim hardware emulation.",
-            "2015": "Hardware diagnostics and improving diagnostics platforms.",
-            "2014": "Tactical archive active.",
-            "2013": "Tactical archive active.",
-            "2012": "Tactical archive active.",
-            "2006": "Validating firmware for server management, LAN, and APIs.",
-            "2005": "Early career work on server management firmware stack."
+            "2024": { "strategic_theme": "Implementing manageability features." },
+            "2018": { "strategic_theme": "Hardware validation." },
+            "2016": { "strategic_theme": "Fulsim debugging." },
+            "2006": { "strategic_theme": "Firmware validation." }
         };
 
-        function renderYears(themes) {
-            root.innerHTML = ""; 
-            const sortedYears = Object.keys(themes).sort((a, b) => b - a);
-
-            sortedYears.forEach(year => {
-                const desc = typeof themes[year] === 'string' ? themes[year] : (themes[year].strategic_theme || "Archive active.");
-                
-                const yearNode = document.createElement('div');
-                yearNode.className = 'tree-year';
-                yearNode.id = `year-${year}`;
-                
-                // Tree Layout
-                yearNode.innerHTML = "`
-                    <div class=\"year-label\" onclick=\"toggleYear('${year}')\">
-                        ${year}
-                    </div>
-                    <div class=\"year-content\" id=\"content-${year}\">
-                        <div class=\"strategy-block\">
-                            <span style=\"color: #4daafc; font-weight: bold;\">STRATEGY:</span> ${desc}
-                        </div>
-                        <ul class=\"file-list\" id=\"files-${year}\">
-                            <li style=\"color: #555;\">Scanning...</li>
-                        </ul>
-                    </div>
-                `";
-                root.appendChild(yearNode);
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu
+            const root = document.getElementById('tree-root');
+            const nav = document.getElementById('timeline-nav');
+            
+            // 1. Mobile Menu
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
             if (menuToggle && sidebar) {
@@ -116,24 +62,63 @@
                 document.querySelector('main').onclick = () => sidebar.classList.remove('active');
             }
 
-            // Fetch
+            // 2. Load Data
             let fetched = false;
             fetch('data/themes.json?t=' + new Date().getTime())
                 .then(r => r.json())
-                .then(data => {
+                .then(themes => {
                     fetched = true;
-                    renderYears(data);
+                    renderYears(themes);
                 })
-                .catch(err => {
+                .catch(() => {
                     if (!fetched) renderYears(FALLBACK_THEMES);
                 });
 
+            // 2s Timeout
             setTimeout(() => {
                 if (!fetched) renderYears(FALLBACK_THEMES);
             }, 2000);
+
+            function renderYears(themes) {
+                root.innerHTML = "";
+                const sortedYears = Object.keys(themes).sort((a, b) => b - a);
+
+                sortedYears.forEach(year => {
+                    const item = themes[year];
+                    const desc = item.strategic_theme || "Archive active.";
+                    
+                    // Nav Link
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#year-${year}">./${year}</a>`;
+                    nav.appendChild(li);
+
+                    // Tree Node
+                    const yearNode = document.createElement('div');
+                    yearNode.className = 'tree-year';
+                    yearNode.id = `year-${year}`;
+                    
+                    yearNode.innerHTML = "
+                        <div class=\"year-label\" onclick=\"toggleYear('\'' + year + '\'')\">
+                            <span>${year}</span>
+                            <span style=\"font-size: 0.8rem; opacity: 0.5;\">▼</span>
+                        </div>
+                        <div class=\"year-content\" id=\"content-${year}\">
+                            <div class=\"strategy-block\">
+                                <div class=\"strategy-title\">STRATEGIC THEME</div>
+                                ${desc}
+                            </div>
+                            <ul class=\"file-list\" id=\"files-${year}\">
+                                <li style=\"color: #555;\">Loading...</li>
+                            </ul>
+                        </div>
+                    ";
+                    root.appendChild(yearNode);
+                });
+            }
         });
 
-        function toggleYear(year) {
+        // Global Scope Functions
+        window.toggleYear = function(year) {
             const node = document.getElementById(`year-${year}`);
             const fileList = document.getElementById(`files-${year}`);
             
@@ -156,7 +141,7 @@
             } else {
                 renderFileList(year, yearCache[year]);
             }
-        }
+        };
 
         function renderFileList(year, events) {
             const list = document.getElementById(`files-${year}`);
@@ -168,47 +153,41 @@
                 groups[month].push(e);
             });
 
-            Object.keys(groups).sort().reverse().forEach(month => {
+            const sortedMonths = Object.keys(groups).sort().reverse();
+
+            sortedMonths.forEach(month => {
+                const monthData = groups[month];
                 const li = document.createElement('li');
                 li.className = 'file-item';
                 const parts = month.split('-');
-                let mName = parts[1] || "Misc";
+                let mName = "Misc";
                 try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'long'}); } catch(e){}
                 
-                // Tree Item Format: |- Month (Count)
-                li.innerHTML = `<strong>${mName}</strong> <span style="opacity: 0.6;">(${groups[month].length} items)</span>`;
-                li.onclick = () => printLog(mName + " " + parts[0], groups[month]);
+                li.innerHTML = `<strong>${mName}</strong> <span style="opacity: 0.6;">(${monthData.length})</span>`;
+                li.onclick = () => printLog(mName + " " + parts[0], monthData);
                 list.appendChild(li);
             });
         }
 
+        let typeInterval;
         function printLog(title, events) {
             const term = document.getElementById('terminal-content');
             if (typeInterval) clearInterval(typeInterval);
             
-            term.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}...</span><span class="cursor"></span>`; 
-            
+            term.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}...</span>`; 
             let buffer = `\n\n`;
             events.forEach(e => {
                 buffer += `[${e.date}] ${e.summary}\n`;
                 if (e.evidence) buffer += `   ↳ ${e.evidence.substring(0, 150)}...\n\n`;
             });
 
-            setTimeout(() => {
-                let i = 0;
-                term.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}... OK</span>\n`;
-                
-                typeInterval = setInterval(() => {
-                    term.textContent += buffer.charAt(i);
-                    i++;
-                    if (i >= buffer.length) {
-                        clearInterval(typeInterval);
-                        term.appendChild(document.createElement('span')).className = 'cursor';
-                    }
-                    const viewer = document.getElementById('main-terminal');
-                    viewer.scrollTop = viewer.scrollHeight;
-                }, 2);
-            }, 500);
+            let i = 0;
+            typeInterval = setInterval(() => {
+                term.textContent += buffer.charAt(i);
+                i++;
+                if (i >= buffer.length) clearInterval(typeInterval);
+                document.getElementById('main-terminal').scrollTop = 99999;
+            }, 2);
         }
     </script>
 </body>
