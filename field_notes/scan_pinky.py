@@ -156,6 +156,7 @@ def main():
             """
             
             result_text = ask_pinky(prompt, label=f"{filename} batch {i//batch_size + 1}")
+            batches_processed += 1
             events = extract_json(result_text)
             
             if isinstance(events, list):
