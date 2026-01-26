@@ -92,6 +92,18 @@ def extract_json_from_llm(text):
     except:
         return []
 
+def get_total_events():
+    count = 0
+    files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    for f in files:
+        if "themes" in f or "status" in f or "queue" in f or "state" in f: continue
+        try:
+            with open(f, 'r') as fp:
+                data = json.load(fp)
+                if isinstance(data, list): count += len(data)
+        except: pass
+    return count
+
 def main():
     print("--- Pinky Nibbler v1.3 ---")
     
@@ -101,9 +113,9 @@ def main():
 
     # 1. Load Queue
     if not os.path.exists(QUEUE_FILE):
+        total = get_total_events()
         print("Queue empty.")
-        # Don't overwrite useful status with "Queue empty" if we just ran successfully recently?
-        # Actually, let's read the status file and see if it's "ONLINE". If so, switch to "IDLE".
+        # Only update if we aren't already IDLE
         current_status = {}
         if os.path.exists(STATUS_FILE):
             try:
@@ -111,17 +123,17 @@ def main():
                     current_status = json.load(f)
             except: pass
         
-        # Only update if we aren't already IDLE
         if current_status.get("status") != "IDLE":
-            update_status("IDLE", "Archives sync complete. Standing by.")
+            update_status("IDLE", f"Archives synced. Total records: {total}")
         return
 
     with open(QUEUE_FILE, 'r') as f:
         queue = json.load(f)
         
     if not queue:
+        total = get_total_events()
         print("Queue empty.")
-        update_status("IDLE", "Archives sync complete. Standing by.")
+        update_status("IDLE", f"Archives synced. Total records: {total}")
         return
 
     # 2. Pop Task
@@ -134,7 +146,7 @@ def main():
     focal_2 = read_file(FOCAL_NEW)
     strategic_context = f"[RESUME]\n{resume[:2000]}\n[FOCALS]\n{focal_1[:3000]}\n{focal_2[:3000]}"
     
-    # 4. Check for Existing Data
+    # 4. Check for Existing Data (Refinement)
     bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
     existing_data = []
     if os.path.exists(bucket_file):
@@ -156,13 +168,14 @@ def main():
 
     [TASK]
     Analyze the RAW NOTES.
-    1. Extract technical events (wins, fixes, tools).
-    2. Classify sensitivity: "Public" or "Sensitive".
-    3. Normalize dates to YYYY-MM-DD.
+    1. Extract technical events (Technical win, Bug fix, Tool usage).
+    2. Compare with EXISTING ARCHIVE. avoid duplicates.
+    3. IMPROVE descriptions if the raw notes offer more detail.
+    4. Classify sensitivity: "Public" (Safe) or "Sensitive" (PII, internal, personal).
     
     Return a JSON list of NEW or UPDATED events:
     [
-        {{ "date": "YYYY-MM-DD", "summary": "Technical win", "evidence": "Quote", "sensitivity": "Public", "tags": ["IPMI"] }}
+        {{ "date": "YYYY-MM-DD", "summary": "Detailed technical achievement", "evidence": "Quote", "sensitivity": "Public", "tags": ["Tag1"] }}
     ]
     
     [OUTPUT]
@@ -182,7 +195,10 @@ def main():
         
         added_count = 0
         for event in new_events:
-            if not isinstance(event, dict): continue
+            if not isinstance(event, dict):
+                print(f"   ! Skipping invalid event format: {event}")
+                continue
+                
             key = (event.get('date'), event.get('summary'))
             if key not in seen:
                 if event.get("sensitivity") == "Public":
@@ -190,6 +206,7 @@ def main():
                     seen.add(key)
                     added_count += 1
                 else:
+                    # Audit Log
                     with open(AUDIT_FILE, "a") as f:
                         f.write(json.dumps(event) + "\n")
         
@@ -206,11 +223,13 @@ def main():
                 year_events.extend(load_json(mf))
             year_events.sort(key=lambda x: x.get('date', ''))
             save_json(year_file, year_events)
+            print(f"   > Aggregated {len(year_events)} events into {year_file}")
 
-        update_status("ONLINE", f"Nibbled {task['id']}", added_count)
+        update_status("ONLINE", f"Processed {task['bucket']}", added_count)
+
     else:
         print("   > Failed to parse Pinky's response.")
-        update_status("WARNING", f"Failed to parse response for {task['id']}")
+        update_status("WARNING", "Failed to parse Pinky's response")
 
     # 6. Update State
     content_hash = hashlib.md5(task['content'].encode('utf-8')).hexdigest()
