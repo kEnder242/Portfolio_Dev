@@ -254,8 +254,8 @@
                 container.textContent = "Pinky is rummaging through archives...";
                 badge.classList.add('loading');
 
-                // Simulate "thinking" time for the effect
-                const delay = 800 + Math.random() * 1200;
+                // Simulate "thinking" time for the effect (5 seconds)
+                const delay = 5000;
 
                 setTimeout(() => {
                     fetch(`data/${year}.json`)
@@ -270,17 +270,43 @@
                                 return;
                             }
 
-                            container.innerHTML = `<ul class="event-list"></ul>`;
-                            const list = container.querySelector('ul');
+                            container.innerHTML = ""; // Clear waiting message
                             
-                            events.forEach((event, index) => {
-                                const li = document.createElement('li');
-                                li.style.animationDelay = `${index * 0.1}s`;
-                                li.innerHTML = `
-                                    <span class="event-date">${event.date}</span>
-                                    ${event.summary}
-                                `;
-                                list.appendChild(li);
+                            // Group events by Month
+                            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                            const grouped = {};
+                            
+                            events.forEach(event => {
+                                const date = new Date(event.date);
+                                const monthIdx = date.getMonth();
+                                const monthName = isNaN(monthIdx) ? "Archive/Misc" : monthNames[monthIdx];
+                                if (!grouped[monthName]) grouped[monthName] = [];
+                                grouped[monthName].push(event);
+                            });
+
+                            // Sort months (we want them in correct temporal order, or matching note order?)
+                            // Let's just iterate the monthNames array to maintain order.
+                            monthNames.concat(["Archive/Misc"]).forEach(mName => {
+                                if (grouped[mName]) {
+                                    const mSection = document.createElement('div');
+                                    mSection.className = 'month-section';
+                                    mSection.innerHTML = `
+                                        <div class="theme-header" style="color: var(--accent-color); border-bottom: 1px solid #333; margin-top: 15px; margin-bottom: 8px;">${mName}</div>
+                                        <ul class="event-list"></ul>
+                                    `;
+                                    const list = mSection.querySelector('ul');
+                                    
+                                    grouped[mName].forEach((event, index) => {
+                                        const li = document.createElement('li');
+                                        li.style.animationDelay = `${index * 0.1}s`;
+                                        li.innerHTML = `
+                                            <span class="event-date">${event.date}</span>
+                                            ${event.summary}
+                                        `;
+                                        list.appendChild(li);
+                                    });
+                                    container.appendChild(mSection);
+                                }
                             });
                         })
                         .catch(err => {
