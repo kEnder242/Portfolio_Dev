@@ -6,155 +6,141 @@
     <title>Timeline | Jason Allred</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Specific Timeline Overrides */
         .timeline-container {
-            position: relative;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px 0;
+            padding: 40px 0;
         }
 
-        /* The Center Line */
-        .timeline-container::after {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background-color: var(--border-color);
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -2px;
-        }
-
-        .year-block {
-            position: relative;
-            background-color: inherit;
-            width: 50%;
-            padding: 10px 40px;
-            margin-bottom: 60px;
-            box-sizing: border-box;
-            opacity: 0.3; /* Dim until observed */
-            transition: opacity 0.8s ease;
-        }
-
-        .year-block.observed {
-            opacity: 1;
-        }
-
-        /* Left side (Strategy) */
-        .year-block.left {
-            left: 0;
-            text-align: right;
-        }
-
-        /* Right side (Tactics) */
-        .year-block.right {
-            left: 50%;
-            text-align: left;
-        }
-
-        /* The Year Circle */
-        .year-badge {
-            position: absolute;
-            top: 15px;
-            right: -25px; /* For left items */
-            background-color: var(--accent-color);
-            color: #fff;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            z-index: 10;
-            text-align: center;
-            line-height: 50px;
-            font-weight: bold;
-            border: 4px solid var(--bg-color);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .year-block.right .year-badge {
-            left: -25px;
-        }
-
-        .year-badge.loading {
-            animation: pulse 1.5s infinite;
-            background-color: #555;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); background-color: var(--accent-color); }
-            100% { transform: scale(1); }
-        }
-
-        /* Content Cards */
-        .content {
-            padding: 20px;
+        /* Year Card */
+        .year-card {
             background-color: var(--code-bg);
-            border-radius: 6px;
             border: 1px solid var(--border-color);
-            position: relative;
-            transition: transform 0.5s ease;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        .left .content { border-right: 4px solid var(--accent-color); }
-        .right .content { border-left: 4px solid var(--accent-color); }
-
-        .theme-header {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 5px;
+        .year-card:hover {
+            border-color: var(--accent-color);
         }
 
-        .theme-text {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 15px;
+        .year-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .year-title {
+            font-size: 1.5rem;
+            font-weight: bold;
             color: var(--heading-color);
-        }
-
-        .event-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .event-list li {
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: slideUp 0.5s forwards;
-        }
-        
-        @keyframes slideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .event-list li:last-child { border-bottom: none; }
-
-        .event-date {
+            margin-right: 20px;
             font-family: monospace;
+        }
+
+        .year-theme {
+            color: #888;
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .toggle-icon {
             color: var(--accent-color);
-            margin-right: 10px;
+            font-weight: bold;
+            transition: transform 0.3s;
         }
 
-        .status-msg {
+        .year-card.active .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        /* Expanded Content */
+        .year-body {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease-out;
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        .year-card.active .year-body {
+            height: auto;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .year-inner {
+            padding: 20px;
+        }
+
+        /* Month Grid */
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .month-btn {
+            background: #333;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 8px 0;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 0.8rem;
-            color: #666;
-            font-style: italic;
+            transition: all 0.2s;
         }
 
-        /* Responsive */
-        @media screen and (max-width: 768px) {
-            .timeline-container::after { left: 31px; }
-            .year-block { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left !important; left: 0 !important; }
-            .year-badge { left: 6px !important; }
-            .content { border-right: none !important; border-left: 4px solid var(--accent-color) !important; }
+        .month-btn:hover {
+            background: #444;
+            color: #fff;
         }
+
+        .month-btn.has-data {
+            border-color: var(--accent-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .month-btn.has-data:hover {
+            background-color: var(--accent-color);
+            color: #1a1a1a;
+        }
+
+        .month-btn.selected {
+            background-color: var(--accent-color);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(77, 170, 252, 0.4);
+        }
+
+        /* Terminal Output */
+        .terminal-window {
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.9rem;
+            min-height: 100px;
+            color: #4cd964; /* Terminal Green */
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -167,19 +153,15 @@
         <a href="index.html">← Back to Dashboard</a>
         
         <h2>Timeline Index</h2>
-        <ul id="timeline-nav">
-            <!-- Populated by JS -->
-        </ul>
+        <ul id="timeline-nav"></ul>
     </nav>
 
     <main>
         <section>
-            <h2 class="section-title">Career Timeline (Strategy vs. Tactics)</h2>
-            <p>A synthesis of 18 years of performance reviews (Strategy) and raw engineering logs (Tactics), correlated by Pinky (Mistral-7B). Tactical events are retrieved asynchronously as you browse.</p>
+            <h2 class="section-title">Career Timeline</h2>
+            <p>Explore the archives. Click a Year to power it on. Select a Month to query the tactical logs.</p>
             
-            <div class="timeline-container" id="timeline-root">
-                <!-- Populated by JS -->
-            </div>
+            <div class="timeline-container" id="timeline-root"></div>
         </section>
     </main>
 
@@ -187,28 +169,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const root = document.getElementById('timeline-root');
             const nav = document.getElementById('timeline-nav');
-            const loadedYears = new Set();
+            const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-            // Intersection Observer Options
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const year = entry.target.getAttribute('data-year');
-                        entry.target.classList.add('observed');
-                        if (!loadedYears.has(year)) {
-                            lazyLoadTactics(year, entry.target);
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            // 1. Load Skeleton (Themes)
+            // 1. Load Skeleton
             fetch('data/themes.json')
                 .then(r => r.json())
                 .then(themes => {
@@ -217,113 +180,168 @@
                     sortedYears.forEach(year => {
                         const item = themes[year];
                         
-                        // Nav link
-                        const navLi = document.createElement('li');
-                        navLi.innerHTML = `<a href="#year-${year}">${year}</a>`;
-                        nav.appendChild(navLi);
+                        // Nav Link
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="#year-${year}">${year}</a>`;
+                        nav.appendChild(li);
 
-                        // Year Block Wrapper
-                        const block = document.createElement('div');
-                        block.className = 'year-block left';
-                        block.id = `year-${year}`;
-                        block.setAttribute('data-year', year);
+                        // Year Card
+                        const card = document.createElement('div');
+                        card.className = 'year-card';
+                        card.id = `year-${year}`;
                         
-                        block.innerHTML = `
-                            <div class="year-badge" id="badge-${year}">${year}</div>
-                            <div class="content">
-                                <div class="theme-header">Strategic Theme</div>
-                                <div class="theme-text">${item.strategic_theme}</div>
-                                <div class="theme-header">Technical Focus</div>
-                                <div>${(item.technical_tags || []).map(t => `<code>${t}</code>`).join(' ')}</div>
-                                <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
-                                <div class="theme-header">Tactical Retrieval</div>
-                                <div id="tactics-${year}" class="status-msg">Waiting for observation...</div>
+                        card.innerHTML = `
+                            <div class="year-header" onclick="toggleYear('${year}')">
+                                <span class="toggle-icon">▶</span>
+                                <span class="year-title">${year}</span>
+                                <span class="year-theme">${item.strategic_theme}</span>
+                            </div>
+                            <div class="year-body" id="body-${year}">
+                                <div class="year-inner">
+                                    <div class="month-grid" id="grid-${year}">
+                                        <!-- Months injected here -->
+                                        <div style="grid-column: 1/-1; color: #666; font-style: italic;">Loading archive...</div>
+                                    </div>
+                                    <div class="terminal-window hidden" id="term-${year}">
+                                        <div id="output-${year}" class="cursor"></div>
+                                    </div>
+                                </div>
                             </div>
                         `;
-                        
-                        root.appendChild(block);
-                        observer.observe(block);
+                        root.appendChild(card);
                     });
                 });
 
-            function lazyLoadTactics(year, element) {
-                loadedYears.add(year);
-                const container = document.getElementById(`tactics-${year}`);
-                const badge = document.getElementById(`badge-${year}`);
-                
-                container.textContent = "Pinky is rummaging through archives...";
-                badge.classList.add('loading');
-
-                // Simulate "thinking" time for the effect (5 seconds)
-                const delay = 5000;
-
-                setTimeout(() => {
-                    fetch(`data/${year}.json`)
-                        .then(r => {
-                            if (!r.ok) throw new Error("No tactical data for this year.");
-                            return r.json();
-                        })
-                        .then(events => {
-                            badge.classList.remove('loading');
-                            if (!events || events.length === 0) {
-                                container.textContent = "No public tactical events found for this era.";
-                                return;
-                            }
-
-                            container.innerHTML = ""; // Clear waiting message
-                            
-                            // Group events by Month
-                            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                            const grouped = {};
-                            
-                            events.forEach(event => {
-                                const date = new Date(event.date);
-                                const monthIdx = date.getMonth();
-                                const monthName = isNaN(monthIdx) ? "Archive/Misc" : monthNames[monthIdx];
-                                if (!grouped[monthName]) grouped[monthName] = [];
-                                grouped[monthName].push(event);
-                            });
-
-                            // Sort months (we want them in correct temporal order, or matching note order?)
-                            // Let's just iterate the monthNames array to maintain order.
-                            monthNames.concat(["Archive/Misc"]).forEach(mName => {
-                                if (grouped[mName]) {
-                                    const mSection = document.createElement('div');
-                                    mSection.className = 'month-section';
-                                    mSection.innerHTML = `
-                                        <div class="theme-header" style="color: var(--accent-color); border-bottom: 1px solid #333; margin-top: 15px; margin-bottom: 8px;">${mName}</div>
-                                        <ul class="event-list"></ul>
-                                    `;
-                                    const list = mSection.querySelector('ul');
-                                    
-                                    grouped[mName].forEach((event, index) => {
-                                        const li = document.createElement('li');
-                                        li.style.animationDelay = `${index * 0.1}s`;
-                                        li.innerHTML = `
-                                            <span class="event-date">${event.date}</span>
-                                            ${event.summary}
-                                        `;
-                                        list.appendChild(li);
-                                    });
-                                    container.appendChild(mSection);
-                                }
-                            });
-                        })
-                        .catch(err => {
-                            badge.classList.remove('loading');
-                            container.textContent = "Data archive unreachable.";
-                            console.error(err);
-                        });
-                }, delay);
-            }
-
-            // Mobile menu logic (copied from index.html)
+            // 2. Mobile Menu
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
             if (menuToggle) {
                 menuToggle.addEventListener('click', () => sidebar.classList.toggle('active'));
             }
         });
+
+        // Global Scope for onclick handlers
+        const yearCache = {};
+
+        function toggleYear(year) {
+            const card = document.getElementById(`year-${year}`);
+            const body = document.getElementById(`body-${year}`);
+            const grid = document.getElementById(`grid-${year}`);
+            const isActive = card.classList.contains('active');
+
+            // Close others? Optional. Let's keep multiple open.
+            
+            if (isActive) {
+                card.classList.remove('active');
+                return;
+            }
+
+            card.classList.add('active');
+
+            // Load Data if not cached
+            if (!yearCache[year]) {
+                fetch(`data/${year}.json`)
+                    .then(r => {
+                        if (!r.ok) throw new Error("No data");
+                        return r.json();
+                    })
+                    .then(events => {
+                        yearCache[year] = processEvents(events);
+                        renderMonthGrid(year, yearCache[year]);
+                    })
+                    .catch(() => {
+                        grid.innerHTML = `<div style="color: #ff5555;">Archive corrupted or empty.</div>`;
+                    });
+            } else {
+                // Already rendered?
+                // renderMonthGrid(year, yearCache[year]); 
+                // No need to re-render if we didn't wipe it.
+            }
+        }
+
+        function processEvents(events) {
+            const map = {};
+            events.forEach(e => {
+                // Parse date YYYY-MM-DD
+                // Some dates might be "2016-ww31". Handle loosely.
+                const parts = e.date.split('-');
+                if (parts.length >= 2) {
+                    const mIndex = parseInt(parts[1]) - 1; // 0-11
+                    if (!isNaN(mIndex) && mIndex >= 0 && mIndex <= 11) {
+                        if (!map[mIndex]) map[mIndex] = [];
+                        map[mIndex].push(e);
+                    } else {
+                        // Overflow bucket
+                        if (!map[12]) map[12] = [];
+                        map[12].push(e);
+                    }
+                }
+            });
+            return map;
+        }
+
+        function renderMonthGrid(year, dataMap) {
+            const grid = document.getElementById(`grid-${year}`);
+            grid.innerHTML = "";
+            const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Misc"];
+
+            MONTHS.forEach((mName, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'month-btn';
+                btn.textContent = mName;
+                
+                if (dataMap[idx] && dataMap[idx].length > 0) {
+                    btn.classList.add('has-data');
+                    btn.onclick = () => activateMonth(year, idx, btn);
+                } else {
+                    btn.style.opacity = '0.3';
+                    btn.style.cursor = 'default';
+                }
+                
+                grid.appendChild(btn);
+            });
+        }
+
+        let typeWriterInterval = null;
+
+        function activateMonth(year, monthIdx, btnElement) {
+            // Visual Selection
+            const grid = document.getElementById(`grid-${year}`);
+            grid.querySelectorAll('.month-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+
+            // Setup Terminal
+            const term = document.getElementById(`term-${year}`);
+            const output = document.getElementById(`output-${year}`);
+            term.classList.remove('hidden');
+            output.textContent = ""; // Clear
+
+            const events = yearCache[year][monthIdx];
+            
+            // Build Text Buffer
+            let textBuffer = `> QUERY: LOGS ${year}-${String(monthIdx+1).padStart(2, '0')}\n> STATUS: FOUND ${events.length} RECORDS\n\n`;
+            
+            events.forEach(e => {
+                textBuffer += `[${e.date}] ${e.summary}\n`;
+                if (e.evidence) textBuffer += `   ↳ "${e.evidence.substring(0, 60)}"...\n`;
+                textBuffer += `\n`;
+            });
+
+            // Typewriter Effect
+            if (typeWriterInterval) clearInterval(typeWriterInterval);
+            
+            let charIndex = 0;
+            typeWriterInterval = setInterval(() => {
+                output.textContent += textBuffer.charAt(charIndex);
+                charIndex++;
+                // Scroll to bottom
+                // term.scrollTop = term.scrollHeight; 
+                
+                if (charIndex >= textBuffer.length) {
+                    clearInterval(typeWriterInterval);
+                }
+            }, 10); // Speed: 10ms per char
+        }
     </script>
 </body>
 </html>

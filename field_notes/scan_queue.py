@@ -85,6 +85,12 @@ def main():
     
     for filepath in files:
         filename = os.path.basename(filepath)
+        
+        # Exclude Reference Files
+        if "GIT" in filename or "resume" in filename.lower():
+            print(f"Skipping Reference File: {filename}")
+            continue
+
         text = read_file(filepath)
         
         # Regex chunking
