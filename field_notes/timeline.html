@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=7.1">
+    <link rel="stylesheet" href="style.css?v=7.2">
     <style>
         .safe-nav-bar { margin-bottom: 20px; }
         .safe-btn { color: #888; text-decoration: none; border: 1px solid #444; padding: 5px 10px; font-size: 0.8rem; }
@@ -39,10 +39,18 @@
             <div class="disclaimer-box">
                 <span style="color: var(--accent-color); font-weight: bold;">[DATA ORIGIN]</span> 18 years of raw engineering logs, synthesized by local AI (Mistral-7B). 
                 <br><span style="color: #888; font-size: 0.8em;">Note: Automated classification may contain artifacts. Reviewing logs via the terminal interface below.</span>
+                <div id="pinky-status" style="margin-top: 10px; font-size: 0.8em; color: #666; border-top: 1px solid #333; padding-top: 5px;">
+                    [STATUS] Connecting to neural uplink...
+                </div>
             </div>
 
             <div class="timeline-container" id="tree-root">
                 <div style="color: #666; padding: 20px;">[WAIT] Loading archives...</div>
+            </div>
+
+            <div class="terminal-viewer" id="main-terminal">
+                <div class="terminal-header">LOG VIEWER</div>
+                <div id="terminal-content" style="color: #ccc;">Select a month to query...<span class="cursor"></span></div>
             </div>
         </section>
     </main>
@@ -76,6 +84,27 @@
                 document.querySelector('main').onclick = () => sidebar.classList.remove('active');
             }
 
+            // Fetch Status
+            fetch('data/status.json?t=' + new Date().getTime())
+                .then(r => r.json())
+                .then(status => {
+                    const el = document.getElementById('pinky-status');
+                    let color = "#666";
+                    if (status.status === "ONLINE") color = "#4cd964";
+                    if (status.status === "WARNING") color = "#ffb000";
+                    if (status.status === "ERROR") color = "#ff5555";
+                    
+                    el.innerHTML = `
+                        <span style="color: ${color}; font-weight: bold;">[${status.status}]</span> 
+                        ${status.message} 
+                        <span style="opacity: 0.5;">(${status.timestamp})</span>
+                        ${status.new_items > 0 ? `<span style="color: var(--accent-color);">+${status.new_items} new</span>` : ''}
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById('pinky-status').textContent = "[STATUS] Offline (No heartbeat)";
+                });
+
             // Fetch Data
             let fetched = false;
             fetch('data/themes.json?t=' + new Date().getTime())
@@ -98,19 +127,19 @@
                 yearNode.id = `year-${year}`;
                 
                 // Tree Layout (Matches CSS)
-                yearNode.innerHTML = `
-                    <div class="year-label" onclick="window.toggleYear('${year}')">
+                yearNode.innerHTML = "
+                    <div class=\"year-label\" onclick=\"window.toggleYear('\''${year}'\')\">
                         ${year}
                     </div>
-                    <div class="year-content" id="content-${year}">
-                        <div class="strategy-block">
-                            <span style="color: #4daafc; font-weight: bold;">STRATEGY:</span> ${desc}
+                    <div class=\"year-content\" id=\"content-${year}\">
+                        <div class=\"strategy-block\">
+                            <span style=\"color: #4daafc; font-weight: bold;\">STRATEGY:</span> ${desc}
                         </div>
-                        <ul class="file-list" id="files-${year}">
-                            <li style="color: #555; padding-left: 20px;">Scanning...</li>
+                        <ul class=\"file-list\" id=\"files-${year}\">
+                            <li style=\"color: #555; padding-left: 20px;\">Scanning...</li>
                         </ul>
                     </div>
-                `;
+                ";
                 root.appendChild(yearNode);
             });
         }
@@ -190,7 +219,12 @@
 
             let buffer = `\n\n`;
             events.forEach(e => {
-                buffer += `[${e.date}] ${e.summary}\n`;
+                let dateDisplay = e.date;
+                if (!dateDisplay || dateDisplay.includes("Unknown") || dateDisplay.startsWith("1970")) {
+                    dateDisplay = "LOG";
+                }
+                
+                buffer += `[${dateDisplay}] ${e.summary}\n`;
                 if (e.evidence) buffer += `   ↳ ${e.evidence.substring(0, 120)}\n\n`;
             });
 
