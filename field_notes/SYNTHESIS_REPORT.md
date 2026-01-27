@@ -1,67 +1,32 @@
-# Field Notes Synthesis Report
-**Date:** January 25, 2026
-**Author:** Gemini CLI (Agent) & Pinky (Mistral-7B)
-**Status:** Complete (v2.2)
+# Field Notes Synthesis Report (v3.0)
+**Date:** January 27, 2026
+**Status:** Operational / Phase 9 Complete
 
-## 🎯 Objective
-To transform the static "Field Notes" portfolio into a data-driven dashboard without introducing a backend server or database ("Class 1" Philosophy). The goal was to index 18 years of raw engineering notes and correlate them with the curated "War Stories" to enhance searchability and visualize career progression.
+## 🎯 Project Evolution
+The Field Notes project evolved from a simple static "War Story" collection into a distributed, AI-indexed knowledge graph. The system now autonomously processes 18 years of engineering logs and provides an interactive "System Admin" interface for exploration.
 
-## 🏗️ Architecture: The "Static Synthesis" Pipeline
+## 🏗️ The "Slow Burn" Architecture
+To handle large-scale data without impacting host performance, we implemented a decoupled pipeline:
 
-We implemented a build-time data pipeline that leverages the local "Pinky" node (HomeLabAI) to process data, leaving the runtime site purely static.
+1.  **The Librarian (`scan_librarian.py`):** Classifies raw files into `LOG` (chronological), `REFERENCE` (technical docs), or `META` (strategic context) using Mistral-7B headers/mid-point sampling.
+2.  **The Queue Manager (`scan_queue.py`):** Date-aware chunking engine. Breaks multi-year files into `YYYY-MM` buckets and queues only new/modified content.
+3.  **The Nibbler (`nibble.py`):** A load-aware background worker. Wakes every 15m, checks Prometheus for CPU idle, and processes ONE chunk.
+4.  **Data Tiering:**
+    - `data/themes.json`: Skeleton for the UI (Strategic Themes).
+    - `data/YYYY.json`: Yearly aggregates for fast fetch.
+    - `data/YYYY_MM.json`: Granular month data.
 
-```mermaid
-graph TD
-    A[Raw Notes (2005-2024)] -->|Read via Symlink| B(Pinky Scanner Script)
-    C[Resume & Focal Reviews] -->|Strategic Context| B
-    B -->|Mistral-7B Inference| D[pinky_index_full.json]
-    D -->|Merge Script| E[search_index.json]
-    E -->|Fetch| F[Dashboard (index.html)]
-    D -->|Fetch| G[Timeline (timeline.html)]
-```
+## 🎭 The "Active Exploration" UI
+A professional "System Admin" aesthetic favoring function and depth:
+- **Blue Tree Interface:** Collapsible directory-style tree using ASCII branches.
+- **Inline Terminals:** Click a month to expand a terminal buffer *inline*.
+- **Typewriter FX:** Real-time character streaming simulates a live neural uplink.
+- **Fail-Safe Mode:** Local hardcoded skeleton ensures the site renders even if the JSON API is unreachable.
 
-### Components
-1.  **Pinky Scanner (`field_notes/scan_pinky.py`):**
-    *   A Python script that interfaces with the local Ollama instance (Port 11434).
-    *   **Input:** `raw_notes/notes_*.txt` (Symlinked from `~/knowledge_base`).
-    *   **Context:** Uses `Jason Allred Resume` and `Insights 2019-2024.txt` to ground the extraction.
-    *   **Logic:** extract `technical_tags` and `key_events` correlated to strategic themes.
+## 🛡️ Privacy & Governance
+- **Redaction Mode:** The AI automates PII removal (`[REDACTED]`) from technical logs, allowing 2024 data to surface without leaking names/emails.
+- **Shadow Archive:** (Planned) Local-only index to track raw-to-redacted mappings for duplicate detection.
 
-2.  **Grand Index (`field_notes/pinky_index_full.json`):**
-    *   The master dataset containing the "Ground Truth" of 18 years of work.
-    *   Structure: Year -> Strategic Theme -> Technical Tags -> Events.
-
-3.  **Search Index (`field_notes/search_index.json`):**
-    *   A lightweight mapping of `Tag -> [Article_IDs]`.
-    *   Merged via `field_notes/merge_indices.py` to combine manual curation with AI discovery.
-
-4.  **Frontend (Vanilla JS):**
-    *   **Dashboard:** `script.js` performs a "Hybrid Search" (Visible Text + Hidden Tags).
-    *   **Timeline:** `timeline.html` renders a vertical visualization of Strategy vs. Tactics.
-
-## 📊 Results
-
-### Search Enhancement
-*   **Before:** Search limited to visible titles (approx. 30 keywords).
-*   **After:** Search expanded to **100+ keywords** including deep cuts like:
-    *   *Simics, NPK, IPC, Trace32* (2015 era)
-    *   *Fulsim, CRC Mismatch* (2016 era)
-    *   *MCTP, PECI, Kayak* (2024 era)
-
-### Timeline Visualization
-*   Created a new `timeline.html` page accessible from Mission Control.
-*   Visualizes the split between "Strategic Goals" (Focal Reviews) and "Tactical Reality" (Engineering Logs).
-
-## 📝 Files & Locations
-*   **Live Site:** `https://notes.jason-lab.dev` (Port 9001)
-*   **Raw Data:** `~/Portfolio_Dev/raw_notes/` (Symlink to `~/knowledge_base`)
-*   **Scripts:**
-    *   `field_notes/scan_pinky.py` (The AI Extractor)
-    *   `field_notes/merge_indices.py` (The Index Merger)
-*   **Data Artifacts:**
-    *   `field_notes/pinky_index_full.json`
-    *   `field_notes/search_index.json`
-
-## 🔮 Future Recommendations
-*   **Automated Re-Scan:** Add a `make scan` target to run the Python script when new notes are added.
-*   **Deep Linking:** Update the Merge script to infer more precise article links based on event dates.
+## 📊 System Health
+- **Live Heartbeat:** Dashboard header displays the latest Pinky activity and total archive size (currently 1000+ records).
+- **Diagnostic Harness:** `debug_site.py` provides backend validation of the fetch chain.

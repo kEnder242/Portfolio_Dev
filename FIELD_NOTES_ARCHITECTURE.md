@@ -1,39 +1,64 @@
-# Field Notes Architecture & Security
+# Field Notes Architecture Overview
 
-## 🚀 Overview
-The "Field Notes" project is a professional technical dashboard designed to showcase engineering "War Stories," validation philosophy, and system architecture. It is built as a **"Class 1"** application: a robust, framework-less static site served via native Linux services.
+This document provides a high-level technical map of the Field Notes portfolio system.
 
-## 🏗️ Technical Stack
-- **Source:** Pure HTML5 / CSS3 (Dark Mode Engineering Aesthetic).
-- **Service:** Systemd unit `field-notes.service` running `python3 -m http.server`.
-- **Network:** Cloudflare Tunnel (`acme-lab`) mapping port `9001` to `notes.jason-lab.dev`.
-- **Security:** Cloudflare Zero Trust (Access) with a "Split-Policy" model.
+## 🛰️ System Topology
 
-## 🛡️ Security Model (Split-Policy)
-We maintain a strict boundary between public-facing "Lobby" content and internal "Vault" tools.
+```mermaid
+graph TD
+    subgraph "Local Storage (Source)"
+        A[knowledge_base] -->|Symlink| B[raw_notes]
+    end
 
-### 1. The Lobby (`notes.jason-lab.dev`)
-- **Purpose:** Interviewer/Recruiter access.
-- **Policy:** **Lobby Access**
-  - **Administrator:** Full access (OTP).
-  - **NVIDIA Guests:** Allow all users with `@nvidia.com` domains (OTP).
-  - **Method:** One-Time PIN via email.
+    subgraph "Background Engine (The Slow Burn)"
+        B --> C[Librarian]
+        C -->|manifest.json| D[Queue Manager]
+        D -->|queue.json| E[Nibbler]
+        E -->|mistral:7b| F[JSON Artifacts]
+    end
 
-### 2. The Vault (`code.jason-lab.dev`, `pager.jason-lab.dev`)
-- **Purpose:** Development and Observability.
-- **Policy:** **Admin Only**
-  - **Administrator:** `kender242@gmail.com` ONLY.
-  - **Auth:** Dual-layer (Cloudflare OTP + App-level Password).
+    subgraph "Infrastructure"
+        G[Prometheus] -->|Load Metrics| E
+    end
 
-## 📂 Project Structure
-- `index.html`: Semantic content for all war stories.
-- `style.css`: Custom "Class 1" dark theme.
-- `Travel_Guide_2026.md`: **(LOCAL ONLY)** Historical context, Pinky logic, and credentials. (Git-ignored).
-- `FIELD_NOTES_PLAN.md`: Roadmap and Phase status.
+    subgraph "Frontend (The View)"
+        F --> H[index.html]
+        F --> I[timeline.html]
+        J[Cloudflare Tunnel] --> H
+    end
+```
 
-## 🔗 External Documentation
-Detailed setup instructions, API token permissions, and deployment commands are maintained in the secure Google Workspace:
-- [Cloudflare Zero Trust Setup Guide](https://docs.google.com/document/d/1ffro9ZtR4VO_9dqoUR46-QlQnxBZ97RhcrhEZloCKk8)
+## 🛠️ Component Breakdown
 
----
-*Note: This file is a high-level grounding document. For sensitive IDs or CLI management, refer to the private Google Doc or the `.secrets/` directory on the host.*
+### 1. Data Ingestion
+- **`scan_librarian.py`**: Reads first/middle 1KB of files. Pinky classifies type (`LOG`, `REFERENCE`, `META`).
+- **`scan_queue.py`**: Splits `LOG` files into monthly chunks. Uses MD5 hashing to skip unchanged data.
+
+### 2. Processing (The Nibbler)
+- **`nibble.py`**: The atomic unit of work. 
+    - Queries Prometheus for `node_load1`.
+    - If `load < 2.0`, fetches 1 task from `queue.json`.
+    - Asks Pinky to extract technical wins + redact names.
+    - Saves granular JSON and updates Yearly Aggregate.
+- **`force_feed.py`**: Batch wrapper to loop the nibbler until the queue is empty.
+
+### 3. The "Neural Uplink" (Static API)
+- Data lives in `field_notes/data/`.
+- `themes.json`: Mapping of years to strategic focal goals.
+- `YYYY.json`: Collection of all monthly events for a given year.
+- `status.json`: Heartbeat file showing last scan result and total record count.
+
+### 4. User Interface
+- **`timeline.html`**: A "Class 1" (Vanilla JS) SPA.
+    - Uses `IntersectionObserver` for scroll-aware priming.
+    - Uses an accordion-tree structure for "Operating System" feel.
+    - Features a high-speed character buffer (Typewriter) for log display.
+- **Fail-Safe Mechanism**: The UI includes hardcoded 2005-2024 skeletons. If the network fetch fails, the tree still populates.
+
+## 📈 Integration with HomeLabAI
+- **`ai_engine.py`**: A factory class that currently provides `OllamaClient` but is stubbed for `AcmeLabClient`.
+- **MCP Bridge**: The system is designed to migrate to a full Model Context Protocol (MCP) toolset, allowing the HomeLabAI "Brain" to act as the primary archivist.
+
+## ⚠️ Known Fragilities & Fixes
+- **Mobile Caching:** Browsers are aggressive. Use versioned URLs (`?v=X.X`) for all CSS/JS changes.
+- **JSON Formatting:** Large prompts occasionally cause LLM hallucinations. The `nibble.py` script includes a `validate_date` and `extract_json_from_llm` cleanup layer.
