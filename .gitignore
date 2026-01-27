@@ -17,3 +17,15 @@ HomeLabAI_Dev
 
 # Sensitive Documentation
 Travel_Guide_2026.md
+
+# Field Notes Data (Private Logs/Indices)
+field_notes/data/
+field_notes/pinky_index_full.json
+field_notes/acronym_candidates.json
+field_notes/acronym_map.json
+pinky_scan_result.json
+field_notes/privacy_audit.json
+
+# Local Data Symlink
+raw_notes/
+
