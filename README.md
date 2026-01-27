@@ -18,7 +18,7 @@ While the frontend is simple, the backend is a sophisticated AI pipeline ("The S
 ```mermaid
 graph TD
     A[Raw Notes] -->|Librarian Script| B(Queue Manager)
-    B -->|Task Chunk| C{Pinky (Mistral-7B)}
+    B -->|Task Chunk| C{"Pinky (Mistral-7B)"}
     C -->|Extract & Redact| D[Granular JSON]
     D -->|Lazy Load| E[Blue Tree Timeline]
 ```
