@@ -163,20 +163,19 @@
             <article id="serial-fragments">
                 <h3>Expect Fragments (Serial Validation)</h3>
                 <div class="meta">Tag: Automation | Impact: Reliability</div>
-                <p>I wrote an automation harness that allowed me to validate TGUI applications in a OS platform agnostic way. It was rather nifty, using TCL and the expect library to handle reading and writing to the screen in a way that can give scripts a grounding.</p>
-                <p>Unfortunately, when I started using expect for serial output (EFI mode) things got dirty. I quickly learned that serial output has no guarantee to preserve words, it’s just a stream of characters - menu items and keywords would often get clipped. I was mostly able to get around this with generous regular expressions. In theory, the flows should have worked, but in the real world, the data was noisy.</p>
+                <p>I wrote an automation harness that allowed me to validate TGUI applications in a OS platform agnostic way. It was rather nifty, using TCL and the expect library to handle reading and writing to the screen. Unfortunately, when I started using expect for serial output (EFI mode) things got dirty. I learned that serial output has no guarantee to preserve words—menu items would often get clipped. I mostly got around this with generous regular expressions. In theory, the flows should have worked, but in the real world, the data was noisy. However, accepting that noise as a constraint paid off. <strong>By building a robust parser that tolerated the fragments, I was able to shift the NIC validation process from 100% manual to 90% automated, saving hours of tedium and proving that even messy interfaces could be tamed.</strong></p>
             </article>
 
             <article id="crazy-callbacks">
                 <h3>Crazy Callbacks</h3>
                 <div class="meta">Tag: Code Pattern | Impact: Efficiency</div>
-                <p>I used a clever callback pattern when chunking data over PECI - sending multiple read requests and mapping the responses with tailored callback functions to de-serialize the data.</p>
+                <p>I used a clever callback pattern when chunking data over PECI - sending multiple read requests and mapping the responses with tailored callback functions to de-serialize the data. This asynchronous approach, detailed in our 2022 DTTC paper "Measuring PECI Performance," <strong>allowed us to chain requests without blocking, improving throughput by nearly 100x (from ~57 to ~5300 commands/sec) and proving the software stack could finally keep up with wire speed.</strong></p>
             </article>
 
             <article id="throughput-gotchas">
                 <h3>Throughput Gotchas</h3>
                 <div class="meta">Tag: Measurement | Impact: Accuracy</div>
-                <p>Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it’s more ambiguous when counting packets over SMBus or other internal protocols. My DTTC paper tackled this but I was never quite satisfied to provide a standard MB/s measurement.</p>
+                <p>Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it’s more ambiguous when counting packets over SMBus or other internal protocols. Our DTTC paper tackled this, but I was never quite satisfied to provide a standard MB/s measurement. <strong>Because the protocol overhead was so heavy, I argued that "Commands per Second" was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see.</strong></p>
             </article>
 
             <article id="curl-postman">
@@ -218,7 +217,7 @@
             <article id="kernel-patch">
                 <h3>The Kernel Patch (Topology & Architecture)</h3>
                 <div class="meta">Tag: Kernel | Impact: Fix</div>
-                <p>I wrote a kernel patch for a government contract. We had a module that would flood dmesg during boot time on custom silicon, the fix was to add flexibility to topology assumptions. Not much I can say beyond that. There was too much red tape for the patch to be upstreamed but I know how to write and compile a module for the linux kernel.</p>
+                <p>We had a module flooding dmesg on custom silicon due to rigid topology assumptions. I wrote and compiled a kernel patch to add the necessary flexibility. <strong>This eliminated the noise, allowing the team to focus on real bugs.</strong> While the patch couldn't be upstreamed due to red tape, the experience validated that I could dive into kernel code to unblock the validation process.</p>
             </article>
 
             <article id="negative-testing">
