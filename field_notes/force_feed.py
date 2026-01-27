@@ -57,6 +57,11 @@ def main():
         # Optional: Cool down for GPU?
         # time.sleep(1) 
 
+    # Final Status Update
+    from nibble import update_status, get_total_events
+    total = get_total_events()
+    update_status("IDLE", f"Archives synced. Total records: {total}")
+
     print("\n=== FEED COMPLETE ===")
 
 if __name__ == "__main__":

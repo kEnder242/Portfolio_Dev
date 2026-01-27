@@ -172,14 +172,20 @@ def main():
     {task['content'][:6000]}
 
     [TASK]
-    Extract technical events.
-    Rules:
-    1. Dates MUST be YYYY-MM-DD.
-    2. Sensitivity: "Public" (Safe) or "Sensitive" (PII).
-    3. Be specific. 
+    Analyze the RAW NOTES.
+    1. Extract technical events (Technical win, Bug fix, Tool usage).
+    2. Compare with EXISTING ARCHIVE. avoid duplicates.
+    3. IMPROVE descriptions if the raw notes offer more detail.
+    4. **PRIVACY & REDACTION:**
+       - **Public:** Technical work, bug fixes, tool usage.
+         * *ACTION:* If it contains a name/email, replace it with `[REDACTED]`. Keep the technical context.
+       - **Sensitive:** Personal feedback ("improvement needed"), salary, health, or purely internal non-technical gossip.
+         * *ACTION:* Mark as "Sensitive".
     
-    [OUTPUT JSON]
-    [ {{ "date": "YYYY-MM-DD", "summary": "...", "evidence": "...", "sensitivity": "Public" }} ]
+    Return a JSON list of NEW or UPDATED events:
+    [
+        {{ "date": "YYYY-MM-DD", "summary": "Meeting with [REDACTED] about Simics debugging", "evidence": "Quote", "sensitivity": "Public", "tags": ["Simics"] }}
+    ]
     """
     
     print(f"   > Asking Pinky...")
@@ -199,6 +205,16 @@ def main():
             if not isinstance(event, dict): continue
             
             clean_date = validate_date(event.get('date', ''))
+            
+            # Fallback to Bucket Date if Pinky missed it
+            if not clean_date and '-' in task['bucket']:
+                try:
+                    # bucket is YYYY-MM
+                    parts = task['bucket'].split('-')
+                    if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
+                        clean_date = f"{parts[0]}-{parts[1]}-01"
+                except: pass
+
             if not clean_date:
                 continue # Skip invalid dates
             event['date'] = clean_date

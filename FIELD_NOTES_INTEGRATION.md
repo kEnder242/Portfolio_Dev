@@ -84,3 +84,35 @@ The Portfolio generates valuable structured data that the Lab should consume.
     -   Chunk strategy: "In 2016, Jason worked on Simics..."
     -   Upserts to **ChromaDB** (The Lab's Long Term Memory).
 3.  **Benefit:** You can ask Pinky on your phone: *"When did I first use JTAG?"* and it retrieves the exact date from the Portfolio's research.
+
+## 4. Future Capability: The Self-Refining Knowledge Graph
+**Concept:** A "Gardening" loop where HomeLabAI actively curates the Portfolio.
+
+### The Vision
+Instead of a linear scan, the Lab implements a CMS-like loop:
+1.  **Drafting:** Pinky scans raw logs and creates draft "Story Nodes" (JSON).
+2.  **Critique:** The Brain Node reviews drafts against the "Strategic Themes" (Focals). "Is this log relevant to the Q3 Goal?"
+3.  **Pruning:** Low-value logs are merged or deleted. High-value logs are promoted to "War Stories."
+4.  **Display:** The Portfolio simply renders the curated `knowledge_graph.json`, removing the need for complex client-side logic.
+
+### Technical Requirement
+- **Shared Storage:** The `field_notes/data` directory must be writable by the `acme_lab` user/service.
+- **State Management:** A SQLite DB or ChromaDB is required to track "Refinement Depth" (How many times has this node been reviewed?).
+
+## 5. Boundary Risk Assessment (Portfolio <-> Lab)
+
+### Risk 1: Concurrency & Locks
+- **Scenario:** `nibble.py` (Portfolio) and `ArchiveNode` (Lab) try to write to `status.json` or `queue.json` simultaneously.
+- **Impact:** Corrupt JSON. Data loss.
+- **Mitigation:**
+    - Use `sqlite` (WAL mode) instead of JSON for shared state.
+    - Or enforce a "Single Writer" policy (Lab owns the write, Portfolio only reads).
+
+### Risk 2: Permissions
+- **Scenario:** `field-notes.service` runs as `jallred` (User). `acme-lab.service` might run as `acme` or root?
+- **Impact:** Permission Denied errors when cleaning up files.
+- **Mitigation:** Ensure both services run as the same user (`jallred`) or use a shared group (`lab_staff`) with `rw` permissions.
+
+### Risk 3: Symlink fragility
+- **Scenario:** `raw_notes` symlink breaks if the underlying drive (`~/knowledge_base`) moves or unmounts.
+- **Mitigation:** Add a `pre-flight` check in `nibble.py` to verify the symlink resolves before queueing work.

@@ -40,8 +40,8 @@ class OllamaClient(CognitiveEngine):
         }
         
         try:
-            # 60s timeout to prevent hangs
-            response = requests.post(self.url, json=payload, timeout=60)
+            # 90s timeout to prevent hangs on large chunks
+            response = requests.post(self.url, json=payload, timeout=90)
             response.raise_for_status()
             return response.json()['response']
         except Exception as e:
