@@ -4,37 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=8.0">
+    <link rel="stylesheet" href="style.css?v=9.0">
     <style>
-        /* Debug Overlay */
-        #debug-panel {
-            background: #110000;
-            border: 1px solid red;
-            color: #ffcccc;
-            font-family: monospace;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 0.75rem;
-            max-height: 150px;
-            overflow-y: auto;
-            display: block; /* VISIBLE */
-        }
-        
-        #tree-root {
-            min-height: 50px;
-            border: 1px dashed #333; /* Outline to verify container presence */
-        }
-
-        .safe-back-btn {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #333;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #555;
-        }
+        .safe-nav-bar { margin-bottom: 20px; }
+        .safe-btn { color: #888; text-decoration: none; border: 1px solid #444; padding: 5px 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -52,38 +25,44 @@
     </nav>
 
     <main>
-        <a href="index.html" class="safe-back-btn">← Emergency Exit</a>
-        
-        <div id="debug-panel">DEBUGGER ONLINE...</div>
+        <div class="safe-nav-bar">
+            <a href="index.html" class="safe-btn">← DASHBOARD</a>
+        </div>
+
+        <div id="sys-console">
+            <div>[INIT] System bootstrap...</div>
+        </div>
 
         <section>
-            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Career Timeline</h2>
+            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">/home/jason/career_history</h2>
             
-            <div class="timeline-container" id="tree-root">
-                <div style="color: #666; padding: 20px;" id="loading-msg">[WAIT] Loading archives...</div>
+            <div class="disclaimer-box">
+                <span style="color: var(--accent-color); font-weight: bold;">[DATA ORIGIN]</span> 18 years of raw engineering logs, synthesized by local AI (Mistral-7B). 
+                <br><span style="color: #888; font-size: 0.8em;">Note: Automated classification may contain artifacts. Reviewing logs via the terminal interface below.</span>
+                <div id="pinky-status" style="margin-top: 10px; font-size: 0.8em; color: #666; border-top: 1px solid #333; padding-top: 5px;">
+                    [STATUS] Connecting to neural uplink...
+                </div>
             </div>
 
-            <div class="terminal-viewer" id="main-terminal">
-                <div class="terminal-header">LOG VIEWER</div>
-                <div id="terminal-content" style="color: #ccc;">Select a month to view details...<span class="cursor"></span></div>
+            <div class="timeline-container" id="tree-root">
+                <div style="color: #666; padding: 20px;">[WAIT] Loading archives...</div>
             </div>
         </section>
     </main>
 
     <script>
         const root = document.getElementById('tree-root');
-        const dbg = document.getElementById('debug-panel');
+        const consoleEl = document.getElementById('sys-console');
         const yearCache = {};
-        let typeInterval;
+        let activeInterval = null;
 
-        function log(msg) {
-            dbg.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-            console.log(msg);
+        function log(msg, type='info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            consoleEl.appendChild(div);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
         }
-
-        window.onerror = function(msg, url, line) {
-            log(`CRITICAL JS ERROR: ${msg} line ${line}`);
-        };
 
         const FALLBACK_THEMES = {
             "2024": { "strategic_theme": "Implementing manageability features." },
@@ -93,87 +72,98 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            log("DOM Loaded.");
+            log("DOM Ready.");
             
+            // Mobile Menu
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
-            if(menuToggle && sidebar) {
-                menuToggle.onclick = (e) => {
-                    sidebar.classList.toggle('active');
-                    e.stopPropagation();
-                };
+            if (menuToggle && sidebar) {
+                menuToggle.onclick = (e) => { sidebar.classList.toggle('active'); e.stopPropagation(); };
                 document.querySelector('main').onclick = () => sidebar.classList.remove('active');
             }
 
-            log("Fetching themes.json...");
-            let fetchSuccess = false;
+            // Fetch Status
+            fetch('data/status.json?t=' + new Date().getTime())
+                .then(r => r.json())
+                .then(status => {
+                    const el = document.getElementById('pinky-status');
+                    let color = "#666";
+                    if (status.status === "ONLINE") color = "#4cd964";
+                    if (status.status === "IDLE") color = "#4daafc";
+                    
+                    el.innerHTML = `
+                        <span style="color: ${color}; font-weight: bold;">[${status.status}]</span> 
+                        ${status.message} 
+                        <span style="opacity: 0.5;">(${status.timestamp})</span>
+                    `;
+                    log("Neural uplink connected.");
+                })
+                .catch(() => log("Neural uplink offline.", 'warn'));
+
+            // Fetch Data with Fail-Safe
+            let fetched = false;
+            log("Mounting archives...");
             
             fetch('data/themes.json?t=' + new Date().getTime())
                 .then(r => {
-                    if(!r.ok) throw new Error("HTTP " + r.status);
+                    if (!r.ok) throw new Error("HTTP " + r.status);
                     return r.json();
                 })
-                .then(data => {
-                    fetchSuccess = true;
-                    log(`Themes loaded. Found ${Object.keys(data).length} years.`);
-                    renderYears(data);
+                .then(data => { 
+                    fetched = true; 
+                    log(`Archive mounted. Found ${Object.keys(data).length} nodes.`); 
+                    renderYears(data); 
                 })
-                .catch(e => {
-                    log(`FETCH FAILED: ${e.message}`);
-                    if(!fetchSuccess) {
-                        log("Activating FAIL-SAFE.");
-                        renderYears(FALLBACK_THEMES);
-                    }
+                .catch(err => { 
+                    log(`Mount failed (${err.message}). Using cache.`, 'err');
+                    if(!fetched) renderYears(FALLBACK_THEMES); 
                 });
 
-            setTimeout(() => {
-                if(!fetchSuccess) {
-                    log("Fetch timed out (2s). Forcing Fail-Safe.");
-                    renderYears(FALLBACK_THEMES);
-                }
-            }, 2000);
+            setTimeout(() => { 
+                if(!fetched) { 
+                    log("Mount timeout. Forcing local cache.", 'warn'); 
+                    renderYears(FALLBACK_THEMES); 
+                } 
+            }, 2500);
         });
 
         function renderYears(themes) {
             root.innerHTML = "";
             const sortedYears = Object.keys(themes).sort((a, b) => b - a);
-            
-            if(sortedYears.length === 0) {
-                log("WARNING: Theme list is empty!");
+
+            if (sortedYears.length === 0) {
+                root.innerHTML = "<div style='color:red'>Archive Empty.</div>";
                 return;
             }
 
             sortedYears.forEach(year => {
                 const item = themes[year];
-                const desc = typeof item === 'string' ? item : (item.strategic_theme || "Archive active.");
-                
+                const desc = item.strategic_theme || "Archive active.";
                 const yearNode = document.createElement('div');
                 yearNode.className = 'tree-year';
                 yearNode.id = `year-${year}`;
                 
-                yearNode.innerHTML = "
-                    <div class=\"year-label\" onclick=\"window.toggleYear('${year}')\">
-                        <span>${year}</span>
-                        <span style=\"font-size: 0.8rem; opacity: 0.5;\">▼</span>
+                yearNode.innerHTML = `
+                    <div class="year-label" onclick="window.toggleYear('${year}')">
+                        ${year}
                     </div>
-                    <div class=\"year-content\" id=\"content-${year}\">
-                        <div class=\"strategy-block\">
-                            <span style=\"color: #4daafc; font-weight: bold;\">STRATEGY:</span> ${desc}
+                    <div class="year-content" id="content-${year}">
+                        <div class="strategy-block">
+                            <span style="color: #4daafc; font-weight: bold;">STRATEGY:</span> ${desc}
                         </div>
-                        <ul class=\"file-list\" id=\"files-${year}\">
-                            <li style=\"color: #555;\">Loading...</li>
+                        <ul class="file-list" id="files-${year}">
+                            <li style="color: #555; padding-left: 20px;">Scanning...</li>
                         </ul>
                     </div>
-                ";
+                `;
                 root.appendChild(yearNode);
             });
-            log("Years rendered to DOM.");
+            log("Directory tree rendered.");
         }
 
         window.toggleYear = function(year) {
-            log(`Click: Year ${year}`);
+            log(`Expanding node: ${year}`);
             const node = document.getElementById(`year-${year}`);
-            
             if (node.classList.contains('open')) {
                 node.classList.remove('open');
                 return;
@@ -181,17 +171,16 @@
             node.classList.add('open');
 
             if (!yearCache[year]) {
-                log(`Fetching data/${year}.json...`);
                 fetch(`data/${year}.json?t=${new Date().getTime()}`)
                     .then(r => r.json())
                     .then(events => {
                         yearCache[year] = events;
                         renderFileList(year, events);
-                        log(`Loaded ${events.length} events for ${year}`);
+                        log(`Loaded ${events.length} records.`);
                     })
-                    .catch(e => {
-                        log(`Error loading ${year}: ${e}`);
-                        document.getElementById(`files-${year}`).innerHTML = `<li style="color: #d55;">Log Missing</li>`;
+                    .catch(() => {
+                        log(`Error reading ${year}.json`, 'err');
+                        document.getElementById(`files-${year}`).innerHTML = `<li style="color: #d55; padding-left: 20px;">Log Missing</li>`;
                     });
             } else {
                 renderFileList(year, yearCache[year]);
@@ -201,15 +190,12 @@
         function renderFileList(year, events) {
             const list = document.getElementById(`files-${year}`);
             list.innerHTML = ""; 
-
             const groups = {};
             events.forEach(e => {
                 let dateDisplay = e.date || "Unknown";
                 if (dateDisplay.includes("Unknown") || dateDisplay.startsWith("1970")) {
                     dateDisplay = "LOG";
                 }
-                // Group logic: Month or LOG bucket?
-                // Just use first 7 chars for grouping
                 const month = dateDisplay.substring(0, 7); 
                 if (!groups[month]) groups[month] = [];
                 groups[month].push(e);
@@ -220,28 +206,24 @@
                 const li = document.createElement('li');
                 li.className = 'file-item';
                 
-                let displayName = month;
-                // Parse Month Name if YYYY-MM
-                if (month.match(/^\d{4}-\d{2}$/)) {
-                    const parts = month.split('-');
-                    try {
-                        displayName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'long'});
-                    } catch(e) {}
-                }
+                const parts = month.split('-');
+                let mName = "misc";
+                try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
                 
-                li.innerHTML = `<strong>${displayName}</strong> <span style="opacity:0.6;">(${monthData.length})</span>`;
+                const filename = `${mName}_${parts[0]}.log`;
+
+                // Inline Terminal Structure
+                const row = document.createElement('div');
+                row.className = 'file-row';
+                row.innerHTML = `<strong>${filename}</strong> (${monthData.length})`;
                 
-                // Inline Terminal
                 const term = document.createElement('div');
                 term.className = 'inline-terminal';
+                
+                li.appendChild(row);
                 li.appendChild(term);
                 
-                li.onclick = (e) => {
-                    // Prevent bubbling if clicking terminal itself
-                    if(e.target.closest('.inline-terminal')) return;
-                    toggleTerminal(term, displayName + " " + month, monthData);
-                };
-                
+                row.onclick = () => toggleTerminal(term, filename, monthData);
                 list.appendChild(li);
             });
         }
@@ -253,8 +235,6 @@
             }
             if (activeInterval) clearInterval(activeInterval);
 
-            // Close others? Optional.
-            
             termElement.style.display = 'block';
             termElement.innerHTML = `<span style="color: #4daafc;">> ACCESSING ${title.toUpperCase()}...</span>`;
             
