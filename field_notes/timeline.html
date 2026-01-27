@@ -206,11 +206,23 @@
                 const li = document.createElement('li');
                 li.className = 'file-item';
                 
-                const parts = month.split('-');
-                let mName = "misc";
-                try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
+                let filename = "misc.log";
                 
-                const filename = `${mName}_${parts[0]}.log`;
+                // Case 1: Standard YYYY-MM
+                if (month.match(/^\d{4}-\d{2}$/)) {
+                    const parts = month.split('-');
+                    let mName = "misc";
+                    try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
+                    filename = `${mName}_${parts[0]}.log`;
+                } 
+                // Case 2: Known Garbage (invalid date...)
+                else if (month.includes("invalid") || month.includes("Unknown")) {
+                    filename = "system_dump.log";
+                }
+                // Case 3: Just use the key sanitized
+                else {
+                    filename = month.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() + ".log";
+                }
 
                 // Inline Terminal Structure
                 const row = document.createElement('div');
