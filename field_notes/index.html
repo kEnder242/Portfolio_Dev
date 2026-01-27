@@ -222,7 +222,7 @@
 
             <article id="negative-testing">
                 <h3>Negative Testing (The Yield Use Case)</h3>
-                <div class="meta">Tag: Validation | Impact: Yield Improvement</div>
+                <div class="meta">Tag: Validation | Impact: Execution Speed</div>
                 <p>I had a big PECI coverage miss, it was rather embarrassing. Because we had a huge list, I was only checking what I knew existed, not what shouldn’t exist. Well, some unexpected endpoints did surface, more echoes of what they should be, but those endpoints should not have been visible. I needed to pivot away from just reading known devices to scanning and including negative space.</p>
                 <p>I recalled a conversation with an expert who had scanned through the BDF region before and adapted that to PECI space. To do that I needed a list of all possible combinations in PCI space - which fit very neatly with a generator pattern. One of the first times I really felt <em>yield</em> improved the readability and reliability of my code.</p>
                 <p>After I got it running I still saw ‘extra’ devices popping up, but they turned out to be actual hardware, which was easy to correlate with lspci. It was a huge space to cover, and a full run would have taken almost a week, but <strong>with the combination of the bulk transfer API and fast negative returns the expected execution time went from a few days to under 10 hours.</strong></p>
