@@ -6,6 +6,7 @@ import time
 import glob
 import requests
 import hashlib
+import logging
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -17,6 +18,21 @@ QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
+
+# Setup Logging
+LOG_FILE = os.path.join(DATA_DIR, "pinky.log")
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+# Helper to log to both (redundant with basicConfig but keeps API simple)
+def log(msg):
+    logging.info(msg)
 
 # Inputs
 RESUME_PATH = "raw_notes/Jason Allred Resume - Jan 2026.txt"
@@ -44,14 +60,11 @@ def update_status(status, msg, new_items=0):
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
     }
     
-    # If going IDLE, maybe keep the last "Processed X" message in a separate field?
-    # For now, just overwrite. The UI shows "Total Records" when IDLE.
-    
     try:
         with open(STATUS_FILE, 'w') as f:
             json.dump(data, f, indent=2)
     except Exception as e:
-        print(f"Error updating status: {e}")
+        log(f"Error updating status: {e}")
 
 def get_system_load():
     try:
@@ -67,8 +80,7 @@ def get_system_load():
 def can_burn():
     load = get_system_load()
     if load > MAX_LOAD:
-        print(f"System Load High ({load} > {MAX_LOAD}). Skipping nibble.")
-        # Only update status if it was previously ONLINE? No, let's just log it.
+        log(f"System Load High ({load} > {MAX_LOAD}). Skipping nibble.")
         return False
     return True
 
@@ -127,7 +139,7 @@ def get_total_events():
     return count
 
 def main():
-    print("--- Pinky Nibbler v1.4 (Strict) ---")
+    log("--- Pinky Nibbler v1.5 (Logged) ---")
     
     if not can_burn():
         return
@@ -146,7 +158,7 @@ def main():
         return
 
     task = queue.pop(0)
-    print(f"Nibbling: {task['id']}")
+    log(f"Nibbling: {task['id']}")
     
     resume = read_file(RESUME_PATH)
     focal_1 = read_file(FOCAL_OLD)
@@ -188,12 +200,12 @@ def main():
     ]
     """
     
-    print(f"   > Asking Pinky...")
+    log(f"   > Asking Pinky...")
     try:
         response = ENGINE.generate(prompt)
         new_events = extract_json_from_llm(response)
     except Exception as e:
-        print(f"   ! AI Error: {e}")
+        log(f"   ! AI Error: {e}")
         new_events = []
     
     if isinstance(new_events, list) and len(new_events) > 0:
@@ -245,9 +257,7 @@ def main():
 
         update_status("ONLINE", f"Processed {task['bucket']}", added_count)
     else:
-        print("   > No valid events found.")
-        # Still update state to prevent infinite retry?
-        # Yes, mark done even if empty to move on.
+        log("   > No valid events found.")
 
     # Update State & Queue
     content_hash = hashlib.md5(task['content'].encode('utf-8')).hexdigest()

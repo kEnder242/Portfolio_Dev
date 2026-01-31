@@ -47,6 +47,21 @@ python3 field_notes/scan_queue.py
 python3 field_notes/force_feed.py
 ```
 
+## 🚀 Lab Deployment & Services
+As part of the **Federated Lab** architecture, this repository acts as the **Platform Host** for `z87-Linux`.
+
+### Systemd Services (Managed by z87-Linux)
+These services ensure the platform is always available:
+*   `cloudflared.service`: Connects `jason-lab.dev` to the local machine.
+*   `code-server@jallred.service`: VS Code Web IDE (`code.jason-lab.dev`).
+*   `acme-pager.service`: Streamlit Log/Note Pager (`pager.jason-lab.dev`).
+*   `acme-notes.service`: Static Timeline Server (`notes.jason-lab.dev`).
+
+### Local Environment
+*   **Path:** `~/Dev_Lab/Portfolio_Dev`
+*   **Data Source:** `raw_notes/` (Symlink to `~/knowledge_base`)
+*   **Backend Link:** `HomeLabAI_Dev/` (Symlink to `~/Dev_Lab/HomeLabAI`)
+
 ## 🤖 Credits & Collaboration
 This project was architected and implemented in an agentic loop with **Google Gemini CLI**.
 *   **Concept & Strategy:** Jason Allred

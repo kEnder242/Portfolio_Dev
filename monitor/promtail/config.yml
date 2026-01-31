@@ -1,0 +1,31 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: field_notes_logs
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: field_notes
+      __path__: /var/log/field_notes/*.log
+
+- job_name: system_logs
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: system
+      __path__: /var/log/host/kern.log
+  - targets:
+      - localhost
+    labels:
+      job: system
+      __path__: /var/log/host/syslog
