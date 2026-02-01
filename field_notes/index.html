@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Field Notes | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=7.1">
+    <link rel="stylesheet" href="style.css?v=10.0">
 </head>
 <body>
     <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
@@ -13,66 +13,72 @@
         <h1>The Field Manual</h1>
         <div class="subtitle">Jason Allred</div>
         
+        <section id="mission-control">
+            <h2>Mission Control</h2>
+            <ul>
+                <li><a href="index.html" class="mission-link"><span class="status-dot online"></span> 📖 Field Manual</a></li>
+                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
+                <li><a href="pager.html" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
+                <li><a href="timeline.html" class="mission-link"><span class="status-dot online"></span> Timeline (The Blue Tree)</a></li>
+                <li><a href="files.html" class="mission-link"><span class="status-dot online"></span> Artifact Map</a></li>
+                <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Observability Deck</a></li>
+            </ul>
+        </section>
+
         <input type="text" id="nav-filter" placeholder="Filter nodes..." aria-label="Filter navigation">
 
-        <h2>Mission Control</h2>
-        <ul>
-            <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
-            <li><a href="https://pager.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
-            <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Metrics (Grafana)</a></li>
-            <li><a href="timeline.html" class="mission-link"><span class="status-dot online"></span> Career Timeline</a></li>
-        </ul>
+        <div id="searchable-content">
+            <h2>Systems Architecture</h2>
+            <ul>
+                <li><a href="#visa-tool">The VISA Tool Engine</a></li>
+                <li><a href="#xslt-parsing">Automated Parsing (XSLT)</a></li>
+                <li><a href="#config-file">A Simple Config File</a></li>
+                <li><a href="#fleet-scale">Flashing 100 Nodes</a></li>
+                <li><a href="#cygwin-wall">The Cygwin Wall</a></li>
+                <li><a href="#ti-basic">Reinventing TI Basic</a></li>
+                <li><a href="#quakecon">The QuakeCon Hot Swap</a></li>
+            </ul>
 
-        <h2>Systems Architecture</h2>
-        <ul>
-            <li><a href="#visa-tool">The VISA Tool Engine</a></li>
-            <li><a href="#xslt-parsing">Automated Parsing (XSLT)</a></li>
-            <li><a href="#config-file">A Simple Config File</a></li>
-            <li><a href="#fleet-scale">Flashing 100 Nodes</a></li>
-            <li><a href="#cygwin-wall">The Cygwin Wall</a></li>
-            <li><a href="#ti-basic">Reinventing TI Basic</a></li>
-            <li><a href="#quakecon">The QuakeCon Hot Swap</a></li>
-        </ul>
+            <h2>Validation Methodology</h2>
+            <ul>
+                <li><a href="#reading-robot">Reading Like a Robot</a></li>
+                <li><a href="#rapl-matplotlib">RAPL & Matplotlib</a></li>
+                <li><a href="#grok-code">How to Grok Code</a></li>
+                <li><a href="#beating-heart">The Beating Heart</a></li>
+                <li><a href="#serial-fragments">Expect Fragments (Serial)</a></li>
+                <li><a href="#crazy-callbacks">Crazy Callbacks</a></li>
+                <li><a href="#throughput-gotchas">Throughput Gotchas</a></li>
+                <li><a href="#curl-postman">Curl over Postman</a></li>
+                <li><a href="#venv-glue">Venv is like Hot Glue</a></li>
+            </ul>
 
-        <h2>Validation Methodology</h2>
-        <ul>
-            <li><a href="#reading-robot">Reading Like a Robot</a></li>
-            <li><a href="#rapl-matplotlib">RAPL & Matplotlib</a></li>
-            <li><a href="#grok-code">How to Grok Code</a></li>
-            <li><a href="#beating-heart">The Beating Heart</a></li>
-            <li><a href="#serial-fragments">Expect Fragments (Serial)</a></li>
-            <li><a href="#crazy-callbacks">Crazy Callbacks</a></li>
-            <li><a href="#throughput-gotchas">Throughput Gotchas</a></li>
-            <li><a href="#curl-postman">Curl over Postman</a></li>
-            <li><a href="#venv-glue">Venv is like Hot Glue</a></li>
-        </ul>
+            <h2>Security & Yield</h2>
+            <ul>
+                <li><a href="#rakp-security">The RAKP Security Catch</a></li>
+                <li><a href="#kernel-patch">The Kernel Patch</a></li>
+                <li><a href="#negative-testing">Negative Testing (Yield)</a></li>
+                <li><a href="#texas-power-on">The Texas Power-On</a></li>
+                <li><a href="#failed-demo">The Failed Microsoft Demo</a></li>
+                <li><a href="#rmcp-optimization">RMCP+ Socket Optimization</a></li>
+            </ul>
 
-        <h2>Security & Yield</h2>
-        <ul>
-            <li><a href="#rakp-security">The RAKP Security Catch</a></li>
-            <li><a href="#kernel-patch">The Kernel Patch</a></li>
-            <li><a href="#negative-testing">Negative Testing (Yield)</a></li>
-            <li><a href="#texas-power-on">The Texas Power-On</a></li>
-            <li><a href="#failed-demo">The Failed Microsoft Demo</a></li>
-            <li><a href="#rmcp-optimization">RMCP+ Socket Optimization</a></li>
-        </ul>
+            <h2>Engineering Leadership</h2>
+            <ul>
+                <li><a href="#scm-integration">To SCM or Not to SCM</a></li>
+                <li><a href="#estimates">Estimates: High vs. Low</a></li>
+                <li><a href="#pythonsv-thrash">The PythonSV API Thrash</a></li>
+                <li><a href="#synergy">Synergy of Validation</a></li>
+                <li><a href="#first-error">Always Fix the First Error</a></li>
+                <li><a href="#count-oks">Count the Ok's</a></li>
+                <li><a href="#conflict-management">The Conflict Management Lesson</a></li>
+                <li><a href="#general-thoughts">General Thoughts & Philosophy</a></li>
+            </ul>
 
-        <h2>Engineering Leadership</h2>
-        <ul>
-            <li><a href="#scm-integration">To SCM or Not to SCM</a></li>
-            <li><a href="#estimates">Estimates: High vs. Low</a></li>
-            <li><a href="#pythonsv-thrash">The PythonSV API Thrash</a></li>
-            <li><a href="#synergy">Synergy of Validation</a></li>
-            <li><a href="#first-error">Always Fix the First Error</a></li>
-            <li><a href="#count-oks">Count the Ok's</a></li>
-            <li><a href="#conflict-management">The Conflict Management Lesson</a></li>
-            <li><a href="#general-thoughts">General Thoughts & Philosophy</a></li>
-        </ul>
-
-        <h2>Future Work</h2>
-        <ul>
-            <li><a href="#future-work">WIP Items</a></li>
-        </ul>
+            <h2>Future Work</h2>
+            <ul>
+                <li><a href="#future-work">WIP Items</a></li>
+            </ul>
+        </div>
     </nav>
 
     <main>
@@ -168,13 +174,13 @@
 
             <article id="crazy-callbacks">
                 <h3>Crazy Callbacks</h3>
-                <div class="meta">Tag: Code Pattern | Impact: Efficiency</div>
+                <div class="meta">Tag: Code Pattern | Impact: Efficiency | Ref: DTTC</div>
                 <p>I used a clever callback pattern when chunking data over PECI - sending multiple read requests and mapping the responses with tailored callback functions to de-serialize the data. This asynchronous approach, detailed in our 2022 DTTC paper "Measuring PECI Performance," <strong>allowed us to chain requests without blocking, improving throughput by nearly 100x (from ~57 to ~5300 commands/sec) and proving the software stack could finally keep up with wire speed.</strong></p>
             </article>
 
             <article id="throughput-gotchas">
                 <h3>Throughput Gotchas</h3>
-                <div class="meta">Tag: Measurement | Impact: Accuracy</div>
+                <div class="meta">Tag: Measurement | Impact: Accuracy | Ref: DTTC, PECI</div>
                 <p>Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it’s more ambiguous when counting packets over SMBus or other internal protocols. Our DTTC paper tackled this, but I was never quite satisfied to provide a standard MB/s measurement. <strong>Because the protocol overhead was so heavy, I argued that "Commands per Second" was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see.</strong></p>
             </article>
 
@@ -277,7 +283,7 @@
 
             <article id="synergy">
                 <h3>Synergy of Validation Working with Architect and Dev</h3>
-                <div class="meta">Tag: Collaboration | Impact: Performance</div>
+                <div class="meta">Tag: Collaboration | Impact: Performance | Ref: DTTC, PECI</div>
                 <p>I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI ‘wire’ time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.</p>
             </article>
 
@@ -318,6 +324,6 @@
 
     </main>
 
-    <script src="script.js?v=2.2"></script>
+    <script src="script.js?v=3.0"></script>
 </body>
 </html>

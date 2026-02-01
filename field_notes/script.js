@@ -1,63 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Load Search Index
     let searchIndex = {};
-    fetch('search_index.json')
+    fetch('search_index.json?v=3.0')
         .then(response => response.json())
         .then(data => {
             searchIndex = data;
+            console.log("Search Index Loaded:", Object.keys(data).length, "keys");
         })
         .catch(err => console.error('Error loading search index:', err));
 
     // 2. Quick Filter
     const searchInput = document.getElementById('nav-filter');
-    const navLists = document.querySelectorAll('nav ul');
+    const searchableContainer = document.getElementById('searchable-content');
     
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase().trim();
-        
-        // Find ID matches from the index
-        let matchedIds = new Set();
-        if (term && searchIndex[term]) {
-            searchIndex[term].forEach(id => matchedIds.add(id));
-        }
-
-        // Also check if the term partially matches any index keys (fuzzy-ish)
-        if (term) {
-            Object.keys(searchIndex).forEach(key => {
-                if (key.includes(term)) {
-                    searchIndex[key].forEach(id => matchedIds.add(id));
-                }
-            });
-        }
-        
-        navLists.forEach(list => {
-            const items = list.querySelectorAll('li');
-            let hasVisibleItems = false;
+    if (searchInput && searchableContainer) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
             
-            items.forEach(item => {
-                const link = item.querySelector('a');
-                const text = item.textContent.toLowerCase();
-                const href = link ? link.getAttribute('href') : '';
-                const id = href.startsWith('#') ? href.substring(1) : '';
+            // Find ID matches from the index AND story bodies
+            let matchedIds = new Set();
+            
+            if (term) {
+                // A. Check Search Index
+                Object.keys(searchIndex).forEach(key => {
+                    if (key.includes(term)) {
+                        searchIndex[key].forEach(id => matchedIds.add(id));
+                    }
+                });
 
-                // Visible if:
-                // 1. Text matches term
-                // 2. ID is in the matched set from JSON index
-                if (text.includes(term) || matchedIds.has(id)) {
-                    item.style.display = '';
-                    hasVisibleItems = true;
-                } else {
-                    item.style.display = 'none';
+                // B. Check Article Bodies (The "Surgical" Search)
+                document.querySelectorAll('article').forEach(art => {
+                    if (art.textContent.toLowerCase().includes(term)) {
+                        matchedIds.add(art.id);
+                    }
+                });
+            }
+            
+            // Filter Sidebar Lists
+            const sections = searchableContainer.querySelectorAll('ul');
+            sections.forEach(list => {
+                const items = list.querySelectorAll('li');
+                let hasVisibleItems = false;
+                
+                items.forEach(item => {
+                    const link = item.querySelector('a');
+                    const text = item.textContent.toLowerCase();
+                    const href = link ? link.getAttribute('href') : '';
+                    const id = href.startsWith('#') ? href.substring(1) : '';
+
+                    const isVisible = (term === '' || text.includes(term) || matchedIds.has(id));
+                    item.style.display = isVisible ? '' : 'none';
+                    if (isVisible) hasVisibleItems = true;
+                });
+
+                // Hide the preceding header (H2) if no items match
+                const header = list.previousElementSibling;
+                if (header && header.tagName === 'H2') {
+                    header.style.display = hasVisibleItems ? '' : 'none';
                 }
             });
-
-            // Hide headers if no items are visible in that section
-            const prevHeader = list.previousElementSibling;
-            if (prevHeader && (prevHeader.tagName === 'H2')) {
-                prevHeader.style.display = hasVisibleItems || term === '' ? '' : 'none';
-            }
         });
-    });
+    }
 
     // 3. Permalink Anchors
     const articles = document.querySelectorAll('article');
@@ -83,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.classList.toggle('active');
         });
 
-        // Close menu when clicking a link (optional UX improvement)
         nav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
@@ -92,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Close when clicking outside (on main content)
         document.querySelector('main').addEventListener('click', () => {
             if (window.innerWidth <= 768) {
                 nav.classList.remove('active');

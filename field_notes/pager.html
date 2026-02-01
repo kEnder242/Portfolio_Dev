@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Pager | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=10.0">
+    <style>
+        .alert-item {
+            border-left: 2px solid var(--accent-color);
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-family: var(--font-stack);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px 15px;
+        }
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .severity-critical { color: #ff3b30; font-weight: bold; border-left-color: #ff3b30; }
+        .severity-warning { color: #ffcc00; font-weight: bold; border-left-color: #ffcc00; }
+        .severity-info { color: var(--accent-color); }
+        
+        .alert-message {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <h1>The Field Manual</h1>
+        <div class="subtitle">Jason Allred</div>
+        <div class="sys-banner">NEURAL PAGER ACTIVE</div>
+        
+        <section id="mission-control">
+            <h2>Mission Control</h2>
+            <ul>
+                <li><a href="index.html" class="mission-link"><span class="status-dot online"></span> 📖 Field Manual</a></li>
+                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
+                <li><a href="pager.html" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
+                <li><a href="timeline.html" class="mission-link"><span class="status-dot online"></span> Career Timeline</a></li>
+                <li><a href="files.html" class="mission-link"><span class="status-dot online"></span> Artifact Map</a></li>
+                <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Observability Deck</a></li>
+            </ul>
+        </section>
+    </nav>
+
+    <main>
+        <div id="sys-console">
+            <div>[INIT] Pager uplink established.</div>
+        </div>
+
+        <section>
+            <h2 style="color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">/var/log/pager_activity</h2>
+            
+            <div class="disclaimer-box">
+                <span style="color: var(--accent-color); font-weight: bold;">[LOG STATUS]</span> 
+                Real-time alerting active. 
+                <br><span style="color: #888; font-size: 0.8em;">Displaying last 100 events. Priority: Critical > Warning > Info.</span>
+            </div>
+
+            <div id="pager-content">
+                <div style="color: #666; padding: 20px;">[WAIT] Fetching alert stream...</div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const consoleEl = document.getElementById('sys-console');
+        const contentEl = document.getElementById('pager-content');
+
+        function log(msg, type='info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            consoleEl.appendChild(div);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.onclick = (e) => { sidebar.classList.toggle('active'); e.stopPropagation(); };
+                document.querySelector('main').onclick = () => sidebar.classList.remove('active');
+            }
+
+            fetchData();
+        });
+
+        function fetchData() {
+            log("Polling pager activity...");
+            fetch('data/pager_activity.json?t=' + new Date().getTime())
+                .then(r => r.json())
+                .then(data => {
+                    log(`Received ${data.length} alerts.`);
+                    renderAlerts(data);
+                })
+                .catch(err => {
+                    log("Failed to fetch alert stream.", "err");
+                    contentEl.innerHTML = '<div style="color: #ff3b30; padding: 20px;">[ERROR] Could not connect to log service.</div>';
+                });
+        }
+
+        function renderAlerts(alerts) {
+            contentEl.innerHTML = "";
+            alerts.forEach((alert, index) => {
+                const item = document.createElement('div');
+                item.className = `alert-item severity-${alert.severity.toLowerCase()}`;
+                
+                const date = new Date(alert.timestamp).toLocaleString();
+                
+                item.innerHTML = `
+                    <div class="alert-header">
+                        <span>${alert.source.toUpperCase()}</span>
+                        <span>${date}</span>
+                    </div>
+                    <div class="alert-message" id="msg-${index}"></div>
+                `;
+                contentEl.appendChild(item);
+                
+                // Typewriter effect for the message
+                typewrite(document.getElementById(`msg-${index}`), alert.message, index * 100);
+            });
+        }
+
+        function typewrite(el, text, delay) {
+            setTimeout(() => {
+                let i = 0;
+                const interval = setInterval(() => {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    if (i >= text.length) clearInterval(interval);
+                }, 10);
+            }, delay);
+        }
+    </script>
+</body>
+</html>

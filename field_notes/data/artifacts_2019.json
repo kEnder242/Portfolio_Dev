@@ -1,0 +1,18 @@
+[
+  {
+    "filename": "ras-viral.txt",
+    "synopsis": "Technical notes and validation strategy for CPU Viral state handling.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  },
+  {
+    "filename": "riv_common.py",
+    "synopsis": "Core PythonSV utility for managing device naming and named nodes in Simics.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  }
+]

@@ -97,6 +97,11 @@
   "dmr": [
     "negative-testing"
   ],
+  "dttc": [
+    "crazy-callbacks",
+    "throughput-gotchas",
+    "synergy"
+  ],
   "evqt": [
     "fleet-scale"
   ],
@@ -244,7 +249,10 @@
     "fleet-scale"
   ],
   "peci": [
-    "negative-testing"
+    "negative-testing",
+    "crazy-callbacks",
+    "throughput-gotchas",
+    "synergy"
   ],
   "pef": [
     "cygwin-wall",

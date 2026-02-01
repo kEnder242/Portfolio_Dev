@@ -1,0 +1,210 @@
+[
+  {
+    "filename": "ras-viral.txt",
+    "synopsis": "Technical notes and validation strategy for CPU Viral state handling.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  },
+  {
+    "filename": "riv_common.py",
+    "synopsis": "Core PythonSV utility for managing device naming and named nodes in Simics.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  },
+  {
+    "filename": "MCTP Debug features.pptx",
+    "synopsis": "Technical deep-dive into MCTP discovery and debugging architecture.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Zd14tG7tIabR1DOPXmPkrTg33Ds-vdW0"
+  },
+  {
+    "filename": "MIV DTAF integration.pptx",
+    "synopsis": "Architecture for integrating MIV with the Distributed Test Automation Framework.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1jQfX4aK3yvxzN_WxhPDKvv9QSQigAwc6"
+  },
+  {
+    "synopsis": "MIV Ignition-Redfish validation script for backup",
+    "rank": 3,
+    "type": "Script",
+    "keywords": [
+      "MIV",
+      "Ignition",
+      "Redfish",
+      "Validation",
+      "Backup",
+      "PPTX"
+    ],
+    "filename": "MIV Ignition-Redfish validation-Backup.pptx",
+    "method": "AI",
+    "drive_id": "1sLjcbrxM3Bi9HMWmkuQPQRTvmSbVmrFJ"
+  },
+  {
+    "filename": "PECI_Comparison.xlsx",
+    "synopsis": "Side-by-side technical comparison of PECI revisions and command support.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Kc9DsqzyIYOgTUZ5R7rgVW3rtD-xNl42"
+  },
+  {
+    "synopsis": "Demonstrates stress testing of Redfish PECI for server hardware diagnostics.",
+    "rank": 4,
+    "type": "Presentation",
+    "keywords": [
+      "Redfish",
+      "PECI",
+      "Server Diagnostics",
+      "Stress Testing",
+      "Power Management"
+    ],
+    "filename": "Stressing Redfish PECI_demo.pptx",
+    "method": "AI",
+    "drive_id": "1HUg9mETwcZF-KoFVw3hWlNcPlQ1tM7z5"
+  },
+  {
+    "filename": "pl1_pl2.txt",
+    "synopsis": "Automated power limit (PL1/PL2) sweep and validation results.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1yq2UOrpkjA1G5u_SIxxgbq1HfTAVb8KK"
+  },
+  {
+    "filename": "redfish_utils.py",
+    "synopsis": "Abstraction layer for scalable Redfish API interactions (GET/POST/PATCH).",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1ZSD1HM8ymIDtORFwW5DcImWdUunYqJtw"
+  },
+  {
+    "filename": "MIV- Requirements for Automation.xlsx",
+    "synopsis": "Comprehensive requirement matrix for manageability validation automation.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  },
+  {
+    "filename": "_Stressing Redfish PECI.pptx",
+    "synopsis": "Presentation on the methodology for high-load Redfish-to-PECI stress testing.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1-BeZ4N7l9ayq4XKZy-CslC3fOwN1V5Dm"
+  },
+  {
+    "filename": "blackbox.py",
+    "synopsis": "System telemetry recorder for capturing post-mortem diagnostic data.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1DVv5BQXU00Jyh22jZLQc6q8mVJCcKTxk"
+  },
+  {
+    "filename": "gethostcpudata.py",
+    "synopsis": "Utility for extracting host CPU telemetry via sideband interfaces.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1IwlHtWG8jVpIACM55hM63C3vQf6xriYk"
+  },
+  {
+    "filename": "makechart.py",
+    "synopsis": "Telemetry visualization tool converting raw PECI/RAPL logs into analytical charts.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Rr684PJVPrXmIGe5fmmcR4fSUuyk4NHd"
+  },
+  {
+    "filename": "mctp_wrapper.cpp",
+    "synopsis": "C++ packet handling wrapper for low-latency MCTP communication.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1706VmAyfVN-DlZYT8jhagHUJOChFFl5N"
+  },
+  {
+    "filename": "peci_redfish.py",
+    "synopsis": "Tool for bridging and validating PECI commands through Redfish endpoints.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1g482ua4P6Rj-g1NDMCGp3Sq3tuegQFEE"
+  },
+  {
+    "filename": "pecistressor.py",
+    "synopsis": "High-throughput PECI command stress tool, capable of ~5300 commands/sec.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1a95TKnx8eODfM5gdCSv6V07i0ZHL_3F1"
+  },
+  {
+    "filename": "policy.py",
+    "synopsis": "Platform power policy management and validation logic.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1bl8p8sKgvUG3fXVTi2XwHLdzxjprn-eD"
+  },
+  {
+    "filename": "sensor_validator.py",
+    "synopsis": "Automated validation of OpenBMC sensor thresholds against platform specs.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "17tWU4uGCSCcvyrU825KXm39uDfMg_FlX"
+  },
+  {
+    "filename": "Backup -MIV Blackbox Recorder.pptx",
+    "synopsis": "Documentation on flight recorder analysis for platform failures.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1LgjAPhFAFk2YmuCwJVhdZWeRKTgIHU7d"
+  },
+  {
+    "filename": "MIV for Execution.pptx",
+    "synopsis": "Strategic execution plan for large-scale manageability validation.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1byzuaJU1IwmJf2LZhVwCCWaigrCseGmW"
+  },
+  {
+    "filename": "DTTC_2022_Peci_Stress.pdf",
+    "synopsis": "Peer-reviewed paper on measuring and optimizing sideband telemetry performance.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1sgbcpgviOaqb0p64LfwEHOD7XQnGKM0m"
+  }
+]
