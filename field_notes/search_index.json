@@ -8,6 +8,11 @@
   "aep": [
     "fleet-scale"
   ],
+  "ambiguity": [
+    "reading-robot",
+    "throughput-gotchas",
+    "beating-heart"
+  ],
   "api": [
     "cygwin-wall",
     "rmcp-optimization"
@@ -68,6 +73,21 @@
   "cdi": [
     "fleet-scale"
   ],
+  "challenge": [
+    "fleet-scale",
+    "visa-tool",
+    "rakp-security"
+  ],
+  "complexity": [
+    "visa-tool",
+    "rakp-security"
+  ],
+  "conflict": [
+    "conflict-management",
+    "pythonsv-thrash",
+    "estimates",
+    "rakp-security"
+  ],
   "crc mismatch": [
     "config-file",
     "reading-robot",
@@ -76,6 +96,11 @@
   ],
   "cve": [
     "rakp-security"
+  ],
+  "data-driven": [
+    "reading-robot",
+    "throughput-gotchas",
+    "beating-heart"
   ],
   "dc": [
     "fleet-scale"
@@ -94,6 +119,12 @@
     "reading-robot",
     "visa-tool"
   ],
+  "disagreement": [
+    "conflict-management",
+    "pythonsv-thrash",
+    "estimates",
+    "rakp-security"
+  ],
   "dmr": [
     "negative-testing"
   ],
@@ -102,13 +133,23 @@
     "throughput-gotchas",
     "synergy"
   ],
+  "estimates": [
+    "estimates"
+  ],
   "evqt": [
     "fleet-scale"
   ],
   "fail": [
-    "cygwin-wall",
     "failed-demo",
-    "first-error"
+    "pythonsv-thrash",
+    "quakecon",
+    "negative-testing"
+  ],
+  "failure": [
+    "failed-demo",
+    "pythonsv-thrash",
+    "quakecon",
+    "negative-testing"
   ],
   "firmware testing": [
     "cygwin-wall",
@@ -116,6 +157,11 @@
   ],
   "firmware validation": [
     "fleet-scale"
+  ],
+  "fit": [
+    "fleet-scale",
+    "rapl-matplotlib",
+    "crazy-callbacks"
   ],
   "fulsim": [
     "config-file",
@@ -150,6 +196,10 @@
   ],
   "icl": [
     "fleet-scale"
+  ],
+  "improvement": [
+    "general-thoughts",
+    "failed-demo"
   ],
   "ipc": [
     "config-file",
@@ -195,6 +245,11 @@
     "scm-integration",
     "texas-power-on"
   ],
+  "learning": [
+    "grok-code",
+    "ti-basic",
+    "beating-heart"
+  ],
   "legacy": [
     "cygwin-wall",
     "quakecon",
@@ -209,6 +264,14 @@
   "memory controller validation": [
     "fleet-scale"
   ],
+  "methodology": [
+    "grok-code",
+    "ti-basic",
+    "beating-heart"
+  ],
+  "negative-testing": [
+    "negative-testing"
+  ],
   "networking": [
     "crazy-callbacks",
     "rmcp-optimization",
@@ -218,6 +281,16 @@
     "config-file",
     "visa-tool",
     "xslt-parsing"
+  ],
+  "nvidia-fit": [
+    "fleet-scale",
+    "rapl-matplotlib",
+    "crazy-callbacks"
+  ],
+  "obstacle": [
+    "cygwin-wall",
+    "rakp-security",
+    "rmcp-optimization"
   ],
   "onstatsupdate": [
     "config-file",
@@ -277,6 +350,11 @@
   "pythonsv": [
     "negative-testing"
   ],
+  "scale": [
+    "fleet-scale",
+    "visa-tool",
+    "rakp-security"
+  ],
   "scr": [
     "fleet-scale"
   ],
@@ -300,6 +378,16 @@
     "reading-robot",
     "visa-tool",
     "xslt-parsing"
+  ],
+  "strategy": [
+    "texas-power-on",
+    "scm-integration",
+    "visa-tool"
+  ],
+  "stuck": [
+    "cygwin-wall",
+    "rakp-security",
+    "rmcp-optimization"
   ],
   "system debug": [
     "fleet-scale"
@@ -331,6 +419,11 @@
   ],
   "visa": [
     "negative-testing"
+  ],
+  "vision": [
+    "texas-power-on",
+    "scm-integration",
+    "visa-tool"
   ],
   "vpg": [
     "config-file",
