@@ -62,3 +62,17 @@ graph TD
 ## ⚠️ Known Fragilities & Fixes
 - **Mobile Caching:** Browsers are aggressive. Use versioned URLs (`?v=X.X`) for all CSS/JS changes.
 - **JSON Formatting:** Large prompts occasionally cause LLM hallucinations. The `nibble.py` script includes a `validate_date` and `extract_json_from_llm` cleanup layer.
+
+## 🛠️ Future Tooling: The Agentic Editor
+*Retrospective on CLI Capabilities (Jan 2026)*
+
+The current development workflow relies on `replace` (exact string matching) and `write_file` (full rewrite). This creates a "Chopstick Coding" friction where minor edits fail due to whitespace mismatches, forcing risky full-file overwrites.
+
+**Proposal: `apply_patch` Tool**
+To move from "Chopsticks" to "Tweezers," the CLI tool belt should be upgraded with a patch application utility.
+
+*   **Format:** Standard Unified Diff (git diff) or Aider-style Search/Replace blocks (`<<<<<<< SEARCH ... ======= ... >>>>>>> REPLACE`).
+*   **Benefit:**
+    *   **Fuzzy Context:** Matches code even if line numbers shift or comments change slightly.
+    *   **Safety:** Reduces the risk of "file clobbering" inherent in `write_file`.
+    *   **Efficiency:** Consumes fewer tokens than re-sending the entire file content.
