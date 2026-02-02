@@ -105,3 +105,53 @@
 - **Portfolio:** [github.com/kEnder242/Portfolio_Dev](https://github.com/kEnder242/Portfolio_Dev)
 - **HomeLabAI:** [github.com/kEnder242/HomeLabAI](https://github.com/kEnder242/HomeLabAI)
 - **Decky Trailers:** [github.com/kEnder242/decky-trailers](https://github.com/kEnder242/decky-trailers)
+
+---
+
+## 6. Behavioral Q&A Key (Search Tags)
+*Use the "Filter nodes..." box on the Field Manual to instantly find these stories.*
+
+### **1. Obstacles & Persistence**
+> "A time when you got stuck 75% through a project? Was it a successful one?"
+- **Search Tag:** `stuck`, `obstacle`
+- **Key Stories:** *The Cygwin Wall*, *The RAKP Security Catch*, *RMCP+ Socket Optimization*
+
+### **2. Failure & Lessons**
+> "Tell me about a time when you failed."
+- **Search Tag:** `fail`, `failure`
+- **Key Stories:** *The Failed Microsoft Demo*, *The PythonSV API Thrash*, *Negative Testing (Yield)* 
+
+### **3. Ambiguity & Data**
+> "Dealing with ambiguous situations / not enough data?"
+- **Search Tag:** `ambiguity`, `data-driven`
+- **Key Stories:** *Reading Like a Robot*, *Throughput Gotchas*, *The Beating Heart*
+
+### **4. Vision & Strategy**
+> "Laid out a vision when there wasn’t one?"
+- **Search Tag:** `vision`, `strategy`
+- **Key Stories:** *The Texas Power-On*, *To SCM or Not to SCM*, *The VISA Tool Engine*
+
+### **5. Conflict Resolution**
+> "Major disagreement with your boss."
+- **Search Tag:** `conflict`, `disagreement`
+- **Key Stories:** *The Conflict Management Lesson*, *The PythonSV API Thrash*, *Estimates: High vs. Low*
+
+### **6. Growth & Improvement**
+> "One thing you wish you’d improve on?"
+- **Search Tag:** `improvement`, `growth`
+- **Key Stories:** *General Thoughts & Philosophy*, *The Failed Microsoft Demo*
+
+### **7. Challenge & Scale**
+> "Most challenging project, program or initiative?"
+- **Search Tag:** `challenge`, `scale`
+- **Key Stories:** *Flashing 100 Nodes*, *The VISA Tool Engine*, *The RAKP Security Catch*
+
+### **8. Learning Style**
+> "How do you learn?"
+- **Search Tag:** `learning`, `methodology`
+- **Key Stories:** *How to Grok Code*, *Reinventing TI Basic*, *The Beating Heart*
+
+### **9. Why NVIDIA?**
+> "Why NVIDIA? / Fit"
+- **Search Tag:** `fit`, `nvidia-fit`
+- **Key Stories:** *Flashing 100 Nodes* (Scale), *RAPL & Matplotlib* (Telemetry), *Crazy Callbacks* (Performance)
