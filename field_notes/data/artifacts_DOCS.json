@@ -5,7 +5,8 @@
     "rank": 4,
     "type": "Document",
     "keywords": [],
-    "method": "Expert Hardcode"
+    "method": "Expert Hardcode",
+    "drive_id": "1Q6SyKK4_qb4VSp0YozQnQ03URVbum7lv"
   },
   {
     "filename": "riv_common.py",
@@ -13,7 +14,8 @@
     "rank": 4,
     "type": "Document",
     "keywords": [],
-    "method": "Expert Hardcode"
+    "method": "Expert Hardcode",
+    "drive_id": "1Vgs_Gr9wdk8nc3ByEn4jH859jK29Yut5"
   },
   {
     "filename": "MCTP Debug features.pptx",
@@ -34,7 +36,7 @@
     "drive_id": "1jQfX4aK3yvxzN_WxhPDKvv9QSQigAwc6"
   },
   {
-    "synopsis": "MIV Ignition-Redfish validation script for backup",
+    "synopsis": "MIV Ignition-Redfish validation script for PowerPoint presentation",
     "rank": 3,
     "type": "Script",
     "keywords": [
@@ -42,8 +44,8 @@
       "Ignition",
       "Redfish",
       "Validation",
-      "Backup",
-      "PPTX"
+      "PowerPoint",
+      "Presentation"
     ],
     "filename": "MIV Ignition-Redfish validation-Backup.pptx",
     "method": "AI",
@@ -59,7 +61,7 @@
     "drive_id": "1Kc9DsqzyIYOgTUZ5R7rgVW3rtD-xNl42"
   },
   {
-    "synopsis": "Demonstrates stress testing of Redfish PECI for server hardware diagnostics.",
+    "synopsis": "Demonstrates stress testing of Redfish PECI for server hardware diagnostics",
     "rank": 4,
     "type": "Presentation",
     "keywords": [

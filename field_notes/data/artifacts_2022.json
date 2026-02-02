@@ -1,0 +1,91 @@
+[
+  {
+    "filename": "MIV- Requirements for Automation.xlsx",
+    "synopsis": "Comprehensive requirement matrix for manageability validation automation.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode"
+  },
+  {
+    "filename": "_Stressing Redfish PECI.pptx",
+    "synopsis": "Presentation on the methodology for high-load Redfish-to-PECI stress testing.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1-BeZ4N7l9ayq4XKZy-CslC3fOwN1V5Dm"
+  },
+  {
+    "filename": "blackbox.py",
+    "synopsis": "System telemetry recorder for capturing post-mortem diagnostic data.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1DVv5BQXU00Jyh22jZLQc6q8mVJCcKTxk"
+  },
+  {
+    "filename": "gethostcpudata.py",
+    "synopsis": "Utility for extracting host CPU telemetry via sideband interfaces.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1IwlHtWG8jVpIACM55hM63C3vQf6xriYk"
+  },
+  {
+    "filename": "makechart.py",
+    "synopsis": "Telemetry visualization tool converting raw PECI/RAPL logs into analytical charts.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Rr684PJVPrXmIGe5fmmcR4fSUuyk4NHd"
+  },
+  {
+    "filename": "mctp_wrapper.cpp",
+    "synopsis": "C++ packet handling wrapper for low-latency MCTP communication.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1706VmAyfVN-DlZYT8jhagHUJOChFFl5N"
+  },
+  {
+    "filename": "peci_redfish.py",
+    "synopsis": "Tool for bridging and validating PECI commands through Redfish endpoints.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1g482ua4P6Rj-g1NDMCGp3Sq3tuegQFEE"
+  },
+  {
+    "filename": "pecistressor.py",
+    "synopsis": "High-throughput PECI command stress tool, capable of ~5300 commands/sec.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1a95TKnx8eODfM5gdCSv6V07i0ZHL_3F1"
+  },
+  {
+    "filename": "policy.py",
+    "synopsis": "Platform power policy management and validation logic.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1bl8p8sKgvUG3fXVTi2XwHLdzxjprn-eD"
+  },
+  {
+    "filename": "sensor_validator.py",
+    "synopsis": "Automated validation of OpenBMC sensor thresholds against platform specs.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "17tWU4uGCSCcvyrU825KXm39uDfMg_FlX"
+  }
+]

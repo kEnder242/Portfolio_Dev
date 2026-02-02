@@ -1,0 +1,78 @@
+[
+  {
+    "filename": "MCTP Debug features.pptx",
+    "synopsis": "Technical deep-dive into MCTP discovery and debugging architecture.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Zd14tG7tIabR1DOPXmPkrTg33Ds-vdW0"
+  },
+  {
+    "filename": "MIV DTAF integration.pptx",
+    "synopsis": "Architecture for integrating MIV with the Distributed Test Automation Framework.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1jQfX4aK3yvxzN_WxhPDKvv9QSQigAwc6"
+  },
+  {
+    "synopsis": "MIV Ignition-Redfish validation script for PowerPoint presentation",
+    "rank": 3,
+    "type": "Script",
+    "keywords": [
+      "MIV",
+      "Ignition",
+      "Redfish",
+      "Validation",
+      "PowerPoint",
+      "Presentation"
+    ],
+    "filename": "MIV Ignition-Redfish validation-Backup.pptx",
+    "method": "AI",
+    "drive_id": "1sLjcbrxM3Bi9HMWmkuQPQRTvmSbVmrFJ"
+  },
+  {
+    "filename": "PECI_Comparison.xlsx",
+    "synopsis": "Side-by-side technical comparison of PECI revisions and command support.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1Kc9DsqzyIYOgTUZ5R7rgVW3rtD-xNl42"
+  },
+  {
+    "synopsis": "Demonstrates stress testing of Redfish PECI for server hardware diagnostics",
+    "rank": 4,
+    "type": "Presentation",
+    "keywords": [
+      "Redfish",
+      "PECI",
+      "Server Diagnostics",
+      "Stress Testing",
+      "Power Management"
+    ],
+    "filename": "Stressing Redfish PECI_demo.pptx",
+    "method": "AI",
+    "drive_id": "1HUg9mETwcZF-KoFVw3hWlNcPlQ1tM7z5"
+  },
+  {
+    "filename": "pl1_pl2.txt",
+    "synopsis": "Automated power limit (PL1/PL2) sweep and validation results.",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1yq2UOrpkjA1G5u_SIxxgbq1HfTAVb8KK"
+  },
+  {
+    "filename": "redfish_utils.py",
+    "synopsis": "Abstraction layer for scalable Redfish API interactions (GET/POST/PATCH).",
+    "rank": 4,
+    "type": "Document",
+    "keywords": [],
+    "method": "Expert Hardcode",
+    "drive_id": "1ZSD1HM8ymIDtORFwW5DcImWdUunYqJtw"
+  }
+]

@@ -65,8 +65,8 @@ CURATED_MAP = {
     "PECI_Comparison.xlsx": {"id": "1Kc9DsqzyIYOgTUZ5R7rgVW3rtD-xNl42", "rank": 4},
     "MIV Ignition-Redfish validation-Backup.pptx": {"id": "1sLjcbrxM3Bi9HMWmkuQPQRTvmSbVmrFJ", "rank": 3},
     "MIV- Requirements for Automation.xlsx": {"rank": 4},
-    "riv_common.py": {"rank": 4},
-    "ras-viral.txt": {"rank": 4}
+    "riv_common.py": {"id": "1Vgs_Gr9wdk8nc3ByEn4jH859jK29Yut5", "rank": 4},
+    "ras-viral.txt": {"id": "1Q6SyKK4_qb4VSp0YozQnQ03URVbum7lv", "rank": 4}
 }
 
 def is_binary(filepath):
