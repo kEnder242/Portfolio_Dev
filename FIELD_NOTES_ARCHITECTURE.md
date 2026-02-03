@@ -59,6 +59,26 @@ graph TD
 - **`ai_engine.py`**: A factory class that currently provides `OllamaClient` but is stubbed for `AcmeLabClient`.
 - **MCP Bridge**: The system is designed to migrate to a full Model Context Protocol (MCP) toolset, allowing the HomeLabAI "Brain" to act as the primary archivist.
 
+## 🔐 Access Control Layer (BKM Pointer)
+# GOAL: Enable Cloudflare "Access Requests" (The "Knock" button) for Guest Entry
+# KEYWORD: Set `approval_required: true` (The "Beta" Click equivalent)
+# SCOPE: Application Policy (Precedence > 1)
+# LOGIC: Create a catch-all policy that prompts for justification and emails the admin.
+# PAYLOAD_CONFIG:
+```json
+{
+  "name": "Access Request Knock",
+  "decision": "allow",
+  "precedence": 2,
+  "include": [{ "everyone": {} }],
+  "approval_required": true,
+  "approval_groups": [{ "email_addresses": ["admin@example.com"] }],
+  "purpose_justification_required": true,
+  "purpose_justification_prompt": "Please verify your identity."
+}
+```
+# AUTH: Requires `Account: Cloudflare Zero Trust: Edit` (Token must be upgraded).
+
 ## ⚠️ Known Fragilities & Fixes
 - **Mobile Caching:** Browsers are aggressive. Use versioned URLs (`?v=X.X`) for all CSS/JS changes.
 - **JSON Formatting:** Large prompts occasionally cause LLM hallucinations. The `nibble.py` script includes a `validate_date` and `extract_json_from_llm` cleanup layer.

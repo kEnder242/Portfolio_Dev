@@ -1,0 +1,5 @@
+# Minimal requirements for Portfolio_Dev
+# Install: pip install -r requirements.txt
+
+requests
+prometheus_client

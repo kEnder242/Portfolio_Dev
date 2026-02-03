@@ -24,6 +24,7 @@
 - [x] **Refinement (v2.0):** Added Quick-Filter, Permalinks, Print Mode (@media print), and simulated Status Indicators.
 - [x] **Search Index (v2.1):** Implemented `search_index.json` for "silent tag" filtering.
 - [x] **Timeline (v2.2):** Created `timeline.html` visualizing 18 years of "Pinky-scanned" data (Strategy vs. Tactics).
+- [x] **Access Layer (v2.3):** Configured "Access Request" policy (The "Knock" button) for guest entry.
 
 ## ✅ PHASE 3: OBSERVABILITY LAB (Complete)
 - [x] **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
@@ -40,6 +41,7 @@
 - [x] **Cynical Ranking:** Implemented 0-4 "Showcase Value" scale (Rank 4 = Star Power, Rank 2 = Standard).
 - [x] **Nuclear Search Fix:** Physically isolated Mission Control from search filtering via DOM containerization.
 - [x] **Robustness:** Implemented atomic writes and heuristic fallbacks for scanner stability.
+- [x] **Public Airlock (v3.1):** Deployed `www.jason-lab.dev` via GitHub Pages + Cloudflare Proxy.
 - [x] **Context Awareness:** Injected "War Stories" and "Focal" text to ground AI ranking logic.
 
 ## 🎯 THE MISSION

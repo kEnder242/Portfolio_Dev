@@ -1,3 +1,10 @@
+# ⚠️ ARCHIVED DOCUMENT
+**Status:** Deprecated (Feb 2026)
+**Active Reference:** See `GEMINI.md` for current task status and `00_MASTER_INDEX.md` for documentation navigation.
+**History:** This was the original master plan for Phase 2/3.
+
+---
+
 # Field Notes Dashboard - Project Status
 
 **Status:** Phase 9 Complete / Maintenance Mode
