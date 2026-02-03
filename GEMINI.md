@@ -1,5 +1,6 @@
 # GEMINI.md: Project Manifesto & State Machine
 **Host:** Z87-Linux (Native) | **User:** Jason Allred | **Tier:** Lead Engineer Portfolio
+**Global Status:** [./00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)
 
 ## ✅ PHASE 0: ACCOMPLISHED (Gemini.google.com & Manual)
 - [x] **Infrastructure Migration:** HomeLabAI_Dev moved from WSL -> Native Linux SSH (Success).
