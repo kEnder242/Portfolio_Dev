@@ -59,8 +59,9 @@ function connect() {
         };
 
         ws.onerror = (err) => {
-            console.error("WS Error:", err);
-            appendMsg("Uplink Error. Check if Acme Lab server is running.", "system-msg");
+            console.error("WS Error Details:", err);
+            appendMsg(`Uplink Error. Protocol: ${ws.protocol}, ReadyState: ${ws.readyState}`, "system-msg");
+            appendMsg("Check if 'acme.jason-lab.dev' requires Cloudflare Access login.", "system-msg");
         };
 
     } catch (e) {
