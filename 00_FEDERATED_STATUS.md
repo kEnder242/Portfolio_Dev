@@ -9,9 +9,11 @@
 
 ## 🎯 Active Initiative: "The Web Intercom" (Phase 8)
 **Goal:** Connect the static Portfolio (`notes`) to the active Brain (`acme`) via WebSockets, replacing the legacy Python client.
-*   **Server:** `AcmeLab` (Port 8765) -> Needs to serve WebSocket API.
-*   **Client:** `intercom.html` (Hosted on Portfolio) -> Needs to implement JS WebSocket client.
-*   **Bridge:** `cloudflared` Tunnel mapping `acme.jason-lab.dev` -> `localhost:8765`.
+*   **Bootstrap Task:** Install Gemini Conductor & Setup Local LLM Proxy (LiteLLM/Ollama).
+*   **Track 1:** Fix Legacy `intercom.py` (Audio/UI bugs).
+*   **Track 2:** Hallucination Audit (RAG failure analysis).
+*   **Track 3:** Google Keep "AI Tags" Integration.
+*   **Track 4:** `acme.jason-lab.dev` Web Client (Text -> Voice).
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Federated Architecture:**
