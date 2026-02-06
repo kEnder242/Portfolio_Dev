@@ -5,7 +5,7 @@ console.log("Intercom.js v2.5.0 loading...");
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "2.5.0"
+    VERSION: "3.0.0"
 };
 
 let ws = null;
@@ -161,6 +161,8 @@ function handleServerMessage(data) {
         }
     } else if (data.brain) {
         appendMsg(data.brain, "brain-msg", data.brain_source || "Brain");
+    } else if (data.type === 'final') {
+        appendMsg(data.text, "user-msg", "You");
     } else if (data.type === 'debug') {
         appendMsg(`${data.event}: ${JSON.stringify(data.data)}`, "debug-msg", "Debug");
     }
