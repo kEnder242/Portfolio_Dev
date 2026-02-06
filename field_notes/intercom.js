@@ -8,12 +8,20 @@ const CONFIG = {
 };
 
 let ws = null;
+let audioContext = null;
+let processor = null;
+let micStream = null;
+let isMicActive = false;
+
 const consoleEl = document.getElementById('chat-console');
 const inputEl = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
+const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
 const statusText = document.getElementById('connection-text');
 const versionEl = document.getElementById('lab-version');
+const audioMeter = document.getElementById('audio-level');
+const meterContainer = document.getElementById('audio-meter-container');
 
 function appendMsg(text, type = 'system-msg', source = 'System') {
     const msg = document.createElement('div');
@@ -24,6 +32,79 @@ function appendMsg(text, type = 'system-msg', source = 'System') {
     
     consoleEl.appendChild(msg);
     consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+// --- AUDIO LOGIC ---
+
+async function toggleMic() {
+    if (isMicActive) {
+        stopMic();
+    } else {
+        await startMic();
+    }
+}
+
+async function startMic() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+        }
+
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const source = audioContext.createMediaStreamSource(micStream);
+        
+        // We use a ScriptProcessorNode for simplicity in this "Class 1" design.
+        // In a production app, an AudioWorklet would be better for performance.
+        processor = audioContext.createScriptProcessor(4096, 1, 1);
+
+        processor.onaudioprocess = (e) => {
+            if (!isMicActive || !ws || ws.readyState !== WebSocket.OPEN) return;
+
+            const inputData = e.inputBuffer.getChannelData(0);
+            
+            // 1. Calculate RMS for the meter
+            let sum = 0;
+            for (let i = 0; i < inputData.length; i++) {
+                sum += inputData[i] * inputData[i];
+            }
+            const rms = Math.sqrt(sum / inputData.length);
+            audioMeter.style.width = `${Math.min(100, rms * 500)}%`;
+
+            // 2. Convert Float32 to Int16 (Signed PCM)
+            const pcmData = new Int16Array(inputData.length);
+            for (let i = 0; i < inputData.length; i++) {
+                // Clamp and scale
+                const s = Math.max(-1, Math.min(1, inputData[i]));
+                pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+            }
+
+            // 3. Send binary chunk
+            ws.send(pcmData.buffer);
+        };
+
+        source.connect(processor);
+        processor.connect(audioContext.destination);
+
+        isMicActive = true;
+        micBtn.classList.add('active');
+        meterContainer.style.display = 'block';
+        appendMsg("Microphone Active. Speak now...", "system-msg");
+
+    } catch (err) {
+        console.error("Mic Error:", err);
+        appendMsg(`Failed to access microphone: ${err.message}`, "system-msg");
+    }
+}
+
+function stopMic() {
+    isMicActive = false;
+    micBtn.classList.remove('active');
+    meterContainer.style.display = 'none';
+    
+    if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+    }
+    appendMsg("Microphone Muted.", "system-msg");
 }
 
 function connect() {
@@ -95,9 +176,42 @@ function jsonStr(obj) { return JSON.stringify(obj); }
 
 // Event Listeners
 sendBtn.addEventListener('click', sendMessage);
+micBtn.addEventListener('click', toggleMic);
 inputEl.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
+
+// --- UNIT TESTING / VERIFICATION ---
+
+// Hidden test function: run in browser console to verify binary streaming
+window.verifyAudioPipeline = (durationSec = 5) => {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        console.error("WebSocket not connected.");
+        return;
+    }
+    
+    appendMsg(`Starting Virtual Mic Test (${durationSec}s)...`, "system-msg");
+    const sampleRate = 16000;
+    const chunkSize = 4096;
+    let elapsed = 0;
+
+    const interval = setInterval(() => {
+        // Generate a 440Hz sine wave as dummy audio
+        const pcmData = new Int16Array(chunkSize);
+        for (let i = 0; i < chunkSize; i++) {
+            const time = (elapsed * chunkSize + i) / sampleRate;
+            pcmData[i] = Math.sin(2 * Math.PI * 440 * time) * 10000;
+        }
+        
+        ws.send(pcmData.buffer);
+        elapsed++;
+
+        if (elapsed * chunkSize / sampleRate >= durationSec) {
+            clearInterval(interval);
+            appendMsg("Virtual Mic Test Finished.", "system-msg");
+        }
+    }, (chunkSize / sampleRate) * 1000);
+};
 
 // Sidebar Toggle (Parity with index.html)
 document.getElementById('menu-toggle').addEventListener('click', () => {

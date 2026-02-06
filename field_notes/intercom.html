@@ -29,6 +29,7 @@
         #input-container {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
         #text-input {
             flex-grow: 1;
@@ -38,22 +39,39 @@
             padding: 10px;
             font-family: var(--font-stack);
         }
-        #send-btn {
+        .icon-btn {
             background: var(--accent-dim);
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 10px;
             cursor: pointer;
-            font-family: var(--font-stack);
-        }
-        #send-btn:hover { background: var(--accent-color); }
-        
-        .status-panel {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
+            justify-content: center;
+            border-radius: 4px;
+            min-width: 40px;
+        }
+        .icon-btn:hover { background: var(--accent-color); }
+        .icon-btn.active { background: #f85149; box-shadow: 0 0 10px #f85149; }
+        
+        #send-btn {
+            padding: 10px 20px;
+            font-family: var(--font-stack);
+        }
+        
+        .audio-meter {
+            width: 100px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+        #audio-level {
+            width: 0%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.1s ease;
         }
     </style>
 </head>
@@ -67,12 +85,12 @@
         <section id="mission-control">
             <h2>Mission Control</h2>
             <ul>
-                <li><a href="index.html" class="mission-link"><span class="status-dot online"></span> 📖 Field Manual</a></li>
-                <li><a href="intercom.html" class="mission-link"><span class="status-dot online"></span> Web Intercom</a></li>
+                <li><a href="../index.html" class="mission-link"><span class="status-dot online"></span> 📖 Field Manual</a></li>
+                <li><a href="../intercom/" class="mission-link"><span class="status-dot online"></span> Web Intercom</a></li>
                 <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
-                <li><a href="pager.html" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
-                <li><a href="timeline.html" class="mission-link"><span class="status-dot online"></span> Timeline (The Blue Tree)</a></li>
-                <li><a href="files.html" class="mission-link"><span class="status-dot online"></span> Artifact Map</a></li>
+                <li><a href="../pager.html" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
+                <li><a href="../timeline.html" class="mission-link"><span class="status-dot online"></span> Timeline (The Blue Tree)</a></li>
+                <li><a href="../files.html" class="mission-link"><span class="status-dot online"></span> Artifact Map</a></li>
                 <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Observability Deck</a></li>
             </ul>
         </section>
@@ -84,6 +102,9 @@
         <div class="status-panel">
             <span id="connection-dot" class="status-dot offline"></span>
             <span id="connection-text">DISCONNECTED</span>
+            <div class="audio-meter" id="audio-meter-container" style="margin-left: 20px;">
+                <div id="audio-level"></div>
+            </div>
             <span id="lab-version" style="margin-left: auto; color: #555;">v0.0.0</span>
         </div>
 
@@ -92,8 +113,9 @@
         </div>
 
         <div id="input-container">
+            <button id="mic-btn" class="icon-btn" title="Toggle Microphone">🎤</button>
             <input type="text" id="text-input" placeholder="Type a command or query..." autofocus>
-            <button id="send-btn">SEND</button>
+            <button id="send-btn" class="icon-btn">SEND</button>
         </div>
 
         <div class="disclaimer-box" style="margin-top: 40px;">
