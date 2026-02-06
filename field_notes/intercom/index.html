@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Intercom | Acme Lab</title>
+    <link rel="stylesheet" href="../style.css?v=10.1">
+    <style>
+        #chat-console {
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+            font-family: var(--font-stack);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message { margin-bottom: 5px; }
+        .user-msg { color: var(--accent-color); }
+        .brain-msg { color: var(--text-color); }
+        .system-msg { color: #888; font-style: italic; }
+        .debug-msg { color: #444; font-size: 0.75rem; }
+        
+        #input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #text-input {
+            flex-grow: 1;
+            background: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            font-family: var(--font-stack);
+        }
+        #send-btn {
+            background: var(--accent-dim);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: var(--font-stack);
+        }
+        #send-btn:hover { background: var(--accent-color); }
+        
+        .status-panel {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+
+    <nav id="sidebar">
+        <h1>The Field Manual</h1>
+        <div class="subtitle">Jason Allred</div>
+        
+        <section id="mission-control">
+            <h2>Mission Control</h2>
+            <ul>
+                <li><a href="../index.html" class="mission-link"><span class="status-dot online"></span> 📖 Field Manual</a></li>
+                <li><a href="../intercom/" class="mission-link"><span class="status-dot online"></span> Web Intercom</a></li>
+                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> VS Code (Remote)</a></li>
+                <li><a href="../pager.html" class="mission-link"><span class="status-dot online"></span> Pager (Logs)</a></li>
+                <li><a href="../timeline.html" class="mission-link"><span class="status-dot online"></span> Timeline (The Blue Tree)</a></li>
+                <li><a href="../files.html" class="mission-link"><span class="status-dot online"></span> Artifact Map</a></li>
+                <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link"><span class="status-dot online"></span> Observability Deck</a></li>
+            </ul>
+        </section>
+    </nav>
+
+    <main>
+        <h2 class="section-title">Acme Lab Web Intercom</h2>
+        
+        <div class="status-panel">
+            <span id="connection-dot" class="status-dot offline"></span>
+            <span id="connection-text">DISCONNECTED</span>
+            <span id="lab-version" style="margin-left: auto; color: #555;">v0.0.0</span>
+        </div>
+
+        <div id="chat-console">
+            <div class="system-msg">Establishing uplink to z87-Linux...</div>
+        </div>
+
+        <div id="input-container">
+            <input type="text" id="text-input" placeholder="Type a command or query..." autofocus>
+            <button id="send-btn">SEND</button>
+        </div>
+
+        <div class="disclaimer-box" style="margin-top: 40px;">
+            <strong>Pro-Tip:</strong> The Web Intercom uses the same WebSocket backbone as the legacy Python client. It supports RAG retrieval and real-time "Nervous Tics" from Pinky.
+        </div>
+    </main>
+
+    <script src="../intercom.js?v=1.0"></script>
+</body>
+</html>
