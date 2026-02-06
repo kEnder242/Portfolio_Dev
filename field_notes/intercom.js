@@ -1,10 +1,11 @@
 // 🐹 Acme Lab: Web Intercom Logic
 // Pure Vanilla JS - No Frameworks (Class 1 Design)
+console.log("Intercom.js v2.5.0 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "2.2.1"
+    VERSION: "2.5.0"
 };
 
 let ws = null;
@@ -108,11 +109,13 @@ function stopMic() {
 }
 
 function connect() {
+    console.log("Connect function called");
     // Determine target URL based on current hostname
     const targetUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? CONFIG.LOCAL_URL 
         : CONFIG.REMOTE_URL;
 
+    console.log(`Target URL selected: ${targetUrl}`);
     appendMsg(`Connecting to ${targetUrl}...`, 'system-msg');
     
     try {
@@ -175,11 +178,13 @@ function sendMessage() {
 function jsonStr(obj) { return JSON.stringify(obj); }
 
 // Event Listeners
-sendBtn.addEventListener('click', sendMessage);
-micBtn.addEventListener('click', toggleMic);
-inputEl.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
+if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+if (micBtn) micBtn.addEventListener('click', toggleMic);
+if (inputEl) {
+    inputEl.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
 
 // --- UNIT TESTING / VERIFICATION ---
 
@@ -214,9 +219,16 @@ window.verifyAudioPipeline = (durationSec = 5) => {
 };
 
 // Sidebar Toggle (Parity with index.html)
-document.getElementById('menu-toggle').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('active');
-});
+const menuToggle = document.getElementById('menu-toggle');
+const sidebar = document.getElementById('sidebar');
+if (menuToggle && sidebar) {
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+}
 
 // Start
-connect();
+window.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM Loaded, starting connection...");
+    connect();
+});
