@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** Feb 3, 2026
+**Date:** Feb 5, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 ## 🧭 Navigation
@@ -9,11 +9,11 @@
 
 ## 🎯 Active Initiative: "The Web Intercom" (Phase 8)
 **Goal:** Connect the static Portfolio (`notes`) to the active Brain (`acme`) via WebSockets, replacing the legacy Python client.
-*   **Bootstrap Task:** Install Gemini Conductor & Setup Local LLM Proxy (LiteLLM/Ollama).
-*   **Track 1:** Fix Legacy `intercom.py` (Audio/UI bugs).
-*   **Track 2:** Hallucination Audit (RAG failure analysis).
-*   **Track 3:** Google Keep "AI Tags" Integration.
-*   **Track 4:** `acme.jason-lab.dev` Web Client (Text -> Voice).
+*   **Bootstrap Task [DONE]:** Install Gemini Conductor & Setup Local LLM Proxy (LiteLLM/Ollama).
+*   **Track 1 [DONE]:** Fix Legacy `intercom.py` (Audio/UI bugs, first character bug).
+*   **Track 2 [DONE]:** Hallucination Audit (RAG failure analysis, context bridge fix).
+*   **Track 3 [DRAFT]:** AI Master Plan Synthesis (Keep research integration).
+*   **Track 4 [ACTIVE]:** `acme.jason-lab.dev` Web Client (Text baseline complete).
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Federated Architecture:**
@@ -24,9 +24,9 @@
     *   Implemented "Systems Nominal" cross-site ping.
 3.  **Security Layer:**
     *   Implemented "Knock" (Access Requests) for `notes.jason-lab.dev`.
-    *   Documented BKM in `Portfolio_Dev/FIELD_NOTES_ARCHITECTURE.md`.
+    *   Automated Access Bypass for Lab IP on `acme` subdomain.
 
 ## 🔮 The Roadmap
-*   **[TODO] Web Intercom:** Build `intercom.html` + `script.js`.
+*   **[ACTIVE] Web Intercom:** Enhanced UI and message history.
 *   **[TODO] Voice Input:** Research MediaStream API for browser-based STT.
 *   **[TODO] Sandbox:** Docker-based code execution for the Brain.
