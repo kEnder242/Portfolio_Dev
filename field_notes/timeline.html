@@ -25,7 +25,7 @@
                 <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
                 <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
                 <li><a href="intercom/" class="mission-link">Intercom</a></li>
-                <li><a href="report.html" class="mission-link">Mission Report</a></li>
+                <li><a href="research.html" class="mission-link">Research Hub</a></li>
                 <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link">Graphana: Observability</a></li>
                 <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
             </ul>
@@ -109,7 +109,24 @@
                     statusText.textContent = status.status || "UNKNOWN";
                     
                     eventCount.textContent = status.total_events || "---";
-                    lastFile.textContent = status.message ? status.message.replace("Processed ", "") : "---";
+                    
+                    // Narrative: "riv_common.py 2h ago"
+                    if (status.timestamp && status.last_file) {
+                        const lastTime = new Date(status.timestamp);
+                        const now = new Date();
+                        const diffMs = now - lastTime;
+                        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+                        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                        let timeStr = "just now";
+                        if (diffHrs > 0) timeStr = `${diffHrs}h ago`;
+                        else if (diffMins > 0) timeStr = `${diffMins}m ago`;
+                        
+                        lastFile.textContent = `${status.last_file} (${timeStr})`;
+                    } else {
+                        lastFile.textContent = status.message ? status.message.replace("Processed ", "") : "---";
+                    }
+                    
                     log("Neural uplink connected.");
                 })
                 .catch(() => log("Neural uplink offline.", 'warn'));

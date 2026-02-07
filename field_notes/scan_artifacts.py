@@ -8,6 +8,7 @@ import re
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
+from utils import update_status
 
 REASONING_MODE = "--reasoning" in sys.argv
 HYBRID_MODE = "--hybrid" in sys.argv
@@ -241,6 +242,7 @@ def scan_sector(year, curated_only=False):
             
         new_results.append(data)
         print(f"   > [{data['method']}] Rank {data['rank']}")
+        update_status("ONLINE", f"Analyzing artifacts: {filename}", engine=engine_mode, filename=filename)
 
     # Atomic Write Logic
     final_list = new_results

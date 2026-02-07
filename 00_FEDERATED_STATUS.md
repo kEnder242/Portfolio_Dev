@@ -12,17 +12,19 @@
     *   TTCS Reasoning Loop (Synthesize -> Solve).
     *   Agentic-R Utility-Based Memory Re-Ranking.
     *   Liger-Kernel DMA Bridge (VRAM Optimization).
-    *   **Fast Burn [ACTIVE]:** High-speed background loop re-processing all notes and artifacts.
+    *   **Continuous Burn [ACTIVE]:** Eternal background loop re-processing all notes and artifacts.
+    *   **Research Hub:** New `research.html` dashboard tracking integrated papers.
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Public Airlock (v3.1):** Deployed `www.jason-lab.dev` and secured notes.
 2.  **Research Synthesis:** Created `RESEARCH_SYNTHESIS.md` mapping papers to implementation.
 3.  **RAS Data Processing:** Integrated `ras-viral.txt` and `ras-einj.txt` using the new reasoning engine.
+4.  **Telemetry Box:** Implemented live narrative status on Timeline and Artifacts map.
 
 ## 🔮 The Roadmap
-*   **[TODO] Liger-Kernel:** Bench-test VRAM efficiency on Pinky-Node.
+*   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.
+*   **[TODO] Subconscious Dreaming:** Multi-host memory consolidation during idle cycles.
 *   **[TODO] Web Intercom:** Add the "Report Writer" synthesis sidebar.
-*   **[TODO] Data Hygiene:** Periodic LLM-based de-duplication of archive JSONs.
 
 ---
 

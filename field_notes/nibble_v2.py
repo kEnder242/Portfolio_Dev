@@ -11,6 +11,7 @@ import logging
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
+from utils import update_status, get_system_load
 
 # Config
 DATA_DIR = "field_notes/data"
@@ -41,50 +42,7 @@ if HYBRID_MODE: engine_mode = "HYBRID"
 elif REASONING_MODE: engine_mode = "REASONING"
 
 ENGINE = get_engine_v2(mode=engine_mode)
-PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
-
-def get_total_events():
-    count = 0
-    files = glob.glob(os.path.join(DATA_DIR, "*.json"))
-    for f in files:
-        if "themes" in f or "status" in f or "queue" in f or "state" in f or "search_index" in f: continue
-        try:
-            with open(f, 'r') as fp:
-                data = json.load(fp)
-                if isinstance(data, list): count += len(data)
-        except: pass
-    return count
-
-def update_status(status, msg, new_items=0):
-    current = {}
-    if os.path.exists(STATUS_FILE):
-        try:
-            with open(STATUS_FILE, 'r') as f:
-                current = json.load(f)
-        except: pass
-
-    data = {
-        "status": status,
-        "message": msg,
-        "new_items": new_items if status == "ONLINE" else current.get("new_items", 0),
-        "total_events": get_total_events(),
-        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "engine": "Curriculum/TTCS" if REASONING_MODE else "Standard"
-    }
-    
-    with open(STATUS_FILE, 'w') as f:
-        json.dump(data, f, indent=2)
-
-def get_system_load():
-    try:
-        response = requests.get(PROMETHEUS_URL, params={"query": "node_load1"}, timeout=2)
-        response.raise_for_status()
-        data = response.json()
-        if data['status'] == 'success' and data['data']['result']:
-            return float(data['data']['result'][0]['value'][1])
-    except: return 0.0
-    return 999.0 
 
 def can_burn():
     load = get_system_load()
@@ -190,13 +148,14 @@ def main():
         
         final_events.sort(key=lambda x: x.get('date', ''))
         save_json(bucket_file, final_events)
-        update_status("ONLINE", f"Processed {task['bucket']}", added_count)
+        update_status("ONLINE", f"Processed {task['bucket']}", added_count, filename=task['filename'], engine=engine_mode)
     else:
         log("   > No valid events found.")
 
     # Update State & Queue
     content_hash = hashlib.md5(task['content'].encode('utf-8')).hexdigest()
     state = load_json(STATE_FILE)
+    if isinstance(state, list): state = {} # Safety for corrupted state
     state[task['id']] = content_hash
     save_json(STATE_FILE, state)
     save_json(QUEUE_FILE, queue)

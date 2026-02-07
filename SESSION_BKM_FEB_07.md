@@ -1,31 +1,31 @@
 # SESSION BKM - FEB 07 (Final)
-**Goal:** Hybrid Brain Activation & 18-Year High-Fidelity Synthesis
+**Goal:** Engine v2.1 (Liger/DMA), Continuous Synthesis, and Research Dashboard.
 
 ## 🏗️ State of the Union
-- **Bicameral Bridge:** `AcmeLabClient` un-stubbed. The Portfolio now talks directly to the Windows 4090 Brain (`192.168.1.26`).
-- **Hybrid Engine:** `CurriculumEngine` now supports `HYBRID` mode. Pinky (Linux) acts as the **Context Builder**, while The Brain (Windows) acts as the **Report Writer** for high-value artifacts and 2024 insights.
-- **VRAM Optimization:** `LigerEngine` (DMA) implemented to reduce VRAM by 84% on the 2080 Ti.
-- **Reporting:** `report.html` created to display real-time synthesis metrics and top technical wins.
+- **Bicameral Bridge:** `AcmeLabClient` active. Portfolio talks directly to Windows 4090 Brain.
+- **Continuous Burn:** `mass_scan.py` refactored into an **Eternal Refinement Loop**. It now transitions to "Slow Burn" (Refining Gems) once the primary queue is empty.
+- **Research Hub:** `research.html` created to showcase integrated papers (FS-Researcher, TTCS, Agentic-R, etc.) and their status.
+- **Narrative Telemetry:** Timeline and Artifacts pages now show "Last scan generated X logs Y mins ago" for high-fidelity situational awareness.
 
-## 🚀 Technical Wins: The Hybrid Burn
-We have initiated a "Wheels Spinning" sync between the two hosts.
+## 🚀 Technical Wins: The Pager Pulse
+We have restored the alerting heartbeat.
 
 **The One-Liner:** 
 ```bash
-nohup python3 Portfolio_Dev/field_notes/mass_scan.py > /home/jallred/.gemini/tmp/mass_scan.log 2>&1 &
+python3 monitor/notify_pd.py "Epoch Complete" --source MassScan --severity info
 ```
 
 **The Core Logic:** 
-1. **Librarian (Pinky):** Classifies files.
-2. **Artifacts (Brain):** Generates BKM-style summaries for scripts using 70B reasoning.
-3. **Notes (Pinky):** Fast-burns the 18-year tactical backlog.
-4. **Notes (Brain):** Deep-burns the 2024 "Focal" insights for maximum interview impact.
+`mass_scan.py` now triggers a "Pulse" at the start and end of every scan epoch. It updates `pager_activity.json` and ensures the user is notified of system progress even when AFK.
+
+**The Trigger:** 
+Epoch transitions and refinement starts.
 
 ## 🛠️ Grounding
-- **Focal Context:** The Brain is fed your **11066402 Insights** and **Tool Era Registry** during every high-value call to ensure 100% reality alignment.
-- **VRAMGuard:** Background scan automatically pauses if VRAM utilization > 95%.
+- **Strict Evidence Rule:** Hardened prompts to prevent "Generic Filler" hallucinations.
+- **Utility Ranking:** Agentic-R layer scans the whole archive to ground the current reasoning in relevant historical context.
 
 ## 🎯 Next Session Goals
-- **Review Report:** Analyze the `report.html` output for "Brain vs. Pinky" quality deltas.
+- **Subconscious Dreaming:** Implement the Windows-side batch job for memory consolidation.
 - **Intercom Synthesis:** Enable the Brain-powered sidebar in the live Web Intercom.
-- **Liger Bench-test:** Verify the 2080 Ti temperature and memory delta during active burn.
+- **Bench-testing:** Evaluate VRAM savings during active Liger inference.

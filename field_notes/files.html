@@ -162,7 +162,7 @@
                 <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
                 <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
                 <li><a href="intercom/" class="mission-link">Intercom</a></li>
-                <li><a href="report.html" class="mission-link">Mission Report</a></li>
+                <li><a href="research.html" class="mission-link">Research Hub</a></li>
                 <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link">Graphana: Observability</a></li>
                 <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
             </ul>
@@ -182,6 +182,14 @@
             <div class="disclaimer-box">
                 <span style="color: var(--accent-color); font-weight: bold;">[SCAN STATUS]</span> 
                 Deep scan active. Showing classified artifacts.
+                <div id="pinky-status" style="margin-top: 10px; font-size: 0.85em; color: #aaa; border-top: 1px solid #333; padding-top: 10px; line-height: 1.4;">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div><span style="color: #4daafc; font-weight: bold;">[SYSTEM]</span> <span id="status-text">Uplink Nominal</span></div>
+                        <div><span style="color: #4daafc; font-weight: bold;">[EVENTS]</span> <span id="event-count">---</span></div>
+                        <div><span style="color: #4daafc; font-weight: bold;">[LAST SCAN]</span> <span id="last-file">None</span></div>
+                        <div><span style="color: #4daafc; font-weight: bold;">[LOAD]</span> <span id="sys-load">0.00</span></div>
+                    </div>
+                </div>
             </div>
 
             <div class="year-tabs" id="year-tabs">
@@ -345,6 +353,46 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Fetch Status & Telemetry
+            fetch('data/status.json?t=' + new Date().getTime())
+                .then(r => r.json())
+                .then(status => {
+                    const statusText = document.getElementById('status-text');
+                    const eventCount = document.getElementById('event-count');
+                    const lastFile = document.getElementById('last-file');
+                    
+                    if (status.status === "ONLINE") statusText.style.color = "#4cd964";
+                    if (status.status === "IDLE") statusText.style.color = "#4daafc";
+                    statusText.textContent = status.status || "UNKNOWN";
+                    
+                    eventCount.textContent = status.total_events || "---";
+                    
+                    if (status.timestamp && status.last_file) {
+                        const lastTime = new Date(status.timestamp);
+                        const now = new Date();
+                        const diffMs = now - lastTime;
+                        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+                        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                        let timeStr = "just now";
+                        if (diffHrs > 0) timeStr = `${diffHrs}h ago`;
+                        else if (diffMins > 0) timeStr = `${diffMins}m ago`;
+                        
+                        lastFile.textContent = `${status.last_file} (${timeStr})`;
+                    }
+                });
+
+            // Fetch Live Load
+            fetch('http://localhost:9090/api/v1/query?query=node_load1')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success' && data.data.result.length > 0) {
+                        const load = parseFloat(data.data.result[0].value[1]).toFixed(2);
+                        document.getElementById('sys-load').textContent = load;
+                    }
+                })
+                .catch(() => { document.getElementById('sys-load').textContent = "OFFLINE"; });
+
             // Mobile Menu
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Hub | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=10.3">
+    <style>
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .paper-card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 20px;
+            border-top: 4px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .paper-impact {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .progress-container {
+            background: #222;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.5s ease;
+        }
+        .progress-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: right;
+        }
+        .gem-list {
+            list-style: none;
+            padding: 0;
+        }
+        .gem-item {
+            border-left: 2px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .gem-summary { color: #fff; font-weight: bold; font-size: 0.9rem; }
+        .gem-meta { font-size: 0.75rem; color: #666; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+
+    <nav id="sidebar">
+        <h1>The Field Manual</h1>
+        <div class="subtitle">Jason Allred</div>
+        <section id="mission-control">
+            <h2>Mission Control</h2>
+            <ul>
+                <li><a href="stories.html" class="mission-link">Stories</a></li>
+                <li><a href="timeline.html" class="mission-link">Notes: Logs</a></li>
+                <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
+                <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
+                <li><a href="intercom/" class="mission-link">Intercom</a></li>
+                <li><a href="research.html" class="mission-link">Research Hub</a></li>
+                <li><a href="https://monitor.jason-lab.dev" target="_blank" class="mission-link">Graphana: Observability</a></li>
+                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
+            </ul>
+        </section>
+    </nav>
+
+    <main>
+        <h2 class="section-title">AI Research Implementation Hub</h2>
+        
+        <div class="research-grid" id="research-grid">
+            <!-- Populated via JS -->
+        </div>
+
+        <section>
+            <h3>High-Fidelity Technical Gems</h3>
+            <div id="tech-gems" class="gem-list">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const PAPERS = [
+            { id: "FS-Researcher", title: "FS-Researcher", impact: "Static Synthesis Core (File-System Memory)", progress: 90 },
+            { id: "TTCS", title: "TTCS", impact: "Reasoning Loop (Synthesize-then-Solve)", progress: 60 },
+            { id: "Agentic-R", title: "Agentic-R", impact: "Utility-Based Memory Re-Ranking", progress: 70 },
+            { id: "Apple-CLaRa", title: "Apple CLaRa", impact: "Semantic Compression (Condenser)", progress: 40 },
+            { id: "Liger-Kernel", title: "Liger-Kernel", impact: "VRAM Optimization (DMA Bridge)", progress: 80 },
+            { id: "DeepAgent", title: "DeepAgent", impact: "Multi-Agent Orchestration Foundation", progress: 100 },
+            { id: "TTT-Discover", title: "TTT-Discover", impact: "Autonomous Discovery (Validation Paths)", progress: 0 },
+            { id: "Google-Nested", title: "Google Nested Learning", impact: "Continual Learning Paradigms", progress: 20 },
+            { id: "Dreaming", title: "Subconscious Dreaming", impact: "Multi-Host Memory Consolidation", progress: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('research-grid');
+            grid.innerHTML = PAPERS.map(p => `
+                <div class="paper-card">
+                    <div>
+                        <div class="paper-title">${p.title}</div>
+                        <div class="paper-impact">${p.impact}</div>
+                    </div>
+                    <div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${p.progress}%"></div>
+                        </div>
+                        <div class="progress-label">${p.progress}% Integrated</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Fetch Gems (Latest 5 high-rank wins)
+            fetch('data/2024.json')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('tech-gems');
+                    data.filter(e => e.rank >= 4).slice(-5).reverse().forEach(gem => {
+                        const div = document.createElement('div');
+                        div.className = 'gem-item';
+                        div.innerHTML = `
+                            <div class="gem-summary">${gem.summary}</div>
+                            <div class="gem-meta">${gem.date} | Ref: ${gem.evidence.substring(0, 60)}...</div>
+                        `;
+                        container.appendChild(div);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

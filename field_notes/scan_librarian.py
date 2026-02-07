@@ -7,6 +7,7 @@ import re
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine import get_engine
+from utils import update_status
 
 # Config
 NOTES_GLOB = "raw_notes/**/notes_*.txt"
@@ -114,6 +115,7 @@ def main():
             
         manifest[filename] = info
         print(f"   --> {filename}: {info.get('type')} ({info.get('year') or info.get('topic')})")
+        update_status("ONLINE", f"Classifying file: {filename}", filename=filename)
 
     # Save Manifest
     with open(MANIFEST_FILE, 'w') as f:
