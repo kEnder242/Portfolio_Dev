@@ -7,9 +7,10 @@ import re
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from ai_engine import get_engine
+from ai_engine_v2 import get_engine_v2
 
-ENGINE = get_engine(mode="LOCAL")
+REASONING_MODE = "--reasoning" in sys.argv
+ENGINE = get_engine_v2(mode="REASONING" if REASONING_MODE else "LOCAL")
 DATA_DIR = "field_notes/data"
 RAW_DIR = "raw_notes"
 
@@ -130,7 +131,7 @@ def heuristic_synopsis(filename):
     return mapping.get(ext, "")
 
 def scan_sector(year, curated_only=False):
-    print(f"--- Artifact Scanner: {year} (Curated Only: {curated_only}) ---")
+    print(f"--- Artifact Scanner v2.0: {year} (Reasoning: {REASONING_MODE}) ---")
     if year.lower() in ["root", "docs"]:
         year_dir = RAW_DIR
         output_file = os.path.join(DATA_DIR, "artifacts_DOCS.json")
@@ -171,35 +172,48 @@ def scan_sector(year, curated_only=False):
         # Expert Override check
         is_star = filename in STAR_SYNOP
         
-        prompt = f"""
-        [TASK]
-        Analyze this file for a Senior Engineer's portfolio.
-        Return ONLY a JSON object. No conversational text.
-        
-        [FILENAME]
-        {filename}
-        [CONTENT SAMPLE]
-        {read_file_sample(filepath)}
-        
-        [REQUIREMENTS]
-        1. Synopsis: TERSE 1-sentence (max 12 words).
-        2. Rank: 0-4 (4=Showcase, 2=Standard, 0=Noise).
-        3. Keywords: 3-5 tags.
-        
-        [JSON FORMAT]
-        {{
-            "synopsis": "...",
-            "rank": 2,
-            "type": "Script" | "Document" | "Data",
-            "keywords": []
-        }}
-        """
-        
         data = None
         if not is_star:
             try:
-                response = ENGINE.generate(prompt)
-                data = extract_json(response)
+                if REASONING_MODE and hasattr(ENGINE, 'generate_with_reasoning'):
+                    # Use reasoning engine for artifacts
+                    res_json_str = ENGINE.generate_with_reasoning(read_file_sample(filepath), bucket=year)
+                    # Reasoning engine returns a list of events usually, but for artifacts we want one object
+                    res_list = json.loads(res_json_str) if isinstance(res_json_str, str) else res_json_str
+                    if res_list and len(res_list) > 0:
+                        item = res_list[0]
+                        data = {
+                            "synopsis": item.get('summary', h_synopsis),
+                            "rank": item.get('rank', h_rank),
+                            "type": "Script" if filename.endswith('.py') else "Document",
+                            "keywords": item.get('tags', [])
+                        }
+                else:
+                    prompt = f"""
+                    [TASK]
+                    Analyze this file for a Senior Engineer's portfolio.
+                    Return ONLY a JSON object. No conversational text.
+                    
+                    [FILENAME]
+                    {filename}
+                    [CONTENT SAMPLE]
+                    {read_file_sample(filepath)}
+                    
+                    [REQUIREMENTS]
+                    1. Synopsis: TERSE 1-sentence (max 12 words).
+                    2. Rank: 0-4 (4=Showcase, 2=Standard, 0=Noise).
+                    3. Keywords: 3-5 tags.
+                    
+                    [JSON FORMAT]
+                    {{
+                        "synopsis": "...",
+                        "rank": 2,
+                        "type": "Script" | "Document" | "Data",
+                        "keywords": []
+                    }}
+                    """
+                    response = ENGINE.generate(prompt)
+                    data = extract_json(response)
             except Exception: pass
         
         if data and 'rank' in data:
@@ -208,7 +222,7 @@ def scan_sector(year, curated_only=False):
             elif data['rank'] < h_rank:
                 data['rank'] = h_rank
             data['filename'] = filename
-            data['method'] = "AI"
+            data['method'] = "AI (Reasoning)" if REASONING_MODE else "AI"
         else:
             data = {
                 "filename": filename, "synopsis": h_synopsis,
@@ -238,6 +252,12 @@ def scan_sector(year, curated_only=False):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        target = sys.argv[1]
-        curated = "--curated" in sys.argv
-        scan_sector(target, curated_only=curated)
+        # Extract target (exclude --reasoning or --curated)
+        targets = [a for a in sys.argv[1:] if not a.startswith('--')]
+        if targets:
+            target = targets[0]
+            curated = "--curated" in sys.argv
+            scan_sector(target, curated_only=curated)
+        else:
+            print("Usage: python3 scan_artifacts.py <year|docs|root> [--curated] [--reasoning]")
+

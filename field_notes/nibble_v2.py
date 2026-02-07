@@ -37,7 +37,7 @@ def log(msg):
 REASONING_MODE = "--reasoning" in sys.argv
 ENGINE = get_engine_v2(mode="REASONING" if REASONING_MODE else "LOCAL")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
-MAX_LOAD = 2.0
+MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
 
 def update_status(status, msg, new_items=0):
     current = {}
