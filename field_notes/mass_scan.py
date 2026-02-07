@@ -66,13 +66,14 @@ def main():
     logging.info("Step 2: Updating Processing Queue...")
     run_task([QUEUE_MGR])
 
-    # 3. Artifact Map Refresh (Reasoning Mode)
-    logging.info("Step 3: Refreshing Artifact Map (Reasoning Mode)...")
+    # 3. Artifact Map Refresh (Hybrid/Brain Mode)
+    logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
     years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
     for year in years:
         while not vram_guard(): time.sleep(60)
-        logging.info(f"Scanning Artifact Sector: {year}")
-        run_task([ARTIFACT_SCANNER, year, "--reasoning"])
+        logging.info(f"Scanning Artifact Sector: {year} (Brain)")
+        # High value artifacts get the Brain
+        run_task([ARTIFACT_SCANNER, year, "--hybrid"])
 
     # 4. Notes Fast Burn
     logging.info("Step 4: Starting Notes Fast Burn...")
@@ -89,14 +90,22 @@ def main():
         while not vram_guard(): time.sleep(60)
         
         logging.info(f"Processing next note chunk ({len(queue)} remaining)...")
-        # Run nibble_v2 with reasoning and force (via environment or flag if we added it)
-        # We'll just run it normally, it pops 1 task.
-        if run_task([NIBBLER, "--reasoning"]):
+        task = queue[0]
+        # High value notes (2024) get the Hybrid Brain
+        use_hybrid = "2024" in task['bucket'] or "PIAV" in task['filename']
+        flag = "--hybrid" if use_hybrid else "--reasoning"
+        
+        if run_task([NIBBLER, flag]):
             time.sleep(SLEEP_INTERVAL)
         else:
             logging.error("Nibbler crashed. Retrying in 60s...")
             time.sleep(60)
 
+    # 5. Generate Final Report
+    logging.info("Step 5: Generating Mission Report...")
+    # Trigger one last update to status.json to ensure total count is fresh
+    run_task([NIBBLER, "--reasoning"]) 
+    
     logging.info("=== MASS SCAN COMPLETE ===")
 
 if __name__ == "__main__":

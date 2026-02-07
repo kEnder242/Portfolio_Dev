@@ -10,7 +10,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
 
 REASONING_MODE = "--reasoning" in sys.argv
-ENGINE = get_engine_v2(mode="REASONING" if REASONING_MODE else "LOCAL")
+HYBRID_MODE = "--hybrid" in sys.argv
+engine_mode = "LOCAL"
+if HYBRID_MODE: engine_mode = "HYBRID"
+elif REASONING_MODE: engine_mode = "REASONING"
+
+ENGINE = get_engine_v2(mode=engine_mode)
 DATA_DIR = "field_notes/data"
 RAW_DIR = "raw_notes"
 

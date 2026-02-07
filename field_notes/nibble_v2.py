@@ -35,7 +35,12 @@ def log(msg):
 
 # AI & Metrics
 REASONING_MODE = "--reasoning" in sys.argv
-ENGINE = get_engine_v2(mode="REASONING" if REASONING_MODE else "LOCAL")
+HYBRID_MODE = "--hybrid" in sys.argv
+engine_mode = "LOCAL"
+if HYBRID_MODE: engine_mode = "HYBRID"
+elif REASONING_MODE: engine_mode = "REASONING"
+
+ENGINE = get_engine_v2(mode=engine_mode)
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
 

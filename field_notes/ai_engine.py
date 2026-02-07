@@ -50,19 +50,44 @@ class OllamaClient(CognitiveEngine):
 
 class AcmeLabClient(CognitiveEngine):
     """
-    [STUB] Future Client for HomeLabAI Integration.
-    Will connect via MCP or WebSocket to 'Pinky' (The Agent).
+    Direct Bridge to 'The Brain' (Windows / 4090).
+    Used for high-value synthesis and BKM-style report writing.
     """
-    def __init__(self, host="localhost", port=8765):
-        self.host = host
-        self.port = port
-    
+    def __init__(self, url="http://192.168.1.26:11434/api/generate", model="llama3:latest"):
+        self.url = url
+        self.model = model
+
+    def prime(self):
+        """Wakes up the Windows GPU model."""
+        logging.info(f"Priming The Brain ({self.model})...")
+        try:
+            # Bypass proxies for local network
+            proxies = {"http": None, "https": None}
+            payload = {"model": self.model, "prompt": "wake up", "keep_alive": "10m", "stream": False}
+            requests.post(self.url, json=payload, timeout=10, proxies=proxies)
+            return True
+        except Exception as e:
+            logging.error(f"Prime failed: {e}")
+            return False
+
     def generate(self, prompt, context="", options=None):
-        # TODO: Implement MCP Client Logic here.
-        # client = mcp.Client(self.host, self.port)
-        # return client.call_tool("archive_notes", {"text": prompt})
-        print("AcmeLabClient is not yet implemented. Please use OllamaClient.")
-        return "{}"
+        full_prompt = f"{context}\n\n{prompt}" if context else prompt
+        payload = {
+            "model": self.model,
+            "prompt": full_prompt,
+            "stream": False,
+            "options": options or {"temperature": 0.1, "num_ctx": 8192}
+        }
+        try:
+            proxies = {"http": None, "https": None}
+            # 120s timeout for complex brain reasoning
+            response = requests.post(self.url, json=payload, timeout=120, proxies=proxies)
+            response.raise_for_status()
+            return response.json()['response']
+        except Exception as e:
+            logging.error(f"Brain Connection Failed: {e}. Falling back to Pinky.")
+            # Fallback to local Ollama
+            return OllamaClient().generate(prompt, context, options)
 
 # --- FACTORY ---
 def get_engine(mode="LOCAL"):

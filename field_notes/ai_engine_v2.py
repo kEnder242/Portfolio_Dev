@@ -207,15 +207,27 @@ class SemanticCondenser:
         """
         return self.client.generate(prompt)
 
-class CurriculumEngine(OllamaClient):
+class CurriculumEngine(CognitiveEngine):
     """
     TTCS (Test-Time Curriculum Synthesis) Implementation.
     Uses a Synthesize-then-Solve loop to improve reasoning quality.
     """
-    def __init__(self, model=DEFAULT_MODEL, url=OLLAMA_URL):
-        super().__init__(model, url)
+    def __init__(self, backend=None):
+        # Prefer DMA/Liger for local reasoning to save VRAM
+        if not backend:
+            if HAS_LIGER:
+                self.local_backend = LigerEngine()
+            else:
+                self.local_backend = OllamaClient()
+        else:
+            self.local_backend = backend
+            
+        self.backend = self.local_backend
         self.memory = ArchiveMemory()
-        self.condenser = SemanticCondenser(self)
+        self.condenser = SemanticCondenser(self.backend)
+
+    def generate(self, prompt, context="", options=None):
+        return self.backend.generate(prompt, context, options)
 
     def generate_with_reasoning(self, raw_text, bucket=None):
         logging.info(f"Starting Curriculum Reasoning for {bucket}...")
@@ -248,7 +260,7 @@ class CurriculumEngine(OllamaClient):
         3. Do not invent technical issues (e.g. SSD errors, permissions) that are not in the text.
         4. Ensure tool associations match the [TOOL ERA REGISTRY].
         """
-        anchors = self.generate(synth_prompt)
+        anchors = self.backend.generate(synth_prompt)
         
         # 4. TTCS Phase 2: Solve
         solve_prompt = f"""
@@ -262,7 +274,7 @@ class CurriculumEngine(OllamaClient):
         **CRITICAL:** Verify the year of the log against the tool's release year.
         If there is a conflict (e.g., tool released in 2022 used in a 2019 note), flag it as a [CAUSALITY ERROR] and ignore the tool name.
         """
-        solutions = self.generate(solve_prompt)
+        solutions = self.backend.generate(solve_prompt)
         
         # 5. Final Consolidation
         final_prompt = f"""
@@ -291,11 +303,21 @@ class CurriculumEngine(OllamaClient):
           {{ "date": "YYYY-MM-DD", "summary": "...", "evidence": "...", "sensitivity": "Public", "tags": [] }}
         ]
         """
-        return self.generate(final_prompt)
+        return self.backend.generate(final_prompt)
 
 def get_engine_v2(mode="LOCAL"):
     if mode == "REASONING":
         return CurriculumEngine()
     elif mode == "DMA":
         return LigerEngine()
+    elif mode == "LAB":
+        from ai_engine import AcmeLabClient
+        client = AcmeLabClient()
+        client.prime()
+        return client
+    elif mode == "HYBRID":
+        from ai_engine import AcmeLabClient
+        brain = AcmeLabClient()
+        brain.prime()
+        return CurriculumEngine(backend=brain)
     return get_engine(mode)
