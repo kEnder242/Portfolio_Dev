@@ -39,6 +39,18 @@ ENGINE = get_engine_v2(mode="REASONING" if REASONING_MODE else "LOCAL")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
 
+def get_total_events():
+    count = 0
+    files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    for f in files:
+        if "themes" in f or "status" in f or "queue" in f or "state" in f or "search_index" in f: continue
+        try:
+            with open(f, 'r') as fp:
+                data = json.load(fp)
+                if isinstance(data, list): count += len(data)
+        except: pass
+    return count
+
 def update_status(status, msg, new_items=0):
     current = {}
     if os.path.exists(STATUS_FILE):
@@ -51,6 +63,7 @@ def update_status(status, msg, new_items=0):
         "status": status,
         "message": msg,
         "new_items": new_items if status == "ONLINE" else current.get("new_items", 0),
+        "total_events": get_total_events(),
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "engine": "Curriculum/TTCS" if REASONING_MODE else "Standard"
     }

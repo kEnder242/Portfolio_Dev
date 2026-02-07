@@ -109,7 +109,9 @@
                     
                     eventCount.textContent = status.total_events || "---";
                     lastFile.textContent = status.message ? status.message.replace("Processed ", "") : "---";
-                });
+                    log("Neural uplink connected.");
+                })
+                .catch(() => log("Neural uplink offline.", 'warn'));
 
             // Fetch Live Load
             fetch('http://localhost:9090/api/v1/query?query=node_load1')
@@ -121,15 +123,6 @@
                     }
                 })
                 .catch(() => { document.getElementById('sys-load').textContent = "OFFLINE"; });
-                    
-                    el.innerHTML = `
-                        <span style="color: ${color}; font-weight: bold;">[${status.status}]</span> 
-                        ${status.message} 
-                        <span style="opacity: 0.5;">(${status.timestamp})</span>
-                    `;
-                    log("Neural uplink connected.");
-                })
-                .catch(() => log("Neural uplink offline.", 'warn'));
 
             // Fetch Data with Fail-Safe
             let fetched = false;
@@ -298,10 +291,10 @@
 
             let i = 0;
             activeInterval = setInterval(() => {
-                // Append 5 characters at a time for 5x speed
-                const chunk = buffer.substring(i, i + 5);
+                // Append 10 characters at a time for 10x original speed
+                const chunk = buffer.substring(i, i + 10);
                 termElement.append(chunk);
-                i += 5;
+                i += 10;
                 if (i >= buffer.length) {
                     clearInterval(activeInterval);
                     termElement.innerHTML += '<span class="cursor"></span>';

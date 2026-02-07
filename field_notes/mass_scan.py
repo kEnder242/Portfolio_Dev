@@ -16,7 +16,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
 # Config
-VRAM_THRESHOLD = 0.85 # 80% utilization limit
+VRAM_THRESHOLD = 0.95 # Allow up to 95% utilization
 MAX_LOAD = 4.0        # Allow higher load for "Fast Burn"
 SLEEP_INTERVAL = 30   # 30 seconds between tasks in Fast Burn
 
