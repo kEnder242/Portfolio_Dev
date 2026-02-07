@@ -24,3 +24,12 @@
 *   **[TODO] Web Intercom:** Add the "Report Writer" synthesis sidebar.
 *   **[TODO] Data Hygiene:** Periodic LLM-based de-duplication of archive JSONs.
 
+---
+
+## 🛠️ Operational Protocols
+### Website Build (Cache-Busting)
+To force-clear browser caches after UI changes, run the automated build script:
+`python3 field_notes/build_site.py`
+*(Documented in [SESSION_BKM_FEB_07.md](./SESSION_BKM_FEB_07.md))*
+
+
