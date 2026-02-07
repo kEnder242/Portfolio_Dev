@@ -47,7 +47,9 @@ def run_task(cmd_list):
     try:
         env = os.environ.copy()
         env["MAX_LOAD"] = "5.0"
-        subprocess.run([sys.executable] + cmd_list, check=True, env=env)
+        # Run from Portfolio_Dev to fix relative path issues
+        cwd = os.path.dirname(BASE_DIR)
+        subprocess.run([sys.executable] + cmd_list, check=True, env=env, cwd=cwd)
         return True
     except Exception as e:
         logging.error(f"Task failed: {e}")
