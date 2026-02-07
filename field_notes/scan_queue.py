@@ -5,7 +5,8 @@ import json
 import hashlib
 
 # Config
-NOTES_GLOB = "raw_notes/notes_*.txt"
+NOTES_GLOB = "raw_notes/**/notes_*.txt"
+RAS_GLOB = "raw_notes/**/ras-*.txt"
 DATA_DIR = "field_notes/data"
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
@@ -90,7 +91,7 @@ def main():
     else:
         queue = []
 
-    files = sorted(glob.glob(NOTES_GLOB))
+    files = sorted(glob.glob(NOTES_GLOB, recursive=True) + glob.glob(RAS_GLOB, recursive=True))
     tasks_added = 0
     
     for filepath in files:

@@ -9,7 +9,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine import get_engine
 
 # Config
-NOTES_GLOB = "raw_notes/notes_*.txt"
+NOTES_GLOB = "raw_notes/**/notes_*.txt"
+RAS_GLOB = "raw_notes/**/ras-*.txt"
 MANIFEST_FILE = "field_notes/data/file_manifest.json"
 ENGINE = get_engine(mode="LOCAL")
 
@@ -83,11 +84,13 @@ def main():
     OVERRIDES = {
         "notes_2024_PIAV.txt": "LOG",
         "Performance review 2008-2018 .txt": "META",
-        "11066402 Insights 2019-2024.txt": "META"
+        "11066402 Insights 2019-2024.txt": "META",
+        "ras-viral.txt": "LOG",
+        "ras-einj.txt": "LOG"
     }
     
     manifest = {}
-    files = sorted(glob.glob(NOTES_GLOB))
+    files = sorted(glob.glob(NOTES_GLOB, recursive=True) + glob.glob(RAS_GLOB, recursive=True))
     
     for filepath in files:
         filename = os.path.basename(filepath)

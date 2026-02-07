@@ -19,7 +19,8 @@ ENGINE = get_engine(mode="LOCAL")
 RESUME_PATH = "raw_notes/Jason Allred Resume - Jan 2026.txt"
 FOCAL_OLD = "raw_notes/Performance review 2008-2018 .txt"
 FOCAL_NEW = "raw_notes/11066402 Insights 2019-2024.txt"
-NOTES_GLOB = "raw_notes/notes_*.txt"
+NOTES_GLOB = "raw_notes/**/notes_*.txt"
+RAS_GLOB = "raw_notes/**/ras-*.txt"
 GAP_FILES = [
     "raw_notes/Performance review 2008-2018 .txt",
     "raw_notes/notes_2006_EPSD.txt",
@@ -160,7 +161,8 @@ def main():
     strategic_context = f"[RESUME]\n{resume[:2000]}\n[FOCALS]\n{focal_1[:3000]}\n{focal_2[:3000]}"
     
     # Gather all files
-    all_files = set(glob.glob(NOTES_GLOB))
+    all_files = set(glob.glob(NOTES_GLOB, recursive=True))
+    all_files.update(glob.glob(RAS_GLOB, recursive=True))
     for gf in GAP_FILES:
         if os.path.exists(gf):
             all_files.add(gf)
