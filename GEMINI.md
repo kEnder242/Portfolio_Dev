@@ -50,10 +50,18 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 
 ## ⚖️ OPERATIONAL PROTOCOL (The "Cautious Design" Rule)
 1. **Fact-Finding First:** The CLI must perform "discovery" on raw notes before suggesting a structure.
-2. **Design Feedback Loop:** Reserve "heads-down" development for moments when specifically called out. Work with the user to gather requirments and build a detailed vision before moving forward.  Some fact finding is allowed.  Only dive into development once approved.
+2. **Design Feedback Loop:** Reserve "heads-down" development for moments when specifically called out. Work with the user to gather requirements and build a detailed vision before moving forward. Some fact finding is allowed. Only dive into development once approved.
 3. **Verification over Velocity:** Prioritize "Why" (the validation logic) over "What" (the finished text).
 
-## Personal notes from Jaosn:
+## ❄️ COLD-START PROTOCOL (Environment Discovery)
+If the agent session is lost or restarted, refer to these anchors:
+1. **Infrastructure Secrets:** `~/.secrets/` (Contains `cloudflare_token` and other non-git keys).
+2. **Project Secrets:** `Portfolio_Dev/monitor/secrets.json` (Contains PagerDuty and Cloudflare IDs).
+3. **Runtime Safe-Zone:** `~/AcmeLab` is the production host for background services.
+4. **Dev Safe-Zone:** `~/Dev_Lab` is the primary workspace.
+5. **Context Anchors:** `Travel_Guide_2026.md` contains the authoritative network topology.
+
+## Personal notes from Jason:
 
 1. **War Story notes** Here is a link to my document dealing wiht my work history.  I want to fill a dashboard with all the content in this doucment - I'd like to brainstorm ways to index and display this content as an interview dashboard
 
