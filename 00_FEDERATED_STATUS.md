@@ -23,12 +23,13 @@
 2.  **Research Synthesis:** Created `RESEARCH_SYNTHESIS.md` mapping papers to implementation.
 3.  **Diamond Synthesis:** Successfully completed first multi-host memory consolidation loop.
 4.  **Portfolio Signature:** Deployed the 3x3 CVT Resume Builder.
-5.  **Telemetry Box:** Implemented live narrative status on Timeline and Artifacts map.
+5.  **Workbench Pivot:** Finalized 50/50 Report Writer UI with mobile sliding sidebar.
 
 ## 🔮 The Roadmap
 *   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.
-*   **[TODO] Subconscious Dreaming:** Multi-host memory consolidation during idle cycles.
-*   **[TODO] Web Intercom:** Add the "Report Writer" synthesis sidebar.
+*   **[TODO] vLLM Integration:** Transition from Ollama to vLLM for high-throughput serving.
+*   **[TODO] TTT-Discover:** RL-based autonomous failure path discovery.
+*   **[TODO] MAXS (Meta-Adaptive):** Lookahead hooks for tool-call valuation (v1.0 active).
 
 ---
 

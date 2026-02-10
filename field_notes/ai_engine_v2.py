@@ -4,7 +4,7 @@ import logging
 import os
 import glob
 import re
-from ai_engine import OllamaClient, get_engine
+from ai_engine import OllamaClient, get_engine, CognitiveEngine
 
 # Try to import Liger/Transformers for DMA mode
 try:
