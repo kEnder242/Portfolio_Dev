@@ -10,8 +10,9 @@ from datetime import datetime, timezone
 BASE_DIR = os.path.dirname(__file__)
 LOG_PATH = os.path.join(BASE_DIR, "../field_notes/data/pager_activity.json")
 SECRETS_PATH = os.path.join(BASE_DIR, "secrets.json")
+MAINTENANCE_LOCK = os.path.join(BASE_DIR, "../field_notes/data/maintenance.lock")
 
-# NTFY Config (Placeholder - User can change)
+# NTFY Config
 NTFY_TOPIC = "jason_lab_alerts"
 NTFY_URL = f"https://ntfy.sh/{NTFY_TOPIC}"
 
@@ -27,9 +28,9 @@ def get_secrets():
 def notify_gatekeeper(summary, source, severity, emergency=False, dry_run=False):
     """
     Triage notifications:
-    - Log all to JSON.
-    - CRITICAL -> NTFY.
-    - --emergency flag -> PagerDuty (Backup).
+    - Log all to JSON for dashboard.
+    - External (NTFY): ONLY if severity is CRITICAL or source is CloudflareAccess.
+    - External (PD): ONLY if --emergency flag is used.
     """
     timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     secrets = get_secrets()
@@ -43,17 +44,18 @@ def notify_gatekeeper(summary, source, severity, emergency=False, dry_run=False)
     
     print(f"[{severity.upper()}] {source}: {summary}")
 
-    # 1. Local Logging (Always)
+    # 1. Local Logging (Always for Dashboard)
     try:
         os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+        data = []
         if os.path.exists(LOG_PATH):
             with open(LOG_PATH, "r") as f:
-                data = json.load(f)
-        else:
-            data = []
+                try:
+                    data = json.load(f)
+                except: data = []
             
         data.insert(0, event)
-        data = data[:100] # Keep last 100
+        data = data[:100] 
         
         with open(LOG_PATH, "w") as f:
             json.dump(data, f, indent=4)
@@ -64,17 +66,28 @@ def notify_gatekeeper(summary, source, severity, emergency=False, dry_run=False)
         print("DRY RUN: External notifications skipped.")
         return
 
-    # 2. NTFY (Live Interrupt for CRITICAL)
-    if severity.lower() == "critical":
+    # 2. Maintenance Mode Check (Suppresses ALL external)
+    if os.path.exists(MAINTENANCE_LOCK):
+        print(f"MAINTENANCE MODE: External alerts suppressed via {MAINTENANCE_LOCK}")
+        return
+
+    # 3. NTFY (Live Interrupt)
+    # Rules: Critical Severity OR a Security/Login Event
+    is_critical = severity.lower() == "critical"
+    is_login = source.lower() == "cloudflareaccess"
+    
+    if is_critical or is_login:
         try:
-            print(f"NTFY: Sending critical alert to {NTFY_URL}...")
+            print(f"NTFY: Sending interrupt alert to {NTFY_URL}...")
             requests.post(NTFY_URL, 
                           data=f"[{source}] {summary}".encode('utf-8'),
-                          headers={"Title": f"LAB ALERT: {severity.upper()}", "Priority": "high"})
+                          headers={"Title": f"LAB: {severity.upper()}", "Priority": "high" if is_critical else "default"})
         except Exception as e:
             print(f"NTFY Error: {e}", file=sys.stderr)
+    else:
+        print(f"Triage: {severity.upper()} from {source} is silent (Dashboard only).")
 
-    # 3. PagerDuty (Manual Emergency Backup)
+    # 4. PagerDuty (Manual Emergency Backup)
     if emergency:
         routing_key = secrets.get("PAGERDUTY_ROUTING_KEY")
         if routing_key:
@@ -97,8 +110,6 @@ def notify_gatekeeper(summary, source, severity, emergency=False, dry_run=False)
                     print(f"ERROR: PagerDuty returned {response.status_code}")
             except Exception as e:
                 print(f"ERROR: PagerDuty connection failed: {e}")
-        else:
-            print("EMERGENCY skip: No PagerDuty routing key found.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HomeLabAI Notification Gatekeeper")

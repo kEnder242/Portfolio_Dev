@@ -23,12 +23,20 @@ class MissionControl extends HTMLElement {
 
         // Mobile menu logic: reach out to the parent nav
         const menuToggle = document.getElementById('menu-toggle');
-        const parentNav = this.closest('nav');
+        const parentNav = this.closest('nav') || document.getElementById('sidebar');
+        
         if (menuToggle && parentNav) {
             menuToggle.onclick = (e) => { 
                 parentNav.classList.toggle('active'); 
                 e.stopPropagation(); 
             };
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (parentNav.classList.contains('active') && !parentNav.contains(e.target) && e.target !== menuToggle) {
+                    parentNav.classList.remove('active');
+                }
+            });
         }
     }
 }

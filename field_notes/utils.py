@@ -9,6 +9,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
+INTERCOM_LAST_SEEN_FILE = os.path.join(DATA_DIR, "intercom_last_seen.tmp")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 
 def get_total_events():
@@ -52,6 +53,26 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
             if s.connect_ex(('localhost', 8765)) == 0:
                 intercom_online = True
     except: pass
+
+    # --- DEAD-MAN'S SWITCH LOGIC ---
+    if intercom_online:
+        with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
+            f.write(str(time.time()))
+    else:
+        if os.path.exists(INTERCOM_LAST_SEEN_FILE):
+            with open(INTERCOM_LAST_SEEN_FILE, "r") as f:
+                try:
+                    last_seen = float(f.read().strip())
+                    if time.time() - last_seen > 300: # 5 Minutes
+                        trigger_pager("Intercom Uplink DOWN for >5 mins. Check server status.", severity="critical", source="DeadMan")
+                        # Adjust last seen forward by 1 minute to prevent spamming while still being over 5m
+                        with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
+                            f.write(str(last_seen + 60))
+                except: pass
+        else:
+            # First time seeing it offline, seed the file
+            with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
+                f.write(str(time.time()))
 
     data = {
         "status": status,

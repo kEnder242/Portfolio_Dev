@@ -21,11 +21,13 @@ All background tasks and scanner scripts require an explicit `PYTHONPATH` to res
 
 ## 📋 The Horizon Backlog
 Items identified during the v3.1.9 roll-out:
-- [ ] **Round Table Lock**: Pause `mass_scan.py` when Web Intercom detects user activity.
-- [ ] **Fallback Dreaming**: Implement 2080 Ti fallback in `dream_cycle.py` if Windows 4090 is offline/busy.
-- [ ] **vLLM Benchmarking**: Test migration from Ollama to vLLM for peak serving throughput.
-- [ ] **Semantic De-duping**: Implement 95%+ similarity filtering during the `Nibbler` (scan) phase.
-- [ ] **TTT-Discover**: RL-based autonomous failure path discovery.
+- [x] **Modular Sidebar**: Switched to Web Components (mission-control.js) for single-point navigation updates.
+- [x] **Lab Status Center**: Unified Grafana telemetry and alert logs into `status.html`.
+- [x] **Notification Gatekeeper**: Implemented `notify_gatekeeper.py` to triage alerts (Silent info/warn, Live critical).
+- [x] **Dead-Man's Switch**: Automated CRITICAL alert if Intercom port 8765 is down for >5 minutes.
+- [x] **vLLM V1 Pilot**: Migrated RTX 2080 Ti to vLLM AWQ stack for high-throughput serving.
+- [x] **Semantic De-duper**: Implemented 85% fuzzy threshold in `nibble_v2.py`.
+- [ ] **Fallback Dreaming**: Port Pinky fallback to memory consolidation.
 
 ## 💎 High-Fidelity Highlights
 *   **Signature Synthesis**: 3x3 CVT Resume Builder is active.
