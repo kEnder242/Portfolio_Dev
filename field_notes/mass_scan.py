@@ -25,8 +25,8 @@ QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
 # Config
 VRAM_THRESHOLD = 0.95 # Allow up to 95% utilization
-MAX_LOAD = 4.0        # Allow higher load for "Fast Burn"
-SLEEP_INTERVAL = 10   # Shorter interval for Fast Burn
+MAX_LOAD = 2.0        # True Slow Burn threshold
+SLEEP_INTERVAL = 60   # Longer interval for polite background operation
 
 logging.basicConfig(
     level=logging.INFO,
@@ -73,8 +73,20 @@ def main():
     logging.info("=== MASS SCAN: CONTINUOUS RESEARCH v2.0 ===")
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
     
+    lock_path = os.path.join(DATA_DIR, "round_table.lock")
+
     epoch_count = 0
     while True:
+        # --- NEW: ROUND TABLE LOCK CHECK ---
+        if os.path.exists(lock_path):
+            # Check for stale lock (older than 2 hours)
+            if time.time() - os.path.getmtime(lock_path) > 7200:
+                logging.warning("[LOCK] Stale Round Table Lock detected (>2h). Ignoring.")
+            else:
+                logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
+                time.sleep(300) # Wait 5 minutes
+                continue
+
         epoch_count += 1
         logging.info(f"--- Starting Epoch {epoch_count} ---")
         

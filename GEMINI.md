@@ -2,6 +2,9 @@
 **Host:** Z87-Linux (Native) | **User:** Jason Allred | **Tier:** Lead Engineer Portfolio
 **Global Status:** [./00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)
 
+> [!IMPORTANT]
+> **THE TRUTH ANCHOR:** For the "God View" of project milestones, always defer to [00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md).
+
 ## ✅ PHASE 0: ACCOMPLISHED (Gemini.google.com & Manual)
 - [x] **Infrastructure Migration:** HomeLabAI_Dev moved from WSL -> Native Linux SSH (Success).
 - [x] **Connectivity:** Tailscale MagicDNS active (z87-linux); passwordless SSH verified.
@@ -50,7 +53,8 @@
 - [x] **Diamond Dreams:** Multi-host memory consolidation pipeline active (Linux -> Windows 4090).
 - [x] **MAXS Lookahead:** v1.0 active for instant wisdom retrieval.
 - [x] **Expertise Hierarchy:** Created hierarchical BKM registry and Technical Architect persona.
-- [ ] **vLLM Integration:** Transition from Ollama to vLLM for peak serving throughput.
+- [x] **Report Writer Sidebar:** UI Shell integrated into Intercom v3.1.
+- [ ] **vLLM Integration:** Transition from Ollama to vLLM (TABLED).
 - [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
 
 ## 🎯 THE MISSION

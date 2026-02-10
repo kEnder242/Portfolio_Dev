@@ -19,8 +19,39 @@ except ImportError:
 DEFAULT_MODEL = "mistral:7b"
 DMA_MODEL_PATH = "mistralai/Mistral-7B-Instruct-v0.3"
 OLLAMA_URL = "http://localhost:11434/api/generate"
+VLLM_URL = "http://localhost:8088/v1/completions"
 DATA_DIR = "field_notes/data"
 RAW_DIR = "raw_notes"
+
+class VLLMClient(OllamaClient):
+    """
+    OpenAI-compatible client for vLLM server.
+    """
+    def __init__(self, url=VLLM_URL, model="TheBloke/Mistral-7B-Instruct-v0.2-GGUF"):
+        super().__init__()
+        self.url = url
+        self.model = model
+
+    def generate(self, prompt, context="", options=None):
+        full_prompt = f"{context}\n\n{prompt}" if context else prompt
+        payload = {
+            "model": self.model,
+            "prompt": full_prompt,
+            "max_tokens": options.get("num_predict", 512) if options else 512,
+            "temperature": options.get("temperature", 0.1) if options else 0.1,
+            "stream": False
+        }
+        try:
+            resp = requests.post(self.url, json=payload, timeout=60)
+            if resp.status_code == 200:
+                data = resp.json()
+                return data['choices'][0]['text']
+            else:
+                logging.error(f"vLLM Error ({resp.status_code}): {resp.text}")
+                return ""
+        except Exception as e:
+            logging.error(f"vLLM Connection Failed: {e}. Falling back to Ollama.")
+            return super().generate(prompt, context, options)
 
 class LigerEngine(OllamaClient):
     """
@@ -306,7 +337,9 @@ class CurriculumEngine(CognitiveEngine):
         return self.backend.generate(final_prompt)
 
 def get_engine_v2(mode="LOCAL"):
-    if mode == "REASONING":
+    if mode == "VLLM":
+        return VLLMClient()
+    elif mode == "REASONING":
         return CurriculumEngine()
     elif mode == "DMA":
         return LigerEngine()
