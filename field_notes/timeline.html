@@ -295,6 +295,8 @@
             log(`Reading ${title}`);
 
             let buffer = `\n\n`;
+            let lastDate = null;
+
             events.forEach(e => {
                 let dateDisplay = e.date;
                 if (!dateDisplay || !dateDisplay.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -304,23 +306,27 @@
                 const isDiamond = e.rank >= 4;
                 const prefix = isDiamond ? "💎 [DIAMOND] " : "";
                 
-                buffer += `[${dateDisplay}] ${prefix}${e.summary}\n`;
-                if (e.evidence) buffer += `   ↳ EVIDENCE: ${e.evidence.substring(0, 120)}\n`;
-                if (isDiamond && e.technical_gem) {
-                    buffer += `   ↳ GEM: ${e.technical_gem}\n`;
+                if (dateDisplay !== lastDate) {
+                    buffer += `\n[${dateDisplay}] ${prefix}${e.summary}\n`;
+                    lastDate = dateDisplay;
+                } else {
+                    buffer += `   ↳ ${prefix}${e.summary}\n`;
                 }
-                buffer += `\n`;
+
+                if (e.evidence) buffer += `     EVIDENCE: ${e.evidence.substring(0, 120)}\n`;
+                if (isDiamond && e.technical_gem) {
+                    buffer += `     GEM: ${e.technical_gem}\n`;
+                }
             });
 
             let i = 0;
-            // Use a text node for the typewriter effect to handle the diamond emoji correctly
             const textNode = document.createTextNode("");
             termElement.appendChild(textNode);
 
             activeInterval = setInterval(() => {
-                const chunk = buffer.substring(i, i + 10);
+                const chunk = buffer.substring(i, i + 15); // Increased speed slightly for better UX
                 textNode.appendData(chunk);
-                i += 10;
+                i += 15;
                 
                 if (i >= buffer.length) {
                     clearInterval(activeInterval);
