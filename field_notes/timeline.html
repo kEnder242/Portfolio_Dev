@@ -297,25 +297,36 @@
             let buffer = `\n\n`;
             events.forEach(e => {
                 let dateDisplay = e.date;
-                // Strict visual filter: Only show YYYY-MM-DD or simple Month
-                // If it looks like garbage, hide it.
                 if (!dateDisplay || !dateDisplay.match(/^\d{4}-\d{2}-\d{2}$/)) {
                     dateDisplay = "LOG";
                 }
                 
-                buffer += `[${dateDisplay}] ${e.summary}\n`;
-                if (e.evidence) buffer += `   ↳ ${e.evidence.substring(0, 120)}\n\n`;
+                const isDiamond = e.rank >= 4;
+                const prefix = isDiamond ? "💎 [DIAMOND] " : "";
+                
+                buffer += `[${dateDisplay}] ${prefix}${e.summary}\n`;
+                if (e.evidence) buffer += `   ↳ EVIDENCE: ${e.evidence.substring(0, 120)}\n`;
+                if (isDiamond && e.technical_gem) {
+                    buffer += `   ↳ GEM: ${e.technical_gem}\n`;
+                }
+                buffer += `\n`;
             });
 
             let i = 0;
+            // Use a text node for the typewriter effect to handle the diamond emoji correctly
+            const textNode = document.createTextNode("");
+            termElement.appendChild(textNode);
+
             activeInterval = setInterval(() => {
-                // Append 10 characters at a time for 10x original speed
                 const chunk = buffer.substring(i, i + 10);
-                termElement.append(chunk);
+                textNode.appendData(chunk);
                 i += 10;
+                
                 if (i >= buffer.length) {
                     clearInterval(activeInterval);
-                    termElement.innerHTML += '<span class="cursor"></span>';
+                    const cursor = document.createElement('span');
+                    cursor.className = 'cursor';
+                    termElement.appendChild(cursor);
                 }
             }, 2);
         }
