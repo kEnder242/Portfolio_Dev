@@ -12,13 +12,13 @@
     "method": "AI"
   },
   {
-    "synopsis": "Design and implementation of MCTP on DMR technology.",
+    "synopsis": "Design and implementation of MCTP on DMR protocol.",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "MCTP",
       "DMR",
-      "Technology"
+      "Protocol"
     ],
     "filename": "MCTP on DMR.docx",
     "method": "AI"
@@ -30,7 +30,7 @@
     "keywords": [
       "portfolio",
       "analysis",
-      "engineering"
+      "senior engineer"
     ],
     "filename": "MCTP-Topology-DMR.vsdx",
     "method": "AI"

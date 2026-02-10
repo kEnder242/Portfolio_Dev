@@ -19,19 +19,19 @@
     "keywords": [
       "software development",
       "best practices",
-      "presentation"
+      "BMC"
     ],
     "filename": "BMC presentation.pptx",
     "method": "AI"
   },
   {
-    "synopsis": "MCTP infrastructure development and future planning.",
+    "synopsis": "MCTP infrastructure development and future outlook",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "MCTP",
-      "Infrastructure",
-      "Development"
+      "infrastructure",
+      "development"
     ],
     "filename": "Future of MCTP Infrastructure.pptx",
     "method": "AI"
@@ -79,21 +79,20 @@
     "drive_id": "1jQfX4aK3yvxzN_WxhPDKvv9QSQigAwc6"
   },
   {
-    "synopsis": "MIV Ignition Redfish validation and backup process demonstration.",
+    "synopsis": "MIV Ignition Redfish validation and backup process",
     "rank": 3,
     "type": "Document",
     "keywords": [
       "Redfish",
-      "MIV",
-      "Ignition",
-      "Validation"
+      "Validation",
+      "Backup"
     ],
     "filename": "MIV Ignition-Redfish validation-Backup.pptx",
     "method": "AI",
     "drive_id": "1sLjcbrxM3Bi9HMWmkuQPQRTvmSbVmrFJ"
   },
   {
-    "synopsis": "Sprint planning and tracking for MIV project",
+    "synopsis": "Sprint planning and tracking for MIV project.",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -105,7 +104,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Test cases for Manageability BKC feature",
+    "synopsis": "Test cases for Manageability BKC system",
     "rank": 2,
     "type": "Data",
     "keywords": [
@@ -117,13 +116,13 @@
     "method": "AI"
   },
   {
-    "synopsis": "Mentee's portfolio for senior engineer Jallred.",
+    "synopsis": "Mentorship program for junior engineers.",
     "rank": 2,
     "type": "Document",
     "keywords": [
-      "portfolio",
-      "senior engineer",
-      "Jallred"
+      "mentorship",
+      "junior engineers",
+      "program"
     ],
     "filename": "Mentee-V3-jallred.xlsx",
     "method": "AI"
@@ -200,24 +199,24 @@
     "method": "AI"
   },
   {
-    "synopsis": "Sprint review for SIV and MIV projects with new focus.",
+    "synopsis": "SIV+MIV Sprint Review - new focus document",
     "rank": 2,
     "type": "Document",
     "keywords": [
-      "SIV",
-      "MIV",
-      "Sprint Review"
+      "Sprint",
+      "Review",
+      "Focus"
     ],
     "filename": "SIV+MIV Sprint Review - new focus.docx",
     "method": "AI"
   },
   {
-    "synopsis": "Scrum implementation best practices and principles",
+    "synopsis": "Agile project management methodology presentation",
     "rank": 2,
     "type": "Document",
     "keywords": [
-      "Agile",
       "Scrum",
+      "Agile",
       "Project Management"
     ],
     "filename": "Scrum Done right.pptx",
@@ -237,14 +236,13 @@
     "drive_id": "1HUg9mETwcZF-KoFVw3hWlNcPlQ1tM7z5"
   },
   {
-    "synopsis": "MIV Debug Report for 2021 backup data analysis",
+    "synopsis": "Debug report for MIV backup system in 2021.",
     "rank": 2,
     "type": "Document",
     "keywords": [
-      "backup",
       "MIV",
-      "debug",
-      "report"
+      "backup",
+      "debug"
     ],
     "filename": "backup_MIV_Debug_Report_2021.xlsx",
     "method": "AI"
@@ -268,7 +266,7 @@
     "keywords": [
       "EGS",
       "SPR",
-      "interop"
+      "Interop"
     ],
     "filename": "interop_EGS_SPRv1_jallred.xlsx",
     "method": "AI"
@@ -286,23 +284,24 @@
     "method": "AI"
   },
   {
-    "synopsis": "PCIE device management using Redfish API.",
+    "synopsis": "PCIE device discovery and journal search script.",
     "rank": 2,
     "type": "Script",
     "keywords": [
       "Redfish",
       "PCIE",
-      "Device Management"
+      "Discovery"
     ],
     "filename": "pcidevices_unit.py",
     "method": "AI"
   },
   {
-    "synopsis": "Pulse Code Signal (PCS) command matrix analysis.",
+    "synopsis": "Command matrix for PCS PECI system",
     "rank": 2,
     "type": "Data",
     "keywords": [
       "PCS",
+      "PECI",
       "command",
       "matrix"
     ],
@@ -352,13 +351,13 @@
     "drive_id": "1ZSD1HM8ymIDtORFwW5DcImWdUunYqJtw"
   },
   {
-    "synopsis": "Used in Excel file for tracking project dependencies.",
+    "synopsis": "Used in Excel file for tracking and analysis.",
     "rank": 2,
     "type": "Data",
     "keywords": [
       "Excel",
-      "dependencies",
-      "tracking"
+      "Tracking",
+      "Analysis"
     ],
     "filename": "used_in.xlsx",
     "method": "AI"

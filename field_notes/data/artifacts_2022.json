@@ -1,12 +1,12 @@
 [
   {
-    "synopsis": "Concurrent PECI requests supported in a single solution.",
+    "synopsis": "Concurrent PECI requests supported in a single script.",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "PECI",
       "Concurrency",
-      "Support"
+      "Scripting"
     ],
     "filename": "20190515 - Support Concurrent PECI Requests v3.pptx",
     "method": "AI"
@@ -24,13 +24,14 @@
     "method": "AI"
   },
   {
-    "synopsis": "Automated execution tracker for Jason Aurora subsystem.",
+    "synopsis": "Aurora subsystem execution tracker for performance monitoring.",
     "rank": 2,
     "type": "Document",
     "keywords": [
-      "execution",
-      "tracker",
-      "subsystem"
+      "Aurora",
+      "Subsystem",
+      "Execution",
+      "Tracker"
     ],
     "filename": "Jason Aurora Subsystem Execution Tracker.xlsx",
     "method": "AI"
@@ -56,7 +57,7 @@
     "method": "Expert Hardcode"
   },
   {
-    "synopsis": "Redfish implementation for Network Management",
+    "synopsis": "Redfish implementation for network management",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -68,57 +69,50 @@
     "method": "AI"
   },
   {
-    "synopsis": "Customer issue resolution for PECI clients.",
+    "synopsis": "Customer issue tracking and resolution for PECI.",
     "rank": 2,
-    "type": "Data",
+    "type": "Document",
     "keywords": [
-      "PECI",
-      "customer issues",
+      "customer",
+      "issues",
       "resolution"
     ],
     "filename": "PECI customer issues.xlsx",
     "method": "AI"
   },
   {
-    "synopsis": "PECI commands and IAMS register reads",
+    "synopsis": "Peci commands and output for BIOS boot configuration.",
     "rank": 2,
     "type": "Script",
     "keywords": [
       "PECI",
-      "IAMS",
-      "register",
-      "read"
+      "BIOS",
+      "boot",
+      "configuration"
     ],
     "filename": "PECI_TO_BIOS_BOOT_WW31_2 (1).txt",
     "method": "AI"
   },
   {
-    "synopsis": "PECI command set for automation and control systems.",
-    "rank": 4,
+    "synopsis": "PECI command set for device control and monitoring.",
+    "rank": 2,
     "type": "Data",
     "keywords": [
       "PECI",
-      "commands",
-      "automation"
+      "device control",
+      "monitoring"
     ],
     "filename": "PECI_commands.xlsx",
-    "method": "AI",
-    "summary": "Improved silicon validation architecture",
-    "technical_gem": "Utilized Verilog-AMS to optimize simulation performance by 30%",
-    "tags": [
-      "silicon_validation",
-      "Verilog-AMS",
-      "simulation_performance"
-    ]
+    "method": "AI"
   },
   {
     "synopsis": "U-Boot boot process and system configuration",
     "rank": 2,
     "type": "Script",
     "keywords": [
-      "boot",
       "U-Boot",
-      "configuration"
+      "boot process",
+      "system configuration"
     ],
     "filename": "PECI_experiments_WW31.3_1.txt",
     "method": "AI"
@@ -128,10 +122,10 @@
     "rank": 2,
     "type": "Script",
     "keywords": [
+      "OpenBMC",
       "Sensor",
       "Threshold",
-      "Severity",
-      "LED"
+      "Severity"
     ],
     "filename": "SensorSeverityThreshold_OpenBMC_longrun.py",
     "method": "AI"
@@ -199,26 +193,26 @@
     "type": "Data",
     "keywords": [
       "power",
-      "accuracy",
-      "analysis"
+      "limit",
+      "accuracy"
     ],
     "filename": "miv_nm_power_limit_accuracy_d0.csv",
     "method": "AI"
   },
   {
-    "synopsis": "Montana script for package power range analysis",
+    "synopsis": "Automated power range testing for MIV package",
     "rank": 2,
     "type": "Script",
     "keywords": [
-      "montana",
-      "package power range",
-      "script"
+      "MIV",
+      "power_range",
+      "testing"
     ],
     "filename": "miv_package_power_range_20221106-230850.txt",
     "method": "AI"
   },
   {
-    "synopsis": "OKR achievements for Senior Engineer's portfolio",
+    "synopsis": "OKRs for Senior Engineer's portfolio",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -230,13 +224,14 @@
     "method": "AI"
   },
   {
-    "synopsis": "Python script for PCU data analysis and visualization.",
+    "synopsis": "PCU notes script for Intel SV tools",
     "rank": 2,
     "type": "Script",
     "keywords": [
+      "Intel",
+      "SV",
       "PCU",
-      "data analysis",
-      "visualization"
+      "registers"
     ],
     "filename": "pcu_notes.py",
     "method": "AI"
@@ -310,13 +305,13 @@
     "drive_id": "1a95TKnx8eODfM5gdCSv6V07i0ZHL_3F1"
   },
   {
-    "synopsis": "Redfish API logs and session management",
+    "synopsis": "Redfish API log analysis and power management capabilities",
     "rank": 2,
-    "type": "Data",
+    "type": "Script",
     "keywords": [
-      "redfish",
-      "api",
-      "logs"
+      "Redfish",
+      "API",
+      "Power Management"
     ],
     "filename": "pmcapsweep_unit.csv",
     "method": "AI"
@@ -343,7 +338,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Redfish API interaction and power control demonstration",
+    "synopsis": "Redfish API interaction and power control demonstration.",
     "rank": 2,
     "type": "Script",
     "keywords": [
@@ -355,14 +350,14 @@
     "method": "AI"
   },
   {
-    "synopsis": "Command matrix for RDiamSR PECI commands",
+    "synopsis": "Command matrix for RDiamSR PECI process control.",
     "rank": 2,
     "type": "Data",
     "keywords": [
       "RDiamSR",
       "PECI",
-      "command",
-      "matrix"
+      "process control",
+      "command matrix"
     ],
     "filename": "rdiamsr_peci_cmd_matrix.xlsx",
     "method": "AI"
@@ -389,13 +384,13 @@
     "method": "AI"
   },
   {
-    "synopsis": "IPMI statistics script for Intel servers.",
+    "synopsis": "IPMI-based statistics collection and processing script.",
     "rank": 2,
     "type": "Script",
     "keywords": [
-      "Intel",
       "IPMI",
-      "statistics"
+      "statistics",
+      "scripting"
     ],
     "filename": "statistics.py",
     "method": "AI"

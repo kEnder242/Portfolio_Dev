@@ -27,9 +27,10 @@
 
 ## 🔮 The Roadmap
 *   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.
-*   **[TODO] vLLM Integration:** Transition from Ollama to vLLM for high-throughput serving.
+*   **[TODO] Round Table Lock:** Pause scans during active Intercom sessions.
+*   **[TODO] Fallback Dreaming:** Port Pinky fallback to memory consolidation.
+*   **[TODO] vLLM Integration:** Transition from Ollama to vLLM.
 *   **[TODO] TTT-Discover:** RL-based autonomous failure path discovery.
-*   **[TODO] MAXS (Meta-Adaptive):** Lookahead hooks for tool-call valuation (v1.0 active).
 
 ---
 
@@ -37,6 +38,6 @@
 ### Website Build (Cache-Busting)
 To force-clear browser caches after UI changes, run the automated build script:
 `python3 field_notes/build_site.py`
-*(Documented in [SESSION_BKM_FEB_07.md](./SESSION_BKM_FEB_07.md))*
+*(Documented in [SESSION_BKM_FEB_09.md](./SESSION_BKM_FEB_09.md))*
 
 

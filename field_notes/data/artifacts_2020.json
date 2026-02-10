@@ -1,11 +1,11 @@
 [
   {
-    "synopsis": "Scans CSV files for specific network functions.",
+    "synopsis": "Scans CSV files for specific network function usage.",
     "rank": 2,
     "type": "Script",
     "keywords": [
-      "Network",
-      "Function",
+      "Network Function",
+      "CSV",
       "Scan"
     ],
     "filename": "scan_NetFunction_8-25-2020.py",

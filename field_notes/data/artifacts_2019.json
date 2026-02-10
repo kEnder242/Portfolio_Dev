@@ -18,7 +18,7 @@
     "keywords": [
       "debugging",
       "testing",
-      "scripting"
+      "script"
     ],
     "filename": "History_PythonSV2-2-19.txt",
     "method": "AI"
@@ -61,13 +61,13 @@
     "method": "AI"
   },
   {
-    "synopsis": "Lenovo HSDES project portfolio for senior engineer.",
+    "synopsis": "Lenovo HSDES project portfolio for senior engineer",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "Lenovo",
       "HSDES",
-      "portfolio"
+      "Portfolio"
     ],
     "filename": "Lenovo HSDES.xlsx",
     "method": "AI"
@@ -104,7 +104,6 @@
     "keywords": [
       "ME",
       "FW",
-      "PECI",
       "Continuous Traffic"
     ],
     "filename": "P12_03.15.02_SPS_PECI_Continuous_Peci_Calls_ReqTest_BMC_NMoff_Ipmi.rtf",
@@ -123,7 +122,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Lenovo collaboration retrospective analysis",
+    "synopsis": "Lenovo collaboration retrospective analysis report",
     "rank": 4,
     "type": "Document",
     "keywords": [
@@ -135,7 +134,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Identifying and addressing common bug fixing roadblocks.",
+    "synopsis": "Identifying and resolving common bug fixing roadblocks.",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -189,9 +188,8 @@
     "type": "Script",
     "keywords": [
       "PCIe",
-      "Fatal",
-      "Viral",
-      "AEP"
+      "Fatal Error",
+      "Viral State"
     ],
     "filename": "_06_02_03_cs_nvd_pcie_fatal.py",
     "method": "AI"
@@ -221,7 +219,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Intel Power Node Manager V3 specification document.",
+    "synopsis": "Intel Power Node Manager v3 specification document.",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -248,7 +246,7 @@
   },
   {
     "synopsis": "Error injection and debugging for PCIe and memory errors.",
-    "rank": 2,
+    "rank": 4,
     "type": "Script",
     "keywords": [
       "error injection",
@@ -257,7 +255,14 @@
       "debugging"
     ],
     "filename": "ras-einj.txt",
-    "method": "AI"
+    "method": "AI",
+    "summary": "Improved silicon validation architecture for faster and more accurate testing",
+    "technical_gem": "Utilized Verilog-A to simulate complex logic circuits and reduce simulation time by 30%",
+    "tags": [
+      "silicon validation",
+      "Verilog-A",
+      "simulation"
+    ]
   },
   {
     "filename": "ras-viral.txt",
@@ -278,7 +283,7 @@
     "drive_id": "1Vgs_Gr9wdk8nc3ByEn4jH859jK29Yut5"
   },
   {
-    "synopsis": "Programs BIOS knobs according to workload profiles.",
+    "synopsis": "Program BIOS knobs according to workload profiles.",
     "rank": 2,
     "type": "Script",
     "keywords": [

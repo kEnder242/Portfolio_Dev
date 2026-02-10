@@ -1,12 +1,12 @@
 [
   {
-    "synopsis": "Innovative AR experience for a futuristic world.",
+    "synopsis": "Innovative AR experience for a fictional world.",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "AR",
       "Augmented Reality",
-      "Futurism"
+      "Innovation"
     ],
     "filename": "AR - InAWorld.docx",
     "method": "AI"
@@ -33,25 +33,25 @@
     "drive_id": "1sgbcpgviOaqb0p64LfwEHOD7XQnGKM0m"
   },
   {
-    "synopsis": "Developed a Steam Deck plugin using React and Linux",
+    "synopsis": "Reverse-engineering a Steam Deck plugin and overcoming development challenges.",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "Steam Deck",
-      "React",
-      "Linux"
+      "Plugin Development",
+      "React Reverse-Engineering"
     ],
     "filename": "Decky_Trailers.md",
     "method": "AI"
   },
   {
-    "synopsis": "Distributed AI system with self-aware infrastructure management.",
+    "synopsis": "Distributed AI system with self-aware infrastructure.",
     "rank": 2,
     "type": "Document",
     "keywords": [
       "AI",
-      "Infrastructure Management",
-      "Distributed Systems"
+      "Distributed Systems",
+      "Infrastructure"
     ],
     "filename": "HomeLabAI.md",
     "method": "AI"
@@ -63,7 +63,7 @@
     "keywords": [
       "OpenBMC",
       "C++",
-      "ThreadX RTOS"
+      "Firmware Development"
     ],
     "filename": "Jason Allred - OpenBMC Development experience.rtf",
     "method": "AI"
@@ -89,7 +89,7 @@
     "method": "AI"
   },
   {
-    "synopsis": "Senior Platform Telemetry Engineer with datacenter scale experience.",
+    "synopsis": "Senior Platform Telemetry Engineer with datacenter scale expertise.",
     "rank": 2,
     "type": "Document",
     "keywords": [
@@ -121,21 +121,25 @@
     "method": "AI"
   },
   {
-    "synopsis": "Gemini Project Session: 8149f7593df2e195289b6874da38d472cdd29258294dec96a45d111fe1dd1136",
+    "synopsis": "Automatic update failed. Please try updating manually",
     "rank": 2,
     "type": "Script",
-    "keywords": [],
+    "keywords": [
+      "Gemini",
+      "update",
+      "CLI"
+    ],
     "filename": "project_8149f759.md",
     "method": "AI"
   },
   {
-    "synopsis": "Optimize resume to highlight relevant skills and experiences.",
+    "synopsis": "Optimizing resume for job interviews and brainstorming tools.",
     "rank": 2,
-    "type": "Script",
+    "type": "Document",
     "keywords": [
       "resume",
-      "optimization",
-      "job interviews"
+      "job interview",
+      "brainstorming"
     ],
     "filename": "prompt.txt",
     "method": "AI"
