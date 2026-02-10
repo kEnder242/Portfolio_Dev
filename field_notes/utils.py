@@ -10,6 +10,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 INTERCOM_LAST_SEEN_FILE = os.path.join(DATA_DIR, "intercom_last_seen.tmp")
+INTERCOM_DOWN_LOCK = os.path.join(DATA_DIR, "intercom_down.lock")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 
 def get_total_events():
@@ -54,24 +55,34 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
                 intercom_online = True
     except: pass
 
-    # --- DEAD-MAN'S SWITCH LOGIC ---
+    # --- STATEFUL HEALTH LOGIC (IPMI SEL Style) ---
+    is_down_lock = os.path.exists(INTERCOM_DOWN_LOCK)
+
     if intercom_online:
         with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
             f.write(str(time.time()))
+        
+        # Recovery Transition: was DOWN, now UP
+        if is_down_lock:
+            trigger_pager("Intercom Uplink RECOVERED. Service is green.", severity="info", source="DeadMan")
+            try: os.remove(INTERCOM_DOWN_LOCK)
+            except: pass
     else:
+        # Check if we should trigger the "DOWN" transition
+        last_seen = 0.0
         if os.path.exists(INTERCOM_LAST_SEEN_FILE):
             with open(INTERCOM_LAST_SEEN_FILE, "r") as f:
-                try:
-                    last_seen = float(f.read().strip())
-                    if time.time() - last_seen > 300: # 5 Minutes
-                        trigger_pager("Intercom Uplink DOWN for >5 mins. Check server status.", severity="critical", source="DeadMan")
-                        # Adjust last seen forward by 1 minute to prevent spamming while still being over 5m
-                        with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
-                            f.write(str(last_seen + 60))
-                except: pass
+                try: last_seen = float(f.read().strip())
+                except: last_seen = time.time()
         else:
-            # First time seeing it offline, seed the file
+            last_seen = time.time()
             with open(INTERCOM_LAST_SEEN_FILE, "w") as f:
+                f.write(str(last_seen))
+
+        # Down Transition: threshold hit and NO lock exists
+        if (time.time() - last_seen > 300) and not is_down_lock:
+            trigger_pager("Intercom Uplink DOWN for >5 mins. Check server status.", severity="critical", source="DeadMan")
+            with open(INTERCOM_DOWN_LOCK, "w") as f:
                 f.write(str(time.time()))
 
     data = {
