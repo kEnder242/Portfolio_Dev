@@ -66,7 +66,21 @@ services:
     networks:
       - monitoring
 
-  # 5. Loki (Log Aggregation)
+  # 5. NVIDIA DCGM Exporter (Enterprise Telemetry)
+  dcgm-exporter:
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.0-ubuntu22.04
+    container_name: field_dcgm_exporter
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    ports:
+      - "9400:9400"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # 6. Loki (Log Aggregation)
   loki:
     image: grafana/loki:2.9.2
     container_name: field_loki

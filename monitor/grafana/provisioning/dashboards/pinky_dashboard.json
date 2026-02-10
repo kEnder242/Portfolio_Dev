@@ -193,7 +193,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 8
       },
@@ -214,7 +214,7 @@
         {
           "expr": "val_package_power_watts",
           "interval": "",
-          "legendFormat": "Power Consumption",
+          "legendFormat": "Simulated CPU Pkg",
           "refId": "A"
         },
         {
@@ -223,9 +223,96 @@
           "interval": "",
           "legendFormat": "PL1 Limit",
           "refId": "B"
+        },
+        {
+          "expr": "DCGM_FI_DEV_POWER_USAGE",
+          "interval": "",
+          "legendFormat": "Actual GPU Power",
+          "refId": "C"
         }
       ],
-      "title": "Power Profile (Validation Logic)",
+      "title": "Power Profile (Multi-Modal Telemetry)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.5.2",
+      "targets": [
+        {
+          "expr": "DCGM_FI_DEV_FB_USED * 1024 * 1024",
+          "interval": "",
+          "legendFormat": "GPU VRAM Used (DCGM)",
+          "refId": "A"
+        }
+      ],
+      "title": "GPU Memory Usage (Real Silicon)",
       "type": "timeseries"
     }
   ],

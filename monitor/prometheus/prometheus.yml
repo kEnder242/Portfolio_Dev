@@ -13,3 +13,7 @@ scrape_configs:
   - job_name: 'rapl-validation-logic'
     static_configs:
       - targets: ['rapl-sim:8000']
+
+  - job_name: 'nvidia-dcgm'
+    static_configs:
+      - targets: ['dcgm-exporter:9400']

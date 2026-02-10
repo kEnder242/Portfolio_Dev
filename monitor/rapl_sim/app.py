@@ -11,6 +11,7 @@ MAX_TURBO_WATTS = 95.0
 # Real Telemetry
 M_TEMP_PKG = Gauge('hw_temp_package_celsius', 'Real Package Temperature from Thermal Zone')
 M_CPU_LOAD = Gauge('hw_cpu_load_percent', 'Real System CPU Load %')
+M_GPU_MEM  = Gauge('hw_gpu_mem_used_bytes', 'Real GPU Memory Used in Bytes')
 
 # Validation Logic (The "Sim")
 M_PKG_POWER = Gauge('val_package_power_watts', 'Simulated Package Power based on Load/Temp')
@@ -39,6 +40,18 @@ def get_real_temp():
         print(f"Error reading temp: {e}")
         return 35.0 # Fallback
 
+import subprocess
+
+def get_gpu_mem():
+    """ Reads GPU memory using nvidia-smi. """
+    try:
+        cmd = "nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits"
+        output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+        # Convert MiB to Bytes
+        return float(output) * 1024 * 1024
+    except:
+        return 0.0
+
 def calculate_power(load_pct, temp_c):
     """ The Physics Model: Power = Base + Dynamic(Load) + Leakage(Temp) """
     dynamic_power = (load_pct / 100.0) * (MAX_TURBO_WATTS - BASE_POWER_WATTS)
@@ -61,6 +74,7 @@ if __name__ == '__main__':
         # 2. Update Real Metrics
         M_CPU_LOAD.set(real_load)
         M_TEMP_PKG.set(real_temp)
+        M_GPU_MEM.set(get_gpu_mem())
 
         # 3. Validation Logic (The Sim)
         sim_power = calculate_power(real_load, real_temp)
