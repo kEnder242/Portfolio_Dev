@@ -14,7 +14,8 @@ class MissionControl extends HTMLElement {
                     <li><a href="files.html" class="mission-link ${activePage === 'files.html' ? 'active' : ''}">Artifacts: Files</a></li>
                     <li><a href="status.html" class="mission-link ${activePage === 'status.html' ? 'active' : ''}">Lab Status</a></li>
                     <li><a href="intercom.html" class="mission-link ${activePage === 'intercom.html' ? 'active' : ''}">AI Lab Intercom</a></li>
-                    <li><a href="research.html" class="mission-link ${activePage === 'research.html' ? 'active' : ''}">Research Hub</a></li>
+                                            <li><a href="research.html" class="mission-link ${activePage === 'research.html' ? 'active' : ''}">Research Pipeline</a></li>
+                    
                     <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
                 </ul>
             </section>

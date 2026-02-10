@@ -3,193 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research & Strategy | Jason Allred</title>
+    <title>Research Pipeline | Jason Allred</title>
     <link rel="stylesheet" href="style.css?v=8a67fc1a">
     <style>
-        .hero-section {
-            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-            border: 1px solid var(--border-color);
-            padding: 40px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
+        /* High-Density Table Styling */
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-stack);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.01);
         }
-        .hero-section::before {
-            content: "v3.1.9";
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-family: monospace;
-            color: #333;
-            font-size: 0.8rem;
-        }
-        .brag-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .brag-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--accent-color);
-            padding: 20px;
-        }
-        .brag-title {
+        .ledger-table th {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--border-color);
             color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .brag-text {
-            font-size: 0.85rem;
-            color: #ccc;
+        .ledger-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #222;
+            vertical-align: top;
             line-height: 1.4;
         }
-        .roadmap-container {
-            margin-top: 60px;
-        }
-        .roadmap-item {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #222;
-        }
-        .roadmap-meta {
-            min-width: 120px;
-            font-family: monospace;
-            color: var(--accent-dim);
-            font-size: 0.9rem;
-        }
-        .roadmap-content h4 {
-            margin: 0 0 10px 0;
-            color: #fff;
-        }
-        .roadmap-content p {
-            font-size: 0.9rem;
-            color: #888;
-            margin: 0;
-        }
-        .badge {
+        .ledger-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+        .anchor-link { color: #fff; text-decoration: none; font-weight: bold; border-bottom: 1px dashed #444; }
+        .anchor-link:hover { color: var(--accent-color); border-bottom-color: var(--accent-color); }
+
+        .impact-badge {
             display: inline-block;
             padding: 2px 8px;
-            border-radius: 10px;
+            border-radius: 3px;
             font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
-            margin-left: 10px;
         }
-        .badge-active { background: #238636; color: #fff; }
-        .badge-planned { background: #1f6feb; color: #fff; }
-        .badge-research { background: #8957e5; color: #fff; }
+        .impact-live { background: #238636; color: #fff; }
+        .impact-design { background: #1f6feb; color: #fff; }
+        .impact-stable { background: #6e7681; color: #fff; }
+
+        .roadmap-item {
+            border-left: 2px solid #444;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+        .roadmap-title { color: var(--accent-color); font-weight: bold; font-size: 0.9rem; }
+        .roadmap-desc { color: #888; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+
+    <button id="menu-toggle">☰ MENU</button>
 
     <nav id="sidebar">
         <mission-control></mission-control>
     </nav>
 
     <main>
-        <section class="hero-section">
-            <h2 style="margin-top: 0; color: #fff;">Diamond Synthesis Engine</h2>
-            <p style="color: #888; font-style: italic; max-width: 800px;">
-                Evolving the "Bicameral Mind" architecture. We treat the local file system as durable external memory, leveraging test-time reasoning to maximize the intelligence of local silicon.
-            </p>
+        <div id="sys-console">
+            <div>[INIT] Mounting Research Pipeline...</div>
+        </div>
 
-            <div class="brag-grid">
-                <div class="brag-card">
-                    <div class="brag-title">3x3 CVT Synthesis</div>
-                    <div class="brag-text">Automated career impact indexing. Correlates 18 years of technical scars with yearly strategic goals for high-density candidate positioning.</div>
-                </div>
-                <div class="brag-card">
-                    <div class="brag-title">Internal Debate</div>
-                    <div class="brag-text">Implemented Moderated Consensus. Resolves complex technical contradictions by dueling independent reasoning paths before a lead moderator.</div>
-                </div>
-                <div class="brag-card">
-                    <div class="brag-title">Diamond Dreams</div>
-                    <div class="brag-text">Multi-host memory consolidation. Synthesizes chaotic short-term logs via the Windows 4090 into durable, long-term RAG wisdom.</div>
-                </div>
-                <div class="brag-card">
-                    <div class="brag-title">Workbench UI</div>
-                    <div class="brag-text">Physical decoupling of chat and synthesis. Streams strategic reports and code drafts to a dedicated 50/50 sidebar with Markdown export.</div>
-                </div>
+        <section id="ledger">
+            <h2 class="section-title">The Researcher's Ledger</h2>
+            <div class="disclaimer-box">
+                <span style="color: var(--accent-color); font-weight: bold;">[PHILOSOPHY]</span> 
+                This ledger tracks the transition of technical theory into local silicon. 
+                Each implementation is grounded in peer-reviewed research or documented validation scars.
             </div>
+
+            <table class="ledger-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Research Anchor</th>
+                        <th style="width: 30%;">Theoretical Logic</th>
+                        <th style="width: 30%;">Acme Implementation</th>
+                        <th style="width: 15%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Foundational Scaling -->
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2602.01566" target="_blank" class="anchor-link">FS-Researcher</a></td>
+                        <td>Dual-Agent: Context Builder + Report Writer scaling for long-horizon memory.</td>
+                        <td><code>nibble_v2.py</code> (Context) & Web Intercom (Report) via durable File-System RAG.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2601.22628" target="_blank" class="anchor-link">TTCS (Curriculum)</a></td>
+                        <td>Test-Time Curriculum: Synthesize-then-Solve loops for higher reasoning quality.</td>
+                        <td><code>CurriculumEngine</code> in <code>ai_engine_v2.py</code> processing 18 years of logs.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td>Apple CLaRa</td>
+                        <td>Semantic Compression: 16x-128x density for long-term document retention.</td>
+                        <td><code>SemanticCondenser</code> compressing tactical logs into high-fidelity abstracts.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <!-- Strategic Outcomes -->
+                    <tr>
+                        <td>Agentic-R</td>
+                        <td>Learning to Retrieve: Utility-based ranking for autonomous memory lookup.</td>
+                        <td><code>ArchiveMemory</code> tool-kit allowing Pinky to follow technical breadcrumbs.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td>3x3 CVT Builder</td>
+                        <td>High-Density Career Indexing: Correlating scars with strategic Focal goals.</td>
+                        <td>Signature resume synthesis tool extracting Diamond artifacts from raw notes.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td>Internal Debate</td>
+                        <td>Moderated Consensus: Dueling independent reasoning paths to reduce hallucinations.</td>
+                        <td>Implemented in v3.1.9 for high-stakes architectural decision making.</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dreaming Cycle</td>
+                        <td>Subconscious Consolidation: Multi-host batch processing during idle cycles.</td>
+                        <td><code>dream_cycle.py</code> moving chat interactions to Long-Term Wisdom (Linux -> 4090).</td>
+                        <td><span class="impact-badge impact-live">Live</span></td>
+                    </tr>
+                    <tr>
+                        <td>Liger-Kernel</td>
+                        <td>VRAM Optimization: Fused kernels for efficient inference on consumer hardware.</td>
+                        <td>Achieved 80% VRAM reduction on RTX 2080 Ti for 14B+ model capability.</td>
+                        <td><span class="impact-badge impact-stable">Stable</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
-        <section class="roadmap-container">
-            <h3 class="section-title">The Research Roadmap</h3>
+        <section id="roadmap" style="margin-top: 60px;">
+            <h2 class="section-title">The Next Horizon</h2>
             
             <div class="roadmap-item">
-                <div class="roadmap-meta">STABLE</div>
-                <div class="roadmap-content">
-                    <h4>Internal Debate: Moderated Consensus <span class="badge badge-active">Active</span></h4>
-                    <p>Resolves hallucinations by dueling independent Brain paths. A moderator synthesizes the final evidenced-backed verdict in the Report Writer sidebar.</p>
-                </div>
+                <div class="roadmap-title">TTT-Discover (RL-based Autonomous Validation)</div>
+                <div class="roadmap-desc">Implementing reinforcement learning to autonomously discover the fastest path to silicon failure states within the archive.</div>
             </div>
 
             <div class="roadmap-item">
-                <div class="roadmap-meta">STABLE</div>
-                <div class="roadmap-content">
-                    <h4>3x3 CVT Resume Builder <span class="badge badge-active">Active</span></h4>
-                    <p>Correlates strategic performance reviews with technical artifacts to build high-density candidate-value summaries for specific years or roles.</p>
-                </div>
+                <div class="roadmap-title">vLLM / PagedAttention Integration</div>
+                <div class="roadmap-desc">Transitioning from Ollama to vLLM for high-throughput serving and Virtual KV Cache management.</div>
             </div>
 
             <div class="roadmap-item">
-                <div class="roadmap-meta">STABLE</div>
-                <div class="roadmap-content">
-                    <h4>Diamond Dreaming: Memory Cycle <span class="badge badge-active">Active</span></h4>
-                    <p>Subconscious consolidation pipeline. Purges raw interaction streams and stores high-fidelity "Diamond Wisdom" abstracts in the long-term archive.</p>
-                </div>
+                <div class="roadmap-title">MAXS (Meta-Adaptive Exploration)</div>
+                <div class="roadmap-desc">Lookahead hooks to estimate the "Value of Information" before executing expensive tool calls.</div>
             </div>
 
             <div class="roadmap-item">
-                <div class="roadmap-meta">STABLE</div>
-                <div class="roadmap-content">
-                    <h4>FS-Researcher (2602.01566) <span class="badge badge-active">Active</span></h4>
-                    <p>Implemented the Context Builder (Nibbler) and Report Writer (Web Intercom) bridge. The file system is now the durable primary memory source.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-meta">HORIZON</div>
-                <div class="roadmap-content">
-                    <h4>MAXS: Meta-Adaptive Exploration <span class="badge badge-research">Researching</span></h4>
-                    <p>Lookahead hooks to estimate the "Value of Information" before tool calls. Aims to optimize API/Token usage by pruning low-utility reasoning paths.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-meta">HORIZON</div>
-                <div class="roadmap-content">
-                    <h4>TTT-Discover: Autonomous Failure Paths <span class="badge badge-planned">Planned</span></h4>
-                    <p>Evolving curriculum synthesis into active discovery. The system will use RL-loops to find the shortest path to reproducing complex silicon validation failures.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-meta">FUTURE</div>
-                <div class="roadmap-content">
-                    <h4>vLLM High-Throughput Serving <span class="badge badge-planned">Planned</span></h4>
-                    <p>Transitioning from Ollama to vLLM to achieve state-of-the-art serving throughput for the Web Intercom and multi-agent loops.</p>
-                </div>
-            </div>
-        </section>
-
-        <section style="margin-top: 40px; border-top: 1px solid #222; padding-top: 20px;">
-            <h3>Strategic Grounding Statistics</h3>
-            <div id="stats-panel" style="font-family: monospace; color: #555; font-size: 0.85rem;">
-                <!-- Updated via build system or manual entry -->
-                Refined Artifacts: 914 | Strategy Anchors: 14 | Diamond Dreams: 1 | VRAM Efficiency: +80%
+                <div class="roadmap-title">Hierarchical Expertise Tree (BKM Registry)</div>
+                <div class="roadmap-desc">Expanding flat JSON indices into a multi-layered Best Known Method (BKM) graph for the Architect persona.</div>
             </div>
         </section>
     </main>
 
-    <script src="mission-control.js?v=476b9ef2"></script>
-    <script src="script.js?v=75defa3b"></script>
+    <script src="mission-control.js?v=548c1db2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.onclick = (e) => { sidebar.classList.toggle('active'); e.stopPropagation(); };
+                document.querySelector('main').onclick = () => sidebar.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

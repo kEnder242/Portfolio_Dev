@@ -20,7 +20,7 @@
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Public Airlock (v3.1):** Deployed `www.jason-lab.dev` and secured notes.
-2.  **Research Synthesis:** Created `RESEARCH_SYNTHESIS.md` mapping papers to implementation.
+2.  **Research Pipeline (v3.2.1):** Overhauled research.html into a high-density 'Researcher's Ledger' mapping ArXiv anchors to code.
 3.  **Modular Architecture (v3.2.0):** Implemented Web Component sidebar and priority-aware status timeline.
 4.  **Status Unification:** Consolidated Grafana telemetry and alert logs into a single 'Lab Status' hub.
 5.  **Portfolio Signature:** Deployed the 3x3 CVT Resume Builder.
