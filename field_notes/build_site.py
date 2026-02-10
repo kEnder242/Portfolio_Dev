@@ -35,8 +35,6 @@ def generate_trailers():
     shot_scraper_bin = os.path.join(os.path.dirname(BASE_DIR), ".venv/bin/shot-scraper")
 
     for html_file in HTML_FILES:
-        if html_file == "intercom.html": continue # Too dynamic
-        
         output_name = html_file.replace(".html", "_trailer.jpg")
         output_path = os.path.join(TRAILERS_DIR, output_name)
         input_url = f"http://localhost:9001/{html_file}"
