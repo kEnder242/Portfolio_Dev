@@ -43,7 +43,7 @@ nav a.mission-link { color: var(--accent-color); }
 #nav-filter { width: 100%; padding: 8px; margin-bottom: 20px; background: #000; border: 1px solid var(--border-color); color: var(--text-color); }
 
 /* Main Content */
-main { flex-grow: 1; overflow-y: auto; padding: 40px; max-width: 1200px; }
+main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-width: none; }
 
 .disclaimer-box {
     background-color: #111;

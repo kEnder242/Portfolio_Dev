@@ -50,9 +50,18 @@ function routeToSidebar(text) {
     // Show the sidebar if it's hidden
     reportSidebar.classList.add('active');
     
-    // Typewriter effect simulation
-    const cleanText = text.replace("[THE EDITOR]", "").trim();
-    reportBody.innerHTML = `<p>${cleanText.replace(/\n/g, "<br>")}</p>`;
+    // Process formatting: Replace \n with <br>, handle double \n as paragraphs
+    let cleanText = text.replace("[THE EDITOR]", "").trim();
+    
+    // 1. Unescape literal \n strings if they exist
+    cleanText = cleanText.replace(/\\n/g, "\n");
+    
+    // 2. Convert to HTML: Double newlines to paragraphs, single to breaks
+    const htmlContent = cleanText.split("\n\n").map(para => {
+        return `<p>${para.replace(/\n/g, "<br>")}</p>`;
+    }).join("");
+
+    reportBody.innerHTML = htmlContent;
     reportBody.scrollTop = reportBody.scrollHeight;
 }
 
