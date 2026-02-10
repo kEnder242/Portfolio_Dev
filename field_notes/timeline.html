@@ -248,6 +248,11 @@
                 const li = document.createElement('li');
                 li.className = 'file-item';
                 
+                // NEW: Detect if this month has a Diamond artifact
+                const hasDiamond = monthData.some(e => e.rank >= 4);
+                const colorStyle = hasDiamond ? 'color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.3);' : 'color: var(--accent-color);';
+                const diamondIcon = hasDiamond ? '💎 ' : '';
+
                 let filename = "misc.log";
                 
                 // Case 1: Standard YYYY-MM
@@ -257,11 +262,10 @@
                     try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
                     filename = `${mName}_${parts[0]}.log`;
                 } 
-                // Case 2: Known Garbage (invalid date...)
+                // Case 2: Known Garbage
                 else if (month.includes("invalid") || month.includes("Unknown")) {
                     filename = "system_dump.log";
                 }
-                // Case 3: Just use the key sanitized
                 else {
                     filename = month.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() + ".log";
                 }
@@ -269,7 +273,7 @@
                 // Inline Terminal Structure
                 const row = document.createElement('div');
                 row.className = 'file-row';
-                row.innerHTML = `<strong>${filename}</strong> (${monthData.length})`;
+                row.innerHTML = `<strong style="${colorStyle}">${diamondIcon}${filename}</strong> (${monthData.length})`;
                 
                 const term = document.createElement('div');
                 term.className = 'inline-terminal';
