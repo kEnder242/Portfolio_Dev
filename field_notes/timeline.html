@@ -251,7 +251,6 @@
                 // NEW: Detect if this month has a Diamond artifact
                 const hasDiamond = monthData.some(e => e.rank >= 4);
                 const colorStyle = hasDiamond ? 'color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.3);' : 'color: var(--accent-color);';
-                const diamondIcon = hasDiamond ? '💎 ' : '';
 
                 let filename = "misc.log";
                 
@@ -273,7 +272,7 @@
                 // Inline Terminal Structure
                 const row = document.createElement('div');
                 row.className = 'file-row';
-                row.innerHTML = `<strong style="${colorStyle}">${diamondIcon}${filename}</strong> (${monthData.length})`;
+                row.innerHTML = `<strong style="${colorStyle}">${filename}</strong> (${monthData.length})`;
                 
                 const term = document.createElement('div');
                 term.className = 'inline-terminal';
