@@ -30,6 +30,7 @@
 *   **[TODO] Round Table Lock:** Pause scans during active Intercom sessions.
 *   **[TODO] Fallback Dreaming:** Port Pinky fallback to memory consolidation.
 *   **[TODO] vLLM Integration:** Transition from Ollama to vLLM.
+*   **[TODO] Diamond-Weighted Retrieval:** Prioritize Rank 4 artifacts in RAG.
 *   **[TODO] TTT-Discover:** RL-based autonomous failure path discovery.
 
 ---
