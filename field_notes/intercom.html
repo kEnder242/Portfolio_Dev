@@ -6,6 +6,30 @@
     <title>Intercom | Acme Lab</title>
     <link rel="stylesheet" href="style.css?v=10.1">
     <style>
+        main { display: flex; gap: 20px; transition: all 0.3s ease; }
+        #report-sidebar {
+            width: 30%;
+            background: #111;
+            border-left: 2px solid var(--border-color);
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #ccc;
+            overflow-y: auto;
+            max-height: 80vh;
+            display: none;
+            box-shadow: inset 5px 0 10px rgba(0,0,0,0.5);
+        }
+        #report-sidebar.active { display: block; }
+        .report-header { 
+            border-bottom: 1px solid #333; 
+            margin-bottom: 15px; 
+            padding-bottom: 5px;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        #intercom-main { flex-grow: 1; }
+
         #chat-console {
             background: #000;
             border: 1px solid var(--border-color);
@@ -98,32 +122,38 @@
     </nav>
 
     <main>
-        <h2 class="section-title">Acme Lab Intercom</h2>
-        
-        <div class="status-panel">
-            <span id="connection-dot" class="status-dot offline"></span>
-            <span id="connection-text">DISCONNECTED</span>
-            <div class="audio-meter" id="audio-meter-container" style="margin-left: 20px;">
-                <div id="audio-level"></div>
+        <div id="intercom-main">
+            <h2 class="section-title">Acme Lab Intercom</h2>
+            
+            <div class="status-panel">
+                <span id="connection-dot" class="status-dot offline"></span>
+                <span id="connection-text">DISCONNECTED</span>
+                <div class="audio-meter" id="audio-meter-container" style="margin-left: 20px;">
+                    <div id="audio-level"></div>
+                </div>
+                <span id="lab-version" style="margin-left: auto; color: #555;">v0.0.0</span>
+                <button id="sidebar-toggle" style="margin-left: 10px; background: none; border: 1px solid #333; color: #555; cursor: pointer;">📋 Reports</button>
             </div>
-            <span id="lab-version" style="margin-left: auto; color: #555;">v0.0.0</span>
+
+            <div id="chat-console">
+                <div class="system-msg">Establishing uplink to z87-Linux...</div>
+            </div>
+
+            <div id="input-container">
+                <button id="mic-btn" class="icon-btn" title="Toggle Microphone">🎤</button>
+                <input type="text" id="text-input" placeholder="Type a command or query..." autofocus>
+                <button id="send-btn" class="icon-btn">SEND</button>
+            </div>
         </div>
 
-        <div id="chat-console">
-            <div class="system-msg">Establishing uplink to z87-Linux...</div>
-        </div>
-
-        <div id="input-container">
-            <button id="mic-btn" class="icon-btn" title="Toggle Microphone">🎤</button>
-            <input type="text" id="text-input" placeholder="Type a command or query..." autofocus>
-            <button id="send-btn" class="icon-btn">SEND</button>
-        </div>
-
-        <div class="disclaimer-box" style="margin-top: 40px;">
-            <strong>Pro-Tip:</strong> The Intercom uses the same WebSocket backbone as the legacy Python client. It supports RAG retrieval and real-time "Nervous Tics" from Pinky.
+        <div id="report-sidebar">
+            <div class="report-header">🧠 REPORT WRITER</div>
+            <div id="report-body" class="typewriter">
+                <em>The Brain's strategic drafts and long-form summaries will appear here...</em>
+            </div>
         </div>
     </main>
 
-    <script src="intercom.js?v=1.0"></script>
+    <script src="intercom_v2.js?v=3.1.0"></script>
 </body>
 </html>

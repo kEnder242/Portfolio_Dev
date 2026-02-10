@@ -23,8 +23,17 @@ const statusText = document.getElementById('connection-text');
 const versionEl = document.getElementById('lab-version');
 const audioMeter = document.getElementById('audio-level');
 const meterContainer = document.getElementById('audio-meter-container');
+const reportSidebar = document.getElementById('report-sidebar');
+const reportBody = document.getElementById('report-body');
+const sidebarToggle = document.getElementById('sidebar-toggle');
 
 function appendMsg(text, type = 'system-msg', source = 'System') {
+    // 1. Check for 'The Editor' drafts
+    if (source === "The Editor" || text.includes("[THE EDITOR]")) {
+        routeToSidebar(text);
+        return;
+    }
+
     const msg = document.createElement('div');
     msg.className = `message ${type}`;
     
@@ -33,6 +42,24 @@ function appendMsg(text, type = 'system-msg', source = 'System') {
     
     consoleEl.appendChild(msg);
     consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+function routeToSidebar(text) {
+    if (!reportSidebar || !reportBody) return;
+    
+    // Show the sidebar if it's hidden
+    reportSidebar.classList.add('active');
+    
+    // Typewriter effect simulation
+    const cleanText = text.replace("[THE EDITOR]", "").trim();
+    reportBody.innerHTML = `<p>${cleanText.replace(/\n/g, "<br>")}</p>`;
+    reportBody.scrollTop = reportBody.scrollHeight;
+}
+
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+        reportSidebar.classList.toggle('active');
+    });
 }
 
 // --- AUDIO LOGIC ---
