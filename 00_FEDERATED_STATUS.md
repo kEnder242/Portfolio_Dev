@@ -19,10 +19,11 @@
     *   **Research Hub:** New `research.html` dashboard tracking integrated papers.
 
 ## ✅ Global Milestones (Feb 2026)
-1.  **Public Airlock (v3.1):** Deployed `www.jason-lab.dev` and secured notes.
-2.  **Research Pipeline (v3.2.1):** Overhauled research.html into a high-density 'Researcher's Ledger' mapping ArXiv anchors to code.
+1.  **Public Airlock (v3.2):** Implemented high-fidelity 'Static Trailers' and vertical cinematic stack on jason-lab.dev.
+2.  **Enterprise Telemetry:** Integrated NVIDIA DCGM for real-world silicon power and VRAM tracking.
 3.  **Modular Architecture (v3.2.0):** Implemented Web Component sidebar and priority-aware status timeline.
-4.  **Status Unification:** Consolidated Grafana telemetry and alert logs into a single 'Lab Status' hub.
+4.  **Dynamic Orchestration:** Implemented session-aware yielding for background scanners to prioritize user Intercom.
+5.  **Status Unification:** Consolidated Grafana telemetry and alert logs into a single 'Lab Status' hub.
 5.  **Portfolio Signature:** Deployed the 3x3 CVT Resume Builder.
 
 ## 🔮 The Roadmap
