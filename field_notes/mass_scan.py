@@ -69,6 +69,16 @@ def get_low_rank_items():
         except: pass
     return items
 
+def check_lock(lock_path):
+    """Returns True if background tasks should yield to Intercom."""
+    if os.path.exists(lock_path):
+        # Check for stale lock (older than 2 hours)
+        if time.time() - os.path.getmtime(lock_path) > 7200:
+            logging.warning("[LOCK] Stale Round Table Lock detected (>2h). Ignoring.")
+            return False
+        return True
+    return False
+
 def main():
     logging.info("=== MASS SCAN: CONTINUOUS RESEARCH v2.0 ===")
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
@@ -77,43 +87,43 @@ def main():
 
     epoch_count = 0
     while True:
-        # --- NEW: ROUND TABLE LOCK CHECK ---
-        if os.path.exists(lock_path):
-            # Check for stale lock (older than 2 hours)
-            if time.time() - os.path.getmtime(lock_path) > 7200:
-                logging.warning("[LOCK] Stale Round Table Lock detected (>2h). Ignoring.")
-            else:
-                logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
-                update_status("WAITING", "Round Table Active. Scanner yielded.")
-                time.sleep(300) # Wait 5 minutes
-                continue
+        # --- TOP LEVEL LOCK CHECK ---
+        if check_lock(lock_path):
+            logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
+            update_status("WAITING", "Round Table Active. Scanner yielded.")
+            time.sleep(300) # Wait 5 minutes
+            continue
 
         epoch_count += 1
         logging.info(f"--- Starting Epoch {epoch_count} ---")
         update_status("ONLINE", f"Starting Epoch {epoch_count}...")
         
         # 1. Update Manifest
-        logging.info("Step 1: Updating File Manifest...")
         run_task([LIBRARIAN])
+        if check_lock(lock_path): continue
 
         # 2. Update Queue
-        logging.info("Step 2: Updating Processing Queue...")
         run_task([QUEUE_MGR])
+        if check_lock(lock_path): continue
 
         # 3. Artifact Map Refresh (Hybrid/Brain Mode)
         logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
         update_status("ONLINE", "Refreshing Artifact Map...")
         years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
         for year in years:
+            if check_lock(lock_path): break
             while not vram_guard(): 
                 update_status("WAITING", "VRAM Cooling...")
                 time.sleep(60)
             logging.info(f"Scanning Artifact Sector: {year} (Brain)")
             run_task([ARTIFACT_SCANNER, year, "--hybrid"])
+        
+        if check_lock(lock_path): continue
 
         # 4. Notes Fast Burn
         logging.info("Step 4: Consuming Note Queue...")
         while True:
+            if check_lock(lock_path): break
             if not os.path.exists(QUEUE_FILE): break
             with open(QUEUE_FILE, 'r') as f:
                 try:
@@ -137,12 +147,15 @@ def main():
             else:
                 time.sleep(60)
 
+        if check_lock(lock_path): continue
+
         # 5. Eternal Slow Burn (Refinement Loop)
         logging.info("Step 5: Entering Eternal Refinement Loop...")
         trigger_pager(f"Epoch {epoch_count} Queue Cleared. Entering Refinement.", severity="info", source="MassScan")
         
         # We stay in this loop for 50 items before re-checking the manifest/queue
         for i in range(50):
+            if check_lock(lock_path): break
             while not vram_guard(): 
                 update_status("WAITING", "VRAM Cooling...")
                 time.sleep(60)
@@ -152,6 +165,8 @@ def main():
                 time.sleep(SLEEP_INTERVAL)
             else:
                 time.sleep(120) 
+
+        if check_lock(lock_path): continue
 
         # 6. Final TLC: De-duplicate and Tidy
         logging.info("Step 6: Performing Archive TLC (De-duplication)...")

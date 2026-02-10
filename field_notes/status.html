@@ -30,6 +30,7 @@
         .led-online { background: #28a745; box-shadow: 0 0 5px #28a745; }
         .led-offline { background: #dc3545; box-shadow: 0 0 5px #dc3545; }
         .led-busy { background: #ffc107; box-shadow: 0 0 5px #ffc107; }
+        .led-yielded { background: #007bff; box-shadow: 0 0 5px #007bff; }
 
         /* Telemetry Section */
         .telemetry-box {
@@ -152,8 +153,10 @@
                     const vram = document.getElementById('vram-status');
                     const msg = document.getElementById('scanner-message');
 
-                    const ledClass = data.status === 'ONLINE' || data.status === 'IDLE' ? 'led-online' : (data.status === 'BUSY' ? 'led-busy' : 'led-offline');
-                    scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.status}`;
+                    let ledClass = data.status === 'ONLINE' || data.status === 'IDLE' ? 'led-online' : (data.status === 'BUSY' ? 'led-busy' : 'led-offline');
+                    if (data.yielded) ledClass = 'led-yielded';
+
+                    scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.yielded ? 'YIELDED' : data.status}`;
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
 
                     if (data.vitals) {

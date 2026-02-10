@@ -55,6 +55,10 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
                 intercom_online = True
     except: pass
 
+    # Round Table Lock check (for yielding scanner)
+    ROUND_TABLE_LOCK = os.path.join(DATA_DIR, "round_table.lock")
+    scanner_yielded = os.path.exists(ROUND_TABLE_LOCK)
+
     # --- STATEFUL HEALTH LOGIC (IPMI SEL Style) ---
     is_down_lock = os.path.exists(INTERCOM_DOWN_LOCK)
 
@@ -88,6 +92,7 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
     data = {
         "status": status,
         "message": msg,
+        "yielded": scanner_yielded,
         "last_file": filename or current.get("last_file", "None"),
         "last_items": new_items if status == "ONLINE" else current.get("last_items", 0),
         "total_events": get_total_events(),
