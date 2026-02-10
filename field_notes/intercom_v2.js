@@ -1,11 +1,11 @@
 // 🐹 Acme Lab: Web Intercom Logic
 // Pure Vanilla JS - No Frameworks (Class 1 Design)
-console.log("Intercom.js v2.5.0 loading...");
+console.log("Intercom.js v3.1.9 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.1.6"
+    VERSION: "3.1.9"
 };
 
 let ws = null;
@@ -26,6 +26,8 @@ const meterContainer = document.getElementById('audio-meter-container');
 const reportSidebar = document.getElementById('report-sidebar');
 const reportBody = document.getElementById('report-body');
 const sidebarToggle = document.getElementById('sidebar-toggle');
+const mobileReportsToggle = document.getElementById('mobile-reports-toggle');
+const downloadBtn = document.getElementById('download-report');
 
 function appendMsg(text, type = 'system-msg', source = 'System') {
     // 1. Check for 'The Editor' drafts
@@ -65,8 +67,29 @@ function routeToSidebar(text) {
     reportBody.scrollTop = reportBody.scrollHeight;
 }
 
+function downloadReport() {
+    const text = reportBody.innerText;
+    const blob = new Blob([text], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Acme_Lab_Report_${new Date().toISOString().split('T')[0]}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+if (downloadBtn) downloadBtn.addEventListener('click', downloadReport);
+
 if (sidebarToggle) {
     sidebarToggle.addEventListener('click', () => {
+        reportSidebar.classList.toggle('active');
+    });
+}
+
+if (mobileReportsToggle) {
+    mobileReportsToggle.addEventListener('click', () => {
         reportSidebar.classList.toggle('active');
     });
 }
