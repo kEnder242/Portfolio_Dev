@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intercom | Acme Lab</title>
-    <link rel="stylesheet" href="style.css?v=10.1">
+    <link rel="stylesheet" href="style.css?v=8a67fc1a">
     <style>
         main { display: flex; gap: 20px; transition: all 0.3s ease; }
         #report-sidebar {
@@ -100,29 +100,14 @@
     </style>
 </head>
 <body>
-    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
-
-    <nav id="sidebar">
-        <h1>The Field Manual</h1>
-        <div class="subtitle">Jason Allred</div>
-        <section id="mission-control">
-            <h2>Mission Control</h2>
-            <ul>
-                <li><a href="stories.html" class="mission-link">Stories</a></li>
-                <li><a href="timeline.html" class="mission-link">Notes: Logs</a></li>
-                <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
-                <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
-                <li><a href="intercom/" class="mission-link">Intercom</a></li>
-                <li><a href="research.html" class="mission-link">Research Hub</a></li>
-                <li><a href="grafana.html" class="mission-link">Grafana</a></li>
-                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
-            </ul>
-        </section>
+            <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
         
-    </nav>
-
-    <main>
-        <div id="intercom-main">
+            <nav id="sidebar">
+                <mission-control></mission-control>
+            </nav>
+        
+            <main>
+                <div id="intercom-main">
             <h2 class="section-title">Acme Lab Intercom</h2>
             
             <div class="status-panel">
@@ -154,6 +139,7 @@
         </div>
     </main>
 
-    <script src="intercom_v2.js?v=3.1.0"></script>
+    <script src="mission-control.js?v=476b9ef2"></script>
+    <script src="intercom_v2.js?v=cae0aee1"></script>
 </body>
 </html>

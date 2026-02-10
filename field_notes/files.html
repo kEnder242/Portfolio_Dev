@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artifacts | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=a0a7c672.3">
+    <link rel="stylesheet" href="style.css?v=8a67fc1a">
     <style>
         /* Override Main Max-Width to allow full expansion */
         main {
@@ -152,23 +152,8 @@
     <button id="menu-toggle">☰ MENU</button>
 
     <nav id="sidebar">
-        <h1>The Field Manual</h1>
-        <div class="subtitle">Jason Allred</div>
-        <section id="mission-control">
-            <h2>Mission Control</h2>
-            <ul>
-                <li><a href="stories.html" class="mission-link">Stories</a></li>
-                <li><a href="timeline.html" class="mission-link">Notes: Logs</a></li>
-                <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
-                <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
-                <li><a href="intercom/" class="mission-link">Intercom</a></li>
-                <li><a href="research.html" class="mission-link">Research Hub</a></li>
-                <li><a href="grafana.html" class="mission-link">Grafana</a></li>
-                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
-            </ul>
-        </section>
+        <mission-control></mission-control>
         <div class="sys-banner">ARTIFACT SCANNER ONLINE</div>
-        
     </nav>
 
     <main>
@@ -218,6 +203,7 @@
         </section>
     </main>
 
+    <script src="mission-control.js?v=476b9ef2"></script>
     <script>
         const YEARS = ['ALL', 'EXPERTISE', 'DOCS', '2024', '2023', '2022', '2021', '2020', '2019'];
         const DRIVE_IDS = {
@@ -353,33 +339,13 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Fetch Status & Telemetry
+            // Fetch Global Status
             fetch('data/status.json?t=' + new Date().getTime())
                 .then(r => r.json())
                 .then(status => {
-                    const statusText = document.getElementById('status-text');
-                    const eventCount = document.getElementById('event-count');
-                    const lastFile = document.getElementById('last-file');
-                    
-                    if (status.status === "ONLINE") statusText.style.color = "#4cd964";
-                    if (status.status === "IDLE") statusText.style.color = "#4daafc";
-                    statusText.textContent = status.status || "UNKNOWN";
-                    
-                    eventCount.textContent = status.total_events || "---";
-                    
-                    if (status.timestamp && status.last_file) {
-                        const lastTime = new Date(status.timestamp);
-                        const now = new Date();
-                        const diffMs = now - lastTime;
-                        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-                        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-                        
-                        let timeStr = "just now";
-                        if (diffHrs > 0) timeStr = `${diffHrs}h ago`;
-                        else if (diffMins > 0) timeStr = `${diffMins}m ago`;
-                        
-                        lastFile.textContent = `${status.last_file} (${timeStr})`;
-                    }
+                    document.getElementById('status-text').textContent = status.status || "UNKNOWN";
+                    document.getElementById('event-count').textContent = status.total_events || "---";
+                    document.getElementById('last-file').textContent = status.last_file || "None";
                 });
 
             // Fetch Live Load

@@ -84,11 +84,13 @@ def main():
                 logging.warning("[LOCK] Stale Round Table Lock detected (>2h). Ignoring.")
             else:
                 logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
+                update_status("WAITING", "Round Table Active. Scanner yielded.")
                 time.sleep(300) # Wait 5 minutes
                 continue
 
         epoch_count += 1
         logging.info(f"--- Starting Epoch {epoch_count} ---")
+        update_status("ONLINE", f"Starting Epoch {epoch_count}...")
         
         # 1. Update Manifest
         logging.info("Step 1: Updating File Manifest...")
@@ -100,9 +102,12 @@ def main():
 
         # 3. Artifact Map Refresh (Hybrid/Brain Mode)
         logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
+        update_status("ONLINE", "Refreshing Artifact Map...")
         years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
         for year in years:
-            while not vram_guard(): time.sleep(60)
+            while not vram_guard(): 
+                update_status("WAITING", "VRAM Cooling...")
+                time.sleep(60)
             logging.info(f"Scanning Artifact Sector: {year} (Brain)")
             run_task([ARTIFACT_SCANNER, year, "--hybrid"])
 
@@ -116,10 +121,14 @@ def main():
                 except: queue = []
             if not queue: break
             
-            while not vram_guard(): time.sleep(60)
+            while not vram_guard(): 
+                update_status("WAITING", "VRAM Cooling...")
+                time.sleep(60)
             
             task = queue[0]
             logging.info(f"Processing: {task['id']} ({len(queue)} remaining)")
+            update_status("BUSY", f"Nibbling: {task['id']}", filename=task['filename'])
+            
             use_hybrid = "2024" in task['bucket'] or "PIAV" in task['filename']
             flag = "--hybrid" if use_hybrid else "--reasoning"
             
@@ -134,8 +143,11 @@ def main():
         
         # We stay in this loop for 50 items before re-checking the manifest/queue
         for i in range(50):
-            while not vram_guard(): time.sleep(60)
+            while not vram_guard(): 
+                update_status("WAITING", "VRAM Cooling...")
+                time.sleep(60)
             logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
+            update_status("ONLINE", f"Refining Gem {i+1}/50")
             if run_task([GEM_REFINER]):
                 time.sleep(SLEEP_INTERVAL)
             else:
@@ -143,9 +155,11 @@ def main():
 
         # 6. Final TLC: De-duplicate and Tidy
         logging.info("Step 6: Performing Archive TLC (De-duplication)...")
+        update_status("ONLINE", "Tidying Archive...")
         run_task([CLEANER])
 
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
+        update_status("IDLE", f"Epoch {epoch_count} complete.")
         trigger_pager(f"Epoch {epoch_count} Synthesis Complete. Lab is Idle.", severity="info", source="MassScan")
         time.sleep(600) # Wait 10 mins before next full manifest check
 

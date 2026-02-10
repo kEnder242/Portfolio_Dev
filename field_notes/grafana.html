@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grafana | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=488571b7.3">
+    <link rel="stylesheet" href="style.css?v=8a67fc1a.3">
     <style>
         .grafana-container {
             width: 100%;
@@ -46,8 +46,8 @@
                 <li><a href="stories.html" class="mission-link">Stories</a></li>
                 <li><a href="timeline.html" class="mission-link">Notes: Logs</a></li>
                 <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
-                <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
-                <li><a href="intercom/" class="mission-link">Intercom</a></li>
+                <li><a href="status.html" class="mission-link">Status: Live</a></li>
+                <li><a href="intercom.html" class="mission-link">Intercom</a></li>
                 <li><a href="research.html" class="mission-link">Research Hub</a></li>
                 <li><a href="grafana.html" class="mission-link">Grafana</a></li>
                 <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
@@ -70,8 +70,15 @@
                 <br><span style="color: #888; font-size: 0.8em;">Access: Anonymous Viewer mode enabled. Secure login required for administrative control.</span>
             </div>
 
+            <div style="margin-bottom: 10px; display: flex; gap: 10px;">
+                <button class="icon-btn" onclick="updateTime('1h')">1H</button>
+                <button class="icon-btn" onclick="updateTime('8h')">8H</button>
+                <button class="icon-btn" onclick="updateTime('24h')">24H</button>
+                <button class="icon-btn" onclick="updateTime('7d')">7D</button>
+            </div>
+
             <div class="grafana-container">
-                <iframe src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-1h&to=now&theme=dark" width="100%" height="400" frameborder="0"></iframe>
+                <iframe id="grafana-iframe" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-8h&to=now&theme=dark" width="100%" height="400" frameborder="0"></iframe>
             </div>
 
             <div style="margin-top: 40px; border-top: 1px solid #333; padding-top: 20px;">
@@ -84,6 +91,14 @@
 
     <script>
         const consoleEl = document.getElementById('sys-console');
+        const iframe = document.getElementById('grafana-iframe');
+
+        function updateTime(range) {
+            const baseUrl = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&theme=dark";
+            iframe.src = `${baseUrl}&from=now-${range}&to=now`;
+            log(`Adjusting telemetry window to last ${range}.`);
+        }
+
         function log(msg, type='info') {
             const div = document.createElement('div');
             div.className = type;

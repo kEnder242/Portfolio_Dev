@@ -172,6 +172,20 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
     padding: 10px; margin-bottom: 20px; border: 1px solid #333; font-size: 0.7rem;
     height: 100px; overflow-y: auto; border-left: 3px solid var(--accent-color);
 }
+
+.icon-btn {
+    background: var(--accent-dim);
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: var(--font-stack);
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.icon-btn:hover { background: var(--accent-color); }
+
 .cursor { display: inline-block; width: 8px; height: 16px; background: var(--accent-color); animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 

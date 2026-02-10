@@ -21,9 +21,9 @@
 ## ✅ Global Milestones (Feb 2026)
 1.  **Public Airlock (v3.1):** Deployed `www.jason-lab.dev` and secured notes.
 2.  **Research Synthesis:** Created `RESEARCH_SYNTHESIS.md` mapping papers to implementation.
-3.  **Diamond Synthesis:** Successfully completed first multi-host memory consolidation loop.
-4.  **Portfolio Signature:** Deployed the 3x3 CVT Resume Builder.
-5.  **Workbench Pivot:** Finalized 50/50 Report Writer UI with mobile sliding sidebar.
+3.  **Modular Architecture (v3.2.0):** Implemented Web Component sidebar and priority-aware status timeline.
+4.  **Status Unification:** Consolidated Grafana telemetry and alert logs into a single 'Lab Status' hub.
+5.  **Portfolio Signature:** Deployed the 3x3 CVT Resume Builder.
 
 ## 🔮 The Roadmap
 *   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.

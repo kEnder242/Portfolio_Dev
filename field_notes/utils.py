@@ -31,6 +31,28 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
                 current = json.load(f)
         except: pass
 
+    # --- LIVE VITALS ---
+    # Brain check (vLLM/Ollama port)
+    brain_online = False
+    try:
+        # Check both potential ports
+        for port in [8088, 11434]:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.1)
+                if s.connect_ex(('localhost', port)) == 0:
+                    brain_online = True
+                    break
+    except: pass
+
+    # Intercom check
+    intercom_online = False
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.1)
+            if s.connect_ex(('localhost', 8765)) == 0:
+                intercom_online = True
+    except: pass
+
     data = {
         "status": status,
         "message": msg,
@@ -38,7 +60,12 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
         "last_items": new_items if status == "ONLINE" else current.get("last_items", 0),
         "total_events": get_total_events(),
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "engine": engine
+        "engine": engine,
+        "vitals": {
+            "brain": "ONLINE" if brain_online else "OFFLINE",
+            "intercom": "ONLINE" if intercom_online else "OFFLINE",
+            "vram": f"{get_vram_usage()*100:.1f}%"
+        }
     }
     
     with open(STATUS_FILE, 'w') as f:
@@ -63,13 +90,16 @@ def get_system_load():
     except: return 0.0
     return 999.0 
 
-def trigger_pager(summary, severity="info", source="System", dry_run=False):
-    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "monitor/notify_pd.py")
+import socket
+
+def trigger_pager(summary, severity="info", source="System", dry_run=False, emergency=False):
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "monitor/notify_gatekeeper.py")
     try:
         cmd = [sys.executable, script_path, summary, "--source", source, "--severity", severity]
         if dry_run: cmd.append("--dry-run")
+        if emergency: cmd.append("--emergency")
         subprocess.run(cmd, check=True)
         return True
     except Exception as e:
-        print(f"Pager failed: {e}")
+        print(f"Gatekeeper failed: {e}")
         return False
