@@ -5,7 +5,7 @@ console.log("Intercom.js v2.5.0 loading...");
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.0.0"
+    VERSION: "3.1.0"
 };
 
 let ws = null;
@@ -162,7 +162,12 @@ function handleServerMessage(data) {
     } else if (data.brain) {
         appendMsg(data.brain, "brain-msg", data.brain_source || "Brain");
     } else if (data.type === 'final') {
-        appendMsg(data.text, "user-msg", "You");
+        // Deduplicate: If it's a text echo, ignore it (we already showed it locally)
+        if (data.source === 'text') {
+            console.log("Server echoed text input. Skipping UI append.");
+            return;
+        }
+        appendMsg(data.text, "user-msg", "SERVER_ECHO");
     } else if (data.type === 'debug') {
         appendMsg(`${data.event}: ${JSON.stringify(data.data)}`, "debug-msg", "Debug");
     }
@@ -172,7 +177,7 @@ function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-    appendMsg(text, "user-msg", "You");
+    appendMsg(text, "user-msg", "LOCAL_ECHO");
     ws.send(jsonStr({ type: "text_input", content: text }));
     inputEl.value = "";
 }
