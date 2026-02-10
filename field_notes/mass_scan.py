@@ -19,6 +19,7 @@ QUEUE_MGR = os.path.join(BASE_DIR, "scan_queue.py")
 NIBBLER = os.path.join(BASE_DIR, "nibble_v2.py")
 ARTIFACT_SCANNER = os.path.join(BASE_DIR, "scan_artifacts.py")
 GEM_REFINER = os.path.join(BASE_DIR, "refine_gem.py")
+CLEANER = os.path.join(BASE_DIR, "clean_duplicates.py")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
@@ -127,6 +128,10 @@ def main():
                 time.sleep(SLEEP_INTERVAL)
             else:
                 time.sleep(120) 
+
+        # 6. Final TLC: De-duplicate and Tidy
+        logging.info("Step 6: Performing Archive TLC (De-duplication)...")
+        run_task([CLEANER])
 
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
         trigger_pager(f"Epoch {epoch_count} Synthesis Complete. Lab is Idle.", severity="info", source="MassScan")
