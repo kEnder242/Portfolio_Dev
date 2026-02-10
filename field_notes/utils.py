@@ -6,7 +6,8 @@ import subprocess
 import requests
 import sys
 
-DATA_DIR = "field_notes/data"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 
