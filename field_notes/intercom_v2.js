@@ -5,7 +5,7 @@ console.log("Intercom.js v2.5.0 loading...");
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.1.0"
+    VERSION: "3.1.6"
 };
 
 let ws = null;
