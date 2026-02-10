@@ -18,6 +18,7 @@ LIBRARIAN = os.path.join(BASE_DIR, "scan_librarian.py")
 QUEUE_MGR = os.path.join(BASE_DIR, "scan_queue.py")
 NIBBLER = os.path.join(BASE_DIR, "nibble_v2.py")
 ARTIFACT_SCANNER = os.path.join(BASE_DIR, "scan_artifacts.py")
+GEM_REFINER = os.path.join(BASE_DIR, "refine_gem.py")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
@@ -120,17 +121,12 @@ def main():
         
         # We stay in this loop for 50 items before re-checking the manifest/queue
         for i in range(50):
-            candidates = get_low_rank_items()
-            if not candidates: break
-            
-            target = random.choice(candidates)
-            logging.info(f"Refining Gem [{i+1}/50]: {target['event'].get('summary')[:50]}...")
-            
             while not vram_guard(): time.sleep(60)
-            
-            # TODO: Implement actual refinement logic (re-processing specific events)
-            # For now, we wait to simulate effort and prevent high CPU/VRAM churn
-            time.sleep(120) 
+            logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
+            if run_task([GEM_REFINER]):
+                time.sleep(SLEEP_INTERVAL)
+            else:
+                time.sleep(120) 
 
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
         trigger_pager(f"Epoch {epoch_count} Synthesis Complete. Lab is Idle.", severity="info", source="MassScan")
