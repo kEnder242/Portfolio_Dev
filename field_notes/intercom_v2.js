@@ -152,6 +152,8 @@ function connect() {
             if (data.type === 'status') {
                 const label = data.state === 'waiting' ? 'LOBBY' : data.state.toUpperCase();
                 appendMsg(`${data.message} [${label}] (v${data.version})`, 'system-msg', 'System');
+            } else if (data.type === 'control') {
+                if (data.command === 'stop_audio') stopMic();
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
