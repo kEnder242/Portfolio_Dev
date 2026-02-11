@@ -150,7 +150,8 @@ function connect() {
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'status') {
-                appendMsg(`${data.message} (v${data.version})`, 'system-msg', 'System');
+                const label = data.state === 'waiting' ? 'LOBBY' : data.state.toUpperCase();
+                appendMsg(`${data.message} [${label}] (v${data.version})`, 'system-msg', 'System');
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
