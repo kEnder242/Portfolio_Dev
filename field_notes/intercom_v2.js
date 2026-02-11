@@ -1,15 +1,19 @@
-// 🐹 Acme Lab: Workbench Console Logic v3.4.3
-console.log("Workbench Console v3.4.3 loading...");
+// 🐹 Acme Lab: Workbench Console Logic v3.4.7
+console.log("Workbench Console v3.4.7 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.4.4"
+    VERSION: "3.4.0"
 };
 
 let ws = null;
 let activeFile = null;
 let editor = null;
+let audioContext = null;
+let processor = null;
+let micStream = null;
+let isMicActive = false;
 
 // UI Elements
 const chatConsole = document.getElementById('chat-console');
@@ -22,6 +26,7 @@ const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
 
 function initEditor() {
+    if (!document.getElementById('workspace-content')) return;
     editor = new EasyMDE({
         element: document.getElementById('workspace-content'),
         forceSync: true,
@@ -33,32 +38,33 @@ function initEditor() {
 }
 
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat') {
-    // 1. Unified Console: Show everything in Pinky's window by default
-    // We append to chatConsole regardless of channel for now, as requested.
+    const target = channel === 'insight' ? insightConsole : chatConsole;
+    
+    if (channel === 'whiteboard' || channel === 'workspace') {
+        if (editor) editor.value(text);
+        return;
+    }
+
     const msg = document.createElement('div');
     msg.className = `message ${type}`;
     const prefix = source ? `[${source.toUpperCase()}]: ` : "";
     msg.textContent = `${prefix}${text}`;
+    
+    // Unified output: All go to primary chat
     chatConsole.appendChild(msg);
     chatConsole.scrollTop = chatConsole.scrollHeight;
 
-    // 2. Insight Console: Duplicate Brain messages here for high-fidelity view
+    // Duplicated output for Insight panel (Brain messages)
     if (channel === 'insight' || source.toLowerCase() === 'brain') {
         const iMsg = msg.cloneNode(true);
         insightConsole.appendChild(iMsg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
-    }
-    
-    // 3. Auto-route Workspace updates (The Live Thinking path)
-    if (channel === 'whiteboard' || channel === 'workspace') {
-        if (editor) editor.value(text);
     }
 }
 
 function updateFileTree(files) {
     if (!fileTree) return;
     let html = '<ul style="list-style: none; padding-left: 5px;">';
-    
     html += '<li class="tree-item" style="font-weight:bold; color:#aaa;">📂 Workspace</li>';
     const workspaceFiles = [...(files.drafts || []), ...(files.workspace || [])];
     if (workspaceFiles.length > 0) {
@@ -71,14 +77,12 @@ function updateFileTree(files) {
     } else {
         html += '<li style="padding-left:10px; color:#444; font-size:0.7rem;">(no files found)</li>';
     }
-
     html += '<li class="tree-item" style="font-weight:bold; color:#aaa; margin-top:10px;">📂 Archives</li>';
     if (files.archive) {
         Object.keys(files.archive).sort().reverse().slice(0, 5).forEach(year => {
             html += `<li style="padding-left:10px; color:#666;">📅 ${year}</li>`;
         });
     }
-    
     html += '</ul>';
     fileTree.innerHTML = html;
 }
@@ -87,13 +91,51 @@ window.selectFile = (filename) => {
     activeFile = filename;
     activeFilename.textContent = filename;
     if (ws && ws.readyState === WebSocket.OPEN) {
-        // Request the file content
         ws.send(JSON.stringify({ type: "read_file", filename: filename }));
-        // Inform the server of the selection context
         ws.send(JSON.stringify({ type: "select_file", filename: filename }));
     }
     appendMsg(`Opening ${filename}...`, 'system-msg');
 };
+
+async function toggleMic() {
+    if (isMicActive) stopMic();
+    else await startMic();
+}
+
+async function startMic() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+        }
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const source = audioContext.createMediaStreamSource(micStream);
+        processor = audioContext.createScriptProcessor(4096, 1, 1);
+        processor.onaudioprocess = (e) => {
+            if (!isMicActive || !ws || ws.readyState !== WebSocket.OPEN) return;
+            const inputData = e.inputBuffer.getChannelData(0);
+            const pcmData = new Int16Array(inputData.length);
+            for (let i = 0; i < inputData.length; i++) {
+                const s = Math.max(-1, Math.min(1, inputData[i]));
+                pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+            }
+            ws.send(pcmData.buffer);
+        };
+        source.connect(processor);
+        processor.connect(audioContext.destination);
+        isMicActive = true;
+        micBtn.classList.add('active');
+        appendMsg("Microphone Active. Speak now...", "system-msg");
+    } catch (err) {
+        appendMsg(`Mic Error: ${err.message}`, "system-msg");
+    }
+}
+
+function stopMic() {
+    isMicActive = false;
+    micBtn.classList.remove('active');
+    if (micStream) micStream.getTracks().forEach(track => track.stop());
+    appendMsg("Microphone Muted.", "system-msg");
+}
 
 function connect() {
     const targetUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
@@ -113,7 +155,7 @@ function connect() {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
                 if (editor) editor.value(data.content);
-                appendMsg(`${data.filename} loaded into workspace.`, 'system-msg');
+                appendMsg(`${data.filename} loaded.`, 'system-msg');
             } else if (data.brain) {
                 appendMsg(data.brain, "brain-msg", data.brain_source, data.channel || 'chat');
             } else if (data.text) {
@@ -134,6 +176,11 @@ function sendMessage() {
     ws.send(JSON.stringify({ type: "text_input", content: text }));
     inputEl.value = "";
 }
+
+// Global Listeners
+if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+if (micBtn) micBtn.addEventListener('click', toggleMic);
+if (inputEl) inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
 window.addEventListener('DOMContentLoaded', () => {
     initEditor();
