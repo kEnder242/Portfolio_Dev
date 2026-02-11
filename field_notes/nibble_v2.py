@@ -12,7 +12,7 @@ import difflib
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
-from utils import update_status, get_system_load
+from utils import update_status, get_system_load, ROUND_TABLE_LOCK
 
 # Config
 DATA_DIR = "field_notes/data"
@@ -46,10 +46,17 @@ ENGINE = get_engine_v2(mode=engine_mode)
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
 
 def can_burn():
+    # 1. System Load Check
     load = get_system_load()
     if load > MAX_LOAD:
         log(f"System Load High ({load} > {MAX_LOAD}). Skipping nibble.")
         return False
+    
+    # 2. Round Table Lock Check (Session Yield)
+    if os.path.exists(ROUND_TABLE_LOCK):
+        log("Round Table Active (lock found). Yielding GPU.")
+        return False
+
     return True
 
 def load_json(path):

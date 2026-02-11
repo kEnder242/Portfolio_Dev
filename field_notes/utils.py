@@ -11,6 +11,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 INTERCOM_LAST_SEEN_FILE = os.path.join(DATA_DIR, "intercom_last_seen.tmp")
 INTERCOM_DOWN_LOCK = os.path.join(DATA_DIR, "intercom_down.lock")
+ROUND_TABLE_LOCK = os.path.join(DATA_DIR, "round_table.lock")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 
 def get_total_events():

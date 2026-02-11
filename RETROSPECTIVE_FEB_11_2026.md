@@ -68,7 +68,7 @@ The Acme Lab Intercom server (acme_lab.py) exhibited persistent startup failures
 ### C. Feature Refinements
 *   **Robust Mic Logic**: Investigate and stabilize the `intercom_v2.js` microphone `stop_audio` control flow to prevent immediate muting.
 *   **"DEBUG_BRAIN" Script**: Create a `debug_brain.sh` script that launches `acme_lab.py` in `DEBUG_BRAIN` mode and automatically tails the log, ready for a direct `intercom.py` connection.
-*   **Automate Test Cycles**: Implement a script that performs a clean launch, waits for ready, runs `test_liveliness.py`, and reports.
+*   **Automate Test Cycles**: Implement a script that performs a clean launch, waits for ready, runs `test_liveliness.py`, and reports. Refer to the consolidated **[MCP Tool Test Plan](../HomeLabAI/docs/plans/mcp_tool_test_plan.md)** for details.
 
 ## IV. Conclusion
 This session highlighted the fragility of complex AI systems under external system-level pressures (driver updates) and the importance of robust logging, error handling, and a clear understanding of asynchronous process lifecycles. The "Montana Protocol" and sequential initialization have significantly improved the Lab's stability and diagnosability, setting the stage for a more reliable future.

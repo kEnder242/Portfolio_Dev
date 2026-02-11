@@ -67,7 +67,7 @@ To achieve a stable and reliably manageable Acme Lab Intercom server (`acme_lab.
 ## IV. Future Work & Next Steps
 
 1.  **Re-enable and Debug `EarNode`**: With core stability, the next major task is to fully re-enable `EarNode` and resolve its `list index out of range` import error (likely related to CUDA paths or library loading order).
-2.  **Unit & Integration Tests**: Develop `pytest` unit tests for `acme_lab.py`'s lifecycle and integration tests for `lab_attendant`'s API.
+2.  **Unit & Integration Tests**: Develop `pytest` unit tests for `acme_lab.py`'s lifecycle and integration tests for `lab_attendant`'s API. Detailed test cases are documented in the **[MCP Tool Test Plan](../HomeLabAI/docs/plans/mcp_tool_test_plan.md)**.
 3.  **Round Table Lock Contention**: Investigate and robustly handle `round_table.lock` interactions for `mass_scan.py` and other background processes.
 4.  **Refine `attendant_liveliness.py`**: Further enhance the `attendant_liveliness.py` script for more advanced polling and status reporting, now that the logging pipeline is reliable.
 
