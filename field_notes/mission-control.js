@@ -15,7 +15,7 @@ class MissionControl extends HTMLElement {
                     <li><a href="timeline.html" class="mission-link ${activePage === 'timeline.html' ? 'active' : ''}">Work Notes</a></li>
                     <li><a href="files.html" class="mission-link ${activePage === 'files.html' ? 'active' : ''}">Artifacts: Files</a></li>
                     <li><a href="status.html" class="mission-link ${activePage === 'status.html' ? 'active' : ''}">Lab Status</a></li>
-                    <li><a href="lab.html" class="mission-link ${activePage === 'lab.html' ? 'active' : ''}">AI Lab</a></li>
+                    <li><a href="intercom.html" class="mission-link ${activePage === 'intercom.html' ? 'active' : ''}">AI Lab: Intercom</a></li>
                     <li><a href="research.html" class="mission-link ${activePage === 'research.html' ? 'active' : ''}">Research Pipeline</a></li>
                 </ul>
                 <div style="font-size: 0.6rem; color: #444; margin-top: 20px; border-top: 1px solid #222; padding-top: 5px;">

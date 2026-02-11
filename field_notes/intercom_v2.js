@@ -1,19 +1,19 @@
-// 🐹 Acme Lab: Workbench Console Logic v3.4.0
-console.log("Workbench Console v3.4.0 loading...");
+// 🐹 Acme Lab: Workbench Console Logic v3.4.1
+console.log("Workbench Console v3.4.1 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.4.0"
+    VERSION: "3.4.0" // Server version we target
 };
 
 let ws = null;
 let activeFile = null;
+let editor = null;
 
 // UI Elements
 const chatConsole = document.getElementById('chat-console');
 const insightConsole = document.getElementById('insight-console');
-const whiteboard = document.getElementById('whiteboard-content');
 const activeFilename = document.getElementById('active-filename');
 const fileTree = document.getElementById('file-tree');
 const inputEl = document.getElementById('text-input');
@@ -21,12 +21,23 @@ const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
 
+function initEditor() {
+    editor = new EasyMDE({
+        element: document.getElementById('workspace-content'),
+        forceSync: true,
+        spellChecker: false,
+        autosave: { enabled: false },
+        status: ["lines", "words"],
+        toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "side-by-side", "fullscreen", "|", "undo", "redo"]
+    });
+}
+
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat') {
     const target = channel === 'insight' ? insightConsole : chatConsole;
     
-    // Auto-route Whiteboard updates
-    if (channel === 'whiteboard') {
-        whiteboard.value = text;
+    // Auto-route Workspace updates
+    if (channel === 'whiteboard' || channel === 'workspace') {
+        if (editor) editor.value(text);
         return;
     }
 
@@ -43,22 +54,25 @@ function updateFileTree(files) {
     if (!fileTree) return;
     let html = '<ul style="list-style: none; padding-left: 5px;">';
     
-    // Archive Section
-    html += '<li class="tree-item" style="font-weight:bold; color:#aaa;">📂 Archives</li>';
-    if (files.archive) {
-        Object.keys(files.archive).sort().reverse().slice(0, 5).forEach(year => {
-            html += `<li style="padding-left:10px; color:#666;">📅 ${year}</li>`;
-        });
-    }
-
-    // Workspace Section
-    html += '<li class="tree-item" style="font-weight:bold; color:#aaa; margin-top:10px;">📂 Workspace</li>';
-    if (files.drafts) {
-        files.drafts.forEach(f => {
+    // Workspace Section (Drafts & Workspace files)
+    html += '<li class="tree-item" style="font-weight:bold; color:#aaa;">📂 Workspace</li>';
+    const workspaceFiles = [...(files.drafts || []), ...(files.workspace || [])];
+    if (workspaceFiles.length > 0) {
+        [...new Set(workspaceFiles)].forEach(f => {
             const isActive = activeFile === f;
             html += `<li class="tree-item file" onclick="selectFile('${f}')" style="${isActive ? 'color:var(--accent-color); font-weight:bold;' : ''}">
                 📄 ${f} ${isActive ? '<span class="active-file-tag">OPEN</span>' : ''}
             </li>`;
+        });
+    } else {
+        html += '<li style="padding-left:10px; color:#444; font-size:0.7rem;">(no files found)</li>';
+    }
+
+    // Archive Section
+    html += '<li class="tree-item" style="font-weight:bold; color:#aaa; margin-top:10px;">📂 Archives</li>';
+    if (files.archive) {
+        Object.keys(files.archive).sort().reverse().slice(0, 5).forEach(year => {
+            html += `<li style="padding-left:10px; color:#666;">📅 ${year}</li>`;
         });
     }
     
@@ -73,8 +87,6 @@ window.selectFile = (filename) => {
         ws.send(JSON.stringify({ type: "select_file", filename: filename }));
     }
     appendMsg(`Opened ${filename} for editing.`, 'system-msg');
-    // Reload tree to show 'OPEN' tag
-    // (This will happen automatically on next server sync)
 };
 
 function connect() {
@@ -116,4 +128,7 @@ function sendMessage() {
 if (sendBtn) sendBtn.addEventListener('click', sendMessage);
 if (inputEl) inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
-window.addEventListener('DOMContentLoaded', connect);
+window.addEventListener('DOMContentLoaded', () => {
+    initEditor();
+    connect();
+});
