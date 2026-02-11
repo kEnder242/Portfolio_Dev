@@ -30,6 +30,7 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS=https://notes.jason-lab.dev https://www.jason-lab.dev localhost
     ports:
       - "3000:3000"
     networks:
