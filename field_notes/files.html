@@ -203,7 +203,7 @@
         </section>
     </main>
 
-    <script src="mission-control.js?v=bc4c43fc"></script>
+    <script src="mission-control.js?v=94e04f0a"></script>
     <script>
         const YEARS = ['ALL', 'EXPERTISE', 'DOCS', '2024', '2023', '2022', '2021', '2020', '2019'];
         const DRIVE_IDS = {
@@ -359,14 +359,6 @@
                 })
                 .catch(() => { document.getElementById('sys-load').textContent = "OFFLINE"; });
 
-            // Mobile Menu
-            const menuToggle = document.getElementById('menu-toggle');
-            const sidebar = document.getElementById('sidebar');
-            if (menuToggle && sidebar) {
-                menuToggle.onclick = (e) => { sidebar.classList.toggle('active'); e.stopPropagation(); };
-                document.querySelector('main').onclick = () => sidebar.classList.remove('active');
-            }
-            
             loadYear('ALL');
         });
     </script>
