@@ -5,50 +5,57 @@ Transitioning from a "Search & Chat" interface to a stateful, dual-hemisphere en
 
 ---
 
-## 🧱 1. The Temporal Moat (Grounding)
+## 🧱 1. The Context Moat (Grounding)
 *   **The Problem**: AI confusing historical validation notes with real-time system state.
-*   **The Fix**: Explicit "moat" logic in Pinky's triage layer.
-    *   **[LIVE_SENSORS]**: Default for "today," "now," or hardware queries. (DCGM/Prometheus).
-    *   **[PERSONAL_HISTORY]**: Requires a **Temporal Key** (e.g., "In 2019", "Check archives").
-*   **Persona Calibration**: Pinky (Llama 3.1 8B) as the "Aware Gateway," Brain (Llama 3.1 70b/8b) as the "Grounded Architect."
+*   **The Soft Moat**: Instead of a binary block, the Archive is treated as a **Gated Resource**. 
+    *   **[LIVE_SENSORS]**: The default reality. (DCGM/Prometheus).
+    *   **[PERSONAL_HISTORY]**: Pinky avoids this by default unless the query implies a need for historical grounding.
+*   **Behavioral Guardrail**: Pinky is an **Observer** of history, not an Author. He is strictly prohibited from modifying or "organizing" the `archive/` directory.
 
 ---
 
-## ⚪ 2. The Whiteboard (Stateful Canvas)
-*   **Concept**: A persistent file-backed workspace (`whiteboard.md`) that represents the "Active Mind" of the Brain.
-*   **UI Implementation**:
-    *   A dedicated panel in `lab.html`.
-    *   **Styling**: Engineering Canvas (Soft Dim Grey/Blue, not blinding white).
-    *   **Flexibility**: Brain can "pin" thoughts, drafts, or code snippets here so they don't scroll away.
-*   **Human-in-the-Loop**: Ability for the user to edit or paste into the whiteboard for the Brain to analyze.
+## ⚪ 2. The Whiteboard (Functional Canvas)
+*   **Concept**: A persistent "Notepad-Fidelity" workspace (`whiteboard.md`) that represents the Brain's active reasoning.
+*   **Functionality over Minimalism**:
+    *   benchmark: `notepad.exe` (Undo, Edit, Select, Save).
+    *   **Live Stream**: The Brain must use the Whiteboard actively for complex thoughts to prevent it from feeling like a "static report."
+*   **Human-in-the-Loop**: The user can edit or paste content directly into the Whiteboard for the Brain to analyze or refine.
 
 ---
 
 ## 📁 3. The Filing Cabinet (Archive Navigator)
-*   **Concept**: A navigable tree of `~/AcmeLab`.
-*   **Permission Model**:
-    *   `archive/`: **READ-ONLY**. Bridge via `access_personal_history`.
-    *   `drafts/`: **READ-WRITE**. Brain's output for new documents.
-    *   `workspace/`: **READ-WRITE**. Location of `whiteboard.md`.
-*   **UI Implementation**: Collapsible directory tree in the sidebar using pure HTML/CSS.
+*   **Concept**: A navigable tree of `~/AcmeLab` with explicit permission zones.
+*   **Structure**:
+    *   `archive/`: **READ-ONLY**. (The Moat).
+    *   `drafts/`: **READ-WRITE**. Brain's output for new BKMs/Docs.
+    *   `workspace/`: **READ-WRITE**. Home of `whiteboard.md`.
+*   **UI Implementation**: Functional directory tree in the sidebar (collapsible folders).
 
 ---
 
 ## 🛠️ 4. Tool Evolution (Modular Rigor)
 *   **De-coupling the BKM**:
-    1.  `start_draft`: Writes initial synthesis to the Whiteboard.
-    2.  `refine_draft`: Brain iterates on the Whiteboard content based on user feedback.
-    3.  `commit_to_archive`: Permanently saves the finalized draft to the Filing Cabinet.
-*   **Telemetery Tools**: `vram_vibe_check` and `get_lab_health` (High-fidelity DCGM).
-*   **Extension Tools**: `web_search` for current market or technical data outside the archive.
+    1.  `start_draft`: Hits the Whiteboard with initial outline.
+    2.  `refine_draft`: Brain iterates on the Whiteboard based on chat feedback.
+    3.  `commit_to_archive`: Saves the result to the `drafts/` or `archive/` folder.
+*   **Extension Tools**: 
+    *   `web_search`: [TABLED] For market data (e.g., "Intel stock").
+    *   `file_management`: Ability to add/remove files in `drafts/`.
 
 ---
 
-## 🚦 5. Phase 11 Roadmap (Active)
+## 🚦 5. Roadmap & Tabled Ideas
 - [x] DCGM high-fidelity telemetry integration.
 - [x] Modular Web Component navigation (v1.3).
-- [x] Basic Whiteboard / Filing Cabinet scaffolding in `lab.html`.
-- [ ] **Next**: Split BKM tool into `start_draft` and `commit_to_archive`.
-- [ ] **Next**: Revert Whiteboard UI to "Engineering Canvas" theme.
-- [ ] **Next**: Fix Filing Cabinet index loading in `lab.html`.
-- [ ] **Future**: Implement multi-file "Workspace" context for the Brain.
+- [ ] **Next**: Implement "Notepad-Fidelity" (Editable Whiteboard) in `lab.html`.
+- [ ] **Next**: Fix Filing Cabinet index loading & Folder support.
+- [ ] **Next**: Update Brain logic to use Whiteboard *during* reasoning.
+- [ ] **Tabled**: Web Search API integration.
+- [ ] **Tabled**: Multi-file "Project Context" for Brain.
+
+---
+
+## 💡 User Insights (Diff)
+*   "The Whiteboard is a portal into the Brain's reasoning, not just a static report."
+*   "benchmark: notepad.exe, not vscode. Functionality (undo/edit) is priority over minimalism."
+*   "Archive is Read-Only; Workspace is Read-Write. Pinky must not be an aggressive architect of the past."
