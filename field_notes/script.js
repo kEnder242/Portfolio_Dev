@@ -62,42 +62,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Permalink Anchors
-    const articles = document.querySelectorAll('article');
-    articles.forEach(article => {
-        const id = article.id;
-        const heading = article.querySelector('h3');
-        if (id && heading) {
-            const anchor = document.createElement('a');
-            anchor.href = '#' + id;
-            anchor.className = 'permalink';
-            anchor.textContent = '#';
-            anchor.ariaLabel = 'Permalink to this section';
-            heading.appendChild(anchor);
-        }
+        // 3. Permalink Anchors
+
+        const articles = document.querySelectorAll('article');
+
+        articles.forEach(article => {
+
+            const id = article.id;
+
+            const heading = article.querySelector('h3');
+
+            if (id && heading) {
+
+                const anchor = document.createElement('a');
+
+                anchor.href = '#' + id;
+
+                anchor.className = 'permalink';
+
+                anchor.textContent = '#';
+
+                anchor.ariaLabel = 'Permalink to this section';
+
+                heading.appendChild(anchor);
+
+            }
+
+        });
+
     });
 
-    // 4. Mobile Menu Toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    const nav = document.getElementById('sidebar');
-
-    if (menuToggle && nav) {
-        menuToggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
-        });
-
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    nav.classList.remove('active');
-                }
-            });
-        });
-
-        document.querySelector('main').addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                nav.classList.remove('active');
-            }
-        });
-    }
-});
+    

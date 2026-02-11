@@ -3,20 +3,7 @@ class MissionControl extends HTMLElement {
         const currentPath = window.location.pathname;
         const activePage = currentPath.split('/').pop() || 'stories.html';
 
-        // --- DEBUG FLAIR: IDENTIFY GHOST SIDEBARS ---
-        // If there is a <nav id="sidebar"> that DOES NOT contain this element,
-        // it's an old hardcoded sidebar. Turn it RED.
-        const allSidebars = document.querySelectorAll('#sidebar');
-        allSidebars.forEach(sb => {
-            if (!sb.contains(this)) {
-                sb.style.border = "5px solid #ff3b30";
-                sb.style.boxShadow = "0 0 20px #ff3b30";
-                const debugTag = document.createElement('div');
-                debugTag.style.cssText = "background: #ff3b30; color: white; padding: 5px; font-weight: bold; position: absolute; top: 0; left: 0; z-index: 9999;";
-                debugTag.textContent = "[!] OLD HARDCODED SIDEBAR DETECTED";
-                sb.appendChild(debugTag);
-            }
-        });
+        console.log(`[MISSION CONTROL] Component connected. Active page: ${activePage}`);
 
         this.innerHTML = `
             <h1>The Field Manual</h1>
@@ -32,28 +19,44 @@ class MissionControl extends HTMLElement {
                     <li><a href="research.html" class="mission-link ${activePage === 'research.html' ? 'active' : ''}">Research Pipeline</a></li>
                 </ul>
                 <div style="font-size: 0.6rem; color: #444; margin-top: 20px; border-top: 1px solid #222; padding-top: 5px;">
-                    DEPLOYMENT: [MODULAR_V1.1]
+                    DEPLOYMENT: [MODULAR_V1.2]
                 </div>
             </section>
         `;
 
-        // Mobile menu logic: reach out to the parent nav
+        // Wait for DOM to be fully ready before attaching listeners
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.initToggle());
+        } else {
+            this.initToggle();
+        }
+    }
+
+    initToggle() {
         const menuToggle = document.getElementById('menu-toggle');
         const parentNav = document.getElementById('sidebar') || this.closest('nav');
         
+        console.log("[MISSION CONTROL] Initializing toggle...");
+        console.log("[MISSION CONTROL] Found menuToggle:", !!menuToggle);
+        console.log("[MISSION CONTROL] Found parentNav:", !!parentNav);
+
         if (menuToggle && parentNav) {
-            menuToggle.onclick = (e) => { 
-                console.log("[DEBUG] Hamburger clicked. Toggling sidebar.");
-                parentNav.classList.toggle('active'); 
-                e.stopPropagation(); 
-            };
-            
-            // Close sidebar when clicking outside on mobile
+            // Using addEventListener to avoid overwriting or being overwritten
+            menuToggle.addEventListener('click', (e) => {
+                console.log("[MISSION CONTROL] Toggle clicked via Component Listener.");
+                parentNav.classList.toggle('active');
+                e.stopPropagation();
+            });
+
+            // Global click handler to close sidebar on mobile
             document.addEventListener('click', (e) => {
                 if (parentNav.classList.contains('active') && !parentNav.contains(e.target) && e.target !== menuToggle) {
+                    console.log("[MISSION CONTROL] Closing sidebar via outside click.");
                     parentNav.classList.remove('active');
                 }
             });
+        } else {
+            console.warn("[MISSION CONTROL] Required elements for hamburger NOT found.");
         }
     }
 }

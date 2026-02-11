@@ -266,35 +266,50 @@ window.verifyAudioPipeline = (durationSec = 5) => {
     const chunkSize = 4096;
     let elapsed = 0;
 
-    const interval = setInterval(() => {
-        // Generate a 440Hz sine wave as dummy audio
-        const pcmData = new Int16Array(chunkSize);
-        for (let i = 0; i < chunkSize; i++) {
-            const time = (elapsed * chunkSize + i) / sampleRate;
-            pcmData[i] = Math.sin(2 * Math.PI * 440 * time) * 10000;
-        }
-        
-        ws.send(pcmData.buffer);
-        elapsed++;
+        const interval = setInterval(() => {
 
-        if (elapsed * chunkSize / sampleRate >= durationSec) {
-            clearInterval(interval);
-            appendMsg("Virtual Mic Test Finished.", "system-msg");
-        }
-    }, (chunkSize / sampleRate) * 1000);
-};
+            // Generate a 440Hz sine wave as dummy audio
 
-// Sidebar Toggle (Parity with index.html)
-const menuToggle = document.getElementById('menu-toggle');
-const sidebar = document.getElementById('sidebar');
-if (menuToggle && sidebar) {
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
+            const pcmData = new Int16Array(chunkSize);
+
+            for (let i = 0; i < chunkSize; i++) {
+
+                const time = (elapsed * chunkSize + i) / sampleRate;
+
+                pcmData[i] = Math.sin(2 * Math.PI * 440 * time) * 10000;
+
+            }
+
+            
+
+            ws.send(pcmData.buffer);
+
+            elapsed++;
+
+    
+
+            if (elapsed * chunkSize / sampleRate >= durationSec) {
+
+                clearInterval(interval);
+
+                appendMsg("Virtual Mic Test Finished.", "system-msg");
+
+            }
+
+        }, (chunkSize / sampleRate) * 1000);
+
+    };
+
+    
+
+    // Start
+
+    window.addEventListener('DOMContentLoaded', () => {
+
+        console.log("DOM Loaded, starting connection...");
+
+        connect();
+
     });
-}
 
-// Start
-window.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM Loaded, starting connection...");
-    connect();
-});
+    
