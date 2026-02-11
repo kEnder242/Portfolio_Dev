@@ -1,5 +1,5 @@
-// 🐹 Acme Lab: Workbench Console Logic v3.4.7
-console.log("Workbench Console v3.4.7 loading...");
+// 🐹 Acme Lab: Workbench Console Logic v3.4.11
+console.log("Workbench Console v3.4.11 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
@@ -183,6 +183,16 @@ if (micBtn) micBtn.addEventListener('click', toggleMic);
 if (inputEl) inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
 window.addEventListener('DOMContentLoaded', () => {
-    initEditor();
-    connect();
+    console.log("[INIT] DOM Loaded. Initializing Workbench...");
+    try {
+        initEditor();
+    } catch (e) {
+        console.error("[INIT] Editor failed:", e);
+    }
+    
+    try {
+        connect();
+    } catch (e) {
+        console.error("[INIT] Connection failed:", e);
+    }
 });
