@@ -1,315 +1,119 @@
-// 🐹 Acme Lab: Web Intercom Logic
-// Pure Vanilla JS - No Frameworks (Class 1 Design)
-console.log("Intercom.js v3.1.9 loading...");
+// 🐹 Acme Lab: Workbench Console Logic v3.4.0
+console.log("Workbench Console v3.4.0 loading...");
 
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.1.9"
+    VERSION: "3.4.0"
 };
 
 let ws = null;
-let audioContext = null;
-let processor = null;
-let micStream = null;
-let isMicActive = false;
+let activeFile = null;
 
-const consoleEl = document.getElementById('chat-console');
+// UI Elements
+const chatConsole = document.getElementById('chat-console');
+const insightConsole = document.getElementById('insight-console');
+const whiteboard = document.getElementById('whiteboard-content');
+const activeFilename = document.getElementById('active-filename');
+const fileTree = document.getElementById('file-tree');
 const inputEl = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
-const statusText = document.getElementById('connection-text');
-const versionEl = document.getElementById('lab-version');
-const audioMeter = document.getElementById('audio-level');
-const meterContainer = document.getElementById('audio-meter-container');
-const reportSidebar = document.getElementById('report-sidebar');
-const reportBody = document.getElementById('report-body');
-const sidebarToggle = document.getElementById('sidebar-toggle');
-const mobileReportsToggle = document.getElementById('mobile-reports-toggle');
-const downloadBtn = document.getElementById('download-report');
 
-function appendMsg(text, type = 'system-msg', source = 'System') {
-    // 1. Check for 'The Editor' drafts
-    if (source === "The Editor" || text.includes("[THE EDITOR]")) {
-        routeToSidebar(text);
+function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat') {
+    const target = channel === 'insight' ? insightConsole : chatConsole;
+    
+    // Auto-route Whiteboard updates
+    if (channel === 'whiteboard') {
+        whiteboard.value = text;
         return;
     }
 
     const msg = document.createElement('div');
     msg.className = `message ${type}`;
-    
     const prefix = source ? `[${source.toUpperCase()}]: ` : "";
     msg.textContent = `${prefix}${text}`;
     
-    consoleEl.appendChild(msg);
-    consoleEl.scrollTop = consoleEl.scrollHeight;
+    target.appendChild(msg);
+    target.scrollTop = target.scrollHeight;
 }
 
-function routeToSidebar(text) {
-    if (!reportSidebar || !reportBody) return;
+function updateFileTree(files) {
+    if (!fileTree) return;
+    let html = '<ul style="list-style: none; padding-left: 5px;">';
     
-    // Show the sidebar if it's hidden
-    reportSidebar.classList.add('active');
-    
-    // Process formatting: Replace \n with <br>, handle double \n as paragraphs
-    let cleanText = text.replace("[THE EDITOR]", "").trim();
-    
-    // 1. Unescape literal \n strings if they exist
-    cleanText = cleanText.replace(/\\n/g, "\n");
-    
-    // 2. Convert to HTML: Double newlines to paragraphs, single to breaks
-    const htmlContent = cleanText.split("\n\n").map(para => {
-        return `<p>${para.replace(/\n/g, "<br>")}</p>`;
-    }).join("");
-
-    reportBody.innerHTML = htmlContent;
-    reportBody.scrollTop = reportBody.scrollHeight;
-}
-
-function downloadReport() {
-    const text = reportBody.innerText;
-    const blob = new Blob([text], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Acme_Lab_Report_${new Date().toISOString().split('T')[0]}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-if (downloadBtn) downloadBtn.addEventListener('click', downloadReport);
-
-if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', () => {
-        reportSidebar.classList.toggle('active');
-    });
-}
-
-if (mobileReportsToggle) {
-    mobileReportsToggle.addEventListener('click', () => {
-        reportSidebar.classList.toggle('active');
-    });
-}
-
-// --- AUDIO LOGIC ---
-
-async function toggleMic() {
-    if (isMicActive) {
-        stopMic();
-    } else {
-        await startMic();
+    // Archive Section
+    html += '<li class="tree-item" style="font-weight:bold; color:#aaa;">📂 Archives</li>';
+    if (files.archive) {
+        Object.keys(files.archive).sort().reverse().slice(0, 5).forEach(year => {
+            html += `<li style="padding-left:10px; color:#666;">📅 ${year}</li>`;
+        });
     }
-}
 
-async function startMic() {
-    try {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-        }
-
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const source = audioContext.createMediaStreamSource(micStream);
-        
-        // We use a ScriptProcessorNode for simplicity in this "Class 1" design.
-        // In a production app, an AudioWorklet would be better for performance.
-        processor = audioContext.createScriptProcessor(4096, 1, 1);
-
-        processor.onaudioprocess = (e) => {
-            if (!isMicActive || !ws || ws.readyState !== WebSocket.OPEN) return;
-
-            const inputData = e.inputBuffer.getChannelData(0);
-            
-            // 1. Calculate RMS for the meter
-            let sum = 0;
-            for (let i = 0; i < inputData.length; i++) {
-                sum += inputData[i] * inputData[i];
-            }
-            const rms = Math.sqrt(sum / inputData.length);
-            audioMeter.style.width = `${Math.min(100, rms * 500)}%`;
-
-            // 2. Convert Float32 to Int16 (Signed PCM)
-            const pcmData = new Int16Array(inputData.length);
-            for (let i = 0; i < inputData.length; i++) {
-                // Clamp and scale
-                const s = Math.max(-1, Math.min(1, inputData[i]));
-                pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-            }
-
-            // 3. Send binary chunk
-            ws.send(pcmData.buffer);
-        };
-
-        source.connect(processor);
-        processor.connect(audioContext.destination);
-
-        isMicActive = true;
-        micBtn.classList.add('active');
-        meterContainer.style.display = 'block';
-        appendMsg("Microphone Active. Speak now...", "system-msg");
-
-    } catch (err) {
-        console.error("Mic Error:", err);
-        appendMsg(`Failed to access microphone: ${err.message}`, "system-msg");
+    // Workspace Section
+    html += '<li class="tree-item" style="font-weight:bold; color:#aaa; margin-top:10px;">📂 Workspace</li>';
+    if (files.drafts) {
+        files.drafts.forEach(f => {
+            const isActive = activeFile === f;
+            html += `<li class="tree-item file" onclick="selectFile('${f}')" style="${isActive ? 'color:var(--accent-color); font-weight:bold;' : ''}">
+                📄 ${f} ${isActive ? '<span class="active-file-tag">OPEN</span>' : ''}
+            </li>`;
+        });
     }
-}
-
-function stopMic() {
-    isMicActive = false;
-    micBtn.classList.remove('active');
-    meterContainer.style.display = 'none';
     
-    if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-    }
-    appendMsg("Microphone Muted.", "system-msg");
+    html += '</ul>';
+    fileTree.innerHTML = html;
 }
+
+window.selectFile = (filename) => {
+    activeFile = filename;
+    activeFilename.textContent = filename;
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: "select_file", filename: filename }));
+    }
+    appendMsg(`Opened ${filename} for editing.`, 'system-msg');
+    // Reload tree to show 'OPEN' tag
+    // (This will happen automatically on next server sync)
+};
 
 function connect() {
-    console.log("Connect function called");
-    // Determine target URL based on current hostname
     const targetUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? CONFIG.LOCAL_URL 
-        : CONFIG.REMOTE_URL;
+        ? CONFIG.LOCAL_URL : CONFIG.REMOTE_URL;
 
-    console.log(`Target URL selected: ${targetUrl}`);
-    appendMsg(`Connecting to ${targetUrl}...`, 'system-msg');
-    
     try {
         ws = new WebSocket(targetUrl);
-
         ws.onopen = () => {
             statusDot.className = 'status-dot online';
-            statusText.textContent = 'CONNECTED';
-            appendMsg("Uplink Established. Handshaking...", "system-msg");
-            
-            // Handshake (As per acme_lab.py requirements)
-            ws.send(jsonStr({ type: "handshake", version: CONFIG.VERSION }));
+            ws.send(JSON.stringify({ type: "handshake", version: CONFIG.VERSION }));
         };
-
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            handleServerMessage(data);
+            if (data.type === 'cabinet') {
+                updateFileTree(data.files);
+            } else if (data.brain) {
+                appendMsg(data.brain, "brain-msg", data.brain_source, data.channel || 'chat');
+            } else if (data.text) {
+                appendMsg(data.text, "user-msg", "Hearing...");
+            }
         };
-
         ws.onclose = () => {
             statusDot.className = 'status-dot offline';
-            statusText.textContent = 'DISCONNECTED';
-            appendMsg("Connection Lost. Reconnecting in 5s...", "system-msg");
             setTimeout(connect, 5000);
         };
-
-        ws.onerror = (err) => {
-            console.error("WS Error Details:", err);
-            appendMsg(`Uplink Error. Protocol: ${ws.protocol}, ReadyState: ${ws.readyState}`, "system-msg");
-            appendMsg("Check if 'acme.jason-lab.dev' requires Cloudflare Access login.", "system-msg");
-        };
-
-    } catch (e) {
-        appendMsg(`Failed to initiate connection: ${e.message}`, "system-msg");
-    }
-}
-
-function handleServerMessage(data) {
-    if (data.type === 'status') {
-        if (data.state === 'ready') {
-            appendMsg("Lab is Open. Pinky is listening.", "system-msg");
-            versionEl.textContent = `v${data.version || '???'}`;
-        }
-    } else if (data.brain) {
-        appendMsg(data.brain, "brain-msg", data.brain_source || "Brain");
-    } else if (data.type === 'final') {
-        // Deduplicate: If it's a text echo, ignore it (we already showed it locally)
-        if (data.source === 'text') {
-            console.log("Server echoed text input. Skipping UI append.");
-            return;
-        }
-        appendMsg(data.text, "user-msg", "SERVER_ECHO");
-    } else if (data.type === 'debug') {
-        appendMsg(`${data.event}: ${JSON.stringify(data.data)}`, "debug-msg", "Debug");
-    }
+    } catch (e) { console.error(e); }
 }
 
 function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
-
-    appendMsg(text, "user-msg", "LOCAL_ECHO");
-    ws.send(jsonStr({ type: "text_input", content: text }));
+    appendMsg(text, "user-msg", "Me");
+    ws.send(JSON.stringify({ type: "text_input", content: text }));
     inputEl.value = "";
 }
 
-function jsonStr(obj) { return JSON.stringify(obj); }
-
-// Event Listeners
+// Global Listeners
 if (sendBtn) sendBtn.addEventListener('click', sendMessage);
-if (micBtn) micBtn.addEventListener('click', toggleMic);
-if (inputEl) {
-    inputEl.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
-}
+if (inputEl) inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
-// --- UNIT TESTING / VERIFICATION ---
-
-// Hidden test function: run in browser console to verify binary streaming
-window.verifyAudioPipeline = (durationSec = 5) => {
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
-        console.error("WebSocket not connected.");
-        return;
-    }
-    
-    appendMsg(`Starting Virtual Mic Test (${durationSec}s)...`, "system-msg");
-    const sampleRate = 16000;
-    const chunkSize = 4096;
-    let elapsed = 0;
-
-        const interval = setInterval(() => {
-
-            // Generate a 440Hz sine wave as dummy audio
-
-            const pcmData = new Int16Array(chunkSize);
-
-            for (let i = 0; i < chunkSize; i++) {
-
-                const time = (elapsed * chunkSize + i) / sampleRate;
-
-                pcmData[i] = Math.sin(2 * Math.PI * 440 * time) * 10000;
-
-            }
-
-            
-
-            ws.send(pcmData.buffer);
-
-            elapsed++;
-
-    
-
-            if (elapsed * chunkSize / sampleRate >= durationSec) {
-
-                clearInterval(interval);
-
-                appendMsg("Virtual Mic Test Finished.", "system-msg");
-
-            }
-
-        }, (chunkSize / sampleRate) * 1000);
-
-    };
-
-    
-
-    // Start
-
-    window.addEventListener('DOMContentLoaded', () => {
-
-        console.log("DOM Loaded, starting connection...");
-
-        connect();
-
-    });
-
-    
+window.addEventListener('DOMContentLoaded', connect);
