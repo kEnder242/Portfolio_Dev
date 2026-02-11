@@ -4,7 +4,7 @@ console.log("Workbench Console v3.4.3 loading...");
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.4.0"
+    VERSION: "3.4.4"
 };
 
 let ws = null;
@@ -107,7 +107,9 @@ function connect() {
         };
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            if (data.type === 'cabinet') {
+            if (data.type === 'status') {
+                appendMsg(`${data.message} (v${data.version})`, 'system-msg', 'System');
+            } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
                 if (editor) editor.value(data.content);
