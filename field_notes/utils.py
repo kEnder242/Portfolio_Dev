@@ -109,13 +109,27 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
         json.dump(data, f, indent=2)
 
 def get_vram_usage():
+    """Reads real GPU memory from DCGM via Prometheus."""
     try:
-        cmd = "nvidia-smi --query-gpu=memory.used,memory.total --format=csv,nounits,noheader"
-        output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
-        used, total = map(int, output.split(','))
-        return used / total
-    except:
-        return 0.0
+        # FB_USED is in MiB in DCGM, FB_FREE is also available
+        # But we want a %
+        res_used = requests.get(PROMETHEUS_URL, params={"query": "DCGM_FI_DEV_FB_USED"}, timeout=1).json()
+        res_free = requests.get(PROMETHEUS_URL, params={"query": "DCGM_FI_DEV_FB_FREE"}, timeout=1).json()
+        
+        used = float(res_used['data']['result'][0]['value'][1])
+        free = float(res_free['data']['result'][0]['value'][1])
+        total = used + free
+        
+        return used / total if total > 0 else 0.0
+    except Exception as e:
+        # Fallback to nvidia-smi if Prometheus/DCGM is down
+        try:
+            cmd = "nvidia-smi --query-gpu=memory.used,memory.total --format=csv,nounits,noheader"
+            output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+            used, total = map(int, output.split(','))
+            return used / total
+        except:
+            return 0.0
 
 def get_system_load():
     try:
