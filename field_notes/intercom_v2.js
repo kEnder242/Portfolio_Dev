@@ -50,12 +50,15 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     const prefix = source ? `[${source.toUpperCase()}]: ` : "";
     msg.textContent = `${prefix}${text}`;
     
-    // Unified output: All go to primary chat
-    chatConsole.appendChild(msg);
-    chatConsole.scrollTop = chatConsole.scrollHeight;
+    // Primary Console Routing: Mute Brain output in main chat
+    const isBrain = channel === 'insight' || source.toLowerCase().includes('brain');
+    if (!isBrain) {
+        chatConsole.appendChild(msg);
+        chatConsole.scrollTop = chatConsole.scrollHeight;
+    }
 
-    // Duplicated output for Insight panel (Brain messages)
-    if (channel === 'insight' || source.toLowerCase() === 'brain') {
+    // Insight Panel Routing: Brain messages only
+    if (isBrain) {
         const iMsg = msg.cloneNode(true);
         insightConsole.appendChild(iMsg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
@@ -141,6 +144,7 @@ function connect() {
     const targetUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? CONFIG.LOCAL_URL : CONFIG.REMOTE_URL;
 
+    appendMsg(`Connecting to ${targetUrl}...`, 'system-msg');
     try {
         ws = new WebSocket(targetUrl);
         ws.onopen = () => {
