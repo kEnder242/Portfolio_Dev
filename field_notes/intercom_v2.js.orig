@@ -10,7 +10,6 @@ const CONFIG = {
 let ws = null;
 let activeFile = null;
 let editor = null;
-let isLoading = false;
 let audioContext = null;
 let processor = null;
 let micStream = null;
@@ -41,8 +40,6 @@ function initEditor() {
     });
 
     editor.codemirror.on("change", () => {
-        if (isLoading) return;
-        
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: "user_typing", timestamp: Date.now() }));
             
@@ -177,11 +174,7 @@ function connect() {
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
-                if (editor) {
-                    isLoading = true;
-                    editor.value(data.content);
-                    isLoading = false;
-                }
+                if (editor) editor.value(data.content);
                 appendMsg(`${data.filename} loaded.`, 'system-msg');
             } else if (data.brain) {
                 appendMsg(data.brain, "brain-msg", data.brain_source, data.channel || 'chat');

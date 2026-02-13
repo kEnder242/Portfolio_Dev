@@ -1,0 +1,32 @@
+--- Portfolio_Dev/field_notes/intercom_v2.js
++++ Portfolio_Dev/field_notes/intercom_v2.js
+@@ -12,6 +12,7 @@
+ let ws = null;
+ let activeFile = null;
+ let editor = null;
++let isLoading = false;
+ let audioContext = null;
+ let processor = null;
+ let micStream = null;
+@@ -43,6 +44,8 @@
+     });
+ 
+     editor.codemirror.on("change", () => {
++        if (isLoading) return;
++        
+         if (ws && ws.readyState === WebSocket.OPEN) {
+             ws.send(JSON.stringify({ type: "user_typing", timestamp: Date.now() }));
+             
+@@ -181,7 +184,11 @@
+             } else if (data.type === 'cabinet') {
+                 updateFileTree(data.files);
+             } else if (data.type === 'file_content') {
+-                if (editor) editor.value(data.content);
++                if (editor) {
++                    isLoading = true;
++                    editor.value(data.content);
++                    isLoading = false;
++                }
+                 appendMsg(`${data.filename} loaded.`, 'system-msg');
+             } else if (data.brain) {
+                 appendMsg(data.brain, "brain-msg", data.brain_source, data.channel || 'chat');
