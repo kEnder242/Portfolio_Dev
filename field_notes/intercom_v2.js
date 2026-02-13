@@ -25,6 +25,9 @@ const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
 
+let typingTimer;
+const AUTO_SAVE_DELAY = 5000; // 5 seconds
+
 function initEditor() {
     if (!document.getElementById('workspace-content')) return;
     editor = new EasyMDE({
@@ -34,6 +37,16 @@ function initEditor() {
         autosave: { enabled: false },
         status: ["lines", "words"],
         toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "side-by-side", "fullscreen", "|", "undo", "redo"]
+    });
+
+    editor.codemirror.on("change", () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: "user_typing", timestamp: Date.now() }));
+            
+            // Auto-save logic
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(window.saveWorkspace, AUTO_SAVE_DELAY);
+        }
     });
 }
 
