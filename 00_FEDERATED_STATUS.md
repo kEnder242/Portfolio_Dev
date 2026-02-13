@@ -29,12 +29,16 @@
 ## 🔮 The Roadmap
 *   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.
     *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to calculate and report completion % to `status.json`.
+*   **[ACTIVE] Sprint v3.6 "The Nightly Recruiter"**:
+    *   **[TODO] Job Search Engine**: Implement scheduled "Alarm Clock" task to search for jobs.
+    *   **[TODO] Phase 3.5: The Conscious Attendant**: Implement **Pre-Cache** (SIGTERM robustness) and **Ollama Persona Swap** (Parity).
+    *   **[TODO] Phase 4: The Hierarchical Mind**: Create **The Architect** node and tiered **Semantic Map**.
+    *   **[TODO] Phase 5: Refined Persona**: Implement **The Amygdala** (Strategic Uncertainty Sentinel) and **Juicy Tooling**.
 *   **[TODO] Sprint v3.5 "Last Mile"**:
-    *   **[TODO] Unified Patching**: Integrate `patch_file` tool into the agentic workflow (Replace "Chopstick Coding").
-    *   **[TODO] vLLM Alpha**: Speculative implementation of vLLM backend for Brain (Toggleable).
-    *   **[TODO] Workspace Auto-Save**: Implement local file persistence in `intercom_v2.js` before agent patches.
-    *   **[TODO] Sentinel Expansion**: Add more silicon-specific keywords (e.g., RAPL, MSR, IRQ) to Brain's listening loop.
-*   **[TODO] Observability Alignment**:
+    *   [DONE] **Unified Patching**: Integrate `patch_file` tool into the agentic workflow.
+    *   [DONE] **Workspace Auto-Save**: Implement local file persistence in `intercom_v2.js`.
+    *   **[TODO] Sentinel v2.0**: Implement "Strategic Uncertainty" interjection logic.
+*   **[LOWER PRIORITY] 3x3 CVT Builder**: Maintenance only.
     *   Standardize `status.html` telemetry windows to fix flakiness across tabs. *Reasoning: Ensure power and GPU metrics are temporally aligned for better diagnostic correlation.*
     *   **Status-Aware Dispatch**: Update Lab Attendant to report reasoning/dreaming states to the UI. *Reasoning: Give the user visibility into the "thought" state of the lab without manual log checking.*
 *   **[TODO] Bicameral Dispatch (Restoring Soul)**: Implement asynchronous interjections (Reflex Loop and Sentinel Mode). *Reasoning: Shift from a linear tool-calling chain to a dynamic, characterful interaction model.*

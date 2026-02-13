@@ -1,45 +1,37 @@
 # Bicameral Dispatch: System Design & Persona Architecture (v3.5)
 
-## Overview
-Transitioning from **Linear Triage** to **Asynchronous Dispatch**. The system moves from a "Request/Response" model to a "Multi-Stream Interjective" model.
+## 🏛️ The Acme Lab Taxonomy (The Glossary of Mind)
+These metaphors serve as architectural hints for system design:
 
-## 1. The Communication Hub (`acme_lab.py`)
+- **Corpus Callosum**: The Hub (`acme_lab.py`). The asynchronous bridge that manages hemispheric communication.
+- **The Amygdala**: The **Logic Structure**. The specific triage gate inside the Hub that decides, "This signal matches a known 'Scar' or 'Uncertainty'—wake the Brain now."
+- **The Sentinel**: The **Sensory State**. The active, low-power background listening loop (the "Eyes and Ears") that feeds the Amygdala.
+- **The Architect**: The **Hierarchy Refactoring**. A background node that decides how memories should be organized (e.g., "This belongs in the strategic Resume layer, not just tactical Notes").
+- **Dreaming**: The **Memory Consolidation**. Turning the day's tactical chatter into summarized "Wisdom."
+- **Sleeping Mind**: A resident model (Shared Weights) that is "Resident but Respendable" (Pre-cached).
+- **The Phone Ring**: An unscheduled user connection (WebSocket) that triggers an immediate "Wake."
+- **The Alarm Clock**: Scheduled background tasks (Job Search, Dreaming, Burn).
+- **Banter TTL**: Weighted decay that prevents infinite hemispheric arguments.
 
-### A. Reflex Loop & Contextual Handover
-- **Pinky's Reflexes:** Non-blocking task for character tics and environment alerts.
-- **Handover Logic:** When dispatching to the Brain, the Hub prepends Pinky's last 3 interactions. 
-- **Banter TTL:** To prevent infinite loops, interjections are limited to a "Banter TTL" of 2 turns before mandatory user yield.
+## 1. The Communication Hub (Corpus Callosum)
 
-### B. Sentinel Mode & Sentinel Insights
-- **Proactive Interjection:** Brain monitors audio/logs. If confidence > 0.85, it interjects to the **Insight Panel (Pink)**.
-- **Muted Console:** Brain remains silent in the main **Pinky Console (Blue)** unless explicitly asked.
+### A. The Amygdala (Sentinel v2.0)
+- **Logic:** Moves beyond brittle keywords. Brain interjects if it detects Pinky being too simplistic or if a "Validation Scar" from the archives is logically relevant.
+- **Trigger:** "Strategic Uncertainty"—detected logical gaps or requests for scaling.
 
-### C. Brain State Management (Offline Robustness)
-- **States:** `UNREACHABLE`, `PENDING_WAKE (WOL)`, `PRIMING`, `READY`.
-- **Bicameral Fallback:** If Brain is `UNREACHABLE`, Hub uses a "Stub" response (characterful "Brain is Napping"). Single-weight model swapping is backlogged for vLLM stabilization.
-- **Remote Model Pull:** Hub can trigger model downloads on the Windows host and report progress to the Insight panel.
+### B. The Sleeping State (Pre-Cache)
+- **Philosophy:** Weights remain resident in VRAM for instant response but are invalidated via **SIGTERM** by the Lab Attendant if a non-AI task (Game/Transcode) requests resources.
+- **Ollama Parity:** Implement prompt-swapping to allow Ollama to mimic vLLM persona concurrency (albeit slower).
 
-### F. State-Aware Listening (Intercom Context)
-- **Goal:** The Hub knows if you are TYPING, LISTENING, or IDLE.
-- **Logic:** Adaptive poller adapted from legacy `intercom.py`.
-- **Reflex Adjustment:** If you are TYPING, Pinky reduces his "Narf!" frequency to avoid spamming the console. If you are IDLE, he interjects more.
+## 2. Collaborative Workspace
 
-## 2. Collaborative Workspace (The "Mice" Toolset)
+### A. The Strategic Patch Tool
+- **Tool:** `patch_file`. Described to agents as "The Strategic Architect's Scalpel."
+- **Validation Vibe Check:** Upon a `💾 SAVE` event, the Brain performs active logic/code validation (e.g., race condition checks) rather than just acknowledging the save.
 
-### A. The Patch Tool (Unified Diff)
-- **Goal:** Move away from "Chopstick Coding" (brittle string replacement).
-- **Logic:** Both Pinky and Brain can generate and apply Unified Diffs to files in the `AcmeLab/workspace`.
-- **UI Interaction:** A "Save" button in `intercom.html` broadcasts a `WORKSPACE_SAVE` event. Pinky and Brain both "hear" this and can react with a validation vibe check.
-
-### B. Workspace Collision Handling
-- **Auto-Save:** User edits are auto-saved locally before an agent-initiated patch occurs.
-- **Agent Politeness:** Agents are forbidden from patching a file if the Hub state is `USER_TYPING`.
-
-## 3. Observational Memory (Continuous Burn v2.0)
-- **From RAG to State:** Transition from simple chunk retrieval to an "Observational World Model."
-- **The Librarian's Duty:** The background burn now builds a "Compressed History" JSON that serves as the Lab's short-term "Working Memory."
-- **Research Anchor:** [Observational Memory cuts AI agent costs 10x](https://venturebeat.com/data/observational-memory-cuts-ai-agent-costs-10x-and-outscores-rag-on-long)
-
-## 4. UI/UX Mapping
-- **Pinky (Right side, Blue):** Main chat console. Gateway/Reflexes.
-- **Brain (Left side, Pink):** Insight panel. Logic/Sentinel/Deep Thinking.
+### B. The Hierarchical Semantic Map
+- **Structure:** 
+    1. **Top Layer:** Resume/CVT (Strategic Summary).
+    2. **Middle Layer:** Insights/Focals (Technical themes).
+    3. **Bottom Layer:** Raw Notes (Detailed scars).
+- **Consumer:** Pinky uses the Semantic Map as his "Working Memory" to ground his reactive responses.
