@@ -129,9 +129,12 @@
         </div>
 
         <div id="workspace-container">
-            <div id="workspace-header">
-                <span>🌑 WORKSPACE</span>
-                <span id="active-filename" style="color:#555; font-weight: normal;">no file open</span>
+            <div id="workspace-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <span>🌑 WORKSPACE</span>
+                    <button class="icon-btn" onclick="saveWorkspace()" style="font-size: 0.6rem; padding: 2px 8px; height: 20px;">💾 SAVE</button>
+                </div>
+                <span id="active-filename" style="color:#555; font-weight: normal; font-size: 0.7rem;">no file open</span>
             </div>
             <textarea id="workspace-content"></textarea>
         </div>
@@ -139,6 +142,6 @@
 
     <script src="mission-control.js?v=bd431d08"></script>
     <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
-    <script src="intercom_v2.js?v=91a66c8f"></script>
+    <script src="intercom_v2.js?v=1921ccd3"></script>
 </body>
 </html>

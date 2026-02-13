@@ -184,10 +184,32 @@ function sendMessage() {
     inputEl.value = "";
 }
 
+window.saveWorkspace = () => {
+    if (!editor || !ws || ws.readyState !== WebSocket.OPEN) return;
+    const content = editor.value();
+    if (!activeFile) {
+        appendMsg("No file open to save.", "system-msg");
+        return;
+    }
+    ws.send(JSON.stringify({ 
+        type: "workspace_save", 
+        filename: activeFile, 
+        content: content 
+    }));
+    appendMsg(`Saved ${activeFile}. Agents notified.`, "system-msg");
+};
+
 // Global Listeners
 if (sendBtn) sendBtn.addEventListener('click', sendMessage);
 if (micBtn) micBtn.addEventListener('click', toggleMic);
-if (inputEl) inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+if (inputEl) {
+    inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    inputEl.addEventListener('input', () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: "user_typing", timestamp: Date.now() }));
+        }
+    });
+}
 
 window.addEventListener('DOMContentLoaded', () => {
     console.log("[INIT] DOM Loaded. Initializing Workbench...");

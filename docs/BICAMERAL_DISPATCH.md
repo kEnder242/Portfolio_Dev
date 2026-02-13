@@ -19,16 +19,21 @@ Transitioning from **Linear Triage** to **Asynchronous Dispatch**. The system mo
 - **Bicameral Fallback:** If Brain is `UNREACHABLE`, Hub uses a "Stub" response (characterful "Brain is Napping"). Single-weight model swapping is backlogged for vLLM stabilization.
 - **Remote Model Pull:** Hub can trigger model downloads on the Windows host and report progress to the Insight panel.
 
+### F. State-Aware Listening (Intercom Context)
+- **Goal:** The Hub knows if you are TYPING, LISTENING, or IDLE.
+- **Logic:** Adaptive poller adapted from legacy `intercom.py`.
+- **Reflex Adjustment:** If you are TYPING, Pinky reduces his "Narf!" frequency to avoid spamming the console. If you are IDLE, he interjects more.
+
 ## 2. Collaborative Workspace (The "Mice" Toolset)
 
 ### A. The Patch Tool (Unified Diff)
 - **Goal:** Move away from "Chopstick Coding" (brittle string replacement).
 - **Logic:** Both Pinky and Brain can generate and apply Unified Diffs to files in the `AcmeLab/workspace`.
-- **UI Interaction:** A "Save" event in the UI broadcasts to both nodes. Agents "notice" the save and can interject with a vibe check or validation.
+- **UI Interaction:** A "Save" button in `intercom.html` broadcasts a `WORKSPACE_SAVE` event. Pinky and Brain both "hear" this and can react with a validation vibe check.
 
 ### B. Workspace Collision Handling
-- **Auto-Save:** User edits are auto-saved locally before an agent-initiated file switch occurs.
-- **Dirty State:** If the user is typing, agents are "polite" and append suggestions to the **Whiteboard** instead of clobbering the active file.
+- **Auto-Save:** User edits are auto-saved locally before an agent-initiated patch occurs.
+- **Agent Politeness:** Agents are forbidden from patching a file if the Hub state is `USER_TYPING`.
 
 ## 3. Observational Memory (Continuous Burn v2.0)
 - **From RAG to State:** Transition from simple chunk retrieval to an "Observational World Model."

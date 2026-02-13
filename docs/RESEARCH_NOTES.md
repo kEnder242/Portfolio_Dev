@@ -15,3 +15,11 @@
 ### Unified Diffs (Patching)
 - **Concept:** Robust file editing using standard Unix diffs.
 - **Application:** The `patch_file` tool for agents to modify workspace documents without brittle string matching.
+
+### Ear Graph Re-compilation
+- **Concept:** Pre-compiling CUDA graphs for ASR/TTS to restore performance lost by the "Sledgehammer" fix.
+- **Task:** Investigate NeMo's graph caching mechanism for specific driver/GPU offsets.
+
+### Bicameral Awareness (Handover)
+- **Concept:** Brain being "aware" of Pinky's preceding interaction context.
+- **Application:** Prepending Pinky's triage to Brain prompts to enable banter and personality continuity.
