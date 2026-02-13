@@ -28,11 +28,16 @@
 
 ## 🔮 The Roadmap
 *   **[ACTIVE] Continuous Burn:** Indefinite refinement of technical gems.
-*   **[TODO] Round Table Lock:** Pause scans during active Intercom sessions.
-*   **[TODO] Fallback Dreaming:** Port Pinky fallback to memory consolidation.
-*   **[TODO] vLLM Integration:** Transition from Ollama to vLLM.
-*   **[TODO] Diamond-Weighted Retrieval:** Prioritize Rank 4 artifacts in RAG.
-*   **[TODO] TTT-Discover:** RL-based autonomous failure path discovery.
+    *   [TODO] **Burn Progress Tracking**: Update `mass_scan.py` to calculate and report completion % to `status.json`. *Reasoning: The dashboard needs to reflect real-world background progress to verify the "Slow Burn" is alive.*
+*   **[TODO] Observability Alignment**:
+    *   Standardize `status.html` telemetry windows to fix flakiness across tabs. *Reasoning: Ensure power and GPU metrics are temporally aligned for better diagnostic correlation.*
+    *   **Status-Aware Dispatch**: Update Lab Attendant to report reasoning/dreaming states to the UI. *Reasoning: Give the user visibility into the "thought" state of the lab without manual log checking.*
+*   **[TODO] Bicameral Dispatch (Restoring Soul)**: Implement asynchronous interjections (Reflex Loop and Sentinel Mode). *Reasoning: Shift from a linear tool-calling chain to a dynamic, characterful interaction model.*
+    *   [TODO] **Brain Offline Robustness**: Implement `Panic Mode` stubs and connection timeout handling. *Reasoning: Ensure the Intercom remains responsive if the 4090 host is down.*
+*   **[TODO] Semantic Architecture**:
+    *   **Deepen Semantic Map**: Generate hierarchical JSON from resumes (top), insights (middle), and raw notes (bottom). *Reasoning: Create a multi-layered RAG structure for high-fidelity career retrieval.*
+    *   **MCP Tool Research**: Investigate off-the-shelf MCP tools for system interaction. *Reasoning: Expand the "Mice" toolset beyond simple file writes.*
+*   **[TODO] vLLM Integration:** Transition from Ollama to vLLM (TABLED for stability).
 
 ---
 

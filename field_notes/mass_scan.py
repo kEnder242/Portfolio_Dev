@@ -108,20 +108,29 @@ def main():
 
         # 3. Artifact Map Refresh (Hybrid/Brain Mode)
         logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
-        update_status("ONLINE", "Refreshing Artifact Map...")
         years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
-        for year in years:
+        for idx, year in enumerate(years):
             if check_lock(lock_path): break
             while not vram_guard(): 
                 update_status("WAITING", "VRAM Cooling...")
                 time.sleep(60)
-            logging.info(f"Scanning Artifact Sector: {year} (Brain)")
+            
+            progress = int((idx / len(years)) * 100)
+            logging.info(f"Scanning Artifact Sector: {year} (Brain) [{progress}%]")
+            update_status("ONLINE", f"Scanning Artifacts: {year}", progress_pct=progress)
             run_task([ARTIFACT_SCANNER, year, "--hybrid"])
         
         if check_lock(lock_path): continue
 
         # 4. Notes Fast Burn
         logging.info("Step 4: Consuming Note Queue...")
+        initial_queue_size = 0
+        if os.path.exists(QUEUE_FILE):
+            try:
+                with open(QUEUE_FILE, 'r') as f:
+                    initial_queue_size = len(json.load(f))
+            except: pass
+
         while True:
             if check_lock(lock_path): break
             if not os.path.exists(QUEUE_FILE): break
@@ -136,8 +145,13 @@ def main():
                 time.sleep(60)
             
             task = queue[0]
-            logging.info(f"Processing: {task['id']} ({len(queue)} remaining)")
-            update_status("BUSY", f"Nibbling: {task['id']}", filename=task['filename'])
+            remaining = len(queue)
+            progress = 100
+            if initial_queue_size > 0:
+                progress = int(((initial_queue_size - remaining) / initial_queue_size) * 100)
+            
+            logging.info(f"Processing: {task['id']} ({remaining} remaining) [{progress}%]")
+            update_status("BUSY", f"Nibbling: {task['id']}", filename=task['filename'], progress_pct=progress)
             
             use_hybrid = "2024" in task['bucket'] or "PIAV" in task['filename']
             flag = "--hybrid" if use_hybrid else "--reasoning"

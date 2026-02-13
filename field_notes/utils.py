@@ -26,7 +26,7 @@ def get_total_events():
         except: pass
     return count
 
-def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
+def update_status(status, msg, new_items=0, filename=None, engine="Standard", progress_pct=None):
     current = {}
     if os.path.exists(STATUS_FILE):
         try:
@@ -99,6 +99,7 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard"):
         "total_events": get_total_events(),
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "engine": engine,
+        "progress_pct": progress_pct if progress_pct is not None else current.get("progress_pct", 0),
         "vitals": {
             "brain": "ONLINE" if brain_online else "OFFLINE",
             "intercom": "ONLINE" if intercom_online else "OFFLINE",

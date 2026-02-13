@@ -20,6 +20,23 @@
         }
         .vital-label { font-size: 0.75rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
         .vital-value { font-size: 1.2rem; font-weight: bold; font-family: var(--font-stack); }
+        
+        /* Burn Progress Bar */
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            height: 4px;
+            margin-top: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
         .status-led {
             display: inline-block;
             width: 10px;
@@ -82,6 +99,7 @@
                 <div class="vital-card">
                     <div class="vital-label">Scanner Engine</div>
                     <div class="vital-value" id="scanner-status"><span class="status-led led-offline"></span>OFFLINE</div>
+                    <div class="progress-container"><div class="progress-bar" id="burn-progress"></div></div>
                 </div>
                 <div class="vital-card">
                     <div class="vital-label">AI Brain</div>
@@ -128,10 +146,9 @@
 
     <script src="mission-control.js?v=bd431d08"></script>
     <script>
-        const consoleEl = document.getElementById('sys-console');
-        const root = document.getElementById('log-tree-root');
         const iframePower = document.getElementById('grafana-power');
         const iframeGpu = document.getElementById('grafana-gpu');
+        let currentTimeRange = '8h';
 
         function log(msg, type='info') {
             const div = document.createElement('div');
@@ -142,9 +159,16 @@
         }
 
         function updateTime(range) {
+            currentTimeRange = range;
             const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
             iframePower.src = `${base}&panelId=6&from=now-${range}&to=now`;
             iframeGpu.src = `${base}&panelId=8&from=now-${range}&to=now`;
+            
+            // Highlight active button
+            document.querySelectorAll('.icon-btn').forEach(btn => {
+                btn.style.borderColor = btn.textContent.toLowerCase() === range ? 'var(--accent-color)' : '#444';
+            });
+
             log(`Adjusting telemetry window to ${range}.`);
         }
 
@@ -164,12 +188,17 @@
                     const intercom = document.getElementById('intercom-status');
                     const vram = document.getElementById('vram-status');
                     const msg = document.getElementById('scanner-message');
+                    const progressBar = document.getElementById('burn-progress');
 
                     let ledClass = data.status === 'ONLINE' || data.status === 'IDLE' ? 'led-online' : (data.status === 'BUSY' ? 'led-busy' : 'led-offline');
                     if (data.yielded) ledClass = 'led-yielded';
 
                     scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.yielded ? 'YIELDED' : data.status}`;
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
+                    
+                    if (data.progress_pct !== undefined) {
+                        progressBar.style.width = data.progress_pct + '%';
+                    }
 
                     if (data.vitals) {
                         brain.innerHTML = `<span class="status-led ${data.vitals.brain === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.brain}`;

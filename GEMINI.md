@@ -67,7 +67,8 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 
 ## ❄️ COLD-START PROTOCOL (Environment Discovery)
 If the agent session is lost or restarted, refer to these anchors:
-1. **Infrastructure Secrets:** `~/.secrets/` (Contains `cloudflare_token` and other non-git keys).
+1. **The Soul of the Lab:** `Portfolio_Dev/docs/BICAMERAL_DISPATCH.md`.
+2. **Infrastructure Secrets:** `~/.secrets/` (Contains `cloudflare_token` and other non-git keys).
 2. **Project Secrets:** `Portfolio_Dev/monitor/secrets.json` (Contains PagerDuty and Cloudflare IDs).
 3. **Maintenance Mode:** `Portfolio_Dev/field_notes/data/maintenance.lock`. If this file exists, external alerts (NTFY/PD) are suppressed. Remove this file to resume live alerting.
 4. **Runtime Safe-Zone:** `~/AcmeLab` is the production host for background services.
