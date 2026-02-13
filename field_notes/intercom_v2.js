@@ -233,6 +233,31 @@ if (inputEl) {
 
 window.addEventListener('DOMContentLoaded', () => {
     console.log("[INIT] DOM Loaded. Initializing Workbench...");
+
+    // --- Resizer Logic ---
+    const resizer = document.getElementById('resizer');
+    const consoleRow = document.getElementById('console-row');
+    const workspaceContainer = document.getElementById('workspace-container');
+
+    if (resizer) {
+        let isResizing = false;
+        resizer.addEventListener('mousedown', () => { isResizing = true; });
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const main = document.querySelector('main');
+            const mainRect = main.getBoundingClientRect();
+            const relativeY = e.clientY - mainRect.top;
+            const containerHeight = main.offsetHeight;
+            const newConsoleHeight = (relativeY / containerHeight) * 100;
+
+            if (newConsoleHeight > 10 && newConsoleHeight < 80) {
+                consoleRow.style.height = `${newConsoleHeight}%`;
+                workspaceContainer.style.height = `${90 - newConsoleHeight}%`;
+            }
+        });
+        document.addEventListener('mouseup', () => { isResizing = false; });
+    }
+
     try {
         initEditor();
     } catch (e) {
