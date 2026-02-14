@@ -16,11 +16,10 @@
 4.  **Nightly Recruiter:** Scheduled Alarm Clock task for job matching verified.
 
 ## 🔮 The Roadmap
-*   **[ACTIVE] Sprint v3.6 "The Nightly Recruiter"**:
-    *   **[TODO] Job Search Engine**: Implement scheduled "Alarm Clock" task to search for jobs.
-    *   **[TODO] Gem: The Pre-warm Lobby**: Implement predictive Brain loading during Pinky triage.
-    *   **[TODO] Gem: Amygdala v2.1**: Refine Sentinel logic into a true "Uncertainty Gate."
-    *   **[TODO] Gem: Alluring Instrumentation**: Deep-dive tool descriptions enticing for agentic use.
+*   **[ACTIVE] Sprint: Project "Resurrection" (Feb 14, 2026)**:
+    *   **Goal:** Restore Lost Strategic Gems and Baseline Silicon (Liger).
+    *   **Plan:** **[HomeLabAI/docs/plans/SPRINT_RECOVERY_FEB_14.md](../HomeLabAI/docs/plans/SPRINT_RECOVERY_FEB_14.md)**.
+    *   **Next Task:** **Phase 1.1: Liger Restoration.**
 *   **[TODO] Phase 3.5: The Conscious Attendant**: Finalize **Pre-Cache** weight residency.
 *   **[TODO] Phase 4: The Hierarchical Mind**: Connect Pinky as a **Consumer** of the Semantic Map.
 *   **[TODO] Phase 5: Refined Persona**: Implement **Strategic Vibe Check** validation logic.
@@ -31,3 +30,6 @@
 ### Website Build (Cache-Busting)
 To force-clear browser caches after UI changes, run the automated build script:
 `python3 field_notes/build_site.py`
+
+### Diagnostic Instruments
+Refer to **[HomeLabAI/docs/DIAGNOSTIC_RUNDOWN.md](../HomeLabAI/docs/DIAGNOSTIC_RUNDOWN.md)** for silicon verification and test suites.
