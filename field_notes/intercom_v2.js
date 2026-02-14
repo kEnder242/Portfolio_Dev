@@ -62,7 +62,9 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     }
 
     const msg = document.createElement('div');
-    msg.className = `message ${type}`;
+    // If source is System, we force system-msg type to get gray style
+    const msgType = (source && source.toLowerCase() === "system") ? "system-msg" : type;
+    msg.className = `message ${msgType}`;
     const prefix = source ? `[${source.toUpperCase()}]: ` : "";
     msg.textContent = `${prefix}${text}`;
     
