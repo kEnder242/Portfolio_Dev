@@ -71,6 +71,7 @@
             flex-direction: column;
             box-shadow: inset 5px 0 10px rgba(0,0,0,0.5);
             overflow: hidden;
+            min-height: 300px; /* Higher min-height to force growth */
         }
         #workspace-header {
             background: #1a1a1a;
@@ -92,6 +93,7 @@
             background: #111; color: #ccc; border-color: #333; 
             font-family: 'Courier New', Courier, monospace;
             flex: 1; /* Key for scaling */
+            height: auto;
         }
         .CodeMirror-scroll { min-height: 100px; }
         .CodeMirror-cursor { border-left: 2px solid #fff !important; }
