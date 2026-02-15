@@ -11,8 +11,9 @@
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Abstracted Silicon:** S/M/L model tiering and hardware-agnostic resilience ladder verified.
-2.  **Protocol Restoration:** Checkpoint, Co-Pilot, and Immutability rules codified and enforced.
-3.  **Conscious Attendant:** Robust SIGTERM and VRAM budgeting via NVML verified.
+2.  **Safe Scalpel v3.0:** Lint-verified Unified Patching integrated across the Federated Mind.
+3.  **Generalization:** Model-aware Liger-Kernels and non-blocking Silicon Hygiene verified.
+4.  **Protocol Integrity:** Checkpoint, Co-Pilot, and Immutability rules enforced.
 2.  **Hierarchical Mind:** Architect Node verified and tiered Semantic Map generated.
 3.  **Collaborative Workbench:** Workspace Save event and strategic vibe check active.
 4.  **Nightly Recruiter:** Scheduled Alarm Clock task for job matching verified.
