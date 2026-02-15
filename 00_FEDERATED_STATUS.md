@@ -18,9 +18,14 @@
 6.  **Hierarchical Mind:** Architect Node verified and tiered Semantic Map generated.
 
 ## 🔮 The Roadmap
-*   **[ACTIVE] Project "Resurrection" (Feb 14, 2026)**:
+*   **[ACTIVE] Project "Resurrection" (Feb 14-15, 2026)**:
     *   **Goal:** Harden the Federated Mind through Abstraction and Stability.
     *   **Current Focus:** **Amygdala v3 (Contextual interjection logic).**
+    *   **Loose Ends (Feb 15 morning):**
+        *   [TODO] **Banter Verification**: Validate Weighted TTL Decay after token crash.
+        *   [TODO] **Liger Generalization**: Move beyond Mistral hard-patch for S/M/L tiers.
+        *   [TODO] **Semantic Map Consumption**: Connect Pinky to Architect's strategic map.
+        *   [TODO] **Strategic Vibe Check**: Implement validation for manual saves.
 *   **[TODO] Phase 4: The Hierarchical Mind**: Connect Pinky as a **Consumer** of the Semantic Map.
 *   **[TODO] Phase 5: Refined Persona**: Implement **Strategic Vibe Check** validation logic.
 
