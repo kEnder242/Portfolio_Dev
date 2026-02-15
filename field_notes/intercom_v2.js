@@ -277,7 +277,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
             if (newConsoleHeight > 10 && newConsoleHeight < 80) {
                 consoleRow.style.height = `${newConsoleHeight}%`;
-                workspaceContainer.style.height = `${90 - newConsoleHeight}%`;
+                // Ensure workspace fills the remaining space minus some padding for input
+                workspaceContainer.style.flex = "1";
+                workspaceContainer.style.height = "auto"; 
+                
+                // Explicitly tell EasyMDE to refresh its internal heights
+                if (editor && editor.codemirror) {
+                    editor.codemirror.refresh();
+                }
             }
         });
         document.addEventListener('mouseup', () => { isResizing = false; });

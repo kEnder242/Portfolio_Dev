@@ -78,9 +78,15 @@
         .editor-toolbar { background: #1a1a1a; border-color: #333; color: #ccc; }
         .editor-toolbar i { color: #888 !important; }
         .editor-toolbar a.active, .editor-toolbar a:hover { background: #333; border-color: #444; }
-        .CodeMirror { background: #111; color: #ccc; border-color: #333; font-family: 'Courier New', Courier, monospace; }
+        .CodeMirror { 
+            background: #111; color: #ccc; border-color: #333; 
+            font-family: 'Courier New', Courier, monospace;
+            flex: 1; /* Key for scaling */
+        }
+        .CodeMirror-scroll { min-height: 100px; }
         .CodeMirror-cursor { border-left: 2px solid #fff !important; }
-        .editor-statusbar { color: #555; }
+        .editor-statusbar { background: #1a1a1a; color: #555; padding: 4px 10px; border-top: 1px solid #333; }
+        .editor-wrapper { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
 
         #filing-cabinet { margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; }
         .cabinet-title { font-size: 0.7rem; color: #555; text-transform: uppercase; margin-bottom: 10px; }
