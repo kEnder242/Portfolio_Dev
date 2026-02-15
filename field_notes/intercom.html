@@ -40,7 +40,6 @@
             padding: 10px;
             border: 1px solid #333;
             border-radius: 4px;
-            order: 3; /* Move to bottom */
         }
         #text-input {
             flex-grow: 1;
@@ -121,17 +120,18 @@
             </div>
         </div>
 
+        <div id="resizer" style="height: 8px; background: #222; cursor: row-resize; border-top: 1px solid #333; border-bottom: 1px solid #333;"></div>
+
         <div id="input-container">
             <button id="mic-btn" class="icon-btn">🎤</button>
             <input type="text" id="text-input" placeholder="Communicate with the Lab..." autofocus>
             <button id="send-btn" class="icon-btn" style="min-width: 60px;">SEND</button>
+            <div id="system-status" style="font-size: 0.7rem; color: #666; font-family: monospace; margin-left: 10px; white-space: nowrap;">[SYSTEM] IDLE</div>
             <div class="status-panel" style="margin-left: auto; border: none; padding: 0;">
                 <span id="connection-dot" class="status-dot offline"></span>
                 <span id="lab-version" style="font-size: 0.6rem; color: #444;">v3.4.0</span>
             </div>
         </div>
-
-        <div id="resizer" style="height: 8px; background: #222; cursor: row-resize; border-top: 1px solid #333; border-bottom: 1px solid #333;"></div>
 
         <div id="workspace-container">
             <div id="workspace-header" style="display: flex; justify-content: space-between; align-items: center;">

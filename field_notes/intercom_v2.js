@@ -25,6 +25,29 @@ const inputEl = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
+const systemStatusEl = document.getElementById('system-status');
+
+function pollSystemStatus() {
+    const el = document.getElementById('system-status');
+    if (!el) return;
+    fetch('data/status.json?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            let statusText = data.vitals?.mode || data.status || 'OFFLINE';
+            if (data.vitals?.model) statusText += ` (${data.vitals.model})`;
+            el.textContent = `[SYSTEM] ${statusText}`;
+            
+            // Color coding
+            if (data.vitals?.mode === 'SWAPPING' || data.vitals?.mode === 'DOWNSHIFTING') {
+                el.style.color = '#ffc107'; 
+            } else if (data.status === 'ONLINE' || data.status === 'IDLE') {
+                el.style.color = '#28a745'; 
+            } else {
+                el.style.color = '#666';
+            }
+        })
+        .catch(err => console.error("System status poll failed", err));
+}
 
 let typingTimer;
 const AUTO_SAVE_DELAY = 5000; // 5 seconds
@@ -268,6 +291,8 @@ window.addEventListener('DOMContentLoaded', () => {
     
     try {
         connect();
+        pollSystemStatus();
+        setInterval(pollSystemStatus, 5000);
     } catch (e) {
         console.error("[INIT] Connection failed:", e);
     }

@@ -102,8 +102,12 @@
                     <div class="progress-container"><div class="progress-bar" id="burn-progress"></div></div>
                 </div>
                 <div class="vital-card">
-                    <div class="vital-label">AI Brain</div>
-                    <div class="vital-value" id="brain-status"><span class="status-led led-offline"></span>OFFLINE</div>
+                    <div class="vital-label">Silicon Mode</div>
+                    <div class="vital-value" id="engine-mode"><span class="status-led led-offline"></span>OFFLINE</div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-label">Active Model</div>
+                    <div class="vital-value" id="model-name">-</div>
                 </div>
                 <div class="vital-card">
                     <div class="vital-label">Web Intercom</div>
@@ -201,7 +205,15 @@
                     }
 
                     if (data.vitals) {
-                        brain.innerHTML = `<span class="status-led ${data.vitals.brain === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.brain}`;
+                        const engineEl = document.getElementById('engine-mode');
+                        const modelEl = document.getElementById('model-name');
+                        
+                        let engineClass = data.vitals.brain === 'ONLINE' ? 'led-online' : 'led-offline';
+                        if (data.vitals.mode === 'SWAPPING' || data.vitals.mode === 'DOWNSHIFTING') engineClass = 'led-busy';
+                        
+                        engineEl.innerHTML = `<span class="status-led ${engineClass}"></span>${data.vitals.mode || 'OFFLINE'}`;
+                        modelEl.textContent = data.vitals.model || '-';
+                        
                         intercom.innerHTML = `<span class="status-led ${data.vitals.intercom === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.intercom}`;
                         vram.textContent = data.vitals.vram;
                     }
