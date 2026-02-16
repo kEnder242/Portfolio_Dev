@@ -32,6 +32,7 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
 *   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.
 *   **[Weights & Measures Retrospective (Feb 15)](./RETROSPECTIVE_MARATHON_FEB_15.md)**: Headroom & Stability results.
 *   **[Test Sweep Retrospective (Feb 15)](./RETROSPECTIVE_TEST_SWEEP_FEB_15.md)**: Breadth-first validation results.
+*   **[Final Sweep Retrospective (Feb 15)](./RETROSPECTIVE_FINAL_SWEEP_FEB_15.md)**: Full-stack hardening & harness consolidation.
 
 ## 🧹 Housekeeping & Drift Report (Feb 2026)
 *Status: Pending Review*
