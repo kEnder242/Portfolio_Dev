@@ -13,6 +13,7 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
     *   **Access Control Layer:** (New) BKM for Cloudflare Access Requests.
     *   Fragility Report (Mobile caching, JSON hallucination).
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines how this static portfolio connects to the broader `HomeLabAI` system (Shared Venv, Symlinks, Data flow).
+*   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Technical inventory of all agentic tools and node duties.
 *   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Silicon Core.** Roadmap for high-throughput, multi-node inference on the 2080 Ti using the Unified Gemma 2 2B base.
 
 ## 🛠️ Protocols & Procedures
