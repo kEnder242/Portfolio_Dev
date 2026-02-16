@@ -28,6 +28,11 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
 *   **[FIELD_NOTES_PLAN.md](./FIELD_NOTES_PLAN.md)**: **The Roadmap.** (Partially Deprecated). Original master plan. Check `GEMINI.md` for current status.
 *   **[INTERVIEW_CHEAT_SHEET.md](./INTERVIEW_CHEAT_SHEET.md)**: **Study Material.** Active document for interview prep.
 
+## 🏺 Engineering Pedigree (Scars & Lessons)
+*   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.
+*   **[Weights & Measures Retrospective (Feb 15)](./RETROSPECTIVE_MARATHON_FEB_15.md)**: Headroom & Stability results.
+*   **[Test Sweep Retrospective (Feb 15)](./RETROSPECTIVE_TEST_SWEEP_FEB_15.md)**: Breadth-first validation results.
+
 ## 🧹 Housekeeping & Drift Report (Feb 2026)
 *Status: Pending Review*
 
