@@ -8,7 +8,7 @@ The Field Notes project evolved from a simple static "War Story" collection into
 ## 🏗️ The "Slow Burn" Architecture
 To handle large-scale data without impacting host performance, we implemented a decoupled pipeline:
 
-1.  **The Librarian (`scan_librarian.py`):** Classifies raw files into `LOG` (chronological), `REFERENCE` (technical docs), or `META` (strategic context) using Mistral-7B headers/mid-point sampling.
+1.  **The Librarian (`scan_librarian.py`):** Classifies raw files into `LOG` (chronological), `REFERENCE` (technical docs), or `META` (strategic context) using Llama-3.2-3B headers and high-speed sub-token sampling.
 2.  **The Queue Manager (`scan_queue.py`):** Date-aware chunking engine. Breaks multi-year files into `YYYY-MM` buckets and queues only new/modified content.
 3.  **The Nibbler (`nibble.py`):** A load-aware background worker. Wakes every 15m, checks Prometheus for CPU idle, and processes ONE chunk.
 4.  **Data Tiering:**

@@ -24,7 +24,7 @@ The backend is a sophisticated AI pipeline that indexes 18 years of raw engineer
 ```mermaid
 graph TD
     A[Raw Notes] -->|Librarian| B(Timeline Queue)
-    B -->|Nibbler Script| C{"Pinky (Mistral-7B)"}
+    B -->|Nibbler Script| C{"Pinky (Llama-3.2-3B)"}
     A -->|Artifact Scanner| C
     C -->|Events & Redaction| D[Timeline Data]
     C -->|Rank & Synopsis| E[Artifact Map Data]
@@ -79,7 +79,7 @@ These services ensure the platform is always available:
 This project was architected and implemented in an agentic loop with **Google Gemini CLI**.
 *   **Concept & Strategy:** Jason Allred
 *   **Code & Integration:** Gemini CLI (Agent)
-*   **Indexing Engine:** "Pinky" (Local Mistral-7B)
+*   **Indexing Engine:** "Pinky" (Local Llama-3.2-3B)
 
 ---
 *Status: Live & Operational.*

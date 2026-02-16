@@ -24,7 +24,7 @@
 ### Phase 4-6: The Data Pipeline
 - [x] **Librarian:** Automated file classification (Log vs Ref).
 - [x] **Queue:** Date-aware chunking and hash tracking.
-- [x] **Nibbler:** Load-aware background AI worker (Mistral-7B).
+- [x] **Nibbler:** Load-aware background AI worker (Llama-3.2-3B). Optimized for high-fidelity instruction following.
 
 ### Phase 7-9: The System Admin UI
 - [x] **Blue Tree:** Indented ASCII-style directory navigation.

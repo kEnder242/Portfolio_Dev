@@ -14,7 +14,7 @@ graph TD
         B --> C[Librarian]
         C -->|manifest.json| D[Queue Manager]
         D -->|queue.json| E[Nibbler]
-        E -->|mistral:7b| F[JSON Artifacts]
+        E -->|llama-3.2-3b-awq| F[JSON Artifacts]
     end
 
     subgraph "Infrastructure"

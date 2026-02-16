@@ -6,7 +6,7 @@ import re
 
 # Configuration
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "mistral:7b"
+MODEL = "llama-3.2-3b-awq"
 NOTES_GLOB = "raw_notes/notes_*.txt"
 
 def read_file(path):

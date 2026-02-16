@@ -5,7 +5,7 @@
 ---
 
 ## 1. The Mission
-We have a "Brain" (Pinky/Mistral-7B) running on local hardware. We need to see how much energy it consumes and how hot it runs *without* manually checking logs.
+We have a "Brain" (Pinky/Llama-3.2-3B) running on local hardware. We need to see how much energy it consumes and how hot it runs *without* manually checking logs.
 **Goal:** Build a "Mission Control" dashboard that visualizes System Load, Temperature, and Power Consumption in real-time.
 
 ## 2. The Stack (Infrastructure as Code)

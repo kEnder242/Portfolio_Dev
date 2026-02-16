@@ -10,14 +10,14 @@ from ai_engine import OllamaClient, get_engine, CognitiveEngine
 try:
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from liger_kernel.transformers import apply_liger_kernel_to_mistral
+    from liger_kernel.transformers import apply_liger_kernel_to_llama
     HAS_LIGER = True
 except ImportError:
     HAS_LIGER = False
 
 # --- CONFIGURATION ---
-DEFAULT_MODEL = "mistral:7b"
-DMA_MODEL_PATH = "mistralai/Mistral-7B-Instruct-v0.3"
+DEFAULT_MODEL = "llama-3.2-3b-awq"
+DMA_MODEL_PATH = "casperhansen/llama-3.2-3b-instruct-awq"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 VLLM_URL = "http://localhost:8088/v1/completions"
 DATA_DIR = "field_notes/data"
@@ -27,7 +27,7 @@ class VLLMClient(OllamaClient):
     """
     OpenAI-compatible client for vLLM server.
     """
-    def __init__(self, url=VLLM_URL, model="TheBloke/Mistral-7B-Instruct-v0.2-GGUF"):
+    def __init__(self, url=VLLM_URL, model="llama-3.2-3b-awq"):
         super().__init__()
         self.url = url
         self.model = model
@@ -69,15 +69,14 @@ class LigerEngine(OllamaClient):
         if self._initialized: return
         logging.info(f"Initializing LigerEngine with {self.model_path}...")
         try:
-            apply_liger_kernel_to_mistral()
+            # Llama 2, 3, 3.1, and 3.2 share the same base architecture in Liger
+            apply_liger_kernel_to_llama()
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_path,
-                torch_dtype=torch.bfloat16,
+                torch_dtype=torch.float16,
                 device_map="auto"
             )
-            # Apply torch.compile for extra speed
-            self.model = torch.compile(self.model)
             self._initialized = True
             logging.info("LigerEngine initialized successfully.")
         except Exception as e:

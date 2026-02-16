@@ -2,7 +2,7 @@
 **Goal:** Step-by-step restoration of the Gemma 2 2B Stable Baseline.
 
 ## BKM-014.1: The Identity Shift (Gemma Baseline)
-**Trigger**: VRAM exhaustion on 11GB RTX 2080 Ti with Mistral-7B.
+**Trigger**: VRAM exhaustion on 11GB RTX 2080 Ti with larger models (e.g., Mistral).
 **One-Liner**: `ollama pull gemma2:2b`
 **Core Logic**: 
 - Shift identity to Gemma 2 2B for superior JSON tool-calling at 1/4 the VRAM cost.

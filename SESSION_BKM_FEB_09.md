@@ -11,7 +11,7 @@ All background tasks and scanner scripts require an explicit `PYTHONPATH` to res
 ### 2. Debug Tools
 *   `dump_stream.py`: View the "short-term memory" (interaction logs) currently waiting for synthesis.
 *   `clean_duplicates.py`: Manual archive maintenance to remove redundant entries.
-*   `refine_gem.py`: Manual fidelity upgrade. Use to test Brain (4090) vs. Pinky (Mistral) fallback logic.
+*   `refine_gem.py`: Manual fidelity upgrade. Use to test Brain (4090) vs. Pinky (Llama-3.2-3B) fallback logic.
 *   `scan_expertise.py`: Re-index the hierarchical Best Known Method (BKM) directory.
 
 ### 3. Critical Fixes (v3.1.9)

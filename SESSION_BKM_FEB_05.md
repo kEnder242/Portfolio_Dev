@@ -4,7 +4,7 @@
 
 ## 1. PREPARATION: The Collaborative Foundation
 *   **Gemini Conductor:** `gemini extensions install https://github.com/gemini-cli-extensions/conductor --consent --auto-update`
-*   **Local LLM Proxy:** Verify `ollama` is listening at `localhost:11434`. Configure LiteLLM (if needed) to allow the Gemini CLI to offload "Big Text" (logs/notes) processing to local Mistral/Llama3 models to save token costs.
+*   **Local LLM Proxy:** Verify `ollama` is listening at `localhost:11434`. Configure LiteLLM (if needed) to allow the Gemini CLI to offload "Big Text" (logs/notes) processing to local Llama3.2/Llama3 models to save token costs.
 *   **Feedback Loop:** All major tracks must start with `gemini conductor track start [track_name]`.
 
 ## 2. THE CORE LOGIC: HomeLabAI Diagnostics (The Brain)

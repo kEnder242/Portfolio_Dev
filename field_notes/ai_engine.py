@@ -3,7 +3,7 @@ import json
 import logging
 
 # --- CONFIGURATION ---
-DEFAULT_MODEL = "mistral:7b"
+DEFAULT_MODEL = "llama-3.2-3b-awq"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 class CognitiveEngine:

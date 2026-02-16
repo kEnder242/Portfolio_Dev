@@ -6,7 +6,7 @@
 The `HomeLabAI/AGENTS.md` manifesto is active. It codifies the "Class 1" design, BKM Protocol, and the **NEVER PUSH** safety rule.
 
 ## 2. Environment Audit
-- **Ollama (11434):** **ONLINE**. Available: `mistral:7b`, `nomic-embed-text`.
+- **Ollama (11434):** **ONLINE**. Available: `llama-3.2-3b-awq`, `nomic-embed-text`.
 - **Prometheus (9090):** **ONLINE**. `node_load1` = `0.1`.
 - **Data Integrity:** `file_manifest.json` and `queue.json` verified.
 
@@ -14,9 +14,9 @@ The `HomeLabAI/AGENTS.md` manifesto is active. It codifies the "Class 1" design,
 This upgrade is grounded in the following technical benchmarks:
 
 ### A. TTCS (Test-Time Curriculum Synthesis - 2601.22628)
-- **Insight:** Using a "Synthesize-then-Solve" loop to prevent shallow summaries.
+- **Insight:** Using a "Synthesize-then-Solve" loop to ground reasoning in evidence.
 - **Implementation:** `CurriculumEngine` will prompt Pinky to generate 3 "Technical Anchors" from raw notes, solve them, and use the results to build the final high-density BKM entry.
-- **Relevance:** Ensures 18 years of validation logic isn't lost to LLM "lazy" bullet points.
+- **Relevance:** Mitigates repetition loops and ensures 18 years of validation logic isn't lost to shallow summaries.
 
 ### B. FS-Researcher (File-System Memory Scaling - 2602.01566)
 - **Insight:** Persistent file systems are superior to LLM context windows for long-horizon tasks.

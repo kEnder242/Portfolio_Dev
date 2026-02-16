@@ -7,15 +7,16 @@ The overnight session of February 14-15 was a high-stakes stabilization sprint f
 ## II. The Silicon Wall: VRAM & Liger Stabilization
 
 ### The Problem
-Initial attempts to boot the vLLM engine (Mistral-7B-AWQ) failed repeatedly. Diagnostic logs identified that a memory utilization setting of `0.3` was insufficient to allocate the necessary KV cache blocks, while higher settings risked clashing with the NeMo EarNode (~1.5GB) and system overhead.
+Initial attempts to boot larger 7B models (Mistral-7B-AWQ) on the 11GB RTX 2080 Ti encountered recurring stability issues and VRAM exhaustion when combined with the sensory EarNode.
 
 ### The Learning (Scars)
-*   **VRAM Floor**: `0.4` is the absolute floor for Mistral-7B-AWQ KV cache allocation. We landed on **`0.5`** to ensure stability during long-context reasoning.
+*   **VRAM Floor**: `0.4` is the absolute floor for the KV cache allocation. We landed on **`0.5`** to ensure stability during long-context reasoning.
+*   **The Llama Shift**: To maximize VRAM efficiency, the Lab transitioned to **Llama-3.2-3B-AWQ** as the unified Large tier. This provided high fidelity at a significantly lower memory footprint (~2.5GB).
 *   **Eager Mode Mandatory**: Disabling CUDA Graphs via `--enforce-eager` was required to reclaim ~1GB of VRAM, providing the headroom needed for the EarNode and secondary residents.
 *   **V1 Engine Instability**: The experimental vLLM V1 engine was identified as a source of silent crashes. **`VLLM_USE_V1=0`** was hard-set as a global requirement.
 
 ### The Solution
-We implemented `vllm_liger_server.py`, a specialized wrapper that applies Liger-Kernels to the Mistral architecture before initialization. This allows for high-throughput, memory-efficient inference within the 11GB budget.
+We implemented `vllm_liger_server.py`, a specialized wrapper that applies Liger-Kernels to the transformer architecture before initialization. This allows for high-throughput, memory-efficient inference within the 11GB budget.
 
 ## III. Strategic Tool Restoration (The Scalpel Pass)
 Following the "v3.5 Refactor," several high-value agentic capabilities were missing. We surgically restored:
@@ -51,7 +52,7 @@ The session ended abruptly after verification due to a **1.09M token limit overf
   <goal>Hardening the Federated Lab and restoring high-fidelity voice and reasoning.</goal>
   <constraints>VRAM 11GB (RTX 2080 Ti), Safe Scalpel v3.0, Absolute Pathing.</constraints>
   <knowledge>
-    - Liger-Kernels applied to Mistral architecture.
+    - Liger-Kernels applied to underlying model architectures.
     - vLLM optimized at 0.5 utilization with --enforce-eager.
     - Recursive Dispatcher v7 handles malformed/nested JSON triage.
     - Filing Cabinet synced with 145 items from the 18-year archive.
