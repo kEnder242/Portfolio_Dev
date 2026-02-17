@@ -1,5 +1,6 @@
 # Feature Tracker (FeatureTracker.md)
 **Status:** ACTIVE | **Version:** 1.0 (Initial Identity)
+**Design Reference:** [FeatureTrackerDesign.md](./FeatureTrackerDesign.md)
 
 ## 🎯 Goal Section
 Use this file as a guiding tool when refactoring code to minimize feature drift and prevent the accidental loss of critical logic. This is the **Map Room**—it tracks the "Why" and identifies how we want the system to be based on explicit architectural buy-in.
