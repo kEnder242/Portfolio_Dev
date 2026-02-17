@@ -19,6 +19,8 @@ Use this file as a guiding tool when refactoring code to minimize feature drift 
 | `[FEAT-001]` | **Unity Pattern** | Llama-3.2-3B + vLLM -> Ensures 3.6GB VRAM headroom for resident EarNode on 11GB silicon. | `start_vllm.sh`, `lab_attendant.py` | BKM: Weights & Measures | `smoke_gate.py` |
 | `[FEAT-002]` | **Montana Protocol** | Sequential Init + Logger Control -> Recovered from Feb 11 "Total Driver Loss." Prevents logger hijacking by NeMo/Chroma. | `acme_lab.py`, `loader.py` | Retrospective: Bladerunner Forensic | `stability_marathon_v2.py` |
 | `[FEAT-003]` | **Lab Attendant** | Non-blocking Background Boot -> Decouples orchestrator from inference engine to prevent Signal 9 timeout crashes. | `lab_attendant.py` | BKM: Boot Protocol v4 | `/heartbeat` |
+| `[FEAT-016]` | **Autonomous Watchdog**| Active Port Verification (8765) -> Automatically restarts Lab Server if port bind is lost, preventing zombie states. | `lab_attendant.py` | BKM: Resilience Ladder | `vram_watchdog_loop` |
+| `[FEAT-017]` | **Stable Bootstrapper** | `start_lab.sh` + `/wait_ready` -> Provides a bulletproof one-liner for cold-starting the full stack with verified readiness. | `start_lab.sh` | BKM: Unity Stabilization | `./start_lab.sh` |
 | `[FEAT-004]` | **Shadow Dispatch** | Predictive Intent Detection -> Anticipates strategic queries during transcription to "warm up" the Brain. | `acme_lab.py` | Paper: TTCS (Self-Correction) | `test_pi_flow.py` |
 
 ---

@@ -50,18 +50,35 @@
         .led-yielded { background: #007bff; box-shadow: 0 0 5px #007bff; }
 
         /* Telemetry Section */
-        .telemetry-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+        .telemetry-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .telemetry-tab {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: #888;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .telemetry-tab.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
         .telemetry-box {
             background: #000;
             border: 1px solid var(--border-color);
             padding: 10px;
+            min-height: 400px;
         }
-        iframe { width: 100%; height: 350px; border: none; }
+        iframe { width: 100%; height: 400px; border: none; }
 
         /* Tree Overrides for Status */
         .alert-item {
@@ -122,20 +139,23 @@
         </section>
 
         <section id="telemetry">
-            <h2 class="section-title">Neural Uplink Telemetry (Power & GPU)</h2>
-            <div style="margin-bottom: 10px; display: flex; gap: 10px;">
-                <button class="icon-btn" onclick="updateTime('1h')">1H</button>
-                <button class="icon-btn" onclick="updateTime('8h')">8H</button>
-                <button class="icon-btn" onclick="updateTime('24h')">24H</button>
-                <button class="icon-btn" onclick="updateTime('7d')">7D</button>
+            <h2 class="section-title">Neural Uplink Telemetry</h2>
+            <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div class="telemetry-tabs" id="panel-tabs">
+                    <button class="telemetry-tab active" onclick="updatePanel(6, this)">POWER</button>
+                    <button class="telemetry-tab" onclick="updatePanel(8, this)">VRAM</button>
+                    <button class="telemetry-tab" onclick="updatePanel(2, this)">LOAD</button>
+                    <button class="telemetry-tab" onclick="updatePanel(4, this)">TEMP</button>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="icon-btn" onclick="updateTime('1h')">1H</button>
+                    <button class="icon-btn active" onclick="updateTime('8h')">8H</button>
+                    <button class="icon-btn" onclick="updateTime('24h')">24H</button>
+                    <button class="icon-btn" onclick="updateTime('7d')">7D</button>
+                </div>
             </div>
-            <div class="telemetry-grid">
-                <div class="telemetry-box">
-                    <iframe id="grafana-power" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-8h&to=now&theme=dark"></iframe>
-                </div>
-                <div class="telemetry-box">
-                    <iframe id="grafana-gpu" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=8&from=now-8h&to=now&theme=dark"></iframe>
-                </div>
+            <div class="telemetry-box">
+                <iframe id="grafana-main" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-8h&to=now&theme=dark"></iframe>
             </div>
         </section>
 
@@ -150,30 +170,31 @@
 
     <script src="mission-control.js?v=bd431d08"></script>
     <script>
-        const iframePower = document.getElementById('grafana-power');
-        const iframeGpu = document.getElementById('grafana-gpu');
+        const iframeMain = document.getElementById('grafana-main');
+        const root = document.getElementById('log-tree-root');
         let currentTimeRange = '8h';
+        let currentPanelId = 6;
 
-        function log(msg, type='info') {
-            const div = document.createElement('div');
-            div.className = type;
-            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            consoleEl.appendChild(div);
-            consoleEl.scrollTop = consoleEl.scrollHeight;
+        function updatePanel(id, btn) {
+            currentPanelId = id;
+            const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
+            iframeMain.src = `${base}&panelId=${id}&from=now-${currentTimeRange}&to=now`;
+            
+            // UI Toggle
+            document.querySelectorAll('.telemetry-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function updateTime(range) {
             currentTimeRange = range;
             const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
-            iframePower.src = `${base}&panelId=6&from=now-${range}&to=now`;
-            iframeGpu.src = `${base}&panelId=8&from=now-${range}&to=now`;
+            iframeMain.src = `${base}&panelId=${currentPanelId}&from=now-${range}&to=now`;
             
             // Highlight active button
             document.querySelectorAll('.icon-btn').forEach(btn => {
-                btn.style.borderColor = btn.textContent.toLowerCase() === range ? 'var(--accent-color)' : '#444';
+                const isMatch = btn.textContent.toLowerCase() === range.toLowerCase();
+                btn.classList.toggle('active', isMatch);
             });
-
-            log(`Adjusting telemetry window to ${range}.`);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
