@@ -181,7 +181,9 @@ function connect() {
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             if (data.type === 'status') {
-                appendMsg(data.message, 'system-msg', 'System');
+                if (data.message) {
+                    appendMsg(data.message, 'system-msg', 'System');
+                }
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
