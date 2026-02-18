@@ -18,11 +18,12 @@ const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDot = document.getElementById('connection-dot');
-const systemStatus = document.getElementById('system-status');
 const activeFilename = document.getElementById('active-filename');
 const resizer = document.getElementById('resizer');
 const consoleRow = document.getElementById('console-row');
 const workspaceContainer = document.getElementById('workspace-container');
+
+let lastSystemState = "";
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -224,9 +225,14 @@ async function pollSystemStatus() {
         const vitals = data.vitals || {};
         const mode = vitals.mode || "OLLAMA";
         const model = vitals.model || "None";
-        systemStatus.textContent = `[SYSTEM] ${mode}: ${model}`;
+        const newState = `[SYSTEM] ${mode}: ${model}`;
+        
+        if (newState !== lastSystemState) {
+            appendMsg(newState, 'system-msg', 'System');
+            lastSystemState = newState;
+        }
     } catch (err) {
         console.error("Status poll failed", err);
     }
-    setTimeout(pollSystemStatus, 5000);
+    setTimeout(pollSystemStatus, 10000);
 }
