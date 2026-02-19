@@ -92,10 +92,14 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const sl = source ? source.toLowerCase() : "system";
+    const displaySource = source.toUpperCase();
     
-    msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">${sl}:</span> <span class="msg-body">${text}</span>`;
+    msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">[${displaySource}]:</span> <span class="msg-body">${text}</span>`;
     
-    const isBrain = channel === 'insight' || source.toLowerCase().includes('brain');
+    // Fix: Routing Logic - System messages should stay in Pinky's console
+    // Only 'Brain' source messages (and specific insight channel) go to the right.
+    const isBrain = channel === 'insight' || (source.toLowerCase().includes('brain') && source.toLowerCase() !== "system");
+    
     if (!isBrain) {
         chatConsole.appendChild(msg);
         chatConsole.scrollTop = chatConsole.scrollHeight;
@@ -109,7 +113,7 @@ function sendText() {
     const content = textInput.value.trim();
     if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
     
-    appendMsg(content, 'user-msg', 'Me');
+    appendMsg(content, 'user-msg', 'ME');
     ws.send(JSON.stringify({ type: "text_input", content: content }));
     textInput.value = '';
 }
