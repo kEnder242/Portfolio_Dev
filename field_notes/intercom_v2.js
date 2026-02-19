@@ -78,9 +78,13 @@ function initResizer() {
 }
 
 // --- MESSAGING ---
-function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat') {
+function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false) {
     const target = channel === 'insight' ? insightConsole : chatConsole;
     
+    if (clear) {
+        target.innerHTML = `<div class="panel-header">${channel === 'insight' ? "Brain's Insight" : "Pinky's Console"}</div>`;
+    }
+
     if (channel === 'whiteboard' || channel === 'workspace') {
         if (editor) editor.value(text);
         return;
@@ -201,7 +205,7 @@ function connect() {
                 activeFilename.textContent = data.filename;
                 editor.value(data.content);
             } else if (data.brain) {
-                appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat');
+                appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false);
             } else if (data.type === 'transcription') {
                 appendMsg(data.text, 'user-msg', 'Me (Voice)');
             }
