@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # 1. The Time-Series Database
   prometheus:
     image: prom/prometheus:latest
     container_name: field_prometheus
@@ -14,16 +13,16 @@ services:
       - '--storage.tsdb.retention.time=15d'
     restart: unless-stopped
 
-  # 2. The Dashboard
   grafana:
     image: grafana/grafana:latest
     container_name: field_grafana
+    network_mode: host
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin  # Change on first login
+      - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
@@ -31,15 +30,8 @@ services:
       - GF_SECURITY_COOKIE_SAMESITE=none
       - GF_SECURITY_COOKIE_SECURE=true
       - GF_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS=https://*.jason-lab.dev https://jason-lab.dev localhost:*
-    ports:
-      - "3000:3000"
-    networks:
-      - monitoring
-    depends_on:
-      - prometheus
-      - loki
+    restart: unless-stopped
 
-  # 3. The "Base" Telemetry (Real Linux Metrics)
   node-exporter:
     image: prom/node-exporter:latest
     container_name: field_node_exporter
@@ -55,59 +47,44 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
 
-  # 4. The "RAPL Sim" (Custom Validation Logic)
   rapl-sim:
     build: ./rapl_sim
     container_name: field_rapl_sim
+    network_mode: host
     volumes:
-      - /sys/class/thermal:/host/sys/class/thermal:ro  # Read real temps
-      - /proc/stat:/host/proc/stat:ro                  # Read real CPU load
-    ports:
-      - "8000:8000"
-    networks:
-      - monitoring
+      - /sys/class/thermal:/host/sys/class/thermal:ro
+      - /proc/stat:/host/proc/stat:ro
+    restart: unless-stopped
 
-  # 5. NVIDIA DCGM Exporter (Enterprise Telemetry)
   dcgm-exporter:
     image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.0-ubuntu22.04
     container_name: field_dcgm_exporter
+    network_mode: host
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-    ports:
-      - "9400:9400"
-    networks:
-      - monitoring
     restart: unless-stopped
 
-  # 6. Loki (Log Aggregation)
   loki:
     image: grafana/loki:2.9.2
     container_name: field_loki
+    network_mode: host
     volumes:
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
-    ports:
-      - "3100:3100"
-    networks:
-      - monitoring
+    restart: unless-stopped
 
-  # 6. Promtail (Log Shipper)
   promtail:
     image: grafana/promtail:2.9.2
     container_name: field_promtail
+    network_mode: host
     volumes:
       - ./promtail/config.yml:/etc/promtail/config.yml
-      - ../field_notes/data:/var/log/field_notes:ro  # Pinky Logs
-      - /var/log:/var/log/host:ro                    # System Logs (dmesg/syslog)
+      - ../field_notes/data:/var/log/field_notes:ro
+      - /var/log:/var/log/host:ro
     command: -config.file=/etc/promtail/config.yml
-    networks:
-      - monitoring
-
-networks:
-  monitoring:
-    driver: bridge
+    restart: unless-stopped
 
 volumes:
   prometheus_data:
