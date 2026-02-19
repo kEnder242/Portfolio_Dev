@@ -96,11 +96,11 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">[${displaySource}]:</span> <span class="msg-body">${text}</span>`;
     
-    // Fix: Routing Logic - System messages should stay in Pinky's console
-    // Only 'Brain' source messages (and specific insight channel) go to the right.
-    const isBrain = channel === 'insight' || (source.toLowerCase().includes('brain') && source.toLowerCase() !== "system");
+    // Fix: Routing Logic - Only TRUE Brain or explicit insight channel goes to the right.
+    // 'Brain (Shadow)' is a Pinky prediction and should stay in Pinky's console.
+    const isTrueBrain = (source.toLowerCase() === 'brain') || (channel === 'insight');
     
-    if (!isBrain) {
+    if (!isTrueBrain) {
         chatConsole.appendChild(msg);
         chatConsole.scrollTop = chatConsole.scrollHeight;
     } else {
