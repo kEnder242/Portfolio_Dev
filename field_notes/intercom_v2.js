@@ -158,6 +158,9 @@ async function startMic() {
         processor.connect(audioContext.destination);
         isMicActive = true;
         micBtn.classList.add('active');
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: "mic_state", active: true }));
+        }
         appendMsg("Microphone Active. Speak now...", "system-msg");
     } catch (err) {
         appendMsg(`Mic Error: ${err.message}`, "system-msg");
@@ -168,6 +171,9 @@ function stopMic() {
     isMicActive = false;
     micBtn.classList.remove('active');
     if (micStream) micStream.getTracks().forEach(track => track.stop());
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: "mic_state", active: false }));
+    }
     appendMsg("Microphone Muted.", "system-msg");
 }
 
