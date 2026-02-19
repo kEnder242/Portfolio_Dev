@@ -362,7 +362,7 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "bps"
         },
         "overrides": []
       },
@@ -387,19 +387,19 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "rate(node_network_receive_bytes_total{device=\"eth0\"}[5m])",
+          "expr": "rate(node_network_receive_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8",
           "interval": "",
-          "legendFormat": "Inbound (eth0)",
+          "legendFormat": "{{device}} Inbound",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_bytes_total{device=\"eth0\"}[5m])",
+          "expr": "rate(node_network_transmit_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8",
           "interval": "",
-          "legendFormat": "Outbound (eth0)",
+          "legendFormat": "{{device}} Outbound",
           "refId": "B"
         }
       ],
-      "title": "Network Bandwidth (eth0)",
+      "title": "Network Bandwidth (Mbps)",
       "type": "timeseries"
     }
   ],
