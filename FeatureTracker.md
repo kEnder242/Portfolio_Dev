@@ -51,6 +51,27 @@
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
+## [FEAT-066] The \"Temporal Moat\" (Context Aging)
+**Status:** ACTIVE
+**Logic:** Dynamically scales the `reflex_ttl` based on interaction density. As the Lab stays idle, the \"metabolism\" slows down (1s to 6s), allowing the system to settle without losing character presence.
+
+## [FEAT-067] Diamond Dreaming (Subconscious Consolidation)
+**Status:** ACTIVE
+**Logic:** A background process (`dream_cycle.py`) that periodically synthesizes chaotic interaction logs into high-density \"Diamond Wisdom\" paragraphs.
+**Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
+
+## [FEAT-068] Persona-Locked Dispatch (The Iron Gate)
+**Status:** ACTIVE
+**Logic:** Strictly prevents \"Persona Bleed\" by intercepting casual conversation and gating it to Pinky, while stripping header artifacts (e.g., system prompt echoes) from the Brain's output.
+
+## [FEAT-069] Silicon-Aware Adaptive Runtime
+**Status:** ACTIVE
+**Logic:** The Lab Attendant characterises the 11GB VRAM budget and automatically \"Downshifts\" the reasoning engine (vLLM -> Ollama -> Suspend) based on real-time NVML telemetry.
+
+## [FEAT-070] Hallucination Shunting
+**Status:** ACTIVE
+**Logic:** If a reasoning node attempts to use an unknown or hallucinated tool, the orchestrator intercepts the error and shunts it back to the Pinky Gateway for characterful recovery and user feedback.
+
 ## [FEAT-064] Static Site Synthesis (build_site.py)
 **Status:** ACTIVE
 **Logic:** Automated pipeline that clears caches and prepares the `www_deploy` directory for public hosting.
@@ -152,9 +173,9 @@
 **Status:** TABLED (Hardware Blocked)
 **Note:** Physically untenable on Turing (2080 Ti). **RETAIN** code and configs for future Ampere+ upgrades.
 
----
-
 ## [BACKLOG] Synthesis & Forensic Tasks
-1.  **[COMPLETE] Forensic Mapping**: Initial DNA map populated from Feb 20 Audit.
-2.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
-3.  **[BACKLOG] Strategic Ping Review**: Revisit timeouts and evaluate parallel heartbeat threads.
+1.  **[NEXT] FEAT-071: Internal Debate (Offline Collaboration)**: Logic allowing nodes to exchange 3-5 turns of dialogue on a specific topic without user input.
+2.  **[NEXT] FEAT-072: Morning Briefing**: Pinky summarizes the \"Nightly Dialogue\" or \"Dream Synthesis\" upon the user's first connection of the day.
+3.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
+4.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
+5.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
