@@ -51,6 +51,17 @@
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
+## [FEAT-056] MIB Memory Wipe (Neuralyzer)
+**Status:** ACTIVE
+**Logic:** Allows user to manually clear the interaction context using trigger phrases like \"Look at the light\" or \"Neuralyzer\".
+**Mechanism:** Resets `self.recent_interactions` in `acme_lab.py`.
+**Verification:** `src/debug/test_mib_wipe.py`.
+
+## [FEAT-057] Deep Context (Amnesia Removal)
+**Status:** ACTIVE
+**Logic:** Removed amnesic slicing (`[-3:]`) and increased interaction cap from 10 to 50, providing Pinky with deep mid-term memory.
+**Verification:** `src/debug/test_mib_wipe.py`.
+
 ## [FEAT-039] Banter Decay (Adaptive Reflex)
 **Status:** ACTIVE
 **Logic:** Automatically increases the polling interval (`reflex_ttl`) when the user is idle (>60s), reducing system noise and resource usage.
