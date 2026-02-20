@@ -1,22 +1,18 @@
-# Federated Lab - Next Steps & Status
-**Status:** Feb 3, 2026
-**Context:** The "Intercom Pivot" and the "Federated" Architecture.
+# NEXT STEPS: Federated Lab Roadmap
 
-## 1. The Intercom Pivot
-We have officially deprecated the Python-based Desktop Client (`intercom.py`) in favor of a Browser-based Web Interface.
+## Active Sprint: Project Bladerunner (Identity & Silicon)
+- [x] Restore Network Telemetry (Mbps alignment).
+- [x] Enforce Iron Partition (Pinky vs. Architect identities).
+- [x] Implement Bicameral Failover (Local fallback for Strategic queries).
+- [x] Storage Optimization (Archives to HDD, HF Cache to SSD).
 
-*   **Logic:** A Web UI is more portable, simpler to deploy (no client-side python deps), and integrates naturally with the Portfolio dashboard.
-*   **Archive:** The legacy Python code (microphone handling, sync scripts) has been preserved in `HomeLabAI/src/archive/legacy_intercom/` for reference.
-*   **Target Architecture:**
-    *   **Server:** `AcmeLab` (Python/WebSockets) on Port 8765.
-    *   **Client:** `intercom.html` (JS/WebSockets) hosted via `Portfolio_Dev` (or `HomeLabAI/web`).
+## vLLM Turing Resurrection Strategy (Feb 19 Update)
+- [ ] **Action:** Force Driver 550-server. (Avoid 580 meta-package traps).
+- [ ] **Action:** Re-attempt v0.4.2 build using Python 3.10 (3.12 is incompatible).
+- [ ] **Finding:** Deadlock is confirmed as a V1 Engine / CUDA UVM conflict on Turing.
+- [ ] **Finding:** Source builds on CUDA 13.0 fail early due to header mismatch.
 
-## 2. Immediate Action Plan
-1.  **Build `intercom.html`:** A lightweight "Class 1" interface (HTML/JS) that connects to `ws://localhost:8765`.
-2.  **Verify Audio:** Test browser-based Microphone input (MediaStream API) vs the legacy PyAudio approach.
-3.  **Bridge the Projects:** Ensure `Portfolio_Dev` documents can link to or embed this Intercom.
-
-## 3. Environment Strategy (Recap)
-*   **HomeLabAI:** Heavy ML Env (`.venv` w/ PyTorch).
-*   **Portfolio_Dev:** Light Env (`.venv` w/ Requests).
-*   **Communication:** Strictly via HTTP/WebSockets. No shared code imports.
+## Phase 4: Semantic Map Integration
+- [ ] Implement `build_semantic_map` tool logic in Archive node.
+- [ ] Update Pinky to use semantic anchors for long-term retrieval.
+- [ ] Stabilize "Dreaming" pipeline for nightly archive refinement.

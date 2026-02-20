@@ -362,7 +362,7 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "megabits"
         },
         "overrides": []
       },
@@ -387,13 +387,13 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "rate(node_network_receive_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8",
+          "expr": "rate(node_network_receive_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8 / 1000 / 1000",
           "interval": "",
           "legendFormat": "{{device}} Inbound",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8",
+          "expr": "rate(node_network_transmit_bytes_total{device=~\"eno1|wlp4s0\"}[5m]) * 8 / 1000 / 1000",
           "interval": "",
           "legendFormat": "{{device}} Outbound",
           "refId": "B"
