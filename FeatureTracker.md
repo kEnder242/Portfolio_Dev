@@ -51,6 +51,15 @@
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
+## [FEAT-064] Static Site Synthesis (build_site.py)
+**Status:** ACTIVE
+**Logic:** Automated pipeline that clears caches and prepares the `www_deploy` directory for public hosting.
+**Mechanism:** Runs `python3 field_notes/build_site.py` to trigger versioned cache-busting and asset bundling.
+
+## [FEAT-065] Cross-Platform Synchronization
+**Status:** ACTIVE
+**Logic:** Shell-based synchronization (`sync_to_linux.sh`, `sync_to_windows.sh`) using `rsync` and Google Drive mounts to maintain code parity across the hybrid lab (Z87-Linux and Windows 4090).
+
 ## [FEAT-062] Protocol Handshake (Version Sync)
 **Status:** ACTIVE (Passive)
 **Logic:** CLI and Web clients send a `handshake` packet with their local `VERSION` string upon connection. 
