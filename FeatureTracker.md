@@ -39,6 +39,18 @@
 **Logic:** An automated logic path that matches the CV summary against cached job descriptions or recruiter queries.
 **Verification:** `src/test_recruiter.py` (Verify existence).
 
+## [FEAT-053] Contextual Tics
+**Status:** ACTIVE
+**Logic:** Updates `monitor_task_with_tics` to provide Brain-health-specific feedback (e.g., \"Resonating weights\", \"Sovereign unreachable\") during long reasoning tasks.
+
+## [FEAT-054] Banter Decay Test
+**Status:** ACTIVE
+**Logic:** A simulation test (`test_banter_decay.py`) that verifies the `reflex_ttl` interval increases correctly when the user is idle.
+
+## [FEAT-055] Manual Task Trigger (Fast Alarm)
+**Status:** ACTIVE
+**Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
+
 ## [FEAT-039] Banter Decay (Adaptive Reflex)
 **Status:** ACTIVE
 **Logic:** Automatically increases the polling interval (`reflex_ttl`) when the user is idle (>60s), reducing system noise and resource usage.
