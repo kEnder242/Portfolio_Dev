@@ -51,6 +51,30 @@
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
+## [FEAT-062] Protocol Handshake (Version Sync)
+**Status:** ACTIVE (Passive)
+**Logic:** CLI and Web clients send a `handshake` packet with their local `VERSION` string upon connection. 
+**Mechanism:** Orchestrator logs the client version and responds with its own server-side `VERSION` in the initial `status` broadcast.
+
+## [FEAT-063] Cache-Busting Deployment
+**Status:** ACTIVE
+**Logic:** Uses query-string versioning (e.g., `script.js?v=fc6916a8`) in `intercom.html` to force browsers and Cloudflare to bypass stale caches during infrastructure updates.
+
+## [FEAT-058] Strategic Console Routing
+**Status:** ACTIVE
+**Logic:** Intercom UI (`intercom_v2.js`) distinguishes between \"TRUE Brain\" messages and \"Brain (Shadow)\" predictions.
+**Mechanism:** Shadow predictions stay in Pinky's console, while true insights and explicit `insight` channel messages route to the Brain's Insight panel.
+
+## [FEAT-059] Real-Time PCM Audio Streaming
+**Status:** ACTIVE
+**Logic:** Browser-based voice capture downsamples audio to 16kHz mono and converts to Signed Int16 PCM before WebSocket streaming.
+**Verification:** `src/debug/test_web_binary.py`.
+
+## [FEAT-060] Multi-Pane Workspace (EasyMDE)
+**Status:** ACTIVE
+**Logic:** Integrated Markdown editor with live WebSocket save/load and resizable split-pane layout.
+**Verification:** `src/test_draft_agency.py`.
+
 ## [FEAT-056] MIB Memory Wipe (Neuralyzer)
 **Status:** ACTIVE
 **Logic:** Allows user to manually clear the interaction context using trigger phrases like \"Look at the light\" or \"Neuralyzer\".
