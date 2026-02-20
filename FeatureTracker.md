@@ -14,6 +14,11 @@
 **Status:** ACTIVE
 **Logic:** Implemented a hardened health check (generation probe) that automatically reroutes strategic queries to the Shadow Hemisphere (local Pinky) if the Strategic Sovereign (Windows 4090) is offline.
 
-## [FEAT-027] Iron Partition
-**Status:** ACTIVE
-**Logic:** Enforced strict identity separation via a server-side "Iron Gate" and UI-level console clearing to prevent persona bleed (Narfs) into the Architect's Insight panel.
+## [FEAT-030] vLLM Multi-LoRA Engine
+**Status:** TABLED (Hardware Blocked)
+**Description:** High-speed multi-LoRA inference for concurrent node execution. 
+**Note:** vLLM is 100% verified as an architectural champion, but physically untenable on Turing (2080 Ti) due to initialization deadlocks. Retain all native build configs for future Ampere+ hardware upgrades.
+
+## [BACKLOG] Silicon Logic Refactor
+**Priority:** MEDIUM
+**Goal:** Decouple `execute_dispatch` from `process_query` in `acme_lab.py`. Remove "vLLM Ghost" environment variables and the "Architect's Raw Shunt" once a Lead Engineer tool response is implemented.

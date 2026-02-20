@@ -6,6 +6,7 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
 ## 📍 Primary Entry Points
 *   **[README.md](./README.md)**: **The Public Face.** High-level project overview, philosophy ("Class 1"), and usage commands.
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist, and core mandates. **Start here for context.**
+*   **[FeatureTracker.md](./FeatureTracker.md)**: **The God View.** Current Tier 1 milestones and architectural roadmap.
 
 ## 📐 Architecture & Logic
 *   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.**
@@ -29,10 +30,11 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
 *   **[INTERVIEW_CHEAT_SHEET.md](./INTERVIEW_CHEAT_SHEET.md)**: **Study Material.** Active document for interview prep.
 
 ## 🏺 Engineering Pedigree (Scars & Lessons)
+*   **[Silicon Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
+*   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & purification BKMs.
+*   **[Recovery & Cruft Retro (Feb 19)](./RETROSPECTIVE_FEB_19_RECOVERY.md)**: Identity, telemetry, and technical debt mapping.
+*   **[Feb 11 Post-Mortem](./POST_MORTEM_FEB_11_2026.md)**: Driver & Logger conflicts.
 *   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.
-*   **[Weights & Measures Retrospective (Feb 15)](./RETROSPECTIVE_MARATHON_FEB_15.md)**: Headroom & Stability results.
-*   **[Test Sweep Retrospective (Feb 15)](./RETROSPECTIVE_TEST_SWEEP_FEB_15.md)**: Breadth-first validation results.
-*   **[Final Sweep Retrospective (Feb 15)](./RETROSPECTIVE_FINAL_SWEEP_FEB_15.md)**: Full-stack hardening & harness consolidation.
 
 ## 🧹 Housekeeping & Drift Report (Feb 2026)
 *Status: Pending Review*
