@@ -39,6 +39,34 @@
 **Logic:** An automated logic path that matches the CV summary against cached job descriptions or recruiter queries.
 **Verification:** `src/test_recruiter.py` (Verify existence).
 
+## [FEAT-039] Banter Decay (Adaptive Reflex)
+**Status:** ACTIVE
+**Logic:** Automatically increases the polling interval (`reflex_ttl`) when the user is idle (>60s), reducing system noise and resource usage.
+
+## [FEAT-043] Dead-Man's Switch
+**Status:** ACTIVE
+**Logic:** Triggers a `CRITICAL` alert to `pager_activity.json` if the Lab port 8765 is unresponsive for more than 5 minutes, signaling unrecoverable failure.
+
+## [FEAT-047] Reflex Tics
+**Status:** ACTIVE
+**Logic:** Occasionally bubbles up characterful banter ("Narf!", "Poit!") when the Lab is idle and ready, maintaining persona presence.
+
+## [FEAT-048] Monitor Task with Tics
+**Status:** ACTIVE
+**Logic:** Sends periodic "Thinking..." updates to the user during long-running Brain reasoning tasks to provide progress feedback.
+
+## [FEAT-049] Scheduled Tasks (Alarm Clock)
+**Status:** ACTIVE
+**Logic:** Background loop that triggers automated jobs: Nightly Recruiter (02:00 AM) and Hierarchy Refactor (03:00 AM).
+
+## [FEAT-050] Strategic Vibe Check on Save
+**Status:** ACTIVE
+**Logic:** Automatically triggers a Brain-level validation of technical logic and architectural advice whenever a file is saved in the workspace.
+
+## [FEAT-052] User Typing Awareness
+**Status:** ACTIVE
+**Logic:** Dynamically suppresses reflexes and character tics if the user is currently typing, preventing interaction collisions.
+
 ## [FEAT-031] Montana Protocol (Logger Isolation)
 **Status:** ACTIVE
 **Context:** Montana name was derived from original experience with a legacy project; implemented to manage logger hijacking by NeMo/ChromaDB.
