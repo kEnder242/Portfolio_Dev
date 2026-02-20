@@ -31,7 +31,7 @@ This document serves as the primary navigational hub for the `Portfolio_Dev` rep
 
 ## 🏺 Engineering Pedigree (Scars & Lessons)
 *   **[Silicon Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
-*   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & purification BKMs.
+*   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & isolation BKMs.
 *   **[Recovery & Cruft Retro (Feb 19)](./RETROSPECTIVE_FEB_19_RECOVERY.md)**: Identity, telemetry, and technical debt mapping.
 *   **[Feb 11 Post-Mortem](./POST_MORTEM_FEB_11_2026.md)**: Driver & Logger conflicts.
 *   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.

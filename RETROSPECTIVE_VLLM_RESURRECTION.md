@@ -13,7 +13,7 @@ To achieve stable vLLM residency on the RTX 2080 Ti (Turing / Compute 7.5) for m
 | **Ancient Resident** | v0.4.2 + Python 3.10 + Driver 550 | **DEADLOCK** | Legacy engines also hit the initialization wall. |
 | **Nuclear Resilience** | `--dtype half`, `--enforce-eager`, `XFORMERS` | **DEADLOCK** | Even with aggressive FP16 forcing, the engine stalls. |
 
-### 🛡️ The "Absolute Zero" Breakthrough [FEAT-029]
+### 🛡️ The "Physical Hardware Isolation" Breakthrough [FEAT-029]
 We successfully bypassed Ubuntu's aggressive driver meta-packages and kernel auto-probes.
 - **The Hammer:** Physically erased active module files (`.ko.zst`) to break the 10s reload loop.
 - **The Anchor:** Secured a stable Driver 550.120 installation on Kernel 6.8.0.

@@ -3,7 +3,7 @@
 ### 🥇 What Went Right
 1.  **Collaborative Thoroughness:** The "Rigor Loop" established by the user (constant "Double Checks" and "QQ" inquiries) prevented silent failures from becoming permanent roadblocks. 
 2.  **The "Zombie Sentinel" Breakthrough:** By building a dedicated tool to detect deadlocks, we moved from "guessing" why things were slow to "proving" silicon limits with 100% certainty.
-3.  **Physical Purification:** The decision to physically erase module files (`.ko.zst`) rather than just using `apt purge` was the "Master Key" that broke the circular dependency loop.
+3.  **Physical Isolation:** The decision to physically erase module files (`.ko.zst`) rather than just using `apt purge` was the "Master Key" that broke the circular dependency loop.
 
 ### 🧠 Strategic Gems (Prompted by User)
 - **"The Second Terminal" Strategy:** Running a monitor in one window while executing the install in another (The "Vacuum Sentinel" and "Babysitter" concepts).
