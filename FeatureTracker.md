@@ -1,24 +1,34 @@
 # Feature Tracker: Acme Lab Bicameral Mind
+**The DNA Association Matrix**
 
-## [FEAT-029] Hardware Isolation Protocol
-**Date:** Feb 19, 2026
-**Situation:** The RTX 2080 Ti was trapped in a circular dependency deadlock between bleeding-edge kernels (6.17) and Ubuntu transition drivers (570) that forcibly re-installed themselves to satisfy OS metadata. 
-**Solution:** Executed hardware isolation: Purged high-version kernels, stopped all GPU-polling services (Docker, sysstat, rclone, lab-watchdog), and used physical module erasure to break the kernel re-loader loop.
-**Ultimately Worked:** Secured a 100% vacant hardware window for >25s, allowing the official NVIDIA .run binary to perform a manual, out-of-band installation.
-
-**The "Why":** Ubuntu Noble's metapackages hard-code 570 as a dependency for 550. Simultaneously, the kernel's PCI-probe worker was auto-reloading modules every 10s to satisfy hidden monitoring agents. Physical file erasure was the only way to "blind" the OS and force compliance.
+> [!IMPORTANT]
+> **PURPOSE:** This is a Relational Hub for mapping **Features** to **Code**, **Research**, and **Tests**.
+> **NOT A MISSION DOC:** Refer to **[HomeLabAI/docs/ENGINEERING_PEDIGREE.md](../HomeLabAI/docs/ENGINEERING_PEDIGREE.md)** for the Strategic Mission and Architecture Laws.
 
 ---
 
-## [FEAT-028] Bicameral Failover
+## [ARTIFACT] Hardware Isolation Protocol
+**Context:** Reversion artifact used during the "Driver 550 Resurgence."
+**Mechanism:** Purge kernels, stop polling, and physically erase modules (e.g., `i2c_nvidia_gpu`).
+**BKM:** Refer to `SESSION_BKM_FEB_19.md` for the "Undo" sequence if moving back to 580/Ampere.
+
+## [FEAT-028] Strategic Ping (Generation Probe)
 **Status:** ACTIVE
-**Logic:** Implemented a hardened health check (generation probe) that automatically reroutes strategic queries to the Shadow Hemisphere (local Pinky) if the Strategic Sovereign (Windows 4090) is offline.
+**Logic:** Functional Logic Verification verifying the *Mind* is alive (not just the process).
+**Mechanism:** Single-token generation probe in `acme_lab.py` to trigger Brain-to-Shadow failover.
+
+## [FEAT-031] Montana Protocol (Logger Isolation)
+**Status:** ACTIVE
+**Context:** Montana name was derived from original experience with a legacy project; implemented to manage logger hijacking by NeMo/ChromaDB.
+**Logic:** Strictly isolates asynchronous library logs from the Lab Attendant's telemetry stream.
 
 ## [FEAT-030] vLLM Multi-LoRA Engine
 **Status:** TABLED (Hardware Blocked)
-**Description:** High-speed multi-LoRA inference for concurrent node execution. 
-**Note:** vLLM is 100% verified as an architectural champion, but physically untenable on Turing (2080 Ti) due to initialization deadlocks. Retain all native build configs for future Ampere+ hardware upgrades.
+**Note:** Physically untenable on Turing (2080 Ti). **RETAIN** code and configs for future Ampere+ upgrades.
 
-## [BACKLOG] Silicon Logic Refactor
-**Priority:** MEDIUM
-**Goal:** Decouple `execute_dispatch` from `process_query` in `acme_lab.py`. Remove "vLLM Ghost" environment variables and the "Architect's Raw Shunt" once a Lead Engineer tool response is implemented.
+---
+
+## [BACKLOG] Synthesis & Forensic Tasks
+1.  **[BACKLOG] Forensic Mapping**: Review Git/CLI history to map existing Scars to DNA.
+2.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
+3.  **[BACKLOG] Strategic Ping Review**: Revisit timeouts and evaluate parallel heartbeat threads.

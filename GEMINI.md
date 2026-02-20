@@ -2,50 +2,10 @@
 **Host:** Z87-Linux (Native) | **User:** Jason Allred | **Tier:** Lead Engineer Portfolio
 **Global Status:** [./00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)
 
-> [!IMPORTANT]
-> **THE TRUTH ANCHOR:** For the "God View" of project milestones, always defer to [00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md).
+> [!CAUTION]
+> **NOT THE SOURCE OF TRUTH:** This document is an active agent state machine, NOT the navigational bedrock. Refer to **[BOOTSTRAP_v4.3.md](../BOOTSTRAP_v4.3.md)** for orientation and **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)** for milestones and historical provenance.
 
-## ✅ PHASE 0: ACCOMPLISHED (Gemini.google.com & Manual)
-- [x] **Infrastructure Migration:** HomeLabAI_Dev moved from WSL -> Native Linux SSH (Success).
-- [x] **Connectivity:** Tailscale MagicDNS active (z87-linux); passwordless SSH verified.
-- [x] **Environment:** VS Code Desktop (Remote-SSH) + Zellij + Native Terminal active.
-- [x] **Access Layer:** Verified Cloudflare Tunnel hostnames (`code.jason-lab.dev`, `pager.jason-lab.dev`).
-- [x] **Strategy:** Initial brainstorming on "War Story" logic and technical dashboard intent.
-
-## ✅ PHASE 1: ACCOMPLISHED (CLI Verification)
-- [x] **Directory Integrity:** Confirmed `~/Portfolio_Dev` and subdirectories.
-- [x] **Binary Access:** Confirmed `python3` and `git` access.
-- [x] **Environment Isolation:** Confirmed operation within `Portfolio_Dev`.
-
-## 📚 REFERENCE MATERIAL
-- **Travel Guide:** `Travel_Guide_2026.md` (Local only, Git-ignored). Contains "Pinky" logic, infrastructure context, and credentials.
-- **Pinky Location:** `~/HomeLabAI_Dev` (Dev) and `~/AcmeLab` (Runtime).
-- **Google Workspace:** I have native access to Drive/Docs via the `google-workspace` extension.
-
-## 🚧 PHASE 2: FIELD NOTES IMPLEMENTATION (Complete)
-...
-- [x] **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
-- [x] **Refinement (v2.0):** Added Quick-Filter, Permalinks, Print Mode (@media print), and simulated Status Indicators.
-- [x] **Search Index (v2.1):** Implemented `search_index.json` for "silent tag" filtering.
-- [x] **Timeline (v2.2):** Created `timeline.html` visualizing 18 years of "Pinky-scanned" data (Strategy vs. Tactics).
-- [x] **Access Layer (v2.3):** Configured "Access Request" policy (The "Knock" button) for guest entry.
-
-## ✅ PHASE 3: OBSERVABILITY LAB (Complete)
-- [x] **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
-- [x] **Telemetry:** RAPL-Sim custom exporter reading real system thermal/load data.
-- [x] **Access:** `monitor.jason-lab.dev` mapped and secured (Admin Only).
-- [x] **Visualization:** Grafana is live and measuring "Neural Uplink" load.
-
-## ✅ PHASE 4-9: AI-STATIC HYBRID (Complete)
-...
-- [x] **Integration:** Defined the "Plays Nice" contract for HomeLabAI migration.
-
-## ✅ PHASE 10: ARTIFACT SYNTHESIS & SCANNER ROBUSTNESS (Complete)
-- [x] **Artifact Map:** Built `files.html` with a unified "ALL" view and Drive folder integration.
-- [x] **Cynical Ranking:** Implemented 0-4 "Showcase Value" scale (Rank 4 = Star Power).
-- [x] **Nuclear Search Fix:** Isolated Mission Control from search filtering.
-- [x] **Robustness:** Implemented atomic writes and absolute path utility hardening.
-- [x] **Public Airlock (v3.1):** Deployed `www.jason-lab.dev`.
+---
 
 ## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
 - [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
@@ -53,8 +13,9 @@
 - [x] **Diamond Dreams:** Multi-host memory consolidation pipeline active (Linux -> Windows 4090).
 - [x] **MAXS Lookahead:** v1.0 active for instant wisdom retrieval.
 - [x] **Expertise Hierarchy:** Created hierarchical BKM registry and Technical Architect persona.
-- [x] **Report Writer Sidebar:** UI Shell integrated into Intercom v3.1.
-- [ ] **vLLM Integration:** Transition from Ollama to vLLM (TABLED).
+- [x] **Bicameral Failover:** Implemented **Strategic Ping** (Generation Probe) for automatic Brain-to-Shadow failover.
+- [x] **vLLM Assessment:** Officially **TABLED** for Turing (2080 Ti). Standardized on Ollama Unity Pattern.
+- [ ] **Feature Tracker Deep Mapping:** (Next) Forensic review of Git/CLI history to map Scars to DNA.
 - [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
 
 ## 🎯 THE MISSION

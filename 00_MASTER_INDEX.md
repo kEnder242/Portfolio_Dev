@@ -1,20 +1,19 @@
 # 🧭 Portfolio_Dev Master Index
 **"The Map Room"**
 
-This document serves as the primary navigational hub for the `Portfolio_Dev` repository. Use this to orient yourself, locate specific architectural details, or understand the project's history.
+> [!IMPORTANT]
+> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.3.md](../BOOTSTRAP_v4.3.md)**.
 
 ## 📍 Primary Entry Points
-*   **[README.md](./README.md)**: **The Public Face.** High-level project overview, philosophy ("Class 1"), and usage commands.
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist, and core mandates. **Start here for context.**
-*   **[FeatureTracker.md](./FeatureTracker.md)**: **The God View.** Current Tier 1 milestones and architectural roadmap.
+*   **[FeatureTracker.md](./FeatureTracker.md)**: **The DNA.** The relational hub mapping Features to Code, Research, and Tests. **Primary truth anchor for architectural intent.**
+*   **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)**: **The God View.** High-level milestones across Brain and Face.
+*   **[README.md](./README.md)**: **The Public Face.** High-level project overview, philosophy ("Class 1").
 
 ## 📐 Architecture & Logic
-*   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.**
-    *   System Topology (Librarian/Nibbler/Pinky).
-    *   **Access Control Layer:** (New) BKM for Cloudflare Access Requests.
-    *   Fragility Report (Mobile caching, JSON hallucination).
-*   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines how this static portfolio connects to the broader `HomeLabAI` system (Shared Venv, Symlinks, Data flow).
-*   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Technical inventory of all agentic tools and node duties.
+*   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.** System Topology and Access Control.
+*   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.
+*   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Agentic tools and node duties.
 *   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Silicon Core.** Roadmap for high-throughput, multi-node inference on the 2080 Ti using the Unified Gemma 2 2B base.
 
 ## 🛠️ Protocols & Procedures
