@@ -93,7 +93,8 @@
 ## [FEAT-058] Strategic Console Routing
 **Status:** ACTIVE
 **Logic:** Intercom UI (`intercom_v2.js`) distinguishes between \"TRUE Brain\" messages and \"Brain (Shadow)\" predictions.
-**Mechanism:** Shadow predictions stay in Pinky's console, while true insights and explicit `insight` channel messages route to the Brain's Insight panel.
+**Mechanism:** Shadow predictions and true insights route to the Brain's Insight panel, while triage/banter stays in Pinky's console.
+**Verification:** `field_notes/tests/routing_test.html`.
 
 ## [FEAT-059] Real-Time PCM Audio Streaming
 **Status:** ACTIVE

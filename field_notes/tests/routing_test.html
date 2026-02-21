@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Intercom Routing Logic Test</title>
+    <style>
+        body { font-family: monospace; background: #0d1117; color: #c9d1d9; padding: 20px; }
+        .pass { color: #4cd964; }
+        .fail { color: #f85149; font-weight: bold; }
+        .test-row { margin-bottom: 10px; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
+        #log { margin-top: 20px; padding: 15px; background: #161b22; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>[TEST] Intercom Routing Logic v1.0</h1>
+    <div id="log">Running tests...</div>
+
+    <!-- MOCK CONSOLES -->
+    <div id="chat-console" style="display:none"></div>
+    <div id="insight-console" style="display:none"></div>
+
+    <script>
+        const chatConsole = document.getElementById('chat-console');
+        const insightConsole = document.getElementById('insight-console');
+        const log = document.getElementById('log');
+
+        // MOCK appendMsg logic from intercom_v2.js
+        function simulateRouting(source, channel = 'chat') {
+            const sl = source ? source.toLowerCase() : "system";
+            const sl_low = sl.toLowerCase();
+            
+            // THE TARGET LOGIC UNDER TEST
+            const isTrueBrain = (sl_low === 'brain') || (sl_low === 'brain (shadow)') || (channel === 'insight');
+            
+            return isTrueBrain ? 'INSIGHT' : 'CHAT';
+        }
+
+        const testCases = [
+            { source: 'Brain', channel: 'chat', expected: 'INSIGHT', desc: 'True Sovereign' },
+            { source: 'Brain (Shadow)', channel: 'chat', expected: 'INSIGHT', desc: 'Failover Shadow' },
+            { source: 'Pinky', channel: 'chat', expected: 'CHAT', desc: 'Gateway Triage' },
+            { source: 'ME', channel: 'chat', expected: 'CHAT', desc: 'User Input' },
+            { source: 'System', channel: 'chat', expected: 'CHAT', desc: 'Infrastructure Log' },
+            { source: 'System', channel: 'insight', expected: 'INSIGHT', desc: 'Explicit Insight Channel' },
+            { source: 'AnyNode', channel: 'insight', expected: 'INSIGHT', desc: 'Force Insight' }
+        ];
+
+        function runTests() {
+            log.innerHTML = '';
+            let passed = 0;
+
+            testCases.forEach(tc => {
+                const result = simulateRouting(tc.source, tc.channel);
+                const isPass = result === tc.expected;
+                if (isPass) passed++;
+
+                const row = document.createElement('div');
+                row.className = 'test-row';
+                row.innerHTML = `
+                    [${isPass ? 'PASS' : 'FAIL'}] <b>${tc.desc}</b><br>
+                    Input: src='${tc.source}', ch='${tc.channel}'<br>
+                    Routed to: <span class="${isPass ? 'pass' : 'fail'}">${result}</span> (Expected: ${tc.expected})
+                `;
+                log.appendChild(row);
+            });
+
+            const summary = document.createElement('h2');
+            summary.innerHTML = `Result: ${passed}/${testCases.length} Passed`;
+            summary.className = passed === testCases.length ? 'pass' : 'fail';
+            log.prepend(summary);
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

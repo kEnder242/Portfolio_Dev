@@ -101,8 +101,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">[${displaySource}]:</span> <span class="msg-body">${text}</span>`;
     
     // Fix: Routing Logic - TRUE Brain or Brain (Shadow) or explicit insight channel goes to the right.
-    const sl_low = sl.toLowerCase();
-    const isTrueBrain = (sl_low === 'brain') || (sl_low === 'brain (shadow)') || (channel === 'insight');
+    const sl_low = sl.toLowerCase().trim();
+    const isTrueBrain = sl_low.includes('brain') || (channel === 'insight');
     
     if (!isTrueBrain) {
         chatConsole.appendChild(msg);
