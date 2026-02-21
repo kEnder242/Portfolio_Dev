@@ -207,6 +207,36 @@
 **Logic:** A surgical tool in the Archive Node (`prune_insights`) that allows for pattern-based trimming of note summaries within a date range.
 **Constraint:** Follows the \"trim, don't rewrite\" mandate, using regex to replace specific strings (like last names) while preserving technical context.
 
+## [FEAT-080] Dynamic Model Fluidity
+**Status:** ACTIVE
+**Logic:** Dynamically selects the best available model on a host by querying `/api/tags`.
+**Mechanism:** `_resolve_best_model` in `loader.py` matches host capabilities against a prioritized preference list.
+
+## [FEAT-081] Hemispheric Decoupling
+**Status:** ACTIVE
+**Logic:** Allows Brain and Pinky to use host-appropriate models independently.
+**Mechanism:** `lab_attendant.py` sets `BRAIN_MODEL` and `PINKY_MODEL` environment variables based on host affinity (KENDER vs Local).
+
+## [FEAT-082] Neural Priming
+**Status:** ACTIVE
+**Logic:** Proactively loads the selected model into VRAM upon WebSocket connection.
+**Mechanism:** Triggers an immediate `check_brain_health` probe with `num_predict: 1` in `acme_lab.py` during the handshake.
+
+## [FEAT-083] Smaller Sovereign (8B Priority)
+**Status:** ACTIVE
+**Logic:** Prioritizes 8B class models (Llama 3.1) over large models (Mixtral) to guarantee <10s load times.
+**Verification:** Forensic logs confirm `llama3.1:8b` selection on KENDER despite LARGE tier request.
+
+## [FEAT-084] Neural Persistence (Resolution Cache)
+**Status:** ACTIVE
+**Logic:** Caches the resolved engine/model mapping for 60 seconds to eliminate per-query network overhead.
+**Mechanism:** `_engine_cache` in `loader.py` with automatic invalidation on request failure.
+
+## [FEAT-085] Intelligent Keep-Alive
+**Status:** ACTIVE
+**Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
+**Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
+
 ## [BACKLOG] Synthesis & Forensic Tasks
 1.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
 4.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
