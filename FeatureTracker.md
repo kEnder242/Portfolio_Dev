@@ -173,9 +173,21 @@
 **Status:** TABLED (Hardware Blocked)
 **Note:** Physically untenable on Turing (2080 Ti). **RETAIN** code and configs for future Ampere+ upgrades.
 
+## [FEAT-071] Internal Debate (Offline Collaboration)
+**Status:** ACTIVE
+**Logic:** Logic allowing nodes to exchange 3-5 turns of dialogue on a specific topic without user input. 
+**Mechanism:** `InternalDebate` class in `src/internal_debate.py`.
+
+## [FEAT-072] Morning Briefing
+**Status:** ACTIVE
+**Logic:** Pinky summarizes the \"Nightly Dialogue\" or \"Dream Synthesis\" upon the user's first connection of the day.
+
+## [FEAT-073] Insight Pruning (Curated Redaction)
+**Status:** ACTIVE
+**Logic:** A surgical tool in the Archive Node (`prune_insights`) that allows for pattern-based trimming of note summaries within a date range.
+**Constraint:** Follows the \"trim, don't rewrite\" mandate, using regex to replace specific strings (like last names) while preserving technical context.
+
 ## [BACKLOG] Synthesis & Forensic Tasks
-1.  **[NEXT] FEAT-071: Internal Debate (Offline Collaboration)**: Logic allowing nodes to exchange 3-5 turns of dialogue on a specific topic without user input.
-2.  **[NEXT] FEAT-072: Morning Briefing**: Pinky summarizes the \"Nightly Dialogue\" or \"Dream Synthesis\" upon the user's first connection of the day.
-3.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
+1.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
 4.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
 5.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
