@@ -3,14 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Stories | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=b00f6a9e">
+    <title>Field Notes | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=a0a7c672.3">
 </head>
 <body>
-    <button id="menu-toggle">☰ MENU</button>
+    <button id="menu-toggle" aria-label="Toggle Navigation">☰</button>
 
     <nav id="sidebar">
-        <mission-control></mission-control>
+        <h1>The Field Manual</h1>
+        <div class="subtitle">Jason Allred</div>
+        <section id="mission-control">
+            <h2>Mission Control</h2>
+            <ul>
+                <li><a href="stories.html" class="mission-link">Stories</a></li>
+                <li><a href="timeline.html" class="mission-link">Notes: Logs</a></li>
+                <li><a href="files.html" class="mission-link">Artifacts: Files</a></li>
+                <li><a href="pager.html" class="mission-link">Pager: Alerting</a></li>
+                <li><a href="intercom/" class="mission-link">Intercom</a></li>
+                <li><a href="research.html" class="mission-link">Research Hub</a></li>
+                <li><a href="grafana.html" class="mission-link">Grafana</a></li>
+                <li><a href="https://code.jason-lab.dev" target="_blank" class="mission-link">VS Code (Remote)</a></li>
+            </ul>
+        </section>
+        
 
         <input type="text" id="nav-filter" placeholder="Filter nodes..." aria-label="Filter navigation">
 
@@ -122,8 +137,9 @@
             </article>
         </section>
 
+
         <!-- VALIDATION METHODOLOGY -->
-        <section id="methodology">
+        <section id="validation">
             <h2 class="section-title">Validation Methodology</h2>
 
             <article id="reading-robot">
@@ -172,16 +188,28 @@
 
             <article id="curl-postman">
                 <h3>Curl over Postman</h3>
-                <div class="meta">Tag: Philosophy | Impact: Efficiency</div>
-                <p>I prefer raw tools. Postman is pretty, but `curl` is scriptable, repeatable, and lives in the terminal. If you can’t debug your API with a one-liner, you don't really own the protocol.</p>
+                <div class="meta">Tag: Tooling | Impact: Reproducibility</div>
+                <p>I prefer Curl over Postman for the same reason I prefer text over screenshots - design tests for reproducibility ease - compartmentalize into a series of batchable steps - essential for bug reports.</p>
             </article>
 
             <article id="venv-glue">
                 <h3>Venv is like Hot Glue</h3>
-                <div class="meta">Tag: Operations | Impact: Isolation</div>
-                <p>Python virtual environments are the "Hot Glue" of modern validation. They allow you to stick together disparate tools without ruining your underlying system. I enforce a strict "One Tool, One Venv" policy to prevent dependency drift.</p>
+                <div class="meta">Tag: Tooling | Impact: Standardization</div>
+                <p>Venv is like hot glue - a stop gap solution that becomes standard - docker feels the same - has better utility these days.</p>
             </article>
         </section>
+
+        <!-- FUTURE WORK -->
+        <section id="future-work">
+            <h2 class="section-title">Future Work (WIP)</h2>
+            <ul class="tbd-list">
+                <li>[WIP] Polling RAPL Telemetry during stress - Defensive coding in recovery scripts</li>
+                <li>[WIP] Rolling window diff - Comparing BIOS logs</li>
+                <li>[WIP] DRA for enabling power transient measurements without a harness</li>
+                <li>[WIP] Meshtastic hobby (LoRa, 3d printing, ESP32 firmware)</li>
+            </ul>
+        </section>
+
 
         <!-- SECURITY & YIELD -->
         <section id="security">
@@ -282,8 +310,9 @@
 
             <article id="general-thoughts">
                 <h3>General Thoughts & Philosophy</h3>
-                <div class="meta">Tag: Philosophy | Impact: Engineering Culture</div>
-                <ul class="phil-list">
+                <div class="meta">Tag: Philosophy</div>
+                <ul>
+                    <li><strong>The "Class 1" Assumption:</strong> It’s a dangerous assumption to code for an end user—modal dialogue boxes, frameworks—assuming code will remain on top. Frameworks should be viewed as debuggers for internal libraries.</li>
                     <li><strong>Content is King:</strong> Automation is Queen but Content is King. This mantra focused our team. Don't let frameworks overshadow actually getting things done.</li>
                     <li><strong>Can AI Really Think?</strong> Question needs to shift from 'can it think?' to ‘Can thoughts live on paper?’ Yes. Language is the single most important invention created by humanity.</li>
                     <li><strong>2 and 7 Year Cycles:</strong> Roughly every 7 years I reinvent myself. Projects tend to finish by two years.</li>
@@ -295,18 +324,8 @@
             </article>
         </section>
 
-        <!-- FUTURE WORK -->
-        <section id="future">
-            <h2 class="section-title">The Horizon</h2>
-            <article id="future-work">
-                <h3>WIP Items</h3>
-                <p>Current research focus: Multi-agent consensus for silicon error reproduction. Using RL to find the fastest path to a "Hang" state.</p>
-            </article>
-        </section>
-
     </main>
 
-    <script src="mission-control.js?v=bd431d08"></script>
-    <script src="script.js?v=7704e669"></script>
+    <script src="script.js?v=75defa3b.3"></script>
 </body>
 </html>
