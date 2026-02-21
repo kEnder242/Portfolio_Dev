@@ -1,7 +1,7 @@
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.6.4"
+    VERSION: "3.8.0"
 };
 
 let ws = null;
@@ -102,7 +102,12 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     // Fix: Routing Logic - TRUE Brain or Brain (Shadow) or explicit insight channel goes to the right.
     const sl_low = sl.toLowerCase().trim();
-    const isTrueBrain = sl_low.includes('brain') || (channel === 'insight');
+    const text_low = text.toLowerCase();
+    
+    // [FEAT-058] Strategic Shunt: If System mentions Sovereign/Engaging, route to Insight
+    const isSystemStrategic = (sl_low === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
+    
+    const isTrueBrain = sl_low.includes('brain') || (channel === 'insight') || isSystemStrategic;
     
     if (!isTrueBrain) {
         chatConsole.appendChild(msg);
