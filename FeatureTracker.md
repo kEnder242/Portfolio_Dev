@@ -81,6 +81,12 @@
 **Status:** ACTIVE
 **Logic:** Shell-based synchronization (`sync_to_linux.sh`, `sync_to_windows.sh`) using `rsync` and Google Drive mounts to maintain code parity across the hybrid lab (Z87-Linux and Windows 4090).
 
+## [FEAT-079] Pager-Aware Shell Execution
+**Status:** ACTIVE (Mandate)
+**Logic:** Prevents CLI hangs by explicitly disabling pagers in shell commands.
+**Mechanism:** Uses `--no-pager` for `journalctl`/`systemctl` and `PAGER=cat` for git/other tools to ensure non-blocking output.
+**Reason:** Prevents the Gemini CLI watchdog from terminating \"silent\" processes waiting for user input.
+
 ## [FEAT-062] Protocol Handshake (Version Sync)
 **Status:** ACTIVE (Passive)
 **Logic:** CLI and Web clients send a `handshake` packet with their local `VERSION` string upon connection. 
