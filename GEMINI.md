@@ -25,6 +25,7 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 1. **Fact-Finding First:** The CLI must perform "discovery" on raw notes before suggesting a structure.
 2. **Design Feedback Loop:** Reserve "heads-down" development for moments when specifically called out. Work with the user to gather requirements and build a detailed vision before moving forward. Some fact finding is allowed. Only dive into development once approved.
 3. **Verification over Velocity:** Prioritize "Why" (the validation logic) over "What" (the finished text).
+4. **[FEAT-075] Content Immutability:** Technical narrative assets (e.g., `stories.html`) are **Write-Protected** at the paragraph level. Structural UI updates are permitted, but technical story content must remain 100% word-faithful to the original engineering pedigree. No LLM-driven "summarization."
 
 ## ❄️ COLD-START PROTOCOL (Environment Discovery)
 If the agent session is lost or restarted, refer to these anchors:

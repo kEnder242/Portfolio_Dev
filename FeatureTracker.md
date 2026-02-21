@@ -100,6 +100,12 @@
 **Logic:** Browser-based voice capture downsamples audio to 16kHz mono and converts to Signed Int16 PCM before WebSocket streaming.
 **Verification:** `src/debug/test_web_binary.py`.
 
+## [FEAT-075] Content Immutability (The 18-Year Lock)
+**Status:** ACTIVE (Mandate)
+**Logic:** Explicitly protects technical narrative assets (e.g., `stories.html`) from LLM-driven \"summarization\" or truncation.
+**Rule:** Structural UI updates (CSS/JS/Sidebar) are allowed, but paragraph-level content must remain 100% word-faithful to the original 18-year engineering history.
+**Verification:** Manual `diff` and word-count checks during UI refactors.
+
 ## [FEAT-060] Multi-Pane Workspace (EasyMDE)
 **Status:** ACTIVE
 **Logic:** Integrated Markdown editor with live WebSocket save/load and resizable split-pane layout.
