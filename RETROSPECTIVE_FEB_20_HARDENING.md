@@ -27,3 +27,35 @@ Resolve discrepancies in the Lab's narrative pedigree, restore missing verificat
 - [FEAT-074] **Workbench Awareness**: Restored `select_file` and `notify_file_open` tools.
 
 **Next Focus**: Co-pilot integration and the "Internal Debate" engine expansion.
+
+## 🧠 Synthesized Thematic Audit: The Soul of Acme Lab
+
+After reviewing 20+ retrospectives and post-mortems, five overarching "Engineering Pillars" emerge. These are the recurring patterns that define the Lab's evolutionary DNA.
+
+### 1. The "Silicon Wall" (Hardware as the Ultimate Arbiter)
+*   **Theme**: Physical hardware limits are the final boundary.
+*   **Evolution**: Transitioned from forcing oversized models to "Silicon-Aware Runtimes" (Llama-3.2-3B-AWQ with 0.5 utilization floor).
+*   **Learning**: Hardware is a constraint variable that must be checked first (`nvidia-smi` as the "Morning Prayer").
+
+### 2. The "Montana Protocol" (Reclaiming Authority)
+*   **Theme**: Asynchronous noise and library hijacking are the primary enemies of stability.
+*   **Evolution**: Implemented `reclaim_logger()`, the Atomic Patcher, and shifted to an OS-native `systemd` manager (The Attendant).
+*   **Learning**: If you don't control the stderr/stdout, you don't own the machine.
+
+### 3. The "Bicameral Mind" (Persona as Architecture)
+*   **Theme**: Technical fidelity requires a rigorous separation of Gateway (Pinky) and Reasoning (Brain).
+*   **Evolution**: Deployed the Iron Gate, Recursive Dispatcher, and Shadow Shunts to prevent persona bleed and JSON leaks.
+*   **Learning**: Character is a routing mechanism that ensures the right hardware handles the right task.
+
+### 4. The "Bull in a China Shop" (Token Pressure & Mutilation)
+*   **Theme**: Long sessions lead to "Manic Housekeeping" where high-value data is sacrificed for structural progress.
+*   **Evolution**: Established [FEAT-075] Content Immutability and the v4.4 Bootloader Memory Map.
+*   **Learning**: Documentation is Agent Instruction Code. If it's not write-protected and in the Routing Table, it will eventually be "summarized" away.
+
+### 5. "Class 1" Engineering (Framework-Free Robustness)
+*   **Theme**: Prefer raw terminal tools (`curl`, `rsync`, vanilla HTML/CSS) over complex, heavy frameworks.
+*   **Evolution**: Standardized on the Ollama Unity Pattern and Static Site Synthesis.
+*   **Learning**: In a federated lab, connectivity is the ultimate debug tool.
+
+---
+**"The weights have resonated. The soul of the Lab is high-fidelity."**
