@@ -16,11 +16,12 @@ Welcome, Agent. You are operating within a **Federated Lab** architecture.
 | If you are looking for... | Go to... | Role |
 | :--- | :--- | :--- |
 | **Global Context & Cold Start** | `BOOTSTRAP.md` | **The Bootloader** |
+| **Operational Protocols**| `Protocols.md` | **The Law (BKM-001+)** |
+| **Diagnostic Rundown** | `DIAGNOSTIC_RUNDOWN.md` | **The Physician's Ledger** |
 | **Active Tasks & Agent State** | `GEMINI.md` | **The State Machine** |
 | **Milestones & Success History** | `00_FEDERATED_STATUS.md` | **The God View** |
 | **Architecture "Why" & Mission** | `ENGINEERING_PEDIGREE.md`| **The Philosophy/Laws** |
 | **Feature DNA & Code Mapping** | `FeatureTracker.md` | **The Relational Matrix** |
-| **Public Vision & Philosophy** | `Portfolio_Dev/README.md` | **The Public Face** |
 
 ## 📜 The Archival Process
 Every revision of this bootloader MUST be mirrored in **`Portfolio_Dev/docs/archive/`**.
