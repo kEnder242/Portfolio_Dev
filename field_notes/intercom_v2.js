@@ -100,9 +100,9 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">[${displaySource}]:</span> <span class="msg-body">${text}</span>`;
     
-    // Fix: Routing Logic - Only TRUE Brain or explicit insight channel goes to the right.
-    // 'Brain (Shadow)' is a Pinky prediction and should stay in Pinky's console.
-    const isTrueBrain = (source.toLowerCase() === 'brain') || (channel === 'insight');
+    // Fix: Routing Logic - TRUE Brain or Brain (Shadow) or explicit insight channel goes to the right.
+    const sl_low = sl.toLowerCase();
+    const isTrueBrain = (sl_low === 'brain') || (sl_low === 'brain (shadow)') || (channel === 'insight');
     
     if (!isTrueBrain) {
         chatConsole.appendChild(msg);
@@ -199,6 +199,9 @@ function connect() {
                 if (data.message) {
                     appendMsg(data.message, 'system-msg', 'System');
                 }
+            } else if (data.type === 'file_content_request') {
+                // [FEAT-074] Workbench: Mice requested a file for the user
+                ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
             } else if (data.type === 'file_content') {
