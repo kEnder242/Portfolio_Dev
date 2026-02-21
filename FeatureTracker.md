@@ -101,6 +101,13 @@
 **Logic:** Browser-based voice capture downsamples audio to 16kHz mono and converts to Signed Int16 PCM before WebSocket streaming.
 **Verification:** `src/debug/test_web_binary.py`.
 
+## [FEAT-076] Sovereign Response Verification
+**Status:** ACTIVE
+**Logic:** A multi-layered test suite that verifies the Brain's reasoning capacity and its primary-to-fallback lifecycle.
+**Verification:** 
+- `src/debug/test_pi_flow.py`: Verifies end-to-end technical accuracy and bicameral delegation.
+- `src/test_lab_integration.py`: Verifies node-to-orchestrator connectivity and life-cycle management.
+
 ## [FEAT-075] Content Immutability (The 18-Year Lock)
 **Status:** ACTIVE (Mandate)
 **Logic:** Explicitly protects technical narrative assets (e.g., `stories.html`) from LLM-driven \"summarization\" or truncation.
