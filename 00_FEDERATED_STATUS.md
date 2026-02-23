@@ -20,6 +20,7 @@
 3.  **Silicon Headroom Verified**: Characterized 11GB VRAM budget with full stack + EarNode resident (~9.8GB peak).
 4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
 5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
+6.  **Archive Hardening**: Archived travel plans and legacy WSL/Remote guides. Completed forensic scan of Phase 0-10 features (FEAT-095+).
 
 ## 🔮 The Roadmap (The Restoration Hub)
 *   **[ACTIVE] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)

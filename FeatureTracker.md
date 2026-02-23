@@ -237,6 +237,101 @@
 **Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
 **Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
 
+## [FEAT-086] Tiered Brain Response (Preamble)
+**Status:** ACTIVE
+**Logic:** Provides sub-second feedback for deep strategic tasks by broadcasting an immediate "Thinking..." message.
+**Mechanism:** Hardcoded async broadcast in `acme_lab.py` triggered before shunting to the reasoning node.
+
+## [FEAT-087] Intelligent Handshake Priming
+**Status:** ACTIVE
+**Logic:** Forces VRAM residency of the primary model upon first connection.
+**Mechanism:** High-priority generation probe (`force=True`) inside the `handshake` packet handler in `acme_lab.py`.
+
+## [FEAT-088] Recruiter Dashboard Reporting
+**Status:** ACTIVE
+**Logic:** Bridging the gap between background "Alarm Clock" tasks and user visibility.
+**Mechanism:** `recruiter.py` writes a high-level summary to `field_notes/data/recruiter_report.json`.
+
+## [FEAT-089] Zero Trust Guest Expansion
+**Status:** ACTIVE
+**Logic:** Securely allows authorized third-party recruiters (e.g., from `intel.com`) to access the technical lobby.
+**Mechanism:** Cloudflare Access Policy updates for `notes.jason-lab.dev` and `acme.jason-lab.dev`.
+
+## [FEAT-090] Non-Blocking Parallel Dispatch
+**Status:** ACTIVE
+**Logic:** Eliminates synchronization barriers in the hemispheric dispatch loop.
+**Mechanism:** Node responses are broadcast to the user as they finish using `asyncio.as_completed` (or parallel handlers), allowing Pinky's fast replies to appear instantly while Brain calculates.
+
+## [FEAT-091] Tiered Thinking (Shallow Mode)
+**Status:** ACTIVE
+**Logic:** Dynamically selects reasoning depth based on intent and direct address.
+**Mechanism:** `shallow_think` tool in Brain node uses a laconic system prompt and low token cap for greetings and quips, while `deep_think` handles strategic complexity.
+
+## [FEAT-092] Persona De-personalization
+**Status:** ACTIVE
+**Logic:** Separates personal "Portfolio" narratives from general "HomeLabAI" cognitive profiles.
+**Mechanism:** Refactoring system prompts and logs to remove specific personal history (e.g., "18 years", "Silicon Validation") in favor of broader engineering identities.
+
+## [FEAT-093] Dynamic Environment Portability
+**Status:** ACTIVE
+**Logic:** Ensuring the Lab is not hardcoded to a specific network or hardware set.
+**Mechanism:** Dynamic IP resolution (`resolve_ip`) and configuration-driven node affinity (`infrastructure.json`) allowing deployment outside the primary lab.
+
+## [FEAT-094] Lively Room Banter (Handover Fillers)
+**Status:** ACTIVE
+**Logic:** Improves perceived responsiveness by having the Gateway (Pinky) provide filler acknowledgments during strategic handovers.
+**Mechanism:** Async broadcast of characterful quips (e.g., "Hmm...") immediately after shunting tasks to the Brain.
+
+## [FEAT-095] Search Indexing Pipeline (v2.1)
+**Status:** ACTIVE
+**Logic:** Automated generation of a flattened keyword-to-ID mapping for lightning-fast static search.
+**Mechanism:** `scan_pinky.py` processes raw notes to produce `search_index.json`.
+
+## [FEAT-096] Blue Tree ASCII Navigation (v7.0)
+**Status:** ACTIVE
+**Logic:** A hierarchical, indented directory navigation UI that mimics a terminal-based system administrator experience.
+**Mechanism:** Recursive DOM generation in `timeline.html` based on yearly JSON aggregates.
+
+## [FEAT-097] Dynamic Typewriter Rendering
+**Status:** ACTIVE
+**Logic:** Simulates a "Live AI" feel by rendering text character-by-character inside the tree structure.
+**Mechanism:** Custom JavaScript interval loop in `timeline.html` and `intercom_v2.js`.
+
+## [FEAT-098] RAPL-Sim Custom Exporter (v3.0)
+**Status:** ACTIVE
+**Logic:** Translates real hardware telemetry (thermal zones) into simulated power metrics for validation logic testing.
+**Mechanism:** Python web server (`monitor/rapl_sim/app.py`) utilizing the `prometheus_client` library.
+
+## [FEAT-099] Grafana Provisioning as Code
+**Status:** ACTIVE
+**Logic:** Ensures dashboards are reproducible and version-controlled by defining them in JSON/YAML.
+**Mechanism:** Docker volume mounts mapping `./grafana/provisioning` to the Grafana container.
+
+## [FEAT-100] Librarian Heuristic File Classification
+**Status:** ACTIVE
+**Logic:** Distinguishes between daily logs, reference documents, and strategic summaries using "Deep Sample" body analysis.
+**Mechanism:** Heuristic rules engine in `scan_librarian.py`.
+
+## [FEAT-101] Load-Aware Nibbling
+**Status:** ACTIVE
+**Logic:** Background workers defer processing if the system load (`node_load1`) is too high, protecting the EarNode's VRAM budget.
+**Mechanism:** `nibble.py` checks system vitals via Prometheus before initiating AI scans.
+
+## [FEAT-102] Nuclear Cache Busting
+**Status:** ACTIVE
+**Logic:** Forces mobile browsers and Cloudflare to bypass stale caches during infrastructure updates.
+**Mechanism:** Global versioning via `?v=X.X` query strings and forced timestamp updates in `build_site.py`.
+
+## [FEAT-103] Cynical Ranking Algorithm
+**Status:** ACTIVE
+**Logic:** Assigns a 0-4 "Showcase Value" scale to artifacts, with Rank 4 ("Diamond") representing high-value technical gems.
+**Mechanism:** AI-driven classification in `scan_artifacts.py` based on technical density and impact.
+
+## [FEAT-104] Research Pipeline Ledger
+**Status:** ACTIVE
+**Logic:** A technical hub mapping ArXiv papers (e.g., TTCS, CLaRa) to specific Lab implementation milestones.
+**Mechanism:** `research.html` dashboard tracking the intellectual pedigree of the Bicameral Mind.
+
 ## [BACKLOG] Synthesis & Forensic Tasks
 1.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
 4.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
