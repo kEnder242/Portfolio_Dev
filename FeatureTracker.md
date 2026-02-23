@@ -273,17 +273,17 @@
 **Mechanism:** Async broadcast of characterful quips (e.g., \"Hmm...\") immediately after shunting tasks to the Brain.
 
 ## [FEAT-105] Multi-Agent Simulation (MAS)
-**Status:** SPR-11-02 (DRAFT)
+**Status:** ACTIVE
 **Logic:** Treat the Lab as a collaborative session between nodes that coordinate answers in real-time.
 **Mechanism:** Combined with [FEAT-094] and [FEAT-108] to simulate inter-agent coordination rather than a linear API flow.
 
 ## [FEAT-106] Async Coordination Engine
-**Status:** SPR-11-02 (IN PROGRESS)
+**Status:** ACTIVE
 **Logic:** Enables Pinky to provide \"Thinking Fillers\" while the Brain's reasoning cycle is in-flight.
 **Mechanism:** Refactored `process_query` to allow asynchronous interjections during the parallel dispatch window.
 
 ## [FEAT-108] Inter-Agent Handover Signal
-**Status:** SPR-11-02 (DRAFT)
+**Status:** ACTIVE
 **Logic:** Immediate low-latency trigger from Hub to Brain upon strategic intent detection.
 **Mechanism:** Dedicated trigger packet sent to Brain node to initiate a `shallow_quip` while Pinky generates fillers.
 
