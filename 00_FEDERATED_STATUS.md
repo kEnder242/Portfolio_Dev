@@ -21,35 +21,23 @@
 4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
 5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
 6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts. Successfully decoupled personal professional narratives from core AI identity.
+7.  **Lively Room Coordination**: Successfully implemented [FEAT-108] Agentic Reflection and Non-blocking dispatch. Pinky and Brain now coordinate in real-time.
+8.  **Hierarchical Grounding**: Architect node now generates a 3-layer Semantic Map (Strategic, Analytical, Tactical) for high-fidelity grounding.
 
 ## 🔮 The Roadmap (The Restoration Hub)
 *   **[ACTIVE] Phase 11.2: Authority of Synthesis** (Sprint SPR-11-03)
     *   [x] **Synthesis of Authority**: Implemented [FEAT-109] laconic synthesis prompts for the Brain.
     *   [x] **The Shadow Moat**: Implemented [FEAT-110] post-generation post-sanitization for persona isolation.
     *   [x] **Identity Lock**: Implemented [FEAT-111] hard constraints for local failover nodes.
+*   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
+    *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
+*   **[ACTIVE] Semantic Sentinel**: Refine Sentinel logic into a true "Semantic Intent" gate using a tiny local model.
+*   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
 *   **[COMPLETED] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
     *   [x] **Tiered Brain Response**: [FEAT-086] WITTY preamble active.
     *   [x] **Intelligent Priming**: [FEAT-087] handshake priming verified.
     *   [x] **Recruiter Dashboard**: [FEAT-088] reporting active.
-*   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
-    *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
-*   **[PENDING] Sprint v3.6 "The Nightly Recruiter"**:
-    *   [DONE] **Engine Logic**: `recruiter.py` implemented.
-    *   [TODO] **Job Search Integration**: Connect to external APIs or local web-scrapes.
-    *   [TODO] **Phase 4: The Hierarchical Mind**: Create **The Architect** node and tiered **Semantic Map**.
-*   **[TODO] Sprint v3.5 "Last Mile"**:
-    *   [DONE] **Unified Patching**: Integrate `patch_file` tool into the agentic workflow.
-    *   [DONE] **Workspace Auto-Save**: Implement local file persistence in `intercom_v2.js`.
-    *   [TODO] **Sentinel v2.0**: Implement "Strategic Uncertainty" interjection logic.
-*   **[LOWER PRIORITY] 3x3 CVT Builder**: Maintenance only.
-    *   [TODO] **Status-Aware Dispatch**: Update Lab Attendant to report reasoning/dreaming states to the UI.
-*   **[TODO] Bicameral Dispatch (Restoring Soul)**: 
-    *   [TODO] **Asynchronous Interjections**: Implement Reflex Loop and Sentinel Mode.
-    *   [TODO] **Brain Offline Robustness**: Implement `Panic Mode` stubs and connection timeout handling.
-*   **[TODO] Semantic Architecture**:
-    *   [TODO] **Deepen Semantic Map**: Generate hierarchical JSON from resumes, insights, and raw notes.
-    *   [TODO] **MCP Tool Research**: Evaluate LangGraph/AutoGen for system-level sync.
-*   **[TODO] Telemetery Recovery**: Add a watchdog task to monitor Docker container health (`field_prometheus`, `field_grafana`).
+    *   [x] **Telemetry Watchdog**: Watching Docker health and reporting to Pager.
 
 ---
 

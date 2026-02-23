@@ -75,7 +75,6 @@ If the agent session is lost or restarted, refer to these anchors:
 5. **Maintenance Mode**: `Portfolio_Dev/field_notes/data/maintenance.lock`. If this file exists, external alerts (NTFY/PD) are suppressed. Remove this file to resume live alerting.
 6. **Runtime Safe-Zone**: `~/AcmeLab` is the production host for background services.
 7. **Dev Safe-Zone**: `~/Dev_Lab` is the primary workspace.
-8. **Mandatory Start**: Run `HomeLabAI/src/debug/stability_marathon_v2.py` to verify the Mind before concluding any task.
 
 ## Personal notes from Jason:
 
