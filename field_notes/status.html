@@ -134,6 +134,11 @@
                     <div class="vital-label">VRAM Usage</div>
                     <div class="vital-value" id="vram-status">0.0%</div>
                 </div>
+                <div class="vital-card" id="job-hunt-card" style="display:none; border-left-color: #ffc107;">
+                    <div class="vital-label">Recruiter Brief</div>
+                    <div class="vital-value" id="job-status">IDLE</div>
+                    <div id="job-meta" style="font-size: 0.7rem; color: #888; margin-top: 5px;"></div>
+                </div>
             </div>
             <div id="scanner-message" style="color: #666; font-size: 0.8rem; margin-top: -20px; margin-bottom: 20px; font-family: monospace;"></div>
         </section>
@@ -201,9 +206,30 @@
         document.addEventListener('DOMContentLoaded', () => {
             pollStatus();
             pollPager();
+            pollRecruiter();
             setInterval(pollStatus, 10000);
             setInterval(pollPager, 30000);
+            setInterval(pollRecruiter, 60000);
         });
+
+        function pollRecruiter() {
+            fetch('data/recruiter_report.json?t=' + new Date().getTime())
+                .then(r => r.json())
+                .then(data => {
+                    const card = document.getElementById('job-hunt-card');
+                    const status = document.getElementById('job-status');
+                    const meta = document.getElementById('job-meta');
+                    
+                    card.style.display = 'block';
+                    status.innerText = `${data.jobs_found} JOBS FOUND`;
+                    
+                    const lastRun = new Date(data.last_run).toLocaleDateString();
+                    meta.innerText = `Last Run: ${lastRun}\nTop: ${data.top_targets[0] || 'None'}`;
+                })
+                .catch(err => {
+                    document.getElementById('job-hunt-card').style.display = 'none';
+                });
+        }
 
         function pollStatus() {
             fetch('data/status.json?t=' + new Date().getTime())
