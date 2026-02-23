@@ -16,17 +16,21 @@
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Unified Base Established**: Standardized on the **Standard Tier (e.g., Llama 3.2 3B)** for 2080 Ti residency.
-2.  **Ollama Standard Stabilized**: vLLM officially **TABLED** for Turing (2080 Ti) due to BF16 deadlocks. Ollama now provides sub-second model/prompt swapping.
+2.  **Ollama Standard Stabilized**: vLLM officially **TABLED** for Turing (2080 Ti). Ollama now provides sub-second model/prompt swapping.
 3.  **Silicon Headroom Verified**: Characterized 11GB VRAM budget with full stack + EarNode resident (~9.8GB peak).
 4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
 5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
-6.  **Archive Hardening**: Archived travel plans and legacy WSL/Remote guides. Completed forensic scan of Phase 0-10 features (FEAT-095+).
+6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts. Successfully decoupled personal professional narratives from core AI identity.
 
 ## 🔮 The Roadmap (The Restoration Hub)
-*   **[ACTIVE] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
-    *   [TODO] **Tiered Brain Response**: Implement [FEAT-086] WITTY preamble for strategic tasks.
-    *   [TODO] **Intelligent Priming**: Implement [FEAT-087] background health-probes on socket handshake.
-    *   [TODO] **Recruiter Dashboard**: Implement [FEAT-088] Nightly Recruiter reporting to `status.json`.
+*   **[ACTIVE] Phase 11.2: Authority of Synthesis** (Sprint SPR-11-03)
+    *   [x] **Synthesis of Authority**: Implemented [FEAT-109] laconic synthesis prompts for the Brain.
+    *   [x] **The Shadow Moat**: Implemented [FEAT-110] post-generation post-sanitization for persona isolation.
+    *   [x] **Identity Lock**: Implemented [FEAT-111] hard constraints for local failover nodes.
+*   **[COMPLETED] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
+    *   [x] **Tiered Brain Response**: [FEAT-086] WITTY preamble active.
+    *   [x] **Intelligent Priming**: [FEAT-087] handshake priming verified.
+    *   [x] **Recruiter Dashboard**: [FEAT-088] reporting active.
 *   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
     *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
 *   **[PENDING] Sprint v3.6 "The Nightly Recruiter"**:
