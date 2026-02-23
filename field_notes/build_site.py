@@ -10,6 +10,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE_FILES = ["style.css", "script.js", "intercom_v2.js", "mission-control.js"]
 HTML_FILES = [
+    "index.html",
     "stories.html", 
     "timeline.html", 
     "files.html", 
@@ -81,7 +82,7 @@ def main(args):
             new_val = f"{filename}?v={h}"
             content = re.sub(pattern, new_val, content)
             
-        if content != original_content:
+        if True: # Force update to refresh mtime/cache
             with open(path, 'w') as f:
                 f.write(content)
             print(f"Updated: {html_file}")
