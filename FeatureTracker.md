@@ -342,7 +342,34 @@
 **Logic:** A technical hub mapping ArXiv papers (e.g., TTCS, CLaRa) to specific Lab implementation milestones.
 **Mechanism:** `research.html` dashboard tracking the intellectual pedigree of the Bicameral Mind.
 
+## [FEAT-109] Synthesis of Authority
+**Status:** ACTIVE
+**Logic:** Refines Brain's output to prioritize brevity and actionable insights over technical lectures.
+**Mechanism:** Refactored `BRAIN_SYSTEM_PROMPT` to enforce "Brevity is Authority" and adaptive depth.
+
+## [FEAT-111] Cognitive Identity Lock
+**Status:** ACTIVE
+**Logic:** Hardened persona boundaries for failover nodes.
+**Mechanism:** Explicit "ANTI-BANTER" and "Laconic Authority" tokens in the `[FAILOVER ARCHITECT]` prompt in `acme_lab.py`.
+
+## [FEAT-112] Sequential Brain Strategy Chain
+**Status:** ACTIVE
+**Logic:** Prevents remote engine collisions by serializing "Quip" and "Deep Think" tasks.
+**Mechanism:** Async `brain_strategy_chain` in `acme_lab.py` ensures the 4090 handles one reasoning task at a time.
+
+## [FEAT-113] DNS Trap Recovery
+**Status:** ACTIVE
+**Logic:** Ensures the Lab can recover network pathing to remote hosts without a service restart.
+**Mechanism:** Dynamic `resolve_brain_url()` call inside the live health-check loop.
+
+## [TECHNICAL DEBT]
+- **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
+    *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
+
 ## [BACKLOG] Synthesis & Forensic Tasks
 1.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
-4.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
-5.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
+2.  **[UI] Authority of Formatting**: Instruction for Brain to use **Bold conclusions**, bullets, and `<details>` tags for better readability.
+3.  **[VIBE] Dynamic Temperature**: Research if Pinky can adjust the Brain's `temperature` on the fly based on task urgency.
+4.  **[VIBE] Tone Checker**: Implement a local 1B model as a "moat" to verify Brain output is free of interjections before broadcast.
+5.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
+6.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
