@@ -2,7 +2,7 @@
 **"The Map Room"**
 
 > [!IMPORTANT]
-> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.4.md](../BOOTSTRAP_v4.4.md)**.
+> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.3.md](../BOOTSTRAP_v4.3.md)**.
 
 ## 📍 Primary Entry Points
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist, and core mandates. **Start here for context.**
@@ -12,9 +12,10 @@
 
 ## 📐 Architecture & Logic
 *   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.** System Topology and Access Control.
+*   **[BICAMERAL_DISPATCH.md](./docs/BICAMERAL_DISPATCH.md)**: **The Mind.** (vLLM Pilot) Defines the Amygdala, Sentinel, and Corpus Callosum metaphors.
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.
 *   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Agentic tools and node duties.
-*   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Silicon Core.** Roadmap for high-throughput, multi-node inference on the 2080 Ti using the Unified Gemma 2 2B base.
+*   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Silicon Core.** Roadmap for high-throughput inference (Preserved for future Ampere+ attempts).
 
 ## 🛠️ Protocols & Procedures
 *   **[../HomeLabAI/docs/Protocols.md](../HomeLabAI/docs/Protocols.md)**: **The Law.**
@@ -32,8 +33,10 @@
 *   **[Silicon Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
 *   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & isolation BKMs.
 *   **[Recovery & Cruft Retro (Feb 19)](./RETROSPECTIVE_FEB_19_RECOVERY.md)**: Identity, telemetry, and technical debt mapping.
+*   **[Hardening Retrospective (Feb 20)](./RETROSPECTIVE_FEB_20_HARDENING.md)**: Logic restoration and content immutability.
 *   **[Feb 11 Post-Mortem](./POST_MORTEM_FEB_11_2026.md)**: Driver & Logger conflicts.
 *   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.
+*   **[Bladerunner Forensic](./RETROSPECTIVE_BLADERUNNER_FORENSIC.md)**: Deep-dive into silicon identity and state drift.
 
 ## 🧹 Housekeeping & Drift Report (Feb 2026)
 *Status: Pending Review*

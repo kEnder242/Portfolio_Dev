@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** Feb 20, 2026
+**Date:** Feb 22, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -21,9 +21,30 @@
 4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
 5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
 
-## 🔮 The Roadmap
-...
-    *   **Telemetery Recovery**: Add a watchdog task to monitor Docker container health (`field_prometheus`, `field_grafana`).
+## 🔮 The Roadmap (The Restoration Hub)
+*   **[ACTIVE] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
+    *   [TODO] **Tiered Brain Response**: Implement [FEAT-086] WITTY preamble for strategic tasks.
+    *   [TODO] **Intelligent Priming**: Implement [FEAT-087] background health-probes on socket handshake.
+    *   [TODO] **Recruiter Dashboard**: Implement [FEAT-088] Nightly Recruiter reporting to `status.json`.
+*   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
+    *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
+*   **[PENDING] Sprint v3.6 "The Nightly Recruiter"**:
+    *   [DONE] **Engine Logic**: `recruiter.py` implemented.
+    *   [TODO] **Job Search Integration**: Connect to external APIs or local web-scrapes.
+    *   [TODO] **Phase 4: The Hierarchical Mind**: Create **The Architect** node and tiered **Semantic Map**.
+*   **[TODO] Sprint v3.5 "Last Mile"**:
+    *   [DONE] **Unified Patching**: Integrate `patch_file` tool into the agentic workflow.
+    *   [DONE] **Workspace Auto-Save**: Implement local file persistence in `intercom_v2.js`.
+    *   [TODO] **Sentinel v2.0**: Implement "Strategic Uncertainty" interjection logic.
+*   **[LOWER PRIORITY] 3x3 CVT Builder**: Maintenance only.
+    *   [TODO] **Status-Aware Dispatch**: Update Lab Attendant to report reasoning/dreaming states to the UI.
+*   **[TODO] Bicameral Dispatch (Restoring Soul)**: 
+    *   [TODO] **Asynchronous Interjections**: Implement Reflex Loop and Sentinel Mode.
+    *   [TODO] **Brain Offline Robustness**: Implement `Panic Mode` stubs and connection timeout handling.
+*   **[TODO] Semantic Architecture**:
+    *   [TODO] **Deepen Semantic Map**: Generate hierarchical JSON from resumes, insights, and raw notes.
+    *   [TODO] **MCP Tool Research**: Evaluate LangGraph/AutoGen for system-level sync.
+*   **[TODO] Telemetery Recovery**: Add a watchdog task to monitor Docker container health (`field_prometheus`, `field_grafana`).
 
 ---
 

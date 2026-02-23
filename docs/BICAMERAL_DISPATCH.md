@@ -1,5 +1,8 @@
 # Bicameral Dispatch: System Design & Persona Architecture (v3.5)
 
+> [!NOTE]
+> **vLLM STATUS:** The features described herein (Amygdala, Sentinel, Corpus Callosum) were originally designed for a native vLLM implementation. While currently **TABLED** for the Turing (2080 Ti) due to BF16 deadlocks, the logic remains the architectural blueprint for future Ampere+ deployments. The Lab currently uses an **Ollama-Standard** implementation of these metaphors.
+
 ## 🏛️ The Acme Lab Taxonomy (The Glossary of Mind)
 These metaphors serve as architectural hints for system design:
 

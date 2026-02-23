@@ -3,7 +3,46 @@
 **Global Status:** [./00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)
 
 > [!CAUTION]
-> **NOT THE SOURCE OF TRUTH:** This document is an active agent state machine, NOT the navigational bedrock. Refer to **[BOOTSTRAP_v4.4.md](../BOOTSTRAP_v4.4.md)** for orientation and **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)** for milestones and historical provenance.
+> **NOT THE SOURCE OF TRUTH:** This document is an active agent state machine, NOT the navigational bedrock. Refer to **[BOOTSTRAP_v4.3.md](../BOOTSTRAP_v4.3.md)** for orientation and **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)** for milestones and historical provenance.
+
+---
+
+## 🏺 CHRONOLOGICAL ARCHIVE (Remembrance of the Past)
+*Historical progress for Phases 0 through 10. These entries are preserved for contextual grounding.*
+
+### ✅ PHASE 0: INFRASTRUCTURE (Jan 2026)
+- **Infrastructure Migration:** HomeLabAI_Dev moved from WSL -> Native Linux SSH.
+- **Connectivity:** Tailscale MagicDNS active (z87-linux); passwordless SSH verified.
+- **Access Layer:** Verified Cloudflare Tunnel hostnames (`code.jason-lab.dev`, `pager.jason-lab.dev`).
+
+### ✅ PHASE 1: CORE REPOSITORY (Jan 2026)
+- **Directory Integrity:** Confirmed `~/Portfolio_Dev` structure.
+- **Binary Access:** Confirmed `python3` and `git` permissions.
+- **Environment Isolation:** Established clean venv for portfolio synthesis.
+
+### ✅ PHASE 2: FIELD NOTES IMPLEMENTATION (Feb 2026)
+- **Security:** Cloudflare Access configured for Admin (Vault) and NVIDIA (Lobby).
+- **Refinement (v2.0):** Added Quick-Filter, Permalinks, and simulated Status Indicators.
+- **Search Index (v2.1):** Implemented `search_index.json` for "silent tag" filtering.
+- **Timeline (v2.2):** Created `timeline.html` visualizing 18 years of technical data.
+- **Access Layer (v2.3):** Configured "Access Request" (The "Knock" button) for guest entry.
+
+### ✅ PHASE 3: OBSERVABILITY LAB (Feb 2026)
+- **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
+- **Telemetry:** RAPL-Sim custom exporter reading system thermal/load data.
+- **Access:** `monitor.jason-lab.dev` mapped and secured (Admin Only).
+
+### ✅ PHASE 4-9: AI-STATIC HYBRID & SYNTHESIS (Feb 2026)
+- **Librarian/Nibbler:** Implemented dual-pipeline static synthesis for notes.
+- **Research Hub:** Created `research.html` mapping AI papers to implementations.
+- **Workbench UI:** Web Intercom with physical Report Writer sidebar.
+- **Subconscious Dreaming:** Multi-host memory consolidation pipeline (Linux -> Windows 4090).
+
+### ✅ PHASE 10: ARTIFACT SYNTHESIS (Feb 2026)
+- **Artifact Map:** Built `files.html` with unified "ALL" view and Drive integration.
+- **Cynical Ranking:** Implemented 0-4 "Showcase Value" scale (Rank 4 = Diamond).
+- **Nuclear Search:** Isolated Mission Control from DOM filtering bugs.
+- **Public Airlock (v3.1):** Deployed `www.jason-lab.dev`.
 
 ---
 
