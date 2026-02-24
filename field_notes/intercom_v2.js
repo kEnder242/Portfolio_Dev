@@ -234,8 +234,12 @@ function updateFileTree(files) {
     files.forEach(f => {
         const item = document.createElement('div');
         item.className = 'tree-item';
+        // Remove prefixes for display but keep them for the click event
         item.textContent = f;
-        item.onclick = () => ws.send(JSON.stringify({ type: "read_file", filename: f }));
+        item.onclick = () => {
+            console.log("Opening file:", f);
+            ws.send(JSON.stringify({ type: "read_file", filename: f }));
+        };
         tree.appendChild(item);
     });
 }
