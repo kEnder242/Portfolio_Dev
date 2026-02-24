@@ -362,6 +362,16 @@
 **Logic:** Ensures the Lab can recover network pathing to remote hosts without a service restart.
 **Mechanism:** Dynamic `resolve_brain_url()` call inside the live health-check loop.
 
+## [FEAT-114] Sovereign Bridge (Handover Context)
+**Status:** ACTIVE
+**Logic:** Injects the results of the initial "Signal" quip into the technical derivation's context window.
+**Mechanism:** `brain_strategy_chain` in `acme_lab.py` bridges sequential API calls to ensure cognitive continuity.
+
+## [FEAT-115] The Ultimate Patcher (Soft Fail)
+**Status:** ACTIVE
+**Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
+**Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
