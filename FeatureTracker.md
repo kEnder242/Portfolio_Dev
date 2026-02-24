@@ -372,6 +372,20 @@
 **Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
+---
+
+## 📖 THE PLAYBOOK (Operational Scenarios)
+*This section tracks high-level agentic capabilities demonstrated via prompting and tool-chains.*
+
+### [PLAYBOOK] Semantic Career Recall
+**Logic:** Asking about specific years or themes (e.g., "What did I do in 2019?") triggers a multi-turn retrieval and synthesis loop.
+
+### [PLAYBOOK] 3x3 CVT Synthesis
+**Logic:** Automated correlation of 18 years of technical history with yearly strategic goals for high-density positioning.
+
+### [PLAYBOOK] Insight Pruning (Hard Scrub)
+**Logic:** Following a direct order to scrub specific patterns (e.g., last names) from historical summaries using regex-based automation.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
