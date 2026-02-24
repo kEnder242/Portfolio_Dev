@@ -33,6 +33,13 @@
     *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
 *   **[ACTIVE] Semantic Sentinel**: Refine Sentinel logic into a true "Semantic Intent" gate using a tiny local model.
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
+*   **[BACKLOG] Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
+*   **[BACKLOG] Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
+*   **[BACKLOG] Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
+*   **[BACKLOG] Subconscious Sanitization**: Review dreaming/debate prompts to remove personal professional anchors.
+*   **[BACKLOG] Lazy-Load Protection**: Protect Hub stability by moving node-specific imports to local blocks.
+*   **[BACKLOG] Liger-Standard Test**: Bench-test Viger-Kernels for Ollama VRAM efficiency.
+*   **[BACKLOG] MAXS Utility Logic**: Implement "Value of Information" lookahead for Brain tasks.
 *   **[COMPLETED] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
     *   [x] **Tiered Brain Response**: [FEAT-086] WITTY preamble active.
     *   [x] **Intelligent Priming**: [FEAT-087] handshake priming verified.
