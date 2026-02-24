@@ -237,10 +237,10 @@
 **Logic:** Forces VRAM residency of the primary model upon first connection.
 **Mechanism:** High-priority generation probe (`force=True`) inside the `handshake` packet handler in `acme_lab.py`.
 
-## [FEAT-088] Recruiter Dashboard Reporting
-**Status:** ACTIVE
-**Logic:** Bridging the gap between background "Alarm Clock" tasks and user visibility.
-**Mechanism:** `recruiter.py` writes a high-level summary to `field_notes/data/recruiter_report.json`.
+## [FEAT-088] Semantic Career Recall
+**Status:** DORMANT (Requires ChromaDB)
+**Logic:** The fundamental ability to query 18 years of technical history via natural language (e.g., "What did I do in 2019?").
+**Mechanism:** Vector search via ArchiveNode bridging the local JSON logs to the reasoning nodes.
 
 ## [FEAT-089] Zero Trust Guest Expansion
 **Status:** ACTIVE

@@ -86,65 +86,63 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Foundational Scaling -->
                     <tr>
-                        <td><a href="https://arxiv.org/abs/2602.01566" target="_blank" class="anchor-link">FS-Researcher</a></td>
+                        <td><a href="https://arxiv.org/abs/2602.01566" target="_blank" class="anchor-link">FS-Researcher [FEAT-095]</a></td>
                         <td>Dual-Agent: Context Builder + Report Writer scaling for long-horizon memory.</td>
                         <td><code>nibble_v2.py</code> (Context) & Web Intercom (Report) via durable File-System RAG.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td><a href="https://arxiv.org/abs/2601.22628" target="_blank" class="anchor-link">TTCS (Curriculum)</a></td>
+                        <td><a href="https://arxiv.org/abs/2601.22628" target="_blank" class="anchor-link">TTCS [FEAT-114]</a></td>
                         <td>Test-Time Curriculum: Synthesize-then-Solve loops for higher reasoning quality.</td>
                         <td><code>CurriculumEngine</code> in <code>ai_engine_v2.py</code> processing 18 years of logs.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>Apple CLaRa</td>
-                        <td>Semantic Compression: 16x-128x density for long-term document retention.</td>
+                        <td>Apple CLaRa [FEAT-073]</td>
+                        <td>Semantic Compression: 16x-128x density for long-term retention.</td>
                         <td><code>SemanticCondenser</code> compressing tactical logs into high-fidelity abstracts.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
-                    <!-- Strategic Outcomes -->
                     <tr>
-                        <td>Agentic-R</td>
+                        <td>Agentic-R [FEAT-080]</td>
                         <td>Learning to Retrieve: Utility-based ranking for autonomous memory lookup.</td>
                         <td><code>ArchiveMemory</code> tool-kit allowing Pinky to follow technical breadcrumbs.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>3x3 CVT Builder</td>
+                        <td>3x3 CVT Builder [FEAT-088]</td>
                         <td>High-Density Career Indexing: Correlating scars with strategic Focal goals.</td>
                         <td>Signature resume synthesis tool extracting Diamond artifacts from raw notes.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>Internal Debate</td>
+                        <td>Internal Debate [FEAT-071]</td>
                         <td>Moderated Consensus: Dueling independent reasoning paths to reduce hallucinations.</td>
                         <td>Implemented in v3.1.9 for high-stakes architectural decision making.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>Dreaming Cycle</td>
+                        <td>Dreaming Cycle [FEAT-067]</td>
                         <td>Subconscious Consolidation: Multi-host batch processing during idle cycles.</td>
-                        <td><code>dream_cycle.py</code> moving chat interactions to Long-Term Wisdom (Linux -> 4090).</td>
+                        <td><code>dream_cycle.py</code> moving chat logs to Long-Term Wisdom (Linux -> 4090).</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>Liger-Kernel</td>
+                        <td>Liger-Kernel [FEAT-031]</td>
                         <td>VRAM Optimization: Fused kernels for efficient inference on consumer hardware.</td>
                         <td>Achieved 80% VRAM reduction on RTX 2080 Ti for 14B+ model capability.</td>
                         <td><span class="impact-badge impact-stable">Stable</span></td>
                     </tr>
                     <tr>
-                        <td>Unified Diffs (Patching)</td>
-                        <td>Robust Agentic Editing: Moving away from "Chopstick Coding" string replacement.</td>
-                        <td><code>patch_file</code> tool in Archive Node for granular, collision-aware workspace updates.</td>
+                        <td>Unified Diffs [FEAT-115]</td>
+                        <td>Robust Agentic Editing: Avoiding string-replacement collisions.</td>
+                        <td><code>patch_file</code> tool in Archive Node for granular workspace updates.</td>
                         <td><span class="impact-badge impact-live">Live</span></td>
                     </tr>
                     <tr>
-                        <td>Turing Deadlock Analysis</td>
-                        <td>Hardware instruction mismatch: BF16 tensors deadlocking UVM on Compute 7.5 silicon.</td>
+                        <td>SML Alignment [FEAT-083]</td>
+                        <td>Hardware instruction mismatch: Cross-platform model resolution and host-affinity.</td>
                         <td>Characterized 333MiB "Zombie State" across 4 engines; standardizing on Ollama Unity Pattern.</td>
                         <td><span class="impact-badge impact-stable">Final</span></td>
                     </tr>
@@ -164,29 +162,10 @@
                 <div class="roadmap-title">TTT-Discover (RL-based Autonomous Validation)</div>
                 <div class="roadmap-desc">Implementing reinforcement learning to autonomously discover the fastest path to silicon failure states within the archive.</div>
             </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-title">vLLM / PagedAttention Integration (Future Hardware)</div>
-                <div class="roadmap-desc">High-throughput multi-LoRA serving. Blocked on Turing silicon; verified for future RTX 3090/4090 Ampere+ upgrades.</div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-title">MAXS (Meta-Adaptive Exploration)</div>
-                <div class="roadmap-desc">Lookahead hooks to estimate the "Value of Information" before executing expensive tool calls.</div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-title">Hierarchical Expertise Tree (BKM Registry)</div>
-                <div class="roadmap-desc">Expanding flat JSON indices into a multi-layered Best Known Method (BKM) graph for the Architect persona.</div>
-            </div>
         </section>
     </main>
 
-    <script src="mission-control.js?v=bd431d08"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Nothing needed here for mobile menu
-        });
-    </script>
+    <script src="mission-control.js?v=476b9ef2"></script>
+    <script src="script.js?v=75defa3b"></script>
 </body>
 </html>
