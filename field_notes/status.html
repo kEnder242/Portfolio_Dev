@@ -99,6 +99,9 @@
         .markdown-body ul { padding-left: 20px; }
         .markdown-body li { margin-bottom: 5px; }
         .markdown-body a { color: #4daafc; text-decoration: none; border-bottom: 1px dashed #444; }
+        .markdown-body p { margin: 5px 0; }
+        .markdown-body ul, .markdown-body ol { margin: 5px 0; }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin: 10px 0 5px 0; }
         
         .alert-meta { font-size: 0.7rem; color: #555; margin-right: 10px; }
         
@@ -288,6 +291,14 @@
         }
 
         function renderInterleavedTimeline(alerts) {
+            // [FEAT-118] Non-Destructive Refresh: Preserve open state
+            const openNodes = new Set();
+            document.querySelectorAll('.tree-year.open').forEach(n => openNodes.add(n.id));
+            const openTerminals = new Set();
+            document.querySelectorAll('.inline-terminal').forEach(t => {
+                if(t.style.display === 'block') openTerminals.add(t.closest('.alert-item').dataset.id);
+            });
+
             root.innerHTML = "";
             const sortedAlerts = alerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             const nodes = [];
@@ -311,10 +322,17 @@
 
             nodes.forEach(node => {
                 if (node.type === 'priority') {
-                    root.appendChild(createAlertElement(node.data));
+                    const el = createAlertElement(node.data);
+                    if (openTerminals.has(el.dataset.id)) {
+                        expandAlertDetail(el.querySelector('.inline-terminal'), node.data);
+                    }
+                    root.appendChild(el);
                 } else {
                     const dayNode = document.createElement('div');
                     dayNode.className = 'tree-year';
+                    dayNode.id = 'day-' + node.day;
+                    if (openNodes.has(dayNode.id)) dayNode.classList.add('open');
+                    
                     const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
                     dayNode.innerHTML = `
@@ -326,7 +344,13 @@
                         </div>
                     `;
                     const list = dayNode.querySelector('.file-list');
-                    node.items.forEach(a => list.appendChild(createAlertElement(a)));
+                    node.items.forEach(a => {
+                        const el = createAlertElement(a);
+                        if (openTerminals.has(el.dataset.id)) {
+                            expandAlertDetail(el.querySelector('.inline-terminal'), a);
+                        }
+                        list.appendChild(el);
+                    });
                     root.appendChild(dayNode);
                 }
             });
@@ -334,6 +358,8 @@
 
         function createAlertElement(alert) {
             const div = document.createElement('div');
+            // Unique ID for state persistence (timestamp + source)
+            div.dataset.id = alert.timestamp + '-' + alert.source;
             div.className = `alert-item severity-${(alert.severity || 'info').toLowerCase()}`;
             div.innerHTML = `
                 <span class="alert-meta">[${new Date(alert.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span> 

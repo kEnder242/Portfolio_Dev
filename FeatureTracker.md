@@ -372,6 +372,16 @@
 **Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
+## [FEAT-117] Multi-Stage Retrieval (Discovery Pattern)
+**Status:** DESIGN
+**Logic:** Two-stage RAG. Stage 1 (ChromaDB) identifies the anchor; Stage 2 (Filesystem) retrieves the raw JSON truth.
+**Hemispheres:** Brain receives raw data for derivation; Pinky receives summaries for contextual banter.
+
+## [FEAT-118] Resonant Oracle (Magic 8-Ball Preambles)
+**Status:** DESIGN
+**Logic:** Replaces hard-coded strings with a weighted state-aware registry.
+**Categories:** `RETRIEVING`, `UNCERTAIN`, `SILICON_STRESS`, `HANDSHAKE`.
+
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
 **Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and "Blue Tree" navigation.
