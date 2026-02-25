@@ -78,7 +78,7 @@ function initResizer() {
 }
 
 // --- MESSAGING ---
-function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false) {
+function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false, metadata = {}) {
     const target = channel === 'insight' ? insightConsole : chatConsole;
     
     if (clear) {
@@ -96,9 +96,28 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const sl = source ? source.toLowerCase() : "system";
-    const displaySource = source.toUpperCase();
+    let displaySource = source.toUpperCase();
+
+    // [FEAT-118] Resonant Oracle Badge (Text-Only)
+    if (metadata.oracle_category) {
+        displaySource += ` (STATE: ${metadata.oracle_category})`;
+    }
+
+    // [FEAT-120] Context Transparency: Prepend clickable refs
+    if (metadata.sources && metadata.sources.length > 0) {
+        const sourceLinks = metadata.sources.map(s => 
+            `<a href="#" onclick="openFile('${s}'); return false;" style="color:var(--accent-color); text-decoration:none; margin-right:5px;">[Ref: ${s}]</a>`
+        ).join('');
+        text = `${sourceLinks} ${text}`;
+    }
     
-    msg.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-source ${sl}">[${displaySource}]:</span> <span class="msg-body">${text}</span>`;
+    msg.innerHTML = `
+        <div class="msg-header">
+            <span class="msg-time">${time}</span>
+            <span class="msg-source ${sl}">[${displaySource}]</span>
+        </div>
+        <div class="msg-body">${text}</div>
+    `;
     
     // Fix: Routing Logic - TRUE Brain or Brain (Shadow) or explicit insight channel goes to the right.
     const sl_low = sl.toLowerCase().trim();
@@ -213,7 +232,10 @@ function connect() {
                 activeFilename.textContent = data.filename;
                 editor.value(data.content);
             } else if (data.brain) {
-                appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false);
+                appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
+                    oracle_category: data.oracle_category,
+                    sources: data.sources
+                });
             } else if (data.type === 'transcription') {
                 appendMsg(data.text, 'user-msg', 'Me (Voice)');
             }
@@ -225,6 +247,13 @@ function connect() {
         };
     } catch (err) {
         appendMsg(`Connection Error: ${err.message}`, 'system-msg');
+    }
+}
+
+function openFile(fn) {
+    console.log("Opening file via ref:", fn);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: "read_file", filename: fn }));
     }
 }
 

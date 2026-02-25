@@ -41,15 +41,16 @@
         .panel-header { font-size: 0.7rem; color: #555; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         .system-msg { color: #666; font-style: italic; }
         
-        /* High-Fidelity Messages */
-        .message { margin-bottom: 8px; line-height: 1.4; display: flex; gap: 8px; align-items: baseline; }
-        .msg-time { color: #333; font-size: 0.65rem; min-width: 55px; font-family: monospace; }
-        .msg-source { font-weight: bold; text-transform: lowercase; min-width: 50px; text-align: right; font-family: monospace; }
+        /* High-Fidelity Messages - Zero Indent Overhaul */
+        .message { margin-bottom: 15px; line-height: 1.5; }
+        .msg-header { display: block; font-size: 0.7rem; margin-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 2px; }
+        .msg-time { color: #444; font-family: monospace; margin-right: 8px; }
+        .msg-source { font-weight: bold; text-transform: uppercase; font-family: monospace; }
         .msg-source.pinky { color: var(--accent-color); }
         .msg-source.brain { color: #f85149; }
         .msg-source.me { color: #888; }
         .msg-source.system { color: #444; }
-        .msg-body { flex: 1; }
+        .msg-body { display: block; color: #eee; word-wrap: break-word; }
 
         /* Input Area */
         #input-container { 
@@ -158,7 +159,7 @@
         </div>
     </main>
 
-    <script src="intercom_v2.js?v=a17466d0"></script>
+    <script src="intercom_v2.js?v=2f193378"></script>
     <script src="mission-control.js?v=bd431d08"></script>
 </body>
 </html>
