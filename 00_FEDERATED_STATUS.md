@@ -80,4 +80,4 @@ To force-clear browser caches after UI changes, run the automated build script:
 `python3 field_notes/build_site.py`
 
 ### Diagnostic Instruments
-Refer to **[HomeLabAI/docs/DIAGNOSTIC_RUNDOWN.md](../HomeLabAI/docs/DIAGNOSTIC_RUNDOWN.md)** for silicon verification and test suites.
+Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)** for silicon verification and test suites.

@@ -372,19 +372,38 @@
 **Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
+## [FEAT-045] Neural Pager Interactivity
+**Status:** DORMANT (Restoration Active)
+**Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and "Blue Tree" navigation.
+**Visuals:** Professional color-coding (Red/Orange/Blue) with slide-down terminal effects and simulated console typing.
+
+## [FEAT-078] Neural Trace (Inference Mirror)
+**Status:** DORMANT (Restoration Active)
+**Logic:** Black-box logging of all inference payloads (System + Prompt + Response) for technical auditability.
+**Mechanism:** `_mirror_trace` in `loader.py` persists full JSON payloads to `HomeLabAI/logs/trace_*.json`.
+
 ---
 
-## 📖 THE PLAYBOOK (Operational Scenarios)
-*This section tracks high-level agentic capabilities demonstrated via prompting and tool-chains.*
+## 🎭 THE VIBE LEDGER (Technical Behaviors & Scenarios)
+*This section tracks high-level agentic capabilities and interaction scenarios.*
 
-### [PLAYBOOK] Semantic Career Recall
+### [VIBE-001] Semantic Career Recall
 **Logic:** Asking about specific years or themes (e.g., "What did I do in 2019?") triggers a multi-turn retrieval and synthesis loop.
 
-### [PLAYBOOK] 3x3 CVT Synthesis
+### [VIBE-002] 3x3 CVT Synthesis
 **Logic:** Automated correlation of 18 years of technical history with yearly strategic goals for high-density positioning.
 
-### [PLAYBOOK] Insight Pruning (Hard Scrub)
-**Logic:** Following a direct order to scrub specific patterns (e.g., last names) from historical summaries using regex-based automation.
+### [VIBE-003] Insight Pruning (Hard Scrub)
+**Logic:** Following a direct order to surgically scrub patterns (e.g., last names) from historical summaries using regex-based automation.
+
+### [VIBE-004] Internal Debate (Peer Review)
+**Logic:** The scenario where Pinky and the Brain "duel" over a technical risk to reach a moderated consensus.
+
+### [VIBE-005] Subconscious Dreaming
+**Logic:** The automated background cycle that transforms chaotic raw logs into "Diamond Wisdom" abstracts.
+
+### [VIBE-006] The "Wave Paper" Event
+**Logic:** Collaborative UI behavior where a mouse notifies the user or auto-refreshes the editor when they write to the whiteboard.
 
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
