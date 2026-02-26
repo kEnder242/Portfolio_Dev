@@ -51,10 +51,16 @@ Every Lab process will generate a 4-part identity at initialization:
     *   **Fingerprint Audit**: Implement a "Ghost Hunter" tool that scans active PIDs for mismatched `BOOT_HASH` or `COMMIT_SHORT` tags and terminates them.
 
 ### 5. Final Resolution & Testing (Feb 26, 2026)
-*   **The Exorcism**: The `LabAttendant` was refactored to use `os.setpgrp()` and `os.killpg()`. The `fuser -k 8765/tcp` command successfully executed the final ghost holding the socket.
+*   **The Exorcism**: The `LabAttendant` was refactored to use `os.setpgrp()` and `os.killpg()`. The **[FEAT-119] Atomic Assassin** was implemented to explicitly hunt and kill any PID holding port 8765 before booting.
 *   **The RAG Fix**: ChromaDB does not support the `$contains` operator on metadata. The `ArchiveNode` was refactored to use **Python-level post-filtering**, fetching a larger batch of documents and strictly checking if the target year exists in the metadata timestamp. 
-*   **The JSON Bug**: The `[AMYGDALA] Recall failed` error was caused by `archive_node.py` returning plain text (e.g., "No relevant artifacts found") instead of valid JSON when queries returned zero results. This was corrected, allowing `acme_lab.py` to parse the response and inject the Grounding Mandate. 
-*   **Status**: `test_grounding_fidelity.py` now passes. The "Discovery Gap" is closed.
+*   **The JSON Bug**: The `[AMYGDALA] Recall failed` error was caused by `archive_node.py` returning plain text instead of JSON for empty results. Fixed.
+*   **[FEAT-124] Local Truth Sentry**: Successfully short-circuited archive hallucinations by using the local Shadow Brain to report "Archive Silence" for years with no records (e.g., 2010).
+*   **[FEAT-125] Smart-Reuse**: Implemented a "Warm Start" protocol that reuses active Lab instances if the code-on-disk matches the code-in-RAM, reducing test cycles from 30s to < 2s.
+
+## 6. Key Learnings (The "Scars" of v4.6)
+1.  **The Port Race**: Even after a `SIGKILL`, the Linux kernel can take up to 1-2 seconds to fully release a socket. Without an explicit `await asyncio.sleep(2.0)` and `reuse_address=True`, the Lab will enter a crash-loop on restart.
+2.  **The Version Gap**: Calculating Git hashes at the module level makes the process "Blind" to disk changes. Dynamic computation via functions is required for reliable "Smart-Reuse."
+3.  **Traceability is Authority**: Adding `[BOOT_HASH:COMMIT:ROLE]` to every log line instantly eliminated the "Am I testing the right code?" anxiety that had plagued the previous 48 hours.
 
 ---
 *Reference: [HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md](../HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md)*

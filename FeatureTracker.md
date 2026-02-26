@@ -403,9 +403,14 @@
 **Mechanism:** `process_query` in `acme_lab.py` detects empty RAG history and injects a high-priority "Do NOT invent" constraint.
 
 ## [FEAT-125] Smart-Reuse Protocol (Warm Start)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Accelerates developer velocity by reusing active Lab instances if the code-on-disk matches the code-in-RAM.
 **Mechanism:** Handshake status includes `boot_hash` and `git_commit`. Test scripts verify parity and perform a `Neuralyzer` memory wipe before proceeding, bypassing the 30s boot sequence.
+
+## [FEAT-126] Yearly Summary Injection
+**Status:** ACTIVE
+**Logic:** Automatically includes the high-level yearly summary (e.g., 2023.json) as a reference whenever a year is detected.
+**Mechanism:** `ArchiveNode.get_context` checks for the existence of `{year}.json` in the data directory and injects it into the `sources` metadata array.
 
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
