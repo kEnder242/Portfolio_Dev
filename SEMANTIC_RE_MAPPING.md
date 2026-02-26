@@ -63,3 +63,35 @@ Before launching the `META` features, the following "Infrastructure Gaps" were i
 *   **Race Conditions**: Always await `cleanup_silicon` in the Attendant.
 *   **Binary Bloat**: Do not scan `.docx` files without using an appropriate text-extractor (e.g., `python-docx` or `pandoc`).
 *   **Sync Trust**: Calculate Git hashes dynamically to ensure "Smart-Reuse" doesn't serve stale logic.
+
+<state_snapshot>
+    <overall_goal>
+        Execute Sprint SPR-11-05 (Semantic Re-Mapping) to ingest high-fidelity "META" documents (Insights, Philosophy, Focals) while transitioning the Nibbler to a modern Attendant-API-aware yield logic.
+    </overall_goal>
+
+    <active_constraints>
+        - **Pivot Mandate**: Use `localhost:9999/status` instead of local file paths for `round_table.lock` checks.
+        - **Load Guard**: Maintain `MAX_LOAD = 8.0` for active dev sessions.
+        - **Engine Standard**: All Portfolio scripts MUST use the `AcmeLabWebSocketClient` (Port 8765) via `ai_engine.py`.
+    </active_constraints>
+
+    <key_knowledge>
+        - **Restoration Verified**: `~/knowledge_base` is populated; `raw_notes` symlink is healthy.
+        - **Librarian Success**: `file_manifest.json` now includes the restored 18-year note files.
+        - **Queue Ready**: 129 tasks are pending in `queue.json` (spanning 2005-2024).
+    </key_knowledge>
+
+    <artifact_trail>
+        - `Portfolio_Dev/SEMANTIC_RE_MAPPING.md`: The BKM-style sprint plan (Updated with Feb 26 Debug State).
+        - `Portfolio_Dev/field_notes/ai_engine.py`: Refactored to use `AcmeLabWebSocketClient` as the default engine.
+        - `Portfolio_Dev/field_notes/utils.py`: Added `os.getloadavg()` fallback to `get_system_load`.
+        - `Portfolio_Dev/field_notes/scan_librarian.py` & `scan_queue.py`: Path-hardened for absolute project execution.
+    </artifact_trail>
+
+    <task_state>
+        1. [TODO] Implement BKM-017: Update `nibble_v2.py` to poll the Lab Attendant API for yield status.
+        2. [TODO] Implement BKM-015: Modify Librarian to classify Insights/Philosophy as `META`.
+        3. [TODO] Implement BKM-016: Create the `STRATEGIC_PROMPT` for `META` document processing.
+        4. [TODO] Run Fast Burn on the 2005-2024 queue.
+    </task_state>
+</state_snapshot>
