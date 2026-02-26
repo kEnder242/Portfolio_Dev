@@ -1,37 +1,44 @@
-# Strategic Anchoring (Sprint SPR-11-05)
+# Dev_Lab Federated Strategy
+**The Architectural Contract for the Acme Lab Ecosystem**
 
-## 🎯 The Mission
-The Lab currently has perfect "tactical" memory (the *What* and *When* via `notes_*.txt`) but lacks "strategic" grounding (the *Why*). This sprint will ingest the restored high-level documents (Insights, Focals, Philosophy, Resumes) and weave them into both the frontend Timeline and the backend Brain.
+This document defines the high-level rules for how independent projects within `Dev_Lab` coexist and interact.
 
-## 🗂️ File Inclusion Rubric
-*   **Target Files (The Anchors):**
-    *   `11066402 Insights 2019-2024.txt` -> High-level quarterly/yearly goals.
-    *   `Performance review 2008-2018 .txt` -> Early career growth and foundational achievements.
-    *   `Philosophy and Learnings 2024.docx` -> Core engineering DNA ("Class 1", "Verify over Velocity").
-    *   `Jason Allred Resume - Feb 2026.txt` -> The current "Ground Truth" persona.
-    *   `Jason Allred resume 2008-2014.txt` -> The "Origin Story".
-*   **Excluded Files:** Individual yearly reviews (redundant to combined `.txt`), older fragmented resumes, and raw binary artifacts (handled elsewhere).
+## 1. The Federated Model
+We follow a **"Shared Nothing, Talk via HTTP"** architecture.
 
-## 🧠 Semantic Re-Mapping (The Flow)
+*   **HomeLabAI:** The "Brain." Heavy compute, ML models, specialized hardware access.
+*   **Portfolio_Dev:** The "Face." Lightweight, static, high-availability dashboard.
+*   **Acme_Lab:** The "Product." The shipping code that combines these.
 
-### 1. Librarian Classification (`scan_librarian.py`)
-*   **Action**: Expand the `NOTES_GLOB` to explicitly include the target files listed above.
-*   **Logic**: The Librarian will tag these files with `"type": "META"` instead of `LOG` or `REFERENCE`. This tells the downstream pipeline that this is *foundational context*, not a daily engineering event.
+## 2. Environment Strategy (The "Clean Room" Rule)
+To prevent "Dependency Hell," we enforce strict isolation.
 
-### 2. The Strategic Nibbler (`nibble_v2.py`)
-*   **Action**: Create a new processing path for `META` files.
-*   **Logic**: Instead of breaking the file into monthly chunks (like `LOG`s), the Nibbler will use a new `STRATEGIC_PROMPT`. It will ask the LLM to extract "Yearly Focals" and "Core Philosophies."
-*   **Output**: These are saved as high-ranking events (Rank 4/5) with a specific tag (e.g., `[STRATEGIC_ANCHOR]`) and written directly into the `YYYY.json` summaries, ensuring they appear at the *top* of any given year in the Timeline UI.
+### 🚫 The Anti-Pattern (What we avoid)
+*   **System Python for Libraries:** Never install `pip` packages (especially `torch`, `numpy`) into `/usr/bin/python3`. This risks breaking OS utilities (`apt`, `dnf`) and creates unfixable conflict states.
+*   **The "Mega-Venv":** Do not share a single `.venv` across HomeLabAI and Portfolio. Updating the Brain's PyTorch should never crash the Portfolio's website builder.
+*   **System Fallback:** We do NOT use `--system-site-packages`. Each project must explicitly declare exactly what it needs.
 
-### 3. The Truth Sentry Integration (`archive_node.py`)
-*   **Action**: Update the `ArchiveNode` to prioritize `META` tags.
-*   **Logic**: When a year is queried, the node will first fetch the `[STRATEGIC_ANCHOR]` from the `YYYY.json` file. This anchor acts as the "Grounding Mandate" for that year, ensuring the Brain understands the broader goal before it reads the granular technical logs.
+### ✅ The Protocol
+| Project | Env Location | Requirements | Profile |
+| :--- | :--- | :--- | :--- |
+| **HomeLabAI** | `./HomeLabAI/.venv` | `requirements.txt` (Heavy) | PyTorch, CUDA, Transformers, Audio |
+| **Portfolio_Dev** | `./Portfolio_Dev/.venv` | `requirements.txt` (Light) | Requests, Prometheus_Client |
 
-## 🧪 Testing Strategy
+## 3. The Bridge (Inter-Process Communication)
+Since the environments are separate, they cannot import each other's code directly.
+*   **Logic:** `import acme.brain` ❌ **FORBIDDEN**
+*   **Logic:** `requests.post('localhost:8765/ask')` ✅ **APPROVED**
 
-*   **Test 1: The Anchor Verification**
-    *   *Action*: Run `scan_librarian.py` and verify `file_manifest.json` correctly tags the target files as `META`.
-*   **Test 2: The UI Header Check**
-    *   *Action*: After running the Nibbler on `Insights 2019-2024`, check `2023.json` to ensure the strategic focal points were extracted and ranked highly.
-*   **Test 3: The Grounding Fidelity Run**
-    *   *Action*: Run the existing `test_grounding_fidelity.py` but modify the query to ask about "Strategic Goals in 2023." Verify the Brain cites the `Insights` document over a random `notes` log.
+This decoupling ensures that even if the AI Brain crashes or is rebuilding, the Portfolio dashboard remains live and functional.
+
+## 4. Component Hierarchy (The "Resilience" Law)
+We prioritize system availability by distinguishing between "Invariant" and "Transient" components.
+
+*   **The Invariant Sensory Core (EarNode):** Powered by NeMo. This is the "Heart." It MUST remain resident and functional regardless of the reasoning engine state. Sensing must never fail.
+*   **The Transient Reasoning Engine (Brain/Pinky):** Powered by vLLM/Ollama. This is the "Mind." It can be downshifted, swapped, or suspended based on hardware pressure.
+
+## 5. Hardware Alignment (The "Silicon" Mandate)
+To survive on an 11GB VRAM budget (RTX 2080 Ti), all AI projects MUST adhere to these resource constraints:
+*   **Model Tiering**: Standardize on **Gemma 2 2B (MEDIUM)** for local reasoning. 
+*   **VRAM Parity**: Avoid models > 7B on the orchestration node to prevent clashing with the EarNode (~1GB) and system overhead.
+*   **Native Pre-emption**: AI processes must be ready to yield to non-AI tasks (Games/Transcodes) via the Resilience Ladder.
