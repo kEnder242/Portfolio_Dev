@@ -95,3 +95,12 @@ Before launching the `META` features, the following "Infrastructure Gaps" were i
         4. [TODO] Run Fast Burn on the 2005-2024 queue.
     </task_state>
 </state_snapshot>
+
+## 🚢 IN-FLIGHT FILE AUDIT (Uncommitted Infrastructure Fixes)
+The following files are modified but uncommitted to preserve a clean "Sprint Start" for the next session. They provide the **Hardened Infrastructure** required for the 18-year re-scan:
+
+1.  **`field_notes/ai_engine.py`**: Transitioned to `AcmeLabWebSocketClient` (Port 8765) for unified Lab connectivity.
+2.  **`field_notes/nibble_v2.py`**: Implemented `[Context]` date-fallback and raised `MAX_LOAD` to 8.0 for Z87-Linux session tolerance.
+3.  **`field_notes/scan_librarian.py`**: Hardened `MANIFEST_FILE` pathing to absolute project-root.
+4.  **`field_notes/scan_queue.py`**: Hardened `DATA_DIR` and `QUEUE_FILE` pathing to absolute project-root.
+5.  **`field_notes/utils.py`**: Added `os.getloadavg()` fallback to `get_system_load` for when Prometheus is unreachable.
