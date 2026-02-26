@@ -402,6 +402,11 @@
 **Logic:** Prevents Brain hallucinations when years are empty or invalid by providing a strict "Total Archive Silence" mandate.
 **Mechanism:** `process_query` in `acme_lab.py` detects empty RAG history and injects a high-priority "Do NOT invent" constraint.
 
+## [FEAT-125] Smart-Reuse Protocol (Warm Start)
+**Status:** DESIGN
+**Logic:** Accelerates developer velocity by reusing active Lab instances if the code-on-disk matches the code-in-RAM.
+**Mechanism:** Handshake status includes `boot_hash` and `git_commit`. Test scripts verify parity and perform a `Neuralyzer` memory wipe before proceeding, bypassing the 30s boot sequence.
+
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
 **Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and "Blue Tree" navigation.
