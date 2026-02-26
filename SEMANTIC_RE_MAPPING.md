@@ -11,6 +11,19 @@ These files were restored on Feb 26, 2026, and are the primary targets:
 *   `raw_notes/Philosophy and Learnings 2024.docx` (Engineering DNA)
 *   `raw_notes/Jason Allred Resume - Feb 2026.txt` (Target Persona)
 
+## 🔄 PIVOT: LOCK PARITY (Feb 26 Update)
+**Discovery**: The `round_table.lock` (Inference Mutex) has evolved. Hardcoded file paths in `utils.py` and `nibble_v2.py` are now "Legacy Cruft" that cause resource contention.
+*   **The Change**: Transition from `os.path.exists(LOCK)` to **Attendant API Polling**.
+*   **Mechanism**: Query `http://localhost:9999/status` -> check `round_table_lock_exists`.
+*   **Rationale**: This abstracts the "Round Table" state away from the filesystem, ensuring the Slow Burn yields correctly to active 4090 Brain sessions regardless of working directory.
+
+## 🔍 CURRENT DEBUGGING STATE (Pre-Flight)
+Before launching the `META` features, the following "Infrastructure Gaps" were identified and patched:
+1.  **Path Hardening**: `scan_librarian.py` and `scan_queue.py` now use `BASE_DIR` absolute paths to prevent CWD-related `FileNotFound` errors.
+2.  **Lab Connectivity**: `ai_engine.py` was updated to `AcmeLabWebSocketClient` to use the unified Lab Port (8765) instead of local Ollama (11434).
+3.  **Load Tolerance**: `MAX_LOAD` was increased from 2.0 to 8.0 to allow processing during active developer sessions (Zellij/CLI).
+4.  **Date Validation**: Added `[Context]` allowance for "Unknown" buckets to prevent silent task-skipping.
+
 ## 🛠️ COMPONENT BKM (Step-by-Step Logic)
 
 ### BKM-015: Librarian Classification (`scan_librarian.py`)
