@@ -26,10 +26,12 @@
 9.  **[ACTIVE] Sprint SPR-11-04: The Ghost Hunter**: Initiated to resolve "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
 
 ## 🔮 The Roadmap (The Restoration Hub)
-*   **[ACTIVE] Phase 11.3: The Ghost Hunter** (Sprint SPR-11-04)
-    *   [ ] **Lab Fingerprint**: Implement [FEAT-121] Boot Hash and Git-Commit tracing.
-    *   [ ] **Proc Title**: Implement [FEAT-122] kernel-level process renaming.
-    *   [ ] **Process Group Cleanup**: Refactor Attendant to use `os.killpg()` for total tree termination.
+*   **[COMPLETE] Phase 11.3: The Ghost Hunter** (Sprint SPR-11-04)
+    *   [x] **Lab Fingerprint**: Implemented [FEAT-121] Boot Hash and Git-Commit tracing.
+    *   [x] **Proc Title**: Implemented [FEAT-122] kernel-level process renaming.
+    *   [x] **Process Group Cleanup**: Refactored Attendant to use `os.killpg()` for total tree termination.
+    *   [x] **Socket-Aware Assassin**: Implemented [FEAT-119] to purge port 8765 before boot.
+    *   [x] **Local Truth Sentry**: Implemented [FEAT-124] to prevent archive hallucinations.
 *   **[ACTIVE] Phase 11.2: Authority of Synthesis** (Sprint SPR-11-03)
     *   [x] **Synthesis of Authority**: Implemented [FEAT-109] laconic synthesis prompts for the Brain.
     *   [x] **The Shadow Moat**: Implemented [FEAT-110] post-generation post-sanitization for persona isolation.
