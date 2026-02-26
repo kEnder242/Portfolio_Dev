@@ -50,5 +50,11 @@ Every Lab process will generate a 4-part identity at initialization:
     *   **Process Groups**: Modify the Attendant to use `os.killpg()` to ensure entire process trees are terminated.
     *   **Fingerprint Audit**: Implement a "Ghost Hunter" tool that scans active PIDs for mismatched `BOOT_HASH` or `COMMIT_SHORT` tags and terminates them.
 
+### 5. Final Resolution & Testing (Feb 26, 2026)
+*   **The Exorcism**: The `LabAttendant` was refactored to use `os.setpgrp()` and `os.killpg()`. The `fuser -k 8765/tcp` command successfully executed the final ghost holding the socket.
+*   **The RAG Fix**: ChromaDB does not support the `$contains` operator on metadata. The `ArchiveNode` was refactored to use **Python-level post-filtering**, fetching a larger batch of documents and strictly checking if the target year exists in the metadata timestamp. 
+*   **The JSON Bug**: The `[AMYGDALA] Recall failed` error was caused by `archive_node.py` returning plain text (e.g., "No relevant artifacts found") instead of valid JSON when queries returned zero results. This was corrected, allowing `acme_lab.py` to parse the response and inject the Grounding Mandate. 
+*   **Status**: `test_grounding_fidelity.py` now passes. The "Discovery Gap" is closed.
+
 ---
 *Reference: [HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md](../HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md)*
