@@ -372,6 +372,16 @@
 **Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
+## [FEAT-121] Lab Fingerprint (Distributed Tracing)
+**Status:** DESIGN
+**Logic:** Implements a 4-part execution identity `[BOOT_HASH : COMMIT_SHORT : NODE_ROLE : PID]` to eliminate ghost processes and verify sync trust.
+**Mechanism:** Dynamic hex hash generation at init and Git short-hash injection into all log streams and heartbeats.
+
+## [FEAT-122] Kernel-Level Visibility (Proc Title)
+**Status:** DESIGN
+**Logic:** Renames Python processes in `ps`/`htop` to their full Fingerprint using `setproctitle`.
+**Mechanism:** `HUB` and `RESIDENT` nodes update their process title at startup to betrayed stale/un-parented zombies.
+
 ## [FEAT-117] Multi-Stage Retrieval (Discovery Pattern)
 **Status:** DESIGN
 **Logic:** Two-stage RAG. Stage 1 (ChromaDB) identifies the anchor; Stage 2 (Filesystem) retrieves the raw JSON truth.

@@ -24,4 +24,31 @@ Despite applying the **"Hard Year Filter"** logic to `archive_node.py` (forcing 
 *   **Process Management**: `hard_reset` is insufficient for deep logic changes; aggressive process termination and cache purges are required for total synchronization.
 
 ---
+
+## 🛠️ Plan of Action: [FEAT-121] Distributed Tracing "Lab Fingerprint"
+**Objective**: Eliminate "Ghost Processes" and "Sync Trust" gaps through verifiable execution context.
+
+### 1. The Fingerprint Schema
+Every Lab process will generate a 4-part identity at initialization:
+`[BOOT_HASH : COMMIT_SHORT : NODE_ROLE : PID]`
+*   **BOOT_HASH**: A dynamic 4-character hex (e.g., `A7B2`) generated at entry-point.
+*   **COMMIT_SHORT**: Output of `git rev-parse --short HEAD` to verify disk-to-RAM synchronization.
+*   **NODE_ROLE**: Identity of the process (HUB, ARCHIVE, PINKY, etc.).
+*   **FILE_MTIME**: (Log-only) The modified timestamp of the executing `__file__` to verify sync completion.
+
+### 2. [FEAT-122] Kernel-Level Visibility (Proc Title)
+*   **Action**: Use `setproctitle` to rename processes in `ps`/`htop` to their full Fingerprint.
+*   **Benefit**: Instant identification of "Ghost" processes from previous boot cycles without checking logs.
+
+### 3. Montana Protocol Extension (Traceable Logs)
+*   **Init Registration**: Every node logs its full Fingerprint and executing file path once at startup.
+*   **Heartbeat (Optional/Configurable)**: A periodic `[STATUS_PULSE][Fingerprint]` log entry, disabled by default to prevent clutter but togglable for deep debugging of silent/hijacked logs.
+
+### 4. Strategic Culprit: The Attendant's Blind Spot
+*   **Diagnosis**: Current `cleanup_silicon` logic uses string-matching `SIGKILL`, which orphans resident subprocesses and skips `finally` cleanup blocks.
+*   **Strategy**:
+    *   **Process Groups**: Modify the Attendant to use `os.killpg()` to ensure entire process trees are terminated.
+    *   **Fingerprint Audit**: Implement a "Ghost Hunter" tool that scans active PIDs for mismatched `BOOT_HASH` or `COMMIT_SHORT` tags and terminates them.
+
+---
 *Reference: [HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md](../HomeLabAI/docs/plans/SPRINT_STATUS_VISIBILITY_v4.6.md)*
