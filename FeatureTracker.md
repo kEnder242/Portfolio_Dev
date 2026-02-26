@@ -392,6 +392,16 @@
 **Logic:** Replaces hard-coded strings with a weighted state-aware registry.
 **Categories:** `RETRIEVING`, `UNCERTAIN`, `SILICON_STRESS`, `HANDSHAKE`.
 
+## [FEAT-119] The Assassin (Atomic Lifecycle)
+**Status:** ACTIVE
+**Logic:** Ensures the Lab's port (8765) is clear and reaped by the kernel before any boot attempt begins.
+**Mechanism:** `cleanup_silicon` in `lab_attendant.py` identifies PIDs holding the TCP port. The `boot_sequence` coroutine implements an **Atomic Lifecycle Barrier** by awaiting total cleanup before spawning the new process, eliminating race-condition collisions.
+
+## [FEAT-123] The Truth Sentinel (Grounding Hardness)
+**Status:** ACTIVE
+**Logic:** Prevents Brain hallucinations when years are empty or invalid by providing a strict "Total Archive Silence" mandate.
+**Mechanism:** `process_query` in `acme_lab.py` detects empty RAG history and injects a high-priority "Do NOT invent" constraint.
+
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
 **Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and "Blue Tree" navigation.
