@@ -13,22 +13,24 @@ logging.basicConfig(level=logging.INFO, format='[AGGREGATE] %(message)s')
 def get_year_range(year_str):
     """Parses 'YYYY', 'YYYY-YYYY', or 'YYYY_MM' into a list of years."""
     if not year_str: return []
-    year_str = year_str.replace('_', '-')
+    # Normalize separators
+    year_str = year_str.replace('_', '-').replace(' ', '-')
+    
     # Handle YYYY-YYYY
     range_match = re.match(r'(\d{4})-(\d{4})', year_str)
     if range_match:
         start, end = map(int, range_match.groups())
         return [str(y) for y in range(start, end + 1)]
-    # Handle YYYY
-    if re.match(r'^\d{4}$', year_str):
-        return [year_str]
-    # Handle YYYY-MM
-    if re.match(r'^\d{4}-\d{2}$', year_str):
-        return [year_str[:4]]
+    
+    # Handle YYYY-MM or YYYY
+    year_match = re.match(r'^(\d{4})', year_str)
+    if year_match:
+        return [year_match.group(1)]
+        
     return []
 
 def aggregate_years():
-    logging.info("--- Consolidating Logs into Yearly Summaries [v2.3] ---")
+    logging.info("--- Consolidating Logs into Yearly Summaries [v2.4] ---")
     
     # 1. Load Manifest
     manifest = {}
@@ -61,34 +63,47 @@ def aggregate_years():
                 # Logic: Determine target years
                 target_years = []
                 
-                # A. Check if filename itself is a range or bucket (e.g. 2008_2018)
+                # A. Check filename for range (e.g. 2008_2018)
                 target_years = get_year_range(fname_base)
                 
-                # B. If not a clear year, try manifest lookup
+                # B. If not in filename, try manifest lookup
                 if not target_years:
                     fname_norm = fname_base.replace(' ', '_').lower()
                     for mf, info in manifest.items():
                         mf_norm = os.path.splitext(mf)[0].replace(' ', '_').lower()
-                        if mf_norm in fname_norm or fname_norm in mf_norm:
-                            target_years = get_year_range(info.get('year'))
-                            break
+                        if mf_norm == fname_norm or mf_norm in fname_norm or fname_norm in mf_norm:
+                            target_years = get_year_range(info.get('year', ''))
+                            if target_years: break
                 
-                # C. Last resort
                 if not target_years:
                     target_years = ["Unknown"]
 
                 logging.info(f"   [DISTRIBUTE] {os.path.basename(fpath)} -> {target_years}")
 
                 for year in target_years:
+                    if year == "Unknown": continue
                     if year not in yearly_buckets: yearly_buckets[year] = []
+                    
                     for event in data:
                         new_event = event.copy()
-                        # Normalize date for the target year
+                        # Sanity: Does the event actually belong in this year?
+                        # If the event has a specific date, we honor it. 
+                        # If it's a range date (e.g. "Oct 2007 - Dec 2007") and we are distributing to 2012, 
+                        # that is a mismatch.
+                        
                         raw_date = str(new_event.get('date', ''))
-                        if '-' in raw_date and len(raw_date) > 7:
-                            # If date is a range, pin to start of target year
-                            new_event['date'] = f"{year}-01-01"
-                        elif raw_date == "Unknown" or not raw_date:
+                        
+                        # Extract year from event date if possible
+                        event_year_match = re.search(r'(\d{4})', raw_date)
+                        if event_year_match:
+                            event_year = event_year_match.group(1)
+                            # If event year is known and doesn't match target year, skip distribution
+                            # EXCEPT for anchors which we pin to the start of every year in the range
+                            if event_year != year and "[STRATEGIC_ANCHOR]" not in str(new_event.get('summary', '')):
+                                continue
+
+                        # Pin anchors and fuzzy dates to the target year
+                        if "[STRATEGIC_ANCHOR]" in str(new_event.get('summary', '')) or not event_year_match:
                             new_event['date'] = f"{year}-01-01"
                         
                         yearly_buckets[year].append(new_event)
@@ -120,6 +135,10 @@ def aggregate_years():
             return f"{d}|{s}"
 
         for item in existing_events:
+            # Cleanup: Remove leaked 2007 data from 2024 tree
+            if year == "2024" and "2007" in str(item.get('date', '')) or "2007" in str(item.get('summary', '')):
+                continue
+            
             fp = get_fingerprint(item)
             if fp not in seen:
                 final_events.append(item)

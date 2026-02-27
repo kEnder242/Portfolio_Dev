@@ -217,7 +217,15 @@
             const list = document.getElementById(`files-${year}`);
             list.innerHTML = ""; 
             const groups = {};
+            
+            // Detect Rank 5 Anchors for a special "Strategy Sector" entry
+            const anchors = events.filter(e => e.rank === 5 || (e.summary && e.summary.includes("[STRATEGIC_ANCHOR]")));
+            if (anchors.length > 0) {
+                groups["STRATEGY"] = anchors;
+            }
+
             events.forEach(e => {
+                if (e.rank === 5) return; // Already in anchors
                 let dateDisplay = e.date || "Unknown";
                 if (dateDisplay.includes("Unknown") || dateDisplay.startsWith("1970")) {
                     dateDisplay = "LOG";
@@ -232,14 +240,21 @@
                 const li = document.createElement('li');
                 li.className = 'file-item';
                 
-                // NEW: Detect if this month has a Diamond artifact
+                // NEW: Detect if this month has a Diamond or Strategic artifact
+                const hasAnchor = month === "STRATEGY";
                 const hasDiamond = monthData.some(e => e.rank >= 4);
-                const colorStyle = hasDiamond ? 'color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.3);' : 'color: var(--accent-color);';
+                
+                let colorStyle = 'color: var(--accent-color);';
+                if (hasAnchor) colorStyle = 'color: #00f2ff; text-shadow: 0 0 8px rgba(0,242,255,0.4); font-weight: bold;';
+                else if (hasDiamond) colorStyle = 'color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.3);';
 
                 let filename = "misc.log";
                 
+                if (month === "STRATEGY") {
+                    filename = "career_strategy.sector";
+                }
                 // Case 1: Standard YYYY-MM
-                if (month.match(/^\d{4}-\d{2}$/)) {
+                else if (month.match(/^\d{4}-\d{2}$/)) {
                     const parts = month.split('-');
                     let mName = "misc";
                     try { mName = new Date(2000, parseInt(parts[1])-1, 1).toLocaleString('default', {month:'short'}).toLowerCase(); } catch(e){}
@@ -290,14 +305,16 @@
                     dateDisplay = "LOG";
                 }
                 
-                const isDiamond = e.rank >= 4;
-                const prefix = "";
+                const isAnchor = e.rank === 5 || (e.summary && e.summary.includes("[STRATEGIC_ANCHOR]"));
+                const isDiamond = e.rank === 4;
+                const prefix = isAnchor ? "🎯 [STRATEGIC] " : "";
+                const summary = (e.summary || "").replace("[STRATEGIC_ANCHOR]", "").trim();
                 
                 if (dateDisplay !== lastDate) {
-                    buffer += `\n[${dateDisplay}] ${prefix}${e.summary}\n`;
+                    buffer += `\n[${dateDisplay}] ${prefix}${summary}\n`;
                     lastDate = dateDisplay;
                 } else {
-                    buffer += `   ↳ ${prefix}${e.summary}\n`;
+                    buffer += `   ↳ ${prefix}${summary}\n`;
                 }
 
                 if (e.evidence) buffer += `     EVIDENCE: ${e.evidence.substring(0, 120)}\n`;

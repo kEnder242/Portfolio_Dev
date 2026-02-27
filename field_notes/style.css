@@ -214,3 +214,18 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
     #menu-toggle { display: block; }
     main { padding: 80px 20px; }
 }
+
+/* [FEAT-128] Strategic Anchor Styling */
+.event-card.rank-5 {
+    border: 2px solid #00f2ff !important; /* Neon Blue */
+    background: rgba(0, 242, 255, 0.05) !important;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+}
+
+.event-card.rank-5 .summary::before {
+    content: "🎯 STRATEGIC FOCUS: ";
+    color: #00f2ff;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
