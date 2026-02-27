@@ -470,6 +470,20 @@
 ### [VIBE-006] The "Wave Paper" Event
 **Logic:** Collaborative UI behavior where a mouse notifies the user or auto-refreshes the editor when they write to the whiteboard.
 
+### [VIBE-007] The "Validation Journal" Pattern
+**Structure:**
+- **Order:** Latest-First (Reverse Chronological).
+- **Head:** Temporary TODOs, lists, and active "Today" buffers.
+- **Section Dividers:** Heavy ASCII lines (`=======` or `-------`).
+- **Anchors:** `[ctrl-F10 s]` reminder usually signals the start of the "DONE" or "Today" event block.
+- **Bulk:** Daily dated entries (M/D/YYYY) containing technical evidence.
+- **Tail:** Stale TODO lists and a "Contacts" directory.
+**Archaeology (Pre-2008 Outliers):**
+- **Fuzzy Chronology:** Early files (e.g., `notes_2005.txt`, `ras-viral.txt`) lack regular timestamps. Dates must be gleaned from surrounding context or header markers.
+- **Role Alignment:** "Year" notes often span multiple years, correlating with career roles (EPSD, DSD, MVE, PAE, PIAV).
+- **Team Tags:** Acronyms in filenames (DSD, MVE, PIAV) correspond to specific engineering teams and should be preserved as high-fidelity metadata.
+**Constraint:** Classification MUST skip the head/tail noise and focus on the ASCII-delimited middle bulk to verify "LOG" status.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.

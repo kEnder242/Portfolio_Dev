@@ -6,28 +6,52 @@ import re
 import time
 
 # Add current directory to path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 from ai_engine import get_engine
 from utils import update_status, can_burn
 
 # Config
-NOTES_GLOB = "raw_notes/**/notes_*.txt"
-RAS_GLOB = "raw_notes/**/ras-*.txt"
-MANIFEST_FILE = "field_notes/data/file_manifest.json"
+# Expanded glob to catch Insights, Philosophy, and Reviews using Absolute Paths
+NOTES_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.txt")
+DOCX_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.docx")
+RAS_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/ras-*.txt")
+MANIFEST_FILE = os.path.join(BASE_DIR, "data/file_manifest.json")
 ENGINE = get_engine(mode="LOCAL")
 
 def read_sample(path):
-    """Read header and a chunk from the middle to catch logs behind backlogs."""
+    """
+    [VIBE-007] Journal-Aware Sampling.
+    Bypasses head TODO noise by hunting for anchors or ASCII dividers.
+    """
     try:
-        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-            header = f.read(2000)
-            f.seek(0, 2) # End
-            size = f.tell()
-            mid_point = max(0, size // 2 - 1000)
-            f.seek(mid_point)
-            middle = f.read(2000)
-            return header + "\n\n...[SKIP]...\n\n" + middle
-    except Exception:
+        if path.endswith('.docx'):
+            import docx2txt
+            text = docx2txt.process(path)
+        else:
+            with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+                text = f.read()
+        
+        lines = text.splitlines()
+        if len(lines) < 100:
+            return text
+        
+        # Hunt for the Journal Anchor [ctrl-F10 s] or ASCII dividers
+        start_idx = 0
+        for i, line in enumerate(lines[:500]): # Scan first 500 lines
+            if "[ctrl-F10 s]" in line or "======" in line or "------" in line:
+                start_idx = i
+                break
+        
+        # If no anchor found, skip the first 100 lines of head noise
+        if start_idx == 0:
+            start_idx = 100
+
+        header = "\n".join(lines[start_idx : start_idx + 100])
+        middle = "\n".join(lines[len(lines)//2 : len(lines)//2 + 50])
+        return f"[STARTING AT LINE {start_idx}]\n{header}\n\n[...]\n\n{middle}"
+    except Exception as e:
+        print(f"Error reading {path}: {e}")
         return ""
 
 def extract_json(text):
@@ -43,10 +67,9 @@ def extract_json(text):
         return {}
 
 def classify_file(filename, text_sample):
-    # Heuristic: Check for dates
-    has_dates = bool(re.search(r'\d{1,2}/\d{1,2}/\d{2,4}', text_sample))
-    date_hint = "Contains chronological date entries." if has_dates else "No obvious dates found."
-
+    """
+    Calls the AI Engine to classify the file.
+    """
     prompt = f"""
     [TASK]
     Act as a digital librarian. Analyze this file sample (Header + Middle) and classify it.
@@ -54,48 +77,72 @@ def classify_file(filename, text_sample):
     [FILENAME]
     {filename}
     
-    [HINT]
-    {date_hint}
-    
-    [TEXT SAMPLE]
-    {text_sample[:4000]}
+    [CONTENT SAMPLE]
+    {text_sample[:2000]}
     
     [CATEGORIES]
-    - LOG: A chronological engineering journal. (MUST contain dates).
-    - REFERENCE: A cheat sheet, config file, how-to guide, or topic dump.
-    - META: Personal career docs, resumes, performance reviews.
+    - LOG: Chronological technical notes, daily logs, error traces.
+    - META: Resumes, performance reviews, philosophy, high-level insights.
+    - REFERENCE: Technical manuals, specs, READMEs (static info).
+    - UNKNOWN: None of the above.
     
-    [OUTPUT]
-    Return a JSON object:
+    [OUTPUT FORMAT]
+    JSON only:
     {{
-      "type": "LOG" | "REFERENCE" | "META",
-      "year": "YYYY" (Best guess for LOG, or null),
-      "topic": "Short 2-3 word topic if REFERENCE",
+      "type": "LOG|META|REFERENCE|UNKNOWN",
+      "year": "YYYY or null",
+      "topic": "Short 2-3 word topic",
       "confidence": 0.0 to 1.0
     }}
     """
     
     print(f"   > Librarian analyzing {filename}...")
-    response = ENGINE.generate(prompt)
-    return extract_json(response)
+    try:
+        response = ENGINE.generate(prompt)
+        return extract_json(response)
+    except Exception as e:
+        print(f"Error classifying {filename}: {e}")
+        return {"type": "UNKNOWN", "note": str(e)}
 
 def main():
-    print("--- Pinky Librarian v1.2 ---")
+    print("--- Pinky Librarian v1.4 (Archaeology Aware) ---")
     
-    # Force overrides for known tricky files
+    if os.path.exists(MANIFEST_FILE):
+        with open(MANIFEST_FILE, 'r') as f:
+            manifest = json.load(f)
+    else:
+        manifest = {}
+
+    files = sorted(
+        glob.glob(NOTES_GLOB, recursive=True) + 
+        glob.glob(RAS_GLOB, recursive=True) +
+        glob.glob(DOCX_GLOB, recursive=True)
+    )
+    
+    # [VIBE-007] Archaeology Hints & Manual Overrides
     OVERRIDES = {
-        "notes_2024_PIAV.txt": "LOG",
-        "Performance review 2008-2018 .txt": "META",
-        "11066402 Insights 2019-2024.txt": "META",
-        "ras-viral.txt": "LOG",
-        "ras-einj.txt": "LOG"
+        "notes_2024_PIAV.txt": {"type": "LOG", "year": "2019-2024", "tags": ["PIAV", "Manageability"]},
+        "notes_2018_PAE.txt": {"type": "LOG", "year": "2016-2019", "tags": ["PAE", "AEP", "Optane"]},
+        "notes_2016_MVE.txt": {"type": "LOG", "year": "2016", "tags": ["MVE", "Graphics"]},
+        "notes_2015_DSD.txt": {"type": "LOG", "year": "2011-2016", "tags": ["DSD", "VISA", "Post-Silicon Debug"]},
+        "notes_2006_EPSD.txt": {"type": "LOG", "year": "2005-2007", "tags": ["EPSD", "Internship"]},
+        "notes_2005.txt": {"type": "LOG", "year": "2005", "tags": ["EPSD"]},
+        "11066402 Insights 2019-2024.txt": {"type": "META", "year": "2019-2024"},
+        "Performance_Review_2008-2018.txt": {"type": "META", "year": "2008-2018"},
+        "notes_GIT.txt": {"type": "REFERENCE", "note": "Not a log"},
+        "ras-viral.txt": {"type": "LOG", "year": "2018-2019", "topic": "RAS / Viral Errors"},
+        "ras-einj.txt": {"type": "LOG", "year": "2018", "topic": "RAS / EINJ"}
     }
     
-    manifest = {}
-    files = sorted(glob.glob(NOTES_GLOB, recursive=True) + glob.glob(RAS_GLOB, recursive=True))
-    
+    # Team Anchors Heuristic
+    TEAM_TAGS = {"PIAV": "2019-2024", "PAE": "2016-2019", "MVE": "2016", "DSD": "2011-2016", "EPSD": "2005-2007"}
+
     for filepath in files:
         filename = os.path.basename(filepath)
+
+        # Skip already classified or excluded
+        if filename in manifest and filename not in OVERRIDES:
+            continue
 
         # --- POLITENESS CHECK ---
         while True:
@@ -104,18 +151,28 @@ def main():
             update_status("YIELD", f"Librarian Yielding: {reason}", filename=filename)
             time.sleep(10)
         
+        # 1. Check Overrides (Explicit Truth)
         if filename in OVERRIDES:
-            print(f"   --> {filename}: {OVERRIDES[filename]} (Manual Override)")
-            manifest[filename] = {"type": OVERRIDES[filename], "note": "Manual Override"}
+            print(f"   --> {filename}: {OVERRIDES[filename]['type']} (Manual Override)")
+            manifest[filename] = OVERRIDES[filename]
             continue
 
-        text_sample = read_sample(filepath)
+        # 2. Check Team Anchors (Heuristic Hint)
+        found_tag = next((tag for tag in TEAM_TAGS if tag in filename), None)
         
+        text_sample = read_sample(filepath)
+        if not text_sample:
+            continue
+            
         info = classify_file(filename, text_sample)
         
-        # Fallback if Pinky fails
+        # Apply team tag context if found
+        if found_tag:
+            info["year"] = info.get("year") or TEAM_TAGS[found_tag]
+            info["tags"] = list(set(info.get("tags", []) + [found_tag]))
+
+        # Fallback if AI fails
         if not info or "type" not in info:
-            # Fallback to filename heuristic
             if "notes_" in filename and any(char.isdigit() for char in filename):
                  info = {"type": "LOG", "year": filename[6:10], "note": "Fallback heuristic"}
             else:

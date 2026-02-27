@@ -42,7 +42,8 @@ class VLLMClient(OllamaClient):
             "stream": False
         }
         try:
-            resp = requests.post(self.url, json=payload, timeout=60)
+            # 120s timeout for complex synthesis
+            resp = requests.post(self.url, json=payload, timeout=120)
             if resp.status_code == 200:
                 data = resp.json()
                 return data['choices'][0]['text']

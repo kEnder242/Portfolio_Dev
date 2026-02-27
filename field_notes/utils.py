@@ -13,9 +13,9 @@ INTERCOM_LAST_SEEN_FILE = os.path.join(DATA_DIR, "intercom_last_seen.tmp")
 INTERCOM_DOWN_LOCK = os.path.join(DATA_DIR, "intercom_down.lock")
 ROUND_TABLE_LOCK = os.path.expanduser("~/Dev_Lab/HomeLabAI/round_table.lock")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
-ATTENDANT_URL = "http://localhost:9999/status"
+ATTENDANT_URL = "http://localhost:9999/mutex"
 
-def can_burn(max_load=2.0, check_vram=True, vram_threshold=0.95):
+def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95):
     """Consolidated 'Politeness Check' for all background scanners."""
     # 1. Attendant API Check
     try:
@@ -44,9 +44,9 @@ def can_burn(max_load=2.0, check_vram=True, vram_threshold=0.95):
 
 def get_total_events():
     count = 0
-    files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    # Only count yearly summaries (YYYY.json) to avoid double-counting with monthly logs
+    files = glob.glob(os.path.join(DATA_DIR, "[0-9][0-9][0-9][0-9].json"))
     for f in files:
-        if any(x in f for x in ["themes", "status", "queue", "state", "search_index", "pager_activity", "file_manifest"]): continue
         try:
             with open(f, 'r') as fp:
                 data = json.load(fp)
@@ -167,7 +167,13 @@ def get_system_load():
         data = response.json()
         if data['status'] == 'success' and data['data']['result']:
             return float(data['data']['result'][0]['value'][1])
-    except: return 0.0
+    except: 
+        # Fallback to standard OS load
+        try:
+            load1, _, _ = os.getloadavg()
+            return load1
+        except:
+            return 0.0
     return 999.0 
 
 import socket

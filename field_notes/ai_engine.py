@@ -3,7 +3,7 @@ import json
 import logging
 
 # --- CONFIGURATION ---
-DEFAULT_MODEL = "llama3.2:1b"
+DEFAULT_MODEL = "llama3.1:8b"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 class CognitiveEngine:
@@ -66,13 +66,13 @@ class OllamaClient(CognitiveEngine):
         }
         
         try:
-            # 30s timeout for high-speed Llama-3.2-3B
-            response = requests.post(self.url, json=payload, timeout=30)
+            # 120s timeout for reasoning-heavy tasks on 11GB VRAM
+            response = requests.post(self.url, json=payload, timeout=120)
             response.raise_for_status()
             return response.json()['response']
         except Exception as e:
             logging.error(f"Ollama Error: {e}")
-            return "{}"
+            return None
 
 class AcmeLabClient(CognitiveEngine):
     """

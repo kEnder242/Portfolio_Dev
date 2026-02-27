@@ -3,35 +3,52 @@ import glob
 import re
 import json
 import hashlib
+import sys
 
 # Config
-NOTES_GLOB = "/home/jallred/Dev_Lab/Portfolio_Dev/raw_notes/**/notes_*.txt"
-RAS_GLOB = "/home/jallred/Dev_Lab/Portfolio_Dev/raw_notes/**/ras-*.txt"
-DATA_DIR = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Absolute GLOB paths
+NOTES_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.txt")
+DOCX_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.docx")
+RAS_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/ras-*.txt")
+
+DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
+MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 
 def ensure_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)
 
 def read_file(path):
     try:
+        if path.endswith('.docx'):
+            import docx2txt
+            return docx2txt.process(path)
         with open(path, 'r', encoding='utf-8', errors='ignore') as f:
             return f.read()
-    except Exception:
+    except Exception as e:
+        print(f"Error reading {path}: {e}")
         return ""
 
 def get_hash(text):
     return hashlib.md5(text.encode('utf-8')).hexdigest()
 
-def parse_chunks(text, filename):
+def parse_chunks(text, filename, file_type="LOG", fallback_year=None):
     """
-    Parses text into Month buckets. 
-    Returns dict: {'YYYY-MM': 'content...'}
+    Parses text into Month or Year buckets. 
+    Returns dict: {'YYYY-MM': 'content...'} or {'YYYY': 'content...'}
     """
+    if file_type == "META":
+        # Meta documents are processed as a single chunk for the year
+        year = fallback_year or "Unknown"
+        return {str(year): text}
+
     date_pattern = r'^(\d{1,2})/(\d{1,2})/(\d{2,4})'
     chunks = {}
-    current_bucket = "Unknown"
+    
+    # [VIBE-007] Use manifest year as absolute fallback for archeology
+    current_bucket = fallback_year or "Unknown"
     current_lines = []
 
     for line in text.splitlines():
@@ -63,10 +80,8 @@ def parse_chunks(text, filename):
     # Join lists into single strings
     return {k: "\n".join(v) for k, v in chunks.items()}
 
-MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
-
 def main():
-    print("--- Scan Queue Manager v2.0 (Librarian Aware) ---")
+    print("--- Scan Queue Manager v2.1 (Hardened & Meta-Aware) ---")
     ensure_dirs()
     
     # Load Manifest
@@ -87,11 +102,17 @@ def main():
     # Load Existing Queue
     if os.path.exists(QUEUE_FILE):
         with open(QUEUE_FILE, 'r') as f:
-            queue = json.load(f)
+            try:
+                queue = json.load(f)
+            except: queue = []
     else:
         queue = []
 
-    files = sorted(glob.glob(NOTES_GLOB, recursive=True) + glob.glob(RAS_GLOB, recursive=True))
+    files = sorted(
+        glob.glob(NOTES_GLOB, recursive=True) + 
+        glob.glob(RAS_GLOB, recursive=True) +
+        glob.glob(DOCX_GLOB, recursive=True)
+    )
     tasks_added = 0
     
     for filepath in files:
@@ -100,27 +121,26 @@ def main():
         # Classification Logic
         info = manifest.get(filename, {})
         file_type = info.get("type", "UNKNOWN")
+        year_guess = info.get("year")
         
-        # Rule: Log if Manifest says LOG, or if it looks like a Log (notes_YYYY) and isn't META/GIT
-        is_log = False
-        if file_type == "LOG":
-            is_log = True
-        elif "notes_" in filename and "GIT" not in filename:
-            # Overrule "REFERENCE" if it follows the naming convention
-            # But respect "META" (e.g. resumes)
-            if file_type != "META":
-                is_log = True
+        # Rule: Process if it's a LOG or a META document
+        should_process = (file_type in ["LOG", "META"])
         
-        if not is_log:
-            # print(f"Skipping {filename} ({file_type})")
+        # Fallback heuristic for un-manifested notes
+        if not should_process and "notes_" in filename and "GIT" not in filename:
+            should_process = True
+            file_type = "LOG"
+        
+        if not should_process:
             continue
 
         text = read_file(filepath)
+        if not text: continue
         
-        # Regex chunking
-        month_chunks = parse_chunks(text, filename)
+        # Chunking
+        chunks = parse_chunks(text, filename, file_type=file_type, fallback_year=year_guess)
         
-        for bucket_id, content in month_chunks.items():
+        for bucket_id, content in chunks.items():
             content_hash = get_hash(content)
             chunk_id = f"{filename}::{bucket_id}"
             
@@ -131,32 +151,19 @@ def main():
                     "id": chunk_id,
                     "filename": filename,
                     "bucket": bucket_id,
-                    "type": "NEW", # Or REFRESH
-                    "priority": 10,
-                    "content": content, # Store content in queue? Or ref? 
-                    # Ref is safer for memory, but content ensures consistency. 
-                    # Let's store content for now (Notes are text, not huge).
+                    "type": file_type, 
+                    "priority": 10 if file_type == "LOG" else 20, # Prioritize strategy
+                    "content": content
                 }
                 
                 # Deduplicate queue
                 if not any(t['id'] == chunk_id for t in queue):
                     queue.append(task)
                     tasks_added += 1
-                    print(f"Queueing {chunk_id} (New/Changed)")
-                
-                # Update state optimistically? No, update state only after Nibble success.
-                # Actually, queue manager shouldn't update state, Nibbler should.
-                # BUT, to avoid re-queueing every time scan runs, we need a "Queued" state.
-                # Let's simple queue dedup handle it.
+                    print(f"Queueing {chunk_id} ({file_type})")
             
-            else:
-                # Content hasn't changed.
-                # Check for "Refinement" opportunity (Low priority)
-                # (Future logic: if last_scan > 30 days, re-queue with type=REFINE)
-                pass
-
-    # Sort queue by priority
-    queue.sort(key=lambda x: x['priority'], reverse=True)
+    # Sort queue by priority DESC
+    queue.sort(key=lambda x: x.get('priority', 10), reverse=True)
     
     with open(QUEUE_FILE, 'w') as f:
         json.dump(queue, f, indent=2)

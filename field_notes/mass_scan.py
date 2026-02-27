@@ -26,7 +26,7 @@ QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
 # Config
 VRAM_THRESHOLD = 0.95 # Allow up to 95% utilization
-MAX_LOAD = 2.0        # True Slow Burn threshold
+MAX_LOAD = 4.0        # True Slow Burn threshold
 SLEEP_INTERVAL = 60   # Longer interval for polite background operation
 
 logging.basicConfig(
