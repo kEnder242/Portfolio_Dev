@@ -3,7 +3,7 @@ import json
 import logging
 
 # --- CONFIGURATION ---
-DEFAULT_MODEL = "llama-3.2-3b-awq"
+DEFAULT_MODEL = "llama3.2:1b"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 class CognitiveEngine:
@@ -21,8 +21,34 @@ class OllamaClient(CognitiveEngine):
     Fast, stateless, robust.
     """
     def __init__(self, model=DEFAULT_MODEL, url=OLLAMA_URL):
-        self.model = model
         self.url = url
+        self.model = model # Default
+
+        try:
+            tags_url = url.replace("/api/generate", "/api/tags")
+            response = requests.get(tags_url, timeout=5)
+            response.raise_for_status()
+            models = [m.get('name') for m in response.json().get('models', [])]
+            
+            if not models:
+                logging.warning("Ollama /api/tags returned no models. Using configured default.")
+                return
+
+            if model in models:
+                self.model = model
+            else:
+                logging.warning(f"Model '{model}' not found in Ollama.")
+                # Find a non-embedding model as a fallback
+                fallback_model = next((m for m in models if "embed" not in m), None)
+                
+                if fallback_model:
+                    self.model = fallback_model
+                    logging.warning(f"Falling back to first available model: {self.model}")
+                else:
+                    logging.error("No suitable fallback models found in Ollama.")
+                    # Stick with original model and likely fail
+        except Exception as e:
+            logging.error(f"Failed to probe Ollama for models: {e}. Using configured default.")
 
     def generate(self, prompt, context="", options=None):
         """

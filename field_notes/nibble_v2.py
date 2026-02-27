@@ -15,7 +15,7 @@ from ai_engine_v2 import get_engine_v2
 from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn
 
 # Config
-DATA_DIR = "field_notes/data"
+DATA_DIR = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data"
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")
@@ -103,8 +103,6 @@ def main():
     for arg in sys.argv:
         if arg.startswith("--limit="):
             limit = int(arg.split("=")[1])
-
-    if not can_burn(): return
 
     if not os.path.exists(QUEUE_FILE):
         update_status("IDLE", "Queue empty.")

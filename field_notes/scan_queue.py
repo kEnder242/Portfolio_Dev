@@ -5,9 +5,9 @@ import json
 import hashlib
 
 # Config
-NOTES_GLOB = "raw_notes/**/notes_*.txt"
-RAS_GLOB = "raw_notes/**/ras-*.txt"
-DATA_DIR = "field_notes/data"
+NOTES_GLOB = "/home/jallred/Dev_Lab/Portfolio_Dev/raw_notes/**/notes_*.txt"
+RAS_GLOB = "/home/jallred/Dev_Lab/Portfolio_Dev/raw_notes/**/ras-*.txt"
+DATA_DIR = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data"
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 
