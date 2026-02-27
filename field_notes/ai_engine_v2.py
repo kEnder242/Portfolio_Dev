@@ -16,7 +16,7 @@ except ImportError:
     HAS_LIGER = False
 
 # --- CONFIGURATION ---
-DEFAULT_MODEL = "llama-3.2-3b-awq"
+DEFAULT_MODEL = "llama3.2:1b"
 DMA_MODEL_PATH = "casperhansen/llama-3.2-3b-instruct-awq"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 VLLM_URL = "http://localhost:8088/v1/completions"

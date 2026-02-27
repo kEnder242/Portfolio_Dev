@@ -66,7 +66,107 @@ Before launching the `META` features, the following "Infrastructure Gaps" were i
 
 <state_snapshot>
     <overall_goal>
-        Execute Sprint SPR-11-05 (Semantic Re-Mapping) to ingest high-fidelity "META" documents (Insights, Philosophy, Focals) while transitioning the Nibbler to a modern Attendant-API-aware yield logic.
+---
+
+## 🛠️ SESSION RESTORE: Feb 27, 2026
+**Current State**: 
+* **Scanner**: OFFLINE (Crashed Feb 26, 23:03:35 during SPR-11-05 initial burn).
+* **Blocker**: Ollama Read Timeout (30s) on large chunks of `notes_2024_PIAV.txt`.
+* **Vitals**: Hardware is stable, `round_table.lock` path is unified to `~/Dev_Lab/HomeLabAI/round_table.lock`.
+* **Branch Status**: `feature/sprint-11-05-hardening` contains high-fidelity Gems but also dangerous regressions.
+
+### 📅 Consolidated Task List
+
+#### **Phase A: Infrastructure & Parity (High Priority)**
+- [x] **[FEAT-125] API-First Mutex**: Implementation confirmed in `lab_attendant.py` and `utils.py`.
+- [x] **[UI] Blue Tree Status**: Non-destructive refresh confirmed in `status.html`.
+- [ ] **[HARDEN] AI Engine Timeout**: Increase timeout in `ai_engine_v2.py` from 30s to **120s** to handle reasoning-heavy "META" chunks.
+- [ ] **[HARDEN] Absolute GLOB Transition**: Refactor `scan_librarian.py` and `scan_queue.py` using `BASE_DIR = os.path.dirname(os.path.abspath(__file__))`.
+- [ ] **[FIX] Event Over-count**: Update `utils.py`'s `get_total_events` to ignore `YYYY_MM.json` patterns.
+- [ ] **[PARITY] Slow Burn Re-Ignition**: Restart `mass_scan.py` in background mode.
+
+#### **Phase B: Strategic Anchoring [FEAT-128]**
+- [ ] **[LIBRARIAN] Anchor Extraction**: Port the `[STRATEGIC_ANCHOR]` identification logic from the feature branch.
+- [ ] **[LIBRARIAN] DOCX Support**: Port the `docx2txt` integration for "War Stories" and "Philosophy" ingestion.
+- [ ] **[NIBBLER] Robust JSON Extraction**: Port the [FEAT-131] regex-based fallback `(\[.*\])` for reliable AI response parsing.
+- [ ] **[NIBBLER] Atomic State Updates**: Port [FEAT-130] to only update `chunk_state.json` on a successful extraction.
+- [ ] **[AGGREGATOR] Year Injection**: Update `aggregate_years.py` to inject anchors at the absolute top of `YYYY.json` files.
+
+#### **Phase C: Documentation & Audit**
+- [ ] **[DOCS] Diagnostic Map v4.1**: Update `DIAGNOSTIC_SCRIPT_MAP.md` with "Ghost Hunter" and "Assassin" verification.
+- [ ] **[AUDIT] Script Map Validation**: Run a full gauntlet to ensure v4.1 parity is standing.
+
+---
+
+## 🗄️ BRANCH AUDIT: feature/sprint-11-05-hardening
+*Forensic summary for surgical porting.*
+
+### **💎 Gems to Port (High Confidence)**
+1. **[FEAT-128] Strategic Prompts:** The "Expert Career Strategist" prompt in `nibble_v2.py` for `META` files.
+2. **[FEAT-131] Robust JSON:** The recursive regex extractor in `nibble_v2.py`.
+3. **[FEAT-130] Atomic Hash:** Only marking a file as "Done" if events > 0.
+4. **[DOCX] Support:** Integration of `docx2txt` in `scan_librarian.py`.
+5. **[HARDEN] Absolute Paths:** Transitioning all relative GLOBs to `BASE_DIR` anchors.
+
+### **🚫 Bad Ideas to Discard (Do NOT Port)**
+1. **Attendant/AcmeLab Regressions:** The branch rolls back `The Assassin` [FEAT-119] and `Lab Fingerprint` [FEAT-121]. **Discard these changes entirely.**
+2. **Lock Path Drift:** The branch attempts to move `round_table.lock`. **Discard.**
+3. **Direct OLLAMA Bypass:** The branch forces a bypass of the `AcmeLabWebSocketClient`. **Discard** (main's factory is superior for resilience).
+4. **Manual OVERRIDES Bloat:** The branch hardcodes specific filenames into the librarian. **Discard** (maintain heuristic authority).
+
+---
+
+## 🧰 THE HIDDEN DEBUG TOOLKIT (Scanner Recovery)
+*Use these scripts for surgical interventions when the Slow Burn stalls.*
+
+| Script | Purpose | When to use |
+| :--- | :--- | :--- |
+| `nudge_2024.py` | Surgical Re-nibble | Clears the hash for 2024 files in `chunk_state.json` to force a re-scan of ONLY that year. |
+| `force_feed.py` | Emergency Ingestion | Bypasses all "Politeness" and "Mutex" checks to jam a specific file into the engine immediately. |
+| `test_chunking.py` | Librarian Debug | Verifies the logic for splitting large files into buckets before they reach the queue. |
+| `debug_2024.py` | Path Probe | Lower-level tool for checking absolute path resolution for the 2024 notes. |
+| `clean_data.py` | **NUCLEAR OPTION** | Wipes the `data/` directory. Only use if the archive is fundamentally corrupted. |
+
+---
+
+## ⚡ HEADS-DOWN EXECUTION STRATEGY
+
+### **Core Objectives:**
+1. **Hardening (The Infrastructure):**
+    * **Timeout Boost:** Increase the `requests` timeout in `ai_engine_v2.py` (and `ai_engine.py`) to **120s** to prevent Ollama crashes during deep reasoning.
+    * **Absolute Pathing:** Refactor `scan_librarian.py` and `scan_queue.py` to use `BASE_DIR` for all GLOB operations, eliminating CWD-dependency bugs.
+    * **Telemetry Fix:** Update `utils.py` to prevent the `YYYY_MM.json` monthly logs from double-counting in the "Total Events" vital.
+
+2. **Synthesis Port (The Gems):**
+    * **DOCX Integration:** Add `docx2txt` support to `scan_librarian.py` to ingest the high-fidelity "War Stories" and "Philosophy" documents.
+    * **Strategic Anchoring [FEAT-128]:** Port the "Expert Career Strategist" logic into `nibble_v2.py` to extract `[STRATEGIC_ANCHOR]` events from `META` files.
+    * **Robust JSON [FEAT-131]:** Port the regex-based JSON extractor to `nibble_v2.py` to handle "chatty" LLM responses.
+    * **Atomic Updates [FEAT-130]:** Port the success-gate logic to ensure `chunk_state.json` is only updated when valid data is captured.
+
+3. **Verification & Re-Ignition:**
+    * Run `test_chunking.py` and `debug_2024.py` to verify the new absolute pathing.
+    * Restart `mass_scan.py` in the background to re-ignite the **Slow Burn** epoch.
+
+### **Iterative Verification Gates:**
+1. **Infrastructure Hardening (Timeout & Paths):**
+    * **Check:** After refactoring `scan_librarian.py` and `scan_queue.py` to use `BASE_DIR`, run them from the root `~/Dev_Lab` (not their home folder) to prove absolute pathing works.
+    * **Lint:** `ruff check` on all modified Python files.
+2. **Telemetry Fix (Event Counting):**
+    * **Check:** Run `python3 -c "from utils import get_total_events; print(get_total_events())"` before and after the fix. The "After" count should be lower.
+3. **DOCX & Librarian Port:**
+    * **Check:** Execute `python3 scan_librarian.py` and verify that `Philosophy and Learnings 2024.docx` is correctly classified as `META` in the `file_manifest.json`.
+4. **Strategic Anchoring & Robust JSON [FEAT-128/131]:**
+    * **Check:** Use `force_feed.py` on a single `META` file. Inspect the resulting `.json` for the `[STRATEGIC_ANCHOR]` prefix and `rank: 5`.
+5. **Atomic State [FEAT-130]:**
+    * **Check:** Simulate a "Null Response" from the engine and verify that the file's hash in `chunk_state.json` **remains unchanged**.
+
+### **Excluded Items (Out of Scope):**
+* **Yearly Injection Logic:** `aggregate_years.py` updates deferred until anchors are generated.
+* **Lab Hub Refactoring:** `acme_lab.py` and `lab_attendant.py` preserved as stable `main` versions.
+* **UI Layout Changes:** No modifications to `status.html` or `timeline.html` CSS.
+
+---
+*Reference: [RETROSPECTIVE_STABILIZATION_FEB_26.md](./RETROSPECTIVE_STABILIZATION_FEB_26.md)*
     </overall_goal>
 
     <active_constraints>

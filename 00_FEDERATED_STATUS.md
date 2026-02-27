@@ -11,8 +11,8 @@
 *   **🗺️ The Map Room:** [00_MASTER_INDEX.md](./00_MASTER_INDEX.md)
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 
-## 🎯 Active Initiative: "Signature Synthesis" (Phase 11)
-**Goal:** High-fidelity career impact synthesis and resilient co-pilot operations.
+## 🎯 Active Initiative: "Semantic Re-Mapping" (Sprint SPR-11-05)
+**Goal:** Ingest high-fidelity META documents and implement Strategic Anchoring.
 
 ## ✅ Global Milestones (Feb 2026)
 1.  **Unified Base Established**: Standardized on the **Standard Tier (e.g., Llama 3.2 3B)** for 2080 Ti residency.
@@ -23,9 +23,13 @@
 6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts. Successfully decoupled personal professional narratives from core AI identity.
 7.  **Lively Room Coordination**: Successfully implemented [FEAT-108] Agentic Reflection and Non-blocking dispatch. Pinky and Brain now coordinate in real-time.
 8.  **Hierarchical Grounding**: Architect node now generates a 3-layer Semantic Map (Strategic, Analytical, Tactical) for high-fidelity grounding.
-9.  **[ACTIVE] Sprint SPR-11-04: The Ghost Hunter**: Initiated to resolve "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
+9.  **[VERIFIED] Sprint SPR-11-04: The Ghost Hunter**: Successfully resolved "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
 
 ## 🔮 The Roadmap (The Restoration Hub)
+*   **[ACTIVE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
+    *   [ ] **Strategic Anchoring**: Implement [FEAT-128] to extract strategic points from META files.
+    *   [ ] **API Mutex Hardening**: Complete [FEAT-125] integration for background scanners.
+    *   [ ] **Yearly Injection**: Implement [FEAT-127] for anchor-aware yearly aggregation.
 *   **[COMPLETE] Phase 11.3: The Ghost Hunter** (Sprint SPR-11-04)
     *   [x] **Lab Fingerprint**: Implemented [FEAT-121] Boot Hash and Git-Commit tracing.
     *   [x] **Proc Title**: Implemented [FEAT-122] kernel-level process renaming.

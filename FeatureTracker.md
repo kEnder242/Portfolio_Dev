@@ -373,12 +373,12 @@
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
 ## [FEAT-121] Lab Fingerprint (Distributed Tracing)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Implements a 4-part execution identity `[BOOT_HASH : COMMIT_SHORT : NODE_ROLE : PID]` to eliminate ghost processes and verify sync trust.
 **Mechanism:** Dynamic hex hash generation at init and Git short-hash injection into all log streams and heartbeats.
 
 ## [FEAT-122] Kernel-Level Visibility (Proc Title)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Renames Python processes in `ps`/`htop` to their full Fingerprint using `setproctitle`.
 **Mechanism:** `HUB` and `RESIDENT` nodes update their process title at startup to betrayed stale/un-parented zombies.
 
@@ -418,9 +418,19 @@
 **Mechanism:** `aggregate_years.py` groups monthly JSONs, merges them with existing yearly summaries, and performs cross-file de-duplication. Integrated into `mass_scan.py` lifecycle.
 
 ## [FEAT-128] The Strategic Anchor
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Ingests high-level `META` documents (Insights, Focals) to provide the "Why" behind the "What" for any given year.
-**Mechanism:** `scan_librarian.py` classifies target files as `META`. The Nibbler extracts strategic points, saving them as high-rank `[STRATEGIC_ANCHOR]` events at the top of `YYYY.json` files for UI and RAG prioritization.
+**Mechanism:** `scan_librarian.py` classifies target files as `META`. The Nibbler extracts strategic points using the "Expert Career Strategist" prompt, saving them as high-rank `[STRATEGIC_ANCHOR]` events at the top of `YYYY.json` files for UI and RAG prioritization.
+
+## [FEAT-130] Atomic State Updates
+**Status:** ACTIVE
+**Logic:** Ensures scanner integrity by only marking a file as "Processed" if the AI worker successfully extracts valid events.
+**Mechanism:** `nibble_v2.py` only updates the `chunk_state.json` hash after the `extract_json_from_llm` function returns a non-empty list.
+
+## [FEAT-131] Robust JSON Extraction
+**Status:** ACTIVE
+**Logic:** Prevents parsing failures caused by LLM conversational filler or Markdown wrapping.
+**Mechanism:** Implements a recursive regex-based fallback in `nibble_v2.py` that hunts for `[...]` or `{...}` blocks before attempting `json.loads`.
 
 ## [FEAT-129] The Philosophical Core
 **Status:** DESIGN
