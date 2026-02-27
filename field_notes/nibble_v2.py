@@ -126,6 +126,50 @@ def is_semantic_duplicate(new_summary, existing_events, threshold=0.85):
             return True
     return False
 
+def scrub_input_buffer(text):
+    """
+    [VIBE-008] Structural Guillotine.
+    Drops forbidden sections based on headers.
+    """
+    FORBIDDEN_HEADERS = [
+        r"AREAS FOR IMPROVEMENT",
+        r"AREAS FOR DEVELOPMENT",
+        r"Results Coaching",
+        r"Behaviors Coaching",
+        r"Behaviors Feedback",
+        r"Coach\b",
+        r"Growth Feedback"
+    ]
+    
+    SAFE_HEADERS = [
+        r"Next Year's Technical Strategy",
+        r"Future Goals",
+        r"Technical Strategy",
+        r"Strategic Focal Points",
+        r"Architecture Plans"
+    ]
+    
+    lines = text.splitlines()
+    clean_lines = []
+    is_dropped = False
+    
+    for line in lines:
+        # Check if we should drop
+        if any(re.search(pattern, line, re.IGNORECASE) for pattern in FORBIDDEN_HEADERS):
+            logging.info(f"   [GUILLOTINE] Dropping section starting at: {line.strip()[:50]}...")
+            is_dropped = True
+            continue
+            
+        # Check if we should resume
+        if is_dropped and any(re.search(pattern, line, re.IGNORECASE) for pattern in SAFE_HEADERS):
+            logging.info(f"   [GUILLOTINE] Resuming at safe header: {line.strip()[:50]}...")
+            is_dropped = False
+            
+        if not is_dropped:
+            clean_lines.append(line)
+            
+    return "\n".join(clean_lines)
+
 def main():
     log(f"--- Pinky Nibbler v2.1 (Reasoning: {REASONING_MODE}) ---")
     
@@ -168,6 +212,9 @@ def main():
 
         log(f"Nibbling: {task['id']} ({task['bucket']})")
         
+        # [VIBE-008] Apply structural guillotine to all content
+        scrubbed_content = scrub_input_buffer(task['content'])
+
         # [FEAT-128] Strategic Prompt selection
         file_type = task.get('type', 'LOG')
         prompt = ""
@@ -175,9 +222,10 @@ def main():
         if file_type == "META":
             prompt = f"""
             [TASK] Expert Career Strategist. Analyze this high-level document and extract the core strategic anchor.
+            [EXCLUSION] EXCLUDE all behavioral feedback, coaching, or personal growth plans. Focus exclusively on technical milestones and strategic focal points.
             [YEAR] {task['bucket']}
             [CONTENT]
-            {task['content'][:8000]}
+            {scrubbed_content[:8000]}
             
             [OUTPUT]
             Generate a JSON list containing ONE high-value entry.
@@ -196,7 +244,7 @@ def main():
             ]
             """
         else:
-            prompt = f"Extract technical events from this log: {task['content'][:4000]}"
+            prompt = f"Extract technical events from this log: {scrubbed_content[:4000]}"
 
         bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
         existing_data = load_json(bucket_file)
@@ -206,7 +254,7 @@ def main():
                 # Meta documents always use the strategic anchor prompt
                 response = ENGINE.generate(prompt)
             elif REASONING_MODE and hasattr(ENGINE, 'generate_with_reasoning'):
-                response = ENGINE.generate_with_reasoning(task['content'], task['bucket'])
+                response = ENGINE.generate_with_reasoning(scrubbed_content, task['bucket'])
             else:
                 response = ENGINE.generate(prompt)
                 

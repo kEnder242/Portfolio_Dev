@@ -21,6 +21,7 @@ monitor/secrets.json
 
 # Field Notes Data (Private Logs/Indices)
 field_notes/data/
+field_notes/data_contaminated_backup/
 field_notes/pinky_index_full.json
 field_notes/acronym_candidates.json
 field_notes/acronym_map.json
