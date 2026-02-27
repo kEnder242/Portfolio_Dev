@@ -484,6 +484,14 @@
 - **Team Tags:** Acronyms in filenames (DSD, MVE, PIAV) correspond to specific engineering teams and should be preserved as high-fidelity metadata.
 **Constraint:** Classification MUST skip the head/tail noise and focus on the ASCII-delimited middle bulk to verify "LOG" status.
 
+### [VIBE-008] Performance Verbiage (The Privacy Filter)
+**Context:** High-fidelity career documents (Reviews, Insights) contain feedback that should not appear in the technical timeline.
+**Keywords:**
+- **Legacy Headers:** `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `Evaluation: Areas for Development`, `IMPROVEMENT/DEVELOPMENT AREAS`.
+- **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
+- **Grammatical Patterns:** `Jason should`, `Jason needs to`, `Should have been communicated`, `missed on this opportunity`.
+**Rule:** Synthesis engines MUST treat text following these markers as **Private/Instructional** and exclude it from the public `YYYY.json` event stream.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.

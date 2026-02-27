@@ -97,10 +97,12 @@ Before launching the `META` features, the following "Infrastructure Gaps" were i
 - [x] **[AUDIT] Script Map Validation**: Verified Librarian archaeology and pathing stability.
 
 #### **Phase D: The Last Mile (Strategic Awareness)**
-- [ ] **[AGGREGATOR] Anchor Pinning**: Update `aggregate_years.py` to identify `[STRATEGIC_ANCHOR]` events and pin them to the top of yearly files.
-- [ ] **[RECOVERY] Nudge Meta**: Create `nudge_meta.py` to surgically invalidate cache for documents classified as `META`.
-- [ ] **[FEAT-128] Multi-Year Explosion**: Update the aggregator to distribute anchors across year ranges (e.g., 2011-2016) found in the manifest.
-- [ ] **[BURN] Anchor Burn**: Execute a targeted fast burn (`nibble_v2.py --limit=15 --reasoning`) to achieve immediate Brain awareness of career focal points.
+- [x] **[AGGREGATOR] Anchor Pinning**: Updated `aggregate_years.py` to pin `[STRATEGIC_ANCHOR]` to top.
+- [x] **[RECOVERY] Nudge Meta**: Created `nudge_meta.py` for surgical cache invalidation.
+- [x] **[FEAT-128] Multi-Year Explosion**: Distributed anchors across year ranges.
+- [x] **[BURN] Anchor Burn**: Completed high-fidelity burn of primary META docs.
+- [ ] **[FEAT-133] Success Sanitization**: Implement [VIBE-008] "Performance Verbiage" filtering in the nibbler prompt.
+- [ ] **[CLEANUP] Success Audit**: Create `sanitize_achievements.py` to scrub existing feedback from `YYYY.json` files.
 
 ---
 
