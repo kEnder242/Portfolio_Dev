@@ -13,10 +13,9 @@ import difflib
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 from ai_engine_v2 import get_engine_v2
-from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn
+from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn, DATA_DIR
 
 # Config
-DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")

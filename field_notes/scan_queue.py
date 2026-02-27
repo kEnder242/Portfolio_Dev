@@ -5,14 +5,14 @@ import json
 import hashlib
 import sys
 
-# Config
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Absolute GLOB paths
-NOTES_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.txt")
-DOCX_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.docx")
-RAS_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/ras-*.txt")
+from utils import RAW_NOTES_DIR, DATA_DIR
 
-DATA_DIR = os.path.join(BASE_DIR, "data")
+# Config
+# Absolute GLOB paths using utils single-source-of-truth
+NOTES_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.txt")
+DOCX_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.docx")
+RAS_GLOB = os.path.join(RAW_NOTES_DIR, "**/ras-*.txt")
+
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")

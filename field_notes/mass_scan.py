@@ -10,7 +10,7 @@ import glob
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import update_status, get_vram_usage, trigger_pager
+from utils import update_status, get_vram_usage, trigger_pager, ROUND_TABLE_LOCK, DATA_DIR
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,7 +21,6 @@ ARTIFACT_SCANNER = os.path.join(BASE_DIR, "scan_artifacts.py")
 GEM_REFINER = os.path.join(BASE_DIR, "refine_gem.py")
 CLEANER = os.path.join(BASE_DIR, "clean_duplicates.py")
 AGGREGATOR = os.path.join(BASE_DIR, "aggregate_years.py")
-DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
 # Config
@@ -46,7 +45,7 @@ def run_task(cmd_list):
     try:
         env = os.environ.copy()
         env["MAX_LOAD"] = "5.0"
-        cwd = os.path.dirname(BASE_DIR)
+        cwd = BASE_DIR
         subprocess.run([sys.executable] + cmd_list, check=True, env=env, cwd=cwd)
         return True
     except Exception as e:
@@ -84,7 +83,7 @@ def main():
     logging.info("=== MASS SCAN: CONTINUOUS RESEARCH v2.0 ===")
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
     
-    lock_path = os.path.join(DATA_DIR, "round_table.lock")
+    lock_path = ROUND_TABLE_LOCK
 
     epoch_count = 0
     while True:

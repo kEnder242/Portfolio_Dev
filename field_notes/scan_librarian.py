@@ -9,14 +9,14 @@ import time
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 from ai_engine import get_engine
-from utils import update_status, can_burn
+from utils import update_status, can_burn, RAW_NOTES_DIR, DATA_DIR
 
 # Config
-# Expanded glob to catch Insights, Philosophy, and Reviews using Absolute Paths
-NOTES_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.txt")
-DOCX_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/*.docx")
-RAS_GLOB = os.path.join(os.path.dirname(BASE_DIR), "raw_notes/**/ras-*.txt")
-MANIFEST_FILE = os.path.join(BASE_DIR, "data/file_manifest.json")
+# Expanded glob to catch Insights, Philosophy, and Reviews using Absolute Paths from utils
+NOTES_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.txt")
+DOCX_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.docx")
+RAS_GLOB = os.path.join(RAW_NOTES_DIR, "**/ras-*.txt")
+MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 ENGINE = get_engine(mode="LOCAL")
 
 def read_sample(path):
