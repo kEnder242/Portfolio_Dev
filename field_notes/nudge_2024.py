@@ -1,34 +1,20 @@
 import json
 import os
 import sys
+import subprocess
 
-DATA_DIR = "field_notes/data"
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
+# Use the known symlink path relative to the repo root
+RAW_NOTES_DIR = os.path.join(os.path.dirname(BASE_DIR), "raw_notes")
 NOTES_FILE = "notes_2024_PIAV.txt"
 
 def nudge():
-    print(f"Nudging {NOTES_FILE} into the queue...")
+    print(f"=== NUDGE: {NOTES_FILE} ===")
     
-    # 1. Load Queue
-    if os.path.exists(QUEUE_FILE):
-        with open(QUEUE_FILE, 'r') as f:
-            queue = json.load(f)
-    else:
-        queue = []
-
-    # 2. Read File Content
-    try:
-        with open(f"raw_notes/{NOTES_FILE}", 'r', encoding='utf-8', errors='ignore') as f:
-            content = f.read()
-    except Exception as e:
-        print(f"Error reading file: {e}")
-        return
-
-    # 3. Create Task (Bucket Unknown/Whole file for now to force scan)
-    # Actually, we should chunk it properly. But let's just push the whole file as a single high-priority task 
-    # if it's not massive, or rely on scan_queue to re-chunk it.
-    # Better: Reset the state for this file and run scan_queue.
-    
+    # 1. Clear State (Force re-scan)
     state_file = os.path.join(DATA_DIR, "chunk_state.json")
     if os.path.exists(state_file):
         with open(state_file, 'r') as f:
@@ -43,14 +29,16 @@ def nudge():
             json.dump(state, f, indent=2)
         print(f"Cleared state for {len(keys_to_remove)} chunks.")
 
-    # 4. Run Queue Manager
+    # 2. Run Queue Manager (to re-chunk)
     print("Running Queue Manager...")
-    os.system("python3 field_notes/scan_queue.py")
+    subprocess.run(["python3", os.path.join(BASE_DIR, "scan_queue.py")])
     
-    # 5. Run Nibbler (Loop a few times)
-    print("Nibbling...")
-    for _ in range(5):
-        os.system("python3 field_notes/nibble.py")
+    # 3. Run Nibbler v2 in FAST MODE
+    print("Nibbling (Fast Mode)...")
+    # Just run it once, it will loop through the queue
+    subprocess.run(["python3", os.path.join(BASE_DIR, "nibble_v2.py"), "--fast"])
+
+    print("\n=== NUDGE COMPLETE ===")
 
 if __name__ == "__main__":
     nudge()

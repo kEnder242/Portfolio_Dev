@@ -12,7 +12,7 @@ import difflib
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
-from utils import update_status, get_system_load, ROUND_TABLE_LOCK
+from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn
 
 # Config
 DATA_DIR = "field_notes/data"
@@ -38,6 +38,7 @@ def log(msg):
 # AI & Metrics
 REASONING_MODE = "--reasoning" in sys.argv
 HYBRID_MODE = "--hybrid" in sys.argv
+FAST_MODE = "--fast" in sys.argv
 engine_mode = "LOCAL"
 if HYBRID_MODE: engine_mode = "HYBRID"
 elif REASONING_MODE: engine_mode = "REASONING"
@@ -45,18 +46,12 @@ elif REASONING_MODE: engine_mode = "REASONING"
 ENGINE = get_engine_v2(mode=engine_mode)
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 2.0))
 
-def can_burn():
-    # 1. System Load Check
-    load = get_system_load()
-    if load > MAX_LOAD:
-        log(f"System Load High ({load} > {MAX_LOAD}). Skipping nibble.")
+def check_politeness():
+    if FAST_MODE: return True
+    ready, reason = can_burn(max_load=MAX_LOAD)
+    if not ready:
+        log(f"Yielding: {reason}")
         return False
-    
-    # 2. Round Table Lock Check (Session Yield)
-    if os.path.exists(ROUND_TABLE_LOCK):
-        log("Round Table Active (lock found). Yielding GPU.")
-        return False
-
     return True
 
 def load_json(path):
@@ -137,6 +132,11 @@ def main():
             log(f"   > Skipping {task['id']} (Hash match: {content_hash})")
             continue
 
+        # --- POLITENESS CHECK ---
+        while not check_politeness():
+            update_status("YIELD", f"Nibbler Yielding (Lock/Load)", filename=task['id'])
+            time.sleep(10)
+
         log(f"Nibbling: {task['id']} ({task['bucket']})")
         
         bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
@@ -196,6 +196,12 @@ def main():
         state[task['id']] = content_hash
         save_json(STATE_FILE, state)
         save_json(QUEUE_FILE, queue)
+
+        if not FAST_MODE:
+            log("Waiting 15s for silicon cooling...")
+            time.sleep(15)
+        else:
+            time.sleep(1) # Tiny yield to prevent CPU spinning
 
 if __name__ == "__main__":
     main()

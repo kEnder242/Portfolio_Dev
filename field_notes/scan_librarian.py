@@ -3,11 +3,12 @@ import os
 import sys
 import glob
 import re
+import time
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine import get_engine
-from utils import update_status
+from utils import update_status, can_burn
 
 # Config
 NOTES_GLOB = "raw_notes/**/notes_*.txt"
@@ -95,6 +96,13 @@ def main():
     
     for filepath in files:
         filename = os.path.basename(filepath)
+
+        # --- POLITENESS CHECK ---
+        while True:
+            ready, reason = can_burn()
+            if ready: break
+            update_status("YIELD", f"Librarian Yielding: {reason}", filename=filename)
+            time.sleep(10)
         
         if filename in OVERRIDES:
             print(f"   --> {filename}: {OVERRIDES[filename]} (Manual Override)")

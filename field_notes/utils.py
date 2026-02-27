@@ -11,8 +11,36 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 INTERCOM_LAST_SEEN_FILE = os.path.join(DATA_DIR, "intercom_last_seen.tmp")
 INTERCOM_DOWN_LOCK = os.path.join(DATA_DIR, "intercom_down.lock")
-ROUND_TABLE_LOCK = os.path.join(DATA_DIR, "round_table.lock")
+ROUND_TABLE_LOCK = os.path.expanduser("~/Dev_Lab/HomeLabAI/round_table.lock")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
+ATTENDANT_URL = "http://localhost:9999/status"
+
+def can_burn(max_load=2.0, check_vram=True, vram_threshold=0.95):
+    """Consolidated 'Politeness Check' for all background scanners."""
+    # 1. Attendant API Check
+    try:
+        resp = requests.get(ATTENDANT_URL, timeout=0.5).json()
+        if resp.get("round_table_lock_exists"):
+            return False, "Attendant: Round Table Active"
+    except:
+        pass
+
+    # 2. Local File Lock Check (Fallback)
+    if os.path.exists(ROUND_TABLE_LOCK):
+        return False, "File: Round Table Active"
+
+    # 3. System Load Check
+    load = get_system_load()
+    if load > max_load:
+        return False, f"Load: {load} > {max_load}"
+
+    # 4. VRAM Check
+    if check_vram:
+        vram = get_vram_usage()
+        if vram > vram_threshold:
+            return False, f"VRAM: {vram*100:.1f}% > {vram_threshold*100:.0f}%"
+
+    return True, "Ready"
 
 def get_total_events():
     count = 0
@@ -57,7 +85,6 @@ def update_status(status, msg, new_items=0, filename=None, engine="Standard", pr
     except: pass
 
     # Round Table Lock check (for yielding scanner)
-    ROUND_TABLE_LOCK = os.path.join(DATA_DIR, "round_table.lock")
     scanner_yielded = os.path.exists(ROUND_TABLE_LOCK)
 
     # --- STATEFUL HEALTH LOGIC (IPMI SEL Style) ---
