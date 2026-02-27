@@ -20,15 +20,18 @@
 3.  **Silicon Headroom Verified**: Characterized 11GB VRAM budget with full stack + EarNode resident (~9.8GB peak).
 4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
 5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
-6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts. Successfully decoupled personal professional narratives from core AI identity.
-7.  **Lively Room Coordination**: Successfully implemented [FEAT-108] Agentic Reflection and Non-blocking dispatch. Pinky and Brain now coordinate in real-time.
-8.  **Hierarchical Grounding**: Architect node now generates a 3-layer Semantic Map (Strategic, Analytical, Tactical) for high-fidelity grounding.
-9.  **[VERIFIED] Sprint SPR-11-04: The Ghost Hunter**: Successfully resolved "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
+6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts.
+7.  **Lively Room Coordination**: Successfully implemented [FEAT-108] Agentic Reflection and Non-blocking dispatch.
+8.  **Hierarchical Grounding**: Architect node now generates a 3-layer Semantic Map (Strategic, Analytical, Tactical).
+9.  **[VERIFIED] Sprint SPR-11-04: The Ghost Hunter**: Resolved "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
+10. **[VERIFIED] Archaeological Grounding**: Mapped 18-year career (EPSD -> PIAV) and bridged the 2011-2014 "VISA Gap" via `notes_2015_DSD.txt`.
+11. **[VERIFIED] Strategic Anchoring**: Implemented [FEAT-128] to extract high-rank focal points from META documents using the 8B model.
 
 ## 🔮 The Roadmap (The Restoration Hub)
 *   **[ACTIVE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
-    *   [ ] **Strategic Anchoring**: Implement [FEAT-128] to extract strategic points from META files.
-    *   [ ] **API Mutex Hardening**: Complete [FEAT-125] integration for background scanners.
+    *   [x] **Strategic Anchoring**: Implemented [FEAT-128] extraction logic and verified on `2011.json`.
+    *   [x] **Robust Extraction**: Implemented [FEAT-131] regex-based JSON parsing for chatty LLMs.
+    *   [x] **Archaeological Logic**: Integrated role-based team anchors (DSD, MVE, PIAV) into the Librarian.
     *   [ ] **Yearly Injection**: Implement [FEAT-127] for anchor-aware yearly aggregation.
 *   **[COMPLETE] Phase 11.3: The Ghost Hunter** (Sprint SPR-11-04)
     *   [x] **Lab Fingerprint**: Implemented [FEAT-121] Boot Hash and Git-Commit tracing.

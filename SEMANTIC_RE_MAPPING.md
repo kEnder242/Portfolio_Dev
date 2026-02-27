@@ -80,21 +80,49 @@ Before launching the `META` features, the following "Infrastructure Gaps" were i
 #### **Phase A: Infrastructure & Parity (High Priority)**
 - [x] **[FEAT-125] API-First Mutex**: Implementation confirmed in `lab_attendant.py` and `utils.py`.
 - [x] **[UI] Blue Tree Status**: Non-destructive refresh confirmed in `status.html`.
-- [ ] **[HARDEN] AI Engine Timeout**: Increase timeout in `ai_engine_v2.py` from 30s to **120s** to handle reasoning-heavy "META" chunks.
-- [ ] **[HARDEN] Absolute GLOB Transition**: Refactor `scan_librarian.py` and `scan_queue.py` using `BASE_DIR = os.path.dirname(os.path.abspath(__file__))`.
-- [ ] **[FIX] Event Over-count**: Update `utils.py`'s `get_total_events` to ignore `YYYY_MM.json` patterns.
+- [x] **[HARDEN] AI Engine Timeout**: Increased timeout in `ai_engine.py` to **120s**.
+- [x] **[HARDEN] Absolute GLOB Transition**: Refactored `scan_librarian.py` and `scan_queue.py` using `BASE_DIR`.
+- [x] **[FIX] Event Over-count**: Updated `utils.py` to ignore `YYYY_MM.json` patterns.
 - [ ] **[PARITY] Slow Burn Re-Ignition**: Restart `mass_scan.py` in background mode.
 
 #### **Phase B: Strategic Anchoring [FEAT-128]**
-- [ ] **[LIBRARIAN] Anchor Extraction**: Port the `[STRATEGIC_ANCHOR]` identification logic from the feature branch.
-- [ ] **[LIBRARIAN] DOCX Support**: Port the `docx2txt` integration for "War Stories" and "Philosophy" ingestion.
-- [ ] **[NIBBLER] Robust JSON Extraction**: Port the [FEAT-131] regex-based fallback `(\[.*\])` for reliable AI response parsing.
-- [ ] **[NIBBLER] Atomic State Updates**: Port [FEAT-130] to only update `chunk_state.json` on a successful extraction.
+- [x] **[LIBRARIAN] Anchor Extraction**: Ported `[STRATEGIC_ANCHOR]` identification logic.
+- [x] **[LIBRARIAN] DOCX Support**: Integrated `docx2txt` for "War Stories" and "Philosophy".
+- [x] **[NIBBLER] Robust JSON Extraction**: Ported [FEAT-131] regex-based fallback `(\[.*\])`.
+- [x] **[NIBBLER] Atomic State Updates**: Ported [FEAT-130] success-gate logic.
 - [ ] **[AGGREGATOR] Year Injection**: Update `aggregate_years.py` to inject anchors at the absolute top of `YYYY.json` files.
 
 #### **Phase C: Documentation & Audit**
 - [ ] **[DOCS] Diagnostic Map v4.1**: Update `DIAGNOSTIC_SCRIPT_MAP.md` with "Ghost Hunter" and "Assassin" verification.
-- [ ] **[AUDIT] Script Map Validation**: Run a full gauntlet to ensure v4.1 parity is standing.
+- [x] **[AUDIT] Script Map Validation**: Verified Librarian archaeology and pathing stability.
+
+#### **Phase D: The Last Mile (Strategic Awareness)**
+- [ ] **[AGGREGATOR] Anchor Pinning**: Update `aggregate_years.py` to identify `[STRATEGIC_ANCHOR]` events and pin them to the top of yearly files.
+- [ ] **[RECOVERY] Nudge Meta**: Create `nudge_meta.py` to surgically invalidate cache for documents classified as `META`.
+- [ ] **[FEAT-128] Multi-Year Explosion**: Update the aggregator to distribute anchors across year ranges (e.g., 2011-2016) found in the manifest.
+- [ ] **[BURN] Anchor Burn**: Execute a targeted fast burn (`nibble_v2.py --limit=15 --reasoning`) to achieve immediate Brain awareness of career focal points.
+
+---
+
+## 🧪 LAST MILE VERIFICATION GATES
+
+### **Gate 1: Aggregator Integrity**
+* **Test**: Run `aggregate_years.py` on a mock dataset with a `[STRATEGIC_ANCHOR]`.
+* **Success Criteria**: Anchor event is at index 0 of the yearly JSON; no duplicate events created.
+
+### **Gate 2: Cache Invalidation (Nudge)**
+* **Test**: Execute `nudge_meta.py`.
+* **Success Criteria**: `chunk_state.json` hashes for `META` files are removed; `LOG` hashes remain intact.
+
+### **Gate 3: Multi-Year Distribution**
+* **Test**: Process a document with a range (e.g., 2011-2016) and run the aggregator.
+* **Success Criteria**: The anchor appears in every yearly file within that span (`2011.json` through `2016.json`).
+
+### **Gate 4: High-Fidelity Extraction**
+* **Test**: Run `nibble_v2.py` on the nudged `META` files.
+* **Success Criteria**: Ollama stays within the 120s timeout; `[STRATEGIC_ANCHOR]` events are correctly formatted with `rank: 5`.
+
+---
 
 ---
 
