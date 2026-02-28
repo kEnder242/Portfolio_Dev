@@ -8,7 +8,7 @@ import re
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine_v2 import get_engine_v2
-from utils import update_status
+from utils import update_status, DATA_DIR, RAW_NOTES_DIR
 
 REASONING_MODE = "--reasoning" in sys.argv
 HYBRID_MODE = "--hybrid" in sys.argv
@@ -17,12 +17,11 @@ if HYBRID_MODE: engine_mode = "HYBRID"
 elif REASONING_MODE: engine_mode = "REASONING"
 
 ENGINE = get_engine_v2(mode=engine_mode)
-DATA_DIR = "field_notes/data"
-RAW_DIR = "raw_notes"
+RAW_DIR = RAW_NOTES_DIR
 
 # Context Files
-FOCAL_OLD = "raw_notes/Performance review 2008-2018 .txt"
-FOCAL_NEW = "raw_notes/11066402 Insights 2019-2024.txt"
+FOCAL_OLD = os.path.join(RAW_DIR, "Performance review 2008-2018 .txt")
+FOCAL_NEW = os.path.join(RAW_DIR, "11066402 Insights 2019-2024.txt")
 
 # Hardcoded High-Value Synopses (Grounded Expertise)
 STAR_SYNOP = {

@@ -90,7 +90,8 @@ class AcmeLabClient(CognitiveEngine):
             # Bypass proxies for local network
             proxies = {"http": None, "https": None}
             payload = {"model": self.model, "prompt": "wake up", "keep_alive": "10m", "stream": False}
-            requests.post(self.url, json=payload, timeout=10, proxies=proxies)
+            # 90s timeout for cold-start model loading on Windows
+            requests.post(self.url, json=payload, timeout=90, proxies=proxies)
             return True
         except Exception as e:
             logging.error(f"Prime failed: {e}")
