@@ -154,10 +154,21 @@
 **Status:** ACTIVE
 **Logic:** Automatically triggers a Brain-level validation of technical logic and architectural advice whenever a file is saved in the workspace.
 
-## [FEAT-031] Montana Protocol (Logger Isolation)
+## [FEAT-031] Logger Isolation (The Montana Fix)
 **Status:** ACTIVE
-**Context:** Montana name was derived from original experience with a legacy project; implemented to manage logger hijacking by NeMo/ChromaDB.
-**Logic:** Strictly isolates asynchronous library logs from the Lab Attendant's telemetry stream.
+**Logic:** Hardens the Lab against stdout/stderr hijacking by asynchronous libraries.
+**Mechanism:** 
+1.  **Redirection**: Routes `acme_lab.py` and `loader.py` logging to `sys.stderr`.
+2.  **Reclamation**: Employs `reclaim_logger()` to strip global handlers after heavy imports (NeMo, ChromaDB).
+**Verification:** `src/debug/test_forensic_logging.py`.
+
+## [FEAT-133] Staged Resident Ignition (Sequencing)
+**Status:** ACTIVE
+**Logic**: Prevents initialization deadlocks and VRAM spikes by serializing the boot sequence of inference nodes.
+**Mechanism**:
+1.  **Serialization**: The orchestrator loads nodes sequentially: `archive` -> `pinky` -> `brain`.
+2.  **Staggered Sleep**: Enforces a mandatory 2-second delay between node starts to allow the event loop and memory buffers to stabilize.
+**Verification**: `src/test_liveliness.py` (Verify sequential ready states).
 
 ## [FEAT-032] Strategic Sentinel (Amygdala Filter)
 **Status:** ACTIVE
@@ -491,6 +502,26 @@
 - **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
 - **Grammatical Patterns:** `Jason should`, `Jason needs to`, `Should have been communicated`, `missed on this opportunity`.
 **Rule:** Synthesis engines MUST treat text following these markers as **Private/Instructional** and exclude it from the public `YYYY.json` event stream.
+
+### [VIBE-010] The "Diagnostic Partner" Shift (Silicon Halt)
+**Objective**: Maintain safety and transparency when the physical environment fails.
+**Logic**: A persona-level transition triggered by hardware instability or orchestration failure.
+**Triggers**:
+*   **Zombies**: Orphaned PIDs ignoring `pkill -9`.
+*   **OOM**: System-level `OutOfMemoryError` despite orchestration guards.
+*   **Driver**: NVIDIA driver communication loss or `nvidia-smi` hangs.
+*   **Disk Pressure**: `df -h` reporting >95% usage on `/` or `/home` (rpool pressure).
+*   **Orchestration Gap**: Lab Attendant (`:9999`) returning 404, Connection Refused, or timing out.
+**Behavior**: The Agent instantly shifts from "Autonomous Execution" to "Diagnostic Reporting." It stops all tool-use, presents the silicon vitals (PID, VRAM, Disk, Attendant logs), and adopts a "Passive Observer" stance.
+**Mandate**: Do not attempt `reboot` or `sudo` cleanup without explicit "Greenlight" from the Lead Engineer.
+
+## [FEAT-134] AFK Resource Guard (Autonomous Unload)
+**Status:** ACTIVE
+**Logic**: Protects GPU resources from idling if the Agent/User session is disconnected or forgotten.
+**Mechanism**:
+1.  **Default Timeout**: The server enforces an internal 60s inactivity window (overridable via `--afk-timeout`).
+2.  **Action**: If no WebSocket traffic is detected, the server SIGTERMs inference engines to free the local GPU for non-AI tasks.
+**Verification**: `src/debug/test_sigterm_protocol.py`.
 
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
