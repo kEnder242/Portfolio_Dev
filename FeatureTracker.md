@@ -22,9 +22,10 @@
 **Logic:** Enforces "Bicameral Identity" where the Brain provides pure strategic insight without conversational filler, while Pinky handles the banter.
 **Verification:** `src/debug/test_persona_bugs.py`.
 
-## [FEAT-036] VRAM Guard (Conscious Attendant)
+## [FEAT-036] VRAM Guard (Conscious Attendant) [SCAR #1]
 **Status:** ACTIVE
 **Logic:** A "Deep Sleep" protocol that stubs the Brain/Pinky nodes if VRAM pressure exceeds critical thresholds (95%) or engines fail to load.
+**SCAR #1:** Feb 20 "Aggressive Healing" collision during 550 driver install. Resolved via [FEAT-138].
 **Mechanism:** `vram_watchdog_loop` in `lab_attendant.py`.
 **Verification:** `src/test_vram_guard.py`.
 
@@ -64,9 +65,10 @@
 **Status:** ACTIVE
 **Logic:** Strictly prevents \"Persona Bleed\" by intercepting casual conversation and gating it to Pinky, while stripping header artifacts (e.g., system prompt echoes) from the Brain's output.
 
-## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder)
+## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
 **Status:** ACTIVE
 **Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
+**SCAR #2:** Feb 13 "333MiB Wall" / Turing BF16 initialization deadlock.
 **Mechanism:**
 1.  **Tier 1 (Primary)**: Standard Ollama using **Unified Base (Llama-3.2-3B)**. 
 2.  **Tier 2 (Downshift)**: Transition to **Llama-3.2-1B** or **TinyLlama** when moderate GPU pressure is detected (>8GB VRAM used by external apps).
@@ -409,9 +411,10 @@
 **Logic:** Replaces hard-coded strings with a weighted state-aware registry.
 **Categories:** `RETRIEVING`, `UNCERTAIN`, `SILICON_STRESS`, `HANDSHAKE`.
 
-## [FEAT-119] The Assassin (Atomic Lifecycle)
+## [FEAT-119] The Assassin (Atomic Lifecycle) [SCAR #3]
 **Status:** ACTIVE
 **Logic:** Ensures the Lab's port (8765) is clear and reaped by the kernel before any boot attempt begins.
+**SCAR #3:** Feb 11 "Ghost PID" port contention during marathon reload.
 **Mechanism:** `cleanup_silicon` in `lab_attendant.py` identifies PIDs holding the TCP port. The `boot_sequence` coroutine implements an **Atomic Lifecycle Barrier** by awaiting total cleanup before spawning the new process, eliminating race-condition collisions.
 
 ## [FEAT-123] The Truth Sentinel (Grounding Hardness)
@@ -529,14 +532,30 @@
 2.  **Action**: If no WebSocket traffic is detected, the server SIGTERMs inference engines to free the local GPU for non-AI tasks.
 **Verification**: `src/debug/test_sigterm_protocol.py`.
 
-## [FEAT-136] Safe-Pilot Autonomous Ignition (Design)
-**Status:** DESIGN
+## [FEAT-136] Safe-Pilot Autonomous Ignition [SCAR #4]
+**Status:** ACTIVE
 **Logic**: Enables the Lab to come online automatically after a system reboot without manual operator intervention, while maintaining a safety guard against VRAM collisions.
+**SCAR #4:** Mar 2 "Cold Start" misunderstanding / Reboot recovery gap.
 **Mechanism**:
 1.  **Boot Grace**: A 60s delay post-service-start to bypass I/O storms and ensure Docker daemon stability.
 2.  **Telemetry Gate**: Queries VRAM usage; aborts if >1GB is already allocated (assumes external task like Gaming).
 3.  **Self-Ignition**: Triggers the `handle_start` sequence for the Unified Base (3B) model if the gate is clear.
 **Verification**: Simulated reboot test and VRAM collision test.
+
+## [FEAT-142] Silicon Quiesce (The Freeze)
+**Status:** DESIGN
+**Logic:** Native Attendant method to enter a safe maintenance state.
+**Mechanism:** `POST /quiesce`. Sets `maintenance.lock`, stops active residents, and reaps all ports.
+
+## [FEAT-143] Command Ignition (Manual Start)
+**Status:** DESIGN
+**Logic:** Direct API override for the Safe-Pilot sequence.
+**Mechanism:** `POST /ignition`. Removes `maintenance.lock` and triggers immediate boot.
+
+## [FEAT-144] Native Health Ping
+**Status:** DESIGN
+**Logic:** Integrated health verification via the Attendant API.
+**Mechanism:** `POST /ping`. Triggers internal generation probe and returns token fidelity.
 
 ### [VIBE-011] The "Always Ready" Resident (Peer Presence)
 **Objective**: Transition the Lab from a "Reactive Service" to a "Resident Peer."
