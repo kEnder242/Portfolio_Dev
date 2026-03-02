@@ -64,9 +64,15 @@
 **Status:** ACTIVE
 **Logic:** Strictly prevents \"Persona Bleed\" by intercepting casual conversation and gating it to Pinky, while stripping header artifacts (e.g., system prompt echoes) from the Brain's output.
 
-## [FEAT-069] Silicon-Aware Adaptive Runtime
+## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder)
 **Status:** ACTIVE
-**Logic:** The Lab Attendant characterises the 11GB VRAM budget and automatically \"Downshifts\" the reasoning engine (vLLM -> Ollama -> Suspend) based on real-time NVML telemetry.
+**Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
+**Mechanism:**
+1.  **Tier 1 (Primary)**: Standard Ollama using **Unified Base (Llama-3.2-3B)**. 
+2.  **Tier 2 (Downshift)**: Transition to **Llama-3.2-1B** or **TinyLlama** when moderate GPU pressure is detected (>8GB VRAM used by external apps).
+3.  **Tier 3 (Hibernation)**: Full SIGTERM of AI engines during critical GPU pressure (e.g., 4K Gaming). 
+4.  **Preservation**: Session context is preserved in the Hub's `recent_interactions` list, allowing for a "Warm Start" once resources are freed.
+**Verification:** `src/debug/test_downshift_protocol.py`.
 
 ## [FEAT-070] Hallucination Shunting
 **Status:** ACTIVE
