@@ -529,6 +529,20 @@
 2.  **Action**: If no WebSocket traffic is detected, the server SIGTERMs inference engines to free the local GPU for non-AI tasks.
 **Verification**: `src/debug/test_sigterm_protocol.py`.
 
+## [FEAT-136] Safe-Pilot Autonomous Ignition (Design)
+**Status:** DESIGN
+**Logic**: Enables the Lab to come online automatically after a system reboot without manual operator intervention, while maintaining a safety guard against VRAM collisions.
+**Mechanism**:
+1.  **Boot Grace**: A 60s delay post-service-start to bypass I/O storms and ensure Docker daemon stability.
+2.  **Telemetry Gate**: Queries VRAM usage; aborts if >1GB is already allocated (assumes external task like Gaming).
+3.  **Self-Ignition**: Triggers the `handle_start` sequence for the Unified Base (3B) model if the gate is clear.
+**Verification**: Simulated reboot test and VRAM collision test.
+
+### [VIBE-011] The "Always Ready" Resident (Peer Presence)
+**Objective**: Transition the Lab from a "Reactive Service" to a "Resident Peer."
+**Logic**: High-availability interaction style where the "Heart" (STT) and "Mind" (Reasoning) are persistent anchors of the environment.
+**Behavior**: The system is designed to be "Always On" following a power cycle. If the Agent encounters an offline state, it is treated as an anomaly rather than the default, triggering immediate diagnostic reporting.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
