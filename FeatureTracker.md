@@ -543,6 +543,16 @@
 **Logic**: High-availability interaction style where the "Heart" (STT) and "Mind" (Reasoning) are persistent anchors of the environment.
 **Behavior**: The system is designed to be "Always On" following a power cycle. If the Agent encounters an offline state, it is treated as an anomaly rather than the default, triggering immediate diagnostic reporting.
 
+## [FEAT-137] vLLM 0.16.0 Infrastructure (Experimental)
+**Status:** ACTIVE
+**Logic**: Establishes a sandbox for vLLM 0.16.0 to evaluate performance gains and Turing (2080 Ti) stability.
+**Mechanism**:
+1.  **Venv**: Dedicated environment at `/home/jallred/Dev_Lab/.venv_vllm_016`.
+2.  **Models**: Staged in `/speedy/models/` (Qwen2.5-3B-Instruct, Llama-3.2-3B-Instruct-FP8, Qwen2.5-Coder-3B-Instruct).
+3.  **Tuning**: Targeting `--dtype float16` and `--enforce-eager` to bypass Turing BF16 deadlocks.
+**Sprint Plan**: **[SPRINT_VLLM_016_SILICON_GAUNTLET.md](../HomeLabAI/docs/plans/SPRINT_VLLM_016_SILICON_GAUNTLET.md)**.
+**Verification**: `src/debug/test_vllm_016_stability.py` (Planned).
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
