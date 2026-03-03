@@ -591,10 +591,22 @@
 **Note:** SML is the "Tier Swapper" and should not be conflated with [FEAT-030] (Unity), which is the "Shared Foundation" rule.
 
 ## [FEAT-149] Resident Heartbeat / Auto-Bounce
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Implements a persistent loop for the communication hub in `SERVICE_UNATTENDED` mode. 
-**Behavior**: Detects graceful shutdowns triggered by social exit phrases (e.g., "close the lab") and automatically restarts the resident boot sequence instead of terminating the process.
-**Mechanism**: A `while True` loop wrapping the `AsyncExitStack` in `acme_lab.py`.
+**Behavior**: Detects graceful shutdowns triggered by the `close_lab` tool and automatically restarts the resident boot sequence instead of terminating the process.
+**Mechanism**: A `while True` loop wrapping the server execution in `acme_lab.py`.
+**Verification**: `src/debug/test_goodnight_bounce.py`.
+
+## [FEAT-150] Shadow Prediction Preamble
+**Status:** ACTIVE
+**Logic:** Reduces perceived latency during strategic handovers by notifying the user that a complex derivation is being prepared.
+**Mechanism:** Async broadcast of "Predicted strategic intent... preparing" when high-stakes keywords are detected in speech/text before the reasoning node responds.
+
+## [FEAT-151] Unified Trace Monitoring (Log Delta Capture)
+**Status:** ACTIVE
+**Logic:** Provides "Appliance-Grade" visibility during autonomous transitions by capturing raw log traces directly in test results.
+**Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the "Delta" (new lines) if a failure or state transition occurs.
+**Verification**: Integrated into `src/debug/test_goodnight_bounce.py`.
 
 ### [VIBE-012] Hemispheric Independence
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
