@@ -1,6 +1,6 @@
 {
     "gpu_total_mib": 11264,
-    "last_updated": "2026-03-02T21:00:00",
+    "last_updated": "2026-03-02T21:35:00",
     "vllm_engine_status": "Tier 1 (Nominal) - v0.16.0 Verified",
     "safe_tiers": {
         "critical": 10700,
@@ -12,17 +12,20 @@
         "LARGE": {
             "vllm": "/speedy/models/llama-3.2-3b-instruct-awq",
             "ollama": "llama3.1:8b",
-            "label": "Llama 3.2 3B AWQ (Unified Unity Base)"
+            "label": "Llama 3.2 3B AWQ (Unified Unity Base)",
+            "est_vram_mib": 6500
         },
         "MEDIUM": {
-            "vllm": "/speedy/models/llama-3.2-3b-instruct-awq",
-            "ollama": "gemma2:2b",
-            "label": "Llama 3.2 3B AWQ (Resident Unity)"
+            "vllm": "/speedy/models/Phi-3.5-mini-instruct-awq",
+            "ollama": "phi3.5:latest",
+            "label": "Phi 3.5 mini AWQ (High-Fidelity Logic)",
+            "est_vram_mib": 5500
         },
         "SMALL": {
             "vllm": "/speedy/models/Llama-3.2-1B-Instruct",
             "ollama": "llama3.2:1b",
-            "label": "Llama 3.2 1B (Diagnostic)"
+            "label": "Llama 3.2 1B (Fast Routing)",
+            "est_vram_mib": 4500
         }
     }
 }
