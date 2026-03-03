@@ -1,9 +1,10 @@
-# Feature Tracker: Acme Lab Bicameral Mind
-**The DNA Association Matrix**
+# Feature Tracker: The DNA Association Matrix
+**Role: [FEAT] Technical Capabilities | [VIBE] Persona & Style**
 
 > [!IMPORTANT]
-> **PURPOSE:** This is a Relational Hub for mapping **Features** to **Code**, **Research**, and **Tests**.
-> **NOT A MISSION DOC:** Refer to **[HomeLabAI/docs/ENGINEERING_PEDIGREE.md](../HomeLabAI/docs/ENGINEERING_PEDIGREE.md)** for the Strategic Mission and Architecture Laws.
+> **PURPOSE:** This is the relational hub mapping the Lab's logic to silicon.
+> **[FEAT]**: Hardcoded logic, technical tools, and software-level functions.
+> **[VIBE]**: Node personalities, interaction flavor, and cognitive styles.
 
 ---
 
