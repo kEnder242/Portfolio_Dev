@@ -590,6 +590,12 @@
 3. **Resilience**: Enables "Downshifting" to 1B models during high-concurrency or sensory peaks (EarNode active).
 **Note:** SML is the "Tier Swapper" and should not be conflated with [FEAT-030] (Unity), which is the "Shared Foundation" rule.
 
+## [FEAT-149] Resident Heartbeat / Auto-Bounce
+**Status:** DESIGN
+**Logic:** Implements a persistent loop for the communication hub in `SERVICE_UNATTENDED` mode. 
+**Behavior**: Detects graceful shutdowns triggered by social exit phrases (e.g., "close the lab") and automatically restarts the resident boot sequence instead of terminating the process.
+**Mechanism**: A `while True` loop wrapping the `AsyncExitStack` in `acme_lab.py`.
+
 ### [VIBE-012] Hemispheric Independence
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
 **Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
