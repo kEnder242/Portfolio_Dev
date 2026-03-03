@@ -198,9 +198,11 @@
 **Logic:** The Lab Attendant monitors port 8765. If the process is alive but the port is unresponsive for 3 intervals, it triggers an autonomous engine swap.
 **Mechanism:** `vram_watchdog_loop` in `lab_attendant.py`.
 
-## [FEAT-030] vLLM Multi-LoRA Engine
-**Status:** TABLED (Hardware Blocked)
-**Note:** Physically untenable on Turing (2080 Ti). **RETAIN** code and configs for future Ampere+ upgrades.
+## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
+**Status:** ACTIVE
+**Logic:** Run all concurrent resident nodes (Pinky, Brain, Architect, Archive) on a shared **Unified Base Model** (Llama-3.2-3B) footprint.
+**SCAR #5:** Windows Isolation. Windows (Node 'Brain') does NOT need to sync with Linux models. Attempting to force identical weight sets across the bridge is a performance trap.
+**Mechanism:** vLLM 0.16.0 with `--enable-lora`.
 
 ## [FEAT-071] Internal Debate (Offline Collaboration)
 **Status:** ACTIVE
@@ -571,6 +573,15 @@
 3.  **Tuning**: Targeting `--dtype float16` and `--enforce-eager` to bypass Turing BF16 deadlocks.
 **Sprint Plan**: **[SPRINT_VLLM_016_SILICON_GAUNTLET.md](../HomeLabAI/docs/plans/SPRINT_VLLM_016_SILICON_GAUNTLET.md)**.
 **Verification**: `src/debug/test_vllm_016_stability.py` (Planned).
+
+## [FEAT-145] "Unity" Dispatcher (Hub Logic)
+**Status:** DESIGN
+**Logic:** Refactors the communication hub to support addressing specific LoRA adapters within a unified vLLM instance.
+**Mechanism:** `loader.py` and `acme_lab.py` include the `lora_name` in the OpenAI completion payload when `lab_mode == "vLLM"`.
+
+### [VIBE-012] Hemispheric Independence
+**Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
+**Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
 
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
