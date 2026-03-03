@@ -201,7 +201,8 @@
 
 ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
-**Logic:** Run all concurrent resident nodes (Pinky, Brain, Architect, Archive) on a shared **Unified Base Model** (Llama-3.2-3B) footprint.
+**Logic:** Run all concurrent resident nodes (Pinky, Brain, Architect, Archive) on a shared **Unified Base Model** footprint. 
+**Note:** The Unity Pattern (Single Active Foundation) should NOT be conflated with the **SML (Small/Medium/Large) Fallback** logic. Unity ensures shared residency at any given moment, while SML provides the ladder to swap the entire foundation to a different tier.
 **SCAR #5:** Windows Isolation. Windows (Node 'Brain') does NOT need to sync with Linux models. Attempting to force identical weight sets across the bridge is a performance trap.
 **Mechanism:** vLLM 0.16.0 with `--enable-lora`.
 
@@ -580,6 +581,15 @@
 **Logic:** Refactors the communication hub to support addressing specific LoRA adapters within a unified vLLM instance.
 **Mechanism:** `loader.py` and `acme_lab.py` include the `lora_name` in the OpenAI completion payload when `lab_mode == "vLLM"`.
 
+## [FEAT-148] SML Fidelity Ladder (Resilience Ladder)
+**Status:** ACTIVE
+**Logic:** Implements an abstracted model hierarchy (Small/Medium/Large) to allow the Lab to adapt reasoning depth to available VRAM headroom.
+**Mechanism:** 
+1. **Characterization**: `vram_characterization.json` maps abstract tiers to physical weight files and utilization targets.
+2. **Orchestration**: Lab Attendant executes a `quiesce` -> `start` sequence to swap the "Unity Base" when a tier shift is requested.
+3. **Resilience**: Enables "Downshifting" to 1B models during high-concurrency or sensory peaks (EarNode active).
+**Note:** SML is the "Tier Swapper" and should not be conflated with [FEAT-030] (Unity), which is the "Shared Foundation" rule.
+
 ### [VIBE-012] Hemispheric Independence
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
 **Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
@@ -594,4 +604,5 @@
 3.  **[VIBE] Dynamic Temperature**: Research if Pinky can adjust the Brain's `temperature` on the fly based on task urgency.
 4.  **[VIBE] Tone Checker**: Implement a local 1B model as a "moat" to verify Brain output is free of interjections before broadcast.
 5.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
-6.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
+6.  **[BACKLOG] Adaptive Residency**: [FEAT-147] Implement dynamic VRAM mutual-exclusion. Unload EarNode (NeMo) when typing is detected or mic is muted for >5m. Swap vLLM tiers (LARGE <-> SMALL) based on `mic_state`.
+7.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
