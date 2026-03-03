@@ -612,6 +612,16 @@
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
 **Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
 
+## [VIBE-001] Tool-First Instinct
+**Status:** DESIGN (v4.9)
+**Logic:** Prioritizes native MCP tools and established diagnostic scripts over generic shell one-liners.
+**Behavior**: Intercepts the "LLM Instinct" to write raw `python -c` or `curl` commands by providing high-signal native interfaces.
+
+## [VIBE-002] Non-Blocking Validation
+**Status:** ACTIVE
+**Logic:** Mandates the "Trigger-Poll-Observe" pattern for all logic tests.
+**Behavior**: Pulse the Lab state (via Attendant), poll the registers (Heartbeat), and observe the evidence (Trace Delta). Never block inside a trigger.
+
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
