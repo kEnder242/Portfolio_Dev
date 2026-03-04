@@ -57,33 +57,33 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
 ## 🛠️ TASKS
 
 ### PHASE 1: Attendant V2 & MCP Integration
-- [ ] Complete `lab_attendant_v2.py` logic refactor.
-- [ ] Register `acme_attendant` tool in `~/.gemini/settings.json`.
-- [ ] Verify **Parallel Assassin** using the **Neural Probe**.
+- [x] Complete `lab_attendant_v2.py` logic refactor.
+- [x] Register `acme_attendant` tool in `~/.gemini/settings.json`.
+- [x] Verify **Parallel Assassin** using the **Neural Probe**.
 *   **Test Plan:**
     1.  **Tool Registration:** Verify `acme_attendant` is visible to the Gemini CLI.
     2.  **Assassin Verification:** Manually hold port 8765 open with a dummy process; trigger `quiesce` and verify parallel `SIGKILL` in `attendant.log`.
     3.  **Sync Gate:** Verify Hub ignition blocks until port 8088 (vLLM) is physically responsive.
 
 ### PHASE 2: The Resonant Chamber (Hub Refactor)
-- [ ] Refactor `cognitive_hub.py` to support "Turn Bundling" (bundle Pinky + Brain).
-- [ ] Implement `oracle_signal` injection into Pinky's context window.
-- [ ] Update `process_query` to await parallel dispatch tasks correctly.
+- [x] Refactor `cognitive_hub.py` to support "Turn Bundling" (bundle Pinky + Brain).
+- [x] Implement `oracle_signal` injection into Pinky's context window.
+- [x] Update `process_query` to await parallel dispatch tasks correctly.
 *   **Test Plan:**
     1.  **Bundling Check:** Verify `conversations.log` shows bundled packets for a single user turn.
     2.  **Context Injection:** Use `probe_hub.py` to confirm Pinky's prompt received the `oracle_signal` data before generating.
 
 ### PHASE 3: Sentient Sentinel & "Literal Grounding"
-- [ ] Implement session sentiment monitor in `acme_lab.py`.
-- [ ] Update Pinky's system prompt with AYPWIP "Hardware So-What" logic.
-- [ ] Test the `[SENTIMENT: EXIT_LIKELY]` hint injection.
+- [x] Implement session sentiment monitor in `acme_lab.py`.
+- [x] Update Pinky's system prompt with AYPWIP "Hardware So-What" logic.
+- [x] Test the `[SENTIMENT: EXIT_LIKELY]` hint injection.
 *   **Test Plan:**
     1.  **Sentiment Trigger:** Fire 3 casual queries in 60s; verify `[SITUATION: EXIT_LIKELY]` is injected.
     2.  **Foil Logic:** Review Pinky's response for literal hardware grounding (e.g., thermal/VRAM comments) in response to strategic tasks.
 
 ### PHASE 4: Verification (The Neural Probe)
 - [x] Create `src/debug/probe_hub.py` to "sniff" the Hub's internal hints.
-- [ ] Execute the full end-to-end Bicameral Gauntlet.
+- [x] Execute the full end-to-end Bicameral Gauntlet.
 *   **Test Plan:**
     1.  **Neural Probe:** Verify script can intercept and display Hub-injected hints in real-time.
     2.  **The Gauntlet:** 1 Strategic Query -> Await Bundled Response -> 1 Casual Follow-up -> Verify Exit Hint and Literal Grounding.
@@ -91,9 +91,9 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
     4.  **Persona Audit:** Run `src/debug/test_persona_bugs.py` to ensure Pinky's new grounding doesn't break character constraints.
 
 ### PHASE 5: Post-Evolution Hardening (Addressing Scars)
-- [ ] **Probe v2.0 (Tool Improvement):** Refactor `probe_hub.py` to be bundle-aware. 
-- [ ] **SSE Evolution (Tool Improvement):** Implement SSE (Server-Sent Events) in `lab_attendant_v2.py`.
-- [ ] **Personality Unification (Core Hardening):** Merge persona instructions into system-prompt templates.
+- [x] **Probe v2.0 (Tool Improvement):** Refactor `probe_hub.py` to be bundle-aware. 
+- [x] **SSE Evolution (Tool Improvement):** Implement SSE (Server-Sent Events) in `lab_attendant_v2.py`.
+- [x] **Personality Unification (Core Hardening):** Merge persona instructions into system-prompt templates.
 - [ ] **Aggregate Verification:** Update `src/debug/verify_sprint.py` to include the Bicameral bundle check.
 
 *   **Test Plan (Phase 5):**
@@ -101,6 +101,21 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
     2.  **SSE Check:** Verify `acme_attendant` tool can communicate without a TTY.
     3.  **Dispatch Audit:** Run `src/debug/test_dispatch_logic.py` to verify priority routing within bundles.
     4.  **Final Gauntlet:** Run `src/debug/verify_sprint.py` for final sign-off.
+
+### PHASE 6: High-Fidelity Sovereignty & Shadow Refactor
+- [ ] **Decouple SML Fallback from KENDER [FEAT-081]:** Ensure KENDER (Windows) connectivity failures do not force a local model downshift for Pinky.
+- [ ] **Grounded Shadow Protocol:** Refactor the "Shadow Brain" failover mode from a "Pinky Hallucination" into a "Stoic Shadow" (technical derivation via local engine, characterful but clinical).
+- [ ] **Adapter Integrity Sweep:** Audit physical `/speedy/models/adapters/` existence. Formally deprecate and remove `lora_name` from `infrastructure.json` to resolve "First-Class Integrity Failure" log noise.
+
+*   **Context/Rationale:**
+    - **Why:** The recent implementation showed Pinky falling back to 1B Ollama because he didn't "recognize" the 3B vLLM model ID (Fidelity Trap).
+    - **Impact:** Critical fidelity loss occurs when "Theatre engines" displace "Reasoning engines" during cold-start handshake penalties (22s characterizing).
+    - **Goal:** Transform Pinky from "Absurd Foil" to "Physicality Auditor" and Brain from "Genius Mouse" to "Sovereign Architect."
+
+*   **Test Plan (Phase 6):**
+    1.  **SML Decoupling:** Simulate KENDER outage; verify Pinky stays on vLLM (LARGE) instead of downshifting.
+    2.  **Shadow Verification:** Trigger failover; verify response is "Stoic Shadow" persona, not "Jupiter Vacation."
+    3.  **Integrity Audit:** Verify zero "Missing Adapter" warnings in `server.log`.
 
 ---
 *Reference: [FEAT-030/SCAR #5] Hemispheric Independence*
