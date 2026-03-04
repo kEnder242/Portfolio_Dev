@@ -23,11 +23,18 @@
 **Rationale:** Rigid isolation prevented cross-hemispheric synergy. This feature allows nodes to "overhear" Hub-level strategic intent before generation.
 **Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn. 
 
-## [FEAT-154] Sentient Sentinel (The Lab Actor)
+## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
-**Logic:** The Hub (`acme_lab.py`) acts as a distinct actor monitoring session sentiment.
-**Rationale:** Replaces brittle word-matching for exit logic. Sentinel identifies "Exit Sentiment" through interaction density and length analysis.
-**Mechanism:** Identifies "Exit Sentiment" (density of short turns after deep tasks) and injects hints like `[SITUATION: EXIT_LIKELY]` into Pinky's context to nudge natural closure suggestions.
+**Logic:** Run all concurrent local nodes (Pinky, Shadow Brain, Lab Actor) on a shared **Unified 3B Base Model** footprint. 
+**Rationale:** To maximize VRAM efficiency on the 11GB 2080 Ti. By sharing the base weights, we only pay the VRAM penalty once, while switching \"personalities\" through low-overhead LoRA adapters.
+**SCAR #5:** Windows Isolation. Windows (Node 'Brain') remains Sovereign and decoupled from Linux model sync.
+**Mechanism:** vLLM 0.16.0 with `--enable-lora` support for dynamic adapter switching.
+
+## [FEAT-154] Environmental Awareness Node (The Lab Actor)
+**Status:** DESIGN (UNITY-ALIGNED)
+**Logic:** The "Lab" is a first-class LLM resident running on the **Unified 3B Base**.
+**Rationale:** To maintain [FEAT-030] Unity compliance. The Lab Actor shares the same VRAM footprint as Pinky and the Shadow Brain, ensuring zero additional memory overhead.
+**Mechanism:** A specialized, low-latency LoRA adapter (`lab_sentinel_v1`) that transforms the 3B base into a situational auditor. It "hears" user input + hardware telemetry and outputs high-level coordination hints (e.g. `[EXIT_LIKELY]`, `[STRATEGIC]`) to the other nodes.
 
 ## [FEAT-155] Sovereign Ultra Sovereignty (Qwen 27B)
 **Status:** ACTIVE
