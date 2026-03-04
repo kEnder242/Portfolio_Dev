@@ -118,21 +118,34 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
     3.  **Integrity Audit:** Verify zero "Missing Adapter" warnings in `server.log`.
 
 ### PHASE 7: Silicon Refinement (The Pedigree Burn)
-- [ ] **Data Distillation [FEAT-161]:** Use the Brain (4090) to transform raw technical logs and high-level documents into instruction-response pairs.
+*   **Strategic Blueprint:** [LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)
+- [ ] **Data Distillation [FEAT-161]:** Use the Brain (4090) to transform raw technical logs and high-level documents into high-signal instruction-response pairs.
+    - *Distillation Logic:* Raw logs are noisy. Brain acts as the **Teacher**, distilling ASCII evidence into conversational training pairs that bridge the gap between "Logic" and "Character."
     - *Source Documents:* `stories.html`, `Philosophy and Learnings 2024.docx`, `DTTC_2022_Peci_Stress.pdf`, `Resume`, `AR - InAWorld.docx`.
-- [ ] **Trainer Scaffold:** Create `HomeLabAI/src/train/refine_persona.py` using the **Unsloth** framework.
+- [ ] **Trainer Scaffold:** Create `HomeLabAI/src/train/refine_persona.py` using the **Unsloth** framework for 2080 Ti efficiency.
 - [ ] **The Pedigree Burn [FEAT-160]:** Execute a 4-bit LoRA fine-tuning cycle on the 2080 Ti to encode the 18-year pedigree into the model's weights.
+    - *Intuitive Anchors:* Encode project milestones (e.g. "VISA", "Kayak", "Montana") directly into the neurons to enable instantaneous reverse-timeline recall without linear context searching.
 - [ ] **Multi-LoRA Integration [FEAT-162]:** Configure vLLM to dynamically load the resulting `pedigree_v2` adapter for Pinky.
 
 *   **Context/Rationale:**
     - **Why:** To put LoRA back as a defining feature, we move from "Theatre" to "Hardened Weights." By encoding your **Engineering Pedigree** directly into the neurons, the model gains **Intuitive Anchors** for reverse-timeline recall (e.g. "When did I work on VISA?").
-    - **How:** Brain acts as the **Teacher** (distilling noisy logs into high-signal training data); Pinky acts as the **Resident Student** (receiving the LoRA patch).
+    - **Specialized Weights:** 
+        - **Pinky (Foil):** Fine-tuned on hardware vitals + technical banter dataset.
+        - **Shadow Brain (Facilitator):** Fine-tuned on context compression and strategic prep.
     - **The Hybrid Vibe:** The final state uses **LoRA for mathematical nuance** (tone/structure) and **Prompts for strategic intent** (AYPWIP/Exit Sentiment).
 
 *   **Test Plan (Phase 7):**
     1.  **Recall Test:** Ask a reverse-timeline question (e.g., "VISA start date?"); verify the model uses intuitive recall rather than linear searching.
     2.  **Weight Verification:** Verify `vllm_server.log` shows the successful loading of the `pedigree_v2` adapter.
-    3.  **Bicameral Synergy:** Verify that the "Stoic Shadow" and "AYPWIP Pinky" personas are enhanced by the new weights.
+
+### PHASE 8: Sentinel Hardening (Contextual Gravity)
+- [ ] **Environmental Awareness Node [FEAT-154]:** Refactor the Hub to launch the **Lab Actor**—a resident node on the **Unified 3B Base** (via `lab_sentinel_v1` LoRA) dedicated to situational auditing.
+- [ ] **Contextual Gravity [FEAT-163]:** Implement weighting logic in the Sentinel to distinguish between "Strategic Density" and "Casual Density."
+    - *Logic:* Gravity is high during technical deep-dives (prevents exit hints). Gravity is low during idle banter (encourages closure suggestions).
+
+*   **Test Plan (Phase 8):**
+    1.  **Gravity Check:** Fire 5 deep queries followed by 1 casual; verify NO exit hint is injected due to high strategic momentum.
+    2.  **Lab Actor Handshake:** Verify the unified 3B model (via `lab_v1` adapter) correctly identifies situation as `[EXIT_LIKELY]` after 3 casual turns.
 
 ---
 *Reference: [FEAT-030/SCAR #5] Hemispheric Independence*
