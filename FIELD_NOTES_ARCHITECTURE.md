@@ -55,9 +55,33 @@ graph TD
     - Features a high-speed character buffer (Typewriter) for log display.
 - **Fail-Safe Mechanism**: The UI includes hardcoded 2005-2024 skeletons. If the network fetch fails, the tree still populates.
 
-## 📈 Integration with HomeLabAI
-- **`ai_engine.py`**: A factory class that currently provides `OllamaClient` but is stubbed for `AcmeLabClient`.
-- **MCP Bridge**: The system is designed to migrate to a full Model Context Protocol (MCP) toolset, allowing the HomeLabAI "Brain" to act as the primary archivist.
+## 🧠 The Resonant Chamber (Bicameral Flow)
+The system uses an "Overhearing" pattern where nodes are aware of the Lab's strategic intent before generating responses.
+
+```mermaid
+sequence_sequence_diagram
+    participant U as User
+    participant H as Lab Hub (acme_lab.py)
+    participant L as Lab Actor (Sentinel)
+    participant P as Pinky (Foil)
+    participant B as Brain (Sovereign)
+
+    U->>H: Query: "What happened in 2019?"
+    H->>L: situational_audit(query, vitals)
+    L-->>H: [SITUATION: RECALL][SENTIMENT: STRATEGIC]
+    H->>B: prime_strategic_signal(RECALL)
+    B-->>H: [SIGNAL: ARCHIVE_SEARCH_INITIATED]
+    
+    Note over H,P: Resonant Chamber: Hub injects B's Signal into P's context
+    H->>P: facilitate(query, context: "[STRATEGIC_INTENT: ARCHIVE_SEARCH]")
+    H->>B: deep_think(query, context: "RAW_ARCHIVE_DATA")
+    
+    P-->>U: [REFLEX]: "Narf! Let me find those 2019 gems..."
+    B-->>U: [INSIGHT]: "Derivation of 2019 events..."
+    
+    Note over P: Pinky summarizes the final turn
+    P-->>U: [WRAP-UP]: "So that's why 2019 was a pivot year!"
+```
 
 ## 🔐 Access Control Layer (BKM Pointer)
 # GOAL: Enable Cloudflare "Access Requests" (The "Knock" button) for Guest Entry
