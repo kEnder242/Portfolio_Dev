@@ -446,7 +446,14 @@
 **Status:** ACTIVE
 **Logic:** Ensures the Lab's port (8765) is clear and reaped by the kernel before any boot attempt begins.
 **SCAR #3:** Feb 11 \"Ghost PID\" port contention during marathon reload.
-**Mechanism:** `cleanup_silicon` in `lab_attendant.py` identifies PIDs holding the TCP port. The `boot_sequence` coroutine implements an **Atomic Lifecycle Barrier** by awaiting total cleanup before spawning the new process, eliminating race-condition collisions.
+**Purge-Before-Poll Hardening:** Explicitly uses `fuser -k` on ports 8088 and 8765 as the very first step of cleanup. This prevents zombie processes from holding ports and providing false \"READY\" signals to the Attendant's sync gates.
+**Mechanism:** `cleanup_silicon` in `lab_attendant.py`.
+
+## [FEAT-165] Resident Handshake Gate
+**Status:** DESIGN
+**Logic:** Implements a mandatory initialization barrier for Lab residents.
+**Why:** The Hub often reports \"READY\" once the server port is open, but before nodes have finished their internal engine handshake. This causes initial queries to fail or fall back unnecessarily.
+**Mechanism:** `acme_lab.py` awaits a \"Confirmed Link\" signal from all resident nodes before broadcasting the final `ready` status.
 
 ## [FEAT-123] The Truth Sentinel (Grounding Hardness)
 **Status:** ACTIVE

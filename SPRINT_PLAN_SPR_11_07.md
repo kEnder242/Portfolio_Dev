@@ -69,6 +69,8 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
 - [x] Refactor `cognitive_hub.py` to support "Turn Bundling" (bundle Pinky + Brain).
 - [x] Implement `oracle_signal` injection into Pinky's context window.
 - [x] Update `process_query` to await parallel dispatch tasks correctly.
+- [ ] **Resident Handshake Gate [FEAT-165]:** Modify `acme_lab.py` to block the Hub's "READY" signal until all local residents confirm a successful engine handshake.
+    - *Rationale:* Prevents "Early Hub Readiness" where the server port opens before nodes have finished connecting to vLLM, causing initial query failures.
 *   **Test Plan:**
     1.  **Bundling Check:** Verify `conversations.log` shows bundled packets for a single user turn.
     2.  **Context Injection:** Use `probe_hub.py` to confirm Pinky's prompt received the `oracle_signal` data before generating.
@@ -94,6 +96,8 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
 - [x] **Probe v2.0 (Tool Improvement):** Refactor `probe_hub.py` to be bundle-aware. 
 - [x] **SSE Evolution (Tool Improvement):** Implement SSE (Server-Sent Events) in `lab_attendant_v2.py`.
 - [x] **Personality Unification (Core Hardening):** Merge persona instructions into system-prompt templates.
+- [ ] **Purge-Before-Poll [FEAT-119 Hardening]:** Update `cleanup_silicon` in `lab_attendant_v2.py` to use `fuser -k` on ports 8088 and 8765 *before* any status polling.
+    - *Rationale:* Ensures no zombie process can provide a false "READY" signal, preventing port/VRAM collisions and the "Doubled-Up Engine" bug.
 - [ ] **Aggregate Verification:** Update `src/debug/verify_sprint.py` to include the Bicameral bundle check.
 
 *   **Test Plan (Phase 5):**
