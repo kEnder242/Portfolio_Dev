@@ -8,10 +8,49 @@
 
 ---
 
-## [ARTIFACT] Hardware Isolation Protocol
-**Context:** Reversion artifact used during the "Driver 550 Resurgence."
-**Mechanism:** Purge kernels, stop polling, and physically erase modules (e.g., `i2c_nvidia_gpu`).
-**BKM:** Refer to `SESSION_BKM_FEB_19.md` for the "Undo" sequence if moving back to 580/Ampere.
+## [FEAT-152] Metabolism of Presence
+**Status:** ACTIVE (TRANSFORMING)
+**Logic:** Replaces Banter Decay. Dynamically shifts Pinky's cognitive mode based on session interaction density.
+**Modes:**
+1.  **High-Activity (Collaborative):** Pinky frames and pre-fills Brain's strategic derivations.
+2.  **Idle (Literal Grounding):** Pinky focuses on literal hardware vitals and AYPWIP-style "I think so Brain, but..." absurdity.
+**Mechanism:** Hub state variable `metabolism` influencing node system prompts.
+
+## [FEAT-153] The Resonant Chamber (Shared Context)
+**Status:** DESIGN
+**Logic:** Replaces [FEAT-068] Persona-Locked Dispatch. Moves from isolation to "Overhearing."
+**Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn.
+**Goal:** Pinky reacts to Brain's intent in real-time.
+
+## [FEAT-154] Sentient Sentinel (The Lab Actor)
+**Status:** DESIGN
+**Logic:** The Hub (`acme_lab.py`) acts as a distinct actor monitoring session sentiment.
+**Mechanism:** Identifies "Exit Sentiment" (density of short/casual turns after deep tasks) and injects non-brittle hints like `[SITUATION: EXIT_LIKELY]` into Pinky's context to nudge natural closure suggestions.
+
+## [FEAT-155] Sovereign Ultra Sovereignty (Qwen 27B)
+**Status:** ACTIVE
+**Logic:** High-fidelity reasoning on **KENDER** (4090) using the Claude-distilled Qwen 27B model.
+**Rule:** Unified residency. This model handles BOTH strategic chat and nightly synthesis tasks to maintain logic glue. No active swapping required during sessions.
+
+## [FEAT-039] [DEFEATURED] Banter Decay (Adaptive Reflex)
+**Status:** DEFEATURED (Feb 2026)
+**Reason:** Replaced by [FEAT-152] (Metabolism of Presence). Frequency-based idling was too system-noisy.
+
+## [FEAT-054] [DEFEATURED] Banter Decay Test
+**Status:** DEFEATURED (Feb 2026)
+**Reason:** Simulation for frequency decay is obsolete.
+
+## [FEAT-047] [DEFEATURED] Reflex Tics
+**Status:** DEFEATURED (Feb 2026)
+**Reason:** Replaced by Mode-Aware Grounding in [FEAT-152].
+
+## [FEAT-068] [DEFEATURED] Persona-Locked Dispatch (The Iron Gate)
+**Status:** DEFEATURED (Feb 2026)
+**Reason:** Rigid isolation prevented the "Collaborative Turn" required for emergent thought. Replaced by [FEAT-153].
+
+## [FEAT-033] [DEFEATURED] Iron Gate (Persona Isolation)
+**Status:** DEFEATURED (Feb 2026)
+**Reason:** isolation prevented collaborative synthesis. Replaced by [FEAT-153].
 
 ## [FEAT-028] Strategic Ping (Generation Probe)
 **Status:** ACTIVE
@@ -19,8 +58,8 @@
 **Mechanism:** Single-token generation probe in `acme_lab.py` to trigger Brain-to-Shadow failover.
 
 ## [FEAT-023] The Stoic Strategist (Identity Anchor)
-**Status:** ACTIVE
-**Logic:** Enforces "Bicameral Identity" where the Brain provides pure strategic insight without conversational filler, while Pinky handles the banter.
+**Status:** ACTIVE (RE-GROUNDED)
+**Logic:** Brain is the "Stoic Reasoner" (Opus Distillation); Pinky is the "Intuitive Foil" (AYPWIP literalism). 
 **Verification:** `src/debug/test_persona_bugs.py`.
 
 ## [FEAT-036] VRAM Guard (Conscious Attendant) [SCAR #1]
@@ -45,10 +84,6 @@
 **Status:** ACTIVE
 **Logic:** Updates `monitor_task_with_tics` to provide Brain-health-specific feedback (e.g., \"Resonating weights\", \"Sovereign unreachable\") during long reasoning tasks.
 
-## [FEAT-054] Banter Decay Test
-**Status:** ACTIVE
-**Logic:** A simulation test (`test_banter_decay.py`) that verifies the `reflex_ttl` interval increases correctly when the user is idle.
-
 ## [FEAT-055] Manual Task Trigger (Fast Alarm)
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
@@ -61,10 +96,6 @@
 **Status:** ACTIVE
 **Logic:** A background process (`dream_cycle.py`) that periodically synthesizes chaotic interaction logs into high-density \"Diamond Wisdom\" paragraphs.
 **Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
-
-## [FEAT-068] Persona-Locked Dispatch (The Iron Gate)
-**Status:** ACTIVE
-**Logic:** Strictly prevents \"Persona Bleed\" by intercepting casual conversation and gating it to Pinky, while stripping header artifacts (e.g., system prompt echoes) from the Brain's output.
 
 ## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
 **Status:** ACTIVE
@@ -88,7 +119,7 @@
 
 ## [FEAT-065] Cross-Platform Synchronization
 **Status:** ACTIVE
-**Logic:** Shell-based synchronization (`sync_to_linux.sh`, `sync_to_windows.sh`) using `rsync` and Google Drive mounts to maintain code parity across the hybrid lab (Z87-Linux and Windows 4090).
+**Logic:** Shell-based synchronization (`sync_to_linux.sh`, `sync_to_windows.sh`) using `rsync` and Google Drive mounts to maintain code parity across the hybrid lab.
 
 ## [FEAT-062] Protocol Handshake (Version Sync)
 **Status:** ACTIVE (Passive)
@@ -139,21 +170,13 @@
 **Logic:** Removed amnesic slicing (`[-3:]`) and increased interaction cap from 10 to 50, providing Pinky with deep mid-term memory.
 **Verification:** `src/debug/test_mib_wipe.py`.
 
-## [FEAT-039] Banter Decay (Adaptive Reflex)
-**Status:** ACTIVE
-**Logic:** Automatically increases the polling interval (`reflex_ttl`) when the user is idle (>60s), reducing system noise and resource usage.
-
 ## [FEAT-043] Dead-Man's Switch
 **Status:** ACTIVE
 **Logic:** Triggers a `CRITICAL` alert to `pager_activity.json` if the Lab port 8765 is unresponsive for more than 5 minutes, signaling unrecoverable failure.
 
-## [FEAT-047] Reflex Tics
-**Status:** ACTIVE
-**Logic:** Occasionally bubbles up characterful banter ("Narf!", "Poit!") when the Lab is idle and ready, maintaining persona presence.
-
 ## [FEAT-048] Monitor Task with Tics
 **Status:** ACTIVE
-**Logic:** Sends periodic "Thinking..." updates to the user during long-running Brain reasoning tasks to provide progress feedback.
+**Logic:** Sends periodic \"Thinking...\" updates to the user during long-running Brain reasoning tasks to provide progress feedback.
 
 ## [FEAT-049] Scheduled Tasks (Alarm Clock)
 **Status:** ACTIVE
@@ -184,11 +207,6 @@
 **Logic:** Dual-gated input filter. Voice mode uses keyword sentinel (strat_keys); Typing mode uses 1B model (stubbed) to prevent casual clutter.
 **Mechanism:** `self.mic_active` toggle in `acme_lab.py`.
 
-## [FEAT-033] Iron Gate (Persona Isolation)
-**Status:** ACTIVE
-**Logic:** Strictly isolates casual greetings to Pinky and clears the Architect's Insight panel during greetings to prevent persona bleed.
-**Mechanism:** `is_casual` check in `acme_lab.py`.
-
 ## [FEAT-034] Barge-In Logic (Interrupts)
 **Status:** ACTIVE
 **Logic:** Allows user to cancel long reasoning cycles using voice interrupt keys ("wait", "stop", "hold on", "shut up").
@@ -202,7 +220,6 @@
 ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
 **Logic:** Run all concurrent resident nodes (Pinky, Brain, Architect, Archive) on a shared **Unified Base Model** footprint. 
-**Note:** The Unity Pattern (Single Active Foundation) should NOT be conflated with the **SML (Small/Medium/Large) Fallback** logic. Unity ensures shared residency at any given moment, while SML provides the ladder to swap the entire foundation to a different tier.
 **SCAR #5:** Windows Isolation. Windows (Node 'Brain') does NOT need to sync with Linux models. Attempting to force identical weight sets across the bridge is a performance trap.
 **Mechanism:** vLLM 0.16.0 with `--enable-lora`.
 
@@ -252,7 +269,7 @@
 
 ## [FEAT-086] Tiered Brain Response (Preamble)
 **Status:** ACTIVE
-**Logic:** Provides sub-second feedback for deep strategic tasks by broadcasting an immediate "Thinking..." message.
+**Logic:** Provides sub-second feedback for deep strategic tasks by broadcasting an immediate \"Thinking...\" message.
 **Mechanism:** Hardcoded async broadcast in `acme_lab.py` triggered before shunting to the reasoning node.
 
 ## [FEAT-087] Intelligent Handshake Priming
@@ -262,7 +279,7 @@
 
 ## [FEAT-088] Semantic Career Recall
 **Status:** DORMANT (Requires ChromaDB)
-**Logic:** The fundamental ability to query 18 years of technical history via natural language (e.g., "What did I do in 2019?").
+**Logic:** The fundamental ability to query 18 years of technical history via natural language (e.g., \"What did I do in 2019?\").
 **Mechanism:** Vector search via ArchiveNode bridging the local JSON logs to the reasoning nodes.
 
 ## [FEAT-089] Zero Trust Guest Expansion
@@ -368,16 +385,16 @@
 ## [FEAT-109] Synthesis of Authority
 **Status:** ACTIVE
 **Logic:** Refines Brain's output to prioritize brevity and actionable insights over technical lectures.
-**Mechanism:** Refactored `BRAIN_SYSTEM_PROMPT` to enforce "Brevity is Authority" and adaptive depth.
+**Mechanism:** Refactored `BRAIN_SYSTEM_PROMPT` to enforce \"Brevity is Authority\" and adaptive depth.
 
 ## [FEAT-111] Cognitive Identity Lock
 **Status:** ACTIVE
 **Logic:** Hardened persona boundaries for failover nodes.
-**Mechanism:** Explicit "ANTI-BANTER" and "Laconic Authority" tokens in the `[FAILOVER ARCHITECT]` prompt in `acme_lab.py`.
+**Mechanism:** Explicit \"ANTI-BANTER\" and \"Laconic Authority\" tokens in the `[FAILOVER ARCHITECT]` prompt in `acme_lab.py`.
 
 ## [FEAT-112] Sequential Brain Strategy Chain
 **Status:** ACTIVE
-**Logic:** Prevents remote engine collisions by serializing "Quip" and "Deep Think" tasks.
+**Logic:** Prevents remote engine collisions by serializing \"Quip\" and \"Deep Think\" tasks.
 **Mechanism:** Async `brain_strategy_chain` in `acme_lab.py` ensures the 4090 handles one reasoning task at a time.
 
 ## [FEAT-113] DNS Trap Recovery
@@ -387,12 +404,12 @@
 
 ## [FEAT-114] Sovereign Bridge (Handover Context)
 **Status:** ACTIVE
-**Logic:** Injects the results of the initial "Signal" quip into the technical derivation's context window.
+**Logic:** Injects the results of the initial \"Signal\" quip into the technical derivation's context window.
 **Mechanism:** `brain_strategy_chain` in `acme_lab.py` bridges sequential API calls to ensure cognitive continuity.
 
 ## [FEAT-115] The Ultimate Patcher (Soft Fail)
 **Status:** ACTIVE
-**Logic:** Allows surgical, diff-based updates to the workspace with an optional "Soft Fail" lint-gate.
+**Logic:** Allows surgical, diff-based updates to the workspace with an optional \"Soft Fail\" lint-gate.
 **Mechanism:** `patch_file` tool in `archive_node.py` handles fuzzy matching and optionally persists changes even if `ruff` reports warnings.
 
 ## [FEAT-121] Lab Fingerprint (Distributed Tracing)
@@ -418,13 +435,13 @@
 ## [FEAT-119] The Assassin (Atomic Lifecycle) [SCAR #3]
 **Status:** ACTIVE
 **Logic:** Ensures the Lab's port (8765) is clear and reaped by the kernel before any boot attempt begins.
-**SCAR #3:** Feb 11 "Ghost PID" port contention during marathon reload.
+**SCAR #3:** Feb 11 \"Ghost PID\" port contention during marathon reload.
 **Mechanism:** `cleanup_silicon` in `lab_attendant.py` identifies PIDs holding the TCP port. The `boot_sequence` coroutine implements an **Atomic Lifecycle Barrier** by awaiting total cleanup before spawning the new process, eliminating race-condition collisions.
 
 ## [FEAT-123] The Truth Sentinel (Grounding Hardness)
 **Status:** ACTIVE
-**Logic:** Prevents Brain hallucinations when years are empty or invalid by providing a strict "Total Archive Silence" mandate.
-**Mechanism:** `process_query` in `acme_lab.py` detects empty RAG history and injects a high-priority "Do NOT invent" constraint.
+**Logic:** Prevents Brain hallucinations when years are empty or invalid by providing a strict \"Total Archive Silence\" mandate.
+**Mechanism:** `process_query` in `acme_lab.py` detects empty RAG history and injects a high-priority \"Do NOT invent\" constraint.
 
 ## [FEAT-125] Smart-Reuse Protocol (Warm Start)
 **Status:** ACTIVE
@@ -443,12 +460,12 @@
 
 ## [FEAT-128] The Strategic Anchor
 **Status:** ACTIVE
-**Logic:** Ingests high-level `META` documents (Insights, Focals) to provide the "Why" behind the "What" for any given year.
-**Mechanism:** `scan_librarian.py` classifies target files as `META`. The Nibbler extracts strategic points using the "Expert Career Strategist" prompt, saving them as high-rank `[STRATEGIC_ANCHOR]` events at the top of `YYYY.json` files for UI and RAG prioritization.
+**Logic:** Ingests high-level `META` documents (Insights, Focals) to provide the \"Why\" behind the \"What\" for any given year.
+**Mechanism:** `scan_librarian.py` classifies target files as `META`. The Nibbler extracts strategic points using the \"Expert Career Strategist\" prompt, saving them as high-rank `[STRATEGIC_ANCHOR]` events at the top of `YYYY.json` files for UI and RAG prioritization.
 
 ## [FEAT-130] Atomic State Updates
 **Status:** ACTIVE
-**Logic:** Ensures scanner integrity by only marking a file as "Processed" if the AI worker successfully extracts valid events.
+**Logic:** Ensures scanner integrity by only marking a file as \"Processed\" if the AI worker successfully extracts valid events.
 **Mechanism:** `nibble_v2.py` only updates the `chunk_state.json` hash after the `extract_json_from_llm` function returns a non-empty list.
 
 ## [FEAT-131] Robust JSON Extraction
@@ -458,75 +475,18 @@
 
 ## [FEAT-129] The Philosophical Core
 **Status:** DESIGN
-**Logic:** Explicitly extracts core engineering principles ("Class 1", "Verify over Velocity") from the 2024 Philosophy document.
+**Logic:** Explicitly extracts core engineering principles (\"Class 1\", \"Verify over Velocity\") from the 2024 Philosophy document.
 **Mechanism:** Injected into the Architect Node's system prompt and RAG context to influence the overall personality and decision-making logic of the Lab.
 
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
-**Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and "Blue Tree" navigation.
+**Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and \"Blue Tree\" navigation.
 **Visuals:** Professional color-coding (Red/Orange/Blue) with slide-down terminal effects and simulated console typing.
 
 ## [FEAT-078] Neural Trace (Inference Mirror)
 **Status:** DORMANT (Restoration Active)
 **Logic:** Black-box logging of all inference payloads (System + Prompt + Response) for technical auditability.
 **Mechanism:** `_mirror_trace` in `loader.py` persists full JSON payloads to `HomeLabAI/logs/trace_*.json`.
-
----
-
-## 🎭 THE VIBE LEDGER (Technical Behaviors & Scenarios)
-*This section tracks high-level agentic capabilities and interaction scenarios.*
-
-### [VIBE-001] Semantic Career Recall
-**Logic:** Asking about specific years or themes (e.g., "What did I do in 2019?") triggers a multi-turn retrieval and synthesis loop.
-
-### [VIBE-002] 3x3 CVT Synthesis
-**Logic:** Automated correlation of 18 years of technical history with yearly strategic goals for high-density positioning.
-
-### [VIBE-003] Insight Pruning (Hard Scrub)
-**Logic:** Following a direct order to surgically scrub patterns (e.g., last names) from historical summaries using regex-based automation.
-
-### [VIBE-004] Internal Debate (Peer Review)
-**Logic:** The scenario where Pinky and the Brain "duel" over a technical risk to reach a moderated consensus.
-
-### [VIBE-005] Subconscious Dreaming
-**Logic:** The automated background cycle that transforms chaotic raw logs into "Diamond Wisdom" abstracts.
-
-### [VIBE-006] The "Wave Paper" Event
-**Logic:** Collaborative UI behavior where a mouse notifies the user or auto-refreshes the editor when they write to the whiteboard.
-
-### [VIBE-007] The "Validation Journal" Pattern
-**Structure:**
-- **Order:** Latest-First (Reverse Chronological).
-- **Head:** Temporary TODOs, lists, and active "Today" buffers.
-- **Section Dividers:** Heavy ASCII lines (`=======` or `-------`).
-- **Anchors:** `[ctrl-F10 s]` reminder usually signals the start of the "DONE" or "Today" event block.
-- **Bulk:** Daily dated entries (M/D/YYYY) containing technical evidence.
-- **Tail:** Stale TODO lists and a "Contacts" directory.
-**Archaeology (Pre-2008 Outliers):**
-- **Fuzzy Chronology:** Early files (e.g., `notes_2005.txt`, `ras-viral.txt`) lack regular timestamps. Dates must be gleaned from surrounding context or header markers.
-- **Role Alignment:** "Year" notes often span multiple years, correlating with career roles (EPSD, DSD, MVE, PAE, PIAV).
-- **Team Tags:** Acronyms in filenames (DSD, MVE, PIAV) correspond to specific engineering teams and should be preserved as high-fidelity metadata.
-**Constraint:** Classification MUST skip the head/tail noise and focus on the ASCII-delimited middle bulk to verify "LOG" status.
-
-### [VIBE-008] Performance Verbiage (The Privacy Filter)
-**Context:** High-fidelity career documents (Reviews, Insights) contain feedback that should not appear in the technical timeline.
-**Keywords:**
-- **Legacy Headers:** `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `Evaluation: Areas for Development`, `IMPROVEMENT/DEVELOPMENT AREAS`.
-- **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
-- **Grammatical Patterns:** `Jason should`, `Jason needs to`, `Should have been communicated`, `missed on this opportunity`.
-**Rule:** Synthesis engines MUST treat text following these markers as **Private/Instructional** and exclude it from the public `YYYY.json` event stream.
-
-### [VIBE-010] The "Diagnostic Partner" Shift (Silicon Halt)
-**Objective**: Maintain safety and transparency when the physical environment fails.
-**Logic**: A persona-level transition triggered by hardware instability or orchestration failure.
-**Triggers**:
-*   **Zombies**: Orphaned PIDs ignoring `pkill -9`.
-*   **OOM**: System-level `OutOfMemoryError` despite orchestration guards.
-*   **Driver**: NVIDIA driver communication loss or `nvidia-smi` hangs.
-*   **Disk Pressure**: `df -h` reporting >95% usage on `/` or `/home` (rpool pressure).
-*   **Orchestration Gap**: Lab Attendant (`:9999`) returning 404, Connection Refused, or timing out.
-**Behavior**: The Agent instantly shifts from "Autonomous Execution" to "Diagnostic Reporting." It stops all tool-use, presents the silicon vitals (PID, VRAM, Disk, Attendant logs), and adopts a "Passive Observer" stance.
-**Mandate**: Do not attempt `reboot` or `sudo` cleanup without explicit "Greenlight" from the Lead Engineer.
 
 ## [FEAT-134] AFK Resource Guard (Autonomous Unload)
 **Status:** ACTIVE
@@ -539,7 +499,7 @@
 ## [FEAT-136] Safe-Pilot Autonomous Ignition [SCAR #4]
 **Status:** ACTIVE
 **Logic**: Enables the Lab to come online automatically after a system reboot without manual operator intervention, while maintaining a safety guard against VRAM collisions.
-**SCAR #4:** Mar 2 "Cold Start" misunderstanding / Reboot recovery gap.
+**SCAR #4:** Mar 2 \"Cold Start\" misunderstanding / Reboot recovery gap.
 **Mechanism**:
 1.  **Boot Grace**: A 60s delay post-service-start to bypass I/O storms and ensure Docker daemon stability.
 2.  **Telemetry Gate**: Queries VRAM usage; aborts if >1GB is already allocated (assumes external task like Gaming).
@@ -561,11 +521,6 @@
 **Logic:** Integrated health verification via the Attendant API.
 **Mechanism:** `POST /ping`. Triggers internal generation probe and returns token fidelity.
 
-### [VIBE-011] The "Always Ready" Resident (Peer Presence)
-**Objective**: Transition the Lab from a "Reactive Service" to a "Resident Peer."
-**Logic**: High-availability interaction style where the "Heart" (STT) and "Mind" (Reasoning) are persistent anchors of the environment.
-**Behavior**: The system is designed to be "Always On" following a power cycle. If the Agent encounters an offline state, it is treated as an anomaly rather than the default, triggering immediate diagnostic reporting.
-
 ## [FEAT-137] vLLM 0.16.0 Infrastructure (Experimental)
 **Status:** ACTIVE
 **Logic**: Establishes a sandbox for vLLM 0.16.0 to evaluate performance gains and Turing (2080 Ti) stability.
@@ -576,19 +531,19 @@
 **Sprint Plan**: **[SPRINT_VLLM_016_SILICON_GAUNTLET.md](../HomeLabAI/docs/plans/SPRINT_VLLM_016_SILICON_GAUNTLET.md)**.
 **Verification**: `src/debug/test_vllm_016_stability.py` (Planned).
 
-## [FEAT-145] "Unity" Dispatcher (Hub Logic)
+## [FEAT-145] \"Unity\" Dispatcher (Hub Logic)
 **Status:** DESIGN
 **Logic:** Refactors the communication hub to support addressing specific LoRA adapters within a unified vLLM instance.
-**Mechanism:** `loader.py` and `acme_lab.py` include the `lora_name` in the OpenAI completion payload when `lab_mode == "vLLM"`.
+**Mechanism:** `loader.py` and `acme_lab.py` include the `lora_name` in the OpenAI completion payload when `lab_mode == \"vLLM\"`.
 
 ## [FEAT-148] SML Fidelity Ladder (Resilience Ladder)
 **Status:** ACTIVE
 **Logic:** Implements an abstracted model hierarchy (Small/Medium/Large) to allow the Lab to adapt reasoning depth to available VRAM headroom.
 **Mechanism:** 
 1. **Characterization**: `vram_characterization.json` maps abstract tiers to physical weight files and utilization targets.
-2. **Orchestration**: Lab Attendant executes a `quiesce` -> `start` sequence to swap the "Unity Base" when a tier shift is requested.
-3. **Resilience**: Enables "Downshifting" to 1B models during high-concurrency or sensory peaks (EarNode active).
-**Note:** SML is the "Tier Swapper" and should not be conflated with [FEAT-030] (Unity), which is the "Shared Foundation" rule.
+2. **Orchestration**: Lab Attendant executes a `quiesce` -> `start` sequence to swap the \"Unity Base\" when a tier shift is requested.
+3. **Resilience**: Enables \"Downshifting\" to 1B models during high-concurrency or sensory peaks (EarNode active).
+**Note:** SML is the \"Tier Swapper\" and should not be conflated with [FEAT-030] (Unity), which is the \"Shared Foundation\" rule.
 
 ## [FEAT-149] Resident Heartbeat / Auto-Bounce
 **Status:** ACTIVE
@@ -600,37 +555,80 @@
 ## [FEAT-150] Shadow Prediction Preamble
 **Status:** ACTIVE
 **Logic:** Reduces perceived latency during strategic handovers by notifying the user that a complex derivation is being prepared.
-**Mechanism:** Async broadcast of "Predicted strategic intent... preparing" when high-stakes keywords are detected in speech/text before the reasoning node responds.
+**Mechanism:** Async broadcast of \"Predicted strategic intent... preparing\" when high-stakes keywords are detected in speech/text before the reasoning node responds.
 
 ## [FEAT-151] Unified Trace Monitoring (Log Delta Capture)
 **Status:** ACTIVE
-**Logic:** Provides "Appliance-Grade" visibility during autonomous transitions by capturing raw log traces directly in test results.
-**Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the "Delta" (new lines) if a failure or state transition occurs.
+**Logic:** Provides \"Appliance-Grade\" visibility during autonomous transitions by capturing raw log traces directly in test results.
+**Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the \"Delta\" (new lines) if a failure or state transition occurs.
 **Verification**: Integrated into `src/debug/test_goodnight_bounce.py`.
+
+---
+
+## 🎭 THE VIBE LEDGER (Technical Behaviors & Scenarios)
+*This section tracks high-level agentic capabilities and interaction scenarios.*
 
 ### [VIBE-012] Hemispheric Independence
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
 **Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
 
-## [VIBE-001] Tool-First Instinct
+### [VIBE-011] The \"Always Ready\" Resident (Peer Presence)
+**Objective**: Transition the Lab from a \"Reactive Service\" to a \"Resident Peer.\"
+**Logic**: High-availability interaction style where the \"Heart\" (STT) and \"Mind\" (Reasoning) are persistent anchors of the environment.
+**Behavior**: The system is designed to be \"Always On\" following a power cycle. If the Agent encounters an offline state, it is treated as an anomaly rather than the default, triggering immediate diagnostic reporting.
+
+### [VIBE-010] The \"Diagnostic Partner\" Shift (Silicon Halt)
+**Objective**: Maintain safety and transparency when the physical environment fails.
+**Logic**: A persona-level transition triggered by hardware instability or orchestration failure.
+**Triggers**:
+*   **Zombies**: Orphaned PIDs ignoring `pkill -9`.
+*   **OOM**: System-level `OutOfMemoryError` despite orchestration guards.
+*   **Driver**: NVIDIA driver communication loss or `nvidia-smi` hangs.
+*   **Disk Pressure**: `df -h` reporting >95% usage on `/` or `/home` (rpool pressure).
+*   **Orchestration Gap**: Lab Attendant (`:9999`) returning 404, Connection Refused, or timing out.
+**Behavior**: The Agent instantly shifts from \"Autonomous Execution\" to \"Diagnostic Reporting.\" It stops all tool-use, presents the silicon vitals (PID, VRAM, Disk, Attendant logs), and adopts a \"Passive Observer\" stance.
+**Mandate**: Do not attempt `reboot` or `sudo` cleanup without explicit \"Greenlight\" from the Lead Engineer.
+
+### [VIBE-001] Tool-First Instinct
 **Status:** DESIGN (v4.9)
 **Logic:** Prioritizes native MCP tools and established diagnostic scripts over generic shell one-liners.
-**Behavior**: Intercepts the "LLM Instinct" to write raw `python -c` or `curl` commands by providing high-signal native interfaces.
+**Behavior**: Intercepts the \"LLM Instinct\" to write raw `python -c` or `curl` commands by providing high-signal native interfaces.
 
-## [VIBE-002] Non-Blocking Validation
+### [VIBE-002] Non-Blocking Validation
 **Status:** ACTIVE
-**Logic:** Mandates the "Trigger-Poll-Observe" pattern for all logic tests.
+**Logic:** Mandates the \"Trigger-Poll-Observe\" pattern for all logic tests.
 **Behavior**: Pulse the Lab state (via Attendant), poll the registers (Heartbeat), and observe the evidence (Trace Delta). Never block inside a trigger.
 
-## [TECHNICAL DEBT]
-- **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional "hack."
-    *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
+### [VIBE-008] Performance Verbiage (The Privacy Filter)
+**Context:** High-fidelity career documents (Reviews, Insights) contain feedback that should not appear in the technical timeline.
+**Keywords:**
+- **Legacy Headers:** `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `Evaluation: Areas for Development`, `IMPROVEMENT/DEVELOPMENT AREAS`.
+- **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
+- **Grammatical Patterns:** `Jason should`, `Jason needs to`, `Should have been communicated`, `missed on this opportunity`.
+**Rule:** Synthesis engines MUST treat text following these markers as **Private/Instructional** and exclude it from the public `YYYY.json` event stream.
 
-## [BACKLOG] Synthesis & Forensic Tasks
-1.  **[VIBE] Semantic Gatekeeper**: Replace brittle `casual_keys` and `strat_keys` with a 1B/3B intent classifier.
-2.  **[UI] Authority of Formatting**: Instruction for Brain to use **Bold conclusions**, bullets, and `<details>` tags for better readability.
-3.  **[VIBE] Dynamic Temperature**: Research if Pinky can adjust the Brain's `temperature` on the fly based on task urgency.
-4.  **[VIBE] Tone Checker**: Implement a local 1B model as a "moat" to verify Brain output is free of interjections before broadcast.
-5.  **[VIBE] Semantic Barge-In**: Catch halts like \"Hold on\" or \"Not yet\" using semantic similarity rather than keyword matching.
-6.  **[BACKLOG] Adaptive Residency**: [FEAT-147] Implement dynamic VRAM mutual-exclusion. Unload EarNode (NeMo) when typing is detected or mic is muted for >5m. Swap vLLM tiers (LARGE <-> SMALL) based on `mic_state`.
-7.  **[BACKLOG] Return to 580 Protocol**: Define the automated cleanup of isolation artifacts.
+### [VIBE-007] The \"Validation Journal\" Pattern
+**Structure:**
+- **Order:** Latest-First (Reverse Chronological).
+- **Head:** Temporary TODOs, lists, and active \"Today\" buffers.
+- **Section Dividers:** Heavy ASCII lines (`=======` or `-------`).
+- **Anchors:** `[ctrl-F10 s]` reminder usually signals the start of the \"DONE\" or \"Today\" event block.
+- **Bulk:** Daily dated entries (M/D/YYYY) containing technical evidence.
+- **Tail:** Stale TODO lists and a \"Contacts\" directory.
+**Archaeology (Pre-2008 Outliers):**
+- **Fuzzy Chronology:** Early files (e.g., `notes_2005.txt`, `ras-viral.txt`) lack regular timestamps. Dates must be gleaned from surrounding context or header markers.
+- **Role Alignment:** \"Year\" notes often span multiple years, correlating with career roles (EPSD, DSD, MVE, PAE, PIAV).
+- **Team Tags:** Acronyms in filenames (DSD, MVE, PIAV) correspond to specific engineering teams and should be preserved as high-fidelity metadata.
+**Constraint:** Classification MUST skip the head/tail noise and focus on the ASCII-delimited middle bulk to verify \"LOG\" status.
+
+### [VIBE-004] Internal Debate (Peer Review)
+**Logic:** The scenario where Pinky and the Brain \"duel\" over a technical risk to reach a moderated consensus.
+
+### [VIBE-005] Subconscious Dreaming
+**Logic:** The automated background cycle that transforms chaotic raw logs into \"Diamond Wisdom\" abstracts.
+
+---
+
+## [TECHNICAL DEBT]
+- **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional \"hack.\"
+    *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
