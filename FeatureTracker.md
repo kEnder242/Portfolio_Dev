@@ -11,26 +11,29 @@
 ## [FEAT-152] Metabolism of Presence
 **Status:** ACTIVE (TRANSFORMING)
 **Logic:** Replaces Banter Decay. Dynamically shifts Pinky's cognitive mode based on session interaction density.
+**Rationale:** Simple frequency decay was too system-noisy. Mode-based scaling allows Pinky to remain a constant presence while shifting focus between "Collaborative Frame" (High Activity) and "Literal Grounding" (Idle).
 **Modes:**
 1.  **High-Activity (Collaborative):** Pinky frames and pre-fills Brain's strategic derivations.
 2.  **Idle (Literal Grounding):** Pinky focuses on literal hardware vitals and AYPWIP-style "I think so Brain, but..." absurdity.
-**Mechanism:** Hub state variable `metabolism` influencing node system prompts.
+**Mechanism:** Hub state variable `metabolism` influencing node system prompts via situational hint injection.
 
 ## [FEAT-153] The Resonant Chamber (Shared Context)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Replaces [FEAT-068] Persona-Locked Dispatch. Moves from isolation to "Overhearing."
-**Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn.
-**Goal:** Pinky reacts to Brain's intent in real-time.
+**Rationale:** Rigid isolation prevented cross-hemispheric synergy. This feature allows nodes to "overhear" Hub-level strategic intent before generation.
+**Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn. 
 
 ## [FEAT-154] Sentient Sentinel (The Lab Actor)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** The Hub (`acme_lab.py`) acts as a distinct actor monitoring session sentiment.
-**Mechanism:** Identifies "Exit Sentiment" (density of short/casual turns after deep tasks) and injects non-brittle hints like `[SITUATION: EXIT_LIKELY]` into Pinky's context to nudge natural closure suggestions.
+**Rationale:** Replaces brittle word-matching for exit logic. Sentinel identifies "Exit Sentiment" through interaction density and length analysis.
+**Mechanism:** Identifies "Exit Sentiment" (density of short turns after deep tasks) and injects hints like `[SITUATION: EXIT_LIKELY]` into Pinky's context to nudge natural closure suggestions.
 
 ## [FEAT-155] Sovereign Ultra Sovereignty (Qwen 27B)
 **Status:** ACTIVE
 **Logic:** High-fidelity reasoning on **KENDER** (4090) using the Claude-distilled Qwen 27B model.
-**Rule:** Unified residency. This model handles BOTH strategic chat and nightly synthesis tasks to maintain logic glue. No active swapping required during sessions.
+**Rationale:** 8B models lack the "Logic Glue" for high-fidelity synthesis. 27B distilled model maintains complex reasoning chains and high instructional adherence.
+**Rule:** Unified residency. This model handles BOTH strategic chat and nightly synthesis tasks to maintain logic continuity. No active swapping required during sessions.
 
 ## [FEAT-039] [DEFEATURED] Banter Decay (Adaptive Reflex)
 **Status:** DEFEATURED (Feb 2026)
@@ -566,32 +569,38 @@
 ## [FEAT-156] SSE Evolution (Hot Link)
 **Status:** ACTIVE
 **Logic:** Implements a Server-Sent Events transport for the Attendant to allow non-TTY remote tool connectivity.
-**Mechanism:** `GET /events` endpoint in `lab_attendant_v2.py`. Allows the Gemini CLI to stay connected to the active service without spawning redundant processes.
+**Rationale:** The original FastMCP implementation required a TTY, which failed inside systemd services. SSE provides a persistent "Hot Link" for the Gemini CLI to stay connected to the active service without spawning redundant processes.
+**Mechanism:** `GET /events` endpoint in `lab_attendant_v2.py`.
 
 ## [FEAT-157] Hybrid Contextual Unification
 **Status:** ACTIVE
 **Logic:** Transitions from weight-based character dependency to prompt-based character injection.
-**Mechanism:** Hub injects high-fidelity persona traits directly into the system prompt. Acts as the "Safety Fallback" to ensure character continuity even without physical LoRA adapters.
+**Rationale:** Removes the "Silicon Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.
+**Mechanism:** Hub injects high-fidelity persona traits directly into the system prompt. 
 
 ## [FEAT-158] Grounded Shadow Protocol
 **Status:** ACTIVE
 **Logic:** Refactors the Brain-to-Shadow failover from a "Pinky Hallucination" into a "Stoic Shadow" mode.
-**Mechanism:** Uses local weights to perform technical derivations with a clinical, technical persona when KENDER is offline.
+**Rationale:** Previous failovers led to unhelpful hallucinations. The Stoic Shadow provides clinical, lead-engineer precision when the primary Sovereign is offline.
+**Mechanism:** Uses local weights to perform technical derivations with a clinical persona when KENDER is offline.
 
 ## [FEAT-160] Pedigree Refinement Pipeline
 **Status:** DESIGN
 **Logic:** Automated LoRA \"Burn\" orchestrator. Physically encodes engineering pedigree into model weights based on Rank 4 \"Gems\" found in the archive.
+**Rationale:** Encodes the 18-year history into the model's neurons, transforming context searching into intuitive neural recall. Helps resolve reverse-timeline queries (e.g. "When did I work on VISA?") by making project anchors native to the model's weights.
 **Mechanism:** Triggers a fine-tuning cycle (Unsloth) when a critical mass of new technical truth is identified.
 
 ## [FEAT-161] Synthetic Character Distillation
 **Status:** DESIGN
 **Logic:** Uses the Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
-**Goal:** Bridges the gap between raw ASCII evidence and agentic character.
+**Rationale:** Raw logs are too noisy for effective fine-tuning. Distillation creates high-signal training data that bridges ASCII evidence with agentic character.
+**Goal:** High-fidelity data generation for the Pedigree Refinement Pipeline.
 
 ## [FEAT-162] Multi-LoRA Cognitive Loadout
 **Status:** ACTIVE (Dormant)
 **Logic:** Dynamic loading of pedigree-hardened weights at runtime via vLLM.
-**Status:** Infrastructure verified; awaiting `pedigree_v2` weights from Phase 7 burn.
+**Rationale:** vLLM `--enable-lora` allows specific task-adapters (e.g. `pedigree_v2`) to be requested per-query, providing a specialized "Cognitive Loadout" for high-stakes tasks like career strategy.
+**Status:** Awaiting `pedigree_v2` weights from Phase 7 burn.
 
 ---
 

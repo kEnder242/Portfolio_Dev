@@ -117,5 +117,22 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
     2.  **Shadow Verification:** Trigger failover; verify response is "Stoic Shadow" persona, not "Jupiter Vacation."
     3.  **Integrity Audit:** Verify zero "Missing Adapter" warnings in `server.log`.
 
+### PHASE 7: Silicon Refinement (The Pedigree Burn)
+- [ ] **Data Distillation [FEAT-161]:** Use the Brain (4090) to transform raw technical logs and high-level documents into instruction-response pairs.
+    - *Source Documents:* `stories.html`, `Philosophy and Learnings 2024.docx`, `DTTC_2022_Peci_Stress.pdf`, `Resume`, `AR - InAWorld.docx`.
+- [ ] **Trainer Scaffold:** Create `HomeLabAI/src/train/refine_persona.py` using the **Unsloth** framework.
+- [ ] **The Pedigree Burn [FEAT-160]:** Execute a 4-bit LoRA fine-tuning cycle on the 2080 Ti to encode the 18-year pedigree into the model's weights.
+- [ ] **Multi-LoRA Integration [FEAT-162]:** Configure vLLM to dynamically load the resulting `pedigree_v2` adapter for Pinky.
+
+*   **Context/Rationale:**
+    - **Why:** To put LoRA back as a defining feature, we move from "Theatre" to "Hardened Weights." By encoding your **Engineering Pedigree** directly into the neurons, the model gains **Intuitive Anchors** for reverse-timeline recall (e.g. "When did I work on VISA?").
+    - **How:** Brain acts as the **Teacher** (distilling noisy logs into high-signal training data); Pinky acts as the **Resident Student** (receiving the LoRA patch).
+    - **The Hybrid Vibe:** The final state uses **LoRA for mathematical nuance** (tone/structure) and **Prompts for strategic intent** (AYPWIP/Exit Sentiment).
+
+*   **Test Plan (Phase 7):**
+    1.  **Recall Test:** Ask a reverse-timeline question (e.g., "VISA start date?"); verify the model uses intuitive recall rather than linear searching.
+    2.  **Weight Verification:** Verify `vllm_server.log` shows the successful loading of the `pedigree_v2` adapter.
+    3.  **Bicameral Synergy:** Verify that the "Stoic Shadow" and "AYPWIP Pinky" personas are enhanced by the new weights.
+
 ---
 *Reference: [FEAT-030/SCAR #5] Hemispheric Independence*
