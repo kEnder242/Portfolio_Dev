@@ -563,6 +563,36 @@
 **Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the \"Delta\" (new lines) if a failure or state transition occurs.
 **Verification**: Integrated into `src/debug/test_goodnight_bounce.py`.
 
+## [FEAT-156] SSE Evolution (Hot Link)
+**Status:** ACTIVE
+**Logic:** Implements a Server-Sent Events transport for the Attendant to allow non-TTY remote tool connectivity.
+**Mechanism:** `GET /events` endpoint in `lab_attendant_v2.py`. Allows the Gemini CLI to stay connected to the active service without spawning redundant processes.
+
+## [FEAT-157] Hybrid Contextual Unification
+**Status:** ACTIVE
+**Logic:** Transitions from weight-based character dependency to prompt-based character injection.
+**Mechanism:** Hub injects high-fidelity persona traits directly into the system prompt. Acts as the "Safety Fallback" to ensure character continuity even without physical LoRA adapters.
+
+## [FEAT-158] Grounded Shadow Protocol
+**Status:** ACTIVE
+**Logic:** Refactors the Brain-to-Shadow failover from a "Pinky Hallucination" into a "Stoic Shadow" mode.
+**Mechanism:** Uses local weights to perform technical derivations with a clinical, technical persona when KENDER is offline.
+
+## [FEAT-160] Pedigree Refinement Pipeline
+**Status:** DESIGN
+**Logic:** Automated LoRA \"Burn\" orchestrator. Physically encodes engineering pedigree into model weights based on Rank 4 \"Gems\" found in the archive.
+**Mechanism:** Triggers a fine-tuning cycle (Unsloth) when a critical mass of new technical truth is identified.
+
+## [FEAT-161] Synthetic Character Distillation
+**Status:** DESIGN
+**Logic:** Uses the Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
+**Goal:** Bridges the gap between raw ASCII evidence and agentic character.
+
+## [FEAT-162] Multi-LoRA Cognitive Loadout
+**Status:** ACTIVE (Dormant)
+**Logic:** Dynamic loading of pedigree-hardened weights at runtime via vLLM.
+**Status:** Infrastructure verified; awaiting `pedigree_v2` weights from Phase 7 burn.
+
 ---
 
 ## 🎭 THE VIBE LEDGER (Technical Behaviors & Scenarios)
