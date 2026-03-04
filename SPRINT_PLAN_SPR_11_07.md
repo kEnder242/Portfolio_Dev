@@ -120,8 +120,9 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
 ### PHASE 7: Silicon Refinement (The Pedigree Burn)
 *   **Strategic Blueprint:** [LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)
 - [ ] **Data Distillation [FEAT-161]:** Use the Brain (4090) to transform raw technical logs and high-level documents into high-signal instruction-response pairs.
-    - *Distillation Logic:* Raw logs are noisy. Brain acts as the **Teacher**, distilling ASCII evidence into conversational training pairs that bridge the gap between "Logic" and "Character."
-    - *Source Documents:* `stories.html`, `Philosophy and Learnings 2024.docx`, `DTTC_2022_Peci_Stress.pdf`, `Resume`, `AR - InAWorld.docx`.
+    - *Distillation Logic:* Apply the [VIBE-008] filter via **`sanitize_achievements.py`** to strip personal coaching ("Jason should") while preserving technical truth.
+    - *Pinky Sources:* `Early outliers`, `DTTC_PECI_Stress.pdf`, `artifacts_*.json`.
+    - *Shadow Sources:* `AR - InAWorld.docx`, `AI_MASTER_PLAN.md`, `Philosophy & Learnings 2024`.
 - [ ] **Trainer Scaffold:** Create `HomeLabAI/src/train/refine_persona.py` using the **Unsloth** framework for 2080 Ti efficiency.
 - [ ] **The Pedigree Burn [FEAT-160]:** Execute a 4-bit LoRA fine-tuning cycle on the 2080 Ti to encode the 18-year pedigree into the model's weights.
     - *Intuitive Anchors:* Encode project milestones (e.g. "VISA", "Kayak", "Montana") directly into the neurons to enable instantaneous reverse-timeline recall without linear context searching.
