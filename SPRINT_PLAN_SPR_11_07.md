@@ -60,20 +60,33 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
 - [ ] Complete `lab_attendant_v2.py` logic refactor.
 - [ ] Register `acme_attendant` tool in `~/.gemini/settings.json`.
 - [ ] Verify **Parallel Assassin** using the **Neural Probe**.
+*   **Test Plan:**
+    1.  **Tool Registration:** Verify `acme_attendant` is visible to the Gemini CLI.
+    2.  **Assassin Verification:** Manually hold port 8765 open with a dummy process; trigger `quiesce` and verify parallel `SIGKILL` in `attendant.log`.
+    3.  **Sync Gate:** Verify Hub ignition blocks until port 8088 (vLLM) is physically responsive.
 
 ### PHASE 2: The Resonant Chamber (Hub Refactor)
 - [ ] Refactor `cognitive_hub.py` to support "Turn Bundling" (bundle Pinky + Brain).
 - [ ] Implement `oracle_signal` injection into Pinky's context window.
 - [ ] Update `process_query` to await parallel dispatch tasks correctly.
+*   **Test Plan:**
+    1.  **Bundling Check:** Verify `conversations.log` shows bundled packets for a single user turn.
+    2.  **Context Injection:** Use `probe_hub.py` to confirm Pinky's prompt received the `oracle_signal` data before generating.
 
 ### PHASE 3: Sentient Sentinel & "Literal Grounding"
 - [ ] Implement session sentiment monitor in `acme_lab.py`.
 - [ ] Update Pinky's system prompt with AYPWIP "Hardware So-What" logic.
 - [ ] Test the `[SENTIMENT: EXIT_LIKELY]` hint injection.
+*   **Test Plan:**
+    1.  **Sentiment Trigger:** Fire 3 casual queries in 60s; verify `[SITUATION: EXIT_LIKELY]` is injected.
+    2.  **Foil Logic:** Review Pinky's response for literal hardware grounding (e.g., thermal/VRAM comments) in response to strategic tasks.
 
 ### PHASE 4: Verification (The Neural Probe)
 - [ ] Create `src/debug/probe_hub.py` to "sniff" the Hub's internal hints.
 - [ ] Execute the full end-to-end Bicameral Gauntlet.
+*   **Test Plan:**
+    1.  **Neural Probe:** Verify script can intercept and display Hub-injected hints in real-time.
+    2.  **The Gauntlet:** 1 Strategic Query -> Await Bundled Response -> 1 Casual Follow-up -> Verify Exit Hint and Literal Grounding.
 
 ---
 *Reference: [FEAT-030/SCAR #5] Hemispheric Independence*
