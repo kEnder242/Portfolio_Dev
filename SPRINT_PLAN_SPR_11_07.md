@@ -82,11 +82,25 @@ To evolve the relationship between **Pinky** and **The Brain** from a simple "UI
     2.  **Foil Logic:** Review Pinky's response for literal hardware grounding (e.g., thermal/VRAM comments) in response to strategic tasks.
 
 ### PHASE 4: Verification (The Neural Probe)
-- [ ] Create `src/debug/probe_hub.py` to "sniff" the Hub's internal hints.
+- [x] Create `src/debug/probe_hub.py` to "sniff" the Hub's internal hints.
 - [ ] Execute the full end-to-end Bicameral Gauntlet.
 *   **Test Plan:**
     1.  **Neural Probe:** Verify script can intercept and display Hub-injected hints in real-time.
     2.  **The Gauntlet:** 1 Strategic Query -> Await Bundled Response -> 1 Casual Follow-up -> Verify Exit Hint and Literal Grounding.
+    3.  **Core Verification:** Run `src/debug/test_lifecycle_gauntlet.py` to verify connection resilience after the Attendant V2 refactor.
+    4.  **Persona Audit:** Run `src/debug/test_persona_bugs.py` to ensure Pinky's new grounding doesn't break character constraints.
+
+### PHASE 5: Post-Evolution Hardening (Addressing Scars)
+- [ ] **Probe v2.0 (Tool Improvement):** Refactor `probe_hub.py` to be bundle-aware. 
+- [ ] **SSE Evolution (Tool Improvement):** Implement SSE (Server-Sent Events) in `lab_attendant_v2.py`.
+- [ ] **Personality Unification (Core Hardening):** Merge persona instructions into system-prompt templates.
+- [ ] **Aggregate Verification:** Update `src/debug/verify_sprint.py` to include the Bicameral bundle check.
+
+*   **Test Plan (Phase 5):**
+    1.  **Probe v2.0:** Verify `probe_hub.py` shows BOTH Pinky and Brain responses correctly for a single turn.
+    2.  **SSE Check:** Verify `acme_attendant` tool can communicate without a TTY.
+    3.  **Dispatch Audit:** Run `src/debug/test_dispatch_logic.py` to verify priority routing within bundles.
+    4.  **Final Gauntlet:** Run `src/debug/verify_sprint.py` for final sign-off.
 
 ---
 *Reference: [FEAT-030/SCAR #5] Hemispheric Independence*
