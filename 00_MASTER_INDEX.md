@@ -9,9 +9,11 @@
 *   **[FeatureTracker.md](./FeatureTracker.md)**: **The DNA.** The relational hub mapping Features to Code, Research, and Tests. **Primary truth anchor for architectural intent.**
 *   **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)**: **The God View.** High-level milestones across Brain and Face.
 *   **[README.md](./README.md)**: **The Public Face.** High-level project overview, philosophy ("Class 1").
+*   **[HomeLabAI/README.md](../HomeLabAI/README.md)**: **The Lab Face.** Overview of the distributed voice ecosystem and operational laws.
 
 ## 📐 Architecture & Logic
 *   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.** System Topology and Access Control.
+*   **[LAB_INFRASTRUCTURE.md](../HomeLabAI/docs/LAB_INFRASTRUCTURE.md)**: **The Physical Map.** Network ports, host affinities (KENDER), and transport layers.
 *   **[BICAMERAL_DISPATCH.md](./docs/BICAMERAL_DISPATCH.md)**: **The Mind.** (vLLM Pilot) Defines the Amygdala, Sentinel, and Corpus Callosum metaphors.
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.
 *   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Agentic tools and node duties.
@@ -21,6 +23,7 @@
 *   **[../HomeLabAI/docs/Protocols.md](../HomeLabAI/docs/Protocols.md)**: **The Law.**
     *   Defines "The Builder Protocol," "Design Studio," and "BKM Style."
     *   **Must Read** for interaction standards.
+*   **[LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)**: **The Pedigree Blueprint.** Roadmap for silicon refinement and weight-hardening.
 *   **[monitor/PAGERDUTY_BKM.md](./monitor/PAGERDUTY_BKM.md)**: **Example BKM.** Specific deployment guide for the Neural Pager.
 *   **[Travel_Guide_2026.md](./Travel_Guide_2026.md)**: **Confidential.** (Local Only). Contains infrastructure credentials, paths, and "Pinky" logic. **Do not commit.**
 
@@ -30,6 +33,7 @@
 *   **[INTERVIEW_CHEAT_SHEET.md](./INTERVIEW_CHEAT_SHEET.md)**: **Study Material.** Active document for interview prep.
 
 ## 🏺 Engineering Pedigree (Scars & Lessons)
+*   **[Forensics Archive](../HomeLabAI/docs/forensics/)**: **The Silicon Scars.** High-fidelity archive of driver crashes, VRAM deadlocks, and recovery reports.
 *   **[Silicon Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
 *   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & isolation BKMs.
 *   **[Recovery & Cruft Retro (Feb 19)](./RETROSPECTIVE_FEB_19_RECOVERY.md)**: Identity, telemetry, and technical debt mapping.

@@ -31,7 +31,7 @@
 **Mechanism:** vLLM 0.16.0 with `--enable-lora` support for dynamic adapter switching.
 
 ## [FEAT-154] Environmental Awareness Node (The Lab Actor)
-**Status:** DESIGN (UNITY-ALIGNED)
+**Status:** ACTIVE (UNITY-ALIGNED)
 **Logic:** The "Lab" is a first-class LLM resident running on the **Unified 3B Base**.
 **Rationale:** To maintain [FEAT-030] Unity compliance. The Lab Actor shares the same VRAM footprint as Pinky and the Shadow Brain, ensuring zero additional memory overhead.
 **Mechanism:** A specialized, low-latency LoRA adapter (`lab_sentinel_v1`) that transforms the 3B base into a situational auditor. It "hears" user input + hardware telemetry and outputs high-level coordination hints (e.g. `[EXIT_LIKELY]`, `[STRATEGIC]`) to the other nodes.
@@ -298,8 +298,8 @@
 **Mechanism:** Cloudflare Access Policy updates for `notes.jason-lab.dev` and `acme.jason-lab.dev`.
 
 ## [FEAT-090] Non-Blocking Parallel Dispatch
-**Status:** ACTIVE
-**Logic:** Eliminates synchronization barriers in the hemispheric dispatch loop.
+**Status:** ACTIVE (HYBRID)
+**Logic:** Stream components individually to the UI for "Live Feedback" [VIBE-002], but bundle them in the `conversations.log` for unified turn history.
 **Mechanism:** Node responses are broadcast to the user as they finish using `asyncio.as_completed` (or parallel handlers), allowing Pinky's fast replies to appear instantly while Brain calculates.
 
 ## [FEAT-091] Tiered Thinking (Shallow Mode)
@@ -450,7 +450,7 @@
 **Mechanism:** `cleanup_silicon` in `lab_attendant.py`.
 
 ## [FEAT-165] Resident Handshake Gate
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Implements a mandatory initialization barrier for Lab residents.
 **Why:** The Hub often reports \"READY\" once the server port is open, but before nodes have finished their internal engine handshake. This causes initial queries to fail or fall back unnecessarily.
 **Mechanism:** `acme_lab.py` awaits a \"Confirmed Link\" signal from all resident nodes before broadcasting the final `ready` status.
@@ -586,6 +586,7 @@
 **Logic:** Implements a Server-Sent Events transport for the Attendant to allow non-TTY remote tool connectivity.
 **Rationale:** The original FastMCP implementation required a TTY, which failed inside systemd services. SSE provides a persistent "Hot Link" for the Gemini CLI to stay connected to the active service without spawning redundant processes.
 **Mechanism:** `GET /events` endpoint in `lab_attendant_v2.py`.
+**High-Fidelity Signal:** Heartbeats include **Live VRAM Characterization**, allowing the Agent to perceive silicon limits before attempting heavy tool calls.
 
 ## [FEAT-157] Hybrid Contextual Unification
 **Status:** ACTIVE
