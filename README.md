@@ -1,8 +1,8 @@
 # Field Notes | Technical Portfolio
 
-**A "Class 1" Engineering Dashboard driven by a local AI knowledge graph.**
+**A "Class 1" Engineering Dashboard driven by a Bicameral Synthesis Pipeline.**
 
-This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career timeline built with a philosophy of radical simplicity and active intelligence.
+This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career environment built with a philosophy of radical simplicity and active intelligence.
 
 ---
 
@@ -18,14 +18,21 @@ This project adheres to a strict "Class 1" design constraint: **Robust, self-con
 *   **No Backend Runtime:** The site runs as static files (JSON/HTML).
 *   **No Build Step:** WYSIWYG. Viewable via `python3 -m http.server`.
 
-## 🧠 The Architecture: "Static Synthesis"
-The backend is a sophisticated AI pipeline that indexes 18 years of raw engineering logs. It utilizes a local LLM ("Pinky") to process heavy data, saving API tokens while maintaining high-fidelity analysis.
+## 🧠 The Architecture: Static Synthesis
+The backend is a **Static Synthesis Pipeline** that indexes 18 years of raw engineering logs into a static knowledge graph (JSON/HTML). It utilizes a **"Dual-Protocol" Attendant (V2)** to coordinate high-fidelity analysis between local reflex and remote strategy.
+
+*   **Bicameral Coordination:** Local reflex (Pinky) and remote strategy (Brain) collaborate to synthesize the 18-year archive into structured data.
+*   **Resident Peer Presence [VIBE-011]:** The portfolio is the face of an "Always Ready" distributed environment.
+*   **Neural Pedigree Recall:** Driven by LoRA-hardened weights encoding 18 years of technical history directly into the model's neurons for intuitive recall.
+*   **Resonant Chamber [FEAT-153]:** Coordinated synthesis via agentic "overhearing," allowing the Foil (Pinky) to ground the Sovereign's (Brain) strategic intent.
 
 ```mermaid
 graph TD
     A[Raw Notes] -->|Librarian| B(Timeline Queue)
-    B -->|Nibbler Script| C{"Pinky (Active Unified Base)"}
+    B -->|Nibbler Script| C{"Pinky (Local Auditor)"}
     A -->|Artifact Scanner| C
+    C -->|Handover Signal| G{"Brain (Sovereign Architect)"}
+    G -->|Strategic Signal| C
     C -->|Events & Redaction| D[Timeline Data]
     C -->|Rank & Synopsis| E[Artifact Map Data]
     D & E --> F[Static Dashboard]
@@ -79,7 +86,7 @@ These services ensure the platform is always available:
 This project was architected and implemented in an agentic loop with **Google Gemini CLI**.
 *   **Concept & Strategy:** Jason Allred
 *   **Code & Integration:** Gemini CLI (Agent)
-*   **Indexing Engine:** "Pinky" (Local Unified Base Model)
+*   **Indexing Engine:** Bicameral Mind (Pinky + Brain)
 
 ---
 *Status: Live & Operational.*

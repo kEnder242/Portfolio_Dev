@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** Feb 22, 2026
+**Date:** March 6, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -11,60 +11,61 @@
 *   **🗺️ The Map Room:** [00_MASTER_INDEX.md](./00_MASTER_INDEX.md)
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 
-## 🎯 Active Initiative: "Semantic Re-Mapping" (Sprint SPR-11-05)
-**Goal:** Ingest high-fidelity META documents and implement Strategic Anchoring.
+## 🎯 Active Initiative: "Bicameral Evolution" (Sprint SPR-11-07)
+**Goal:** Transition to Attendant V2, integrate Qwen 27B, and refine Bicameral Synergy.
 
-## ✅ Global Milestones (Feb 2026)
-1.  **Unified Base Established**: Standardized on the **Standard Tier (e.g., Llama 3.2 3B)** for 2080 Ti residency.
-2.  **Ollama Standard Stabilized**: vLLM officially **TABLED** for Turing (2080 Ti). Ollama now provides sub-second model/prompt swapping.
-3.  **Silicon Headroom Verified**: Characterized 11GB VRAM budget with full stack + EarNode resident (~9.8GB peak).
-4.  **Bicameral Failover (Ping)**: Integrated "Generation Probe" (Strategic Ping) to automatically reroute queries if the Brain deadlocks.
-5.  **Strategic Retrieval**: Connected Pinky to the 18-year archive via the Strategic Map integration.
-6.  **Persona Hardening**: Implemented [FEAT-110] Shadow Moat sanitizer and [FEAT-109] Synthesis of Authority prompts.
-7.  **Lively Room Coordination**: Successfully implemented [FEAT-108] Agentic Reflection and Non-blocking dispatch.
-8.  **Hierarchical Grounding**: Architect node now generates a 3-layer Semantic Map (Strategic, Analytical, Tactical).
-9.  **[VERIFIED] Sprint SPR-11-04: The Ghost Hunter**: Resolved "Ghost Process" blockades via [FEAT-121] Lab Fingerprint and [FEAT-122] Proc Title.
-10. **[VERIFIED] Archaeological Grounding**: Mapped 18-year career (EPSD -> PIAV) and bridged the 2011-2014 "VISA Gap" via `notes_2015_DSD.txt`.
-11. **[VERIFIED] Strategic Anchoring**: Implemented [FEAT-128] to extract high-rank focal points from META documents using the 8B model.
+## ✅ Global Milestones (March 2026)
+1.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+2.  **vLLM 0.16.0 Breakthrough**: Successfully bypassed the "333MiB Wall" on Turing (2080 Ti) using `lo` loopback handshakes. vLLM is now the **Active Production Engine** for the Unified 3B Base.
+3.  **Unified 3B Base Established**: Standardized on Llama 3.2 / Qwen 2.5 for 2080 Ti residency via the **Unity Pattern [FEAT-030]**.
+4.  **Historical Pivot (Feb 2026)**: vLLM was briefly **TABLED** due to Ray/NCCL deadlocks; Ollama served as the bridge during characterization.
+5.  **Sovereign Ultra (27B)**: Claude-distilled Qwen resident on KENDER (4090).
+6.  **Resonant Chamber [FEAT-153]**: Implemented multi-agent coordination via "overhearing" strategic intent.
+7.  **Forensics Archive Established**: Relocated "Silicon Scars" to `HomeLabAI/docs/forensics/` to preserve pedigree.
 
 ## 🔮 The Roadmap (The Restoration Hub)
 
-### [URGENT] Public Research Synthesis (Airlock Security)
-- **Goal:** Safely move `research.html` from the internal Airlock to the public `www_deploy/` pipeline.
-- **Implementation:**
-    1.  Update `field_notes/build_site.py` with a `synthesize_research()` function.
-    2.  Use regex to strip `<mission-control>` and `mission-control.js` (Zero Trust logic) from the file.
-    3.  Inject a static `public-nav.html` partial for standard public navigation.
-    4.  Sanitize the "Acme Implementation" column: Replace internal script names (e.g., `ai_engine_v2.py`) with descriptive labels (e.g., "Synthesis Engine v2.0").
-    5.  Deploy the sanitized version to `www_deploy/research.html`.
+### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-07)
+*   [x] **Bilingual Attendant (V2)**: Integrated REST and MCP toolsets.
+*   [x] **Sovereign Ultra (27B)**: Claude-distilled Qwen resident on KENDER (4090).
+*   [x] **Resonant Chamber**: Multi-agent coordination via "overhearing" [FEAT-153].
+*   [x] **Resident Handshake Gate**: Implemented initialization barrier for resident nodes [FEAT-165].
+*   [ ] **Architect LoRA**: Distill BKM Protocol into a specialized `architect_v1` adapter.
 
-*   **[ACTIVE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
+*   **[COMPLETE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
     *   [x] **Strategic Anchoring**: Implemented [FEAT-128] extraction logic and verified on `2011.json`.
     *   [x] **Robust Extraction**: Implemented [FEAT-131] regex-based JSON parsing for chatty LLMs.
     *   [x] **Archaeological Logic**: Integrated role-based team anchors (DSD, MVE, PIAV) into the Librarian.
-    *   [ ] **Yearly Injection**: Implement [FEAT-127] for anchor-aware yearly aggregation.
+    *   [x] **Yearly Injection**: Implement [FEAT-127] for anchor-aware yearly aggregation.
+
 *   **[COMPLETE] Phase 11.3: The Ghost Hunter** (Sprint SPR-11-04)
     *   [x] **Lab Fingerprint**: Implemented [FEAT-121] Boot Hash and Git-Commit tracing.
     *   [x] **Proc Title**: Implemented [FEAT-122] kernel-level process renaming.
     *   [x] **Process Group Cleanup**: Refactored Attendant to use `os.killpg()` for total tree termination.
     *   [x] **Socket-Aware Assassin**: Implemented [FEAT-119] to purge port 8765 before boot.
     *   [x] **Local Truth Sentry**: Implemented [FEAT-124] to prevent archive hallucinations.
-*   **[ACTIVE] Phase 11.2: Authority of Synthesis** (Sprint SPR-11-03)
+
+*   **[COMPLETE] Phase 11.2: Authority of Synthesis** (Sprint SPR-11-03)
     *   [x] **Synthesis of Authority**: Implemented [FEAT-109] laconic synthesis prompts for the Brain.
     *   [x] **The Shadow Moat**: Implemented [FEAT-110] post-generation post-sanitization for persona isolation.
     *   [x] **Identity Lock**: Implemented [FEAT-111] hard constraints for local failover nodes.
+
 *   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
     *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
+
 *   **[ACTIVE] Semantic Sentinel**: Refine Sentinel logic into a true "Semantic Intent" gate using a tiny local model.
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
-*   **[BACKLOG] Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
-*   **[BACKLOG] Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
-*   **[BACKLOG] Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
-*   **[BACKLOG] Subconscious Sanitization**: Review dreaming/debate prompts to remove personal professional anchors.
-*   **[BACKLOG] Lazy-Load Protection**: Protect Hub stability by moving node-specific imports to local blocks.
-*   **[BACKLOG] Liger-Standard Test**: Bench-test Viger-Kernels for Ollama VRAM efficiency.
-*   **[BACKLOG] MAXS Utility Logic**: Implement "Value of Information" lookahead for Brain tasks.
-*   **[COMPLETED] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
+
+### [BACKLOG]
+*   [BACKLOG] **Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
+*   [BACKLOG] **Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
+*   [BACKLOG] **Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
+*   [BACKLOG] **Subconscious Sanitization**: Review dreaming/debate prompts to remove personal professional anchors.
+*   [BACKLOG] **Lazy-Load Protection**: Protect Hub stability by moving node-specific imports to local blocks.
+*   [BACKLOG] **Liger-Standard Test**: Bench-test Viger-Kernels for Ollama VRAM efficiency.
+*   [BACKLOG] **MAXS Utility Logic**: Implement "Value of Information" lookahead for Brain tasks.
+
+*   **[COMPLETE] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
     *   [x] **Tiered Brain Response**: [FEAT-086] WITTY preamble active.
     *   [x] **Intelligent Priming**: [FEAT-087] handshake priming verified.
     *   [x] **Recruiter Dashboard**: [FEAT-088] reporting active.
@@ -74,6 +75,11 @@
 
 ## 🏺 Chronological Archive (The Bedrock)
 *Historical milestones for Phases 0 through 10.*
+
+*   **[COMPLETE] Phase 10: Artifact Synthesis** (Feb 2026)
+    *   [x] **Artifact Map**: Built `files.html` with unified "ALL" view.
+    *   [x] **Cynical Ranking**: Implemented 0-4 showcase value scale.
+    *   [x] **Nuclear Search**: Isolated navigation from DOM filtering.
 
 ### ✅ PHASE 0: INFRASTRUCTURE (Jan 2026)
 - **Infrastructure Migration:** HomeLabAI_Dev moved from WSL -> Native Linux SSH.
@@ -86,11 +92,11 @@
 - **Access Layer:** Configured "Access Request" policy for guest entry.
 
 ### ✅ PHASE 3: OBSERVABILITY LAB
-- **Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
+- **Scaffological Scaffolding:** Docker stack created (Prometheus, Grafana, NodeExporter).
 - **Telemetry:** RAPL-Sim custom exporter reading system thermal/load data.
 - **Access:** `monitor.jason-lab.dev` mapped and secured.
 
-### ✅ PHASE 4-10: SYNTHESIS & ROBUSTNESS
+### ✅ PHASE 4-9: SYNTHESIS & ROBUSTNESS
 - **Librarian/Nibbler:** Implemented dual-pipeline static synthesis.
 - **Artifact Map:** Built `files.html` with Cynical Ranking (0-4).
 - **Public Airlock (v3.1):** Deployed `www.jason-lab.dev`.
