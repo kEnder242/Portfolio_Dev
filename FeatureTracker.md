@@ -498,6 +498,7 @@
 ## [FEAT-045] Neural Pager Interactivity
 **Status:** DORMANT (Restoration Active)
 **Logic:** High-fidelity interactive tree for lab alerts. Supports hierarchical expansion and \"Blue Tree\" navigation.
+**Sentinel Integration:** Integrated with the Lab Actor [FEAT-154] to receive and display real-time situational alerts (e.g. VRAM pressure, exit sentiment, and strategic handovers).
 **Visuals:** Professional color-coding (Red/Orange/Blue) with slide-down terminal effects and simulated console typing.
 
 ## [FEAT-078] Neural Trace (Inference Mirror)

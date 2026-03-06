@@ -28,6 +28,16 @@
 11. **[VERIFIED] Strategic Anchoring**: Implemented [FEAT-128] to extract high-rank focal points from META documents using the 8B model.
 
 ## 🔮 The Roadmap (The Restoration Hub)
+
+### [URGENT] Public Research Synthesis (Airlock Security)
+- **Goal:** Safely move `research.html` from the internal Airlock to the public `www_deploy/` pipeline.
+- **Implementation:**
+    1.  Update `field_notes/build_site.py` with a `synthesize_research()` function.
+    2.  Use regex to strip `<mission-control>` and `mission-control.js` (Zero Trust logic) from the file.
+    3.  Inject a static `public-nav.html` partial for standard public navigation.
+    4.  Sanitize the "Acme Implementation" column: Replace internal script names (e.g., `ai_engine_v2.py`) with descriptive labels (e.g., "Synthesis Engine v2.0").
+    5.  Deploy the sanitized version to `www_deploy/research.html`.
+
 *   **[ACTIVE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
     *   [x] **Strategic Anchoring**: Implemented [FEAT-128] extraction logic and verified on `2011.json`.
     *   [x] **Robust Extraction**: Implemented [FEAT-131] regex-based JSON parsing for chatty LLMs.
