@@ -682,6 +682,21 @@
 ### [VIBE-005] Subconscious Dreaming
 **Logic:** The automated background cycle that transforms chaotic raw logs into \"Diamond Wisdom\" abstracts.
 
+## [FEAT-088] Nightly Recruiter (Target Acquisition)
+**Status:** ACTIVE
+**Logic:** Autonomous background worker that retrieves 3x3 CVT context from the Archive Node and tasks the Brain with agentic job searching via `deep_think`. 
+**Verification:** Confirmed via `test_recruiter.py` with mock job identification.
+
+## [FEAT-095] Public Research Ledger (Static Airlock)
+**Status:** COMPLETE
+**Logic:** Sanitize the internal `research.html` for public deployment by stripping Zero Trust dependencies and inlining high-density CSS.
+**Artifacts:** `www_deploy/research.html`, `www_deploy/sync_research.sh`, and `assets/research_snapshot.png`.
+
+## [LAW-021] Silicon Verification Law (The "Wall" Audit)
+**Status:** ACTIVE
+**Logic:** Mandatory silicon gate for inference engine changes. Requiring 100% stable `POST /ping` heartbeat verification of the **333MiB Breakthrough** (Turing VRAM threshold).
+**Pedigree:** Anchored in **[ENGINEERING_PEDIGREE.md](../HomeLabAI/docs/ENGINEERING_PEDIGREE.md)**.
+
 ---
 
 ## [TECHNICAL DEBT]
