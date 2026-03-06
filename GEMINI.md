@@ -48,7 +48,7 @@
 
 ## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
 - [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
-- [ ] **Job Search Integration:** [FEAT-088] (Active) Nightly Recruiter transition to agentic search.
+- [x] **Recruitment Uplink:** [FEAT-167/168] Multi-vector matching, deduplication, and agentic Gmail dispatch.
 - [x] **Public Research Ledger:** [FEAT-095] `research.html` moved to `www_deploy/` as a static asset.
 - [x] **Internal Debate:** Deployed moderated consensus logic for high-stakes technical tasks.
 - [x] **Diamond Dreams:** Multi-host memory consolidation pipeline active (Linux -> Windows 4090).

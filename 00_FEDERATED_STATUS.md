@@ -15,14 +15,15 @@
 **Goal:** Transition from stubbed job searching to high-fidelity agentic recruitment and research publicization.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Public Research Ledger [FEAT-095]**: `research.html` transitioned to a static, sanitized airlock variant.
-2.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+1.  **Recruitment Uplink [SPR-11-08]**: Nightly Recruiter now uses Multi-Vector Pillar scoring, deduplication, and Gmail dispatch.
+2.  **Public Research Ledger [FEAT-095]**: `research.html` transitioned to a static, sanitized airlock variant.
+3.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
 
 ## 🔮 The Roadmap
 
-### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-08)
-*   **[ACTIVE] Job Search Integration**: [FEAT-088] Transitioning Nightly Recruiter from stubs to agentic search.
-*   [x] **Public Research Ledger**: [FEAT-095] Transitioned `research.html` to a sanitized, static variant.
+### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-09)
+*   **[ACTIVE] Unified Build Pipeline**: Porting airlock sync logic from bash to the main Python build system.
+*   [x] **Recruitment Uplink**: [FEAT-167/168] Automated job acquisition with multi-pillar matching and local optimization.
 2.  **vLLM 0.16.0 Breakthrough**: Successfully bypassed the "333MiB Wall" on Turing (2080 Ti) using `lo` loopback handshakes. vLLM is now the **Active Production Engine** for the Unified 3B Base.
 3.  **Unified 3B Base Established**: Standardized on Llama 3.2 / Qwen 2.5 for 2080 Ti residency via the **Unity Pattern [FEAT-030]**.
 4.  **Historical Pivot (Feb 2026)**: vLLM was briefly **TABLED** due to Ray/NCCL deadlocks; Ollama served as the bridge during characterization.
