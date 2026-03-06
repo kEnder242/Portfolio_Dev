@@ -11,11 +11,18 @@
 *   **🗺️ The Map Room:** [00_MASTER_INDEX.md](./00_MASTER_INDEX.md)
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 
-## 🎯 Active Initiative: "Bicameral Evolution" (Sprint SPR-11-07)
-**Goal:** Transition to Attendant V2, integrate Qwen 27B, and refine Bicameral Synergy.
+## 🎯 Active Initiative: "Bicameral Evolution" (Sprint SPR-11-08)
+**Goal:** Transition from stubbed job searching to high-fidelity agentic recruitment and research publicization.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+1.  **Public Research Ledger [FEAT-095]**: `research.html` transitioned to a static, sanitized airlock variant.
+2.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+
+## 🔮 The Roadmap
+
+### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-08)
+*   **[ACTIVE] Job Search Integration**: [FEAT-088] Transitioning Nightly Recruiter from stubs to agentic search.
+*   [x] **Public Research Ledger**: [FEAT-095] Transitioned `research.html` to a sanitized, static variant.
 2.  **vLLM 0.16.0 Breakthrough**: Successfully bypassed the "333MiB Wall" on Turing (2080 Ti) using `lo` loopback handshakes. vLLM is now the **Active Production Engine** for the Unified 3B Base.
 3.  **Unified 3B Base Established**: Standardized on Llama 3.2 / Qwen 2.5 for 2080 Ti residency via the **Unity Pattern [FEAT-030]**.
 4.  **Historical Pivot (Feb 2026)**: vLLM was briefly **TABLED** due to Ray/NCCL deadlocks; Ollama served as the bridge during characterization.
