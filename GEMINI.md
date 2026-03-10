@@ -47,16 +47,10 @@
 ---
 
 ## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
+- [ ] **vLLM 0.17 Optimization:** [FEAT-170] (Active) Lock in FlashInfer, Chunked Prefill, and Realtime Pipelining.
+- [ ] **Recruiter Deep Read:** [FEAT-168] (Active) Implementation of Playwright scraping and Brain-driven semantic matching.
+- [ ] **Archive Ingestion:** (Active) Forensic review of new archive notes to map historical "DNA" into the Feature Tracker.
 - [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
-- [x] **Recruitment Uplink:** [FEAT-167/168] Multi-vector matching, deduplication, and agentic Gmail dispatch.
-- [x] **Public Research Ledger:** [FEAT-095] `research.html` moved to `www_deploy/` as a static asset.
-- [x] **Internal Debate:** Deployed moderated consensus logic for high-stakes technical tasks.
-- [x] **Diamond Dreams:** Multi-host memory consolidation pipeline active (Linux -> Windows 4090).
-- [x] **MAXS Lookahead:** v1.0 active for instant wisdom retrieval.
-- [x] **Expertise Hierarchy:** Created hierarchical BKM registry and Technical Architect persona.
-- [x] **Bicameral Failover:** Implemented **Strategic Ping** (Generation Probe) for automatic Brain-to-Shadow failover.
-- [x] **vLLM Assessment:** Officially **TABLED** for Turing (2080 Ti). Standardized on Ollama Unity Pattern.
-- [ ] **Feature Tracker Deep Mapping:** (Next) Forensic review of Git/CLI history to map Scars to DNA.
 - [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
 
 ## 🎯 THE MISSION

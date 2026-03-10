@@ -697,6 +697,47 @@
 **Logic:** Mandatory silicon gate for inference engine changes. Requiring 100% stable `POST /ping` heartbeat verification of the **333MiB Breakthrough** (Turing VRAM threshold).
 **Pedigree:** Anchored in **[ENGINEERING_PEDIGREE.md](../HomeLabAI/docs/ENGINEERING_PEDIGREE.md)**.
 
+## [FEAT-171] Intelligent Lifecycle Matrix (Disconnect vs. Close)
+**Status:** DESIGN
+**Logic:** Context-aware lifecycle management distinguishing between passive network events and explicit tool triggers.
+**Rationale:** To ensure debug sessions clean up properly on exit without interrupting persistent background operations (Dreaming/Recruiter).
+
+| Trigger | Mode | Action |
+| :--- | :--- | :--- |
+| **Socket Disconnect** | Debug / Co-Pilot | **Graceful Shutdown**: Start 5-minute idle timer. If no client reconnects, execute full cleanup. |
+| **Socket Disconnect** | `SERVICE_UNATTENDED` | **Ignore**: Lab remains resident in VRAM for background tasks. |
+| **`close_lab`** (Tool) | Debug / Co-Pilot | **Immediate Exit**: Terminate process and return control to the Gemini CLI. |
+| **`close_lab`** (Tool) | `SERVICE_UNATTENDED` | **Bounce**: Shutdown nodes and trigger autonomous re-ignition (engine refresh). |
+
+## [FEAT-172] Hemispheric Interjection (The Active Buffer)
+**Status:** DESIGN
+**Logic:** Transforms the Gateway (Pinky) from a reactive narrator into an active co-processor that manages the "Silicon Gap" between human intent and Brain latency.
+**Rationale:** To eliminate "Brain Silence" and improve technical accuracy by identifying gaps in queries before the deep reasoning cycle finishes.
+**Mechanisms:**
+1.  **The Lag Shield**: Pinky perceives the `deep_think` state and provides strategic fillers or status updates (e.g., "The Brain is chewing on the 580 driver logs, but Narf! Did you include the `dmesg` output?") to maintain engagement.
+2.  **Pre-emptive Probing**: Parallel pass where Pinky identifies missing technical parameters (IPs, versions, hardware IDs) and asks for them *while* the Brain is generating.
+3.  **Organic Interrupt**: Ability for Pinky to broadcast a `[HALT]` signal if she detects a "Silicon Reality" conflict (e.g., thermals or VRAM limits) that invalidates the Brain's current derivation.
+4.  **Context Hot-Plugging**: Injects user's intermediate answers into the Brain's active context window to steer generation mid-flight.
+
+## [FEAT-173] Agentic Backtracking (Autonomous Exploration)
+**Status:** DESIGN
+**Logic:** Implements the AT2QA (arXiv:2603.01853) pattern of decoupling agents from rigid retrieval workflows in favor of iterative tool-decision agency.
+**Rationale:** To solve the "Search Trap" where a single thin tool-result leads to reasoning failure or hallucination.
+**Mechanism:** 
+1.  **Post-Tool Evaluation**: After a tool call (e.g. `ArchiveNode.get_context`), the node performs a high-speed self-evaluation of the data fidelity.
+2.  **Strategic Pivot**: If results are "Thin" or temporally inconsistent, the node autonomously triggers a follow-up query with refined parameters (e.g., widening the date range or shifting from "Log" to "Focal" metadata) without user prompting.
+3.  **Agency over Workflow**: The node is granted the authority to "Backtrack" up to 3 times before providing a final derivation to the user.
+
+## [FEAT-174] Multi-LoRA Expert Routing (Poor Man's MoE)
+**Status:** DESIGN
+**Logic:** Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident silicon (3B).
+**Rationale:** To achieve "Ultimate Expert Specialization" (DeepSeekMoE) without the VRAM penalty of a 14B+ model. 
+**Mechanisms:**
+1.  **The "Pre-Gated" Pass**: The Cognitive Hub acts as the "Router," identifying the task domain before the inference call and selecting the corresponding specialized LoRA "glasses."
+2.  **Fine-Grained Adapters**: Replaces monolithic personas with tiny, high-density domain experts (e.g. `telemetry_v1`, `security_v1`, `recruiter_v1`) trained via Unsloth.
+3.  **Adaptive Residency**: Leverages vLLM's ability to keep the base weights fixed while hot-swapping or layering adapters in milliseconds.
+**Theoretical Anchor:** [ARX-2401.06066], [ARX-2402.07033].
+
 ---
 
 ## [TECHNICAL DEBT]

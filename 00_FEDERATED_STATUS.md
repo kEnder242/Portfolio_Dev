@@ -65,6 +65,20 @@
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
 
 ### [BACKLOG]
+*   [BACKLOG] **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
+*   [BACKLOG] **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
+*   [BACKLOG] **GPU Fractioning Research**: Investigate NVIDIA Run:ai or similar software partitioning to enforce strict VRAM quotas for concurrent resident nodes.
+*   [BACKLOG] **Adversarial Internal Debate**: Experiment with an adversarial reviewer node (Byzantine Consensus) to force the Brain to defend technical logic more rigorously.
+*   [BACKLOG] **Hemispheric Interjection**: [FEAT-172] Transform Pinky into an "Active Buffer" that provides pre-emptive clarifying questions while the Brain is thinking.
+*   [BACKLOG] **Intelligent Socket Logic**: [FEAT-171] Implement mode-aware shutdown triggers. Debug modes use a 5-minute idle timer on disconnect; Service mode ignores disconnects.
+*   [BACKLOG] **Airlock Redundancy Audit**: Check if `notes.jason-lab.dev/research.html` is redundant vs the static `www.jason-lab.dev` variant.
+*   [BACKLOG] **Hot Swap LoRA Strategy**: Plan for building and swapping adapters (mice glasses) tailored to journals, code, and notes.
+*   [BACKLOG] **WYWO Intent Gate**: Adjust "While You Were Out" to trigger only on user prompt ("What's up?") rather than connection.
+*   [BACKLOG] **Integrated News Cycle**: Expand WYWO to include recruiter results, lab status, and service health briefings.
+*   [BACKLOG] **Service Management via Pinky**: Research a safe execution flow for Pinky to monitor and potentially restart services (e.g., Jellyfin).
+*   [BACKLOG] **vLLM 0.17.0 Optimization**: [FEAT-170] Lock in FlashInfer, Chunked Prefill, and Realtime WebSocket Pipelining.
+*   [BACKLOG] **Recruiter "Deep Read"**: [FEAT-168] Implement Playwright scraping and Brain-driven semantic scoring for real-world job URLs.
+*   [BACKLOG] **Forensic Ingestion**: Perform deep mapping of "War Stories" and "Travel Guide" archive notes into Feature Tracker DNA.
 *   [BACKLOG] **Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
 *   [BACKLOG] **Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
 *   [BACKLOG] **Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
