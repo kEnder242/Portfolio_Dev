@@ -21,15 +21,15 @@
 
 ## 🛠️ Protocols & Procedures
 *   **[../HomeLabAI/docs/Protocols.md](../HomeLabAI/docs/Protocols.md)**: **The Law.**
-    *   Defines "The Builder Protocol," "Design Studio," and "BKM Style."
-    *   **Must Read** for interaction standards.
-*   **[LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)**: **The Pedigree Blueprint.** Roadmap for silicon refinement and weight-hardening.
+*   **[Silicon Upgrade Gauntlet](../HomeLabAI/docs/protocols/BKM_SILICON_UPGRADE_GAUNTLET.md)**: **The Gauntlet.** Step-by-step safety protocol for NVIDIA/Kernel/vLLM transitions.
+*   **[LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)**: **The Pedigree Blueprint.**
 *   **[monitor/PAGERDUTY_BKM.md](./monitor/PAGERDUTY_BKM.md)**: **Example BKM.** Specific deployment guide for the Neural Pager.
 *   **[Travel_Guide_2026.md](./Travel_Guide_2026.md)**: **Confidential.** (Local Only). Contains infrastructure credentials, paths, and "Pinky" logic. **Do not commit.**
 
 ## 📜 Archives & Journals
 *   **[PHASE_3_JOURNAL.md](./PHASE_3_JOURNAL.md)**: **The Log.** Detailed build log for the Observability Lab (Prometheus/Grafana).
-*   **[FIELD_NOTES_PLAN.md](./FIELD_NOTES_PLAN.md)**: **The Roadmap.** (Partially Deprecated). Original master plan. Check `GEMINI.md` for current status.
+*   **[FIELD_NOTES_PLAN.md](./docs/archive/FIELD_NOTES_PLAN.md)**: **The Roadmap.** (Archived). Original master plan. Check `GEMINI.md` for current status.
+*   **[PHASE_3_LEARNING_PRIMER.md](./docs/archive/PHASE_3_LEARNING_PRIMER.md)**: **The Primer.** (Archived). Original learning notes for observability.
 *   **[INTERVIEW_CHEAT_SHEET.md](./INTERVIEW_CHEAT_SHEET.md)**: **Study Material.** Active document for interview prep.
 
 ## 🏺 Engineering Pedigree (Scars & Lessons)
