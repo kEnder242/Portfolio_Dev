@@ -7,6 +7,7 @@ import requests
 import logging
 import random
 import glob
+import argparse
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -22,6 +23,7 @@ GEM_REFINER = os.path.join(BASE_DIR, "refine_gem.py")
 CLEANER = os.path.join(BASE_DIR, "clean_duplicates.py")
 AGGREGATOR = os.path.join(BASE_DIR, "aggregate_years.py")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
+RAW_NOTES_DIR = os.path.join(os.path.dirname(BASE_DIR), "raw_notes")
 
 # Config
 VRAM_THRESHOLD = 0.95 # Allow up to 95% utilization
@@ -79,7 +81,44 @@ def check_lock(lock_path):
         return True
     return False
 
+def hallway_protocol(keyword):
+    """[FEAT-179] Targeted scan for the Hallway Protocol."""
+    logging.info(f"=== HALLWAY PROTOCOL: Targeted Search for '{keyword}' ===")
+    
+    # 1. Grep for matching files in raw_notes
+    try:
+        # Use ripgrep or grep to find files containing the keyword
+        cmd = ["grep", "-rl", keyword, RAW_NOTES_DIR]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        files = res.stdout.strip().split("\n") if res.stdout else []
+        
+        if not files or (len(files) == 1 and files[0] == ''):
+            logging.info(f"No raw notes found matching '{keyword}'.")
+            return
+        
+        # Limit to top 5 for fast response
+        target_files = files[:5]
+        logging.info(f"Found {len(files)} matches. Scanning top {len(target_files)}...")
+        
+        # 2. Force these files into the nibbler
+        for f in target_files:
+            rel_path = os.path.relpath(f, RAW_NOTES_DIR)
+            logging.info(f"Deep Harvesting: {rel_path}")
+            # We use --reasoning mode for high-fidelity extraction
+            run_task([NIBBLER, "--reasoning", "--file", f])
+            
+    except Exception as e:
+        logging.error(f"Hallway Protocol failed: {e}")
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--keyword", help="Run a targeted Hallway Protocol scan.")
+    args = parser.parse_args()
+
+    if args.keyword:
+        hallway_protocol(args.keyword)
+        return
+
     logging.info("=== MASS SCAN: CONTINUOUS RESEARCH v2.0 ===")
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
     
