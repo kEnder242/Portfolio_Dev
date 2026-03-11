@@ -48,7 +48,7 @@
 
 ## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
 - [ ] **vLLM 0.17 Optimization:** [FEAT-170] (Active) Lock in FlashInfer, Chunked Prefill, and Realtime Pipelining.
-- [ ] **Recruiter Deep Read:** [FEAT-168] (Active) Implementation of Playwright scraping and Brain-driven semantic matching.
+- [ ] **Recruiter Deep Read:** [FEAT-168] (TODO) Implementation of Playwright scraping and Brain-driven semantic matching.
 - [ ] **Archive Ingestion:** (Active) Forensic review of new archive notes to map historical "DNA" into the Feature Tracker.
 - [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
 - [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
@@ -64,25 +64,13 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 
 ## ❄️ COLD-START PROTOCOL (Environment Discovery)
 If the agent session is lost or restarted, refer to these anchors:
-1. **The Current State**: `HomeLabAI/docs/STABILIZATION_REPORT_FEB_13.md` (Crucial vLLM vs VRAM findings).
-2. **The Safe Scalpel**: `HomeLabAI/src/debug/atomic_patcher.py`. Use for ALL code edits to ensure lint-verification.
-3. **Infrastructure Secrets**: `~/.secrets/` (Contains `cloudflare_token` and other non-git keys).
-4. **Project Secrets**: `Portfolio_Dev/monitor/secrets.json` (Contains PagerDuty and Cloudflare IDs).
-5. **Maintenance Mode**: `Portfolio_Dev/field_notes/data/maintenance.lock`. If this file exists, external alerts (NTFY/PD) are suppressed. Remove this file to resume live alerting.
-6. **Runtime Safe-Zone**: `~/AcmeLab` is the production host for background services.
-7. **Dev Safe-Zone**: `~/Dev_Lab` is the primary workspace.
-
-## Personal notes from Jason:
-
-1. **War Story notes** Here is a link to my document dealing wiht my work history.  I want to fill a dashboard with all the content in this doucment - I'd like to brainstorm ways to index and display this content as an interview dashboard
-
-Link: https://docs.google.com/document/d/12Hu34Vv9y4e5mSfj98glCJ-1CJUVOYxKtWkxWMKyYk8/edit?usp=drive_link
-
-2. **Travel Guide notes** - This is context for the environment we are working on, some of the info is old but it details the transition from HomeLabAI development in WSL to a Remote-to-Linux dev environment (here).  I'd like to leverage the website setup described here and implemented on this host.  A landing page pointing to home lab pages might be nice.  I'd like to brainstorm security options, maybe a guest login, and preserve existing work as well as possible./
-
-Link: https://drive.google.com/file/d/1E7RYWn-WIkMkV6UmWML8_ZLzQRmuzlJY/view?usp=drive_link
-
-3. **Strech goals** I want to learn promethius, graphana, and influxdb.  Please leave some room for these on a landing page and in our plans.  Integration to HomeLabAI_Dev might be useful - let's brainstorm as well.
+1.  **The Current State**: `HomeLabAI/docs/protocols/BKM_SILICON_UPGRADE_GAUNTLET.md` (Verified 0.17 stack).
+2.  **The PMM Blueprint**: `HomeLabAI/docs/plans/LORA_MOE_SYNTHESIS.md` (The "Poor Man's MoE" roadmap).
+3.  **Silicon Identity**: Kernel `6.14.0-36-generic`, Driver `580.126.09`. Wi-Fi requires `linux-modules-extra`.
+4.  **Inference Ghost**: `.venv_vllm_017` is the active environment, but `vllm_server.log` currently reports version `0.15.1`. Investigate this discrepancy before starting FEAT-174.
+5.  **Project Secrets**: `Portfolio_Dev/monitor/secrets.json` (Contains PagerDuty and Cloudflare IDs).
+6.  **Runtime Safe-Zone**: `~/AcmeLab` is the production host; `~/Dev_Lab` is the workspace.
 
 ## 🤖 CLI INITIALIZATION COMMAND
-> "I am acting as a Lead Engineer's thought partner. My first task is to index all existing raw notes in  and propose a dashboard layout that highlights validation logic across the entire set."
+> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-11-MoE]**. My first task is to resolve the vLLM version discrepancy in the 0.17 environment and then implement the **[FEAT-174.1] Pre-Gated Router** logic in `acme_lab.py`."
+
