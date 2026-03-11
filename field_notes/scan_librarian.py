@@ -8,8 +8,8 @@ import time
 # Add current directory to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-from ai_engine import get_engine
-from utils import update_status, can_burn, RAW_NOTES_DIR, DATA_DIR
+from ai_engine import get_engine  # noqa: E402
+from utils import update_status, can_burn, RAW_NOTES_DIR, DATA_DIR, atomic_write_json  # noqa: E402
 
 # Config
 # Expanded glob to catch Insights, Philosophy, and Reviews using Absolute Paths from utils
@@ -59,11 +59,11 @@ def extract_json(text):
     if match:
         try:
             return json.loads(match.group(0))
-        except:
+        except Exception:
             pass
     try:
         return json.loads(text.replace("```json", "").replace("```", "").strip())
-    except:
+    except Exception:
         return {}
 
 def classify_file(filename, text_sample):
@@ -82,6 +82,7 @@ def classify_file(filename, text_sample):
     
     [CATEGORIES]
     - LOG: Chronological technical notes, daily logs, error traces.
+    - SCAR: High-value technical depth, BKMs, Post-Mortems, Root Cause Analysis (RCA), or Silicon Failure details.
     - META: Resumes, performance reviews, philosophy, high-level insights.
     - REFERENCE: Technical manuals, specs, READMEs (static info).
     - UNKNOWN: None of the above.
@@ -89,10 +90,11 @@ def classify_file(filename, text_sample):
     [OUTPUT FORMAT]
     JSON only:
     {{
-      "type": "LOG|META|REFERENCE|UNKNOWN",
+      "type": "LOG|SCAR|META|REFERENCE|UNKNOWN",
       "year": "YYYY or null",
       "topic": "Short 2-3 word topic",
-      "confidence": 0.0 to 1.0
+      "confidence": 0.0 to 1.0,
+      "priority": "HIGH|NORMAL"
     }}
     """
     
@@ -136,6 +138,9 @@ def main():
     
     # Team Anchors Heuristic
     TEAM_TAGS = {"PIAV": "2019-2024", "PAE": "2016-2019", "MVE": "2016", "DSD": "2011-2016", "EPSD": "2005-2007"}
+    
+    # [FEAT-175] BKM Sentinel Keywords
+    BKM_KEYWORDS = ["root cause", "silicon failure", "validation bkm", "post-mortem", "rca", "debug", "regression"]
 
     for filepath in files:
         filename = os.path.basename(filepath)
@@ -147,7 +152,8 @@ def main():
         # --- POLITENESS CHECK ---
         while True:
             ready, reason = can_burn()
-            if ready: break
+            if ready:
+                break
             update_status("YIELD", f"Librarian Yielding: {reason}", filename=filename)
             time.sleep(10)
         
@@ -160,10 +166,16 @@ def main():
         # 2. Check Team Anchors (Heuristic Hint)
         found_tag = next((tag for tag in TEAM_TAGS if tag in filename), None)
         
+        # [FEAT-175] BKM Sentinel Pre-Scan
+        is_bkm_suspect = any(k in filename.lower() for k in BKM_KEYWORDS)
+        
         text_sample = read_sample(filepath)
         if not text_sample:
             continue
             
+        if not is_bkm_suspect:
+            is_bkm_suspect = any(k in text_sample.lower() for k in BKM_KEYWORDS)
+
         info = classify_file(filename, text_sample)
         
         # Apply team tag context if found
@@ -171,6 +183,12 @@ def main():
             info["year"] = info.get("year") or TEAM_TAGS[found_tag]
             info["tags"] = list(set(info.get("tags", []) + [found_tag]))
 
+        # [FEAT-175] Priority Gating
+        if is_bkm_suspect:
+            info["priority"] = "HIGH"
+            if info.get("type") == "LOG":
+                info["type"] = "SCAR" # Upgrade to SCAR if keywords match
+        
         # Fallback if AI fails
         if not info or "type" not in info:
             if "notes_" in filename and any(char.isdigit() for char in filename):
@@ -179,12 +197,11 @@ def main():
                  info = {"type": "UNKNOWN", "manual_review": True}
             
         manifest[filename] = info
-        print(f"   --> {filename}: {info.get('type')} ({info.get('year') or info.get('topic')})")
+        print(f"   --> {filename}: {info.get('type')} ({info.get('year') or info.get('topic')}) [Priority: {info.get('priority', 'NORMAL')}]")
         update_status("ONLINE", f"Classifying file: {filename}", filename=filename)
 
-    # Save Manifest
-    with open(MANIFEST_FILE, 'w') as f:
-        json.dump(manifest, f, indent=2)
+    # Save Manifest (Atomic)
+    atomic_write_json(MANIFEST_FILE, manifest)
         
     print(f"\nManifest saved to {MANIFEST_FILE}")
 

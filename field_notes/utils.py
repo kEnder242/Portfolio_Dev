@@ -62,6 +62,13 @@ def update_status(status, message, last_items=0, filename=None, engine="LOCAL", 
         json.dump(data, f, indent=2)
     os.replace(temp_file, STATUS_FILE)
 
+def atomic_write_json(path, data, indent=2):
+    """Generic atomic write for JSON files."""
+    temp_file = path + ".tmp"
+    with open(temp_file, 'w') as f:
+        json.dump(data, f, indent=indent)
+    os.replace(temp_file, path)
+
 def get_total_events():
     count = 0
     # Only count yearly summaries (YYYY.json) to avoid double-counting with monthly logs

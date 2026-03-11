@@ -10,6 +10,12 @@
 *   **📂 The Face (Frontend):** [GEMINI.md](./GEMINI.md)
 *   **🗺️ The Map Room:** [00_MASTER_INDEX.md](./00_MASTER_INDEX.md)
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
+*   **🎼 The Conductor:** [Registry](./conductor/tracks.md) | [Product](./conductor/product.md) | [Workflow](./conductor/workflow.md)
+
+## 🏗️ Conductor: Active Tracks
+| ID | Phase | Feature Focus | Status |
+| :--- | :--- | :--- | :--- |
+| **spr-11-moe-qol** | 6. Grounded | MoE Hardening & Engine Enhancements | **ACTIVE** |
 
 ## 🎯 Active Initiative: "Bicameral Evolution" (Sprint SPR-11-08)
 **Goal:** Transition from stubbed job searching to high-fidelity agentic recruitment and research publicization.
@@ -39,6 +45,12 @@
 *   [x] **Resonant Chamber**: Multi-agent coordination via "overhearing" [FEAT-153].
 *   [x] **Resident Handshake Gate**: Implemented initialization barrier for resident nodes [FEAT-165].
 *   [ ] **Architect LoRA**: Distill BKM Protocol into a specialized `architect_v1` adapter.
+
+*   **[COMPLETE] Phase 11.5: Poor Man's MoE (PMM)** (Sprint SPR-11-MoE)
+    *   [x] **Pre-Gated Router**: Intent-based expert domain routing [FEAT-174.1].
+    *   [x] **vLLM Multi-Adapter Bridge**: Dynamic hot-swapping via lora_request [FEAT-174.2].
+    *   [x] **Expert Forge**: Archive distillation and Unsloth training infra [FORGE-01/02].
+    *   [x] **Strategic Pivot**: Fidelity-aware backtracking and recursive retry [FEAT-173].
 
 *   **[COMPLETE] Phase 11.4: Semantic Re-Mapping** (Sprint SPR-11-05)
     *   [x] **Strategic Anchoring**: Implemented [FEAT-128] extraction logic and verified on `2011.json`.

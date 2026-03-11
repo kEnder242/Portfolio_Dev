@@ -6,6 +6,7 @@
 
 ## 📍 Primary Entry Points
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist, and core mandates. **Start here for context.**
+*   **[conductor/](./conductor/)**: **The Orchestrator.** SDLC management, product goals, and active feature tracks.
 *   **[FeatureTracker.md](./FeatureTracker.md)**: **The DNA.** The relational hub mapping Features to Code, Research, and Tests. **Primary truth anchor for architectural intent.**
 *   **[00_FEDERATED_STATUS.md](./00_FEDERATED_STATUS.md)**: **The God View.** High-level milestones across Brain and Face.
 *   **[README.md](./README.md)**: **The Public Face.** High-level project overview, philosophy ("Class 1").

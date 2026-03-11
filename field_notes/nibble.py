@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import re
-import time
 import glob
 import requests
 import hashlib
@@ -11,9 +10,12 @@ import logging
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine import get_engine
+from utils import update_status as utils_update_status, atomic_write_json
 
 # Config
 DATA_DIR = "field_notes/data"
+EXPERTISE_DIR = os.path.join(DATA_DIR, "expertise")
+BKM_DATASET = os.path.join(EXPERTISE_DIR, "bkm_master_manifest.jsonl")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")
@@ -45,26 +47,10 @@ PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 MAX_LOAD = 2.0
 
 def update_status(status, msg, new_items=0):
-    # Load previous to persist "Last Action" if going IDLE
-    current = {}
-    if os.path.exists(STATUS_FILE):
-        try:
-            with open(STATUS_FILE, 'r') as f:
-                current = json.load(f)
-        except: pass
+    utils_update_status(status, msg, last_items=new_items)
 
-    data = {
-        "status": status,
-        "message": msg,
-        "new_items": new_items if status == "ONLINE" else current.get("new_items", 0),
-        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
-    }
-    
-    try:
-        with open(STATUS_FILE, 'w') as f:
-            json.dump(data, f, indent=2)
-    except Exception as e:
-        log(f"Error updating status: {e}")
+def save_json(path, data):
+    atomic_write_json(path, data)
 
 def get_system_load():
     try:
@@ -97,25 +83,22 @@ def load_json(path):
             return json.load(f)
     return {}
 
-def save_json(path, data):
-    with open(path, 'w') as f:
-        json.dump(data, f, indent=2)
-
 def extract_json_from_llm(text):
     match = re.search(r'\[.*\]', text, re.DOTALL)
     if match:
         try:
             return json.loads(match.group(0))
-        except:
+        except Exception:
             pass
     text = text.replace("```json", "").replace("```", "").strip()
     try:
         return json.loads(text)
-    except:
+    except Exception:
         return []
 
 def validate_date(date_str):
-    if not date_str: return None
+    if not date_str:
+        return None
     # Strict YYYY-MM-DD
     if re.match(r'^\d{4}-\d{2}-\d{2}$', date_str):
         return date_str
@@ -130,16 +113,19 @@ def get_total_events():
     count = 0
     files = glob.glob(os.path.join(DATA_DIR, "*.json"))
     for f in files:
-        if "themes" in f or "status" in f or "queue" in f or "state" in f: continue
+        if "themes" in f or "status" in f or "queue" in f or "state" in f:
+            continue
         try:
             with open(f, 'r') as fp:
                 data = json.load(fp)
-                if isinstance(data, list): count += len(data)
-        except: pass
+                if isinstance(data, list):
+                    count += len(data)
+        except Exception:
+            pass
     return count
 
 def main():
-    log("--- Pinky Nibbler v1.5 (Logged) ---")
+    log("--- Pinky Nibbler v1.6 (Deep Connect Ready) ---")
     
     if not can_burn():
         return
@@ -165,42 +151,76 @@ def main():
     focal_2 = read_file(FOCAL_NEW)
     strategic_context = f"[RESUME]\n{resume[:2000]}\n[FOCALS]\n{focal_1[:3000]}\n{focal_2[:3000]}"
     
+    # [FEAT-176] Deep-Connect Mode Detection
+    is_deep_connect = task.get("mode") == "DEEP_CONNECT"
+    
     bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
     existing_data = []
     if os.path.exists(bucket_file):
         existing_data = load_json(bucket_file)
         
-    prompt = f"""
-    [ROLE]
-    You are 'Pinky', an expert technical archivist.
+    if is_deep_connect:
+        prompt = f"""
+        [ROLE]
+        You are 'Pinky', a high-fidelity technical forensic investigator.
+        
+        [STRATEGIC SEEDS]
+        {strategic_context}
+        
+        [TASK]
+        Perform 'Reverse RAG'. Analyze the RAW LOGS to find specific 'Technical Evidence' 
+        for the Strategic Wins mentioned in the FOCALS above.
+        
+        1. Harvest high-density technical blocks (50-100 words).
+        2. Focus on: Error traces, register values, specific tool commands (msr, rapl, dcgm), or post-mortem logic.
+        3. Identify 'Silicon Scars': Direct proof of a hard-won validation victory.
+        
+        Return a JSON list of EVIDENCE pairs:
+        [
+            {{ 
+                "date": "YYYY-MM-DD", 
+                "summary": "Technical Evidence for [Focal Win]", 
+                "evidence": "Detailed 50-100 word technical block with raw values...", 
+                "sensitivity": "Public", 
+                "tags": ["Evidence", "BKM", "[Module]"] 
+            }}
+        ]
+        
+        [RAW LOGS]
+        {task['content'][:8000]}
+        """
+    else:
+        prompt = f"""
+        [ROLE]
+        You are 'Pinky', an expert technical archivist.
 
-    [CONTEXT]
-    {strategic_context}
+        [CONTEXT]
+        {strategic_context}
 
-    [EXISTING ARCHIVE]
-    {json.dumps(existing_data[:5], indent=2)}... (truncated)
+        [EXISTING ARCHIVE]
+        {json.dumps(existing_data[:5], indent=2)}... (truncated)
 
-    [RAW LOGS]
-    {task['content'][:6000]}
+        [RAW LOGS]
+        {task['content'][:6000]}
 
-    [TASK]
-    Analyze the RAW NOTES.
-    1. Extract technical events (Technical win, Bug fix, Tool usage).
-    2. Compare with EXISTING ARCHIVE. avoid duplicates.
-    3. IMPROVE descriptions if the raw notes offer more detail.
-    4. **PRIVACY & REDACTION:**
-       - **Public:** Technical work, bug fixes, tool usage.
-         * *ACTION:* If it contains a name/email, replace it with `[REDACTED]`. Keep the technical context.
-       - **Sensitive:** Personal feedback ("improvement needed"), salary, health, or purely internal non-technical gossip.
-         * *ACTION:* Mark as "Sensitive".
+        [TASK]
+        Analyze the RAW NOTES.
+        1. Extract technical events (Technical win, Bug fix, Tool usage).
+        2. Compare with EXISTING ARCHIVE. avoid duplicates.
+        3. IMPROVE descriptions if the raw notes offer more detail.
+        4. **PRIVACY & REDACTION:**
+           - **Public:** Technical work, bug fixes, tool usage.
+             * *ACTION:* If it contains a name/email, replace it with `[REDACTED]`. Keep the technical context.
+           - **Sensitive:** Personal feedback ("improvement needed"), salary, health, or purely internal non-technical gossip.
+             * *ACTION:* Mark as "Sensitive".
+        
+        Return a JSON list of NEW or UPDATED events:
+        [
+            {{ "date": "YYYY-MM-DD", "summary": "Meeting with [REDACTED] about Simics debugging", "evidence": "Quote", "sensitivity": "Public", "tags": ["Simics"] }}
+        ]
+        """
     
-    Return a JSON list of NEW or UPDATED events:
-    [
-        {{ "date": "YYYY-MM-DD", "summary": "Meeting with [REDACTED] about Simics debugging", "evidence": "Quote", "sensitivity": "Public", "tags": ["Simics"] }}
-    ]
-    """
-    
-    log(f"   > Asking Pinky...")
+    log(f"   > Asking Pinky ({'DEEP' if is_deep_connect else 'LITE'})...")
     try:
         response = ENGINE.generate(prompt)
         new_events = extract_json_from_llm(response)
@@ -214,7 +234,8 @@ def main():
         
         added_count = 0
         for event in new_events:
-            if not isinstance(event, dict): continue
+            if not isinstance(event, dict):
+                continue
             
             clean_date = validate_date(event.get('date', ''))
             
@@ -225,7 +246,8 @@ def main():
                     parts = task['bucket'].split('-')
                     if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
                         clean_date = f"{parts[0]}-{parts[1]}-01"
-                except: pass
+                except Exception:
+                    pass
 
             if not clean_date:
                 continue # Skip invalid dates
@@ -237,6 +259,21 @@ def main():
                     final_events.append(event)
                     seen.add(key)
                     added_count += 1
+                    
+                    # [FEAT-177] DNA Uplink: Harvest for Expert Forge
+                    if is_deep_connect:
+                        try:
+                            os.makedirs(EXPERTISE_DIR, exist_ok=True)
+                            with open(BKM_DATASET, "a") as f:
+                                # Distill to Instruction-Response for Unsloth
+                                pair = {
+                                    "instruction": f"Explain the technical context for: {event.get('summary')}",
+                                    "input": "",
+                                    "output": event.get("evidence", "")
+                                }
+                                f.write(json.dumps(pair) + "\n")
+                        except Exception as e:
+                            log(f"   ! DNA Uplink Failed: {e}")
                 else:
                     with open(AUDIT_FILE, "a") as f:
                         f.write(json.dumps(event) + "\n")
@@ -255,7 +292,7 @@ def main():
             year_events.sort(key=lambda x: x.get('date', ''))
             save_json(year_file, year_events)
 
-        update_status("ONLINE", f"Processed {task['bucket']}", added_count)
+        update_status("ONLINE", f"Processed {task['bucket']} ({'DEEP' if is_deep_connect else 'LITE'})", added_count)
     else:
         log("   > No valid events found.")
 
@@ -271,11 +308,8 @@ def main():
         
     state[task['id']] = content_hash
     
-    with open(STATE_FILE, 'w') as f:
-        json.dump(state, f, indent=2)
-
-    with open(QUEUE_FILE, 'w') as f:
-        json.dump(queue, f, indent=2)
+    save_json(STATE_FILE, state)
+    save_json(QUEUE_FILE, queue)
 
 if __name__ == "__main__":
     main()
