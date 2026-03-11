@@ -29,6 +29,7 @@
 - [x] **Check-Point**: Verify "how much VRAM?" query accuracy.
 
 ## Phase 6: Final Integration & Hardening
+- [x] **[TEST] Hub Intent Triage Audit** (Synchronize Hub Intent and Triage logic tests)
 - [ ] **[FEAT-031] Liger Optimization Implementation** (vLLM Apply)
 - [ ] **[FEAT-110] Shadow Moat Restoration** (Persona Isolation)
 - [ ] **[FEAT-154] Sentient Sentinel Plumbing** (Turn Density Logic)

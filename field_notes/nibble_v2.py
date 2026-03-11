@@ -217,9 +217,28 @@ def main():
 
         # [FEAT-128] Strategic Prompt selection
         file_type = task.get('type', 'LOG')
+        is_deep_connect = task.get("mode") == "DEEP_CONNECT"
         prompt = ""
         
-        if file_type == "META":
+        if is_deep_connect:
+            strategic_context = task.get("strategic_context", "General Technical DNA")
+            prompt = f"""
+            [ROLE] You are 'Pinky', a high-fidelity technical forensic investigator.
+            [STRATEGIC SEEDS] {strategic_context}
+            [TASK] Perform 'Reverse RAG'. Analyze the RAW LOGS to find specific 'Technical Evidence'.
+            1. Harvest high-density technical blocks (50-100 words).
+            2. Focus on: Error traces, register values, post-mortem logic.
+            Return a JSON list of EVIDENCE pairs:
+            [
+              {{
+                "date": "YYYY-MM-DD", 
+                "summary": "...", 
+                "evidence": "...", 
+                "tags": ["technical", "evidence", "lora_candidate"]
+              }}
+            ]
+            """
+        elif file_type == "META":
             prompt = f"""
             [TASK] Expert Career Strategist. Analyze this high-level document and extract the core strategic anchor.
             [EXCLUSION] EXCLUDE all behavioral feedback, coaching, or personal growth plans. Focus exclusively on technical milestones and strategic focal points.
