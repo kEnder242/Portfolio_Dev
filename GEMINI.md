@@ -47,10 +47,11 @@
 ---
 
 ## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
-- [x] **vLLM 0.17 Optimization:** [FEAT-170] (Active) Lock in FlashInfer, Chunked Prefill, and Realtime Pipelining.
-- [x] **Poor Man's MoE (PMM):** [SPR-11-MoE] (COMPLETED) Implemented dynamic expert routing and backtracking.
+- [x] **Surgical Restoration Sprint**: [SPR-11-09] (COMPLETED) achieved 100% technical parity for Hardware Grounding, Tool Resurrection, and Agentic-R.
+- [x] **vLLM 0.17 Optimization**: [FEAT-170] (Active) Lock in FlashInfer, Chunked Prefill, and Realtime Pipelining.
+- [x] **Poor Man's MoE (PMM)**: [SPR-11-MoE] (COMPLETED) Implemented dynamic expert routing and backtracking.
+
 - [ ] **Recruiter Deep Read:** [FEAT-168] (TODO) Implementation of Playwright scraping and Brain-driven semantic matching.
-- [ ] **Archive Ingestion:** (Active) Forensic review of new archive notes to map historical "DNA" into the Feature Tracker.
 - [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
 - [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
 

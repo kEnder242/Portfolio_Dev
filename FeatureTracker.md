@@ -8,21 +8,6 @@
 
 ---
 
-## [FEAT-152] Metabolism of Presence
-**Status:** ACTIVE (TRANSFORMING)
-**Logic:** Replaces Banter Decay. Dynamically shifts Pinky's cognitive mode based on session interaction density.
-**Rationale:** Simple frequency decay was too system-noisy. Mode-based scaling allows Pinky to remain a constant presence while shifting focus between "Collaborative Frame" (High Activity) and "Literal Grounding" (Idle).
-**Modes:**
-1.  **High-Activity (Collaborative):** Pinky frames and pre-fills Brain's strategic derivations.
-2.  **Idle (Literal Grounding):** Pinky focuses on literal hardware vitals and AYPWIP-style "I think so Brain, but..." absurdity.
-**Mechanism:** Hub state variable `metabolism` influencing node system prompts via situational hint injection.
-
-## [FEAT-153] The Resonant Chamber (Shared Context)
-**Status:** ACTIVE
-**Logic:** Replaces [FEAT-068] Persona-Locked Dispatch. Moves from isolation to "Overhearing."
-**Rationale:** Rigid isolation prevented cross-hemispheric synergy. This feature allows nodes to "overhear" Hub-level strategic intent before generation.
-**Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn. 
-
 ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
 **Logic:** Run all concurrent local nodes (Pinky, Shadow Brain, Lab Actor) on a shared **Unified 3B Base Model** footprint. 
@@ -98,9 +83,14 @@
 **Status:** ACTIVE
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
-## [FEAT-066] The \"Temporal Moat\" (Context Aging)
-**Status:** ACTIVE
-**Logic:** Dynamically scales the `reflex_ttl` based on interaction density. As the Lab stays idle, the \"metabolism\" slows down (1s to 6s), allowing the system to settle without losing character presence.
+## [FEAT-066] The "Temporal Moat" (Context Aging)
+**Status:** ACTIVE (TRANSFORMING)
+**Logic:** Dynamically shifts Pinky's cognitive mode and polling interval (`reflex_ttl`) based on session interaction density.
+**Rationale:** Simple frequency decay was too system-noisy. Mode-based scaling allows Pinky to remain a constant presence while shifting focus between "Collaborative Frame" (High Activity) and "Literal Grounding" (Idle).
+**Modes:**
+1.  **High-Activity (Collaborative):** Pinky frames and pre-fills Brain's strategic derivations.
+2.  **Idle (Literal Grounding):** Pinky focuses on literal hardware vitals and AYPWIP-style "I think so Brain, but..." absurdity.
+**Mechanism:** Hub state variable `metabolism` influencing node system prompts via situational hint injection, while scaling `reflex_ttl` from 1s to 6s.
 
 ## [FEAT-067] Diamond Dreaming (Subconscious Consolidation)
 **Status:** ACTIVE
@@ -414,8 +404,9 @@
 
 ## [FEAT-114] Sovereign Bridge (Handover Context)
 **Status:** ACTIVE
-**Logic:** Injects the results of the initial \"Signal\" quip into the technical derivation's context window.
-**Mechanism:** `brain_strategy_chain` in `acme_lab.py` bridges sequential API calls to ensure cognitive continuity.
+**Logic:** Injects the results of the initial "Signal" quip or Hub-level strategic intent into the technical derivation's context window.
+**Rationale:** Moves from isolation to "Overhearing." Rigid isolation prevented cross-hemispheric synergy. This feature allows nodes to "overhear" Hub-level strategic intent before generation.
+**Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn. 
 
 ## [FEAT-115] The Ultimate Patcher (Soft Fail)
 **Status:** ACTIVE
@@ -570,10 +561,10 @@
 **Mechanism**: A `while True` loop wrapping the server execution in `acme_lab.py`.
 **Verification**: `src/debug/test_goodnight_bounce.py`.
 
-## [FEAT-150] Shadow Prediction Preamble
+## [FEAT-004] Shadow Dispatch (Predictive Intent)
 **Status:** ACTIVE
-**Logic:** Reduces perceived latency during strategic handovers by notifying the user that a complex derivation is being prepared.
-**Mechanism:** Async broadcast of \"Predicted strategic intent... preparing\" when high-stakes keywords are detected in speech/text before the reasoning node responds.
+**Logic:** Reduces perceived latency and anticipates strategic queries by notifying the user that a complex derivation is being prepared during transcription.
+**Mechanism:** Async broadcast of "Predicted strategic intent... preparing" when high-stakes keywords (e.g. architecture, silicon) are detected in speech or text before the reasoning node responds.
 
 ## [FEAT-151] Unified Trace Monitoring (Log Delta Capture)
 **Status:** ACTIVE
