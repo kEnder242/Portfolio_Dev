@@ -24,6 +24,7 @@ const consoleRow = document.getElementById('console-row');
 const workspaceContainer = document.getElementById('workspace-container');
 
 let lastSystemState = "";
+let lastMsgSource = "";
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -92,11 +93,28 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
 
     const msg = document.createElement('div');
     const msgType = (source && source.toLowerCase() === "system") ? "system-msg" : type;
-    msg.className = `message ${msgType}`;
+    
+    // [VISUAL THINK] Detect Internal Crosstalk
+    const sl_low = source ? source.toLowerCase() : "system";
+    const isInternal = sl_low.includes('interjection') || 
+                       sl_low.includes('reflex') || 
+                       sl_low.includes('intuition') || 
+                       sl_low.includes('forensic') || 
+                       sl_low.includes('fidelity') || 
+                       sl_low.includes('shadow') ||
+                       metadata.is_internal;
+
+    msg.className = `message ${msgType} ${isInternal ? 'internal' : ''}`;
     
     const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const sl = source ? source.toLowerCase() : "system";
     let displaySource = source.toUpperCase();
+
+    // [VISUAL THINK] Detect Building Upon state
+    let isBuildingUpon = false;
+    if (sl.includes('brain') && lastMsgSource.includes('pinky')) isBuildingUpon = true;
+    if (sl.includes('pinky') && lastMsgSource.includes('brain')) isBuildingUpon = true;
+    lastMsgSource = sl;
 
     // [FEAT-118] Resonant Oracle Badge (Text-Only)
     if (metadata.oracle_category) {
@@ -114,7 +132,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     msg.innerHTML = `
         <div class="msg-header">
             <span class="msg-time">${time}</span>
-            <span class="msg-source ${sl}">[${displaySource}]</span>
+            <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
         </div>
         <div class="msg-body">${text}</div>
     `;
@@ -142,6 +160,7 @@ function sendText() {
     if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
     
     appendMsg(content, 'user-msg', 'ME');
+    lastMsgSource = 'me';
     ws.send(JSON.stringify({ type: "text_input", content: content }));
     textInput.value = '';
 }
@@ -238,6 +257,7 @@ function connect() {
                 });
             } else if (data.type === 'transcription') {
                 appendMsg(data.text, 'user-msg', 'Me (Voice)');
+                lastMsgSource = 'me';
             }
         };
         ws.onclose = () => {

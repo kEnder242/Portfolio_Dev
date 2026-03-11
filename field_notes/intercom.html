@@ -52,6 +52,26 @@
         .msg-source.system { color: #444; }
         .msg-body { display: block; color: #eee; word-wrap: break-word; }
 
+        /* Inter-Node Dialogue Style */
+        .message.internal {
+            border-left: 2px solid #d29922;
+            background: rgba(210, 153, 34, 0.03);
+            margin-left: 10px;
+            padding: 10px;
+            border-radius: 0 4px 4px 0;
+            position: relative;
+        }
+        .message.internal::before {
+            content: "↳ INTERNAL CROSSTALK";
+            display: block;
+            font-size: 0.6rem;
+            color: #d29922;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .message.internal .msg-source { color: #d29922 !important; }
+
         /* Input Area */
         #input-container { 
             display: flex; gap: 10px; align-items: center; background: var(--panel-bg); 
