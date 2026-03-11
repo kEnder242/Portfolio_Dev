@@ -592,16 +592,16 @@
 **Mechanism:** Uses local weights to perform technical derivations with a clinical persona when KENDER is offline.
 
 ## [FEAT-160] Pedigree Refinement Pipeline
-**Status:** DESIGN
+**Status:** ACTIVE (WIP)
 **Logic:** Automated LoRA \"Burn\" orchestrator. Physically encodes engineering pedigree into model weights based on Rank 4 \"Gems\" found in the archive.
-**Rationale:** Encodes the 18-year history into the model's neurons, transforming context searching into intuitive neural recall. Helps resolve reverse-timeline queries (e.g. "When did I work on VISA?") by making project anchors native to the model's weights.
-**Mechanism:** Triggers a fine-tuning cycle (Unsloth) when a critical mass of new technical truth is identified.
+**Rationale:** Encodes the 18-year history into the model's neurons, transforming context searching into intuitive neural recall.
+**Mechanism:** `src/train/train_expert.py` (Scaffolding ready). Triggers a fine-tuning cycle (Unsloth) on the local 2080 Ti AFTER archive burn completion.
 
 ## [FEAT-161] Synthetic Character Distillation
-**Status:** DESIGN
-**Logic:** Uses the Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
+**Status:** ACTIVE
+**Logic:** Uses the Sovereign Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
 **Rationale:** Raw logs are too noisy for effective fine-tuning. Distillation creates high-signal training data that bridges ASCII evidence with agentic character.
-**Goal:** High-fidelity data generation for the Pedigree Refinement Pipeline.
+**Mechanism:** `src/forge/distill_gems.py`. Successfully verified small-batch distillation using KENDER compute.
 
 ## [FEAT-162] Multi-LoRA Cognitive Loadout
 **Status:** ACTIVE (Dormant)
