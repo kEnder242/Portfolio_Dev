@@ -144,6 +144,24 @@ def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95):
 def trigger_pager(message, severity="info", source="Lab"):
     """Fires a notification to the Pager center."""
     try:
-        # Pager implementation stub
-        pass
-    except: pass
+        pager_path = os.path.join(DATA_DIR, "pager_activity.json")
+        entry = {
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "severity": severity.upper(),
+            "source": source,
+            "message": message
+        }
+        
+        # Load existing
+        activities = []
+        if os.path.exists(pager_path):
+            try:
+                with open(pager_path, 'r') as f:
+                    activities = json.load(f)
+            except: pass
+            
+        activities.append(entry)
+        # Keep last 20
+        atomic_write_json(pager_path, activities[-20:])
+    except Exception as e:
+        print(f"Pager Error: {e}")

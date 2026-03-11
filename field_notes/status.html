@@ -237,7 +237,14 @@
                     const jobsText = data.new_jobs !== undefined ? `${data.new_jobs} NEW` : `${data.jobs_found} FOUND`;
                     status.innerHTML = `<span id="job-led" class="status-led ${data.status === 'UPLINK_ACTIVE' ? 'led-online' : 'led-yielded'}"></span>${jobsText}`;
                     
-                    const lastRun = new Date(data.last_run).toLocaleDateString();
+                    // [FIX] Robust Date Parsing
+                    let lastRun = "Unknown";
+                    if (data.last_run) {
+                        const d = new Date(data.last_run.includes('T') ? data.last_run : data.last_run.replace(' ', 'T'));
+                        if (!isNaN(d.getTime())) {
+                            lastRun = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        }
+                    }
                     meta.innerText = `Last Run: ${lastRun}\nStatus: ${data.status || 'NOMINAL'}`;
                 })
                 .catch(err => {
@@ -302,13 +309,18 @@
             });
 
             root.innerHTML = "";
-            const sortedAlerts = alerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const sortedAlerts = alerts.sort((a, b) => {
+                const da = new Date(a.timestamp.includes('T') ? a.timestamp : a.timestamp.replace(' ', 'T'));
+                const db = new Date(b.timestamp.includes('T') ? b.timestamp : b.timestamp.replace(' ', 'T'));
+                return db - da;
+            });
             const nodes = [];
             let currentDayFolder = null;
 
             sortedAlerts.forEach(alert => {
                 const severity = (alert.severity || 'info').toLowerCase();
-                const day = alert.timestamp.split('T')[0];
+                const ts = alert.timestamp.includes('T') ? alert.timestamp : alert.timestamp.replace(' ', 'T');
+                const day = ts.split('T')[0];
 
                 if (severity === 'critical' || severity === 'warning') {
                     nodes.push({ type: 'priority', data: alert });
@@ -363,8 +375,12 @@
             // Unique ID for state persistence (timestamp + source)
             div.dataset.id = alert.timestamp + '-' + alert.source;
             div.className = `alert-item severity-${(alert.severity || 'info').toLowerCase()}`;
+            
+            const d = new Date(alert.timestamp.includes('T') ? alert.timestamp : alert.timestamp.replace(' ', 'T'));
+            const timeStr = !isNaN(d.getTime()) ? d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "??:??";
+
             div.innerHTML = `
-                <span class="alert-meta">[${new Date(alert.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span> 
+                <span class="alert-meta">[${timeStr}]</span> 
                 <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}
                 <div class="inline-terminal"></div>
             `;
