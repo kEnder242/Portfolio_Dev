@@ -98,7 +98,8 @@
         .markdown-body h1, .markdown-body h2 { color: var(--accent-color); margin-top: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
         .markdown-body ul { padding-left: 20px; }
         .markdown-body li { margin-bottom: 5px; }
-        .markdown-body a { color: #4daafc; text-decoration: none; border-bottom: 1px dashed #444; }
+        .markdown-body a { color: #4daafc; text-decoration: none; border-bottom: 1px dashed #444; position: relative; z-index: 10; pointer-events: auto; }
+        .markdown-body a:hover { color: #ffffff; border-bottom-style: solid; }
         .markdown-body p { margin: 5px 0; }
         .markdown-body ul, .markdown-body ol { margin: 5px 0; }
         .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin: 10px 0 5px 0; }
@@ -313,6 +314,13 @@
             setInterval(pollStatus, 10000);
             setInterval(pollPager, 30000);
             setInterval(pollRecruiter, 60000);
+
+            // [FIX] Link Click Delegation
+            document.getElementById('log-tree-root').addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    e.stopPropagation(); // Prevent minimization but allow navigation
+                }
+            });
         });
 
         function pollRecruiter() {
