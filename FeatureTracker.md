@@ -98,7 +98,8 @@
 **Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
 
 ## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
-**Status:** ACTIVE
+**Status:** DEFEATURED (Mar 2026)
+**Reason:** Replaced by [FEAT-180] (Graceful Resource Governance). Downshift logic introduced latency and "Logic Drift." Standardized on hard stop (SIGTERM) to preserve silicon integrity.
 **Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
 **SCAR #2:** Feb 13 "333MiB Wall" / Turing BF16 initialization deadlock.
 **Mechanism:**
@@ -253,7 +254,8 @@
 **Mechanism:** Triggers an immediate `check_brain_health` probe with `num_predict: 1` in `acme_lab.py` during the handshake.
 
 ## [FEAT-083] Smaller Sovereign (8B Priority)
-**Status:** ACTIVE
+**Status:** DEFEATURED (Mar 2026)
+**Reason:** Redundant following the standardization of the Unified 3B Base (Linux) and 27B Sovereign (Windows).
 **Logic:** Prioritizes 8B class models (Llama 3.1) over large models (Mixtral) to guarantee <10s load times.
 **Verification:** Forensic logs confirm `llama3.1:8b` selection on KENDER despite LARGE tier request.
 
@@ -263,7 +265,8 @@
 **Mechanism:** `_engine_cache` in `loader.py` with automatic invalidation on request failure.
 
 ## [FEAT-085] Intelligent Keep-Alive
-**Status:** ACTIVE
+**Status:** DEFEATURED (Mar 2026)
+**Reason:** Obsolete due to Safe-Pilot [FEAT-136] and Lab Attendant residency management. Prevents unnecessary VRAM chatter.
 **Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
 **Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
 
@@ -720,7 +723,7 @@
 3.  **Agency over Workflow**: The node is granted the authority to "Backtrack" up to 3 times before providing a final derivation to the user.
 
 ## [FEAT-174] Multi-LoRA Expert Routing (Poor Man's MoE)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident silicon (3B).
 **Rationale:** To achieve "Ultimate Expert Specialization" (DeepSeekMoE) without the VRAM penalty of a 14B+ model. 
 **Mechanisms:**
@@ -734,3 +737,64 @@
 ## [TECHNICAL DEBT]
 - **[DEBT-001] Shadow Moat (Narf Scrub):** Current implementation uses regex sanitization to strip Pinky-isms from Brain sources. This is a functional \"hack.\"
     *   *Stable Solution Task:* Move to explicit negative constraint fine-tuning or 1B-model tone verification.
+
+## [FEAT-180] Graceful Resource Governance (Hard Stop)
+**Status:** ACTIVE
+**Logic:** Replaces Ollama Fallback mechanisms. If VRAM or system load exceeds stability thresholds (defined in 'infrastructure.json'), the Lab executes an immediate 'Graceful Shutdown' instead of falling back to slower engines.
+**Rationale:** Fallbacks introduce "Logic Drift" and high latency. A hard stop preserves "Silicon Integrity" and forces the Agent to resolve the resource bottleneck before proceeding.
+**Mechanism:** 'lab_attendant_v2.py' monitor loop triggers 'SIGTERM' to 'acme_lab.py' upon threshold violation.
+
+## [FEAT-181] Behavioral DNA Registry (ChromaDB Bones)
+**Status:** ACTIVE
+**Logic:** Replaces static intent mapping with a vector-driven 'Vibe' retrieval system.
+**Rationale:** To comply with [BKM-015.1]. Eliminates hardcoded keyword-to-expert mapping, allowing the Lab's orchestration to evolve semantically as new expertise is added to the archive.
+**Mechanism:** New 'behavioral_dna' collection in ChromaDB queried by the Cognitive Hub during the pre-gating phase.
+
+## [FEAT-182] Neural Resonance (Strategic Interjection)
+**Status:** ACTIVE
+**Logic:** Implements true 'overhearing' synergy using the [FEAT-172] Active Buffer mechanism.
+**Rationale:** Eliminates the 'Hollow Echo Chamber' by ensuring Pinky's initial intuition informs the Brain's deep reasoning chain in real-time.
+**Mechanism:** Injects a [PINKY_HEARING] block into the Brain's context window containing the results of the triage facilitate task.
+
+## [FEAT-183] CLaRa-Based Continuous Refinement
+**Status:** ACTIVE
+**Logic:** Applies Continual Learning and Retrospective Analysis to behavioral anchors.
+**Rationale:** Ensures the 'Tendons' (Vibes) of the system strengthen based on real-world interaction success rather than manual developer tuning.
+**Mechanism:** Post-session audit task where the Lab Actor (1B/3B) audits the 'Vibe' success and generates new anchors.
+
+## [FEAT-184] The "Amygdala" Weight (Sentinel v2.1)
+**Status:** DESIGN
+**Logic:** Refines the sentinel from a keyword list into a true "Uncertainty Gate."
+**Rationale:** Keyword sentinels are too rigid. A logic-based check can decide if the Brain needs to interject based on the complexity or inconsistency of the query.
+**Mechanism:** Uses a tiny, fast logic check (1B model or log-pattern-matcher) to trigger strategic handovers.
+
+## [FEAT-185] Alluring Instrumentation (Juicy Tooling)
+**Status:** DESIGN
+**Logic:** Refactors tool descriptions to be highly enticing and precise for agentic reasoning.
+**Rationale:** If tool descriptions sound like high-precision instruments of truth, the LLM is statistically more likely to reach for them during complex reasoning.
+**Mechanism:** Applying 'The Strategic Architect's Scalpel' terminology across the toolset.
+
+## [FEAT-186] The "Pre-warm" Lobby (Predictive Warm-up)
+**Status:** DESIGN
+**Logic:** Implements predictive Brain loading during Pinky triage.
+**Rationale:** Reduces perceived latency. If triage indicates a high likelihood of Brain involvement, the Hub starts pre-loading the Sovereign context while Pinky is still responding.
+**Mechanism:** Hub triggers a non-blocking `check_brain_health` probe based on initial triage sentiment.
+
+## [FEAT-187] CLaRa Model Re-training (Unified 3B Refinement)
+**Status:** DESIGN
+**Logic:** Fine-tunes the Unified 3B Base (Llama 3.2) using "Synergy Pairs" from interaction logs.
+**Rationale:** Moves beyond prompt injection to make "Neural Resonance" a native behavior of the resident nodes.
+**Mechanism:** Utilizes the [FORGE-01] infrastructure to train on processed conversation turns where Pinky/Brain cooperation was successful.
+
+---
+
+### [VIBE-006] Neural Resonance (The Overhearing)
+**Logic:** Transforms the Hub into a "Corpus Callosum" that bridges Pinky's fast intuition with the Brain's deep derivation.
+**Rationale:** Eliminates "Hollow Parallelism." Pinky acts as the "gut instinct" that the Brain can validate or override.
+**Vibe:** Emergent Synergy.
+
+---
+**DEFEATURED REASONING (Mar 2026):**
+- **[FEAT-069]**: Deprecated in favor of [FEAT-180] (Hard Stop) to prioritize silicon integrity over latency-heavy fallbacks.
+- **[FEAT-083] & [FEAT-085]**: Redundant following the consolidation of the Unified 3B resident base and Attendant-led Safe-Pilot [FEAT-136] sequences.
+
