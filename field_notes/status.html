@@ -273,19 +273,26 @@
             const url = `http://localhost:9999/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
+            // [SECURITY] Extract shared key from cache-busting CSS link
+            const styleLink = document.querySelector('link[href*="style.css?v=d3756599"]');
+            const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
+
             const consoleRow = document.getElementById('sys-console');
             const div = document.createElement('div');
             div.style.color = 'var(--accent-color)';
-            div.innerText = `[REMOTE] Sending ${action.toUpperCase()} signal...`;
+            div.innerText = `[REMOTE] Sending ${action.toUpperCase()} signal (Key: ${key})...`;
             consoleRow.appendChild(div);
 
             try {
-                const response = await fetch(url, { method: 'POST' });
+                const response = await fetch(url, { 
+                    method: 'POST',
+                    headers: { 'X-Lab-Key': key }
+                });
                 const result = await response.json();
                 
                 const resDiv = document.createElement('div');
                 resDiv.style.color = response.ok ? '#28a745' : '#f85149';
-                resDiv.innerText = `[ATTENDANT] ${result.message || 'Signal Acknowledged'}`;
+                resDiv.innerText = `[ATTENDANT] ${result.message || result.error || 'Signal Acknowledged'}`;
                 consoleRow.appendChild(resDiv);
                 
                 // Refresh status immediately
