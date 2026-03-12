@@ -108,6 +108,36 @@
         .alert-header:hover { opacity: 0.8; }
         
         .log-tree-container { margin-top: 20px; }
+
+        /* Remote Control Suite */
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #444;
+            color: #eee;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent-color); }
+        .control-btn:active { transform: translateY(2px); }
+        .control-btn .status-led { margin-right: 0; }
+        .control-btn.btn-danger:hover { border-color: #f85149; color: #f85149; }
+        .control-btn.locked { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -154,6 +184,28 @@
                 </div>
             </div>
             <div id="scanner-message" style="color: #666; font-size: 0.8rem; margin-top: -20px; margin-bottom: 20px; font-family: monospace;"></div>
+        </section>
+
+        <section id="remote-control">
+            <h2 class="section-title">Remote Lab Control</h2>
+            <div class="control-grid">
+                <div class="control-btn" onclick="triggerLabAction('ignition')">
+                    <span class="status-led led-online"></span>
+                    Ignition
+                </div>
+                <div class="control-btn" onclick="triggerLabAction('quiesce')">
+                    <span class="status-led led-yielded"></span>
+                    Quiesce
+                </div>
+                <div class="control-btn" onclick="triggerLabAction('refresh')">
+                    <span class="status-led led-busy"></span>
+                    Refresh
+                </div>
+                <div class="control-btn btn-danger" onclick="triggerLabAction('hard_reset')">
+                    <span class="status-led led-offline"></span>
+                    Hard Reset
+                </div>
+            </div>
         </section>
 
         <section id="telemetry">
@@ -215,6 +267,36 @@
                 const isMatch = btn.textContent.toLowerCase() === range.toLowerCase();
                 btn.classList.toggle('active', isMatch);
             });
+        }
+
+        async function triggerLabAction(action) {
+            const url = `http://localhost:9999/${action}`;
+            if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
+
+            const consoleRow = document.getElementById('sys-console');
+            const div = document.createElement('div');
+            div.style.color = 'var(--accent-color)';
+            div.innerText = `[REMOTE] Sending ${action.toUpperCase()} signal...`;
+            consoleRow.appendChild(div);
+
+            try {
+                const response = await fetch(url, { method: 'POST' });
+                const result = await response.json();
+                
+                const resDiv = document.createElement('div');
+                resDiv.style.color = response.ok ? '#28a745' : '#f85149';
+                resDiv.innerText = `[ATTENDANT] ${result.message || 'Signal Acknowledged'}`;
+                consoleRow.appendChild(resDiv);
+                
+                // Refresh status immediately
+                setTimeout(pollStatus, 2000);
+            } catch (err) {
+                const errDiv = document.createElement('div');
+                errDiv.style.color = '#f85149';
+                errDiv.innerText = `[ERROR] Remote Control failed: ${err.message}`;
+                consoleRow.appendChild(errDiv);
+            }
+            consoleRow.scrollTop = consoleRow.scrollHeight;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
