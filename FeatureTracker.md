@@ -98,8 +98,7 @@
 **Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
 
 ## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
-**Status:** DEFEATURED (Mar 2026)
-**Reason:** Replaced by [FEAT-180] (Graceful Resource Governance). Downshift logic introduced latency and "Logic Drift." Standardized on hard stop (SIGTERM) to preserve silicon integrity.
+**Status:** ACTIVE
 **Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
 **SCAR #2:** Feb 13 "333MiB Wall" / Turing BF16 initialization deadlock.
 **Mechanism:**
@@ -148,6 +147,12 @@
 **Verification:** 
 - `src/debug/test_pi_flow.py`: Verifies end-to-end technical accuracy and bicameral delegation.
 - `src/test_lab_integration.py`: Verifies node-to-orchestrator connectivity and life-cycle management.
+
+## [FEAT-077] Fidelity Gate (Quality Gate)
+**Status:** ACTIVE
+**Logic:** Intercepts "Thin" or empty reasoning responses and triggers autonomous retries or strategic pivots.
+**Rationale:** To prevent high-latency models from providing low-fidelity or hallucinated "short" answers.
+**Mechanism:** `CognitiveHub` word-count check and [BKM-015.1] bypass for technical constants.
 
 ## [FEAT-075] Content Immutability (The 18-Year Lock)
 **Status:** ACTIVE (Mandate)
@@ -254,8 +259,7 @@
 **Mechanism:** Triggers an immediate `check_brain_health` probe with `num_predict: 1` in `acme_lab.py` during the handshake.
 
 ## [FEAT-083] Smaller Sovereign (8B Priority)
-**Status:** DEFEATURED (Mar 2026)
-**Reason:** Redundant following the standardization of the Unified 3B Base (Linux) and 27B Sovereign (Windows).
+**Status:** ACTIVE
 **Logic:** Prioritizes 8B class models (Llama 3.1) over large models (Mixtral) to guarantee <10s load times.
 **Verification:** Forensic logs confirm `llama3.1:8b` selection on KENDER despite LARGE tier request.
 
@@ -265,8 +269,7 @@
 **Mechanism:** `_engine_cache` in `loader.py` with automatic invalidation on request failure.
 
 ## [FEAT-085] Intelligent Keep-Alive
-**Status:** DEFEATURED (Mar 2026)
-**Reason:** Obsolete due to Safe-Pilot [FEAT-136] and Lab Attendant residency management. Prevents unnecessary VRAM chatter.
+**Status:** ACTIVE
 **Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
 **Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
 
@@ -787,20 +790,42 @@
 **Mechanism:** Utilizes the [FORGE-01] infrastructure to train on processed conversation turns where Pinky/Brain cooperation was successful.
 
 ## [FEAT-188] Resonant Memory (Bicameral Momentum)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Expands the 'Overhearing' mechanism from a single-turn injection to a multi-turn semantic buffer.
 **Rationale:** To build behavioral momentum. The Brain should 'overhear' not just the immediate triage intuition, but the evolution of Pinky's sentiment over the last 3 interactions.
+**Mechanism:** CognitiveHub maintains a 3-turn buffer of Pinky's triage results and injects them as a [RESONANT_HISTORY] block.
 
 ## [FEAT-189] Vibe-Driven Tool Pruning
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Dynamically filters the Brain's available MCP toolset based on the Hub's Vibe Check.
 **Rationale:** Reduces the 'Hallucination Surface Area.' If the vibe is 'Tactical,' the Brain should only see high-precision diagnostic tools, preventing it from reaching for broad archival tools unnecessarily.
+**Mechanism:** Hub generates a 'tool_allowlist' based on the retrieved vibe metadata.
 
 ## [FEAT-190] Cognitive Audit (The Judge)
-**Status:** DESIGN
+**Status:** ACTIVE
 **Logic:** Automated test validation using a logic-based auditor routine.
 **Rationale:** To break the 'Waffle Trap' of hardcoded string matching in tests. Uses a small resident model (1B) or a peer node to judge the technical consistency and 'Vibe' of an output.
-**Mechanism:** A common 'src/infra/cognitive_audit.py' library available to the pytest suite.
+**Mechanism:** A common 'src/infra/cognitive_audit.py' library available to the pytest suite and synthetic memory pipeline.
+
+## [FEAT-191] Judicial Feedback Loop (The Audit)
+**Status:** ACTIVE
+**Logic:** Integrate the 'CognitiveAudit' routine into the nightly 'dream_cycle.py' process.
+**Rationale:** To perform autonomous self-correction on synthetic memories. Synthetic wisdom is peer-audited for technical accuracy before being committed to long-term memory.
+
+## [FEAT-195] Archival Topography Injection
+**Status:** ACTIVE
+**Logic:** Provides the Brain with a topographical view of the 18-year archive to enable multi-hop chronological retrieval.
+**Rationale:** Solves the 'Granularity Gap' where nodes only receive small portions of files. By knowing the archive's structure (The Map), the Brain can request specific 'Deep Samples' or date ranges.
+**Mechanisms:**
+1.  **peek_strategic_map**: Tool allowing the Brain to see which years/themes contain the most evidence.
+2.  **read_chronological_excerpts**: Tool for requesting full JSON logs for specific months/years.
+3.  **Map Injection**: Automated Hub-level context injection of the semantic map during Forensic vibes.
+
+## [FEAT-196] Multi-Hop Archival Reasoning
+**Status:** ACTIVE
+**Logic:** Enables the Brain node to use archival topography tools as proxies to navigate multiple years autonomously.
+**Rationale:** To empower the Sovereign Brain to connect historical breadcrumbs across large temporal gaps without user re-prompting.
+**Mechanism:** BrainNode proxy methods for 'peek_strategic_map' and 'read_chronological_excerpts'.
 
 ---
 
@@ -818,4 +843,3 @@
 **DEFEATURED REASONING (Mar 2026):**
 - **[FEAT-069]**: Deprecated in favor of [FEAT-180] (Hard Stop) to prioritize silicon integrity over latency-heavy fallbacks.
 - **[FEAT-083] & [FEAT-085]**: Redundant following the consolidation of the Unified 3B resident base and Attendant-led Safe-Pilot [FEAT-136] sequences.
-

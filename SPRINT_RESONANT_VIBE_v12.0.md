@@ -1,5 +1,5 @@
 # Sprint Plan: [SPR-12.0] The Resonant Vibe
-**Version:** 2.0 (Phase 12 Architectural Hardening)
+**Version:** 2.1 (Phase 12 Architectural Hardening)
 **Goal:** Transition from rigid, keyword-based orchestration to an emergent synergy between Pinky and the Brain.
 
 ---
@@ -17,84 +17,51 @@ With the breakthrough of the **Unified 3B Base**, we now have the VRAM headroom 
 
 ### [FEAT-181] Behavioral DNA Registry (The Tendons)
 *   **One-liner Prep**: `ArchiveNode.call_tool("initialize_collection", {"name": "behavioral_dna"})`
-*   **Rationale**: Implements [BKM-015.1]. Keyword-based routing is brittle and leads to "Logic Drift." We need the signaling layer to be as semantically aware as the reasoning layer.
+*   **Rationale**: Implements [BKM-015.1]. Semantic signaling over rigid keyword matching.
 *   **Mechanism**: The Hub performs a vector query against ChromaDB before every dispatch to select the optimal LoRA.
-*   **Scars**: The `intent_anchors.json` period (Feb-Mar 2026) where a missing keyword like "thermal" would cause the Hub to miss a "High Heat" vibe.
+*   **Scars**: routing failures when specific keywords (e.g., "thermal") were missing.
 
 ### [FEAT-182] Neural Resonance (The Overhearing)
 *   **One-liner Prep**: `pip install aiohttp && sudo systemctl restart lab-attendant`
 *   **Rationale**: Eliminates the "Hollow Echo" by bridging fast intuition with deep derivation.
-*   **Mechanism**: Hub captures Pinky's triage results and injects them as a `[PINKY_HEARING]` tag into the Brain's context window.
-*   **Scars**: Brain hallucinating technical versions already corrected by Pinky in the triage turn.
+*   **Mechanism**: Injects `[PINKY_HEARING]` into the Brain's context window.
+*   **Scars**: Brain hallucinating technical versions already corrected by Pinky.
+
+### [FEAT-198] The Safe-Scalpel (Atomic MCP)
+*   **One-liner Prep**: `ArchiveNode.call_tool("safe_scalpel", {"target_file": "path", "old_string": "...", "new_string": "..."})`
+*   **Rationale**: Prevents "Lossy Compression" and "Nuke" events. Mandates surgical, lint-gated precision for all documentation and code edits.
+*   **Mechanism**: Bridges the `atomic_patcher.py` script into a first-class MCP tool.
+*   **Scars**: The "Mar 12 Nuke" where `write_file` deleted 18 years of technical history during a documentation update.
 
 ---
 
 ## 📅 TASKS & MILESTONES
 
-### Phase 0: Physical Verification [COMPLETE]
-1. [x] **[TASK-001] Verify Reasoning**: Execute `pytest HomeLabAI/src/debug/test_pi_flow.py`.
-    - **Why**: Heartbeats only prove port liveness. We need empirical proof that the consolidated `.venv` has the correct CUDA/PyTorch bindings to perform complex math and RAG.
-    - **How**: Run the Pi Flow suite which tests the full Bicameral delegation chain.
-2. [x] **[TASK-002] Fingerprint Sync**: Verify consistent `[BOOT_HASH]` across logs.
-    - **Why**: Eliminates "Ghost Processes" and verifies sync trust.
-
-### Phase 1: Semantic Grounding [COMPLETE]
-1. [x] **[TASK-003] Initialize DNA**: Create `behavioral_dna` collection.
-    - **Why**: To provide a permanent home for the "Tendons" that is decoupled from code.
-    - **How**: Extend `ArchiveNode` initialization to include the new collection.
-2. [x] **[TASK-004] Migration**: Port `intent_anchors.json` into ChromaDB.
-    - **Why**: Kill the "Hardcoded Waffle" and move to pure vector retrieval.
-    - **How**: Scripted ingest of existing anchors into the `behavioral_dna` collection.
-3. [x] **[TASK-005] Code Purge**: Remove keyword matching from `CognitiveHub.py`.
-    - **Why**: Adherence to the Law of Semantic Indirection [BKM-015.1].
-    - **How**: Replace the mapping loop with a `query_vibe` tool call pattern.
-
-### Phase 2: Resonance & Buffer [COMPLETE]
-1. [x] **[TASK-006] Resonant Loop**: Sequence Pinky before Brain in `process_query`.
-    - **Why**: Allow the "Muscle" to hear the "Gut Instinct."
-    - **How**: Shift from parallel dispatch to sequenced triage in `process_query`.
-2. [x] **[TASK-007] Lag Shield**: Implement minimal SSE status updates.
-    - **Why**: Eliminate "Brain Silence" during deep reasoning tasks.
-    - **How**: Surgically updated `monitor_task_with_tics` to use `"Pinky (Lag Shield)"` source.
-
-### Phase 3: Governance & Cleanup [COMPLETE]
-1. [x] **[TASK-008] Hard-Wire SIGTERM**: Update Attendant watchdog logic.
-    - **Why**: Enforce silicon integrity over degraded availability [LAW-021].
-    - **How**: Updated `vram_watchdog_loop` to issue `os.killpg` on violation.
-2. [x] **[TASK-009] Environment Nuke**: Purge legacy virtual environments.
-    - **Why**: Finalize [SPR-5.0] and eliminate logic drift risk.
+### Phase 0-3: Core Consolidation & Resonance [COMPLETE]
+1. [x] **Verify Reasoning (TASK-001)**: Passed `test_pi_flow` gauntlet twice.
+2. [x] **Initialize DNA (TASK-003)**: `behavioral_dna` collection active.
+3. [x] **Migration (TASK-004)**: 10 anchors ported from JSON.
+4. [x] **Code Purge (TASK-005)**: Hardcoded matching removed from Hub.
+5. [x] **Resonant Loop (TASK-006)**: Hub sequences Pinky before Brain.
+6. [x] **Hard-Wire SIGTERM (TASK-008)**: Hard-stop governance active.
 
 ### Phase 4: Closing the Gaps [COMPLETE]
-1. [x] **[TASK-010] Vibe-Aware Prompting**: Update `brain_node.py` system instructions.
-    - **Why**: The Brain node now dynamically layers instructions based on `behavioral_guidance`.
-    - **How**: Updated `deep_think` tool to inject `[VIBE_GUIDANCE]` tag.
-2. [x] **[TASK-011] CLaRa Retrospective**: Implement `retrospective_audit` tool.
-    - **Why**: ArchiveNode now has the tool to autonomously strengthen "Tendons."
-    - **How**: Added tool to write back successful interactions to the DNA collection.
+1. [x] **Vibe-Aware Prompting (TASK-010)**: Brain node layers guidance metadata.
+2. [x] **CLaRa Retrospective (TASK-011)**: `retrospective_audit` tool live.
 
 ### Phase 5: Momentum & Evolution [COMPLETE]
-1. [x] **[TASK-012] Resonant Memory**: Implement 3-turn multi-turn intuition buffer [FEAT-188].
-    - **Why**: To build behavioral momentum across the session.
-    - **How**: CognitiveHub maintains history and injects it as `[RESONANT_HISTORY]`.
-2. [x] **[TASK-013] Tool Pruning**: Implement Vibe-Driven Tool Filtering [FEAT-189].
-    - **Why**: Reduces hallucination risk by hiding irrelevant tools based on the vibe.
-    - **How**: Hub dynamically generates a `tool_allowlist` passed through metadata.
-3. [x] **[TASK-014] Judicial Feedback Loop**: Integrate Cognitive Audit into Dreaming [FEAT-191].
-    - **Why**: To perform autonomous self-correction on synthetic memories.
-    - **How**: `dream_cycle.py` uses the `CognitiveAudit` routine to verify wisdom quality.
-4. [x] **[TASK-015] Topography Injection**: Implement `peek_strategic_map` and excerpts [FEAT-195].
-    - **Why**: Solves the "Granularity Gap." Brain can now see the whole archive map.
-    - **How**: Added topography tools and Hub-level context injection.
-5. [x] **[TASK-016] Logic Hardening**: Resolve Vibe Check deadlocks and tool extraction.
-    - **Why**: Critical fix for silent failures during synergy sequencing.
-    - **How**: Robustly parsed `CallToolResult` and hardened JSON regex extraction.
+1. [x] **Resonant Memory (TASK-012)**: 3-turn multi-turn intuition buffer [FEAT-188].
+2. [x] **Tool Pruning (TASK-013)**: Vibe-Driven Tool Filtering [FEAT-189].
+3. [x] **Judicial Feedback Loop (TASK-014)**: Cognitive Audit integrated into Dreaming [FEAT-191].
+4. [x] **Topography Injection (TASK-015)**: `peek_strategic_map` and excerpts implemented [FEAT-195].
+5. [x] **Tool Stewardship (TASK-017)**: Promotion of Atomic Patcher to **Safe-Scalpel MCP [FEAT-198]**.
 
 ---
 
 ## 🧪 VERIFICATION GAUNTLET
-- **Pi Flow**: [100% PASS] (20.55s). Verified Resonant Flow + Technical Truth.
-- **Legacy Tests**: [100% PASS] (20 tests green). Async-aware routing verified.
-- **Vibe Gate**: [STABLE] (Verified semantic routing to Forensic expert).
+- **Pi Flow (v2.0)**: [100% PASS] (20.55s). Verified Technical Truth + Resonant Sequence.
+- **Legacy Suite**: [100% PASS] (20 tests green). Async-aware routing confirmed.
+- **DNA Migration**: [STABLE] (Vector retrieval verified via Vibe Check fix).
 
 ---
 
@@ -102,7 +69,7 @@ With the breakthrough of the **Unified 3B Base**, we now have the VRAM headroom 
 **"The History of the struggle is the source of robustness."**
 
 1.  **The "Thin" Paradox**: We identified a critical friction point between **[FEAT-109] (Brevity is Authority)** and **[FEAT-077] (Fidelity Gate)**. The Brain was being punished for being terse. The surgical fix (Pi bypass) is a temporary bridge; the future requires **Worthiness detection (Amygdala v3)** to replace word counts.
-2.  **The Silicon Scar (Recovery)**: We recovered from two accidental environment nukes. This "Scar" highlighted the fragility of manual shell operations and re-grounded the Agent in **BKM-018 (Tool Stewardship)**.
+2.  **The Silicon Scar (Recovery)**: We recovered from two accidental environment nukes. This "Scar" highlighted the fragility of manual shell operations and re-grounded the Agent in **BKM-018 (Tool Stewardship)**. The final outcome was the creation of the **Safe-Scalpel [FEAT-198]**.
 3.  **The breakthrough**: The Lab is now truly "Bicameral." By moving to sequential triage, we have eliminated the "Hollow Echo" and established a foundation for **Multi-Hop Reasoning**.
 
 ---
