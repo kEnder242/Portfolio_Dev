@@ -137,14 +137,12 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         <div class="msg-body">${text}</div>
     `;
     
-    // Fix: Routing Logic - TRUE Brain or Brain (Shadow) or explicit insight channel goes to the right.
-    const sl_low = sl.toLowerCase().trim();
-    const text_low = text.toLowerCase();
-    
-    // [FEAT-058] Strategic Shunt: If System mentions Sovereign/Engaging, route to Insight
+    // Fix: Routing Logic - TRUE Brain or explicit insight channel goes to the right,
+    // BUT all connectivity/internal logs stay in Pinky's console as per mandate.
     const isSystemStrategic = (sl_low === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
     
-    const isTrueBrain = sl_low.includes('brain') || (channel === 'insight') || isSystemStrategic;
+    // [FEAT-058-RECOVER] Internal priority: If it's internal, it MUST stay in Pinky's console.
+    const isTrueBrain = (sl_low.includes('brain') || (channel === 'insight') || isSystemStrategic) && !isInternal;
     
     if (!isTrueBrain) {
         chatConsole.appendChild(msg);
@@ -238,6 +236,7 @@ function connect() {
         };
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
+            console.log("[WS RECV]", data); // [FEAT-200] Debug visibility
             if (data.type === 'status') {
                 if (data.message) {
                     appendMsg(data.message, 'system-msg', 'System');
@@ -292,7 +291,6 @@ function updateFileTree(files) {
         tree.appendChild(item);
     });
 }
-
 async function pollSystemStatus() {
     try {
         const resp = await fetch('data/status.json?t=' + Date.now());
@@ -301,7 +299,7 @@ async function pollSystemStatus() {
         const mode = vitals.mode || "OLLAMA";
         const model = vitals.model || "None";
         const newState = `[SYSTEM] ${mode}: ${model}`;
-        
+
         if (newState !== lastSystemState) {
             appendMsg(newState, 'system-msg', 'System');
             lastSystemState = newState;
@@ -311,3 +309,4 @@ async function pollSystemStatus() {
     }
     setTimeout(pollSystemStatus, 10000);
 }
+
