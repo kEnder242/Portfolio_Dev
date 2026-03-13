@@ -1,34 +1,45 @@
 {
     "gpu_total_mib": 11264,
-    "last_updated": "2026-03-12T12:15:00",
-    "vllm_engine_status": "Tier 1 (Micro) - vLLM 0.17.0 Optimized",
+    "last_updated": "2026-03-13T14:30:00",
+    "vllm_engine_status": "Tier 1 (Unified) - vLLM 0.17.0 Stable",
     "safe_tiers": {
         "critical": 11000,
-        "downshift": 10500,
+        "downshift": 9500,
         "warning": 8000,
         "nominal": 7000
     },
     "model_map": {
+        "UNIFIED": {
+            "vllm": "/speedy/models/llama-3.2-3b-instruct-awq",
+            "ollama": "llama3.2:3b",
+            "label": "Llama 3.2 3B AWQ (Unified Base)",
+            "est_vram_mib": 5125,
+            "gpu_memory_utilization": 0.5,
+            "attention_backend": "TRITON_ATTN"
+        },
         "LARGE": {
             "vllm": "/speedy/models/qwen-2.5-1.5b-awq",
             "ollama": "qwen2.5:1.5b",
-            "label": "Qwen 2.5 1.5B AWQ (vLLM 0.17.0)",
-            "est_vram_mib": 6500,
-            "gpu_memory_utilization": 0.4
+            "label": "Qwen 2.5 1.5B AWQ",
+            "est_vram_mib": 5125,
+            "gpu_memory_utilization": 0.5,
+            "attention_backend": "TRITON_ATTN"
         },
         "MEDIUM": {
             "vllm": "/speedy/models/Llama-3.2-1B-Instruct",
             "ollama": "llama3.2:1b",
-            "label": "Llama 3.2 1B (vLLM 0.17.0)",
-            "est_vram_mib": 6000,
-            "gpu_memory_utilization": 0.4
+            "label": "Llama 3.2 1B (High Speed)",
+            "est_vram_mib": 4800,
+            "gpu_memory_utilization": 0.5,
+            "attention_backend": "TRITON_ATTN"
         },
         "SMALL": {
             "vllm": "/speedy/models/qwen-2.5-0.5b-awq",
             "ollama": "qwen2.5:0.5b",
-            "label": "Qwen 2.5 0.5B AWQ (vLLM 0.17.0)",
-            "est_vram_mib": 4500,
-            "gpu_memory_utilization": 0.4
+            "label": "Qwen 2.5 0.5B (Micro)",
+            "est_vram_mib": 4200,
+            "gpu_memory_utilization": 0.5,
+            "attention_backend": "TRITON_ATTN"
         }
     }
 }

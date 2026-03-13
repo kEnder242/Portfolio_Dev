@@ -8,33 +8,34 @@ To stabilize the **Unified 3B Base** on the 2080 Ti (11GB) following the vLLM 0.
 
 ## 🏗️ ARCHITECTURAL MANDATES
 
-### 1. Attendant V3 (Service + Proxy) [NEW]
+### 1. Attendant V3 (Service + Proxy) [COMPLETE]
 *   **Master (Service):** Sole governor of silicon and state; hosts port 9999.
 *   **Proxy (MCP):** Stateless agentic interface; redirects tool calls via internal REST to avoid port/PID conflicts.
-*   **Port-Strict Assassin:** [FEAT-119] Refined to target only processes physically holding Lab ports (8088, 8765), protecting control scripts.
+*   **Port-Strict Assassin:** [FEAT-119] Refined to target only processes physically holding Lab ports (8088, 8765), protecting control scripts and model paths.
+*   **Dynamic Configuration:** Attendant now consumes utilization and backend flags from `vram_characterization.json` at runtime.
 
-### 2. The Atomic File Swap Protocol [BKM-022]
+### 2. The Atomic File Swap Protocol [BKM-022] [COMPLETE]
 *   **Purpose:** Ensure filesystem atomicity for all file updates.
 *   **Mechanism:** Standardize on `.tmp` + `os.replace` for the **Forensic Ledger** and state snapshots.
 
-### 3. The Split Status Model [FEAT-045/151]
+### 3. The Split Status Model [FEAT-045/151] [COMPLETE]
 *   **Volatile Status (Liveness):** Real-time system health retrieved from the Master API (:9999/heartbeat).
 *   **Forensic Ledger (History):** Append-only, atomic-write-protected record (`pager_activity.json`) preserving historical alerts and log traces.
 
 ---
 
-## 🧪 FORENSIC TRIAGE & WIN RECIPE (Mar 13 Update)
+## 🧪 FORENSIC TRIAGE & WIN RECIPE (Mar 13 Final)
 
-### 1. The "Win Recipe" (from 0.16 Archeology)
-*   **Engine:** vLLM 0.17 (V1 Architecture).
-*   **Backend:** `TRITON_ATTN` (Required for 3B models on Compute 7.5; FlashInfer JIT fails).
-*   **Utilization:** `0.5` (Verified "Safe Win" for 3B models; `0.4` is the redline).
+### 1. The Production "Win Recipe" (vLLM 0.17)
+*   **Model:** `llama-3.2-3b-instruct-awq` (UNIFIED Tier).
+*   **Backend:** `TRITON_ATTN` (Mandatory; FlashInfer JIT build fails on Compute 7.5).
+*   **Utilization:** `0.5` (Verified "Safe Win" providing necessary KV cache blocks).
 *   **Network:** `NCCL_P2P_DISABLE=1` and `NCCL_SOCKET_IFNAME=lo`.
 
-### 2. Baseline Verification [COMPLETE]
-*   **Success:** Established confirmed baseline with **1.5B model** (`qwen-2.5-1.5b-awq`).
-*   **VRAM Peak:** 5178 MiB (46%) under `TRITON_ATTN`.
-*   **Reasoning:** Physically verified via inference ping.
+### 2. Verification Gates [COMPLETE]
+*   **1.5B Baseline:** Verified reasoning and VRAM (5125 MiB).
+*   **3B Production:** Verified reasoning and VRAM (5125 MiB).
+*   **Path Awareness:** Diagnostic suite and Attendant are working directory-independent.
 
 ---
 
@@ -42,17 +43,23 @@ To stabilize the **Unified 3B Base** on the 2080 Ti (11GB) following the vLLM 0.
 
 ### PHASE 1: Forensic Hardening (The V3 Pivot) [COMPLETE]
 - [x] **Implementation:** Refactor to **Attendant V3** (Master/Proxy bifurcation).
-- [x] **Logic:** Fix `log_monitor_loop` to correctly maintain file pointers for readiness signals.
-- [x] **Assassin:** Implement Port-Strict matching to prevent Signal 9 "Self-Kills."
+- [x] **Logic:** Fix `log_monitor_loop` file pointer bug to reliably catch readiness signals.
+- [x] **Assassin:** Implement Port-Strict matching to eliminate Signal 9 "Self-Kills."
 
-### PHASE 2: VRAM Optimization & Config Exploration [ACTIVE]
-- [ ] **Characterization:** Run `test_apollo_vram.py` (V3-Aware) on the 1.5B baseline with `0.5 utilization` and `TRITON_ATTN`.
-- [ ] **Decoupling [FEAT-145]:** Update `mass_scan.py` to skip EarNode loading during heavy synthesis.
-- [ ] **Scale-Up:** Attempt 3B-AWQ ignition using the verified "Win Recipe."
+### PHASE 2: VRAM Optimization & Scale-Up [COMPLETE]
+- [x] **Characterization:** Run `test_apollo_vram.py` on 1.5B and 3B baselines.
+- [x] **Dynamic Config:** Update `vram_characterization.json` and Attendant to automate the "Win Recipe."
+- [x] **3B Scale-Up:** physically verified 3B residency using TRITON_ATTN.
 
-### PHASE 3: Watchdog Recovery & Resilience
-- [ ] **Recovery Logic:** Implement "One-Touch Auto-Restart" in the Master watchdog.
-- [ ] **Resilience Ladder [FEAT-069]:** Re-integrate autonomous downshifting (vLLM -> Ollama) during VRAM pressure (>85%).
+### PHASE 3: Watchdog Recovery & Resilience [ACTIVE]
+- [ ] **Implementation:** Finalize \"One-Touch Auto-Restart\" in the Master watchdog loop.
+- [ ] **Resilience Ladder [FEAT-069]:** Re-integrate autonomous tiered downshifting:
+    - **Tier 1 (vLLM Production):** `UNIFIED` (3B-AWQ).
+    - **Tier 2 (vLLM SML):** Downshift to `LARGE` (1.5B) or `SMALL` (0.5B) tiers to preserve residency during pressure.
+    - **Tier 3 (Ollama Fallback):** Shift to Ollama if vLLM engine remains unstable.
+- [ ] **Mode Verification:** Audit `DEBUG_BRAIN` and `DEBUG_PINKY` modes to ensure correct auto-shutdown and bypass behavior in V3.
+- [ ] **Smoke Test Suite:** Standardize a rapid `/ping` smoke test for the CI/CD pipeline.
+
 
 ---
 
