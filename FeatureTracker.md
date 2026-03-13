@@ -786,12 +786,33 @@
 **Rationale:** Moves beyond prompt injection to make "Neural Resonance" a native behavior of the resident nodes.
 **Mechanism:** Utilizes the [FORGE-01] infrastructure to train on processed conversation turns where Pinky/Brain cooperation was successful.
 
+## [FEAT-188] Resonant Memory (Bicameral Momentum)
+**Status:** DESIGN
+**Logic:** Expands the 'Overhearing' mechanism from a single-turn injection to a multi-turn semantic buffer.
+**Rationale:** To build behavioral momentum. The Brain should 'overhear' not just the immediate triage intuition, but the evolution of Pinky's sentiment over the last 3 interactions.
+
+## [FEAT-189] Vibe-Driven Tool Pruning
+**Status:** DESIGN
+**Logic:** Dynamically filters the Brain's available MCP toolset based on the Hub's Vibe Check.
+**Rationale:** Reduces the 'Hallucination Surface Area.' If the vibe is 'Tactical,' the Brain should only see high-precision diagnostic tools, preventing it from reaching for broad archival tools unnecessarily.
+
+## [FEAT-190] Cognitive Audit (The Judge)
+**Status:** DESIGN
+**Logic:** Automated test validation using a logic-based auditor routine.
+**Rationale:** To break the 'Waffle Trap' of hardcoded string matching in tests. Uses a small resident model (1B) or a peer node to judge the technical consistency and 'Vibe' of an output.
+**Mechanism:** A common 'src/infra/cognitive_audit.py' library available to the pytest suite.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)
 **Logic:** Transforms the Hub into a "Corpus Callosum" that bridges Pinky's fast intuition with the Brain's deep derivation.
 **Rationale:** Eliminates "Hollow Parallelism." Pinky acts as the "gut instinct" that the Brain can validate or override.
 **Vibe:** Emergent Synergy.
+
+### [VIBE-013] The "Silent Partner" (Stealth Triage)
+**Status:** DESIGN
+**Logic:** A bicameral mode where Pinky's intuition is injected into the Brain's context window but NOT broadcast to the UI.
+**Rationale:** For high-stakes derivation where the Lead Engineer requires a clean, non-narrated technical output while still benefiting from the bicameral 'gut instinct.'
 
 ---
 **DEFEATURED REASONING (Mar 2026):**
