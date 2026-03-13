@@ -102,6 +102,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
                        sl_low.includes('forensic') || 
                        sl_low.includes('fidelity') || 
                        sl_low.includes('shadow') ||
+                       sl_low.includes('triage') ||
+                       sl_low.includes('lag shield') ||
                        metadata.is_internal;
 
     msg.className = `message ${msgType} ${isInternal ? 'internal' : ''}`;
@@ -139,10 +141,11 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     // Fix: Routing Logic - TRUE Brain or explicit insight channel goes to the right,
     // BUT all connectivity/internal logs stay in Pinky's console as per mandate.
-    const isSystemStrategic = (sl_low === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
+    const text_low = text.toLowerCase();
+    const isSystemStrategic = (sl === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
     
     // [FEAT-058-RECOVER] Internal priority: If it's internal, it MUST stay in Pinky's console.
-    const isTrueBrain = (sl_low.includes('brain') || (channel === 'insight') || isSystemStrategic) && !isInternal;
+    const isTrueBrain = (sl.includes('brain') || (channel === 'insight') || isSystemStrategic) && !isInternal;
     
     if (!isTrueBrain) {
         chatConsole.appendChild(msg);
@@ -236,13 +239,12 @@ function connect() {
         };
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            console.log("[WS RECV]", data); // [FEAT-200] Debug visibility
+            console.log("[WS RECV]", data);
             if (data.type === 'status') {
                 if (data.message) {
                     appendMsg(data.message, 'system-msg', 'System');
                 }
             } else if (data.type === 'file_content_request') {
-                // [FEAT-074] Workbench: Mice requested a file for the user
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
@@ -252,7 +254,8 @@ function connect() {
             } else if (data.brain) {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
                     oracle_category: data.oracle_category,
-                    sources: data.sources
+                    sources: data.sources,
+                    is_internal: data.is_internal
                 });
             } else if (data.type === 'transcription') {
                 appendMsg(data.text, 'user-msg', 'Me (Voice)');
@@ -270,7 +273,6 @@ function connect() {
 }
 
 function openFile(fn) {
-    console.log("Opening file via ref:", fn);
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ type: "read_file", filename: fn }));
     }
@@ -278,19 +280,20 @@ function openFile(fn) {
 
 function updateFileTree(files) {
     const tree = document.getElementById('file-tree');
-    tree.innerHTML = '';
-    files.forEach(f => {
-        const item = document.createElement('div');
-        item.className = 'tree-item';
-        // Remove prefixes for display but keep them for the click event
-        item.textContent = f;
-        item.onclick = () => {
-            console.log("Opening file:", f);
-            ws.send(JSON.stringify({ type: "read_file", filename: f }));
-        };
-        tree.appendChild(item);
-    });
+    if (tree) {
+        tree.innerHTML = '';
+        files.forEach(f => {
+            const item = document.createElement('div');
+            item.className = 'tree-item';
+            item.textContent = f;
+            item.onclick = () => {
+                ws.send(JSON.stringify({ type: "read_file", filename: f }));
+            };
+            tree.appendChild(item);
+        });
+    }
 }
+
 async function pollSystemStatus() {
     try {
         const resp = await fetch('data/status.json?t=' + Date.now());
@@ -299,7 +302,7 @@ async function pollSystemStatus() {
         const mode = vitals.mode || "OLLAMA";
         const model = vitals.model || "None";
         const newState = `[SYSTEM] ${mode}: ${model}`;
-
+        
         if (newState !== lastSystemState) {
             appendMsg(newState, 'system-msg', 'System');
             lastSystemState = newState;
@@ -309,4 +312,3 @@ async function pollSystemStatus() {
     }
     setTimeout(pollSystemStatus, 10000);
 }
-
