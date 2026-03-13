@@ -14,7 +14,7 @@
 - [x] **Check-Point**: Verify BKM distillation from archive.
 
 ## Phase 3: Agentic-R Integration [COMPLETED]
-- [x] **[FEAT-178] Semantic Map Injection** (Global Topography)
+- [x] **[FEAT-181] Semantic Map Injection** (Global Topography)
 - [x] **[FEAT-179] Hallway Protocol** (Deep Retrieval)
 - [x] **Check-Point**: Verify autonomous procrastination re-query.
 

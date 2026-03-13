@@ -15,7 +15,7 @@ This track implements the Quality-of-Life (QoL) improvements and the Engine Enha
 - **[FEAT-175] BKM Sentinel**: Librarian logic to prioritize "Silicon Scars" (BKMs/RCA docs).
 - **[FEAT-176] Deep-Connect Epoch**: Reverse RAG flow using Focal Wins as search seeds to harvest 50-100 word technical blocks.
 - **[FEAT-177] DNA Uplink**: Route harvested data into `expertise/bkm_master_manifest.jsonl`.
-- **[FEAT-178] Semantic Map Injection**: Plumb `semantic_map.json` into Brain's `deep_think` context.
+- **[FEAT-181] Semantic Map Injection**: Plumb `semantic_map.json` into Brain's `deep_think` context.
 - **[FEAT-179] Hallway Protocol (Agentic-R)**: Real-time "Deep Retrieval" triggered by failed Strategic Pivots.
 
 ## Success Criteria
