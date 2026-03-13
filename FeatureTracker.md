@@ -803,9 +803,11 @@
 
 ## [FEAT-190] Cognitive Audit (The Judge)
 **Status:** ACTIVE
-**Logic:** Automated test validation using a logic-based auditor routine.
-**Rationale:** To break the 'Waffle Trap' of hardcoded string matching in tests. Uses a small resident model (1B) or a peer node to judge the technical consistency and 'Vibe' of an output.
-**Mechanism:** A common 'src/infra/cognitive_audit.py' library available to the pytest suite and synthetic memory pipeline.
+**Logic:** Automated test and runtime validation using a logic-based auditor routine.
+**Rationale:** To break the 'Waffle Trap' of hardcoded string matching. Replaces length-based heuristics in the Fidelity Gate with semantic judgment.
+**Mechanism:** Uses the **Lab Node Sentinel** (via residents['architect'] or residents['pinky'] LoRA) to judge the technical consistency and 'Vibe' of an output.
+**Verification:** Hub calls 'src/infra/cognitive_audit.py' during the Fidelity Gate check.
+
 
 ## [FEAT-191] Judicial Feedback Loop (The Audit)
 **Status:** ACTIVE
@@ -826,6 +828,18 @@
 **Logic:** Enables the Brain node to use archival topography tools as proxies to navigate multiple years autonomously.
 **Rationale:** To empower the Sovereign Brain to connect historical breadcrumbs across large temporal gaps without user re-prompting.
 **Mechanism:** BrainNode proxy methods for 'peek_strategic_map' and 'read_chronological_excerpts'.
+
+## [FEAT-199] Hub-Level CORS Support
+**Status:** ACTIVE
+**Logic:** Implements 'aiohttp_cors' in 'acme_lab.py' to allow cross-origin WebSocket handshakes.
+**Rationale:** Necessary for browser-based Intercom access when the UI is served via a different port (e.g., 9001) or hostname.
+**Mechanism:** CORS configuration in Hub's 'run' loop allowing all origins by default.
+
+## [FEAT-200] UI Debug Visibility
+**Status:** ACTIVE
+**Logic:** Injects comprehensive packet logging into the Intercom UI.
+**Rationale:** To provide the Lead Engineer with real-time visibility into Hub-to-UI data flow, facilitating rapid forensic diagnostics of connection or routing issues.
+**Mechanism:** 'console.log("[WS RECV]", data)' in 'intercom_v2.js'.
 
 ---
 
