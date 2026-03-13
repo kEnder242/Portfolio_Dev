@@ -21,16 +21,16 @@
 **Goal:** Resolve VRAM instability on vLLM 0.17, implement the Split Status Model, and restore the Resilience Ladder.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
-2.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
-3.  **Surgical Restoration Sprint [SPR-11-09]**: COMPLETED. achieved 100% technical parity for Hardware Grounding and Agentic-R.
+1.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
+2.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
 
 ## 🔮 The Roadmap
 
-### [ACTIVE] Phase 13: Silicon Stability & Forensic Clarity (Sprint SPR-13.0)
-*   **[RESEARCH] Forensic Triage**: Analyze the 02:40 AM crash and characterize vLLM 0.17 VRAM peak.
-*   **[PLANNED] Split Status Model**: Bifurcate liveness (API) from history (Forensic Ledger).
-*   **[PLANNED] Resilience Ladder**: Restore Tiered Governance (vLLM -> Ollama -> SIGTERM).
+### [COMPLETE] Phase 13: Silicon Stability & Forensic Clarity (Sprint SPR-13.0)
+*   [x] **Forensic Ledger [FEAT-151]**: Structured silicon logging with physical trace evidence.
+*   [x] **Split Status Model [FEAT-045]**: Bifurcated health (API) from logical persona (status.json).
+*   [x] **Resilience Ladder [FEAT-069]**: Autonomous Tiered Governance (Unified -> Large -> Emergency Stop).
+*   [x] **Operational Modes**: Verified DEBUG_PINKY filtering and auto-shutdown for non-service modes.
 
 ### [COMPLETE] Phase 12: The Resonant Vibe (Sprint SPR-12.0)
 *   [x] **Behavioral DNA [FEAT-181]**: Semanticexpert routing via ChromaDB.

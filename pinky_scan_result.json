@@ -1,0 +1,20 @@
+ {
+  "tags": ["Simics", "HSD", "Maestro", "Fulsim", "Bug tracking", "CRC", "Display tests", "XMON", "IOSF Specifications", "Redmine", "Jira", "PPA", "Lily", "FLR", "Gits HSD access", "AR: Action items"],
+  "events": [
+    { "date": "2016-07-22", "summary": "Running display tests with run_simics.py", "relevance": "High" },
+    { "date": "2016", "summary": "Bug_DE[1946330] Corruption in fulsim planes processing captures when running bare metal maestro test", "relevance": "High" },
+    { "date": "2016", "summary": "Maestro tests crash after upgrading fulsim", "relevance": "High" },
+    { "date": "2016", "summary": "Mismatched CRCs when running display tests on Simics VP", "relevance": "High" },
+    { "date": "2016", "summary": "Corruption in fulsim planes processing captures when running bare metal maestro test (Redmine #22256)", "relevance": "Medium" },
+    { "date": "2016", "summary": "Display CRC is not supported by VMON", "relevance": "Medium" },
+    { "date": "2016", "summary": "DDI_CRC_CTL_A (CRC Done) does not clear after writing 1b to Fulsim", "relevance": "Medium" },
+    { "date": "2016", "summary": "CNL SV GFX on VP: facing issues with latest maestro versions (52, 53) and maestro tests based on .bl2 format", "relevance": "Medium" },
+    { "date": "2016", "summary": "segmentation fault in dbox_surface.cpp when running maestro display_base", "relevance": "Medium" },
+    { "date": "2016", "summary": "Help Fulsim team debug plane processing crash", "relevance": "Medium" },
+    { "date": "2016", "summary": "Help Fulsim team debug CRC Lily != Simics mismatch", "relevance": "Medium" },
+    { "date": "2016", "summary": "What needs to be done to handle FLR on VP?", "relevance": "Low" },
+    { "date": "2016", "summary": "3pts - What needs to be done to handle FLR on VP?", "relevance": "Low" },
+    { "date": "2016", "summary": "2pt - Help Fulsim team debug plane processing crash", "relevance": "Low" },
+    { "date": "2016", "summary": "3pts - Help Fulsim team debug CRC Lily != Simics mismatch", "relevance": "Low" }
+  ]
+}

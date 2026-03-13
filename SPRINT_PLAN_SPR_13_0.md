@@ -47,14 +47,14 @@ To stabilize the **Unified 3B Base** on the 2080 Ti (11GB) following the vLLM 0.
 - [x] **Dynamic Config:** Automate the "Win Recipe" via `vram_characterization.json`.
 - [x] **Scale-Up:** Physically verified 3B residency using `TRITON_ATTN` at `0.5 util`.
 
-### PHASE 3: Watchdog Recovery & Resilience [ACTIVE]
-- [ ] **Implementation:** Finalize "One-Touch Auto-Restart" in the Master watchdog loop.
-- [ ] **Resilience Ladder [FEAT-069]:** Re-integrate autonomous tiered downshifting:
+### PHASE 3: Watchdog Recovery & Resilience [COMPLETE]
+- [x] **Implementation:** Finalize "One-Touch Auto-Restart" in the Master watchdog loop.
+- [x] **Resilience Ladder [FEAT-069]:** Re-integrate autonomous tiered downshifting:
     - **Tier 1 (vLLM Production):** `UNIFIED` (3B-AWQ).
     - **Tier 2 (vLLM SML):** Downshift to `LARGE` (1.5B) or `SMALL` (0.5B) vLLM tiers during pressure.
     - **Tier 3 (Ollama Fallback):** Shift to Ollama if vLLM engine remains unstable.
-- [ ] **State Verification:** Use `DEBUG_PINKY` to verify the state-transition logic without VRAM risk.
-- [ ] **Cleanup Verification:** Use `DEBUG_BRAIN` to confirm the 3B model unloads cleanly on disconnect.
+- [x] **State Verification:** Use `DEBUG_PINKY` to verify the state-transition logic without VRAM risk.
+- [x] **Cleanup Verification:** Use `DEBUG_BRAIN` to confirm the 3B model unloads cleanly on disconnect.
 
 ---
 

@@ -46,14 +46,10 @@
 
 ---
 
-## 🚧 PHASE 11: SIGNATURE SYNTHESIS & SCALING (Active)
-- [x] **Surgical Restoration Sprint**: [SPR-11-09] (COMPLETED) achieved 100% technical parity for Hardware Grounding, Tool Resurrection, and Agentic-R.
-- [x] **vLLM 0.17 Optimization**: [FEAT-170] (Active) Lock in FlashInfer, Chunked Prefill, and Realtime Pipelining.
-- [x] **Poor Man's MoE (PMM)**: [SPR-11-MoE] (COMPLETED) Implemented dynamic expert routing and backtracking.
-
-- [ ] **Recruiter Deep Read:** [FEAT-168] (TODO) Implementation of Playwright scraping and Brain-driven semantic matching.
-- [x] **3x3 CVT Builder:** Implemented signature career impact synthesis tool.
-- [ ] **TTT-Discover:** Implement RL-based autonomous validation path discovery.
+## 🚧 PHASE 13: SILICON STABILITY (Active)
+- [ ] **Surgical Restoration Sprint**: [SPR-13.0] (Active) Stabilize Unified 3B Base, harden Forensic Ledger, and implement the Resilience Ladder (Watchdog/Downshift).
+- [ ] **Forensic Ledger**: [FEAT-181] Implementation of structured silicon logging.
+- [ ] **Resilience Ladder**: [FEAT-180] Auto-Restart and Tiered Downshift verification.
 
 ## 🎯 THE MISSION
 To integrate the collection of technical notes and stories into a cohesive "Technical Dashboard." This is a full-spectrum integration—not a "best of" list. It reflects the rigor of a Validation Engineer.
@@ -63,16 +59,17 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 2. **Design Feedback Loop:** Reserve "heads-down" development for moments when specifically called out. Work with the user to gather requirements and build a detailed vision before moving forward. Some fact finding is allowed. Only dive into development once approved.
 3. **Verification over Velocity:** Prioritize "Why" (the validation logic) over "What" (the finished text).
 4. **[FEAT-075] Content Immutability:** Technical narrative assets (e.g., `stories.html`) are **Write-Protected** at the paragraph level. Structural UI updates are permitted, but technical story content must remain 100% word-faithful to the original engineering pedigree. No LLM-driven "summarization."
+5. **[FEAT-198] Safe-Scalpel Protocol:** Use the `archive` node for atomic, lint-verified edits when the Lab is ONLINE. If the Lab is OFFLINE, fall back to the standalone `HomeLabAI/src/debug/atomic_patcher.py` script, ensuring `ruff` is present in the `.venv`.
 
 ## ❄️ COLD-START PROTOCOL (Environment Discovery)
 If the agent session is lost or restarted, refer to these anchors:
 1.  **The Current State**: `HomeLabAI/docs/protocols/BKM_SILICON_UPGRADE_GAUNTLET.md` (Verified 0.17 stack).
 2.  **The PMM Blueprint**: `HomeLabAI/docs/plans/LORA_MOE_SYNTHESIS.md` (The "Poor Man's MoE" roadmap).
 3.  **Silicon Identity**: Kernel `6.14.0-36-generic`, Driver `580.126.09`. Wi-Fi requires `linux-modules-extra`.
-4.  **Inference Ghost**: `.venv_vllm_017` is the active environment, but `vllm_server.log` currently reports version `0.15.1`. Investigate this discrepancy before starting FEAT-174.
+4.  **Watchdog Check**: The `vram_watchdog_loop` is active but requires verification of its "Auto-Restart" logic for defunct processes.
 5.  **Project Secrets**: `Portfolio_Dev/monitor/secrets.json` (Contains PagerDuty and Cloudflare IDs).
 6.  **Runtime Safe-Zone**: `~/AcmeLab` is the production host; `~/Dev_Lab` is the workspace.
 
 ## 🤖 CLI INITIALIZATION COMMAND
-> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-11-MoE]**. My first task is to resolve the vLLM version discrepancy in the 0.17 environment and then implement the **[FEAT-174.1] Pre-Gated Router** logic in `acme_lab.py`."
+> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-13.0]**. My first task is to verify the **Resilience Ladder** auto-restart logic in `lab_attendant_v3.py` and then implement the **Forensic Ledger** hardening."
 
