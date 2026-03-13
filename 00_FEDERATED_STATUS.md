@@ -15,26 +15,28 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-11-moe-qol** | 6. Grounded | MoE Hardening & Engine Enhancements | **ACTIVE** |
+| **spr-13-0-stability** | 1. Research | Silicon Stability & Forensic Clarity | **ACTIVE** |
 
-## 🎯 Active Initiative: "Bicameral Evolution" (Sprint SPR-11-08)
-**Goal:** Transition from stubbed job searching to high-fidelity agentic recruitment and research publicization.
+## 🎯 Active Initiative: "Silicon Stability" (Sprint SPR-13.0)
+**Goal:** Resolve VRAM instability on vLLM 0.17, implement the Split Status Model, and restore the Resilience Ladder.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Surgical Restoration Sprint [SPR-11-09]**: COMPLETED. achieved 100% technical parity for Hardware Grounding, Tool Resurrection, and Agentic-R (Hallway Protocol).
-2.  **Recruitment Uplink [SPR-11-08]**: Nightly Recruiter now uses Multi-Vector Pillar scoring, deduplication, and Gmail dispatch.
-3.  **Public Research Ledger [FEAT-095]**: `research.html` transitioned to a static, sanitized airlock variant.
-4.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+1.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
+2.  **Bilingual Attendant (V2) Stable**: Successfully integrated REST (:9999) and native MCP toolsets.
+3.  **Surgical Restoration Sprint [SPR-11-09]**: COMPLETED. achieved 100% technical parity for Hardware Grounding and Agentic-R.
 
 ## 🔮 The Roadmap
 
-### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-09)
-*   **[COMPLETE] Surgical Restoration Sprint**: 
-    *   [x] **Tier 1**: Hardware Grounding (Telemetry & Engine Priming).
-    *   [x] **Tier 2**: Tool Restoration (Bounce, Scribble, History, CVT).
-    *   [x] **Tier 3**: Agentic-R Activation (Hallway Protocol Ignition).
-    *   [x] **Tier 4**: Strategic Live Fire Validation.
-*   **[ACTIVE] Nightly Fast Burn**: Epoch 1 Refinement active.
+### [ACTIVE] Phase 13: Silicon Stability & Forensic Clarity (Sprint SPR-13.0)
+*   **[RESEARCH] Forensic Triage**: Analyze the 02:40 AM crash and characterize vLLM 0.17 VRAM peak.
+*   **[PLANNED] Split Status Model**: Bifurcate liveness (API) from history (Forensic Ledger).
+*   **[PLANNED] Resilience Ladder**: Restore Tiered Governance (vLLM -> Ollama -> SIGTERM).
+
+### [COMPLETE] Phase 12: The Resonant Vibe (Sprint SPR-12.0)
+*   [x] **Behavioral DNA [FEAT-181]**: Semanticexpert routing via ChromaDB.
+*   [x] **Neural Resonance [FEAT-182]**: Inter-agent overhearing logic.
+*   [x] **Safe-Scalpel [FEAT-198]**: Atomic, lint-gated code patching via MCP.
+*   [x] **Judicial Feedback [FEAT-191]**: Peer-review integrated into dreaming.
 2.  **vLLM 0.16.0 Breakthrough**: Successfully bypassed the "333MiB Wall" on Turing (2080 Ti) using `lo` loopback handshakes. vLLM is now the **Active Production Engine** for the Unified 3B Base.
 3.  **Unified 3B Base Established**: Standardized on Llama 3.2 / Qwen 2.5 for 2080 Ti residency via the **Unity Pattern [FEAT-030]**.
 4.  **Historical Pivot (Feb 2026)**: vLLM was briefly **TABLED** due to Ray/NCCL deadlocks; Ollama served as the bridge during characterization.
