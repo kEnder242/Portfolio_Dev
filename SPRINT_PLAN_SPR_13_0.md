@@ -135,7 +135,38 @@ I have successfully executed the **"Soul Graft,"** restoring the high-fidelity o
 *   **Silicon Stability**: **PASS.** Confirmed that the complex parallel logic is running stably under the **V3 systemd service** with active **Resilience Ladder** protection.
 *   **Nomenclature**: All `architect` references have been successfully migrated to `lab`.
 
-### Next Steps Recommendation:
-Now that the "Lightning in a Bottle" is recaptured, I recommend returning to the original roadmap:
-1.  **Semantic Map Integration**: Finalize the implementation of the `build_semantic_map` tool in the Lab Node to anchor long-term retrieval.
-2.  **Focal Alignment**: Initiate the `expertise/` dataset generation (`FEAT-177`) to prepare for the **Architect LoRA** fine-tuning.
+## 🔮 PHASE 7: STRATEGIC DEEPENING (Safe Win Path) [ACTIVE]
+
+### Overview
+This phase locks in the "Soul Graft" body while verifying the machine that builds the "Bones." We prioritize structural integrity and local logic verification before committing to long-running extraction.
+
+| Move | Task | Complexity | ETA | Goal |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | **Deep-Connect Smoke Test** | Low | 3m | Verify LLM extraction logic works on a 3-sample limit. |
+| 2 | **Shadow Brain Audit** | Low | 5m | Verify 2080 Ti filtering logic in `brain_node.py`. |
+| 3 | **Semantic Map Structure** | Medium | 5m | Implement 3-layer hierarchy in `lab_node.py`. |
+| 4 | **SAFE WIN CHECKPOINT** | N/A | 2m | Git Commit to lock in the Soul Graft + Unified Identity. |
+| 5 | **Background Trial Epoch** | High | 20m | Kick off full 18-year extraction; babysit in 5m increments. |
+
+---
+
+### Phase 7 Tasks: Focal Alignment
+- [ ] **Smoke Test**: Run `deep_connect_epoch_v2.py` with `limit=3`. Verify `bkm_master_manifest.jsonl` contains raw paragraphs.
+- [ ] **Shadow Brain Audit**: Verify the 2080 Ti filtering logic in `brain_node.py` against the 4090 delegation path.
+- [ ] **Deepen Semantic Map**: Implement the 3-layer strategic hierarchy (Strategic, Analytical, Tactical) in `lab_node.py`.
+- [ ] **Background Epoch**: Execute `python3 deep_connect_epoch_v2.py` in the background and tail logs every 5 minutes.
+
+---
+
+## 🚀 FUTURE PHASE: SILICON INDUCTION (Post-Epoch)
+
+### The "Why": Moving from Prompting to Instinct
+Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will contain the "Physical Truth" of the 18-year archive. We can then transition the Lab Node from a "Well-prompted 3B" to a "Native Sentinel."
+
+### Future Tasks:
+1. **LoRA Curriculum Preparation**: Use `FORGE-01` to format the manifest into a training-ready dataset.
+2. **LoRA Training (`lab_sentinel_v1`)**: Use `train_expert.py` with Unsloth to bake situational awareness into the weights.
+3. **Multi-Adapter Activation**: Deploy the new adapter via the `BicameralNode` loader and verify that the Hub correctly swaps to it during triage.
+
+---
+*Reference: [BKM-018] Orchestrator-First Mandate (Attendant V3)*
