@@ -771,13 +771,13 @@
 **Status:** ACTIVE
 **Logic:** Applies Continual Learning and Retrospective Analysis to behavioral anchors.
 **Rationale:** Ensures the 'Tendons' (Vibes) of the system strengthen based on real-world interaction success rather than manual developer tuning.
-**Mechanism:** Post-session audit task where the Lab Actor (1B/3B) audits the 'Vibe' success and generates new anchors.
+**Mechanism:** Post-session audit task where the Lab Actor audits the 'Vibe' success and generates new anchors.
 
 ## [FEAT-184] The "Amygdala" Weight (Sentinel v2.1)
 **Status:** DESIGN
 **Logic:** Refines the sentinel from a keyword list into a true "Uncertainty Gate."
 **Rationale:** Keyword sentinels are too rigid. A logic-based check can decide if the Brain needs to interject based on the complexity or inconsistency of the query.
-**Mechanism:** Uses a tiny, fast logic check (1B model or log-pattern-matcher) to trigger strategic handovers.
+**Mechanism:** Uses the lab node to trigger strategic handovers.
 
 ## [FEAT-185] Alluring Instrumentation (Juicy Tooling)
 **Status:** DESIGN
@@ -836,6 +836,12 @@
 **Logic:** Enables the Brain node to use archival topography tools as proxies to navigate multiple years autonomously.
 **Rationale:** To empower the Sovereign Brain to connect historical breadcrumbs across large temporal gaps without user re-prompting.
 **Mechanism:** BrainNode proxy methods for 'peek_strategic_map' and 'read_chronological_excerpts'.
+
+## [FEAT-197] Sequential Thinking (The Chain)
+**Status:** ACTIVE
+**Logic:** Provides structured, multi-step reasoning blocks to Pinky and the Shadow Brain.
+**Rationale:** Prevents logic-drift during complex derivations by forcing the LLM to commit to intermediate steps before generating a final answer.
+**Mechanism:** `thinking_node.py` resident providing the `sequential_thinking` tool.
 
 ## [FEAT-199] Hub-Level CORS Support
 **Status:** ACTIVE
