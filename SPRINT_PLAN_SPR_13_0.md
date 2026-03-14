@@ -145,20 +145,37 @@ This phase locks in the "Soul Graft" body while verifying the machine that build
 | 1 | **Deep-Connect Smoke Test** | Low | 3m | Verify LLM extraction logic works on a 3-sample limit. |
 | 2 | **Shadow Brain Audit** | Low | 5m | Verify 2080 Ti filtering logic in `brain_node.py`. |
 | 3 | **Semantic Map Structure** | Medium | 5m | Implement 3-layer hierarchy in `lab_node.py`. |
-| 4 | **SAFE WIN CHECKPOINT** | N/A | 2m | Git Commit to lock in the Soul Graft + Unified Identity. |
-| 5 | **Background Trial Epoch** | High | 20m | Kick off full 18-year extraction; babysit in 5m increments. |
+| 4 | **[FEAT-199] Hub Nuclear Refactor**| Medium | 10m | **NEW**: Harden JSON extraction to survive 3B model artifacts. |
+| 5 | **[FEAT-202] Decoupled Pipeline** | Medium | 10m | **NEW**: Implement Stage 1 Raw Capture to avoid VRAM thrash. |
+| 6 | **SAFE WIN CHECKPOINT** | N/A | 2m | Git Commit to lock in the Soul Graft + Unified Identity. |
+| 7 | **Background Trial Epoch** | High | 20m | Kick off full 18-year extraction; babysit in 5m increments. |
 
 ---
 
 ### Phase 7 Tasks: Focal Alignment
-- [ ] **Smoke Test**: Run `deep_connect_epoch_v2.py` with `limit=3`. Verify `bkm_master_manifest.jsonl` contains raw paragraphs.
+- [ ] **Smoke Test**: Run `deep_connect_epoch_v2.py` with `limit=3`. Verify `raw_stage_1.jsonl` contains raw responses.
 - [ ] **Shadow Brain Audit**: Verify the 2080 Ti filtering logic in `brain_node.py` against the 4090 delegation path.
 - [ ] **Deepen Semantic Map**: Implement the 3-layer strategic hierarchy (Strategic, Analytical, Tactical) in `lab_node.py`.
-- [ ] **Background Epoch**: Execute `python3 deep_connect_epoch_v2.py` in the background and tail logs every 5 minutes.
+- [x] **[FEAT-199] Hub Refactor**: Refactor `cognitive_hub.py` with `nuclear_json_clean` logic.
+- [ ] **[FEAT-202] Pipeline Implementation**: Split `deep_connect` into Capture and Refine stages.
+- [ ] **Background Epoch**: Execute Stage 1 in the background and tail logs every 5 minutes.
 
 ---
 
 ## 🚀 FUTURE PHASE: SILICON INDUCTION (Post-Epoch)
+
+### [FEAT-202] Decoupled Extraction Pipeline (Rationale)
+**Objective**: To protect the 18-year archive run from transient VRAM errors or parser failures.
+**Stage 1 (Capture)**: `deep_connect_epoch_v2.py` now writes ALL raw LLM output into `raw_stage_1.jsonl`. No parsing happens during the inference run.
+**Stage 2 (Refinement)**: `refine_bones.py` performs the nuclear parsing pass on the persistent log. This allows for infinite regex tuning without re-running the 40-minute LLM grind.
+
+### [FEAT-199] Cognitive Hub: Nuclear Refactor (Technical Ledger)
+**Rationale**: 3B models (especially AWQ versions on Compute 7.5) frequently output JSON with double-braces `{{ }}` or comma-separated domain lists that break standard parsers.
+**Implementation**:
+1.  **Recursive Regex**: `re.findall(r'(\{.*\})')` to find the most complete JSON block.
+2.  **Brace Sanitization**: Force-reduction of `{{` to `{`.
+3.  **Domain Multi-Pick Correction**: Regex to pick the first domain if the model provides a list.
+4.  **Parallel Gate**: Separation of 'Result' vs 'System' messages to prevent state corruption.
 
 ### The "Why": Moving from Prompting to Instinct
 Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will contain the "Physical Truth" of the 18-year archive. We can then transition the Lab Node from a "Well-prompted 3B" to a "Native Sentinel."

@@ -861,6 +861,18 @@
 **Rationale:** To provide the Lead Engineer with real-time visibility into Hub-to-UI data flow, facilitating rapid forensic diagnostics of connection or routing issues.
 **Mechanism:** 'console.log("[WS RECV]", data)' in 'intercom_v2.js'.
 
+## [FEAT-201] Neural Shock (Negative Feedback Loop)
+**Status:** ACTIVE
+**Logic:** Replaces extreme shutdowns with a logic-based "Shock" to the LLM when it hallucinations a tool.
+**Rationale:** Halts logic-drift without killing the session. Provides a negative penalty header forcing the node to re-derive its reasoning.
+**Mechanism:** `[SYSTEM_SHOCK]` interjection re-injected into the query context on tool-execution error.
+
+## [FEAT-202] Decoupled Extraction Pipeline
+**Status:** ACTIVE
+**Logic:** Bifurcates the "Deep-Connect" epoch into two stages: 1) Raw Asynchronous Capture and 2) Offline Surgical Refinement.
+**Rationale:** Eliminates the "Thrash and Wait" cycle. High-latency LLM calls are captured into a persistent buffer (`raw_stage_1.jsonl`) regardless of parsing success, allowing for iterative regex refinement without re-running inference.
+**Mechanism:** `deep_connect_epoch_v2.py` performs raw logging; `refine_bones.py` performs the nuclear parsing pass.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)
