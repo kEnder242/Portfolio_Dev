@@ -188,16 +188,17 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 | 2 | **[FEAT-206] Asymmetric TTL** | Medium | 10m | Implement 15s failure / 300s success engine caching. |
 | 3 | **[FEAT-207] Bicameral Airtime**| Medium | 10m | Force Pinky interjection when PRIMARY_LOCKED is detected. |
 | 4 | **[FEAT-208] Manifest Authority**| High | 15m | Link Harvester to Librarian's `file_manifest.json`. |
-| 5 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
-| 6 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
+| 5 | **[FEAT-209] Double-Tap Search** | Medium | 10m | Implement redundant LOG/META source searching. |
+| 6 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
+| 7 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
 
 ---
 
 ### Sub-Sprint 8.1: Manifest Authority Integration
 **Rationale**: Replaces the hardcoded `LOG_MAP` with a dynamic lookup against the Librarian's `file_manifest.json`. Ensures 100% gem yield by leveraging the Librarian's year/type classifications.
 
-- [ ] **Implementation**: Refactor `serial_harvest.py` to parse `file_manifest.json`.
-- [ ] **Logic**: Implement "Double-Tap" searching (LOG + META) for target years.
+- [x] **Implementation**: Refactor `serial_harvest.py` to parse `file_manifest.json`.
+- [x] **Logic [FEAT-209]**: Implement "Double-Tap" searching (LOG + META) for target years.
 - [ ] **Verification**: Run `wc -l` on final manifest to confirm all 93 gems mapped.
 
 ---
