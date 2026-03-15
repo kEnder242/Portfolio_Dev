@@ -148,7 +148,7 @@ This phase locks in the "Soul Graft" body while verifying the machine that build
 | 4 | **[FEAT-203] Bicameral Bridge Signal Hardening**| Medium | 10m | **NEW**: Harden JSON extraction to survive 3B model artifacts. |
 | 5 | **[FEAT-202] Decoupled Pipeline** | Medium | 10m | **NEW**: Implement Stage 1 Raw Capture to avoid VRAM thrash. |
 | 6 | **SAFE WIN CHECKPOINT** | N/A | 2m | **DONE** |
-| 7 | **Background Trial Epoch** | High | 20m | **RUNNING** |
+| 7 | **Background Trial Epoch** | High | 20m | **STALLED** |
 
 ---
 
@@ -165,15 +165,37 @@ This phase locks in the "Soul Graft" body while verifying the machine that build
 I have successfully concluded **Sprint [SPR-13.0] Move 3**. The Lab has transitioned from "Silicon Stability" to "Strategic Depth."
 
 ### Architectural Accomplishments:
-1.  **[FEAT-203] Bicameral Bridge: Robust Neural Parsing**: Hardened the Lab Node's triage layer by moving to a robust pipe-delimited format (`INTENT|DOMAIN|...`) while maintaining backward compatibility with JSON. The Hub's `nuclear_json_clean` now survives high-pressure 3B model artifacts and truncated outputs.
+1.  **[FEAT-203] Bicameral Bridge: Robust Neural Parsing**: Hardened the Lab Node's triage layer by moving to a robust pipe-delimited format (`INTENT|DOMAIN|...`) while maintaining backward compatibility with JSON. The Hub's `bridge_signal_clean` now survives high-pressure 3B model artifacts and truncated outputs.
 2.  **[FEAT-201] Neural Shock**: Implemented a logic-based "Mental Reset" loop. Resident nodes that hallucinate tool calls now receive a `[SYSTEM_SHOCK]` penalty header, forcing them to re-derive their reasoning without killing the session.
-3.  **[FEAT-202] Decoupled Extraction Pipeline**: Bifurcated the high-latency archive extraction into two stages: **Raw Capture** (Stage 1) and **Surgical Refinement** (Stage 2). This isolates the 18-year LLM grind from parsing errors, ensuring we never lose "Bone" data due to regex failures.
-4.  **Semantic Hierarchy**: Deepened the `lab` node's semantic mapping to a 3-layer architecture (**Strategic**, **Analytical**, **Tactical**), enabling native high-fidelity organization of career artifacts.
+3.  **[FEAT-202] Decoupled Extraction Pipeline**: Bifurcated the high-latency archive extraction into two stages: **Raw Capture** (Stage 1) and **Surgical Refinement** (Stage 2).
+4.  **Semantic Hierarchy**: Deepened the `lab` node's semantic mapping to a 3-layer architecture (**Strategic**, **Analytical**, **Tactical**).
+5.  **[FEAT-204] CLI Persona Induction**: Consolidated 6,684 user prompts for "Voice" adapter training.
 
 ### Validation Status:
-*   **Decoupled Capture**: **IN PROGRESS.** PID 506714 is currently harvesting the 18-year archive. 
-*   **Triage Reliability**: **PASS.** Confirmed the Hub correctly shunts ARCHIVE_EXTRACT queries to the Brain Node while bypassing casual Pinky filters.
-*   **Silicon Health**: **STABLE.** Intel WiFi stability fixes applied; 2080 Ti residency maintained.
+*   **Decoupled Capture**: **STALLED (Latency Misalignment).** Background harvest finished but only recorded 1/106 gems.
+*   **Root Cause**: Consistently underexpecting the Windows 4090 "Long-Tail" wake-up time (~40-60s). The Hub triggered fallbacks before the remote weights were resident.
+*   **Triage Reliability**: **PASS.** Confirmed the Hub correctly shunts ARCHIVE_EXTRACT queries.
+*   **Silicon Health**: **STABLE.** Intel WiFi stability fixes applied.
+
+## 🔮 PHASE 8: LONG-TAIL STABILITY & MULTI-SOUL INDUCTION [ACTIVE]
+
+### Overview
+This phase corrects the latency mismatch between the Linux Hub and Windows Sovereign while preparing the "Dual-Soul" training architecture.
+
+| Move | Task | Complexity | ETA | Goal |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | **[FEAT-205] Long-Tail Gate** | Medium | 10m | Implement 60s warm-up wait for the 4090 Sovereign. |
+| 2 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
+| 3 | **Multi-LoRA Blueprint** | Low | 5m | Map the integration of "History" and "Voice" adapters. |
+| 4 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
+
+---
+
+### Phase 8 Tasks: Induction Readiness
+- [ ] **Long-Tail Hardening**: Update `loader.py` or Hub logic to handle the 60s Ollama residency window.
+- [ ] **Serial Capture (v12)**: Implement `src/forge/serial_harvest.py` using a single WebSocket and serial processing.
+- [ ] **Voice Refinement**: Filter the 6,684 prompts for technical directives.
+- [ ] **Dual-Adapter Prep**: Scaffold Unsloth for concurrent training of `lab_history_v1` and `cli_voice_v1`.
 
 ---
 
