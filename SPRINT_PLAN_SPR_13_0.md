@@ -203,6 +203,47 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 
 ---
 
+## 🗺️ THE BICAMERAL INDUCTION MAP
+
+```mermaid
+graph TD
+    subgraph "1. THE MEMORY SOUL (Technical Truth)"
+        A1[Raw .txt Notes] --> B1[serial_harvest.py v13]
+        B1 --> C1[raw_stage_1.jsonl]
+        C1 --> D1[refine_bones.py]
+        D1 --> E1[bkm_master_manifest.jsonl]
+        E1 --> F1{LoRA: lab_history_v1}
+    end
+
+    subgraph "2. THE VOICE SOUL (Persona/Tone)"
+        A2[CLI Chat Logs] --> B2[extract_gemini_prompts.py]
+        B2 --> C2[refined_prompts.jsonl]
+        C2 --> D2[dream_voice.py]
+        D2 --> E2[cli_voice_dataset.jsonl]
+        E2 --> F2{LoRA: cli_voice_v1}
+    end
+
+    subgraph "3. THE AUDIT SOUL (Coordination)"
+        A3[Synthetic Scenarios] --> B3[generate_sentinel_data.py]
+        B3 --> E3[sentinel_training_data.jsonl]
+        E3 --> F3{LoRA: lab_sentinel_v1}
+    end
+
+    F1 --> G1[Node: BRAIN - Deep Retrieval]
+    F2 --> G2[Node: ALL - Persona Formatting]
+    F3 --> G3[Node: LAB - Situational Auditor]
+```
+
+---
+
+## 📊 HARVEST STATUS & ETA
+*   **Current Progress**: 23/93 Gems (24.7%).
+*   **Active PID**: RESTARTING.
+*   **Mean Latency**: ~45s per gem (Sequential).
+*   **ETA**: **~55 minutes** from restart.
+
+---
+
 ### Phase 8 Tasks: Induction Readiness
 - [x] **Long-Tail Gate [FEAT-205]**: Added 60s sleep during transition to primary host.
 - [ ] **Asymmetric TTL [FEAT-206]**: Implement dual TTL logic in `loader.py`.
