@@ -849,11 +849,11 @@
 **Rationale:** Necessary for browser-based Intercom access when the UI is served via a different port (e.g., 9001) or hostname.
 **Mechanism:** CORS configuration in Hub's 'run' loop allowing all origins by default.
 
-## [FEAT-198] Safe-Scalpel (Atomic MCP Patching)
+## [FEAT-198] Safe-Scalpel (Surgical MCP Tool)
 **Status:** ACTIVE
-**Logic:** Bridges the `atomic_patcher.py` script into a first-class MCP tool for surgical, lint-gated code and documentation edits.
-**Rationale:** Prevents "Lossy Compression" and "Nuke" events by mandating that all edits must pass a `ruff` lint check before commitment.
-**Mechanism:** `ArchiveNode.call_tool("safe_scalpel", ...)` triggers a background patch and verification cycle.
+**Logic:** A system-level MCP server providing the `safe_scalpel` tool for lint-gated code patching directly to the Gemini CLI.
+**Rationale:** Promotes the surgical patching logic from a "resident" tool to a first-class system capability. Ensures exactly-once replacement and provides detailed linting feedback (Ruff/ESLint).
+**Mechanism:** `system_scalpel.py` standalone MCP server registered in `settings.json`.
 
 ## [FEAT-200] UI Debug Visibility
 **Status:** ACTIVE
