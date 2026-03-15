@@ -187,9 +187,18 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 | 1 | **[FEAT-205] Long-Tail Gate** | Medium | 10m | Implement 60s warm-up wait for the 4090 Sovereign. |
 | 2 | **[FEAT-206] Asymmetric TTL** | Medium | 10m | Implement 15s failure / 300s success engine caching. |
 | 3 | **[FEAT-207] Bicameral Airtime**| Medium | 10m | Force Pinky interjection when PRIMARY_LOCKED is detected. |
-| 4 | **Multi-LoRA Blueprint** | Low | 5m | Map the integration of "History" and "Voice" adapters. |
+| 4 | **[FEAT-208] Manifest Authority**| High | 15m | Link Harvester to Librarian's `file_manifest.json`. |
 | 5 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
 | 6 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
+
+---
+
+### Sub-Sprint 8.1: Manifest Authority Integration
+**Rationale**: Replaces the hardcoded `LOG_MAP` with a dynamic lookup against the Librarian's `file_manifest.json`. Ensures 100% gem yield by leveraging the Librarian's year/type classifications.
+
+- [ ] **Implementation**: Refactor `serial_harvest.py` to parse `file_manifest.json`.
+- [ ] **Logic**: Implement "Double-Tap" searching (LOG + META) for target years.
+- [ ] **Verification**: Run `wc -l` on final manifest to confirm all 93 gems mapped.
 
 ---
 
