@@ -21,7 +21,7 @@
 **Goal:** Implement the Decoupled Extraction Pipeline [FEAT-202], harvest the 18-year archive, and prepare the "Bones" for native Architect training.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Strategic Induction [SPR-13.0]**: ACTIVE. Implemented the Decoupled Pipeline (Capture/Refine) and Nuclear Hub refactor. Currently harvesting the 18-year archive.
+1.  **Strategic Induction [SPR-13.0]**: ACTIVE. Implemented the Decoupled Pipeline (Capture/Refine) and Bicameral Bridge refactor. Currently harvesting the 18-year archive.
 2.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
 3.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
 
@@ -29,7 +29,7 @@
 
 ### [ACTIVE] Phase 13: Silicon Induction & The Living Ledger (Sprint SPR-13.0)
 *   [x] **Decoupled Pipeline [FEAT-202]**: Split archive harvest into Stage 1 (Capture) and Stage 2 (Refine).
-*   [x] **Nuclear Hub [FEAT-203]**: Recursive regex-based JSON extraction and hybrid triage parsing.
+*   [x] **Bicameral Bridge [FEAT-203]**: Recursive regex-based JSON extraction and hybrid triage parsing.
 *   [x] **Neural Shock [FEAT-201]**: Logic-based mental reset feedback loop for tool hallucinations.
 *   [x] **Semantic Map (v2)**: Implemented 3-layer strategic hierarchy (Strategic, Analytical, Tactical).
 *   [ ] **Curriculum Distillation**: Formatting BKMs into instruction-tuning pairs.
