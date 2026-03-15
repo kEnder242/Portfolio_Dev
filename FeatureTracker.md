@@ -873,6 +873,12 @@
 **Rationale:** Eliminates the "Thrash and Wait" cycle. High-latency LLM calls are captured into a persistent buffer (`raw_stage_1.jsonl`) regardless of parsing success, allowing for iterative regex refinement without re-running inference.
 **Mechanism:** `deep_connect_epoch_v2.py` performs raw logging; `refine_bones.py` performs the nuclear parsing pass.
 
+## [FEAT-203] Cognitive Hub: Nuclear Refactor
+**Status:** ACTIVE
+**Logic:** Hardens the Hub's parsing layer using recursive regex and hybrid (Pipe/JSON) triage recognition.
+**Rationale:** 3B models frequently output artifacts (double braces, comma-separated lists) under pressure. This refactor ensures logic-drift doesn't break the orchestration.
+**Mechanism:** `nuclear_json_clean` utility and hybrid triage loop in `cognitive_hub.py`.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)
