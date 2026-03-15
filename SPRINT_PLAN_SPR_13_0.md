@@ -194,11 +194,13 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 
 ---
 
-### Sub-Sprint 8.1: Manifest Authority Integration
-**Rationale**: Replaces the hardcoded `LOG_MAP` with a dynamic lookup against the Librarian's `file_manifest.json`. Ensures 100% gem yield by leveraging the Librarian's year/type classifications.
+### Sub-Sprint 8.1: Manifest Authority & Resumable Harvest
+**Rationale**: Replaces the hardcoded `LOG_MAP` with a dynamic lookup against the Librarian's `file_manifest.json`. Implements persistent state tracking to allow for safe process interruptions.
 
 - [x] **Implementation**: Refactor `serial_harvest.py` to parse `file_manifest.json`.
 - [x] **Logic [FEAT-209]**: Implement "Double-Tap" searching (LOG + META) for target years.
+- [x] **Resilience**: Implement **Resume Logic** via `raw_stage_1.jsonl` fingerprinting.
+- [ ] **Scheduled Extraction**: Add 02:00 AM harvest trigger to `acme_lab.py` Alarm Clock.
 - [ ] **Verification**: Run `wc -l` on final manifest to confirm all 93 gems mapped.
 
 ---
