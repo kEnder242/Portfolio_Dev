@@ -881,9 +881,21 @@
 
 ## [FEAT-204] CLI Persona Induction
 **Status:** ACTIVE
-**Logic:** Aggregates multi-year Gemini CLI prompt history into a consolidated manifest.
+**Logic:** Aggregates multi-year Gemini CLI prompt history into a consolidated manifest, refined by length gates, debug noise removal, and semantic de-duplication (85% threshold).
 **Rationale:** Enables the creation of a "User Voice" LoRA adapter, allowing the Lab to predictively align with the engineer's technical tone and directive style.
-**Mechanism:** `extract_gemini_prompts.py` script and `gemini_prompts_manifest.jsonl`.
+**Mechanism:** `extract_gemini_prompts.py` -> `refine_prompts.py` -> `dedupe_prompts.py` (4,410 unique entries).
+
+## [FEAT-208] Manifest Authority
+**Status:** ACTIVE
+**Logic:** Links the extraction harvester to the Librarian's `file_manifest.json` for dynamic source file resolution.
+**Rationale:** Eliminates hardcoded log mappings. Ensures that new files categorized by the Librarian are immediately accessible to the Bridge.
+**Mechanism:** `serial_harvest.py` performs a real-time year/type lookup against the manifest.
+
+## [FEAT-209] Double-Tap Search Pattern
+**Status:** ACTIVE
+**Logic:** Implements redundant archival searching by querying both the raw daily log (`type:LOG`) and the distilled review/resume (`type:META`) for a given artifact year.
+**Rationale:** Maximizes technical block yield. If a detail is missing from the chronological log, the high-level performance review often contains the "Physical Truth."
+**Mechanism:** Sequential multi-file loop in `serial_harvest.py` for every identified gem.
 
 ---
 
