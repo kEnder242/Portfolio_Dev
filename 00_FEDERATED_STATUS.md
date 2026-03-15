@@ -15,22 +15,32 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-13-0-stability** | 1. Research | Silicon Stability & Forensic Clarity | **ACTIVE** |
+| **spr-13-0-stability** | 2. Implementation | Silicon Induction & Living Ledger | **ACTIVE** |
 
-## 🎯 Active Initiative: "Silicon Stability" (Sprint SPR-13.0)
-**Goal:** Resolve VRAM instability on vLLM 0.17, implement the Split Status Model, and restore the Resilience Ladder.
+## 🎯 Active Initiative: "Silicon Induction" (Sprint SPR-13.0)
+**Goal:** Implement the Decoupled Extraction Pipeline [FEAT-202], harvest the 18-year archive, and prepare the "Bones" for native Architect training.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
-2.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
+1.  **Strategic Induction [SPR-13.0]**: ACTIVE. Implemented the Decoupled Pipeline (Capture/Refine) and Nuclear Hub refactor. Currently harvesting the 18-year archive.
+2.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
+3.  **Resonant Vibe [SPR-12.0]**: COMPLETED. Achieved semantic expert routing (Behavioral DNA), Neural Resonance (overhearing), and the Safe-Scalpel MCP.
 
 ## 🔮 The Roadmap
 
-### [COMPLETE] Phase 13: Silicon Stability & Forensic Clarity (Sprint SPR-13.0)
+### [ACTIVE] Phase 13: Silicon Induction & The Living Ledger (Sprint SPR-13.0)
+*   [x] **Decoupled Pipeline [FEAT-202]**: Split archive harvest into Stage 1 (Capture) and Stage 2 (Refine).
+*   [x] **Nuclear Hub [FEAT-203]**: Recursive regex-based JSON extraction and hybrid triage parsing.
+*   [x] **Neural Shock [FEAT-201]**: Logic-based mental reset feedback loop for tool hallucinations.
+*   [x] **Semantic Map (v2)**: Implemented 3-layer strategic hierarchy (Strategic, Analytical, Tactical).
+*   [ ] **Curriculum Distillation**: Formatting BKMs into instruction-tuning pairs.
+*   [ ] **LoRA Induction**: Fine-tuning the `lab_sentinel_v1` native expert.
+
+### [COMPLETE] Phase 13.1: Silicon Stability & Forensic Clarity
 *   [x] **Forensic Ledger [FEAT-151]**: Structured silicon logging with physical trace evidence.
 *   [x] **Split Status Model [FEAT-045]**: Bifurcated health (API) from logical persona (status.json).
 *   [x] **Resilience Ladder [FEAT-069]**: Autonomous Tiered Governance (Unified -> Large -> Emergency Stop).
 *   [x] **Operational Modes**: Verified DEBUG_PINKY filtering and auto-shutdown for non-service modes.
+
 
 ### [COMPLETE] Phase 12: The Resonant Vibe (Sprint SPR-12.0)
 *   [x] **Behavioral DNA [FEAT-181]**: Semanticexpert routing via ChromaDB.
