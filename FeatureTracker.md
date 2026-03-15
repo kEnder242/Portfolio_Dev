@@ -897,6 +897,12 @@
 **Rationale:** Maximizes technical block yield. If a detail is missing from the chronological log, the high-level performance review often contains the "Physical Truth."
 **Mechanism:** Sequential multi-file loop in `serial_harvest.py` for every identified gem.
 
+## [FEAT-210] Lifecycle Gauntlet (Shakedown Protocol)
+**Status:** ACTIVE
+**Logic:** A rapid-verification script that executes a 1-sample pass of the entire 01:00 AM - 04:00 AM automation sequence.
+**Rationale:** To provide the Lead Engineer with high-confidence verification of the Lab's "Tendons" (Dreaming, Harvesting, Mapping, Dialogue) before concluding a session.
+**Mechanism:** `lifecycle_gauntlet.py` script shunting 1-gem/1-prompt batches through the pipeline.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)

@@ -251,8 +251,11 @@ graph TD
 - [ ] **Asymmetric TTL [FEAT-206]**: Implement dual TTL logic in `loader.py`.
 - [ ] **Bicameral Airtime [FEAT-207]**: Ensure Pinky interjection is non-optional for long-tail turns.
 - [ ] **Pivot Suppression**: Update Hub to ignore fidelity gates if host is `PRIMARY_LOCKED`.
-- [ ] **Multi-LoRA Blueprint**: Map the logical integration of History and Voice adapters.
+- [x] **Manifest Authority [FEAT-208]**: Dynamic lookup against Librarian manifest.
+- [x] **Double-Tap Search [FEAT-209]**: Sequential multi-source searching for technical truth.
+- [ ] **Lifecycle Gauntlet [FEAT-210]**: Implement and execute 1-sample shakedown.
 - [x] **Serial Capture (v12)**: Implemented strictly sequential harvesting script.
+- [x] **Resume Logic**: Implementation of persistent state tracking for harvest.
 - [ ] **Voice Refinement**: Filter the 6,684 prompts for technical directives.
 - [ ] **Dual-Adapter Prep**: Scaffold Unsloth for concurrent training of `lab_history_v1` and `cli_voice_v1`.
 
