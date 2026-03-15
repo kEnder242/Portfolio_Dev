@@ -189,8 +189,9 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 | 3 | **[FEAT-207] Bicameral Airtime**| Medium | 10m | Force Pinky interjection when PRIMARY_LOCKED is detected. |
 | 4 | **[FEAT-208] Manifest Authority**| High | 15m | Link Harvester to Librarian's `file_manifest.json`. |
 | 5 | **[FEAT-209] Double-Tap Search** | Medium | 10m | Implement redundant LOG/META source searching. |
-| 6 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
-| 7 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
+| 6 | **[FEAT-210] Lifecycle Gauntlet**| Medium | 10m | Automated shakedown of the 01:00 AM - 04:00 AM sequence. |
+| 7 | **Serial Sequential Harvest** | Medium | 10m | **DONE**: Strictly sequential v15 harvest with 5s cadence. |
+| 8 | **The "Great Grind"** | High | 60m | **ACTIVE**: v15 Inverted Chain is currently grinding. |
 
 ---
 
@@ -300,3 +301,31 @@ Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will co
 
 ---
 *Reference: [BKM-018] Orchestrator-First Mandate (Attendant V3)*
+
+---
+
+## 🕵️ INDUCTION LOGIC GAP REPORT (Post-Session Audit)
+
+This report documents the discrepancy between the Phase 8 Strategic Blueprint and the physical codebase as of the conclusion of SPR-13.0 Move 5.
+
+### 1. Missing Code-Level Logic (The "Tendon" Gaps)
+*   **[FEAT-206] Asymmetric TTL**: 
+    *   *Status*: **INCOMPLETE**. 
+    *   *Reality*: `loader.py` still uses a fixed 60s cache. Needs implementation of the 15s failure / 300s success branching.
+*   **[FEAT-207] Bicameral Airtime**: 
+    *   *Status*: **INCOMPLETE**. 
+    *   *Reality*: `cognitive_hub.py` does not yet force a Pinky turn when `PRIMARY_LOCKED` is detected. It remains probabilistic.
+*   **[FEAT-210] Gauntlet Completeness**: 
+    *   *Status*: **PARTIAL**. 
+    *   *Reality*: `lifecycle_gauntlet.py` currently skips "Step 3: Hierarchy Refactor" due to the lack of a standalone trigger script.
+
+### 2. Forgotten / Tabled Items (Future Induction)
+*   **[FEAT-XXX] Synthetic Janitor**: Lack of an autonomous script to purge older synthetic generations once superseded by higher-fidelity "Dream Passes."
+*   **[FEAT-XXX] Persona Refiner (Turn 2)**: Tabled Hub logic to perform a second "Voice Refinement" turn using the `cli_voice_v1` adapter at runtime.
+
+### 3. Harvest Yield Assessment
+*   **Status**: **STALLED at 32/93 gems**.
+*   **Process**: The Lab is currently running the **Inverted Chain catch-up**.
+*   **Observation**: The restart at 4 AM successfully triggered the sequential chain. The system has moved past the Harvest (Step 4) and is currently busy with **Step 5 (Dream Pass)**.
+
+**Conclusion**: The system is "Infrastructure Ready," but requires physical logic injection via the **System Scalpel** in the next session to finalize the Bicameral tendons.
