@@ -58,8 +58,10 @@ To integrate the collection of technical notes and stories into a cohesive "Tech
 1. **Fact-Finding First:** The CLI must perform "discovery" on raw notes before suggesting a structure.
 2. **Design Feedback Loop:** Reserve "heads-down" development for moments when specifically called out. Work with the user to gather requirements and build a detailed vision before moving forward. Some fact finding is allowed. Only dive into development once approved.
 3. **Verification over Velocity:** Prioritize "Why" (the validation logic) over "What" (the finished text).
-4. **[FEAT-075] Content Immutability:** Technical narrative assets (e.g., `stories.html`) are **Write-Protected** at the paragraph level. Structural UI updates are permitted, but technical story content must remain 100% word-faithful to the original engineering pedigree. No LLM-driven "summarization."
-5. **[FEAT-198] Safe-Scalpel Protocol (Mandatory):**
+4.  **[FEAT-075] Content Immutability**: Technical narrative assets (e.g., `stories.html`) are **Write-Protected** at the paragraph level. Structural UI updates are permitted, but technical story content must remain 100% word-faithful to the original engineering pedigree. No LLM-driven "summarization."
+5.  **[FEAT-205] Authority of Time**: If the Sovereign Brain (Windows 4090) is confirmed **RESIDENT** (`PRIMARY_LOCKED`), the Hub must yield to the long-tail latency (up to 180s). The Hub is forbidden from performing a "Panic Pivot" to local models based strictly on response time. 
+6.  **[FEAT-198] Safe-Scalpel Protocol (Mandatory):**
+
     - **Primary Path (MCP):** Use the `archive` node's `safe_scalpel` MCP tool for all edits. This is the gold standard for high-fidelity, verified patching.
     - **Fallback (Standalone):** Only if the Lab is **OFFLINE**, use the `HomeLabAI/src/debug/atomic_patcher.py` script directly via the shell. Ensure `ruff` is present in the `.venv`.
     - **CRITICAL:** Do not confuse this protocol with standard `write_file` or generic `replace` calls. It is a strictly gated, lint-verified surgical tool and **never** requires the Lab to be active when using the standalone script.

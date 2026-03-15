@@ -185,15 +185,21 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 | Move | Task | Complexity | ETA | Goal |
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | **[FEAT-205] Long-Tail Gate** | Medium | 10m | Implement 60s warm-up wait for the 4090 Sovereign. |
-| 2 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
-| 3 | **Multi-LoRA Blueprint** | Low | 5m | Map the integration of "History" and "Voice" adapters. |
-| 4 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
+| 2 | **[FEAT-206] Asymmetric TTL** | Medium | 10m | Implement 15s failure / 300s success engine caching. |
+| 3 | **[FEAT-207] Bicameral Airtime**| Medium | 10m | Force Pinky interjection when PRIMARY_LOCKED is detected. |
+| 4 | **Multi-LoRA Blueprint** | Low | 5m | Map the integration of "History" and "Voice" adapters. |
+| 5 | **Serial Sequential Harvest** | Medium | 10m | Rewrite capture to wait for completion before iterating. |
+| 6 | **The "Great Grind"** | High | 60m | Final 106-gem harvest with 60s latency gates. |
 
 ---
 
 ### Phase 8 Tasks: Induction Readiness
-- [ ] **Long-Tail Hardening**: Update `loader.py` or Hub logic to handle the 60s Ollama residency window.
-- [ ] **Serial Capture (v12)**: Implement `src/forge/serial_harvest.py` using a single WebSocket and serial processing.
+- [x] **Long-Tail Gate [FEAT-205]**: Added 60s sleep during transition to primary host.
+- [ ] **Asymmetric TTL [FEAT-206]**: Implement dual TTL logic in `loader.py`.
+- [ ] **Bicameral Airtime [FEAT-207]**: Ensure Pinky interjection is non-optional for long-tail turns.
+- [ ] **Pivot Suppression**: Update Hub to ignore fidelity gates if host is `PRIMARY_LOCKED`.
+- [ ] **Multi-LoRA Blueprint**: Map the logical integration of History and Voice adapters.
+- [x] **Serial Capture (v12)**: Implemented strictly sequential harvesting script.
 - [ ] **Voice Refinement**: Filter the 6,684 prompts for technical directives.
 - [ ] **Dual-Adapter Prep**: Scaffold Unsloth for concurrent training of `lab_history_v1` and `cli_voice_v1`.
 
