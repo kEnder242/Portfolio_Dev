@@ -879,6 +879,12 @@
 **Rationale:** 3B models frequently output artifacts under pressure. This refactor ensures signal-to-noise integrity across the bridge.
 **Mechanism:** `bridge_signal_clean` utility and hybrid triage loop in `cognitive_hub.py`.
 
+## [FEAT-204] CLI Persona Induction
+**Status:** ACTIVE
+**Logic:** Aggregates multi-year Gemini CLI prompt history into a consolidated manifest.
+**Rationale:** Enables the creation of a "User Voice" LoRA adapter, allowing the Lab to predictively align with the engineer's technical tone and directive style.
+**Mechanism:** `extract_gemini_prompts.py` script and `gemini_prompts_manifest.jsonl`.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)
