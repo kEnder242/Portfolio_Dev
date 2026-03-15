@@ -248,9 +248,9 @@ graph TD
 
 ### Phase 8 Tasks: Induction Readiness
 - [x] **Long-Tail Gate [FEAT-205]**: Added 60s sleep during transition to primary host.
-- [x] **Asymmetric TTL [FEAT-206]**: Integrated into `loader.py` heartbeat logic.
-- [x] **Bicameral Airtime [FEAT-207]**: Mandatory Pinky interjections during Brain wait.
-- [x] **Pivot Suppression**: Hub ignores fidelity gates if host is `PRIMARY_LOCKED`.
+- [ ] **Asymmetric TTL [FEAT-206]**: Implement 15s failure / 300s success caching in `loader.py`.
+- [ ] **Bicameral Airtime [FEAT-207]**: Physically implement forced Pinky turn for LOCKED hosts.
+- [ ] **Pivot Suppression**: Update Hub to ignore fidelity gates if host is `PRIMARY_LOCKED`.
 - [x] **Manifest Authority [FEAT-208]**: Dynamic lookup against Librarian manifest.
 - [x] **Double-Tap Search [FEAT-209]**: Redundant LOG/META searching enabled.
 - [x] **Lifecycle Gauntlet [FEAT-210]**: Shakedown script verified (1-sample pass).
