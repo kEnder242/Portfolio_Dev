@@ -304,24 +304,16 @@ Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will co
 
 ---
 
-## 🧠 THE TRICAMERAL FLOW (Refined Mar 15)
+## ✅ MOVE 2: THE TENDON GRAFT (Mar 15)
+*Status: COMPLETE | Time: 1:00 AM*
 
-To eliminate "Brain Silence" and adhere to **[BKM-015.1] (Vector Intent)**, the Hub will implement a three-layered response hierarchy:
+*   **[FEAT-207] Tricameral Flow**: **ACTIVE**. Sequential dispatch (Pinky -> Shadow -> Sovereign) verified via `test_pi_flow.py`.
+*   **[FEAT-211] Shadow Archivist**: **ACTIVE**. Proactive RAG context grafting implemented and verified.
+*   **[FEAT-053] Dynamic Shadow Tics**: **ACTIVE**. LLM-driven cognitive tics masking 4090 latency.
+*   **Harvest Logic (v12.1)**: **FIXED**. Absolute progress, orphan fallback, and stall-prevention enabled.
+*   **Stabilization**: **VERIFIED**. `smoke_verify.py` and `DEEP_SMOKE` gauntlet passed.
 
-1.  **Pinky (Reflex)**: Instant characterful triage (sub-second acknowledgement).
-2.  **Shadow Brain (Clinical Intuition)**: 
-    *   Executes `shallow_think` pass on the local 2080 Ti.
-    *   Broadcasts a "Fast Technical Echo" to the user to mask 4090 latency.
-    *   **Neural Resonance**: This intuition is injected into the Sovereign context.
-3.  **Sovereign Brain (Deep Synthesis)**: 
-    *   Executes `deep_think` on the remote 4090 Sovereign.
-    *   Overhears the triage and intuition turns to ensure cross-hemispheric alignment.
-
-### **Action Plan: The Tricameral Graft**
-*   **Cleanup**: Consolidate redundant `DESIGN` features ([FEAT-172], [FEAT-186], [FEAT-004]) into **[FEAT-207] Bicameral Airtime** in the `FeatureTracker.md`.
-*   **Orchestration**: Refactor `cognitive_hub.py` to trigger parallel tasks for both local Shadow and remote Sovereign.
-*   **Dynamics**: Update `monitor_task_with_tics` to allow the Shadow Brain to generate dynamic, LLM-driven cognitive tics instead of static "Thinking..." text.
-*   **Routing**: Verify `lab_node` (Sentinel) is correctly identifying intent using the **behavioral_dna** collection in ChromaDB.
-
----
-*Reference: [BKM-018] Orchestrator-First Mandate (Attendant V3)*
+### **🔜 MOVE 3: REFINEMENT & TRAINING (Post-Harvest)**
+*   [ ] **Stage 2 Refinement**: Run `refine_bones.py` to process the 100% yield from tonight's harvest.
+*   [ ] **Architect Forge**: Initiate LoRA training for the local 2080 Ti Architect adapter.
+*   [ ] **Gauntlet Verification**: Execute `test_lifecycle_gauntlet.py` for final stability proof.
