@@ -570,17 +570,37 @@
 **Mechanism**: A `while True` loop wrapping the server execution in `acme_lab.py`.
 **Verification**: `src/debug/test_goodnight_bounce.py`.
 
-## [FEAT-004] Shadow Dispatch (Predictive Intent)
-**Status:** ACTIVE
-**Logic:** Reduces perceived latency and anticipates strategic queries by notifying the user that a complex derivation is being prepared during transcription.
-**Mechanism:** Async broadcast of "Predicted strategic intent... preparing" when high-stakes keywords (e.g. architecture, silicon) are detected in speech or text before the reasoning node responds.
-
 ## [FEAT-151] Unified Trace Monitoring (Forensic Ledger)
 **Status:** ACTIVE
 **Logic:** Provides \"Appliance-Grade\" visibility during autonomous transitions by capturing raw log traces directly in the **Forensic Ledger** (`pager_activity.json`).
 **Mandate:** All system alerts and deltas are preserved for long-term auditability. The **Atomic File Swap Protocol [BKM-022]** must be used for ledger updates to ensure the integrity of the historical sequence without data loss.
 **Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the \"Delta\" (new lines) if a failure or state transition occurs.
 **Verification**: Integrated into `src/debug/test_goodnight_bounce.py`.
+
+## [FEAT-211] Shadow Archivist (Proactive Context Grafting)
+**Status:** ACTIVE
+**Logic:** The Shadow Brain acts as the \"Proactive Archivist,\" retrieving relevant historical JSONs/links during the 4090's warm-up period.
+**Rationale:** Eliminates \"Wait-to-Ask\" latency. High-fidelity context is \"grafted\" onto the Sovereign's derivation before it begins.
+**Mechanism:** `cognitive_hub.py` triggers a parallel `archive.get_context` call via the Shadow Brain when strategic intent or years are detected.
+
+## [FEAT-207] Bicameral Airtime (Tricameral Sync)
+**Status:** ACTIVE
+**Logic:** A three-layered response hierarchy (Pinky -> Shadow -> Sovereign) to mask latency and improve accuracy.
+**Consolidation:** This feature consolidates and supersedes **[FEAT-004]** (Shadow Dispatch), **[FEAT-172]** (Hemispheric Interjection), and **[FEAT-186]** (Predictive Warm-up).
+**Rationale:** To eliminate \"Brain Silence\" and provide immediate characterful and technical feedback while the primary model processes.
+**Mechanism:** `CognitiveHub` parallel dispatch with inter-agent context injection (Neural Resonance).
+
+## [FEAT-004] [CONSOLIDATED] Shadow Dispatch (Predictive Intent)
+**Status:** CONSOLIDATED (Mar 2026)
+**Reason:** Absorbed into [FEAT-207] Tricameral Airtime and [FEAT-211] Shadow Archivist.
+
+## [FEAT-172] [CONSOLIDATED] Hemispheric Interjection (The Active Buffer)
+**Status:** CONSOLIDATED (Mar 2026)
+**Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
+
+## [FEAT-186] [CONSOLIDATED] The \"Pre-warm\" Lobby (Predictive Warm-up)
+**Status:** CONSOLIDATED (Mar 2026)
+**Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
 
 ## [FEAT-156] SSE Evolution (Hot Link)
 **Status:** ACTIVE
