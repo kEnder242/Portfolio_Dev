@@ -304,28 +304,24 @@ Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will co
 
 ---
 
-## 🕵️ INDUCTION LOGIC GAP REPORT (Post-Session Audit)
+## 🧠 THE TRICAMERAL FLOW (Refined Mar 15)
 
-This report documents the discrepancy between the Phase 8 Strategic Blueprint and the physical codebase as of the conclusion of SPR-13.0 Move 5.
+To eliminate "Brain Silence" and adhere to **[BKM-015.1] (Vector Intent)**, the Hub will implement a three-layered response hierarchy:
 
-### 1. Missing Code-Level Logic (The "Tendon" Gaps)
-*   **[FEAT-206] Asymmetric TTL**: 
-    *   *Status*: **INCOMPLETE**. 
-    *   *Reality*: `loader.py` still uses a fixed 60s cache. Needs implementation of the 15s failure / 300s success branching.
-*   **[FEAT-207] Bicameral Airtime**: 
-    *   *Status*: **INCOMPLETE**. 
-    *   *Reality*: `cognitive_hub.py` does not yet force a Pinky turn when `PRIMARY_LOCKED` is detected. It remains probabilistic.
-*   **[FEAT-210] Gauntlet Completeness**: 
-    *   *Status*: **PARTIAL**. 
-    *   *Reality*: `lifecycle_gauntlet.py` currently skips "Step 3: Hierarchy Refactor" due to the lack of a standalone trigger script.
+1.  **Pinky (Reflex)**: Instant characterful triage (sub-second acknowledgement).
+2.  **Shadow Brain (Clinical Intuition)**: 
+    *   Executes `shallow_think` pass on the local 2080 Ti.
+    *   Broadcasts a "Fast Technical Echo" to the user to mask 4090 latency.
+    *   **Neural Resonance**: This intuition is injected into the Sovereign context.
+3.  **Sovereign Brain (Deep Synthesis)**: 
+    *   Executes `deep_think` on the remote 4090 Sovereign.
+    *   Overhears the triage and intuition turns to ensure cross-hemispheric alignment.
 
-### 2. Forgotten / Tabled Items (Future Induction)
-*   **[FEAT-XXX] Synthetic Janitor**: Lack of an autonomous script to purge older synthetic generations once superseded by higher-fidelity "Dream Passes."
-*   **[FEAT-XXX] Persona Refiner (Turn 2)**: Tabled Hub logic to perform a second "Voice Refinement" turn using the `cli_voice_v1` adapter at runtime.
+### **Action Plan: The Tricameral Graft**
+*   **Cleanup**: Consolidate redundant `DESIGN` features ([FEAT-172], [FEAT-186], [FEAT-004]) into **[FEAT-207] Bicameral Airtime** in the `FeatureTracker.md`.
+*   **Orchestration**: Refactor `cognitive_hub.py` to trigger parallel tasks for both local Shadow and remote Sovereign.
+*   **Dynamics**: Update `monitor_task_with_tics` to allow the Shadow Brain to generate dynamic, LLM-driven cognitive tics instead of static "Thinking..." text.
+*   **Routing**: Verify `lab_node` (Sentinel) is correctly identifying intent using the **behavioral_dna** collection in ChromaDB.
 
-### 3. Harvest Yield Assessment
-*   **Status**: **STALLED at 32/93 gems**.
-*   **Process**: The Lab is currently running the **Inverted Chain catch-up**.
-*   **Observation**: The restart at 4 AM successfully triggered the sequential chain. The system has moved past the Harvest (Step 4) and is currently busy with **Step 5 (Dream Pass)**.
-
-**Conclusion**: The system is "Infrastructure Ready," but requires physical logic injection via the **System Scalpel** in the next session to finalize the Bicameral tendons.
+---
+*Reference: [BKM-018] Orchestrator-First Mandate (Attendant V3)*
