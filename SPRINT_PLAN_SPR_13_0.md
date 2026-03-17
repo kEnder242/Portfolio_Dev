@@ -198,7 +198,7 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 ### Sub-Sprint 8.1: Manifest Authority & Resumable Harvest
 **Rationale**: Replaces the hardcoded `LOG_MAP` with a dynamic lookup against the Librarian's `file_manifest.json`. Implements persistent state tracking to allow for safe process interruptions.
 
-- [x] **Implementation**: Refactor `serial_harvest.py` to parse `file_manifest.json`.
+- [x] **Implementation**: Refactor `serial_harvest_v2.py` to parse `file_manifest.json`.
 - [x] **Logic [FEAT-209]**: Implement "Double-Tap" searching (LOG + META) for target years.
 - [x] **Resilience**: Implement **Resume Logic** via `raw_stage_1.jsonl` fingerprinting.
 - [x] **Scheduled Extraction**: Integrated into the 01:00 AM Inverted Chain in `acme_lab.py`.
@@ -211,7 +211,7 @@ This phase corrects the latency mismatch between the Linux Hub and Windows Sover
 ```mermaid
 graph TD
     subgraph "1. THE MEMORY SOUL (Technical Truth)"
-        A1[Raw .txt Notes] --> B1[serial_harvest.py v15]
+        A1[Raw .txt Notes] --> B1[serial_harvest_v2.py v15]
         B1 --> C1[raw_stage_1.jsonl]
         C1 --> D1[refine_bones.py]
         D1 --> E1[bkm_master_manifest.jsonl]

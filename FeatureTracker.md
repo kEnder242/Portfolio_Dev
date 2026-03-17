@@ -909,13 +909,13 @@
 **Status:** ACTIVE
 **Logic:** Links the extraction harvester to the Librarian's `file_manifest.json` for dynamic source file resolution.
 **Rationale:** Eliminates hardcoded log mappings. Ensures that new files categorized by the Librarian are immediately accessible to the Bridge.
-**Mechanism:** `serial_harvest.py` performs a real-time year/type lookup against the manifest.
+**Mechanism:** `serial_harvest_v2.py` performs a real-time year/type lookup against the manifest.
 
 ## [FEAT-209] Double-Tap Search Pattern
 **Status:** ACTIVE
 **Logic:** Implements redundant archival searching by querying both the raw daily log (`type:LOG`) and the distilled review/resume (`type:META`) for a given artifact year.
 **Rationale:** Maximizes technical block yield. If a detail is missing from the chronological log, the high-level performance review often contains the "Physical Truth."
-**Mechanism:** Sequential multi-file loop in `serial_harvest.py` for every identified gem.
+**Mechanism:** Sequential multi-file loop in `serial_harvest_v2.py` for every identified gem.
 
 ## [FEAT-210] Lifecycle Gauntlet (Shakedown Protocol)
 **Status:** ACTIVE
