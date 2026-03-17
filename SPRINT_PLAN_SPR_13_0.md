@@ -328,14 +328,15 @@ This audit identifies the "Brute Force" bottleneck causing 4090 latency and OLLA
 ---
 
 ### **🏁 MOVE 3: SOVEREIGN RECOVERY & FINAL HARVEST (REVISED)**
-1.  **Hub Hardening**:
-    *   [x] Fix `TypeError` in `execute_dispatch` signature.
-    *   [x] Rename `Pinky (Result)` to `Pinky (Triage)` to prevent script confusion.
-    *   [ ] Implement **Sovereign Gate**: Forbidden to failover extractions to Pinky.
+1.  **Hub Restoration (The Mind Graft)**:
+    *   [ ] **[FEAT-190] The Judge**: Re-integrate `CognitiveAudit` to allow Linux to judge Windows accuracy.
+    *   [ ] **[FEAT-173] Strategic Pivot**: Implement autonomous search redirection based on Audit FAIL signals.
+    *   [ ] **[FEAT-184] Amygdala Gate**: Re-connect the Uncertainty Gate to the Triage layer.
+    *   [x] **Label Hardening**: (Fixed) Renamed Pinky Turns to `Triage` to prevent capture stalls.
 2.  **Harvester v2.2 (Zoom Aware)**:
-    *   [ ] Refactor `serial_harvest_v2.py` to target **JSON Excerpts** instead of raw files.
-    *   [ ] Implement **Manifest-First** range parsing (e.g., matching 2021 to 2019-2024 role notes).
-3.  **VIBE-008 Compliance**:
-    *   [ ] Add **Privacy Sanitizer** to `refine_bones.py` to strip manager coaching from final gems.
-4.  **Full Re-Harvest**:
-    *   [ ] Execute the final 100% high-fidelity Sovereign run.
+    *   [x] **Zoom Logic**: (Implemented) Using JSON Excerpts to avoid 10MB context blowouts.
+    *   [x] **Manifest-First**: (Implemented) Range-aware matching for 2011-2024 role notes.
+3.  **Full Re-Harvest**:
+    *   [ ] **In Progress**: Executing clean 93-gem Sovereign-tier run (PID 1682775).
+4.  **Verification**:
+    *   [ ] **Post-Harvest Refinement**: Clean the final yield into the master manifest.
