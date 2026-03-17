@@ -307,13 +307,14 @@ Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will co
 ## ✅ MOVE 2: THE TENDON GRAFT (Mar 15)
 *Status: COMPLETE | Time: 1:00 AM*
 
-*   **[FEAT-207] Tricameral Flow**: **ACTIVE**. Sequential dispatch (Pinky -> Shadow -> Sovereign) verified via `test_pi_flow.py`.
-*   **[FEAT-211] Shadow Archivist**: **ACTIVE**. Proactive RAG context grafting implemented and verified.
+*   **[FEAT-207] Tricameral Flow**: **ACTIVE**. Sequential dispatch (Pinky -> Shadow -> Sovereign) verified.
+*   **[FEAT-211] Shadow Archivist**: **ACTIVE**. Proactive RAG context grafting implemented.
 *   **[FEAT-053] Dynamic Shadow Tics**: **ACTIVE**. LLM-driven cognitive tics masking 4090 latency.
-*   **Harvest Logic (v12.1)**: **FIXED**. Absolute progress, orphan fallback, and stall-prevention enabled.
-*   **Stabilization**: **VERIFIED**. `smoke_verify.py` and `DEEP_SMOKE` gauntlet passed.
+*   **Harvest Logic (v2.0)**: **ACTIVE**. Tricameral-aware listener implemented in `serial_harvest_v2.py`.
 
-### **🔜 MOVE 3: REFINEMENT & TRAINING (Post-Harvest)**
-*   [ ] **Stage 2 Refinement**: Run `refine_bones.py` to process the 100% yield from tonight's harvest.
-*   [ ] **Architect Forge**: Initiate LoRA training for the local 2080 Ti Architect adapter.
-*   [ ] **Gauntlet Verification**: Execute `test_lifecycle_gauntlet.py` for final stability proof.
+### **🏁 MOVE 3: SOVEREIGN RECOVERY & FINAL HARVEST (ACTIVE)**
+*   [ ] **[FEAT-212] Sovereign Prime & Probe**: Implement B+A script to verify 4090 handshake and bypass latency.
+*   [ ] **Hub Labeling Hardening**: Fix `Pinky (Result)` mis-signaling in `cognitive_hub.py`.
+*   [ ] **Full Sovereign Harvest**: Wipe low-fidelity gems and run `v2.0` from start to finish.
+*   [ ] **Stage 2 Refinement**: Clean the 100% Sovereign-tier yield into the master manifest.
+*   [ ] **Final Retrospective**: Document "Silicon Scars" and system stability.
