@@ -62,6 +62,13 @@ To ensure gradual, regression-free improvement, the training framework will be f
 ### Move 3: Verification & Burn-In
 *   [x] **The 5-Step Smoke**: Run a minimal 5-step training turn to verify the autonomous handover. **(VERIFIED: MAR 17 - Quiesce/Train/Ignite cycle successful)**
 *   [x] **Documentation**: Finalize the "Eternal Forge" pedigree in **FeatureTracker.md**.
+*   [x] **[FEAT-215] Gauntlet Expansion**: Add Step 6 (Nightly Forge) and Proxy Connectivity Probes to `lifecycle_gauntlet.py`. **(VERIFIED: MAR 17 - Gauntlet v2.0 Pass)**
+*   [x] **Pre-Flight Shakedown**: Run the expanded gauntlet to verify the full 2:00 AM induction chain. **(VERIFIED: MAR 17 - 100% Pass)**
+
+### Move 4: The 3-Hour Endurance Burn
+*   [x] **Endurance Session**: Kick off a long-running background session (Max 3 hours). **(ACTIVE: Background process 1960589)**
+*   [x] **Babysitting Protocol**: Monitor every 5 minutes for the first 20 minutes (0:05, 0:10, 0:15, 0:20) to ensure VRAM stability and log health. **(VERIFIED: MAR 17 - Stability confirmed. Scanner reached Step 5.1.)**
+*   [ ] **Final Audit**: Verify the 18-year archive refinement progress after the burn.
 
 ---
 
@@ -85,3 +92,19 @@ The following surgical updates have been applied to integrate the **Eternal Forg
 2.  **Hub Hook (`acme_lab.py`)**: Integrated **Induction Step 6**. The Hub now autonomously triggers a training turn after the nightly "Dream Pass."
 3.  **Round-Robin Logic**: The nightly training alternates between souls (`History` -> `Voice` -> `Sentinel`) to ensure gradual, balanced saturation across the bicameral mind.
 4.  **Fidelity Restoration**: Re-integrated the **Cognitive Audit [FEAT-190]** and **Strategic Pivot [FEAT-173]** into the production Hub to ensure technical truth during the re-harvest.
+
+---
+
+## 🕵️ BATCH FORGE STRATEGY AUDIT (MAR 17)
+
+### 1. The "Pseudo-Parallel" Pivot
+*   **The Problem**: The initial Step 6 implementation used a **Round-Robin** schedule (one soul per night). This was a deviation from the goal of continuous, balanced weight evolution for the entire mind.
+*   **The Deviation**: Defaulting back to `Quiesce` (shutdown) for training was necessary due to the 11GB VRAM limit (Unsloth vs vLLM), but it was incorrectly applied to the harvesting/dreaming phases in my earlier implementation.
+*   **The Solution**: Transition to a **Sequenced Batch Forge**. All three souls (`History` -> `Voice` -> `Sentinel`) will be trained every night in a single VRAM-vacated window.
+
+### 2. Implementation Tasks [ACTIVE]
+*   [ ] **[FEAT-217] Sequenced Batch Trigger**: Modify `acme_lab.py` to remove Round-Robin and trigger a full `BATCH` forge turn.
+*   [ ] **[FEAT-218] Attendant Batch Support**: Update `lab_attendant_v3.py` to handle `mcp_train_batch` or handle multiple targets in a single quiesce cycle.
+*   [ ] **Proxy Alignment**: Ensure the Archive node proxy supports the new batch signature.
+*   [ ] **Gauntlet v3.0**: Run `lifecycle_gauntlet.py` to verify the full sequenced forge (3 souls in 1 pass).
+
