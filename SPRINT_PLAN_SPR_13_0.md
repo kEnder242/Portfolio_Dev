@@ -56,11 +56,11 @@ To stabilize the **Unified 3B Base** on the 2080 Ti (11GB) following the vLLM 0.
 - [x] **State Verification:** Use `DEBUG_PINKY` to verify the state-transition logic without VRAM risk.
 - [x] **Cleanup Verification:** Use `DEBUG_BRAIN` to confirm the 3B model unloads cleanly on disconnect.
 
-### PHASE 4: Identity Realignment & Logic Documentation [ACTIVE]
-- [ ] **Lab Node Unification:** Merge Architect/Sentinel/Auditor logic into a single `lab` node identity.
-- [ ] **Feature Documentation:** Register `[FEAT-197] Sequential Thinking (The Chain)` in the Feature Tracker.
-- [ ] **Logic Restoration:** Re-plumb the "Amygdala" Uncertainty Gate `[FEAT-184]` and Predictive Warm-up `[FEAT-186]` logic.
-- [ ] **Audit:** Verify Shadow Brain (Brain Node) filtering logic against the 4090 delegation path.
+### PHASE 4: Identity Realignment & Logic Documentation [COMPLETE]
+- [x] **Lab Node Unification**: Merge Architect/Sentinel/Auditor logic into a single `lab` node identity.
+- [x] **Feature Documentation**: Register `[FEAT-197] Sequential Thinking (The Chain)` in the Feature Tracker.
+- [x] **Logic Restoration**: Re-plumb the "Amygdala" Uncertainty Gate `[FEAT-184]` and Predictive Warm-up `[FEAT-186]` logic.
+- [x] **Audit**: Verify Shadow Brain (Brain Node) filtering logic against the 4090 delegation path.
 
 ---
 

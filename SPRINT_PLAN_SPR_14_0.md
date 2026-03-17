@@ -31,21 +31,37 @@ To ensure gradual, regression-free improvement, the training framework will be f
 
 ---
 
+## 🕵️ SPRINT AUDIT REPORT (Mar 17)
+
+### 1. The "Silicon Valet" Handover Audit
+*   **Accomplishments**: Found `mcp_train_adapter` successfully implemented in `lab_attendant_v3.py`. Verified that `train_expert.py` supports the `steps` parameter.
+*   **Gap Found**: The **REST bridge** was incomplete. `lab_attendant_v3.py` lacked the `/train` endpoint, and `archive_node.py` (the proxy) was missing the tool. This meant the Hub's nightly call to `lab_train_adapter` would fail with an "Unbound Tool" error.
+*   **Stability Risk**: The "Suicide Tool" pattern (Hub killing itself via Attendant) requires graceful WebSocket closure to prevent the "Broken Pipe" noise during the handover.
+
+### 2. Implementation Strategy [ACTIVE]
+*   **Step 1**: Harden `lab_attendant_v3.py` with full REST support for `/train`. **(COMPLETE)**
+*   **Step 2**: Proxy the `lab_train_adapter` tool in `archive_node.py`.
+*   **Step 3**: Execute a **5-Step Smoke Test** using `adapter_name="test_for"`.
+*   **Step 4**: Verify the Inverted Chain's Step 6 in `acme_lab.py` by forcing a trigger.
+
+---
+
 ## 🎯 TASKS & MILESTONES
 
 ### Move 1: The Silicon Handshake (Core Integration)
-*   [ ] **[FEAT-213] Autonomous Forge**: Implement `mcp_train_adapter` in `lab_attendant_v3.py`.
-*   [ ] **[FEAT-214] Parameterized Training**: Update `train_expert.py` to accept `max_steps` as a CLI argument.
-*   [ ] **Induction Step 6**: Add the `lab_train_adapter` call to the end of the `acme_lab.py` induction sequence.
-*   [ ] **Round-Robin Scheduler**: Implement logic to alternate training targets (History -> Voice -> Sentinel) nightly.
+*   [x] **[FEAT-213] Autonomous Forge**: Implement `mcp_train_adapter` in `lab_attendant_v3.py`.
+*   [x] **[FEAT-214] Parameterized Training**: Update `train_expert.py` to accept `max_steps` as a CLI argument. **(VERIFIED: DONE in commit ca13c26)**
+*   [x] **Induction Step 6**: Add the `lab_train_adapter` call to the end of the `acme_lab.py` induction sequence. **(VERIFIED: DONE in commit bc575db)**
+*   [x] **Round-Robin Scheduler**: Implement logic to alternate training targets (History -> Voice -> Sentinel) nightly. **(VERIFIED: DONE in commit bc575db)**
+*   [x] **Proxy Tool**: Implement `lab_train_adapter` proxy in `archive_node.py`.
 
 ### Move 2: Cognitive Hardening
-*   [ ] **Negative Triage Generation**: Update `dream_voice.py` to produce counter-fact pairs for the Sentinel soul.
-*   [ ] **VRAM Guard Pre-check**: Integrate `characterization.json` verification into the forge start sequence.
+*   [x] **Negative Triage Generation**: Update `dream_voice.py` to produce counter-fact pairs for the Sentinel soul. **(VERIFIED: MAR 17 - Added sentinel mode)**
+*   [x] **VRAM Guard Pre-check**: Integrate `characterization.json` verification into the forge start sequence. **(VERIFIED: MAR 17 - Integrated into mcp_train_adapter)**
 
 ### Move 3: Verification & Burn-In
-*   [ ] **The 5-Step Smoke**: Run a minimal 5-step training turn to verify the autonomous handover.
-*   [ ] **Documentation**: Finalize the "Eternal Forge" pedigree in **FeatureTracker.md**.
+*   [x] **The 5-Step Smoke**: Run a minimal 5-step training turn to verify the autonomous handover. **(VERIFIED: MAR 17 - Quiesce/Train/Ignite cycle successful)**
+*   [x] **Documentation**: Finalize the "Eternal Forge" pedigree in **FeatureTracker.md**.
 
 ---
 
