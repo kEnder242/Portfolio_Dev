@@ -646,7 +646,7 @@
 
 ### [VIBE-012] Hemispheric Independence
 **Objective:** Maintain unconstrained strategic depth while optimizing resident efficiency.
-**Behavior:** The Agent acknowledges the split between Linux residency (Unified 3B) and Windows sovereignty (Mixtral/Llama-70B). No attempts are made to sync or match models across the bridge.
+**Behavior:** The Agent acknowledges the split between Linux residency (Unified model) and Windows sovereignty (typically larger model pre-loaded). No attempts are made to sync or match models across the bridge.
 
 ### [VIBE-011] The \"Always Ready\" Resident (Peer Presence)
 **Objective**: Transition the Lab from a \"Reactive Service\" to a \"Resident Peer.\"
@@ -693,7 +693,7 @@
 - **Tail:** Stale TODO lists and a \"Contacts\" directory.
 **Archaeology (Pre-2008 Outliers):**
 - **Fuzzy Chronology:** Early files (e.g., `notes_2005.txt`, `ras-viral.txt`) lack regular timestamps. Dates must be gleaned from surrounding context or header markers.
-- **Role Alignment:** \"Year\" notes often span multiple years, correlating with career roles (EPSD, DSD, MVE, PAE, PIAV).
+- **Role Alignment:** \"Year\" notes often span multiple years, correlating with career roles (EPSD, DSD, MVE, PAE, PIAV). (This alignment is saved and tracked in file_manifest.json)
 - **Team Tags:** Acronyms in filenames (DSD, MVE, PIAV) correspond to specific engineering teams and should be preserved as high-fidelity metadata.
 **Constraint:** Classification MUST skip the head/tail noise and focus on the ASCII-delimited middle bulk to verify \"LOG\" status.
 
@@ -930,11 +930,16 @@
 **Rationale:** Eliminates "Hollow Parallelism." Pinky acts as the "gut instinct" that the Brain can validate or override.
 **Vibe:** Emergent Synergy.
 
-### [VIBE-013] The "Silent Partner" (Stealth Triage)
-**Status:** DESIGN
-**Logic:** A bicameral mode where Pinky's intuition is injected into the Brain's context window but NOT broadcast to the UI.
-**Rationale:** For high-stakes derivation where the Lead Engineer requires a clean, non-narrated technical output while still benefiting from the bicameral 'gut instinct.'
+### [VIBE-013] Sequential Blending (The Waterfall Flow)
+**Logic:** Prioritize context density over raw parallel speed. 
+**Sequence:**
+1.  **Lab Node (Sentinel)**: Performs Triage & Domain routing.
+2.  **Pinky (Reflex)**: Provides situational interjection (Internal).
+3.  **Shadow Brain (Archivist)**: Provides technical intuition + Proactive RAG Context.
+4.  **Sovereign Brain (Architect)**: Receives the "Blended" history of the previous three turns to produce the definitive synthesis.
+**Rationale:** Ensures the 4090 Sovereign has the highest possible "Truth Density" by overhearing the local nodes' intuition before it begins its own derivation.
 
 ---
 **DEFEATURED REASONING (Mar 2026):**
+- **[VIBE-014]**: Redundant. The user prefers a "Live Chamber" where all intuition turns are visible during the 4090 grind.
 - **[FEAT-083] & [FEAT-085]**: Redundant following the consolidation of the Unified 3B resident base and Attendant-led Safe-Pilot [FEAT-136] sequences.

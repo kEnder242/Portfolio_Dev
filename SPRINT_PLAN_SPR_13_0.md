@@ -312,9 +312,30 @@ Once the Deep-Connect Epoch is complete, the `bkm_master_manifest.jsonl` will co
 *   **[FEAT-053] Dynamic Shadow Tics**: **ACTIVE**. LLM-driven cognitive tics masking 4090 latency.
 *   **Harvest Logic (v2.0)**: **ACTIVE**. Tricameral-aware listener implemented in `serial_harvest_v2.py`.
 
-### **🏁 MOVE 3: SOVEREIGN RECOVERY & FINAL HARVEST (ACTIVE)**
-*   [ ] **[FEAT-212] Sovereign Prime & Probe**: Implement B+A script to verify 4090 handshake and bypass latency.
-*   [ ] **Hub Labeling Hardening**: Fix `Pinky (Result)` mis-signaling in `cognitive_hub.py`.
-*   [ ] **Full Sovereign Harvest**: Wipe low-fidelity gems and run `v2.0` from start to finish.
-*   [ ] **Stage 2 Refinement**: Clean the 100% Sovereign-tier yield into the master manifest.
-*   [ ] **Final Retrospective**: Document "Silicon Scars" and system stability.
+## 🕵️ SOVEREIGNTY & ZOOM AUDIT (Mar 16)
+
+This audit identifies the "Brute Force" bottleneck causing 4090 latency and OLLAMA unloads during the induction cycle.
+
+### 1. The "Raw" Bottleneck
+*   **The Problem**: The Harvester was sending prompts like "Find X in notes_2024_PIAV.txt." This forced the Brain to load 10MB+ raw files into context via `read_document`.
+*   **The Result**: Latencies exceeding 90s, KV cache saturation, and OLLAMA model purging.
+
+### 2. The "Zoom" Solution
+*   **The Method**: Leverage **[FEAT-195] Archival Topography**. 
+*   **The Implementation**: Instead of raw .txt files, the Harvester will now use the `read_chronological_excerpts` tool to target pre-processed, segmented JSON files in the `data/` directory. 
+*   **Benefits**: Maximum context stays within 15,000 chars, OLLAMA stays resident, and derivation quality improves.
+
+---
+
+### **🏁 MOVE 3: SOVEREIGN RECOVERY & FINAL HARVEST (REVISED)**
+1.  **Hub Hardening**:
+    *   [x] Fix `TypeError` in `execute_dispatch` signature.
+    *   [x] Rename `Pinky (Result)` to `Pinky (Triage)` to prevent script confusion.
+    *   [ ] Implement **Sovereign Gate**: Forbidden to failover extractions to Pinky.
+2.  **Harvester v2.2 (Zoom Aware)**:
+    *   [ ] Refactor `serial_harvest_v2.py` to target **JSON Excerpts** instead of raw files.
+    *   [ ] Implement **Manifest-First** range parsing (e.g., matching 2021 to 2019-2024 role notes).
+3.  **VIBE-008 Compliance**:
+    *   [ ] Add **Privacy Sanitizer** to `refine_bones.py` to strip manager coaching from final gems.
+4.  **Full Re-Harvest**:
+    *   [ ] Execute the final 100% high-fidelity Sovereign run.
