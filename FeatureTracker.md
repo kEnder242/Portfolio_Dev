@@ -952,3 +952,24 @@
 **Status:** ACTIVE
 **Logic:** Updates `train_expert.py` to support `max_steps` argument, enabling autonomous alternating nightly training cycles.
 **Mechanism:** `train_expert.py` CLI argument parsing.
+
+## [FEAT-219] Silicon Handshake (Hardened Gate)
+**Status:** ACTIVE
+**Logic:** UI sends a key extracted from the style.css cache-busting hash; Attendant validates via middleware.
+**Mechanism:** 'key_middleware' in 'lab_attendant_v3.py' supports Header (X-Lab-Key) or Query Param (?key=).
+
+## [FEAT-220] Diplomatic Immunity Protocol
+**Status:** ACTIVE
+**Goal:** Prevent Attendant suicide loops while enabling aggressive PGID-based silicon reclamation.
+**Mechanism:** 
+1.  _BOOT_HASH injected into os.environ['LAB_IMMUNITY_TOKEN'] of all children.
+2.  cleanup_silicon verifies the token before any kill or killpg signal.
+3.  Mismatch or Absence = Termination. Match = Immunity.
+
+## [FEAT-221] Crosstalk Status Line
+**Status:** ACTIVE
+**Logic:** Offloads inter-agent "thinking" banter from the primary Pinky console to a dedicated 1-line status bar.
+**Mechanism:** 
+1.  'intercom_v2.js' intercepts 'crosstalk' packets and updates the '#crosstalk-bar' element.
+2.  Mobile UI hides the resizer bar to make room for the status line above input.
+3.  'cognitive_hub.py' tick rate reduced to 10-15s intervals.

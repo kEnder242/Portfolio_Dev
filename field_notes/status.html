@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=d3756599">
+    <link rel="stylesheet" href="style.css?v=c48e0b32">
     <style>
         .vitals-grid {
             display: grid;
@@ -149,6 +149,8 @@
         <mission-control></mission-control>
     </nav>
 
+    <div id="crosstalk-bar" style="font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; color: #d29922; padding: 5px 15px; background: #000; border-bottom: 1px solid #222; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-height: 1.5rem; display: flex; align-items: center;">⚡ Systems nominal.</div>
+
     <main>
         <div id="sys-console">
             <div>[INIT] Uplink established. Monitoring telemetry...</div>
@@ -275,7 +277,7 @@
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Extract shared key from cache-busting CSS link
-            const styleLink = document.querySelector('link[href*="style.css?v="]');
+            const styleLink = document.querySelector('link[href*="style.css?v=c48e0b32?v="]');
             const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
 
             const consoleRow = document.getElementById('sys-console');
@@ -367,6 +369,9 @@
 
                     scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.yielded ? 'YIELDED' : data.status}`;
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
+                    
+                    const bar = document.getElementById('crosstalk-bar');
+                    if (bar && data.message) bar.innerText = `⚡ ${data.message}`;
                     
                     if (data.progress_pct !== undefined) {
                         progressBar.style.width = data.progress_pct + '%';

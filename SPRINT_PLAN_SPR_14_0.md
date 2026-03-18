@@ -24,4 +24,12 @@ This audit is active to ensure the high-fidelity 18-year archive is correctly in
 *   [ ] **Immunity Injection**: Plumb `_BOOT_HASH` into `mcp_start` environment.
 *   [ ] **Safe-Assassin**: Upgrade `cleanup_silicon` to use token-aware PGID purging.
 *   [ ] **VRAM Watchdog**: Implement [FEAT-180] logic to downshift tiers under pressure.
+*   [ ] **Crosstalk Migration [FEAT-221]**: Move inter-agent banter to a 1-line status bar and slow down the tick rate.
+*   [ ] **Cognitive De-Warping [FEAT-222]**: Fix panel routing (Brain=Right, Pinky=Left) and remove yellow crosstalk aesthetics.
 *   [ ] **Gauntlet v3.0**: Run `lifecycle_gauntlet.py` to verify the full sequenced forge (3 souls in 1 pass).
+
+## 🏺 FORENSIC REPORT: THE UI WARPING (Mar 17)
+*   **The Issue**: Messages from 'Brain (Signal)' were bleeding into Pinky's console because the `is_internal` flag was overriding source-based routing. 
+*   **The Aesthetic**: The `.internal` CSS class was applying a heavy yellow border and label that cluttered the clinical log view.
+*   **The Logic**: Some 'Thinking...' tics were bypassing the crosstalk bar because of inconsistent packet typing.
+*   **The Fix**: Prioritize Source (Brain/Pinky) for routing, delete the yellow CSS, and unify all tics under `type: crosstalk`.

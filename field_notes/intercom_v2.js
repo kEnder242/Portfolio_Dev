@@ -102,7 +102,6 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
                        sl_low.includes('forensic') || 
                        sl_low.includes('fidelity') || 
                        sl_low.includes('shadow') ||
-                       sl_low.includes('triage') ||
                        sl_low.includes('lag shield') ||
                        metadata.is_internal;
 
@@ -139,20 +138,23 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         <div class="msg-body">${text}</div>
     `;
     
-    // Fix: Routing Logic - TRUE Brain or explicit insight channel goes to the right,
-    // BUT all connectivity/internal logs stay in Pinky's console as per mandate.
+    // Fix: Routing Logic - [FEAT-222] Source-First Authority
+    const sl_low = source ? source.toLowerCase() : "system";
     const text_low = text.toLowerCase();
-    const isSystemStrategic = (sl === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
     
-    // [FEAT-058-RECOVER] Internal priority: If it's internal, it MUST stay in Pinky's console.
-    const isTrueBrain = (sl.includes('brain') || (channel === 'insight') || isSystemStrategic) && !isInternal;
-    
-    if (!isTrueBrain) {
-        chatConsole.appendChild(msg);
-        chatConsole.scrollTop = chatConsole.scrollHeight;
-    } else {
+    // Brain (Signal or Result) always goes to the Right
+    const isBrain = sl_low.includes('brain');
+    // Pinky (Triage or Reflex) always goes to the Left
+    const isPinky = sl_low.includes('pinky');
+    // System strategic messages go to the Right
+    const isSystemStrategic = (sl_low === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
+
+    if (isBrain || isSystemStrategic) {
         insightConsole.appendChild(msg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
+    } else {
+        chatConsole.appendChild(msg);
+        chatConsole.scrollTop = chatConsole.scrollHeight;
     }
 }
 
@@ -240,6 +242,21 @@ function connect() {
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log("[WS RECV]", data);
+            
+            // [FEAT-221] Crosstalk Migration
+            if (data.type === 'crosstalk') {
+                const bar = document.getElementById('crosstalk-bar');
+                if (bar) {
+                    bar.innerText = `⚡ ${data.brain}`;
+                    // Clear after 15s if no new updates
+                    if (window.crosstalkTimeout) clearTimeout(window.crosstalkTimeout);
+                    window.crosstalkTimeout = setTimeout(() => {
+                        bar.innerText = "⚡ Systems nominal.";
+                    }, 15000);
+                }
+                return; // Do not append to main console
+            }
+
             if (data.type === 'status') {
                 if (data.message) {
                     appendMsg(data.message, 'system-msg', 'System');
