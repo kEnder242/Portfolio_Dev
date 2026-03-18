@@ -271,11 +271,11 @@
         }
 
         async function triggerLabAction(action) {
-            const url = `http://localhost:9999/${action}`;
+            const url = `/attendant/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Extract shared key from cache-busting CSS link
-            const styleLink = document.querySelector('link[href*="style.css?v=d3756599"]');
+            const styleLink = document.querySelector('link[href*="style.css?v="]');
             const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
 
             const consoleRow = document.getElementById('sys-console');
