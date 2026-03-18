@@ -277,7 +277,7 @@
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Extract shared key from cache-busting CSS link
-            const styleLink = document.querySelector('link[href*="style.css?v=c48e0b32?v="]');
+            const styleLink = document.querySelector('link[href*="style.css?v="]');
             const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
 
             const consoleRow = document.getElementById('sys-console');
