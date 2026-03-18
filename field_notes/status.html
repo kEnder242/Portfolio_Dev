@@ -149,8 +149,6 @@
         <mission-control></mission-control>
     </nav>
 
-    <div id="crosstalk-bar" style="font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; color: #d29922; padding: 5px 15px; background: #000; border-bottom: 1px solid #222; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-height: 1.5rem; display: flex; align-items: center;">⚡ Systems nominal.</div>
-
     <main>
         <div id="sys-console">
             <div>[INIT] Uplink established. Monitoring telemetry...</div>
@@ -247,8 +245,26 @@
     <script>
         const iframeMain = document.getElementById('grafana-main');
         const root = document.getElementById('log-tree-root');
+        const consoleRow = document.getElementById('sys-console');
         let currentTimeRange = '8h';
         let currentPanelId = 6;
+        let lastKnownState = "";
+        let lastKnownMsg = "";
+
+        function logToConsole(text, color = '#888') {
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const div = document.createElement('div');
+            div.style.color = color;
+            div.style.marginBottom = '2px';
+            div.innerText = `[${time}] ${text}`;
+            consoleRow.appendChild(div);
+            consoleRow.scrollTop = consoleRow.scrollHeight;
+            
+            // Keep last 50 lines to prevent DOM bloat
+            while (consoleRow.children.length > 50) {
+                consoleRow.removeChild(consoleRow.firstChild);
+            }
+        }
 
         function updatePanel(id, btn) {
             currentPanelId = id;
@@ -280,11 +296,7 @@
             const styleLink = document.querySelector('link[href*="style.css?v="]');
             const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
 
-            const consoleRow = document.getElementById('sys-console');
-            const div = document.createElement('div');
-            div.style.color = 'var(--accent-color)';
-            div.innerText = `[REMOTE] Sending ${action.toUpperCase()} signal (Key: ${key})...`;
-            consoleRow.appendChild(div);
+            logToConsole(`[REMOTE] Sending ${action.toUpperCase()} signal...`, 'var(--accent-color)');
 
             try {
                 const response = await fetch(url, { 
@@ -293,20 +305,14 @@
                 });
                 const result = await response.json();
                 
-                const resDiv = document.createElement('div');
-                resDiv.style.color = response.ok ? '#28a745' : '#f85149';
-                resDiv.innerText = `[ATTENDANT] ${result.message || result.error || 'Signal Acknowledged'}`;
-                consoleRow.appendChild(resDiv);
+                const color = response.ok ? '#28a745' : '#f85149';
+                logToConsole(`[ATTENDANT] ${result.message || result.error || 'Signal Acknowledged'}`, color);
                 
                 // Refresh status immediately
                 setTimeout(pollStatus, 2000);
             } catch (err) {
-                const errDiv = document.createElement('div');
-                errDiv.style.color = '#f85149';
-                errDiv.innerText = `[ERROR] Remote Control failed: ${err.message}`;
-                consoleRow.appendChild(errDiv);
+                logToConsole(`[ERROR] Remote Control failed: ${err.message}`, '#f85149');
             }
-            consoleRow.scrollTop = consoleRow.scrollHeight;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -358,20 +364,26 @@
                 .then(r => r.json())
                 .then(data => {
                     const scanner = document.getElementById('scanner-status');
-                    const brain = document.getElementById('brain-status');
                     const intercom = document.getElementById('intercom-status');
                     const vram = document.getElementById('vram-status');
                     const msg = document.getElementById('scanner-message');
                     const progressBar = document.getElementById('burn-progress');
+
+                    // Console Logging: State Transitions
+                    if (data.status !== lastKnownState) {
+                        logToConsole(`[STATE] System transitioned to ${data.status}`, '#28a745');
+                        lastKnownState = data.status;
+                    }
+                    if (data.message && data.message !== lastKnownMsg) {
+                        logToConsole(`[HUB] ${data.message}`, '#aaa');
+                        lastKnownMsg = data.message;
+                    }
 
                     let ledClass = data.status === 'ONLINE' || data.status === 'IDLE' ? 'led-online' : (data.status === 'BUSY' ? 'led-busy' : 'led-offline');
                     if (data.yielded) ledClass = 'led-yielded';
 
                     scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.yielded ? 'YIELDED' : data.status}`;
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
-                    
-                    const bar = document.getElementById('crosstalk-bar');
-                    if (bar && data.message) bar.innerText = `⚡ ${data.message}`;
                     
                     if (data.progress_pct !== undefined) {
                         progressBar.style.width = data.progress_pct + '%';
