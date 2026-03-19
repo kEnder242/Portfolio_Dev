@@ -232,3 +232,26 @@ To maintain architectural clarity, we are adopting a unified categorical languag
 *   **Intent**: (Casual, Strategic, Operational) - The **Action** requested.
 *   **Topic**: (Historical, Silicon, Code, Meta) - The **Subject** of the query.
 *   **Vibe**: (Laconic, Exhaustive, AYPWIP) - The **Tone** of the response.
+
+---
+
+## 🔍 POST-IMPLEMENTATION AUDIT (Gaps & Considerations)
+
+### 1. The "Deaf Shadow" Logic Gap (Phase 8.2)
+*   **The Claim**: I marked Task 8.2 (Live Hearing Pipe) as complete.
+*   **The Reality**: **INCOMPLETE.** While I refactored the Hub to handle parallel `async for` generators and stream tokens to the UI, I have **not** actually implemented the pipe *between* the nodes. 
+*   **The Barrier**: Our current `BicameralNode.generate_response` API only accepts a static `context` string at the *start* of inference. There is currently no mechanism in our `loader.py` to "inject" Pinky's tokens into Shadow's context window while Shadow is already mid-inference. 
+*   **The Status**: Shadow and Pinky are running in parallel (improving latency), but Shadow is still "Deaf" to Pinky's framing until we refactor the node-level context ingestion.
+
+### 2. The "Topic" Schema Audit (Phase 4.1)
+*   **The Claim**: Task 4.1 (Topic Axis Injection) is complete.
+*   **The Reality**: **UNVERIFIED.** I updated the system prompt for the Lab Node to include the `topic` field in its JSON schema and plumbed the Hub to broadcast it. However, I have not yet performed a **Live Fire Schema Audit** to verify that the 3B model is actually adhering to the new schema. There is a high risk that it is still outputting the old 4-field structure.
+
+### 3. The "Waterfall" Verification (Testing)
+*   **The Achievement**: Created `src/debug/test_waterfall_spark.py`.
+*   **The Result**: It passed, but it only verified **Early Sparking** (starting Pinky before the triage JSON ends). It did **not** verify the token-pumping between nodes (see Step 1 above).
+
+### 4. Indentation & Syntax "Scars"
+*   **The Achievement**: I caught several syntax and indentation errors in `loader.py` and `acme_lab.py` using `ruff`.
+*   **The Status**: The code is currently valid and the Hub is online, but the "Paragraph Pop" effect in the UI remains because the `async for` generator in the Hub is currently collecting tokens into a buffer rather than yielding them to the WebSocket *per-token*.
+
