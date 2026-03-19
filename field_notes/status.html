@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // [FEAT-223] Global Error Sentry
+        window.addEventListener('error', function(e) {
+            const msg = `[CRITICAL UI ERROR] ${e.message} at ${e.filename || 'inline'}:${e.lineno || '?'}`;
+            console.error(msg);
+            const report = () => {
+                const consoleEl = document.getElementById('chat-console') || document.getElementById('sys-console');
+                if (consoleEl) {
+                    const errDiv = document.createElement('div');
+                    errDiv.style.color = '#f85149';
+                    errDiv.style.fontWeight = 'bold';
+                    errDiv.style.borderLeft = '2px solid #f85149';
+                    errDiv.style.paddingLeft = '10px';
+                    errDiv.style.marginTop = '10px';
+                    errDiv.innerText = msg;
+                    consoleEl.appendChild(errDiv);
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+                }
+            };
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', report);
+            else report();
+        });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>

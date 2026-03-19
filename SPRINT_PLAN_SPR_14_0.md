@@ -31,6 +31,7 @@ This audit is active to ensure the high-fidelity 18-year archive is correctly in
 *   [ ] **VRAM Watchdog**: Implement [FEAT-180] logic to downshift tiers under pressure.
 *   [x] **Crosstalk Migration [FEAT-221]**: Move inter-agent banter to a 1-line status bar and slow down the tick rate. ✅
 *   [x] **Cognitive De-Warping [FEAT-222]**: Fix panel routing (Brain=Right, Pinky=Left) and remove yellow crosstalk aesthetics. ✅
+*   [x] **Error Sentry [FEAT-223]**: Inject global error catching to prevent silent JS death. ✅
 *   [ ] **Gauntlet v3.0**: Run `lifecycle_gauntlet.py` to verify the full sequenced forge (3 souls in 1 pass).
 
 ## 🏺 FORENSIC RETROSPECTIVE: THE MAR 18 UPLINK BREACH

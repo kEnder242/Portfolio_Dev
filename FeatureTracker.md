@@ -973,3 +973,18 @@
 1.  'intercom_v2.js' intercepts 'crosstalk' packets and updates the '#crosstalk-bar' element.
 2.  Mobile UI hides the resizer bar to make room for the status line above input.
 3.  'cognitive_hub.py' tick rate reduced to 10-15s intervals.
+
+## [FEAT-222] Cognitive De-Warping (Source-First Routing)
+**Status:** ACTIVE
+**Logic:** Prioritizes Source (Brain/Pinky) for panel routing. Removes yellow internal aesthetics.
+**Mechanism:** 
+1. 'intercom_v2.js' routes all BRAIN packets to Right, PINKY packets to Left.
+2. All interim 'Thinking...' tics are shunted to the technical ledger.
+3. Clean, high-density clinical log view.
+
+## [FEAT-223] Global Error Sentry
+**Status:** ACTIVE
+**Logic:** Prevents "Silent Death" of the UI by catching syntax and runtime errors before scripts load.
+**Mechanism:** 
+1. Inline script in <head> hooks window.onerror and unhandledrejection.
+2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
