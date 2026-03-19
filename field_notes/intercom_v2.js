@@ -141,8 +141,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
     const text_low = text.toLowerCase();
     
-    // Brain (Signal or Result) always goes to the Right
-    const isBrain = sl_low.includes('brain');
+    // [FEAT-224] Brain (Signal or Result) and Shadow (Intuition) always go to the Right
+    const isBrain = sl_low.includes('brain') || sl_low.includes('shadow');
     // Pinky (Triage or Reflex) always goes to the Left
     const isPinky = sl_low.includes('pinky');
     // System strategic messages go to the Right
