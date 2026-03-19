@@ -163,7 +163,7 @@ function sendText() {
     
     appendMsg(content, 'user-msg', 'ME');
     lastMsgSource = 'me';
-    ws.send(JSON.stringify({ type: "text_input", content: content }));
+    ws.send(JSON.stringify({ type: "text_input", content: `[ME] ${content}` }));
     textInput.value = '';
 }
 
