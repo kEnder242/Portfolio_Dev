@@ -46,10 +46,10 @@
 
 ---
 
-## 🚧 PHASE 13: SILICON STABILITY (Active)
-- [ ] **Surgical Restoration Sprint**: [SPR-13.0] (Active) Stabilize Unified 3B Base, harden Forensic Ledger, and implement the Resilience Ladder (Watchdog/Downshift).
-- [ ] **Forensic Ledger**: [FEAT-181] Implementation of structured silicon logging.
-- [ ] **Resilience Ladder**: [FEAT-180] Auto-Restart and Tiered Downshift verification.
+## 🚧 PHASE 15: THE NEURAL RELAY (Active)
+- [ ] **Waterfall Implementation [SPR-15.0]**: (Active) Implement the Live Hearing Pipe [FEAT-233.2] between Pinky and Shadow.
+- [x] **Neural Relay Architecture**: [FEAT-229] Parallel fan-out and scalar fuel routing verified.
+- [x] **Atomic Anchor Gate**: [FEAT-227] Hardened [ME] loopback protection.
 
 ## 🎯 THE MISSION
 To integrate the collection of technical notes and stories into a cohesive "Technical Dashboard." This is a full-spectrum integration—not a "best of" list. It reflects the rigor of a Validation Engineer.
@@ -76,5 +76,5 @@ If the agent session is lost or restarted, refer to these anchors:
 6.  **Runtime Safe-Zone**: `~/AcmeLab` is the production host; `~/Dev_Lab` is the workspace.
 
 ## 🤖 CLI INITIALIZATION COMMAND
-> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-13.0]**. My first task is to verify the **Resilience Ladder** auto-restart logic in `lab_attendant_v3.py` and then implement the **Forensic Ledger** hardening."
+> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-15.0]**. My first task is to stabilize the **Neural Relay** by implementing the **Live Hearing Pipe** between Pinky and Shadow nodes."
 

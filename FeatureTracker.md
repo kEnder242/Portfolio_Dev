@@ -1017,3 +1017,13 @@
 **Mechanism:** 
 1. A standalone tool that fetches evidence based on a semantic axis (Year, Topic, Device).
 2. Allows the Lab to map against any database without conflating the data with the Lab's identity.
+
+## [FEAT-236] Relay Route Awareness
+**Status:** ACTIVE
+**Logic:** Injects situational "Route Data" (Role, Fuel, Destination) into node context windows to prevent hemispheric identity bleed.
+**Rationale:** Prevents small models from "Roleplaying" other nodes (e.g., Pinky calculating Pi). Nodes become aware of their specific duty in the current turn sequence.
+**Mechanisms:**
+1.  **Role Injection**: Hub tags Pinky as [MODE: FRAME_ONLY] if high fuel is detected.
+2.  **Fuel Awareness**: Shadow receives the raw fuel scalar to determine technical verbosity.
+3.  **Route Awareness**: Nodes receive a [ROUTE] block indicating which nodes have already fired or are upcoming.
+**Related Features:** [FEAT-233] (Waterfall), [FEAT-234] (Scalar Fuel), [FEAT-111] (Identity Lock).

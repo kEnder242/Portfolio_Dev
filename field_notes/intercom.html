@@ -139,6 +139,19 @@
         .tree-item { font-size: 0.75rem; color: #888; cursor: pointer; padding: 2px 5px; }
         .tree-item:hover { color: var(--accent-color); background: #111; }
         
+        /* [FEAT-232] Relay Feedback & Metadata */
+        .relay-meta { font-size: 0.65rem; color: #555; display: flex; gap: 10px; align-items: center; margin-top: 5px; }
+        .fuel-gauge { width: 40px; height: 4px; background: #222; border-radius: 2px; overflow: hidden; display: inline-block; vertical-align: middle; }
+        .fuel-fill { height: 100%; background: var(--accent-color); }
+        .feedback-btns { display: flex; gap: 5px; margin-left: auto; }
+        .feedback-btn { 
+            background: none; border: 1px solid #333; color: #444; cursor: pointer; 
+            padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; transition: all 0.2s;
+        }
+        .feedback-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .feedback-btn.active-up { border-color: #3fb950; color: #3fb950; background: rgba(63, 185, 80, 0.1); }
+        .feedback-btn.active-down { border-color: #f85149; color: #f85149; background: rgba(248, 81, 73, 0.1); }
+
         .icon-btn { background: var(--accent-dim); color: #fff; border: none; padding: 8px; cursor: pointer; border-radius: 4px; }
         .icon-btn.active { background: #f85149; }
     </style>
@@ -194,7 +207,7 @@
         </div>
     </main>
 
-    <script src="intercom_v2.js?v=b0334c22"></script>
+    <script src="intercom_v2.js?v=23d75e2a"></script>
     <script src="mission-control.js?v=bd431d08"></script>
 </body>
 </html>

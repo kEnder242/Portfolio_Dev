@@ -129,6 +129,25 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         ).join('');
         text = `${sourceLinks} ${text}`;
     }
+
+    // [FEAT-232] Relay Metadata & Feedback
+    let metaHtml = '';
+    if (metadata.topic || metadata.fuel !== undefined) {
+        const topic = metadata.topic || 'Casual';
+        const fuel = metadata.fuel || 0.0;
+        const fuelPct = Math.min(100, fuel * 100);
+        
+        metaHtml = `
+            <div class="relay-meta">
+                <span>TOPIC: ${topic}</span>
+                <span>FUEL: <div class="fuel-gauge"><div class="fuel-fill" style="width: ${fuelPct}%"></div></div></span>
+                <div class="feedback-btns">
+                    <button class="feedback-btn" title="Promote Logic" onclick="sendFeedback(this, 'UP', '${topic}', ${fuel}, '${source}')">⬆️</button>
+                    <button class="feedback-btn" title="Demote Logic" onclick="sendFeedback(this, 'DOWN', '${topic}', ${fuel}, '${source}')">⬇️</button>
+                </div>
+            </div>
+        `;
+    }
     
     msg.innerHTML = `
         <div class="msg-header">
@@ -136,6 +155,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
             <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
         </div>
         <div class="msg-body">${text}</div>
+        ${metaHtml}
     `;
     
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
@@ -271,7 +291,9 @@ function connect() {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
                     oracle_category: data.oracle_category,
                     sources: data.sources,
-                    is_internal: data.is_internal
+                    is_internal: data.is_internal,
+                    topic: data.topic,
+                    fuel: data.fuel
                 });
             } else if (data.type === 'transcription') {
                 appendMsg(data.text, 'user-msg', 'Me (Voice)');
@@ -327,4 +349,27 @@ async function pollSystemStatus() {
         console.error("Status poll failed", err);
     }
     setTimeout(pollSystemStatus, 10000);
+}
+
+function sendFeedback(btn, vote, topic, fuel, source) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    
+    // Toggle active state
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.feedback-btn').forEach(b => {
+        b.classList.remove('active-up', 'active-down');
+    });
+    btn.classList.add(vote === 'UP' ? 'active-up' : 'active-down');
+    
+    // Send to Hub
+    ws.send(JSON.stringify({
+        type: "relay_feedback",
+        vote: vote,
+        topic: topic,
+        fuel: fuel,
+        source: source,
+        timestamp: new Date().toISOString()
+    }));
+    
+    console.log("[FEEDBACK] Sent:", { vote, topic, fuel, source });
 }

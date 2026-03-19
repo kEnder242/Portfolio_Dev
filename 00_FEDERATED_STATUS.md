@@ -15,26 +15,27 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-13-0-stability** | 2. Implementation | Long-Tail Stability & Multi-Soul | **ACTIVE** |
+| **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
+| **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Silicon Induction" (Sprint SPR-13.0)
-**Goal:** Implement the Decoupled Extraction Pipeline [FEAT-202], harvest the 18-year archive, and prepare the "Bones" for native Architect training.
+## 🎯 Active Initiative: "The Neural Relay" (Sprint SPR-15.0)
+**Goal:** Transition from a linear "Ping-Pong" state machine into a high-throughput **Relay Race** with parallel inference and token-aware yielding.
 
 ## ✅ Global Milestones (March 2026)
-1.  **Long-Tail Stability [SPR-13.0]**: ACTIVE. Resolving Windows 4090 latency misalignment and implementing Serial Capture (v12).
-2.  **Strategic Induction [SPR-13.0]**: COMPLETED. Implemented the Decoupled Pipeline (Capture/Refine) and Bicameral Bridge refactor.
-3.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
+1.  **Neural Relay [SPR-15.0]**: ACTIVE. Parallelized local inference implemented. Waterfall pipe in logic phase.
+2.  **Long-Tail Stability [SPR-13.0]**: COMPLETED. Resolving Windows 4090 latency misalignment and implementing Serial Capture (v12).
+3.  **Strategic Induction [SPR-13.0]**: COMPLETED. Implemented the Decoupled Pipeline (Capture/Refine) and Bicameral Bridge refactor.
+4.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
 
 ## 🔮 The Roadmap
 
-### [ACTIVE] Phase 13: Silicon Induction & Multi-Soul Prep (Sprint SPR-13.0)
-*   [ ] **Agnostic Context Engine [FEAT-228]**: Decouple historical pedigree from core Lab logic by implementing a generic `get_context` tool.
-*   [ ] **Long-Tail Gate [FEAT-205]**: Implement 60s warm-up wait for the 4090 Sovereign.
-*   [ ] **Serial Capture (v12)**: Strictly sequential harvesting to ensure 100% gem capture.
-*   [x] **Decoupled Pipeline [FEAT-202]**: Split archive harvest into Stage 1 (Capture) and Stage 2 (Refine).
-*   [x] **Bicameral Bridge [FEAT-203]**: Recursive regex-based JSON extraction and hybrid triage parsing.
-*   [x] **CLI Persona [FEAT-204]**: Consolidated 6,684 user prompts for "Voice" adapter training.
-*   [ ] **Multi-Soul Prep**: Scaffolding for concurrent History/Voice LoRA training.
+### [ACTIVE] Phase 15: The Neural Relay (Sprint SPR-15.0)
+*   [x] **Parallel Local Fan-out [FEAT-229.1]**: Spark Pinky and Shadow nodes simultaneously.
+*   [x] **Incremental Triage [FEAT-233.1]**: Hub proceeds once intent is parsed from streaming Lab Node output.
+*   [x] **Scalar Fuel Routing [FEAT-231]**: Multiplicative fuel function for emergent routing decisions.
+*   [x] **Loopback Protection [FEAT-227]**: Atomic Anchor ([ME]) gate active.
+*   [ ] **Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes (In Progress).
+*   [ ] **Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom.
 
 ### [COMPLETE] Phase 13.1: Silicon Induction & The Living Ledger
 *   [x] **Neural Shock [FEAT-201]**: Logic-based mental reset feedback loop for tool hallucinations.
