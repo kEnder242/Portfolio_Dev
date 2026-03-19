@@ -1027,3 +1027,9 @@
 2.  **Fuel Awareness**: Shadow receives the raw fuel scalar to determine technical verbosity.
 3.  **Route Awareness**: Nodes receive a [ROUTE] block indicating which nodes have already fired or are upcoming.
 **Related Features:** [FEAT-233] (Waterfall), [FEAT-234] (Scalar Fuel), [FEAT-111] (Identity Lock).
+
+## [FEAT-238] Dynamic Fuel Calibration
+**Status:** ACTIVE
+**Logic:** Enables mid-relay adjustment of the turn's importance level based on node-level reasoning.
+**Rationale:** The Lab Node may under-estimate a query (e.g. Pi as general knowledge). This feature allows Pinky to "Pull the Alarm" by recommending a fuel boost, or "Demote" a turn if she detects it's a joke or mistake.
+**Mechanism:** `CognitiveHub` parses `recommend_fuel` from any node response and updates the session's fuel state before the Sovereign Brain check.

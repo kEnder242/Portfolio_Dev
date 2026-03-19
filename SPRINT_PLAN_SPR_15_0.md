@@ -118,20 +118,21 @@ Replacing booleans with a scalar `Importance` function.
 **Goal:** Retrain Persona adapters to natively understand the Scalar Fuel flow.
 
 ### 📍 Task 9.1: Feedback Harvester
-*   [ ] **How**: Create `src/forge/harvest_feedback.py` to ingest `server.log` ⬆️/⬇️ votes.
-*   [ ] **Why**: To automate the reinforcement learning loop from real-world usage.
+*   [x] **How**: Create `src/forge/harvest_feedback.py` to ingest `server.log` ⬆️/⬇️ votes.
+*   [x] **Why**: To automate the reinforcement learning loop from real-world usage.
 
 ### 📍 Task 9.2: Route-Aware Persona Training
-*   [ ] **How**: Update Pinky/Shadow prompts to natively respect `[MODE: FRAME_ONLY]`.
-*   [ ] **Why**: Reduces reliance on prompt injection and prevents "Pi Roleplay" hallucinations.
+*   [x] **How**: Update Pinky/Shadow prompts to natively respect `[MODE: FRAME_ONLY]`.
+*   [x] **Why**: Reduces reliance on prompt injection and prevents "Pi Roleplay" hallucinations.
 
 ---
 
 ## 🏺 POST-IMPLEMENTATION AUDIT (Active Hardening)
 *   [x] **Task 7.1: Restore Brain Resilience**: Fallback to localhost active.
-*   [ ] **Task 7.2: Real-time Token Yielding**: (ACTIVE) Eliminate "Paragraph Pop" in UI.
+*   [x] **Task 7.2: Real-time Token Yielding**: (DEFEATURED) Paragraph Pop is the gold standard.
 *   [x] **Task 10.1: Math/Corrective Steerage**: [FEAT-236] Added to `lab_node.py` and curriculum.
 *   [x] **Task 10.2: UI Promotion Pivot**: [FEAT-232] Swapped 👍/👎 for ⬆️/⬇️ with source-tracking.
+*   [x] **Task 10.3: Loop-Breaker**: [FEAT-237] Recursive tool calls blocked in Hub.
 
 ---
 
@@ -288,3 +289,27 @@ To maintain architectural clarity, we are adopting a unified categorical languag
   > 1. Calibration UI: The backend is pumping topic and fuel data, but the Thumbs Up/Down buttons need to be added to intercom.html.
   > 2. Retraining: Update the lab_sentinel_v1 curriculum with the new scalar schema and trigger a forge run.
   > 3. Waterfall Verification: Run a complex technical query and verify that Shadow's output references Pinky's specific persona framing from the same turn.
+
+  ---
+
+  ## 🏛️ PIVOT: THE COUNCIL OF HEMISPHERES (Agentic Veto)
+  **Goal:** Transition from a hierarchical relay to a peer-based democratic decision model.
+
+  ### 🧠 Brainstorming the Pivot: "Pinky's Vote" (Agentic Veto)
+  Instead of the Lab Node (Sentinel) acting as the absolute monarch of Fuel, we give Pinky and Shadow distinct "Levers" in their reasoning to influence the final relay path.
+
+  #### **A. The `handle_myself` Vote (Local Resolution)**
+  *   **Logic**: Pinky decides the query is beneath the Brain's pay grade.
+  *   **Impact**: Hub overrides Lab Node and sets fuel to 0.0, killing the Sovereign turn.
+  *   **Why**: Prevents "Over-Reasoning" on casual/joke topics.
+
+  #### **B. The `ask_brain` Vote (Uplink Promotion)**
+  *   **Logic**: Pinky decides her framing isn't enough and deep logic is required.
+  *   **Impact**: Hub overrides Lab Node and sets fuel to 1.0, forcing the Sovereign Brain.
+  *   **Why**: Corrects under-estimations by the Sentinel (e.g. complex math mistaken for casual fact).
+
+  ### 🛠️ TASKS: THE COUNCIL PIVOT
+  *   [ ] **Task 11.1: Multi-Vote Hub [FEAT-238]**: Refactor `CognitiveHub.py` to aggregate decisions (handle_myself / ask_brain) from Pinky and Shadow.
+  *   [ ] **Task 11.2: Identity Alignment**: Update `pinky_node.py` system prompt to explain her role as an "Agentic Veto" peer.
+  *   [ ] **Task 11.3: Decision Schema**: Update `facilitate` tool to return an optional `decision` field.
+  *   [ ] **Task 11.4: Validation**: Execute `src/debug/test_pi_flow.py` to verify that Pinky's `ask_brain` vote correctly promotes a low-fuel turn.
