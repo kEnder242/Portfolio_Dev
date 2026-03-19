@@ -139,7 +139,6 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     `;
     
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
-    const sl_low = source ? source.toLowerCase() : "system";
     const text_low = text.toLowerCase();
     
     // Brain (Signal or Result) always goes to the Right

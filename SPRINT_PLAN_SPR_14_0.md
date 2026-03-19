@@ -20,6 +20,11 @@ This audit is active to ensure the high-fidelity 18-year archive is correctly in
 *   **The Scar**: Recent "friendly fire" crashes were caused by the Master Attendant finding itself in its own name/port search and committing suicide.
 *   **The Fix**: Use `_BOOT_HASH` as a `LAB_IMMUNITY_TOKEN`. Mismatch or Absence = Terminate PGID. Match = Immunity.
 
+## 🧪 [DRAFT/EXPERIMENTAL] Unified Origin Architecture
+*   **Concept**: Consolidate WebSockets (`/hub`) and API (`/attendant/`) onto the single `notes.jason-lab.dev` domain to solve Zero Trust session splitting.
+*   **Logic**: Browser sends the same session cookie for all paths, ensuring 100% auth sync.
+*   **Status**: ON HOLD (Reverted to Situation A for stability).
+
 ## 🛠️ TASKS
 *   [ ] **Immunity Injection**: Plumb `_BOOT_HASH` into `mcp_start` environment.
 *   [ ] **Safe-Assassin**: Upgrade `cleanup_silicon` to use token-aware PGID purging.
