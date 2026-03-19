@@ -59,6 +59,92 @@ Replacing booleans with a scalar `Importance` function.
     *   *How*: Log calculated Fuel to `server.log` for calibration.
     *   *Why*: Verifies the math is grounded before it controls the physical silicon.
 
+### 📍 Phase 4: The Calibration Loop
+*   **Task 4.1: Topic Axis Injection**: 
+    *   *How*: Update `lab_node.py` to return a `topic` field and plumb it through `cognitive_hub.py` into every broadcast packet.
+    *   *Why*: To provide UI visibility into the Sentinel's categorical decisions.
+*   **Task 4.2: UI Confidence Toggle**:
+    *   *How*: Add binary feedback buttons (Thumbs Up/Down) to the intercom interface.
+    *   *Why*: Enables real-time coaching of the scalar fuel logic.
+*   **Task 4.3: Feedback Logging**:
+    *   *How*: Create `calibration_ledger.jsonl` to store user feedback.
+    *   *Why*: Generates high-signal data for future `lab_sentinel_v1` retraining.
+
+### 📍 Phase 5: Cognitive Refinement
+**Goal:** Polish the relay logic and verbal feedback loops.
+*   **Task 5.1: Operational Shortcut**:
+    *   *How*: Update `CognitiveHub` to intercept `OPERATIONAL` intent and execute tools immediately, bypassing the parallel relay.
+    *   *Why*: To eliminate VRAM/Latency overhead for simple system commands (Close/Neuralyzer).
+*   **Task 5.2: Multiplicative Fuel f()**:
+    *   *How*: Transition from additive boosting to balanced math: `Fuel = ((1.0 - casual) * (intrigue + importance)) / 2`.
+    *   *Why*: Prevents high-stakes "Importance" from overriding high-confidence "Casual" greetings.
+*   **Task 5.3: Verbal Retraction (Hallucination Brake)**:
+    *   *How*: If the `CognitiveAudit` [FEAT-190] fails for Shadow or Brain, Pinky quips a characterful verbal retraction (e.g., "Wait Brain, that's not quite right...") before the Hub triggers a strategic pivot.
+    *   *Why*: To maintain persona immersion even when the technical hemispheres miss the mark.
+
+### 📍 Phase 6: LoRA Retraining [FORGE-03]
+**Goal:** Induct the new scalar physics into the Lab Node Sentinel.
+*   **Task 6.1: Update Training Curriculum**: 
+    *   *How*: Update `src/forge/generate_sentinel_data.py` to include the new scalar schema and Intent Steerage axes (Meta, Corrective, Speculative).
+    *   *Why*: To teach the model the new categorical language and importance weights.
+*   **Task 6.2: Retrain Sentinel**:
+    *   *How*: Execute `mcp_train_adapter` for `lab_sentinel_v1`.
+    *   *Why*: Physically encodes the new routing logic into the resident 3B weights.
+*   **Task 6.3: LoRA Re-alignment**:
+    *   *How*: Assign `shadow_brain_v2` to the Shadow node in `infrastructure.json` and verify its technical intuition vibe.
+    *   *Why*: To physically separate "Intuition" from "Synthesis" across our two local/remote hosts.
+
+---
+
+## 📝 TODO: POST-RELAY HARDENING
+*   [x] **Task 7.1: Restore Brain Resilience**: Update `infrastructure.json` to change `brain.fallback` back to `localhost`.
+*   [ ] **Task 7.2: Real-time Token Yielding**: Transition Shadow/Brain turns to `async for` streaming to eliminate the "Paragraph Pop" effect in the UI.
+*   [ ] **Task 7.3: DNA Verification**: Monitor local vLLM logs to verify the `shadow_brain_v2` LoRA is physically loading into the Unified Base.
+*   [ ] **Task 7.4: KENDER DNA Induction**: Create a specialized Ollama `Modelfile` on the Windows host to allow the remote Brain to utilize the `lab_history_v1` adapter natively.
+
+---
+
+## 🌊 PHASE 8: THE INTER-NODE WATERFALL [FEAT-233]
+**Goal:** Transition from turn-based handovers to real-time token streaming between nodes.
+
+### 📍 Task 8.1: Stream Parsing (Hub)
+*   **How**: Update `CognitiveHub` to use `async for` when calling node tools. Implement a "Live JSON" parser for the Lab Node to identify intent before the turn finishes.
+*   **Why**: To eliminate the "Wait-to-Start" bottleneck for subsequent nodes in the relay.
+
+### 📍 Task 8.2: The "Live Hearing" Pipe
+*   **How**: Plumb Pinky's yielded tokens directly into Shadow's input stream as they arrive.
+*   **Why**: Allows Shadow's technical intuition to synchronize with Pinky's persona framing in real-time, reducing total turn latency to the speed of the slowest single node.
+
+### 📍 Task 8.3: Promotion-Aware Streaming
+*   **How**: Plumb `final: false` tokens directly to the Status Bar via the Hub.
+*   **Why**: Provides real-time visual feedback of the "Relay Race" in progress.
+
+---
+
+## 🗺️ DESIGN COMPARISON: LINEAR VS. WATERFALL
+
+### Current State: "Sequential Blocks"
+Every step is a brick. You can’t lay the second brick until the first is dried.
+1.  **Lab Node**: Waits for full JSON.
+2.  **Shadow**: Waits for Pinky's full paragraph.
+3.  **Brain**: Waits for Shadow's full intuition.
+
+### Phase 8 Vision: "The Token Waterfall"
+A continuous stream. The moment a drop falls, the next node catches it.
+1.  **Hub** parses tokens live from the Lab Node.
+2.  **Pinky and Shadow** spark the moment `intent` is parsed.
+3.  **Shadow** "Hears" Pinky's tokens live as they arrive, forming its context *during* inference.
+
+### Step-by-Step Travel Logic
+
+| Step | Current (Blocking) | Waterfall (Streaming) | Waits For... | Size/Verbosity Impact |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Triage** | LN generates full JSON. | Hub parses tokens *live*. | `[ME]` Input. | Low (Fixed Schema). |
+| **2. Persona** | Pinky waits for LN JSON. | Pinky starts at 1st LN token. | `LN.intent` token. | Medium (Vibe-based). |
+| **3. Intuition** | Shadow waits for LN + P. | Shadow starts at 1st P token. | `P.text` stream. | **Variable (Fuel-based)**. |
+| **4. Synthesis** | Brain waits for LN + P + S. | Brain starts at 1st S token. | `S.text` stream. | **Max (Fuel-based)**. |
+| **5. Cooldown** | Pinky waits for full B. | Pinky starts at 1st B token. | `B.text` stream. | Low (1-sentence cap). |
+
 ---
 
 ## ⚠️ COMPLEXITY & RISK MITIGATION REPORT
@@ -88,9 +174,10 @@ Replacing booleans with a scalar `Importance` function.
 ### Challenges & Scars
 *   **Async Synchronization**: Managing `asyncio.gather` with exception handling required careful implementation to ensure a single node's failure didn't kill the entire turn.
 *   **Indentation Fragility**: Surgical edits to `acme_lab.py` during the loopback implementation caused minor indentation errors, caught during the `ruff` validation phase.
+*   **Unintentional Feature Loss (The Shadow Gap)**: Realized that during Phase 7 (Pedigree Burn), the Brain's local fallback was accidentally disabled in `infrastructure.json`, and the Shadow node was incorrectly using remote Ollama (which ignores `lora_request`). This resulted in Shadow running without its specialized adapter for several weeks.
 
 ### Engineering Outcome
-The Lab has moved from a linear "Ping-Pong" state machine into a high-throughput **Relay Race**. Perceived latency for technical queries has dropped by ~40% by overlapping the persona triage with the technical intuition phase.
+The Lab has moved from a linear "Ping-Pong" state machine into a high-throughput **Relay Race**. Perceived latency for technical queries has dropped by ~40% by overlapping the persona triage with the technical intuition phase. Local Shadow has been physically restored to the 2080 Ti, re-enabling its LoRA DNA.
 
 ---
 
@@ -153,19 +240,3 @@ To maintain architectural clarity, we are adopting a unified categorical languag
 *   **Intent**: (Casual, Strategic, Operational) - The **Action** requested.
 *   **Topic**: (Historical, Silicon, Code, Meta) - The **Subject** of the query.
 *   **Vibe**: (Laconic, Exhaustive, AYPWIP) - The **Tone** of the response.
-
----
-
-## 🛠️ PHASE 4: THE CALIBRATION LOOP
-
-### 📍 Task 4.1: Topic Axis Injection
-*   **How**: Update `lab_node.py` to return a `topic` field and plumb it through `cognitive_hub.py` into every broadcast packet.
-*   **Why**: To provide UI visibility into exactly what subject the Sentinel believes is being discussed, allowing the user to spot classification errors instantly.
-
-### 📍 Task 4.2: UI Confidence Toggle
-*   **How**: Add binary feedback buttons to `intercom.html` that send a `relay_feedback` packet back to the Hub.
-*   **Why**: Enables real-time human-in-the-loop coaching of the scalar fuel logic.
-
-### 📍 Task 4.3: Feedback Logging
-*   **How**: Update `acme_lab.py` to log these feedback packets into a new `calibration_ledger.jsonl`.
-*   **Why**: Creates a high-signal dataset for future Sentinel LoRA refinement, grounding the classification model in real-world user expectations.
