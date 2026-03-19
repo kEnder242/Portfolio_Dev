@@ -104,12 +104,34 @@ Replacing booleans with a scalar `Importance` function.
 *   [x] **Why**: To eliminate the "Wait-to-Start" bottleneck for subsequent nodes in the relay.
 
 ### 📍 Task 8.2: The "Live Hearing" Pipe
-*   [x] **How**: Plumb Pinky's yielded tokens directly into Shadow's input stream as they arrive.
-*   [x] **Why**: Allows Shadow's technical intuition to synchronize with Pinky's persona framing in real-time, reducing total turn latency to the speed of the slowest single node.
+*   [ ] **How**: Plumb Pinky's yielded tokens directly into Shadow's input stream as they arrive.
+*   [ ] **Why**: Allows Shadow's technical intuition to synchronize with Pinky's persona framing in real-time.
+*   **Status**: DEFEATURED (Requires custom vLLM transport beyond current MCP scope).
 
 ### 📍 Task 8.3: Promotion-Aware Streaming
 *   [x] **How**: Plumb `final: false` tokens directly to the Status Bar via the Hub.
 *   [x] **Why**: Provides real-time visual feedback of the "Relay Race" in progress.
+
+---
+
+## 🎯 PHASE 9: NEURAL ALIGNMENT [FORGE-04]
+**Goal:** Retrain Persona adapters to natively understand the Scalar Fuel flow.
+
+### 📍 Task 9.1: Feedback Harvester
+*   [ ] **How**: Create `src/forge/harvest_feedback.py` to ingest `server.log` ⬆️/⬇️ votes.
+*   [ ] **Why**: To automate the reinforcement learning loop from real-world usage.
+
+### 📍 Task 9.2: Route-Aware Persona Training
+*   [ ] **How**: Update Pinky/Shadow prompts to natively respect `[MODE: FRAME_ONLY]`.
+*   [ ] **Why**: Reduces reliance on prompt injection and prevents "Pi Roleplay" hallucinations.
+
+---
+
+## 🏺 POST-IMPLEMENTATION AUDIT (Active Hardening)
+*   [x] **Task 7.1: Restore Brain Resilience**: Fallback to localhost active.
+*   [ ] **Task 7.2: Real-time Token Yielding**: (ACTIVE) Eliminate "Paragraph Pop" in UI.
+*   [x] **Task 10.1: Math/Corrective Steerage**: [FEAT-236] Added to `lab_node.py` and curriculum.
+*   [x] **Task 10.2: UI Promotion Pivot**: [FEAT-232] Swapped 👍/👎 for ⬆️/⬇️ with source-tracking.
 
 ---
 
@@ -251,9 +273,6 @@ To maintain architectural clarity, we are adopting a unified categorical languag
 *   **The Achievement**: Created `src/debug/test_waterfall_spark.py`.
 *   **The Result**: It passed, but it only verified **Early Sparking** (starting Pinky before the triage JSON ends). It did **not** verify the token-pumping between nodes (see Step 1 above).
 
-### 4. Indentation & Syntax "Scars"
-*   **The Achievement**: I caught several syntax and indentation errors in `loader.py` and `acme_lab.py` using `ruff`.
-*   **The Status**: The code is currently valid and the Hub is online, but the "Paragraph Pop" effect in the UI remains because the `async for` generator in the Hub is currently collecting tokens into a buffer rather than yielding them to the WebSocket *per-token*.
 
   > STATUS: SPR-15.0 MISSION SUCCESSFUL
   >
