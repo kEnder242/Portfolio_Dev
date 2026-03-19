@@ -988,3 +988,10 @@
 **Mechanism:** 
 1. Inline script in <head> hooks window.onerror and unhandledrejection.
 2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
+
+## [FEAT-228] Agnostic Context Engine (get_context)
+**Status:** PLANNED
+**Goal:** Decouple "Historical Pedigree" from core Lab logic.
+**Mechanism:** 
+1. A standalone tool that fetches evidence based on a semantic axis (Year, Topic, Device).
+2. Allows the Lab to map against any database without conflating the data with the Lab's identity.

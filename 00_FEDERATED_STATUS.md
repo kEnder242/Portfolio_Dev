@@ -28,6 +28,7 @@
 ## 🔮 The Roadmap
 
 ### [ACTIVE] Phase 13: Silicon Induction & Multi-Soul Prep (Sprint SPR-13.0)
+*   [ ] **Agnostic Context Engine [FEAT-228]**: Decouple historical pedigree from core Lab logic by implementing a generic `get_context` tool.
 *   [ ] **Long-Tail Gate [FEAT-205]**: Implement 60s warm-up wait for the 4090 Sovereign.
 *   [ ] **Serial Capture (v12)**: Strictly sequential harvesting to ensure 100% gem capture.
 *   [x] **Decoupled Pipeline [FEAT-202]**: Split archive harvest into Stage 1 (Capture) and Stage 2 (Refine).
