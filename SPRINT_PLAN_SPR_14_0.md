@@ -26,12 +26,23 @@ This audit is active to ensure the high-fidelity 18-year archive is correctly in
 *   **Status**: ON HOLD (Reverted to Situation A for stability).
 
 ## 🛠️ TASKS
-*   [ ] **Immunity Injection**: Plumb `_BOOT_HASH` into `mcp_start` environment.
-*   [ ] **Safe-Assassin**: Upgrade `cleanup_silicon` to use token-aware PGID purging.
+*   [x] **Immunity Injection**: Plumb `_BOOT_HASH` into `mcp_start` environment. ✅
+*   [x] **Safe-Assassin**: Upgrade `cleanup_silicon` to use token-aware PGID purging. ✅
 *   [ ] **VRAM Watchdog**: Implement [FEAT-180] logic to downshift tiers under pressure.
-*   [ ] **Crosstalk Migration [FEAT-221]**: Move inter-agent banter to a 1-line status bar and slow down the tick rate.
-*   [ ] **Cognitive De-Warping [FEAT-222]**: Fix panel routing (Brain=Right, Pinky=Left) and remove yellow crosstalk aesthetics.
+*   [x] **Crosstalk Migration [FEAT-221]**: Move inter-agent banter to a 1-line status bar and slow down the tick rate. ✅
+*   [x] **Cognitive De-Warping [FEAT-222]**: Fix panel routing (Brain=Right, Pinky=Left) and remove yellow crosstalk aesthetics. ✅
 *   [ ] **Gauntlet v3.0**: Run `lifecycle_gauntlet.py` to verify the full sequenced forge (3 souls in 1 pass).
+
+## 🏺 FORENSIC RETROSPECTIVE: THE MAR 18 UPLINK BREACH
+*   **The Incident**: After Hardening Phase 2, the desktop Intercom became unresponsive ("Stale Uplink").
+*   **The False Lead**: I hypothesized a "Zero Trust Session Split" and pivoted to a **Unified Origin** (`/hub` path). This was an overreach that added more complexity without fixing the root cause.
+*   **The Smoking Gun**: A `SyntaxError` (Redeclaration of `sl_low`) in `intercom_v2.js` was preventing the script from even attempting a connection.
+*   **The Resolution**: Reverted to the stable **Subdomain Model** (Situation A) and surgically fixed the JS syntax error.
+
+## 🩹 SCARS & THRASH (Technical Debt to Fix Later)
+1.  **Orphaned Ingress**: The `notes.jason-lab.dev/hub` rule was removed from `config.yml`, but `acme_lab.py` still has the dual-registration code for it. This is harmless but technically "Dead Code."
+2.  **JS Selector Fragility**: The `querySelector` for `style.css?v=` is still manual. If `build_site.py` misses a file, the security key will break again.
+3.  **VRAM Residency**: Multiple ignition attempts left Ollama with multiple model instances. A host reboot is recommended to clear the ~8GB peak back to the ~2GB baseline.
 
 ## 🏺 FORENSIC REPORT: THE UI WARPING (Mar 17)
 *   **The Issue**: Messages from 'Brain (Signal)' were bleeding into Pinky's console because the `is_internal` flag was overriding source-based routing. 
