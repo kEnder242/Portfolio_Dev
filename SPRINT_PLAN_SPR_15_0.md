@@ -31,66 +31,58 @@ Replacing booleans with a scalar `Importance` function.
 
 ### 📍 Phase 1: Protocol Hardening & Cooldown [FEAT-227]
 **Goal:** Establish the safety rules and grounding logic.
-*   **Task 1.1: Loopback Protection**: 
+*   [x] **Task 1.1: Loopback Protection**: 
     *   *How*: Update `acme_lab.py` to strictly gate WebSocket ingestion on the `[ME]` anchor.
     *   *Why*: Prevents the "Are you pondering..." challenge from re-triggering the relay loop.
-*   **Task 1.2: The Grounding Gate**: 
+*   [x] **Task 1.2: The Grounding Gate**: 
     *   *How*: Implement `evaluate_grounding()` in the Hub. Trigger Pinky summary for any node result (Shadow or Brain) that exceeds the Importance/Length threshold.
     *   *Why*: To ensure technical dumps are always anchored by a persona-driven TL;DR.
-*   **Task 1.3: Terminal Cooldown**: 
+*   [x] **Task 1.3: Terminal Cooldown**: 
     *   *How*: Tag Pinky's grounding turn as `is_terminal: true`.
     *   *Why*: To ensure the relay stops at the human-facing summary.
 
 ### 📍 Phase 2: The Speculative Handshake (Yielding) [FEAT-229]
 **Goal:** Parallelize the local workload.
-*   **Task 2.1: Local Fan-out**:
+*   [x] **Task 2.1: Local Fan-out**:
     *   *How*: Use `asyncio.gather` to spark Stage 1 (Pinky) and Stage 2 (Shadow) simultaneously.
     *   *Why*: Shadow is faster; its pre-work should be ready the moment Pinky finishes.
-*   **Task 2.2: Speculative Buffer**:
+*   [x] **Task 2.2: Speculative Buffer**:
     *   *How*: Implement a token buffer in `CognitiveHub`. Shadow output is held in `final: false` until "Fuel" confirms relevance.
     *   *Why*: To avoid UI flickering for rejected speculative paths.
 
 ### 📍 Phase 3: Scalar Routing (The Fuel Function) [FEAT-230]
 **Goal:** Graduate from boolean intent to situational importance.
-*   **Task 3.1: JSON Triage Expansion**:
+*   [x] **Task 3.1: JSON Triage Expansion**:
     *   *How*: Update `lab_node.py` to return scalar `casual` and `intrigue` scores.
     *   *Why*: Allows for fine-grained control over model verbosity.
-*   **Task 3.2: Shadow Scoring**: 
+*   [x] **Task 3.2: Shadow Scoring**: 
     *   *How*: Log calculated Fuel to `server.log` for calibration.
     *   *Why*: Verifies the math is grounded before it controls the physical silicon.
 
 ### 📍 Phase 4: The Calibration Loop
-*   **Task 4.1: Topic Axis Injection**: 
+*   [x] **Task 4.1: Topic Axis Injection**: 
     *   *How*: Update `lab_node.py` to return a `topic` field and plumb it through `cognitive_hub.py` into every broadcast packet.
     *   *Why*: To provide UI visibility into the Sentinel's categorical decisions.
-*   **Task 4.2: UI Confidence Toggle**:
-    *   *How*: Add binary feedback buttons (Thumbs Up/Down) to the intercom interface.
-    *   *Why*: Enables real-time coaching of the scalar fuel logic.
-*   **Task 4.3: Feedback Logging**:
-    *   *How*: Create `calibration_ledger.jsonl` to store user feedback.
-    *   *Why*: Generates high-signal data for future `lab_sentinel_v1` retraining.
+*   [ ] **Task 4.2: UI Confidence Toggle**:
+*   [ ] **Task 4.3: Feedback Logging**:
 
 ### 📍 Phase 5: Cognitive Refinement
 **Goal:** Polish the relay logic and verbal feedback loops.
-*   **Task 5.1: Operational Shortcut**:
+*   [x] **Task 5.1: Operational Shortcut**:
     *   *How*: Update `CognitiveHub` to intercept `OPERATIONAL` intent and execute tools immediately, bypassing the parallel relay.
     *   *Why*: To eliminate VRAM/Latency overhead for simple system commands (Close/Neuralyzer).
-*   **Task 5.2: Multiplicative Fuel f()**:
+*   [x] **Task 5.2: Multiplicative Fuel f()**:
     *   *How*: Transition from additive boosting to balanced math: `Fuel = ((1.0 - casual) * (intrigue + importance)) / 2`.
     *   *Why*: Prevents high-stakes "Importance" from overriding high-confidence "Casual" greetings.
-*   **Task 5.3: Verbal Retraction (Hallucination Brake)**:
+*   [x] **Task 5.3: Verbal Retraction (Hallucination Brake)**:
     *   *How*: If the `CognitiveAudit` [FEAT-190] fails for Shadow or Brain, Pinky quips a characterful verbal retraction (e.g., "Wait Brain, that's not quite right...") before the Hub triggers a strategic pivot.
     *   *Why*: To maintain persona immersion even when the technical hemispheres miss the mark.
 
 ### 📍 Phase 6: LoRA Retraining [FORGE-03]
 **Goal:** Induct the new scalar physics into the Lab Node Sentinel.
-*   **Task 6.1: Update Training Curriculum**: 
-    *   *How*: Update `src/forge/generate_sentinel_data.py` to include the new scalar schema and Intent Steerage axes (Meta, Corrective, Speculative).
-    *   *Why*: To teach the model the new categorical language and importance weights.
-*   **Task 6.2: Retrain Sentinel**:
-    *   *How*: Execute `mcp_train_adapter` for `lab_sentinel_v1`.
-    *   *Why*: Physically encodes the new routing logic into the resident 3B weights.
-*   **Task 6.3: LoRA Re-alignment**:
+*   [ ] **Task 6.1: Update Training Curriculum**: 
+*   [ ] **Task 6.2: Retrain Sentinel**:
+*   [x] **Task 6.3: LoRA Re-alignment**:
     *   *How*: Assign `shadow_brain_v2` to the Shadow node in `infrastructure.json` and verify its technical intuition vibe.
     *   *Why*: To physically separate "Intuition" from "Synthesis" across our two local/remote hosts.
 
@@ -108,16 +100,16 @@ Replacing booleans with a scalar `Importance` function.
 **Goal:** Transition from turn-based handovers to real-time token streaming between nodes.
 
 ### 📍 Task 8.1: Stream Parsing (Hub)
-*   **How**: Update `CognitiveHub` to use `async for` when calling node tools. Implement a "Live JSON" parser for the Lab Node to identify intent before the turn finishes.
-*   **Why**: To eliminate the "Wait-to-Start" bottleneck for subsequent nodes in the relay.
+*   [x] **How**: Update `CognitiveHub` to use `async for` when calling node tools. Implement a "Live JSON" parser for the Lab Node to identify intent before the turn finishes.
+*   [x] **Why**: To eliminate the "Wait-to-Start" bottleneck for subsequent nodes in the relay.
 
 ### 📍 Task 8.2: The "Live Hearing" Pipe
-*   **How**: Plumb Pinky's yielded tokens directly into Shadow's input stream as they arrive.
-*   **Why**: Allows Shadow's technical intuition to synchronize with Pinky's persona framing in real-time, reducing total turn latency to the speed of the slowest single node.
+*   [x] **How**: Plumb Pinky's yielded tokens directly into Shadow's input stream as they arrive.
+*   [x] **Why**: Allows Shadow's technical intuition to synchronize with Pinky's persona framing in real-time, reducing total turn latency to the speed of the slowest single node.
 
 ### 📍 Task 8.3: Promotion-Aware Streaming
-*   **How**: Plumb `final: false` tokens directly to the Status Bar via the Hub.
-*   **Why**: Provides real-time visual feedback of the "Relay Race" in progress.
+*   [x] **How**: Plumb `final: false` tokens directly to the Status Bar via the Hub.
+*   [x] **Why**: Provides real-time visual feedback of the "Relay Race" in progress.
 
 ---
 

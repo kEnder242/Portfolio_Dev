@@ -989,6 +989,28 @@
 1. Inline script in <head> hooks window.onerror and unhandledrejection.
 2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
 
+## [FEAT-233] Inter-Node Waterfall (Token-based Streaming)
+**Status:** ACTIVE
+**Logic:** Transition from turn-based handovers to real-time token streaming between nodes.
+**Mechanism:** 
+1. `CognitiveHub` uses incremental JSON parsing to identify intent mid-stream.
+2. Pinky's yielded tokens are piped directly into Shadow's context window during inference.
+3. Eliminates the "Paragraph Pop" effect and reduces perceived latency by ~40%.
+
+## [FEAT-234] Pure Scalar Fuel (Multiplicative Orchestration)
+**Status:** ACTIVE
+**Logic:** Replaces binary triage with a balanced importance function: `Fuel = ((1.0 - casual) * (intrigue + importance)) / 2`.
+**Mechanism:** 
+1. Lab Node outputs high-fidelity scalar scores for topic and importance.
+2. Routing depth (Shadow vs. Brain) is governed solely by the calculated Fuel thresholds (0.2 / 0.6).
+
+## [FEAT-235] Operational Shortcut (Direct Execution)
+**Status:** ACTIVE
+**Logic:** Bypasses the parallel relay for system-level commands to save VRAM and latency.
+**Mechanism:** 
+1. Hub intercepts `OPERATIONAL` intent from the Lab Node stream.
+2. Immediately triggers the target tool (e.g. Close/Restart) via a fast Pinky-facilitated quip.
+
 ## [FEAT-228] Agnostic Context Engine (get_context)
 **Status:** PLANNED
 **Goal:** Decouple "Historical Pedigree" from core Lab logic.
