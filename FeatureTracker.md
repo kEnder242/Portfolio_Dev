@@ -1028,8 +1028,14 @@
 3.  **Route Awareness**: Nodes receive a [ROUTE] block indicating which nodes have already fired or are upcoming.
 **Related Features:** [FEAT-233] (Waterfall), [FEAT-234] (Scalar Fuel), [FEAT-111] (Identity Lock).
 
-## [FEAT-238] Dynamic Fuel Calibration
+## [FEAT-238] Council of Hemispheres (Peer Vote)
 **Status:** ACTIVE
 **Logic:** Enables mid-relay adjustment of the turn's importance level based on node-level reasoning.
 **Rationale:** The Lab Node may under-estimate a query (e.g. Pi as general knowledge). This feature allows Pinky to "Pull the Alarm" by recommending a fuel boost, or "Demote" a turn if she detects it's a joke or mistake.
-**Mechanism:** `CognitiveHub` parses `recommend_fuel` from any node response and updates the session's fuel state before the Sovereign Brain check.
+**Mechanism:** `CognitiveHub` parses explicit steering signals from node responses and updates the session's fuel state before the Sovereign Brain check.
+
+## [FEAT-239] Neural Action Tags
+**Status:** ACTIVE
+**Logic:** Uses natural language interjections like [ACTION: UPLINK] or [ACTION: THINK MORE] at the end of persona responses to provide relay hints.
+**Rationale:** Replaces brittle JSON tool-calling for steering. Pinky can maintain her voice while still "Handwaving" to her smarter friend (Brain).
+**Mechanism:** Hub uses regex to extract and strip tags, adding scalar "Hints" (+0.3 fuel) to the relay baseline.
