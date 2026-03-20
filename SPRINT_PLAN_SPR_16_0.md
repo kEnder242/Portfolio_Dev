@@ -58,6 +58,23 @@ To ensure we don't gut the system, the following features **MUST** remain intact
 
 ---
 
+## 🌊 PHASE 5: HIGH-FIDELITY SYNC (Cleanup & Restoration)
+**Goal:** Restore multi-lora backend streaming and lost MCP tools while enforcing the "Clinical Pop" UI mandate.
+
+### 📍 Task 5.1: Backend Stream Restoration
+*   **How**: Refactor `loader.py`'s `generate_response` and `native_sample` to be asynchronous generators. Update `CognitiveHub` to consume these streams with `async for`.
+*   **Why**: To restore the sub-second responsiveness of vLLM and enable incremental "Action Tag" detection.
+*   **Invariant**: The Hub will buffer these tokens and only `broadcast()` to the UI once the node turn is complete (preserving "Paragraph Pop").
+
+### 📍 Task 5.2: Tool Suite Recovery
+*   **How**: Restore `close_lab` to `lab_node.py` and `shallow_think` reflex to `brain_node.py`. 
+*   **Why**: Corrects regressions found during the forensic audit.
+
+### 📍 Task 5.3: Telemetry Hardening
+*   **How**: Re-implement the `_probe_ttl` throttling in `loader.py` to reduce driver polling overhead during idle periods.
+
+---
+
 ## 🎼 CONDUCTOR & AGENT CONTEXT
 When delegating to sub-agents:
 *   **Primary Directive**: "Follow the MCP Protocol, not the legacy facilitate pattern."
@@ -81,5 +98,23 @@ When delegating to sub-agents:
 *   **Pinky**: Removed the `Combined Output` example, leaving the model without a "North Star" for melding speech with `[ACTION]` tags.
 *   **Brain**: Removal of the `deep_think` wrapper deleted the `system_override` logic that injected `behavioral_guidance` from the Hub. The Brain is now "blind" to Situational Triage hints.
 
-### 4. Sentinel Logic Gaps (`lab_node.py`)
-*   **Regression**: Removal of `triage_response`. This tool contained the "Deep Search" safety net for identifying tool names inside sloppy 3B JSON values. The current Hub is too reliant on rigid regex for these signals.
+---
+
+## 🤕 FINAL FORENSIC AUDIT: MISSING & ALTERED CAPABILITIES
+*Final audit conducted after Phase 1 & 2 implementation.*
+
+### 1. Unintentional Omissions (Regressions)
+*   **lab_node.py (Master Switch)**: `close_lab` missing. Sentinel no longer has the ability to trigger a session termination.
+*   **lab_node.py (Signal extraction)**: `triage_response` tool removed. The Sentinel lost its "Deep Search" logic for finding buried tool calls in sloppy 3B output.
+*   **brain_node.py (Identity)**: `shallow_think` removed. The Brain no longer has a "Fast Reflex" mode for laconic estratégica greetings.
+*   **loader.py (Telemetry)**: The engine ping throttling logic (TTL) was simplified/flattened, potentially increasing polling overhead.
+
+### 2. Intentional Changes (Verified)
+*   **Tool Removal**: `facilitate` and `shallow_think` (as a wrapper) were purged from node registries to enable native sampling.
+*   **Action Tag Migration**: `[ACTION: UPLINK]` and `[ACTION: THINK MORE]` regex logic replaced the brittle `handle_myself` tool.
+*   **Nuclear JSON Stripping**: The Hub now aggressively removes all JSON from persona speech, ensuring pure UI text.
+
+### 3. Architecture Phase 5: Cleanup & Restoration (PLANNED)
+*   [ ] Restore `close_lab` to `lab_node.py`.
+*   [ ] Restore `shallow_think` reflex to `brain_node.py`.
+*   [ ] Standardize Hub-provided steering vs Node-provided hardware tools in prompts.
