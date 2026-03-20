@@ -106,3 +106,22 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 1.  **Direct Address vs. Fuel**: We identified that direct address ("Hi Brain!") should not necessarily trigger the Sovereign 4090 if the query is simple. We have decouped **Address** (who speaks) from **Fuel** (how deep they think). "Hi Brain!" now triggers the **Shadow (Local)** while muting Pinky.
 2.  **Speaker Masking**: We have replaced the "Veto" logic with a **Hub-side Mask**. The Sentinel determines the target node (`addressed_to`), and the Hub enforces silence on the others. This removes the need for Pinky to "Roleplay" a yield.
 3.  **Unified Vibe Schema**: To align with **BKM-015.1 (Semantic Fluidity)**, we have consolidated "Vibe" and "Topic" into a single classification task for the Lab Node. This simplifies training and makes routing more predictable.
+
+---
+
+## 🏺 SPRINT RETROSPECTIVE [MAR 20, 2026]
+**Status:** COMPLETE | **Outcome:** High-Fidelity Restoration Achieved.
+
+### 🏆 WINS
+1.  **Waterfall Responsiveness**: Refactoring to `async generator` in the backend successfully masks node transport latency. Handshake Tics provide immediate visual feedback, making the Lab feel "alive" during 4090 reasoning cycles.
+2.  **Speaker Masking**: Successfully decoupled "Who speaks" from "Complexity fuel." The `addressed_to` scalar allows for natural direct address without brittle keyword hacks or awkward persona yields.
+3.  **Silicon Identity**: Fixed the critical path error in `loader.py`. Nodes now correctly load their specialized LoRA adapters, restoring the Lab's 18-year technical DNA.
+4.  **Judicial Hardening**: Implemented the **Blind Audit Rule [BKM-028]** in the Dreaming Cycle, ensuring peer-based verification of synthetic wisdom.
+
+### 🤕 SCARS & CHALLENGES
+*   **The "Silent" Blindness**: The one-line path error in `loader.py` was a silent killer that bypassed model weights entirely. Future shakedowns must explicitly verify the `boot_hash` and `model` name in the heartbeat.
+*   **Streaming Paradox**: Buffering for the UI while streaming for the backend required a careful internal dispatch refactor. The "Paragraph Pop" is preserved, but the system is now ready for future per-token UI upgrades.
+
+### 🧭 NEXT STEPS
+*   Initiate the **Sentinel v2** training run using the newly generated 200-pair vetted curriculum.
+*   Expand the **Physical Audit Gate** to include real-time thermals/load analysis in the cooldown phase.
