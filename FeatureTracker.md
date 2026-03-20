@@ -1039,3 +1039,33 @@
 **Logic:** Uses natural language interjections like [ACTION: UPLINK] or [ACTION: THINK MORE] at the end of persona responses to provide relay hints.
 **Rationale:** Replaces brittle JSON tool-calling for steering. Pinky can maintain her voice while still "Handwaving" to her smarter friend (Brain).
 **Mechanism:** Hub uses regex to extract and strip tags, adding scalar "Hints" (+0.3 fuel) to the relay baseline.
+
+## [FEAT-240] Native MCP Sampling Bridge
+**Status:** ACTIVE
+**Logic:** Transition from turn-based handovers to standard MCP sampling requests.
+**Mechanism:** `residents["pinky"].create_message(query, tools=[ask_brain])`.
+
+## [FEAT-242.1] Handshake Tic
+**Status:** PLANNED
+**Logic:** Mid-stream Crosstalk status updates to mask node transport latency.
+**Mechanism:** 'cognitive_hub.py' broadcasts crosstalk packets signaling node activation.
+
+## [FEAT-244] Speaker Masking
+**Status:** PLANNED
+**Logic:** Hub-side selective muting based on the `addressed_to` scalar from Sentinel.
+**Mechanism:** Prevents nodes from speaking if they are not the intended target of the semantic address.
+
+## [FEAT-245] Identity Shielding
+**Status:** PLANNED
+**Logic:** Enforced distinction between Current Lab State (Mice) and Historical Archive (Brain).
+**Rationale:** Prevents "Memory Bleed" where nodes hallucinate personal experiences from the 18-year archive.
+
+## [FEAT-246] Unified Vibe Schema
+**Status:** PLANNED
+**Logic:** Consolidation of topic and vibe into a single classification loadout for BKM-015.1.
+**Rationale:** Simplifies training and makes routing more semantically predictable.
+
+## [FEAT-247] Physical Audit Gate
+**Status:** PLANNED
+**Logic:** Refinement of the Cooldown phase where Pinky audits Brain's synthesis for hardware feasibility.
+**Mechanism:** Refactored 'evaluate_grounding' in Cognitive Hub.

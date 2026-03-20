@@ -38,50 +38,50 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
     *   *How*: Update `CognitiveHub` to consume the new generator stream, identifying `[ACTION]` tags and `final=true` signals *mid-stream* to spark subsequent nodes.
     *   *Why*: Allows the Brain to start pre-warming the moment Pinky's intent is clear, while still holding the UI display for a "Clinical Pop."
 
-### 📍 PHASE 3: Semantic Steerage & Persona Pivot [RANK 2]
-**Goal:** Transition to "Overhearing" and rebalance the Mice for high-fidelity interface.
+### 📍 PHASE 3: Semantic Steerage & Speaker Masking [RANK 2]
+**Goal:** Implement the "Muting" logic and unified vibes for surgical routing.
 
 *   **Task 3.1: Shadow Overhear Pivot [FEAT-229.2]**
     *   *How*: Lower the Shadow promotion threshold in `CognitiveHub.py` to **0.2**.
-    *   *Why*: Shadow (Local 2080 Ti) should always provide technical intuition unless Pinky explicitly handles the query (Casual).
-*   **Task 3.2: Collective Triage [FEAT-241]**
-    *   *How*: Update `lab_node.py` system prompt to recognize "Collective" vibes (Mice/Echo Chamber) and assign high intrigue.
-    *   *Why*: Restores the ability to address the Lab as a group without the system defaulting to casual silence.
+    *   *Why*: Shadow (Local 2080 Ti) should always provide technical intuition unless Pinky handles the turn solo.
+*   **Task 3.2: Speaker Masking (`addressed_to`) [FEAT-244]**
+    *   *How*: Add an `addressed_to` field (PINKY | BRAIN | MICE) to the Lab Node triage. Hub uses this to selectively mute nodes (e.g., addressing Brain mutes Pinky's speech).
+    *   *Why*: Allows for natural direct addressing without keyword hacks. "Hi Brain!" should only trigger the Left-Hemisphere (Shadow/Sovereign).
 *   **Task 3.3: Interface Persona & Natural Veto [VIBE-015]**
-    *   *How*: Refactor Pinky's prompt to be an **Interface Layer** (Enthusiastic Assistant) rather than a "Talking Dashboard." Demote hardware metrics to **Passive Awareness**.
-    *   *Why*: Prevents "VRAM Hyper-focus" and makes her interjections feel natural. Hub detects a Veto when `fuel < 0.2` and `intent == "CASUAL"`.
+    *   *How*: Refactor Pinky's prompt to be an **Interface Layer**. Hub detects a "Yield" when `addressed_to == "BRAIN"`.
+    *   *Why*: Eliminates canned "I've got this" responses in favor of semantic yield logic.
+*   **Task 3.4: The Handshake Tic [FEAT-242.1]**
+    *   *How*: Implement mid-stream Crosstalk broadcasts in `CognitiveHub` signaling node activation.
+*   **Task 3.5: Unified Vibe Schema**
+    *   *How*: Consolidate `topic` and `vibe` into a unified list (e.g., `PINKY_INTERFACE`, `BRAIN_STRATEGY`, `ARCHIVE_HISTORY`).
+    *   *Why*: Simplifies the Lab Node's primary classification task and aligns with BKM-015.1.
 
 ### 📍 PHASE 4: The Sentinel Forge (DNA Induction)
-**Goal:** Physically encode "Vibe Awareness" and data distinction into the Lab Node.
+**Goal:** Physically encode "Address Awareness" into the Lab Node.
 
 *   **Task 4.1: Reverse Vibe Generator [FORGE-05]**
-    *   *How*: Create `src/forge/generate_sentinel_curriculum.py` utilizing the Sovereign Brain (4090) to generate synthetic query-to-scalar pairs.
-    *   *Why*: To provide a high-density training dataset that aligns the Sentinel's intuition with the new scalar schema.
+    *   *How*: Create `src/forge/generate_sentinel_curriculum.py` utilizing the Sovereign Brain (4090) to generate a **vetted seed of 200 pairs**.
+    *   *Why*: Focus on diverse ways to address the Mice ("Hey everyone") vs individual nodes ("Yo Brain").
 *   **Task 4.2: Data Distinction (Lab vs. Archive)**
-    *   *How*: Ensure training data distinguishes between **Current Lab State** (Pinky/Shadow) and **Historical Archive Data** (Brain). 
-    *   *Why*: Prevents "Memory Bleed" where the Mice act as if they have personally experienced 18 years of history.
+    *   *How*: Ensure training data distinguishes between **Current Lab State** and **Historical Archive Data**. 
 
 ### 📍 PHASE 5: Judicial Restoration (Rank 2)
 **Goal:** Eliminate "Marking own homework" bias and implement the Physical Audit Gate.
 
 *   **Task 5.1: Blind Audit Implementation [BKM-028]**
     *   **How**: Refactor `dream_cycle.py` to use **Pinky** (Local) to audit the **Brain's** (Remote) synthesis.
-    *   **Why*: Prevents high-fidelity hallucinations from being permanently anchored in the archive.
 *   **Task 5.2: The "333MiB" Breakthrough Verification**
-    *   **How**: Execute the silicon gauntlet (`src/debug/verify_breakthrough.py`) to confirm VRAM headroom.
-    *   **Why**: Mandatory silicon gate per `ENGINEERING_PEDIGREE.md`.
+    *   **How**: Execute the silicon gauntlet (`src/debug/verify_breakthrough.py`).
 *   **Task 5.3: The Physical Audit Gate (Cooldown Refinement)**
-    *   **How**: Refactor `evaluate_grounding` in `CognitiveHub.py` to request a **Physical Audit/Reality Check** from Pinky (Hardware feasibility) rather than a generic "TLDR."
-    *   **Why**: Makes Pinky the "Grounding Wire" for the Brain's abstract technical logic.
+    *   **How**: Refactor `evaluate_grounding` in `CognitiveHub.py` to request a **Physical Audit/Reality Check** from Pinky (Hardware feasibility).
 
 ---
 
 ## 🌅 PHASE 6: THE DREAMING DEBRIEF (Presentation)
-**Goal:** Close the loop on Phase 9's synthesis by presenting "Diamond Wisdom" to the user.
+**Goal:** Close the loop on Phase 9's synthesis.
 
 *   **Task 6.1: UI Presentation Component**
-    *   **How**: Implement the "Morning Briefing" presentation logic in `CognitiveHub` that pulls the latest `dream` entry from the Archive.
-    *   **Why**: Diamond Wisdom is currently synthesized but remains "unseen."
+    *   **How**: Implement the "Morning Briefing" presentation logic in `CognitiveHub`.
 
 ---
 
@@ -89,29 +89,20 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 | ID | Name | Role |
 | :--- | :--- | :--- |
-| **[FEAT-241]** | **Collective Triage** | **PLANNED**: Explicit scalar weights for group-based address ("Mice/Everyone"). |
-| **[FEAT-242]** | **Async Tool Streaming** | **PLANNED**: Ability to trigger relay promotions mid-sentence via stream-parsing. |
-| **[BKM-028]** | **The Blind Audit Rule** | **LAW**: Dreaming audits MUST be performed by a node with different weights/personality to prevent echo-chamber bias. |
-
----
-
-## 🧪 VALIDATION PLAN
-*   **Phase 1**: Run `src/debug/test_attendant_sanity.py` to verify path restoration.
-*   **Phase 2**: Use `src/debug/test_waterfall_spark.py` to verify sub-second node sparking.
-*   **Phase 3**: Execute the "Hi Mice" gauntlet to verify collective triage and scalar fuel routing.
-*   **Phase 4**: Audit `server.log` for `[SENTINEL_SCALAR]` entries.
+| **[FEAT-244]** | **Speaker Masking** | **PLANNED**: Hub-side muting based on `addressed_to` scalar. |
+| **[FEAT-242.1]** | **The Handshake Tic** | **PLANNED**: Mid-stream Crosstalk status updates. |
+| **[BKM-028]** | **The Blind Audit Rule** | **LAW**: Dreaming audits MUST be performed by a node with different weights. |
 
 ---
 
 ## 🎼 CONDUCTOR TRACK: Restoration Relay
-**Conductor Context:** "Execute the SPR-17.0 restoration plan. Use `generalist` for Phase 1/2 refactors and `architect` for Phase 3/4 curriculum design. Mandate `ruff check` on every edit. Refer to the Post-Mortem and BKM-015.1 for grounding."
+**Conductor Context:** "Execute the SPR-17.0 restoration plan. Use `generalist` for Phase 1/2 and `architect` for Phase 3/4. Mandate `ruff check`. Follow the \`addressed_to\` Speaker Masking logic."
 
 ---
 
-## 🤕 FORENSIC RATIONALE: PERSONA REBALANCING [REVISION-17.1]
-*Report on the "Mice" persona pivot and grounding refinements.*
+## 🤕 FORENSIC RATIONALE: SPEAKER MASKING & UNIFIED VIBES [REVISION-17.2]
+*Report on the "Muting" logic and semantic consolidation.*
 
-1.  **From Dashboard to Assistant**: We identified that Pinky was becoming a "Talking VRAM Dashboard," leading to hyper-focused and repetitive interjections. We have pivoted her role to be the **Interface Layer** of the Lab. She maintains **Passive Awareness** of hardware but only speaks to it when the physical state impacts the logical flow.
-2.  **The Physical Auditor**: The "TLDR" phase (Grounding Gate) was identified as a low-fidelity summary trap. We have refactored this into a **Reality Check**. Pinky now audits the Brain's abstract synthesis against the physical constraints of the Lab (VRAM/Thermals/Complexity).
-3.  **The Identity Shield**: To prevent the Mice from "hallucinating" 18 years of personal experience, we have enforced a **Data Distinction**. The Brain remains the sole "Historical Sovereign," while Pinky and Shadow treat the archive as external "Sacred Logs" to be queried, not personal memories.
-4.  **Shadow Handshake**: We have formalized the "Tapping into intuition" flow, where Pinky leads the turn and acknowledges the multi-node consensus building, turning latency into a technical feature.
+1.  **Direct Address vs. Fuel**: We identified that direct address ("Hi Brain!") should not necessarily trigger the Sovereign 4090 if the query is simple. We have decouped **Address** (who speaks) from **Fuel** (how deep they think). "Hi Brain!" now triggers the **Shadow (Local)** while muting Pinky.
+2.  **Speaker Masking**: We have replaced the "Veto" logic with a **Hub-side Mask**. The Sentinel determines the target node (`addressed_to`), and the Hub enforces silence on the others. This removes the need for Pinky to "Roleplay" a yield.
+3.  **Unified Vibe Schema**: To align with **BKM-015.1 (Semantic Fluidity)**, we have consolidated "Vibe" and "Topic" into a single classification task for the Lab Node. This simplifies training and makes routing more predictable.
