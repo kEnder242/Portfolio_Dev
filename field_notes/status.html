@@ -312,7 +312,8 @@
         }
 
         async function triggerLabAction(action) {
-            const url = `/attendant/${action}`;
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const url = isLocal ? `http://localhost:9999/${action}` : `${window.location.origin}/attendant/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Extract shared key from cache-busting CSS link
@@ -326,7 +327,14 @@
                     method: 'POST',
                     headers: { 'X-Lab-Key': key }
                 });
-                const result = await response.json();
+                
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    const text = await response.text();
+                    throw new Error(`Invalid response format (Status ${response.status}): ${text.substring(0, 60)}...`);
+                }
                 
                 const color = response.ok ? '#28a745' : '#f85149';
                 logToConsole(`[ATTENDANT] ${result.message || result.error || 'Signal Acknowledged'}`, color);
