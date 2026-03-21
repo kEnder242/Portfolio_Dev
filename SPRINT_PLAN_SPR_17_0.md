@@ -125,3 +125,31 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 ### 🧭 NEXT STEPS
 *   Initiate the **Sentinel v2** training run using the newly generated 200-pair vetted curriculum.
 *   Expand the **Physical Audit Gate** to include real-time thermals/load analysis in the cooldown phase.
+
+---
+
+## 🌊 PHASE 7: REMOTE CONTROL & LOGGING HARDENING [REVISION-17.3]
+**Goal:** Fix the Remote Control suite (`status.html` JSON.parse error) and eliminate log poisoning.
+
+*   **Task 7.1: UI Routing & Resilience**
+    *   *How*: Update `status.html` `triggerLabAction` to use absolute paths (`window.location.origin + '/attendant/'`) and wrap `response.json()` in a try/catch.
+    *   *Why*: Relative paths were hitting the static Python server (port 9001) which returns a 501 HTML error for POST requests, crashing the UI.
+*   **Task 7.2: Attendant Assassin Decoupling**
+    *   *How*: Update `lab_attendant_v3.py` `mcp_stop` and `mcp_quiesce` to dispatch the JSON success response *before* executing the blocking `cleanup_silicon` routine (using `asyncio.create_task`).
+    *   *Why*: The aggressive port cleanup was killing the network socket before the HTTP response could be fully transmitted.
+*   **Task 7.3: Log Poisoning Elimination**
+    *   *How*: Demote the "Missing Atomic Anchor" warning in `acme_lab.py` to DEBUG or filter out recurring background tasks.
+    *   *Why*: The `server.log` was saturated with repetitive ingestion denials, making forensic analysis impossible.
+
+---
+
+## 🌊 PHASE 8: SCHEMA & PERSONA LEAK FIXES [REVISION-17.4]
+**Goal:** Fix Sentinel schema mismatch and prevent prompt repetition in the 3B models.
+
+*   **Task 8.1: Schema Alignment**
+    *   *How*: Ensure the Sentinel (`lab_node.py`) strictly adheres to the new `addressed_to` and `vibe` JSON schema, and `cognitive_hub.py` gracefully handles missing fields.
+    *   *Why*: Mismatched schema caused the Hub to default to `MICE`, breaking the speaker masking.
+*   **Task 8.2: Persona Leak Prevention**
+    *   *How*: Adjust the injection format of `[ROUTE]`, `[FUEL]`, etc., in `CognitiveHub.py` to use system-level boundaries (e.g., `<system_state>`) or add an explicit instruction to Pinky's prompt: `DO NOT repeat system metadata in your response.`
+    *   *Why*: The 3B model was repeating the injected headers back to the user, creating a robotic "Echo Chamber" effect.
+
