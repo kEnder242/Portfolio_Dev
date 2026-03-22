@@ -128,7 +128,7 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
-## 🌊 PHASE 11: ATTENDANT V4.0 - STATE-AWARE SUPERVISOR [REVISION-17.7]
+## ✅ PHASE 11: ATTENDANT V4.0 - STATE-AWARE SUPERVISOR [REVISION-17.7]
 **Goal:** Transition the Attendant from a passive launcher to a high-fidelity, state-aware appliance guardian.
 
 *   **Task 11.1: Quiesce-Aware Alarms**
@@ -149,7 +149,7 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
-## 🌊 PHASE 12: SHADOW BRAIN FORENSIC (Failover Fix)
+## ✅ PHASE 12: SHADOW BRAIN FORENSIC (Failover Fix)
 **Goal:** Identify and fix why the Shadow Brain (local 2080 Ti) is silent when KENDER (Windows) is offline.
 
 *   **Task 12.1: Failover Logic Audit**
