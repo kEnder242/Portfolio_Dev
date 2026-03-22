@@ -411,9 +411,11 @@
                     }
 
                     let ledClass = data.status === 'ONLINE' || data.status === 'IDLE' ? 'led-online' : (data.status === 'BUSY' ? 'led-busy' : 'led-offline');
+                    if (data.status === 'HIBERNATING (VRAM Free)') ledClass = 'led-busy';
                     if (data.yielded) ledClass = 'led-yielded';
 
-                    scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${data.yielded ? 'YIELDED' : data.status}`;
+                    const statusText = data.status === 'HIBERNATING (VRAM Free)' ? '🌙 SLEEPING' : (data.yielded ? 'YIELDED' : data.status);
+                    scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${statusText}`;
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
                     
                     if (data.progress_pct !== undefined) {
@@ -425,10 +427,10 @@
                         const modelEl = document.getElementById('model-name');
                         
                         let engineClass = data.vitals.brain === 'ONLINE' ? 'led-online' : 'led-offline';
-                        if (data.vitals.mode === 'SWAPPING' || data.vitals.mode === 'DOWNSHIFTING') engineClass = 'led-busy';
+                        if (data.vitals.mode === 'SWAPPING' || data.vitals.mode === 'DOWNSHIFTING' || data.vitals.mode === 'HIBERNATING') engineClass = 'led-busy';
                         
                         engineEl.innerHTML = `<span class="status-led ${engineClass}"></span>${data.vitals.mode || 'OFFLINE'}`;
-                        modelEl.textContent = data.vitals.model || '-';
+                        modelEl.textContent = data.vitals.mode === 'HIBERNATING' ? 'Engines Parked' : (data.vitals.model || '-');
                         
                         intercom.innerHTML = `<span class="status-led ${data.vitals.intercom === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.intercom}`;
                         vram.textContent = data.vitals.vram;

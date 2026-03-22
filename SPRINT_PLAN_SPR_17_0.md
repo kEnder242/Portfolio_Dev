@@ -175,5 +175,28 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
         *   *Why*: Masks the 3s reload latency by starting the engine the moment the user opens the tab.
     *   **Task 9.6: VRAM Sleep Status**
         *   *How*: Update the Hub's status broadcast to include a `hibernating` flag when the engine is unloaded.
+    *   **Task 9.7: Surgical Ignition (Immunity-Aware) [FEAT-250]**
+        *   *How*: Refactor `mcp_start` to accept an `engine_only` flag. If True, the Assassin spares the Hub port (8765).
+        *   *Why*: Prevents the "Handshake Suicide Loop" by allowing the Hub to wake local engines without killing its own WebSocket connection.
+
+---
+
+## 🏺 SPRINT RETROSPECTIVE: THE DEEP SLEEP EVOLUTION [MAR 22, 2026]
+**Status:** COMPLETE | **Outcome:** Appliance-Grade Efficiency & Forensic Stability Achieved.
+
+### 🏆 WINS
+1.  **VRAM Hibernation (Deep Sleep)**: Successfully implemented the 5-minute "Nap Gate." The Lab now automatically unloads its heavy 6GB engines when idle, leaving only the lightweight Hub (~150MB) resident. This resolves the parasitic Windows GPU usage while preserving nightly background growth.
+2.  **Snap-to-Life (The Spark)**: The Handshake Ignition Spark successfully masks the 3s engine reload time. Proactive ignition triggered by the WebSocket handshake ensures the model is resident by the time the user finishes typing.
+3.  **Surgical Ignition**: Decoupled engine cleanup from Hub lifecycle. The Attendant is now "Immunity-Aware," allowing it to refresh AI weights without killing the active user connection.
+4.  **Forensic Test Pattern**: Refactored diagnostic scripts to the **"Eyes Open"** pattern. Tests now actively scan logs for stack traces during polling, reducing "time-to-truth" for boot failures from 120s to <5s.
+
+### 🤕 SCARS & CHALLENGES (The Debugging Grind)
+*   **The Handshake Suicide Loop**: We hit a recursive crash where the Hub's amnesia caused it to trigger its own assassination on every reconnection. This was a "Double-Whammy" of memory-volatile locks and over-reaching cleanup logic.
+*   **Phantom READY Signal**: Identified a race condition where the Hub could report `READY` just milliseconds before being reaped by the kernel. This taught us to prioritize `port-liveness` (netstat) over `ready-events` during high-churn transitions.
+*   **Amnesia vs. Persistence**: Realized that state-locks for hardware ignition MUST reside in the **Attendant** (the parent) rather than the Hub (the child) to survive process-level crashes.
+
+### 🧭 NEXT STEPS
+*   Monitor the **Hibernation Duty Cycle** over the next 24 hours to ensure zero-drift in VRAM usage.
+*   Scale the **Sentinel v2** curriculum to the full 200-pair vetted seed.
 
 

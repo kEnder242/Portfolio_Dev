@@ -1077,3 +1077,11 @@
 1.  **Passive (0-5m)**: Maintain weights for instant re-entry.
 2.  **Deep Sleep (>5m)**: Unload heavy engines (vLLM/Ollama) while keeping Hub resident.
 3.  **Snap-to-Life**: Proactive ignition triggered by WebSocket handshake to mask reload latency (~3s).
+
+## [FEAT-250] Surgical Ignition (Immunity-Aware)
+**Status:** PLANNED
+**Logic:** Enable engine-only reloading while sparing the active Hub process.
+**Mechanism:** 
+1.  **Token Check**: Attendant verifies `LAB_IMMUNITY_TOKEN` on incoming `/start` requests.
+2.  **Surgical Mode**: If requested as `engine_only`, the Assassin spares port 8765.
+3.  **Stability**: Ensures the WebSocket foyer remains open during VRAM transitions.
