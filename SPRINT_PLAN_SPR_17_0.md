@@ -192,6 +192,9 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
     *   *Why*: Centralizes "Bounce" authority. Ensures debug modes (`DEBUG_BRAIN`, etc.) remain terminal and do not auto-restart.
 *   **Task 10.3: The Nuclear Scrub**
     *   *How*: Perform a manual `sudo fuser -k 8765/tcp` followed by a service restart to clear the current state.
+*   **Task 10.4: Cold Hub Ignition [FEAT-136]**
+    *   *How*: Restore auto-start logic to `lab_attendant_v3.py`. Upon `MASTER` boot, trigger a surgical `mcp_start` for the Hub.
+    *   *Why*: Closes the "Bootstrap Gap" where the Hub (which contains the Handshake Spark) wasn't running to receive the initial UI connection.
 
 ---
 
