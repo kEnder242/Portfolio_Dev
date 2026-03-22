@@ -150,6 +150,22 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
     *   *How*: Ensure the Sentinel (`lab_node.py`) strictly adheres to the new `addressed_to` and `vibe` JSON schema, and `cognitive_hub.py` gracefully handles missing fields.
     *   *Why*: Mismatched schema caused the Hub to default to `MICE`, breaking the speaker masking.
 *   **Task 8.2: Persona Leak Prevention**
-    *   *How*: Adjust the injection format of `[ROUTE]`, `[FUEL]`, etc., in `CognitiveHub.py` to use system-level boundaries (e.g., `<system_state>`) or add an explicit instruction to Pinky's prompt: `DO NOT repeat system metadata in your response.`
-    *   *Why*: The 3B model was repeating the injected headers back to the user, creating a robotic "Echo Chamber" effect.
+    *   Adjust the injection format of `[ROUTE]`, `[FUEL]`, etc., in `CognitiveHub.py` to use system-level boundaries (e.g., `<system_state>`) or add an explicit instruction to Pinky's prompt: `DO NOT repeat system metadata in your response.`
+        *   *Why*: The 3B model was repeating the injected headers back to the user, creating a robotic "Echo Chamber" effect.
+
+    ---
+
+    ## 🌊 PHASE 9: RESIDENCY & PROBE HARDENING [REVISION-17.5]
+    **Goal:** Restore BKM-026 (Asymmetric TTL) and enforce the AFK Resource Guard to allow Windows GPU to idle.
+
+    *   **Task 9.1: The Escalation Probe (Ping -> Tags -> Prime)**
+        *   *How*: Refactor `check_brain_health` to use a tiered discovery: 1) Ping (60s TTL on fail), 2) /api/tags (15s TTL on fail), 3) /api/generate (Only if `connected_clients > 0`).
+        *   *Why*: Prevents the Lab from "Stalking" the Windows GPU when Ollama is offline or the room is empty.
+    *   **Task 9.2: Asymmetric TTL Implementation**
+        *   *How*: Implement a "Penalty Box" for KENDER. Successes cached for 300s; Failures cached for 60s.
+        *   *Why*: Aligns with **BKM-026** and reduces network/log noise.
+    *   **Task 9.3: AFK Presence Gate [FEAT-134]**
+        *   *How*: Explicitly gate the heavyweight `POST /api/generate` call behind a `self.connected_clients > 0` check.
+        *   *Why*: Ensures residency during nightly alarms doesn't keep external GPUs active.
+
 
