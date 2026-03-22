@@ -128,6 +128,38 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
+## 🌊 PHASE 11: ATTENDANT V4.0 - STATE-AWARE SUPERVISOR [REVISION-17.7]
+**Goal:** Transition the Attendant from a passive launcher to a high-fidelity, state-aware appliance guardian.
+
+*   **Task 11.1: Quiesce-Aware Alarms**
+    *   **How**: Update `acme_lab.py` to check for `maintenance.lock` inside the `scheduled_tasks_loop`.
+    *   **Why**: Prevents background induction cycles from firing while the engineer is manually testing or driver updates are in progress.
+*   **Task 11.2: Hardware-First Assassin [FEAT-119.2]**
+    *   **How**: Hardwire `cleanup_silicon` to use `nvidia-smi --query-compute-apps` as the primary source of truth for process reaping.
+    *   **Why**: Catch camouflaged engine cores (like `VLLM::EngineCore`) that hide under non-standard process names.
+*   **Task 11.3: Dynamic Secret Rotation [FEAT-252]**
+    *   **How**: Replace the static git/boot hash with a fresh `uuid4().hex` generated upon every ignition. Update the `X-Lab-Key` middleware to sync with this secret.
+    *   **Why**: Ensures that old sessions cannot bypass the Assassin and prevents cross-contamination of "Immunity" tokens.
+*   **Task 11.4: Verified Hibernation [FEAT-249.3]**
+    *   **How**: Update `mcp_hibernate` to wait for a physical VRAM drop (via NVML) before reporting success.
+    *   **Why**: Resolves the "Zombie Ready" state where software thinks it's asleep but hardware is still pinned.
+*   **Task 11.5: Forensic Wait (Early Crash Detection)**
+    *   **How**: Integrate log-tailing into `mcp_wait_ready`. If "Traceback" appears in `server.log`, abort the wait and return the error instantly.
+    *   **Why**: Eliminates the "120s Blind Wait" during boot failures.
+
+---
+
+## 🌊 PHASE 12: SHADOW BRAIN FORENSIC (Failover Fix)
+**Goal:** Identify and fix why the Shadow Brain (local 2080 Ti) is silent when KENDER (Windows) is offline.
+
+*   **Task 12.1: Failover Logic Audit**
+    *   **How**: Inspect `CognitiveHub.py` fuel math and `acme_lab.py` status broadcasts.
+    *   **Why**: Shadow Brain should act as the primary technical reasoner when the 4090 is residentially offline.
+*   **Task 12.2: The "Mute" Recovery**
+    *   **How**: Ensure the Hub correctly shunts technical queries to the local `shadow` node regardless of `brain_online` status if the local engine is healthy.
+
+---
+
 ## 🌊 PHASE 7: REMOTE CONTROL & LOGGING HARDENING [REVISION-17.3]
 **Goal:** Fix the Remote Control suite (`status.html` JSON.parse error) and eliminate log poisoning.
 
