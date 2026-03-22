@@ -15,7 +15,13 @@
             "label": "Llama 3.2 3B AWQ (Unified Base)",
             "est_vram_mib": 5125,
             "gpu_memory_utilization": 0.5,
-            "attention_backend": "TRITON_ATTN"
+            "attention_backend": "TRITON_ATTN",
+            "lora_modules": [
+                "lab_sentinel_v1=/speedy/models/adapters/lab_sentinel_v1",
+                "cli_voice_v1=/speedy/models/adapters/cli_voice_v1",
+                "shadow_brain_v2=/speedy/models/adapters/shadow_brain_v2",
+                "lab_history_v1=/speedy/models/adapters/lab_history_v1"
+            ]
         },
         "LARGE": {
             "vllm": "/speedy/models/qwen-2.5-1.5b-awq",
@@ -23,15 +29,27 @@
             "label": "Qwen 2.5 1.5B AWQ",
             "est_vram_mib": 5125,
             "gpu_memory_utilization": 0.5,
-            "attention_backend": "TRITON_ATTN"
+            "attention_backend": "TRITON_ATTN",
+            "lora_modules": [
+                "lab_sentinel_v1=/speedy/models/adapters/lab_sentinel_v1",
+                "cli_voice_v1=/speedy/models/adapters/cli_voice_v1",
+                "shadow_brain_v2=/speedy/models/adapters/shadow_brain_v2",
+                "lab_history_v1=/speedy/models/adapters/lab_history_v1"
+            ]
         },
         "MEDIUM": {
-            "vllm": "/speedy/models/Llama-3.2-1B-Instruct",
-            "ollama": "llama3.2:1b",
-            "label": "Llama 3.2 1B (High Speed)",
-            "est_vram_mib": 4800,
+            "vllm": "/speedy/models/llama-3.2-3b-instruct-awq",
+            "ollama": "llama3.2:3b",
+            "label": "Llama 3.2 3B AWQ (Unified Base)",
+            "est_vram_mib": 5125,
             "gpu_memory_utilization": 0.5,
-            "attention_backend": "TRITON_ATTN"
+            "attention_backend": "TRITON_ATTN",
+            "lora_modules": [
+                "lab_sentinel_v1=/speedy/models/adapters/lab_sentinel_v1",
+                "cli_voice_v1=/speedy/models/adapters/cli_voice_v1",
+                "shadow_brain_v2=/speedy/models/adapters/shadow_brain_v2",
+                "lab_history_v1=/speedy/models/adapters/lab_history_v1"
+            ]
         },
         "SMALL": {
             "vllm": "/speedy/models/qwen-2.5-0.5b-awq",
@@ -39,7 +57,13 @@
             "label": "Qwen 2.5 0.5B (Micro)",
             "est_vram_mib": 4200,
             "gpu_memory_utilization": 0.5,
-            "attention_backend": "TRITON_ATTN"
+            "attention_backend": "TRITON_ATTN",
+            "lora_modules": [
+                "lab_sentinel_v1=/speedy/models/adapters/lab_sentinel_v1",
+                "cli_voice_v1=/speedy/models/adapters/cli_voice_v1",
+                "shadow_brain_v2=/speedy/models/adapters/shadow_brain_v2",
+                "lab_history_v1=/speedy/models/adapters/lab_history_v1"
+            ]
         }
     }
 }
