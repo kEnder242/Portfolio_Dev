@@ -181,6 +181,20 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
+## 🌊 PHASE 10: PROCESS DECOUPLING & LOOP STABILIZATION [REVISION-17.6]
+**Goal:** Resolve the "Zombie Collision" loop and centralize process authority in the Attendant.
+
+*   **Task 10.1: Purge Internal Bounce Loop**
+    *   *How*: Remove the `while True` loop from `AcmeLab.run` in `acme_lab.py`.
+    *   *Why*: Redundant self-restart logic was competing with the Attendant, creating redundant Hub processes fighting for Port 8765.
+*   **Task 10.2: Parent-Led Recovery [FEAT-149.1]**
+    *   *How*: Update `lab_attendant_v3.py` to monitor the `lab_process`. If it terminates while in `SERVICE_UNATTENDED` mode, the Attendant triggers a tactical restart.
+    *   *Why*: Centralizes "Bounce" authority. Ensures debug modes (`DEBUG_BRAIN`, etc.) remain terminal and do not auto-restart.
+*   **Task 10.3: The Nuclear Scrub**
+    *   *How*: Perform a manual `sudo fuser -k 8765/tcp` followed by a service restart to clear the current state.
+
+---
+
 ## 🏺 SPRINT RETROSPECTIVE: THE DEEP SLEEP EVOLUTION [MAR 22, 2026]
 **Status:** COMPLETE | **Outcome:** Appliance-Grade Efficiency & Forensic Stability Achieved.
 
