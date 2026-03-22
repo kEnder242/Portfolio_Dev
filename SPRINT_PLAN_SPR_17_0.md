@@ -167,5 +167,13 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
     *   **Task 9.3: AFK Presence Gate [FEAT-134]**
         *   *How*: Explicitly gate the heavyweight `POST /api/generate` call behind a `self.connected_clients > 0` check.
         *   *Why*: Ensures residency during nightly alarms doesn't keep external GPUs active.
+    *   **Task 9.4: VRAM Hibernation Matrix (The 5m Nap) [FEAT-249]**
+        *   *How*: Implement a `self._vram_hibernate_timer` in `acme_lab.py`. SIGTERM local engines (vLLM/Ollama) if `connected_clients == 0` for > 300s.
+        *   *Why*: Reclaims ~6GB of VRAM for non-AI tasks while keeping the Hub resident for alarms.
+    *   **Task 9.5: Handshake Ignition Spark**
+        *   *How*: Update the `handshake` WebSocket handler to proactively trigger `lab_start` if the engine is OFFLINE.
+        *   *Why*: Masks the 3s reload latency by starting the engine the moment the user opens the tab.
+    *   **Task 9.6: VRAM Sleep Status**
+        *   *How*: Update the Hub's status broadcast to include a `hibernating` flag when the engine is unloaded.
 
 

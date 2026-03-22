@@ -1069,3 +1069,11 @@
 **Status:** PLANNED
 **Logic:** Refinement of the Cooldown phase where Pinky audits Brain's synthesis for hardware feasibility.
 **Mechanism:** Refactored 'evaluate_grounding' in Cognitive Hub.
+
+## [FEAT-249] VRAM Hibernation Matrix (Deep Sleep)
+**Status:** PLANNED
+**Logic:** Tiered VRAM reclamation based on client connectivity and activity timers.
+**Mechanism:**
+1.  **Passive (0-5m)**: Maintain weights for instant re-entry.
+2.  **Deep Sleep (>5m)**: Unload heavy engines (vLLM/Ollama) while keeping Hub resident.
+3.  **Snap-to-Life**: Proactive ignition triggered by WebSocket handshake to mask reload latency (~3s).
