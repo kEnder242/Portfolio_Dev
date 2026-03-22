@@ -205,9 +205,9 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 4.  **Forensic Test Pattern**: Refactored diagnostic scripts to the **"Eyes Open"** pattern. Tests now actively scan logs for stack traces during polling, reducing "time-to-truth" for boot failures from 120s to <5s.
 
 ### 🤕 SCARS & CHALLENGES (The Debugging Grind)
-*   **The Handshake Suicide Loop**: We hit a recursive crash where the Hub's amnesia caused it to trigger its own assassination on every reconnection. This was a "Double-Whammy" of memory-volatile locks and over-reaching cleanup logic.
-*   **Phantom READY Signal**: Identified a race condition where the Hub could report `READY` just milliseconds before being reaped by the kernel. This taught us to prioritize `port-liveness` (netstat) over `ready-events` during high-churn transitions.
-*   **Amnesia vs. Persistence**: Realized that state-locks for hardware ignition MUST reside in the **Attendant** (the parent) rather than the Hub (the child) to survive process-level crashes.
+*   **The Handshake Suicide Loop**: We hit a recursive crash where the Hub's amnesia caused it to trigger its own assassination on every reconnection. This was fixed by moving spark-locks to the Attendant.
+*   **Phantom READY Signal**: Identified a race condition where the Hub could report `READY` just milliseconds before being reaped. Port-liveness is now the preferred truth.
+*   **The Rogue Engine (`VLLM::EngineCore`)**: Discovered that engine processes can hide under non-standard names, surviving generic `pkill` attempts and preventing VRAM reclamation. We've updated our **Silicon Audit [FEAT-251.2]** to use `nvidia-smi` as the source of truth for process reaping.
 
 ### 🧭 NEXT STEPS
 *   Monitor the **Hibernation Duty Cycle** over the next 24 hours to ensure zero-drift in VRAM usage.
