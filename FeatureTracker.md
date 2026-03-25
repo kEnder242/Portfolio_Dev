@@ -1046,22 +1046,22 @@
 **Mechanism:** `residents["pinky"].create_message(query, tools=[ask_brain])`.
 
 ## [FEAT-242.1] Handshake Tic
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Mid-stream Crosstalk status updates to mask node transport latency.
 **Mechanism:** 'cognitive_hub.py' broadcasts crosstalk packets signaling node activation.
 
 ## [FEAT-244] Speaker Masking
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Hub-side selective muting based on the `addressed_to` scalar from Sentinel.
 **Mechanism:** Prevents nodes from speaking if they are not the intended target of the semantic address.
 
 ## [FEAT-245] Identity Shielding
 **Status:** PLANNED
 **Logic:** Enforced distinction between Current Lab State (Mice) and Historical Archive (Brain).
-**Rationale:** Prevents "Memory Bleed" where nodes hallucinate personal experiences from the 18-year archive.
+**Rationale:** Prevents \"Memory Bleed\" where nodes hallucinate personal experiences from the 18-year archive.
 
 ## [FEAT-246] Unified Vibe Schema
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Consolidation of topic and vibe into a single classification loadout for BKM-015.1.
 **Rationale:** Simplifies training and makes routing more semantically predictable.
 
@@ -1071,17 +1071,41 @@
 **Mechanism:** Refactored 'evaluate_grounding' in Cognitive Hub.
 
 ## [FEAT-249] VRAM Hibernation Matrix (Deep Sleep)
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Tiered VRAM reclamation based on client connectivity and activity timers.
-**Mechanism:**
-1.  **Passive (0-5m)**: Maintain weights for instant re-entry.
-2.  **Deep Sleep (>5m)**: Unload heavy engines (vLLM/Ollama) while keeping Hub resident.
-3.  **Snap-to-Life**: Proactive ignition triggered by WebSocket handshake to mask reload latency (~3s).
+**Mechanism:** Reclaims ~6GB VRAM after 10m idle time.
+
+## [FEAT-249.3] Verified Hibernation (VRAM Polling)
+**Status:** ACTIVE
+**Logic:** NVML-based confirmation of weight unloading.
+**Mechanism:** `mcp_hibernate` polls VRAM used until it drops below 2000MB.
+
+## [FEAT-249.4] Shadow Mute Recovery [FOR REVIEW]
+**Status:** ACTIVE
+**Logic:** Lowers Shadow activation threshold to 0.0 when KENDER is offline.
+**Rationale:** Ensures local technical failover is always active when sovereign compute is unreachable.
+
+## [FEAT-249.5] Sovereign Fallback (Double-Tap Shadow)
+**Status:** ACTIVE
+**Logic:** Re-invokes Shadow at high fuel (>0.6) for technical synthesis when Brain is offline.
 
 ## [FEAT-250] Surgical Ignition (Immunity-Aware)
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Enable engine-only reloading while sparing the active Hub process.
-**Mechanism:** 
-1.  **Token Check**: Attendant verifies `LAB_IMMUNITY_TOKEN` on incoming `/start` requests.
-2.  **Surgical Mode**: If requested as `engine_only`, the Assassin spares port 8765.
-3.  **Stability**: Ensures the WebSocket foyer remains open during VRAM transitions.
+**Mechanism:** Assassin spares Port 8765 if `engine_only` is requested.
+
+## [FEAT-251.2] Forensic Wait (Early Crash Detection)
+**Status:** ACTIVE
+**Logic:** Monitor logs for 'Traceback' during boot to bypass blind 120s timeouts.
+
+## [FEAT-252] Dynamic Secret Rotation
+**Status:** ACTIVE
+**Logic:** Unique `uuid4` session tokens generated on every ignition to invalidate old sessions.
+
+## [FEAT-253] Dynamic Role Discovery
+**Status:** ACTIVE
+**Logic:** `BicameralNode` parses `--role` from `sys.argv` to resolve identity and host mapping.
+
+## [FEAT-254] VRAM Pre-Flight Gate
+**Status:** PLANNED
+**Logic:** Refuse ignition if `FreeVRAM < RequiredVRAM`.

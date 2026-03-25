@@ -149,7 +149,7 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
-## ✅ PHASE 12: SHADOW BRAIN FORENSIC (Failover Fix)
+## 🏆 PHASE 12: SHADOW BRAIN FORENSIC (Failover Fix)
 **Goal:** Identify and fix why the Shadow Brain (local 2080 Ti) is silent when KENDER (Windows) is offline.
 
 *   **Task 12.1: Failover Logic Audit**
@@ -247,5 +247,19 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 ### 🧭 NEXT STEPS
 *   Monitor the **Hibernation Duty Cycle** over the next 24 hours to ensure zero-drift in VRAM usage.
 *   Scale the **Sentinel v2** curriculum to the full 200-pair vetted seed.
+
+---
+
+## 🌊 PHASE 13: ATTENDANT V4.1 - THE VRAM PRE-FLIGHT GATE [REVISION-17.8]
+**Goal:** Prevent engine initialization crashes (`ValueError: Free memory less than desired`) by implementing a proactive physical audit.
+
+*   **Task 13.1: Physical Audit Gate (Hard Stop)**
+    *   **File**: `HomeLabAI/src/lab_attendant_v3.py`
+    *   **How**: In `mcp_start`, calculate `RequiredVRAM = TotalVRAM * utilization`. Compare this against the current `FreeVRAM` from NVML *after* the silicon scrub. If `Free < Required`, abort ignition and return `SILICON_CONGESTION`.
+    *   **Why**: Eliminates "Doomed Boots" where vLLM tries to allocate more memory than the RTX 2080 Ti has free, causing an immediate crash.
+*   **Task 13.2: The Assassin Audit (Settling Window)**
+    *   **File**: `HomeLabAI/src/lab_attendant_v3.py`
+    *   **How**: Introduce a 2-second `asyncio.sleep()` after `cleanup_silicon` to allow the GPU driver to finalize reclamation before performing the Pre-Flight check.
+    *   **Why**: Prevents race conditions where NVML reports "Used" memory that has been released but not yet garbage-collected by the driver.
 
 
