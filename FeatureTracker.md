@@ -1107,5 +1107,10 @@
 **Logic:** `BicameralNode` parses `--role` from `sys.argv` to resolve identity and host mapping.
 
 ## [FEAT-254] VRAM Pre-Flight Gate
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Refuse ignition if `FreeVRAM < RequiredVRAM`.
+
+## [FEAT-257] Physical Pre-Flight Purge (Nuclear Assassin)
+**Status:** ACTIVE
+**Logic:** OS-level port clearing and process reaping via systemd.
+**Mechanism:** `ExecStartPre` logic in `lab-attendant.service` ensuring a clean silicon state before Python initialization.
