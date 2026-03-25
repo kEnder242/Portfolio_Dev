@@ -137,7 +137,21 @@ When delegating to sub-agents:
 
 ### 📍 PHASE 6: SPRINT 15.0 RESIDUALS (Restoration)
 *   **Task 6.1: Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes.
-*   **Task 6.2: Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom for high-fidelity steering.
+### 🏛️ SILICON STABILIZATION REPORT (MARCH 25, 2026)
+*   **The Orchestrator-First Mandate [BKM-018]**: Confirmed that all hardware-level and process-lifecycle operations must flow through the **Attendant v4** MCP tools (`lab_start`, `lab_wait_ready`) to avoid "Zombie States" and pattern traps.
+*   **The Forensic Wait [FEAT-251.2]**: Identified that `lab_wait_ready` is a high-fidelity sentinel that performs log-scraping and port-probing internally, making manual heartbeat-polling redundant.
+*   **The Larynx Signal**: Confirmed that while KV blocks are the physical readiness signal, they are asynchronous to the Hub's `READY` signal. The **Larynx Gate** must leverage the Attendant's internal `ready_event` for maximum reliability.
+
+### 🧭 FORGOTTEN PATTERNS & INVARIANTS
+*   **[FEAT-184] Expert Vibe Routing**: The Sentinel (Lab Node) selects the LoRA adapter *before* the turn starts; this must be preserved during the Relay refactor.
+*   **[FEAT-227] Atomic Anchor**: The `[ME]` gate in `acme_lab.py` remains the primary guard for the system's "Self-Awareness."
+*   **[FEAT-119] Broad-Spectrum Assassin**: PGID-based process reaping with **Diplomatic Immunity** is the standard for silicon cleanup.
+
+### 📋 REVISED EXECUTION PATH (Heads Down)
+1.  **[MONITOR] Master Sentinel**: Use `lab_wait_ready` (MCP) to confirm the Lab is Open.
+2.  **[AUDIT] Baseline Profile**: Execute `characterize_ignition.py` (v2.0) to record the latency and throughput baseline.
+3.  **[IMPLEMENT] The Larynx Gate [FEAT-233.5]**: Use the **Safe-Scalpel (BKM-011)** to refactor the Hub's boot sequence in `acme_lab.py`, replacing arbitrary sleeps with a blocking wait on the Attendant's readiness signal.
+4.  **[IMPLEMENT] The Relay Pattern [FEAT-240.2]**: Refactor `cognitive_hub.py` and `loader.py` to implement standard-compliant sampling requests from Nodes to the Hub.
 1.  **[IMMEDIATE] Persist `CharacterizeIgnition.py`**: Implement the sequential loader with real-time heartbeat verification.
 2.  **[STABILIZATION] Hub-as-Host Refactor**: Update `cognitive_hub.py` and `loader.py` to support native MCP Sampling, removing legacy `facilitate` wrappers.
 3.  **[VERIFICATION] The Physician's Gauntlet**: Run lifecycle tests (`src/debug/test_lifecycle_gauntlet.py`) to ensure system integrity.
