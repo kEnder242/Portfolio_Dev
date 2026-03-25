@@ -1113,4 +1113,12 @@
 ## [FEAT-257] Physical Pre-Flight Purge (Nuclear Assassin)
 **Status:** ACTIVE
 **Logic:** OS-level port clearing and process reaping via systemd.
-**Mechanism:** `ExecStartPre` logic in `lab-attendant.service` ensuring a clean silicon state before Python initialization.
+**Mechanism:** `ExecStopPost` logic in `lab-attendant.service` ensuring a clean silicon state when the service exits.
+
+## [FEAT-259] Targeted Hibernation (The Butler Pattern)
+**Status:** ACTIVE
+**Logic:** Surgical reaping of session-specific engine processes during hibernation while sparing the management layer.
+**Mechanism:** `mcp_hibernate` walks the process tree and identifies members carrying the `_CURRENT_SESSION_TOKEN`.
+1.  **SPARE**: Hub (`acme_lab.py`) and Resident Nodes (Archive, Pinky, etc.) are spared to preserve handshakes and session history.
+2.  **REAP**: AI Engines (`vllm`, `ollama`, `EngineCore`) are reaped to immediately reclaim VRAM.
+3.  **SAFETY**: External tools (test scripts) are automatically spared as they lack the session token.
