@@ -117,4 +117,27 @@ When delegating to sub-agents:
 ### 3. Architecture Phase 5: Cleanup & Restoration (PLANNED)
 *   [ ] Restore `close_lab` to `lab_node.py`.
 *   [ ] Restore `shallow_think` reflex to `brain_node.py`.
-*   [ ] Standardize Hub-provided steering vs Node-provided hardware tools in prompts.
+---
+
+## 🏛️ TECHNICAL INVESTIGATION & NEXT STEPS (MARCH 25, 2026)
+
+### 1. Protocol Discovery: The "Standard Relay" Gap
+*   **Observation**: `mcp.ClientSession` does not natively expose a `create_message` method for the Client (Hub) to request sampling from the Server (Node).
+*   **Insight**: The "Standard Relay" architecture requires a custom Request/Response handler or a specific implementation of the Sampling bridge. We must bridge the gap between the Hub acting as a Host and the Node acting as a Sampling client.
+### 3. The "Relay Pattern": A Standard-Compliant Alternative
+*   **Concept**: Instead of the Hub (Client) requesting sampling from the Node (Server), we follow the standard MCP flow:
+    *   **Hub -> Node**: The Hub calls a standard `generate` or `think` tool on the Node.
+    *   **Node -> Hub**: If the Node needs to delegate (e.g., `ask_brain`), it sends a standard `SamplingRequest` back to the Hub (Host).
+*   **Benefit**: This is 100% compliant with the MCP specification and avoids "fighting" the protocol's intended directionality. It preserves native personas while leveraging the Host's steering tools through official sampling channels.
+
+### 2. Ignition Strategy: From Waterfall to "Ping-Gate"
+*   **Observation**: Current vLLM initialization relies on arbitrary `asyncio.sleep` calls, leading to potential VRAM thrashing or unnecessary wait times.
+*   **Insight**: We will implement a sequential "ping-gate" loader (`CharacterizeIgnition.py`). The first node's readiness (heartbeat) must be verified before the next node begins loading. This will provide clear telemetry on resource constraints (RTX 2080 Ti) and catch crashes as they happen.
+*   **Telemetry Gap**: We will leverage vLLM's `/health` or `/metrics` endpoints rather than arbitrary timeouts to gate the "Ignition" sequence.
+
+### 📍 PHASE 6: SPRINT 15.0 RESIDUALS (Restoration)
+*   **Task 6.1: Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes.
+*   **Task 6.2: Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom for high-fidelity steering.
+1.  **[IMMEDIATE] Persist `CharacterizeIgnition.py`**: Implement the sequential loader with real-time heartbeat verification.
+2.  **[STABILIZATION] Hub-as-Host Refactor**: Update `cognitive_hub.py` and `loader.py` to support native MCP Sampling, removing legacy `facilitate` wrappers.
+3.  **[VERIFICATION] The Physician's Gauntlet**: Run lifecycle tests (`src/debug/test_lifecycle_gauntlet.py`) to ensure system integrity.
