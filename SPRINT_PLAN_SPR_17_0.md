@@ -73,7 +73,29 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 *   **Task 5.2: The "333MiB" Breakthrough Verification**
     *   **How**: Execute the silicon gauntlet (`src/debug/verify_breakthrough.py`).
 *   **Task 5.3: The Physical Audit Gate (Cooldown Refinement)**
-    *   **How**: Refactor `evaluate_grounding` in `CognitiveHub.py` to request a **Physical Audit/Reality Check** from Pinky (Hardware feasibility).
+    *   Refactor `evaluate_grounding` in `CognitiveHub.py` to request a **Physical Audit/Reality Check** from Pinky (Hardware feasibility).
+
+    ---
+
+    ## 🌊 PHASE 14: PROMPT PRUNING & IDENTITY HARDENING [REVISION-17.9]
+    **Goal:** Eliminate "Meta-Talking" and robotic echoes by distilling the Brain/Shadow persona into a high-density, 3B-native structural prompt.
+
+    *   **Task 14.1: Structural Persona Compression**
+        *   **File**: `HomeLabAI/src/nodes/brain_node.py`
+        *   **How**: Replace the 200-word paragraph-style `BRAIN_SYSTEM_PROMPT` with a Markdown-structured `# IDENTITY` and `# RULES` block.
+        *   **Why**: 3B models anchor better to structural headers than conversational prose, reducing identity collapse.
+    *   **Task 14.2: Metadata Displacement (User-Side Context)**
+        *   **File**: `HomeLabAI/src/nodes/loader.py` (Inside `generate_response`)
+        *   **How**: Move the `[SITUATIONAL_CONTEXT]` injection from the system prompt to the user message.
+        *   **Why**: Small models weigh the most recent tokens (user message) higher, ensuring the `<system_state>` actually informs behavior rather than becoming a robotic label.
+    *   **Task 14.3: Negative Constraint Hardening**
+        *   **File**: `HomeLabAI/src/nodes/brain_node.py` and `pinky_node.py`
+        *   **How**: Explicitly forbid "Meta-Labeling" (e.g., "DO NOT describe your internal function or role name in your response").
+        *   **Why**: Prevents the "I am a high-fidelity synthesis engine" robotic loops.
+    *   **Task 14.4: Zero-Discovery Handshake**
+        *   **File**: `HomeLabAI/src/logic/cognitive_hub.py` (Inside `_process_node_stream`)
+        *   **How**: Update the status broadcast (`crosstalk`) to use more natural labels that don't trigger model imitation.
+
 
 ---
 
