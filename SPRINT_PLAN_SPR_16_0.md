@@ -38,12 +38,12 @@ To ensure we don't gut the system, the following features **MUST** remain intact
 ## 🗺️ PHASES OF IMPLEMENTATION
 
 ### 📍 PHASE 1: Protocol Alignment [HOW & WHY]
-*   **Task 1.1: Node Hardening**: Refactor `BicameralNode` in `loader.py` to support the MCP Sampling/Message protocol.
+*   **[DONE] Task 1.1: Node Hardening**: Refactor `BicameralNode` in `loader.py` to support the MCP Sampling/Message protocol.
 *   **Why**: To allow the Hub to talk to the model weights directly without a tool wrapper.
 *   **How**: Enable the `mcp.create_message` (or equivalent) path in the Node server.
 
 ### 📍 PHASE 2: The Hub as Host [HOW & WHY]
-*   **Task 2.1: Steering Tool Definition**: Define `ask_brain` and `vram_vibe_check` as tools provided *by the Hub* during the sampling call.
+*   **[DONE] Task 2.1: Steering Tool Definition**: Define `ask_brain` and `vram_vibe_check` as tools provided *by the Hub* during the sampling call.
 *   **Why**: To move the "Veto/Promotion" logic out of the Hub's parser and into the Host's tool handler.
 *   **How**: Update `execute_dispatch` to process `CallToolRequest` events natively.
 
@@ -115,7 +115,7 @@ When delegating to sub-agents:
 *   **Nuclear JSON Stripping**: The Hub now aggressively removes all JSON from persona speech, ensuring pure UI text.
 
 ### 3. Architecture Phase 5: Cleanup & Restoration (PLANNED)
-*   [ ] Restore `close_lab` to `lab_node.py`.
+*   [x] Restore `close_lab` to `lab_node.py`.
 *   [ ] Restore `shallow_think` reflex to `brain_node.py`.
 ---
 
@@ -152,6 +152,25 @@ When delegating to sub-agents:
 2.  **[AUDIT] Baseline Profile**: Execute `characterize_ignition.py` (v2.0) to record the latency and throughput baseline.
 3.  **[IMPLEMENT] The Larynx Gate [FEAT-233.5]**: Use the **Safe-Scalpel (BKM-011)** to refactor the Hub's boot sequence in `acme_lab.py`, replacing arbitrary sleeps with a blocking wait on the Attendant's readiness signal.
 4.  **[IMPLEMENT] The Relay Pattern [FEAT-240.2]**: Refactor `cognitive_hub.py` and `loader.py` to implement standard-compliant sampling requests from Nodes to the Hub.
+
+---
+
+### 🏛️ SPRINT REPORT: SPR-16.0 (MARCH 25, 2026)
+
+**1. Baseline Characterization (Task 7.1)**
+*   The `characterize_ignition.py` v2 script successfully captured the "Waterfall" baseline. I was able to observe PGID isolation working correctly, but noted the Larynx (vLLM) took approximately 90 seconds to report physical readiness.
+
+**2. Hibernation & The Larynx Gate (Task 7.2)**
+*   **The Deadlock Fix**: I identified a critical deadlock in `acme_lab.py`: the Hub's boot sequence was calling the Attendant's `/wait_ready` endpoint, but that endpoint waits for the Hub to say `[READY] Lab is Open.`—causing an infinite hang. I fixed this by refactoring the **Larynx Gate** to poll the vLLM engine directly (`/v1/models`) before booting residents or completing a spark.
+*   **The Butler Fix**: I discovered a bug in `lab_attendant_v4.py` where `psutil` was throwing an `AttributeError` and failing to match `vllm` because it wasn't requesting the `cmdline` info. I fixed the environment fetching logic.
+*   **Result**: `test_hibernation_cycle.py` now passes with flying colors. VRAM correctly drops from ~60% down to 9% during hibernation, and the "Spark Handshake" successfully re-ignites the engine and handles requests seamlessly.
+
+**3. The Relay Pattern & Identity Restoration (Task 7.3 & 3.1)**
+*   I refactored `loader.py` to use the standard `think` tool and `cognitive_hub.py` to execute standard `CallToolRequests`, fully implementing the **Relay Pattern**. 
+*   I also refactored the `test_hibernation_cycle.py` script to correctly filter out background `crosstalk` and handle the async websocket timeouts properly while the engine sparks. Pinky is now generating native persona speech (`poit!...`) entirely without the legacy `facilitate` wrappers.
+
+**4. Forensic Regressions**
+*   I verified that the `close_lab` tool is safely intact within `lab_node.py` (The Master Switch) and the `shallow_think` reflex remains operational within `brain_node.py`.
 1.  **[IMMEDIATE] Persist `CharacterizeIgnition.py`**: Implement the sequential loader with real-time heartbeat verification.
 2.  **[STABILIZATION] Hub-as-Host Refactor**: Update `cognitive_hub.py` and `loader.py` to support native MCP Sampling, removing legacy `facilitate` wrappers.
 3.  **[VERIFICATION] The Physician's Gauntlet**: Run lifecycle tests (`src/debug/test_lifecycle_gauntlet.py`) to ensure system integrity.

@@ -142,8 +142,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
                 <span>TOPIC: ${topic}</span>
                 <span>FUEL: <div class="fuel-gauge"><div class="fuel-fill" style="width: ${fuelPct}%"></div></div></span>
                 <div class="feedback-btns">
-                    <button class="feedback-btn" title="Promote Logic" onclick="sendFeedback(this, 'UP', '${topic}', ${fuel}, '${source}')">⬆️</button>
-                    <button class="feedback-btn" title="Demote Logic" onclick="sendFeedback(this, 'DOWN', '${topic}', ${fuel}, '${source}')">⬇️</button>
+                    <button class="feedback-btn up" title="Promote Logic" onclick="sendFeedback(this, 'UP', '${topic}', ${fuel}, '${source}')">⬆️</button>
+                    <button class="feedback-btn down" title="Demote Logic" onclick="sendFeedback(this, 'DOWN', '${topic}', ${fuel}, '${source}')">⬇️</button>
                 </div>
             </div>
         `;

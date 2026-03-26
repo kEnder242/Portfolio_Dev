@@ -110,6 +110,20 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 **5. LoRA De-escalation**
 *   Forensic tests confirmed the `shadow_brain_v2` LoRA was over-trained on structural headers, causing infinite loops. Disabling it has restored perfect grounding.
 
+---
+
+### 🏛️ FINAL FORENSIC REPORT: KENDER CONNECTIVITY & BICAMERAL SYNC (MARCH 25, 2026)
+
+**1. The "Name Resolution" Fix ([FEAT-255.7])**
+*   **The Problem**: `loader.py` (BicameralNode) was attempting to resolve the hostname `KENDER` via DNS, which was intermittently failing with a "Temporary failure in name resolution."
+*   **The Fix**: Implemented an **Explicit IP Fallback** in `BicameralNode`. It now attempts DNS resolution first but defaults to the hardwired IP `192.168.1.26` if resolution fails or if the host is explicitly named "KENDER."
+*   **Result**: The Windows 4090 is now reliably reachable regardless of local network DNS stability.
+
+**2. Full Bicameral Flow Verified**
+*   **The Problem**: `test_complex.py` was exiting prematurely after the fast local response, masking the Sovereign (4090) output.
+*   **The Fix**: Updated the test script to wait for the **`Brain (Result)`** signal.
+*   **Verification**: Confirmed the 1-2-3 sequence: 1) Local Intuition, 2) Sovereignty Handshake, 3) Sovereign Synthesis (Grounded).
+
 
 ---
 
