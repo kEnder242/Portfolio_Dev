@@ -80,21 +80,35 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
     ## 🌊 PHASE 14: PROMPT PRUNING & IDENTITY HARDENING [REVISION-17.9]
     **Goal:** Eliminate "Meta-Talking" and robotic echoes by distilling the Brain/Shadow persona into a high-density, 3B-native structural prompt.
 
-    *   **Task 14.1: Structural Persona Compression**
-        *   **File**: `HomeLabAI/src/nodes/brain_node.py`
-        *   **How**: Replace the 200-word paragraph-style `BRAIN_SYSTEM_PROMPT` with a Markdown-structured `# IDENTITY` and `# RULES` block.
-        *   **Why**: 3B models anchor better to structural headers than conversational prose, reducing identity collapse.
-    *   **Task 14.2: Metadata Displacement (User-Side Context)**
-        *   **File**: `HomeLabAI/src/nodes/loader.py` (Inside `generate_response`)
-        *   **How**: Move the `[SITUATIONAL_CONTEXT]` injection from the system prompt to the user message.
-        *   **Why**: Small models weigh the most recent tokens (user message) higher, ensuring the `<system_state>` actually informs behavior rather than becoming a robotic label.
-    *   **Task 14.3: Negative Constraint Hardening**
-        *   **File**: `HomeLabAI/src/nodes/brain_node.py` and `pinky_node.py`
-        *   **How**: Explicitly forbid "Meta-Labeling" (e.g., "DO NOT describe your internal function or role name in your response").
-        *   **Why**: Prevents the "I am a high-fidelity synthesis engine" robotic loops.
-    *   **Task 14.4: Zero-Discovery Handshake**
-        *   **File**: `HomeLabAI/src/logic/cognitive_hub.py` (Inside `_process_node_stream`)
-        *   **How**: Update the status broadcast (`crosstalk`) to use more natural labels that don't trigger model imitation.
+    *   **[DONE] Task 14.1: Structural Persona Compression**
+        *   *Result*: Applied refined Markdown prompts to `brain_node.py` and `pinky_node.py`.
+    *   **[DONE] Task 14.2: Metadata Displacement (User-Side Context)**
+        *   *Result*: Refactored `loader.py` to move situational context to the user role.
+    *   **[TESTED/FAILED] Task 14.3: Negative Constraint Hardening**
+        *   *Result*: Verified in harness: negative rules cause infinite loops in 3B models. Use explicit positive identity anchors instead.
+    *   **[DONE] Task 14.4: Zero-Discovery Handshake**
+        *   *Result*: Updated `acme_lab.py` crosstalk to use natural labels.
+
+---
+
+### 🏛️ ARCHITECTURAL RESTORATION REPORT (MARCH 25, 2026)
+
+**1. Brain Priming restored ([FEAT-085])**
+*   The Brain now snaps to life immediately when a client connects to the foyer. I've ensured this only triggers on a physical handshake to avoid "Over-Waking" the system during background tasks.
+
+**2. Console Spam silenced ([FEAT-233])**
+*   I refactored `loader.py` to remove the per-token POST calls. The UI Waterfall is now decoupled from the inter-node pre-loading.
+*   **Result**: The Pinky and Shadow consoles now show only the final cohesive response (Paragraph Pop).
+
+**3. Identity Grounding hardened ([FEAT-254.2])**
+*   I implemented strict **Metadata Displacement**. All situational context and behavioral guidance are now injected into the `user` role instead of the `system` role. 
+*   **Result**: The 3B model maintains its persona without regurgitating its own metadata.
+
+**4. Expert Routing restored ([FEAT-184])**
+*   The **Expert Domain Router** is now active in the main reasoning loop. The Sovereign Brain (KENDER) now receives domain-specific guidance based on the query.
+
+**5. LoRA De-escalation**
+*   Forensic tests confirmed the `shadow_brain_v2` LoRA was over-trained on structural headers, causing infinite loops. Disabling it has restored perfect grounding.
 
 
 ---
