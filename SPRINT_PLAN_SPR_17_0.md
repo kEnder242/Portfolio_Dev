@@ -91,7 +91,27 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 
 ---
 
-### 🏛️ ARCHITECTURAL RESTORATION REPORT (MARCH 25, 2026)
+### 🏛️ FORENSIC REPORT: THE PERPETUAL MOTION IGNITION (MARCH 31, 2026)
+*   **The Bug**: Identified that the "Snap-to-Life" Handshake was triggering engine ignition for **any** WebSocket connection, including passive dashboard polls from `status.html`.
+*   **The Result**: The Hub would hibernate, the dashboard would immediately handshake, and the Hub would re-ignite the engine—creating a 10-minute loop that wasted VRAM and masked hibernation.
+*   **The Missing Signal**: The Attendant lacked a `reason` parameter for ignition, making it impossible to distinguish between a recovery, a user-intent wake, or a ghost-connection.
+
+## 🌊 PHASE 16: TRACEABLE AWAKENING [HARDENING]
+**Goal:** Implement mandatory ignition reasons and client-aware handshake gates to ensure the Lab only wakes for valid user intent.
+
+*   **Task 16.1: [ATTENDANT] Mandatory Reason Enforcement**
+    *   **File**: `HomeLabAI/src/lab_attendant_v4.py`
+    *   **How**: Update `/start` and `/ignition` to require a `reason` string. Log it to `status.json`.
+*   **Task 16.2: [HUB] Client-Signed Handshake**
+    *   **File**: `HomeLabAI/src/acme_lab.py`
+    *   **How**: Refactor `client_handler` to only trigger `spark_reload` if the client ID matches `intercom`.
+*   **Task 16.3: [DEBUG] The 'STUB' Engine**
+    *   **File**: `HomeLabAI/src/lab_attendant_v4.py`
+    *   **How**: Implement a `STUB` engine type that skips GPU calls and **bypasses Quiescence [FEAT-136]** for near-instant state transitions.
+*   **Task 16.4: [FORENSIC] Idle Gauges**
+    *   **How**: Add `[IDLE_GAUGE]` logs to the Hub to show exactly which client or timer is blocking hibernation.
+*   **Task 16.5: [AUDIT] Timing Characterization (Mid-Sprint)**
+    *   **How**: Use logs from STUB runs to identify the absolute minimum async cooldowns required for foyer stability. Shore up timing to eliminate unnecessary waits.
 
 **1. Brain Priming restored ([FEAT-085])**
 *   The Brain now snaps to life immediately when a client connects to the foyer. I've ensured this only triggers on a physical handshake to avoid "Over-Waking" the system during background tasks.
@@ -122,7 +142,27 @@ We are not just fixing bugs; we are hardening the **Tendons** of the Lab.
 **2. Full Bicameral Flow Verified**
 *   **The Problem**: `test_complex.py` was exiting prematurely after the fast local response, masking the Sovereign (4090) output.
 *   **The Fix**: Updated the test script to wait for the **`Brain (Result)`** signal.
-*   **Verification**: Confirmed the 1-2-3 sequence: 1) Local Intuition, 2) Sovereignty Handshake, 3) Sovereign Synthesis (Grounded).
+*   *---
+
+## 🏗️ ARCHITECTURE: THE NATIVE MCP RELAY (PLANNING)
+
+### 1. The "Dialogue" Model ([FEAT-240])
+*   **Pattern**: Transition from "Hub-Drives-Node" to "Hub-Hosts-Node."
+*   **Mechanism**: The Hub implements the `mcp.sampling.createMessage` handler.
+*   **Visibility**: Every `SamplingRequest` from a node (e.g., Pinky asking for Brain) is a **Visible Event** in the Intercom. No more "Quiet Mode."
+
+### 2. Multi-LoRA Streaming Continuity
+*   **Internal Pipeline**: Nodes will use `async for token in generate_response()` internally to maintain the speed of the 2080 Ti.
+*   **Out-of-Band Bridge**: To avoid the MCP "Blocking" trap, nodes will emit tokens to a private Hub-side buffer. This allows the Hub to detect `[ACTION]` tags *before* the model finishes talking.
+*   **The "Waffle" Guard**: We will no longer attempt to force-stream through standard MCP `call_tool`. We accept that MCP tools are cohesive blocks, and we use the internal buffer for the "Waterfall" logic.
+
+### ⚠️ THE UI MANDATE: PARAGRAPH POP
+*   **Rule**: Streaming is **INTERNAL ONLY**. 
+*   **GUI Behavior**: The Intercom UI must **NEVER** see word-by-word tokens. 
+*   **Mechanism**: The Hub will collect tokens from the "Dialogue" bridge and only `broadcast()` the final cohesive paragraph once the node turn is complete. This preserves the clinical, high-authority aesthetic of the Lab.
+
+### 🧐 Lead Engineer Intuition
+While this increases the Hub's code surface area (managing asynchronous sampling states), it finally provides a **Physical Grounding** for the "Fuel" metaphor. Fuel isn't just a number; it's the **Recursion Depth Limit** of the sampling bridge. This refactor will make the lab more robust, less "chatty" in the logs, but more "conversational" in the UI.
 
 
 ---
