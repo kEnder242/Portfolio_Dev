@@ -123,10 +123,17 @@ def main():
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
     
     lock_path = ROUND_TABLE_LOCK
+    maint_lock = os.path.join(DATA_DIR, "maintenance.lock")
 
     epoch_count = 0
     while True:
-        # --- TOP LEVEL LOCK CHECK ---
+        # --- [FEAT-259.1] TOP LEVEL LOCK CHECKS ---
+        if os.path.exists(maint_lock):
+            logging.info("[LOCK] Maintenance Lock Active. Silencing all background tasks.")
+            update_status("IDLE", "Maintenance Active. Scanner yielded.")
+            time.sleep(300)
+            continue
+
         if check_lock(lock_path):
             logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
             update_status("WAITING", "Round Table Active. Scanner yielded.")
@@ -139,27 +146,31 @@ def main():
         
         # 1. Update Manifest
         run_task([LIBRARIAN])
-        if check_lock(lock_path): continue
-
+        
         # 2. Update Queue
         run_task([QUEUE_MGR])
-        if check_lock(lock_path): continue
 
         # 3. Artifact Map Refresh (Hybrid/Brain Mode)
-        logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
-        years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
-        for idx, year in enumerate(years):
-            if check_lock(lock_path): break
-            while not vram_guard(): 
-                update_status("WAITING", "VRAM Cooling...")
-                time.sleep(60)
+        # Only run if there is work or if specifically requested
+        if os.path.exists(QUEUE_FILE):
+            with open(QUEUE_FILE, 'r') as f:
+                queue = json.load(f)
             
-            progress = int((idx / len(years)) * 100)
-            logging.info(f"Scanning Artifact Sector: {year} (Brain) [{progress}%]")
-            update_status("ONLINE", f"Scanning Artifacts: {year}", progress_pct=progress)
-            run_task([ARTIFACT_SCANNER, year, "--hybrid"])
+            if queue:
+                logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
+                years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
+                for idx, year in enumerate(years):
+                    if check_lock(lock_path) or os.path.exists(maint_lock): break
+                    while not vram_guard(): 
+                        update_status("WAITING", "VRAM Cooling...")
+                        time.sleep(60)
+                    
+                    progress = int((idx / len(years)) * 100)
+                    logging.info(f"Scanning Artifact Sector: {year} (Brain) [{progress}%]")
+                    update_status("ONLINE", f"Scanning Artifacts: {year}", progress_pct=progress)
+                    run_task([ARTIFACT_SCANNER, year, "--hybrid"])
         
-        if check_lock(lock_path): continue
+        if check_lock(lock_path) or os.path.exists(maint_lock): continue
 
         # 4. Notes Fast Burn
         logging.info("Step 4: Consuming Note Queue...")
@@ -167,57 +178,56 @@ def main():
         if os.path.exists(QUEUE_FILE):
             try:
                 with open(QUEUE_FILE, 'r') as f:
-                    initial_queue_size = len(json.load(f))
-            except: pass
-
-        while True:
-            if check_lock(lock_path): break
-            if not os.path.exists(QUEUE_FILE): break
-            with open(QUEUE_FILE, 'r') as f:
-                try:
                     queue = json.load(f)
-                except: queue = []
-            if not queue: break
-            
-            while not vram_guard(): 
-                update_status("WAITING", "VRAM Cooling...")
-                time.sleep(60)
-            
-            task = queue[0]
-            remaining = len(queue)
-            progress = 100
-            if initial_queue_size > 0:
-                progress = int(((initial_queue_size - remaining) / initial_queue_size) * 100)
-            
-            logging.info(f"Processing: {task['id']} ({remaining} remaining) [{progress}%]")
-            update_status("BUSY", f"Nibbling: {task['id']}", filename=task['filename'], progress_pct=progress)
-            
-            use_hybrid = "2024" in task['bucket'] or "PIAV" in task['filename']
-            flag = "--hybrid" if use_hybrid else "--reasoning"
-            
-            if run_task([NIBBLER, flag]):
-                time.sleep(SLEEP_INTERVAL)
-            else:
-                time.sleep(60)
+                    initial_queue_size = len(queue)
+            except: queue = []
 
-        if check_lock(lock_path): continue
+            while queue:
+                if check_lock(lock_path) or os.path.exists(maint_lock): break
+                
+                while not vram_guard(): 
+                    update_status("WAITING", "VRAM Cooling...")
+                    time.sleep(60)
+                
+                task = queue[0]
+                remaining = len(queue)
+                progress = 100
+                if initial_queue_size > 0:
+                    progress = int(((initial_queue_size - remaining) / initial_queue_size) * 100)
+                
+                logging.info(f"Processing: {task['id']} ({remaining} remaining) [{progress}%]")
+                update_status("BUSY", f"Nibbling: {task['id']}", filename=task['filename'], progress_pct=progress)
+                
+                use_hybrid = "2024" in task['bucket'] or "PIAV" in task['filename']
+                flag = "--hybrid" if use_hybrid else "--reasoning"
+                
+                if run_task([NIBBLER, flag]):
+                    time.sleep(SLEEP_INTERVAL)
+                else:
+                    time.sleep(60)
+                
+                # Reload queue
+                with open(QUEUE_FILE, 'r') as f:
+                    queue = json.load(f)
+
+        if check_lock(lock_path) or os.path.exists(maint_lock): continue
 
         # 5. Eternal Slow Burn (Refinement Loop)
-        logging.info("Step 5: Entering Eternal Refinement Loop...")
-        trigger_pager(f"Epoch {epoch_count} Queue Cleared. Entering Refinement.", severity="info", source="MassScan")
-        
-        # We stay in this loop for 50 items before re-checking the manifest/queue
-        for i in range(50):
-            if check_lock(lock_path): break
-            while not vram_guard(): 
-                update_status("WAITING", "VRAM Cooling...")
-                time.sleep(60)
-            logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
-            update_status("ONLINE", f"Refining Gem {i+1}/50")
-            if run_task([GEM_REFINER]):
-                time.sleep(SLEEP_INTERVAL)
-            else:
-                time.sleep(120) 
+        # [POLITENESS] Only refine if the queue was just cleared or specifically idle
+        items_to_refine = get_low_rank_items()
+        if items_to_refine:
+            logging.info(f"Step 5: Refining {len(items_to_refine)} items...")
+            for i in range(min(len(items_to_refine), 50)):
+                if check_lock(lock_path) or os.path.exists(maint_lock): break
+                while not vram_guard(): 
+                    update_status("WAITING", "VRAM Cooling...")
+                    time.sleep(60)
+                logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
+                update_status("ONLINE", f"Refining Gem {i+1}/50")
+                if run_task([GEM_REFINER]):
+                    time.sleep(SLEEP_INTERVAL)
+                else:
+                    time.sleep(120) 
 
         if check_lock(lock_path): continue
 
