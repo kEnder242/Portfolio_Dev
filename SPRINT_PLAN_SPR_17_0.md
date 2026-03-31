@@ -379,6 +379,18 @@ While this increases the Hub's code surface area (managing asynchronous sampling
 *   **[DONE] Task 16.6: [CLEAN_RESTART] Clean Restart Mandate**
     *   *Result*: `on_shutdown` hook implemented. Verified that `systemctl stop` reaps the foyer.
 
+## 🌊 PHASE 17: LAST-MILE HARDENING [STABILITY]
+**Goal:** Align all clients and ensure operational consistency for the live system.
+
+*   **Task 17.1: [CLIENT] Python Intercom Alignment**
+    *   *How*: Update `intercom.py` to send the `client: "intercom"` signature in its handshake.
+*   **Task 17.2: [HUB] Idle Logic Consistency**
+    *   *How*: Consolidate `afk_timeout` into `idle_gate` and ensure the live gate is set to **300s (5m)**.
+*   **Task 17.3: [UI] Ignition Reason Visibility**
+    *   *How*: Update `status.html` to display the ignition `reason` in the technical ledger.
+*   **Task 17.4: [FORENSIC] Log Leveling**
+    *   *How*: Demote `[IDLE_GAUGE]` to DEBUG to prevent log bloat in normal operation.
+
 ---
 
 ### 🛡️ STABILITY & FORENSIC REPORT (MARCH 31, 2026 - 13:15)
