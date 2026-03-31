@@ -1123,7 +1123,19 @@
 ## [FEAT-259] Targeted Hibernation (The Butler Pattern)
 **Status:** ACTIVE
 **Logic:** Surgical reaping of session-specific engine processes during hibernation while sparing the management layer.
-**Mechanism:** `mcp_hibernate` walks the process tree and identifies members carrying the `_CURRENT_SESSION_TOKEN`.
-1.  **SPARE**: Hub (`acme_lab.py`) and Resident Nodes (Archive, Pinky, etc.) are spared to preserve handshakes and session history.
-2.  **REAP**: AI Engines (`vllm`, `ollama`, `EngineCore`) are reaped to immediately reclaim VRAM.
-3.  **SAFETY**: External tools (test scripts) are automatically spared as they lack the session token.
+**Mechanism:** 
+1.  **SPARE**: Hub (`acme_lab.py`) and Resident Nodes are spared.
+2.  **REAP**: AI Engines carrying the session token are killed.
+
+## [FEAT-260] Fast-Path STUB Engine (Silicon Proxy)
+**Status:** ACTIVE
+**Logic:** A high-speed simulation mode that bypasses physical GPU hardware gates.
+**Mechanism:** Bypasses VRAM pre-flight and subprocess spawning for rapid state testing.
+
+## [FEAT-261] Traceable Awakening (Mandatory Reasoning)
+**Status:** ACTIVE
+**Logic:** Enforces a mandatory `reason` argument for all engine ignition events to ensure auditability.
+**Mechanism:** 
+1.  **Enforcement**: `/start` and `/ignition` require a `reason`.
+2.  **Audit Trail**: Reasons are logged to the journal and exported to `status.json`.
+3.  **Client-Aware Gate**: Hub foyer only triggers ignition if the handshake client is explicitly `intercom`.

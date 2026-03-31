@@ -363,4 +363,29 @@ While this increases the Hub's code surface area (managing asynchronous sampling
 *   **Task 15.4: [DONE] [CONDUCTOR] LoRA De-escalation** (Disabled shadow_brain_v2 in infrastructure.json)
 *   **Task 15.5: [DONE] [VERIFICATION] Resonant Shakedown** (Verified via test_complex.py: 167 tokens streamed, zero hallucinations)
 
+## 🌊 PHASE 16: TRACEABLE AWAKENING [HARDENING]
+**Goal:** Implement mandatory ignition reasons and client-aware handshake gates.
+
+*   **[DONE] Task 16.1: [ATTENDANT] Mandatory Reason Enforcement**
+    *   *Result*: `/start` and `/ignition` now require a `reason` string. Logging verified.
+*   **[DONE] Task 16.2: [HUB] Client-Signed Handshake**
+    *   *Result*: `acme_lab.py` now gates `spark_reload` to `client_id == "intercom"`.
+*   **[DONE] Task 16.3: [DEBUG] The 'STUB' Engine**
+    *   *Result*: `engine="STUB"` implemented. Bypasses 60s hardware gates for fast logic testing.
+*   **[DONE] Task 16.4: [FORENSIC] Idle Gauges**
+    *   *Result*: `[IDLE_GAUGE]` logs active in `reflex_loop` for characterization.
+*   **[PENDING] Task 16.5: [AUDIT] Timing Characterization (Mid-Sprint)**
+    *   *Status*: Scheduled for follow-up audit.
+*   **[DONE] Task 16.6: [CLEAN_RESTART] Clean Restart Mandate**
+    *   *Result*: `on_shutdown` hook implemented. Verified that `systemctl stop` reaps the foyer.
+
+---
+
+### 🛡️ STABILITY & FORENSIC REPORT (MARCH 31, 2026 - 13:15)
+*   **System Status**: **HIBERNATING** (Verified 8.4% VRAM).
+*   **Idle Gate Verification**: The `[IDLE_GAUGE]` logs confirm a perfectly linear 300s countdown to hibernation. No resets or "Phantom Activity" detected.
+*   **Reason Traceability**: Ignition `SAFE_PILOT` correctly logged and persisting in vitals.
+*   **Clean Slate Verified**: `systemctl stop` confirmed to reap port 8765, ensuring zero zombie collisions on restart.
+*   **Handshake Security**: Handshake-only ignition spark verified. Passive polls (dashboard) no longer wake the GPU.
+
 
