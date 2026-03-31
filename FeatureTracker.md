@@ -922,6 +922,11 @@
 **Rationale:** To provide the Lead Engineer with high-confidence verification of the Lab's "Tendons" (Dreaming, Harvesting, Mapping, Dialogue) before concluding a session.
 **Mechanism:** `lifecycle_gauntlet.py` script shunting 1-gem/1-prompt batches through the pipeline.
 
+## [FEAT-240] Native MCP Relay (Sampling Bridge)
+**Status:** DESIGN
+**Logic:** Moves from custom tool wrappers (`facilitate`) to the standard `mcp.sampling.createMessage` protocol.
+**Mechanism:** The Hub acts as a Stateful Host, providing steering tools to nodes via the Sampling context and relaying their intents as visible events.
+
 ---
 
 ### [VIBE-006] Neural Resonance (The Overhearing)
@@ -929,14 +934,14 @@
 **Rationale:** Eliminates "Hollow Parallelism." Pinky acts as the "gut instinct" that the Brain can validate or override.
 **Vibe:** Emergent Synergy.
 
-### [VIBE-013] Sequential Blending (The Waterfall Flow)
+### [VIBE-013] Sequential Blending (The Fuel Travel Model)
 **Logic:** Prioritize context density over raw parallel speed. 
 **Sequence:**
 1.  **Lab Node (Sentinel)**: Performs Triage & Domain routing.
-2.  **Pinky (Reflex)**: Provides situational interjection (Internal).
-3.  **Shadow Brain (Archivist)**: Provides technical intuition + Proactive RAG Context.
-4.  **Sovereign Brain (Architect)**: Receives the "Blended" history of the previous three turns to produce the definitive synthesis.
-**Rationale:** Ensures the 4090 Sovereign has the highest possible "Truth Density" by overhearing the local nodes' intuition before it begins its own derivation.
+2.  **Pinky (Reflex)**: Provides situational interjection (Visible).
+3.  **Shadow Brain (Archivist)**: Provides technical intuition + Proactive RAG Context (Visible).
+4.  **Sovereign Brain (Architect)**: Receives the "Blended" history of the previous three turns to produce the definitive synthesis (Visible).
+**Rationale:** The "Fuel Travel" model mandates that every node that consumes fuel and produces a thought **must** be visible in the Intercom. You should see the triage framing, the technical guess, and the final grounded synthesis as a sequential "Waterfall."
 
 ---
 **DEFEATURED REASONING (Mar 2026):**
@@ -989,13 +994,13 @@
 1. Inline script in <head> hooks window.onerror and unhandledrejection.
 2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
 
-## [FEAT-233] Inter-Node Waterfall (Token-based Streaming)
+## [FEAT-233] Inter-Node Waterfall (Internal Streaming)
 **Status:** ACTIVE
 **Logic:** Transition from turn-based handovers to real-time token streaming between nodes.
 **Mechanism:** 
 1. `CognitiveHub` uses incremental JSON parsing to identify intent mid-stream.
 2. Pinky's yielded tokens are piped directly into Shadow's context window during inference.
-3. Eliminates the "Paragraph Pop" effect and reduces perceived latency by ~40%.
+3. [REVISION-17.9]: Enforces **Paragraph Pop** for the Intercom UI. Tokens are streamed out-of-band to the Hub for action-detection but are ONLY broadcast to the GUI as a cohesive block once the turn is complete.
 
 ## [FEAT-234] Pure Scalar Fuel (Multiplicative Orchestration)
 **Status:** ACTIVE

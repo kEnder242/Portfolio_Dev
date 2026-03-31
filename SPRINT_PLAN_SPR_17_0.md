@@ -274,6 +274,7 @@ While this increases the Hub's code surface area (managing asynchronous sampling
 *   **Task 8.2: Persona Leak Prevention**
     *   Adjust the injection format of `[ROUTE]`, `[FUEL]`, etc., in `CognitiveHub.py` to use system-level boundaries (e.g., `<system_state>`) or add an explicit instruction to Pinky's prompt: `DO NOT repeat system metadata in your response.`
         *   *Why*: The 3B model was repeating the injected headers back to the user, creating a robotic "Echo Chamber" effect.
+        *   **[RECONCILIATION NOTE]**: This task is evolved by **[FEAT-254.2] Metadata Displacement** (See Phase 15). We have moved away from `<system_state>` boundaries in favor of moving context entirely to the User role.
 
     ---
 
@@ -292,6 +293,7 @@ While this increases the Hub's code surface area (managing asynchronous sampling
     *   **Task 9.4: VRAM Hibernation Matrix (The 5m Nap) [FEAT-249]**
         *   *How*: Implement a `self._vram_hibernate_timer` in `acme_lab.py`. SIGTERM local engines (vLLM/Ollama) if `connected_clients == 0` for > 300s.
         *   *Why*: Reclaims ~6GB of VRAM for non-AI tasks while keeping the Hub resident for alarms.
+        *   **[RECONCILIATION NOTE]**: This feature suffered a regression during the `v4` Attendant upgrade. We are re-stabilizing it today to solve the "Watchdog Ignition Loop" where the Attendant would re-wake the hibernated engines.
     *   **Task 9.5: Handshake Ignition Spark**
         *   *How*: Update the `handshake` WebSocket handler to proactively trigger `lab_start` if the engine is OFFLINE.
         *   *Why*: Masks the 3s reload latency by starting the engine the moment the user opens the tab.
