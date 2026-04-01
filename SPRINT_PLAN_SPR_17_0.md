@@ -388,8 +388,21 @@ While this increases the Hub's code surface area (managing asynchronous sampling
     *   *How*: Consolidate `afk_timeout` into `idle_gate` and ensure the live gate is set to **300s (5m)**.
 *   **Task 17.3: [UI] Ignition Reason Visibility**
     *   *How*: Update `status.html` to display the ignition `reason` in the technical ledger.
-*   **Task 17.4: [FORENSIC] Log Leveling**
-    *   *How*: Demote `[IDLE_GAUGE]` to DEBUG to prevent log bloat in normal operation.
+*   **[DONE] Task 17.4: [FORENSIC] Log Leveling**
+    *   *Result*: Demote `[IDLE_GAUGE]` to DEBUG to prevent log bloat in normal operation.
+
+## 🌊 PHASE 18: PERSISTENT ENGINE (SLEEP MODE) [FEAT-262]
+**Goal:** Transition from "Kill-to-Hibernate" to "vLLM Sleep Mode" to reduce wake-up latency from 86s to <10s.
+
+*   **Task 18.1: [ENGINE] Enable Sleep Mode**
+    *   *How*: Update `start_vllm.sh` to export `VLLM_SERVER_DEV_MODE=1` and add the `--enable-sleep-mode` flag.
+*   **Task 18.2: [ATTENDANT] REST-based Hibernation**
+    *   *How*: Update `mcp_hibernate` to POST to `localhost:8088/sleep?level=1` instead of reaping PIDs.
+*   **Task 18.3: [HUB] Seamless Wake-up**
+    *   *How*: Ensure the Hub's Handshake Spark uses the `/wake_up` endpoint for near-instant restoration.
+*   **Task 18.4: [FORENSIC] Registry Persistence**
+    *   *How*: Maintain the PID Registry to ensure that even if "Sleep" hangs, the Attendant can still perform a Hard-Scrub.
+
 
 ---
 

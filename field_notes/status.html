@@ -188,6 +188,7 @@
                 <div class="vital-card">
                     <div class="vital-label">Silicon Mode</div>
                     <div class="vital-value" id="engine-mode"><span class="status-led led-offline"></span>OFFLINE</div>
+                    <div id="ignition-reason" style="font-size: 0.7em; color: #666; margin-top: 4px; font-family: monospace;">-</div>
                 </div>
                 <div class="vital-card">
                     <div class="vital-label">Active Model</div>
@@ -425,12 +426,14 @@
                     if (data.vitals) {
                         const engineEl = document.getElementById('engine-mode');
                         const modelEl = document.getElementById('model-name');
+                        const reasonEl = document.getElementById('ignition-reason');
                         
                         let engineClass = data.vitals.brain === 'ONLINE' ? 'led-online' : 'led-offline';
                         if (data.vitals.mode === 'SWAPPING' || data.vitals.mode === 'DOWNSHIFTING' || data.vitals.mode === 'HIBERNATING') engineClass = 'led-busy';
                         
                         engineEl.innerHTML = `<span class="status-led ${engineClass}"></span>${data.vitals.mode || 'OFFLINE'}`;
                         modelEl.textContent = data.vitals.mode === 'HIBERNATING' ? 'Engines Parked' : (data.vitals.model || '-');
+                        reasonEl.textContent = data.vitals.reason ? `[${data.vitals.reason.toUpperCase()}]` : '-';
                         
                         intercom.innerHTML = `<span class="status-led ${data.vitals.intercom === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.intercom}`;
                         vram.textContent = data.vitals.vram;
@@ -565,8 +568,12 @@
                     }
                 } else if (alert.source === 'System' || alert.source === 'LabAttendant') {
                     const r = await fetch('logs/trace_brain.json');
-                    const text = await r.text();
-                    simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
+                    if (r.ok) {
+                        const text = await r.text();
+                        simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
+                    } else {
+                        simulateTyping(term, "[EVIDENCE UNAVAILABLE]\nMetadata: " + JSON.stringify(alert, null, 2));
+                    }
                 } else {
                     simulateTyping(term, "Metadata: " + JSON.stringify(alert, null, 2));
                 }
