@@ -227,7 +227,7 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
 #crosstalk-bar {
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.75rem;
-    color: #d29922;
+    color: #8b949e; /* Default grey */
     padding: 5px 15px;
     background: #000;
     border-top: 1px solid #333;
@@ -238,6 +238,12 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
     min-height: 1.5rem;
     display: flex;
     align-items: center;
+    transition: all 0.3s ease;
+}
+
+#crosstalk-bar.status-hibernating {
+    color: #d29922; /* Gold for sleep */
+    border-top-color: #d29922;
 }
 
 @media screen and (max-width: 768px) {

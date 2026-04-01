@@ -394,14 +394,14 @@ While this increases the Hub's code surface area (managing asynchronous sampling
 ## 🌊 PHASE 18: PERSISTENT ENGINE (SLEEP MODE) [FEAT-262]
 **Goal:** Transition from "Kill-to-Hibernate" to "vLLM Sleep Mode" to reduce wake-up latency from 86s to <10s.
 
-*   **Task 18.1: [ENGINE] Enable Sleep Mode**
-    *   *How*: Update `start_vllm.sh` to export `VLLM_SERVER_DEV_MODE=1` and add the `--enable-sleep-mode` flag.
-*   **Task 18.2: [ATTENDANT] REST-based Hibernation**
-    *   *How*: Update `mcp_hibernate` to POST to `localhost:8088/sleep?level=1` instead of reaping PIDs.
-*   **Task 18.3: [HUB] Seamless Wake-up**
-    *   *How*: Ensure the Hub's Handshake Spark uses the `/wake_up` endpoint for near-instant restoration.
-*   **Task 18.4: [FORENSIC] Registry Persistence**
-    *   *How*: Maintain the PID Registry to ensure that even if "Sleep" hangs, the Attendant can still perform a Hard-Scrub.
+*   **[DONE] Task 18.1: [ENGINE] Enable Sleep Mode**
+    *   *Result*: `start_vllm.sh` updated with `--enable-sleep-mode`.
+*   **[DONE] Task 18.2: [ATTENDANT] REST-based Hibernation**
+    *   *Result*: `mcp_hibernate` now uses vLLM's `/sleep` endpoint.
+*   **[DONE] Task 18.3: [HUB] Seamless Wake-up**
+    *   *Result*: Hub handshake now triggers `/wake_up` for instant restoration.
+*   **[DONE] Task 18.4: [FORENSIC] Registry Persistence**
+    *   *Result*: Signature-aware cleanup implemented. Engines are reaped by name on exit regardless of token loss.
 
 
 ---

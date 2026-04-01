@@ -256,24 +256,41 @@ function connect() {
         ws = new WebSocket(targetUrl);
         ws.onopen = () => {
             statusDot.className = 'status-dot online';
-            ws.send(JSON.stringify({ type: "handshake", version: CONFIG.VERSION }));
+            ws.send(JSON.stringify({ 
+                type: "handshake", 
+                version: CONFIG.VERSION,
+                client: "intercom" 
+            }));
         };
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log("[WS RECV]", data);
             
             // [FEAT-221] Crosstalk Migration
-            if (data.type === 'crosstalk') {
+            if (data.type === 'crosstalk' || data.type === 'status') {
                 const bar = document.getElementById('crosstalk-bar');
                 if (bar) {
-                    bar.innerText = `⚡ ${data.brain}`;
-                    // Clear after 15s if no new updates
-                    if (window.crosstalkTimeout) clearTimeout(window.crosstalkTimeout);
-                    window.crosstalkTimeout = setTimeout(() => {
+                    if (data.type === 'status' && data.state === "hibernating") {
+                        bar.innerText = "🌙 HIBERNATING";
+                        bar.classList.add('status-hibernating');
+                    } else if (data.type === 'crosstalk') {
+                        bar.innerText = `⚡ ${data.brain}`;
+                        bar.classList.remove('status-hibernating');
+                        // Clear after 15s if no new updates
+                        if (window.crosstalkTimeout) clearTimeout(window.crosstalkTimeout);
+                        window.crosstalkTimeout = setTimeout(() => {
+                            // If we aren't hibernating, return to nominal
+                            if (!bar.classList.contains('status-hibernating')) {
+                                bar.innerText = "⚡ Systems nominal.";
+                            }
+                        }, 15000);
+                    } else if (data.state === "ready") {
                         bar.innerText = "⚡ Systems nominal.";
-                    }, 15000);
+                        bar.classList.remove('status-hibernating');
+                    }
                 }
-                return; // Do not append to main console
+                
+                if (data.type === 'crosstalk') return; // Silence internal tokens
             }
 
             if (data.type === 'status') {
