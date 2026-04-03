@@ -16,18 +16,29 @@ Before diving into the implementation, we must acknowledge the "Scars" from prev
 
 ---
 
-## 🏗️ Phase 1: The Waking State Machine [FEAT-265]
-**Context:** When a user handshakes the lab via `intercom.html` while it is `HIBERNATING`, the system enters a chaotic "Ignition" phase. We need to formalize this transition.
+## 🏗️ Phase 1: Remote Control "Discovery" [FEAT-267]
+**Context:** Remote Lab Control has been failing due to CORS issues and "guessing" the Lab Key. This is the foundation for all remote verification.
+
+### Tasks:
+- [ ] **Internal Discovery:** Update the Attendant's `status.json` to include `vitals.style_key` (the CSS hash).
+- [ ] **UI Unification:** Modify `status.html` to read the key directly from the `status.json` polling loop. No more DOM scraping.
+- [ ] **CORS Preflight:** Update `lab_attendant_v4.py` middleware to return `200 OK` for all `OPTIONS` requests, satisfying Cloudflare's security handshake.
+- [ ] **Informative Errors:** Fix the `Response.text` race condition in the JS `fetch` handler to provide detailed feedback (e.g., "Invalid Key" vs "Connection Refused").
+
+---
+
+## 🏗️ Phase 2: The Waking State Machine [FEAT-265]
+**Context:** Once Remote Control is stable (Phase 1), we formalize the transition from HIBERNATING to WAKING to READY to stabilize the "Vibe."
 
 ### Tasks:
 - [ ] **State Transition:** Introduce `status = "WAKING"` in `acme_lab.py`.
-- [ ] **Crosstalk Integration:** Update `status.json` and the frontend `mission-control.js` to show `[IGNITION IN PROGRESS]` when the Hub is in the `WAKING` state. Map `HIBERNATING`, `QUIESCED`, and `OFFLINE` to distinct visual indicators in the crosstalk bar.
+- [ ] **Crosstalk Integration:** Update `status.json` and the frontend `mission-control.js` to show `[IGNITION IN PROGRESS]` when the Hub is in the `WAKING` state. Map `HIBERNATING`, `QUIESCED`, and `OFFLINE` to distinct visual indicators.
 - [ ] **The "Wait Ready" Gate:** Modify the WebSocket handshake to **await** `self.engine_ready` (with a 60s timeout) if the status is `WAKING`. This ensures Pinky's Console doesn't see a `None` state and disconnect.
 
 ---
 
-## ⏰ Phase 2: Alarm Restoration & Tiered Visibility [FEAT-266]
-**Context:** The "Alarm Clock" (scheduled tasks) is currently resident in the code but hard-disabled. We need to restore it while managing log noise.
+## ⏰ Phase 3: Alarm Restoration & Tiered Visibility [FEAT-266]
+**Context:** The "Alarm Clock" is the highest-level logic. It depends on a stable Waking State (Phase 2) to ensure background tasks don't crash trying to talk to a "None" engine.
 
 ### Tasks:
 - [ ] **Enable Window:** Set `is_window = True` and calibrate the loop to run every 60s.
@@ -35,17 +46,6 @@ Before diving into the implementation, we must acknowledge the "Scars" from prev
     - **Nightly (02:00/03:00):** Log "Nothing to do" at `WARNING` level so it appears in the Interleaved Logs once per window.
     - **Nibble (Frequent):** Log only on **Execution** or **Error** to keep the dashboard clean.
 - [ ] **Hibernation Wake:** Ensure the Alarm loop can trigger a `wake_up` for the Nightly Dialogue if the Lab is hibernating. Skip if a `MAINTENANCE_LOCK` or `LORA_TRAINING` task is detected.
-
----
-
-## 🔐 Phase 3: Remote Control "Discovery" [FEAT-267]
-**Context:** Remote Lab Control has been failing due to CORS issues and "guessing" the Lab Key.
-
-### Tasks:
-- [ ] **Internal Discovery:** Update the Attendant's `status.json` to include `vitals.style_key` (the CSS hash).
-- [ ] **UI Unification:** Modify `status.html` to read the key directly from the `status.json` polling loop. No more DOM scraping.
-- [ ] **CORS Preflight:** Update `lab_attendant_v4.py` middleware to return `200 OK` for all `OPTIONS` requests, satisfying Cloudflare's security handshake.
-- [ ] **Informative Errors:** Fix the `Response.text` race condition in the JS `fetch` handler to provide detailed feedback (e.g., "Invalid Key" vs "Connection Refused").
 
 ---
 
