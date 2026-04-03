@@ -328,8 +328,32 @@ function connect() {
                     topic: data.topic,
                     fuel: data.fuel
                 });
-            } else if (data.type === 'transcription') {
-                appendMsg(data.text, 'user-msg', 'Me (Voice)');
+            } else if (data.type === 'hearing') {
+                // [FEAT-233.2] Live Hearing Pipe: Update or create a temporary hearing bubble
+                let hearingMsg = document.getElementById('live-hearing-msg');
+                if (!hearingMsg) {
+                    hearingMsg = document.createElement('div');
+                    hearingMsg.id = 'live-hearing-msg';
+                    hearingMsg.className = 'message user-msg hearing-active';
+                    chatConsole.appendChild(hearingMsg);
+                }
+                const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                hearingMsg.innerHTML = `
+                    <div class="msg-header">
+                        <span class="msg-time">${time}</span>
+                        <span class="msg-source me">[HEARING...]</span>
+                    </div>
+                    <div class="msg-body">${data.text}</div>
+                `;
+                chatConsole.scrollTop = chatConsole.scrollHeight;
+            } else if (data.type === 'final') {
+                // [FEAT-233.2] Replace hearing bubble with permanent final transcript
+                const hearingMsg = document.getElementById('live-hearing-msg');
+                if (hearingMsg) hearingMsg.remove();
+                
+                // acme_lab.py sends tagged_query: f"[ME] {query}"
+                const cleanText = data.text.replace("[ME] ", "");
+                appendMsg(cleanText, 'user-msg', 'Me (Voice)');
                 lastMsgSource = 'me';
             }
         };

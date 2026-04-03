@@ -47,7 +47,7 @@
 ---
 
 ## 🚧 PHASE 15: THE NEURAL RELAY (Active)
-- [ ] **Waterfall Implementation [SPR-15.0]**: (Active) Implement the Live Hearing Pipe [FEAT-233.2] between Pinky and Shadow.
+- [x] **Waterfall Implementation [SPR-15.0]**: (Complete) Implement the Live Hearing Pipe [FEAT-233.2] between Pinky and Shadow.
 - [x] **Neural Relay Architecture**: [FEAT-229] Parallel fan-out and scalar fuel routing verified.
 - [x] **Atomic Anchor Gate**: [FEAT-227] Hardened [ME] loopback protection.
 
