@@ -1,7 +1,7 @@
 # Sprint Plan: [SPR-18.0] Silicon Stability & Restoration
 **Role: [SPRINT] - High-Fidelity State Management**
 **Date:** April 3, 2026
-**Status:** PROPOSED
+**Status:** COMPLETE
 
 > [!IMPORTANT]
 > **GOAL:** Resolve the "Laundry List" of system janks: stabilize the Hibernation Wake-up sequence, restore the missing Alarm tasks, and fix the "Remote Lab Control" auth failures.
@@ -20,10 +20,10 @@ Before diving into the implementation, we must acknowledge the "Scars" from prev
 **Context:** Remote Lab Control has been failing due to CORS issues and "guessing" the Lab Key. This is the foundation for all remote verification.
 
 ### Tasks:
-- [ ] **Internal Discovery:** Update the Attendant's `status.json` to include `vitals.style_key` (the CSS hash).
-- [ ] **UI Unification:** Modify `status.html` to read the key directly from the `status.json` polling loop. No more DOM scraping.
-- [ ] **CORS Preflight:** Update `lab_attendant_v4.py` middleware to return `200 OK` for all `OPTIONS` requests, satisfying Cloudflare's security handshake.
-- [ ] **Informative Errors:** Fix the `Response.text` race condition in the JS `fetch` handler to provide detailed feedback (e.g., "Invalid Key" vs "Connection Refused").
+- [x] **Internal Discovery:** Update the Attendant's `status.json` to include `vitals.style_key` (the CSS hash).
+- [x] **UI Unification:** Modify `status.html` to read the key directly from the `status.json` polling loop. No more DOM scraping.
+- [x] **CORS Preflight:** Update `lab_attendant_v4.py` middleware to return `200 OK` for all `OPTIONS` requests, satisfying Cloudflare's security handshake.
+- [x] **Informative Errors:** Fix the `Response.text` race condition in the JS `fetch` handler to provide detailed feedback (e.g., "Invalid Key" vs "Connection Refused").
 
 ---
 
@@ -31,9 +31,9 @@ Before diving into the implementation, we must acknowledge the "Scars" from prev
 **Context:** Once Remote Control is stable (Phase 1), we formalize the transition from HIBERNATING to WAKING to READY to stabilize the "Vibe."
 
 ### Tasks:
-- [ ] **State Transition:** Introduce `status = "WAKING"` in `acme_lab.py`.
-- [ ] **Crosstalk Integration:** Update `status.json` and the frontend `mission-control.js` to show `[IGNITION IN PROGRESS]` when the Hub is in the `WAKING` state. Map `HIBERNATING`, `QUIESCED`, and `OFFLINE` to distinct visual indicators.
-- [ ] **The "Wait Ready" Gate:** Modify the WebSocket handshake to **await** `self.engine_ready` (with a 60s timeout) if the status is `WAKING`. This ensures Pinky's Console doesn't see a `None` state and disconnect.
+- [x] **State Transition:** Introduce `status = "WAKING"` in `acme_lab.py`.
+- [x] **Crosstalk Integration:** Update `status.json` and the frontend `mission-control.js` to show `[IGNITION IN PROGRESS]` when the Hub is in the `WAKING` state. Map `HIBERNATING`, `QUIESCED`, and `OFFLINE` to distinct visual indicators.
+- [x] **The "Wait Ready" Gate:** Modify the WebSocket handshake to **await** `self.engine_ready` (with a 60s timeout) if the status is `WAKING`. This ensures Pinky's Console doesn't see a `None` state and disconnect.
 
 ---
 
@@ -41,11 +41,11 @@ Before diving into the implementation, we must acknowledge the "Scars" from prev
 **Context:** The "Alarm Clock" is the highest-level logic. It depends on a stable Waking State (Phase 2) to ensure background tasks don't crash trying to talk to a "None" engine.
 
 ### Tasks:
-- [ ] **Enable Window:** Set `is_window = True` and calibrate the loop to run every 60s.
-- [ ] **Tiered Logging:**
+- [x] **Enable Window:** Set `is_window = True` and calibrate the loop to run every 60s.
+- [x] **Tiered Logging:**
     - **Nightly (02:00/03:00):** Log "Nothing to do" at `WARNING` level so it appears in the Interleaved Logs once per window.
     - **Nibble (Frequent):** Log only on **Execution** or **Error** to keep the dashboard clean.
-- [ ] **Hibernation Wake:** Ensure the Alarm loop can trigger a `wake_up` for the Nightly Dialogue if the Lab is hibernating. Skip if a `MAINTENANCE_LOCK` or `LORA_TRAINING` task is detected.
+- [x] **Hibernation Wake:** Ensure the Alarm loop can trigger a `wake_up` for the Nightly Dialogue if the Lab is hibernating. Skip if a `MAINTENANCE_LOCK` or `LORA_TRAINING` task is detected.
 
 ---
 
@@ -84,3 +84,24 @@ To avoid "waffling" and speed up verification, we will employ the following surg
 ## 📝 Logging & Diagnostics
 - **Internal:** Add a "Header-Dump" to the Attendant's middleware to log the full `X-Lab-Key` and `X-Forwarded-For` headers during 401 events to predict Cloudflare behavior.
 - **External:** Implement detailed error strings in `status.html` that report the `Response.status` code and the first 60 chars of the error body for live test debugging.
+
+---
+
+## 🏁 [BKM-016.3] Sprint Retrospective: High-Fidelity Restoration
+**Date:** April 3, 2026
+**Role:** [RETROSPECTIVE] - Forensic Success & Scar Mapping
+
+### 🏛️ Summary of Success
+Sprint 18.0 successfully transitioned the Lab from a "Reactive Service" to a "Stable Resident." By implementing the **Waking State Machine [FEAT-265]**, we have eliminated the "Handshake Loop" that caused UI disconnects during engine ignition. The restoration of **Alarm Tasks [FEAT-266]** ensures the 18-year archive continues to evolve without manual prompting, while **Remote Control Discovery [FEAT-267]** provides the Lead Engineer with a robust hardware override behind Cloudflare Zero Trust.
+
+### 📉 Deviations from Assumptions
+*   **[STATE_MAPPING]:** Initially assumed `mission-control.js` handled the crosstalk bar. Discovery revealed that `intercom_v2.js` and `status.html` maintain their own status-rendering logic. Requirements were adjusted to ensure parity across all frontend entry points.
+*   **[ALARM_TRIGGER]:** The original plan assumed a simple cron-like check. The implementation was upgraded to include **Quiescence Awareness [FEAT-136]** to prevent background tasks from firing while the silicon is in a maintenance lock.
+*   **[AUTH_REDUNDANCY]:** While the plan focused on the CSS Key, the final implementation in `lab_attendant_v4.py` maintains support for the **Session Token** as a redundant fallback, providing two-factor security for automated and manual overrides.
+
+### 🩹 Scars & Unfinished Tasks
+*   **[SCAR-04] Manual Restart Complexity:** The manual restart procedure for the Hub (`acme_lab.py`) remains sensitive to working-directory pathing. While absolute paths were used for the fix, a more robust systemd wrapper for the Hub (independent of the Attendant) would improve long-tail reliability.
+*   **[UNFINISHED] Nightly Forge Optimization:** Phase 3 Task 2 (Alarms) successfully triggers the Nightly Forge, but the 60-step cycle remains a "Long-Tail" operation that can temporarily block other tool calls. Future sprints should investigate **Asynchronous Training Offloading** to a dedicated worker.
+*   **[LOG_NOISE]:** The "Nothing to do" heartbeats for nightly tasks are currently logged at `WARNING` level to ensure visibility in interleaved logs. This may become "White Noise" over months; monitoring the signal-to-noise ratio is recommended.
+
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
