@@ -316,7 +316,8 @@
 
         async function triggerLabAction(action) {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const url = isLocal ? `http://localhost:9999/${action}` : `${window.location.origin}/attendant/${action}`;
+            // [FIX] pager.jason-lab.dev is the dedicated tunnel for the Attendant (Port 9999)
+            const url = isLocal ? `http://localhost:9999/${action}` : `https://pager.jason-lab.dev/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Use discovered key from pollStatus instead of scraping DOM

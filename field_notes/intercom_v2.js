@@ -284,7 +284,12 @@ function connect() {
                             bar.innerText = "💀 OFFLINE";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "ready") {
-                            bar.innerText = "⚡ Systems nominal.";
+                            // [FEAT-265.6] Gate Nominal by Physical Readiness
+                            if (data.full_lab_ready) {
+                                bar.innerText = "⚡ Systems nominal.";
+                            } else {
+                                bar.innerText = "⏳ SYNCHRONIZING NODES...";
+                            }
                             bar.classList.remove('status-hibernating');
                         }
                     } else if (data.type === 'crosstalk') {
