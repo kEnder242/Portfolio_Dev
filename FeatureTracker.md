@@ -1139,3 +1139,18 @@
 1.  **Enforcement**: `/start` and `/ignition` require a `reason`.
 2.  **Audit Trail**: Reasons are logged to the journal and exported to `status.json`.
 3.  **Client-Aware Gate**: Hub foyer only triggers ignition if the handshake client is explicitly `intercom`.
+
+## [FEAT-265] The Waking State Machine
+**Status:** ACTIVE
+**Logic:** Formalizes the transition from HIBERNATING to WAKING to READY.
+**Mechanism:** Modifies `on_handshake` in the Hub to await engine readiness before broadcasting status, preventing UI disconnect loops. Updates crosstalk bar to reflect intermediate states (`[IGNITION IN PROGRESS]`).
+
+## [FEAT-266] Alarm Restoration & Tiered Visibility
+**Status:** ACTIVE
+**Logic:** Restores the background scheduled task loop (Nightly Dialogue, Nibbler) with managed log verbosity.
+**Mechanism:** Re-enables `is_window` logic. Implements `WARNING` level "Nothing to do" heartbeats for nightly tasks, and suppresses "spam" from frequent nibble tasks unless executed. Respects `MAINTENANCE_LOCK`.
+
+## [FEAT-267] Remote Control Discovery
+**Status:** ACTIVE
+**Logic:** Resolves 401 Unauthorized errors during Remote Lab Control actions.
+**Mechanism:** Attendant publishes its current auth key (`vitals.style_key`) in `status.json`. UI polling loop extracts this key for subsequent REST calls. Attendant middleware hardened to accept CORS `OPTIONS` preflights (HTTP 200).

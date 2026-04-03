@@ -274,6 +274,8 @@
         let currentPanelId = 6;
         let lastKnownState = "";
         let lastKnownMsg = "";
+        let currentLabKey = "";
+        let currentLabSession = "";
 
         function logToConsole(text, color = '#888') {
             const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -317,9 +319,8 @@
             const url = isLocal ? `http://localhost:9999/${action}` : `${window.location.origin}/attendant/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
-            // [SECURITY] Extract shared key from cache-busting CSS link
-            const styleLink = document.querySelector('link[href*="style.css?v="]');
-            const key = styleLink ? styleLink.href.split('v=')[1] : "unknown";
+            // [SECURITY] Use discovered key from pollStatus instead of scraping DOM
+            const key = currentLabKey || currentLabSession || "unknown";
 
             logToConsole(`[REMOTE] Sending ${action.toUpperCase()} signal...`, 'var(--accent-color)');
 
@@ -330,15 +331,20 @@
                 });
                 
                 let result = {};
+                const text = await response.text(); // Single consumption
                 try {
-                    result = await response.json();
+                    if (text) result = JSON.parse(text);
                 } catch (e) {
-                    const text = await response.text();
-                    throw new Error(`Invalid response format (Status ${response.status}): ${text.substring(0, 60)}...`);
+                    // [FEAT-267] Clean error display without consuming body twice
+                    const snippet = text ? text.substring(0, 60) : "Empty Response";
+                    throw new Error(`Invalid format (Status ${response.status}): ${snippet}...`);
                 }
                 
-                const color = response.ok ? '#28a745' : '#f85149';
-                logToConsole(`[ATTENDANT] ${result.message || result.error || 'Signal Acknowledged'}`, color);
+                if (!response.ok) {
+                    throw new Error(result.message || result.error || `Server Error ${response.status}`);
+                }
+                
+                logToConsole(`[ATTENDANT] ${result.message || 'Signal Acknowledged'}`, '#28a745');
                 
                 // Refresh status immediately
                 setTimeout(pollStatus, 2000);
@@ -400,6 +406,11 @@
                     const vram = document.getElementById('vram-status');
                     const msg = document.getElementById('scanner-message');
                     const progressBar = document.getElementById('burn-progress');
+
+                    if (data.vitals) {
+                        currentLabSession = data.vitals.session || "";
+                        currentLabKey = data.vitals.style_key || "";
+                    }
 
                     // Console Logging: State Transitions
                     if (data.status !== lastKnownState) {

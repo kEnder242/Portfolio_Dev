@@ -270,9 +270,23 @@ function connect() {
             if (data.type === 'crosstalk' || data.type === 'status') {
                 const bar = document.getElementById('crosstalk-bar');
                 if (bar) {
-                    if (data.type === 'status' && data.state === "hibernating") {
-                        bar.innerText = "🌙 HIBERNATING";
-                        bar.classList.add('status-hibernating');
+                    if (data.type === 'status') {
+                        if (data.state === "hibernating") {
+                            bar.innerText = "🌙 HIBERNATING";
+                            bar.classList.add('status-hibernating');
+                        } else if (data.state === "waking") {
+                            bar.innerText = "⚡ [IGNITION IN PROGRESS]";
+                            bar.classList.remove('status-hibernating');
+                        } else if (data.state === "quiesced") {
+                            bar.innerText = "⚙️ MAINTENANCE (QUIESCED)";
+                            bar.classList.remove('status-hibernating');
+                        } else if (data.state === "offline") {
+                            bar.innerText = "💀 OFFLINE";
+                            bar.classList.remove('status-hibernating');
+                        } else if (data.state === "ready") {
+                            bar.innerText = "⚡ Systems nominal.";
+                            bar.classList.remove('status-hibernating');
+                        }
                     } else if (data.type === 'crosstalk') {
                         bar.innerText = `⚡ ${data.brain}`;
                         bar.classList.remove('status-hibernating');
@@ -284,9 +298,6 @@ function connect() {
                                 bar.innerText = "⚡ Systems nominal.";
                             }
                         }, 15000);
-                    } else if (data.state === "ready") {
-                        bar.innerText = "⚡ Systems nominal.";
-                        bar.classList.remove('status-hibernating');
                     }
                 }
                 
