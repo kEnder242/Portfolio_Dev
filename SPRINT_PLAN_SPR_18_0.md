@@ -105,3 +105,31 @@ Sprint 18.0 successfully transitioned the Lab from a "Reactive Service" to a "St
 *   **[LOG_NOISE]:** The "Nothing to do" heartbeats for nightly tasks are currently logged at `WARNING` level to ensure visibility in interleaved logs. This may become "White Noise" over months; monitoring the signal-to-noise ratio is recommended.
 
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+
+## 🩹 [BKM-016.4] Forensic Hardening & Final Pass (April 3, 2026 Night Session)
+**Role:** [VERIFICATION] - Final Stability Gate & Immunity Hardening
+
+### 🛠️ Technical Implementation
+1.  **[FEAT-119.1/2] Diplomatic & Agentic Immunity:**
+    *   Upgraded `cleanup_silicon` to perform PGID-based sparing.
+    *   Implemented `GEMINI_CLI_IMMUNITY=1` environment signal, allowing agent-spawned test scripts to survive the "Assassin" reclamation cycle.
+2.  **[FEAT-265.9] Functional Probe:**
+    *   Enhanced engine verification in `acme_lab.py` to include a minimal inference check (OpenAI-compatible `ping`).
+    *   The Lab now rejects the "READY" state if the engine responds with binary garbage or empty models, preventing "Systems Nominal" false-positives.
+3.  **[FEAT-268] Silicon Singleton:**
+    *   Implemented filesystem-based locks (`/tmp/acme_lab.lock` and `/tmp/lab_attendant.lock`) with PID-aware existence checks.
+    *   Ensures that F5 refreshes and rapid socket resets do not trigger redundant Hub instances or port collisions (`Errno 98`).
+4.  **[FEAT-269] Aggressive Service Hygiene:**
+    *   Hardened `lab-attendant.service` with `ExecStartPre` and `ExecStopPost` port-clearing (`fuser -k`).
+    *   Ensures a "Nuclear" clean slate for every service lifecycle event, regardless of script-level crash state.
+
+### 🧪 Final Verification (April 3, 22:48 PDT)
+*   **Hibernate Cycle:** PASS. VRAM reclaimed, state transitioned to `HIBERNATING`.
+*   **Waking Collision:** PASS. Rapid-fire ignition requests handled via Attendant state gating.
+*   **Redundancy Rejection:** PASS. Second wake request rejected with `SILICON_CONGESTION` instead of causing a process crash.
+*   **Agent Immunity:** PASS. `monitor_readiness.py` survived the port-reclamation purge and successfully reported the stable `READY` state.
+*   **Broadcast Resilience:** PASS. `test_broadcast_resilience.py` confirmed the Hub foyer survives abrupt client disconnects (F5 simulation) without crashing. Dead sockets are now pruned safely during broadcast.
+
+**Status:** STABILIZED & VERIFIED.

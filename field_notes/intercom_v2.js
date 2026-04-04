@@ -284,23 +284,34 @@ function connect() {
                             bar.innerText = "💀 OFFLINE";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "ready") {
-                            // [FEAT-265.6] Gate Nominal by Physical Readiness
+                            // [FEAT-265.6] Gate Readiness by Physical Node Sync
                             if (data.full_lab_ready) {
-                                bar.innerText = "⚡ Systems nominal.";
+                                bar.innerText = `⚡ ${data.message || "Mind is READY."}`;
                             } else {
                                 bar.innerText = "⏳ SYNCHRONIZING NODES...";
                             }
                             bar.classList.remove('status-hibernating');
+                        } else if (data.state === "working") {
+                            bar.innerText = `🧠 ${data.message || "THINKING..."}`;
+                            bar.classList.remove('status-hibernating');
+                        } else if (data.state === "error") {
+                            bar.innerText = `⚠️ ${data.message || "SYSTEM ERROR"}`;
+                            bar.classList.remove('status-hibernating');
                         }
                     } else if (data.type === 'crosstalk') {
+                        // Store the current non-crosstalk text if we don't have a better state tracker
+                        if (!window.lastStatusMessage) {
+                            window.lastStatusMessage = bar.innerText;
+                        }
+                        
                         bar.innerText = `⚡ ${data.brain}`;
                         bar.classList.remove('status-hibernating');
                         // Clear after 15s if no new updates
                         if (window.crosstalkTimeout) clearTimeout(window.crosstalkTimeout);
                         window.crosstalkTimeout = setTimeout(() => {
-                            // If we aren't hibernating, return to nominal
-                            if (!bar.classList.contains('status-hibernating')) {
-                                bar.innerText = "⚡ Systems nominal.";
+                            // Revert to the last known stable status
+                            if (window.lastStatusMessage && !bar.classList.contains('status-hibernating')) {
+                                bar.innerText = window.lastStatusMessage;
                             }
                         }, 15000);
                     }
