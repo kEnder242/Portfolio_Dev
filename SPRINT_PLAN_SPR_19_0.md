@@ -72,4 +72,27 @@ This session achieved the "Gold Standard" of verification: we witnessed a live, 
 **Status:** Sprint 19.0 Groundwork is **STABILIZED & VERIFIED**.
 
 ---
+
+## 🏺 Session Retrospective (April 5, 2026 - Forensic Update)
+**"The Conflation of States"**
+
+### 🧠 Lessons Learned & Experiments
+1.  **The Hibernation Trap (FAILED):** Much of this session was spent hyper-focusing on "Cleanup" during hibernation. I mistakenly treated VRAM reclamation as a "Nuclear" requirement, leading me to use reapers (`fuser`, `os.killpg`) during what should have been a graceful state transition. This created the **Self-Reaping Loop**, where the Hub foyer was killed by the very restoration it requested.
+2.  **The Environment Ghost (FAILED):** Attempting to use environment variables (`LAB_IMMUNITY_TOKEN`) for discovery proved brittle. Processes spawned in complex `TaskGroups` or via systemd didn't always inherit or publish these correctly to `psutil`.
+3.  **The Silicon Handshake (WORKED):** Moving to **Process Title Tagging** (`[HUB:xxxx]`) and multi-layered substring matching in `cleanup_silicon` finally stabilized the immunity layer.
+4.  **Functional Gating (WORKED):** Replacing "Port is Open" with "Engine is Vocal" (functional `ping`) eliminated the "Restoration Illusion."
+
+### ⚖️ New Architectural Mandates
+*   **Decouple Hibernate from Kill:** Hibernation must strictly use the vLLM REST API (`/sleep`). If VRAM fails to drop, the Attendant should report a `STALL`, but it must **NOT** automatically hard-reap unless a `lab_stop` or `lab_quiesce` is explicitly called.
+*   **Authority of Knobs:** Tests must use the Attendant's logical knobs (`/quiesce` -> `/start` -> `/stop`) to prepare the environment. Stopping the `lab-attendant.service` should be the final resort, not the first step of a test.
+*   **Proactive Guarding:** Tests must pre-check VRAM and abort early if `SILICON_CONGESTION` is inevitable, providing clear "Pre-Flight" diagnostics.
+
+### 🧪 Resulting Tasks
+*   [ ] Refactor `mcp_hibernate` to remove all "Kill" logic.
+*   [ ] Update `test_hibernation_cycle.py` to prepare its own environment via REST knobs.
+*   [ ] Verify `test_broadcast_resilience.py` (Socket Disconnect simulation).
+
+**Status:** Heads Down on Forensic Hardening.
+
+---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
