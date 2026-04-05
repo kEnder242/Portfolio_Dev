@@ -43,29 +43,31 @@
 | Instrument | Result | Subjective Observation |
 | :--- | :--- | :--- |
 | `test_attendant_sanity.py` | **PASS** | Heartbeat and state tracking are nominal. |
-| `test_brain_smoke.py` | **PASS** | Primary engine core responding correctly to technical prompts. |
-| `test_hibernation_cycle.py` | **PASS** | **CRITICAL:** Verified full cycle (Load -> Offload -> Reload -> Sync). |
-| `test_broadcast_resilience.py`| **PASS** | Hub survives abrupt F5/Socket resets without crashing. |
+| `test_brain_smoke.py` | **PASS** | Primary engine core responding correctly. |
+| `test_hibernation_cycle.py` | **PASS** | **GOLD STANDARD:** Verified live Pinky response post-restoration. |
+| `test_broadcast_resilience.py`| **PASS** | Hub foyer survives abrupt resets. |
 
 ### 📍 Phase 3: Forensic Hardening
 *   [x] Fix identified stability bugs (Verify with re-run).
+*   [x] Implement [FEAT-276] Deep Forensic Telemetry.
 *   [x] Append Retrospective.
 
 ---
 
 ## 🏺 Session Retrospective (April 4, 2026)
-**"The 50-Second Restoration"**
+**"The Ghost in the Silicon"**
 
 ### 🧠 Strategic Synthesis
-The primary discovery of this session was the "Restoration Illusion." We identified that the system was reporting `READY` based on socket availability, but failing when asked to *reason* because the model weights were still loading or the resident nodes hadn't finished their internal handshakes. By implementing **High-Fidelity Restoration [FEAT-265.8]**, we have mandated that the Lab only signals readiness *after* the engine passes a functional probe and all nodes report successful synchronization.
+This session achieved the "Gold Standard" of verification: we witnessed a live, cognitive response from Pinky after a full hibernation offload. However, the session also exposed a **Hard Silicon Stall**. Despite our aggressive process reapers and "Assassin" purges, 6.5GB of VRAM remains leaked at the driver level. This proves that failed `TaskGroup` contexts or abrupt reaps can orphan CUDA handles that `fuser` and `pkill` cannot reach.
 
 ### 🩹 Scars & Technical Debt
-*   **[SCAR] Hub Reaping:** The aggressive "Assassin" purges were occasionally killing the very Hub foyer that sparked them. The transition to **Conservative Reaping** (sparing the Hub port 8765) resolved this, but we must remain vigilant about "Ghost Hubs" that might survive a failed stop.
-*   **[SCAR] Schema Drift:** The test suites revealed that several message paths (Cabinet, History Replay) lacked the `brain_source` field, causing parsing timeouts. We have hardened the `broadcast` method to enforce this schema at the root.
+*   **[SCAR] Vocabulary Ambiguity:** The term `READY` was found to be highly misleading, as it often meant "Socket Open" rather than "Model Vocal." We have refactored the entire stack to use `INIT` (Up) and `OPERATIONAL` (Vocal).
+*   **[SCAR] Ingress Omission:** The `monitor.jason-lab.dev` outage was caused by a missing ingress rule in the Cloudflare config. This has been restored and verified.
+*   **[DEBT] Driver Leak:** The 6.5GB VRAM leak is persistent. All logic gates for `SILICON_CONGESTION` are functioning correctly, but the physical ceiling is now too low for the 3B model.
 
 ### 🚀 Next Steps
-*   **MCP Instrument Audit:** The next session should focus on the `archive` and `browser` nodes, ensuring their specialized toolsets (listing files, reading web content) follow the new schema-hardened patterns.
-*   **Induction Loop Verification:** Monitor the nightly Alarms to ensure the `WAKING` state handles automated triggers as reliably as manual handshakes.
+1.  **Host Reboot:** A physical host reboot is mandatory to clear the driver-level VRAM leak.
+2.  **Telemetry Refinement:** Integrate the new `[VRAM_TRACE]` logs into a Grafana dashboard for real-time leak detection.
 
 **Status:** Sprint 19.0 Groundwork is **STABILIZED & VERIFIED**.
 
