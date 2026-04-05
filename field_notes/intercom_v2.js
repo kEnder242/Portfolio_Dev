@@ -283,13 +283,17 @@ function connect() {
                         } else if (data.state === "offline") {
                             bar.innerText = "💀 OFFLINE";
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "ready") {
-                            // [FEAT-265.6] Gate Readiness by Physical Node Sync
-                            if (data.full_lab_ready) {
-                                bar.innerText = `⚡ ${data.message || "Mind is READY."}`;
+                        } else if (data.state === "init") {
+                            // [FEAT-265.6] Functional Gate: Distinguish between Up and Vocal
+                            if (data.full_lab_ready || data.operational) {
+                                bar.innerText = "⚡ Mind is OPERATIONAL.";
                             } else {
                                 bar.innerText = "⏳ SYNCHRONIZING NODES...";
                             }
+                            bar.classList.remove('status-hibernating');
+                        } else if (data.state === "ready") {
+                            // Legacy support for older Hub signals
+                            bar.innerText = "⚡ Mind is READY.";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "working") {
                             bar.innerText = `🧠 ${data.message || "THINKING..."}`;
