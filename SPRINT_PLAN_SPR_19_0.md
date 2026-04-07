@@ -142,4 +142,34 @@ Bypassing `ruff` and using blunt `replace` calls led to syntax errors and "chops
 **Status:** Ready for Deterministic Pivot.
 
 ---
+
+## 🏺 Session Retrospective (April 7, 2026 - The Turing Lockdown)
+**"The V1 Architecture Deadlock"**
+
+### 🧠 Forensic Root Cause Analysis
+Pinky's silence was not caused by a code bug in the Hub, but by a **Silicon-Level Deadlock** in the vLLM v0.17.0 **V1 Architecture**. 
+
+1.  **Architecture Hijack:** We upgraded to v0.17.0 to support Level 2 Sleep Mode. This forced us into the V1 engine path, which uses a background `EngineCoreProc` communicating via ZMQ. 
+2.  **Turing Conflict:** The V1 engine's auto-selection logic prefers `FlashInfer` on our 2080 Ti. However, our environment is missing the necessary JIT headers (`prefill.cuh`), causing the engine to crash during the first inference forward pass.
+3.  **The "333MiB Wall":** This signature (API up, Core down) fooled our Attendant into signaling `OPERATIONAL` while the engine was cognitively dead.
+4.  **The Breakthrough:** Forcing **`VLLM_USE_V1=0`** and the **Sprint 13 Golden Recipe** (`xformers`, `0.4 utilization`) restored Pinky's voice instantly.
+
+### 🏛️ vLLM Launch Evolution Table (Sprints 13-19)
+
+| Milestone | Commit | Method | Core Parameters | Key FEATs / Findings |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sprint 13 Baseline** | `6baec45` | `lab_attendant_v1.py` | `xformers`, `V0`, `util: 0.4`, `max-len: 4096` | **GOLD STANDARD.** First stable residency. |
+| **Sprint 17 Baseline** | `f2dd580` | `lab_attendant_v3.py` | `TRITON_ATTN`, `V0`, `util: 0.4`, `LoRAs: 4` | **PRODUCTION WIN.** LoRAs & Hibernation. |
+| **Sleep Mode 2** | `bdff415` | `lab_attendant_v4.py` | `TRITON_ATTN`, **`V1`**, `util: 0.4`, `max-len: 8192` | **TURNING POINT.** Forced into unstable V1. |
+| **Stability Gauntlet** | `c04374b` | `lab_attendant_v4.py` | `TRITON_ATTN`, `V1`, `util: 0.5`, `max-len: 4096` | [FEAT-280] Wait-for-200 gating failed due to V1. |
+| **Turing Lockdown** | `Verified` | `Manual Recipe` | `xformers`, **`V0`**, `util: 0.4`, `max-len: 4096` | **RESTORED.** Pinky vocal after V0 force. |
+
+### ⚖️ Final Takeaways & Architectural Mandates
+*   **The V0 Law:** On Turing (Compute 7.5), **`VLLM_USE_V1=0`** is a non-negotiable law for stability. We must sacrifice Level 2 Sleep Mode (which is V1-only) to maintain cognitive reliability.
+*   **Start Script Supremacy:** We must **ALWAYS** use `start_vllm.sh`. It is the only place we can reliably enforce the hardware-level `NCCL_P2P_DISABLE=1` and `NCCL_SOCKET_IFNAME=lo` parameters required by the Z87 board.
+*   **The "Larynx Ping" is Truth:** The Attendant must never mark the Lab as ready based on a port check. It **MUST** perform a functional `completion` probe to confirm the engine hasn't hit a JIT deadlock.
+
+**Status:** Pinky's Voice Restored Manually. Ready for Attendant Alignment.
+
+---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
