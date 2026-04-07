@@ -132,13 +132,14 @@ A node is truly `OPERATIONAL` only when it answers a functional `ping` prompt. M
 Bypassing `ruff` and using blunt `replace` calls led to syntax errors and "chopstick coding." The `atomic_patcher.py` and mandatory `ruff check` are non-negotiable for system integrity.
 
 ### 🧪 Refined Task List (Next Actions)
-*   [ ] Create `HomeLabAI/run/` directory for PID persistence.
-*   [ ] Implement `PID Ledger` in `lab_attendant_v4.py` (Save/Load PIDs).
-*   [ ] Refactor `cleanup_silicon` to use VRAM-to-PID correlation instead of signature matching.
-*   [ ] Add detailed logging for the `/sleep` REST response body.
-*   [ ] Re-verify `test_hibernation_cycle.py` with 100% LINT compliance.
+*   [ ] **[FEAT-277] The Ledger:** Create `HomeLabAI/run/` and implement PID persistence in `lab_attendant_v4.py`.
+    *   Store `hub_pid`, `engine_pid`, and `engine_mode` in `run/active_pids.json`.
+*   [ ] **[FEAT-278] VRAM Truth:** Refactor `cleanup_silicon` to query `nvidia-smi` for PIDs > 1GB VRAM.
+    *   Reap any PID > 1GB that is NOT in the Ledger.
+*   [ ] **[FEAT-279] Hibernation Forensic:** Add `response.text()` logging to the `/sleep` REST call to diagnose Level 2 offload failures.
+*   [ ] **[BKM] Safe-Scalpel Mandate:** All logic edits MUST use `atomic_patcher.py` and pass `ruff` check.
 
-**Status:** Halted for Architectural Alignment.
+**Status:** Ready for Deterministic Pivot.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
