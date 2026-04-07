@@ -169,7 +169,41 @@ Pinky's silence was not caused by a code bug in the Hub, but by a **Silicon-Leve
 *   **Start Script Supremacy:** We must **ALWAYS** use `start_vllm.sh`. It is the only place we can reliably enforce the hardware-level `NCCL_P2P_DISABLE=1` and `NCCL_SOCKET_IFNAME=lo` parameters required by the Z87 board.
 *   **The "Larynx Ping" is Truth:** The Attendant must never mark the Lab as ready based on a port check. It **MUST** perform a functional `completion` probe to confirm the engine hasn't hit a JIT deadlock.
 
-**Status:** Pinky's Voice Restored Manually. Ready for Attendant Alignment.
+## 🏺 Session Retrospective (April 7, 2026 - Final Restoration)
+**"The Script Supremacy Breakthrough"**
+
+### 🧠 Forensic Synthesis: The Python Trap
+The "Pinky Silence" was caused by a fatal interaction between the **vLLM V1 Architecture** and Python's **Garbage Collector**. 
+
+1.  **The Deadlock**: By capturing the \`subprocess.Popen\` object in Python, the parent process was "bullying" the child's file descriptors. When the object was garbage-collected, the background EngineCore process deadlocked or was reaped, leaving the API server as a zombie.
+2.  **The Solution**: Reverted to **"Dumb Ignition"** via \`bash start_vllm.sh\`. The Attendant no longer holds a process reference, allowing Bash to manage the hardware-alignment laws (\`lo\` interface, \`P2P_DISABLE\`) cleanly.
+3.  **The Recipe**: **Recipe R2** (4096 context, 0.5 utilization, TRITON_ATTN) is the verified stability baseline for the 2080 Ti post-reboot.
+
+### ✅ Cleanup & Feature Restoration
+*   **[FEAT-072.1] Signal-Based Briefing**: Restored. The Hub now detects the \`trigger_morning_briefing\` tool signal from the node response. Hardcoded magic strings in the triage loop have been removed.
+*   **[FEAT-184] Vibe Guidance**: Restored. Situational instructions (e.g., conciseness, technical depth) are now model-driven and passed down to the nodes.
+*   **[FEAT-281.2] Cognitive Readiness**: Active. The Lab only signals \`OPERATIONAL\` after successfully generating a token via a functional ping.
+
+## 🏺 Final Sprint Report (April 7, 2026 - Sprint 19.0 Completion)
+**"The Silicon Restoration"**
+
+### ✅ Completed Tasks (Final)
+1.  **[FEAT-277] The Ledger**: Persistent PID tracking in \`run/active_pids.json\`. 
+2.  **[FEAT-278] VRAM Truth**: Silicon-level orphan identification via \`nvidia-smi\`.
+3.  **[FEAT-280/281] Forensic Gating**: Dual-layer readiness (Wait-for-200 + Log Tail + Cognitive Ping).
+4.  **[FEAT-072.1] Signal Restoration**: Morning Briefing Uplink restored via model-driven tool signals.
+5.  **[FEAT-184] Vibe Restoration**: Situational guidance (Concise/Standard/Deep) restored to node streams.
+6.  **[BKM] Script Supremacy**: Reverted to \`bash start_vllm.sh\` ignition to ensure hardware-alignment.
+7.  **[BKM] Recipe R2**: Established 4096 context / 0.5 utilization as the Turing Stability Target.
+
+### 📊 Final Stability Gauntlet Result
+| Recipe | Result | Subjective Observation |
+| :--- | :--- | :--- |
+| **R1: Bare** | **PASS** | V1 Core is stable under low complexity. |
+| **R2: Full** | **PASS** | **GOLD STANDARD.** Vocal success with 4 LoRAs at 4096 context. |
+| **R3: Target**| **FAIL** | 8192 context triggers deterministic EngineCore deadlock. |
+
+**Final Status:** Lab is **OPERATIONAL, VOCAL, and FORENSICALLY SHIELDED**. 
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
