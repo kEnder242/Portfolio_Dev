@@ -203,7 +203,20 @@ The "Pinky Silence" was caused by a fatal interaction between the **vLLM V1 Arch
 | **R2: Full** | **PASS** | **GOLD STANDARD.** Vocal success with 4 LoRAs at 4096 context. |
 | **R3: Target**| **FAIL** | 8192 context triggers deterministic EngineCore deadlock. |
 
-**Final Status:** Lab is **OPERATIONAL, VOCAL, and FORENSICALLY SHIELDED**. 
+## 🏺 SPRINT 19.0 Addendum: Restoration of Elegance (BKM-020 + BKM-17)
+**Status:** HEADS DOWN | **Objective:** Restore Level 2 Hibernation (CPU Offload)
+
+### 🏗️ Integration Blueprint
+| Target | Function | Change |
+| :--- | :--- | :--- |
+| \`lab_attendant_v4.py\` | \`mcp_hibernate\` | Implement strict L2 offload. NO REAP. |
+| \`lab_attendant_v4.py\` | \`_get_current_vitals\` | Maintain TTL throttling to avoid contention. |
+| \`test_hibernation_cycle.py\` | \`Step 4\` | Wait for VRAM rise before cognitive probe. |
+
+### ⚖️ Mandate: The Reaping Memorial
+*   The Sprint 16 Atomic Reap logic in \`mcp_hibernate\` is officially **DEPRECATED**. 
+*   The code must remain in the source but **COMMENTED OUT** as a memorial to the brutal recovery era. 
+*   **NO REAPING FALLBACKS** are permitted for hibernation today.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
