@@ -1154,3 +1154,23 @@
 **Status:** ACTIVE
 **Logic:** Resolves 401 Unauthorized errors during Remote Lab Control actions.
 **Mechanism:** Attendant publishes its current auth key (`vitals.style_key`) in `status.json`. UI polling loop extracts this key for subsequent REST calls. Attendant middleware hardened to accept CORS `OPTIONS` preflights (HTTP 200).
+
+## [FEAT-283] Neural Buffer
+**Status:** PLANNED
+**Logic:** Message queuing during hibernation/restoration cycles.
+
+## [FEAT-284] Engine-Aware Foyer Gate
+**Status:** ACTIVE
+**Logic:** Explicitly blocks user queries during the 'WAKING' state.
+
+## [FEAT-285] High-Fidelity Priming Telemetry
+**Status:** ACTIVE
+**Logic:** Verbose logging of all Windows Brain priming decisions and results.
+
+## [FEAT-286] Escalation Probe Protocol
+**Status:** ACTIVE
+**Logic:** Implements a 3-stage ignition sequence for remote and local engines:
+1.  **Stage 1 (Ping):** Verifies physical network/port reachability.
+2.  **Stage 2 (Tags):** Verifies API readiness and model manifest availability.
+3.  **Stage 3 (Prime):** Performs a 1-token cognitive generation to force silicon residency (The "Latch").
+**Behavior:** Stages 1 & 2 are synchronous (Heartbeat); Stage 3 is asynchronous (Parallel Prime).
