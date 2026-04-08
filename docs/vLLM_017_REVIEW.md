@@ -30,3 +30,21 @@ The stability gauntlet of Sprint 19.0 identified that the transition from **Shel
 *   **Mandate**: The Lab Attendant must use `bash start_vllm.sh` without holding an active Python process reference.
 *   **PID Tracking**: Tracking must be handled via a physical file (`run/vllm.pid`) written by the shell script itself.
 *   **Headroom**: `TRITON_ATTN` + `0.5 utilization` is confirmed stable post-reboot.
+
+---
+
+# 🏺 vLLM v0.17.0 Addendum: The "Placebo" Flags (April 7, 2026 Update)
+
+## 🛠️ Flag Re-Education
+
+### 1. VLLM_SERVER_DEV_MODE=1
+*   **Status**: **RECOMMENDED**.
+*   **Function**: Enables FastAPI debug endpoints. While not strictly required for basic Sleep Mode, it exposes the `/reset_prefix_cache` and `/offload` routes which were part of the Sprint 16 "Eureka" success. It allows the Attendant to perform surgical state manipulation without a full engine reload.
+
+### 2. VLLM_USE_V1=0
+*   **Status**: **PLACEBO (LEGACY)**.
+*   **Function**: Historically disabled the V1 engine core. In v0.17.0, the V0 core has been physically removed from the binary. 
+*   **Finding**: Setting this to `0` has no physical effect on the architecture (V1 is always used), but it is maintained in the `start_vllm.sh` script for backward compatibility with older venv restores.
+
+### 3. The Hibernation Regression
+The failure of Level 2 Sleep in v0.17.0 is due to the **V1 EngineCore Deadlock**. Because V1 uses a background ZMQ pipe, any kernel-level compilation failure during the KV-cache swap causes the process to hang. The **Atomic Reap** method from Sprint 16 remains the only 100% reliable reclamation path for Turing hardware.
