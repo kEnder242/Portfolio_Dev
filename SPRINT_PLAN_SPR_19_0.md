@@ -203,20 +203,22 @@ The "Pinky Silence" was caused by a fatal interaction between the **vLLM V1 Arch
 | **R2: Full** | **PASS** | **GOLD STANDARD.** Vocal success with 4 LoRAs at 4096 context. |
 | **R3: Target**| **FAIL** | 8192 context triggers deterministic EngineCore deadlock. |
 
-## 🏺 SPRINT 19.0 Addendum: Restoration of Elegance (BKM-020 + BKM-17)
-**Status:** HEADS DOWN | **Objective:** Restore Level 2 Hibernation (CPU Offload)
+## 🏺 SPRINT 19.0 Addendum: The Silicon Cleanup (April 8, 2026)
+**Status:** HEADS DOWN | **Objective:** Resolve remaining triage deadlocks and priming mismatches.
 
-### 🏗️ Integration Blueprint
-| Target | Function | Change |
-| :--- | :--- | :--- |
-| \`lab_attendant_v4.py\` | \`mcp_hibernate\` | Implement strict L2 offload. NO REAP. |
-| \`lab_attendant_v4.py\` | \`_get_current_vitals\` | Maintain TTL throttling to avoid contention. |
-| \`test_hibernation_cycle.py\` | \`Step 4\` | Wait for VRAM rise before cognitive probe. |
+### 🧪 Forensic Error Tracking
+| Error ID | Symbol / Message | Physical Cause | Fixed? | Proof Log Evidence |
+| :--- | :--- | :--- | :--- | :--- |
+| **ERR-01** | \`SILICON LOBOTOMY\` | False positive trigger on connection errors. | [ ] | PENDING |
+| **ERR-02** | \`TransferEncodingError\` | \`aiohttp\` payload truncation during engine crashes. | [ ] | PENDING |
+| **ERR-03** | \`Brain 404\` | Windows Ollama tag mismatch during priming. | [ ] | PENDING |
+| **ERR-04** | \`ExceptionGroup\` | Unhandled node-level connection deaths. | [ ] | PENDING |
 
-### ⚖️ Mandate: The Reaping Memorial
-*   The Sprint 16 Atomic Reap logic in \`mcp_hibernate\` is officially **DEPRECATED**. 
-*   The code must remain in the source but **COMMENTED OUT** as a memorial to the brutal recovery era. 
-*   **NO REAPING FALLBACKS** are permitted for hibernation today.
+### 🛠️ Heads Down Fix Plan
+1.  **[ERR-01]** Refactor \`cognitive_hub.py\` to ignore known connection errors in the Gibberish Detector.
+2.  **[ERR-02/04]** Harden \`loader.py\` to catch encoding errors and prevent node process death.
+3.  **[ERR-03]** Align \`acme_lab.py\` priming to verified Windows Ollama tags.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+

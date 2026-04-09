@@ -39,6 +39,14 @@ I have selected the top two ways to visualize this cyclical and hierarchical tim
     *   A shaded area for `HIBERNATION` (showing the 90s offload curve).
 *   **High Level**: Essential for debugging "Restoration Illusions." It proves *why* the Lab isn't ready yet by showing the physical dependencies (e.g., "Waiting for Triton Settle").
 
+**Method C: The "Silicon Flame Graph" (Resource Contention)**
+*   **Concept**: A standard Flame Graph where the X-axis is time and the Y-axis is **Process Hierarchy**.
+*   **Visualization**:
+    *   The base bar is `lab-attendant.service`.
+    *   Stacked above it are the `Hub` and `vLLM` processes.
+    *   When a JIT compilation or a weight-swap occurs, the "Flame" spikes in width, showing which specific operation is consuming the event loop.
+*   **High Level**: Excellent for identifying **Silicon Stalls**. If the `vLLM` bar is wide but the `Hub` bars above it are missing, we have a clear ZMQ/Inference deadlock.
+
 ---
 
 #### 3. Grafana Brainstorming (Beyond Time Series)
