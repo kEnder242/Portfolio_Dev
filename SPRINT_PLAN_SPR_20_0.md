@@ -93,3 +93,80 @@ We pivoted from forceful reaps to vLLM's `/sleep` mode. However, aggressive 10s 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
 
+---
+
+## 🔬 Section 4: Post-Sprint Retrospective & Diagnostic Report (April 14, 2026)
+
+### 1. System Telemetry & Crash State
+Despite completing the sprint tasks, the Lab has entered a terminal failure loop (`RECOVERY` mode) with the following trace evidence:
+*   **Intercom Sockets:** Disconnected. The `status.json` reports `foyer_up: false`, indicating the Hub process (PID `8438`) has crashed or exited, taking port `8765` offline.
+*   **Stuck Services:** The Attendant Watchdog is caught in an auto-restart loop. It detects the Hub process ending, waits 5s, and triggers `mcp_start` repeatedly.
+*   **Stuck VRAM (Ghost Contexts):** The vLLM engine (PID `50280`) remains active, with VRAM stubbornly locked at `67.8%`. Because the Hub crashed abruptly, it failed to trigger its `AsyncExitStack` cleanup routines, leaving the vLLM prefix cache populated and the weights fully mapped in the 2080 Ti.
+
+### 2. UI Refinement Tasks (Crosstalk Alignment)
+During the diagnostic sweep, I identified several hardcoded UI assumptions and misrouted data flows that are actively polluting the console and providing false system state guarantees to the user.
+
+- [ ] **Task 7: Remove Misleading UI Default**
+    - Target: `Portfolio_Dev/field_notes/intercom.html`.
+    - Action: Remove the hardcoded `"⚡ Systems nominal."` from the `#crosstalk-bar` div. Replace it with `Awaiting neural uplink...` or a blank placeholder to prevent the UI from lying to the user during an actual system failure.
+- [ ] **Task 8: Redirect Misrouted Crosstalk Flows**
+    - Target: `HomeLabAI/src/logic/cognitive_hub.py` and `HomeLabAI/src/acme_lab.py`.
+    - Action: The following diagnostic logs are currently printing to standard output/Pinky's console and must be converted to `self.broadcast({"type": "crosstalk"...})` events for proper visibility:
+        1. `[HUB] Action Tag: UPLINK via {source}` (`cognitive_hub.py`)
+        2. `[HUB] Action Tag: THINK MORE via {source}` (`cognitive_hub.py`)
+        3. `[HUB] Neural Signal detected: trigger_morning_briefing` (`cognitive_hub.py`)
+        4. `[HUB] SILICON LOBOTOMY: Engine is returning garbage.` (`cognitive_hub.py`)
+
+---
+
+## 🧪 Section 5: Systematic Testing Ledger & Roadmap
+
+To establish a verified baseline going forward, I have organized the `DIAGNOSTIC_SCRIPT_MAP.md` into a layered integration test plan.
+
+### Tier 1: Foundational Telemetry & VRAM (The Grounding Phase)
+*Goal: Ensure the 2080 Ti hardware can handle the exact memory curves required by the weight swaps.*
+- [ ] **`src/debug/test_vllm_alpha.py` (VLLM Alpha)**
+    - *Why:* Pure connectivity check for the vLLM OpenAI-compatible endpoint. If this fails, nothing else matters.
+    - *Fix Needed:* Ensure the timeout accounts for the 180s cold-start JIT compilation delay on Turing architectures.
+- [ ] **`src/test_liger.py` (Liger Test)**
+    - *Why:* Verifies Liger-Kernels are physically accelerating the engine without throwing Triton configuration errors.
+    - *Fix Needed:* Needs to be updated to target the current unified `Llama-3.2-3B-AWQ` base rather than older Gemma paths.
+- [ ] **`src/debug/test_apollo_vram.py` (Apollo 11)**
+    - *Why:* The definitive "Token Burn" test. It allocates the KV cache fully to ensure we don't hit OOM errors mid-generation.
+
+### Tier 2: Orchestration & State Machine (The Attendant Phase)
+*Goal: Ensure the Lab can boot, hibernate, and survive harsh process manipulation without leaving Zombie PID contexts.*
+- [ ] **`src/debug/test_lifecycle_gauntlet.py` (Gauntlet)**
+    - *Why:* Stress tests the Hub with rapid connect/disconnect cycles (e.g., the user spamming F5 on the Intercom). Essential for verifying `aiohttp` socket resilience.
+- [ ] **`src/test_shutdown.py` (Shutdown Flow)**
+    - *Why:* Validates the clean exit sequences and PID cleanup.
+    - *Fix Needed:* Must be updated to confirm the new `mcp_hibernate` Level 2 offload logic behaves identically to the old `os.killpg` assassin pattern.
+- [ ] **`src/test_intercom_flow.py` (Intercom Flow)**
+    - *Why:* End-to-end local test of the Python CLI client to verify the WebSockets and handshakes are actually routing to the Brain.
+
+### Tier 3: Persona & Triage Logic (The Soul Phase)
+*Goal: Ensure the routing layer actually understands intent and maintains the "Lead Engineer" persona.*
+- [ ] **`src/debug/test_live_fire_triage.py` (Live Fire Triage)**
+    - *Why:* Rapid verification of parallel turn-bundling and hybrid (Pipe/JSON) triage.
+    - *Fix Needed:* Ensure it incorporates the newly fixed `ERR-06` type-agnostic JSON parser.
+- [ ] **`src/debug/test_contextual_echo.py` (Contextual Echo)**
+    - *Why:* Verifies persona-aware echo behavior and ensures the "Shadow Moat" is actively stripping Pinky-isms (like "Narf!") from Sovereign output.
+- [ ] **`src/tests/test_agentic_backtrack.py` (Agentic Backtrack)**
+    - *Why:* Verifies the Strategic Pivot logic. If the Hub detects a hallucination, it must properly backtrack to Pinky.
+
+### Tier 4: Holistic Validation (The Deep Smoke Phase)
+*Goal: End-to-end integration proving the lab can function autonomously as a resident service.*
+- [ ] **`acme_lab.py --mode DEEP_SMOKE` (Deep Smoke)**
+    - *Why:* Full state-machine validation: Ingest -> Reason -> Dream -> Recall.
+- [ ] **`src/tests/test_strategic_live_fire.py` (Strategic Live Fire)**
+    - *Why:* The definitive physical hardware validation of the PMM routing and fidelity lifecycle.
+    - *Fix Needed:* Requires verifying the "Neural Buffer" (Task 3) correctly queues requests while the engine handles the heavy `DEEP_SMOKE` reasoning.
+
+---
+### 🗑️ Redundant / Deprecated Tests (For Review)
+*These tests are currently flagged in the ledger but are architecturally obsolete based on recent pivots.*
+*   **`Iron Gate Audit` / `Strategic Sentinel`**: Flagged as STALE. The triage logic has entirely replaced the old Regex-based "Amygdala filtering."
+*   **`The Assassin` / `Ghost Hunter`**: Deprecated. Sprint 19's pivot to vLLM's graceful REST `/sleep` offloading completely removes the need for `os.killpg` or `fuser -k` atomic reaping.
+*   **`JSON Fix Experiment`**: Standalone sandbox code from Sprint 18. The `bridge_signal_clean` method is now fully integrated and unit-tested directly in `test_hub_sprint20.py`.
+
+
