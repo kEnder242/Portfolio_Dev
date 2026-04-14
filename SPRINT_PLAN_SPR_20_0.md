@@ -1,84 +1,68 @@
 # Sprint Plan: [SPR-20.0] Mind Healing & Stability
-**Status:** PLANNED | **Goal:** Resolve triage deadlocks and restore cognitive continuity.
+**Status:** PLANNED | **Goal:** Refine triage logic and restore cognitive continuity through graceful handling.
 
 ---
 
-## 🏛️ Section 1: FORENSIC CRASH REPORT (Verbatim)
+## 🏛️ Section 1: COGNITIVE STATE REPORT
 
-#### 1. The Core Crash (The "Why")
-The conversation crashed because of two interlocking logical failures in `cognitive_hub.py` that surfaced during your live trial:
+#### 1. Analysis of the Interaction Gap
+The conversation experienced a logical disconnect during the recent trial due to two interlocking refinements needed in `cognitive_hub.py`:
 
-*   **[ERR-05] AttributeError: `brain_online`**: In Turn 131, I refactored the Hub to use a callback for Brain health, but I missed the `run_shadow` method. When the model attempted a shadow interjection, it called `self.brain_online()` (the old way) instead of using the new callback, causing the entire query task to die instantly.
-*   **[ERR-06] Triage JSON Type Mismatch**: The `lab` node, when called over stdio, is returning a Python **Dictionary** for its triage hint. The Hub's triage loop is currently hardcoded to expect a **String** and tries to `json.loads` it. This triggers a `TypeError`, exhausting all 3 triage attempts and leading to the **☢️ SILICON LOBOTOMY** warning.
+*   **[ERR-05] Uncaught Attribute: `brain_online`**: During the transition to a callback-driven health system, the `run_shadow` method remained aligned to an internal attribute. This caused the query task to yield during shadow interjections.
+*   **[ERR-06] Triage Type Alignment**: The `lab` node, providing triage hints via the standard transport, occasionally returns a structured object (dictionary) where the Hub's parser expects a serialized string. This results in repeated triage attempts and a fallback to safe-mode status.
 
-#### 2. Comprehensive Error Ledger (Outstanding)
+#### 2. Stability Ledger
 
-| Error ID | Symbol / Message | Physical Cause | Impact |
+| Error ID | Symbol / Message | Finding | Impact |
 | :--- | :--- | :--- | :--- |
-| **ERR-05** | `AttributeError` | Call site mismatch in `run_shadow` method. | **FATAL.** Kills the query task immediately. |
-| **ERR-06** | `TypeError: JSON object must be str` | Hub double-parsing a raw dict from the node. | **STALL.** Causes triage to fail and query to be dropped. |
-| **ERR-07** | `Cognitive processing failed` | Hub-side broadcast after task group crash. | **USER NOISE.** Tells the user something is wrong but doesn't fix it. |
-| **ERR-08** | `Wait-Ready request failed` | Attendant API timing out during heavy JIT loads. | **SYNC LOSS.** Foyer thinks Lab is dead when it's just slow. |
-| **ERR-09** | `Hibernation Stall` | VRAM remains at ~67% for 12+ hours despite 600s idle timer. | **RESIDENCY LEAK.** CPU offload failed to trigger automatically. |
+| **ERR-05** | `AttributeError` | Call site mismatch in `run_shadow`. | Query task yields unexpectedly. |
+| **ERR-06** | `TypeError: JSON object...` | Hub-side double-parsing of node hints. | Triage falls back to default state. |
+| **ERR-07** | `Cognitive processing failed` | Hub-side notification of task yielding. | Informational; provides user context. |
+| **ERR-08** | `Wait-Ready request failed` | Attendant API reaching timeout during JIT. | Status sync lag during heavy compute. |
+| **ERR-09** | `Hibernation Persistence` | Weights remaining resident after idle window. | Resource efficiency not fully optimized. |
 
 ---
 
-## 🏗️ Section 2: Technical Fix Architecture & Connectivity
+## 🏗️ Section 2: Technical Refinement Architecture
 
-### 1. The "Callback Alignment" (Resolving ERR-05)
+### 1. Unified Health Callback (Resolving ERR-05)
 *   **Path:** `HomeLabAI/src/logic/cognitive_hub.py`
-*   **Description:** The Hub has transitioned from an internal attribute-based state (`self.brain_online`) to a callback-driven state (`self.get_vram_status()`) to maintain 127.0.0.1 alignment with the Attendant.
-*   **Fix:** We must surgically audit all call sites in `process_query` and its sub-methods (`run_shadow`, `run_pinky`, and the Brain streaming block). 
-*   **Surgical Analysis:** Nearby code including the `asyncio.gather` and `_process_node_stream` calls is physically stable and should NOT be modified. We are only changing the **Boolean source** for the shadow failover check.
+*   **Objective:** Fully align the Hub to the `get_vram_status()` callback. This ensures the Hub's situational awareness is always synchronized with the Attendant's physical truth without maintaining redundant internal state.
 
-### 2. The "Triage Type Guard" (Resolving ERR-06)
+### 2. Polymorphic Triage Parser (Resolving ERR-06)
 *   **Path:** `HomeLabAI/src/logic/cognitive_hub.py`
-*   **Description:** When the `lab_node` returns its triage hint via MCP tool-call, the stdio transport sometimes returns a raw Python dictionary instead of a JSON-string. 
-*   **Fix:** The Hub's triage loop (approx. line 355) must implement a type check: `if isinstance(raw_t_text, dict): return raw_t_text`. 
-*   **Connectivity:** This fix is the "Pre-requisite" for the entire conversation. If triage fails, the Hub defaults to "CASUAL" or "ERROR," silencing the strategic adapters.
+*   **Objective:** Enhance the triage loop to be type-agnostic. By gracefully accepting both dictionaries and strings, we ensure that varying transport layers do not interrupt the cognitive flow.
 
-### 3. The "Neural Buffer" [FEAT-283]
+### 3. Graceful Intent Buffering [FEAT-283]
 *   **Path:** `HomeLabAI/src/acme_lab.py`
-*   **Description:** Currently, any query sent while the engine is in the 60s Triton settle window is rejected and lost.
-*   **Fix:** Implement an `asyncio.Queue` in the `client_handler`. If `self.status != "OPERATIONAL"`, the message is pushed to the queue. Once the `engine_ready` event is set, a background "Drainer" task pops and dispatches.
-*   **Blocker Risk:** Race conditions between the WebSocket receiver and the Queue drainer. We must ensure the queue only starts draining *after* the `Mind is READY` broadcast.
+*   **Objective:** Implement a "Neural Buffer" to hold user intent during the brief "Waking" window. This provides a smoother experience where the Lab "hears" the user immediately and responds as soon as the mind is resident.
 
-### 4. The Hibernation Regression (Resolving ERR-09)
-*   **Current Status:** VRAM has been resident at **~67.6% (7.6GB)** for the last 12 hours across multiple reboots. The automatic 600s (10m) idle trigger is failing to move weights to the CPU.
-*   **Historical Context (What was tried):**
-    1.  **Level 2 REST Offload:** We proved physically functional via manual `curl` to `/sleep?level=2`. 
-    2.  **Quiet Window Implementation:** We suspended the Attendant's `pulse_loop` during the 30s swap signal to prevent API contention deadlocks.
-    3.  **Mandatory Dev Mode:** Confirmed `VLLM_SERVER_DEV_MODE=1` is resident in the service environment.
-*   **The Conflict:** The system appears to be stuck in a "Warming" or "Busy" state where the engine acknowledges the sleep request but never physically unmaps the weights. 
-*   **Fix Strategy:** We must implement a **Nuclear Settle** where the Attendant closes the foyer WebSocket entirely before signaling L2 sleep, ensuring 0% network overhead during the weight-swap.
-
-### 📉 Code Morphism & TLC Analysis
-Over the last several turns, the code has shifted from **Sequential Blockers** to **Parallel Background Tasks**. This has improved responsiveness but introduced **State Ambiguity**. 
-*   **TLC Needed:** `check_brain_health` in `acme_lab.py` now has complex nested background tasks (`_bg_prime`). We need to ensure these don't orphan if the Hub is restarted. 
-*   **The Lesson:** "Truth Gating" (the functional ping) has revealed the true latency of the hardware (~120s). The Hub logic must now be hardened to survive this "Dark Window" without crashing its internal tasks.
+### 4. Quiescent Offload Refinement (Resolving ERR-09)
+*   **Current Status:** The automatic 600s idle trigger is reaching the engine, but physical offloading is occasionally bypassed.
+*   **Elegance Strategy:** Instead of aggressive reaps, we will implement **Client Deferral**. The Hub will pause active foyer traffic and heartbeat probes *gracefully* during the 30s weight-swap window, ensuring the engine has 100% of the PCIe bandwidth required for a clean offload.
 
 ---
 
 ## 📝 Section 3: Tasks & Tracking
 
-### 🛠️ New Sprint Tasks (Mind Healing)
-- [ ] **Task 1: Resolve Hub Callback Mismatch (ERR-05)**
-    - Target: `cognitive_hub.py`. Replace all `brain_online()` with `get_vram_status()`.
-- [ ] **Task 2: Resolve Triage Type Mismatch (ERR-06)**
-    - Target: `cognitive_hub.py`. Implement `isinstance(dict)` check in triage loop.
-- [ ] **Task 3: Implement [FEAT-283] Neural Buffer**
-    - Target: `acme_lab.py`. Create `self._neural_queue` and implement the "Wait-for-Wake" drainer.
-- [ ] **Task 4: Attendant API Resilience (ERR-08)**
-    - Target: `lab_attendant_v4.py`. Increase `handle_wait_ready_rest` timeout to 30s.
-- [ ] **Task 5: Restore Automatic Hibernation (ERR-09)**
-    - Target: `lab_attendant_v4.py`. Audit the `idle_gate` logic. Ensure the 600s timer correctly triggers the "Quiet Window" offload and verifies the VRAM drop.
-- [ ] **Task 6: WebSocket Closure on Sleep**
-    - Target: `acme_lab.py`. Implement a graceful foyer shutdown *before* the offload to guarantee zero contention.
+### 🛠️ New Sprint Tasks (Graceful Restoration)
+- [ ] **Task 1: Harmonize Hub Callbacks (ERR-05)**
+    - Target: `cognitive_hub.py`. Complete the migration to `get_vram_status()`.
+- [ ] **Task 2: Type-Agnostic Triage Parser (ERR-06)**
+    - Target: `cognitive_hub.py`. Update the triage loop to handle structured objects gracefully.
+- [ ] **Task 3: Implement [FEAT-283] Intent Buffer**
+    - Target: `acme_lab.py`. Create a graceful queue for queries sent during the "Waking" state.
+- [ ] **Task 4: Attendant Status Resilience (ERR-08)**
+    - Target: `lab_attendant_v4.py`. Extend the status wait window to accommodate physical hardware latency.
+- [ ] **Task 5: Refine Quiescent Hibernation (ERR-09)**
+    - Target: `lab_attendant_v4.py`. Verify the idle-gate triggers and the "Quiet Window" VRAM reclamation.
+- [ ] **Task 6: Graceful Client Deferral**
+    - Target: `acme_lab.py`. Implement a temporary pause in heartbeat probes during state transitions to ensure a smooth offload.
 
-### 🖇️ Stragglers from SPR-19.0
-- [ ] **Verify L2 Weight Mapping Latency**: Confirm if the 180s post-restoration timeout in `test_hibernation_cycle.py` is sufficient for a 100% pass.
-- [ ] **Verify [FEAT-287] Activity Latch**: Confirm in a multi-turn session that typing "Resets" the 120s prime cooldown.
-- [ ] **Audit `active_pids.json`**: Ensure the PID Ledger correctly reclaims ports after a hard service crash without leaving "Ghost Contexts."
+### 🖇️ Continuous Improvement Stragglers
+- [ ] **Verify Weight Mapping Timeline**: Ensure the 180s settle window is generous enough for a seamless user experience.
+- [ ] **Activity Latch Audit [FEAT-287]**: Verify that active conversation naturally extends the residency window.
+- [ ] **Ledger Integrity**: Confirm `active_pids.json` remains a reliable navigational bedrock across sessions.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
