@@ -50,22 +50,34 @@ The conversation experienced a logical disconnect during the recent trial due to
 
 ### 🛠️ New Sprint Tasks (Graceful Restoration)
 - [ ] **Task 1: Harmonize Hub Callbacks (ERR-05)**
-    - Target: `cognitive_hub.py`. Complete the migration to `get_vram_status()`.
+    - Target: `cognitive_hub.py`. Replace `self.brain_online()` with `self.get_vram_status()` in `run_shadow`.
 - [ ] **Task 2: Type-Agnostic Triage Parser (ERR-06)**
-    - Target: `cognitive_hub.py`. Update the triage loop to handle structured objects gracefully.
+    - Target: `cognitive_hub.py`. Modify the triage loop to detect if `t_clean` is already a dictionary (`isinstance(t_clean, dict)`). Clean up unreachable code in `bridge_signal_clean`.
 - [ ] **Task 3: Implement [FEAT-283] Neural Buffer**
-    - Target: \`acme_lab.py\`. Create \`self._neural_queue\` and implement the "Wait-for-Wake" drainer.
+    - Target: `acme_lab.py`. Create `self._neural_queue` in `__init__`. Update `client_handler` to queue messages during `WAKING` and drain them once `READY`.
 - [ ] **Task 4: Attendant Status Resilience (ERR-08)**
-    - Target: `lab_attendant_v4.py`. Extend the status wait window to accommodate physical hardware latency.
+    - Target: `lab_attendant_v4.py`. Extend the status wait window and harden the port-probing logic to handle high-latency weight swaps.
 - [ ] **Task 5: Refine Quiescent Hibernation (ERR-09)**
-    - Target: `lab_attendant_v4.py`. Verify the idle-gate triggers and the "Quiet Window" VRAM reclamation.
-- [ ] **Task 6: Graceful Client Deferral**
-    - Target: `acme_lab.py`. Implement a temporary pause in heartbeat probes during state transitions to ensure a smooth offload.
+    - Target: `lab_attendant_v4.py`. Ensure the `/sleep` REST call is logged with full response text for forensic analysis.
+- [ ] **Task 6: Graceful Client Deferral (Heartbeat Pause)**
+    - Target: `acme_lab.py`. Implement a temporary pause in `BRAIN_HEARTBEAT_URL` pings during the 30s weight-swap window to prevent collision with offloading.
 
-### 🖇️ Continuous Improvement Stragglers
-- [ ] **Verify Weight Mapping Timeline**: Ensure the 180s settle window is generous enough for a seamless user experience.
-- [ ] **Activity Latch Audit [FEAT-287]**: Verify that active conversation naturally extends the residency window.
-- [ ] **Ledger Integrity**: Confirm \`active_pids.json\` correctly reclaims ports after a hard service crash without leaving "Ghost Contexts."
+---
+
+## 🏛️ FORENSIC REPORT: THE ARCHITECTURAL GAP (April 13, 2026)
+
+### 1. ERR-05: The `brain_online` Attribute Error
+**The Trajectory (Sprints 17 -> 19):**
+In Sprint 18/19, the initialization arguments in `acme_lab.py` were refactored from `brain_online_callback` to `get_vram_status` to support the **Waking State Machine [FEAT-265]**. However, the `run_shadow` function in `cognitive_hub.py` was not updated and continues to call `self.brain_online()`, which no longer exists as a method or attribute. This causes a fatal `AttributeError` during fallback scenarios.
+
+### 2. ERR-06: The JSON Double-Parsing Triage Failure
+**The Trajectory (Sprints 18 -> 19):**
+The `bridge_signal_clean` method was hardened to return `json.loads(block)`, making its output a Python dictionary. However, the triage loop in `process_query` still calls `json.loads(t_clean)`, triggering a `TypeError` because it's attempting to parse an already-parsed object. This forces the Hub to fall back to a low-fuel default state, ignoring the Lab Node's semantic steering.
+
+### 3. ERR-08/09: Heartbeat Collision (The Ghost Contexts)
+**The Trajectory (Sprints 18 -> 19):**
+We pivoted from forceful reaps to vLLM's `/sleep` mode. However, aggressive 10s heartbeats from the Hub are colliding with the 30s PCIe weight-offload window. This triggers a "Wake" event mid-sleep, leaving ~67% VRAM leaked in a resident "zombie" state. We must implement **Client Deferral** to silence the Hub during these transitions.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
