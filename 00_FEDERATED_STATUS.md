@@ -21,6 +21,12 @@
 ## 🎯 Active Initiative: "The Neural Relay" (Sprint SPR-15.0)
 **Goal:** Transition from a linear "Ping-Pong" state machine into a high-throughput **Relay Race** with parallel inference and token-aware yielding.
 
+## ✅ Global Milestones (April 2026)
+1.  **Mind Healing [SPR-20.0]**: COMPLETE. Implemented Neural Buffer [FEAT-283] for WAKING state queuing, type-agnostic triage parsing [ERR-06], and Heartbeat Deferral [FEAT-283.2] to prevent weight-swap collisions.
+2.  **Stability Gauntlet [SPR-19.0]**: COMPLETED. Verified vLLM V0 stability on 2080 Ti and established PID Ledger for port reclamation.
+3.  **Silicon Stability [SPR-18.0]**: COMPLETED. Resolved Hibernation Wake-up traps and established Remote Lab Control auth discovery.
+4.  **Neural Relay [SPR-15.0]**: COMPLETED. Parallelized local inference and scalar fuel routing verified.
+
 ## ✅ Global Milestones (March 2026)
 1.  **Neural Relay [SPR-15.0]**: ACTIVE. Parallelized local inference implemented. Waterfall pipe in logic phase.
 2.  **Long-Tail Stability [SPR-13.0]**: COMPLETED. Resolving Windows 4090 latency misalignment and implementing Serial Capture (v12).
