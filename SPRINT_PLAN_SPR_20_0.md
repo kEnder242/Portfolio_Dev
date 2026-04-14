@@ -101,6 +101,72 @@ We pivoted from forceful reaps to vLLM's `/sleep` mode. However, aggressive 10s 
 Despite completing the sprint tasks, the Lab has entered a terminal failure loop (`RECOVERY` mode) with the following trace evidence:
 *   **Intercom Sockets:** Disconnected. The `status.json` reports `foyer_up: false`, indicating the Hub process (PID `8438`) has crashed or exited, taking port `8765` offline.
 *   **Stuck Services:** The Attendant Watchdog is caught in an auto-restart loop. It detects the Hub process ending, waits 5s, and triggers `mcp_start` repeatedly.
+*   **Stuck VRAM (Ghost Contexts):** The vLLM engine remains inactive, yet `nvidia-smi` reports **7196MiB** used with no owning process listed. Approximately **6.6GB** of VRAM is stranded in a "Ghost Context," likely due to an abrupt process termination during an active weight mapping.
+
+### 2. Immediate Stability Tasks (Sprint 21.0)
+- [ ] **Task 7: Remove Misleading UI Default**
+    - Target: `Portfolio_Dev/field_notes/intercom.html`.
+    - Action: Remove the hardcoded `"⚡ Systems nominal."` from the `#crosstalk-bar` div.
+- [ ] **Task 8: Redirect Misrouted Crosstalk Flows**
+    - Target: `HomeLabAI/src/logic/cognitive_hub.py`.
+    - Action: Convert `logging.info` and `print` statements for UPLINK, THINK MORE, and Triage into `await self.broadcast` events.
+- [ ] **Task 9: Silicon De-fragmentation**
+    - Target: Physical Hardware.
+    - Action: Reclaim the 6.6GB stranded VRAM. (Requires Attendant service restart or physical driver reload).
+
+---
+
+## 🧪 Section 5: Systematic Testing Ledger & Roadmap
+
+### Tier 1: Foundational Telemetry & VRAM (The Grounding Phase)
+- [ ] **`src/debug/test_vllm_alpha.py` (VLLM Alpha)**
+    - *Goal:* Connectivity check for vLLM REST API.
+    - *Why:* If the engine can't talk, the Hub can't think. 
+    - *Fix Needed:* Increase initial handshake timeout to 180s.
+- [ ] **`src/test_liger.py` (Liger Test)**
+    - *Goal:* Verify Triton kernel acceleration.
+    - *Why:* Prevents CUDA kernel crashes during heavy inference.
+    - *Fix Needed:* Update target model path to current AWQ base.
+- [ ] **`src/debug/test_apollo_vram.py` (Apollo 11)**
+    - *Goal:* Profile peak VRAM during Token Burn.
+    - *Why:* Validates the 11GB budget headroom.
+
+### Tier 2: Orchestration & State Machine (The Attendant Phase)
+- [ ] **`src/debug/test_lifecycle_gauntlet.py` (Gauntlet)**
+    - *Goal:* Stress test rapid connect/disconnect cycles.
+    - *Why:* Proves socket resilience and prevents Hub crashes from UI refresh.
+- [ ] **`src/test_shutdown.py` (Shutdown Flow)**
+    - *Goal:* Validate clean exit and PID cleanup.
+    - *Fix Needed:* Confirm Level 2 `/sleep` correctly unmaps weights from VRAM.
+
+### Tier 3: Persona & Triage Logic (The Soul Phase)
+- [ ] **`src/debug/test_live_fire_triage.py` (Live Fire Triage)**
+    - *Goal:* Verify parallel turn-bundling and triage intent.
+    - *Fix Needed:* Incorporate `ERR-06` type-agnostic dict handling.
+- [ ] **`src/debug/test_contextual_echo.py` (Contextual Echo)**
+    - *Goal:* Verify "Shadow Moat" Pinky-ism stripping.
+
+### Tier 4: Holistic Validation (The Deep Smoke Phase)
+- [ ] **`acme_lab.py --mode DEEP_SMOKE` (Deep Smoke)**
+    - *Goal:* End-to-end state machine validation.
+- [ ] **`src/tests/test_strategic_live_fire.py` (Strategic Live Fire)**
+    - *Goal:* Definitive hardware validation of PMM routing.
+
+---
+### 🗑️ Redundant / Deprecated Tests (For Review)
+*   **`Strategic Sentinel`**: Deprecated by Triage logic.
+*   **`The Assassin`**: Deprecated by graceful `/sleep` offloading.
+*   **`JSON Fix Experiment`**: Merged into `test_hub_sprint20.py`.
+
+
+---
+
+## 🔬 Section 4: Post-Sprint Retrospective & Diagnostic Report (April 14, 2026)
+
+### 1. System Telemetry & Crash State
+Despite completing the sprint tasks, the Lab has entered a terminal failure loop (`RECOVERY` mode) with the following trace evidence:
+*   **Intercom Sockets:** Disconnected. The `status.json` reports `foyer_up: false`, indicating the Hub process (PID `8438`) has crashed or exited, taking port `8765` offline.
+*   **Stuck Services:** The Attendant Watchdog is caught in an auto-restart loop. It detects the Hub process ending, waits 5s, and triggers `mcp_start` repeatedly.
 *   **Stuck VRAM (Ghost Contexts):** The vLLM engine (PID `50280`) remains active, with VRAM stubbornly locked at `67.8%`. Because the Hub crashed abruptly, it failed to trigger its `AsyncExitStack` cleanup routines, leaving the vLLM prefix cache populated and the weights fully mapped in the 2080 Ti.
 
 ### 2. UI Refinement Tasks (Crosstalk Alignment)
@@ -168,5 +234,40 @@ To establish a verified baseline going forward, I have organized the `DIAGNOSTIC
 *   **`Iron Gate Audit` / `Strategic Sentinel`**: Flagged as STALE. The triage logic has entirely replaced the old Regex-based "Amygdala filtering."
 *   **`The Assassin` / `Ghost Hunter`**: Deprecated. Sprint 19's pivot to vLLM's graceful REST `/sleep` offloading completely removes the need for `os.killpg` or `fuser -k` atomic reaping.
 *   **`JSON Fix Experiment`**: Standalone sandbox code from Sprint 18. The `bridge_signal_clean` method is now fully integrated and unit-tested directly in `test_hub_sprint20.py`.
+
+---
+
+## 🧭 Section 6: Sprint 20 Retrospective & Strategic Consistency
+
+### 1. What Helped in This Sprint
+*   **Isolated Unit Testing (Pytest)**: Building `test_hub_sprint20.py` and running tests in a dedicated Python virtual environment allowed rapid validation of the JSON parser and Callback logic *without* suffering the 180s cold-start latency of the physical hardware.
+*   **The Safe-Scalpel Protocol ([FEAT-198])**: Making targeted, lint-verified edits to `cognitive_hub.py` and `acme_lab.py` ensured that existing robust logic (like `asyncio.gather`) wasn't accidentally destroyed during the `brain_online` migration.
+*   **Surgical Preservation ([BKM-023])**: Sticking to an "append-only" methodology in this document kept the forensic trace alive, allowing us to see *how* the errors evolved from previous sprints.
+
+### 2. What Would Have Helped (If Paid Attention)
+*   **The Diagnostic Ledger (`DIAGNOSTIC_SCRIPT_MAP.md`)**: The project *already had* a `test_live_fire_triage.py` script. If that had been consulted *before* refactoring the triage logic in Sprint 19, the `TypeError` caused by `json.loads` would have been caught instantly.
+*   **Understanding Type Contracts**: A fundamental misunderstanding between the string-based outputs of Sprint 17 and the parsed dictionaries of Sprint 18 caused the core cognitive loop to fail. Paying closer attention to function signatures (`bridge_signal_clean`) would have prevented ERR-06.
+
+### 3. Strategic Inconsistent Outliers (Conflicts & Lost Gems)
+Across Sprints 11-20, several architectural philosophies began to conflict, creating "Ghost Contexts" and behavioral drift:
+
+*   **[SPR-18 vs SPR-11.3] The Graceful Sleep vs The Assassin**: 
+    *   *Origin*: In Sprint 11.3, `[FEAT-119] Socket-Aware Assassin` was built to aggressively reap processes (`os.killpg`) to free VRAM. 
+    *   *Conflict*: In Sprint 18, `[FEAT-262] vLLM Sleep Mode` was introduced for graceful REST `/sleep` offloads. 
+    *   *Result*: The system tried to do both, causing the Attendant to panic-reap the engine while it was trying to sleep, stranding 67% of the VRAM (ERR-09). The "Assassin" pattern must be formally deprecated in favor of Graceful Deferral.
+*   **[SPR-19 vs SPR-17] The Disconnected Callback**: 
+    *   *Origin*: Sprint 17 introduced robust Shadow Failover logic via `self.brain_online`. 
+    *   *Conflict*: Sprint 19 migrated the initialization to `self.get_vram_status` to support `[FEAT-265] Waking State Machine`.
+    *   *Result*: The `run_shadow` failover was never updated (ERR-05), effectively destroying the safety net exactly when we were trying to make the system more resilient.
+*   **[SPR-18] The Lying UI**: 
+    *   *Origin*: Deep server-side states (`WAKING`, `HIBERNATING`) were built in `acme_lab.py` `[FEAT-265]`. 
+    *   *Conflict*: The frontend (`intercom.html`) retained a hardcoded `"⚡ Systems nominal."` default. 
+    *   *Result*: Violates `[BKM-028] High-Fidelity State Machine Debugging`, as the UI happily reported "nominal" while the Hub was dead and the sockets were disconnected.
+
+### Timeline of Architectural Drift
+*   **Epoch 1 (Sprint 11-13)**: The Foundation. The "Assassin" pattern is born to enforce stability via brute force (kill processes to free VRAM).
+*   **Epoch 2 (Sprint 14-17)**: The Soul. Robust failover (`run_shadow`), Larynx Gates, and Semantic Regex extracting are introduced. The system becomes "smart."
+*   **Epoch 3 (Sprint 18-19)**: The Collision. Graceful `vLLM` hibernation and strict state machines are introduced. The old "Assassin" brute force conflicts with the new "Graceful Sleep," and the old `brain_online` boolean conflicts with the new telemetry callbacks.
+*   **Epoch 4 (Sprint 20)**: The Healing. Applying `[FEAT-283]` Neural Buffers and Type-Agnostic parsers to bridge the gap between Epoch 2's "smartness" and Epoch 3's "gracefulness."
 
 
