@@ -51,16 +51,25 @@ The conversation experienced a logical disconnect during the recent trial due to
 ### 🛠️ New Sprint Tasks (Graceful Restoration)
 - [ ] **Task 1: Harmonize Hub Callbacks (ERR-05)**
     - Target: `cognitive_hub.py`. Replace `self.brain_online()` with `self.get_vram_status()` in `run_shadow`.
+    - **Verify:** `python3 src/debug/test_direct_hub.py`
 - [ ] **Task 2: Type-Agnostic Triage Parser (ERR-06)**
-    - Target: `cognitive_hub.py`. Modify the triage loop to detect if `t_clean` is already a dictionary (`isinstance(t_clean, dict)`). Clean up unreachable code in `bridge_signal_clean`.
+    - Target: `cognitive_hub.py`. Modify the triage loop to detect if `t_clean` is already a dictionary. Clean up unreachable code in `bridge_signal_clean`.
+    - **Verify:** `python3 src/debug/test_live_fire_triage.py`
 - [ ] **Task 3: Implement [FEAT-283] Neural Buffer**
-    - Target: `acme_lab.py`. Create `self._neural_queue` in `__init__`. Update `client_handler` to queue messages during `WAKING` and drain them once `READY`.
+    - Target: `acme_lab.py`. Create `self._neural_queue` and implement the "Wait-for-Wake" drainer.
+    - **Verify:** `python3 src/debug/test_state_waking.py`
 - [ ] **Task 4: Attendant Status Resilience (ERR-08)**
-    - Target: `lab_attendant_v4.py`. Extend the status wait window and harden the port-probing logic to handle high-latency weight swaps.
+    - Target: `lab_attendant_v4.py`. Extend the status wait window to 180s for heavy JIT swaps.
 - [ ] **Task 5: Refine Quiescent Hibernation (ERR-09)**
-    - Target: `lab_attendant_v4.py`. Ensure the `/sleep` REST call is logged with full response text for forensic analysis.
+    - Target: `lab_attendant_v4.py`. Ensure `/sleep` REST call logs the full response.
 - [ ] **Task 6: Graceful Client Deferral (Heartbeat Pause)**
-    - Target: `acme_lab.py`. Implement a temporary pause in `BRAIN_HEARTBEAT_URL` pings during the 30s weight-swap window to prevent collision with offloading.
+    - Target: `acme_lab.py`. Implement heartbeat suppression during state transitions.
+    - **Verify:** `python3 src/debug/test_hibernation_cycle.py`
+
+### 🖇️ Continuous Improvement Stragglers
+- [ ] **Verify Weight Mapping Timeline**: Ensure the 180s settle window is generous enough for a seamless user experience.
+- [ ] **Activity Latch Audit [FEAT-287]**: Verify that active conversation naturally extends the residency window.
+- [ ] **Ledger Integrity**: Confirm `active_pids.json` correctly reclaims ports after a hard service crash without leaving "Ghost Contexts."
 
 ---
 
