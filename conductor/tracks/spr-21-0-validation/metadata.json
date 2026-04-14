@@ -1,0 +1,7 @@
+{
+  "id": "spr-21-0-validation",
+  "name": "SPR-21.0 UI Refinement and Systematic Validation",
+  "status": "planned",
+  "priority": "high",
+  "tags": ["testing", "ui", "bugfix"]
+}
