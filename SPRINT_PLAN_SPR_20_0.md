@@ -19,6 +19,7 @@ The conversation crashed because of two interlocking logical failures in `cognit
 | **ERR-06** | `TypeError: JSON object must be str` | Hub double-parsing a raw dict from the node. | **STALL.** Causes triage to fail and query to be dropped. |
 | **ERR-07** | `Cognitive processing failed` | Hub-side broadcast after task group crash. | **USER NOISE.** Tells the user something is wrong but doesn't fix it. |
 | **ERR-08** | `Wait-Ready request failed` | Attendant API timing out during heavy JIT loads. | **SYNC LOSS.** Foyer thinks Lab is dead when it's just slow. |
+| **ERR-09** | `Hibernation Stall` | VRAM remains at ~67% for 12+ hours despite 600s idle timer. | **RESIDENCY LEAK.** CPU offload failed to trigger automatically. |
 
 ---
 
@@ -42,6 +43,15 @@ The conversation crashed because of two interlocking logical failures in `cognit
 *   **Fix:** Implement an `asyncio.Queue` in the `client_handler`. If `self.status != "OPERATIONAL"`, the message is pushed to the queue. Once the `engine_ready` event is set, a background "Drainer" task pops and dispatches.
 *   **Blocker Risk:** Race conditions between the WebSocket receiver and the Queue drainer. We must ensure the queue only starts draining *after* the `Mind is READY` broadcast.
 
+### 4. The Hibernation Regression (Resolving ERR-09)
+*   **Current Status:** VRAM has been resident at **~67.6% (7.6GB)** for the last 12 hours across multiple reboots. The automatic 600s (10m) idle trigger is failing to move weights to the CPU.
+*   **Historical Context (What was tried):**
+    1.  **Level 2 REST Offload:** We proved physically functional via manual `curl` to `/sleep?level=2`. 
+    2.  **Quiet Window Implementation:** We suspended the Attendant's `pulse_loop` during the 30s swap signal to prevent API contention deadlocks.
+    3.  **Mandatory Dev Mode:** Confirmed `VLLM_SERVER_DEV_MODE=1` is resident in the service environment.
+*   **The Conflict:** The system appears to be stuck in a "Warming" or "Busy" state where the engine acknowledges the sleep request but never physically unmaps the weights. 
+*   **Fix Strategy:** We must implement a **Nuclear Settle** where the Attendant closes the foyer WebSocket entirely before signaling L2 sleep, ensuring 0% network overhead during the weight-swap.
+
 ### 📉 Code Morphism & TLC Analysis
 Over the last several turns, the code has shifted from **Sequential Blockers** to **Parallel Background Tasks**. This has improved responsiveness but introduced **State Ambiguity**. 
 *   **TLC Needed:** `check_brain_health` in `acme_lab.py` now has complex nested background tasks (`_bg_prime`). We need to ensure these don't orphan if the Hub is restarted. 
@@ -60,6 +70,10 @@ Over the last several turns, the code has shifted from **Sequential Blockers** t
     - Target: `acme_lab.py`. Create `self._neural_queue` and implement the "Wait-for-Wake" drainer.
 - [ ] **Task 4: Attendant API Resilience (ERR-08)**
     - Target: `lab_attendant_v4.py`. Increase `handle_wait_ready_rest` timeout to 30s.
+- [ ] **Task 5: Restore Automatic Hibernation (ERR-09)**
+    - Target: `lab_attendant_v4.py`. Audit the `idle_gate` logic. Ensure the 600s timer correctly triggers the "Quiet Window" offload and verifies the VRAM drop.
+- [ ] **Task 6: WebSocket Closure on Sleep**
+    - Target: `acme_lab.py`. Implement a graceful foyer shutdown *before* the offload to guarantee zero contention.
 
 ### 🖇️ Stragglers from SPR-19.0
 - [ ] **Verify L2 Weight Mapping Latency**: Confirm if the 180s post-restoration timeout in `test_hibernation_cycle.py` is sufficient for a 100% pass.
