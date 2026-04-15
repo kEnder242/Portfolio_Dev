@@ -1,5 +1,5 @@
 # Sprint Plan: [SPR-21.0] WD Actions (Watchdog Sovereignty)
-**Status:** DRAFT | **Goal:** Rebuild the Lab Attendant's internal watchdog as a "State Machine Monitor" to ensure resilient hibernation and recovery.
+**Status:** DRAFT | **Goal:** Rebuild the Lab Attendant's internal watchdog as a "Multi-Modal State Monitor" to ensure resilient hibernation and recovery.
 
 ---
 
@@ -7,74 +7,62 @@
 
 **Core Problem:** A deep forensic review confirmed that the `vram_watchdog_loop` in `lab_attendant_v4.py` is an empty stub. More importantly, there's a fundamental architectural conflict between the old "liveness" model (always on) and the new "hibernation" model (resource efficiency). The watchdog must be rebuilt not just to detect crashes, but to **validate state transitions**.
 
-**The Watchdog's New Purpose: The "Sleep Monitor"**
-The internal watchdog must evolve from a simple "is it on?" checker to a true "State Machine Monitor." It runs as a background `asyncio` task on the same event loop as the Attendant's REST API, giving it direct, thread-safe access to the Attendant's internal state (`self.is_hibernating`, etc.). Its job is to ensure the Lab doesn't get stuck *between* states.
+**The Watchdog's New Purpose: The "Multi-Modal State Monitor"**
+The internal watchdog must evolve from a simple "is it on?" checker to a true "State Machine Monitor." It runs as a background `asyncio` task on the same event loop as the Attendant's REST API, giving it direct, thread-safe access to internal state (`self.is_hibernating`, `self.current_lab_mode`).
 
-**Proposed Flow (Reconstruction):**
-1.  **State-Aware Monitoring**: The `vram_watchdog_loop` will be state-aware. It will check the Attendant's intended state (`current_lab_mode`, `is_hibernating`) before performing checks.
-2.  **Hibernation Failure Detection**:
-    *   **Trigger**: The Attendant sets `is_hibernating = True` and attempts to unload the AI engine.
-    *   **Watchdog Check**: The watchdog sees the `is_hibernating` flag. After a grace period (e.g., 60s), it checks VRAM.
-    *   **Failure Condition**: If `is_hibernating` is true but VRAM usage is still high, the watchdog declares a "Hibernation Failure."
-3.  **Liveness Failure Detection**:
-    *   **Trigger**: The Lab is supposed to be `ONLINE`.
-    *   **Watchdog Check**: The watchdog polls the Hub's heartbeat endpoint (`:8765`).
-    *   **Failure Condition**: If the endpoint is unresponsive for several cycles, the watchdog declares a "DEAD Hub."
-4.  **Tiered Recovery & Forensic Logging**:
-    *   **On Hibernation Failure**: Log a `CRITICAL` event (`[WATCHDOG] Hibernation failed. VRAM remains allocated.`) and trigger a forceful `mcp_stop` to guarantee silicon release.
-    *   **On DEAD Hub**: Use the **TraceMonitor** to grab the last few lines from `server.log`. Log a `CRITICAL` event (`[WATCHDOG] Hub unresponsive. Last words: "..."`) and trigger the `mcp_stop` -> `mcp_start` cycle.
-    *   All logs will use `self.log_event()` to ensure they appear in the "Interleaved System Logs" on `status.html`.
+**Proposed Flow (Multi-Modal Reconstruction):**
+1.  **State-Aware Monitoring**: The watchdog checks intended state before probing. It respects a 60s `boot_grace_period` and a `MAINTENANCE_LOCK`.
+2.  **Multi-Modal Detection Rubric**:
+    *   **VRAM Truth**: Check `pynvml`. Declare failure if `is_hibernating` is true but VRAM > 2000MB (ERR-09).
+    *   **Port Liveness**: Poll `:8765/heartbeat`. Declare failure if Hub is unresponsive for 3 cycles (ERR-05).
+    *   **Forensic Log Scanning**: Use the **TraceMonitor** to scan `server.log`, `attendant.log`, and `vllm_server.log` for Python Tracebacks or CUDA kernel errors.
+    *   **Observability Health**: Check status of Docker containers (Prometheus, Grafana). Restart if DOWN.
+3.  **Tiered Recovery & Forensic Logging**:
+    *   **On Failure**: Capture "Last Words" log snippet via TraceMonitor.
+    *   **Recovery**: Execute `mcp_hibernate` (Level 1) or `mcp_stop -> mcp_start` (Level 2).
+    *   **Interleaved Log**: Inject recovery actions into `pager_activity.json` for visibility in `status.html`.
 
 ---
 
 ## 🔗 Section 2: Architectural Alignment
 
-This plan directly implements and restores several core features documented in the `FeatureTracker`:
-*   **[FEAT-036] VRAM Guard**: The VRAM monitoring logic is the core of this feature.
-*   **[FEAT-249] VRAM Hibernation Matrix**: The state-aware monitoring directly supports this feature.
-*   **[FEAT-035] Zombie Port Recovery**: The Hub liveness probe directly addresses this.
-*   **[FEAT-043] Dead-Man's Switch**: The "DEAD Hub Recovery" is the implementation of this switch.
-It also adheres to **[BKM-018] (Orchestrator-First)** and **[BKM-022] (Atomic IO)** for logging.
+This plan restores core DNA from the Feature Tracker and archived `v1` logic:
+*   **[FEAT-036] VRAM Guard**: Physical VRAM thresholds (85% Warning, 95% Critical).
+*   **[FEAT-249] VRAM Hibernation Matrix**: State-aware monitoring of transition windows.
+*   **[FEAT-035] Zombie Port Recovery**: Hub heartbeat polling.
+*   **[FEAT-043] Dead-Man's Switch**: Autonomous full restart on persistent unresponsiveness.
+*   **[FEAT-151] Forensic Trace Monitor**: Expanded to include `vllm_server.log`.
 
 ---
 
 ### 🛠️ Section 3: Tasks & Tracking (WD Sovereignty)
 
-- [ ] **Task 1: Rebuild State-Aware Watchdog Logic**
-    - **Mechanism**: Implement the state-aware VRAM and Port monitoring logic in the `vram_watchdog_loop` in `lab_attendant_v4.py`. This involves checking internal state flags like `self.is_hibernating` before probing hardware or ports.
+- [ ] **Task 1: Rebuild Multi-Modal Watchdog Logic**
+    - **Mechanism**: Implement the state-aware rubric in `vram_watchdog_loop`. Add checks for VRAM thresholds, Hub liveness, and Docker container status.
 - [ ] **Task 2: Implement Tiered Recovery**
-    - **Mechanism**: In the watchdog loop, call the appropriate recovery MCP methods (`mcp_hibernate`, `mcp_stop`) based on the detected failure mode.
-- [ ] **Task 3: Implement Forensic Log Injection**
-    - **Mechanism**: Before triggering a recovery, use the existing `TraceMonitor` instance to read the last few lines from `server.log` and `attendant.log`. Inject any discovered `Traceback` or error into the `self.log_event()` message to provide a rich forensic record in `status.html`.
+    - **Mechanism**: In the loop, call `self.mcp_hibernate()` for hibernation failures and `self.mcp_stop()` for DEAD Hubs.
+- [ ] **Task 3: Implement Forensic Log Injection (vLLM Aware)**
+    - **Mechanism**: Expand `TraceMonitor` to include `/home/jallred/Dev_Lab/HomeLabAI/vllm_server.log`. Inject discovered errors into `self.log_event()`.
+- [ ] **Task 4: Gemini CLI BKM-018 Compliance**
+    - **Mechanism**: Gemini CLI MUST use `lab_stop` / `lab_start` for all cleanup. Manual `pkill` is strictly forbidden.
 
 ---
 ## 🧪 Section 4: Detailed Implementation Plan
 
-### **Task 1: Rebuild State-Aware Watchdog Logic**
-*   **Location**: `lab_attendant_v4.py`, inside the `vram_watchdog_loop` method.
-*   **Sub-Task 1.1: State Initialization**: Initialize `failure_count = 0` and `boot_grace_period = 6` at the top of the loop.
-*   **Sub-Task 1.2: State-Aware Gates**:
-    *   Add `if os.path.exists(MAINTENANCE_LOCK): continue`.
-    *   Add a grace period for booting: `if boot_grace_period > 0: boot_grace_period -= 1; continue`.
-*   **Sub-Task 1.3: Hibernation Check**:
-    *   `if is_hibernating:`
-    *   Check VRAM. If `used > 2000` after a grace period, trigger **Hibernation Failure Recovery**.
-*   **Sub-Task 1.4: Liveness Check**:
-    *   `elif current_lab_mode != "OFFLINE":`
-    *   Poll `http://127.0.0.1:8765/heartbeat`. On failure, increment `failure_count`.
-    *   If `failure_count > 3`, trigger **DEAD Hub Recovery**. On success, reset `failure_count`.
+### **Task 1: Multi-Modal Detection Rubric**
+*   **Location**: `lab_attendant_v4.py` -> `vram_watchdog_loop`.
+*   **Sub-Task 1.1: State Gates**: Respect `MAINTENANCE_LOCK` and `boot_grace_period`.
+*   **Sub-Task 1.2: VRAM Thresholds**: If `used > (total * 0.95)`, trigger `cleanup_silicon()`.
+*   **Sub-Task 1.3: Docker Monitoring**: Check Prometheus/Grafana containers; restart via `subprocess` if not running.
+*   **Sub-Task 1.4: Heartbeat Latency**: Measure `aiohttp` response time. If > 5s for 3 cycles, log "DEGRADED" status.
 
 ### **Task 2 & 3: Recovery and Logging**
-*   **Location**: `lab_attendant_v4.py`, inside `vram_watchdog_loop`.
-*   **Sub-Task 2.1: Hibernation Failure Recovery**:
-    *   `self.log_event("Hibernation failed; VRAM not released. Forcing stop.", "CRITICAL")`.
-    *   `await self.mcp_stop()`.
-*   **Sub-Task 2.2: DEAD Hub Recovery**:
-    *   Use `self.trace_monitor` to get the last lines from `server.log`.
-    *   `self.log_event(f"Hub unresponsive. Triggering full restart. Last words: {log_snippet}", "CRITICAL")`.
-    *   `await self.mcp_stop()`.
-    *   `await asyncio.sleep(5)`.
-    *   `await self.mcp_start(reason="WATCHDOG_RECOVERY")`.
+*   **Sub-Task 2.1: Forensic Capture**:
+    *   Call `self.trace_monitor.get_last_trace()`.
+    *   Identify source (Hub, Attendant, or vLLM).
+*   **Sub-Task 2.2: Log Interleaving**:
+    *   `self.log_event(f"[WATCHDOG] Recovery triggered. Last words: {snippet}", "CRITICAL")`.
+*   **Sub-Task 2.3: Reset Sequence**: `await self.mcp_stop()` -> `await asyncio.sleep(5)` -> `await self.mcp_start()`.
 
 ---
 
@@ -82,14 +70,17 @@ It also adheres to **[BKM-018] (Orchestrator-First)** and **[BKM-022] (Atomic IO
 *A final review of historical documents and sprint plans to ensure no intent is lost.*
 
 ### **Unfinished Items from Sprint 20:**
-- **PENDING TEST: Contextual Echo**: The Tier 3 "Soul" test for verifying Pinky-ism stripping was not run.
-- **PENDING TEST: Deep Smoke**: This test was only partially completed.
-- **Carry-over Task: Verify Weight Mapping Timeline**: Ensure the 180s settle window is generous enough.
-- **Carry-over Task: Activity Latch Audit [FEAT-287]**: Verify active conversation extends the residency window.
-- **Carry-over Task: Ledger Integrity**: Confirm `active_pids.json` correctly reclaims ports after a hard service crash.
+- **PENDING TEST: Contextual Echo**: Verify Pinky-ism stripping.
+- **PENDING TEST: Deep Smoke**: Verify flow with Windows host online.
+- **Carry-over Task: Activity Latch Audit [FEAT-287]**: Verify conversation extends residency.
+- **Carry-over Task: Ledger Integrity**: Confirm `active_pids.json` port reclamation.
 
-### **Lost Gems Recovered:**
-- **Docker Container Monitoring**: The `lab_attendant_v1.py` watchdog included logic to monitor essential Docker containers. This should be restored in a future sprint.
+### **Refinement Report (Homework Analysis):**
+- **vLLM Log Path**: Confirmed at `/home/jallred/Dev_Lab/HomeLabAI/vllm_server.log`.
+- **v1 Lost Gems**: Re-integrated Docker monitoring and 95% VRAM critical threshold logic.
+- **TraceMonitor**: Physically present in `v4` (imported); needs VLLM log added to target list.
+- **State Mapping**: `self.is_hibernating` and `self.current_lab_mode` confirmed as the internal truth anchors.
+- **Interleaved Schema**: Confirmed JSON list format in `pager_activity.json`.
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
