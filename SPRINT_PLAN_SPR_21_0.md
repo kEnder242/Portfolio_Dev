@@ -206,3 +206,22 @@ We will move from 'Identity Probing' (checking environments) to 'Family Tracking
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE SOVEREIGN BINDING (Token-PID Association)
+
+**Observation:** A list of PIDs without a linked token is 'unauthenticated.' If the session token changes (e.g., after a Hard Reset), the Attendant must know which PIDs are disowned to prevent unauthorized GPU occupancy.
+
+### 🏗️ Solution: Unified Sovereign Ledger
+The \`active_pids.json\` will be upgraded to include an \`authority\` header containing the current \`session_token\`. This binds the process tree to a specific identity.
+
+### 🛠️ Phase 23 Additions: Linkage & Purge
+- [ ] **Task 17.1: Implementation of Authority Header**
+    - **Why:** Bind PIDs to a verifiable session identity.
+    - **How:** Add \`"authority": {"token": "..."}\` to the ledger schema.
+- [ ] **Task 22: Stale Identity Purge**
+    - **Why:** Clear survivors from invalidated sessions.
+    - **How:** If boot-time scavenging finds a token mismatch in the ledger, treat the entire \`family_pids\` list as a kill-list.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
