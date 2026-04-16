@@ -112,51 +112,51 @@ We must transition the Attendant to a 'Continuous Governor' model. A service res
 ## 🛠️ Phase 22: Service Continuity & Adoption (Tasks)
 
 ### Tier 1: Persistent Identity
-- [ ] **Task 7: Disk-Persisted Session Token**
+- [x] **Task 7: Disk-Persisted Session Token**
     - **Why:** To ensure the 'Immunity Signal' survives a service restart.
     - **Where:** `lab_attendant_v4.py` -> `__init__`.
     - **How:** Check for `run/session.token`. If exists, load it; otherwise, generate and save. Use this for all `LAB_IMMUNITY_TOKEN` environment variables.
 
-- [ ] **Task 8: Stable Boot Hash**
+- [x] **Task 8: Stable Boot Hash**
     - **Why:** Provide a secondary 'Epoch' marker that persists across restarts but resets on a 'Hard Reset.'
     - **Where:** Global state in `lab_attendant_v4.py`.
 
 ### Tier 2: Physical Scavenging (The 'Detective' Boot)
-- [ ] **Task 9: Implementation of `scavenge_reality()`**
+- [x] **Task 9: Implementation of `scavenge_reality()`**
     - **Why:** To identify what is *actually* running before we look at the ledger.
     - **Where:** `LabAttendantV4` class.
     - **How:** Execute `sudo fuser` on ports 8765, 8088, and 11434. Cross-reference results with `psutil` to find process start times and command lines.
 
-- [ ] **Task 10: Process Adoption Protocol**
+- [x] **Task 10: Process Adoption Protocol**
     - **Why:** To re-link the Attendant with healthy existing nodes.
     - **Where:** Startup sequence in `run_bilingual()`.
     - **How:** Compare discovered PIDs against the `active_pids.json` and the persisted `session_token`. If a healthy node matches, update the live `self.active_pids` and skip spawning.
 
-- [ ] **Task 11: State Machine Reconstruction**
+- [x] **Task 11: State Machine Reconstruction**
     - **Why:** Ensure the `current_lab_mode` and `is_hibernating` flags reflect reality on boot.
     - **Where:** `mcp_heartbeat` and `update_status_json`.
     - **How:** If a vLLM process is found on 8088 but is not responding to a cognitive probe, set `is_hibernating = True`.
 
 ### Tier 3: Hardening & Verification
-- [ ] **Task 12: Synchronous SIGTERM Handler**
+- [x] **Task 12: Synchronous SIGTERM Handler**
     - **Why:** Prevent the 'Shutdown Race' where children outlive the parent.
     - **Where:** `lab_attendant_v4.py` signal registration.
     - **How:** Implement a handler that uses `asyncio.run(self.cleanup_silicon(mode="SESSION"))` before final exit.
 
-- [ ] **Task 13: Ledger Integrity (Self-Healing)**
+- [x] **Task 13: Ledger Integrity (Self-Healing)**
     - **Why:** Ensure the disk ledger is never out of sync with physical reality.
     - **Where:** `vram_watchdog_loop`.
     - **How:** Add a task to periodically overwrite `active_pids.json` with the 'Physical Truth' found during the VRAM audit.
 
-- [ ] **Task 14: The 'Graceful Restart' Test**
+- [x] **Task 14: The 'Graceful Restart' Test**
     - **Action:** Start the Lab (VLLM), then `sudo systemctl restart lab-attendant`.
     - **Success:** The new Attendant instance should adopt the existing vLLM PID without triggering a second ignition or reaping the healthy engine.
 
-- [ ] **Task 15: The 'Adopted Hibernate' Test**
+- [x] **Task 15: The 'Adopted Hibernate' Test**
     - **Action:** Hibernate the Lab, then restart the Attendant.
     - **Success:** The new instance should correctly identify the state as `HIBERNATING` based on VRAM/Process checks.
 
-- [ ] **Task 16: Standard Operating Procedure (Gemini CLI)**
+- [x] **Task 16: Standard Operating Procedure (Gemini CLI)**
     - **Action:** Formally document the 'Orchestrator-First' mandate. Gemini CLI (me) is forbidden from manual intervention unless the Attendant's scavenging fails.
 
 ---
