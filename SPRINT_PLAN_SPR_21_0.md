@@ -379,3 +379,33 @@ The Hub will remain in 'LOBBY' or 'INIT' state and will NOT broadcast 'OPERATION
 
 ---
 **Status:** SPR-21.0 CONCLUDED. READY FOR FIELD DEPLOYMENT.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE BLACKLIST LAW (Radical Simplification)
+
+**Observation:** Whitelisting system processes is a "Fragile Protector" anti-pattern. We should only manage what we own.
+
+### 🏗️ Solution: The Blacklist Pivot
+The Watchdog is forbidden from auditing or reaping any process not explicitly named in the Blacklist.
+
+**The Blacklist:**
+1. \`vllm\`
+2. \`EngineCore\`
+3. \`ollama\`
+4. \`acme_lab.py\`
+5. \`node.py\`
+
+---
+## 🛠️ Phase 27: The Blacklist Law & Targeted Reaping (Tasks)
+
+### Tier 13: Radical Simplification
+- [ ] **Task 36: Implementation of the Blacklist-Only Audit**
+    - **Why:** To eliminate the need for system-wide whitelisting and prevent collateral damage.
+    - **How:** Remove all code related to \`system_pids\`. Update the Watchdog to only iterate over processes matching the Blacklist.
+- [ ] **Task 37: Function-Based Ghost Detection**
+    - **How:** A Blacklisted process is a ghost ONLY if: (VRAM > 2GB) AND (Known Ports 8088/11434/8765 are CLOSED).
+- [ ] **Task 38: Mandatory Attendant Immunity**
+    - **How:** Hard-code the Attendant's own PID to be exempt from all reaping, regardless of name.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
