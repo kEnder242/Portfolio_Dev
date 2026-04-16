@@ -427,3 +427,34 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 
 ---
 **Status:** SPRINT CONCLUDED. LAB OPERATIONAL.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE SOVEREIGN WAKE (Phase 28)
+
+**Observation:** [FEAT-221] Wake-on-Connect was broken by the 'Vocal Lock'. The Hub foyer is no longer self-aware of its hibernation state and fails to trigger the Attendant when queries arrive.
+
+### 🏗️ Solution: Wake-on-Intent
+1. **Idempotent Sparking:** The Hub will trigger a 'Spark' request to the Attendant if a query arrives and the engine is silent, regardless of Handshake state.
+2. **Persistent Tab Resilience:** Moving the ignition trigger from 'Handshake' (one-time) to 'Intent' (per-query).
+3. **Patience Alignment:** Update all system timeouts to respect the 180s vLLM weight-load window.
+
+### 🛠️ Phase 28: Wake-on-Intent Implementation (Tasks)
+
+#### Tier 14: Intent-Driven Ignition
+- [ ] **Task 39: Implement Wake-on-Query in Hub**
+    - **Why:** To handle persistent browser tabs that survive engine hibernation.
+    - **How:** Add a spark-check to \`process_query\`. If state is LOBBY/HIBERNATING, trigger \`spark_restoration\`.
+- [ ] **Task 40: Correct Hibernation Awareness**
+    - **How:** Update \`get_current_vitals\` to correctly report 'HIBERNATING' if VRAM < 1GB and Foyer is Up.
+
+#### Tier 15: Timing Realignment
+- [ ] **Task 41: Update LAB_TIMING_REPORT.md**
+    - **How:** Synchronize the 180s Ignition Gate across all documentation.
+
+---
+### 🕵️ Pre-emptive Brainstorm (Failure Scenarios)
+1. **Ghost Sparking:** Rapid-fire queries triggering multiple REST calls. (Fixed via \`_spark_active\` idempotency).
+2. **VRAM Thrashing:** Waking up while another VRAM process is starting. (Handled by Attendant's 'Patient Governor' congestion check).
+3. **Signal Lag:** 5-10s delay between query and 'Warming' feedback. (Fixed by immediate broadcast of 'Warming' signal in Hub).
+
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
