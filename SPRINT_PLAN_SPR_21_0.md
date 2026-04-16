@@ -327,3 +327,35 @@ The Hub will remain in 'LOBBY' or 'INIT' state and will NOT broadcast 'OPERATION
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE PATIENT GOVERNOR (Refined Direction)
+
+**Observation:** We have been too aggressive. A port being open is a signal of 'Intent.' If a process accepts a connection, it is a Resident, not a Ghost, even if it is slow to speak.
+
+### 🏗️ Solution: Function-First Adoption
+1. **The Larynx Probe:** Distinguish between 'Socket Accepted' (Warming) and 'Connection Refused' (Dead).
+2. **Reap as Last Resort:** Only kill if VRAM is high, ports are closed, AND the PID is unrecognized by the ledger.
+3. **UI De-Clutter:** Move automated status messages to the Crosstalk bar.
+
+---
+## 🛠️ Phase 26: The Patient Governor & UI Hardening (Tasks)
+
+### Tier 11: The "Larynx Probe" & PID Binding
+- [ ] **Task 32: Implement Non-Blocking Larynx Check**
+    - **Why:** To spare 'Warming' engines from the Watchdog.
+    - **How:** Update Watchdog to use \`asyncio.open_connection()\`. If accepted, yield for 60s.
+- [ ] **Task 33: Immediate PID-Token Association**
+    - **Why:** Establish immunity at the moment of birth.
+    - **How:** Ensure \`start_vllm.sh\` PID is immediately recorded in the ledger with the current \`session_token\`.
+
+### Tier 12: UI/UX Refinement
+- [ ] **Task 34: Shunt Status to Crosstalk**
+    - **Why:** Keep the chat window focused on dialogue.
+    - **How:** Broadcast 'THINKING' and 'READY' as \`type: crosstalk\`.
+- [ ] **Task 35: Streamline Mouse Stances**
+    - **Why:** Professional, non-indented output for technical thoughts.
+    - **How:** Update \`cognitive_hub.py\` to strip indents and headers from \`TECHNICAL_INTUITION\`.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
