@@ -258,3 +258,50 @@ The 'v4 Over-Reach' attempted to solve the persistent 6.5GB VRAM leak by auditin
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ RETROSPECTIVE: THE COGNITIVE GAP (Physics vs. Logic)
+
+**Date:** April 15, 2026 (Final Audit)
+**Observation:** Automated tests reported 'PASS' while the actual Intercom experience was 'Trash' (Reconnection Loops / Stalls). 
+
+### 🕵️ 10 Dimensions of Test Blindness (The "10 Ways" Report)
+1. **The Localhost Illusion:** Missing Cloudflare Tunnel latency/timeouts.
+2. **Clean Slate Bias:** Tests always start from a perfect purge; users arrive at 'dirty' environments.
+3. **The Impatient User:** Manual typing ('hi') occurs during state transitions (INIT/LOBBY) that tests skip.
+4. **Socket Stagnation:** Persistent browser tabs vs. connection bursts.
+5. **The API-Only Trap:** Checking ports instead of 'Vocal' cognitive readiness.
+6. **Recursive Immunity Lag:** The 5-10s window between worker spawn and ledger registration.
+7. **JS Retry Loop:** Mismatch between the frontend reconnection logic and backend recovery.
+8. **The ExceptionGroup Trap:** Silent death of background Hub threads not surfacing as return codes.
+9. **Auth-Key Desync:** Browser cache holding old style-keys.
+10. **Systemd/Env Divergence:** Differences in I/O buffering and redirection.
+
+### 🏗️ Strategic Pivot: Cognitive Real-World Hardening
+We will move beyond 'Logic' verification to 'Physics' verification. The system only exists if it is **Vocal** and **Resilient to Reality.**
+
+---
+## 🛠️ Phase 25: Cognitive Hardening & JS Simulation (Tasks)
+
+### Tier 8: Functional (Vocal) Verification
+- [ ] **Task 26: Implementation of \`mcp_verify_vocal()\`**
+    - **Why:** Cognitive Truth is the only true liveness.
+    - **How:** Add a method to Attendant to perform a 1-token probe.
+- [ ] **Task 27: Mandate 'Vocal Truth' for Test PASS**
+    - **How:** Update all Physician's Gauntlet scripts to require reasoning success for a PASS.
+
+### Tier 9: The "Browser Mirror" Simulation
+- [ ] **Task 28: Implementation of \`test_intercom_browser_sim.py\`**
+    - **Why:** Reproduce the 'Trash' behavior by mimicking \`intercom_v2.js\`.
+    - **How:** Persistent WS client with 5s reconnect loop and handshake payloads.
+- [ ] **Task 29: Port Pressure Audit**
+    - **How:** Use \`netstat\` during the simulation to identify socket exhaustion.
+
+### Tier 10: Visibility & Audit
+- [ ] **Task 30: Verbose Reap Logging**
+    - **How:** Watchdog must log specific PID/Name and Reason for every kill action.
+- [ ] **Task 31: 401 Forensic Logging**
+    - **How:** Harden \`key_middleware\` to log rejected keys to rule out browser cache issues.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
