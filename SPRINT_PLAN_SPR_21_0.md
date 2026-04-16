@@ -458,3 +458,33 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 3. **Signal Lag:** 5-10s delay between query and 'Warming' feedback. (Fixed by immediate broadcast of 'Warming' signal in Hub).
 
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ STRATEGIC RE-ALIGNMENT: THE QUIET SENTRY (Phase 29)
+
+**Observation:** We have deviated into a 'Reaping' mindset. Constant 10s polling for ghosts is an anti-pattern that creates instability. We must shift to a 'Lifecycle-Event' model.
+
+### 🏗️ Solution: Lifecycle Anchors
+1. **Pre-Init:** Surgical ghost-sweep happens exactly once before ignition.
+2. **Hibernation:** VRAM decay is monitored only during the transition.
+3. **Resumption:** Log-based forensic monitoring (Traceback detection) is the primary liveness gate.
+4. **Steady-State:** The Watchdog pulse slows to 60s, acting as a passive observer.
+
+---
+## 🛠️ Phase 29: The Quiet Sentry & Forensic Capture (Tasks)
+
+### Tier 16: Transition-Based Logic
+- [ ] **Task 42: De-Escalate Watchdog Pulse**
+    - **Action:** Increase poll interval to 60s. Reduce log noise.
+- [ ] **Task 43: Implementation of Pre-Ignition Deck Clear**
+    - **How:** Move \`scavenge_reality\` call to the start of \`mcp_start\`.
+- [ ] **Task 44: Log-Triggered Recovery**
+    - **How:** Use \`TraceMonitor\` results as the primary trigger for 'Resume' failures.
+
+### Tier 17: Forensic Capture
+- [ ] **Task 45: Forensic Log Injection**
+    - **Why:** Resolve '[EVIDENCE UNAVAILABLE]' in Pager alerts.
+    - **How:** Inject the last 10 lines of the relevant log into the recovery metadata.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
