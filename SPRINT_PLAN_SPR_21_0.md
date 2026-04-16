@@ -225,3 +225,36 @@ The \`active_pids.json\` will be upgraded to include an \`authority\` header con
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ HISTORICAL REPORT: THE RESILIENCE DNA (Reclaiming the Blacklist)
+
+**Date:** April 15, 2026 (Night Session)
+**Observation:** We have deviated from established resilience laws. The move toward 'Whitelisting' (killing unrecognized processes) has turned the Watchdog into a threat to system stability.
+
+### 🏺 Historical Successes (The DNA)
+1. **The Assassin [FEAT-119]:** Originally used a strict **Blacklist** of names (\`vllm\`, \`ollama\`, \`acme_lab.py\`). It never touched unknown VRAM consumers.
+2. **Port-Strict Reaping:** Used \`fuser -k\` only on specific Lab ports (8765, 8088, 11434).
+3. **Script Supremacy:** Standardized on \`bash start_vllm.sh\` to prevent Python FD 'bullying.'
+
+### 🩹 How we Lost it (The Scars)
+The 'v4 Over-Reach' attempted to solve the persistent 6.5GB VRAM leak by auditing all GPU PIDs. This bypassed the 'Blacklist' law and resulted in the 'Murderous Protector' bug, where the Watchdog killed newborn engines and system processes.
+
+---
+## 🛠️ Phase 24: Blacklist Restoration & Intercom Stability (Tasks)
+
+### Tier 6: The Blacklist Law
+- [ ] **Task 23: Implementation of strict Blacklist Reaping**
+    - **Why:** Adhere to the 'Only Kill What We Know' mandate.
+    - **How:** Revert \`cleanup_silicon\` to use the \`targets\` list from \`v1\`. Remove all broad physical-PID killing.
+- [ ] **Task 24: Port-Bound VRAM Audit**
+    - **Why:** Narrow the Watchdog's focus to prevent collateral damage.
+    - **How:** Watchdog only audits PIDs that are physically bound to ports 8088, 8765, or 11434.
+
+### Tier 7: Stress Validation
+- [ ] **Task 25: Intercom Stress Test (The 'Cray Ports' Fix)**
+    - **Action:** Run \`src/debug/test_intercom_flood.py\`.
+    - **Success:** 50 consecutive WebSocket connections without a single Hub crash or Watchdog recovery.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
