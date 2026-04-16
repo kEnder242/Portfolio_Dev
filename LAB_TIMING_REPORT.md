@@ -12,7 +12,7 @@ I have synthesized the Lab's timing architecture from the forensic grep results.
 | **Hub** | `AFK Hibernate` | **600s** (10m) | **[FEAT-249]** Automatic Level 2 offload after inactivity. |
 | **Nodes** | `probe_ttl_success` | **300s** (5m) | Cache engine resolution to reduce per-query network hits. |
 | **Attendant** | `vram_watchdog` | **10s** | Background VRAM monitoring and orphan reaping. |
-| **Attendant** | `Triton Settle` | **60s** | Mandatory wait for kernel residency on Turing silicon. |
+| **Attendant** | `Triton Settle` | **120s** | Mandatory wait for kernel residency on Turing silicon. |
 | **Attendant** | `Ignition Gate` | **180s** | Max wait for cognitive readiness (Functional Ping). |
 | **Attendant** | `PCIe Grace` | **5s** | Post-subprocess delay for OS environment alignment. |
 | **Scanner** | `Dream Cycle` | **3600s** (1h?) | Periodic memory synthesis. |
