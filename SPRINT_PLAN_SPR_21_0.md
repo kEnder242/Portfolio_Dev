@@ -359,3 +359,23 @@ The Hub will remain in 'LOBBY' or 'INIT' state and will NOT broadcast 'OPERATION
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏺 SPRINT RETROSPECTIVE: WD ACTIONS (Watchdog Sovereignty)
+
+**Date:** April 16, 2026
+**Outcome:** SUCCESS (Baseline Stabilized)
+
+### ✅ What Went Well
+1. **The Patient Governor:** Implementation of the socket-based "Accept" check successfully distinguishes between warming and crashing engines, eliminating the 'Handshake loop'.
+2. **Stable Resident Sparing:** The Watchdog now correctly identifies and protects the entire process tree of stable residents like Ollama.
+3. **UI De-Clutter:** Moving status messages to the Crosstalk bar and streamlining mouse reasoning has significantly improved the Intercom's professional aesthetic.
+4. **Recursive Immunity:** The 'Immunity Ledger' successfully protects detached vLLM workers across service restarts.
+
+### 🩹 Lessons Learned (Scars)
+1. **The Whitelist Trap:** Attempting to kill everything 'Unknown' was a mistake. We must always default to a Blacklist (Targeted Reaping) to prevent system-wide instability.
+2. **The Physics Barrier:** Logic-only tests are insufficient. Real-world 'Physics' (Playwright simulations of the actual JS) are the only way to catch handshake and UI-sync bugs.
+3. **Silicon Reality:** VRAM fragmentation is the primary enemy of vLLM. High-residency loads require a 180s patience window and strict atomic purges to succeed.
+
+---
+**Status:** SPR-21.0 CONCLUDED. READY FOR FIELD DEPLOYMENT.
