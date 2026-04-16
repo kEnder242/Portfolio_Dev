@@ -305,3 +305,25 @@ We will move beyond 'Logic' verification to 'Physics' verification. The system o
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE VOCAL LOCK (Truth over Liveness)
+
+**Observation:** Port-based 'Liveness' is a lie. The Intercom reports 'OPERATIONAL' while the residents are still deadlocked in kernel loads, leading to the 'Thinking Stall.'
+
+### 🏗️ Solution: The Vocal-Locked Foyer
+The Hub will remain in 'LOBBY' or 'INIT' state and will NOT broadcast 'OPERATIONAL' to the JS client until a functional cognitive probe has cleared the entire stack.
+
+### 🛠️ Phase 25 Refinements: Browser & Vocal
+- [ ] **Task 26.1: Implementation of the Vocal-Lock Gate**
+    - **Why:** Stop the Hub from lying to the frontend.
+    - **How:** Add a 1-token "Larynx Ping" as the final condition for the 'OPERATIONAL' status.
+- [ ] **Task 28.1: Playwright Browser Simulation**
+    - **Why:** Run the actual \`intercom_v2.js\` logic in an automated test.
+    - **How:** Use Playwright to load the UI and type 'hi' during state transitions.
+- [ ] **Task 30.1: Physician's Final Assertion**
+    - **Why:** Mandate health checks at the end of each test.
+    - **How:** Create \`src/debug/verify_vocal_liveliness.py\` and integrate into the Physician's Gauntlet.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
