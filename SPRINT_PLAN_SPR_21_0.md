@@ -409,3 +409,21 @@ The Watchdog is forbidden from auditing or reaping any process not explicitly na
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏺 FINAL RETROSPECTIVE: THE BLACKLIST LAW (Radical Simplification)
+
+**Date:** April 16, 2026
+**Outcome:** VERIFIED STABLE
+
+### ✅ Accomplishments
+1. **The Blacklist Law [Task 36]:** Surgically removed all whitelist logic. The Watchdog is now blind to everything except the 8 core Lab processes. No more collateral damage to Xorg or Sunshine.
+2. **Function-First Adoption [Task 37]:** The Watchdog now adopts Port-Bound residents into the Immunity Ledger immediately, regardless of token mismatch.
+3. **UI Signal Shunting [Task 34]:** THINKING and READY signals now reside in the Crosstalk panel, keeping the chat window clinical and focused.
+4. **Physician's Vocal Assertion [Task 30.1]:** Every test now terminates with a mandatory functional 1-token probe. API liveness is no longer accepted as Truth.
+
+### 🛡️ Final State
+The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign Governor' (Blacklist). It is now resilient to service restarts and detached worker processes.
+
+---
+**Status:** SPRINT CONCLUDED. LAB OPERATIONAL.
