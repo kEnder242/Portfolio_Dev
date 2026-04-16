@@ -37,13 +37,13 @@ This plan restores core DNA from the Feature Tracker and archived `v1` logic:
 
 ### 🛠️ Section 3: Tasks & Tracking (WD Sovereignty)
 
-- [ ] **Task 1: Rebuild Multi-Modal Watchdog Logic**
+- [x] **Task 1: Rebuild Multi-Modal Watchdog Logic**
     - **Mechanism**: Implement the state-aware rubric in `vram_watchdog_loop`. Add checks for VRAM thresholds, Hub liveness, and Docker container status.
-- [ ] **Task 2: Implement Tiered Recovery**
+- [x] **Task 2: Implement Tiered Recovery**
     - **Mechanism**: In the loop, call `self.mcp_hibernate()` for hibernation failures and `self.mcp_stop()` for DEAD Hubs.
-- [ ] **Task 3: Implement Forensic Log Injection (vLLM Aware)**
+- [x] **Task 3: Implement Forensic Log Injection (vLLM Aware)**
     - **Mechanism**: Expand `TraceMonitor` to include `/home/jallred/Dev_Lab/HomeLabAI/vllm_server.log`. Inject discovered errors into `self.log_event()`.
-- [ ] **Task 4: Gemini CLI BKM-018 Compliance**
+- [x] **Task 4: Gemini CLI BKM-018 Compliance**
     - **Mechanism**: Gemini CLI MUST use `lab_stop` / `lab_start` for all cleanup. Manual `pkill` is strictly forbidden.
 
 ---
