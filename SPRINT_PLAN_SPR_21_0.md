@@ -161,3 +161,48 @@ We must transition the Attendant to a 'Continuous Governor' model. A service res
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+
+---
+## 🏛️ RETROSPECTIVE: THE RECURSIVE BLIND SPOT (Why it's still breaking)
+
+**Date:** April 15, 2026 (Late Session)
+**Observation:** Despite implementing 'Adopt-on-Restart,' the Lab remained trapped in a 'Recovery Loop.' The Watchdog continued to reap the vLLM engine every 20 seconds.
+
+### 🕵️ The "Smoking Gun" Discovery
+vLLM spawns a family of worker processes to handle inference. While the **Parent PID** (the API Server) correctly carries the `LAB_IMMUNITY_TOKEN`, its **Child Worker PIDs** (the ones actually holding the VRAM) do not. 
+The Watchdog's 'VRAM Truth' audit saw these 'Token-Blind' workers, misidentified them as ghosts, and reaped the entire engine family.
+
+### 🏗️ Solution: The 'Family Ledger' (Tier 4)
+We will move from 'Identity Probing' (checking environments) to 'Family Tracking' (recording the tree). The Attendant will maintain a disk-persisted table of authorized PIDs.
+
+---
+## 🛠️ Phase 23: Family Sovereignty & Signal Unification (Tasks)
+
+### Tier 4: The Immunity Ledger
+- [ ] **Task 17: Schema Extension (`family_pids`)**
+    - **Why:** Provide a single source of truth for all authorized GPU consumers.
+    - **Where:** `active_pids.json`.
+    - **How:** Add a `family_pids` list to the JSON structure.
+
+- [ ] **Task 18: Implementation of `sync_family_ledger()`**
+    - **Why:** Authorize vLLM workers and Hub residents recursively.
+    - **Where:** `LabAttendantV4` class.
+    - **How:** Use `psutil.Process(parent).children(recursive=True)` to populate the ledger. Call this immediately after ignition and during the Watchdog loop.
+
+- [ ] **Task 19: Family-Aware VRAM Audit**
+    - **Why:** Prevent the Watchdog from 'murdering' recognized children.
+    - **Where:** `vram_watchdog_loop` -> Step 4.
+    - **How:** Replace the environment token-scrape with a simple `p_pid in self.active_pids['family_pids']` check.
+
+### Tier 5: Signal Alignment & Verification
+- [ ] **Task 20: Purge Legacy 'READY' Signals**
+    - **Why:** The Attendant is waiting for 'READY' while the Hub is sending 'OPERATIONAL.'
+    - **Where:** `log_monitor_loop` and `mcp_wait_ready`.
+    - **How:** Standardize all readiness checks to look for the Hub's `Mind is OPERATIONAL` and the Engine's `is VOCAL` signals.
+
+- [ ] **Task 21: Family-Aware Gauntlet Test**
+    - **Action:** Update `test_lifecycle_gauntlet.py` to verify that the *entire family* (workers included) is protected during restarts.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
