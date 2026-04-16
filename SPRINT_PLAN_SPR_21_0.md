@@ -488,3 +488,13 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏺 MILESTONE: BASELINE v4.1 ARCHIVED
+
+**Date:** April 16, 2026 (14:30)
+**Status:** VERIFIED STABLE
+**Tag:** \`v4.1-patient-governor\`
+**Anchor:** The system correctly ignites, resumes from hibernation on intent, and ignores system GUI processes. Reaping is functional but restrained.
+
+---
