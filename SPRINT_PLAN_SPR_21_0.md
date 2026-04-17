@@ -498,3 +498,17 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 **Anchor:** The system correctly ignites, resumes from hibernation on intent, and ignores system GUI processes. Reaping is functional but restrained.
 
 ---
+
+---
+## 🏺 FINAL SPRINT MILESTONE: SOVEREIGN STABILITY VERIFIED
+
+**Date:** April 16, 2026 (21:30)
+**Outcome:** VERIFIED STABLE
+**Key Achievements:**
+1. **The Blacklist Law:** Watchdog is surgically restricted to Lab processes only. COLLATERAL DAMAGE: ZERO.
+2. **Refugee Immunity:** Detached vLLM workers (EngineCore) are correctly adopted and spared via ancestry audit.
+3. **Hibernation Grace Window:** Prevented the 'Instant Sleep' race condition by enforcing a 300s boot-immunity period.
+4. **Wake-on-Intent:** The Lab foyer now automatically sparks ignition upon receiving a query, breaking the hibernation deadlock.
+
+---
+**Status:** SPRINT 21.0 CONCLUDED. BASELINE SECURED.
