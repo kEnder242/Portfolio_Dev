@@ -512,3 +512,34 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 
 ---
 **Status:** SPRINT 21.0 CONCLUDED. BASELINE SECURED.
+
+---
+## 🏛️ SPRINT 21.0 DEEP RETROSPECTIVE: SCARS & WISDOM
+
+**Date:** April 16, 2026
+**Role:** Lead Engineer's Thought Partner (Gemini CLI)
+
+### 🕵️ 1. The "Whitelisting" Thought Trap
+*   **The Trap:** In an attempt to solve a 6.5GB VRAM leak, I moved from a 'Blacklist' (kill known bads) to a 'Whitelist' (kill everything unknown).
+*   **The Backfire:** This turned the Watchdog into an 'Assassin.' It reaped the X-Server, Sunshine, and the Lab's own newborn workers.
+*   **The Lesson:** Whitelisting in a shared hardware environment is catastrophic. **The Blacklist Law** is now a fundamental Lab protocol: We only manage (and kill) what we explicitly own.
+
+### 🕵️ 2. The "Larynx Lock" (Hibernation Catch-22)
+*   **Unexpected Item:** Implementing 'Vocal Truth' (must respond to ping to be READY) broke the hibernation wake path.
+*   **The Deadlock:** The system refused to signal 'OPERATIONAL' because the engine was asleep, but the engine couldn't wake up because the 'OPERATIONAL' gate was closed.
+*   **Resolution:** Ignition triggers must be bound to **Intent** (Query Arrival) rather than **Handshake** (One-time connection), bypassing health gates during the 'WAKING' window.
+
+### 🕵️ 3. Technical Detail: Token-Blindness
+*   **The Surprise:** vLLM worker processes (\`EngineCore\`) are detached and do not carry environment variables from the parent. 
+*   **The Fix:** We replaced 'Administrative Identity' (Tokens) with 'Physical Ancestry' (Ancestry Audits). If a parent is immune, the entire family is immune.
+
+### 🕵️ 4. Simple Mistakes (The "CORS Gap")
+*   **The Error:** I used \`X-Lab-Key\` in the frontend but only permitted \`LabKey\` in the backend middleware. This resulted in a 'NetworkError' that looked like a server crash but was a simple pre-flight rejection.
+*   **Avoidance:** Always run the **Playwright Browser Simulation** early to catch JS/CORS sync issues before committing logic.
+
+### 🛡️ 5. Useful BKMs & FEATs
+*   **[FEAT-265] Deterministic Readiness:** Watching for logs (\`Application startup complete\`) instead of timers is a 'Huge Win.' Ignition sync dropped from 60,000ms to 7ms.
+*   **[BKM-011] Safe-Scalpel:** The atomic patcher saved the \`acme_lab.py\` file from multiple potential truncations during high-concurrency edits.
+
+---
+**Status:** SPRINT 21.0 FULLY ARCHIVED. READY FOR FIELD DEPLOYMENT.
