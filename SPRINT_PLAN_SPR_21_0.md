@@ -543,3 +543,35 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 
 ---
 **Status:** SPRINT 21.0 FULLY ARCHIVED. READY FOR FIELD DEPLOYMENT.
+
+---
+## 🏛️ DESIGN REFINEMENT: THE QUIET GOVERNOR (Phase 30)
+
+**Observation:** Background polling every 10s is a "hunter" mindset that causes instability. We must shift to a "Governor" mindset where cleaning logic is bound to deterministic lifecycle events.
+
+### 🏗️ Solution: Lifecycle-Event Driven (LED) Architecture
+1. **De-activate the Hunter:** The continuous WD loop is disabled.
+2. **The "Deck Clear":** Surgical ghost-reaping happens exactly once at the start of \`mcp_start\`.
+3. **The Decay Monitor:** VRAM reclamation is verified once inside \`mcp_hibernate\`.
+4. **Sovereign Supremacy:** Ollama is moved to manual-only status. Automatic fallback is removed.
+
+---
+## 🛠️ Phase 30: LED Architecture & Ollama Backlining (Tasks)
+
+### Tier 18: WD De-Commissioning
+- [ ] **Task 50: Terminate Background WD Loop**
+    - **Action:** Remove the \`vram_watchdog_loop\` from the service startup. 
+    - **Effect:** Eliminate constant VRAM/Port polling noise.
+- [ ] **Task 51: Implement Pre-Ignition "Deck Clear"**
+    - **How:** Move the targeted ghost-reaping logic into the start of \`mcp_start\`.
+- [ ] **Task 52: Implement Hibernation Decay Verification**
+    - **How:** Move the 90s VRAM decay audit into \`mcp_hibernate\`.
+
+### Tier 19: Sovereign Engine Enforcement
+- [ ] **Task 53: Remove Automatic Ollama Fallback**
+    - **How:** Delete the retry-logic in \`mcp_start\` that falls back to Ollama on vLLM failure.
+- [ ] **Task 54: Manual-Only Ollama Route**
+    - **How:** Guard Ollama ignition behind an explicit \`engine="OLLAMA"\` parameter.
+
+---
+**Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
