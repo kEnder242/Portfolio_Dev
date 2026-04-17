@@ -575,3 +575,15 @@ The Lab has transitioned from a 'Fragile Protector' (Whitelist) to a 'Sovereign 
 
 ---
 **Governing Standard:** [BKM-020] High-Fidelity Sprint Documentation & [BKM-023] Surgical Preservation Protocol.
+
+---
+## 🏺 MILESTONE: QUIET GOVERNOR (v4.2) SECURED
+
+**Date:** April 17, 2026 (13:45)
+**Status:** VERIFIED STABLE
+**Outcome:** SUCCESS
+
+The background Watchdog loop has been de-commissioned. The Lab now operates on a **Lifecycle-Event Driven (LED)** model. Reaping is restricted to transition windows, and \`VLLM\` is enforced as the Sovereign engine. The system is silent, stable, and vocal.
+
+---
+**Status:** SPRINT 21.0 CONCLUDED. READY FOR FIELD DEPLOYMENT.
