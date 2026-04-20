@@ -587,3 +587,23 @@ The background Watchdog loop has been de-commissioned. The Lab now operates on a
 
 ---
 **Status:** SPRINT 21.0 CONCLUDED. READY FOR FIELD DEPLOYMENT.
+
+---
+## 🏺 PHASE 31: THE GAUNTLET OF SLEEP & THE NIGHTLY GHOST
+
+**Goal:** Achieve 3 consecutive validated hibernate/wake cycles and resolve the 2AM "Eternal Wakefulness" bug.
+
+### 🏗️ Validation Criteria (The Gauntlet)
+1. **Pass 1 (1m Wait):** Forced hibernate -> 1m sleep -> Wake-on-Intent. (Weights must return).
+2. **Pass 2 (5m Wait):** Forced hibernate -> 5m sleep -> Wake-on-Intent. (VRAM must be <1.5GB during sleep).
+3. **Pass 3 (10m Wait):** Natural idle hibernate -> 10m sleep -> Wake-on-Intent (Manual).
+*Note: Any logic fix resets the counter to 0/3.*
+
+### 🏗️ Investigation: The Nightly Ghost (2AM Stall)
+1. **Log Forensic:** Extract ALARM activity from 02:00.
+2. **Simulation:** Create \`src/debug/test_alarm_deadlock.py\` to trigger nightly dialogue logic.
+3. **Resolution:** Ensure ALARMs do not reset the idle timer (2 consecutive passes required).
+
+### 📊 Lifecycle Ledger (GAUNTLET-21.0)
+| Iteration | Trigger | Wait | VRAM Drop | Vocal Return | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
