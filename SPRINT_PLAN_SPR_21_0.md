@@ -633,3 +633,29 @@ The background Watchdog loop has been de-commissioned. The Lab now operates on a
 #### 4. "Check Before Spark" (ALARM Refinement)
 - **Location:** \`acme_lab.py\` (\`scheduled_tasks_loop\`).
 - **Action:** Move the \`spark_restoration\` call INSIDE the specific steps (e.g., Step 4/5) and only if those steps confirm physical work is required.
+
+## 🧪 SPRINT 21: VALIDATION ANNEX [VER-21.0]
+**Goal:** Prove the "Induction Storm" is solved and verify forensic logging.
+
+### 1. The Mutex Stress Test (Pytest Mock)
+- **Target:** `HomeLabAI/src/tests/test_induction_mutex.py` (NEW)
+- **Strategy:** 
+    - Mock `datetime.datetime.now()` to hit the 02:00 window.
+    - Mock `run_full_induction_cycle` to be a slow async task (10s delay).
+    - Trigger two consecutive loop iterations (60s simulation).
+- **Verification:** Assert that `run_full_induction_cycle` is called **exactly once** and `last_induction_date` is set before the slow task completes.
+
+### 2. Live-Fire Forensic Check (Integration)
+- **Trigger:** `touch ~/trigger_nightly`
+- **Action:** Monitor `HomeLabAI/server.log` for the new forensic signature:
+    - Expected: `[HUB] Ignition Sequence Initiated. Source: alarm_manual | Intent: ACTIVE`
+- **Constraint:** Verify that subsequent status polls from `status.html` (Passive) do NOT trigger additional ignition logs.
+
+### 3. Data-Aware Waking
+- **Environment:** Clear `REFINED_PROMPTS` and then inject a single dummy JSON.
+- **Verification:** Ensure the Lab wakes, processes the one item, and then respects the 10-minute hibernation timer without "ghost" wake-ups.
+
+### 4. Implementation Schedule
+- [ ] **Step 1:** Create `test_induction_mutex.py` using the logic from `test_hub_intent.py`.
+- [ ] **Step 2:** Execute with `pytest -v src/tests/test_induction_mutex.py`.
+- [ ] **Step 3:** Perform the Live-Fire manual trigger and tail logs.
