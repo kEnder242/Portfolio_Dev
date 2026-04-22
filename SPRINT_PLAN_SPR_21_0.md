@@ -666,3 +666,23 @@ The background Watchdog loop has been de-commissioned. The Lab now operates on a
     - `test_induction_mutex.py`: PASSED (Confirmed early state commit prevents loop races).
     - Forensic logging successfully differentiated between background tasks and user intent.
 - **Residual Task:** Restart the lab service to re-initiate the background task loop (Currently stale in PID 843290).
+
+## 🏆 SPRINT 21: FULL INTEGRATED AUDIT [AUDIT-21.0]
+**Status:** SUCCESS | **Date:** April 22, 2026
+
+### 1. ALARM Sequence Verification (Live Server)
+- **Trigger:** `~/trigger_nightly` correctly picked up by PID 1498987.
+- **Step 1 (Dialogue):** [FIXED] Updated to use `think` tool. Confirmed high-fidelity output in `nightly_dialogue.json`.
+- **Step 2 (Recruiter):** [HEALTHY] Confirmed LLM-driven URL acquisition (NVIDIA/Amazon/Google) in trace logs.
+- **Step 3 (Refactor):** [HEALTHY] `semantic_map.json` updated with fresh `last_refactor` timestamp.
+- **Step 4 (Harvest):** [HEALTHY] Confirmed sequential scan of 93 candidates.
+- **Step 5 (Dream Pass):** [FIXED] Corrected case-sensitivity bug in source verification. Confirmed VLLM activity on RTX 4090.
+
+### 2. Hardening Fixes [FEAT-289, FEAT-294, FEAT-292]
+- **Atomic Induction Mutex:** Proven to prevent "Recursive Sparks" in both Unit and Integrated contexts.
+- **Forensic Ignition:** Log signatures now clearly distinguish between Passive monitoring and Active ignition.
+- **Subprocess Logging:** `acme_lab.py` now captures and logs stdout/stderr from Harvest and Dream tasks.
+
+### 3. Residual Verification
+- Confirmed that the Sovereign Brain (RTX 4090) is processing the 6,000-item dream queue in a single, serialized stream.
+- Verified physical VRAM occupancy (7.3GiB) and GPU utility (20%) during deep reasoning turns.
