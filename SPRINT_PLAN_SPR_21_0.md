@@ -607,3 +607,29 @@ The background Watchdog loop has been de-commissioned. The Lab now operates on a
 ### 📊 Lifecycle Ledger (GAUNTLET-21.0)
 | Iteration | Trigger | Wait | VRAM Drop | Vocal Return | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+
+---
+## 🏛️ PHASE 32: THE SOVEREIGN SILENCE (Hardening v4.5)
+
+**Goal:** Establish "Ghost" status for background tasks and monitoring, ensuring they never wake or pin the silicon unnecessarily.
+
+### 🏗️ Task Breakdown
+
+#### 1. Tagging & Reconciliation [FEAT-287-290]
+- **Location:** \`lab_attendant_v4.py\`, \`acme_lab.py\`, \`cognitive_hub.py\`.
+- **Action:** Surgically update logic tags to match FeatureTracker.md.
+- **Conflict:** Move 'Activity Latch' to \`FEAT-287.1\`.
+
+#### 2. Passive Monitoring Gate (The "Look but Don't Touch" Shield)
+- **Location:** \`acme_lab.py\` (\`on_handshake\`).
+- **Logic:** Add \`if client_id not in ["status", "monitor"]:\` gate to ignition spark.
+- **Front-end:** Update \`status.html\` heartbeat JS to send \`client: "status"\`.
+
+#### 3. Idle-Neutrality (Task Sovereignty)
+- **Location:** \`acme_lab.py\` (\`text_input\`).
+- **Logic:** Define \`BACKGROUND_CLIENTS\`. Bypass \`last_activity\` reset if sender is a background agent.
+- **Result:** Dreams can occur without resetting the 10-minute hibernation timer.
+
+#### 4. "Check Before Spark" (ALARM Refinement)
+- **Location:** \`acme_lab.py\` (\`scheduled_tasks_loop\`).
+- **Action:** Move the \`spark_restoration\` call INSIDE the specific steps (e.g., Step 4/5) and only if those steps confirm physical work is required.
