@@ -1174,3 +1174,27 @@
 2.  **Stage 2 (Tags):** Verifies API readiness and model manifest availability.
 3.  **Stage 3 (Prime):** Performs a 1-token cognitive generation to force silicon residency (The "Latch").
 **Behavior:** Stages 1 & 2 are synchronous (Heartbeat); Stage 3 is asynchronous (Parallel Prime).
+
+## [FEAT-287] Mutual Exclusion (Ignition Mutex)
+**Status:** ACTIVE
+**Logic:** Enforces a strict one-in-one-out policy for state transitions using an \`asyncio.Lock\`.
+**Rationale:** Prevents "Spark Collisions" where redundant ignition requests (e.g., RECOVERY + User Intent) would flood the Attendant and crash the Hub.
+**Mechanism:** \`self.ignition_lock\` in \`lab_attendant_v4.py\` wrapping the entire ignition sequence.
+
+## [FEAT-288] Absolute Port Authority (Nuclear Port Guard)
+**Status:** ACTIVE
+**Logic:** Ensures port 8088 and 8765 are physically clear before ignition using a combination of \`fuser -k\` and direct \`SIGKILL\` signals.
+**Rationale:** Solves the "Zombie Port" problem where dormant engines or \`TIME_WAIT\` sockets would block new family members from binding.
+**Mechanism:** Verification loop in \`mcp_start\` that force-kills stubborn occupants.
+
+## [FEAT-289] Atomic Induction (Alarm State Lock)
+**Status:** ACTIVE
+**Logic:** Sets the daily lock date (last_induction_date) IMMEDIATELY upon entering the induction gate.
+**Rationale:** Eliminates the "2AM Induction Storm" where the 60s loop would re-trigger the same nightly dialogue before the first one finished.
+**Mechanism:** Ordering fix in \`scheduled_tasks_loop\` in \`acme_lab.py\`.
+
+## [FEAT-290] Physical Truth Bridge (Sovereign Gate)
+**Status:** ACTIVE
+**Logic:** Hard-gates cognitive reasoning behind physical silicon residency (>5GB VRAM) and non-blocking NVML telemetry.
+**Rationale:** Prevents "Larynx Ghosts" where light-weight triage models would answer queries using cached state while the main engine weights were still offloaded.
+**Mechanism:** \`request_key\` persistence and physical VRAM checks in \`process_query\`.
