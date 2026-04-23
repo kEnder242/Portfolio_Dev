@@ -144,7 +144,7 @@ Critical Review of Centralized Hub Control
 
 ## 📍 IMPLEMENTATION SCHEDULE (Heads-Down Order)
 
-1.  **[ ] Step 1: Pager Bridge**: Implement `AcmeLab.trigger_pager()` and add the `PAGER_FILE` constant.
-2.  **[ ] Step 2: State Purge**: Unify `READY` -> `OPERATIONAL`.
-3.  **[ ] Step 3: Pulse Unblocking**: Refactor the task loop to use tasks instead of `communicate()`.
-4.  **[ ] Step 4: Truth Hardening**: Update Step 6 to reflect the actual silicon state.
+1.  **[x] Step 1: Pager Bridge**: Implement `AcmeLab.trigger_pager()` and add the `PAGER_FILE` constant.
+2.  **[x] Step 2: State Purge**: Unify `READY` -> `OPERATIONAL`.
+3.  **[x] Step 3: Pulse Unblocking**: Refactor the task loop to use tasks instead of `communicate()`.
+4.  **[x] Step 4: Truth Hardening**: Update Step 6 to reflect the actual silicon state.
