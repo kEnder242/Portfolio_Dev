@@ -89,3 +89,62 @@ Critical Review of Centralized Hub Control
    2. Restore the Pager: Port the "Hard-Won" trigger_pager logic from the Recruiter directly into the Hub's core.
 
 
+
+## 🛠️ RECOVERY BACKLOG [SPR-22.0]
+
+### 1. The Pager Restoration [FEAT-045 / FEAT-298]
+**Rationale**: Restore UI visibility to Hub-level events (Ignition, State Transitions).
+**Mechanism**: Port the "Hard-Won" legacy `trigger_pager` logic (Commit `907cbef7`, March 11) from `Recruiter.py` into a first-class `AcmeLab` method.
+*   **[BKM-022] Standard**: Utilize the `.tmp` + `os.replace` protocol for atomic writes to `pager_activity.json`.
+*   **[FEAT-294] Bridge**: Re-link the `Forensic Ignition` logs to this method.
+
+### 2. State Unification (Purge of `READY`) [FEAT-265]
+**Rationale**: Resolve the hibernation stall. The idle timer requires `READY`, but boot sets `OPERATIONAL`.
+**Surgical Targets (acme_lab.py)**:
+- [ ] **Logic Gates**: Lines 587, 613, 1360 (Shift check from `READY` to `OPERATIONAL`).
+- [ ] **State Initialization**: Lines 1337, 1386 (Update assignment).
+- [ ] **UI Broadcasts**: Lines 1339, 1387, 1473 (Update crosstalk strings).
+- [ ] **CAUTION**: Preserve Line 1471 (Developer comment) to maintain pedigree.
+
+### 3. Non-Blocking Task Orchestration [FEAT-249]
+**Rationale**: Restore the Lab Watchdog Heartbeat.
+**Mechanism**:
+- **Task Spawn**: Refactor Steps 4 and 5 in `scheduled_tasks_loop` to use `asyncio.create_task()`.
+- **Stay Awake Guards**: 
+    - **Dreaming**: Uses `[ME]` WebSocket queries to reset `self.last_activity` automatically.
+    - **Debate/Recruiter**: Add `self.last_activity = time.time()` anchors between internal turns.
+    - **Forge**: Step 6 triggers a `quiesce` shutdown, which is the "Ultimate Guard."
+
+### 4. Step 6: Forge State Truth [FEAT-297]
+**Rationale**: Correct the "Lying Status" where the Hub logs "Cycle Complete" prematurely.
+**Mechanism**:
+- **Status Shift**: Hub sets `self.status = "MAINTENANCE"` before dispatching the forge task.
+- **Handover**: The Hub gracefully terminates *after* dispatch, letting the Attendant's `maintenance.lock` manage the GPU.
+
+---
+
+## 🧪 SPRINT 22: VERIFICATION GAUNTLET [VER-22.0]
+
+### Phase 1: Forensic Verification (The UI)
+- [ ] **Ignition Log**: Trigger `~/trigger_nightly`. Verify `[HUB] Ignition Sequence Initiated` appears in `status.html`.
+- [ ] **State Sync**: Verify `status.html` shows **OPERATIONAL** (Green) after boot.
+
+### Phase 2: Hibernation Stress Test
+- [ ] **Linear Countdown**: Set `afk_timeout=60`. Verify `[IDLE_GAUGE]` in `server.log` counts down linearly during background work.
+- [ ] **Busy Guard**: Verify the Lab does **NOT** hibernate during an active 2-hour Dream Pass.
+
+---
+
+## 🤕 CHURN LOG: RECENT SCARS
+- **[FIXED]** Case-Sensitivity in `dream_voice.py` ("Brain" -> "brain").
+- **[FIXED]** Missing `await run_full_induction_cycle()` (Commit 51d9788).
+- **[FIXED]** Tool Desync in Step 1 (facilitate -> think).
+
+---
+
+## 📍 IMPLEMENTATION SCHEDULE (Heads-Down Order)
+
+1.  **[ ] Step 1: Pager Bridge**: Implement `AcmeLab.trigger_pager()` and add the `PAGER_FILE` constant.
+2.  **[ ] Step 2: State Purge**: Unify `READY` -> `OPERATIONAL`.
+3.  **[ ] Step 3: Pulse Unblocking**: Refactor the task loop to use tasks instead of `communicate()`.
+4.  **[ ] Step 4: Truth Hardening**: Update Step 6 to reflect the actual silicon state.
