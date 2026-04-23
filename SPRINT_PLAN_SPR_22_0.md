@@ -41,3 +41,51 @@ To harden the **Cross-Node Communication** (The Bridge) and ensure that the "Sha
 1.  **Run `test_induction_mutex.py`**: Verify baseline hardening still holds.
 2.  **Trigger `status.html`**: Ensure it does NOT wake a hibernating lab.
 3.  **Force-Fail Primary**: Monitor the transition to Shadow in the logs.
+
+Critical Review of Centralized Hub Control
+
+  I have reviewed the diff from 912176d to HEAD (today's "Centralization" arc). Here is my technical audit of the refactors:
+
+  1. Necessary Refactors (The Wins)
+   * [FEAT-289] Atomic Induction Gate: Moving self.last_induction_date = today to the top of the trigger block was Necessary. Without this, the 2-minute "Induction Storm" would always
+     recur on slow model loads.
+   * [FEAT-292] Dream Guard: The pgrep check is Necessary defensive coding to prevent VRAM thrashing by multiple dream_voice.py processes.
+   * Subprocess Logging: Capturing stdout/stderr is Necessary for server-side forensics (previously, background task errors were completely invisible).
+
+  2. Superfluous Refactors (The Bloat)
+   * Forensic Ignition Log [FEAT-294]: While the intent is good, adding a new log signature without bridging it to the existing pager_activity.json (The UI) makes it Superfluous from a
+     user perspective. It only adds noise to the internal server.log while the dashboard remains silent.
+
+  3. Harmful Refactors (The Regressions)
+   * Blocking Subprocesses: Using await proc.communicate() inside the scheduled_tasks_loop is Harmful.
+       * Impact: The main loop is the heartbeat of the Lab. By awaiting a 2-hour Dream Pass, I effectively killed the Watchdog and the Hibernation Timer for that entire duration. The
+         Lab could not check if it was idle because it was stuck waiting for a subprocess.
+   * Logic Amputation (Manual Trigger): My accidental deletion of await self.run_full_induction_cycle() in commit 51d9788 was Harmful. It turned the manual trigger into a "Dead Man's
+     Switch" that cleared the flag but did no work.
+   * Fire-and-Forget Forge [FEAT-297]: This refactor is Harmful to state traceability. By moving the Forge turn to an asyncio.create_task, the Hub now logs "Induction Cycle Complete"
+     while the physical GPU might be entering a 1-hour training lockdown. This creates a "Lying Status" anomaly.
+
+  📋 Audit of Lost Features (Identified via Diff)
+
+  ┌──────────────┬──────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬──────────┐
+  │ ID           │ Feature              │ Note on Loss                                                                                                               │ Status   │
+  ├──────────────┼──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────────┤
+  │ [FEAT-045]   │ Interleaved Forensic │ SUPERSEDE ERROR: The Hub took over tasks from standalone scripts but did not adopt their trigger_pager logic. Resulted in  │ LOST     │
+  │              │ Ledger               │ UI silence after 3:05 PM.                                                                                                  │          │
+  │ [FEAT-249]   │ Watchdog Heartbeat   │ THREAD BLOCK: await proc.communicate() blocked the heartbeat during Step 5. The watchdog was effectively dead for 2 hours. │ DEGRADED │
+  │ [FEAT-265.1] │ Vocal Truth (Larynx  │ TOOL DESYNC: Replaced facilitate with think in code but not in all logic paths. Resulted in "Unknown Tool" errors in Step  │ BROKEN   │
+  │              │ Check)               │ 1.                                                                                                                         │          │
+  └──────────────┴──────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────────┘
+
+  🕵️ Unknown Lost Feature: "The IDLE_GAUGE"
+  I discovered a formerly unknown loss: [FEAT-249.2] Linear Idle Countdown.
+  In the baseline, [IDLE_GAUGE] would log every 60s to show the countdown to hibernation. By using communicate() in the same loop, I broke the linearity of this gauge. It would
+  "freeze" at 100s and then suddenly jump to 7200s, likely triggering a panic hibernation immediately after the task finished, or missing the window entirely if the model was still
+  resident.
+
+  📍 Corrective Recommendation
+  I have been "over-optimizing" for the Python runtime while ignoring the Silicon/User interface. To fix this, I must:
+   1. Non-Blocking Tasks: All background steps (1-6) must run in their own tasks, or use asyncio.wait_for with the heartbeat loop preserved.
+   2. Restore the Pager: Port the "Hard-Won" trigger_pager logic from the Recruiter directly into the Hub's core.
+
+
