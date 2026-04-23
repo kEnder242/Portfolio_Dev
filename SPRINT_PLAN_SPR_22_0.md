@@ -148,3 +148,32 @@ Critical Review of Centralized Hub Control
 2.  **[x] Step 2: State Purge**: Unify `READY` -> `OPERATIONAL`.
 3.  **[x] Step 3: Pulse Unblocking**: Refactor the task loop to use tasks instead of `communicate()`.
 4.  **[x] Step 4: Truth Hardening**: Update Step 6 to reflect the actual silicon state.
+
+---
+
+## 🏺 SPRINT 22 RETROSPECTIVE [RETRO-22.0]
+**Status:** COMPLETED | **Date:** April 23, 2026
+
+### 📍 Executive Summary
+Sprint 22 successfully navigated the "Sovereign Bridge" hardening, resolving critical desyncs between the Hub's logic and the physical silicon state. We restored the user-facing forensic ledger, unified the state machine from legacy strings, and unblocked the Lab's heartbeat during long-tail background tasks.
+
+### 🧵 Loose Threads
+- **Dataset Scale Performance**: While "Fast Forward" [FEAT-296] fixed the Silent Crawl, the script still loads the full 6,000-line queue into memory. A future refactor to use file-seeks or database-backed queues is recommended for Epoch 2.
+- **Triage Latency**: The 5-7 second overhead per dream item remains. This is a natural consequence of serialized high-fidelity triage but remains a throughput bottleneck.
+
+### 📉 Lost Time & Documentation Gaps
+- **READY vs OPERATIONAL**: Lost ~45 minutes diagnosing a hibernation stall caused by a legacy state string that survived previous refactors. **Gap**: No centralized "State Registry" doc exists to enforce string constants across repos.
+- **REST Authentication**: Encountered multiple 401 Unauthorized errors in Step 6 (Forge). **Gap**: The requirement for `X-Lab-Key` on internal node-to-attendant calls was not explicitly documented in the Node implementation BKM.
+- **[ME] Prefix**: The Dream Pass produced zero saved data for ~30 minutes because queries lacked the `[ME]` tag required for Hub ignition. This was a "Cognitive Blind Spot" where I assumed background tasks had bypass rights.
+
+### 🧠 Retrospective Insights (The "Scars" Ledger)
+- **The Self-Reaping Loop**: Discovered that Step 6 (Forge) would cause the Attendant to kill the Hub while the Hub was still waiting for the Forge results. Resolved via **Fire-and-Forget Forge [FEAT-297]**.
+- **Heartbeat Thread-Lock**: Learned that `await proc.communicate()` is lethal to a 1-second heartbeat loop. Background tasks MUST be dispatched via `asyncio.create_task` to keep the watchdog alive.
+
+### 🧬 New/Recommended Anchors (BKM/FEAT)
+- **[FEAT-297] Fire-and-Forget Forge**: Disconnects Hub lifecycle from high-intensity silicon training.
+- **[FEAT-298] Centralized Hub Pager**: Restores UI visibility to core Lab events.
+- **[FEAT-299] Pulse Preservation**: Ensures watchdog liveness during background work.
+- **[BKM-024] Internal Intent Tagging**: (Recommended) Mandate that all internal background actors utilize the `[ME]` or `[INTERNAL]` tags to ensure correct triage and ignition.
+
+**Final Status**: All implementation steps are [x] COMPLETE. Verification Gauntlet is [x] PASSED. Git Baseline is SECURED.
