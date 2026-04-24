@@ -1,0 +1,72 @@
+[
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 0,
+    "type": "user",
+    "message": "we also have a non SMI way to get vram, that's how graphana does it",
+    "timestamp": "2026-04-20T20:19:11.034Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 1,
+    "type": "user",
+    "message": "we also have a non nvidia-SMI way to get vram, that's how graphana does it",
+    "timestamp": "2026-04-20T20:19:22.555Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 2,
+    "type": "user",
+    "message": "QQ: REPORT AND AWAIT MY DIRECTION. 1) Save baseline to git.  2) what is the expected hibernation vram level? ~6GB or ~1GB? It's been a day now.  Investigate and REPORT ONLY on the current status.  Note any logs & telemetry showing stalls etc. Recommend actions in your report and await my buy-in.  3) Do the items in the hardening summary have FEAT or sub-FEAT ID's documented in FeatureTracker.md?  Which ones do you recommend?  Await my buy-in. QQ",
+    "timestamp": "2026-04-22T16:28:34.911Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 3,
+    "type": "user",
+    "message": "QQ: 1) Update feature tracker per your recommendations. Then double check your edits to ensure other features were not lost. 2) Before we agree to dive into your propsoed 10 min  test, please note that the lab has been 'idle' for several days at ~6GB.  Investigate the cause of this. Also note where this WAKE_MANUAL came from.  The only activity I've made is opening status.html, is status.html expected to wake or is WAKE_MANUAL from another source?  Note: My graph shows hibernation stopped at 2am on April 21st.  Please look for logs aroudn that time and show me a timeline of what happened. REPORT and await my buy-in.  QQ",
+    "timestamp": "2026-04-22T16:37:43.399Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 4,
+    "type": "user",
+    "message": "1) Does our code need to be updated to note these features?  Can you tag the code if it is missing?  2) You apper to be contradicting yourself regarding WAKE_MANUAL.  I did not 'igninte' or peform any actions in status.html.  Can you further investiage the cause of WAKE_MANUAL?  Are you able to review historical reasons for WAKE_MANUAL, and if so, was the only wake within the last two days a recent trigger?  I'm weighing the options on promoting a status.html passive wake into a feature, so I'd like you to be clear on what implementation fix you already have in place.  3) The dream pass is part of the lab, can you remind me what it does?  Is it seperate from the 2am ALARM tasks?  If seperate why would it start holding the lab open at 2am?  I thought we had logic in place so that if there was nothing to do it would not wake.  Please create a hypothesis, then investigate the code and describe the flows and describe what you found in a report.  --- Code changes for tags is OK.  Await my feedback. REPORT, DO NOT IMPLEMENT.",
+    "timestamp": "2026-04-22T16:50:58.244Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 5,
+    "type": "user",
+    "message": "1) Break down tasks needed to implement Tagging, Passive Status, and Dream Isolation goals -- include details, context, and code locations as we've done before.  APPEND your sprint log with todo tasks. 2) Talk with me about alternatives to [INTERNAL]. I think INTERNAL is a hack.  dream voice could still use [ME] as long as 'nothing to do' logic is detected before wake, I thought that's how it was supposed to work.  Where do things get tripped up?  -- Rememeber to APPENDED your report/tasks in the sprint file.  I will be reading the file so remember to actually write to it. Await my buy in.",
+    "timestamp": "2026-04-22T17:06:19.027Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 6,
+    "type": "user",
+    "message": "QQ: I'm not sure I follow.  Waking up at 2am is fine.  Staying awake when there is a conversation (aka a dream) is fine.  I thought we were able to check if anything was in the dream queue before waking up.  Walk me thought the logic.",
+    "timestamp": "2026-04-22T17:10:43.031Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 7,
+    "type": "user",
+    "message": "QQ: I'm not sure I follow.  Waking up at 2am is fine.  Staying awake when there is a conversation (aka a dream) is fine.  I thought we were able to check if anything was in the dream queue before doing anything vocal, which would let the lab sleep.  Walk me thought the logic and the code as it is now.",
+    "timestamp": "2026-04-22T17:11:46.550Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 8,
+    "type": "user",
+    "message": "hmm... I think there's still someting to dig into.  It's okday for spark restoration to awake for the ALARM tasks.  We want the mice to talk about something, we want to go over the nightly tasks.  What we don't want is to wake up every 2 min after because the 2 min timer was tied to something that wakes.  Walk me through the 2 min timer flow and where the file check should happen to avoid waking the lab every 2 min.  Talk to me about how this is different than the 2am wake, and how they are related at different levels.",
+    "timestamp": "2026-04-22T17:20:30.164Z"
+  },
+  {
+    "sessionId": "b1675d16-8619-41da-907f-1fe292084e4f",
+    "messageId": 9,
+    "type": "user",
+    "message": "I still don't see the problem. If prompts are exhausted dream voice will eventually stop, and they should be held open while there is work to do.  So even if we could be more pro-active around REFINED_PROMPTS.exists() to find out if it is empty - we should still be able to hibernate after 'with BRAIN_NODE_URI' completes and returns.",
+    "timestamp": "2026-04-22T17:32:50.897Z"
+  }
+]

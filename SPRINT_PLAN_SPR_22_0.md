@@ -148,6 +148,30 @@ Critical Review of Centralized Hub Control
 2.  **[x] Step 2: State Purge**: Unify `READY` -> `OPERATIONAL`.
 3.  **[x] Step 3: Pulse Unblocking**: Refactor the task loop to use tasks instead of `communicate()`.
 4.  **[x] Step 4: Truth Hardening**: Update Step 6 to reflect the actual silicon state.
+5.  **[x] Step 5: Dynamic Tic Restoration [FEAT-301]**:
+    *   **Rationale**: Restore the Lab's "Dynamic Soul" by replacing hardcoded string buckets with low-latency local inference.
+    *   **Logic**: Refactor `monitor_task_with_tics` in `acme_lab.py` (Line 331) to call the standardized `think` tool on the **Sentinel (Lab Node)**.
+    *   **BKM Alignment**: Adhere to `[BKM-026]` (Airtime Rule) by providing persona-driven updates during remote latency.
+
+6.  **[x] Step 6: Pager Protocol [v2.0] [FEAT-298]**:
+    *   **Rationale**: Ensure UI stability and data integrity for the forensic ledger.
+    *   **Logic**: Update `trigger_pager` in `acme_lab.py` (Line 258) to implement the **Atomic Swap Protocol [BKM-022]**.
+    *   **Mechanism**: Utilize `.tmp` file staging and `os.replace` to prevent partial-read "UI Flicker" in `status.html`.
+
+7.  **[-] Step 7: State Unification [TABLED]**:
+    *   **Rationale**: Preservation of the 3-tier readiness machine (LOBBY -> WAKING -> OPERATIONAL). Further refactoring postponed to prevent logic thrashing.
+
+---
+
+## 🏛️ AUDIT: LOST FEATURES & BKM DEVIATIONS
+*Identified via Forensic Search and Git Blame.*
+
+| ID | Feature / Logic | Status | Orphaned Code / BKM Gap |
+| :--- | :--- | :--- | :--- |
+| [FEAT-053] | Dynamic Tics | **LOST** | `shallow_think` calls in `acme_lab.py` (Line 324) are dead. |
+| [FEAT-265.1]| Vocal Truth | **BROKEN** | `facilitate` calls remaining in `InternalDebate` paths. |
+| [BKM-024] | Anti-Static | **DEVIATED** | Hardcoded tics at `acme_lab.py:580` (Commit `b4c95d6f`). |
+| [FEAT-045] | Pager Bridge | **LOST** | Standalone script logic for `trigger_pager` not ported to Hub. |
 
 ---
 
