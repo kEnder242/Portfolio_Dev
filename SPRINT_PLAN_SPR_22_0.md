@@ -175,7 +175,44 @@ Critical Review of Centralized Hub Control
 
 ---
 
-## 🏺 SPRINT 22 RETROSPECTIVE [RETRO-22.0]
+---
+
+## 🏛️ FORENSIC REPORT: THE WATCHDOG PARADOX (April 23, 20:10)
+
+### 1. The Discrepancy
+Sprint 21 documentation claims the background watchdog was decommissioned in favor of a Lifecycle-Event Driven (LED) model. However, recent triage confirms the watchdog is still actively reaping the Hub.
+
+### 2. Code Correlation
+A search of `lab_attendant_v4.py` reveals a "Ghost Implementation." In the `run_bilingual` method (Line 1857), the code explicitly re-enables the loop despite a comment stating it is disabled:
+```python
+# [FEAT-265.12] Quiet Sentry: Background WD loop disabled...
+asyncio.create_task(attendant.vram_watchdog_loop())
+```
+
+### 3. Impact Analysis
+The `vram_watchdog_loop` contains an aggressive "Hub Liveness Probe" that triggers a full `lab_stop` -> `lab_start` sequence if the Hub is silent for 5 cycles. During a "Sleepy Brain" resume, the Hub blocks the event loop while waiting for the 4090, which the Watchdog misinterprets as a crash.
+
+### 4. Recommendation
+1.  **Decommission (Actual)**: Remove the `asyncio.create_task` call for the watchdog loop in `lab_attendant_v4.py`.
+2.  **Logic Hardening**: Transition the remaining "Critical Health" checks (VRAM leak detection) to the `pulse_loop` or keep them as reactive-only.
+
+### 1. Incident Summary
+At 19:42, a user resume attempt triggered a "Larynx Lock" death loop. The Lab is currently stuck in a cycle where the Hub hangs during Brain synchronization, leading to a Watchdog reap every 30 seconds.
+
+### 2. Forensic Findings
+*   **Primary Block**: Hub logs stall at `Synchronizing BRAIN...`.
+*   **Watchdog Evidence**: `[WATCHDOG] RECOVERY [Hub Unresponsive (5 cycles)]`.
+*   **Silicon Evidence**: `[WATCHDOG] RECOVERY [Engine Process disk-sleep]`. This indicates the 4090 is hung at the OS level on I/O.
+
+### 3. Hypothesized Regression
+The recent **Tooling Parity [FEAT-295]** refactor (renaming `shallow_think` to `think`) may have introduced a synchronization hang if the Brain node's initial handshake is sensitive to tool names, or if the `boot_residents` method is blocking the event loop while waiting for the "Sleepy" vLLM engine.
+
+### 4. Status: [CRITICAL] 
+The Lab is currently unstable and self-reaping.
+
+### 5. Recommendation
+1.  **Emergency Stop**: Perform a `lab_stop` to clear the 4090's disk-sleep.
+2.  **Logic Hardening**: Refactor node booting to be fully non-blocking to ensure the Hub heartbeat remains vocal even during long-tail vLLM loads.
 **Status:** COMPLETED | **Date:** April 23, 2026
 
 ### 📍 Executive Summary
