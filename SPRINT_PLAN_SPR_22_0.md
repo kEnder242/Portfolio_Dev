@@ -357,3 +357,19 @@ BKM-029 acted as a **Cognitive Brake** that prevented several high-severity regr
 3.  **Intent Alignment (Anti-Drift)**: The 'Compare' step (Step 1) ensured the implementation of Recursive Ledger Tracking (16.2) moved beyond simple `ps` checks to full `psutil` recursive child adoption, solving the "Detachment Problem" identified in triage.
 
 **Retrospective Insight**: BKM-029 successfully transitioned the Agent from a "Writer of Code" to a "Validator of Systems," replacing tool hubris with the engineering rigor required for Sovereign Lab stability.
+
+---
+
+## 🏺 SPRINT 22 RETROSPECTIVE: THE SOVEREIGN HEALING
+**Status:** [CONCLUDED] | **Baseline:** [VER-22.1]
+
+### ✅ vLLM Hardening Milestones
+- **[FEAT-308] Passive Trace Monitor**: (Success) Implemented 2s continuous log-tailing in the pulse loop. Verified that engine crashes are snipped to `logs/crash_*.log` and trigger backoff-aware recovery.
+- **[FEAT-307] Sanitary Filter**: (Success) Foundations hardened in `loader.py` using turn-level `redirect_stdout(sys.stderr)`. Physically verified that the Hub survives unformatted node noise.
+- **[FEAT-313] Persistent Foyer**: (Success) Hub boot sequence refactored to non-blocking mode. Foyer opens immediately on Port 8765, eliminating the "Disconnect Loop" during weight loading.
+
+### 🧠 Forensic Insight: The "Distributed" Latency
+Audit of `vllm_server.log` identified a 7.4s stall during NCCL/ZMQ distributed initialization. This latency causes transient timeouts on mobile clients.
+- **Recommendation**: Inject `--distributed-executor-backend="none"` in the next hardening pass.
+
+**Final Status**: All implementation steps for Sprint 22 are [x] COMPLETE. Verification Gauntlet is [x] PASSED. Git Baseline is SECURED at commit `936b1c0`.
