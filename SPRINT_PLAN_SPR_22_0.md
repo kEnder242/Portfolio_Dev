@@ -38,9 +38,10 @@ To harden the **Cross-Node Communication** (The Bridge) and ensure that the "Sha
 ---
 
 ## 🧪 VERIFICATION GAUNTLET
-1.  **Run `test_induction_mutex.py`**: Verify baseline hardening still holds.
-2.  **Trigger `status.html`**: Ensure it does NOT wake a hibernating lab.
-3.  **Force-Fail Primary**: Monitor the transition to Shadow in the logs.
+1.  **Run `test_hub_intent.py`**: Verify tool calling and that `"facilitate"` is no longer a primary entry point.
+2.  **Run `test_hibernation_cycle.py`**: Verify that the transition to `HIBERNATING` is not stalled by legacy `"READY"` checks.
+3.  **Run `test_forge_fidelity.py`**: Verify that `status.html` shows `"MAINTENANCE"` while the Forge task is running in the background.
+4.  **Force-Fail Primary**: Monitor the transition to Shadow in the logs.
 
 Critical Review of Centralized Hub Control
 
@@ -160,6 +161,22 @@ Critical Review of Centralized Hub Control
 
 7.  **[-] Step 7: State Unification [TABLED]**:
     *   **Rationale**: Preservation of the 3-tier readiness machine (LOBBY -> WAKING -> OPERATIONAL). Further refactoring postponed to prevent logic thrashing.
+
+8.  **[x] Step 8: Pulse Preservation [FEAT-299]**:
+    *   **Rationale**: Restore the Lab Heartbeat during background tasks.
+    *   **Action**: Refactor `scheduled_tasks_loop` (Steps 4 & 5) to use `asyncio.create_task()`.
+    *   **Result**: Heartbeat remains vocal even during long-tail Dream/Harvest passes.
+
+9.  **[x] Step 9: Ledger-Only Mandate [BKM-031]**:
+    *   **Rationale**: Prevent accidental system-level assassinations (RDP/Xorg disconnects).
+    *   **Mandate**: Reaping is restricted strictly to the explicit PID Ledger. Broad-spectrum system scans (GPU/Port/Signature) are FORBIDDEN.
+    *   **Implementation**: Neutered `cleanup_silicon` in `lab_attendant_v4.py` to rely on tracked family PIDs only.
+
+10. **[ ] [FIX-S2] Truth Hardening (Forge Status)**: Update `run_full_induction_cycle` to set `self.status = "MAINTENANCE"` before the final yield. This ensures the UI reflects the physical GPU state until the Forge is truly done.
+
+11. **[ ] [FIX-S3] Final State Purge**: Finish the `READY` -> `OPERATIONAL` unification. I found 3 logic gates (including `_wait_ready`) that still look for the string `READY`. Removing these will prevent the "Hibernation Stall" we diagnosed earlier.
+
+12. **[ ] [FIX-S4] Orphan Cleanup**: Perform a non-destructive search-and-replace for the string `facilitate` in comments and log messages to ensure the "Pedigree" matches the current tooling.
 
 ---
 
