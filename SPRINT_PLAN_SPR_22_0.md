@@ -319,9 +319,28 @@ Sprint 22 successfully navigated the "Sovereign Bridge" hardening, resolving cri
 **Active Goal:** Resolve the "Dirty Silence" and restore forensic visibility.
 
 16. **[ ] Goal 13: Forensic Healing [FEAT-310/311]**:
-    *   **Rationale**: Resolve the "Dirty Silence" and restore forensic visibility to engine crashes.
-    *   **Tasks**:
-        *   **16.1 [Code] Scavenger Hardening**: Update `scavenge_reality` to reap non-immune VRAM orphans (>1GB) to ensure silicon truth.
-        *   **16.2 [Code] Crash Evidence Bridge**: Update `status.html` JS to fetch and render `logs/crash_*.log` files upon interaction.
-        *   **16.3 [Code] Mobile Auth Bridge**: Add explicit login links for mobile iframe compatibility.
-        *   **16.4 [Deploy] Cache Busting v8.0**: Bump all script/css versions to `?v=8.0` to force UI refresh.
+    *   **Rationale**: Resolve the "Dirty Silence" (Silicon Congestion) and restore forensic visibility to engine crashes without the "Nuke from Orbit" risk to RDP.
+    *   **16.1 [Code] Blacklist Fingerprint Scavenging**:
+        *   **Context**: Identified the "Imposter Problem" where vLLM worker processes show up as generic `python3` orphans. We will use a **Combined Fingerprint** to identify them with 99% accuracy.
+        *   **Logic**: Update `scavenge_reality` to use **Surgical Blacklisting**. If a process is using >1GB VRAM AND its command line contains any of the confirmed signatures, it is reaped even if not in the ledger.
+        *   **Table: The vLLM Blacklist Fingerprints**:
+| Type | Fingerprint String | Safety |
+| :--- | :--- | :--- |
+| **Module** | `vllm.entrypoints` | **SAFE**: Only used by vLLM. |
+| **Module** | `vllm.v1.engine` | **SAFE**: Specifically targets V1 cores. |
+| **Path** | `speedy/models/` | **SAFE**: Only our LLM models live here. |
+| **Port** | `8088` | **SAFE**: The vLLM API port. |
+        *   **BKM Alignment**: Adheres to `[BKM-031]` because it is not a "Broad-Spectrum" scan—it is a **Signature-Verified** cleanup that spares system GUI processes.
+    *   **16.2 [Code] Recursive Ledger Tracking**:
+        *   **Context**: The "Detachment Problem" occurs when the API Server parent dies but the Engine Core worker becomes a "Physical Ghost."
+        *   **Logic**: Update `mcp_start` to wait for engine stabilization, then query the process tree (via `psutil`) and record **every child PID** in the family ledger immediately.
+        *   **Result**: Eliminates ghosts by ensuring every sub-process is born with a ledger identity.
+    *   **16.3 [Code] Crash Evidence Bridge & Log Proxy**:
+        *   **Context**: Encountered `[EVIDENCE UNAVAILABLE]` errors in the UI because the frontend has no logic to handle `crash_*.log` files or navigate the filesystem.
+        *   **Logic**: Harden the Attendant's `/logs` REST endpoint to accept an optional filename parameter. Update `status.html` JS to detect `crash_*.log` strings in pager alerts and fetch the raw forensic snips via the Attendant proxy.
+    *   **16.4 [Code] Mobile Auth Bridge [FEAT-312]**:
+        *   **Context**: Mobile browsers (Android/iOS) block Grafana iframes because Cloudflare Access sends `frame-ancestors 'none'` when an unauthenticated session is detected.
+        *   **Logic**: Add a "Login to Monitor" link below the Grafana iframe to allow mobile users to establish their Zero Trust session in a full window before viewing the dashboard.
+    *   **16.5 [Deploy] Site Synthesis (Cache Busting)**:
+        *   **Context**: Manual versioning like `v8.0` is a "Liar's Version." The build system already uses automated **MD5 Fingerprinting**.
+        *   **Action**: Execute `build_site.py`. This calculates the physical hash of every asset and surgically overwrites `?v=` tags in the HTML, forcing a high-fidelity browser refresh.
