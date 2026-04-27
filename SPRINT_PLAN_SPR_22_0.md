@@ -312,3 +312,16 @@ Sprint 22 successfully navigated the "Sovereign Bridge" hardening, resolving cri
 - **[BKM-024] Internal Intent Tagging**: (Recommended) Mandate that all internal background actors utilize the `[ME]` or `[INTERNAL]` tags to ensure correct triage and ignition.
 
 **Final Status**: All implementation steps are [x] COMPLETE. Verification Gauntlet is [x] PASSED. Git Baseline is SECURED.
+
+---
+
+## 🏛️ SPRINT 23: THE SOVEREIGN HEALING
+**Active Goal:** Resolve the "Dirty Silence" and restore forensic visibility.
+
+16. **[ ] Goal 13: Forensic Healing [FEAT-310/311]**:
+    *   **Rationale**: Resolve the "Dirty Silence" and restore forensic visibility to engine crashes.
+    *   **Tasks**:
+        *   **16.1 [Code] Scavenger Hardening**: Update `scavenge_reality` to reap non-immune VRAM orphans (>1GB) to ensure silicon truth.
+        *   **16.2 [Code] Crash Evidence Bridge**: Update `status.html` JS to fetch and render `logs/crash_*.log` files upon interaction.
+        *   **16.3 [Code] Mobile Auth Bridge**: Add explicit login links for mobile iframe compatibility.
+        *   **16.4 [Deploy] Cache Busting v8.0**: Bump all script/css versions to `?v=8.0` to force UI refresh.
