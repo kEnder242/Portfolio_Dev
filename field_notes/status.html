@@ -27,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=fac2447e">
+    <link rel="stylesheet" href="style.css?v=92e785ba">
     <style>
         .vitals-grid {
             display: grid;
@@ -587,12 +587,28 @@
                         term.style.display = 'block';
                     }
                 } else if (alert.source === 'System' || alert.source === 'LabAttendant') {
-                    const r = await fetch('logs/trace_brain.json');
-                    if (r.ok) {
-                        const text = await r.text();
-                        simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
+                    // [FEAT-311] Crash Evidence Bridge: Detect crash logs in message
+                    const crashMatch = alert.message.match(/crash_\d+\.log/);
+                    if (crashMatch) {
+                        const logFile = crashMatch[0];
+                        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                        const url = isLocal ? `http://localhost:9999/logs?file=${logFile}` : `https://pager.jason-lab.dev/logs?file=${logFile}`;
+                        
+                        const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" } });
+                        if (r.ok) {
+                            const text = await r.text();
+                            simulateTyping(term, `[FORENSIC SNIP: ${logFile}]\n` + text);
+                        } else {
+                            simulateTyping(term, `[CRASH LOG NOT FOUND]\nFile: ${logFile}`);
+                        }
                     } else {
-                        simulateTyping(term, "[EVIDENCE UNAVAILABLE]\nMetadata: " + JSON.stringify(alert, null, 2));
+                        const r = await fetch('logs/trace_brain.json');
+                        if (r.ok) {
+                            const text = await r.text();
+                            simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
+                        } else {
+                            simulateTyping(term, "[EVIDENCE UNAVAILABLE]\nMetadata: " + JSON.stringify(alert, null, 2));
+                        }
                     }
                 } else {
                     simulateTyping(term, "Metadata: " + JSON.stringify(alert, null, 2));
