@@ -373,3 +373,18 @@ Audit of `vllm_server.log` identified a 7.4s stall during NCCL/ZMQ distributed i
 - **Recommendation**: Inject `--distributed-executor-backend="none"` in the next hardening pass.
 
 **Final Status**: All implementation steps for Sprint 22 are [x] COMPLETE. Verification Gauntlet is [x] PASSED. Git Baseline is SECURED at commit `936b1c0`.
+
+---
+
+## 🏛️ RETROSPECTIVE: THE RESILIENT FOYER (April 27)
+**Status:** [VERIFIED] | **Impact:** High-Fidelity UX during silicon wake-up.
+
+This turn resolved the "Disconnected Loop" that plagued the mobile and desktop Intercom experience during engine ignition. 
+
+#### 📍 Core Fixes:
+- **Non-Blocking Ignition [FEAT-313.5]**: Decoupled WebSocket start from resident sync. The Hub foyer now opens immediately upon process start.
+- **Live Log Stream [FEAT-313.2]**: Implemented real-time tailing of `vllm_server.log`. Progress snippets are broadcast to the "Pinky Console" as official `status` updates.
+- **State-Aware Reconnect [FEAT-314]**: Updated `intercom_v2.js` to poll the Attendant REST API before retrying. It silences console spam during silicon resets.
+- **Authority Handover [FEAT-282.5]**: Hub now yields to active Attendant ignition tasks, preventing the "Self-Reaping" ignition loop.
+
+**The mind is vocal, the foyer is persistent, and the drive-belt is secure.**
