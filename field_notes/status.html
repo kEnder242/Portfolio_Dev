@@ -214,21 +214,25 @@
         <section id="remote-control">
             <h2 class="section-title">Remote Lab Control</h2>
             <div class="control-grid">
-                <div class="control-btn" onclick="triggerLabAction('ignition')">
+                <div class="control-btn" onclick="triggerLabAction('start')">
                     <span class="status-led led-online"></span>
-                    Ignition
+                    Start
+                </div>
+                <div class="control-btn" onclick="triggerLabAction('hibernate')">
+                    <span class="status-led led-busy"></span>
+                    Hibernate
                 </div>
                 <div class="control-btn" onclick="triggerLabAction('quiesce')">
                     <span class="status-led led-yielded"></span>
                     Pause
                 </div>
-                <div class="control-btn" onclick="triggerLabAction('refresh')">
+                <div class="control-btn" onclick="triggerLabAction('ignition?reason=UI_REFRESH')">
                     <span class="status-led led-busy"></span>
                     Refresh
                 </div>
-                <div class="control-btn btn-danger" onclick="triggerLabAction('hard_reset')">
+                <div class="control-btn btn-danger" onclick="triggerLabAction('stop')">
                     <span class="status-led led-offline"></span>
-                    KILL
+                    STOP
                 </div>
             </div>
         </section>
@@ -328,11 +332,15 @@
             try {
                 const response = await fetch(url, { 
                     method: 'POST',
-                    headers: { 'X-Lab-Key': key }
+                    headers: { 
+                        'X-Lab-Key': key,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
                 });
-                
+
                 let result = {};
-                const text = await response.text(); // Single consumption
+                const text = await response.text();
                 try {
                     if (text) result = JSON.parse(text);
                 } catch (e) {

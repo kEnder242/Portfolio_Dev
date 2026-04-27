@@ -212,6 +212,28 @@ We should definitely capture the \"Last Words\" of the engine. I will implement 
     *   **14.4 [Test] Recovery Verification**: Create `src/debug/test_vllm_crash_recovery.py` to simulate a crash via log-injection and verify the backoff sequence.
     *   **14.5 [Debug] Logic Sync**: Ensure `recovery_attempts` is properly reset upon the first successful `Mind is OPERATIONAL` signal.
 
+15. **[ ] Goal 12: UI Control Hardening [FEAT-309]**:
+    *   **Rationale**: Resolve API drift and restore reliable remote control from the status dashboard.
+    *   **Tasks**:
+        *   **15.1 [Code] `status.html` Refactor**: Standardize buttons to **Start, Hibernate, Pause, Stop, Refresh**.
+        *   **15.2 [Code] Handshake Stability**: Ensure `X-Lab-Key` is dynamically pulled from the latest telemetry poll.
+        *   **15.3 [Test] GUI Simulation**: Harden `src/debug/test_status_remote.py` to verify the entire control suite.
+
+
+
+---
+
+## 🏛️ FORENSIC AUDIT: SPRINT 22 GIT LEDGER
+*Ranked by Severity (S1=Critical, S4=Low)*
+
+| Rank | Issue / Finding | Status | Severity | Discovery Path |
+| :--- | :--- | :--- | :--- | :--- |
+| **S1** | **RDP Assassination Loop** | **FIXED** | **CRITICAL** | Identified by tracing `cleanup_silicon` general scanning. (Commit `fc488a1`) |
+| **S1** | **The Ghost Graft** | **FIXED** | **CRITICAL** | Found duplicate tail in `lab_attendant_v4.py`. (Commit `f60f22d`) |
+| **S2** | **"Lying Status" (Forge)** | **FIXED** | **HIGH** | Commit `3b9114c` moved Forge to a task without updating the status UI. |
+| **S2** | **Pipe Contamination** | **FIXED** | **HIGH** | `BrokenPipeError` in `server.log` linked to node log-leak. (Commit `22ef190`) |
+| **S3** | **READY vs OPERATIONAL** | **FIXED** | **MEDIUM** | Commit `8093727` missed low-level logic gates (e.g., `_wait_ready`). |
+| **S4** | **Legacy Bloat** | **ORPHAN** | **LOW** | Commit `11a4992` left `facilitate` strings in `internal_debate.py`. |
 
 ---
 
