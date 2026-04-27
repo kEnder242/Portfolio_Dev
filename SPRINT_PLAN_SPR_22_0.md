@@ -172,19 +172,45 @@ Critical Review of Centralized Hub Control
     *   **Mandate**: Reaping is restricted strictly to the explicit PID Ledger. Broad-spectrum system scans (GPU/Port/Signature) are FORBIDDEN.
     *   **Implementation**: Neutered `cleanup_silicon` in `lab_attendant_v4.py` to rely on tracked family PIDs only.
 
-10. **[ ] [FIX-S2] Truth Hardening (Forge Status)**: Update `run_full_induction_cycle` to set `self.status = "MAINTENANCE"` before the final yield. This ensures the UI reflects the physical GPU state until the Forge is truly done.
+10. **[x] [FIX-S2] Truth Hardening (Forge Status)**:
+ Update `run_full_induction_cycle` to set `self.status = "MAINTENANCE"` before the final yield. This ensures the UI reflects the physical GPU state until the Forge is truly done.
 
-11. **[ ] [FIX-S3] Final State Purge**: Finish the `READY` -> `OPERATIONAL` unification. I found 3 logic gates (including `_wait_ready`) that still look for the string `READY`. Removing these will prevent the "Hibernation Stall" we diagnosed earlier.
+11. **[x] [FIX-S3] Final State Purge**:
+ Finish the `READY` -> `OPERATIONAL` unification. I found 3 logic gates (including `_wait_ready`) that still look for the string `READY`. Removing these will prevent the "Hibernation Stall" we diagnosed earlier.
 
 12. [x] [FIX-S4] Orphan Cleanup: Perform a non-destructive search-and-replace for the string `facilitate` in comments and log messages to ensure the "Pedigree" matches the current tooling.
 
-13. [ ] **Goal 11: Multi-Resolution Memory [FEAT-306]**:
-    *   **Rationale**: Resolve the "Hallucinated Recall" issue by implementing a tiered retrieval model (Topography -> Focal -> Evidence).
+13. [x] **Goal 11: Multi-Resolution Memory [FEAT-306]**:
+    *   **Rationale**: Resolve the \"Hallucinated Recall\" issue by implementing a tiered retrieval model (Topography -> Focal -> Evidence).
     *   **Logic**:
         *   **Tier 1 (Yearly)**: Proactive injection of yearly theme JSONs.
         *   **Tier 2 (ChromaDB)**: Vector search to identify specific monthly file anchors.
         *   **Tier 3 (Raw Logs)**: Instruction-driven tool calls (`read_document`) to fetch the physical evidence.
     *   **BKM Alignment**: Adhere to `[BKM-015]` (Anchor Migration) by using semantic intent rather than hardcoded regex for memory triggers.
+
+### 🏛️ The \"Unified Recovery\" Strategy [FEAT-308]
+
+#### 1. Integration with Backoff Timer
+Yes, this fits perfectly. By unifying the **Crash Detection** (Trace Monitor) and **Process Detection** (Log Monitor), we can route both through the same `self.recovery_attempts` logic. If vLLM crashes and we try to restart it, but it crashes again, the backoff adds 120s of \"Silicon Silence\" each time. This prevents the Lab from overheating the system while it's in a \"Dirty\" state.
+
+#### 2. \"Free\" Reaping via Lifecycle
+This is a critical insight. Because our `mcp_start` logic *already* calls `cleanup_silicon(engine_only=True)`, we don't need a separate \"Assassin\" for crashes. 
+*   **The Path**: Trace Monitor sees crash -> Triggers `mcp_start` -> `mcp_start` reaps the zombie PIDs from the ledger -> Fresh start on clean silicon. 
+*   **Result**: We get **Ledger-Locked Reaping** for \"free\" as part of the standard ignition sequence.
+
+#### 3. Forensic Preservation (BKM-010.5)
+We should definitely capture the \"Last Words\" of the engine. I will implement a **Forensic Snip**: when a crash is detected, the Attendant will grab the last 20 lines of the `vllm_server.log` and save it as a timestamped `.crash` file.
+
+---
+
+### 📍 Task Breakdown: Passive Trace Monitor
+
+14. **[x] Step 14: Passive Trace Monitor Implementation [FEAT-308]**:
+    *   **14.1 [Design] Offset Persistence**: Instead of wiping logs, implement in-memory `_last_vllm_log_size` tracking to ensure we only scan new lines each heartbeat.
+    *   **14.2 [Code] Forensic Snip**: Implement `self._capture_vllm_snip()` to preserve crash signatures in `HomeLabAI/logs/crash_*.log`.
+    *   **14.3 [Code] Pulse Loop Integration**: Refactor the 2s `pulse_loop` to perform the tail-scan and trigger `_tactical_recovery` upon detection.
+    *   **14.4 [Test] Recovery Verification**: Create `src/debug/test_vllm_crash_recovery.py` to simulate a crash via log-injection and verify the backoff sequence.
+    *   **14.5 [Debug] Logic Sync**: Ensure `recovery_attempts` is properly reset upon the first successful `Mind is OPERATIONAL` signal.
 
 
 ---
