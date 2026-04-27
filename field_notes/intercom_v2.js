@@ -378,11 +378,31 @@ function connect() {
                 lastMsgSource = 'me';
             }
         };
-        ws.onclose = () => {
+        ws.onclose = async () => {
             statusDot.className = 'status-dot offline';
-            appendMsg("Disconnected. Reconnecting in 5s...", 'system-msg');
+
+            // [FEAT-314] State-Aware Reconnect: Poll Attendant before retrying
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const hbUrl = isLocal ? 'http://localhost:9999/heartbeat' : 'https://pager.jason-lab.dev/heartbeat';
+
+            try {
+                const response = await fetch(hbUrl, { headers: { 'X-Lab-Key': currentLabKey || 'unknown' } });
+                const hb = await response.json();
+                const reason = hb.vitals?.reason || '';
+
+                if (["SAFE_PILOT", "RECOVERY", "REST_API_START", "VLLM_CRASH_RECOVERY"].includes(reason)) {
+                    appendMsg("⚡ [SILICON_RESET] Lab is warming its anchors. Standing by...", "system-msg", "System", "chat", true);
+                    setTimeout(connect, 10000); // 10s wait during ignition
+                    return;
+                }
+            } catch (e) {
+                // If Attendant is down too, use standard 5s backoff
+            }
+
+            appendMsg("Disconnected. Reconnecting in 5s...", "system-msg");
             setTimeout(connect, 5000);
         };
+
     } catch (err) {
         appendMsg(`Connection Error: ${err.message}`, 'system-msg');
     }
