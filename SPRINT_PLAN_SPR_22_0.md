@@ -176,7 +176,16 @@ Critical Review of Centralized Hub Control
 
 11. **[ ] [FIX-S3] Final State Purge**: Finish the `READY` -> `OPERATIONAL` unification. I found 3 logic gates (including `_wait_ready`) that still look for the string `READY`. Removing these will prevent the "Hibernation Stall" we diagnosed earlier.
 
-12. **[ ] [FIX-S4] Orphan Cleanup**: Perform a non-destructive search-and-replace for the string `facilitate` in comments and log messages to ensure the "Pedigree" matches the current tooling.
+12. [x] [FIX-S4] Orphan Cleanup: Perform a non-destructive search-and-replace for the string `facilitate` in comments and log messages to ensure the "Pedigree" matches the current tooling.
+
+13. [ ] **Goal 11: Multi-Resolution Memory [FEAT-306]**:
+    *   **Rationale**: Resolve the "Hallucinated Recall" issue by implementing a tiered retrieval model (Topography -> Focal -> Evidence).
+    *   **Logic**:
+        *   **Tier 1 (Yearly)**: Proactive injection of yearly theme JSONs.
+        *   **Tier 2 (ChromaDB)**: Vector search to identify specific monthly file anchors.
+        *   **Tier 3 (Raw Logs)**: Instruction-driven tool calls (`read_document`) to fetch the physical evidence.
+    *   **BKM Alignment**: Adhere to `[BKM-015]` (Anchor Migration) by using semantic intent rather than hardcoded regex for memory triggers.
+
 
 ---
 

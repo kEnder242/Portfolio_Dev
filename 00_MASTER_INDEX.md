@@ -14,6 +14,7 @@
 
 ## 📐 Architecture & Logic
 *   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.** System Topology and Access Control.
+*   **[DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)**: **The Physician's Ledger.** Comprehensive list of tests, tools, and validation logic.
 *   **[LAB_INFRASTRUCTURE.md](../HomeLabAI/docs/LAB_INFRASTRUCTURE.md)**: **The Physical Map.** Network ports, host affinities (KENDER), and transport layers.
 *   **[LORA_MOE_SYNTHESIS.md](../HomeLabAI/docs/plans/LORA_MOE_SYNTHESIS.md)**: **The "Poor Man's MoE".** Multi-LoRA expert routing strategy.
 *   **[BICAMERAL_DISPATCH.md](./docs/BICAMERAL_DISPATCH.md)**: **The Mind.** (vLLM Pilot) Defines the Amygdala, Sentinel, and Corpus Callosum metaphors.

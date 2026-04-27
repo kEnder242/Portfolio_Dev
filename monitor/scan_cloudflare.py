@@ -88,6 +88,10 @@ def main():
 
     print(f"Found {len(logs)} access requests.")
 
+    # [SECURITY] Report every email found in the current API pull
+    unique_emails = {log.get("user_email") for log in logs}
+    print(f"Users found in logs: {', '.join(unique_emails)}")
+
     # Load existing pager logs
     if os.path.exists(PAGER_LOG):
         with open(PAGER_LOG, "r") as f:
@@ -108,12 +112,13 @@ def main():
             email = log.get("user_email", "Unknown")
             app = log.get("app_name", "Zero Trust")
             action = log.get("action", "request")
+            ip = log.get("ip", "0.0.0.0")
             
             event = {
                 "timestamp": ts,
-                "severity": "INFO",
+                "severity": "INFO" if action == "GRANT" else "WARNING",
                 "source": "Cloudflare",
-                "message": f"Access {action} by {email} for {app}."
+                "message": f"Access {action} for {email} from {ip} ({app})."
             }
             pager_data.append(event)
             seen_timestamps.add(ts)
