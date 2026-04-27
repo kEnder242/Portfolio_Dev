@@ -321,7 +321,13 @@ function connect() {
                     }
                 }
                 
-                if (data.type === 'crosstalk') return; // Silence internal tokens
+                if (data.type === 'crosstalk') {
+                    // [FEAT-313.3] Log Integration: Append System-sourced logs to the console
+                    if (data.brain_source === 'System') {
+                        appendMsg(data.brain, 'system-msg', 'System');
+                    }
+                    return; // Silence non-system internal tokens
+                }
             }
 
             if (data.type === 'status') {
