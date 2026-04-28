@@ -415,3 +415,26 @@ Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `
     *   **17.4 [BKM] Silicon State Registry**: Document the new "Lobby" lifecycle transitions to ensure future refactors don't re-introduce the blocking handshake.
 
 **Status**: [IN-PROGRESS] | **Evidence**: Physical collision reproduced via Playwright with 1006 abnormal closure.
+
+---
+
+## 🏛️ SPRINT 24: SOVEREIGN IGNITION & BRIDGE VERIFICATION
+**Active Goal:** Restore the physical mind (Hub) and verify the 3-tier hardening.
+
+### 📍 Why & How
+- **The Why**: The Hub process was physically purged during the silicon reset. We are currently in "The Void" (Attendant alive, Hub absent). We must prove that our new **[FEAT-315] Resilient Wake** logic allows the Hub to remain a "Lobby" even when the engine is thrashing.
+- **The How**: Trigger a full `POST /start` via the Attendant. This will spawn a fresh Hub using the **[FEAT-307] Sanitary Filter**. We will then use the **[FEAT-314] State-Aware** Intercom to connect and monitor the background ignition.
+
+### 🛠️ Task List (Heads Down)
+18. **[ ] Goal 15: Physical Restoration & Evidence Collection**:
+    *   **18.1 [Action] Sovereign Ignition**: Trigger `POST /start` and monitor `attendant.log` for the "Sparing Hub" logic if applicable.
+    *   **18.2 [Verify] Recursive Adoption**: Physically inspect `active_pids.json` to confirm the Attendant has adopted the vLLM EngineCore child PIDs.
+    *   **18.3 [Verify] Pipe Integrity**: Verify `server.log` is free of JSON-RPC contamination from vLLM (Prove [FEAT-307]).
+    *   **18.4 [Verify] KENDER Bridge**: Confirm the Sovereign Brain (4090) is reached via the Hub's heartbeat before the local vLLM settles.
+
+### 💻 Code Context
+- **Attendant**: `lab_attendant_v4.py` -> `cleanup_silicon(engine_only=True)`
+- **Hub**: `acme_lab.py` -> `spark_restoration()` calls `/wake`
+- **Foundation**: `loader.py` -> `redirect_stdout(sys.stderr)` within the tool loop.
+
+**Status**: [AWAKENING] | **Physical State**: Port 8765 [EMPTY] | Port 9999 [ALIVE]
