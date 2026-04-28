@@ -388,3 +388,16 @@ This turn resolved the "Disconnected Loop" that plagued the mobile and desktop I
 - **Authority Handover [FEAT-282.5]**: Hub now yields to active Attendant ignition tasks, preventing the "Self-Reaping" ignition loop.
 
 **The mind is vocal, the foyer is persistent, and the drive-belt is secure.**
+
+---
+
+## 🏛️ FORENSIC REPORT: THE HUB MURDER COLLISION (April 27)
+**Status:** [REPRODUCED] | **Discovery**: Physical collision between concurrent queries and the Attendant's "Deck Clear" protocol.
+
+#### 📍 The Discovery (Commit f45a4d2 -> HEAD):
+1.  **Redundant Ignition**: Hub was firing multiple `/start` signals to the Attendant during the "Waking" window.
+2.  **Autonomous Reap**: The Attendant reaped the Hub to "clear the deck" for each signal, killing the active WebSocket foyer.
+3.  **BKM-029 Result**: Collision physically verified via `src/debug/repro_intercom_loop.py` with code 1006 (Abnormal Closure).
+
+#### 📍 Current Objective:
+Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `process_query` that checks the Attendant's physical status before requesting ignition.
