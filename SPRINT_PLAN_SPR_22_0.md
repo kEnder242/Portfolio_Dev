@@ -401,3 +401,17 @@ This turn resolved the "Disconnected Loop" that plagued the mobile and desktop I
 
 #### 📍 Current Objective:
 Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `process_query` that checks the Attendant's physical status before requesting ignition.
+
+---
+
+## 🏛️ SPRINT 23: RESILIENT WAKE PROTOCOL [FEAT-315]
+**Active Goal:** Resolve the "Suicide Messenger" loop where the Hub kills itself during wake-on-intent.
+
+17. **[ ] Goal 14: Resilient Wake Implementation [FEAT-315]**:
+    *   **Rationale**: Break the physical collision between the Hub's wake request and the Attendant's deck-clear protocol.
+    *   **17.1 [Code] Attendant /wake Endpoint**: Implement a non-destructive ignition trigger in `lab_attendant_v4.py`. It must start the engines but **SPARE** the active Hub process group.
+    *   **17.2 [Code] Hub Yield Logic**: Update `acme_lab.py` to call `/wake` instead of `/start` for autonomous restoration.
+    *   **17.3 [Test] Collision Verification**: Re-run `repro_intercom_loop.py` with rapid-fire queries. The connection must stay open (Foyer: True) while the vLLM engine core initializes.
+    *   **17.4 [BKM] Silicon State Registry**: Document the new "Lobby" lifecycle transitions to ensure future refactors don't re-introduce the blocking handshake.
+
+**Status**: [IN-PROGRESS] | **Evidence**: Physical collision reproduced via Playwright with 1006 abnormal closure.
