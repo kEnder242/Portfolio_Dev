@@ -438,3 +438,21 @@ Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `
 - **Foundation**: `loader.py` -> `redirect_stdout(sys.stderr)` within the tool loop.
 
 **Status**: [AWAKENING] | **Physical State**: Port 8765 [EMPTY] | Port 9999 [ALIVE]
+
+---
+
+## 🏛️ SPRINT 25: THE ABSOLUTE FOYER [FEAT-317]
+**Active Goal:** Resolve the "Ghost Mode" where the Hub dies silently but the Attendant remains "Operational."
+
+### 📍 Why & How
+- **The Why**: Current telemetry shows Port 8765 is empty while the Attendant reports SERVICE_UNATTENDED. This indicates the Hub foyer is fragile and lacks a "Liveness" verification from the Attendant's perspective.
+- **The How**: Implement **[FEAT-317] Physical Liveness Verification**. The Attendant's pulse loop must physically check port 8765 every 2 seconds. If the port is empty while in an active mode, it must trigger an immediate **RECOVERY**.
+
+### 🛠️ Task List (Heads Down)
+19. **[ ] Goal 16: Physical Foyer Hardening**:
+    *   **19.1 [Action] Reproduction Harness**: Create `src/debug/verify_foyer_integrity.py` to probe port 8765 and report WebSocket handshake health.
+    *   **19.2 [Code] Attendant Port Monitor**: Refactor `lab_attendant_v4.py` pulse loop to include a physical socket check for port 8765.
+    *   **19.3 [Code] Hub Boot Hardening**: Ensure the Hub foyer uses `REUSEPORT` to prevent the TCP WAIT locks we saw earlier.
+    *   **19.4 [Verify] The "Scream" Test**: Manually kill the Hub process and verify the Attendant auto-restarts it within 5 seconds.
+
+**Status**: [BROKEN] | **Physical State**: Port 8765 [EMPTY] | Port 9999 [ALIVE]
