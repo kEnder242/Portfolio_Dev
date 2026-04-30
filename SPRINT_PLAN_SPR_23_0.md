@@ -14,7 +14,7 @@
 
 ### 🛠️ Recommended Update Plan:
 - **Phase 1: Foundation Alignment**
-    - [ ] Update `BOOTSTRAP_v4.4.md` to include surgical debugging BKMs for the log tailer.
+    - [ ] Update `Protocols.md` to include surgical debugging BKMs for the log tailer.
     - [ ] Sync `00_FEDERATED_STATUS.md` with the VER-22.5 stability baseline.
 - **Phase 2: Feature Pedigree**
     - [ ] Formalize [FEAT-313] through [FEAT-318] in `FeatureTracker.md`.
