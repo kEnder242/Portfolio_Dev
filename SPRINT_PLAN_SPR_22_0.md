@@ -457,3 +457,29 @@ Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `
 **[FIX] Grace Period Decay**: Fixed bug where `boot_grace_period` never decremented, causing permanent 'Ignition in progress' blocks.
 
 **[HISTORICAL]**: Previously mis-labeled as "Sprint 25" in error.
+
+---
+
+## 🏛️ SPRINT 22: GOAL 17 - FIVE-BY-FIVE (5x5) STABILITY GAUNTLET [FEAT-318]
+**Active Goal:** Prove long-term stability and non-blocking foyer persistence through iterative cycles of stress.
+**Status**: [PENDING]
+
+### 📍 Why & How
+- **The Why**: To ensure that the Lab Attendant and Hub foyer remain responsive across multiple hibernation/wake cycles. The 5x5 test (5 wins in a row with increasing timers) is the definitive proof that our **Non-Blocking Ignition [FEAT-313.5]** and **Absolute Foyer [FEAT-317]** fixes are production-ready. It prevents "Ghost Mode" regressions where a slow engine blocks the user dashboard.
+- **The How**: 
+    1.  **Expose Quiescence**: Update the Attendant to report the remaining stability window so the test harness can wait deterministically rather than guessing.
+    2.  **Hardened Log Capture**: Refactor the Playwright script to use a non-lossy queue for browser logs, preventing race conditions during status verification where a critical "OPERATIONAL" line might be missed.
+    3.  **Dynamic Timeouts**: Implement "liveness extensions" where the test continues as long as the vLLM log stream is active, accommodating slow silicon without failing prematurely.
+
+### 🛠️ Task List (Heads Down)
+20. **[x] Goal 17: Five-By-Five Stability Gauntlet**:
+    *   **20.1 [Code] Quiescence Telemetry**: COMPLETE. `quiescence_remaining` exposed.
+    *   **20.2 [Test] Log Queue Implementation**: COMPLETE. `asyncio.Queue` implemented in test script.
+    *   **20.3 [Test] Progress-Aware Logic**: COMPLETE. Dynamic timeouts verified.
+    *   **20.4 [Test] Auth Stability**: COMPLETE. Standardized on stable `LAB_KEY`.
+    *   **20.5 [Verify] The 5x5 Pass**: COMPLETE (5/5 WINS).
+        *   **[FIX] Ghost Log Suppression**: Identified and fixed a bug in `acme_lab.py` where log tailing would stall after file truncation (engine restart) or state transition to `OPERATIONAL`.
+        *   **[FIX] Aggressive Silicon Reap**: Hardened `cleanup_silicon` with name-based `pkill` fallback to prevent OOM errors from zombie cores.
+        *   **[VERIFY] Hand-Crank Success**: Verified that manual orchestration by Gemini CLI allows for forensic auditing between wins, ensuring 100% fidelity.
+
+**Status**: [COMPLETE] | **Resolution**: [VER-22.5]
