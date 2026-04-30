@@ -483,3 +483,31 @@ Finalize **[FEAT-314] State-Aware Spark**. Implement a mandatory yield gate in `
         *   **[VERIFY] Hand-Crank Success**: Verified that manual orchestration by Gemini CLI allows for forensic auditing between wins, ensuring 100% fidelity.
 
 **Status**: [COMPLETE] | **Resolution**: [VER-22.5]
+
+---
+
+## 🏛️ SPRINT 22: FINAL REPORT & STABILITY VERIFICATION
+**Active Goal:** Resolve ignition loops, restore log fidelity, and verify end-to-end resilience.
+**Status**: [COMPLETE] | **Final State**: OPERATIONAL (Hibernating)
+
+### 📍 Key Points & Resolutions
+- **[RESTORATION] Crosstalk Log Fidelity**: Restored `type: crosstalk` for vLLM engine logs in `acme_lab.py`. This ensures high-fidelity rendering in the "Blue Tree" UI with the intended typewriter interface, resolving the regression where logs were shunted to the lower-priority `status` type.
+- **[FIX] Multiple Ignition Loop**:
+    *   **Root Cause**: Identified that `mcp_start` was spawning duplicate `log_monitor_loop` tasks. Upon a Hub failure, multiple overlapping recovery signals triggered a recursive ignition loop where new Hubs were reaped as orphans by parallel sparks.
+    *   **Logic Hardening**: Refactored `log_monitor_loop` to yield authority if a newer `hub_pid` is detected in the ledger.
+    *   **Ledger Schema**: Fixed a `KeyError: 'family'` by ensuring the recursive process ledger is correctly initialized and persisted.
+    *   **Immunity Protection**: Hardened `_is_current_session_process` to check the PID ledger directly. This ensures the Hub and its children are immune to the "Assassin" sweep even if environment variable reading is restricted.
+- **[VERIFY] Five-By-Five (5x5) Success**: ACHIEVED 5/5 WINS.
+    *   Verified stable startup from cold-start.
+    *   Verified autonomous hibernation (Idle Timeout).
+    *   Verified UI-driven wake from hibernation.
+    *   Verified long-term stability after iterative stress cycles (5m to 25m idle).
+
+### 🛠️ PHYSICAL STATE (Pre-Alarm)
+- **Time**: 01:15 AM
+- **Attendant**: ALIVE (Port 9999)
+- **Hub**: ALIVE (Port 8765, Hibernating)
+- **vLLM**: ALIVE (Port 8088, Sleeping)
+- **VRAM**: 1.4GB / 11GB (Offloaded)
+
+**Next Step**: Monitor 2:00 AM ALARM trigger and verify daily induction cycle.
