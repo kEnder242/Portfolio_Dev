@@ -7,7 +7,7 @@
 **Scope:** Comprehensive review of foundational ledgers to align with Phase 15 Neural Relay and v6.0 Eternal Forge architectures.
 
 ### 📍 Current Gaps identified:
-1.  **BOOTSTRAP v4.3**: Lacks instructions for the new `quiescence_remaining` telemetry. Does not reflect the Non-Blocking Ignition strategy (still implies a sequential wait).
+1.  **PROTOCOLS**: Lacks instructions for the new `quiescence_remaining` telemetry. Does not reflect the Non-Blocking Ignition strategy (still implies a sequential wait).
 2.  **FEDERATED_STATUS**: Last updated April 13. Does not mention [FEAT-317] Absolute Foyer or the successful 5x5 Stability Gauntlet.
 3.  **GEMINI.md**: Lifecycle states (WAKING vs BOOTING) are inconsistent with the latest `lab_attendant_v4.py` implementation.
 4.  **FeatureTracker**: [FEAT-310] through [FEAT-318] are undocumented or partially documented.

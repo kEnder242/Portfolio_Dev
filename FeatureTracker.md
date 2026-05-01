@@ -1193,8 +1193,17 @@
 **Rationale:** Eliminates the "2AM Induction Storm" where the 60s loop would re-trigger the same nightly dialogue before the first one finished.
 **Mechanism:** Ordering fix in \`scheduled_tasks_loop\` in \`acme_lab.py\`.
 
-## [FEAT-290] Physical Truth Bridge (Sovereign Gate)
+## [FEAT-302] Adaptive Cooldown Tracking (Recovery Backoff)
 **Status:** ACTIVE
-**Logic:** Hard-gates cognitive reasoning behind physical silicon residency (>5GB VRAM) and non-blocking NVML telemetry.
-**Rationale:** Prevents "Larynx Ghosts" where light-weight triage models would answer queries using cached state while the main engine weights were still offloaded.
-**Mechanism:** \`request_key\` persistence and physical VRAM checks in \`process_query\`.
+**Logic**: Prevents "Silicon Thrashing" during persistent hardware or orchestration failures by implementing an exponential backoff for autonomous recovery.
+**Mechanism**:
+1.  **Counter**: `recovery_attempts` increments on every watchdog-triggered ignition.
+2.  **Backoff**: `Cooldown = 5s + (Attempts * 120s)`.
+3.  **Stability Latch**: The counter only resets if the Lab maintains `OPERATIONAL` status for at least 300s (5 minutes). This prevents resetting the backoff during short-lived "Flapping" states.
+**Verification**: 5x5 Stability Gauntlet.
+
+## [FEAT-318] Quiescence Telemetry (The Settle Window)
+**Status:** ACTIVE
+**Logic**: Exposes the remaining boot grace window to the dashboard and test harnesses for deterministic sequencing.
+**Mechanism**: `/status` endpoint returns `quiescence_remaining` in seconds, derived from the internal `boot_grace_period` (decremented every 2s pulse).
+**Rationale**: Eliminates "Wait-and-Guess" patterns in user interfaces and automated endurance tests.
