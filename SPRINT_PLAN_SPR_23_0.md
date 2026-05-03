@@ -112,3 +112,29 @@ I identified and restored three critical regressions and one documentation gap t
 - **Autonomous Recovery**: Verified that the Attendant correctly handles physical Hub failures with a full spark (`engine_only=False`) and respects the adaptive cooldown.
 
 **Verdict**: The Lab is physically healthy and production-stable as of 08:15 PM.
+
+---
+
+## 🏛️ SPRINT 23: GOAL 3 - NEURAL QUEUE FIDELITY [FEAT-321] & ADAPTIVE OLLAMA
+**Active Goal:** Verify asynchronous buffering and adaptive remote model selection.
+**Status**: [COMPLETE] | **Resolution**: [VER-23.3]
+
+### 📍 Key Points & Resolutions
+- **[FEAT-321] Neural Queue Fidelity**: 
+    *   **Logic**: Queries arriving during HIBERNATING or WAKING states are now correctly buffered and acknowledged with a user-facing feedback message: *"Lab is warming its anchors. I've queued your request."*
+    *   **Feedback**: Implemented real-time crosstalk notifications when the buffer begins draining: *"Anchors established. Processing X queued request(s)..."*
+    *   **[FIX] Re-Queueing Loop**: Resolved a race condition where drained queries were immediately re-queued because the mind hadn't physically "warmed" yet. Added a mandatory wait for the `_spark_active` lock to release before draining.
+- **[FEAT-320] Adaptive Ollama selection**:
+    *   **Logic**: Refactored `BicameralNode` to query the remote host's active process list (`/api/ps`).
+    *   **Result**: The Lab now autonomously adopts the model currently active on the Windows host (Kender) by default, preventing silicon thrashing and VRAM contention while maintaining manual override capability.
+- **[FIX] Recovery Singleton**: 
+    *   Hardened the Attendant to ensure only one adaptive recovery sequence can be active at a time. This prevents parallel watchdog triggers from spawning multiple ignition tasks.
+- **[FIX] Watchdog Loopback**:
+    *   Hardened the monitor to respect `OFFLINE` and `HIBERNATING` states, preventing the watchdog from mistaking an intentional stop for a crash.
+
+### 🛠️ PHYSICAL STATE (Final Certification)
+- **Time**: 12:15 PM (Sat May 2)
+- **Status**: HIBERNATING (Stable).
+- **VRAM**: 1.4GB / 11GB.
+- **Queue**: VERIFIED end-to-end.
+- **Stability**: **PRODUCTION READY**
