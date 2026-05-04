@@ -103,7 +103,51 @@ I identified and restored three critical regressions and one documentation gap t
     - [x] **22.2 [Run] Win 2**: 10-minute idle. COMPLETE.
     - [x] **22.3 [Run] Win 3**: 15-minute idle. COMPLETE.
     - [x] **22.4 [Run] Win 4**: 20-minute idle. COMPLETE.
-    - [x] **22.5 [Run] Win 5**: 25-minute idle. COMPLETE.
+    - **Task 22.5 [Run] Win 5**: 25-minute idle. COMPLETE.
+
+---
+
+## 🏛️ FORENSIC REPORT: May 4th "Shadow Deadlock" [VER-23.4]
+**Scope:** Contrast analysis of May 4th behavior vs. prior Sprint 23 stability.
+
+### 📍 Behavioral Contrast:
+- **Prior to May 4th (The "Hardened" Era)**: The Lab was behaving as intended. The **Stability Latch [FEAT-302]** was correctly managing backoffs, and the system cleared the 5x5 Gauntlet with 100% fidelity.
+- **May 4th (The "Shadow" Era)**: Starting at **04:03 AM**, the behavior shifted from "Controlled Recovery" to "Silent Deadlock."
+    *   **The Pivot**: A system reboot or service restart caused the new Attendant (PID 215391) to "adopt" the stale ledger of a crashed session.
+    *   **The Failure**: At `04:12 AM`, the Hub reported a `Hibernation request error`, proving it was attempting to communicate with a dead Attendant process while pointing to an obsolete session token.
+    *   **Root Cause**: **Ghost Ledger Adoption**. The Attendant lacked an authority check to verify if the PIDs it was "adopting" from `active_pids.json` actually belonged to current Lab processes.
+
+### 🛠️ Recommended Hardening:
+- **[FEAT-322] Authority Verification**:
+```diff
++        # Verify adopted Hub is actually a Lab process
++        if self.active_pids.get('hub_pid'):
++            try:
++                proc = psutil.Process(self.active_pids['hub_pid'])
++                if "acme_lab" not in proc.name().lower():
++                    self.active_pids = {'hub_pid': None, 'engine_pid': None, 'engine_mode': None, 'family': []}
++            except psutil.NoSuchProcess:
++                self.active_pids = {'hub_pid': None, 'engine_pid': None, 'engine_mode': None, 'family': []}
+```
+- **[FEAT-323] Backoff Telemetry**:
+```diff
++        vitals["recovery_level"] = self.recovery_attempts
++        vitals["recovery_in_progress"] = self._recovery_in_progress
+```
+
+---
+
+## 🏛️ SPRINT 23: GOAL 4 - GHOST LEDGER REPRODUCTION & HARDENING [FEAT-322]
+**Active Goal:** Reproduce the "Shadow Deadlock" failure state and implement authority validation.
+**Status**: [PENDING]
+
+### 🛠️ Task List (Heads Down)
+23. **[ ] Goal 4: Authority Hardening**:
+    - [ ] **23.1 [Design] Repro Harness**: Create `src/debug/repro_ghost_ledger.py`. It must manually inject stale PIDs into the ledger and verify Attendant adoption behavior.
+    - [ ] **23.2 [Test] Verify Transparency**: Implement **[FEAT-323] Backoff Telemetry** first to enable visual confirmation of the failure state in the JSON status.
+    - [ ] **23.3 [Verify] Capture Failure**: Run the harness and prove the system enters "Shadow Deadlock" (Attendant thinks Hub is up, but Hub is a ghost).
+    - [ ] **23.4 [Code] Apply FEAT-322**: Implement the Authority Verification check in `lab_attendant_v4.py`.
+    - [ ] **23.5 [Verify] Resolution**: Re-run the harness and prove the Attendant now autonomously rejects and wipes stale ledger entries.
 
 **[VERIFY] Hand-Crank Success**: ACHIEVED 5/5 WINS.
 - **Stability**: Verified that the **Stability Latch [FEAT-302]** correctly manages the recovery backoff reset. 
