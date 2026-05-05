@@ -92,3 +92,15 @@ I am pivoting Goal 2 and 4 to use the **hardened tools** from the map.
 1.  **Stop Coding, Start Running**: I will use `src/debug/test_hibernation_wake.py` (already found on disk) and `src/debug/verify_vocal_liveliness.py` to verify the Lab.
 2.  **Surgical Fix to TTL**: Instead of a "In-Flight Guard," I will simply **clear the `_last_engine_check` cache** whenever a Wake or Start is triggered. This is a one-line change that solves the 30s lag without adding new complexity.
 3.  **Respect the Blacklist Law**: I will remove the "Nuclear" port-based reaping and instead rely on the existing `scavenge_reality()` and ledger-based `cleanup_silicon()`.
+
+---
+
+### 🪣 Sprint 24.0: Revised Task List (The Bucket List)
+
+- [ ] **Task 5.1 (Cleanup)**: Revert the "Nuclear Port Purge" (remove `fuser -k` from `cleanup_silicon` in `lab_attendant_v4.py`) to respect the Blacklist Law.
+- [ ] **Task 5.2 (Cleanup)**: Remove the "In-Flight Ignition Guard" from `mcp_start` to restore the original clean state flow.
+- [ ] **Task 5.3 (Cleanup)**: Delete the redundant tools created today: `HomeLabAI/src/debug/test_stability_fixed.py` and `HomeLabAI/src/debug/vram_hog.py`.
+- [ ] **Task 5.4 (Fix)**: Implement the "Surgical Fix to TTL" by setting `self._last_engine_check = 0` at the beginning of `mcp_start` and `/wake_up` handler to clear the cognitive truth cache.
+- [ ] **Task 5.5 (Test)**: Run the existing `src/debug/test_hibernation_wake.py` to verify the fast wake path works as designed.
+- [ ] **Task 5.6 (Test)**: Run `src/test_dream.py` to ensure the Diamond Dream Cycle operates correctly using the Attendant API.
+- [ ] **Task 5.7 (Test)**: Run `src/debug/verify_vocal_liveliness.py` immediately after waking from sleep to confirm cognitive readiness.
