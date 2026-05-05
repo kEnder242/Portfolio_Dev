@@ -100,7 +100,8 @@ I am pivoting Goal 2 and 4 to use the **hardened tools** from the map.
 - [ ] **Task 5.1 (Cleanup)**: Revert the "Nuclear Port Purge" (remove `fuser -k` from `cleanup_silicon` in `lab_attendant_v4.py`) to respect the Blacklist Law.
 - [ ] **Task 5.2 (Cleanup)**: Remove the "In-Flight Ignition Guard" from `mcp_start` to restore the original clean state flow.
 - [ ] **Task 5.3 (Cleanup)**: Delete the redundant tools created today: `HomeLabAI/src/debug/test_stability_fixed.py` and `HomeLabAI/src/debug/vram_hog.py`.
-- [ ] **Task 5.4 (Fix)**: Implement the "Surgical Fix to TTL" by setting `self._last_engine_check = 0` at the beginning of `mcp_start` and `/wake_up` handler to clear the cognitive truth cache.
-- [ ] **Task 5.5 (Test)**: Run the existing `src/debug/test_hibernation_wake.py` to verify the fast wake path works as designed.
-- [ ] **Task 5.6 (Test)**: Run `src/test_dream.py` to ensure the Diamond Dream Cycle operates correctly using the Attendant API.
-- [ ] **Task 5.7 (Test)**: Run `src/debug/verify_vocal_liveliness.py` immediately after waking from sleep to confirm cognitive readiness.
+- [ ] **Task 5.4 (Fix)**: Implement the "Surgical Fix to TTL" by setting `self._last_engine_check = 0` at the beginning of `mcp_start` and `/wake_up` handler.
+- [ ] **Task 5.5 (Fix)**: Update the "Deck Clear" in `mcp_start` to call `scavenge_reality()` if an unknown process is detected on the engine port, adhering to the "Adoption Over Reaping" mandate.
+- [ ] **Task 5.6 (Test)**: Run `src/debug/test_hibernation_wake.py` to verify the fast wake path works as designed.
+- [ ] **Task 5.7 (Test)**: Run `src/test_dream.py` to ensure the Diamond Dream Cycle operates correctly using the Attendant API.
+- [ ] **Task 5.8 (Test)**: Run the "Physician's Gauntlet" (`src/debug/verify_vocal_liveliness.py` and `src/debug/test_lifecycle_gauntlet.py`) to confirm final systemic stability.
