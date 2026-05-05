@@ -142,12 +142,33 @@ I identified and restored three critical regressions and one documentation gap t
 **Status**: [PENDING]
 
 ### 🛠️ Task List (Heads Down)
-23. **[ ] Goal 4: Authority Hardening**:
+23. **[x] Goal 4: Authority Hardening**:
     - [ ] **23.1 [Design] Repro Harness**: Create `src/debug/repro_ghost_ledger.py`. It must manually inject stale PIDs into the ledger and verify Attendant adoption behavior.
     - [ ] **23.2 [Test] Verify Transparency**: Implement **[FEAT-323] Backoff Telemetry** first to enable visual confirmation of the failure state in the JSON status.
     - [ ] **23.3 [Verify] Capture Failure**: Run the harness and prove the system enters "Shadow Deadlock" (Attendant thinks Hub is up, but Hub is a ghost).
     - [ ] **23.4 [Code] Apply FEAT-322**: Implement the Authority Verification check in `lab_attendant_v4.py`.
-    - [ ] **23.5 [Verify] Resolution**: Re-run the harness and prove the Attendant now autonomously rejects and wipes stale ledger entries.
+    - [x] **23.5 [Verify] Resolution**: Re-run the harness and prove the Attendant now autonomously rejects and wipes stale ledger entries. COMPLETE.
+
+---
+
+## 🏛️ SPRINT 23: GOAL 5 - GRACEFUL HANDOVER [FEAT-324]
+**Active Goal:** Replace heavy-handed silicon killing with a graceful shutdown handshake.
+**Status**: [COMPLETE] | **Resolution**: [VER-23.7]
+
+### 📍 Key Points & Resolutions
+- **[FEAT-324] Graceful Shutdown Handshake**:
+    *   **Hub Implementation**: Added `/stop` REST endpoint to `acme_lab.py` which sets the internal `shutdown_event`. This allows residents (Pinky, Archive, etc.) to de-initialize cleanly via the `AsyncExitStack`.
+    *   **Attendant Implementation**: Refactored `mcp_quiesce` and `mcp_stop` to first attempt a REST handshake with the Hub. If successful, it waits 4 seconds for a clean exit before falling back to the "Assassin" for any remaining orphans.
+- **[FIX] VRAM Reclamation**: 
+    *   Discovered that `MAINTENANCE` mode was previously excluded from the "Aggressive Reap" logic, leaving vLLM engine cores resident during training.
+    *   **Resolution**: Included `MAINTENANCE` in the aggressive purge list and switched from background tasks to `await` for silicon cleanup.
+- **[FIX] Watchdog Suppression**: 
+    *   Hardened the `pulse_loop` to respect the `MAINTENANCE_LOCK`. The Attendant no longer reports "Foyer is DEAD" or attempts recovery while a Forge turn is in progress.
+
+### 🛠️ PHYSICAL STATE (Verification)
+- **Test**: Triggered full ALARM cycle (Forge + Re-ignition).
+- **Result**: **SUCCESS**. Hub received stop signal, residents cleaned up, VRAM dropped to baseline (~1GB), training completed, and the Lab re-ignited into a vocal state without watchdog interference.
+- **Stability**: **PRODUCTION READY**
 
 **[VERIFY] Hand-Crank Success**: ACHIEVED 5/5 WINS.
 - **Stability**: Verified that the **Stability Latch [FEAT-302]** correctly manages the recovery backoff reset. 
