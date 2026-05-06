@@ -47,3 +47,23 @@ The Lab is now **STANDING**, **VOCAL**, and **STABLE**.
 *   **Socket Persistence**: Added 30s PING/PONG heartbeats to all WebSockets to prevent Cloudflare and browser idle timeouts from dropping connections.
 *   **Strategic Sovereignty Debouncing**: Implemented state-aware status reporting. "Strategic Sovereignty: PRIMARY" is now only broadcast upon a genuine state transition, eliminating console spam on reconnect.
 *   **Remote Brain Cool-down**: Automated suspension of health probes to KENDER (remote Windows host) after 5 minutes of inactivity, allowing remote silicon to cool down during idle periods.
+
+---
+
+### 🏺 Retrospective: The Value of "Physician's Gauntlet" Verification
+
+The testing was **absolutely critical**. While the first implementation stood up the correct architectural logic, the verification phase caught several "Silicon Traps" that would have resulted in immediate system failure or degraded performance.
+
+#### 🕵️ Errors Caught During Verification:
+
+1.  **The "Larynx Lock" Syntax Error**: I had accidentally left an empty `if` block in `acme_lab.py` (`if self.connected_clients:`). Without testing, the Lab would have failed to boot, and the Hub would have crashed immediately upon service restart.
+2.  **Cognitive Cache Lag**: Verification revealed that while the engine was "Vocal," the Attendant's **30s TTL cache** was still reporting it as "Down." I had to implement a surgical cache invalidation (`_last_engine_check = 0`) to prevent the Attendant from murdering the engine with a redundant ignition cycle just as it finished waking.
+3.  **The Atomic Anchor Bypass**: My initial test run failed because the test query didn't include the mandatory `[ME]` anchor. This confirmed that the **FEAT-227 Security Gate** was working perfectly, but reminded me that even our internal diagnostic tools must respect the "Physician's Law."
+4.  **Idle Timer Deadlock**: Testing exposed a race condition where the engine would wake, but if the `last_activity` timer wasn't immediately reset in the Hub's `/wake` handler, the Lab would re-hibernate 5 seconds later because it still thought it was idle.
+
+#### 🏺 Scars & ROI:
+*   **The Trap**: Relying on "Logical Completion" rather than "Silicon Truth." My first implementation was logically sound but syntactically broken.
+*   **The BKM**: Never trust an ignition sequence that hasn't been "Physically Asserted" by a cognitive probe.
+*   **Final ROI**: High. The 15 minutes spent in the "Physician's Gauntlet" saved the Lab from a 3:00 AM failure during the next Dream Cycle.
+
+The Lab is now verified **BATTLE-HARDENED**.
