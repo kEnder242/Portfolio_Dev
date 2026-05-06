@@ -40,7 +40,6 @@
 - [x] **Task 4.2**: **CRITICAL**: Verify that the Lab uses the "Fast Wake Path" (HTTP `/wake_up`) instead of the "Pre-Reap Path" (SIGKILL + Restart).
 - [x] **Task 4.3**: Benchmark the "Wake" vs "Restart" time to confirm <10s availability.
 
-
 ---
 
 ## 🛠️ PHYSICAL STATE (Final)
@@ -120,3 +119,61 @@ I am pivoting Goal 2 and 4 to use the **hardened tools** from the map.
     *   `src/debug/verify_vocal_liveliness.py`: **PASS** (Lab is VOCAL and Reasoning).
 
 The Lab is now **STANDING**, **VOCAL**, and **STABLE**.
+
+---
+
+### 🏺 Retrospective: The Value of "Physician's Gauntlet" Verification
+
+The testing was **absolutely critical**. While the first implementation stood up the correct architectural logic, the verification phase caught several "Silicon Traps" that would have resulted in immediate system failure or degraded performance.
+
+#### 🕵️ Errors Caught During Verification:
+
+1.  **The "Larynx Lock" Syntax Error**: I had accidentally left an empty `if` block in `acme_lab.py` (`if self.connected_clients:`). Without testing, the Lab would have failed to boot, and the Hub would have crashed immediately upon service restart.
+2.  **Cognitive Cache Lag**: Verification revealed that while the engine was "Vocal," the Attendant's **30s TTL cache** was still reporting it as "Down." I had to implement a surgical cache invalidation (`_last_engine_check = 0`) to prevent the Attendant from murdering the engine with a redundant ignition cycle just as it finished waking.
+3.  **The Atomic Anchor Bypass**: My initial test run failed because the test query didn't include the mandatory `[ME]` anchor. This confirmed that the **FEAT-227 Security Gate** was working perfectly, but reminded me that even our internal diagnostic tools must respect the "Physician's Law."
+4.  **Idle Timer Deadlock**: Testing exposed a race condition where the engine would wake, but if the `last_activity` timer wasn't immediately reset in the Hub's `/wake` handler, the Lab would re-hibernate 5 seconds later because it still thought it was idle.
+
+#### 🏺 Scars & ROI:
+*   **The Trap**: Relying on "Logical Completion" rather than "Silicon Truth." My first implementation was logically sound but syntactically broken.
+*   **The BKM**: Never trust an ignition sequence that hasn't been "Physically Asserted" by a cognitive probe.
+*   **Final ROI**: High. The 15 minutes spent in the "Physician's Gauntlet" saved the Lab from a 3:00 AM failure during the next Dream Cycle.
+
+The Lab is now verified **BATTLE-HARDENED**.
+
+---
+
+# Sprint Plan: [SPR-26.0] Internal Waterfall & Mute Fix
+**Status:** ACTIVE | **Baseline:** Sprint 25.0 [VER-25.5]
+
+## 🏛️ RETROSPECTIVE: THE WATERFALL PLATEAU (Context & Scars)
+**The Problem:** The Lab's internal cognitive synergy has plateaued into a turn-based sequential model. While "Fuel" still governs routing, the critical ability for nodes to "Overhear" each other in real-time [FEAT-233] was lost during the transition to standard MCP tool-calling. This has introduced significant latency and contributed to the "MUTE" condition, where triage stalls and the UI remains silent during long derivations.
+
+### 🕵️ Investigation Findings (May 5):
+1.  **Waterfall Regression**: `_process_node_stream` currently uses `await node.call_tool("think")`, which is a blocking call. Succeeding nodes (Brain) cannot start until the preceding node (Pinky) finishes.
+2.  **Triage Lock**: The Lab Node is hitting `TRIAGE_PARSE_FAILURE` repeatedly, leading to 60s timeouts per attempt. This causes the "MUTE" behavior where the Lab sits on "THINKING" for 3.5+ minutes.
+3.  **Deaf Nodes**: The current `asyncio.gather(run_pinky(), run_shadow())` runs nodes in parallel but isolates them from each other's live tokens, losing the "Warming" effect.
+
+---
+
+## 🏛️ SPRINT 26: GOALS & OBJECTIVES
+
+### 🎯 GOAL 1: RESTORE INTERNAL WATERFALL [FEAT-233]
+- [ ] **Task 1.1 (Loader)**: Refactor `BicameralNode.think` tool in `loader.py` to optionally yield tokens to a Hub-provided callback or use a streaming generator.
+- [ ] **Task 1.2 (Hub)**: Re-implement `WaterfallQueue` in `cognitive_hub.py`. Pinky's tokens must be available to Shadow and Brain in real-time.
+- [ ] **Task 1.3 (Cross-Host)**: Ensure the Sovereign Brain (KENDER) can consume the internal waterfall stream via context-injection.
+
+### 🎯 GOAL 2: FIX MUTE TRIAGE / COGNITIVE LOCK
+- [ ] **Task 2.1**: Debug `TRIAGE_PARSE_FAILURE` by logging raw Lab Node output to the journal.
+- [ ] **Task 2.2**: Harden `bridge_signal_clean` to handle multi-line thinking blocks or preamble noise from vLLM 3B.
+- [ ] **Task 2.3**: Implement immediate "Status: TRIAGE_COMPLETE" broadcast to the UI to break the 4-minute silence.
+
+### 🎯 GOAL 3: FULL FUEL FLOW VERIFICATION
+- [ ] **Task 3.1**: Use `src/tests/test_strategic_live_fire.py` to verify inter-node overhearing.
+- [ ] **Task 3.2**: Confirm that the "Council of Hemispheres" [FEAT-238] correctly adds fuel mid-stream based on Pinky's intuition.
+
+---
+
+## 🛠️ PHYSICAL STATE (Baseline)
+- **Status**: MUTE (Triage failing).
+- **Waterfall**: Turn-Blocked.
+- **Fuel Cycle**: Static.
