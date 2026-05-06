@@ -21,6 +21,10 @@
 ## 🎯 Active Initiative: "The Neural Relay" (Sprint SPR-15.0)
 **Goal:** Transition from a linear "Ping-Pong" state machine into a high-throughput **Relay Race** with parallel inference and token-aware yielding.
 
+## ✅ Global Milestones (May 2026)
+1.  **Governor's Gate [SPR-27.0]**: ACTIVE. Implementing resource coordination between background workers and the Lab Hub to prevent OOM events.
+2.  **Mind Healing [SPR-26.0]**: COMPLETE. Restored Internal Waterfall Cascade [FEAT-233] and resolved high-fidelity triage deadlocks.
+
 ## ✅ Global Milestones (April 2026)
 1.  **Mind Healing [SPR-20.0]**: COMPLETE. Implemented Neural Buffer [FEAT-283] for WAKING state queuing, type-agnostic triage parsing [ERR-06], and Heartbeat Deferral [FEAT-283.2] to prevent weight-swap collisions.
 2.  **Stability Gauntlet [SPR-19.0]**: COMPLETED. Verified vLLM V0 stability on 2080 Ti and established PID Ledger for port reclamation.
