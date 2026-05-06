@@ -8,6 +8,7 @@ import logging
 import random
 import glob
 import argparse
+import signal
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -15,6 +16,8 @@ from utils import update_status, get_vram_usage, trigger_pager, ROUND_TABLE_LOCK
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LAB_RUN_DIR = os.path.expanduser("~/Dev_Lab/HomeLabAI/run")
+MASS_SCAN_PID_FILE = os.path.join(LAB_RUN_DIR, "mass_scan.pid")
 LIBRARIAN = os.path.join(BASE_DIR, "scan_librarian.py")
 QUEUE_MGR = os.path.join(BASE_DIR, "scan_queue.py")
 NIBBLER = os.path.join(BASE_DIR, "nibble_v2.py")
@@ -35,6 +38,37 @@ logging.basicConfig(
     format='%(asctime)s [MASS SCAN] %(message)s',
     handlers=[logging.StreamHandler(sys.stdout)]
 )
+
+# [FEAT-330] Signal Throttling
+IS_PAUSED = False
+
+def handle_pause(signum, frame):
+    global IS_PAUSED
+    logging.warning("[GOVERNOR] Received PAUSE signal (SIGUSR1). Throttling execution...")
+    IS_PAUSED = True
+
+def handle_resume(signum, frame):
+    global IS_PAUSED
+    logging.info("[GOVERNOR] Received RESUME signal (SIGUSR2). Resuming execution...")
+    IS_PAUSED = False
+
+signal.signal(signal.SIGUSR1, handle_pause)
+signal.signal(signal.SIGUSR2, handle_resume)
+
+def register_pid():
+    """Writes the current PID to the Lab's run directory for Attendant tracking."""
+    try:
+        os.makedirs(LAB_RUN_DIR, exist_ok=True)
+        with open(MASS_SCAN_PID_FILE, "w") as f:
+            f.write(str(os.getpid()))
+        logging.info(f"Registered PID {os.getpid()} at {MASS_SCAN_PID_FILE}")
+    except Exception as e:
+        logging.error(f"Failed to register PID: {e}")
+
+def wait_if_paused():
+    """Polls the pause state and yields CPU if throttled."""
+    while IS_PAUSED:
+        time.sleep(5)
 
 def vram_guard():
     usage = get_vram_usage()
@@ -119,6 +153,9 @@ def main():
         hallway_protocol(args.keyword)
         return
 
+    # [FEAT-330] Register for physical governance
+    register_pid()
+
     logging.info("=== MASS SCAN: CONTINUOUS RESEARCH v2.0 ===")
     trigger_pager("Initiating High-Fidelity Synthesis Burn.", severity="info", source="MassScan")
     
@@ -127,6 +164,9 @@ def main():
 
     epoch_count = 0
     while True:
+        # [FEAT-330] Yield to physical governor
+        wait_if_paused()
+
         # --- [FEAT-259.1] TOP LEVEL LOCK CHECKS ---
         if os.path.exists(maint_lock):
             logging.info("[LOCK] Maintenance Lock Active. Silencing all background tasks.")
