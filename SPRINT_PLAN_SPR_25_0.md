@@ -17,18 +17,18 @@
 ## 🏛️ SPRINT 25: GOALS & OBJECTIVES
 
 ### 🎯 GOAL 1: LOBBY RESIDENCY (FOYER STAY-ALIVE) [FEAT-327]
-- [x] **Task 1.1**: Refactor `reflex_loop` in `acme_lab.py` to allow hibernation based strictly on `idle_time`, ignoring client count. (DONE)
-- [x] **Task 1.2**: Update `client_handler` to support the `heartbeat=30.0` parameter in `WebSocketResponse`. (DONE)
-- [x] **Task 1.3**: Verify that incoming `[ME]` queries from an open lobby correctly trigger a "Fast Wake" without dropping the socket. (VERIFIED via logic path)
+- [x] **Task 1.1**: Refactor `reflex_loop` in `acme_lab.py` to allow hibernation based strictly on `idle_time`. (VERIFIED: Hub detects hibernation while socket open).
+- [x] **Task 1.2**: Update `client_handler` to support the `heartbeat=30.0` parameter. (VERIFIED: No disconnects during idle periods).
+- [x] **Task 1.3**: Verify that incoming `[ME]` queries trigger a "Fast Wake" without dropping the socket. (VERIFIED via `test_hibernation_wake.py`).
 
 ### 🎯 GOAL 2: SOVEREIGNTY DEBOUNCING [FEAT-328]
-- [x] **Task 2.1**: Implement state-aware broadcasting for "Strategic Sovereignty" to prevent spam. (DONE)
-- [x] **Task 2.2**: Move the initial status report to happen EXACTLY once per handshake. (DONE)
+- [x] **Task 2.1**: Implement state-aware broadcasting for "Strategic Sovereignty" to prevent spam. (VERIFIED: Log audit confirms 1 msg per state transition).
+- [x] **Task 2.2**: Move initial status report to happen EXACTLY once per handshake. (DONE).
 
 ### 🎯 GOAL 3: REMOTE BRAIN COOL-DOWN [FEAT-329]
-- [x] **Task 3.1**: Refactor `check_brain_health` to respect the `idle_time`. (DONE)
-- [x] **Task 3.2**: Suspend health probes to KENDER if the Lab has been idle for > 5 minutes. (DONE)
-- [x] **Task 3.3**: Resume probes immediately upon `text_input` or `user_typing`. (DONE)
+- [x] **Task 3.1**: Refactor `check_brain_health` to respect the `idle_time`. (DONE).
+- [x] **Task 3.2**: Suspend health probes to KENDER if idle > 5 minutes. (VERIFIED via code audit and activity tracking).
+- [x] **Task 3.3**: Resume probes immediately upon `text_input` or `user_typing`. (DONE).
 
 ---
 
