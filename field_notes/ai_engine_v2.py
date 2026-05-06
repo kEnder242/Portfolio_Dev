@@ -54,6 +54,68 @@ class VLLMClient(OllamaClient):
             logging.error(f"vLLM Connection Failed: {e}. Falling back to Ollama.")
             return super().generate(prompt, context, options)
 
+class McpClient(OllamaClient):
+    """
+    [FEAT-330] Connects to the Lab Hub via WebSocket and calls the 'think' tool.
+    This ensures unified model usage and central resource coordination.
+    Uses the [INTERNAL] tag to prevent UI leakage.
+    """
+    def __init__(self, uri="ws://localhost:8765"):
+        super().__init__()
+        self.uri = uri
+
+    def generate(self, prompt, context="", options=None):
+        import asyncio
+        import json
+        import websockets
+
+        async def _call():
+            try:
+                # Use a high timeout for weights loading/derivation
+                async with websockets.connect(self.uri, open_timeout=10, ping_interval=20) as ws:
+                    # Handshake
+                    await ws.send(json.dumps({"type": "handshake", "client": "refine_worker"}))
+                    
+                    # Call Think Tool (via text_input for simplified Hub routing)
+                    message = {
+                        "type": "text_input",
+                        "content": f"[INTERNAL] [REFINE]: {prompt}",
+                        "context": context
+                    }
+                    await ws.send(json.dumps(message))
+                    
+                    full_response = ""
+                    start_t = time.time()
+                    while time.time() - start_t < 180:
+                        try:
+                            msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
+                            data = json.loads(msg)
+                            
+                            # Standard brain broadcast
+                            if "brain" in data:
+                                full_response += data["brain"]
+                            
+                            # Final flag from Hub
+                            if data.get("final") == True:
+                                break
+                            
+                            # [FIX] Loop breaker for situation tags
+                            if "[SITUATION: EXIT_LIKELY]" in str(data):
+                                break
+                        except asyncio.TimeoutError:
+                            continue
+                    return full_response
+            except Exception as e:
+                logging.error(f"McpClient Failure: {e}")
+                return ""
+
+        # Bridge async call to sync generate method
+        try:
+            return asyncio.run(_call())
+        except Exception as e:
+            logging.error(f"McpBridge failed: {e}")
+            return ""
+
 class LigerEngine(OllamaClient):
     """
     Direct Model Access (DMA) with Liger-Kernel optimization.
@@ -344,13 +406,10 @@ def get_engine_v2(mode="LOCAL"):
     elif mode == "DMA":
         return LigerEngine()
     elif mode == "LAB":
-        from ai_engine import AcmeLabClient
-        client = AcmeLabClient()
-        client.prime()
-        return client
+        # [FEAT-330] Use unified MCP client for resource coordination
+        return McpClient()
     elif mode == "HYBRID":
-        from ai_engine import AcmeLabClient
-        brain = AcmeLabClient()
-        brain.prime()
+        # [FEAT-330] Use unified MCP client as reasoning backend
+        brain = McpClient()
         return CurriculumEngine(backend=brain)
     return get_engine(mode)
