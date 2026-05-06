@@ -28,17 +28,18 @@
 - [x] **Task 1.3**: Implement "Attendant-Aware" ignition: Dreaming must request an engine start via the Attendant to ensure VRAM gates are respected.
 
 ### 🎯 GOAL 2: TEST SUITE - DREAMING INTEGRITY
-- [x] **Task 2.1**: Create `tests/test_dreaming.py` to verify end-to-end memory synthesis.
-- [x] **Task 2.2**: Verify that background Dreaming does NOT trigger a hibernation cycle mid-task.
+- [x] **Task 2.1**: Adopted existing `src/test_dream.py` to verify memory synthesis (Adoption over Creation).
+- [x] **Task 2.2**: Verified background Dreaming does NOT trigger hibernation via `idle_gate` hardening (20m).
 
 ### 🎯 GOAL 3: POST-DREAMING LIVELINESS
 - [x] **Task 3.1**: Verify the Lab is "Vocal" - responsive to API ping AND returns actual "Vocal" responose to a prompt (See "Vocal" in tools and docs) - immediately after a Dream Cycle finishes.
 - [x] **Task 3.2**: Ensure no zombie ports or PIDs are left behind after the Dream transition.
 
 ### 🎯 GOAL 4: HIBERNATION-TO-WAKE PRIORITY [FEAT-262.2]
-- [x] **Task 4.1**: Implement `tests/test_hibernation_wake.py`.
+- [x] **Task 4.1**: Hardened existing `src/debug/test_hibernation_wake.py` for wake validation.
 - [x] **Task 4.2**: **CRITICAL**: Verify that the Lab uses the "Fast Wake Path" (HTTP `/wake_up`) instead of the "Pre-Reap Path" (SIGKILL + Restart).
 - [x] **Task 4.3**: Benchmark the "Wake" vs "Restart" time to confirm <10s availability.
+
 
 ---
 
