@@ -37,3 +37,13 @@
 - **VRAM**: 7.2GB / 11GB.
 - **Hub Socket**: Persistent.
 - **Remote Brain**: PROBING.
+
+The Lab is now **STANDING**, **VOCAL**, and **STABLE**.
+
+---
+
+### ✅ Sprint [SPR-25.0] Accomplishments Summary:
+*   **Lobby Residency Implemented**: Refactored the hibernation trigger to be based strictly on idle_time. The foyer (WebSocket lobby) now stays open indefinitely even when engines are hibernated, eliminating "Lobby Deadlock."
+*   **Socket Persistence**: Added 30s PING/PONG heartbeats to all WebSockets to prevent Cloudflare and browser idle timeouts from dropping connections.
+*   **Strategic Sovereignty Debouncing**: Implemented state-aware status reporting. "Strategic Sovereignty: PRIMARY" is now only broadcast upon a genuine state transition, eliminating console spam on reconnect.
+*   **Remote Brain Cool-down**: Automated suspension of health probes to KENDER (remote Windows host) after 5 minutes of inactivity, allowing remote silicon to cool down during idle periods.
