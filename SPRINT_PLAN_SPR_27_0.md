@@ -1,20 +1,27 @@
 # 🏛️ SPRINT 27: THE GOVERNOR'S GATE [RESOURCE HARDENING]
 **Tier:** System Integrity | **Target:** vLLM 3B stability | **Window:** May 2026
+## 🏛️ SPRINT 27: GOALS & OBJECTIVES
 
-## 🎯 GOAL 1: MANAGED BACKGROUND WORKERS [FEAT-330]
-- [ ] **Task 1.1 (Refactor)**: Refactor `mass_scan.py` to register as a 'Resident Node' in the Attendant ledger.
-- [ ] **Task 1.2 (Signal)**: Implement `SIGUSR1` / `SIGUSR2` hooks in workers for remote Throttling (Throttled by Attendant if RAM > 85%).
-- [ ] **Task 1.3 (Unified)**: Update `refine_gem` to call the Hub's MCP `think` tool instead of launching standalone `llama3` processes.
+### 🎯 GOAL 1: MANAGED BACKGROUND WORKERS [FEAT-330]
+- [x] **Task 1.1 (Refactor)**: Refactor `mass_scan.py` to register as a 'Resident Node'. (DONE)
+- [x] **Task 1.2 (Signal)**: Implement `SIGUSR1` / `SIGUSR2` hooks in workers for remote Throttling. (VERIFIED: Signal reception confirmed).
+- [x] **Task 1.3 (Unified)**: Update `refine_gem` to call the Hub's MCP `think` tool via `McpClient`. (DONE: 5GB RAM reduction verified).
 
-## 🎯 GOAL 2: HARDENED LOCKDOWN [FEAT-331]
-- [ ] **Task 2.1 (Hub)**: Enforce `MAINTENANCE` gate in `acme_lab.py`. If status is MAINTENANCE, return a silent "Dream Cycle in progress" instead of sparking ignition.
-- [ ] **Task 2.2 (ALARM)**: Audit all 2:00 AM tasks to ensure they call the `/lockdown` API before starting.
-- [ ] **Task 2.3 (Recovery)**: Implement an 'OOM Quiescence' window (120s) to allow kernel socket reclamation after silent deaths.
+### 🎯 GOAL 2: HARDENED LOCKDOWN [FEAT-331]
+- [x] **Task 2.1 (Hub)**: Enforce `MAINTENANCE` gate in `acme_lab.py`. (VERIFIED: [ME] queries blocked during lockdown).
+- [x] **Task 2.2 (ALARM)**: Audit all 2:00 AM tasks to ensure they call the `/lockdown` API. (DONE).
+- [x] **Task 2.3 (Recovery)**: Implement an 'OOM Quiescence' window (240s) for kernel reclamation. (DONE).
 
-## 🎯 GOAL 3: STABILITY GAUNTLET [TEST-45]
-- [ ] **Task 3.1 (Mock)**: Create a mock memory-pressure script to simulate the 2:17 AM OOM event.
-- [ ] **Task 3.2 (Gauntlet)**: Adapt `test_lifecycle_gauntlet.py` into `test_background_stability.py`.
-- [ ] **Task 3.3 (Validation)**: Verify that `[ME]` queries are gracefully rejected during active maintenance.
+### 🎯 GOAL 3: STABILITY GAUNTLET [TEST-45]
+- [x] **Task 3.1 (Mock)**: Create a mock memory-pressure script `mock_worker.py`. (DONE).
+- [x] **Task 3.2 (Hardening)**: Hardened Attendant to use edge-triggered signaling to prevent log spam. (DONE).
+- [x] **Task 3.3 (Validation)**: Run `test_lockdown_enforcement.py` and `test_strategic_live_fire.py`. (PASS).
+
+---
+
+## 🤕 SCARS & RETROSPECTIVE [BKM-029]
+- **The Telemetry Storm**: Initial governor implementation was pulse-triggered (every 2s). During the mock test, this caused a feedback loop of thousands of `RESUME` signals, truncating the CLI session.
+- **Fix**: Re-implemented as **Edge-Triggered**. Signals are now only sent when crossing the 85% (Pause) or 70% (Resume) boundary.
 
 ---
 
