@@ -68,6 +68,9 @@ class McpClient(OllamaClient):
         import asyncio
         import json
         import websockets
+        import time
+
+        target_source = options.get("target_source") if options else None
 
         async def _call():
             try:
@@ -91,8 +94,18 @@ class McpClient(OllamaClient):
                             msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
                             data = json.loads(msg)
                             
-                            # Standard brain broadcast
-                            if "brain" in data:
+                            # Filter for actual reasoning tokens
+                            source = str(data.get("brain_source", data.get("source", "System"))).lower()
+                            
+                            # DEBUG: Log incoming sources
+                            # print(f"DEBUG: WS INGEST from {source}")
+
+                            # If target_source is specified, ONLY accept tokens from that source
+                            if target_source and target_source.lower() not in source:
+                                continue
+                                
+                            if "brain" in data and source not in ["system", "attendant"]:
+                                # print(f"DEBUG: ACCEPTED token from {source}")
                                 full_response += data["brain"]
                             
                             # Final flag from Hub
