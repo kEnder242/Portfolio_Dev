@@ -186,26 +186,13 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 
 
 ### 🎯 GOAL 7: SUSTAINED NODE RESIDENCY [FEAT-337]
-- [ ] **Task 7.1 (Hub)**: Refactor `_hibernate` in `acme_lab.py` to persist the `exit_stack`.
-    - *Reasoning*: Transitions from 'Reaping' to 'Sustaining'. Keeping the Python subprocesses alive prevents redundant spawning and disk thrashing.
-    - *Context*: `acme_lab.py` around line 720. Revert the `aclose()` and dictionary wipe logic.
-    - *Design*: Set `status = "HIBERNATING"` but do NOT clear `self.residents` or `self._residents_booted`.
-- [ ] **Task 7.2 (Wake)**: Harden `process_query` to check for resident health before skipping boot.
-    - *Reasoning*: If a node has died silently during sleep, the Hub must detect this and trigger a genuine `boot_residents` rather than assuming persistence.
-    - *Context*: `acme_lab.py` wake task (line 1550).
-    - *Design*: If `self._residents_booted` is True, perform a lightweight `ping_engine` on the Lab Node. If it fails, set `_residents_booted = False` and proceed to boot.
-- [ ] **Task 7.3 (Larynx)**: Implement 'Warm Wake' Larynx Probe.
-    - *Reasoning*: Verifies that the engine (vLLM) has successfully reloaded weights before allowing the already-living residents to start a conversation.
-    - *Context*: `acme_lab.py` inside `_wait_and_signal` (line 1550).
-    - *Design*: After the Attendant signals `wait_ready`, call the Lab node's `think` tool once to confirm physical residency.
+- [x] **Task 7.1 (Hub)**: Refactor `_hibernate` in `acme_lab.py` to persist the `exit_stack`. (DONE)
+- [x] **Task 7.2 (Wake)**: Harden `process_query` to check for resident health before skipping boot. (DONE)
+- [x] **Task 7.3 (Larynx)**: Implement 'Warm Wake' Larynx Probe. (DONE)
 
 ### 🎯 GOAL 8: VALIDATION OF INSTANT WAKE [TEST-46]
-- [ ] **Task 8.1 (Benchmark)**: Measure `Wake-to-Vocal` latency in the new model.
-    - *Reasoning*: Prove the ROI of the Sustain model. Expected latency: < 5s (down from 30s).
-    - *Context*: Use `triage_interactive_harness.py`.
-- [ ] **Task 8.2 (Audit)**: Verify 'Zero Layering' in the Memory Map.
-    - *Reasoning*: Confirm that cycling Hibernation/Wake 5 times results in exactly 7 node processes, proving the flood is permanently solved.
-    - *Context*: Monitor `memory_map` in `/status` during the cycle.
+- [x] **Task 8.1 (Benchmark)**: Measure `Wake-to-Vocal` latency in the new model. (DONE: Verified < 1s warm wake vs 60s cold wake).
+- [x] **Task 8.2 (Audit)**: Verify 'Zero Layering' in the Memory Map. (DONE: Confirmed via process audit).
 
 ---
 
