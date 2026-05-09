@@ -206,3 +206,23 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 - [ ] **Task 8.2 (Audit)**: Verify 'Zero Layering' in the Memory Map.
     - *Reasoning*: Confirm that cycling Hibernation/Wake 5 times results in exactly 7 node processes, proving the flood is permanently solved.
     - *Context*: Monitor `memory_map` in `/status` during the cycle.
+
+---
+
+## 🔬 SPRINT 27.0: MID-SPRINT FORENSIC REPORT (PHASES 7 & 8)
+**Date:** May 8, 2026
+**Status:** Implementation Gaps Identified
+
+### **Current Implementation Status**
+*   **Managed Background Workers (Goal 1):** **COMPLETE.** `mass_scan.py` now registers its PID and implements `SIGUSR1`/`SIGUSR2` hooks. `lab_attendant_v4.py` implements an edge-triggered **Governor** that pauses workers at 85% RAM and resumes at 70%, preventing the "Telemetry Storm" mentioned in the scars.
+*   **Persistent Hibernation (Goal 7):** **PARTIALLY ACTED.**
+    *   **Task 7.1 (Persist residents):** The `_hibernate` method in `acme_lab.py` (line 705) has already been refactored to remove the `exit_stack.aclose()` and dictionary wipe logic. Subprocesses now remain alive in RAM during sleep.
+    *   **Task 7.2 (Health check):** **MISSING.** The `process_query` wake sequence (line 1497) does not yet verify the health of existing residents. If a Python node crashes during hibernation, the system will attempt to use a dead reference.
+    *   **Task 7.3 (Larynx Probe):** **MISSING.** The wake sequence does not perform a "Gold Standard" cognitive probe (`think` tool call) to verify the engine is actually "Vocal" (weights loaded) before setting the `OPERATIONAL` status.
+
+### **Technical Insights & Concerns**
+1.  **The Persistence Pivot:** Reverting Goal 4.1 (Reaping) in favor of Goal 7.1 (Sustaining) is a significant architectural win for latency (reducing wake times from ~30s to <5s), but it creates an **800MB RAM floor** that the Governor must now defend.
+2.  **Silicon Lobotomy Risk:** The retrospective mentions token corruption caused by vLLM prefix cache fragmentation. I found a new `/reset_cache` endpoint in the Attendant that is currently manual; we should consider if this should be automated during the `_hibernate` or `_wake` cycles.
+3.  **Code Density:** `acme_lab.py` has grown to ~1,940 lines. Maintaining surgical precision is critical here. I will strictly use the **Safe-Scalpel (BKM-011)** protocol for all edits to ensure linting passes before any service is restarted.
+4.  **Deviation Alert:** The `process_query` logic contains a `[FIX]` comment (line 1579) stating the redundant wait loop was removed, but it still lacks the **Resident Recovery** logic mentioned in Task 7.2 (where it should trigger a fresh `boot_residents` if the existing nodes are unresponsive).
+
