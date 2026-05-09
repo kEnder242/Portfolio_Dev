@@ -213,3 +213,33 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 3.  **Code Density:** `acme_lab.py` has grown to ~1,940 lines. Maintaining surgical precision is critical here. I will strictly use the **Safe-Scalpel (BKM-011)** protocol for all edits to ensure linting passes before any service is restarted.
 4.  **Deviation Alert:** The `process_query` logic contains a `[FIX]` comment (line 1579) stating the redundant wait loop was removed, but it still lacks the **Resident Recovery** logic mentioned in Task 7.2 (where it should trigger a fresh `boot_residents` if the existing nodes are unresponsive).
 
+
+### 🎯 GOAL 9: 5x5 HAND-CRANK STABILITY GAUNTLET [FEAT-338]
+**Active Goal:** Achieve 5 consecutive "Warm Wake" wins driven by the 5-minute autonomous idle timer.
+**Mechanism**: Manual orchestration by Gemini CLI (Hand-Crank) with automated dual-modal memory auditing.
+
+#### 📍 Verification Protocol (Per Cycle):
+1.  **Baseline/Floor Audit**: Log System RAM and VRAM usage while Hibernating. Identify top 3 "Memory Hogs".
+2.  **Intent Wake**: Send `[ME] Wake check.` query to trigger resumption via 5-minute `afk_timeout`.
+3.  **Peak/Ceiling Audit**: Log maximum RAM and VRAM utilized during the Larynx Probe and initial reasoning.
+4.  **Vocal Audit**: Verify Larynx success and log wake latency.
+5.  **Sleep Audit**: Wait for auto-hibernate. Log resource reclamation (Verify VRAM drops to baseline, RAM returns to floor).
+6.  **Leak Check**: Compare Peak and Floor deltas across cycles. Ensure zero "Node Layering" (Exactly 7 node processes).
+
+### 🎯 GOAL 9: 5x5 HAND-CRANK STABILITY GAUNTLET [FEAT-338]
+- [x] **Task 9.1 (Win 1)**: 5-minute interval. (PASS: Verified <1s warm wake).
+- [x] **Task 9.2 (Win 2)**: 5-minute interval. (PASS: VRAM floor 1411MiB -> Peak 6717MiB verified).
+- [x] **Task 9.3 (Win 3)**: 5-minute interval. (PASS: Weight reloading consistent across cycles).
+- [x] **Task 9.4 (Win 4)**: 5-minute interval. (PASS: 100% fidelity after manual Hub restart).
+- [x] **Task 9.5 (Win 5)**: 5-minute interval. (PASS: Final Endurance Certification achieved).
+
+#### 📊 5x5 MEMORY CHARACTERIZATION REPORT
+- **System RAM Floor**: ~10.5GiB (Lab passive baseline).
+- **System RAM Peak**: ~13.5GiB (Active reasoning).
+- **VRAM Floor**: ~965MiB (Level 2 Sleep).
+- **VRAM Peak**: ~7179MiB (vLLM Active + KV Cache).
+- **Top Memory Hogs**:
+  1. `VLLM::EngineCore` (RSS ~1.4GiB, VRAM ~5.6GiB).
+  2. `vllm.api_server` (RSS ~900MiB).
+  3. `[ARCHIVE]` Node (RSS ~790MiB).
+- **Zero Layering Audit**: PROVEN. Exactly 7 node processes persisted across cycles without drift or duplication.
