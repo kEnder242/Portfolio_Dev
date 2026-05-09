@@ -243,3 +243,44 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
   2. `vllm.api_server` (RSS ~900MiB).
   3. `[ARCHIVE]` Node (RSS ~790MiB).
 - **Zero Layering Audit**: PROVEN. Exactly 7 node processes persisted across cycles without drift or duplication.
+
+---
+
+## 🏛️ SPRINT 27.0: FOYER INSTABILITY FORENSIC REPORT [MAY 09]
+**Status:** High-Severity UX Regression Identified (The "Drunken Foyer" Effect)
+
+### 📍 15-Minute Forensic Timeline
+- **00:03:16 - The False Lobby**: Client disconnected after HIBERNATING signal. Hub reported logical start while vLLM was still offloaded.
+- **00:03:56 - Cold Boot Ignition**: Hub starts (PID 203742). Foyer opens on 8765 but residents are not yet "Vocal."
+- **00:04:30 - The Collision**: Concurrent Query Arrival. User query `[ME] hello` triggered a redundant `spark_restoration` while already waking.
+- **00:05:11 - Triage Hallucination**: Pinky entered an infinite loop of `[TOOL_CALL]` on `read_chronological_excerpts` due to prefix cache corruption from the redundant spark.
+- **00:06:25 - The State Storm**: Client UI overwhelmed by parallel `OPERATIONAL` signals; WebSocket began flapping.
+- **00:06:45 - The Grand Replay**: Entire triage loop buffer re-broadcasted to JS at once, causing the "Wall of Text" console failure.
+
+---
+
+### 🎯 GOAL 10: FOYER DE-DUPLICATION & UX HARDENING [FEAT-339]
+**Active Goal:** Resolve the "Drunken Foyer" effect and stabilize the client-side experience during ignition.
+
+- [ ] **Task 10.1 (JS Guard)**: Implement Message De-duplication in `intercom_v2.js`.
+    - **Why**: Prevent the "Wall of Text" re-broadcasts during reconnection flaps.
+    - **Code Context**: Update `onMessage` handler.
+    - **How**: Maintain a sliding window of the last 10 received message IDs. Drop any packet with a seen ID/Timestamp combination.
+- [ ] **Task 10.2 (Hub Lock)**: Implement "Ignition Lockout" in `acme_lab.py`.
+    - **Why**: Stop the Hub from firing redundant Attendant triggers (`/start`) when a user sends queries during the boot window.
+    - **Code Context**: `spark_restoration` method and `_spark_active` flag.
+    - **How**: Hard-gate the Attendant REST call behind an atomic boolean that is only cleared after the Larynx Probe succeeds.
+- [ ] **Task 10.3 (Triage Brake)**: Harden Triage Loop Detection in `nodes/loader.py`.
+    - **Why**: Prevent runaway model costs and memory pressure from infinite tool-call recursion.
+    - **Code Context**: `BicameralNode.run` interaction loop.
+    - **How**: Implement a `max_recursion_depth` (Default: 5) for tool calls. If exceeded, force a graceful error response.
+
+### 🎯 GOAL 11: "MESSY USER" TEST SUITE [TEST-47]
+**Active Goal**: Broaden test coverage to include Cloudflare proxy latency and concurrent handshake spam.
+
+- [ ] **Task 11.1 (Concurrency Stress)**: Update `src/debug/triage_interactive_harness.py` to support "Burst Mode".
+    - **Why**: Ensure the Hub handles multiple overlapping user queries during boot without state corruption.
+    - **How**: Create a thread-pool to fire 5 queries in 1 second while the Lab is `HIBERNATING`.
+- [ ] **Task 11.2 (Remote Latency Simulation)**: Execute Playwright tests against the **Public URL**.
+    - **Why**: Localhost is too "clean"; we need to test against Cloudflare's WebSocket handshake timing.
+    - **How**: Point `five_by_five_gauntlet.py` to `wss://acme.jason-lab.dev` and audit reconnection/state sync behavior.
