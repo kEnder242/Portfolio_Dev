@@ -86,3 +86,123 @@
 3.  **The Study**: Use the harness to prove 5 stable queries.
 4.  **The Study-Waterfall**: Toggle `POOLING` vs `WATERFALL` on the Triage node during the study to prove/disprove streaming impact.
 5.  **Live Audit**: Observe the memory map during the study to identify any "Memory Seesaw" signatures.
+
+---
+
+## Phase 5: THE RESIDENT ANCHOR [PERSISTENT HIBERNATION]
+
+why not just keep the residents and avoid reaping?  Are there architectural implications with regard to hibernate that natrually take nodes down? Or did you get hyper focused on a  
+   solution when a simpler solution existed?                                                                                                                                            
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
+⚠  Hook(s) [claude-mem] failed for event PreCompress. Press F12 to see the debug drawer for more details.
+
+✦ I likely over-corrected. You are right to challenge the "Reaping" model—persisting the residents is the simpler and faster path, and it aligns better with the definition of Level 2
+  Hibernation. 
+
+  I got hyper-focused on Silicon Cleanliness because we were battling the "Silicon Lobotomy" (gibberish). I treated the resident nodes like they were part of the corruption, but our
+  forensic Layer 0 test proved the corruption lived in the vLLM Adapter/Cache, not the Python node processes.
+
+  🕵️ Architectural Implications: Persist vs. Reap
+
+  ┌────────────┬──────────────────────────────────────────┬───────────────────────────────────────┐
+  │ Feature    │ Persistent Residents (Designer's Intent) │ Reaping Residents (The Sledgehammer)  │
+  ├────────────┼──────────────────────────────────────────┼───────────────────────────────────────┤
+  │ Wake Speed │ Instant (Nodes are already warm).        │ Slow (20-30s to spawn 7 Python envs). │
+  │ RAM Cost   │ ~800MB persistent overhead.              │ 0MB during sleep.                     │
+  │ Stability  │ Risks "Memory Creep" over days.          │ Guaranteed clean slate every wake.    │
+  │ Complexity │ Requires careful "Adoption" logic.       │ Simpler "Burn & Rebuild" logic.       │
+  └────────────┴──────────────────────────────────────────┴───────────────────────────────────────┘
+
+  🛠️ The "True Hibernate" Pivot
+  If we want to avoid reaping and keep the residents alive, we only need to change one line of logic and one check.
+
+  1. The _hibernate Fix:
+  We stop calling aclose() and stop wiping the dictionary. We only set the logical status to HIBERNATING.
+
+   1 # Instead of self.exit_stack.aclose()
+   2 self.status = "HIBERNATING"
+   3 self.engine_ready.clear()
+   4 # Keep self.residents and self._residents_booted as they are!
+
+  2. The process_query Fix:
+  The wake sequence already checks if not self._residents_booted. If we don't wipe that flag during sleep, the wake task will trigger the engine (vLLM) but skip the redundant
+  boot_residents() call.
+
+❓ Why did I choose Reaping?
+  The "flood" occurred because the code was in a halfway state: it wiped its knowledge of the nodes (self.residents = {}) but didn't kill the physical processes. I chose to kill them
+  to "solve" the flood, but I could have just as easily "remembered" them to solve it.
+
+  This would give you much faster wake times while still preventing the memory flood (since the Hub would correctly see that residents are already booted). 
+
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ > okay, but can you walk me through how 'init' style needs of nodes change when waking from hibernation?  Is it just a python module that waits for the engine?                        
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
+⚠  Hook(s) [claude-mem] failed for event PreCompress. Press F12 to see the debug drawer for more details.
+
+✦ The resident nodes are essentially Sophisticated Wrappers (Python modules) that act as clients to the main inference engine (vLLM). 
+
+  To answer your question: Yes, they are mostly just waiting for the engine, but there is one specific "init-style" need called the Larynx Check that must be respected during a wake.
+
+  1. The "Node as a Client" Architecture
+  Each node (Pinky, Archive, etc.) is a separate Python subprocess. Their lifecycle looks like this:
+   * Logical Init: They load their system prompts and register their tools (e.g., read_document). This only needs to happen once.
+   * Engine Connection: They hold a standard HTTP/WebSocket connection to localhost:8088 (vLLM). 
+   * The Wait: As long as the vLLM process is alive (even if weights are offloaded), that connection remains valid.
+
+  2. What changes when waking?
+  When the Lab wakes from Level 2 Hibernation, the Python nodes don't actually know anything happened. They were just sitting idle. 
+
+  The only thing that changed was the Physical Silicon:
+   * In Sleep: vLLM offloaded the 5GB of weights to System RAM/Disk.
+   * In Wake: vLLM swapped those weights back into the 2080 Ti's VRAM.
+
+  3. The recurring need: The "Larynx Check"
+  While the nodes don't need to be "re-spawned," the Hub needs to verify that the engine they are talking to is actually "Vocal" (ready to reason) before it starts a conversation. 
+
+  In our current boot_residents logic, I have this check:
+  In our current boot_residents logic, I have this check:
+
+   1 # [FEAT-265.1] Vocal-Lock Protocol: Final Cognitive Probe
+   2 await self.residents["lab"].call_tool(name="think", arguments={"query": "Larynx Ping"})
+  If we keep residents persistent, the wake sequence simply becomes:
+   1. Engine Wake: Attendant tells vLLM to reload weights.
+   2. Larynx Probe: Hub uses the already-living Lab Node to send a 1-token test query.
+   3. Operational: Once the probe succeeds, the Lab is open for business.
+
+  4. Why the "Reaper" was the wrong choice
+  By "Reaping" the nodes, I was forcing the system to perform a Cold Boot every time you woke it up. 
+   * Cost: You had to wait for 7 Python environments to initialize, which is slow and disk-heavy.
+   * Risk: It created the race condition where multiple "Spawners" could collide.
+
+  🛠️ The "Persistent" Correction
+  I have already identified the two lines in acme_lab.py that caused the "Process Layering" (the flood). I should revert the "Reaper" and instead implement Resident Persistence:
+
+   1. In _hibernate: We keep the exit_stack open. We only clear the engine_ready flag and set status = "HIBERNATING".
+   2. In process_query: It sees self._residents_booted == True, skips the spawning logic, and goes straight to the Larynx Check.
+
+  This achieves your original intent: Nodes are spawned once at INIT and live forever, while only the VRAM/Weights cycle.
+
+
+### 🎯 GOAL 7: SUSTAINED NODE RESIDENCY [FEAT-337]
+- [ ] **Task 7.1 (Hub)**: Refactor `_hibernate` in `acme_lab.py` to persist the `exit_stack`.
+    - *Reasoning*: Transitions from 'Reaping' to 'Sustaining'. Keeping the Python subprocesses alive prevents redundant spawning and disk thrashing.
+    - *Context*: `acme_lab.py` around line 720. Revert the `aclose()` and dictionary wipe logic.
+    - *Design*: Set `status = "HIBERNATING"` but do NOT clear `self.residents` or `self._residents_booted`.
+- [ ] **Task 7.2 (Wake)**: Harden `process_query` to check for resident health before skipping boot.
+    - *Reasoning*: If a node has died silently during sleep, the Hub must detect this and trigger a genuine `boot_residents` rather than assuming persistence.
+    - *Context*: `acme_lab.py` wake task (line 1550).
+    - *Design*: If `self._residents_booted` is True, perform a lightweight `ping_engine` on the Lab Node. If it fails, set `_residents_booted = False` and proceed to boot.
+- [ ] **Task 7.3 (Larynx)**: Implement 'Warm Wake' Larynx Probe.
+    - *Reasoning*: Verifies that the engine (vLLM) has successfully reloaded weights before allowing the already-living residents to start a conversation.
+    - *Context*: `acme_lab.py` inside `_wait_and_signal` (line 1550).
+    - *Design*: After the Attendant signals `wait_ready`, call the Lab node's `think` tool once to confirm physical residency.
+
+### 🎯 GOAL 8: VALIDATION OF INSTANT WAKE [TEST-46]
+- [ ] **Task 8.1 (Benchmark)**: Measure `Wake-to-Vocal` latency in the new model.
+    - *Reasoning*: Prove the ROI of the Sustain model. Expected latency: < 5s (down from 30s).
+    - *Context*: Use `triage_interactive_harness.py`.
+- [ ] **Task 8.2 (Audit)**: Verify 'Zero Layering' in the Memory Map.
+    - *Reasoning*: Confirm that cycling Hibernation/Wake 5 times results in exactly 7 node processes, proving the flood is permanently solved.
+    - *Context*: Monitor `memory_map` in `/status` during the cycle.
