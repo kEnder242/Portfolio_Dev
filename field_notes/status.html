@@ -202,6 +202,10 @@
                     <div class="vital-label">VRAM Usage</div>
                     <div class="vital-value" id="vram-status">0.0%</div>
                 </div>
+                <div class="vital-card">
+                    <div class="vital-label">System RAM</div>
+                    <div class="vital-value" id="ram-status">0.0%</div>
+                </div>
                 <div class="vital-card" id="job-hunt-card" style="display:none; border-left-color: #ffc107;">
                     <div class="vital-label">Recruiter Brief</div>
                     <div class="vital-value" id="job-status"><span id="job-led" class="status-led led-online"></span>IDLE</div>
@@ -242,7 +246,7 @@
             <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div class="telemetry-tabs" id="panel-tabs">
                     <button class="telemetry-tab active" onclick="updatePanel(6, this)">POWER</button>
-                    <button class="telemetry-tab" onclick="updatePanel(8, this)">VRAM</button>
+                    <button class="telemetry-tab" onclick="updatePanel(8, this)">MEMORY</button>
                     <button class="telemetry-tab" onclick="updatePanel(10, this)">NETWORK</button>
                     <button class="telemetry-tab" onclick="updatePanel(2, this)">LOAD</button>
                     <button class="telemetry-tab" onclick="updatePanel(4, this)">TEMP</button>
@@ -416,6 +420,7 @@
                     const scanner = document.getElementById('scanner-status');
                     const intercom = document.getElementById('intercom-status');
                     const vram = document.getElementById('vram-status');
+                    const ram = document.getElementById('ram-status');
                     const msg = document.getElementById('scanner-message');
                     const progressBar = document.getElementById('burn-progress');
 
@@ -460,6 +465,7 @@
                         
                         intercom.innerHTML = `<span class="status-led ${data.vitals.intercom === 'ONLINE' ? 'led-online' : 'led-offline'}"></span>${data.vitals.intercom}`;
                         vram.textContent = data.vitals.vram;
+                        if (ram) ram.textContent = data.vitals.ram;
                     }
                 })
                 .catch(err => console.error("Status poll failed", err));

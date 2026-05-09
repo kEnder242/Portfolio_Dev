@@ -310,9 +310,15 @@
           "interval": "",
           "legendFormat": "GPU VRAM Used (DCGM)",
           "refId": "A"
+        },
+        {
+          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)",
+          "interval": "",
+          "legendFormat": "System RAM Used",
+          "refId": "B"
         }
       ],
-      "title": "GPU Memory Usage (Real Silicon)",
+      "title": "Memory Usage (VRAM & System RAM)",
       "type": "timeseries"
     },
     {
