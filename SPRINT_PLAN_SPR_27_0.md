@@ -260,13 +260,23 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 ---
 
 ### 🎯 GOAL 10: FOYER DE-DUPLICATION & UX HARDENING [FEAT-339]
-- [x] **Task 10.1 (JS Guard)**: Implement Message De-duplication in `intercom_v2.js`. (DONE: Verified via Burst Test).
-- [x] **Task 10.2 (Hub Lock)**: Implement "Ignition Lockout" in `acme_lab.py`. (DONE: Ignition now gated by Larynx Probe).
-- [x] **Task 10.3 (Triage Brake)**: Harden Triage Loop Detection in `nodes/loader.py`. (DONE: Implemented 5-turn recursion limit in CognitiveHub).
+- [x] **Task 10.1 (JS Guard)**: Implement Message De-duplication in `intercom_v2.js`. 
+    - **Why**: Prevent the "Wall of Text" re-broadcasts during reconnection flaps.
+    - **How**: Maintain a sliding window of the last 50 received message IDs. Drop any packet with a seen ID. (DONE: Verified via Burst Test).
+- [x] **Task 10.2 (Hub Lock)**: Implement "Ignition Lockout" in `acme_lab.py`.
+    - **Why**: Stop the Hub from firing redundant Attendant triggers (`/start`) when a user sends queries during the boot window.
+    - **How**: Hard-gate the Attendant REST call behind the `_spark_active` boolean that is only cleared after the Larynx Probe succeeds. (DONE: Ignition now gated by Larynx Probe).
+- [x] **Task 10.3 (Triage Brake)**: Harden Triage Loop Detection in `logic/cognitive_hub.py`.
+    - **Why**: Prevent runaway model costs and memory pressure from infinite tool-call recursion.
+    - **How**: Implement a `MAX_RECURSION` limit (Depth: 5) for tool calls. If exceeded, force a graceful error response. (DONE: Implemented in CognitiveHub).
 
 ### 🎯 GOAL 11: "MESSY USER" TEST SUITE [TEST-47]
-- [x] **Task 11.1 (Concurrency Stress)**: Update `src/debug/triage_interactive_harness.py` to support "Burst Mode". (DONE: Modernized harness with threading).
-- [x] **Task 11.2 (Remote Latency Simulation)**: Execute Playwright tests against the **Public URL**. (DONE: Identified CSP violations and proxy-level handshake collisions).
+- [x] **Task 11.1 (Concurrency Stress)**: Update `src/debug/triage_interactive_harness.py` to support "Burst Mode".
+    - **Why**: Ensure the Hub handles multiple overlapping user queries during boot without state corruption.
+    - **How**: Threaded execution to fire 5 concurrent queries while the Lab is `HIBERNATING`. (DONE: Modernized harness).
+- [x] **Task 11.2 (Remote Latency Simulation)**: Execute Playwright tests against the **Public URL**.
+    - **Why**: Localhost is too "clean"; we need to test against Cloudflare's WebSocket handshake timing.
+    - **How**: Point `five_by_five_gauntlet.py` to `wss://acme.jason-lab.dev` and audit reconnection/state sync behavior. (DONE: Identified proxy-level handshake collisions).
 
 #### 🛡️ SECURITY & STABILITY VERDICT
 The "Drunken Foyer" effect has been surgically eliminated. The client-side UI now successfully de-duplicates history replays during reconnection flaps, and the Hub is hard-gated against redundant ignition sparks. The Lab is certified stable for "Messy User" interactions.
