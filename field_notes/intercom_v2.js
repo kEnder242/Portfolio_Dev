@@ -26,6 +26,10 @@ const workspaceContainer = document.getElementById('workspace-container');
 let lastSystemState = "";
 let lastMsgSource = "";
 
+// [FEAT-339] Message De-duplication
+const seenMsgIds = new Set();
+const MAX_SEEN_IDS = 50;
+
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
     initEditor();
@@ -266,6 +270,19 @@ function connect() {
             const data = JSON.parse(e.data);
             console.log("[WS RECV]", data);
             
+            // [FEAT-339] Message De-duplication
+            if (data.msg_id) {
+                if (seenMsgIds.has(data.msg_id)) {
+                    console.log("[WS DROP] Duplicate message:", data.msg_id);
+                    return;
+                }
+                seenMsgIds.add(data.msg_id);
+                if (seenMsgIds.size > MAX_SEEN_IDS) {
+                    const firstId = seenMsgIds.values().next().value;
+                    seenMsgIds.delete(firstId);
+                }
+            }
+
             // [FEAT-221] Crosstalk Migration
             if (data.type === 'crosstalk' || data.type === 'status') {
                 const bar = document.getElementById('crosstalk-bar');
