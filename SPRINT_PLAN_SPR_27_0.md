@@ -308,3 +308,43 @@ The "Drunken Foyer" effect has been surgically eliminated. The client-side UI no
 - [ ] **Task 12.1 (Attendant Restart)**: Restart the Lab Attendant to activate the Telemetry Ledger [FEAT-339].
 - [ ] **Task 12.2 (Warm Ignition)**: Perform a controlled start and verify the "Warm Standby" RAM ceiling.
 - [ ] **Task 12.3 (Ledger Audit)**: Verify `telemetry_ledger.jsonl` is populating every 60s.
+
+---
+
+## Phase 11: SILICON SOVEREIGNTY & TOKEN INTEGRITY [MAY 10 09:00-09:10]
+**Status:** Physical Silicon Corruption Identified (The "Double Ignition" Scar)
+
+### 📍 Forensic Timeline (Race Condition Audit)
+- **09:06:19 - Ignition 1 (intercom)**: WebSocket foyer opens. Hub detects HIBERNATING state and triggers a spark via Attendant.
+- **09:06:25 - vLLM Wake-up**: Engine reports `POST /wake_up 200 OK`. Weights reloaded into VRAM.
+- **09:06:25 - Query Arrival**: User sends `hi`. Hub logic processes query immediately.
+- **09:06:26 - Ignition 2 (WAKE_INTENT)**: **RACE CONDITION.** Hub fires a second spark because `_spark_active` was not set early enough.
+- **09:07:04 - Triage Hallucination**: Lab Node (Triage) returns 4000+ characters of garbled tokens.
+- **09:08:28 - Triage Failure loop**: Hub attempts Triage 3 times; all return gibberish.
+- **09:09:09 - Base Model Corruption**: `unified-base` (Base Model) verified via direct CURL to return "!!!!!!!!!!" strings. 
+- **VERDICT**: The double ignition at 09:06:26 likely caused a VRAM context collision, physically corrupting the resident weights.
+
+---
+
+### 🎯 GOAL 13: PHYSICAL NODE AUDIT & BEHAVIOR MAPPING [TEST-48]
+**Active Goal:** Isolate the source of token corruption across all 7 nodes using direct API probes.
+
+#### 📍 Recommended Validation Harnesses:
+1.  **`src/debug/test_warm_wake.py`**: The Gold Standard. Use to audit "Zero Layering" and measure wake-to-vocal latency after ignition.
+2.  **`src/debug/test_lora_guard.py`**: Stress Testing. Use to verify the alphanumeric entropy guard and auto-downshift logic.
+3.  **`src/debug/triage_interactive_harness.py`**: Manual Probe. Use to individually toggle POOLING/WATERFALL and verify tool-call stability.
+
+#### 🛠️ Task List (Precursor Probes):
+- [ ] **Task 13.1 (Base Audit)**: `curl` probe of `unified-base`.
+    - **Why**: Establish the physical baseline. If the base model is "Screaming" (!), all LoRAs are inherited failures.
+    - **How**: `curl -X POST /v1/chat/completions` with `model="unified-base"`.
+- [ ] **Task 13.2 (Vibe Audit)**: `curl` probe of `lab_sentinel_v1` (if active) or direct Node call.
+    - **Why**: Check if the Triage persona is specifically corrupted or just inheriting base garbage.
+- [ ] **Task 13.3 (History Audit)**: `curl` probe of `lab_history_v1`.
+    - **Why**: Audit the Archive node's ability to reason over long-context history without fragmentation.
+- [ ] **Task 13.4 (Voice Audit)**: `curl` probe of `cli_voice_v1`.
+    - **Why**: Verify if the CLI persona is stable for STT interjections.
+- [ ] **Task 13.5 (Brain Audit)**: `curl` probe of `shadow_brain_v2`.
+    - **Why**: Audit the "Sovereign Shadow" for reasoning integrity during high VRAM pressure.
+- [ ] **Task 13.6 (Behavior Map)**: Document which nodes are "Vocal" vs "Corrupted" to identify prefix cache fragmentation points.
+    - **Proof**: A completed table in the sprint log mapping [Node] -> [Status] -> [Entropy Score].
