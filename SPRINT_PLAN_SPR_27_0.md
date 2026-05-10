@@ -269,6 +269,10 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 - [x] **Task 10.3 (Triage Brake)**: Harden Triage Loop Detection in `logic/cognitive_hub.py`.
     - **Why**: Prevent runaway model costs and memory pressure from infinite tool-call recursion.
     - **How**: Implement a `MAX_RECURSION` limit (Depth: 5) for tool calls. If exceeded, force a graceful error response. (DONE: Implemented in CognitiveHub).
+- [x] **Task 10.4 (LoRA Guard)**: Implement LoRA Auto-Disable (Gibberish Guard).
+    - **Why**: Prevent token corruption and "wall of text" hallucinations caused by LoRA fragmentation in vLLM.
+    - **How**: Monitor `TRIAGE_PARSE_FAILURE` in `CognitiveHub`. If 3 failures occur, set `lora_enabled=False` and downshift to the base model.
+    - **Proof**: Triage loops correctly break and the system reports the model downshift to the user. (DONE: Verified via forensic log replay).
 
 ### 🎯 GOAL 11: "MESSY USER" TEST SUITE [TEST-47]
 - [x] **Task 11.1 (Concurrency Stress)**: Update `src/debug/triage_interactive_harness.py` to support "Burst Mode".
