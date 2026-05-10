@@ -330,11 +330,14 @@ The "Drunken Foyer" effect has been surgically eliminated. The client-side UI no
 **Active Goal:** Isolate the source of token corruption across all 7 nodes using direct API probes.
 
 #### 📍 Recommended Validation Harnesses:
-1.  **`src/debug/test_warm_wake.py`**: The Gold Standard. Use to audit "Zero Layering" and measure wake-to-vocal latency after ignition.
-2.  **`src/debug/test_lora_guard.py`**: Stress Testing. Use to verify the alphanumeric entropy guard and auto-downshift logic.
-3.  **`src/debug/triage_interactive_harness.py`**: Manual Probe. Use to individually toggle POOLING/WATERFALL and verify tool-call stability.
+1.  **`src/debug/test_foyer_resilience.py`**: The "Drunken Foyer" Simulator. Use to verify that sending 5 concurrent prompts during the ignition window triggers exactly one spark and catches all duplicate history replays.
+2.  **`src/debug/test_warm_wake.py`**: The Gold Standard. Use to audit "Zero Layering" and measure wake-to-vocal latency after ignition.
+3.  **`src/debug/test_lora_guard.py`**: Stress Testing. Use to verify the alphanumeric entropy guard and auto-downshift logic.
+4.  **`src/debug/triage_interactive_harness.py`**: Manual Probe. Use to individually toggle POOLING/WATERFALL and verify tool-call stability.
 
 #### 🛠️ Task List (Precursor Probes):
+- [ ] **Task 13.0 (Foyer Audit)**: Run `test_foyer_resilience.py` during a cold start.
+    - **Why**: Prove the "Drunken Foyer" fix (Goal 10) prevents state fragmentation under "Messy User" conditions.
 - [ ] **Task 13.1 (Base Audit)**: `curl` probe of `unified-base`.
     - **Why**: Establish the physical baseline. If the base model is "Screaming" (!), all LoRAs are inherited failures.
     - **How**: `curl -X POST /v1/chat/completions` with `model="unified-base"`.
