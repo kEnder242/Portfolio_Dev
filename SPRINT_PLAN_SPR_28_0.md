@@ -82,3 +82,8 @@ Recent unresponsiveness (May 09, 7pm) revealed that a crashed Hub leads to "Remo
 *   **Validation**: `src/debug/test_warm_wake.py` (Benchmark latency).
 *   **Mandate**: Follow **BKM-029** (4-Step Loop) for all state-machine modifications.
 *   **Caution**: Avoid the "Reaping Trap"—focus only on processes identified in the **Lab Controlled** category.
+
+- [ ] **Task 1.8: LoRA Adapter Reset (The Purge)**
+    - **Why**: Persistent silicon-level corruption in `lab_sentinel_v1` is causing "Token Storms" and blocking the Dream Pass. Rebuilding from a clean baseline is required.
+    - **How**: 1) Full Lab Stop. 2) Set `lora_name` to `null` in `infrastructure.json`. 3) Delete `/speedy/models/adapters/lab_sentinel_v1/`. 4) Lab Restart.
+    - **Proof**: Hub logs show successful boot without LoRA load, and triage reasoning returns to 100% alphanumeric density.
