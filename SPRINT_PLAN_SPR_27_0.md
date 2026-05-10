@@ -280,3 +280,27 @@ why not just keep the residents and avoid reaping?  Are there architectural impl
 
 #### 🛡️ SECURITY & STABILITY VERDICT
 The "Drunken Foyer" effect has been surgically eliminated. The client-side UI now successfully de-duplicates history replays during reconnection flaps, and the Hub is hard-gated against redundant ignition sparks. The Lab is certified stable for "Messy User" interactions.
+
+---
+
+## 🏛️ SPRINT 27.0: LATE MORNING STABILITY AUDIT [MAY 09 12:00]
+**Status:** Lab OFFLINE | Memory STABLE
+
+### 📍 Current Vitals
+- **Lab Hub**: DOWN (Port 8765 free).
+- **Lab Attendant**: ALIVE (Port 9999, Mode: OFFLINE).
+- **System RAM**: 8.44 GiB / 15.49 GiB (54.5%).
+- **VRAM**: 965 MiB (Baseline).
+
+### 🔍 Observations on "Memory Creep"
+- **Footprint Check**: Total RAM dropped from 12.5 GiB (Hub UP) to 8.44 GiB (Hub DOWN).
+- **Verdict**: The ~4 GiB delta matches the expected residency cost (7 Nodes + vLLM). 
+- **Non-Lab Hogs**: Gemini CLI (948 MiB), Steam/Graphics (~900 MiB), Jellyfin (288 MiB).
+- **Action**: No silicon leak detected in the Hub logic. The "Creep" is the physical floor of the persistent node model.
+
+### 🎯 GOAL 12: SYSTEM-WIDE STABILITY ACTIVATION [FEAT-340]
+**Active Goal:** Reactivate the Lab with the new Lifecycle & Telemetry logic and monitor for drift.
+
+- [ ] **Task 12.1 (Attendant Restart)**: Restart the Lab Attendant to activate the Telemetry Ledger [FEAT-339].
+- [ ] **Task 12.2 (Warm Ignition)**: Perform a controlled start and verify the "Warm Standby" RAM ceiling.
+- [ ] **Task 12.3 (Ledger Audit)**: Verify `telemetry_ledger.jsonl` is populating every 60s.
