@@ -201,7 +201,7 @@
             <h2 class="section-title">Security & Yield</h2>
 
             <article id="rakp-security">
-                <h3>The RAKP Security Catch (CVE-2013-4782)</h3>
+                <h3>The RAKP Security Catch (CVE-2013-4786)</h3>
                 <div class="meta">Tag: Security | Impact: CVE Discovery</div>
                 <p>While implementing the RMCP+ protocol stack from scratch in C, I performed a deep dive into the RAKP authentication spec. To properly debug the session negotiation, I had to patch the Wireshark (then Ethereal) source code to correctly parse the custom packet exchanges I was seeing.</p>
                 <p>During this process, I identified a fundamental flaw: the BMC would return a salted hash of the user’s password before the client proved their identity, essentially enabling offline dictionary attacks. <strong>Although my concerns were dismissed by senior engineers at the time, this exact vulnerability was later confirmed as industry-wide flaw CVE-2013-4782.</strong> This solidified my conviction to trust technical data over hierarchy and to maintain meticulous documentation for critical findings.</p>
