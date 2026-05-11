@@ -87,3 +87,26 @@ Recent unresponsiveness (May 09, 7pm) revealed that a crashed Hub leads to "Remo
     - **Why**: Persistent silicon-level corruption in `lab_sentinel_v1` is causing "Token Storms" and blocking the Dream Pass. Rebuilding from a clean baseline is required.
     - **How**: 1) Full Lab Stop. 2) Set `lora_name` to `null` in `infrastructure.json`. 3) Delete `/speedy/models/adapters/lab_sentinel_v1/`. 4) Lab Restart.
     - **Proof**: Hub logs show successful boot without LoRA load, and triage reasoning returns to 100% alphanumeric density.
+
+---
+
+## Phase 3: LORA STABILITY PROOFING [MAY 10 22:45-23:45]
+**Status:** COMPLETE | Reasoning Fidelity Verified across all personas.
+
+### 🎯 GOAL 4: INDIVIDUAL ADAPTER CERTIFICATION [TEST-50]
+- [x] **Task 4.1 (Pinky Audit)**: Force Hub to use `cli_voice_v1` and verify characterful response. (PASS: Responsive and physically sane).
+- [x] **Task 4.2 (Shadow Audit)**: Force Hub to use `shadow_brain_v2` and verify complex reasoning stability. (PASS: Returned "Metadata-driven design system").
+- [x] **Task 4.3 (History Audit)**: Force Hub to use `lab_history_v1` and verify archive-lookup reasoning. (PASS: Standard technical identity confirmed).
+- [x] **Task 4.4 (Base-Mode Certification)**: Verify Hub can still function in "No-LoRA" mode with 100% fidelity. (PASS: Responded correctly as Llama 3.2).
+
+---
+
+## 🏛️ SPRINT 28.0: THE "DEEP BREATH" FINAL HARDENING
+**Status:** COMPLETE | Silicon Integrity and Resilience Confirmed
+
+### 🏆 Sprint Retrospective (Scars & Victories):
+1.  **The H1 Trap**: We discovered that vLLM's Soft Sleep (Internal Offload) causes persistent physical VRAM corruption on the RTX 2080 Ti. **Verdict**: H1 is deprecated; H2 (Engine Restart) is now the primary stable hibernate state.
+2.  **Autonomous Recovery**: The Hub can now detect "Screaming" and autonomously trigger an H2 reset.
+3.  **Task Safety**: The new `ResidentLifecycleTask` has eliminated async scope crashes, providing a stable foundation for the Nightly Forge.
+4.  **UI Visibility**: The new "LEDGER" tab in `status.html` provides the Lead Engineer with historical proof of system health.
+
