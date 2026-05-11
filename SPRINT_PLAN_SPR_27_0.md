@@ -344,30 +344,28 @@ The "Drunken Foyer" effect has been surgically eliminated. The client-side UI no
 
 ---
 
-## Phase 12: FIVE BY FIVE STABILITY CERTIFICATION & CHARACTERIZATION [MAY 10 16:30-17:30]
-**Status:** ACTIVE | Silicon Corruption Detected (Residency Regression)
+## Phase 12: FIVE BY FIVE STABILITY CERTIFICATION & CHARACTERIZATION [MAY 10 16:30-18:00]
+**Status:** ACTIVE | H1 Soft Wake confirmed as Physical Corruption Trigger
 
-### 📍 Forensic Timeline (09:00 - 09:10 & 16:40)
-- **16:39:09 - Ignition**: Hub foyer opens. Restoration sequence initiated.
-- **16:39:49 - False Success**: Hub reports `Warm Wake Larynx Check: SUCCESS` and marks OPERATIONAL.
-- **16:40:21 - Silent Failure**: User query `anyone home?` arrives. Hub logs stop at `SENTINEL` density update. No Triage begins.
-- **16:46:21 - Physical Audit**: Direct CURL to `unified-base` returns "!!!!!!!!!!". 
-- **VERDICT**: The Larynx Probe (Task 7.3) is too lenient. It is accepting "Screaming" garbage as "Success," leading to a logical-physical desync.
+### 📍 Forensic Timeline (Characterization Audit)
+- **16:50 - Baseline**: H3 Cold Boot performed. Physical Audit: **PASSED** (Responded "ROGER").
+- **16:55 - H1 Cycle**: Soft Hibernate (Level 2 Offload) followed by Wake.
+- **16:56 - Corruption**: Physical Audit: **FAILED** (Responded "!!!!!!!!!!").
+- **VERDICT**: **Double Ignition is RULED OUT** (only one ignition logged). The corruption is physically induced by the vLLM `Sleep -> Wake` re-mapping sequence on Compute 7.5 hardware.
 
 ### 🎯 GOAL 15: 5x5 HAND-CRANKED VOCAL CHECK [TEST-49]
-**Active Goal:** Achieve 5 consecutive "Vocal Wins" with 100% reasoning fidelity using increasing idle intervals, aiming for stability without resorting to H3 resets.
+**Active Goal:** Achieve 5 consecutive "Vocal Wins" by identifying and utilizing the primary stable state (H2 vs H3).
 
 #### 🛠️ Precursor Tasks (Characterization & Transparency):
-- [ ] **Task 15.1 (Un-Censor Screams)**: Update `CognitiveHub.py` to broadcast detected gibberish to the intercom with a `[GIBBERISH]` prefix instead of returning `None`.
-    - **Why**: Intercom is a debug tool; we need to see the true state (bad and good) to characterize failures.
-- [ ] **Task 15.2 (Characterize Screaming)**: Perform direct `curl` probes after Cold Boot vs H1 Wake to identify the *exact* trigger of the "!!!!!!!!!!" state.
-- [ ] **Task 15.3 (Larynx Hardening)**: Update `Larynx Probe` to verify alphanumeric density.
-    - **Why**: Prevent the Hub from entering OPERATIONAL state if the model is physically corrupted.
-- [ ] **Task 15.4 (Atomic Ignition Fix)**: Implement the definitive fix for "Double Ignition" race condition (the suspected root cause).
+- [x] **Task 15.1 (Un-Censor Screams)**: Update `CognitiveHub.py` to broadcast `[GIBBERISH]` to the intercom. (DONE: Active and verified).
+- [x] **Task 15.2 (Characterize Screaming)**: Rule out Double Ignition and identify H1 Wake as the physical trigger. (DONE: H1 confirmed unstable).
+- [ ] **Task 15.3 (Larynx Hardening)**: Update `Larynx Probe` to verify alphanumeric density and trigger auto-fallback to H2 on "Screaming."
+    - **Why**: Prevent the Hub from entering OPERATIONAL state with corrupted weights.
+- [ ] **Task 15.4 (H2 Stability Audit)**: Verify if `H2` (Engine Restart) is stable compared to `H1`.
 
 #### 🛠️ 5x5 Hand-Crank Cycles:
-- [ ] **Win 1**: 5 Minutes. Basic transition & persistent foyer check.
-- [ ] **Win 2**: 10 Minutes. Stability during medium-term offload.
-- [ ] **Win 3**: 15 Minutes. Weight reloading consistency.
-- [ ] **Win 4**: 20 Minutes. Stability Latch [FEAT-302] audit.
-- [ ] **Win 5**: 25 Minutes. Final Endurance Certification.
+- [ ] **Win 1**: 5 Minutes. (Targeting H2 Stability).
+- [ ] **Win 2**: 10 Minutes.
+- [ ] **Win 3**: 15 Minutes.
+- [ ] **Win 4**: 20 Minutes.
+- [ ] **Win 5**: 25 Minutes.
