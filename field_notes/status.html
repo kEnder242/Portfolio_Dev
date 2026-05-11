@@ -250,6 +250,7 @@
                     <button class="telemetry-tab" onclick="updatePanel(10, this)">NETWORK</button>
                     <button class="telemetry-tab" onclick="updatePanel(2, this)">LOAD</button>
                     <button class="telemetry-tab" onclick="updatePanel(4, this)">TEMP</button>
+                    <button class="telemetry-tab" onclick="showLedger(this)">LEDGER</button>
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="icon-btn" onclick="updateTime('1h')">1H</button>
@@ -260,6 +261,7 @@
             </div>
             <div class="telemetry-box">
                 <iframe id="grafana-main" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-8h&to=now&theme=dark"></iframe>
+                <div id="ledger-container" style="display:none; height:400px; overflow-y:auto; padding:15px; background:#000; font-family:monospace;"></div>
                 <div style="margin-top: 10px; text-align: center; font-size: 0.8rem; color: #666;">
                     Mobile users: <a href="https://monitor.jason-lab.dev" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Login to Monitor</a> if telemetry is blocked.
                 </div>
@@ -308,9 +310,46 @@
             const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
             iframeMain.src = `${base}&panelId=${id}&from=now-${currentTimeRange}&to=now`;
             
+            iframeMain.style.display = 'block';
+            document.getElementById('ledger-container').style.display = 'none';
+
             // UI Toggle
             document.querySelectorAll('.telemetry-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
+        }
+
+        async function showLedger(btn) {
+            iframeMain.style.display = 'none';
+            const ledger = document.getElementById('ledger-container');
+            ledger.style.display = 'block';
+            ledger.innerHTML = "<div style='color:var(--accent-color); padding: 20px;'>[LOADING TELEMETRY SNAPSHOTS...]</div>";
+
+            // UI Toggle
+            document.querySelectorAll('.telemetry-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            try {
+                const r = await fetch('data/telemetry_ledger.jsonl?t=' + new Date().getTime());
+                if (!r.ok) throw new Error("Ledger file missing or unreachable.");
+                const text = await r.text();
+                const lines = text.trim().split('\n').reverse().slice(0, 50); // Last 50 entries
+                
+                let html = "<table style='width:100%; font-size:0.8rem; border-collapse: collapse; color:#aaa;'>";
+                html += "<tr style='color:var(--accent-color); text-align:left; border-bottom:1px solid #333;'><th style='padding:8px;'>TIMESTAMP</th><th>MODE</th><th>RAM %</th><th>VRAM</th><th>HOGS</th></tr>";
+                
+                lines.forEach(line => {
+                    try {
+                        const data = JSON.parse(line);
+                        const ts = new Date(data.timestamp).toLocaleTimeString();
+                        const hogs = (data.top_lab_hogs || []).map(h => `${h.name} (${Math.round(h.mem_mib)}MB)`).join(', ');
+                        html += `<tr style='border-bottom:1px solid #111;'><td style='padding:8px; color:#666;'>${ts}</td><td style='color:#eee;'>${data.mode}</td><td>${data.ram_pct}%</td><td>${data.vram_mib}MB</td><td style='font-size:0.7rem; color:#555;'>${hogs}</td></tr>`;
+                    } catch(e) {}
+                });
+                html += "</table>";
+                ledger.innerHTML = html;
+            } catch(err) {
+                ledger.innerHTML = `<div style='color:#f85149; padding:20px;'>[ERROR] ${err.message}</div>`;
+            }
         }
 
         function updateTime(range) {
