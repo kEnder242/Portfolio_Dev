@@ -110,3 +110,26 @@ Recent unresponsiveness (May 09, 7pm) revealed that a crashed Hub leads to "Remo
 3.  **Task Safety**: The new `ResidentLifecycleTask` has eliminated async scope crashes, providing a stable foundation for the Nightly Forge.
 4.  **UI Visibility**: The new "LEDGER" tab in `status.html` provides the Lead Engineer with historical proof of system health.
 
+
+---
+
+## Phase 4: THE RUDE 5x5 CERTIFICATION [MAY 10 23:30-00:30]
+**Status:** COMPLETE | Transition Stability Certified
+
+### 🎯 GOAL 5: TRANSITION STABILITY CERTIFICATION [TEST-51]
+- [x] **Task 5.1 (Rude Gauntlet Dev)**: Create `src/debug/test_rude_gauntlet.py`. (DONE: Accelerated 5x5 script developed).
+- [x] **Task 5.2 (Rude Certification)**: Execute the gauntlet and achieve 5/5 "Rude Wins." (PASS: Hub successfully handled 5 concurrent "Wake-on-Intent" queries across 5 H2 cycles with 0 physical corruption or deadlocks).
+- [x] **Task 5.3 (Final Resilience Audit)**: Verify vLLM status remains suppressed (no spam) and telemetry ledger records all transitions. (PASS: Verified via console audit and Ledger UI).
+
+---
+
+## 🏛️ SPRINT 28.0: THE "DEEP BREATH" FINAL HARDENING
+**Status:** COMPLETE & CERTIFIED | Physically and Logically Robust
+
+### 🏆 Sprint Retrospective (Scars & Victories):
+1.  **The H1 Trap**: We identified and deprecated H1 (Soft Sleep) due to persistent VRAM corruption.
+2.  **The Rude Win**: We proved the Lab can survive a 5-node concurrent storm even when waking from a cold state.
+3.  **The Mute Fix**: Refactored `process_query` to eliminate the recursive lock deadlock identified in real-world usage.
+4.  **The Spam Fix**: Suppressed vLLM throughput messages during operational status.
+5.  **UI Transparency**: Historical resource accounting is now live via the Status Ledger.
+
