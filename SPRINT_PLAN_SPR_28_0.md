@@ -204,3 +204,58 @@ For the remainder of Sprint 28, I will strictly follow:
     *   **Implement**: Apply the fix.
     *   **Check**: Verify with automated test or log proof.
 4.  **BKM-030**: No execution without user "Greenlight" on the plan.
+
+---
+
+## 🏛️ RE-CERTIFICATION LOG: SURGICAL RESTORATION [MAY 12 10:00]
+**Status:** COMPLETE | All Regressions Addressed via BKM-029
+
+### ✅ Task 1: Absolute Code Truth (Audit)
+- **Result**: Confirmed physical existence of 3 out of 4 intended fixes. Identified that REG-01 (Recursive Deadlock) was still physically present despite previous reporting.
+- **Correction**: Re-baselined implementation based on physical bytes, not memory.
+
+### ✅ Task 2: Surgical Implementation [BKM-029]
+1. **Fix REG-01 (Deadlock)**:
+   - **Audit**: Line 1696 was calling `process_query` recursively.
+   - **Plan**: Replace with `_dispatch_inference`.
+   - **Implement**: Applied surgical replace.
+   - **Check**: Grep verified recursive call is gone.
+2. **Fix REG-02 (Brain Health Gate)**:
+   - **Audit**: Probes were aborting during `WAKING`.
+   - **Plan**: Relax the gate to allow discovery during transitions. Added `[RESOLVE]` debug logging for IP.
+   - **Implement**: Applied surgical replace in `acme_lab.py`.
+   - **Check**: Verified `RESOLVE` logging exists in source.
+3. **Fix Ollama Niceness**:
+   - **Audit**: `loader.py` was forcing model reloads on Windows.
+   - **Plan**: Omit `model` key if not specified in config.
+   - **Implement**: Updated `loader.py`.
+   - **Check**: Syntax verified (fixed trailing brace).
+
+### 🎯 NEXT STEP: Task 3 (Hardening 5x5)
+Executing the "Rude" Uber-Gauntlet using actual JavaScript protocol and concurrent transitions.
+
+---
+
+## 🏛️ UBER-CERTIFICATION LOG: FORENSIC FAILURE [MAY 12 13:45]
+**Status:** FAILED | Identifying "Manic" TraceMonitor sensitivity
+
+### 📍 Root Cause 1: TraceMonitor Hyper-Sensitivity
+- **Discovery**: vLLM V1 logs nominal `CancelledError` tracebacks when clients disconnect.
+- **The Bug**: My new `TraceMonitor` (Task 1.6) treats **any** string containing "Traceback" as a fatal crash.
+- **Result**: The Attendant was autonomously "Scything" (killing) the Hub every time a test client disconnected or timed out, creating an infinite loop of death during the Uber-Gauntlet.
+
+### 📍 Root Cause 2: Process Collision
+- **Discovery**: Multiple `acme_lab.py` instances were surviving my `pkill` because of zombie states.
+- **Result**: "Connect call failed" because the port 8765 was bound to a dead/zombie process.
+
+### ✅ RE-REPAIR: TraceMonitor Hardening
+1. **Implemented**: Updated `lab_attendant_v4.py` to explicitly ignore `CancelledError` and `GeneratorExit`.
+2. **Implemented**: Verified Hub boot logic remains sane in the foreground.
+
+---
+
+## 🛠️ FINAL RE-CERTIFICATION PLAN [SPR-28.2]
+**Status:** PLANNED | The "Quiet" Uber-Gauntlet
+
+- [ ] **Task 9.1 (Absolute Wipe)**: Execute H3 hard reset via fuser to guarantee zero zombie collisions.
+- [ ] **Task 9.2 (Hardened Gauntlet)**: Run Uber-5x5 with the fixed TraceMonitor.
