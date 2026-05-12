@@ -343,7 +343,8 @@ function connect() {
                     if (data.brain_source === 'System') {
                         appendMsg(data.brain, 'system-msg', 'System');
                     }
-                    return; // Silence non-system internal tokens
+                    // [Task 13.1] Un-Muted: All crosstalk is now visible for characterization
+                    // return removed.
                 }
             }
 
