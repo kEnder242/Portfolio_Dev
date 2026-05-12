@@ -133,3 +133,74 @@ Recent unresponsiveness (May 09, 7pm) revealed that a crashed Hub leads to "Remo
 4.  **The Spam Fix**: Suppressed vLLM throughput messages during operational status.
 5.  **UI Transparency**: Historical resource accounting is now live via the Status Ledger.
 
+
+---
+
+## Phase 13: DESIGN INTEGRITY RESTORATION [MAY 11 13:00-14:00]
+**Status:** ACTIVE | Restoring Transparency & Logical Heart
+
+### 📍 Forensic Background: The "Mute" Lab Audit
+During the May 11 session, the Lead Engineer reported a total lack of conversational flow ("not a single reply") since before Sprint 27. My forensic audit identified that the Lab was functionally alive but logically and visually silenced:
+1.  **Logical Deadlock**: A recursive call to `process_query` inside `acme_lab.py` (line ~1685) attempted to re-acquire the `_triage_lock` while already holding it. This caused a permanent stall for any "Wake-on-Intent" query (e.g., "Hello?" sent while hibernating).
+2.  **UI Suppression**: `intercom_v2.js` (line ~347) contained a `return` that explicitly dropped all non-system `crosstalk` packets. This blinded the user to Pinky's and Shadow's intuition during the Waterfall sequence.
+3.  **Physical Corruption Trigger**: I identified that `H1 (Soft Sleep)` re-mapping on the RTX 2080 Ti physically corrupts VRAM weights, resulting in the `!!!!!!!!!!` "Screaming" state.
+
+### 🎯 GOAL 6: TOTAL TRANSPARENCY [FEAT-344]
+*Requirement: Adhere strictly to **BKM-029** (Audit, Plan, Implement, Check) for each task.*
+
+- [ ] **Task 13.1 (Intercom Un-Mute)**: 
+    - **Where**: `Portfolio_Dev/field_notes/intercom_v2.js`
+    - **Why**: Restore visibility to the Lab's internal reasoning.
+    - **How**: Remove the explicit `return` in the `crosstalk` data handler.
+    - **Proof**: User sees `[PINKY (TRIAGE)]` intuition in the left console during wake.
+- [ ] **Task 13.2 (No More Secrets)**: 
+    - **Where**: `HomeLabAI/src/logic/cognitive_hub.py` -> `bridge_signal_clean`
+    - **Why**: Characterize physical failures rather than hiding them.
+    - **How**: Instead of returning `None` for gibberish, broadcast the raw text with a `[GIBBERISH]` prefix.
+    - **Proof**: Direct `!!!!` screaming is visible on the intercom during H1 failure.
+- [ ] **Task 13.3 (Logical Heart Fix)**: 
+    - **Where**: `HomeLabAI/src/acme_lab.py` -> `process_query`
+    - **Why**: Resolve the permanent "Wake-on-Intent" deadlock and scoping crash.
+    - **How**: 1) Fix `NameError: client_id`. 2) Extract the inference core into `_dispatch_inference` to avoid recursive lock acquisition.
+    - **Proof**: A query sent to a HIBERNATING lab successfully triggers wake and responds with character.
+- [ ] **Task 13.4 (Fuel Calibration)**: 
+    - **Why**: The Brain (4090) is currently unreachable.
+    - **How**: Audit `CognitiveHub.py` fuel multipliers (`raw_imp`, `raw_cas`, `raw_int`). Ensure strategic queries can reach the >0.6 threshold.
+    - **Proof**: A complex technical query triggers `Brain (Result)` in the right console.
+
+---
+
+## Phase 14: THE UBER-5x5 STABILITY GAUNTLET [MAY 11 14:00-15:00]
+**Status:** PLANNED | The Definitive Transition Certification
+
+### 📍 Design Intent: "The Rude Standard"
+The original 5x5 tests were "Polite"—they waited for the Lab to be Operational before querying. Real-world usage is "Rude"—users query the system while it is asleep or waking. The Uber-Gauntlet merges Foyer Storms with 5x5 persistence to certify the system is "Bulletproof."
+
+### 🎯 GOAL 7: REAL-WORLD ENDURANCE [TEST-52]
+*Requirement: Full end-to-end validation including Javascript-level handshake.*
+
+#### 🛠️ Uber-Test Requirements (The 5 Pillars):
+1.  **Impolite**: Queries are sent *during* the H2 -> Operational window.
+2.  **JS-Aware**: Must use the exact protocol defined in `intercom_v2.js`.
+3.  **Serialized**: Must prove that concurrent bursts are handled by the Triage Lock without deadlocking.
+4.  **Full-Fuel**: At least one query per cycle must reach the Brain (4090).
+5.  **Non-Gibberish**: 100% alphanumeric sanity (Physical Integrity check).
+
+#### 🛠️ Task List:
+- [ ] **Task 14.1 (Uber-Test Dev)**: Create `src/debug/test_uber_5x5.py`.
+    - **Plan**: Implement an asynchronous harness that triggers H2, then launches 5 concurrent JS-mimic clients to the Foyer.
+- [ ] **Task 14.2 (The Gauntlet)**: Execute and achieve 5/5 "Uber-Wins."
+    - **Proof**: Logs show 5 sequential triages and 5 sane responses per cycle.
+
+---
+
+## 🏗️ OPERATIONAL MANDATES (BKM Audit)
+For the remainder of Sprint 28, I will strictly follow:
+1.  **BKM-005**: High-signal reporting. Every tool call must be preceded by intent.
+2.  **BKM-020**: No task without Why/How/Proof.
+3.  **BKM-029**: The **4-Step Implementation Loop**. Every code change must follow:
+    *   **Audit**: Verify current code and state.
+    *   **Plan**: Share the proposed change.
+    *   **Implement**: Apply the fix.
+    *   **Check**: Verify with automated test or log proof.
+4.  **BKM-030**: No execution without user "Greenlight" on the plan.
