@@ -365,7 +365,9 @@ function connect() {
 
             if (data.type === 'status') {
                 if (data.message) {
-                    appendMsg(data.message, 'system-msg', 'System');
+                    let msg = data.message;
+                    if (data.socket_id) msg += ` [SID: ${data.socket_id}]`;
+                    appendMsg(msg, 'system-msg', 'System');
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
