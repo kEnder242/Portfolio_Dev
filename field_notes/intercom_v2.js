@@ -25,6 +25,7 @@ const workspaceContainer = document.getElementById('workspace-container');
 
 let lastSystemState = "";
 let lastMsgSource = "";
+let currentSocketId = "Unknown"; // [FEAT-344] Persistence Tracker
 
 // [FEAT-339] Message De-duplication
 const seenMsgIds = new Set();
@@ -83,9 +84,6 @@ function initResizer() {
 }
 
 // --- MESSAGING ---
-const seenMsgIds = new Set();
-const MAX_SEEN_IDS = 50;
-
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false, metadata = {}) {
     // [FEAT-344] UI Deduplication: Ignore redundant packets from concurrent storms
     if (metadata.msg_id) {
@@ -139,6 +137,11 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     // [FEAT-118] Resonant Oracle Badge (Text-Only)
     if (metadata.oracle_category) {
         displaySource += ` (STATE: ${metadata.oracle_category})`;
+    }
+    
+    // [FEAT-344] Visible Physical Truth: Prepend SID to source
+    if (currentSocketId && source.toLowerCase() !== "system") {
+        displaySource += ` [${currentSocketId}]`;
     }
 
     // [FEAT-120] Context Transparency: Prepend clickable refs
@@ -364,10 +367,13 @@ function connect() {
             }
 
             if (data.type === 'status') {
+                if (data.socket_id) {
+                    currentSocketId = data.socket_id;
+                }
                 if (data.message) {
                     let msg = data.message;
                     if (data.socket_id) msg += ` [SID: ${data.socket_id}]`;
-                    appendMsg(msg, 'system-msg', 'System');
+                    appendMsg(msg, 'system-msg', 'System', 'chat', false, { msg_id: data.msg_id });
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
@@ -378,6 +384,7 @@ function connect() {
                 editor.value(data.content);
             } else if (data.brain) {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
+                    msg_id: data.msg_id, // [FIX] Task 2.4: Bridge the ID
                     oracle_category: data.oracle_category,
                     sources: data.sources,
                     is_internal: data.is_internal,
