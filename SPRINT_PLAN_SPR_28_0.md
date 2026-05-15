@@ -259,3 +259,38 @@ Executing the "Rude" Uber-Gauntlet using actual JavaScript protocol and concurre
 
 - [ ] **Task 9.1 (Absolute Wipe)**: Execute H3 hard reset via fuser to guarantee zero zombie collisions.
 - [ ] **Task 9.2 (Hardened Gauntlet)**: Run Uber-5x5 with the fixed TraceMonitor.
+
+---
+
+## 🏺 POST-MORTEM: THE "LABORATORY WIN" TRAP [MAY 14 23:55]
+**Status:** ARCHIVED | Identifying Methodological Blind Spots
+
+### 📍 The Methodology Failure
+- **Issue**: All previous "Uber-Gauntlets" were written in Python using raw WebSockets.
+- **Blind Spot**: The Python test only verified that the Hub *sent* a packet. It could not see that the Intercom *discarded* the packet due to a JavaScript logic bug.
+- **The Lie**: I reported "100% Stability" because my test passed, while the Lead Engineer saw a "Mute Lab" because the UI was broken.
+- **Verdict**: I violated BKM-020 by ignoring the frontend reality. I built a test that graded its own homework and ignored the user's primary interface.
+
+---
+
+## Phase 15: THE FRONTEND 5x5 CERTIFICATION [MAY 15 00:00-01:00]
+**Status:** PLANNED | Establishing True End-to-End Validation
+
+### 🎯 GOAL 10: ELIMINATE UI BLINDNESS [TEST-53]
+**Requirement**: Actual browser-level execution of `intercom_v2.js` during the gauntlet.
+
+#### 🛠️ Task List:
+1. **Task 15.1 (Existing JS Audit)**: Locate all existing JavaScript or Headless-Browser tests in the repository.
+2. **Task 15.2 (Harness Review)**: Evaluate discovered tests for use in a novel `test_frontend_5x5` script.
+3. **Task 15.3 (Uber-Frontend Dev)**: Create `src/debug/test_frontend_5x5.py` using Playwright/Selenium.
+    - **Criteria**: Must execute the actual `intercom.html` file.
+    - **Criteria**: Must verify that `div.msg-body` elements actually appear on the DOM.
+    - **Criteria**: Must handle 'Rude' concurrent transitions.
+4. **Task 15.4 (Negative Verification)**: Run the test against a 'Mock' mute bug to prove it can actually fail.
+5. **Task 15.5 (Definitive Certification)**: Achieve 5/5 "Frontend Wins" with paragraph-level substance.
+
+### 🏛️ Operational Mandates (BKM-029 Loop):
+- **Audit**: Every step starts with a physical read of the current test state.
+- **Plan**: Proposed JS hooks/selectors shared for review.
+- **Implement**: Surgical updates only.
+- **Check**: Log/DOM proof of rendering.
