@@ -357,12 +357,9 @@ function connect() {
                 }
                 
                 if (data.type === 'crosstalk') {
-                    // [FEAT-313.3] Log Integration: Append System-sourced logs to the console
-                    if (data.brain_source === 'System') {
-                        appendMsg(data.brain, 'system-msg', 'System');
-                    }
-                    // [Task 13.1] Un-Muted: All crosstalk is now visible for characterization
-                    // return removed.
+                    // [FEAT-313.3] Log Integration: Append all crosstalk (intuition/logs) to the console
+                    // [Task 2.4] Fixed: Bridge the ID and remove the 'System' only filter
+                    appendMsg(data.brain, 'system-msg', data.brain_source || 'System', 'chat', false, { msg_id: data.msg_id });
                 }
             }
 
