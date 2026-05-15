@@ -85,18 +85,6 @@ function initResizer() {
 
 // --- MESSAGING ---
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false, metadata = {}) {
-    // [FEAT-344] UI Deduplication: Ignore redundant packets from concurrent storms
-    if (metadata.msg_id) {
-        if (seenMsgIds.has(metadata.msg_id)) {
-            return; 
-        }
-        seenMsgIds.add(metadata.msg_id);
-        if (seenMsgIds.size > MAX_SEEN_IDS) {
-            const firstId = seenMsgIds.values().next().value;
-            seenMsgIds.delete(firstId);
-        }
-    }
-
     const target = channel === 'insight' ? insightConsole : chatConsole;
     
     if (clear) {
