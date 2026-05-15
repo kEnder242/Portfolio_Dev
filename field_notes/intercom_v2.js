@@ -357,9 +357,11 @@ function connect() {
                 }
                 
                 if (data.type === 'crosstalk') {
-                    // [FEAT-313.3] Log Integration: Append all crosstalk (intuition/logs) to the console
-                    // [Task 2.4] Fixed: Bridge the ID and remove the 'System' only filter
-                    appendMsg(data.brain, 'system-msg', data.brain_source || 'System', 'chat', false, { msg_id: data.msg_id });
+                    // [FEAT-313.3] Log Integration: Append all crosstalk to the console
+                    const sl_low = (data.brain_source || 'System').toLowerCase();
+                    const isPersona = sl_low.includes('pinky') || sl_low.includes('brain') || sl_low.includes('shadow');
+                    const msgType = isPersona ? 'brain-msg' : 'system-msg';
+                    appendMsg(data.brain, msgType, data.brain_source || 'System', 'chat', false, { msg_id: data.msg_id });
                 }
             }
 
