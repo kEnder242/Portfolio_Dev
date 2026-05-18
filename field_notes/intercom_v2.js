@@ -84,7 +84,15 @@ function initResizer() {
 }
 
 // --- MESSAGING ---
+let lastAppendedText = ""; // [FEAT-344] Brute Force Dedup
+
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false, metadata = {}) {
+    // [FEAT-344] Brute Force Dedup: Ignore if exact same text as last message
+    if (text === lastAppendedText && source !== 'ME') {
+        return;
+    }
+    lastAppendedText = text;
+
     const target = channel === 'insight' ? insightConsole : chatConsole;
     
     if (clear) {
@@ -127,9 +135,11 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         displaySource += ` (STATE: ${metadata.oracle_category})`;
     }
     
-    // [FEAT-344] Visible Physical Truth: Prepend SID to source
+    // [FEAT-344] Visible Physical Truth: Prepend SID and PID to source
     if (currentSocketId && source.toLowerCase() !== "system") {
-        displaySource += ` [${currentSocketId}]`;
+        let signature = `[SID: ${currentSocketId}]`;
+        if (metadata.hub_pid) signature += ` [PID: ${metadata.hub_pid}]`;
+        displaySource += ` ${signature}`;
     }
 
     // [FEAT-120] Context Transparency: Prepend clickable refs
@@ -372,6 +382,7 @@ function connect() {
             } else if (data.brain) {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
                     msg_id: data.msg_id, // [FIX] Task 2.4: Bridge the ID
+                    hub_pid: data.hub_pid, // [FIX] Task 2.5: Bridge the PID
                     oracle_category: data.oracle_category,
                     sources: data.sources,
                     is_internal: data.is_internal,
