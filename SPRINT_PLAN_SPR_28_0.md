@@ -341,3 +341,27 @@ Audit of May 18 logs identified a feedback loop where the Lab thrashed between 0
     - **Proof**: Hub logs show "Bypassing Maintenance gate for Induction" during Step 5.
 - [ ] **Task 13.3 (BKM-029: Hand-Crank Step 5)**:
     - **Plan**: Trigger a manual Induction Step 5 and verify 100% completion in the UI/Logs.
+
+---
+
+## Phase 18: UX HARDENING & WATCHDOG PACING [MAY 18 14:00-15:00]
+**Status:** ACTIVE | Polishing the User Experience and Stabilizing the Orchestrator
+
+### 🎯 GOAL 14: UX COMPACTNESS & KILLER LOOP MITIGATION [FEAT-348]
+*Requirement: Standardize the UI visual hierarchy and prevent Attendant-Hub process collisions.*
+
+#### 🛠️ Task List:
+- [ ] **Task 18.1 (Compact System Logs)**:
+    - **Where**: `intercom_v2.js` -> `appendMsg`
+    - **Why**: Reduce vertical scrolling noise from [SYSTEM] messages.
+    - **How**: Render timestamp and [SYSTEM] prefix inline. Apply light-grey styling (CSS).
+- [ ] **Task 18.2 (Crosstalk Triage Migration)**:
+    - **Where**: `CognitiveHub.py` -> `process_query`
+    - **Why**: "Triage Attempt 1-3" are orchestration noise, not conversation.
+    - **How**: Change broadcast type from 'status' to 'crosstalk' for triage progress.
+- [ ] **Task 18.3 (Killer Loop Forensic Fix)**:
+    - **Hypothesis**: Attendant reaps Hub during slow node-sync window (~120s) because port 8765 isn't bound yet.
+    - **How**: Increase Attendant boot grace period. Hardened `cleanup_silicon` to spare Hubs in `WAKING` or `INIT` states.
+- [ ] **Task 18.4 (Brain Visibility Audit)**:
+    - **Test**: Verify that strategic Brain (4090) responses are not being hidden in the `insightConsole`.
+    - **Verification**: Ensure `is_internal` flags do not suppress high-fidelity technical paragraph rendering.

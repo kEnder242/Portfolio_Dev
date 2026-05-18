@@ -169,14 +169,26 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         `;
     }
     
-    msg.innerHTML = `
-        <div class="msg-header">
-            <span class="msg-time">${time}</span>
-            <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
-        </div>
-        <div class="msg-body">${text}</div>
-        ${metaHtml}
-    `;
+    const isSystem = sl_low === 'system';
+    
+    if (isSystem && !isSystemStrategic) {
+        msg.innerHTML = `
+            <div class="msg-body system-inline">
+                <span class="msg-time">${time}</span>
+                <span class="msg-source ${sl}">[${displaySource}]</span>
+                ${text}
+            </div>
+        `;
+    } else {
+        msg.innerHTML = `
+            <div class="msg-header">
+                <span class="msg-time">${time}</span>
+                <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
+            </div>
+            <div class="msg-body">${text}</div>
+            ${metaHtml}
+        `;
+    }
     
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
     const text_low = text.toLowerCase();
