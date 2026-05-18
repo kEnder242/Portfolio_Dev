@@ -314,3 +314,30 @@ Executing the "Rude" Uber-Gauntlet using actual JavaScript protocol and concurre
 - [ ] **Task 16.2 (The "Rude" Frontend 5x5 - Goal 10)**:
     - **Plan**: Execute `test_frontend_5x5.py` strictly using BKM-029 to finish Goal 10 (Eliminate UI Blindness).
     - **Check**: Verify physical DOM rendering of 5 consecutive paragraph-level persona responses.
+
+---
+
+## Phase 17: INDUCTION RESILIENCE & JSON HARDENING [MAY 18 13:00-14:00]
+**Status:** ACTIVE | Purging the "Nightly Scythe" Loop
+
+### 📍 Forensic Background: The "Screaming Sleep" Audit
+Audit of May 18 logs identified a feedback loop where the Lab thrashed between 02:00 AM and 04:12 AM:
+1. **JSON Collision**: Triage nodes began nesting quotes in the "situation" field, breaking the simple parser.
+2. **Maintenance Blockade**: The Hub's security gate blocked the 'Dream Pass' from waking the engine, while the 'Silicon Scythe' simultaneously tried to reset it.
+3. **Result**: 10+ physical H2 resets with zero progress on Step 5.
+
+### 🎯 GOAL 13: MAINTENANCE IMMUNITY & NUCLEAR JSON [FEAT-347]
+*Requirement: Adhere strictly to **BKM-029** for each task.*
+
+- [ ] **Task 13.1 (Nuclear JSON Extractor)**:
+    - **Where**: `HomeLabAI/src/logic/cognitive_hub.py` -> `bridge_signal_clean`
+    - **Why**: Resolve 'Nested Quote' triage failures (REG-06).
+    - **How**: Implement `re.findall(r'\{.*\}', text, re.DOTALL)` to extract the largest valid JSON block.
+    - **Proof**: Manually parse the "situation" string that failed at 02:08 AM.
+- [ ] **Task 13.2 (Induction Larynx Bypass)**:
+    - **Where**: `HomeLabAI/src/acme_lab.py` -> `process_query`
+    - **Why**: Step 5 (Dream Pass) is blocked by its own Maintenance gate.
+    - **How**: Allow queries starting with `[ME] [DREAM_PASS]` to bypass the MAINTENANCE/ALARM restriction if source is System.
+    - **Proof**: Hub logs show "Bypassing Maintenance gate for Induction" during Step 5.
+- [ ] **Task 13.3 (BKM-029: Hand-Crank Step 5)**:
+    - **Plan**: Trigger a manual Induction Step 5 and verify 100% completion in the UI/Logs.
