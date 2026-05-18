@@ -346,23 +346,29 @@ Audit of May 18 logs identified a feedback loop where the Lab thrashed between 0
 ---
 
 ## Phase 18: UX HARDENING & WATCHDOG PACING [MAY 18 14:00-15:00]
-**Status:** ACTIVE | Polishing the User Experience and Stabilizing the Orchestrator
+**Status:** COMPLETE & CERTIFIED | Polishing the User Experience and Stabilizing the Orchestrator
 
 ### 🎯 GOAL 14: UX COMPACTNESS & KILLER LOOP MITIGATION [FEAT-348]
-*Requirement: Standardize the UI visual hierarchy and prevent Attendant-Hub process collisions.*
+*Requirement: Standardize the UI visual hierarchy and prevent Attendant-Hub process collisions. Must adhere to BKM-023.*
 
 #### 🛠️ Task List:
-- [ ] **Task 18.1 (Compact System Logs)**:
-    - **Where**: `intercom_v2.js` -> `appendMsg`
-    - **Why**: Reduce vertical scrolling noise from [SYSTEM] messages.
-    - **How**: Render timestamp and [SYSTEM] prefix inline. Apply light-grey styling (CSS).
-- [ ] **Task 18.2 (Crosstalk Triage Migration)**:
-    - **Where**: `CognitiveHub.py` -> `process_query`
-    - **Why**: "Triage Attempt 1-3" are orchestration noise, not conversation.
-    - **How**: Change broadcast type from 'status' to 'crosstalk' for triage progress.
-- [ ] **Task 18.3 (Killer Loop Forensic Fix)**:
-    - **Hypothesis**: Attendant reaps Hub during slow node-sync window (~120s) because port 8765 isn't bound yet.
-    - **How**: Increase Attendant boot grace period. Hardened `cleanup_silicon` to spare Hubs in `WAKING` or `INIT` states.
-- [ ] **Task 18.4 (Brain Visibility Audit)**:
-    - **Test**: Verify that strategic Brain (4090) responses are not being hidden in the `insightConsole`.
-    - **Verification**: Ensure `is_internal` flags do not suppress high-fidelity technical paragraph rendering.
+- [x] **Task 18.1 (Compact System Logs)**:
+    - **Where**: `intercom_v2.js` -> `appendMsg` and `style.css` (`.system-inline`).
+    - **Why**: Reduce vertical scrolling noise from `[SYSTEM]` messages.
+    - **How**: Changed the JS template to render `[SYSTEM]` message content inline with the timestamp/source on a single row with light-grey styling.
+    - **Proof**: Executed Playwright DOM check; successfully verified the `.system-inline` class is physically rendered on the browser page.
+- [x] **Task 18.2 (Crosstalk Triage Migration)**:
+    - **Where**: `CognitiveHub.py` -> `process_query` and `intercom_v2.js` -> `ws.onmessage`.
+    - **Why**: "Triage Attempt 1-3" prints were generating excess orchestration noise in the primary conversation panel.
+    - **How**: Changed broadcast type to `crosstalk` in the Hub, and added a filter in JS to only update the crosstalk-bar and `return` before `appendMsg` is called.
+    - **Proof**: Playwright test verified that the string `Triage Attempt` appears exclusively in the `#crosstalk-bar` and is successfully suppressed from the main chat console DOM.
+- [x] **Task 18.3 (Killer Loop Forensic Fix)**:
+    - **Where**: `lab_attendant_v4.py` -> `cleanup_silicon` and `boot_grace_period`.
+    - **Why**: The Attendant was repeatedly killing the Hub (Reaping) during slow node-sync windows (~120s) because port 8765 hadn't bound yet, creating a "Killer Loop".
+    - **How**: Increased `boot_grace_period` to 180 (360 seconds). Updated `cleanup_silicon` to explicitly spare the Hub PID if the orchestrator is in an active `WAKING` or `BOOTING` state. Added trace filters to ignore `CancelledError` and `TimeoutError`.
+    - **Proof**: Verified via `journalctl` and server logs; the system survived a massive 15GB RAM limit "Concurrent Storm" reboot, successfully completing a 120s+ heavy-prime boot sequence without the watchdog assassinating the process.
+- [x] **Task 18.4 (Brain Visibility Audit)**:
+    - **Where**: `intercom_v2.js` -> `appendMsg` routing.
+    - **Why**: The `brain-msg` css class was broken, and messages were assigned to `system-msg` resulting in a "Mute" appearance (grey text).
+    - **How**: Corrected the `msgType` conditional logic (`isPersona ? 'brain-msg' : 'system-msg'`) and ensured the DOM parent hierarchy uses `#insight-console`.
+    - **Proof**: Playwright UI script successfully found `.brain-msg` div elements inside `#insight-console`, validating 1520 characters of vibrant blue text rendered from a strategic query.
