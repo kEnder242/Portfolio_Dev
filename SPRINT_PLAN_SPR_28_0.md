@@ -375,32 +375,25 @@ Audit of May 18 logs identified a feedback loop where the Lab thrashed between 0
 
 ---
 
-## Phase 19: RAG RESTORATION & TOOL CALL SANITY [PENDING]
-**Status:** PLANNED | Addressing Lost Semantic Topography and Gibberish Scythe Bugs
+## Phase 19: RAG RESTORATION, FUEL CALIBRATION & TOOL SANITY [PENDING]
+**Status:** PLANNED | Establishing Semantic Grounding, UX Snappiness, and Parser Resilience
 
-### 📍 Forensic Background: The "Gibberish Reboot" & Lost RAG
-1. **The Reboot Loop**: The "Nuclear JSON Extractor" introduced a bug. It blindly replaced single quotes (`'`) with double quotes (`"`) inside JSON strings (e.g., `I don't think` became `I don"t think`). This corrupted valid JSON, triggering 3 consecutive parse failures, which tripped the Gibberish Guard and caused the continuous H2 reboots.
-2. **The Lost RAG**: The 3-tier Semantic Map is loaded in `CognitiveHub.py` but is no longer injected into the `archival_map_context`. Furthermore, RAG retrieval via the `archive` node is currently hardcoded to only trigger if a 4-digit year (`199[0-9]|20[0-2][0-9]`) is found in the query, ignoring the triage model's `RECALL` intent.
-3. **Pinky's Tool Call Struggles**: The Llama 3.2 3B model struggles with strict JSON tool calling syntax under vLLM's `llama3_json` parser, often leading to payload errors or hallucinations.
-
-### 🎯 GOAL 15: SEMANTIC GROUNDING & MODEL ALIGNMENT [FEAT-349]
-*Requirement: Adhere strictly to **BKM-029** for each task.*
-
+### 🎯 GOAL 15: WAKE-ON-INTENT & UX SNAPPINESS
+*Context: During hibernation (H2), sending a query currently triggers Triage before vLLM finishes loading weights, causing 3 consecutive triage failures and an aggressive H2 reset loop.*
 #### 🛠️ Task List:
-- [ ] **Task 19.1 (Gibberish Guard Fix)**:
-    - **Where**: `CognitiveHub.py` -> `bridge_signal_clean`
-    - **Why**: Prevent valid English text containing apostrophes from failing JSON parsing and triggering a Silicon Scythe reboot.
-    - **How**: Remove the aggressive `block.replace("'", '"')` logic. Rely purely on the regex extraction.
-- [ ] **Task 19.2 (RAG & Semantic Map Restoration)**:
-    - **Where**: `CognitiveHub.py` -> `process_query`
-    - **Why**: Triage model's `RECALL` intent is being ignored, and the Semantic Map topography is no longer passed to the Brain.
-    - **How**: 
-        1. Remove the hardcoded 4-digit year regex. Trigger archive retrieval whenever `intent == "RECALL"`.
-        2. Re-inject `self.semantic_map` into the `archival_map_context` so the Brain knows the 3-tier topography exists.
-- [ ] **Task 19.3 (Pinky Tool Call Hardening)**:
-    - **Where**: `PinkyNode` prompt configuration or vLLM config.
-    - **Why**: Llama 3.2 3B hallucinates tool syntax.
-    - **Options** (Awaiting Lead Engineer Buy-in):
-        - *Option A*: Prompt Engineering (Add explicit Few-Shot JSON tool call examples to Pinky's system prompt).
-        - *Option B*: Guided Decoding (Use vLLM's `guided_json` schema to mathematically force valid output, sacrificing some latency).
-        - *Option C*: Model Swap (Switch Pinky to `Qwen2.5-3B-Instruct`, which is already in `infrastructure.json` and vastly superior at native tool calling).
+- [ ] **Task 19.1.1 (Wait-for-Ready Lock)**: Update `acme_lab.py` -> `process_query` to explicitly await the vLLM engine binding (ping port 8088) *before* attempting Triage. This prevents the Triage Loop from failing while the engine is physically offline.
+- [ ] **Task 19.2.1 (Cached Lobby Relay to Brain)**: Implement a new feature to send cached lobby messages to the Sovereign Brain (4090) immediately upon wake. If the remote Brain is already online, it can reply instantly while the local 3B model is still loading weights, creating a snappy, lag-free user experience.
+
+### 🎯 GOAL 16: FUEL CALIBRATION & RAG RESTORATION
+*Context: We previously hardcoded a `+0.4` Fuel Boost for technical keywords (e.g., RAPL) which caused simple questions to become long-winded essays. Furthermore, RAG retrieval was hardcoded to trigger only if a 4-digit year was present in the query, ignoring the LLM's own 'RECALL' intent.*
+#### 🛠️ Task List:
+- [ ] **Task 19.3.1 (Remove Manual Fuel Boost)**: Update `CognitiveHub.py` to remove the hardcoded `fuel_boost` variable. The Triage model's System Prompt already instructs it to set `importance=1.0` for technical terms; we must trust the LLM's raw Intrigue and Importance metrics.
+- [ ] **Task 19.4.1 (Semantic Grounding via Intent)**: Update `CognitiveHub.py` to trigger the `archive` node whenever the Triage model returns `intent == "RECALL"`, completely removing the 4-digit year regex dependency.
+- [ ] **Task 19.5.1 (Prompt Enhancement for Past References)**: Update the `LAB_SYSTEM_PROMPT` in `lab_node.py` to explicitly instruct the model: *“If asking about past experience, work history, or previous lab events (even without a year), set intent=RECALL.”* This ensures it can generically identify past questions.
+
+### 🎯 GOAL 17: TOOL CALLING & GIBBERISH SANITY
+*Context: The "Nuclear JSON Extractor" introduced a bug that corrupted valid JSON containing apostrophes (`I don't think` -> `I don"t think`). Also, Pinky struggles with strict JSON tool calling.*
+#### 🛠️ Task List:
+- [ ] **Task 19.6.1 (Gibberish Guard Fix)**: Remove the destructive `block.replace("'", '"')` logic in `CognitiveHub.py`. Rely purely on the greedy regex `re.findall` extraction so valid English contractions are not corrupted.
+- [ ] **Task 19.7.1 (Guided JSON Tool Calling)**: Implement **Option B** (Guided Decoding) for Pinky's API calls. By passing the expected JSON schema in the API payload, we mathematically force the vLLM logits to produce syntactically valid JSON tool calls.
+- [ ] **Discussion Point (Option C - Qwen2.5-3B)**: Qwen2.5-3B is an extremely capable 3-billion parameter model that fits well within the 8GB VRAM footprint (especially when quantized via AWQ). It is natively superior at tool-calling. Guided JSON (Option B) *can* and *should* co-exist with Qwen to guarantee 100% adherence, providing a robust, lightweight foundation.
