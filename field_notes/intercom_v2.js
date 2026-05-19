@@ -170,6 +170,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     }
     
     const isSystem = sl_low === 'system';
+    const text_low = text.toLowerCase();
+    const isSystemStrategic = (isSystem) && (text_low.includes('sovereign') || text_low.includes('engaging'));
     
     if (isSystem && !isSystemStrategic) {
         msg.innerHTML = `
@@ -191,15 +193,13 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     }
     
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
-    const text_low = text.toLowerCase();
     
     // [FEAT-224] Brain (Signal or Result) and Shadow (Intuition) always go to the Right
     const isBrain = sl_low.includes('brain') || sl_low.includes('shadow');
     // Pinky (Triage or Reflex) always goes to the Left
     const isPinky = sl_low.includes('pinky');
     // System strategic messages go to the Right
-    const isSystemStrategic = (sl_low === 'system') && (text_low.includes('sovereign') || text_low.includes('engaging'));
-
+    
     if (isBrain || isSystemStrategic) {
         insightConsole.appendChild(msg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
@@ -367,6 +367,11 @@ function connect() {
                 }
                 
                 if (data.type === 'crosstalk') {
+                    // [Task 18.2] Silence verbose triage attempts in main console
+                    if (data.brain && data.brain.includes("Triage Attempt")) {
+                        return; // Already updated the crosstalk bar above
+                    }
+                    
                     // [FEAT-313.3] Log Integration: Append all crosstalk to the console
                     const sl_low = (data.brain_source || 'System').toLowerCase();
                     const isPersona = sl_low.includes('pinky') || sl_low.includes('brain') || sl_low.includes('shadow');
