@@ -372,3 +372,35 @@ Audit of May 18 logs identified a feedback loop where the Lab thrashed between 0
     - **Why**: The `brain-msg` css class was broken, and messages were assigned to `system-msg` resulting in a "Mute" appearance (grey text).
     - **How**: Corrected the `msgType` conditional logic (`isPersona ? 'brain-msg' : 'system-msg'`) and ensured the DOM parent hierarchy uses `#insight-console`.
     - **Proof**: Playwright UI script successfully found `.brain-msg` div elements inside `#insight-console`, validating 1520 characters of vibrant blue text rendered from a strategic query.
+
+---
+
+## Phase 19: RAG RESTORATION & TOOL CALL SANITY [PENDING]
+**Status:** PLANNED | Addressing Lost Semantic Topography and Gibberish Scythe Bugs
+
+### 📍 Forensic Background: The "Gibberish Reboot" & Lost RAG
+1. **The Reboot Loop**: The "Nuclear JSON Extractor" introduced a bug. It blindly replaced single quotes (`'`) with double quotes (`"`) inside JSON strings (e.g., `I don't think` became `I don"t think`). This corrupted valid JSON, triggering 3 consecutive parse failures, which tripped the Gibberish Guard and caused the continuous H2 reboots.
+2. **The Lost RAG**: The 3-tier Semantic Map is loaded in `CognitiveHub.py` but is no longer injected into the `archival_map_context`. Furthermore, RAG retrieval via the `archive` node is currently hardcoded to only trigger if a 4-digit year (`199[0-9]|20[0-2][0-9]`) is found in the query, ignoring the triage model's `RECALL` intent.
+3. **Pinky's Tool Call Struggles**: The Llama 3.2 3B model struggles with strict JSON tool calling syntax under vLLM's `llama3_json` parser, often leading to payload errors or hallucinations.
+
+### 🎯 GOAL 15: SEMANTIC GROUNDING & MODEL ALIGNMENT [FEAT-349]
+*Requirement: Adhere strictly to **BKM-029** for each task.*
+
+#### 🛠️ Task List:
+- [ ] **Task 19.1 (Gibberish Guard Fix)**:
+    - **Where**: `CognitiveHub.py` -> `bridge_signal_clean`
+    - **Why**: Prevent valid English text containing apostrophes from failing JSON parsing and triggering a Silicon Scythe reboot.
+    - **How**: Remove the aggressive `block.replace("'", '"')` logic. Rely purely on the regex extraction.
+- [ ] **Task 19.2 (RAG & Semantic Map Restoration)**:
+    - **Where**: `CognitiveHub.py` -> `process_query`
+    - **Why**: Triage model's `RECALL` intent is being ignored, and the Semantic Map topography is no longer passed to the Brain.
+    - **How**: 
+        1. Remove the hardcoded 4-digit year regex. Trigger archive retrieval whenever `intent == "RECALL"`.
+        2. Re-inject `self.semantic_map` into the `archival_map_context` so the Brain knows the 3-tier topography exists.
+- [ ] **Task 19.3 (Pinky Tool Call Hardening)**:
+    - **Where**: `PinkyNode` prompt configuration or vLLM config.
+    - **Why**: Llama 3.2 3B hallucinates tool syntax.
+    - **Options** (Awaiting Lead Engineer Buy-in):
+        - *Option A*: Prompt Engineering (Add explicit Few-Shot JSON tool call examples to Pinky's system prompt).
+        - *Option B*: Guided Decoding (Use vLLM's `guided_json` schema to mathematically force valid output, sacrificing some latency).
+        - *Option C*: Model Swap (Switch Pinky to `Qwen2.5-3B-Instruct`, which is already in `infrastructure.json` and vastly superior at native tool calling).
