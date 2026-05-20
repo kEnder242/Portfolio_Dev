@@ -13,26 +13,42 @@ To verify and maximize the performance of the Acme Lab's multi-LoRA routing arch
 2. **[CONTEXT_MUTATION]**: `loader.py` prepends dynamic metrics (`[SYSTEM_DESIGN_STANCE]`) to the user prompt. Because these metrics (Fuel, Route) are updated *after* triage, the hash for the user prompt always misses.
 3. **[RECIPE_GAP]**: The vLLM launch command in `lab_attendant_v4.py` is missing the `--enable-prefix-caching` flag.
 
-### 📍 STREAMING & ASYNC BOTTLENECKS
-1. **[SERIALIZED_TRIAGE]**: We currently wait for the *complete* Triage JSON block before sparking the next Waterfall leg.
-2. **[FAST_TRACK_WIN]**: The `Cached Lobby Relay` is our most performant path (0.8s TTFT), but it only fires if the Brain is warm.
+### 📍 FORENSIC DISCOVERY: RAG BYPASS [HIGH SEVERITY]
+- **Root Cause**: Investigation of `CognitiveHub.py` reveals that the `intent` variable is being initialized to `"STRATEGIC"` in the `except` blocks of the Triage loop. If a triage model fails even a single attempt, the `RECALL` intent is lost. Furthermore, the `archive` resident is not being reliably re-initialized after an H2 wake.
 
 ---
 
 ## 🛠️ SPRINT GOALS
 
-### 🎯 GOAL 19: KV-CACHE SINCERITY [PERF-001]
-*Objective: Achieve 100% stable prefix-cache hits for repeated or related queries.*
+### 🎯 GOAL 19: SHELL-SIDE RECIPE HARDENING [PERF-001]
+*Objective: Stabilize vLLM flags and prevent Python GC interference.*
 
-- [ ] **Task 20.1 (Unified System Anchor)**: Implement a shared "Physical Bedrock" string (64+ tokens) that prepends all system prompts across all nodes.
-- [ ] **Task 20.2 (Context Displacement)**: Move dynamic metadata (Fuel, Route, Triage Hints) to the *tail* of the prompt or a trailing user message to prevent prefix invalidation.
-- [ ] **Task 20.3 (Recipe Hardening)**: Add `--enable-prefix-caching=True` and tune `--max-loras=7` in `lab_attendant_v4.py`.
+- [ ] **Task 20.1 (Move Flags to start_vllm.sh)**: Port all vLLM optimization flags (`--enable-prefix-caching`, `--max-loras`, `--gpu-memory-utilization`) directly into the shell script to avoid Python GC deaths and flag parsing issues.
+- [ ] **Task 20.2 (Attendant Simplification)**: Update `lab_attendant_v4.py` to rely on the script for the "Bulletproof Recipe," passing only the `model_path` and `venv` as arguments.
 
-### 🎯 GOAL 20: ASYNC WATERFALL OPTIMIZATION [PERF-002]
-*Objective: Fast-track the Persona leg as soon as intent is identified.*
+### 🎯 GOAL 20: THE PHYSICAL BEDROCK (AGENTIC PREAMBLE) [FEAT-351]
+*Objective: Achieve 100% stable prefix-cache hits for repeated or related queries via BKM-015.*
 
-- [ ] **Task 20.4 (Speculative Spark)**: If Triage tokens contain "STRATEGIC" or "TECHNICAL", spark the next leg in the Waterfall *before* the JSON block finishes.
-- [ ] **Task 20.5 (Throughput Benchmarking)**: Develop `src/debug/bench_vllm_cache.py` to physically measure the latency difference between a cold prefill and a prefix-cached hit.
+- [ ] **Task 20.3 (Identity Bedrock Implementation - BKM-015)**: Create a shared constant string describing the Lab's 3-tier memory topography (Diamond/Archive/Raw), RAG capabilities, and resident roles (Pinky/Shadow/Brain). 
+    - **Constraint**: Describe the *locations* and *capabilities* only. No hard-coded telemetry values or fuel metrics (BKM-015 compliance).
+- [ ] **Task 20.4 (Prompt-Engineering Routing)**: Shift triage from Python logic to "Agentic Routing" within the shared identity preamble.
+- [ ] **Task 20.5 (Context Displacement)**: Move all dynamic "Fuel/Route" data to the *tail* of the prompt or a trailing user message role to preserve the Bedrock prefix hash.
+- [ ] **Task 20.6 (Throughput Benchmarking)**: Develop `src/debug/bench_vllm_cache.py` to physically measure the latency difference between a cold prefill and a prefix-cached hit.
+
+### 🎯 GOAL 21: THE QWEN PIVOT [FEAT-352]
+*Objective: Standardize on Qwen2.5-3B for superior tool-calling and performance.*
+
+- [ ] **Task 20.7 (Qwen Transition)**: Update `infrastructure.json` to set `qwen2.5-3b-awq` as the `unified-base`.
+- [ ] **Task 20.8 (Adapter Legacy Preservation)**: Move existing Llama LoRAs to `/speedy/models/adapters/llama_legacy`.
+- [ ] **Task 20.9 (Nightly Task Adaptation)**: Update the Nightly Dream Pass and Training scripts to generate Qwen-compatible adapters.
+
+---
+
+## 🛠️ EXECUTION SEQUENCE (BKM-029)
+1. **Priority 1**: RAG Bypass Cleanup (Stability).
+2. **Priority 2**: Shell-Side Hardening (GC Shielding).
+3. **Priority 3**: Physical Bedrock Implementation (Cache Optimization).
+4. **Priority 4**: The Qwen Pivot (Intelligence Upgrade).
 
 ---
 
