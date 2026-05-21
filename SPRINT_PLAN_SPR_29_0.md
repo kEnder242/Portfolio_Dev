@@ -180,6 +180,52 @@ For each goal, I will follow this rigorous cycle:
 
 ---
 
-### ⚖️ LEAD ENGINEER GREENLIGHT REQUIRED
-*Per BKM-030, implementation is paused pending review of this high-fidelity Phase 2 blueprint.*
+---
+
+## 🔬 PHASE 3: RESTORATION HARDENING [MAY 21]
+**Status:** ACTIVE | HEADS-DOWN EXECUTION
+
+### 🎯 MISSION
+Evolve the Lab's reasoning architecture to **100% Transparency**. We will physically remove the architectural barriers (is_internal, FRAME_ONLY) that caused the "Silence" failures and implement granular system reporting to eliminate the "Black Box" ignition problem.
+
+### 🧠 STRATEGIC RATIONALE (Why)
+*   **The Transparency Gap**: Phase 2 introduced flags (`is_internal`) that inadvertently hid thoughts from the Intercom. We are moving to a "Validation-First" mode where every inter-node whisper is visible.
+*   **The Streaming Synergy**: Transparent thinking eliminates the need for blocking buffers. We will stream thoughts in real-time while using buffers strictly for background context.
+*   **The Ignition Visibility**: Users must see the "Silicon Life" during the 5-minute warming window to ensure the system hasn't hung.
+
+---
+
+### 🛠️ SPRINT GOALS
+
+#### 🎯 GOAL 28: NUKE INTERNAL MASKING (100% Transparency) [FEAT-361]
+*Objective: Remove the ability for any node to be silenced or hidden from the user.*
+
+- [ ] **Task 28.1 (API Purge)**: Remove `is_internal` and `internal` parameters from `execute_dispatch`, `_dispatch_plain_text`, and `_process_node_stream`.
+- [ ] **Task 28.2 (Logic Removal)**: Delete `mute_pinky`, `mute_shadow`, and `FRAME_ONLY` mode hints from `cognitive_hub.py`.
+- [ ] **Task 28.3 (Broadcast Enforcement)**: Ensure the "Handshake Tic" is always broadcast to the user.
+
+#### 🎯 GOAL 29: NON-BLOCKING WATERFALL BUFFERS [FEAT-362]
+*Objective: Ensure real-time streaming of all node dialogue.*
+
+- [ ] **Task 29.1 (Token Priority)**: Refactor `on_token` to ensure the broadcast to the user is the high-priority task.
+- [ ] **Task 29.2 (Context Decoupling)**: Ensure `session_buffers` are populated in the background without delaying the user-facing stream.
+
+#### 🎯 GOAL 30: PHYSICAL WARMING VISIBILITY [FEAT-363]
+*Objective: Provide real-time status updates during the restoration window.*
+
+- [ ] **Task 30.1 (Attendant Milestones)**: Update `lab_attendant_v4.py` to log specific "Step 1, 2, 3" milestones to the event ledger.
+- [ ] **Task 30.2 (Polling Task)**: Implement a 2s polling task in `acme_lab.py` to broadcast these ledger items as `[SYSTEM]` messages.
+
+#### 🎯 GOAL 31: UI TRUTH VERIFICATION (Playwright) [FEAT-364]
+*Objective: Physically prove that thoughts are visible in the browser.*
+
+- [ ] **Task 31.1 (Visibility Test)**: Create `src/tests/test_visibility_truth.py` using Playwright.
+- [ ] **Task 31.2 (DOM Assertion)**: Assert that `<thought>` blocks and `[SYSTEM]` stages are present in the Intercom DOM.
+
+---
+
+### 🧪 THE ULTIMATE TEST: THE 2023 PROBE (v2.0)
+**Success Criteria**:
+1.  **Visibility**: I must provide a console log proving Pinky's thoughts were seen *before* the Brain spoke.
+2.  **Grounding**: The final answer must correctly identify PECISTRESSOR/2023 focus.
 
