@@ -101,6 +101,61 @@ Following a forensic audit of `research.html` and `RESEARCH_SYNTHESIS.md`, we ha
 4.  **BKM-023 Adherence**: All edits performed via `replace` to preserve surrounding engineering context.
 
 ### 🔮 Next Steps
-- [ ] Review `research.html`.
-- [ ] Perform the Google Keep brain dump for Epoch 2 research.
-- [ ] Sync the refined ledger to the public airlock (`sync_research.sh`).
+- [x] Review `research_demo.html`.
+- [x] Perform the Google Keep brain dump for Epoch 2 research.
+- [x] Sync the refined ledger to the public airlock (`sync_research.sh`).
+
+---
+
+## 🔬 PHASE 2: THE BICAMERAL DEBATE [MAY 20]
+**Status:** DRAFT | PENDING LEAD ENGINEER GREENLIGHT
+
+### 🎯 MISSION
+Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visible Consensus (TTCS)**. By giving the internal nodes (Pinky, Shadow, Brain) a persistent, unified view of the session and forcing explicit `<thought>` debates, we aim to drastically improve historical grounding and reduce hallucinations when navigating the 18-year archive.
+
+### 🧠 STRATEGIC RATIONALE (Why)
+*   **The Goldfish Gap**: Currently, the Hub clears the `session_buffers` every turn. Pinky cannot "remember" the Brain's critiques from previous turns, causing cyclical errors during deep archival probes.
+*   **The Banter Evolution**: We are pivoting from "Banter as side-chatter" to "Banter as the primary reasoning trace" [TTCS - 2601.22628]. The nodes must act as adversarial foils *before* presenting a final narrative to the user.
+*   **The Silicon Constraint**: To hold this expanding context, we must implement Apple's Stochastic KV Routing [2604.22782] to fit the multi-turn debate onto 11GB of VRAM.
+
+---
+
+### 🛠️ SPRINT GOALS (How)
+
+#### 🎯 GOAL 22: OPEN DEBATE TTCS (Visible Consensus) [FEAT-355]
+*Objective: Transform internal node communication into structured, visible reasoning traces.*
+
+- [ ] **Task 22.1 (Thought Tagging)**: Update `cognitive_hub.py` and the node prompts to enforce the use of `<thought>` tags for all inter-node communication prior to user delivery.
+- [ ] **Task 22.2 (Adversarial Prompts)**: Modify Pinky and Shadow's system prompts to explicitly critique each other's historical retrieval (e.g., "Check the dates").
+- [ ] **Task 22.3 (Consensus Gate)**: Implement logic in the Hub that prevents final user delivery until a consensus is reached (or fuel runs out).
+
+#### 🎯 GOAL 23: FOIL-AWARE MEMORY (Unified Session Ledger) [FEAT-356]
+*Objective: Eliminate single-turn amnesia for the resident mice.*
+
+- [ ] **Task 23.1 (Persistent Ledger)**: Replace `session_buffers.clear()` in `cognitive_hub.py` with an append-only `round_table_memory` that persists across the session.
+- [ ] **Task 23.2 (Ledger Injection)**: Prepend the `[PREVIOUS_DEBATE]` block to Pinky/Shadow's context on every turn so they retain the Brain's historical corrections.
+- [ ] **Task 23.3 (Pruning Strategy)**: Implement a rolling window (e.g., last 3 turns) to manage context bloat before KV Routing is finalized.
+
+#### 🎯 GOAL 24: STOCHASTIC KV ROUTING (The VRAM Multiplier) [FEAT-357]
+*Objective: Enable deep, multi-turn RAG conversations on the 2080 Ti.*
+
+- [ ] **Task 24.1 (vLLM Parameter Injection)**: Investigate and apply cross-layer attention flags (if supported natively in our vLLM version) or simulate chunked KV sharing to optimize context caching.
+- [ ] **Task 24.2 (Context Anchoring)**: Ensure the `IDENTITY_BEDROCK` (Goal 20) remains locked in the prefix cache while the `round_table_memory` cycles dynamically.
+
+---
+
+### 🧪 VERIFICATION: THE ULTIMATE RAG TEST
+**Objective:** Prove that the Bicameral Debate produces grounded, hallucination-free history.
+
+1.  **The "Early 2023" Probe**:
+    *   **Query**: "What did I focus on in early 2023?"
+    *   **Expected Trace (Visible TTCS)**: 
+        *   Pinky retrieves the 2023 JSONs via RAG.
+        *   Shadow critiques the retrieval: `<thought> Wait, the logs show heavy Python scripting in Feb 2023, but the query implies strategic focus. Let's ask the Brain for the Master Index correlation. </thought>`
+        *   Brain provides the context.
+    *   **Assertion**: The final output MUST reference specific technical milestones from Q1 2023 without hallucinating 2024 features, proving Foil-Aware memory and RAG integration succeeded.
+
+---
+
+### ⚖️ LEAD ENGINEER GREENLIGHT REQUIRED
+*Per BKM-030, implementation is paused pending review of this Phase 2 draft.*
