@@ -111,7 +111,7 @@ Following a forensic audit of `research.html` and `RESEARCH_SYNTHESIS.md`, we ha
 **Status:** DRAFT | PENDING LEAD ENGINEER GREENLIGHT
 
 ### 🎯 MISSION
-Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visible Consensus (TTCS)**. By giving the internal nodes (Pinky, Shadow, Brain) a persistent, unified view of the session and forcing explicit `<thought>` debates, we aim to drastically improve historical grounding and reduce hallucinations when navigating the 18-year archive.
+Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visible Consensus (TTCS)**. We will implement a persistent **Unified Session Ledger** and force explicit **Visible Debate** between nodes to eliminate historical amnesia and hallucinations when navigating the 18-year archive.
 
 ### 🧠 STRATEGIC RATIONALE (Why)
 *   **The Goldfish Gap**: Currently, the Hub clears the `session_buffers` every turn. Pinky cannot "remember" the Brain's critiques from previous turns, causing cyclical errors during deep archival probes.
@@ -120,42 +120,61 @@ Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visib
 
 ---
 
-### 🛠️ SPRINT GOALS (How)
+### 🛠️ SPRINT GOALS
 
 #### 🎯 GOAL 22: OPEN DEBATE TTCS (Visible Consensus) [FEAT-355]
-*Objective: Transform internal node communication into structured, visible reasoning traces.*
+*Objective: Transform inter-node talk from "side-chatter" into the reasoning bedrock where nodes foil each other to reach historical truth.*
 
-- [ ] **Task 22.1 (Thought Tagging)**: Update `cognitive_hub.py` and the node prompts to enforce the use of `<thought>` tags for all inter-node communication prior to user delivery.
-- [ ] **Task 22.2 (Adversarial Prompts)**: Modify Pinky and Shadow's system prompts to explicitly critique each other's historical retrieval (e.g., "Check the dates").
-- [ ] **Task 22.3 (Consensus Gate)**: Implement logic in the Hub that prevents final user delivery until a consensus is reached (or fuel runs out).
+- [ ] **Task 22.1 (Thought Tagging)**: Update `execute_dispatch` in `cognitive_hub.py` and the node prompts to enforce the use of `<thought>` tags for all inter-node communication prior to user delivery.
+- [ ] **Task 22.2 (Adversarial Prompts)**: Modify `pinky_node.py` & `brain_node.py` system prompts to explicitly mandate critiquing each other's historical retrieval (e.g., "Check the dates").
+- [ ] **Task 22.3 (Consensus Gate)**: Implement logic in `_process_node_stream` that prevents final user delivery until a consensus is reached or fuel runs out.
+
+**Implementation Details**:
+*   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` and individual node prompt files.
+*   **Test Strategy**: Create `src/tests/test_debate_logic.py` (Mock) to verify the Hub doesn't skip the critique phase when "Fuel" is high.
 
 #### 🎯 GOAL 23: FOIL-AWARE MEMORY (Unified Session Ledger) [FEAT-356]
-*Objective: Eliminate single-turn amnesia for the resident mice.*
+*Objective: Eliminate amnesia by giving Pinky a persistent view of the Brain's strategic logic from previous turns.*
 
-- [ ] **Task 23.1 (Persistent Ledger)**: Replace `session_buffers.clear()` in `cognitive_hub.py` with an append-only `round_table_memory` that persists across the session.
-- [ ] **Task 23.2 (Ledger Injection)**: Prepend the `[PREVIOUS_DEBATE]` block to Pinky/Shadow's context on every turn so they retain the Brain's historical corrections.
-- [ ] **Task 23.3 (Pruning Strategy)**: Implement a rolling window (e.g., last 3 turns) to manage context bloat before KV Routing is finalized.
+- [ ] **Task 23.1 (Persistent Ledger)**: Replace `session_buffers.clear()` in `cognitive_hub.py` with an append-only `round_table_memory` (deque, maxlen=5) that survives across turns.
+- [ ] **Task 23.2 (Ledger Injection)**: Prepend the `[PREVIOUS_DEBATE]` block to node context on every turn so they retain historical corrections.
+- [ ] **Task 23.3 (Pruning Strategy)**: Implement rolling window management to prevent context bloat before KV Routing is finalized.
+
+**Implementation Details**:
+*   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` (`__init__` and `process_query`).
+*   **Test Strategy**: Use `src/tests/test_memory_drill_down.py` (Forensic) to verify Turn-1 corrections are visible in Turn-2 prompts.
 
 #### 🎯 GOAL 24: STOCHASTIC KV ROUTING (The VRAM Multiplier) [FEAT-357]
-*Objective: Enable deep, multi-turn RAG conversations on the 2080 Ti.*
+*Objective: Enable deep, multi-turn RAG conversations on the 2080 Ti by optimizing context caching.*
 
-- [ ] **Task 24.1 (vLLM Parameter Injection)**: Investigate and apply cross-layer attention flags (if supported natively in our vLLM version) or simulate chunked KV sharing to optimize context caching.
-- [ ] **Task 24.2 (Context Anchoring)**: Ensure the `IDENTITY_BEDROCK` (Goal 20) remains locked in the prefix cache while the `round_table_memory` cycles dynamically.
+- [ ] **Task 24.1 (vLLM Parameter Injection)**: Update `lab_attendant_v4.py` (`_run_engine`) to include `--enable-chunked-prefill` and `--max-num-batched-tokens` optimized for memory sharing.
+- [ ] **Task 24.2 (Context Anchoring)**: Ensure `IDENTITY_BEDROCK` (Goal 20) remains locked in the prefix cache while the `round_table_memory` cycles dynamically.
+
+**Implementation Details**:
+*   **Where**: `HomeLabAI/src/lab_attendant_v4.py`.
+*   **Test Strategy**: Use `src/debug/test_apollo_vram.py` to profile VRAM delta before/after enabling optimized prefill.
 
 ---
 
-### 🧪 VERIFICATION: THE ULTIMATE RAG TEST
-**Objective:** Prove that the Bicameral Debate produces grounded, hallucination-free history.
+### 🔄 THE 4-STEP HEADS-DOWN IMPLEMENTATION LOOP
+For each goal, I will follow this rigorous cycle:
+1.  **REPRODUCE/MOCK**: Create a failing test case to establish the baseline failure.
+2.  **SURGICAL ACT**: Apply the code change using the **Safe-Scalpel [FEAT-198]**.
+3.  **UNIT VALIDATE**: Run specific tests (e.g., `pytest src/tests/test_debate_logic.py`).
+4.  **INTEGRATION GAUNTLET**: Execute the **Physician's Gauntlet** (`src/debug/verify_sprint.py`).
 
-1.  **The "Early 2023" Probe**:
-    *   **Query**: "What did I focus on in early 2023?"
-    *   **Expected Trace (Visible TTCS)**: 
-        *   Pinky retrieves the 2023 JSONs via RAG.
-        *   Shadow critiques the retrieval: `<thought> Wait, the logs show heavy Python scripting in Feb 2023, but the query implies strategic focus. Let's ask the Brain for the Master Index correlation. </thought>`
-        *   Brain provides the context.
-    *   **Assertion**: The final output MUST reference specific technical milestones from Q1 2023 without hallucinating 2024 features, proving Foil-Aware memory and RAG integration succeeded.
+---
+
+### 🧪 THE ULTIMATE RAG VERIFICATION: "THE 2023 PROBE"
+**Objective:** Prove the mice can debate and win on historical ground truth.
+*   **Prompt**: "[ME] What was my primary focus in early 2023?"
+*   **Success Criteria**: 
+    1. **Trace**: Pinky finds "PECISTRESSOR" or "Telemetry Scripts."
+    2. **Foil**: Shadow critiques the "raw data" to extract "Strategic Intent."
+    3. **Memory**: Pinky answers a follow-up correctly using the Turn-1 debate context.
 
 ---
 
 ### ⚖️ LEAD ENGINEER GREENLIGHT REQUIRED
-*Per BKM-030, implementation is paused pending review of this Phase 2 draft.*
+*Per BKM-030, implementation is paused pending review of this high-fidelity Phase 2 blueprint.*
+
