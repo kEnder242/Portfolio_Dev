@@ -126,8 +126,10 @@ Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visib
 *Objective: Transform inter-node talk from "side-chatter" into the reasoning bedrock where nodes foil each other to reach historical truth.*
 
 - [ ] **Task 22.1 (Thought Tagging)**: Update `execute_dispatch` in `cognitive_hub.py` and the node prompts to enforce the use of `<thought>` tags for all inter-node communication prior to user delivery.
+    *   **BKM-017 Delegation**: Repetitive prompt string updates across `shadow_node.py`, `pinky_node.py`, and `brain_node.py` are candidates for `generalist` execution.
 - [ ] **Task 22.2 (Adversarial Prompts)**: Modify `pinky_node.py` & `brain_node.py` system prompts to explicitly mandate critiquing each other's historical retrieval (e.g., "Check the dates").
 - [ ] **Task 22.3 (Consensus Gate)**: Implement logic in `_process_node_stream` that prevents final user delivery until a consensus is reached or fuel runs out.
+    *   **Logic Flow**: Triage -> Round Table -> `<thought>` (Pinky) -> `<thought>` (Shadow/Brain) -> Final Delivery.
 
 **Implementation Details**:
 *   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` and individual node prompt files.
@@ -137,8 +139,10 @@ Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visib
 *Objective: Eliminate amnesia by giving Pinky a persistent view of the Brain's strategic logic from previous turns.*
 
 - [ ] **Task 23.1 (Persistent Ledger)**: Replace `session_buffers.clear()` in `cognitive_hub.py` with an append-only `round_table_memory` (deque, maxlen=5) that survives across turns.
+    *   **Why**: Current amnesia prevents Pinky from learning from the Brain's corrections in real-time.
 - [ ] **Task 23.2 (Ledger Injection)**: Prepend the `[PREVIOUS_DEBATE]` block to node context on every turn so they retain historical corrections.
 - [ ] **Task 23.3 (Pruning Strategy)**: Implement rolling window management to prevent context bloat before KV Routing is finalized.
+    *   **BKM-017 Delegation**: Surgical insertion of deque logic into `__init__` and `process_query` will be delegated to ensure context amnesia for the Main Agent is avoided.
 
 **Implementation Details**:
 *   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` (`__init__` and `process_query`).
@@ -148,6 +152,7 @@ Evolve the Lab's reasoning architecture from "Sequential Overhearing" to **Visib
 *Objective: Enable deep, multi-turn RAG conversations on the 2080 Ti by optimizing context caching.*
 
 - [ ] **Task 24.1 (vLLM Parameter Injection)**: Update `lab_attendant_v4.py` (`_run_engine`) to include `--enable-chunked-prefill` and `--max-num-batched-tokens` optimized for memory sharing.
+    *   **BKM-017 Delegation**: Shell command flag verification and update delegated to `generalist`.
 - [ ] **Task 24.2 (Context Anchoring)**: Ensure `IDENTITY_BEDROCK` (Goal 20) remains locked in the prefix cache while the `round_table_memory` cycles dynamically.
 
 **Implementation Details**:
