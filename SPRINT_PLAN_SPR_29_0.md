@@ -71,6 +71,36 @@ To verify and maximize the performance of the Acme Lab's multi-LoRA routing arch
 
 ---
 
-## ⚖️ DISCUSSION POINTS FOR LEAD ENGINEER
-1. **Universal System Prompt**: [x] **RESOLVED**. Shared `IDENTITY_BEDROCK` is active and forcing cache hits.
-2. **Qwen vs Llama (VRAM vs Perf)**: [x] **RESOLVED**. Moving to Qwen2.5-3B as the standard.
+
+---
+
+## 🔬 RESEARCH RECOVERY & MODERNIZATION REPORT [BKM-023]
+**Date:** May 20, 2026 | **Status:** PROPOSED
+
+### 🎯 Restoration Summary
+Following a forensic audit of `research.html` and `RESEARCH_SYNTHESIS.md`, we have restored the high-fidelity ArXiv-centric architecture. Internal `FEAT` markers have been subordinated to their theoretical anchors to maintain a professional "Research Ledger" appearance.
+
+### 🧬 ArXiv Mapping & Pedigree Correlation
+| Research Anchor | ArXiv ID | Implementation Milestone | Status |
+| :--- | :--- | :--- | :--- |
+| **FS-Researcher** | 2602.01566 | [FEAT-095] Static Synthesis | Live |
+| **Agentic-R** | 2601.11888 | [FEAT-080] Learning to Retrieve | Active |
+| **TTCS / Curriculum**| 2601.22628 | [FEAT-114] Sovereign Bridge | Live |
+| **Apple CLaRa** | 2511.18659 | [FEAT-073] Semantic Condenser | Live |
+| **Liger Kernel** | 2410.10989 | [FEAT-137] Triton Optimization | Live |
+| **Byzantine ToM** | 2603.00142 | [FEAT-071] Internal Debate | Live |
+| **AT2QA** | 2603.01853 | [FEAT-173] Autonomous Pivot | Design |
+| **Memex (RL)** | 2603.04257 | [FEAT-067] Diamond Dreaming | Live |
+| **TTT-Discover** | 2601.16175 | N/A | Planned |
+| **MAXS** | 2601.12538 | N/A | Planned |
+
+### 🛠️ Actions Taken [BKM-023 Compliance]
+1.  **Surgical Update**: `RESEARCH_SYNTHESIS.md` updated with explicit ArXiv IDs.
+2.  **Noise Filtering**: Cleaned up "Tabled & Future" items in the source markdown.
+3.  **Demo Creation**: `field_notes/research_demo.html` generated (not committed) for UI comparison. 
+4.  **BKM-023 Adherence**: All edits performed via `replace` to preserve surrounding engineering context.
+
+### 🔮 Next Steps
+- [ ] Review `research.html`.
+- [ ] Perform the Google Keep brain dump for Epoch 2 research.
+- [ ] Sync the refined ledger to the public airlock (`sync_research.sh`).
