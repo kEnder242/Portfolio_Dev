@@ -226,6 +226,8 @@ Evolve the Lab's reasoning architecture to **100% Transparency**. We will physic
 
 ---
 
+---
+
 ## 🔬 PHASE 4: RAG DEEP SEARCH & BKM-015 CLEANUP [MAY 22]
 **Status:** DRAFT | PENDING LEAD ENGINEER REVIEW
 
@@ -245,36 +247,36 @@ Transition the Lab from a "Year-Sticky" searcher into a semantic "Researcher." W
 *Objective: Replace hardcoded triggers with semantic intent detection.*
 
 - [ ] **Task 32.1 (Trigger Refactor)**: Remove hardcoded year-regex from `acme_lab.py` and `cognitive_hub.py`. Ensure `intent == "RECALL"` is the sole authority for triggering `archive.get_context`.
-    *   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` (lines 610-620).
+    *   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` (lines 620-630).
 - [ ] **Task 32.2 (FEAT-088 Intent Hardening)**: Update the `lab_node.py` (Sentinel) prompt to recognize temporal queries like "My time at Intel" or "Early career" and map them to `intent: RECALL`.
 - [ ] **Task 32.3 (Agnostic Retrieval)**: Update `archive_node.py` to handle `get_context` calls without an explicit year, defaulting to a broader semantic search across the `long_term_wisdom` collection.
 
 #### 🎯 GOAL 33: AGENTIC BACKTRACKING [RE-FEAT-173]
 *Objective: Allow nodes to autonomously refine their search if initial results are thin.*
 
-- [ ] **Task 33.1 (Fidelity Check)**: In `CognitiveHub`, implement a check after `get_context`. If `historical_context` is < 100 characters or contains "No relevant artifacts," trigger a secondary attempt.
+- [ ] **Task 33.1 (Fidelity Check)**: In `CognitiveHub`, implement a check after `get_context`. If `historical_context` is < 150 characters or contains "No relevant artifacts," trigger a secondary attempt.
 - [ ] **Task 33.2 (Recursive Retrieval)**: Grant the `ArchiveNode` the authority to widen the temporal window (e.g., +/- 1 year) if the primary year yields low signal.
 
 #### 🎯 GOAL 34: MULTI-YEAR NEIGHBORHOOD SEARCH
 *Objective: Provide "temporal on-ramps" by peeking at surrounding context.*
 
-- [ ] **Task 34.1 (Temporal Neighborhoods)**: Update `archive.get_context` to always retrieve 1 month before and after a confirmed temporal anchor to provide context continuity.
+- [ ] **Task 34.1 (Temporal Neighborhoods)**: Update `archive.get_context` to always retrieve 1 year before a confirmed temporal anchor to provide narrative continuity.
 - [ ] **Task 34.2 (Strategic Summary Grafting)**: Ensure the high-level `[STRATEGIC_ANCHOR]` from the previous year is always included in the context when starting a new temporal probe.
 
 #### 🎯 GOAL 35: STANDARDIZED 3-TIER MAP INJECTION
 *Objective: Orient the mice with the full topography of the 18-year archive.*
 
-- [ ] **Task 35.1 (Topographical Preamble)**: Prepend the `semantic_map.json` summary to all high-fuel node prompts so they know which years contain the specific expertise (e.g., Telemetry, Security) before searching.
+- [ ] **Task 35.1 (Topographical Preamble)**: Ingest the `semantic_map.json` and prepend its topographical anchors (Theme vs Year ranges) to the `IDENTITY_BEDROCK` in `CognitiveHub`.
 
 ---
 
-### 🧪 VERIFICATION: THE "2023 PROBE" (v3.0)
+### 🧪 VERIFICATION: THE "RECALL PROBE" (v3.0)
 **Objective:** Prove semantic intent and multi-year grounding.
 *   **Prompt**: "[ME] Look into the early months of my NVIDIA career. What was the transition like?"
 *   **Success Criteria**:
-    1.  **Intent**: Hub logs show `intent: RECALL` triggered without the user saying a specific year.
+    1.  **Intent**: Hub logs show `intent: RECALL` triggered without the user saying "2024" or a specific year.
     2.  **Backtracking**: If NVIDIA starts in Jan, and the search finds nothing, the log must show a backtracking retry to Dec of the previous year.
-    3.  **Privacy**: Zero "coaching" feedback appears in the final synthesis.
+    3.  **Continuity**: The final answer must reference context from both the anchor year and its neighborhood.
 
 ---
 
