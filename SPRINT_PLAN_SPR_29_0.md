@@ -224,8 +224,60 @@ Evolve the Lab's reasoning architecture to **100% Transparency**. We will physic
 
 ---
 
-### 🧪 THE ULTIMATE TEST: THE 2023 PROBE (v2.0)
-**Success Criteria**:
-1.  **Visibility**: I must provide a console log proving Pinky's thoughts were seen *before* the Brain spoke.
-2.  **Grounding**: The final answer must correctly identify PECISTRESSOR/2023 focus.
+---
+
+## 🔬 PHASE 4: RAG DEEP SEARCH & BKM-015 CLEANUP [MAY 22]
+**Status:** DRAFT | PENDING LEAD ENGINEER REVIEW
+
+### 🎯 MISSION
+Transition the Lab from a "Year-Sticky" searcher into a semantic "Researcher." We will eliminate hardcoded temporal triggers (BKM-015), implement autonomous retry logic (Agentic Backtracking), and restore **Semantic Career Recall (FEAT-088)** to ensure the Lab Node can detect historical queries by intent rather than rigid regex.
+
+### 🧠 STRATEGIC RATIONALE (Why)
+*   **The BKM-015 Violation**: Currently, the system often relies on hardcoded regex for "2023" or "2019" to trigger RAG. This is brittle and violates the Law of Semantic Indirection. We must use the **Lab Node's Intent (RECALL)** as the sole authority.
+*   **The Search Trap**: A single "thin" RAG result often leads to hallucinations. **Agentic Backtracking** allows the Lab to say "I found nothing, let me look at the surrounding years" autonomously.
+*   **The Core Mind (FEAT-088)**: The Lab Node exists to perceive the *nature* of your query. By restoring FEAT-088, we empower the "Receptionist" to recognize when you are asking about the past, even if you don't provide a specific year.
+
+---
+
+### 🛠️ SPRINT GOALS
+
+#### 🎯 GOAL 32: BKM-015 CLEANUP & FEAT-088 (Semantic Recall)
+*Objective: Replace hardcoded triggers with semantic intent detection.*
+
+- [ ] **Task 32.1 (Trigger Refactor)**: Remove hardcoded year-regex from `acme_lab.py` and `cognitive_hub.py`. Ensure `intent == "RECALL"` is the sole authority for triggering `archive.get_context`.
+    *   **Where**: `HomeLabAI/src/logic/cognitive_hub.py` (lines 610-620).
+- [ ] **Task 32.2 (FEAT-088 Intent Hardening)**: Update the `lab_node.py` (Sentinel) prompt to recognize temporal queries like "My time at Intel" or "Early career" and map them to `intent: RECALL`.
+- [ ] **Task 32.3 (Agnostic Retrieval)**: Update `archive_node.py` to handle `get_context` calls without an explicit year, defaulting to a broader semantic search across the `long_term_wisdom` collection.
+
+#### 🎯 GOAL 33: AGENTIC BACKTRACKING [RE-FEAT-173]
+*Objective: Allow nodes to autonomously refine their search if initial results are thin.*
+
+- [ ] **Task 33.1 (Fidelity Check)**: In `CognitiveHub`, implement a check after `get_context`. If `historical_context` is < 100 characters or contains "No relevant artifacts," trigger a secondary attempt.
+- [ ] **Task 33.2 (Recursive Retrieval)**: Grant the `ArchiveNode` the authority to widen the temporal window (e.g., +/- 1 year) if the primary year yields low signal.
+
+#### 🎯 GOAL 34: MULTI-YEAR NEIGHBORHOOD SEARCH
+*Objective: Provide "temporal on-ramps" by peeking at surrounding context.*
+
+- [ ] **Task 34.1 (Temporal Neighborhoods)**: Update `archive.get_context` to always retrieve 1 month before and after a confirmed temporal anchor to provide context continuity.
+- [ ] **Task 34.2 (Strategic Summary Grafting)**: Ensure the high-level `[STRATEGIC_ANCHOR]` from the previous year is always included in the context when starting a new temporal probe.
+
+#### 🎯 GOAL 35: STANDARDIZED 3-TIER MAP INJECTION
+*Objective: Orient the mice with the full topography of the 18-year archive.*
+
+- [ ] **Task 35.1 (Topographical Preamble)**: Prepend the `semantic_map.json` summary to all high-fuel node prompts so they know which years contain the specific expertise (e.g., Telemetry, Security) before searching.
+
+---
+
+### 🧪 VERIFICATION: THE "2023 PROBE" (v3.0)
+**Objective:** Prove semantic intent and multi-year grounding.
+*   **Prompt**: "[ME] Look into the early months of my NVIDIA career. What was the transition like?"
+*   **Success Criteria**:
+    1.  **Intent**: Hub logs show `intent: RECALL` triggered without the user saying a specific year.
+    2.  **Backtracking**: If NVIDIA starts in Jan, and the search finds nothing, the log must show a backtracking retry to Dec of the previous year.
+    3.  **Privacy**: Zero "coaching" feedback appears in the final synthesis.
+
+---
+
+### ⚖️ LEAD ENGINEER REVIEW REQUIRED
+*Per BKM-030, Phase 4 execution is paused pending review of these goals.*
 
