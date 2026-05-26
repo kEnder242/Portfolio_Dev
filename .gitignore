@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 tmp/
 *.swp
+.omo
 
 # Symlinks/Local Config
 gemini_settings.json
