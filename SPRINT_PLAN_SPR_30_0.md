@@ -2,7 +2,7 @@
 **Status:** PLANNING | NO EXECUTION PERMITTED
 
 ## 🎯 MISSION
-Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying the existing DNA. We will map all critical features to their physical code locations, modernize foundational documentation, and establish a "Deferred Semantic Evaluation" (BKM-032) protocol to ensure no functional regressions occur during the upcoming transformation into the **Great Brain Awakening**.
+Prepare the Lab for an architectural refactor (Sprint 31) by codifying the existing DNA. We will map all critical features to their physical code locations, modernize foundational documentation to reflect the **current stable state**, and establish a "Deferred Semantic Evaluation" (BKM-032) protocol to ensure no functional regressions occur during the upcoming transformation.
 
 ---
 
@@ -18,7 +18,7 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 | **[FEAT-088] Semantic Recall** | The "Receptionist" intent detection that triggers RAG. | **Critical**. Grounding must remain intent-driven. |
 | **[FEAT-117] Multi-Stage RAG** | Discovery (ChromaDB) -> Acquisition (Filesystem) pattern. | **Critical**. Accuracy bedrock. |
 | **[FEAT-151] Forensic Ledger** | Unified Trace Monitoring for autonomous transitions. | **Critical**. Reliability bedrock. |
-| **[FEAT-240] Native MCP Sampling** | **The Refactor Anchor**. Inter-node message protocol. | **Nuclear**. Replace JSON pipes with native sampling. |
+| **[FEAT-240] Native MCP Sampling** | **The Refactor Anchor**. Inter-node message protocol. | **Central**. Replace JSON pipes with native sampling. |
 | **[FEAT-368] Vocal Handshake** | Immediate persona feedback during engine ignition. | **Harden**. 100% visibility during warming. |
 | **[FEAT-036] VRAM Guard** | The autonomous survival instinct against OOM crashes. | **Harden**. Port to new architecture. |
 | **[FEAT-249] VRAM Hibernation Matrix**| Tiered reclamation based on activity/connectivity. | **Harden**. Essential for multi-tenancy. |
@@ -72,32 +72,25 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 
 ---
 
-## 📚 4. DOC MODERNIZATION PLAN
-*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
-
-### 🔮 Proposed & Undocumented [POTENTIAL]
-- **[FEAT-369] Sovereign Verifier Synthesis**: Autonomous test generation during Sprints (derived from AutoHarness).
-- **[FEAT-370] Stochastic KV Optimization**: Deep cross-layer attention sharing for long-horizon sessions.
-
-## 📚 4. DOC MODERNIZATION PLAN
-*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
+## 📚 4. DOC MODERNIZATION PLAN (Snapshotting Current Truth)
+*Goal: Align blueprints with the current Phase 15 "Neural Relay" reality to ensure a stable baseline for refactoring.*
 
 1.  **[00_MASTER_INDEX.md] Update**: 
     - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
     - [ ] Add `SPRINT_PLAN_SPR_30_0.md` to the active roadmap.
-    - [ ] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers in `00_MASTER_INDEX.md` resolve to existing (non-zombie) documents.
-2.  **Architecture & Logic Modernization**:
-    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Reflect the shift from "Sequential Handovers" to "Bicameral Debate" and the **Deep Thought** action.
-    - [ ] **Task 4.1 (Nomenclature Alignment)**: Update `FIELD_NOTES_ARCHITECTURE.md` to replace all references to "Shadow" with "The Brain" and "Sovereign" with "Deep Thought [HHGTTG]".
-    - [ ] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Interest" score logic.
-    - [ ] **Task 4.2 (Metric Translation)**: In `BICAMERAL_DISPATCH.md`, define the **Interest Score** logic—explicitly documenting that Pinky always "Pushes" intuition, but the Brain "Pulls" or choice-halts based on conversational completion.
+    - [ ] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers resolve to existing documents.
+2.  **Architecture & Logic Verification**:
+    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Ensure the document accurately reflects the current **Pinky -> Shadow -> Sovereign** waterfall flow.
+    - [ ] **Task 4.1 (Current State Audit)**: Audit design docs to ensure every 'Inflection Core' feature is physically documented.
+    - [ ] **BICAMERAL_DISPATCH.md**: Finalize the documentation for **Fuel Scalar** logic and the **Handshake Tic** behaviors.
+    - [ ] **Task 4.2 (Protocol Hardening)**: Document the **BKM-015.1 (Semantic Indirection)** enforcement patterns used in the current Hub triage.
 3.  **Timing & Vitals**:
-    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
+    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut established in Sprint 29.
 
+---
 
-
-## 🧪 5. TEST MAP (The Gauntlet)
-*Goal: Correlate features to physical verification scripts.*
+## 🧪 5. TEST MAP (The Gold Master Baseline)
+*Goal: Correlate features to physical verification scripts to establish a 'Gold Master' baseline.*
 
 ### 🛠️ The Inflection Test Set
 | Feature Group | Script(s) | Type | Gap/Strategy |
@@ -108,33 +101,30 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 | **VRAM Resilience** | `test_apollo_vram.py`, `uber_5x5_hand_crank.py`| Stress | **Ultimate Pass**: 5-cycle increasing wait. |
 
 **Proposed Implementation Tasks:**
-- [ ] **Task 5.1 (The 'Interest' Mock)**: Create `src/tests/mock_interest_decay.py` to verify that the logic correctly maps old `fuel` values to the new `interest_score` without breaking triage.
-- [ ] **Task 5.2 (Deep Thought Handshake)**: Implement `src/tests/test_deep_thought_vocal.py` to verify that the Brain can still provide immediate fast-track responses while the "Deep Thought" (4090) model is loading.
-- [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Legacy" and which are "V5-Ready."
+- [ ] **Task 5.1 (The Gold Master Baseline)**: Run the entire inflection set and capture the **Wordy Output** as a reference.
+- [ ] **Task 5.2 (Handshake Trace)**: Verify the **Vocal Handshake** timing and broadcast reliability during engine warm-up.
+- [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Current" and essential for refactor verification.
 
 ---
 
 ## ⚙️ 6. DEFERRED SEMANTIC EVALUATION [BKM-032]
-*Vibe: Human-in-the-Loop Batch Evaluation. Replaces the "Hand-Crank" nomenclature to decouple the testing pattern from the specific 5x5 stress test.*
-
-### 🔄 Logic Flow
-1.  **Batch Execution**: Run a suite of tests (like the Uber 5x5) in a non-blocking, automated sequence.
-2.  **Hard Validation (System)**: The runner notifies immediately on "Hard" errors (Crashes, Connection Failures, Silence, Gibberish).
-3.  **Wordy Output Capture**: The system captures the full LLM reasoning trace, the visible `<thought>` blocks, and persona nuances into a log.
-4.  **AI Evaluation (The Deferred Review)**:
-    - **Step**: Gemini CLI (acting as the Lead Engineer's proxy) reads the wordy output *after* the batch completes.
-    - **Criteria**: Evaluates for: *Coherence, Historical Grounding, and Persona Fidelity*.
-    - **Verdict**: The AI decides if the behavior "Feels Right" in the context of the Lab's 18-year history, moving beyond brittle string-matching to true semantic verification.
+*Vibe: Human-in-the-Loop Batch Evaluation. Decouples the testing pattern from specific scripts.*
 
 **Proposed Implementation Tasks:**
 - [ ] **Task 6.1 (The Wordy Logger)**: Implement a decorator or wrapper in `AcmeLab` that captures 100% of the cross-node thought trace into a single `evaluation_batch_01.log`.
 - [ ] **Task 6.2 (Review Template)**: Define a markdown template for the "Gemini CLI Evaluation" (e.g., *Check: Did Pinky use Narf? Check: Was PECISTRESSOR mentioned?*).
-- [ ] **Task 6.3 (Hard-Error Sentry)**: Ensure the batch runner triggers a PagerDuty alert (or high-visibility red log) if a "Hard" error occurs, so manual audit time isn't wasted on crashed runs.
+- [ ] **Task 6.3 (Hard-Error Sentry)**: Ensure the batch runner triggers a PagerDuty alert (or high-visibility red log) if a "Hard" error occurs.
 
-### 🛠️ 7. Foundational Code Tasks (Sprint 30 Implementation)
-*Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
+---
 
-- [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
-- [ ] **Task 0.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
-- [ ] **Task 0.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
-- [ ] **Task 0.4 (Interest Sync)**: Globally rename `fuel` variables to `interest` and `shadow` to `brain` across the Hub to align with Sprint 31 logic.
+## 🛠️ 7. INSTRUMENTATION & HARDENING
+*Surgical tasks required to stabilize the DNA and provide testing visibility before the refactor.*
+
+- [ ] **Task 7.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
+- [ ] **Task 7.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
+- [ ] **Task 7.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
+
+---
+
+### ⚖️ LEAD ENGINEER REVIEW REQUIRED
+*This plan is an artifact for Sprint 30. No code changes have been made.*
