@@ -114,7 +114,7 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
     - **Criteria**: Evaluates for: *Coherence, Historical Grounding, and Persona Fidelity*.
     - **Verdict**: The AI decides if the behavior "Feels Right" in the context of the Lab's 18-year history, moving beyond brittle string-matching to true semantic verification.
 
-### 🛠️ Foundational Code Tasks (Sprint 30 Implementation)
+### 🛠️ 7. Foundational Code Tasks (Sprint 30 Implementation)
 *Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
 
 - [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
