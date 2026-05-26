@@ -27,6 +27,8 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 | **[FEAT-067] Diamond Dreaming** | Background consolidation of raw logs into wisdom. | **Modernize**. Align with new logging. |
 | **[FEAT-160] Pedigree Refinement**| Physically encoding history into model weights (LoRA). | **Keep**. Long-term neural recall. |
 
+---
+
 ### ⚙️ Active Infrastructure (The Supporting Cast)
 *Categorized by Lab Flow stage. These implementations are critical, but the specific code can change.*
 
@@ -71,25 +73,11 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 ---
 
 ## 📚 4. DOC MODERNIZATION PLAN
-...
+*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
 
 ### 🔮 Proposed & Undocumented [POTENTIAL]
 - **[FEAT-369] Sovereign Verifier Synthesis**: Autonomous test generation during Sprints (derived from AutoHarness).
 - **[FEAT-370] Stochastic KV Optimization**: Deep cross-layer attention sharing for long-horizon sessions.
-
-
-### 🛠️ Foundational Code Tasks (Sprint 30 Implementation)
-*Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
-
-- [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
-- [ ] **Task 0.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
-- [ ] **Task 0.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
-- [ ] **Task 0.4 (Interest Sync)**: Globally rename `fuel` variables to `interest` and `shadow` to `brain` across the Hub to align with Sprint 31 logic.
-
----
-
-## 📚 2. DOC MODERNIZATION PLAN
-*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
 
 1.  **[00_MASTER_INDEX.md] Update**: 
     - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
@@ -100,12 +88,8 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 3.  **Timing & Vitals**:
     - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
 
----
 
-## 🧪 3. TEST MAP (The Gauntlet)
-...
-
-## 🧪 3. TEST MAP (The Gauntlet)
+## 🧪 5. TEST MAP (The Gauntlet)
 *Goal: Correlate features to physical verification scripts.*
 
 ### 🛠️ The Inflection Test Set
@@ -118,7 +102,7 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 
 ---
 
-## ⚙️ 4. DEFERRED SEMANTIC EVALUATION [BKM-032]
+## ⚙️ 6. DEFERRED SEMANTIC EVALUATION [BKM-032]
 *Vibe: Human-in-the-Loop Batch Evaluation. Replaces the "Hand-Crank" nomenclature to decouple the testing pattern from the specific 5x5 stress test.*
 
 ### 🔄 Logic Flow
@@ -130,7 +114,10 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
     - **Criteria**: Evaluates for: *Coherence, Historical Grounding, and Persona Fidelity*.
     - **Verdict**: The AI decides if the behavior "Feels Right" in the context of the Lab's 18-year history, moving beyond brittle string-matching to true semantic verification.
 
----
+### 🛠️ Foundational Code Tasks (Sprint 30 Implementation)
+*Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
 
-### ⚖️ LEAD ENGINEER REVIEW REQUIRED
-*This plan is an artifact for Sprint 30. No code changes have been made.*
+- [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
+- [ ] **Task 0.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
+- [ ] **Task 0.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
+- [ ] **Task 0.4 (Interest Sync)**: Globally rename `fuel` variables to `interest` and `shadow` to `brain` across the Hub to align with Sprint 31 logic.
