@@ -1067,9 +1067,10 @@
 **Logic:** Hub-side selective muting based on the `addressed_to` scalar from Sentinel.
 **Mechanism:** Prevents nodes from speaking if they are not the intended target of the semantic address.
 
-## [FEAT-245] Identity Shielding
-**Status:** PLANNED
-**Logic:** Enforced distinction between Current Lab State (Mice) and Historical Archive (Brain).
+## [FEAT-245] Identity Shielding (Semantic Isolation)
+**Status:** ACTIVE (Modernization Planned Sprint 31)
+**Logic:** Distinction between Current Lab State (The Brain) and Historical Archive (Deep Thought) to prevent memory bleed.
+**Refactor Strategy:** Merge into [VIBE-012] (Hemispheric Independence). Enforce boundaries through modular prompt injection.
 **Rationale:** Prevents \"Memory Bleed\" where nodes hallucinate personal experiences from the 18-year archive.
 
 ## [FEAT-246] Unified Vibe Schema
@@ -1226,3 +1227,5 @@
 **Logic:** Immediate persona feedback during engine ignition. If the engine is still warming, Pinky provides a hardcoded Semantic Handshake instead of crashing or providing reflex-only output.
 **Mechanism:** Triggered within `cognitive_hub.py` and `acme_lab.py` during engine-down events or triage connection errors.
 **Refactor Strategy:** Harden into a "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
+ "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
+
