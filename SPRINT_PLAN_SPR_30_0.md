@@ -79,14 +79,21 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 - **[FEAT-369] Sovereign Verifier Synthesis**: Autonomous test generation during Sprints (derived from AutoHarness).
 - **[FEAT-370] Stochastic KV Optimization**: Deep cross-layer attention sharing for long-horizon sessions.
 
+## 📚 4. DOC MODERNIZATION PLAN
+*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
+
 1.  **[00_MASTER_INDEX.md] Update**: 
     - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
     - [ ] Add `SPRINT_PLAN_SPR_30_0.md` to the active roadmap.
+    - [ ] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers in `00_MASTER_INDEX.md` resolve to existing (non-zombie) documents.
 2.  **Architecture & Logic Modernization**:
     - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Reflect the shift from "Sequential Handovers" to "Bicameral Debate" and the **Deep Thought** action.
+    - [ ] **Task 4.1 (Nomenclature Alignment)**: Update `FIELD_NOTES_ARCHITECTURE.md` to replace all references to "Shadow" with "The Brain" and "Sovereign" with "Deep Thought [HHGTTG]".
     - [ ] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Interest" score logic.
+    - [ ] **Task 4.2 (Metric Translation)**: In `BICAMERAL_DISPATCH.md`, define the **Interest Score** logic—explicitly documenting that Pinky always "Pushes" intuition, but the Brain "Pulls" or choice-halts based on conversational completion.
 3.  **Timing & Vitals**:
     - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
+
 
 
 ## 🧪 5. TEST MAP (The Gauntlet)
@@ -99,6 +106,11 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 | **Persona & Voice** | `test_visibility_truth.py`, `semantic_probe.py` | Integration | **Deferred Evaluation required** for semantic quality. |
 | **Archival RAG** | `test_intent_recall.py`, `test_rag_logic.py` | Mock | Needs broad "No-Year" semantic trigger test. |
 | **VRAM Resilience** | `test_apollo_vram.py`, `uber_5x5_hand_crank.py`| Stress | **Ultimate Pass**: 5-cycle increasing wait. |
+
+**Proposed Implementation Tasks:**
+- [ ] **Task 5.1 (The 'Interest' Mock)**: Create `src/tests/mock_interest_decay.py` to verify that the logic correctly maps old `fuel` values to the new `interest_score` without breaking triage.
+- [ ] **Task 5.2 (Deep Thought Handshake)**: Implement `src/tests/test_deep_thought_vocal.py` to verify that the Brain can still provide immediate fast-track responses while the "Deep Thought" (4090) model is loading.
+- [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Legacy" and which are "V5-Ready."
 
 ---
 
@@ -113,6 +125,11 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
     - **Step**: Gemini CLI (acting as the Lead Engineer's proxy) reads the wordy output *after* the batch completes.
     - **Criteria**: Evaluates for: *Coherence, Historical Grounding, and Persona Fidelity*.
     - **Verdict**: The AI decides if the behavior "Feels Right" in the context of the Lab's 18-year history, moving beyond brittle string-matching to true semantic verification.
+
+**Proposed Implementation Tasks:**
+- [ ] **Task 6.1 (The Wordy Logger)**: Implement a decorator or wrapper in `AcmeLab` that captures 100% of the cross-node thought trace into a single `evaluation_batch_01.log`.
+- [ ] **Task 6.2 (Review Template)**: Define a markdown template for the "Gemini CLI Evaluation" (e.g., *Check: Did Pinky use Narf? Check: Was PECISTRESSOR mentioned?*).
+- [ ] **Task 6.3 (Hard-Error Sentry)**: Ensure the batch runner triggers a PagerDuty alert (or high-visibility red log) if a "Hard" error occurs, so manual audit time isn't wasted on crashed runs.
 
 ### 🛠️ 7. Foundational Code Tasks (Sprint 30 Implementation)
 *Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
