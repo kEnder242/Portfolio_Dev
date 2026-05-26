@@ -2,7 +2,7 @@
 **Status:** PLANNING | NO EXECUTION PERMITTED
 
 ## 🎯 MISSION
-Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying the existing DNA. We will map all critical features to their physical code locations, modernize foundational documentation, and establish a "Hand-Crank" batch-testing protocol to ensure no functional regressions occur during the upcoming transformation.
+Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying the existing DNA. We will map all critical features to their physical code locations, modernize foundational documentation, and establish a "Deferred Semantic Evaluation" (BKM-032) protocol to ensure no functional regressions occur during the upcoming transformation into the **Great Brain Awakening**.
 
 ---
 
@@ -18,6 +18,7 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 | **[FEAT-088] Semantic Recall** | The "Receptionist" intent detection that triggers RAG. | **Critical**. Grounding must remain intent-driven. |
 | **[FEAT-117] Multi-Stage RAG** | Discovery (ChromaDB) -> Acquisition (Filesystem) pattern. | **Critical**. Accuracy bedrock. |
 | **[FEAT-151] Forensic Ledger** | Unified Trace Monitoring for autonomous transitions. | **Critical**. Reliability bedrock. |
+| **[FEAT-240] Native MCP Sampling** | **The Refactor Anchor**. Inter-node message protocol. | **Nuclear**. Replace JSON pipes with native sampling. |
 | **[FEAT-368] Vocal Handshake** | Immediate persona feedback during engine ignition. | **Harden**. 100% visibility during warming. |
 | **[FEAT-036] VRAM Guard** | The autonomous survival instinct against OOM crashes. | **Harden**. Port to new architecture. |
 | **[FEAT-249] VRAM Hibernation Matrix**| Tiered reclamation based on activity/connectivity. | **Harden**. Essential for multi-tenancy. |
@@ -76,21 +77,33 @@ Prepare the Lab for a "Nuclear" architectural refactor (Sprint 31) by codifying 
 - **[FEAT-369] Sovereign Verifier Synthesis**: Autonomous test generation during Sprints (derived from AutoHarness).
 - **[FEAT-370] Stochastic KV Optimization**: Deep cross-layer attention sharing for long-horizon sessions.
 
+
+### 🛠️ Foundational Code Tasks (Sprint 30 Implementation)
+*Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
+
+- [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
+- [ ] **Task 0.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
+- [ ] **Task 0.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
+- [ ] **Task 0.4 (Interest Sync)**: Globally rename `fuel` variables to `interest` and `shadow` to `brain` across the Hub to align with Sprint 31 logic.
+
 ---
 
 ## 📚 2. DOC MODERNIZATION PLAN
-*Goal: Align blueprints with Phase 15 "Neural Relay" reality.*
+*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
 
 1.  **[00_MASTER_INDEX.md] Update**: 
     - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
     - [ ] Add `SPRINT_PLAN_SPR_30_0.md` to the active roadmap.
 2.  **Architecture & Logic Modernization**:
-    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Reflect the shift from "Sequential Handovers" to "Bicameral Debate."
-    - [ ] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Vocal handshakes."
+    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Reflect the shift from "Sequential Handovers" to "Bicameral Debate" and the **Deep Thought** action.
+    - [ ] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Interest" score logic.
 3.  **Timing & Vitals**:
-    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks established in Sprint 29.
+    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
 
 ---
+
+## 🧪 3. TEST MAP (The Gauntlet)
+...
 
 ## 🧪 3. TEST MAP (The Gauntlet)
 *Goal: Correlate features to physical verification scripts.*
