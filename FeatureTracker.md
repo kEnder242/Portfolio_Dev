@@ -284,9 +284,10 @@
 **Mechanism:** High-priority generation probe (`force=True`) inside the `handshake` packet handler in `acme_lab.py`.
 
 ## [FEAT-088] Semantic Career Recall
-**Status:** DORMANT (Requires ChromaDB)
-**Logic:** The fundamental ability to query 18 years of technical history via natural language (e.g., "What did I do in 2019?").
-**Mechanism:** Vector search via ArchiveNode bridging the local JSON logs to the reasoning nodes.
+**Status:** ACTIVE
+**Logic:** The "Receptionist" intent detection that triggers RAG. The fundamental ability to query 18 years of technical history via natural language based on semantic intent rather than rigid regex.
+**Mechanism:** Vector search via ArchiveNode bridging the local JSON logs to the reasoning nodes. Uses the Lab Node's Intent (RECALL) as the sole authority.
+**Refactor Strategy:** Expand to improve multi-year "Neighborhood" search depth, allowing the system to automatically retrieve context for preceding years to ensure narrative continuity.
 
 ## [FEAT-089] Zero Trust Guest Expansion
 **Status:** ACTIVE
@@ -675,7 +676,10 @@
 **Behavior**: Pulse the Lab state (via Attendant), poll the registers (Heartbeat), and observe the evidence (Trace Delta). Never block inside a trigger.
 
 ### [VIBE-008] Performance Verbiage (The Privacy Filter)
+**Status:** ACTIVE (Modernization Planned Sprint 31)
+**Logic:** Automatic redaction of 'Coaching' verbiage from archive synthesis.
 **Context:** High-fidelity career documents (Reviews, Insights) contain feedback that should not appear in the technical timeline.
+**Refactor Strategy:** Modernize into a high-fidelity "Sanitization Pipeline." It must accurately redact coaching verbiage (e.g., "Jason needs to...") without stripping the technical "Scars" that prove engineering impact. Move beyond basic regex to a robust semantic filter.
 **Keywords:**
 - **Legacy Headers:** `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `Evaluation: Areas for Development`, `IMPROVEMENT/DEVELOPMENT AREAS`.
 - **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
@@ -935,6 +939,7 @@
 **Vibe:** Emergent Synergy.
 
 ### [VIBE-013] Sequential Blending (The Fuel Travel Model)
+**Status:** ACTIVE (Modernization Planned Sprint 31)
 **Logic:** Prioritize context density over raw parallel speed. 
 **Sequence:**
 1.  **Lab Node (Sentinel)**: Performs Triage & Domain routing.
@@ -942,6 +947,7 @@
 3.  **Shadow Brain (Archivist)**: Provides technical intuition + Proactive RAG Context (Visible).
 4.  **Sovereign Brain (Architect)**: Receives the "Blended" history of the previous three turns to produce the definitive synthesis (Visible).
 **Rationale:** The "Fuel Travel" model mandates that every node that consumes fuel and produces a thought **must** be visible in the Intercom. You should see the triage framing, the technical guess, and the final grounded synthesis as a sequential "Waterfall."
+**Refactor Strategy:** Address visual jitter. Refactor the Intercom's "Thought Pop" logic to ensure the sequential waterfall feels fluid rather than a series of abrupt updates.
 
 ---
 **DEFEATURED REASONING (Mar 2026):**
@@ -995,12 +1001,13 @@
 2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
 
 ## [FEAT-233] Inter-Node Waterfall (Internal Streaming)
-**Status:** ACTIVE
-**Logic:** Transition from turn-based handovers to real-time token streaming between nodes.
+**Status:** ACTIVE (Modernization Planned Sprint 31)
+**Logic:** Transition from turn-based handovers to real-time token streaming between nodes. The token streaming pipeline.
 **Mechanism:** 
 1. `CognitiveHub` uses incremental JSON parsing to identify intent mid-stream.
 2. Pinky's yielded tokens are piped directly into Shadow's context window during inference.
 3. [REVISION-17.9]: Enforces **Paragraph Pop** for the Intercom UI. Tokens are streamed out-of-band to the Hub for action-detection but are ONLY broadcast to the GUI as a cohesive block once the turn is complete.
+**Refactor Strategy:** Decouple token yield from Hub logic. Ensure real-time streaming of all node dialogue without blocking buffers.
 
 ## [FEAT-234] Pure Scalar Fuel (Multiplicative Orchestration)
 **Status:** ACTIVE
@@ -1207,3 +1214,15 @@
 **Logic**: Exposes the remaining boot grace window to the dashboard and test harnesses for deterministic sequencing.
 **Mechanism**: `/status` endpoint returns `quiescence_remaining` in seconds, derived from the internal `boot_grace_period` (decremented every 2s pulse).
 **Rationale**: Eliminates "Wait-and-Guess" patterns in user interfaces and automated endurance tests.
+
+## [FEAT-356] Foil-Aware Memory (Unified Session Ledger)
+**Status:** ACTIVE (Modernization Planned Sprint 31)
+**Logic:** Eliminates single-turn amnesia by giving Pinky a persistent view of the Brain's strategic logic from previous turns. The short-term context buffer for debate.
+**Mechanism:** Session-persistent `round_table_memory` (deque) in the `CognitiveHub` that survives turn clearances.
+**Refactor Strategy:** Stabilize. Move from in-memory deque to persistent session file (`.round_table.json`).
+
+## [FEAT-368] Vocal Handshake
+**Status:** ACTIVE (Modernization Planned Sprint 31)
+**Logic:** Immediate persona feedback during engine ignition. If the engine is still warming, Pinky provides a hardcoded Semantic Handshake instead of crashing or providing reflex-only output.
+**Mechanism:** Triggered within `cognitive_hub.py` and `acme_lab.py` during engine-down events or triage connection errors.
+**Refactor Strategy:** Harden into a "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
