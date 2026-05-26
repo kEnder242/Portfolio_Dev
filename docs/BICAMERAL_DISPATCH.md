@@ -1,40 +1,40 @@
-# Bicameral Dispatch: System Design & Persona Architecture (v3.5)
+# Bicameral Dispatch: System Design & Persona Architecture (v4.0)
 
 > [!NOTE]
-> **vLLM STATUS:** The features described herein (Amygdala, Sentinel, Corpus Callosum) were originally designed for a native vLLM implementation. While currently **TABLED** for the Turing (2080 Ti) due to BF16 deadlocks, the logic remains the architectural blueprint for future Ampere+ deployments. The Lab currently uses an **Ollama-Standard** implementation of these metaphors.
+> **vLLM STATUS:** The metaphors described herein are fully realized via a native vLLM implementation on Turing (2080 Ti) silicon, utilizing Multi-LoRA residency [FEAT-030] to maintain sub-second TTFT across all nodes.
 
 ## 🏛️ The Acme Lab Taxonomy (The Glossary of Mind)
-These metaphors serve as architectural hints for system design:
+These metaphors serve as architectural anchors for the physical code:
 
-- **Corpus Callosum**: The Hub (`acme_lab.py`). The asynchronous bridge that manages hemispheric communication.
-- **The Amygdala**: The **Logic Structure**. The specific triage gate inside the Hub that decides, "This signal matches a known 'Scar' or 'Uncertainty'—wake the Brain now."
-- **The Sentinel**: The **Sensory State**. The active, low-power background listening loop (the "Eyes and Ears") that feeds the Amygdala.
-- **The Architect**: The **Hierarchy Refactoring**. A background node that decides how memories should be organized (e.g., "This belongs in the strategic Resume layer, not just tactical Notes").
-- **Dreaming**: The **Memory Consolidation**. Turning the day's tactical chatter into summarized "Wisdom."
-- **Sleeping Mind**: A resident model (Shared Weights) that is "Resident but Respendable" (Pre-cached).
-- **The Phone Ring**: An unscheduled user connection (WebSocket) that triggers an immediate "Wake."
-- **The Alarm Clock**: Scheduled background tasks (Job Search, Dreaming, Burn).
-- **Banter TTL**: Weighted decay that prevents infinite hemispheric arguments.
+- **Corpus Callosum**: The Hub (`acme_lab.py` / `cognitive_hub.py`). The asynchronous bridge that manages real-time token streaming [FEAT-233].
+- **The Amygdala**: The **Triage Gate**. Uses the Lab Sentinel (vLLM adapter) to calculate the **Scalar Fuel** [FEAT-234], deciding which nodes to wake.
+- **The Sentinel**: The **Domain Router**. The low-power first pass that identifies intent (RECALL, STRATEGIC, CASUAL) and domain (TELEMETRY, BKM, FORGE).
+- **The Architect**: The Sovereign Brain (4090). The definitive synthesis layer for high-stakes technical derivations.
+- **Dreaming**: Background memory consolidation [FEAT-067].
+- **Sleeping Mind**: [FEAT-249] VRAM Hibernation. Engines are alive but passive until the **Vocal Handshake** triggers.
 
-## 1. The Communication Hub (Corpus Callosum)
+## 1. The Communication Hub (Waterfall Relay)
 
-### A. The Amygdala (Sentinel v2.0)
-- **Logic:** Moves beyond brittle keywords. Brain interjects if it detects Pinky being too simplistic or if a "Validation Scar" from the archives is logically relevant.
-- **Trigger:** "Strategic Uncertainty"—detected logical gaps or requests for scaling.
+### A. Scalar Fuel [FEAT-234]
+- **Formula**: `Fuel = ((1.0 - casual) * (intrigue + importance)) / 2`.
+- **Thresholds**: 
+    - **0.2**: Wakes the Shadow Brain (Archivist).
+    - **0.6**: Wakes the Sovereign Brain (Architect).
+- **Consensus**: Nodes can autonomously recommend fuel boosts using [Council of Hemispheres] signals.
 
-### B. The Sleeping State (Pre-Cache)
-- **Philosophy:** Weights remain resident in VRAM for instant response but are invalidated via **SIGTERM** by the Lab Attendant if a non-AI task (Game/Transcode) requests resources.
-- **Ollama Parity:** Implement prompt-swapping to allow Ollama to mimic vLLM persona concurrency (albeit slower).
+### B. Inter-Node Waterfall [FEAT-233]
+- **Streaming**: Pinky's intuitions are piped directly into Shadow's context window *while* generation is active.
+- **Visibility**: Every node that consumes fuel produces a visible thought in the UI, ensuring no "Black Box" reasoning occurs.
+
+### C. The Vocal Handshake [FEAT-368]
+- **Logic**: Prevents "Silicon Silence" during engine ignition.
+- **Behavior**: If the heavy model is still loading, Pinky provides a hardcoded Semantic Handshake ("establishing connections...") to acknowledge the user immediately.
 
 ## 2. Collaborative Workspace
 
-### A. The Strategic Patch Tool
-- **Tool:** `patch_file`. Described to agents as "The Strategic Architect's Scalpel."
-- **Validation Vibe Check:** Upon a `💾 SAVE` event, the Brain performs active logic/code validation (e.g., race condition checks) rather than just acknowledging the save.
+### A. The Safe-Scalpel [FEAT-198]
+- **Tool**: `safe_scalpel`. Lint-gated surgical patching protocol.
+- **Validation**: Every automated edit is verified via `ruff` or `eslint` before being committed to the DNA.
 
-### B. The Hierarchical Semantic Map
-- **Structure:** 
-    1. **Top Layer:** Resume/CVT (Strategic Summary).
-    2. **Middle Layer:** Insights/Focals (Technical themes).
-    3. **Bottom Layer:** Raw Notes (Detailed scars).
-- **Consumer:** Pinky uses the Semantic Map as his "Working Memory" to ground his reactive responses.
+### B. Double-Tap Search [FEAT-209]
+- **Pattern**: RAG queries hit the Chronological Log AND the Strategic Meta files (Resume/CVT) simultaneously to maximize factual yield.

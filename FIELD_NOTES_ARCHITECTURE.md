@@ -10,77 +10,79 @@ graph TD
         A[knowledge_base] -->|Symlink| B[raw_notes]
     end
 
-    subgraph "Background Engine (The Slow Burn)"
-        B --> C[Librarian]
-        C -->|manifest.json| D[Queue Manager]
-        D -->|queue.json| E[Nibbler]
-        E -->|llama-3.2-3b-awq| F[JSON Artifacts]
+    subgraph "The Orchestrator (Acme Lab)"
+        H[AcmeLab Hub] -->|Task 7.3| Q[Request Queue]
+        H -->|FEAT-151| FL[Forensic Ledger]
+        H -->|FEAT-036| WD[VRAM Watchdog]
+        WD -->|FEAT-249| HM[Hibernation Matrix]
     end
 
-    subgraph "Infrastructure"
-        G[Prometheus] -->|Load Metrics| E
+    subgraph "Cognitive Relay (Waterfall)"
+        H -->|Triage| L[Lab Sentinel]
+        L -->|Scalar Fuel| H
+        H -->|FEAT-233| P[Pinky Node]
+        P -->|Stream| S[Shadow Brain]
+        S -->|Context Graft| SB[Sovereign Brain]
     end
 
-    subgraph "Frontend (The View)"
-        F --> H[index.html]
-        F --> I[timeline.html]
-        J[Cloudflare Tunnel] --> H
+    subgraph "The View (Frontend)"
+        SB --> IC[intercom.html]
+        P --> IC
+        FL --> PG[pager.html]
     end
 ```
 
 ## 🛠️ Component Breakdown
 
-### 1. Data Ingestion
-- **`scan_librarian.py`**: Reads first/middle 1KB of files. Pinky classifies type (`LOG`, `REFERENCE`, `META`).
-- **`scan_queue.py`**: Splits `LOG` files into monthly chunks. Uses MD5 hashing to skip unchanged data.
+### 1. Data Ingestion & Indexing
+- **`scan_librarian.py`**: Heuristic classification of raw notes (`LOG`, `META`, `REF`).
+- **`archive_node.py`**: [FEAT-088] Semantic RAG engine using ChromaDB for discovery and filesystem for acquisition.
 
-### 2. Processing (The Nibbler)
-- **`nibble.py`**: The atomic unit of work. 
-    - Queries Prometheus for `node_load1`.
-    - If `load < 2.0`, fetches 1 task from `queue.json`.
-    - Asks Pinky to extract technical wins + redact names.
-    - Saves granular JSON and updates Yearly Aggregate.
-- **`force_feed.py`**: Batch wrapper to loop the nibbler until the queue is empty.
+### 2. The Neural Relay (Cascading Spark)
+- **`AcmeLab` (acme_lab.py)**: Physical manager of silicon ports, hibernation states, and the request queue.
+- **`CognitiveHub` (cognitive_hub.py)**: The logical Corpus Callosum. 
+    - **Triage**: Uses the Lab Sentinel to calculate **Scalar Fuel** [FEAT-234].
+    - **Waterfall**: [FEAT-233] Streams Pinky's intuition directly into Shadow's context window.
+    - **Fidelity Gate**: Autonomously triggers backtracking if RAG context is thin.
 
-### 3. The "Neural Uplink" (Static API)
-- Data lives in `field_notes/data/`.
-- `themes.json`: Mapping of years to strategic focal goals.
-- `YYYY.json`: Collection of all monthly events for a given year.
-- `status.json`: Heartbeat file showing last scan result and total record count.
+### 3. VRAM Governance
+- **`Hibernation Matrix`**: [FEAT-249] Tiered reclamation. Reclaims 6GB VRAM after 10m idle time.
+- **`Resilience Ladder`**: Graceful downshifting from vLLM (Unified 3B) to Ollama (1B) under pressure.
 
 ### 4. User Interface
-- **`timeline.html`**: A "Class 1" (Vanilla JS) SPA.
-    - Uses `IntersectionObserver` for scroll-aware priming.
-    - Uses an accordion-tree structure for "Operating System" feel.
-    - Features a high-speed character buffer (Typewriter) for log display.
-- **Fail-Safe Mechanism**: The UI includes hardcoded 2005-2024 skeletons. If the network fetch fails, the tree still populates.
+- **`intercom.html`**: [VIBE-013] Sequential Blending. Displays the multi-node reasoning waterfall.
+- **`pager.html`**: High-fidelity terminal view for the **Forensic Ledger** alerts.
 
-## 🧠 The Resonant Chamber (Bicameral Flow)
+## 🧠 The Resonant Chamber (Waterfall Flow)
 The system uses an "Overhearing" pattern where nodes are aware of the Lab's strategic intent before generating responses.
 
 ```mermaid
-sequence_sequence_diagram
+sequenceDiagram
     participant U as User
-    participant H as Lab Hub (acme_lab.py)
-    participant L as Lab Actor (Sentinel)
-    participant P as Pinky (Foil)
-    participant B as Brain (Sovereign)
+    participant H as Hub (acme_lab.py)
+    participant L as Lab Node (Sentinel)
+    participant P as Pinky (Intuition)
+    participant S as Shadow (Archivist)
+    participant B as Sovereign (Brain)
 
-    U->>H: Query: "What happened in 2019?"
-    H->>L: situational_audit(query, vitals)
-    L-->>H: [SITUATION: RECALL][SENTIMENT: STRATEGIC]
-    H->>B: prime_strategic_signal(RECALL)
-    B-->>H: [SIGNAL: ARCHIVE_SEARCH_INITIATED]
+    U->>H: Query: "Early career teams?"
+    H->>L: Triage(query)
+    L-->>H: {intent: RECALL, fuel: 0.6}
     
-    Note over H,P: Resonant Chamber: Hub injects B's Signal into P's context
-    H->>P: facilitate(query, context: "[STRATEGIC_INTENT: ARCHIVE_SEARCH]")
-    H->>B: deep_think(query, context: "RAW_ARCHIVE_DATA")
+    H->>S: [FEAT-088] get_context(query)
+    S-->>H: Historical Facts (2008-2012)
     
-    P-->>U: [REFLEX]: "Narf! Let me find those 2019 gems..."
-    B-->>U: [INSIGHT]: "Derivation of 2019 events..."
+    Note over H,P: Waterfall: P hears the Intent
+    H->>P: think(query, context: "[RECALL]")
+    P-->>H: "Narf! Let me look back..."
     
-    Note over P: Pinky summarizes the final turn
-    P-->>U: [WRAP-UP]: "So that's why 2019 was a pivot year!"
+    Note over H,S: Resonant Chamber: S hears P's quip
+    H->>S: think(query, context: "[P_HEARING]")
+    S-->>H: Technical Derivation...
+    
+    Note over H,B: Sovereign: B synthesizes all
+    H->>B: deep_think(query, context: "[P+S_HEARING]")
+    B-->>U: Final Synthesis
 ```
 
 ## 🔐 Access Control Layer (BKM Pointer)
