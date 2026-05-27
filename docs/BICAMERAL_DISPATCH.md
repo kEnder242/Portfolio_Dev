@@ -38,3 +38,19 @@ These metaphors serve as architectural anchors for the physical code:
 
 ### B. Double-Tap Search [FEAT-209]
 - **Pattern**: RAG queries hit the Chronological Log AND the Strategic Meta files (Resume/CVT) simultaneously to maximize factual yield.
+
+## 3. The Law of Semantic Indirection [BKM-015.1]
+
+### A. Anti-Hardcoding Mandate
+To prevent functional drift and "Logic Traps," the Lab prohibits hardcoded technical keywords in routing blocks.
+- **Current Pattern**: Instead of `if "MSR" in query: load_msr_tool()`, the system utilizes the **Lab Sentinel** to classify the "Vibe" and "Intent" of the user.
+- **Physical Implementation**: The Hub foyer performs a semantic pass to identify `RECALL` or `SILICON_TELEMETRY` before any tool-decision is made.
+
+### B. Intent Authority
+The **Lab Node (Sentinel)** is the sole authority for intent.
+- **RECALL**: Triggers the ArchiveNode's `get_context` tool.
+- **STRATEGIC**: Promotes the turn to the **Sovereign Brain** (4090).
+- **CASUAL**: Handled by **Pinky** with minimal fuel usage.
+
+### C. The Retrieval Exception
+Per **BKM-015 #4**, hardcoded optimizations (like year-based regex) are permitted strictly for physical file retrieval *after* a semantic intent has been established. This ensures high-fidelity access to chronological logs without sacrificing semantic flexibility.

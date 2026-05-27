@@ -42,12 +42,15 @@ graph TD
 - **`AcmeLab` (acme_lab.py)**: Physical manager of silicon ports, hibernation states, and the request queue.
 - **`CognitiveHub` (cognitive_hub.py)**: The logical Corpus Callosum. 
     - **Triage**: Uses the Lab Sentinel to calculate **Scalar Fuel** [FEAT-234].
+    - **Bicameral Airtime**: [FEAT-207] Manages the "Silicon Gap" with inter-node fillers and overhearing to prevent "Brain Silence."
+    - **Foil-Aware Memory**: [FEAT-356] Persistent short-term context (deque) giving Pinky a view of the Brain's logic.
     - **Waterfall**: [FEAT-233] Streams Pinky's intuition directly into Shadow's context window.
     - **Fidelity Gate**: Autonomously triggers backtracking if RAG context is thin.
 
-### 3. VRAM Governance
-- **`Hibernation Matrix`**: [FEAT-249] Tiered reclamation. Reclaims 6GB VRAM after 10m idle time.
-- **`Resilience Ladder`**: Graceful downshifting from vLLM (Unified 3B) to Ollama (1B) under pressure.
+### 3. VRAM Governance & Evolution
+- **`Hibernation Matrix`**: [FEAT-249] Tiered reclamation based on 10m idle window.
+- **`Resilience Ladder`**: Graceful downshifting under VRAM pressure.
+- **`Pedigree Refinement`**: [FEAT-160] Background LoRA training pipeline that physically encodes history into model weights.
 
 ### 4. User Interface
 - **`intercom.html`**: [VIBE-013] Sequential Blending. Displays the multi-node reasoning waterfall.
