@@ -16,6 +16,10 @@ Execute a architectural refactor to align the Lab's terminology and file structu
     *   **The Brain's Decision**: The Brain (Local) evaluates the `interest_score`. If the score is low and the turn is semantically "Complete," the Brain can autonomously choose NOT to follow up, enforcing high-fidelity brevity.
     *   **Impact**: Simplifies streaming logic by removing the "Early Trigger" gates in favor of a constant "Neural Bridge."
 
+### 📚 Retrieval Shift: RRF Implementation
+*   **Action**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] enhancement designed in Sprint 30.
+*   **Goal**: Enable exact-match surfacing of technical acronyms (e.g. PECISTRESSOR) alongside semantic vector results.
+
 ### 🔬 Node Promotion: Shadow -> THE BRAIN
 *   **The Name**: "Shadow" is deprecated as an architectural term. The local 2080 Ti reasoning node is now officially **THE BRAIN**.
 *   **The Action**: The Sovereign 4090 Ti is now accessed via the **Deep Thought** action [HHGTTG]. 

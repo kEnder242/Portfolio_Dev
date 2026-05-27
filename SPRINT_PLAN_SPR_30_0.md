@@ -48,7 +48,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 
 | Vibe ID | Title | Lab Behavior / Manifestation | Refactor Priority |
 | :--- | :--- | :--- | :--- |
-| **[VIBE-012]** | **Hemispheric Independence** | KENDER (4090) vs Local (2080) model split. No forced weight sync. | **High** |
+| **[VIBE-012]** | **Hemispheric Independence** | Sovereign (4090) vs Local (2080) model split. No forced weight sync. | **High** |
 | **[VIBE-013]** | **Sequential Blending** | **The Fuel Travel Model**: Every node thought MUST be visible. | **Sacred** |
 | **[VIBE-006]** | **Neural Resonance** | The Hub as a 'Corpus Callosum'; Brain overhears Pinky's gut instinct. | **High** |
 | **[VIBE-004]** | **Internal Debate** | Pinky and Brain 'duel' over technical risk for moderated consensus. | **High** |
@@ -84,6 +84,12 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
     - [ ] **Task 4.1 (Current State Audit)**: Audit design docs to ensure every 'Inflection Core' feature is physically documented.
     - [ ] **BICAMERAL_DISPATCH.md**: Finalize the documentation for **Fuel Scalar** logic and the **Handshake Tic** behaviors.
     - [ ] **Task 4.2 (Protocol Hardening)**: Document the **BKM-015.1 (Semantic Indirection)** enforcement patterns used in the current Hub triage.
+    - [ ] **Task 4.4 (Hybrid Design)**: Document the **RRF Hybrid Retrieval** enhancement (Lexical + Semantic) as the proposed path for Sprint 31.
+    
+    **📐 Design Blueprint: RRF Hybrid Retrieval [ENHANCEMENT]**
+    *   **Concept**: Enhance the existing year-sticky retrieval with a mathematical hybrid of Lexical (BM25) and Semantic (Vector) search.
+    *   **Logic**: Use **Reciprocal Rank Fusion (RRF)** to merge ranked results. While the **Year-Sticky Regex** remains a valid physical optimization (per BKM-015 #4), RRF will now surface non-temporal acronyms (e.g., "PECISTRESSOR", "MSR") at Rank 1 via exact-match logic.
+    *   **Impact**: Provides "Professional-Grade" grounding for technical jargon while retaining the high-fidelity year-based file access of the current architecture.
 3.  **Timing & Vitals**:
     - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut established in Sprint 29.
 
