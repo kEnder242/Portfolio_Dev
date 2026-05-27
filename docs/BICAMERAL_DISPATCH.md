@@ -8,10 +8,13 @@ These metaphors serve as architectural anchors for the physical code:
 
 - **Corpus Callosum**: The Hub (`acme_lab.py` / `cognitive_hub.py`). The asynchronous bridge that manages real-time token streaming [FEAT-233].
 - **The Amygdala**: The **Triage Gate**. Uses the Lab Sentinel (vLLM adapter) to calculate the **Scalar Fuel** [FEAT-234], deciding which nodes to wake.
-- **The Sentinel**: The **Domain Router**. The low-power first pass that identifies intent (RECALL, STRATEGIC, CASUAL) and domain (TELEMETRY, BKM, FORGE).
+- **The Sentinel**: The **Sensory State**. The active, low-power background listening loop (the "Eyes and Ears") that feeds the Amygdala.
 - **The Architect**: The Sovereign Brain (4090). The definitive synthesis layer for high-stakes technical derivations.
 - **Dreaming**: Background memory consolidation [FEAT-067].
 - **Sleeping Mind**: [FEAT-249] VRAM Hibernation. Engines are alive but passive until the **Vocal Handshake** triggers.
+- **The Phone Ring**: An unscheduled user connection (WebSocket) that triggers an immediate "Wake."
+- **The Alarm Clock**: Scheduled background tasks (Job Search, Dreaming, Burn).
+- **Banter TTL**: Weighted decay that prevents infinite hemispheric arguments.
 
 ## 1. The Communication Hub (Waterfall Relay)
 

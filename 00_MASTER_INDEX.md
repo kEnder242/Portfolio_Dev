@@ -17,6 +17,8 @@
 ## 📐 Architecture & Logic
 *   **[FIELD_NOTES_ARCHITECTURE.md](./FIELD_NOTES_ARCHITECTURE.md)**: **The Blueprints.** Snapshot of the Phase 15 Neural Relay topology.
 *   **[BICAMERAL_DISPATCH.md](./docs/BICAMERAL_DISPATCH.md)**: **The Mind.** Defines Scalar Fuel, Semantic Indirection, and Handshake behaviors.
+*   **[LAB_INFRASTRUCTURE.md](../HomeLabAI/docs/LAB_INFRASTRUCTURE.md)**: **The Physical Map.** Network ports, host affinities (KENDER), and transport layers.
+*   **[LORA_MOE_SYNTHESIS.md](../HomeLabAI/docs/plans/LORA_MOE_SYNTHESIS.md)**: **The "Poor Man's MoE".** Multi-LoRA expert routing strategy.
 *   **[RRF_HYBRID_RETRIEVAL.md](./docs/designs/RRF_HYBRID_RETRIEVAL.md)**: **Hybrid Design.** [ENHANCEMENT] blueprint for Sprint 31.
 *   **[DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)**: **The Physician's Ledger.** Comprehensive list of tests and validation logic.
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.

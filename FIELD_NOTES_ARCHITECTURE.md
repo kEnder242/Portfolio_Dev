@@ -10,6 +10,13 @@ graph TD
         A[knowledge_base] -->|Symlink| B[raw_notes]
     end
 
+    subgraph "Background Engine (The Slow Burn)"
+        B --> C[Librarian]
+        C -->|manifest.json| D[Queue Manager]
+        D -->|queue.json| E[Nibbler]
+        E -->|Llama-3.2-3B| F[JSON Artifacts]
+    end
+
     subgraph "The Orchestrator (Acme Lab)"
         H[AcmeLab Hub] -->|Task 7.3| Q[Request Queue]
         H -->|FEAT-151| FL[Forensic Ledger]
@@ -26,7 +33,8 @@ graph TD
     end
 
     subgraph "The View (Frontend)"
-        SB --> IC[intercom.html]
+        F --> IC[intercom.html]
+        SB --> IC
         P --> IC
         FL --> PG[pager.html]
     end
@@ -38,7 +46,15 @@ graph TD
 - **`scan_librarian.py`**: Heuristic classification of raw notes (`LOG`, `META`, `REF`).
 - **`archive_node.py`**: [FEAT-088] Semantic RAG engine using ChromaDB for discovery and filesystem for acquisition.
 
-### 2. The Neural Relay (Cascading Spark)
+### 2. The Slow Burn (Static Synthesis)
+- **`scan_queue.py`**: Splits `LOG` files into monthly chunks. Uses MD5 hashing to skip unchanged data.
+- **`nibble.py`**: The atomic unit of work. 
+    - Queries Prometheus for `node_load1`.
+    - Asks Pinky to extract technical wins + redact names.
+    - Saves granular JSON and updates Yearly Aggregate.
+- **`force_feed.py`**: Batch wrapper to loop the nibbler until the queue is empty.
+
+### 3. The "Neural Relay" (Cascading Spark)
 - **`AcmeLab` (acme_lab.py)**: Physical manager of silicon ports, hibernation states, and the request queue.
 - **`CognitiveHub` (cognitive_hub.py)**: The logical Corpus Callosum. 
     - **Triage**: Uses the Lab Sentinel to calculate **Scalar Fuel** [FEAT-234].
@@ -47,12 +63,12 @@ graph TD
     - **Waterfall**: [FEAT-233] Streams Pinky's intuition directly into Shadow's context window.
     - **Fidelity Gate**: Autonomously triggers backtracking if RAG context is thin.
 
-### 3. VRAM Governance & Evolution
+### 4. VRAM Governance & Evolution
 - **`Hibernation Matrix`**: [FEAT-249] Tiered reclamation based on 10m idle window.
 - **`Resilience Ladder`**: Graceful downshifting under VRAM pressure.
 - **`Pedigree Refinement`**: [FEAT-160] Background LoRA training pipeline that physically encodes history into model weights.
 
-### 4. User Interface
+### 5. User Interface
 - **`intercom.html`**: [VIBE-013] Sequential Blending. Displays the multi-node reasoning waterfall.
 - **`pager.html`**: High-fidelity terminal view for the **Forensic Ledger** alerts.
 

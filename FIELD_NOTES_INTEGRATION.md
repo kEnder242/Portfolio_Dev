@@ -54,6 +54,11 @@ Both systems should query the *same* metrics to avoid fighting for GPU resources
     2. If `load > 2.0`, queue the task for later.
     3. *Bonus:* Pinky can "See" the heat. "I'm feeling a bit feverish (High Temp), let's wait."
 
+### Dashboard Integration
+- **Grafana:** The "Mission Control" on the Portfolio.
+- **HomeLabAI:** Should act as a *writer* to Grafana (via Annotations).
+    - *Example:* When Pinky finishes a "Dream," it posts an Annotation to the Grafana timeline: "Dream Cycle 45 Complete."
+
 ---
 
 ## 3. Data Exchange (The Knowledge Graph)
@@ -71,6 +76,14 @@ The Portfolio generates structured data that the Lab should consume.
   }
 }
 ```
+
+**Ingestion Strategy:**
+1.  **Symlink:** The Lab already has access to `~/Portfolio_Dev`.
+2.  **RAG Sync:** Create a Lab tool `sync_career_memory()`.
+    -   Reads `pinky_index_full.json`.
+    -   Chunk strategy: "In 2016, Jason worked on Simics..."
+    -   Upserts to **ChromaDB** (The Lab's Long Term Memory).
+3.  **Benefit:** You can ask Pinky on your phone: *"When did I first use JTAG?"* and it retrieves the exact date from the Portfolio's research.
 
 ---
 
