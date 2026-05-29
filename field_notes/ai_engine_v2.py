@@ -306,7 +306,7 @@ class SemanticCondenser:
         Remove all conversational filler and redundant dates.
         
         [RAW LOG]
-        {text[:8000]}
+        {text[:4000]}
         
         [OUTPUT FORMAT]
         One paragraph of high-density technical prose.
@@ -371,7 +371,7 @@ class CurriculumEngine(CognitiveEngine):
         # 4. TTCS Phase 2: Solve
         solve_prompt = f"""
         [RAW LOGS]
-        {raw_text[:6000]}
+        {raw_text[:4000]}
         [TECHNICAL ANCHORS]
         {anchors}
         

@@ -244,7 +244,7 @@ def main():
             [EXCLUSION] EXCLUDE all behavioral feedback, coaching, or personal growth plans. Focus exclusively on technical milestones and strategic focal points.
             [YEAR] {task['bucket']}
             [CONTENT]
-            {scrubbed_content[:8000]}
+            {scrubbed_content[:4000]}
             
             [OUTPUT]
             Generate a JSON list containing ONE high-value entry.
