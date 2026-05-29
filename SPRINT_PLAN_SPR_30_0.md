@@ -89,7 +89,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
     **📐 Design Blueprint: RRF Hybrid Retrieval [ENHANCEMENT]**
     *   **Concept**: Enhance the existing year-sticky retrieval with a mathematical hybrid of Lexical (BM25) and Semantic (Vector) search.
     *   **Logic**: Use **Reciprocal Rank Fusion (RRF)** to merge ranked results. While the **Year-Sticky Regex** remains a valid physical optimization (per BKM-015 #4), RRF will now surface non-temporal acronyms (e.g., "PECISTRESSOR", "MSR") at Rank 1 via exact-match logic.
-    *   **Impact**: Provides "Professional-Grade" grounding for technical jargon while retaining the high-fidelity year-based file access of the current architecture.
+    *   **Artifact Integration**: Update the RAG pipeline to ingest `artifacts_*.json`. This enables the Lab to respond not just with "what happened," but with "what code/docs prove it."
 3.  **Timing & Vitals**:
     - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut established in Sprint 29.
 
@@ -110,6 +110,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 - [ ] **Task 5.1 (The Gold Master Baseline)**: Run the entire inflection set and capture the **Wordy Output** as a reference.
 - [ ] **Task 5.2 (Handshake Trace)**: Verify the **Vocal Handshake** timing and broadcast reliability during engine warm-up.
 - [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Current" and essential for refactor verification.
+- [ ] **Task 5.4 (DNA Audit)**: Perform a deep-dive audit of `FeatureTracker.md` to identify and resolve 'Status: BACKLOG' vs 'Status: ACTIVE' drift caused by the modernization pass. Ensure the DNA matrix is whole.
 
 ---
 
@@ -129,6 +130,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 - [ ] **Task 7.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
 - [ ] **Task 7.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
 - [ ] **Task 7.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
+- [x] **Task 7.4 (Artifact RAG Sync)**: Update `bridge_burn_to_rag.py` to handle the `artifacts_*.json` schema (synopsis/filename), indexing our physical asset catalog into the `long_term_wisdom` collection.
 
 ---
 

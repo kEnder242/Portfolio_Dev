@@ -223,11 +223,15 @@
 **Logic:** The Lab Attendant monitors port 8765. If the process is alive but the port is unresponsive for 3 intervals, it triggers an autonomous engine swap.
 **Mechanism:** `vram_watchdog_loop` in `lab_attendant.py`.
 
-## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
+## [FEAT-029] Absolute Zero Silicon Purification
+**Status:** ARCHIVED (Feb 19 BKM)
+**Logic:** To break circular dependency deadlocks during driver installation, the system purges all GPU-polling services and physically erases module files (`.ko.zst`) to secure a 100% vacant hardware window.
+**Mechanism:** `SESSION_BKM_FEB_19.md`.
+
+## [FEAT-027] Iron Partition (Identity Separation)
 **Status:** ACTIVE
-**Logic:** Run all concurrent resident nodes (Pinky, Brain, Architect, Archive) on a shared **Unified Base Model** footprint. 
-**SCAR #5:** Windows Isolation. Windows (Node 'Brain') does NOT need to sync with Linux models. Attempting to force identical weight sets across the bridge is a performance trap.
-**Mechanism:** vLLM 0.16.0 with `--enable-lora`.
+**Logic:** Server-side identity gating that ensures session artifacts and short-term context are strictly re-initialized during context switches.
+**Rationale:** Prevents "Cross-Session Pollution" and ensures the Lab foyer remains a clean slate for new users.
 
 ## [FEAT-071] Internal Debate (Offline Collaboration)
 **Status:** ACTIVE
