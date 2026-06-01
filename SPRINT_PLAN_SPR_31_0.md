@@ -32,8 +32,11 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 *   **Pedigree & Intent**: *"We aren't budgeting for tokens anymore; we're reasoning for depth. If the Lab is genuinely 'interested' in a topic, it should have the autonomy to keep digging. Interest is the new fuel."* — Lead Engineer.
 *   **Tasks**:
     *   [x] **Task 2.1 (The Recursive Scorer)**: Refactor `CognitiveHub.py` to derive `interest_score` from the semantic overlap and topical resonance (identifiable via grammar and repeated phrasing) between the current query and the `resonant_history`.
-    *   [ ] **Task 2.2 (Long-Form Shunt)**: Implement logic where `interest_score > 0.8` forces `max_tokens=2000`, allowing the Brain to perform exhaustive multi-node synthesis.
-    *   [ ] **Task 2.3 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
+    *   [x] **Task 2.2 (Long-Form Shunt)**: Implement logic where `interest_score > 0.8` forces `max_tokens=2000`, allowing the Brain to perform exhaustive multi-node synthesis.
+    *   [x] **Task 2.3 (Persona Stance)**: Update `_process_node_stream` to inject behavioral stances (ACADEMIC vs INTERFACE) based on the interest scalar.
+    *   [x] **Task 2.4 (The Thought Trace)**: Update `execute_dispatch` to package the `<thought>` block of the local nodes into the context window of the remote node.
+    *   [x] **Task 2.5 (Visible Consensus)**: Update UI (`style.css` and `intercom_v2.js`) to highlight where "Deep Thought" has refined the "Local Brain" intuition.
+    *   [ ] **Task 2.6 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
 
 ---
 
@@ -43,18 +46,18 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ### 📋 Topical RAG Cache (The Clipboard)
 *   **Pedigree & Intent**: *"RAG shouldn't be a one-shot lookup. We need to build up a 'mental clipboard' of context over several turns, refining the truth as the conversation deepens."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 3.1 (The Clipboard)**: Implement a session-scoped "Clipboard" in `ArchiveNode.py` that builds up RAG info turn-over-turn. Include **Neighborhood Expansion** logic to proactively look up related segments based on discovering new technical anchors.
-    *   [ ] **Task 3.2 (RRF Implementation)**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] to merge vector scores with exact-match frequency rankings for acronym precision (e.g., PECISTRESSOR).
+    *   [x] **Task 3.1 (The Clipboard)**: Implement a session-scoped "Clipboard" in `ArchiveNode.py` that builds up RAG info turn-over-turn. Include **Neighborhood Expansion** logic to proactively look up related segments based on discovering new technical anchors.
+    *   [x] **Task 3.2 (RRF Implementation)**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] to merge vector scores with exact-match frequency rankings for acronym precision (e.g., PECISTRESSOR).
 
 ### 📋 Workspace-as-Cache (Refinement)
 *   [x] **Task 3.4 (The Collaborative Ledger)**: Implement `create_followup_file` in `ArchiveNode.py`. Trigger on Turn 2 of high-interest loops to instantiate physical `whiteboard/` files with Triage-derived names.
-*   [ ] **Task 3.5 (Append-Only Mandate)**: Configure nodes to prefer the internal `patch_file` tool for updating Whiteboard files, ensuring evidence is built up without clobbering history.
-*   [ ] **Task 3.6 (RAG Pointers)**: Use "RAG Pointers" (URIs/Line Anchors) in follow-up files instead of copying large text blocks to prevent context-window drowning.
+*   [x] **Task 3.5 (Append-Only Mandate)**: Configure nodes to prefer the internal `patch_file` tool for updating Whiteboard files, ensuring evidence is built up without clobbering history.
+*   [x] **Task 3.6 (RAG Pointers)**: Use "RAG Pointers" (URIs/Line Anchors) in follow-up files instead of copying large text blocks to prevent context-window drowning.
 
 ### ❄️ The Hibernation Rule
 *   **Pedigree & Intent**: *"Keep the conversation history, but discard the heavy context cache so we start the next session with a lean mind but a long memory."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 3.3 (Selective Persistence)**: Refactor `acme_lab.py` to persist `message_history` to disk, but explicitly discard the RAG Clipboard and heavy VRAM objects during H2 transitions.
+    *   [x] **Task 3.3 (Selective Persistence)**: Refactor `acme_lab.py` to persist `message_history` to disk, but explicitly discard the RAG Clipboard and heavy VRAM objects during H2 transitions.
 
 ---
 

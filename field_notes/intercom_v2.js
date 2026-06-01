@@ -128,12 +128,19 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     let isBuildingUpon = false;
     if (sl.includes('brain') && lastMsgSource.includes('pinky')) isBuildingUpon = true;
     if (sl.includes('pinky') && lastMsgSource.includes('brain')) isBuildingUpon = true;
+    
+    // [Task 2.5] Visible Consensus: Detect Sovereign Refinement
+    const isRefinement = sl.includes('deep thought') && (lastMsgSource.includes('brain') || lastMsgSource.includes('pinky'));
+    
     lastMsgSource = sl;
 
     // [FEAT-118] Resonant Oracle Badge (Text-Only)
     if (metadata.oracle_category) {
         displaySource += ` (STATE: ${metadata.oracle_category})`;
     }
+    
+    // Update class with refinement
+    if (isRefinement) msg.classList.add('refinement-msg');
     
     // [FEAT-344] Visible Physical Truth: Prepend SID and PID to source
     if (currentSocketId && source.toLowerCase() !== "system") {
