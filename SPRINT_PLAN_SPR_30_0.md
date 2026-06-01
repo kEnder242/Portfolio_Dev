@@ -48,7 +48,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 
 | Vibe ID | Title | Lab Behavior / Manifestation | Refactor Priority |
 | :--- | :--- | :--- | :--- |
-| **[VIBE-012]** | **Hemispheric Independence** | Sovereign (4090) vs Local (2080) model split. No forced weight sync. | **High** |
+| **[VIBE-012]** | **Hemispheric Independence** | KENDER (4090) vs Local (2080) model split. No forced weight sync. | **High** |
 | **[VIBE-013]** | **Sequential Blending** | **The Fuel Travel Model**: Every node thought MUST be visible. | **Sacred** |
 | **[VIBE-006]** | **Neural Resonance** | The Hub as a 'Corpus Callosum'; Brain overhears Pinky's gut instinct. | **High** |
 | **[VIBE-004]** | **Internal Debate** | Pinky and Brain 'duel' over technical risk for moderated consensus. | **High** |
@@ -72,31 +72,32 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 
 ---
 
-## 📚 4. DOC MODERNIZATION PLAN (Snapshotting Current Truth)
-*Goal: Align blueprints with the current Phase 15 "Neural Relay" reality to ensure a stable baseline for refactoring.*
+## 📚 4. DOC MODERNIZATION PLAN
+*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
+
+### 🔮 Proposed & Undocumented [POTENTIAL]
+- **[FEAT-369] Sovereign Verifier Synthesis**: Autonomous test generation during Sprints (derived from AutoHarness).
+- **[FEAT-370] Stochastic KV Optimization**: Deep cross-layer attention sharing for long-horizon sessions.
+
+## 📚 4. DOC MODERNIZATION PLAN
+*Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
 
 1.  **[00_MASTER_INDEX.md] Update**: 
     - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
     - [ ] Add `SPRINT_PLAN_SPR_30_0.md` to the active roadmap.
-    - [ ] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers resolve to existing documents.
-2.  **Architecture & Logic Verification**:
-    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Ensure the document accurately reflects the current **Pinky -> Shadow -> Sovereign** waterfall flow.
-    - [ ] **Task 4.1 (Current State Audit)**: Audit design docs to ensure every 'Inflection Core' feature is physically documented.
-    - [ ] **BICAMERAL_DISPATCH.md**: Finalize the documentation for **Fuel Scalar** logic and the **Handshake Tic** behaviors.
-    - [ ] **Task 4.2 (Protocol Hardening)**: Document the **BKM-015.1 (Semantic Indirection)** enforcement patterns used in the current Hub triage.
-    - [ ] **Task 4.4 (Hybrid Design)**: Document the **RRF Hybrid Retrieval** enhancement (Lexical + Semantic) as the proposed path for Sprint 31.
-    
-    **📐 Design Blueprint: RRF Hybrid Retrieval [ENHANCEMENT]**
-    *   **Concept**: Enhance the existing year-sticky retrieval with a mathematical hybrid of Lexical (BM25) and Semantic (Vector) search.
-    *   **Logic**: Use **Reciprocal Rank Fusion (RRF)** to merge ranked results. While the **Year-Sticky Regex** remains a valid physical optimization (per BKM-015 #4), RRF will now surface non-temporal acronyms (e.g., "PECISTRESSOR", "MSR") at Rank 1 via exact-match logic.
-    *   **Artifact Integration**: Update the RAG pipeline to ingest `artifacts_*.json`. This enables the Lab to respond not just with "what happened," but with "what code/docs prove it."
+    - [ ] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers in `00_MASTER_INDEX.md` resolve to existing (non-zombie) documents.
+2.  **Architecture & Logic Modernization**:
+    - [ ] **FIELD_NOTES_ARCHITECTURE.md**: Reflect the shift from "Sequential Handovers" to "Bicameral Debate" and the **Deep Thought** action.
+    - [ ] **Task 4.1 (Nomenclature Alignment)**: Update `FIELD_NOTES_ARCHITECTURE.md` to replace all references to "Shadow" with "The Brain" and "Sovereign" with "Deep Thought [HHGTTG]".
+    - [ ] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Interest" score logic.
+    - [ ] **Task 4.2 (Metric Translation)**: In `BICAMERAL_DISPATCH.md`, define the **Interest Score** logic—explicitly documenting that Pinky always "Pushes" intuition, but the Brain "Pulls" or choice-halts based on conversational completion.
 3.  **Timing & Vitals**:
-    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut established in Sprint 29.
+    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
 
----
 
-## 🧪 5. TEST MAP (The Gold Master Baseline)
-*Goal: Correlate features to physical verification scripts to establish a 'Gold Master' baseline.*
+
+## 🧪 5. TEST MAP (The Gauntlet)
+*Goal: Correlate features to physical verification scripts.*
 
 ### 🛠️ The Inflection Test Set
 | Feature Group | Script(s) | Type | Gap/Strategy |
@@ -107,32 +108,33 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 | **VRAM Resilience** | `test_apollo_vram.py`, `uber_5x5_hand_crank.py`| Stress | **Ultimate Pass**: 5-cycle increasing wait. |
 
 **Proposed Implementation Tasks:**
-- [ ] **Task 5.1 (The Gold Master Baseline)**: Run the entire inflection set and capture the **Wordy Output** as a reference.
-- [ ] **Task 5.2 (Handshake Trace)**: Verify the **Vocal Handshake** timing and broadcast reliability during engine warm-up.
-- [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Current" and essential for refactor verification.
-- [ ] **Task 5.4 (DNA Audit)**: Perform a deep-dive audit of `FeatureTracker.md` to identify and resolve 'Status: BACKLOG' vs 'Status: ACTIVE' drift caused by the modernization pass. Ensure the DNA matrix is whole.
+- [ ] **Task 5.1 (The 'Interest' Mock)**: Create `src/tests/mock_interest_decay.py` to verify that the logic correctly maps old `fuel` values to the new `interest_score` without breaking triage.
+- [ ] **Task 5.2 (Deep Thought Handshake)**: Implement `src/tests/test_deep_thought_vocal.py` to verify that the Brain can still provide immediate fast-track responses while the "Deep Thought" (4090) model is loading.
+- [ ] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Legacy" and which are "V5-Ready."
 
 ---
 
 ## ⚙️ 6. DEFERRED SEMANTIC EVALUATION [BKM-032]
-*Vibe: Human-in-the-Loop Batch Evaluation. Decouples the testing pattern from specific scripts.*
+*Vibe: Human-in-the-Loop Batch Evaluation. Replaces the "Hand-Crank" nomenclature to decouple the testing pattern from the specific 5x5 stress test.*
+
+### 🔄 Logic Flow
+1.  **Batch Execution**: Run a suite of tests (like the Uber 5x5) in a non-blocking, automated sequence.
+2.  **Hard Validation (System)**: The runner notifies immediately on "Hard" errors (Crashes, Connection Failures, Silence, Gibberish).
+3.  **Wordy Output Capture**: The system captures the full LLM reasoning trace, the visible `<thought>` blocks, and persona nuances into a log.
+4.  **AI Evaluation (The Deferred Review)**:
+    - **Step**: Gemini CLI (acting as the Lead Engineer's proxy) reads the wordy output *after* the batch completes.
+    - **Criteria**: Evaluates for: *Coherence, Historical Grounding, and Persona Fidelity*.
+    - **Verdict**: The AI decides if the behavior "Feels Right" in the context of the Lab's 18-year history, moving beyond brittle string-matching to true semantic verification.
 
 **Proposed Implementation Tasks:**
 - [ ] **Task 6.1 (The Wordy Logger)**: Implement a decorator or wrapper in `AcmeLab` that captures 100% of the cross-node thought trace into a single `evaluation_batch_01.log`.
 - [ ] **Task 6.2 (Review Template)**: Define a markdown template for the "Gemini CLI Evaluation" (e.g., *Check: Did Pinky use Narf? Check: Was PECISTRESSOR mentioned?*).
-- [ ] **Task 6.3 (Hard-Error Sentry)**: Ensure the batch runner triggers a PagerDuty alert (or high-visibility red log) if a "Hard" error occurs.
+- [ ] **Task 6.3 (Hard-Error Sentry)**: Ensure the batch runner triggers a PagerDuty alert (or high-visibility red log) if a "Hard" error occurs, so manual audit time isn't wasted on crashed runs.
 
----
+### 🛠️ 7. Foundational Code Tasks (Sprint 30 Implementation)
+*Surgical 'Step-Zero' tasks required to stabilize the DNA before the modular split.*
 
-## 🛠️ 7. INSTRUMENTATION & HARDENING
-*Surgical tasks required to stabilize the DNA and provide testing visibility before the refactor.*
-
-- [ ] **Task 7.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
-- [ ] **Task 7.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
-- [ ] **Task 7.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
-- [x] **Task 7.4 (Artifact RAG Sync)**: Update `bridge_burn_to_rag.py` to handle the `artifacts_*.json` schema (synopsis/filename), indexing our physical asset catalog into the `long_term_wisdom` collection.
-
----
-
-### ⚖️ LEAD ENGINEER REVIEW REQUIRED
-*This plan is an artifact for Sprint 30. No code changes have been made.*
+- [ ] **Task 0.1 (Fidelity Gate)**: Implement a basic 'fidelity threshold' in `cognitive_hub.py` to identify 'thin' RAG results (Goal 33).
+- [ ] **Task 0.2 (Sampling Audit)**: Perform a forensic audit of current `facilitate` and `think` tools for MCP sampling compatibility (Goal 31).
+- [ ] **Task 0.3 (Request Queue)**: Harden the `spark_restoration` loop in `acme_lab.py` to prevent user query loss during 'Step 3' (Goal 30).
+- [ ] **Task 0.4 (Interest Sync)**: Globally rename `fuel` variables to `interest` and `shadow` to `brain` across the Hub to align with Sprint 31 logic.
