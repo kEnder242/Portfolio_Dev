@@ -87,9 +87,59 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 *Objective: Apply BKM-032 to certify the Refactor results.*
 
 *   **Phase A (The Hard Switch)**: [x] Automated batch verify that all ports bind and the "Interest" scalar still calculates correctly.
-*   **Phase B (The Voice Audit)**: [x] Gemini CLI (AI Reviewer) reads the "Deep Thought" traces for persona alignment and interest decay naturalism.
+---
+
+## 📜 PHASE 1: REFACTOR REPORT [COMPLETE]
+### 🏆 Milestone Completion Summary
+
+#### 1. Goal 1: Physical Foundations & Nomenclature
+*   **The Brain (Local)**: Promoted the 2080 Ti node to primary local participation.
+*   **Deep Thought (Remote)**: Established the 4090 as the Sovereign strategic reasoning engine.
+*   **VRAM Mutex**: Implemented `fcntl` locking on `/tmp/lab_vram.lock` in `acme_lab.py` to prevent silicon thrashing during ignition.
+*   **Git Status**: SECURED. (Committed to `sprint-31` branch).
+
+#### 2. Goal 2: The Consciousness Shift (Interest Scorer)
+*   **Recursive Scalar**: Refactored `CognitiveHub.py` to use a dynamic **Interest Scalar**. The system now detects semantic resonance with `round_table_memory`, boosting interest on technical follow-ups to force Sovereign (4090) depth.
+*   **Wait-for-Brain (Task 2.2)**: Implemented an **Interest Gate** (> 0.8) that forces the Hub to synchronize and wait for the remote synthesis before finalizing the turn.
+*   **Persona Stance (Task 2.3)**: Added logic to inject `ACADEMIC` (dense, evidence-heavy) vs `INTERFACE` (brief, witty) stances into node guidance based on the Interest scalar.
+*   **Thought Trace (Task 2.4)**: Explicitly extract `<thought>` blocks from local nodes and package them into the context window for **Deep Thought**, ensuring the Sovereign node knows the local "Intuition" before reasoning.
+*   **Visible Consensus (Task 2.5)**: Updated `intercom_v2.js` and `style.css` to highlight **Sovereign Refinement** in the UI with a distinct gold border and background.
+
+#### 3. Goal 3: The Memory Bridge (Implemented & Verified)
+*   **The Clipboard (Task 3.1)**: Added session-scoped context storage to `ArchiveNode.py`.
+*   **Neighborhood Expansion**: Refactored `get_context` to proactively fetch surrounding technical segments (+/- 1 entry) from JSON logs when a match is found, caching them in the session clipboard.
+*   **Hybrid Retrieval (RRF) (Task 3.2)**: Implemented **Reciprocal Rank Fusion**. The Archive Node now merges Vector scores (ChromaDB) with Exact-match Frequency scores (Keyword Grep) to ensure acronyms like "PECISTRESSOR" are never missed.
+*   **Selective Persistence (Task 3.3)**: `message_history` is now physically backed by `interaction_history.json`. RAG Clipboards are explicitly cleared during **H2 transitions** to maintain a lean context for the next session.
+
+#### 4. Goal 4: Appliance-Grade Decomposition (Skeleton Established)
+*   **V5 Skeleton (Task 4.1)**: Established the `src/v5/` directory structure with modular sub-services.
+*   **Always-Online Foyer (Task 4.2/4.3)**: Created `v5/foyer/router.py`, a standalone WebSocket/REST bridge that implements a **Disk-backed Intent Queue** (`foyer_queue.jsonl`), ensuring user requests are secured even if logic nodes are offline.
+*   **Larynx-Aware Ignition (Task 4.4)**: Created `v5/ignition/manager.py`, utilizing the physical **VRAM Mutex** and verifying readiness via the **Vocal Handshake** definitive signal.
+
+### 🧪 Verification (BKM-032 / BKM-029)
+*   **Conversation Ledger**: Successfully verified the multi-turn interest climb and thought-trace passage via `test_relay_interest_buildup.py`.
+*   **RRF/Clipboard Trace**: Successfully verified hybrid retrieval and neighbor caching via `test_archive_clipboard.py` and `test_archive_rrf.py`.
+*   **Persistence Audit**: Successfully verified history restoration and H2 rule enforcement via `test_hub_persistence.py`.
 
 ---
 
+## 🚀 PHASE 2: AUTONOMOUS STABILIZATION & ALARM INTEGRATION
+*Objective: Deprecate V4 monolith and certify V5 resilience for overnight ALARM tasks.*
+
+### 🛠️ V4 Deprecation & V5 Promotion
+*   **Pedigree & Intent**: *"We cannot have two captains. Moving the primary entry points to V5 ensures the 'Always-Online' Foyer is the definitive gate for all traffic."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 2.1 (The Clean Cut)**: Physically move `acme_lab.py` logic into `v5/router.py` and rename the legacy script to `acme_lab_v4.py.bak`.
+    *   [ ] **Task 2.2 (Systemd Update)**: Update the Lab Attendant service definition to point to the `v5/ignition/manager.py` orchestrator.
+
+### 🌙 ALARM Task Resilience (Dreaming & Refinement)
+*   **Pedigree & Intent**: *"The mice shouldn't stop thinking when I'm away. Refactoring the ALARM loop to use the VRAM Mutex and Interest Scorer ensures continuous enhancement of the 18-year archive."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 2.3 (Modular Dreaming)**: Update `internal_debate.py` and `dream()` tools to respect the V5 nomenclature and use the physical VRAM Mutex.
+    *   [ ] **Task 2.4 (Continuous Burn)**: Implement a 'Quiet Refinement' loop in the Ignition Manager that triggers gem-refining tasks when VRAM pressure is low and user activity is idle.
+    *   [ ] **Task 2.5 (Search Parity)**: Ensure the 'Nightly Job Search' and 'Focal Connections' agents are updated to use the RRF Hybrid Retrieval for higher matching fidelity.
+
 ### ⚖️ LEAD ENGINEER REVIEW REQUIRED
 *This plan is an artifact for Sprint 31. No code changes have been made.*
+
+
