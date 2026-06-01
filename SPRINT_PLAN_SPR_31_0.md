@@ -6,68 +6,70 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 
 ---
 
-## 🧠 1. THE CONSCIOUSNESS SHIFT (Metric Promotion)
+## 🏗️ GOAL 1: NOMENCLATURE SHIFT & PHYSICAL FOUNDATIONS
+*Objective: Stabilize the 'Hard Anchors' and align the file system with the mental model before logical shifts.*
+
+### 🔬 Node Promotion: Shadow -> THE BRAIN
+*   **Pedigree & Intent**: *"Shadow was originally a failover; the local 2080 Ti is now a primary participant in the Relay. Promoting it to THE BRAIN aligns our nomenclature with the new hierarchy of authority."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 1.1 (Git Move)**: Physically rename `shadow_node.py` -> `brain_node.py` and update `infrastructure.json`.
+    *   [ ] **Task 1.2 (Prompt Sync)**: Update `BRAIN_SYSTEM_PROMPT` and `PINKY_SYSTEM_PROMPT` to reflect the new hierarchy ("The Brain" and "Deep Thought").
+    *   [ ] **Task 1.3 (Identity Bedrock)**: Update `IDENTITY_BEDROCK` labels in `cognitive_hub.py` to match the new naming gauntlet.
+
+### 🔐 Physical Boundary Mitigation: VRAM Mutex
+*   **Pedigree & Intent**: *"When Ignition becomes a separate service, in-memory locks will fail. We need a physical anchor to prevent silicon thrashing."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 1.4 (File-based Mutex)**: Transition from `self._ignition_in_progress` memory flags to strict file-based locking (e.g., `fcntl` on `/tmp/lab_vram.lock`) to ensure only one process touches the GPU.
+
+---
+
+## 🧠 GOAL 2: THE CONSCIOUSNESS SHIFT (Logic & Communication)
+*Objective: Move from 'Budgeting for cost' to 'Reasoning for Depth' using recursive linguistic resonance.*
 
 ### 📈 Metric Shift: Fuel -> INTEREST
 *   **Pedigree & Intent**: *"We aren't budgeting for tokens anymore; we're reasoning for depth. If the Lab is genuinely 'interested' in a topic, it should have the autonomy to keep digging. Interest is the new fuel."* — Lead Engineer.
-*   **Strategy: Recursive Topic Scoring (Linguistic Resonance)**: Derive interest from the semantic overlap between the current query, the `resonant_history`, and established technical domains.
-*   **Implementation**: 
-    *   Purge `intent_anchors.json` and all hardcoded keyword list dependencies.
-    *   Refactor `CognitiveHub.py`: `self.current_fuel` -> `self.interest_score`.
-    *   Logic: The Brain evaluates the `interest_score` via linguistic resonance. If the score is high, it triggers multi-turn refinement. If low, it yields to high-fidelity brevity.
-
-### 📚 Retrieval Shift: RRF Implementation
-*   **Pedigree & Intent**: *"Exact technical matches (like PECISTRESSOR) are often lost in a purely semantic vector search. We need the rigor of Reciprocal Rank Fusion to ensure both the 'Vibe' and the 'Fact' surface correctly."* — Lead Engineer.
-*   **Strategy: RRF Hybrid Retrieval [BKM-032]**: Merge vector scores with exact-match frequency rankings to surface "Star" technical artifacts.
+*   **Tasks**:
+    *   [ ] **Task 2.1 (The Recursive Scorer)**: Refactor `CognitiveHub.py` to derive `interest_score` from the semantic overlap between the current query and the `resonant_history`.
+    *   [ ] **Task 2.2 (Long-Form Shunt)**: Implement logic where `interest_score > 0.8` forces `max_tokens=2000`, allowing the Brain to perform exhaustive multi-node synthesis.
+    *   [ ] **Task 2.3 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
 
 ---
 
-## 🗄️ 2. THE MEMORY BRIDGE (Refinement & Persistence)
+## 🗄️ GOAL 3: THE MEMORY BRIDGE (Refinement & Persistence)
+*Objective: Build a cumulative RAG context that survives hibernation without the 'Greed' of monolithic context.*
 
 ### 📋 Topical RAG Cache (The Clipboard)
-*   **Pedigree & Intent**: *"RAG shouldn't be a one-shot lookup. We need to build up a 'mental clipboard' of context over several turns, refining the truth as the conversation deepens. It's about cumulative synthesis, not isolated pings."* — Lead Engineer.
-*   **Strategy: Topical RAG Cache (Clipboard)**: Implement a session-scoped "Clipboard" in `ArchiveNode.py` that allows refining and building up RAG info Turn-over-Turn, flushed only on major topic shifts.
+*   **Pedigree & Intent**: *"RAG shouldn't be a one-shot lookup. We need to build up a 'mental clipboard' of context over several turns, refining the truth as the conversation deepens."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 3.1 (The Clipboard)**: Implement a session-scoped "Clipboard" in `ArchiveNode.py` that builds up RAG info turn-over-turn.
+    *   [ ] **Task 3.2 (RRF Implementation)**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] to merge vector scores with exact-match frequency rankings for acronym precision (e.g., PECISTRESSOR).
 
 ### ❄️ The Hibernation Rule
-*   **Pedigree & Intent**: *"When the Lab goes to sleep (H2), I don't want to lose the thread of where we were. Keep the conversation history, but discard the heavy context cache so we start the next session with a lean mind but a long memory."* — Lead Engineer.
-*   **Strategy: Selective Persistence**: Preserve `message_history` in `acme_lab.py`, but discard the heavy RAG Clipboard and trigger `clear_thoughts()` on the thinking node.
+*   **Pedigree & Intent**: *"Keep the conversation history, but discard the heavy context cache so we start the next session with a lean mind but a long memory."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 3.3 (Selective Persistence)**: Refactor `acme_lab.py` to persist `message_history` to disk, but explicitly discard the RAG Clipboard and heavy VRAM objects during H2 transitions.
 
 ---
 
-## 📐 3. THE APPLIANCE-GRADE DECOMPOSITION (V5 Architecture)
-*   **Pedigree & Intent**: *"Transform the 'Stable Monolith' into a modular suite of services. Objective: Decouple physical silicon management (Ignition) from logical intent (The Brain) to achieve zero-downtime persona transitions and eliminate state-machine race conditions."* — Lead Engineer.
+## 📐 GOAL 4: THE APPLIANCE-GRADE DECOMPOSITION (V5 Architecture)
+*Objective: Decompose the v4 monolith into a modular suite of services with 100% foyer uptime.*
 
-### 🔬 Node Promotion: Shadow -> THE BRAIN
-*   **Strategy**: Deprecate "Shadow." The local reasoning node is now **THE BRAIN**. The 4090 is accessed via the **Deep Thought** action. 
-
-### 🛠️ The Four Physical Boundaries
-Based on forensic analysis of the v38 baseline (where `acme_lab.py` and `lab_attendant_v4.py` exceed 2,000 lines), the system will be split along four natural boundaries:
-1.  **The Ignition Boundary (`attendant.ignition`)**: Strictly silicon. Port checking, weight loading, process reaping. Zero cognitive logic.
-2.  **The Foyer Boundary (`attendant.foyer`)**: Always-online WebSocket/REST bridge. Solves "WebSocket Jitter" and the "Silent Ledger" bug by staying up even when the Brain is "Dreaming" or "Resetting."
-3.  **The Logic Boundary (`lab.brain` / `lab.sentinel`)**: All "Interest" and "Resonance" logic moves to a dedicated Brain Engine, independent of physical server routing.
-4.  **The Forensic Boundary (`attendant.forensics`)**: Pulse logging and trace monitoring.
-
-### 🛡️ The Versioning Strategy: "The Zero-Downtime Handover"
-*   **Step 1: The v5 Skeleton**: Create a new directory structure `HomeLabAI/src/v5/`.
-*   **Step 2: Component Extraction**: Extract one module at a time (e.g., `ignition.py`), rather than a "Big Bang" refactor.
-*   **Step 3: The Alias Layer**: Rename `shadow_node.py` -> `brain_node.py` physically first, then let the V4 monolith call the V5 Brain module.
-*   **Step 4: The Clean Cut**: Once verified via parallel run, deprecate `lab_attendant_v4.py` and promote the V5 orchestrator.
-
-### ⚠️ Forensic Recovery: Missed Requirements
-*   **Context Synchronization**: A shared state ledger (e.g., `.v5_state.json`) is required so modular components don't experience amnesia during handovers.
-*   **Larynx-Awareness**: The new modular Ignition needs a direct health-link to the Foyer, using the Vocal Handshake as a definitive readiness signal (not just guessing).
-*   **Log Compatibility**: Renaming `fuel` to `interest` requires a "Legacy Parser" or a clean cut-over point to ensure old `evaluation_batch_*.log` files don't break during replay.
+### 🛠️ The Split Strategy: "The Zero-Downtime Handover"
+*   **Pedigree & Intent**: *"The v4 monolith is a single point of failure. Breaking the Attendant into 'Appliance-Grade' services ensures that a failure in the router doesn't kill the ignition logic."* — Lead Engineer.
+*   **Tasks**:
+    *   [ ] **Task 4.1 (V5 Skeleton)**: Establish the `src/v5/` directory structure.
+    *   [ ] **Task 4.2 (The Always-Online Foyer)**: Implement a standalone WebSocket/REST bridge that stays up 100% of the time, solving "Ghost Disconnects."
+    *   [ ] **Task 4.3 (Disk-backed Holding Queue)**: Build a robust, disk-backed queue in the Foyer to hold user intent during hot-swaps of logic modules.
+    *   [ ] **Task 4.4 (Larynx-Aware Ignition)**: Build the `attendant.ignition` module that uses the **Vocal Handshake** as a definitive readiness signal for the foyer.
+    *   [ ] **Task 4.5 (The Clean Cut)**: Deprecate `lab_attendant_v4.py` and promote the modular V5 orchestrator.
 
 ---
 
-## 🧪 4. DEFERRED SEMANTIC CERTIFICATION
-*Applying BKM-032 to the Refactor.*
+## 🧪 GOAL 5: DEFERRED SEMANTIC CERTIFICATION
+*Objective: Apply BKM-032 to certify the Refactor results.*
 
-1.  **Phase A (The Hard Switch)**: Automated batch verify that all ports bind and the "Interest" scalar still calculates correctly (0.2/0.6 logic).
-2.  **Phase B (The Voice Audit)**: Gemini CLI (AI Reviewer) reads the "Deep Thought" traces. 
-    *   **Check**: Does Pinky address the local node as "Brain" correctly?
-    *   **Check**: Does the "Interest Decay" feel natural vs. the old "Fuel" jitter?
-    *   **Check**: Does the system stay vocal during the H2 -> V5 startup?
+*   **Phase A (The Hard Switch)**: [ ] Automated batch verify that all ports bind and the "Interest" scalar still calculates correctly.
+*   **Phase B (The Voice Audit)**: [ ] Gemini CLI (AI Reviewer) reads the "Deep Thought" traces for persona alignment and interest decay naturalism.
 
 ---
 
