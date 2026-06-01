@@ -63,6 +63,14 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [ ] **Task 4.4 (Larynx-Aware Ignition)**: Build the `attendant.ignition` module that uses the **Vocal Handshake** as a definitive readiness signal for the foyer.
     *   [ ] **Task 4.5 (The Clean Cut)**: Deprecate `lab_attendant_v4.py` and promote the modular V5 orchestrator.
 
+#### 🗺️ V5 Physical-to-Logical [FEAT] Map
+| Module | Target Features |
+| :--- | :--- |
+| **`attendant.ignition`** | [FEAT-119] The Assassin (Port Reaping), [FEAT-254] VRAM Verification. |
+| **`attendant.lifecycle`** | [FEAT-249] Hibernation Matrix, [FEAT-134] AFK Guarding. |
+| **`attendant.router`** | [FEAT-233] Waterfall, [FEAT-234] Scalar Interest Triage. |
+| **`attendant.forensics`**| [FEAT-151] Forensic Ledger (Wordy Log), [FEAT-318] Trace Monitor. |
+
 ---
 
 ## 🧪 GOAL 5: DEFERRED SEMANTIC CERTIFICATION
