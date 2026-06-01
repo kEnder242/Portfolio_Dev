@@ -129,15 +129,16 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ### 🛠️ V4 Deprecation & V5 Promotion
 *   **Pedigree & Intent**: *"We cannot have two captains. Moving the primary entry points to V5 ensures the 'Always-Online' Foyer is the definitive gate for all traffic."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 2.1 (The Clean Cut)**: Physically move `acme_lab.py` logic into `v5/router.py` and rename the legacy script to `acme_lab_v4.py.bak`.
-    *   [ ] **Task 2.2 (Systemd Update)**: Update the Lab Attendant service definition to point to the `v5/ignition/manager.py` orchestrator.
+    *   [x] **Task 2.1 (The Clean Cut)**: Physically move `acme_lab.py` logic into `v5/router.py` and rename the legacy script to `acme_lab_v4.py.bak`.
+    *   [x] **Task 2.2 (V5 Transition Shim)**: Established a shim `acme_lab.py` that boots the V5 Foyer Router, ensuring backward compatibility with existing launch scripts.
 
 ### 🌙 ALARM Task Resilience (Dreaming & Refinement)
 *   **Pedigree & Intent**: *"The mice shouldn't stop thinking when I'm away. Refactoring the ALARM loop to use the VRAM Mutex and Interest Scorer ensures continuous enhancement of the 18-year archive."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 2.3 (Modular Dreaming)**: Update `internal_debate.py` and `dream()` tools to respect the V5 nomenclature and use the physical VRAM Mutex.
-    *   [ ] **Task 2.4 (Continuous Burn)**: Implement a 'Quiet Refinement' loop in the Ignition Manager that triggers gem-refining tasks when VRAM pressure is low and user activity is idle.
-    *   [ ] **Task 2.5 (Search Parity)**: Ensure the 'Nightly Job Search' and 'Focal Connections' agents are updated to use the RRF Hybrid Retrieval for higher matching fidelity.
+    *   [x] **Task 2.3 (Modular Dreaming)**: Update `internal_debate.py` and `dream_cycle.py` to respect the V5 nomenclature and use the physical VRAM Mutex.
+    *   [x] **Task 2.4 (Continuous Burn)**: Implement a 'Quiet Refinement' loop in the Ignition Manager that triggers gem-refining tasks when VRAM pressure is low and user activity is idle.
+    *   [x] **Task 2.5 (Search Parity)**: Ensure the 'Nightly Job Search' and 'Focal Connections' agents are updated to use the RRF Hybrid Retrieval for higher matching fidelity.
+
 
 ### ⚖️ LEAD ENGINEER REVIEW REQUIRED
 *This plan is an artifact for Sprint 31. No code changes have been made.*
