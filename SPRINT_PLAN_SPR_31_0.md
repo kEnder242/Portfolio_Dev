@@ -16,6 +16,7 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [ ] **Task 1.2 (Prompt Sync)**: Update `BRAIN_SYSTEM_PROMPT` and `PINKY_SYSTEM_PROMPT` to reflect the new hierarchy ("The Brain" and "Deep Thought").
     *   [ ] **Task 1.3 (Identity Bedrock)**: Update `IDENTITY_BEDROCK` labels in `cognitive_hub.py` to match the new naming gauntlet.
     *   [ ] **Task 1.5 (Lobby Residency)**: Ensure the "Deep Thought" action (4090) maintains model-awareness to minimize weight-swapping. Preserve the immediate fast-track response capability during local engine warm-ups.
+    *   [ ] **Task 1.6 (Resilience Parity)**: [FEAT-069] Ensure the local Brain (2080 Ti) inherits the Sovereign toolset (RAG/Excerpts) during remote-offline failover to maintain Lab availability.
 
 ### 🔐 Physical Boundary Mitigation: VRAM Mutex
 *   **Pedigree & Intent**: *"When Ignition becomes a separate service, in-memory locks will fail. We need a physical anchor to prevent silicon thrashing."* — Lead Engineer.
@@ -44,6 +45,11 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 *   **Tasks**:
     *   [ ] **Task 3.1 (The Clipboard)**: Implement a session-scoped "Clipboard" in `ArchiveNode.py` that builds up RAG info turn-over-turn. Include **Neighborhood Expansion** logic to proactively look up related segments based on discovering new technical anchors.
     *   [ ] **Task 3.2 (RRF Implementation)**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] to merge vector scores with exact-match frequency rankings for acronym precision (e.g., PECISTRESSOR).
+
+### 📋 Workspace-as-Cache (Refinement)
+*   [ ] **Task 3.4 (The Collaborative Ledger)**: Implement `create_followup_file` in `ArchiveNode.py`. Trigger on Turn 2 of high-interest loops to instantiate physical `whiteboard/` files with Triage-derived names.
+*   [ ] **Task 3.5 (Append-Only Mandate)**: Configure nodes to prefer the internal `patch_file` tool for updating Whiteboard files, ensuring evidence is built up without clobbering history.
+*   [ ] **Task 3.6 (RAG Pointers)**: Use "RAG Pointers" (URIs/Line Anchors) in follow-up files instead of copying large text blocks to prevent context-window drowning.
 
 ### ❄️ The Hibernation Rule
 *   **Pedigree & Intent**: *"Keep the conversation history, but discard the heavy context cache so we start the next session with a lean mind but a long memory."* — Lead Engineer.
