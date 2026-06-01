@@ -67,10 +67,10 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ### 🛠️ The Split Strategy: "The Zero-Downtime Handover"
 *   **Pedigree & Intent**: *"The v4 monolith is a single point of failure. Breaking the Attendant into 'Appliance-Grade' services ensures that a failure in the router doesn't kill the ignition logic."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 4.1 (V5 Skeleton)**: Establish the `src/v5/` directory structure.
-    *   [ ] **Task 4.2 (The Always-Online Foyer)**: Implement a standalone WebSocket/REST bridge that stays up 100% of the time, solving "Ghost Disconnects."
-    *   [ ] **Task 4.3 (Disk-backed Holding Queue)**: Build a robust, disk-backed queue in the Foyer to hold user intent during hot-swaps of logic modules.
-    *   [ ] **Task 4.4 (Larynx-Aware Ignition)**: Build the `attendant.ignition` module that uses the **Vocal Handshake** as a definitive readiness signal for the foyer.
+    *   [x] **Task 4.1 (V5 Skeleton)**: Establish the `src/v5/` directory structure.
+    *   [x] **Task 4.2 (The Always-Online Foyer)**: Implement a standalone WebSocket/REST bridge that stays up 100% of the time, solving "Ghost Disconnects."
+    *   [x] **Task 4.3 (Disk-backed Holding Queue)**: Build a robust, disk-backed queue in the Foyer to hold user intent during hot-swaps of logic modules.
+    *   [x] **Task 4.4 (Larynx-Aware Ignition)**: Build the `attendant.ignition` module that uses the **Vocal Handshake** as a definitive readiness signal for the foyer.
     *   [ ] **Task 4.5 (The Clean Cut)**: Deprecate `lab_attendant_v4.py` and promote the modular V5 orchestrator.
 
 #### 🗺️ V5 Physical-to-Logical [FEAT] Map
@@ -86,8 +86,8 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ## 🧪 GOAL 5: DEFERRED SEMANTIC CERTIFICATION
 *Objective: Apply BKM-032 to certify the Refactor results.*
 
-*   **Phase A (The Hard Switch)**: [ ] Automated batch verify that all ports bind and the "Interest" scalar still calculates correctly.
-*   **Phase B (The Voice Audit)**: [ ] Gemini CLI (AI Reviewer) reads the "Deep Thought" traces for persona alignment and interest decay naturalism.
+*   **Phase A (The Hard Switch)**: [x] Automated batch verify that all ports bind and the "Interest" scalar still calculates correctly.
+*   **Phase B (The Voice Audit)**: [x] Gemini CLI (AI Reviewer) reads the "Deep Thought" traces for persona alignment and interest decay naturalism.
 
 ---
 
