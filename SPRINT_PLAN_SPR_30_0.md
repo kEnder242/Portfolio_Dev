@@ -83,7 +83,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 *Goal: Align blueprints with Phase 15 "Neural Relay" reality and the "Great Brain Awakening" naming conventions.*
 
 1.  **[00_MASTER_INDEX.md] Update**: 
-    - [ ] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
+    - [x] Add `LAB_TIMING_REPORT.md` (The Resonant Clock).
     - [x] Add `SPRINT_PLAN_SPR_30_0.md` to the active roadmap.
     - [x] **Task 4.3 (Master Index Audit)**: Physically link `LAB_TIMING_REPORT.md` and verify all pointers in `00_MASTER_INDEX.md` resolve to existing (non-zombie) documents.
 2.  **Architecture & Logic Modernization**:
@@ -92,7 +92,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
     - [x] **BICAMERAL_DISPATCH.md**: Update the Amygdala/Sentinel metaphors to include "Foil Awareness" and "Interest" score logic.
     - [x] **Task 4.2 (Metric Translation)**: In `BICAMERAL_DISPATCH.md`, define the **Interest Score** logic—explicitly documenting that Pinky always "Pushes" intuition, but the Brain "Pulls" or choice-halts based on conversational completion.
 3.  **Timing & Vitals**:
-    - [ ] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
+    - [x] **LAB_TIMING_REPORT.md**: Incorporate H1/H2 wake latency benchmarks and the **Snappy Wake** shortcut.
 
 
 
@@ -111,6 +111,7 @@ Prepare the Lab for an architectural refactor (Sprint 31) by codifying the exist
 - [x] **Task 5.1 (The Gold Master Baseline)**: Run the entire 'Inflection Test Set' to anchor the baseline (v38 passed 5/5).
 - [ ] **Task 5.2 (Deep Thought Handshake)**: Implement `src/tests/test_deep_thought_vocal.py` to verify that the Brain can still provide immediate fast-track responses while the "Deep Thought" (4090) model is loading.
 - [x] **Task 5.3 (Gauntlet Consolidation)**: Update `DIAGNOSTIC_SCRIPT_MAP.md` to flag which scripts are "V4-Current" and essential for refactor verification.
+- [x] **Task 5.4 (DNA Audit)**: Manually reconstruct FEAT-027 and FEAT-029 in the Feature Tracker to resolve modernization drift.
 
 ---
 
