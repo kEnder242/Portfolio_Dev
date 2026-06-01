@@ -12,16 +12,16 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ### 🔬 Node Promotion: Shadow -> THE BRAIN
 *   **Pedigree & Intent**: *"Shadow was originally a failover; the local 2080 Ti is now a primary participant in the Relay. Promoting it to THE BRAIN aligns our nomenclature with the new hierarchy of authority."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 1.1 (Git Move)**: Physically rename `shadow_node.py` -> `brain_node.py` and update `infrastructure.json`.
-    *   [ ] **Task 1.2 (Prompt Sync)**: Update `BRAIN_SYSTEM_PROMPT` and `PINKY_SYSTEM_PROMPT` to reflect the new hierarchy ("The Brain" and "Deep Thought").
-    *   [ ] **Task 1.3 (Identity Bedrock)**: Update `IDENTITY_BEDROCK` labels in `cognitive_hub.py` to match the new naming gauntlet.
+    *   [x] **Task 1.1 (Git Move)**: Physically rename `shadow_node.py` -> `brain_node.py` and update `infrastructure.json`.
+    *   [x] **Task 1.2 (Prompt Sync)**: Update `BRAIN_SYSTEM_PROMPT` and `PINKY_SYSTEM_PROMPT` to reflect the new hierarchy ("The Brain" and "Deep Thought").
+    *   [x] **Task 1.3 (Identity Bedrock)**: Update `IDENTITY_BEDROCK` labels in `cognitive_hub.py` to match the new naming gauntlet.
     *   [ ] **Task 1.5 (Lobby Residency)**: Ensure the "Deep Thought" action (4090) maintains model-awareness to minimize weight-swapping. Preserve the immediate fast-track response capability during local engine warm-ups.
     *   [ ] **Task 1.6 (Resilience Parity)**: [FEAT-069] Ensure the local Brain (2080 Ti) inherits the Sovereign toolset (RAG/Excerpts) during remote-offline failover to maintain Lab availability.
 
 ### 🔐 Physical Boundary Mitigation: VRAM Mutex
 *   **Pedigree & Intent**: *"When Ignition becomes a separate service, in-memory locks will fail. We need a physical anchor to prevent silicon thrashing."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 1.4 (File-based Mutex)**: Transition from `self._ignition_in_progress` memory flags to strict file-based locking (e.g., `fcntl` on `/tmp/lab_vram.lock`) to ensure only one process touches the GPU.
+    *   [x] **Task 1.4 (File-based Mutex)**: Transition from `self._ignition_in_progress` memory flags to strict file-based locking (e.g., `fcntl` on `/tmp/lab_vram.lock`) to ensure only one process touches the GPU.
 
 ---
 
@@ -31,7 +31,7 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 ### 📈 Metric Shift: Fuel -> INTEREST
 *   **Pedigree & Intent**: *"We aren't budgeting for tokens anymore; we're reasoning for depth. If the Lab is genuinely 'interested' in a topic, it should have the autonomy to keep digging. Interest is the new fuel."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 2.1 (The Recursive Scorer)**: Refactor `CognitiveHub.py` to derive `interest_score` from the semantic overlap and topical resonance (identifiable via grammar and repeated phrasing) between the current query and the `resonant_history`.
+    *   [x] **Task 2.1 (The Recursive Scorer)**: Refactor `CognitiveHub.py` to derive `interest_score` from the semantic overlap and topical resonance (identifiable via grammar and repeated phrasing) between the current query and the `resonant_history`.
     *   [ ] **Task 2.2 (Long-Form Shunt)**: Implement logic where `interest_score > 0.8` forces `max_tokens=2000`, allowing the Brain to perform exhaustive multi-node synthesis.
     *   [ ] **Task 2.3 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
 
@@ -47,7 +47,7 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [ ] **Task 3.2 (RRF Implementation)**: Physically implement the **RRF Hybrid Retrieval** [BKM-032] to merge vector scores with exact-match frequency rankings for acronym precision (e.g., PECISTRESSOR).
 
 ### 📋 Workspace-as-Cache (Refinement)
-*   [ ] **Task 3.4 (The Collaborative Ledger)**: Implement `create_followup_file` in `ArchiveNode.py`. Trigger on Turn 2 of high-interest loops to instantiate physical `whiteboard/` files with Triage-derived names.
+*   [x] **Task 3.4 (The Collaborative Ledger)**: Implement `create_followup_file` in `ArchiveNode.py`. Trigger on Turn 2 of high-interest loops to instantiate physical `whiteboard/` files with Triage-derived names.
 *   [ ] **Task 3.5 (Append-Only Mandate)**: Configure nodes to prefer the internal `patch_file` tool for updating Whiteboard files, ensuring evidence is built up without clobbering history.
 *   [ ] **Task 3.6 (RAG Pointers)**: Use "RAG Pointers" (URIs/Line Anchors) in follow-up files instead of copying large text blocks to prevent context-window drowning.
 
