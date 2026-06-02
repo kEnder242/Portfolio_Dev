@@ -176,10 +176,10 @@ Execute an architectural refactor to align the Lab's terminology and file struct
 *   **Pedigree & Intent**: *"Physical resilience is the skeleton; semantic fidelity is the soul. The 5x5 proves the system survives natural idle drift without logical decay."* — Lead Engineer.
 *   **Contextual Notes**: Adapt `uber_5x5_hand_crank.py` to V5 nomenclature. Perform a 75-minute increasing stress test (5, 10, 15, 20, 25 mins) with natural idle drift.
 *   **Tasks (BKM-029)**:
-    1.  [ ] **Task 3.4.1 (Compare)**: Contrast `uber_5x5` search patterns with new V5 node names (**Deep Thought** / **The Brain**) and **Visible Consensus** DOM markers.
-    2.  [ ] **Task 3.4.2 (Save)**: Secure the adapted `src/debug/uber_5x5_v5.py`.
-    3.  [ ] **Task 3.4.3 (Strategic Inquiry)**: Audit **BKM-033 (Babysitting)** for real-time forensic oversight during the 75-minute run.
-    4.  [ ] **Task 3.4.4 (Verify)**: Achieve 5/5 consecutive wins. Finalize with a **BKM-032 Wordy Audit** of the evaluation logs.
+    1.  [x] **Task 3.4.1 (Compare)**: Contrast `uber_5x5` search patterns with new V5 node names (**Deep Thought** / **The Brain**) and **Visible Consensus** DOM markers.
+    2.  [x] **Task 3.4.2 (Save)**: Secure the adapted `src/debug/uber_5x5_v5.py`.
+    3.  [x] **Task 3.4.3 (Strategic Inquiry)**: Audit **BKM-033 (Babysitting)** for real-time forensic oversight during the 75-minute run.
+    4.  [x] **Task 3.4.4 (Verify)**: Achieve 5/5 consecutive wins. Finalize with a **BKM-032 Wordy Audit** of the evaluation logs.
 
 ### ⚖️ LEAD ENGINEER REVIEW REQUIRED
 *This plan is an artifact for Sprint 31. No code changes have been made.*
