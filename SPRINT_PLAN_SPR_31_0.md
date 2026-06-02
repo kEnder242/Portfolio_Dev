@@ -140,6 +140,38 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [x] **Task 2.5 (Search Parity)**: Ensure the 'Nightly Job Search' and 'Focal Connections' agents are updated to use the RRF Hybrid Retrieval for higher matching fidelity.
 
 
+---
+
+## 🛡️ PHASE 3: APPLIANCE STABILIZATION GAUNTLET
+*Objective: Verify V5 modular resilience and ALARM task stability under physical stress.*
+
+### ⛓️ Scenario A: The Busy Silicon Handshake (VRAM Mutex)
+*   **Pedigree & Intent**: *"In a decoupled world, the Foyer must respect the physical VRAM lock held by background tasks without failing the user."* — Lead Engineer.
+*   **Contextual Notes**: Repurpose `test_induction_mutex.py` logic to verify that when a background task (e.g., `dream_cycle.py`) holds `/tmp/lab_vram.lock`, the V5 Foyer correctly enqueues the user intent and provides a characterful "Silicon Busy" quip.
+*   **Tasks (BKM-029)**:
+    1.  [ ] **Task 3.1.1 (Compare)**: Contrast `v5/ignition/manager.py` locking with legacy Attendant V4 behavior.
+    2.  [ ] **Task 3.1.2 (Save)**: Secure the `test_v5_mutex_collision.py` validator.
+    3.  [ ] **Task 3.1.3 (Strategic Inquiry)**: Brainstorm "Lock Hunger" traps where a background task might starvation the Foyer.
+    4.  [ ] **Task 3.1.4 (Verify)**: Physically simulate a 60s lock-hold and verify Foyer queue drainage.
+
+### 👻 Scenario B: The Ghost Intent Recovery (Queue Durability)
+*   **Pedigree & Intent**: *"Intent must survive the crash. If the Foyer dies, the queue stays."* — Lead Engineer.
+*   **Contextual Notes**: Evolve `test_lifecycle_gauntlet.py` into a crash-consistency test. Verify that `foyer_queue.jsonl` is recovered and re-broadcasted to clients after a Foyer restart.
+*   **Tasks (BKM-029)**:
+    1.  [ ] **Task 3.2.1 (Compare)**: Verify `foyer_queue.jsonl` schema against `IntentEvent` dataclass.
+    2.  [ ] **Task 3.2.2 (Save)**: Secure `test_v5_queue_recovery.py`.
+    3.  [ ] **Task 3.2.3 (Strategic Inquiry)**: Identify "Zombie Event" traps where a processed task is re-run after crash.
+    4.  [ ] **Task 3.2.4 (Verify)**: Kill Foyer with SIGKILL during active queueing and verify state restoration.
+
+### 🌙 Scenario C: The Nightly No-Show (ALARM Self-Healing)
+*   **Pedigree & Intent**: *"The Ignition Manager is the silent guardian. It must detect and restart failed ALARM loops."* — Lead Engineer.
+*   **Contextual Notes**: Upgrade `test_goodnight_bounce.py` logic to verify that the `continuous_burn_loop` and `run_nightly_tasks` in the V5 Ignition Manager can detect subprocess failures (e.g., `refine_gem.py` crash) and re-initiate the sequence.
+*   **Tasks (BKM-029)**:
+    1.  [ ] **Task 3.3.1 (Compare)**: Verify `v5/ignition/manager.py` subprocess monitoring against legacy watchdog logic.
+    2.  [ ] **Task 3.3.2 (Save)**: Secure `test_v5_alarm_healing.py`.
+    3.  [ ] **Task 3.3.3 (Strategic Inquiry)**: Brainstorm "VRAM Thrashing" traps during high-frequency restart loops.
+    4.  [ ] **Task 3.3.4 (Verify)**: Mock a `refine_gem.py` failure and verify Ignition Manager's 60s cooldown/restart logic.
+
 ### ⚖️ LEAD ENGINEER REVIEW REQUIRED
 *This plan is an artifact for Sprint 31. No code changes have been made.*
 
