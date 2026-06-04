@@ -130,7 +130,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     if (sl.includes('pinky') && lastMsgSource.includes('brain')) isBuildingUpon = true;
     
     // [Task 2.5] Visible Consensus: Detect Sovereign Refinement
-    const isRefinement = sl.includes('deep thought') && (lastMsgSource.includes('brain') || lastMsgSource.includes('pinky'));
+    const isRefinement = (sl.includes('deep thought') || sl.includes('the brain (failover)')) && (lastMsgSource.includes('brain') || lastMsgSource.includes('pinky'));
     
     lastMsgSource = sl;
 
