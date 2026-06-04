@@ -324,26 +324,3 @@ The BKM-029 cautious iteration approach was the only reason V5 survived. The `ub
 
 ---
 
-## 🔮 PRELIMINARY SPRINT 32: THE RETRIEVAL RENAISSANCE
-**Objective:** Upgrade to vLLM 0.21.x, integrate Qwen 3.6, and shift focus from *Inference Reason* to *Retrieval Precision*.
-
-### 🏗️ GOAL 1: SILICON MODERNIZATION (vLLM v0.21.0)
-*   **Upgrade Path**: Research confirms vLLM v0.21.x supports Qwen 3.6 natively with **Model Runner V2 (MRv2)** and **Thinking Preservation**.
-*   **Tasks**:
-    *   [ ] **Task 1.1 (The Upgrade)**: Upgrade `.venv` to vLLM 0.21.0 and Python 3.12.
-    *   [ ] **Task 1.2 (Qwen 3.6)**: Migrate 3B Unified Base and 27B Sovereign to Qwen 3.6 FP8.
-    *   [ ] **Task 1.3 (Thinking Mode)**: Enable `--reasoning-parser qwen3` to allow native handling of `<think>` blocks without regex hacks.
-
-### 🧠 GOAL 2: ORCHESTRATION MEMORY (OM & RAG)
-*   **Objective**: Integrate the "RAG is not ML" philosophy [BKM-032]. Focus on the **Engineering of Truth**.
-*   **Tasks**:
-    *   [ ] **Task 2.1 (Memo-Memory)**: Implement a "Memo" layer that caches high-fidelity "Observations" (OM) to avoid re-summarizing the 18-year archive.
-    *   [ ] **Task 2.2 (Cost-Control Layer)**: Gate Sovereign (4090) deep dives behind a retrieval-confidence check. If local Brain (2080 Ti) has >90% hit on the PECISTRESSOR keyword, skip the Sovereign call.
-    *   [ ] **Task 2.3 (Memory OS)**: Implement eviction policies for the session RAG clipboard to prevent context-window drowning.
-
-### 💎 STRETCH GOALS
-*   [ ] **Neural Pager v2**: Use the `memory-os` concept to alert on "Memory Fragmentation" (when RAG results are logically contradictory).
-*   [ ] **MTP Speculative Decoding**: Enable Multi-Token Prediction for Qwen 3.6 to reduce TPOT.
-
-
-
