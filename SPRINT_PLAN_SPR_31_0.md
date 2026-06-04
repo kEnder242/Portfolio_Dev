@@ -261,7 +261,7 @@ The BKM-029 cautious iteration approach was the only reason V5 survived. The `ub
 *   `[FEAT-149]` Resident Heartbeat: Dropped. V5 delegates liveness to the Foyer's status loop.
 *   `[FEAT-134]` AFK Resource Guard: Partially active via `status.json` but requires more granular engine-reaping logic in the Manager.
 
-**Conclusion**: The V5 "Appliance-Grade" architecture is officially certified and parity-verified.
+**Conclusion**: The V5 "Appliance-Grade" architecture is officially certified and parity-verified. All ALARM tasks (Nightly Recruiter, Dream Cycle, Nibbler) have been successfully ported and integrated into the modular structure.
 
 ### 🛑 FORENSIC BREAKDOWN: FALSE CERTIFICATION (Attempt 13)
 *A post-mortem analysis of testing methodology failures during the initial V5 certification attempt.*
