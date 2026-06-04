@@ -23,3 +23,23 @@
 ### Bicameral Awareness (Handover)
 - **Concept:** Brain being "aware" of Pinky's preceding interaction context.
 - **Application:** Prepending Pinky's triage to Brain prompts to enable banter and personality continuity.
+
+### Memo-Memory Model (LLM Upgrades)
+- **Source:** [VentureBeat: Memo Memory Model](https://venturebeat.com/orchestration/memo-memory-model-teams-upgrade-llm-without-retraining)
+- **Concept:** Decoupling memory from weights to allow model upgrades without retraining.
+- **Application:** Sprint 32 Upgrade strategy. Ensures our 18-year archive remains the "Gold Standard" truth even as the serving engine (vLLM) and base models (Qwen 3.6) evolve.
+
+### RAG Myth-Busting (Problem Space)
+- **Source:** [Towards Data Science: RAG is not Machine Learning](https://towardsdatascience.com/rag-is-not-machine-learning-and-the-ml-toolkit-solves-the-wrong-problem/)
+- **Concept:** RAG is an information retrieval and engineering problem, not an ML problem.
+- **Application:** Focus Sprint 32 on the **Retrieval Layer** (precision) rather than the **Model Layer** (reasoning) to reduce PECISTRESSOR hallucinations.
+
+### RAG Cost Control (Efficiency)
+- **Source:** [GitHub: rag-cost-control-layer](https://github.com/Emmimal/rag-cost-control-layer)
+- **Concept:** Gating heavy retrieval behind cost/token-aware layers.
+- **Application:** Tiered Retrieval. Use lightweight "Keyword Pings" for Tier 3 context, and "Sovereign Deep Thought" only for Tier 1 strategic gems.
+
+### Memory OS (Operating Memory)
+- **Source:** [GitHub: memory-os](https://github.com/ClaudioDrews/memory-os)
+- **Concept:** Treating memory as a system-level resource with allocation/eviction policies.
+- **Application:** Hardening the 3-Tier Memory model. Implement an "Eviction Policy" for the RAG Clipboard to prevent context-window drowning.
