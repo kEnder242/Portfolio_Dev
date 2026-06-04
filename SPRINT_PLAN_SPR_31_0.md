@@ -285,7 +285,65 @@ The BKM-029 cautious iteration approach was the only reason V5 survived. The `ub
 *   [ ] **Task 5.1 (Delete Sandbox)**: Remove `run_5x5.sh` and `start_vllm_test.sh` from the repository.
 *   [ ] **Task 5.2 (Systemd Upgrade)**: Modify `/etc/systemd/system/lab-attendant.service`. Use `ExecStartPre` for strict zombie cleanup. Configure `ExecStart` to launch the V5 Foyer, and spawn the Ignition Manager properly.
 *   [ ] **Task 5.3 (VRAM Investigation)**: Investigate true VRAM pressure (e.g., zombie hunting) before artificially lowering `gpu_memory_utilization` to `0.4` in `start_vllm.sh`. Keep LoRAs enabled.
-*   [ ] **Task 5.4 (The True Gauntlet)**: Start the Lab via `systemctl restart lab-attendant.service`. Run `uber_5x5_v5.py` strictly as a black-box client. Use a long-polling Python babysitter script to bypass the 5-minute CLI timeout without intervening in the Lab's execution.
+*   [x] **Task 5.4 (The True Gauntlet)**: Start the Lab via `systemctl restart lab-attendant.service`. Run `uber_5x5_v5.py` strictly as a black-box client. Use a long-polling Python babysitter script to bypass the 5-minute CLI timeout without intervening in the Lab's execution.
+
+### 🔬 IN-DEPTH CODE REVIEW & FORENSIC REPORT (V5 REFACTOR)
+*Objective: Audit the modular suite for physical stability risks and technical debt before long-term deployment.*
+
+#### 🔴 High Priority: Physical Stability Risks
+1.  **Thread Proliferation (`loader.py`)**: 
+    *   **Bug**: `_broadcast_token` spawns a `threading.Thread` for **every single token** generated.
+    *   **Impact**: A typical "Deep Thought" turn (500+ tokens) creates 500 threads in seconds. This triggers kernel-level jitter and potential thread exhaustion on the 2080 Ti host.
+    *   **Fix**: Transition to a single background "Telemetry Relay" thread with a thread-safe `Queue`.
+
+2.  **Synchronous Blocking (`manager.py`)**:
+    *   **Bug**: `update_status_file` uses the synchronous `requests` library to push updates to the Foyer.
+    *   **Impact**: Every 30s status pulse (and every ignition event) hangs the Ignition Manager's event loop for ~0.5s. This causes the "Heartbeat Jitter" observed in gauntlet logs.
+    *   **Fix**: Wrap the POST in `loop.run_in_executor` or transition to `aiohttp`.
+
+#### 🟡 Technical Debt & Logic Fragility
+1.  **Memory Leak (Intent Tracking)**: 
+    *   `processed_ids` sets in both Foyer and Manager never clear. In an appliance environment, this will cause slow memory bloat over weeks. 
+    *   **Fix**: Implement a `maxlen=1000` deque or time-based eviction.
+2.  **Vibe Auditor Fragility (`cognitive_audit.py`)**:
+    *   `audit_vibe_alignment` uses strict string matching (`"PASS" in result`). This is prone to false failures if the auditor node becomes chatty.
+    *   **Fix**: Apply BKM-015 "Semantic Indirection" to the auditor. Let it output qualitative scores that the Hub interprets, rather than a binary pass/fail string.
+3.  **Hardcoded Silicon Anchors**:
+    *   **KENDER's** IP (192.168.1.26) is hardcoded in `loader.py`.
+    *   **Fix**: Move to `infrastructure.json` as a dynamic hint.
+4.  **Ghost Attribute (`is_extraction`)**:
+    *   **Bug**: `cognitive_hub.py` references `self.is_extraction` in the audit gate, but it is never initialized.
+    *   **Fix**: Formalize `is_extraction` in `__init__` as a bypass flag for structured data tasks.
+
+### 🛡️ THE FINAL STABILIZATION SWEEP (Task 6)
+*   [ ] **Task 6.1 (Physics)**: Implement `TelemetryRelay` in `loader.py` to kill thread proliferation.
+*   [ ] **Task 6.2 (Latency)**: Asyncify the status push in `manager.py`.
+*   [ ] **Task 6.3 (Hygiene)**: Add TTL/Deque eviction to `processed_ids` to prevent memory leaks.
+*   [ ] **Task 6.4 (Alignment)**: Harden `cognitive_audit.py` with BKM-015 indirection.
+*   [ ] **Task 6.5 (Discovery)**: Restore dynamic discovery for the Sovereign IP.
+
+---
+
+## 🔮 PRELIMINARY SPRINT 32: THE RETRIEVAL RENAISSANCE
+**Objective:** Upgrade to vLLM 0.21.x, integrate Qwen 3.6, and shift focus from *Inference Reason* to *Retrieval Precision*.
+
+### 🏗️ GOAL 1: SILICON MODERNIZATION (vLLM v0.21.0)
+*   **Upgrade Path**: Research confirms vLLM v0.21.x supports Qwen 3.6 natively with **Model Runner V2 (MRv2)** and **Thinking Preservation**.
+*   **Tasks**:
+    *   [ ] **Task 1.1 (The Upgrade)**: Upgrade `.venv` to vLLM 0.21.0 and Python 3.12.
+    *   [ ] **Task 1.2 (Qwen 3.6)**: Migrate 3B Unified Base and 27B Sovereign to Qwen 3.6 FP8.
+    *   [ ] **Task 1.3 (Thinking Mode)**: Enable `--reasoning-parser qwen3` to allow native handling of `<think>` blocks without regex hacks.
+
+### 🧠 GOAL 2: ORCHESTRATION MEMORY (OM & RAG)
+*   **Objective**: Integrate the "RAG is not ML" philosophy [BKM-032]. Focus on the **Engineering of Truth**.
+*   **Tasks**:
+    *   [ ] **Task 2.1 (Memo-Memory)**: Implement a "Memo" layer that caches high-fidelity "Observations" (OM) to avoid re-summarizing the 18-year archive.
+    *   [ ] **Task 2.2 (Cost-Control Layer)**: Gate Sovereign (4090) deep dives behind a retrieval-confidence check. If local Brain (2080 Ti) has >90% hit on the PECISTRESSOR keyword, skip the Sovereign call.
+    *   [ ] **Task 2.3 (Memory OS)**: Implement eviction policies for the session RAG clipboard to prevent context-window drowning.
+
+### 💎 STRETCH GOALS
+*   [ ] **Neural Pager v2**: Use the `memory-os` concept to alert on "Memory Fragmentation" (when RAG results are logically contradictory).
+*   [ ] **MTP Speculative Decoding**: Enable Multi-Token Prediction for Qwen 3.6 to reduce TPOT.
 
 
 
