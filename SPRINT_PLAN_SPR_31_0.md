@@ -319,8 +319,9 @@ The BKM-029 cautious iteration approach was the only reason V5 survived. The `ub
 *   [ ] **Task 6.1 (Physics)**: Implement `TelemetryRelay` in `loader.py` to kill thread proliferation.
 *   [ ] **Task 6.2 (Latency)**: Asyncify the status push in `manager.py`.
 *   [ ] **Task 6.3 (Hygiene)**: Add TTL/Deque eviction to `processed_ids` to prevent memory leaks.
-*   [ ] **Task 6.4 (Alignment)**: Harden `cognitive_audit.py` with BKM-015 indirection.
+*   [ ] **Task 6.4 (Alignment)**: Harden `cognitive_audit.py` with BKM-015 indirection (Resonance Scalars).
 *   [ ] **Task 6.5 (Discovery)**: Restore dynamic discovery for the Sovereign IP.
+*   [ ] **Task 6.6 (UI Pop)**: Refactor `waterfall_drainer` to buffer tokens for the UI. Ensure internal overhearing remains real-time while delivery to the Intercom is block-buffered to eliminate jitter.
 
 ---
 
