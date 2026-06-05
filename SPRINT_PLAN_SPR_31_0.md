@@ -15,8 +15,8 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [x] **Task 1.1 (Git Move)**: Physically rename `shadow_node.py` -> `brain_node.py` and update `infrastructure.json`.
     *   [x] **Task 1.2 (Prompt Sync)**: Update `BRAIN_SYSTEM_PROMPT` and `PINKY_SYSTEM_PROMPT` to reflect the new hierarchy ("The Brain" and "Deep Thought").
     *   [x] **Task 1.3 (Identity Bedrock)**: Update `IDENTITY_BEDROCK` labels in `cognitive_hub.py` to match the new naming gauntlet.
-    *   [ ] **Task 1.5 (Lobby Residency)**: Ensure the "Deep Thought" action (4090) maintains model-awareness to minimize weight-swapping. Preserve the immediate fast-track response capability during local engine warm-ups.
-    *   [ ] **Task 1.6 (Resilience Parity)**: [FEAT-069] Ensure the local Brain (2080 Ti) inherits the Sovereign toolset (RAG/Excerpts) during remote-offline failover to maintain Lab availability.
+    *   [x] **Task 1.5 (Lobby Residency)**: Ensure the "Deep Thought" action (4090) maintains model-awareness to minimize weight-swapping. Preserve the immediate fast-track response capability during local engine warm-ups.
+    *   [x] **Task 1.6 (Resilience Parity)**: [FEAT-069] Ensure the local Brain (2080 Ti) inherits the Sovereign toolset (RAG/Excerpts) during remote-offline failover to maintain Lab availability.
 
 ### 🔐 Physical Boundary Mitigation: VRAM Mutex
 *   **Pedigree & Intent**: *"When Ignition becomes a separate service, in-memory locks will fail. We need a physical anchor to prevent silicon thrashing."* — Lead Engineer.
@@ -36,7 +36,7 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [x] **Task 2.3 (Persona Stance)**: Update `_process_node_stream` to inject behavioral stances (ACADEMIC vs INTERFACE) based on the interest scalar.
     *   [x] **Task 2.4 (The Thought Trace)**: Update `execute_dispatch` to package the `<thought>` block of the local nodes into the context window of the remote node.
     *   [x] **Task 2.5 (Visible Consensus)**: Update UI (`style.css` and `intercom_v2.js`) to highlight where "Deep Thought" has refined the "Local Brain" intuition.
-    *   [ ] **Task 2.6 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
+    *   [x] **Task 2.6 (Native MCP Sampling)**: Enable nodes to request client-side LLM completions via the Hub (`sampling/createMessage`), allowing the Brain to "Ask the 4090" for help mid-turn.
 
 ---
 
@@ -71,7 +71,7 @@ Execute an architectural refactor to align the Lab's terminology and file struct
     *   [x] **Task 4.2 (The Always-Online Foyer)**: Implement a standalone WebSocket/REST bridge that stays up 100% of the time, solving "Ghost Disconnects."
     *   [x] **Task 4.3 (Disk-backed Holding Queue)**: Build a robust, disk-backed queue in the Foyer to hold user intent during hot-swaps of logic modules.
     *   [x] **Task 4.4 (Larynx-Aware Ignition)**: Build the `attendant.ignition` module that uses the **Vocal Handshake** as a definitive readiness signal for the foyer.
-    *   [ ] **Task 4.5 (The Clean Cut)**: Deprecate `lab_attendant_v4.py` and promote the modular V5 orchestrator.
+    *   [x] **Task 4.5 (The Clean Cut)**: Deprecate `lab_attendant_v4.py` and promote the modular V5 orchestrator.
 
 #### 🗺️ V5 Physical-to-Logical [FEAT] Map
 | Module | Target Features |
@@ -282,9 +282,9 @@ The BKM-029 cautious iteration approach was the only reason V5 survived. The `ub
 *   **What was compromised:** Everything. The 5x5 is a *semantic* gauntlet testing persona fidelity. By stripping the LoRAs, the LLM defaulted to a generic personality. The test passed structurally, but the Lab was lobotomized.
 
 ### 🛠️ The True V5 Stabilization Path (Final Iteration)
-*   [ ] **Task 5.1 (Delete Sandbox)**: Remove `run_5x5.sh` and `start_vllm_test.sh` from the repository.
-*   [ ] **Task 5.2 (Systemd Upgrade)**: Modify `/etc/systemd/system/lab-attendant.service`. Use `ExecStartPre` for strict zombie cleanup. Configure `ExecStart` to launch the V5 Foyer, and spawn the Ignition Manager properly.
-*   [ ] **Task 5.3 (VRAM Investigation)**: Investigate true VRAM pressure (e.g., zombie hunting) before artificially lowering `gpu_memory_utilization` to `0.4` in `start_vllm.sh`. Keep LoRAs enabled.
+*   [x] **Task 5.1 (Delete Sandbox)**: Remove `run_5x5.sh` and `start_vllm_test.sh` from the repository.
+*   [x] **Task 5.2 (Systemd Upgrade)**: Modify `/etc/systemd/system/lab-attendant.service`. Use `ExecStartPre` for strict zombie cleanup. Configure `ExecStart` to launch the V5 Foyer, and spawn the Ignition Manager properly.
+*   [x] **Task 5.3 (VRAM Investigation)**: Investigate true VRAM pressure (e.g., zombie hunting) before artificially lowering `gpu_memory_utilization` to `0.4` in `start_vllm.sh`. Keep LoRAs enabled.
 *   [x] **Task 5.4 (The True Gauntlet)**: Start the Lab via `systemctl restart lab-attendant.service`. Run `uber_5x5_v5.py` strictly as a black-box client. Use a long-polling Python babysitter script to bypass the 5-minute CLI timeout without intervening in the Lab's execution.
 
 ### 🔬 IN-DEPTH CODE REVIEW & FORENSIC REPORT (V5 REFACTOR)
