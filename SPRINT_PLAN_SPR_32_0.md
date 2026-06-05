@@ -12,9 +12,9 @@ Upgrade the Lab's serving core to vLLM 0.21.x, integrate the Qwen 3.6 family, an
 ### 🛠️ The Serving Core
 *   **Pedigree & Intent**: *"vLLM v0.21.x natively supports Qwen 3.6 and deep-integrated reasoning blocks. Upgrading eliminates our custom regex hacks for <think> extraction and increases throughput."* — Lead Engineer.
 *   **Tasks**:
-    *   [ ] **Task 1.1 (The Upgrade)**: Upgrade the production `.venv` to vLLM 0.21.0 and Python 3.12 (Local 2080 Ti host only).
-    *   [ ] **Task 1.2 (Local Qwen 3.6)**: Migrate the 3B Unified Base (2080 Ti) to Qwen 3.6 FP8. Maintain "Lazy Adaptive" selection for the Sovereign (4090) to leverage whatever high-fidelity model is currently resident on Kender.
-    *   [ ] **Task 1.3 (Native Thinking)**: Enable `--reasoning-parser qwen3` (Local only) to allow the engine to handle internal reasoning blocks without breaking tool-calling streams.
+    *   [x] **Task 1.1 (The Upgrade)**: Upgrade the production `.venv` to vLLM 0.21.0 and Python 3.12 (Local 2080 Ti host only).
+    *   [x] **Task 1.2 (Local Qwen 3.6)**: Migrate the 3B Unified Base (2080 Ti) to Qwen 3.6 FP8. Maintain "Lazy Adaptive" selection for the Sovereign (4090) to leverage whatever high-fidelity model is currently resident on Kender.
+    *   [x] **Task 1.3 (Native Thinking)**: Enable `--reasoning-parser qwen3` (Local only) to allow the engine to handle internal reasoning blocks without breaking tool-calling streams.
 
 ---
 
