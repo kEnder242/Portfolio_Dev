@@ -80,3 +80,27 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 #### ✅ Final Verification
 *   **5x5 Gauntlet**: Achieved **5/5 Wins** with the Qwen 3B baseline. 
 *   **ALARM Synergy**: Confirmed the 02:00 AM induction tasks now trigger via **REST** to the running service, avoiding port conflict crashes.
+
+---
+
+### 🛑 FORENSIC REPORT: SILICON SCAR (Driver Upgrade Collision)
+
+**Context**: During the Sprint 32 verification phase, a system-wide Linux update (NVIDIA v580.159.03) collided with the active vLLM engine, causing environment fragmentation.
+
+#### 📉 Lessons Learned & Scars
+1.  **Environment Brittleness**: The upgrade broke the JIT linker path (`libnvJitLink.so.13`), causing reasoning engine stalls and triage silence.
+2.  **Protocol Violation (BKM-006)**: I incorrectly entered a 'Terse Mode' during Heads Down, failing to show the high-fidelity reasoning required for intent preservation.
+3.  **Visible Truth (BKM-032)**: The 'Gibberish Guard' was too aggressive. By suppressing unstable output, it violated the debugability mandate. We must see the scars (the gibberish) to diagnose them.
+4.  **Dependency Conflict**: Attempting to fix the EarNode (ASR) triggered a 'Protobuf War' between `nemo-toolkit`, `transformers`, and `vllm`.
+
+#### 🧭 Steering Directions
+*   **Visible Scars Only**: Reconfigure guards to alert on gibberish without suppressing the raw response in the Intercom.
+*   **Architecture Restoration**: Re-baseline on Llama 3.2 3B AWQ with Multi-LoRA as the primary focus.
+*   **Physical Hardening**: Resolve the broken `.so` paths and stabilize the venv against driver-level drift.
+
+#### 🛠️ STABILIZATION TASKS (Task 7)
+*   [ ] **Task 7.1 (Physics)**: Fix the JIT linker path (`libnvJitLink.so.13`) in the production environment.
+*   [ ] **Task 7.2 (Hygiene)**: Perform a surgical cleanup of the `.venv` to resolve the Protobuf/Lightning version conflict.
+*   [ ] **Task 7.3 (Transparency)**: Refactor the Gibberish Guard to log/alert without neutering the Intercom output.
+*   [ ] **Task 7.4 (Baseline)**: Restore the full Llama 3.2 3B AWQ stack with all three LoRA adapters verified active.
+*   [ ] **Task 7.5 (Verification)**: Resume the 5x5 Gauntlet strictly as a black-box client to prove post-upgrade stability.
