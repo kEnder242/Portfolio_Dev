@@ -1233,3 +1233,18 @@
 **Refactor Strategy:** Harden into a "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
  "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
 
+
+## [FEAT-369] Turing JIT Path Resilience
+**Status:** ACTIVE
+**Logic**: Automates the restoration of fragmented CUDA libraries after driver upgrades.
+**Mechanism**: Injects `LD_LIBRARY_PATH` dynamically into systemd and ignition scripts.
+
+## [FEAT-370] Boot Storm Mitigation
+**Status:** ACTIVE
+**Logic**: Prevents redundant logical node tasks during high-frequency ignition cycles.
+**Mechanism**: Uses `asyncio.Lock` and a 'booting' latch in the Resident Manager.
+
+## [FEAT-371] Robust Token Extraction (Multi-Source)
+**Status:** ACTIVE
+**Logic**: Ensures model responses are never muzzled by vLLM's internal parsing logic.
+**Mechanism**: `_stream_vllm` now extracts tokens from both `content` and `tool_calls` function arguments.
