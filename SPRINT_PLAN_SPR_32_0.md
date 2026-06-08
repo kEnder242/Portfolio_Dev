@@ -99,8 +99,23 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 *   **Physical Hardening**: Resolve the broken `.so` paths and stabilize the venv against driver-level drift.
 
 #### 🛠️ STABILIZATION TASKS (Task 7)
-*   [ ] **Task 7.1 (Physics)**: Fix the JIT linker path (`libnvJitLink.so.13`) in the production environment.
-*   [ ] **Task 7.2 (Hygiene)**: Perform a surgical cleanup of the `.venv` to resolve the Protobuf/Lightning version conflict.
-*   [ ] **Task 7.3 (Transparency)**: Refactor the Gibberish Guard to log/alert without neutering the Intercom output.
+*   [x] **Task 7.1 (Physics)**: Fix the JIT linker path (`libnvJitLink.so.13`) in the production environment.
+*   [x] **Task 7.2 (Hygiene)**: Perform a surgical cleanup of the `.venv` to resolve the Protobuf/Lightning version conflict.
+*   [x] **Task 7.3 (Transparency)**: Refactor the Gibberish Guard to log/alert without neutering the Intercom output.
 *   [ ] **Task 7.4 (Baseline)**: Restore the full Llama 3.2 3B AWQ stack with all three LoRA adapters verified active.
 *   [ ] **Task 7.5 (Verification)**: Resume the 5x5 Gauntlet strictly as a black-box client to prove post-upgrade stability.
+
+---
+
+## ⚡ SPRINT 32 PHASE 2: WATERFALL RESTORATION & TOPOLOGY HARDENING
+*Objective: Un-muzzle the silicon reasoning stream and resolve the recursive logical node crashes.*
+
+### 📋 Post-Reboot Recovery (The "Mice" Restoration)
+*   **Pedigree & Intent**: *"Physical stabilization is complete, but the 'Soul' of the Lab is fragmented. My aggressive patching created an import recursion loop, and my attempt to un-muzzle the tokens accidentally re-introduced a blocking wait that killed the waterfall. Phase 2 is a surgical strike to restore real-time presence."* — Gemini CLI.
+
+### 🛠️ RECOVERY TASKS (Task 8)
+*   [ ] **Task 8.1 (Waterfall)**: Restore true async generator behavior in `_process_node_stream`. Remove the blocking `await node.call_tool("think", ...)` and replace it with the native streaming bridge to eliminate UI jitter.
+*   [ ] **Task 8.2 (Topology)**: Surgically clean the logical node scripts (`thought_node.py`, `brain_node.py`, etc.). Remove the nested `try-except` blocks and standardize on a single, robust relative import for `BicameralNode`.
+*   [ ] **Task 8.3 (Triage)**: Refine the 3B triage prompt. Ensure the model outputs only raw JSON without hallucinating the "VALID_VALUES" or "SCHEMA" headers from the system instructions.
+*   [ ] **Task 8.4 (Fallback)**: Certify `localhost` fallback for the `thought` node. Verify that the model manifest correctly maps `unified-base` to Ollama tag names (e.g., `gemma2:2b`) instead of absolute paths.
+*   [ ] **Task 8.5 (Verification)**: Re-execute the UBER 5x5 Gauntlet. Verify absolute path logging and 100% VRAM release during natural drift with EarNode disabled for safety.
