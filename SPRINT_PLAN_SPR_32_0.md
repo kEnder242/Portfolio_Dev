@@ -122,6 +122,21 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 
 ---
 
+## ⚡ SPRINT 32 PHASE 3: THE JITTER-FREE WATERFALL
+*Objective: Unblock the Hub logic, refine the triage model, and certify the 100ms streaming victory.*
+
+### 📋 Background Context
+*   **The 100ms Victory**: The `waterfall_drainer` in the Foyer successfully implements a 100ms buffered chunking strategy for UI delivery, balancing real-time responsiveness with visual stability.
+*   **The Blockage**: `_process_node_stream` in `cognitive_hub.py` is currently blocking on `res = await node.call_tool("think", ...)`, preventing internal logical nodes from "overhearing" the stream in real-time.
+
+### 🛠️ REFINEMENT TASKS (Task 9)
+*   [ ] **Task 9.1 (Hub Generator Restoration)**: Convert `_process_node_stream` in `cognitive_hub.py` to use `node.create_message(...)` instead of the blocking `call_tool`. Yield tokens natively so the Hub can process intent mid-stream.
+*   [ ] **Task 9.2 (Triage Hardening)**: Update the `LAB_SYSTEM_PROMPT` in `lab_node.py` to explicitly forbid hallucinated "SCHEMA" or "VALID_VALUES" headers in the raw output block, solving the 3B parsing fragility.
+*   [ ] **Task 9.3 (Model Manifest)**: Update the local model manifest (if applicable) to ensure the `unified-base` fallback maps cleanly to the `gemma2:2b` tag for localhost redundancy.
+*   [ ] **Task 9.4 (Babysat Certification)**: Execute `uber_5x5_hand_crank.py` using the Babysitting Protocol (BKM-033) to certify the newly unblocked Waterfall logic and Triage stability.
+
+---
+
 ## 🏆 FINAL CERTIFICATION: THE BULLETPROOF BASELINE
 *Date: June 8, 2026 | Result: PASS (5/5 Wins)*
 
