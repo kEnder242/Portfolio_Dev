@@ -27,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=00faa640">
+    <link rel="stylesheet" href="style.css?v=38637b40">
     <style>
         .vitals-grid {
             display: grid;
@@ -230,6 +230,10 @@
                     <span class="status-led led-yielded"></span>
                     Pause
                 </div>
+                <div class="control-btn" onclick="pingLab()">
+                    <span class="status-led led-online" style="background-color: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
+                    Ping
+                </div>
                 <div class="control-btn" onclick="triggerLabAction('ignition?reason=UI_REFRESH')">
                     <span class="status-led led-busy"></span>
                     Refresh
@@ -364,10 +368,31 @@
             });
         }
 
+        async function pingLab() {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const url = isLocal ? `http://localhost:8765/inject` : `https://pager.jason-lab.dev/inject`;
+            
+            logToConsole(`[REMOTE] Sending PING signal to Neural Relay...`, '#3b82f6');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "query": "[ME] PING: Status report: Are all nodes vocal?" })
+                });
+                if (response.ok) {
+                    logToConsole(`[SUCCESS] Ping injected. Check Intercom for node responses.`, 'var(--success-color)');
+                } else {
+                    logToConsole(`[ERROR] Ping failed with status ${response.status}`, 'var(--error-color)');
+                }
+            } catch (e) {
+                logToConsole(`[ERROR] Ping failed: ${e.message}`, 'var(--error-color)');
+            }
+        }
+
         async function triggerLabAction(action) {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             // [FIX] pager.jason-lab.dev is the dedicated tunnel for the Attendant (Port 9999)
-            const url = isLocal ? `http://localhost:9999/${action}` : `https://pager.jason-lab.dev/${action}`;
+            const url = isLocal ? `http://localhost:8765/${action}` : `https://pager.jason-lab.dev/${action}`;
             if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Use discovered key from pollStatus instead of scraping DOM
@@ -640,7 +665,7 @@
                     if (crashMatch) {
                         const logFile = crashMatch[0];
                         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                        const url = isLocal ? `http://localhost:9999/logs?file=${logFile}` : `https://pager.jason-lab.dev/logs?file=${logFile}`;
+                        const url = isLocal ? `http://localhost:8765/logs?file=${logFile}` : `https://pager.jason-lab.dev/logs?file=${logFile}`;
                         
                         const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" } });
                         if (r.ok) {

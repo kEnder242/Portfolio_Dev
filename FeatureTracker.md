@@ -444,12 +444,22 @@
 **Logic:** Replaces hard-coded strings with a weighted state-aware registry.
 **Categories:** `RETRIEVING`, `UNCERTAIN`, `SILICON_STRESS`, `HANDSHAKE`.
 
-## [FEAT-119] The Assassin (Atomic Lifecycle) [SCAR #3]
-**Status:** ACTIVE
-**Logic:** Ensures the Lab's port (8765) is clear and reaped by the kernel before any boot attempt begins.
+## [FEAT-119] The Blacklist Law (Process-Strict Lifecycle) [SCAR #3]
+**Status:** ACTIVE (V5 Refactor)
+**Logic:** Ensures the Lab's physical silicon is clear before boot by explicitly targeting ONLY processes we own.
 **SCAR #3:** Feb 11 "Ghost PID" port contention during marathon reload.
-**Purge-Before-Poll Hardening:** Explicitly uses `fuser -k` on ports 8088 and 8765 as the very first step of cleanup. This prevents zombie processes from holding ports and providing false "READY" signals to the Attendant's sync gates.
-**Mechanism:** `cleanup_silicon` in `lab_attendant.py`.
+**Purge-Before-Poll Hardening:** Explicitly DEPRECATED `fuser -k`. We now use `pkill -9` targeted strictly at our `setproctitle` hashes (e.g., `acme_foyer_v5`) and the vLLM engine binary. This prevents suicidal client drops (e.g., Gemini CLI crashes) when external processes touch the ports.
+**Mechanism:** `ExecStopPost` in `lab-attendant.service`.
+
+## [FEAT-372] Pre-Emptive Sensory Boot
+**Status:** ACTIVE
+**Logic:** Loads the NeMo EarNode immediately on Foyer startup and exempts it from hibernation.
+**Rationale:** Preserves the ~1.5GB VRAM footprint permanently to eliminate the 45-second latency delay upon waking, ensuring voice interactiveness is instantly available.
+
+## [FEAT-373] Multi-Language Safe-Scalpel (Passive Mode)
+**Status:** ACTIVE
+**Logic:** Upgrades `atomic_patcher.py` to support `ruff` for Python and `bash -n` for shell scripts, operating strictly in a *passive* mode.
+**Rationale:** Enforces BKM-011 by providing awareness of linting issues without acting as a rigid block to developer velocity. It will always patch, but will warn if linting fails.
 
 ## [FEAT-165] Resident Handshake Gate
 **Status:** ACTIVE
@@ -1004,14 +1014,12 @@
 1. Inline script in <head> hooks window.onerror and unhandledrejection.
 2. Surfaces critical failures as high-visibility red blocks directly in the console ledger.
 
-## [FEAT-233] Inter-Node Waterfall (Internal Streaming)
-**Status:** ACTIVE (Modernization Planned Sprint 31)
-**Logic:** Transition from turn-based handovers to real-time token streaming between nodes. The token streaming pipeline.
+## [FEAT-233] Inter-Node Waterfall (Buffered Streaming)
+**Status:** ACTIVE 
+**Logic:** Transition from turn-based handovers to real-time, buffered token streaming between nodes.
 **Mechanism:** 
-1. `CognitiveHub` uses incremental JSON parsing to identify intent mid-stream.
-2. Pinky's yielded tokens are piped directly into Shadow's context window during inference.
-3. [REVISION-17.9]: Enforces **Paragraph Pop** for the Intercom UI. Tokens are streamed out-of-band to the Hub for action-detection but are ONLY broadcast to the GUI as a cohesive block once the turn is complete.
-**Refactor Strategy:** Decouple token yield from Hub logic. Ensure real-time streaming of all node dialogue without blocking buffers.
+1. `CognitiveHub` extracts tokens mid-stream.
+2. Tokens are buffered in 100ms chunks before hitting the websocket (The Token Batching Victory), solving UI jitter during long reasoning chains.
 
 ## [FEAT-234] Pure Scalar Fuel (Multiplicative Orchestration)
 **Status:** ACTIVE
@@ -1193,11 +1201,11 @@
 **Rationale:** Prevents "Spark Collisions" where redundant ignition requests (e.g., RECOVERY + User Intent) would flood the Attendant and crash the Hub.
 **Mechanism:** \`self.ignition_lock\` in \`lab_attendant_v4.py\` wrapping the entire ignition sequence.
 
-## [FEAT-288] Absolute Port Authority (Nuclear Port Guard)
+## [FEAT-288] Hash-Based Port Authority
 **Status:** ACTIVE
-**Logic:** Ensures port 8088 and 8765 are physically clear before ignition using a combination of \`fuser -k\` and direct \`SIGKILL\` signals.
-**Rationale:** Solves the "Zombie Port" problem where dormant engines or \`TIME_WAIT\` sockets would block new family members from binding.
-**Mechanism:** Verification loop in \`mcp_start\` that force-kills stubborn occupants.
+**Logic:** Replaces the 'Nuclear Port Guard' (`fuser -k`) with strict PID file and process-name tracking.
+**Rationale:** Solves the "Zombie Port" problem where dormant engines or `TIME_WAIT` sockets block new family members, while preventing the suicidal reaping of active client connections.
+**Mechanism:** `cleanup_silicon` in `manager.py` targets specific hashes.
 
 ## [FEAT-289] Atomic Induction (Alarm State Lock)
 **Status:** ACTIVE
