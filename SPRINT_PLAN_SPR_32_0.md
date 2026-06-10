@@ -131,9 +131,11 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 
 ### 🛠️ REFINEMENT TASKS (Task 9)
 *   [ ] **Task 9.1 (Hub Generator Restoration)**: Convert `_process_node_stream` in `cognitive_hub.py` to use `node.create_message(...)` instead of the blocking `call_tool`. Yield tokens natively so the Hub can process intent mid-stream.
-*   [ ] **Task 9.2 (Triage Hardening)**: Update the `LAB_SYSTEM_PROMPT` in `lab_node.py` to explicitly forbid hallucinated "SCHEMA" or "VALID_VALUES" headers in the raw output block, solving the 3B parsing fragility.
+*   [ ] **Task 9.2 (Triage Guided Decoding)**: Replace regex-based Nuclear Extraction with native vLLM Guided Decoding. Pass a strict `response_format` JSON Schema to the `generate_response` method during the Triage phase.
 *   [ ] **Task 9.3 (Model Manifest)**: Update the local model manifest (if applicable) to ensure the `unified-base` fallback maps cleanly to the `gemma2:2b` tag for localhost redundancy.
-*   [ ] **Task 9.4 (Babysat Certification)**: Execute `uber_5x5_hand_crank.py` using the Babysitting Protocol (BKM-033) to certify the newly unblocked Waterfall logic and Triage stability.
+*   [ ] **Task 9.4 (BKM-015 Semantic Audit)**: Purge hardcoded keywords (e.g., RAPL, NVIDIA, MSR) from prompts (like `LAB_SYSTEM_PROMPT`) and replace them with semantic concepts, ensuring strict adherence to the Law of Semantic Indirection.
+*   [ ] **Task 9.5 (Smoke Test)**: Perform an isolated live-fire test on the Triage logic to verify the new Guided Decoding schema before full integration testing.
+*   [ ] **Task 9.6 (Babysat Certification)**: Execute `uber_5x5_hand_crank.py` using the Babysitting Protocol (BKM-033) to certify the newly unblocked Waterfall logic and Triage stability.
 
 ---
 

@@ -11,7 +11,7 @@
     "model_map": {
         "UNIFIED": {
             "vllm": "/speedy/models/llama-3.2-3b-instruct-awq",
-            "ollama": "llama3.2:3b",
+            "ollama": "gemma2:2b",
             "label": "Llama 3.2 3B AWQ (Unified Base)",
             "est_vram_mib": 5125,
             "gpu_memory_utilization": 0.5,
