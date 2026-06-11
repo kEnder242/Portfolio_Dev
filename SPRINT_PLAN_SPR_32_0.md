@@ -130,21 +130,22 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 *   **The Blockage**: `_process_node_stream` in `cognitive_hub.py` is currently blocking on `res = await node.call_tool("think", ...)`, preventing internal logical nodes from "overhearing" the stream in real-time.
 
 ### 🛠️ REFINEMENT TASKS (Task 9)
-*   [ ] **Task 9.1 (Hub Generator Restoration)**: Convert `_process_node_stream` in `cognitive_hub.py` to use `node.create_message(...)` instead of the blocking `call_tool`. Yield tokens natively so the Hub can process intent mid-stream.
-*   [ ] **Task 9.2 (Triage Guided Decoding)**: Replace regex-based Nuclear Extraction with native vLLM Guided Decoding. Pass a strict `response_format` JSON Schema to the `generate_response` method during the Triage phase.
-*   [ ] **Task 9.3 (Model Manifest)**: Update the local model manifest (if applicable) to ensure the `unified-base` fallback maps cleanly to the `gemma2:2b` tag for localhost redundancy.
-*   [ ] **Task 9.4 (BKM-015 Semantic Audit)**: Purge hardcoded keywords (e.g., RAPL, NVIDIA, MSR) from prompts (like `LAB_SYSTEM_PROMPT`) and replace them with semantic concepts, ensuring strict adherence to the Law of Semantic Indirection.
-*   [ ] **Task 9.5 (Smoke Test)**: Perform an isolated live-fire test on the Triage logic to verify the new Guided Decoding schema before full integration testing.
-*   [ ] **Task 9.6 (Babysat Certification)**: Execute `uber_5x5_hand_crank.py` using the Babysitting Protocol (BKM-033) to certify the newly unblocked Waterfall logic and Triage stability.
+*   [x] **Task 9.1 (Hub Generator Restoration)**: Convert `_process_node_stream` in `cognitive_hub.py` to use `node.create_message(...)` (refactored to non-blocking tool task) instead of the blocking `call_tool`. Yield tokens natively so the Hub can process intent mid-stream.
+*   [x] **Task 9.2 (Triage Guided Decoding)**: Replace regex-based Nuclear Extraction with native vLLM Guided Decoding. Pass a strict `response_format` JSON Schema to the `generate_response` method during the Triage phase.
+*   [x] **Task 9.3 (Model Manifest)**: Update the local model manifest (if applicable) to ensure the `unified-base` fallback maps cleanly to the `gemma2:2b` tag for localhost redundancy.
+*   [x] **Task 9.4 (BKM-015 Semantic Audit)**: Purge hardcoded keywords (e.g., RAPL, NVIDIA, MSR) from prompts (like `LAB_SYSTEM_PROMPT`) and replace them with semantic concepts, ensuring strict adherence to the Law of Semantic Indirection.
+*   [x] **Task 9.5 (Smoke Test)**: Perform an isolated live-fire test on the Triage logic to verify the new Guided Decoding schema before full integration testing.
+*   [x] **Task 9.6 (Babysat Certification)**: Execute `uber_5x5_hand_crank.py` using the Babysitting Protocol (BKM-033) to certify the newly unblocked Waterfall logic and Triage stability.
 
 ---
 
 ## 🏆 FINAL CERTIFICATION: THE BULLETPROOF BASELINE
-*Date: June 8, 2026 | Result: PASS (5/5 Wins)*
+*Date: June 10, 2026 | Result: PASS (5/5 Wins)*
 
-**The Lab is officially certified.** Sprint 32 Phase 1 & 2 are complete. 
+**The Lab is officially certified.** Sprint 32 is complete. 
 1.  **VRAM Stability**: Llama 3.2 3B AWQ + Multi-LoRA + EarNode resident on 11GB RTX 2080 Ti.
-2.  **Logical Resiliency**: Automated recovery of logical nodes (Mice) after hibernation.
-3.  **Waterfall Experience**: Batched real-time token delivery to the Intercom UI.
-4.  **Blacklist Law**: Suicidal cleanup code removed; host memory hogs reaped.
+2.  **Guided Decoding**: Native vLLM `response_format` schemas enforced for Triage, eliminating parse failures.
+3.  **Async Waterfall**: Hub logic refactored to non-blocking tasks with real-time overhear buffers.
+4.  **Semantic Purity**: Triage prompt purged of hardcoded keywords in compliance with BKM-015.
+5.  **Resilience**: Successfully survived an emergency reboot and Steam-induced system saturation.
 
