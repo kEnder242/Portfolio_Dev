@@ -151,6 +151,17 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 
 ---
 
+## 🧭 SPRINT 32 PHASE 5: REMOTE CONTROL TAXONOMY
+*Objective: Standardize the remote control API and UI verbs to align with physical silicon capabilities.*
+
+### 🛠️ TAXONOMY REFINEMENT TASKS (Task 11)
+*   [ ] **Task 11.1 (Backend Route Refactor)**: Update `router.py` to expose `/wake`, `/sleep`, `/lock`, and `/shutdown`. Remove legacy routes (`/start`, `/hibernate`, `/quiesce`, `/stop`, etc.).
+*   [ ] **Task 11.2 (Ignition Logic Sync)**: Update `manager.py` to parse the new intents (`WAKE`, `SLEEP`, `LOCK`, `SHUTDOWN`) and implement the `MAINTENANCE_LOCK` behavior for the `LOCK` state.
+*   [ ] **Task 11.3 (UI Sync)**: Refactor `status.html` control grid. Implement the 4 new buttons with left-to-right ordering (Wake, Sleep, Lock, Shutdown) and appropriate color-coding (Green, Blue, Yellow, Red). Remove Ping and Refresh.
+*   [ ] **Task 11.4 (Documentation Sync)**: Update `FEDERATED_ARCH_STATE_MACHINE.md` to define the VRAM vs. System RAM nuances of Sleep vs. Shutdown.
+
+---
+
 ## 🏆 FINAL CERTIFICATION: THE BULLETPROOF BASELINE
 *Date: June 15, 2026 | Result: PASS (5/5 Wins)*
 
