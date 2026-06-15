@@ -217,30 +217,22 @@
 
         <section id="remote-control">
             <h2 class="section-title">Remote Lab Control</h2>
-            <div class="control-grid">
-                <div class="control-btn" onclick="triggerLabAction('start')">
+            <div class="control-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="control-btn" onclick="triggerLabAction('wake')">
                     <span class="status-led led-online"></span>
-                    Start
+                    Wake
                 </div>
-                <div class="control-btn" onclick="triggerLabAction('hibernate')">
-                    <span class="status-led led-busy"></span>
-                    Hibernate
-                </div>
-                <div class="control-btn" onclick="triggerLabAction('quiesce')">
-                    <span class="status-led led-yielded"></span>
-                    Pause
-                </div>
-                <div class="control-btn" onclick="pingLab()">
+                <div class="control-btn" onclick="triggerLabAction('sleep')">
                     <span class="status-led led-online" style="background-color: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
-                    Ping
+                    Sleep
                 </div>
-                <div class="control-btn" onclick="triggerLabAction('ignition?reason=UI_REFRESH')">
+                <div class="control-btn" onclick="triggerLabAction('lock')">
                     <span class="status-led led-busy"></span>
-                    Refresh
+                    Lock
                 </div>
-                <div class="control-btn btn-danger" onclick="triggerLabAction('stop')">
+                <div class="control-btn btn-danger" onclick="triggerLabAction('shutdown')">
                     <span class="status-led led-offline"></span>
-                    STOP
+                    Shutdown
                 </div>
             </div>
         </section>
@@ -360,33 +352,12 @@
             currentTimeRange = range;
             const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
             iframeMain.src = `${base}&panelId=${currentPanelId}&from=now-${range}&to=now`;
-            
+
             // Highlight active button
             document.querySelectorAll('.icon-btn').forEach(btn => {
                 const isMatch = btn.textContent.toLowerCase() === range.toLowerCase();
                 btn.classList.toggle('active', isMatch);
             });
-        }
-
-        async function pingLab() {
-            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const url = isLocal ? `http://localhost:8765/inject` : `https://pager.jason-lab.dev/inject`;
-            
-            logToConsole(`[REMOTE] Sending PING signal to Neural Relay...`, '#3b82f6');
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ "query": "[ME] PING: Status report: Are all nodes vocal?" })
-                });
-                if (response.ok) {
-                    logToConsole(`[SUCCESS] Ping injected. Check Intercom for node responses.`, 'var(--success-color)');
-                } else {
-                    logToConsole(`[ERROR] Ping failed with status ${response.status}`, 'var(--error-color)');
-                }
-            } catch (e) {
-                logToConsole(`[ERROR] Ping failed: ${e.message}`, 'var(--error-color)');
-            }
         }
 
         async function triggerLabAction(action) {
