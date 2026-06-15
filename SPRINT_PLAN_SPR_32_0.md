@@ -158,7 +158,20 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 *   [ ] **Task 11.1 (Backend Route Refactor)**: Update `router.py` to expose `/wake`, `/sleep`, `/lock`, and `/shutdown`. Remove legacy routes (`/start`, `/hibernate`, `/quiesce`, `/stop`, etc.).
 *   [ ] **Task 11.2 (Ignition Logic Sync)**: Update `manager.py` to parse the new intents (`WAKE`, `SLEEP`, `LOCK`, `SHUTDOWN`) and implement the `MAINTENANCE_LOCK` behavior for the `LOCK` state.
 *   [ ] **Task 11.3 (UI Sync)**: Refactor `status.html` control grid. Implement the 4 new buttons with left-to-right ordering (Wake, Sleep, Lock, Shutdown) and appropriate color-coding (Green, Blue, Yellow, Red). Remove Ping and Refresh.
-*   [ ] **Task 11.4 (Documentation Sync)**: Update `FEDERATED_ARCH_STATE_MACHINE.md` to define the VRAM vs. System RAM nuances of Sleep vs. Shutdown.
+*   [x] **Task 11.4 (Documentation Sync)**: Update `FEDERATED_ARCH_STATE_MACHINE.md` to define the VRAM vs. System RAM nuances of Sleep vs. Shutdown.
+
+---
+
+## 🕰️ SPRINT 32 PHASE 6: HISTORICAL RESTORATION & UX FIDELITY
+*Objective: Reintroduce critical V4 behavioral patterns that were lost during the V5 rewrite, based on deep historical synthesis and user feedback.*
+
+### 🛠️ UX & BEHAVIORAL RESTORATION TASKS (Task 12)
+*   [ ] **Task 12.1 (KENDER Parallel Warmup)**: In V4, `acme_lab_v4.py` used `_bg_prime()` to ping KENDER (the remote 4090 host) immediately when the lab woke up. **Action**: Implement a background task in `manager.py:start_lab` to independently POST a 1-token "ping" prompt to KENDER's `/api/generate` endpoint, forcing early VRAM loading in parallel with the local lab boot.
+*   [ ] **Task 12.2 (Sovereign Early-Reply)**: In V4, the system leveraged the Sovereign Brain's "Always On" or "Fast Wake" capability to chat with the user *while* the local 2080 Ti was slowly booting. **Action**: Modify `cognitive_hub.py:process_query` so that if `get_vram_status()` is False (Lab is `WAKING`), it bypasses local Triage and immediately dispatches the query to `Deep Thought` (KENDER) to fill the dead air.
+*   [ ] **Task 12.3 (UI Pop vs. Stream)**: The 100ms chunking in `router.py` broke the original "Pop" requirement for the UI. The UI is meant to receive complete, finalized thoughts, while the *internal* components stream tokens for speed. **Action**: Refactor the `waterfall_drainer` in `router.py` to accumulate tokens and only `broadcast()` the final string to the UI when a `final: True` signal is received from a node.
+*   [ ] **Task 12.4 (Insight Window Routing)**: The UI's `intercom_v2.js` routes messages to the "Brain's Insight" window by looking for `"channel": "insight"` in the JSON payload. This metadata was lost in the V5 rewrite. **Action**: Update `router.py:waterfall_drainer` (and `broadcast`) to dynamically append `"channel": "insight"` to the payload when `brain_source` is `Deep Thought`, `Brain`, or `thought`.
+*   [ ] **Task 12.5 (Triage Semantic Tuning)**: The `LAB_SYSTEM_PROMPT` in `lab_node.py` is overly rigid and mis-categorizes greetings as historical. **Action**: Refine the prompt to handle "Hello/Greetings" gracefully (as `CASUAL`), and apply BKM-015.1 (Semantic Indirection) to rely on the model's intuition rather than hardcoded trigger words.
+*   [ ] **Task 12.6 (Tool Failure Audit)**: Implement a rigorous grep scan across `server.log` and `journalctl` during validation to catch any hidden tool execution failures or regressions missed during the rewrite.
 
 ---
 
