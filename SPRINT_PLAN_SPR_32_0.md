@@ -139,8 +139,20 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 
 ---
 
+## 🌐 SPRINT 32 PHASE 4: UI FIDELITY & REMOTE CONNECTIVITY
+*Objective: Fix the stale UI Vitals, restore the interleaved log ledger, and resolve the persistent 'NetworkError' on Remote Control actions.*
+
+### 🛠️ UI & NETWORK REFINEMENT TASKS (Task 10)
+*   [x] **Task 10.1 (UI-Backend Schema Sync)**: Patch the `LabStatus.to_dict()` logic in `types.py` to restore the legacy `vitals` JSON schema expected by the V3 dashboard, eliminating the "Scanner Engine: undefined" UI bug.
+*   [x] **Task 10.2 (Live Telemetry)**: Implement `pynvml` and `psutil` sampling directly within the Ignition Manager's `update_status_file` method to feed accurate physical VRAM and RAM percentages to the dashboard.
+*   [x] **Task 10.3 (Interleaved Ledger Restoration)**: Create `pager_relay.py` and implement a background `journal_monitor` task to capture critical systemd events and interleave them into `pager_activity.json` with Foyer intents.
+*   [x] **Task 10.4 (Cloudflare Access Hardening)**: Use the Cloudflare API to natively configure CORS and `options_preflight_bypass` for the `pager.jason-lab.dev` Access application.
+*   [x] **Task 10.5 (Tunnel Port Correction)**: Patch `/etc/cloudflared/config.yml` to correctly route `pager.jason-lab.dev` to the V5 Foyer port (`8765`), eliminating the 502 Bad Gateway response on preflight success.
+
+---
+
 ## 🏆 FINAL CERTIFICATION: THE BULLETPROOF BASELINE
-*Date: June 10, 2026 | Result: PASS (5/5 Wins)*
+*Date: June 15, 2026 | Result: PASS (5/5 Wins)*
 
 **The Lab is officially certified.** Sprint 32 is complete. 
 1.  **VRAM Stability**: Llama 3.2 3B AWQ + Multi-LoRA + EarNode resident on 11GB RTX 2080 Ti.
@@ -148,4 +160,5 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 3.  **Async Waterfall**: Hub logic refactored to non-blocking tasks with real-time overhear buffers.
 4.  **Semantic Purity**: Triage prompt purged of hardcoded keywords in compliance with BKM-015.
 5.  **Resilience**: Successfully survived an emergency reboot and Steam-induced system saturation.
+6.  **Remote Liveliness**: Cross-origin `NetworkError` resolved; full Zero Trust tunnel connectivity established to the Foyer.
 
