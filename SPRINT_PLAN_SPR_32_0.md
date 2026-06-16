@@ -239,3 +239,14 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 *   **The History:** Playwright sees the final DOM but misses rapid interleaving (stutters) and silent background failures if the test only asserts on the final triage result.
 *   [ ] **Task 14.7 (Diagnostic Rigor)**: Document that manual CLI tailing of the `waterfall_queue` is required to catch race conditions during the **INTEGRATION GAUNTLET** step of BKM-029.
 
+---
+
+## 💎 SPRINT 32 PHASE 9: EDGE CASE POLISH (THE LOST GEMS)
+*Objective: Address the nuanced edge cases and behavioral gaps identified during the Phase 8 historical synthesis.*
+
+### 🛠️ EDGE CASE TASKS (Task 15)
+*   [ ] **Task 15.1 (Conversational Grace Override)**: When Triage sets `vibe = CASUAL`, ensure `cognitive_hub.py` injects a specific `behavioral_guidance` to the target node (Pinky) that overrides the default `[STANCE]: ACADEMIC`, allowing for natural greetings and small talk.
+*   [ ] **Task 15.2 (Automated Streaming Fidelity Test)**: Create `test_websocket_fidelity.py` to assert on raw WebSocket frames, verifying that `final: False` tokens are accumulating cleanly without overlapping, catching "stutters" that DOM-based Playwright tests miss.
+*   [ ] **Task 15.3 (Idle Reset on WAKE)**: Ensure the `WAKE` API endpoint explicitly resets the `last_activity` timer in `manager.py`. Currently, if WAKE is called while the lab is operational, it logs "Lab already operational" and does nothing, risking hibernation while the user is reading a long response.
+*   [ ] **Task 15.4 (X-Lab-Key Cache Dependency)**: Cross-origin requests (`pager.jason-lab.dev`) require the `X-Lab-Key` header extracted from the DOM. If Cache Locking fails, silent CORS preflight failures masquerade as "Network Errors". Task 14.6's `alert()` must explicitly mention this key dependency.
+
