@@ -212,30 +212,30 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 *   **The History:** In Sprint 29 (May 21, 2026), we established **[FEAT-361] NUKE INTERNAL MASKING (100% Transparency)**. The mandate: *"Remove the ability for any node to be silenced or hidden... Remove `is_internal` and `internal` parameters."* We wanted every inter-node whisper visible.
 *   **The Drift:** During the V5 FastMCP rewrite, we "waffled." To solve a UI stuttering issue, `internal=True` was lazily re-added to the Hub's `think` tool calls.
 *   **The Consequence:** This gagged the MCP nodes, preventing them from transmitting telemetry to the Foyer's `/stream_ingest` endpoint. The Hub became the "censor" and the sole broadcaster. When the Hub routing logic had a flaw, Brain and Pinky disappeared entirely from the UI.
-*   **Actionable Task (14.1 - Restore Transparency):** Remove `internal=True` from all MCP tool calls in `cognitive_hub.py`. Allow nodes to freely stream to the Foyer's `/stream_ingest` endpoint.
+*   [ ] **Task 14.1 (Restore Transparency)**: Remove `internal=True` from all MCP tool calls in `cognitive_hub.py`. Allow nodes to freely stream to the Foyer's `/stream_ingest` endpoint.
 
 #### Goal 2: UI "Pop" vs. Stutter & The Routing Black Hole
 *   **The History:** V4 let nodes broadcast directly; JS handled Left/Right routing. V5 introduced a Hub -> Foyer `waterfall_drainer`, but because nodes were gagged (Goal 1), the drainer starved. The UI only received messages from the Hub's final `execute_dispatch()` call. 
 *   **The Consequence:** `execute_dispatch` bypasses the `channel="insight"` assignment logic built into the `waterfall_drainer`. This is why Deep Thought appeared in Pinky's console.
-*   **Actionable Task (14.2 - Drainer Primacy):** Remove `execute_dispatch` entirely from the Hub's reasoning paths. Let the Foyer's `waterfall_drainer` be the single source of truth for UI delivery. It will accumulate the incoming node streams and "Pop" exactly once when `final=True` is received, applying the correct `channel="insight"` tag.
+*   [ ] **Task 14.2 (Drainer Primacy)**: Remove `execute_dispatch` entirely from the Hub's reasoning paths. Let the Foyer's `waterfall_drainer` be the single source of truth for UI delivery. It will accumulate the incoming node streams and "Pop" exactly once when `final=True` is received, applying the correct `channel="insight"` tag.
 
 #### Goal 3: Missing Nodes (Brain & Pinky)
 *   **The History:** In V5, the Hub's `_process_node_stream` yields tokens. But in the main `process_query` function, we used `async for _ in ... : pass`. The tokens were yielded into a black hole. With the nodes gagged, nothing reached the UI.
-*   **Actionable Task (14.3 - Stream Liberation):** Ensure tokens yielded by streams are properly forwarded, or completely rely on the un-gagged node's telemetry queue to populate the Foyer drainer.
+*   [ ] **Task 14.3 (Stream Liberation)**: Ensure tokens yielded by streams are properly forwarded, or completely rely on the un-gagged node's telemetry queue to populate the Foyer drainer.
 
 #### Goal 4: Vibe Brainstorming (Semantic Indirection)
 *   **The History:** The current vibes (`SILICON_TELEMETRY`, `ARCHIVE_HISTORY`, `PINKY_INTERFACE`) are rigid and cause Triage to stumble. This violates BKM-015 (Semantic Indirection).
-*   **Actionable Task (14.4 - Taxonomy Overhaul):** Update the Pydantic schema in `lab_node.py` and the routing logic in `cognitive_hub.py` to use a broader 7-vibe taxonomy: `TECHNICAL`, `CASUAL`, `HISTORICAL`, `ANALYTICAL`, `OPERATIONAL`, `FORENSIC`, `META`.
+*   [ ] **Task 14.4 (Taxonomy Overhaul)**: Update the Pydantic schema in `lab_node.py` and the routing logic in `cognitive_hub.py` to use a broader 7-vibe taxonomy: `TECHNICAL`, `CASUAL`, `HISTORICAL`, `ANALYTICAL`, `OPERATIONAL`, `FORENSIC`, `META`.
 
 #### Goal 5: UI Polish & Cache Locking
 *   **The History:** 
     *   *Double `[SYSTEM]`*: Occurs because `router.py` automatically prepends `[SYSTEM]` if a source isn't provided, but legacy logic in the Hub also prepends it.
     *   *Bright Colors*: The `.system-msg` CSS class needs to be toned down.
     *   *Cache Locking*: It is **NOT** working. `intercom_v2.js` sends `VERSION: "3.8.1"` during the handshake, and the Foyer replies with `5.0.0-foyer`, but the Javascript never asserts on the mismatch.
-*   **Actionable Task (14.5 - UI Cleanup):** Strip double tags in `cognitive_hub.py` and mute `.system-msg` in `style.css` (e.g., `#6e7681`). 
-*   **Actionable Task (14.6 - Cache Lock Enforce):** Add `alert()` logic in `intercom_v2.js` if the handshake version mismatches.
+*   [ ] **Task 14.5 (UI Cleanup)**: Strip double tags in `cognitive_hub.py` and mute `.system-msg` in `style.css` (e.g., `#6e7681`). 
+*   [ ] **Task 14.6 (Cache Lock Enforce)**: Add `alert()` logic in `intercom_v2.js` if the handshake version mismatches.
 
 #### Goal 6: Visibility Blind Spots (Playwright vs Reality)
 *   **The History:** Playwright sees the final DOM but misses rapid interleaving (stutters) and silent background failures if the test only asserts on the final triage result.
-*   **Actionable Task (14.7 - Diagnostic Rigor):** Document that manual CLI tailing of the `waterfall_queue` is required to catch race conditions during the **INTEGRATION GAUNTLET** step of BKM-029.
+*   [ ] **Task 14.7 (Diagnostic Rigor)**: Document that manual CLI tailing of the `waterfall_queue` is required to catch race conditions during the **INTEGRATION GAUNTLET** step of BKM-029.
 
