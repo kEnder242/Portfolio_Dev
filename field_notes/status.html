@@ -364,7 +364,9 @@
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             // [FIX] pager.jason-lab.dev is the dedicated tunnel for the Attendant (Port 9999)
             const url = isLocal ? `http://localhost:8765/${action}` : `https://pager.jason-lab.dev/${action}`;
-            if (!confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
+            
+            // [FIX] Remove confirmation for benign 'wake' action
+            if (action !== 'wake' && !confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             // [SECURITY] Use discovered key from pollStatus instead of scraping DOM
             const key = currentLabKey || currentLabSession || "unknown";
