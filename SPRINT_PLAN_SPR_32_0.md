@@ -175,6 +175,18 @@ I have successfully stabilized the Lab on the **vLLM 0.21.0** stack and complete
 
 ---
 
+## 🔬 SPRINT 32 PHASE 7: FORENSIC PIPELINE HYGIENE
+*Objective: Eliminate race conditions, character interleaving (stuttering), and validation errors in the streaming bridge.*
+
+### 🛠️ PIPELINE HARDENING TASKS (Task 13)
+*   [x] **Task 13.1 (Buffer Isolation)**: Key the `session_buffers` by a unique `request_id` to prevent concurrent triage/response streams from interleaving characters in shared memory.
+*   [x] **Task 13.2 (Broadcaster Unification)**: Set `internal=True` for all MCP `think` calls. This makes the Cognitive Hub the sole source of UI tokens, eliminating the double-broadcast "stutter" where both the Node and Hub were writing to the WebSocket.
+*   [x] **Task 13.3 (Validation Error Guard)**: Enforce a default empty dictionary `{}` for `response_format` in all `think` tool calls, preventing the Pydantic `NoneType` error reported in the logs.
+*   [x] **Task 13.4 (Redundant Task Guard)**: Implement a `processed_ids` guard directly within `process_query` to prevent the Hub from spinning up multiple reasoning tasks for the same intent.
+*   [x] **Task 13.5 (Insight Routing Refinement)**: Verify and harden the `channel: insight` logic in `router.py` to ensure Brain/Thought sources are correctly targeted to the right-hand UI panel.
+
+---
+
 ## 🏆 FINAL CERTIFICATION: THE BULLETPROOF BASELINE
 *Date: June 15, 2026 | Result: PASS (5/5 Wins)*
 
