@@ -1,7 +1,7 @@
 const CONFIG = {
     LOCAL_URL: "ws://localhost:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "3.8.1"
+    VERSION: "5.0.0-foyer"
 };
 
 let ws = null;
