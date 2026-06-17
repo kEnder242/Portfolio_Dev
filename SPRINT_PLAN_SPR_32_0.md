@@ -241,6 +241,18 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 
 ---
 
+## 🎭 SPRINT 32 PHASE 10: SANITY & STYLE
+*Objective: Stabilize the system's "personality" and visual presentation to reflect a professional silicon validation appliance.*
+
+### 🛠️ STABILIZATION & UI TASKS (Task 16)
+*   [ ] **Task 16.1 (The Sanity Swap)**: Re-point `start_vllm.sh` to use the VibeThinker-3B weights as the local unified base. Ensure the swap is revertible via `infrastructure.json`.
+*   [ ] **Task 16.2 (Markdown Pop)**: Enable `marked.js` rendering for all Persona and Insight messages in `intercom_v2.js`, utilizing the existing `field_notes/assets/marked.min.js`.
+*   [ ] **Task 16.3 (Null-State Triage)**: Refactor `lab_node.py` to return empty `situation` and `hints` fields when `vibe == CASUAL`, eliminating technical lectures for simple greetings.
+*   [ ] **Task 16.4 (Analytical Quips)**: Implement a "loading quip" from the Brain/Archive node while Pinky is generating to fill dead air during reasoning latencies.
+*   [ ] **Task 16.5 (Signature Fix)**: Harden the WebSocket metadata payload in `router.py` to ensure the `version` field is always present, eliminating the `vundefined` leak in the UI.
+
+---
+
 ## 💎 SPRINT 32 PHASE 9: EDGE CASE POLISH (THE LOST GEMS)
 *Objective: Address the nuanced edge cases and behavioral gaps identified during the Phase 8 historical synthesis.*
 
