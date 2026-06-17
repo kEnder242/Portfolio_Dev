@@ -383,7 +383,8 @@ function connect() {
                     const sl_low = (data.brain_source || 'System').toLowerCase();
                     const isPersona = sl_low.includes('pinky') || sl_low.includes('brain') || sl_low.includes('shadow');
                     const msgType = isPersona ? 'brain-msg' : 'system-msg';
-                    appendMsg(data.brain, msgType, data.brain_source || 'System', 'chat', false, { msg_id: data.msg_id });
+                    // [Task 12.4] Respect channel for crosstalk (e.g. Brain Insight)
+                    appendMsg(data.brain, msgType, data.brain_source || 'System', data.channel || 'chat', false, { msg_id: data.msg_id });
                 }
             }
 
@@ -394,7 +395,10 @@ function connect() {
                 if (data.message) {
                     let msg = data.message;
                     if (data.socket_id) msg += ` [SID: ${data.socket_id}]`;
-                    appendMsg(msg, 'system-msg', 'System', 'chat', false, { msg_id: data.msg_id });
+                    if (data.version && data.version !== CONFIG.VERSION) {
+                        alert(`CACHE_LOCK_VIOLATION: Browser is running Intercom ${CONFIG.VERSION} but the Lab is at ${data.version}. \n\nThis mismatch will break the X-Lab-Key dependency and cause Remote Control errors. \n\nPlease perform a hard-refresh (Ctrl+F5) immediately.`);
+                    }
+                    appendMsg(`${data.message} (v${data.version})`, 'system-msg', 'System');
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
@@ -501,7 +505,7 @@ async function pollSystemStatus() {
         const vitals = data.vitals || {};
         const mode = vitals.mode || "OLLAMA";
         const model = vitals.model || "None";
-        const newState = `[SYSTEM] ${mode}: ${model}`;
+        const newState = `${mode}: ${model}`;
         
         if (newState !== lastSystemState) {
             appendMsg(newState, 'system-msg', 'System');
