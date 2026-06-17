@@ -179,13 +179,20 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     const isSystem = sl_low === 'system';
     const text_low = text.toLowerCase();
     const isSystemStrategic = (isSystem) && (text_low.includes('sovereign') || text_low.includes('engaging'));
+
+    // [Task 16.2] Markdown Pop via Marked.js
+    let formattedText = text;
+    // Only parse if it's not a system message and marked is available
+    if (!isSystem && window.marked) {
+        formattedText = marked.parse(text);
+    }
     
     if (isSystem && !isSystemStrategic) {
         msg.innerHTML = `
             <div class="msg-body system-inline">
                 <span class="msg-time">${time}</span>
                 <span class="msg-source ${sl}">[${displaySource}]</span>
-                ${text}
+                ${formattedText}
             </div>
         `;
     } else {
@@ -194,7 +201,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
                 <span class="msg-time">${time}</span>
                 <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
             </div>
-            <div class="msg-body">${text}</div>
+            <div class="msg-body">${formattedText}</div>
             ${metaHtml}
         `;
     }
