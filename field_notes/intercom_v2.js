@@ -219,10 +219,15 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
 function sendText() {
     const content = textInput.value.trim();
     if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
-    
+
+    const request_id = `UI_${Math.random().toString(36).substr(2, 6)}`;
     appendMsg(content, 'user-msg', 'ME');
     lastMsgSource = 'me';
-    ws.send(JSON.stringify({ type: "text_input", content: `[ME] ${content}` }));
+    ws.send(JSON.stringify({ 
+        type: "text_input", 
+        content: content,
+        request_id: request_id
+    }));
     textInput.value = '';
 }
 
@@ -398,7 +403,8 @@ function connect() {
                     if (data.version && data.version !== CONFIG.VERSION) {
                         alert(`CACHE_LOCK_VIOLATION: Browser is running Intercom ${CONFIG.VERSION} but the Lab is at ${data.version}. \n\nThis mismatch will break the X-Lab-Key dependency and cause Remote Control errors. \n\nPlease perform a hard-refresh (Ctrl+F5) immediately.`);
                     }
-                    appendMsg(`${data.message} (v${data.version})`, 'system-msg', 'System');
+                    const cleanMsg = data.message.replace(/^\[SYSTEM\]\s*/, "");
+                    appendMsg(`${cleanMsg} (v${data.version})`, 'system-msg', 'System');
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
