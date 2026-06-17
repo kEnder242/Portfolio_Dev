@@ -251,6 +251,9 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 *   [ ] **Task 16.4 (Analytical Quips)**: Implement a "loading quip" from the Brain/Archive node while Pinky is generating to fill dead air during reasoning latencies.
 *   [ ] **Task 16.5 (Signature Fix)**: Harden the WebSocket metadata payload in `router.py` to ensure the `version` field is always present, eliminating the `vundefined` leak in the UI.
 
+### 🔮 FUTURE CORE FEATURES (TODO)
+*   [ ] **Thought Capture [FEAT-368]**: Leverage VibeThinker's "Chain-of-Thought" (CoT) to capture the raw "Thought" stream and pipe it to the Brain's Insight window, while the final "Response" goes to Pinky's console. This physically realizes the Bicameral handover.
+
 ---
 
 ## 💎 SPRINT 32 PHASE 9: EDGE CASE POLISH (THE LOST GEMS)
