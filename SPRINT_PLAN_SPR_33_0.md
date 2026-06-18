@@ -12,7 +12,7 @@ Correct the grounding of the Bicameral Mind. The mice must realize that **Acme L
 5. **Grounding Fix**: Prompt engineering required to correct the "Acme Lab" relationship.
 
 ### 🛠️ SPRINT 33 TASKS (Task 18)
-*   [ ] **Task 18.1 (Identity Grounding)**: Update `IDENTITY_BEDROCK` and node prompts to clarify that the user is the Lead Engineer and Acme Lab is the *agents' resident environment*.
+*   [x] **Task 18.1 (Identity Grounding)**: Update `IDENTITY_BEDROCK` and node prompts to clarify that the user is the Lead Engineer and Acme Lab is the *agents' resident environment*.
 *   [ ] **Task 18.2 (Quip Refinement)**: Patch `_prime_first_try` and `thought_node.py` to enforce a laconic, hesitant, and arrogant "naive" first response.
 *   [ ] **Task 18.3 (Pinky Un-gagging)**: Refactor `pinky_node.py` and Hub waterfall to ensure Pinky provides a human-readable summary instead of a raw RAG dump.
 *   [ ] **Task 18.4 (Triage De-duplication)**: Remove the redundant `Triage Result` broadcast in `cognitive_hub.py`. Consolidate into a single "Syncing..." or "Vibe Confirmed" signal.
