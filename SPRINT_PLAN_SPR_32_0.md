@@ -266,3 +266,41 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 *   [x] **Task 15.3 (Idle Reset on WAKE)**: Ensure the `WAKE` API endpoint explicitly resets the `last_activity` timer in `manager.py`. Currently, if WAKE is called while the lab is operational, it logs "Lab already operational" and does nothing, risking hibernation while the user is reading a long response.
 *   [x] **Task 15.4 (X-Lab-Key Cache Dependency)**: Cross-origin requests (`pager.jason-lab.dev`) require the `X-Lab-Key` header extracted from the DOM. If Cache Locking fails, silent CORS preflight failures masquerade as "Network Errors". Task 14.6's `alert()` must explicitly mention this key dependency.
 
+
+---
+
+## 🏗️ SPRINT 32 PHASE 11: FORENSIC HARVEST & ROUTING FIDELITY
+*Status: PLANNING | APPROVED BY LEAD ENGINEER*
+
+### 🎯 MISSION
+Purge the \"naive\" implementations from Phase 10 and restore high-fidelity architectural patterns. We will unify the priming mechanism, restore registry authority, and use Playwright to verify that the Bicameral routing (Pinky vs. Brain Insight) is 100% visible and accurate.
+
+### 📋 STRATEGIC CONTEXT (The Nuanced Flow)
+User communication triggers a dual-path async loop:
+1. **The Reasoning Leg**: Wake -> Triage -> Waterfall (with RAG context).
+2. **The Liveness Leg**: KENDER (Deep Thought) generates a thoughtful 'quip' to fill airtime while the reasoning leg processes.
+*Crucial*: Both must be visible, properly sourced, and routed to their distinct UI channels (Chat vs. Insight).
+
+### 🛠️ HARVEST & HARDENING TASKS (Task 17)
+*   [ ] **Task 17.1 (Async Priming Restoration)**: Remove the hardcoded `asyncio.sleep(5)` in `cognitive_hub.py`. Implement a state-aware `wait_for_ready` loop or check for KENDER resident liveness before triggering the 'First Try' quip.
+*   [ ] **Task 17.2 (Registry Authority)**: Re-point `start_vllm.sh` to resolve its model path dynamically via the `infrastructure.json` Model Manifest. Eliminate path hardcoding to restore environment flexibility.
+*   [ ] **Task 17.3 (Single Source of Versioning)**: Centralize the `VERSION` constant (e.g., in `v5/common/types.py`). Update `router.py` and `intercom_v2.js` to pull from this single source, eliminating copy-pasted version metadata.
+*   [ ] **Task 17.4 (Routing Fidelity - Playwright)**: Adapt or create a Playwright test (e.g., `test_ui_routing.spec.js`) to explicitly verify that messages from `Brain`, `Thought`, or `Deep Thought` are routed to the `#insight-console`, while `Pinky` remains in the main chat.
+*   [ ] **Task 17.5 (High-Fidelity Certification)**: Execute a full gauntlet run using the **Babysitting Protocol (BKM-033)**. Manually audit the \"Wordy Log\" (BKM-032) to ensure persona-faithful responses before closing Sprint 32.
+
+
+### 🛡️ PHASE 11 OPERATIONAL PROTOCOLS (BKM HARDENING)
+*Role: [BKM] - Rules of Behavior & Verification*
+
+| Protocol | Usage | Strategic Benefit |
+| :--- | :--- | :--- |
+| **BKM-012** | **Ultimate Patcher** | Use Archive Node fuzzy diffs for surgical, lint-verified logic updates. |
+| **BKM-013** | **Watchdog Safety** | Background long-running Playwright tests with progress markers to prevent CLI timeout. |
+| **BKM-015.1**| **Semantic Indirection**| Derive \"First Try\" quips from the Vibe Check, not static hardcoded strings. |
+| **BKM-016** | **Montana Protocol** | Reclaim logger visibility with session fingerprints to ensure priming is forensically visible. |
+| **BKM-018** | **Orchestrator-First** | Use MCP Proxy (`lab_start`/`lab_stop`) for all state changes to protect the PID Ledger. |
+| **BKM-026** | **Asymmetric Probe** | Implement Success/Failure TTL for KENDER resident liveness checks. |
+| **BKM-029** | **The 4-Step Loop** | Mandatory Compare-Save-Review-Validate for every sub-task. |
+| **BKM-033** | **Babysitting** | Real-time PID and VRAM monitoring during the final 5x5 Gauntlet. |
+
+---
