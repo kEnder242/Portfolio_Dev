@@ -245,11 +245,12 @@ Execute a deep historical restoration of the Lab's UX and routing architecture. 
 *Objective: Stabilize the system's "personality" and visual presentation to reflect a professional silicon validation appliance.*
 
 ### 🛠️ STABILIZATION & UI TASKS (Task 16)
-*   [ ] **Task 16.1 (The Sanity Swap)**: Re-point `start_vllm.sh` to use the VibeThinker-3B weights as the local unified base. Ensure the swap is revertible via `infrastructure.json`.
-*   [x] **Task 16.2 (Markdown Pop)**: Enable `marked.js` rendering for all Persona and Insight messages in `intercom_v2.js`, utilizing the existing `field_notes/assets/marked.min.js`.
-*   [x] **Task 16.3 (Null-State Triage)**: Refactor `lab_node.py` to return empty `situation` and `hints` fields when `vibe == CASUAL`, eliminating technical lectures for simple greetings.
-*   [x] **Task 16.4 (Analytical Quips)**: Implement a "loading quip" from the Brain/Archive node while Pinky is generating to fill dead air during reasoning latencies.
-*   [x] **Task 16.5 (Signature Fix)**: Harden the WebSocket metadata payload in `router.py` to ensure the `version` field is always present, eliminating the `vundefined` leak in the UI.
+*   [x] **Task 16.1 (Llama Restoration)**: Verify and hard-code `start_vllm.sh` to use the proven Llama-3.2-3B-AWQ model. Smoke test vocal output and multi-LoRA stability.
+*   [x] **Task 16.2 (Markdown Pop)**: Enable `marked.js` rendering for all Persona and Insight messages in `intercom_v2.js`.
+*   [x] **Task 16.3 (Null-State Triage)**: Refactor `lab_node.py` to return empty `situation` and `hints` fields when `vibe == CASUAL`.
+*   [x] **Task 16.4 (Analytical Quips)**: Implement a "loading quip" from the Brain/Archive node while Pinky is generating.
+*   [x] **Task 16.5 (Signature Fix)**: Harden the WebSocket metadata payload in `router.py` to ensure the `version` field is always present.
+*   [ ] **Task 16.6 (The Sanity Swap - VibeThinker/Qwen 3B)**: (Experimental) Re-point `start_vllm.sh` to evaluate VibeThinker-3B (huggingface.co/WeiboAI/VibeThinker-3B) as the local unified base, ensuring full Multi-LoRA support. Fallback: Qwen 3B. Revertible via `infrastructure.json`.
 
 ### 🔮 FUTURE CORE FEATURES (TODO)
 *   [ ] **Thought Capture [FEAT-368]**: Leverage VibeThinker's "Chain-of-Thought" (CoT) to capture the raw "Thought" stream and pipe it to the Brain's Insight window, while the final "Response" goes to Pinky's console. This physically realizes the Bicameral handover.
