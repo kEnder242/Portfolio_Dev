@@ -209,12 +209,12 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
     
     // [FEAT-224] Brain (Signal or Result) and Shadow (Intuition) always go to the Right
-    const isBrain = sl_low.includes('brain') || sl_low.includes('shadow');
+    const isBrain = sl_low.includes('brain') || sl_low.includes('shadow') || sl_low.includes('deep thought');
     // Pinky (Triage or Reflex) always goes to the Left
     const isPinky = sl_low.includes('pinky');
     // System strategic messages go to the Right
     
-    if (isBrain || isSystemStrategic) {
+    if (isBrain || isSystemStrategic || channel === 'insight') {
         insightConsole.appendChild(msg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
     } else {
