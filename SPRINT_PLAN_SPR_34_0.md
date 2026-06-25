@@ -1,5 +1,5 @@
 # 🏗️ SPRINT 34: SEMANTIC RETRIEVAL & SILICON TELEMETRY (NVIDIA PIVOT)
-*Status: ACTIVE | EXECUTING*
+*Status: ACTIVE | PHASES 1-3 COMPLETE | PHASE 4 COMPLETE*
 
 ### 🎯 MISSION
 Deepen the grounding and efficiency of the Bicameral Mind. Having successfully stabilized hierarchical semantic retrieval and socket isolation in Goal 1, we pivot to build high-fidelity GPU and token telemetry dashboards. We will leverage NVIDIA DCGM metrics alongside token-level metrics (TTFT, speed) to showcase real-time latency, power, and synthetic TCO/Turing-class cost metrics, culminating in a model benchmarking page to evaluate performance across the local and remote lab silicon.
@@ -27,24 +27,47 @@ Deepen the grounding and efficiency of the Bicameral Mind. Having successfully s
 
 ## ⚡ SPRINT 34 PHASE 2: LIVE GPU & TOKEN TELEMETRY DASHBOARD (Task 20)
 *Objective: Showcase token-aligned KPIs (latency, speed, power, synthetic cost) based on active lab runs.*
+*Status: COMPLETE (June 25, 2026)*
 
 ### 📋 NVIDIA DC GPU Principal Modeling Architect Demo Alignment
 *   **Pedigree & Intent**: *"We need to show live validation-level KPIs for model execution. By aligning tokens as they stream (TTFT, tokens/sec) with physical GPU telemetry (watts consumed via DCGM on port 9400, VRAM, and thermals), we can calculate a live synthetic cost-per-token and real-time efficiency metrics."* — Lead Engineer.
+*   **Commit**: `[FEAT-T20] Silicon KPI Telemetry Pipeline` + `[FEAT-T20.4] KPI Tab`
 *   **Tasks**:
-    *   [ ] **Task 20.1 (Token Metric Instrumentation)**: Instrument `BicameralNode` and `CognitiveHub` to track TTFT (Time-to-First-Token), throughput (tokens/sec), and total generation duration per turn, exporting them in the stream payload to the Foyer.
-    *   [ ] **Task 20.2 (NVIDIA DCGM / Prometheus Integration)**: Build a lightweight Python collector or query helper that hits the local Prometheus/DCGM exporter on port 9400 to fetch real-time power (watts) and thermal metrics during active generation turns.
-    *   [ ] **Task 20.3 (Token-Aligned KPI Fusion)**: Correlate power draw with generation time to calculate energy per token (Joules/token) and compute a synthetic "price/TCO" based on Turing vs Kender (4090) hardware running costs.
-    *   [ ] **Task 20.4 (UI Uplink - status.html)**: Add a `KPIs` tab in `status.html`'s Neural Uplink Telemetry section. Render real-time graphs showing latency, speed, power efficiency, and synthetic TCO.
+    *   [x] **Task 20.1 (Token Metric Instrumentation)**: Instrument `BicameralNode` and `CognitiveHub` to track TTFT, throughput (tokens/sec), and total generation duration per turn. Files: `loader.py`, `cognitive_hub.py`.
+    *   [x] **Task 20.2 (NVIDIA DCGM / Prometheus Integration)**: `telemetry_collector.py` — lightweight DCGM scraper with 5s TTL cache, `TelemetrySample` dataclass, append-only ledger writer.
+    *   [x] **Task 20.3 (Token-Aligned KPI Fusion)**: Joules/token + synthetic TCO ($0.10/kWh) computed in `TelemetrySample.enrich_economics()`. `/telemetry_kpi` REST endpoint in `router.py`.
+    *   [x] **Task 20.4 (UI Uplink - status.html)**: KPI tab in Neural Uplink Telemetry. 5 sparkline stat cards (TTFT, throughput, GPU power, J/token, synthetic TCO µ$). Recent-query table.
+    *   [x] **Task 20.5 (SYSTEM Graph Tab)**: Replaced LOAD+TEMP Grafana iframe tabs with single live canvas graph. Polls `/sys_metrics` every 5s. 5 series: CPU%, RAM%, VRAM%, GPU Temp°C, GPU Power W. 60-point ring buffer (~5 min). DPR-aware rendering. Files: `status.html`, `router.py`.
 
 ---
 
 ## ⚡ SPRINT 34 PHASE 3: SILICON BENCHMARKING LEDGER (Task 21)
 *Objective: Create a benchmark dashboard and evaluation framework to compare local vs. remote models.*
+*Status: COMPLETE (June 25, 2026)*
 
 ### 📋 Performance Comparison & Online Judge (BKM-032 / LLM-as-a-Judge)
 *   **Pedigree & Intent**: *"Evaluating models on generic test sets is useless for the lab. We need to measure how well local and remote models (Qwen 3B vs Sovereign 27B) understand the 18-year lab history, using consistency queries and automated judges to tag model runs."* — Lead Engineer.
+*   **Commit**: `[FEAT-T21] Silicon Benchmarking Engine` + `[FEAT-T21.2] Silicon Benchmarks dashboard`
 *   **Tasks**:
-    *   [ ] **Task 21.1 (Performance Benchmark Ledger)**: Design a SQLite database or JSONL ledger `data/benchmarks.jsonl` that tracks offline and online execution runs, tagging model type, quant level, context length, TTFT, speed, and energy.
-    *   [ ] **Task 21.2 (Benchmark Frontend)**: Create a new page `benchmarks.html` or a dedicated tab in `status.html` that reads the benchmark ledger and renders comparative bar charts (latency, speed, energy efficiency).
-    *   [ ] **Task 21.3 (LLM-as-a-Judge Evaluation)**: Implement an online judge workflow using the Sovereign node (or a specialized evaluator) to rate answers to historical queries on a 1-5 scale, recording validation scores in the ledger.
-    *   [ ] **Task 21.4 (BKM-032 Consistency Gate)**: Establish an automated test suite that queries historical anchors and triggers warning alerts on the Pager if semantic drift or factual contradictions are detected.
+    *   [x] **Task 21.1 (Performance Benchmark Ledger)**: `benchmarks.jsonl` append-only ledger via `run_evals.py`. Schema: model, engine, quant, tags, prompt, response, TTFT, tok/s, GPU power, J/token, TCO, judge_score (1-5), judge_reasoning.
+    *   [x] **Task 21.2 (Benchmark Frontend)**: `benchmarks.html` — model comparison cards with score bar + sparkline, run history table with score badges (color-coded 1-5), prompt inspector modal, tag filter buttons. `/benchmarks_kpi` REST endpoint with per-model aggregates. Navigation link in `mission-control.js` (v1.4).
+    *   [x] **Task 21.3 (LLM-as-a-Judge Evaluation)**: `run_evals.py` — 10 domain-tagged prompts (telemetry, history, inference, tco), async vLLM/Ollama runner, Cynical Curator rubric, JSON extraction with regex fallback.
+    *   [x] **Task 21.4 (BKM-032 Consistency Gate)**: Watchdog in `run_evals.py` checks sliding avg over last N runs. Fires `pager_relay.trigger_pager(WARNING)` if score drops below `BENCH_SCORE_THRESHOLD` (default 3.0, env-configurable). Eval dispatch via `/trigger_task?task=eval` POST.
+
+---
+
+## 📊 Sprint 34 — Delivery Summary
+
+| Component | Files Changed | Status |
+|---|---|---|
+| Token telemetry pipeline | `loader.py`, `cognitive_hub.py`, `telemetry_collector.py` | ✅ |
+| REST endpoints | `router.py` (+4 endpoints) | ✅ |
+| KPI + SYSTEM tabs | `status.html` | ✅ |
+| Benchmark harness | `run_evals.py` | ✅ |
+| Benchmark dashboard | `benchmarks.html`, `mission-control.js` | ✅ |
+
+**Run first eval batch:**
+```bash
+cd ~/Dev_Lab/HomeLabAI/src
+PYTHONPATH=$(pwd) python run_evals.py --tag baseline --engine vllm
+```
