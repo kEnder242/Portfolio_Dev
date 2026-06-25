@@ -18,8 +18,12 @@
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "The Neural Relay" (Sprint SPR-15.0)
-**Goal:** Transition from a linear "Ping-Pong" state machine into a high-throughput **Relay Race** with parallel inference and token-aware yielding.
+## 🎯 Active Initiative: "Alignment & Identity" (Sprint SPR-33.0)
+**Goal:** Align Acme Lab grounding, quip personality, Pinky RAG synthesis, triage de-duplication, and port V4 recovery mechanisms.
+
+## ✅ Global Milestones (June 2026)
+1.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
+2.  **Silicon Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
 
 ## ✅ Global Milestones (May 2026)
 1.  **Governor's Gate [SPR-27.0]**: ACTIVE. Implementing resource coordination between background workers and the Lab Hub to prevent OOM events.
