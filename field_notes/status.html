@@ -247,6 +247,7 @@
                     <button class="telemetry-tab" onclick="updatePanel(2, this)">LOAD</button>
                     <button class="telemetry-tab" onclick="updatePanel(4, this)">TEMP</button>
                     <button class="telemetry-tab" onclick="showLedger(this)">LEDGER</button>
+                    <button class="telemetry-tab" onclick="showKpi(this)">KPI</button>
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="icon-btn" onclick="updateTime('1h')">1H</button>
@@ -258,6 +259,7 @@
             <div class="telemetry-box">
                 <iframe id="grafana-main" src="https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&panelId=6&from=now-8h&to=now&theme=dark"></iframe>
                 <div id="ledger-container" style="display:none; height:400px; overflow-y:auto; padding:15px; background:#000; font-family:monospace;"></div>
+                <div id="kpi-container" style="display:none; height:400px; overflow-y:auto; padding:15px; background:#000;"></div>
                 <div style="margin-top: 10px; text-align: center; font-size: 0.8rem; color: #666;">
                     Mobile users: <a href="https://monitor.jason-lab.dev" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Login to Monitor</a> if telemetry is blocked.
                 </div>
@@ -316,6 +318,7 @@
 
         async function showLedger(btn) {
             iframeMain.style.display = 'none';
+            document.getElementById('kpi-container').style.display = 'none';
             const ledger = document.getElementById('ledger-container');
             ledger.style.display = 'block';
             ledger.innerHTML = "<div style='color:var(--accent-color); padding: 20px;'>[LOADING TELEMETRY SNAPSHOTS...]</div>";
@@ -345,6 +348,140 @@
                 ledger.innerHTML = html;
             } catch(err) {
                 ledger.innerHTML = `<div style='color:#f85149; padding:20px;'>[ERROR] ${err.message}</div>`;
+            }
+        }
+
+        // ── KPI Sparkline Helpers ──────────────────────────────────────────────
+        function drawSparkline(canvas, values, color) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            if (!values || values.length < 2) return;
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const range = max - min || 1;
+            const step = w / (values.length - 1);
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            values.forEach((v, i) => {
+                const x = i * step;
+                const y = h - ((v - min) / range) * (h - 4) - 2;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            // Fill under
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+            ctx.fillStyle = color + '22';
+            ctx.fill();
+        }
+
+        function kpiCard(label, value, unit, sparkValues, color, trend) {
+            const id = 'spark_' + label.replace(/[^a-z]/gi, '_');
+            setTimeout(() => {
+                const c = document.getElementById(id);
+                if (c) drawSparkline(c, sparkValues, color);
+            }, 50);
+            return `
+            <div style="background:#0d1117; border:1px solid #30363d; border-left:3px solid ${color}; border-radius:6px; padding:14px 18px; min-width:180px; flex:1;">
+                <div style="font-size:0.65rem; color:#666; letter-spacing:0.12em; margin-bottom:6px;">${label}</div>
+                <div style="font-size:1.6rem; font-weight:700; color:#e6edf3; line-height:1;">${value}<span style="font-size:0.75rem; color:#8b949e; margin-left:4px;">${unit}</span></div>
+                <div style="font-size:0.7rem; color:${trend >= 0 ? '#3fb950' : '#f85149'}; margin-top:4px;">${trend >= 0 ? '▲' : '▼'} ${Math.abs(trend).toFixed(1)}% vs avg</div>
+                <canvas id="${id}" width="160" height="28" style="margin-top:8px; display:block; opacity:0.8;"></canvas>
+            </div>`;
+        }
+
+        async function showKpi(btn) {
+            iframeMain.style.display = 'none';
+            document.getElementById('ledger-container').style.display = 'none';
+            const kpi = document.getElementById('kpi-container');
+            kpi.style.display = 'block';
+            kpi.innerHTML = "<div style='color:var(--accent-color); padding:20px; font-family:monospace;'>[LOADING KPI SAMPLES...]</div>";
+            document.querySelectorAll('.telemetry-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Detect attendant URL (local vs tunnel)
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+
+            try {
+                const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`);
+                if (!r.ok) throw new Error(`Attendant unreachable (${r.status}). Is the Lab running?`);
+                const payload = await r.json();
+                const samples = payload.samples || [];
+
+                if (samples.length === 0) {
+                    kpi.innerHTML = `
+                        <div style='padding:30px; text-align:center; color:#444; font-family:monospace;'>
+                            <div style='font-size:2rem; margin-bottom:10px;'>◌</div>
+                            <div>No KPI samples yet. Run a query through the Intercom to generate data.</div>
+                        </div>`;
+                    return;
+                }
+
+                // Filter to records with actual token data
+                const active = samples.filter(s => s.total_tokens > 0);
+                const gpu = samples.filter(s => s.gpu_power_w > 0);
+
+                const avg = (arr, key) => arr.length ? arr.reduce((a,b) => a + (b[key]||0), 0) / arr.length : 0;
+                const last = (arr, key) => arr.length ? arr[arr.length-1][key] || 0 : 0;
+                const trend = (arr, key) => {
+                    const a = avg(arr, key); const l = last(arr, key);
+                    return a ? ((l - a) / a) * 100 : 0;
+                };
+
+                const ttftVals = active.map(s => s.ttft_ms);
+                const tpsVals = active.map(s => s.tokens_per_sec);
+                const pwrVals = gpu.map(s => s.gpu_power_w);
+                const jtVals = active.filter(s => s.joules_per_token > 0).map(s => s.joules_per_token);
+                const tcoVals = active.filter(s => s.tco_usd > 0).map(s => s.tco_usd * 1e6); // micro-USD
+
+                const latestModel = active.length ? active[active.length-1].model || '—' : '—';
+                const latestEngine = active.length ? active[active.length-1].engine_type || '—' : '—';
+                const totalTokens = active.reduce((a,b) => a + (b.total_tokens||0), 0);
+                const totalQueries = active.length;
+
+                const headerHtml = `
+                    <div style="font-family:monospace; font-size:0.7rem; color:#555; margin-bottom:16px; border-bottom:1px solid #21262d; padding-bottom:8px;">
+                        <span style="color:#8b949e;">ENGINE:</span> ${latestEngine} &nbsp;|&nbsp;
+                        <span style="color:#8b949e;">MODEL:</span> ${latestModel} &nbsp;|&nbsp;
+                        <span style="color:#8b949e;">QUERIES:</span> ${totalQueries} &nbsp;|&nbsp;
+                        <span style="color:#8b949e;">TOTAL TOKENS:</span> ${totalTokens.toLocaleString()}
+                    </div>`;
+
+                const cardsHtml = `<div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                    ${ttftVals.length ? kpiCard('TTFT', avg(active,'ttft_ms').toFixed(0), 'ms', ttftVals, '#58a6ff', trend(active,'ttft_ms')) : ''}
+                    ${tpsVals.length ? kpiCard('THROUGHPUT', avg(active,'tokens_per_sec').toFixed(1), 'tok/s', tpsVals, '#3fb950', trend(active,'tokens_per_sec')) : ''}
+                    ${pwrVals.length ? kpiCard('GPU POWER', avg(gpu,'gpu_power_w').toFixed(0), 'W', pwrVals, '#f78166', trend(gpu,'gpu_power_w')) : ''}
+                    ${jtVals.length ? kpiCard('J / TOKEN', avg(active.filter(s=>s.joules_per_token>0),'joules_per_token').toFixed(4), 'J', jtVals, '#d2a8ff', 0) : ''}
+                    ${tcoVals.length ? kpiCard('SYNTHETIC TCO', avg(active.filter(s=>s.tco_usd>0).map(s=>({tco_usd:s.tco_usd*1e6})),'tco_usd').toFixed(2), 'µ$', tcoVals, '#ffa657', 0) : ''}
+                </div>`;
+
+                // Recent query table
+                const recent = [...active].reverse().slice(0, 15);
+                let tableHtml = `<div style="font-size:0.65rem; color:#666; letter-spacing:0.1em; margin-bottom:8px;">RECENT GENERATIONS</div>
+                    <table style="width:100%; font-size:0.75rem; border-collapse:collapse; color:#8b949e;">
+                    <tr style="color:#58a6ff; text-align:left; border-bottom:1px solid #21262d;">
+                        <th style="padding:6px 8px;">TIME</th><th>NODE</th><th>TTFT</th><th>TOK/S</th><th>TOKENS</th><th>POWER</th><th>J/TOK</th>
+                    </tr>`;
+                recent.forEach(s => {
+                    const ts = new Date(s.timestamp * 1000).toLocaleTimeString([], {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+                    tableHtml += `<tr style="border-bottom:1px solid #161b22;">
+                        <td style="padding:5px 8px; color:#444;">${ts}</td>
+                        <td style="color:#e6edf3;">${s.node || '—'}</td>
+                        <td>${s.ttft_ms ? s.ttft_ms.toFixed(0)+'ms' : '—'}</td>
+                        <td style="color:#3fb950;">${s.tokens_per_sec ? s.tokens_per_sec.toFixed(1) : '—'}</td>
+                        <td>${s.total_tokens || '—'}</td>
+                        <td style="color:#f78166;">${s.gpu_power_w ? s.gpu_power_w.toFixed(0)+'W' : '—'}</td>
+                        <td style="color:#d2a8ff;">${s.joules_per_token ? s.joules_per_token.toFixed(4) : '—'}</td>
+                    </tr>`;
+                });
+                tableHtml += '</table>';
+
+                kpi.innerHTML = headerHtml + cardsHtml + tableHtml;
+
+            } catch(err) {
+                kpi.innerHTML = `<div style='color:#f85149; padding:20px; font-family:monospace;'>[ERROR] ${err.message}</div>`;
             }
         }
 
