@@ -15,14 +15,16 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Semantic Retrieval & Hierarchical Cognition" (Sprint SPR-34.0)
-**Goal:** Deepen the grounding and efficiency of the Bicameral Mind. Transition flat semantic index to hierarchical, integrate MCompassRAG, stabilize multi-host dreaming, and deploy intelligent socket disconnect rules.
+## 🎯 Active Initiative: "Semantic Retrieval & Silicon Telemetry (NVIDIA Pivot)" (Sprint SPR-34.0)
+**Goal:** Deepen retrieval precision via hierarchical indexing/MCompassRAG, and build live token/GPU telemetry & model performance benchmarks.
 
 ## ✅ Global Milestones (June 2026)
-1.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
+1.  **Semantic & Telemetry [SPR-34.0]**: ACTIVE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) active.
+2.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
 2.  **Silicon Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
 
 ## ✅ Global Milestones (May 2026)
