@@ -18,8 +18,8 @@
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Alignment & Identity" (Sprint SPR-33.0)
-**Goal:** Align Acme Lab grounding, quip personality, Pinky RAG synthesis, triage de-duplication, and port V4 recovery mechanisms.
+## 🎯 Active Initiative: "Semantic Retrieval & Hierarchical Cognition" (Sprint SPR-34.0)
+**Goal:** Deepen the grounding and efficiency of the Bicameral Mind. Transition flat semantic index to hierarchical, integrate MCompassRAG, stabilize multi-host dreaming, and deploy intelligent socket disconnect rules.
 
 ## ✅ Global Milestones (June 2026)
 1.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
