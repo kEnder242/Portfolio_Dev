@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silicon Benchmarks | Acme Lab</title>
+    <meta name="description" content="Live silicon benchmarking dashboard: model comparison by speed, energy, accuracy, and TCO. Powered by LLM-as-a-Judge evaluation harness.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        /* ── Page-level overrides ─────────────────────────────── */
+        body { background: #010409; }
+
+        .bench-header {
+            padding: 28px 0 16px;
+            border-bottom: 1px solid #21262d;
+            margin-bottom: 24px;
+        }
+        .bench-header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #e6edf3;
+            letter-spacing: 0.04em;
+            margin: 0 0 4px;
+        }
+        .bench-header p {
+            font-size: 0.8rem;
+            color: #555;
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── Controls bar ─────────────────────────────────────── */
+        .controls-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .ctrl-btn {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            letter-spacing: 0.06em;
+            transition: all 0.15s;
+        }
+        .ctrl-btn:hover, .ctrl-btn.active {
+            background: #1f2937;
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }
+        .ctrl-btn.run-btn {
+            background: #0d2137;
+            border-color: #388bfd;
+            color: #79c0ff;
+        }
+        .ctrl-btn.run-btn:hover {
+            background: #1158ae;
+            color: #fff;
+        }
+        #tag-filter {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── Status bar ───────────────────────────────────────── */
+        #status-bar {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #444;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 6px;
+        }
+
+        /* ── Model comparison cards ───────────────────────────── */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .model-card {
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 18px;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        .model-card:hover { border-color: #30363d; }
+        .model-card.best { border-left: 3px solid #3fb950; }
+        .model-card.best::before {
+            content: 'TOP';
+            position: absolute;
+            top: 10px; right: 12px;
+            font-size: 0.6rem;
+            color: #3fb950;
+            letter-spacing: 0.1em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .model-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e6edf3;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+        .model-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid #161b22;
+            font-size: 0.75rem;
+        }
+        .model-stat:last-child { border-bottom: none; }
+        .stat-label { color: #555; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+        .stat-value { color: #e6edf3; font-weight: 500; }
+        .score-bar {
+            width: 100%;
+            height: 3px;
+            background: #21262d;
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .score-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
+
+        /* ── Section headers ──────────────────────────────────── */
+        .section-hdr {
+            font-size: 0.65rem;
+            color: #444;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin: 28px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #161b22;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── Run table ────────────────────────────────────────── */
+        .run-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .run-table th {
+            text-align: left;
+            padding: 8px 10px;
+            color: #58a6ff;
+            border-bottom: 1px solid #21262d;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .run-table td {
+            padding: 6px 10px;
+            color: #8b949e;
+            border-bottom: 1px solid #0d1117;
+            vertical-align: top;
+        }
+        .run-table tr:hover td { background: #0d1117; }
+        .score-badge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .score-5 { background: #1a3d1a; color: #3fb950; }
+        .score-4 { background: #1a3324; color: #56d364; }
+        .score-3 { background: #2d2a10; color: #e3b341; }
+        .score-2 { background: #2d1a10; color: #f0883e; }
+        .score-1 { background: #3d1212; color: #f85149; }
+        .score-0 { background: #1c1c1c; color: #444; }
+
+        .tag-pill {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1px 7px;
+            font-size: 0.65rem;
+            color: #555;
+            margin: 1px;
+        }
+
+        /* ── Empty state ──────────────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #333;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .empty-cmd {
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 6px;
+            padding: 10px 16px;
+            color: #555;
+            font-size: 0.78rem;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        /* ── Prompt inspector modal ───────────────────────────── */
+        #inspector-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        #inspector-modal.open { display: flex; }
+        .inspector-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 24px;
+            max-width: 720px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .inspector-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .inspector-label { font-size: 0.65rem; color: #444; letter-spacing: 0.1em; margin: 12px 0 4px; font-family: 'JetBrains Mono', monospace; }
+        .inspector-content { font-size: 0.8rem; color: #8b949e; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+
+        /* ── Loading spinner ──────────────────────────────────── */
+        .loader {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #58a6ff;
+            animation: pulse 1s infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        @media (max-width: 700px) {
+            .model-grid { grid-template-columns: 1fr; }
+            .run-table th:nth-child(n+5), .run-table td:nth-child(n+5) { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <script src="mission-control.js?v=bd431d08"></script>
+
+    <main class="main-content">
+        <div class="bench-header">
+            <h1>Silicon Benchmarking</h1>
+            <p>[BKM-032] LLM-as-a-Judge | Scored 1-5 | Live silicon metrics from DCGM</p>
+        </div>
+
+        <div class="controls-bar">
+            <button class="ctrl-btn active" id="filter-all" onclick="setTagFilter(null, this)">ALL</button>
+            <div id="tag-buttons"></div>
+            <select id="tag-filter" onchange="setTagFilterFromSelect(this.value)" style="display:none;"></select>
+            <button class="ctrl-btn run-btn" onclick="triggerEvalRun()">RUN EVAL</button>
+            <button class="ctrl-btn" onclick="loadBenchmarks()">REFRESH</button>
+            <span id="loader-indicator" style="display:none; font-size:0.72rem; color:#58a6ff; font-family:monospace;">
+                <span class="loader"></span>Loading...
+            </span>
+        </div>
+
+        <div id="status-bar">[INIT] Connecting to Attendant...</div>
+
+        <div id="model-comparison"></div>
+        <div id="run-history"></div>
+
+        <!-- Prompt Inspector Modal -->
+        <div id="inspector-modal">
+            <div class="inspector-box">
+                <button class="inspector-close" onclick="closeInspector()">&#x2715;</button>
+                <div id="inspector-content"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ── Config ──────────────────────────────────────────────
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const ATTENDANT = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+        let activeTag = null;
+        let allData = null;
+
+        // ── Status bar ──────────────────────────────────────────
+        function setStatus(msg, color = '#444') {
+            const el = document.getElementById('status-bar');
+            el.style.color = color;
+            el.textContent = msg;
+        }
+
+        // ── Tag filter ──────────────────────────────────────────
+        function setTagFilter(tag, btn) {
+            activeTag = tag;
+            document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            if (allData) renderAll(allData);
+        }
+
+        function setTagFilterFromSelect(val) {
+            activeTag = val || null;
+            if (allData) renderAll(allData);
+        }
+
+        function buildTagButtons(tags) {
+            const container = document.getElementById('tag-buttons');
+            container.innerHTML = '';
+            tags.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'ctrl-btn';
+                btn.textContent = tag.toUpperCase();
+                btn.onclick = () => {
+                    setTagFilter(tag, btn);
+                    // Deactivate ALL button
+                    document.getElementById('filter-all').classList.remove('active');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // ── Sparkline ───────────────────────────────────────────
+        function drawSparkline(canvas, values, color) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            if (!values || values.length < 2) return;
+            const min = Math.min(...values), max = Math.max(...values);
+            const range = max - min || 1;
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            values.forEach((v, i) => {
+                const x = (i / (values.length - 1)) * w;
+                const y = h - ((v - min) / range) * (h - 4) - 2;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+            ctx.fillStyle = color + '22';
+            ctx.fill();
+        }
+
+        // ── Score badge ─────────────────────────────────────────
+        function scoreBadge(score) {
+            const cls = score > 0 ? `score-${score}` : 'score-0';
+            return `<span class="score-badge ${cls}">${score || '?'}</span>`;
+        }
+
+        // ── Score bar color ─────────────────────────────────────
+        function scoreColor(avg) {
+            if (avg >= 4.5) return '#3fb950';
+            if (avg >= 3.5) return '#56d364';
+            if (avg >= 2.5) return '#e3b341';
+            if (avg >= 1.5) return '#f0883e';
+            return '#f85149';
+        }
+
+        // ── Model comparison section ────────────────────────────
+        function renderModelCards(aggregates, runs) {
+            const container = document.getElementById('model-comparison');
+            const models = Object.keys(aggregates);
+            if (models.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            // Find best model by avg score
+            const bestModel = models.reduce((a, b) =>
+                aggregates[a].avg_score >= aggregates[b].avg_score ? a : b
+            );
+
+            const maxScore = Math.max(...models.map(m => aggregates[m].avg_score));
+
+            container.innerHTML = `<div class="section-hdr">Model Comparison (${models.length} models)</div>
+            <div class="model-grid" id="model-grid"></div>`;
+
+            const grid = document.getElementById('model-grid');
+            models.sort((a, b) => aggregates[b].avg_score - aggregates[a].avg_score);
+            models.forEach(model => {
+                const s = aggregates[model];
+                const isBest = model === bestModel && maxScore > 0;
+                const scoreRuns = runs.filter(r => r.model === model && r.judge_score > 0);
+                const sparkId = 'sp_' + model.replace(/[^a-z0-9]/gi, '_');
+
+                const card = document.createElement('div');
+                card.className = `model-card${isBest ? ' best' : ''}`;
+                card.innerHTML = `
+                    <div class="model-name">${model}</div>
+                    <div class="model-stat">
+                        <span class="stat-label">RUNS</span>
+                        <span class="stat-value">${s.runs}</span>
+                    </div>
+                    <div class="model-stat">
+                        <span class="stat-label">AVG SCORE</span>
+                        <span class="stat-value" style="color:${scoreColor(s.avg_score)}">${s.avg_score}/5</span>
+                    </div>
+                    <div class="model-stat">
+                        <span class="stat-label">TOK/S</span>
+                        <span class="stat-value" style="color:#3fb950;">${s.avg_tps.toFixed(1)}</span>
+                    </div>
+                    <div class="model-stat">
+                        <span class="stat-label">GPU POWER</span>
+                        <span class="stat-value" style="color:#f78166;">${s.avg_power_w.toFixed(0)}W</span>
+                    </div>
+                    <div class="model-stat">
+                        <span class="stat-label">J / TOKEN</span>
+                        <span class="stat-value" style="color:#d2a8ff;">${s.avg_j_tok.toFixed(4)}</span>
+                    </div>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width:${(s.avg_score / 5) * 100}%; background:${scoreColor(s.avg_score)};"></div>
+                    </div>
+                    ${scoreRuns.length > 1 ? `<canvas id="${sparkId}" width="220" height="24" style="margin-top:10px; display:block;"></canvas>` : ''}
+                `;
+                grid.appendChild(card);
+
+                if (scoreRuns.length > 1) {
+                    setTimeout(() => {
+                        const c = document.getElementById(sparkId);
+                        if (c) drawSparkline(c, scoreRuns.map(r => r.judge_score), scoreColor(s.avg_score));
+                    }, 80);
+                }
+            });
+        }
+
+        // ── Run history table ───────────────────────────────────
+        function renderRunTable(runs) {
+            const container = document.getElementById('run-history');
+            if (runs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">&#9675;</div>
+                        <div>No benchmark runs yet.</div>
+                        <div class="empty-cmd">cd ~/Dev_Lab/HomeLabAI/src &amp;&amp; python run_evals.py --tag baseline</div>
+                    </div>`;
+                return;
+            }
+
+            let html = `<div class="section-hdr">Recent Runs (${runs.length})</div>
+            <div style="overflow-x:auto;">
+            <table class="run-table">
+                <thead>
+                    <tr>
+                        <th>TIME</th>
+                        <th>ID</th>
+                        <th>MODEL</th>
+                        <th>SCORE</th>
+                        <th>TOK/S</th>
+                        <th>TTFT</th>
+                        <th>POWER</th>
+                        <th>J/TOK</th>
+                        <th>TAGS</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            runs.slice(0, 50).forEach((r, i) => {
+                const ts = new Date(r.timestamp * 1000).toLocaleString([], {
+                    month: 'short', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                });
+                const tags = (r.tags || []).map(t => `<span class="tag-pill">${t}</span>`).join('');
+                html += `<tr>
+                    <td style="color:#444; white-space:nowrap;">${ts}</td>
+                    <td style="color:#555;">${r.prompt_id || r.id?.slice(0,8) || '—'}</td>
+                    <td style="color:#e6edf3;">${r.model || '—'}</td>
+                    <td>${scoreBadge(r.judge_score)}</td>
+                    <td style="color:#3fb950;">${r.tokens_per_sec ? r.tokens_per_sec.toFixed(1) : '—'}</td>
+                    <td>${r.ttft_ms ? r.ttft_ms.toFixed(0) + 'ms' : '—'}</td>
+                    <td style="color:#f78166;">${r.gpu_power_w ? r.gpu_power_w.toFixed(0) + 'W' : '—'}</td>
+                    <td style="color:#d2a8ff;">${r.joules_per_token ? r.joules_per_token.toFixed(4) : '—'}</td>
+                    <td>${tags}</td>
+                    <td><button class="ctrl-btn" style="padding:3px 8px; font-size:0.65rem;" onclick="openInspector(${i})">VIEW</button></td>
+                </tr>`;
+            });
+
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        // ── Main render ─────────────────────────────────────────
+        function renderAll(data) {
+            let runs = data.runs || [];
+            const aggregates = data.aggregates || {};
+
+            if (activeTag) {
+                runs = runs.filter(r => (r.tags || []).includes(activeTag));
+                // Filter aggregates to only models appearing in filtered runs
+                const filteredModels = new Set(runs.map(r => r.model));
+                const filteredAgg = {};
+                filteredModels.forEach(m => { if (aggregates[m]) filteredAgg[m] = aggregates[m]; });
+                renderModelCards(filteredAgg, runs);
+            } else {
+                renderModelCards(aggregates, runs);
+            }
+
+            renderRunTable(runs);
+        }
+
+        // ── Inspector modal ─────────────────────────────────────
+        function openInspector(idx) {
+            if (!allData) return;
+            let runs = allData.runs || [];
+            if (activeTag) runs = runs.filter(r => (r.tags || []).includes(activeTag));
+            const r = runs[idx];
+            if (!r) return;
+
+            const scoreClass = r.judge_score > 0 ? `score-${r.judge_score}` : 'score-0';
+            document.getElementById('inspector-content').innerHTML = `
+                <div style="font-size:1rem; font-weight:600; color:#e6edf3; margin-bottom:4px;">${r.prompt_id || r.id}</div>
+                <div style="font-size:0.72rem; color:#444; margin-bottom:16px;">${r.model} &nbsp;|&nbsp; ${r.engine} &nbsp;|&nbsp; ${r.quantization}</div>
+
+                <div class="inspector-label">PROMPT</div>
+                <div class="inspector-content" style="color:#8b949e;">${escapeHtml(r.prompt)}</div>
+
+                <div class="inspector-label">RESPONSE</div>
+                <div class="inspector-content" style="color:#e6edf3;">${escapeHtml(r.response || '')}</div>
+
+                <div class="inspector-label">JUDGE VERDICT &nbsp; <span class="score-badge ${scoreClass}">${r.judge_score || '?'}</span>/5</div>
+                <div class="inspector-content">${escapeHtml(r.judge_reasoning || '—')}</div>
+
+                <div class="inspector-label">RUBRIC</div>
+                <div class="inspector-content" style="color:#555;">${escapeHtml(r.rubric || '—')}</div>
+
+                <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:16px; font-family:'JetBrains Mono',monospace; font-size:0.72rem;">
+                    <span><span style="color:#444;">TTFT</span> <span style="color:#58a6ff;">${r.ttft_ms ? r.ttft_ms.toFixed(0) + 'ms' : '—'}</span></span>
+                    <span><span style="color:#444;">TOK/S</span> <span style="color:#3fb950;">${r.tokens_per_sec ? r.tokens_per_sec.toFixed(1) : '—'}</span></span>
+                    <span><span style="color:#444;">TOKENS</span> <span style="color:#e6edf3;">${r.total_tokens || '—'}</span></span>
+                    <span><span style="color:#444;">POWER</span> <span style="color:#f78166;">${r.gpu_power_w ? r.gpu_power_w.toFixed(0) + 'W' : '—'}</span></span>
+                    <span><span style="color:#444;">J/TOK</span> <span style="color:#d2a8ff;">${r.joules_per_token ? r.joules_per_token.toFixed(4) : '—'}</span></span>
+                </div>`;
+
+            document.getElementById('inspector-modal').classList.add('open');
+        }
+
+        function closeInspector() {
+            document.getElementById('inspector-modal').classList.remove('open');
+        }
+        document.getElementById('inspector-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('inspector-modal')) closeInspector();
+        });
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ── Load data from Attendant ────────────────────────────
+        async function loadBenchmarks() {
+            document.getElementById('loader-indicator').style.display = 'inline';
+            setStatus('[LOADING] Fetching benchmark data from Attendant...', '#58a6ff');
+            try {
+                const tag = activeTag ? `&tag=${activeTag}` : '';
+                const r = await fetch(`${ATTENDANT}/benchmarks_kpi?n=200${tag}&t=${Date.now()}`);
+                if (!r.ok) throw new Error(`Attendant returned ${r.status}. Is the Lab running?`);
+                const data = await r.json();
+                allData = data;
+
+                buildTagButtons(data.tags || []);
+                renderAll(data);
+
+                const scored = (data.runs || []).filter(r => r.judge_score > 0);
+                const avgScore = scored.length
+                    ? (scored.reduce((a, b) => a + b.judge_score, 0) / scored.length).toFixed(2)
+                    : '—';
+                setStatus(
+                    `[OK] ${data.total} runs | Avg judge score: ${avgScore}/5 | Models: ${Object.keys(data.aggregates || {}).length}`,
+                    '#3fb950'
+                );
+            } catch(err) {
+                setStatus(`[ERROR] ${err.message}`, '#f85149');
+                document.getElementById('model-comparison').innerHTML = '';
+                document.getElementById('run-history').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">&#9675;</div>
+                        <div style="color:#444;">${err.message}</div>
+                        <div class="empty-cmd">python run_evals.py --tag baseline</div>
+                    </div>`;
+            } finally {
+                document.getElementById('loader-indicator').style.display = 'none';
+            }
+        }
+
+        // ── Trigger eval run ────────────────────────────────────
+        async function triggerEvalRun() {
+            const tag = activeTag || 'baseline';
+            setStatus(`[QUEUING] Eval run for tag "${tag}"...`, '#e3b341');
+            try {
+                const r = await fetch(`${ATTENDANT}/trigger_task`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({task: 'eval', tag: tag})
+                });
+                const data = await r.json();
+                if (data.status === 'TRIGGERED' || data.status === 'QUEUED') {
+                    setStatus(`[QUEUED] Eval run for "${tag}" dispatched. Refresh in ~60s.`, '#3fb950');
+                } else {
+                    setStatus(`[WARN] ${JSON.stringify(data)}`, '#e3b341');
+                }
+            } catch(err) {
+                setStatus(`[ERROR] Could not reach Attendant: ${err.message}`, '#f85149');
+            }
+        }
+
+        // ── Boot ────────────────────────────────────────────────
+        window.addEventListener('load', loadBenchmarks);
+        // Auto-refresh every 5 minutes
+        setInterval(loadBenchmarks, 300000);
+    </script>
+</body>
+</html>
