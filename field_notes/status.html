@@ -335,26 +335,40 @@
             btn.classList.add('active');
 
             try {
-                const r = await fetch('data/telemetry_ledger.jsonl?t=' + new Date().getTime());
-                if (!r.ok) throw new Error("Ledger file missing or unreachable.");
-                const text = await r.text();
-                const lines = text.trim().split('\n').reverse().slice(0, 50); // Last 50 entries
-                
-                let html = "<table style='width:100%; font-size:0.8rem; border-collapse: collapse; color:#aaa;'>";
-                html += "<tr style='color:var(--accent-color); text-align:left; border-bottom:1px solid #333;'><th style='padding:8px;'>TIMESTAMP</th><th>MODE</th><th>RAM %</th><th>VRAM</th><th>HOGS</th></tr>";
-                
-                lines.forEach(line => {
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+                const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`, { credentials: 'include' });
+                if (!r.ok) throw new Error(`Attendant returned ${r.status}. Is the Lab running?`);
+                const payload = await r.json();
+                const samples = (payload.samples || []).reverse().slice(0, 60);
+
+                if (samples.length === 0) {
+                    ledger.innerHTML = "<div style='color:#444; padding:20px; font-family:monospace;'>No telemetry samples yet. Run a query through the Intercom to generate data.</div>";
+                    return;
+                }
+
+                let html = "<table style='width:100%; font-size:0.75rem; border-collapse:collapse; color:#aaa; font-family:monospace;'>";
+                html += "<tr style='color:var(--accent-color); text-align:left; border-bottom:1px solid #333;'>" +
+                        "<th style='padding:6px 8px;'>TIME</th><th>NODE</th><th>TTFT</th>" +
+                        "<th>TOK/S</th><th>TOKENS</th><th>POWER</th><th>J/TOK</th></tr>";
+                samples.forEach(s => {
                     try {
-                        const data = JSON.parse(line);
-                        const ts = new Date(data.timestamp).toLocaleTimeString();
-                        const hogs = (data.top_lab_hogs || []).map(h => `${h.name} (${Math.round(h.mem_mib)}MB)`).join(', ');
-                        html += `<tr style='border-bottom:1px solid #111;'><td style='padding:8px; color:#666;'>${ts}</td><td style='color:#eee;'>${data.mode}</td><td>${data.ram_pct}%</td><td>${data.vram_mib}MB</td><td style='font-size:0.7rem; color:#555;'>${hogs}</td></tr>`;
+                        const ts = new Date(s.timestamp * 1000).toLocaleTimeString([], {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+                        html += `<tr style='border-bottom:1px solid #111;'>` +
+                            `<td style='padding:6px 8px; color:#555;'>${ts}</td>` +
+                            `<td style='color:#e6edf3;'>${s.node || '\u2014'}</td>` +
+                            `<td>${s.ttft_ms ? s.ttft_ms.toFixed(0)+'ms' : '\u2014'}</td>` +
+                            `<td style='color:#3fb950;'>${s.tokens_per_sec ? s.tokens_per_sec.toFixed(1) : '\u2014'}</td>` +
+                            `<td>${s.total_tokens || '\u2014'}</td>` +
+                            `<td style='color:#f78166;'>${s.gpu_power_w ? s.gpu_power_w.toFixed(0)+'W' : '\u2014'}</td>` +
+                            `<td style='color:#d2a8ff;'>${s.joules_per_token ? s.joules_per_token.toFixed(4) : '\u2014'}</td>` +
+                            `</tr>`;
                     } catch(e) {}
                 });
                 html += "</table>";
                 ledger.innerHTML = html;
             } catch(err) {
-                ledger.innerHTML = `<div style='color:#f85149; padding:20px;'>[ERROR] ${err.message}</div>`;
+                ledger.innerHTML = `<div style='color:#f85149; padding:20px; font-family:monospace;'>[ERROR] ${err.message}</div>`;
             }
         }
 
@@ -414,7 +428,7 @@
             const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
 
             try {
-                const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`);
+                const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`, { credentials: 'include' });
                 if (!r.ok) throw new Error(`Attendant unreachable (${r.status}). Is the Lab running?`);
                 const payload = await r.json();
                 const samples = payload.samples || [];
@@ -608,7 +622,7 @@
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
             try {
-                const r = await fetch(`${attendantBase}/sys_metrics?t=${Date.now()}`);
+                const r = await fetch(`${attendantBase}/sys_metrics?t=${Date.now()}`, { credentials: 'include' });
                 if (!r.ok) return;
                 const d = await r.json();
                 if (d.error) return;

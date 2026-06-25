@@ -71,3 +71,19 @@ Deepen the grounding and efficiency of the Bicameral Mind. Having successfully s
 cd ~/Dev_Lab/HomeLabAI/src
 PYTHONPATH=$(pwd) python run_evals.py --tag baseline --engine vllm
 ```
+
+---
+
+## ⚡ SPRINT 34 PHASE 4: CORS REMEDIATION & BASELINE EVALUATION (Task 22)
+*Objective: Stabilize dashboard telemetry across origins via CORS credentials allowance, and perform baseline model benchmarking.*
+*Status: ACTIVE*
+
+### 📋 Forensic Rationale
+During physical telemetry integration (Phase 2), querying `/telemetry_kpi` and `/sys_metrics` from the static web server (`notes.jason-lab.dev` or port `9001`) to the Foyer Attendant (`pager.jason-lab.dev` or port `8765`) triggered browser CORS `NetworkError` blocks. This occurred because wildcard CORS configurations (`Access-Control-Allow-Origin: *`) are fundamentally incompatible with credentials forwarding (`Access-Control-Allow-Credentials: true`), which is required to pass Cloudflare Access authentication tokens. To resolve this, a custom middleware allowlist is implemented in the Foyer router to dynamically echo the request origin, and fetch calls on the frontend are updated to request credentials forwarding.
+
+### 🛠️ Tasks
+*   [ ] **Task 22.1 (CORS Middleware Integration)**: Integrate custom `_cors_mw` middleware in `src/v5/foyer/router.py` to echo valid origins and allow credentials.
+*   [ ] **Task 22.2 (Frontend Credentials Forwarding)**: Update `status.html` fetch calls to include `{ credentials: 'include' }`.
+*   [ ] **Task 22.3 (Service Ignition & Verification)**: Restart `lab-attendant.service` and verify dashboard vitals rendering.
+*   [ ] **Task 22.4 (Baseline Eval Execution)**: Execute `run_evals.py` to record baseline metrics in `benchmarks.jsonl`.
+
