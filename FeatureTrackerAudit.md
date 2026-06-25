@@ -3,8 +3,8 @@
 ## 🚀 The Uncharted (Implemented but Undocumented)
 *These features exist in the hardware and logic of the Lab but have no entries in the Feature Tracker. They represent "Technical Debt" in your documentation.*
 
-*   **`[FEAT-322]` Authority Verification**: Implementation of PID and user-ownership verification to prevent unauthorized Hub adoption.
-*   **`[FEAT-323]` Backoff Telemetry**: The mechanism to expose `recovery_level` and `recovery_in_progress` to the vitals dashboard.
+*   **`[FEAT-322]` Authority Verification**: Implementation of PID and user-ownership verification to prevent unauthorized Hub adoption. (DOCUMENTED - Sprint 33)
+*   **`[FEAT-323]` Backoff Telemetry**: The mechanism to expose `recovery_level` and `recovery_in_progress` to the vitals dashboard. (DOCUMENTED/RESTORED - Sprint 33)
 *   **`[FEAT-342]` Silicon Scythe & Resilience Console**: Needs formal consolidation. Currently covers H2 Pivot, TraceMonitor hardening, and Silicon Scythe. (Note: Check if `[FEAT-259]` already documented parts of this, particularly Wake-on-Intent and Hibernation Awareness).
 *   **`[FEAT-346]` RAM-Aware Watchdog**: (Proposed/Pending) Monitors Hub RSS memory specifically for Lab-induced bloat beyond the ~7.5GB base idle threshold.
 

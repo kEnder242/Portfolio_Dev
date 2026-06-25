@@ -46,10 +46,13 @@
 
 ---
 
-## 🚧 PHASE 15: THE NEURAL RELAY (Active)
-- [x] **Waterfall Implementation [SPR-15.0]**: (Complete) Implement the Live Hearing Pipe [FEAT-233.2] between Pinky and Shadow.
-- [x] **Neural Relay Architecture**: [FEAT-229] Parallel fan-out and scalar fuel routing verified.
-- [x] **Atomic Anchor Gate**: [FEAT-227] Hardened [ME] loopback protection.
+## 🚧 SPRINT 33: ALIGNMENT & IDENTITY (Active)
+- [x] **Task 18.1 (Identity Grounding)**: Update `IDENTITY_BEDROCK` in `cognitive_hub.py` to clarify Acme Lab's resident relationship.
+- [x] **Task 18.2 (Quip Refinement)**: Update priming persona to naive, arrogant, and hesitant deep thought quips.
+- [x] **Task 18.3 (Pinky Un-gagging)**: Fix Pinky wordiness using synthesis mode over raw RAG log dumping.
+- [x] **Task 18.4 (Triage De-duplication)**: Consolidate redundant triage broadcast in `cognitive_hub.py`.
+- [x] **Task 18.5 (Nightly Task Audit)**: Verify Continuous Burn and log paths.
+- [x] **Harden V5 Recovery**: Port `[FEAT-302]` (recovery backoff) and `[FEAT-323]` (backoff telemetry) to V5.
 
 ## 🎯 THE MISSION
 To integrate the collection of technical notes and stories into a cohesive "Technical Dashboard." This is a full-spectrum integration—not a "best of" list. It reflects the rigor of a Validation Engineer.
@@ -76,5 +79,5 @@ If the agent session is lost or restarted, refer to these anchors:
 6.  **Runtime Safe-Zone**: `~/AcmeLab` is the production host; `~/Dev_Lab` is the workspace.
 
 ## 🤖 CLI INITIALIZATION COMMAND
-> "I am acting as a Lead Engineer's thought partner. We are starting **Sprint [SPR-15.0]**. My first task is to stabilize the **Neural Relay** by implementing the **Live Hearing Pipe** between Pinky and Shadow nodes."
+> "I am acting as a Lead Engineer's thought partner. We are wrapping up **Sprint 33 (Alignment & Identity)** by porting `[FEAT-302]` and `[FEAT-323]`, stabilizing Pinky's repetition penalty, and documenting feature integrity."
 

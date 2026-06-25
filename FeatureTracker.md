@@ -1256,3 +1256,19 @@
 **Status:** ACTIVE
 **Logic**: Ensures model responses are never muzzled by vLLM's internal parsing logic.
 **Mechanism**: `_stream_vllm` now extracts tokens from both `content` and `tool_calls` function arguments.
+
+## [FEAT-322] Authority Verification (Ownership Check)
+**Status:** DEFEATURED (Sprint 31)
+**Logic**: Verification checks ensuring adopted PIDs belong strictly to user `jallred`.
+**Mechanism**: Relied on in V4 to prevent multi-user process adoption collisions. Defeatured in V5 by enforcing single-user systemd sandbox constraints (`User=jallred`).
+
+## [FEAT-323] Backoff Telemetry
+**Status:** ACTIVE
+**Logic**: Exposes `recovery_level` and `recovery_in_progress` status flags to the `/status` endpoint and UI during recovery actions.
+**Mechanism**: Decoupled attributes mapped in `LabStatus` dataclass and populated by the `IgnitionManager` in V5.
+
+## [FEAT-220.1] Physical Scavenging (Process Adoption)
+**Status:** DEFEATURED (Sprint 31)
+**Logic**: Scans active ports/processes on boot and "adopts" existing foyer or engine processes into the ledger.
+**Mechanism**: Omitted in V5 in favor of clean-slate namespaces via `ExecStartPre` namespace cleanup (`pkill -9`). Removes "ghost state" traps.
+
