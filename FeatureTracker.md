@@ -1272,3 +1272,12 @@
 **Logic**: Scans active ports/processes on boot and "adopts" existing foyer or engine processes into the ledger.
 **Mechanism**: Omitted in V5 in favor of clean-slate namespaces via `ExecStartPre` namespace cleanup (`pkill -9`). Removes "ghost state" traps.
 
+## [FEAT-374] Tiered Idle Verification Pattern
+**Status:** ACTIVE
+**Logic**: Prevents premature hibernation during direct API usage of the vLLM engine by combining low-overhead TCP connection checks with precise internal engine metrics validation.
+**Mechanism**:
+1.  **Tier 1 (TCP Connection Check)**: Checks if there are active TCP connections on port 8088. If none, proceeds to hibernate.
+2.  **Tier 2 (vLLM Metric Check)**: If connections exist, queries `http://localhost:8088/metrics` or `/health` to verify if the engine is actively executing or queueing requests (`vllm:num_requests_running > 0` or `vllm:num_requests_waiting > 0`). If idle, proceeds to hibernate. Otherwise, resets the idle timer.
+3.  **Grace Window**: Prevents shutdown race conditions during the engine warmup phase by respecting a boot grace period.
+
+

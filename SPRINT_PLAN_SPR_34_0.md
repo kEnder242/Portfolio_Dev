@@ -76,14 +76,29 @@ PYTHONPATH=$(pwd) python run_evals.py --tag baseline --engine vllm
 
 ## ⚡ SPRINT 34 PHASE 4: CORS REMEDIATION & BASELINE EVALUATION (Task 22)
 *Objective: Stabilize dashboard telemetry across origins via CORS credentials allowance, and perform baseline model benchmarking.*
-*Status: ACTIVE*
+*Status: COMPLETE (June 25, 2026)*
 
 ### 📋 Forensic Rationale
 During physical telemetry integration (Phase 2), querying `/telemetry_kpi` and `/sys_metrics` from the static web server (`notes.jason-lab.dev` or port `9001`) to the Foyer Attendant (`pager.jason-lab.dev` or port `8765`) triggered browser CORS `NetworkError` blocks. This occurred because wildcard CORS configurations (`Access-Control-Allow-Origin: *`) are fundamentally incompatible with credentials forwarding (`Access-Control-Allow-Credentials: true`), which is required to pass Cloudflare Access authentication tokens. To resolve this, a custom middleware allowlist is implemented in the Foyer router to dynamically echo the request origin, and fetch calls on the frontend are updated to request credentials forwarding.
 
 ### 🛠️ Tasks
-*   [ ] **Task 22.1 (CORS Middleware Integration)**: Integrate custom `_cors_mw` middleware in `src/v5/foyer/router.py` to echo valid origins and allow credentials.
-*   [ ] **Task 22.2 (Frontend Credentials Forwarding)**: Update `status.html` fetch calls to include `{ credentials: 'include' }`.
-*   [ ] **Task 22.3 (Service Ignition & Verification)**: Restart `lab-attendant.service` and verify dashboard vitals rendering.
-*   [ ] **Task 22.4 (Baseline Eval Execution)**: Execute `run_evals.py` to record baseline metrics in `benchmarks.jsonl`.
+*   [x] **Task 22.0 (Tiered Idle Verification - FEAT-374)**: Implement fast TCP port connection checks and vLLM metric checks inside `IgnitionManager` before triggering natural hibernation.
+*   [x] **Task 22.1 (CORS Middleware Integration)**: Integrate custom `_cors_mw` middleware in `src/v5/foyer/router.py` to echo valid origins and allow credentials.
+*   [x] **Task 22.2 (Frontend Credentials Forwarding)**: Update `status.html` fetch calls to include `{ credentials: 'include' }`.
+*   [x] **Task 22.3 (Service Ignition & Verification)**: Restart `lab-attendant.service` and verify dashboard vitals rendering.
+*   [x] **Task 22.4 (Baseline Eval Execution)**: Execute `run_evals.py` to record baseline metrics in `benchmarks.jsonl`.
+
+### 📋 Phase 4 Execution Challenges & Keep-Awake Strategy
+During baseline evaluation execution, two major blockers were identified and must be managed:
+1. **Hugging Face Hub Lock Contention**:
+   Stale lock files in `~/.cache/huggingface/hub/.locks/` (specifically under `models--sentence-transformers--all-MiniLM-L6-v2/` and `models--nvidia--nemotron-speech-streaming-en-0.6b/`) modified months ago cause the node synchronization (SentenceTransformers and Nemotron STT) to block the Foyer Attendant's single-threaded event loop on startup. This causes a 3-4 minute startup hang.
+   *Remediation*: Delete these stale lock files before restarting the service.
+
+2. **AFK / Idle Timeout Conflict**:
+   The `IgnitionManager` terminates the vLLM engine if no active WebSocket clients connect to the router for more than 120 seconds. Because `run_evals.py` communicates directly with vLLM via HTTP on port 8088 rather than connecting via WebSocket, the router reports 0 active clients, causing the manager to hibernate vLLM mid-evaluation.
+   *Keep-Awake Strategy*: During evaluations, run a background loop calling `/wake` every 50 seconds to refresh the active timer:
+   ```bash
+   while true; do curl -s -X POST http://localhost:8765/wake > /dev/null; sleep 50; done &
+   ```
+
 

@@ -23,7 +23,7 @@
 **Goal:** Deepen retrieval precision via hierarchical indexing/MCompassRAG, and build live token/GPU telemetry & model performance benchmarks.
 
 ## ✅ Global Milestones (June 2026)
-1.  **Semantic & Telemetry [SPR-34.0]**: ACTIVE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation & Baseline Eval) active.
+1.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete.
 2.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
 2.  **Silicon Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
 
