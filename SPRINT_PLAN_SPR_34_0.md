@@ -98,7 +98,27 @@ During baseline evaluation execution, two major blockers were identified and mus
    The `IgnitionManager` terminates the vLLM engine if no active WebSocket clients connect to the router for more than 120 seconds. Because `run_evals.py` communicates directly with vLLM via HTTP on port 8088 rather than connecting via WebSocket, the router reports 0 active clients, causing the manager to hibernate vLLM mid-evaluation.
    *Keep-Awake Strategy*: During evaluations, run a background loop calling `/wake` every 50 seconds to refresh the active timer:
    ```bash
-   while true; do curl -s -X POST http://localhost:8765/wake > /dev/null; sleep 50; done &
-   ```
+    while true; do curl -s -X POST http://localhost:8765/wake > /dev/null; sleep 50; done &
+    ```
 
+---
 
+## ⚡ SPRINT 34 PHASE 5: COGNITIVE TAXONOMY & CACHE ALIGNMENT (COMPLETE)
+*Objective: Collapse intent/vibe taxonomy to eliminate routing conflicts, enforce prefix-caching, and restore peer-to-peer prompt alignment.*
+
+### 📋 Context & Research History
+During casual dialogue testing, the dual taxonomy of `intent` and `vibe` created a structural conflict (e.g., triage classifying `"Hello mice!"` as `intent: CASUAL` but `vibe: TECHNICAL`, bypassing conversational overrides and forcing report-style lecturing). Historically:
+*   **Validation Era (v3.1.9)**: Hard-coded silicon anchors restricted dialogue to strict diagnostics.
+*   **Moat Era (ad1fa25)**: Banter Sanitizers and negative constraints ("NO BANTER") were added to block cross-node bleed, creating a cold, arrogant persona.
+*   **Graft Era (857d891)**: `IDENTITY_BEDROCK` hardcoded subservient roleplay ("The Lead Engineer who built you"), which was baked into the `cli_voice` adapter.
+
+### 🛠️ Proposed Realignment Strategy
+1.  **Collapse Taxonomy**: Remove `intent` from triage schema in `lab_node.py` and rely entirely on `vibe` (e.g. `CASUAL` selects local conversational Pinky, `TECHNICAL` selects strategic Deep Thought).
+2.  **Restore Prefix Caching**: Place a static, objective `IDENTITY_BEDROCK` at the absolute beginning of all node prompts to maximize vLLM prefix cache hits, and append all dynamic context to the end of user queries.
+3.  **Positive Prompting**: Shift from negative constraints to positive style descriptions (collaborative technical peer vs. subservient reporting).
+
+### 📋 Tasks to Review
+*   [x] **Task 23.1 (Taxonomy Simplification)**: Refactor `lab_node.py` and `cognitive_hub.py` to route and style based on `vibe` alone, removing `intent` redundancies.
+*   [x] **Task 23.2 (Prefix Cache Optimization)**: Restructure system prompt assembly to prepend the static bedrock topography, moving all dynamic variables (RAG hints, telemetry, user context) to the query end.
+*   [x] **Task 23.3 (Dream Voice Peer Adaptation)**: Update `dream_voice.py` fine-tuning template to target "engineering peer" rather than "Lead Engineer" and run a refinement burn.
+*   [x] **Task 23.4 (Log Viewer Restoration)**: Resolve the systemd regression by restoring native Foyer trace file reading inside `status.html` to reclaim local execution visibility.

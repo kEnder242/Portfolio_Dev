@@ -278,7 +278,7 @@
     </main>
 
     <script src="assets/marked.min.js"></script>
-    <script src="mission-control.js?v=bd431d08"></script>
+    <script src="mission-control.js?v=f4aec311"></script>
     <script>
         const iframeMain = document.getElementById('grafana-main');
         const root = document.getElementById('log-tree-root');
@@ -978,7 +978,7 @@
                         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                         const url = isLocal ? `http://localhost:8765/logs?file=${logFile}` : `https://pager.jason-lab.dev/logs?file=${logFile}`;
                         
-                        const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" } });
+                        const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" }, credentials: 'include' });
                         if (r.ok) {
                             const text = await r.text();
                             simulateTyping(term, `[FORENSIC SNIP: ${logFile}]\n` + text);
@@ -986,7 +986,9 @@
                             simulateTyping(term, `[CRASH LOG NOT FOUND]\nFile: ${logFile}`);
                         }
                     } else {
-                        const r = await fetch('logs/trace_brain.json');
+                        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                        const url = isLocal ? `http://localhost:8765/logs?file=trace_brain.json` : `https://pager.jason-lab.dev/logs?file=trace_brain.json`;
+                        const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" }, credentials: 'include' });
                         if (r.ok) {
                             const text = await r.text();
                             simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
