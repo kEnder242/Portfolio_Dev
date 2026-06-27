@@ -122,3 +122,13 @@ During casual dialogue testing, the dual taxonomy of `intent` and `vibe` created
 *   [x] **Task 23.2 (Prefix Cache Optimization)**: Restructure system prompt assembly to prepend the static bedrock topography, moving all dynamic variables (RAG hints, telemetry, user context) to the query end.
 *   [x] **Task 23.3 (Dream Voice Peer Adaptation)**: Update `dream_voice.py` fine-tuning template to target "engineering peer" rather than "Lead Engineer" and run a refinement burn.
 *   [x] **Task 23.4 (Log Viewer Restoration)**: Resolve the systemd regression by restoring native Foyer trace file reading inside `status.html` to reclaim local execution visibility.
+
+---
+
+### 🛠️ Post-Sprint Maintenance & Verification (June 27, 2026)
+* **Problem**: Nightly automated fine-tuning (sequenced batch forge) was silent and failing. During the V5 modular refactor, the `/train` endpoint was omitted from the `FoyerRouter` (port `8765`). When the `IgnitionManager` triggered `acme_lab.py --trigger-task forge`, the router attempted to call the `lab_train_adapter` tool on the logical `archive` node. However, because logical nodes hibernate when the physical vLLM engine is stopped (which is required to free VRAM for Unsloth training), the `archive` node was `None`, resulting in an unhandled silent deadlock.
+* **Solution**: 
+  1. Restored the `/train` REST endpoint in `router.py` to compile specified adapters using async subprocess calls to `train_expert.py`.
+  2. Bypassed the logical node boot requirement in `handle_trigger_task` by executing local HTTP POST requests directly to the `/train` route.
+* **Validation**: Verified by executing a 1-step micro-burn for the `cli_voice` adapter. The process ran successfully and compiled the PEFT adapter weights to `/speedy/models/adapters/cli_voice`. Service restarted cleanly under systemd.
+
