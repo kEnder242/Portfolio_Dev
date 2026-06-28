@@ -65,7 +65,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
 *   [x] **Task 1.3 (Hemispheric Sandbox Tool Isolation)**:
     *   **Why**: Prevent model tool hallucinations and protect system repositories from accidental execution of git or systemd tools during normal validation runs.
     *   **How (Mechanism)**: Update `src/logic/cognitive_hub.py` to inspect the triage vibe. If the vibe is NOT `META`, filter the available MCP tools, stripping out git, systemd, and state-machine controllers from the node's environment.
-*   [ ] **Task 1.4 (Re-enable Nightly Induction Window)**:
+*   [x] **Task 1.4 (Re-enable Nightly Induction Window)**:
     *   **Why**: Ensure the daily automated training sequence runs correctly at 2am after active development is complete.
     *   **How (Mechanism)**: Remove the `disable_induction.lock` file and perform a system check to verify that `is_window` status checks remain stable and responsive.
     *   **Proof (Validation)**: Remove `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/disable_induction.lock`, run a status query, and verify from log check that `disable_induction.lock` file is absent.
