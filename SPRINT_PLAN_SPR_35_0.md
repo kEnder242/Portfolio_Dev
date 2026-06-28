@@ -22,19 +22,20 @@ Currently, dataset extraction (`extract_gemini_prompts.py`), refinement (`refine
 *Objective: Layer specialized low-rank adapters at runtime instead of relying on a monolithic voice/history file.*
 
 ### 📋 Context & Research Blueprint
-Monolithic adapters (like the historical `cli_voice`) risk overfitting or pigeonholing the model to narrow personas. In Sprint 35, we will explore leveraging vLLM's native dynamic adapter hot-swapping:
-1. **Specialized Experts**: Train tiny, high-density, single-purpose adapters:
-   - `telemetry_audit_lora`: Expert in GPU/PCIe/MSR registers.
-   - `architecture_lora`: Expert in systems design and BKM documentation.
-   - `conversational_casual_lora`: A pure dialogue/banter foil.
-2. **Dynamic Layering**: The Foyer Router will read triage vibes from the Sentinel node and dynamically load/combine these adapters in the inference request headers on-the-fly, providing tailored cognitive loadouts for each user query.
+Monolithic adapters risk overfitting or pigeonholing the model to narrow personas. In Sprint 35, we will explore leveraging vLLM's native dynamic adapter hot-swapping:
+1. **Vibe Grouping Scheme**: Rather than running 7 separate adapters (exceeding our VRAM slot budget), we group the taxonomy into three high-fidelity target adapters:
+   - `cli_voice`: Expert in conversational flow and natural foil dialogue (mapping to the `CASUAL` vibe).
+   - `architect`: Expert in systems validation, diagnostics, and telemetry analysis (consolidating the `TECHNICAL`, `OPERATIONAL`, and `ANALYTICAL` vibes).
+   - `history`: Expert in historical notes, design pedigrees, and retrospective lookups (consolidating the `HISTORICAL` and `FORENSIC` vibes).
+2. **Prompt-Resident Triage API**: Keep the triage node (Lab Sentinel) prompt-resident to maintain agile schema editing and avoid compile lock. Downstream experts (Brain, Pinky) will be trained via dataset distillation to natively expect, parse, and act on the triage payload (hints, vibes, and domains).
 
 ---
 
-## 🛡️ CONCEPT 3: THE SELF-AWARENESS SHIELD (CONTEXT ISOLATION)
-*Objective: Prevent memory bleed between lab orchestration files and physical engineering tasks.*
+## 🛡️ CONCEPT 3: THE SELF-AWARENESS SHIELD (HEMISPHERIC SANDBOX)
+*Objective: Prevent memory and tool bleed between lab orchestration files and physical engineering tasks.*
 
 ### 📋 Context & Research Blueprint
-To prevent the model from confusing its own developmental metadata ("outside looking in" at its own state machine/systemd files) with active validation engineering tasks ("inside the lab" looking at telemetry), we will enforce strict semantic isolation:
+To prevent the model from confusing its own developmental metadata ("outside looking in" at its own state machine/systemd files) with active validation engineering tasks ("inside the lab" looking at telemetry), we will enforce strict semantic and functional isolation:
 1. **Vibe Classification Guard**: The triage Sentinel node will classify queries concerning development plans, `Protocols.md`, or orchestrator details as `vibe: META`.
-2. **Prompt Routing**: Queries flagged as `vibe: META` will load system instructions containing lab metadata, while standard technical queries will be routed strictly to the engineering workspace logs and BKMs, completely shielding the model from developmental awareness during core engineering tasks.
+2. **Hemispheric Sandbox (Tool Isolation)**: To ensure safety and context purity, the `CognitiveHub` will dynamically strip and disable system-level tools (git commands, state-machine overrides, systemd controls) from the node's environment when executing standard engineering tasks (`TECHNICAL`/`HISTORY`).
+3. **Prompt Routing**: Queries flagged as `vibe: META` will load system instructions containing lab metadata and expose system-level tools, while standard technical queries will be routed strictly to the engineering workspace logs and BKMs, completely shielding the model from developmental awareness during core engineering tasks.
