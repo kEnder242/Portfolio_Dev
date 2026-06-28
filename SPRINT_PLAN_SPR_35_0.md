@@ -39,3 +39,30 @@ To prevent the model from confusing its own developmental metadata ("outside loo
 1. **Vibe Classification Guard**: The triage Sentinel node will classify queries concerning development plans, `Protocols.md`, or orchestrator details as `vibe: META`.
 2. **Hemispheric Sandbox (Tool Isolation)**: To ensure safety and context purity, the `CognitiveHub` will dynamically strip and disable system-level tools (git commands, state-machine overrides, systemd controls) from the node's environment when executing standard engineering tasks (`TECHNICAL`/`HISTORY`).
 3. **Prompt Routing**: Queries flagged as `vibe: META` will load system instructions containing lab metadata and expose system-level tools, while standard technical queries will be routed strictly to the engineering workspace logs and BKMs, completely shielding the model from developmental awareness during core engineering tasks.
+
+---
+
+## ⚡ SPRINT 35 PHASE 1: DATASET CLOSED-LOOP AUTOMATION & HEMISPHERIC SHIELDING
+*Objective: Implement the data transition scripts, documentation distiller, automated pre-forge refresh, and tool isolation.*
+*Status: PLANNED (Awaiting Greenlight)*
+
+### 📋 Forensic Rationale
+To fulfill the strategic goals of closed-loop training and context safety, we require robust scripting to transition legacy CLI logs, extract conceptual QA records from project files, automate the nightly pipeline steps before model hibernation, and isolate toolsets at the router level during standard non-META queries. Each task is executed under the strict BKM-029 loop.
+
+### 🛠️ Tasks
+*   [ ] **Task 1.0 (Transitional Log Merger)**:
+    *   **Why**: Prevent losing historical conversation inputs during the migration to AGY CLI app data formats.
+    *   **How (Mechanism)**: Modify `src/forge/extract_gemini_prompts.py` to search for chat transcripts in both legacy `~/.gemini/tmp/**/chats/*.json` and new AGY `/home/jallred/.gemini/antigravity-cli/brain/` directories, deduplicating and merging their outputs into `gemini_prompts_manifest.jsonl`.
+    *   **Proof (Validation)**: Run `extract_gemini_prompts.py` and verify the log output reports parsing files from both roots and saving a valid manifest.
+*   [ ] **Task 1.1 (The Documentation Distiller)**:
+    *   **Why**: Teach local models BKM structures and system logic from actual markdown files without raw text overfitting.
+    *   **How (Mechanism)**: Create a new pipeline script `src/forge/distill_documentation.py` that reads specified markdown files, uses the active 4090 Brain to generate structured QA pairs (Question/Response format), and appends them to `bkm_master_manifest.jsonl`.
+    *   **Proof (Validation)**: Run the distiller on `Protocols.md` and verify that the generated JSONL contains valid instruction/output formatting.
+*   [ ] **Task 1.2 (Ignition Pre-Forge Dataset Refresh)**:
+    *   **Why**: Automate dialogue learning so that daily user interactions are trained into the weights during the next nightly loop.
+    *   **How (Mechanism)**: Update `src/v5/ignition/manager.py` within the daily alarm sequence to trigger the dataset generation sequence (`extract_gemini_prompts.py`, `refine_prompts.py`, `dream_voice.py`, and `build_lora_datasets.py`) prior to calling `stop_lab` and invoking `train_expert.py`.
+    *   **Proof (Validation)**: Perform a dry-run of the alarm flow and verify from the attendant logs that the dataset compilation scripts are invoked in sequence before training commands.
+*   [ ] **Task 1.3 (Hemispheric Sandbox Tool Isolation)**:
+    *   **Why**: Prevent model tool hallucinations and protect system repositories from accidental execution of git or systemd tools during normal validation runs.
+    *   **How (Mechanism)**: Update `src/logic/cognitive_hub.py` to inspect the triage vibe. If the vibe is NOT `META`, filter the available MCP tools, stripping out git, systemd, and state-machine controllers from the node's environment.
+    *   **Proof (Validation)**: Execute a test query with `vibe: TECHNICAL` attempting to invoke a git command and verify the Hub throws a tool-blocked error.
