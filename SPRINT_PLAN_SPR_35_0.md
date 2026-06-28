@@ -1,5 +1,5 @@
 # 🏗️ SPRINT 35: CLOSED-LOOP TRAINING & ADAPTIVE LORAS
-*Status: PLANNED*
+*Status: ACTIVE*
 
 ### 🎯 MISSION
 Transition the Acme Lab from a semi-automated batch training workflow into a fully closed-loop, self-refreshing intelligence lifecycle. Building upon the VRAM and audio pre-emption optimizations stabilized in Sprint 34, this sprint introduces the blueprint for automated daily dataset harvesting/dreaming, dynamic multi-LoRA domain-specific layering at runtime, and strict context shielding to prevent self-awareness bleed.
