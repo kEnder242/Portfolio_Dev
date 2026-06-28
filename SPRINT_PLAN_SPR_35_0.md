@@ -44,13 +44,13 @@ To prevent the model from confusing its own developmental metadata ("outside loo
 
 ## ⚡ SPRINT 35 PHASE 1: DATASET CLOSED-LOOP AUTOMATION & HEMISPHERIC SHIELDING
 *Objective: Implement the data transition scripts, documentation distiller, automated pre-forge refresh, and tool isolation.*
-*Status: PLANNED (Awaiting Greenlight)*
+*Status: ACTIVE*
 
 ### 📋 Forensic Rationale
 To fulfill the strategic goals of closed-loop training and context safety, we require robust scripting to transition legacy CLI logs, extract conceptual QA records from project files, automate the nightly pipeline steps before model hibernation, and isolate toolsets at the router level during standard non-META queries. Each task is executed under the strict BKM-029 loop.
 
 ### 🛠️ Tasks
-*   [ ] **Task 1.0 (Transitional Log Merger)**:
+*   [x] **Task 1.0 (Transitional Log Merger)**:
     *   **Why**: Prevent losing historical conversation inputs during the migration to AGY CLI app data formats.
     *   **How (Mechanism)**: Modify `src/forge/extract_gemini_prompts.py` to search for chat transcripts in both legacy `~/.gemini/tmp/**/chats/*.json` and new AGY `/home/jallred/.gemini/antigravity-cli/brain/` directories, deduplicating and merging their outputs into `gemini_prompts_manifest.jsonl`.
     *   **Proof (Validation)**: Run `extract_gemini_prompts.py` and verify the log output reports parsing files from both roots and saving a valid manifest.
