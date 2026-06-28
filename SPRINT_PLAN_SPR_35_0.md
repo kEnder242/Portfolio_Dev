@@ -54,7 +54,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
     *   **Why**: Prevent losing historical conversation inputs during the migration to AGY CLI app data formats.
     *   **How (Mechanism)**: Modify `src/forge/extract_gemini_prompts.py` to search for chat transcripts in both legacy `~/.gemini/tmp/**/chats/*.json` and new AGY `/home/jallred/.gemini/antigravity-cli/brain/` directories, deduplicating and merging their outputs into `gemini_prompts_manifest.jsonl`.
     *   **Proof (Validation)**: Run `extract_gemini_prompts.py` and verify the log output reports parsing files from both roots and saving a valid manifest.
-*   [ ] **Task 1.1 (The Documentation Distiller)**:
+*   [x] **Task 1.1 (The Documentation Distiller)**:
     *   **Why**: Teach local models BKM structures and system logic from actual markdown files without raw text overfitting.
     *   **How (Mechanism)**: Create a new pipeline script `src/forge/distill_documentation.py` that reads specified markdown files, uses the active 4090 Brain to generate structured QA pairs (Question/Response format), and appends them to `bkm_master_manifest.jsonl`.
     *   **Proof (Validation)**: Run the distiller on `Protocols.md` and verify that the generated JSONL contains valid instruction/output formatting.
