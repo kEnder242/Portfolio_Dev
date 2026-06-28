@@ -58,7 +58,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
     *   **Why**: Teach local models BKM structures and system logic from actual markdown files without raw text overfitting.
     *   **How (Mechanism)**: Create a new pipeline script `src/forge/distill_documentation.py` that reads specified markdown files, uses the active 4090 Brain to generate structured QA pairs (Question/Response format), and appends them to `bkm_master_manifest.jsonl`.
     *   **Proof (Validation)**: Run the distiller on `Protocols.md` and verify that the generated JSONL contains valid instruction/output formatting.
-*   [ ] **Task 1.2 (Ignition Pre-Forge Dataset Refresh)**:
+*   [x] **Task 1.2 (Ignition Pre-Forge Dataset Refresh)**:
     *   **Why**: Automate dialogue learning so that daily user interactions are trained into the weights during the next nightly loop.
     *   **How (Mechanism)**: Update `src/v5/ignition/manager.py` within the daily alarm sequence to trigger the dataset generation sequence (`extract_gemini_prompts.py`, `refine_prompts.py`, `dream_voice.py`, and `build_lora_datasets.py`) prior to calling `stop_lab` and invoking `train_expert.py`.
     *   **Proof (Validation)**: Perform a dry-run of the alarm flow and verify from the attendant logs that the dataset compilation scripts are invoked in sequence before training commands.
