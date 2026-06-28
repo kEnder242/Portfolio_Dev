@@ -62,7 +62,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
     *   **Why**: Automate dialogue learning so that daily user interactions are trained into the weights during the next nightly loop.
     *   **How (Mechanism)**: Update `src/v5/ignition/manager.py` within the daily alarm sequence to trigger the dataset generation sequence (`extract_gemini_prompts.py`, `refine_prompts.py`, `dream_voice.py`, and `build_lora_datasets.py`) prior to calling `stop_lab` and invoking `train_expert.py`.
     *   **Proof (Validation)**: Perform a dry-run of the alarm flow and verify from the attendant logs that the dataset compilation scripts are invoked in sequence before training commands.
-*   [ ] **Task 1.3 (Hemispheric Sandbox Tool Isolation)**:
+*   [x] **Task 1.3 (Hemispheric Sandbox Tool Isolation)**:
     *   **Why**: Prevent model tool hallucinations and protect system repositories from accidental execution of git or systemd tools during normal validation runs.
     *   **How (Mechanism)**: Update `src/logic/cognitive_hub.py` to inspect the triage vibe. If the vibe is NOT `META`, filter the available MCP tools, stripping out git, systemd, and state-machine controllers from the node's environment.
     *   **Proof (Validation)**: Execute a test query with `vibe: TECHNICAL` attempting to invoke a git command and verify the Hub throws a tool-blocked error.
