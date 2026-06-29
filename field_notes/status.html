@@ -114,6 +114,8 @@
         .severity-critical { color: #ff3b30; font-weight: bold; border-left-color: #ff3b30; background: rgba(255,59,48,0.08); margin-bottom: 10px; padding: 10px 15px; border-top: 1px solid #661111; border-bottom: 1px solid #661111; border-right: 1px solid #661111; }
         .severity-warning { color: #ffcc00; font-weight: bold; border-left-color: #ffcc00; background: rgba(255,204,0,0.05); margin-bottom: 10px; padding: 10px 15px; border-top: 1px solid #443300; border-bottom: 1px solid #443300; border-right: 1px solid #443300; }
         .severity-info { color: #888; border-left-color: #444; background: rgba(255,255,255,0.02); }
+        .source-acme { border-left-color: #58a6ff !important; background: rgba(88, 166, 255, 0.04); color: #c9d1d9; }
+        .has-artifact { border-left-color: #3fb950 !important; background: rgba(63, 185, 80, 0.05) !important; color: #c9d1d9; }
         .alert-item { transition: all 0.2s ease; cursor: pointer; }
         .alert-item:hover { background: rgba(255,255,255,0.05); border-right: 2px solid var(--accent-color); }
         .inline-terminal { display: none; background: #000; border: 1px solid #333; padding: 15px; font-family: monospace; font-size: 0.8rem; line-height: 1.4; color: #aaa; margin: 10px 0; overflow-x: auto; white-space: pre-wrap; border-left: 2px solid var(--accent-color); }
@@ -929,7 +931,33 @@
         function createAlertElement(alert) {
             const div = document.createElement('div');
             div.dataset.id = alert.timestamp + '-' + alert.source;
-            div.className = `alert-item severity-${(alert.severity || 'info').toLowerCase()}`;
+            
+            const severity = (alert.severity || 'info').toLowerCase();
+            const source = (alert.source || '').toLowerCase();
+            const msg = (alert.message || '').toLowerCase();
+            
+            let extraClass = '';
+            
+            // 1. Detect if it has an artifact/report (Green)
+            const hasArtifact = source === 'recruiter' || 
+                                msg.includes('.md') || 
+                                msg.includes('.patch') || 
+                                msg.includes('.json') || 
+                                msg.includes('report') || 
+                                msg.includes('artifact') ||
+                                msg.includes('gem refined') || 
+                                msg.includes('distilled');
+            
+            // 2. Detect if it is an acme-lab specific process (Blue)
+            const isAcme = ['system', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect'].includes(source);
+            
+            if (hasArtifact) {
+                extraClass = 'has-artifact';
+            } else if (isAcme) {
+                extraClass = 'source-acme';
+            }
+            
+            div.className = `alert-item severity-${severity} ${extraClass}`;
             
             const d = new Date(alert.timestamp.includes('T') ? alert.timestamp : alert.timestamp.replace(' ', 'T'));
             const timeStr = !isNaN(d.getTime()) ? d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "??:??";
@@ -961,17 +989,71 @@
             term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>\n";
             
             try {
-                if (alert.source === 'Recruiter') {
-                    const briefName = alert.message.split(': ')[1];
-                    if (briefName) {
-                        const r = await fetch(`data/recruiter_briefs/${briefName}`);
-                        const text = await r.text();
-                        // Use marked.js for high-fidelity rendering
-                        term.innerHTML = `<div class='markdown-body'>${marked.parse(text)}</div>`;
-                        term.style.display = 'block';
+                // 1. Check for Recruiter Briefs
+                if (alert.source.toLowerCase() === 'recruiter') {
+                    const briefMatch = alert.message.match(/brief_[a-zA-Z0-9_.-]+/);
+                    const briefName = briefMatch ? briefMatch[0] : alert.message.split(': ')[1];
+                    if (briefName && briefName.trim()) {
+                        const r = await fetch(`data/recruiter_briefs/${briefName.trim()}`);
+                        if (r.ok) {
+                            const text = await r.text();
+                            term.innerHTML = `
+                                <div style="margin-bottom: 12px; font-family: monospace; font-size: 0.75rem;">
+                                    <a href="data/recruiter_briefs/${briefName.trim()}" target="_blank" style="color: #3fb950; text-decoration: underline; font-weight: bold;">📄 VIEW BRIEF IN NEW TAB</a>
+                                    &nbsp;|&nbsp;
+                                    <a href="data/recruiter_briefs/${briefName.trim()}" download style="color: #3fb950; text-decoration: underline; font-weight: bold;">⬇️ DOWNLOAD MARKDOWN FILE</a>
+                                </div>
+                                <div class='markdown-body'>${marked.parse(text)}</div>
+                            `;
+                            term.style.display = 'block';
+                            return;
+                        }
                     }
-                } else if (alert.source === 'System' || alert.source === 'LabAttendant') {
-                    // [FEAT-311] Crash Evidence Bridge: Detect crash logs in message
+                }
+                
+                // 2. Generic Artifact/File parser (.md, .patch, .json, .log)
+                const fileMatch = alert.message.match(/[a-zA-Z0-9_.-]+\.(md|patch|json|log|jsonl)/i);
+                if (fileMatch) {
+                    const fileName = fileMatch[0];
+                    if (fileName.startsWith("brief_")) {
+                        const r = await fetch(`data/recruiter_briefs/${fileName}`);
+                        if (r.ok) {
+                            const text = await r.text();
+                            term.innerHTML = `
+                                <div style="margin-bottom: 12px; font-family: monospace; font-size: 0.75rem;">
+                                    <a href="data/recruiter_briefs/${fileName}" target="_blank" style="color: #3fb950; text-decoration: underline; font-weight: bold;">📄 VIEW BRIEF</a>
+                                    &nbsp;|&nbsp;
+                                    <a href="data/recruiter_briefs/${fileName}" download style="color: #3fb950; text-decoration: underline; font-weight: bold;">⬇️ DOWNLOAD BRIEF</a>
+                                </div>
+                                <div class='markdown-body'>${marked.parse(text)}</div>
+                            `;
+                            term.style.display = 'block';
+                            return;
+                        }
+                    }
+                    
+                    // Check other local data folder endpoints
+                    const r = await fetch(`data/${fileName}`);
+                    if (r.ok) {
+                        const text = await r.text();
+                        const isJson = fileName.endsWith('.json') || fileName.endsWith('.jsonl');
+                        const displayContent = isJson ? JSON.stringify(JSON.parse(text), null, 2) : text;
+                        term.innerHTML = `
+                            <div style="margin-bottom: 12px; font-family: monospace; font-size: 0.75rem;">
+                                <a href="data/${fileName}" target="_blank" style="color: #3fb950; text-decoration: underline; font-weight: bold;">📄 VIEW ARTIFACT</a>
+                                &nbsp;|&nbsp;
+                                <a href="data/${fileName}" download style="color: #3fb950; text-decoration: underline; font-weight: bold;">⬇️ DOWNLOAD FILE</a>
+                            </div>
+                            <pre style="background: #0d1117; color: #c9d1d9; border: 1px solid #30363d; padding: 10px; border-radius: 4px; overflow-x: auto; white-space: pre; font-size: 0.75rem;">${displayContent}</pre>
+                        `;
+                        term.style.display = 'block';
+                        return;
+                    }
+                }
+                
+                // 3. Fallback: System or LabAttendant specific crash/trace lookups
+                const sourceLower = alert.source.toLowerCase();
+                if (sourceLower === 'system' || sourceLower === 'labattendant' || sourceLower === 'foyer' || sourceLower === 'ignition') {
                     const crashMatch = alert.message.match(/crash_\d+\.log/);
                     if (crashMatch) {
                         const logFile = crashMatch[0];
