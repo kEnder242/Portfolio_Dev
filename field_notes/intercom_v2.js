@@ -32,9 +32,12 @@ const seenMsgIds = new Set();
 const MAX_SEEN_IDS = 50;
 
 // --- INITIALIZATION ---
+let isRestoringHistory = false;
+
 document.addEventListener('DOMContentLoaded', () => {
     initEditor();
     initResizer();
+    loadHistory();
     connect();
     pollSystemStatus();
     
@@ -47,6 +50,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function loadHistory() {
+    try {
+        isRestoringHistory = true;
+        const history = JSON.parse(sessionStorage.getItem('acme_chat_history') || '[]');
+        history.forEach(item => {
+            appendMsg(item.text, item.type, item.source, item.channel, false, item.metadata);
+        });
+        
+        const savedFile = sessionStorage.getItem('acme_active_file');
+        const savedContent = sessionStorage.getItem('acme_active_file_content');
+        if (savedFile && savedContent !== null) {
+            activeFilename.textContent = savedFile;
+            // Delay editor value update slightly to ensure editor has finished loading
+            setTimeout(() => {
+                if (editor) editor.value(savedContent);
+            }, 100);
+        }
+    } catch (e) {
+        console.error("Failed to load history", e);
+    } finally {
+        isRestoringHistory = false;
+    }
+}
+
 function initEditor() {
     editor = new EasyMDE({
         element: document.getElementById('workspace-content'),
@@ -56,6 +83,14 @@ function initEditor() {
         toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen"],
         minHeight: "100px"
     });
+
+    if (editor && editor.codemirror) {
+        editor.codemirror.on("change", () => {
+            try {
+                sessionStorage.setItem('acme_active_file_content', editor.value());
+            } catch (e) {}
+        });
+    }
 }
 
 function initResizer() {
@@ -97,6 +132,18 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     if (clear) {
         target.innerHTML = `<div class="panel-header">${channel === 'insight' ? "Brain's Insight" : "Pinky's Console"}</div>`;
+        if (!isRestoringHistory) {
+            sessionStorage.removeItem('acme_chat_history');
+        }
+    }
+
+    if (!isRestoringHistory && !clear && type !== 'hearing' && !text.includes('Connecting to') && !text.includes('Microphone Active') && !text.includes('Microphone Muted') && !text.includes('Larynx is warming')) {
+        try {
+            const history = JSON.parse(sessionStorage.getItem('acme_chat_history') || '[]');
+            history.push({ text, type, source, channel, metadata });
+            if (history.length > 60) history.shift();
+            sessionStorage.setItem('acme_chat_history', JSON.stringify(history));
+        } catch (e) {}
     }
 
     if (channel === 'whiteboard' || channel === 'workspace') {
@@ -420,6 +467,10 @@ function connect() {
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
                 editor.value(data.content);
+                try {
+                    sessionStorage.setItem('acme_active_file', data.filename);
+                    sessionStorage.setItem('acme_active_file_content', data.content);
+                } catch (e) {}
             } else if (data.brain) {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
                     msg_id: data.msg_id, // [FIX] Task 2.4: Bridge the ID
