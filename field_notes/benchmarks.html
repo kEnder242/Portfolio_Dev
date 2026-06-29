@@ -283,7 +283,7 @@
     </style>
 </head>
 <body>
-    <script src="mission-control.js?v=bd431d08"></script>
+    <script src="mission-control.js?v=f4aec311"></script>
 
     <main class="main-content">
         <div class="bench-header">
@@ -428,23 +428,23 @@
                 card.innerHTML = `
                     <div class="model-name">${model}</div>
                     <div class="model-stat">
-                        <span class="stat-label">RUNS</span>
+                        <span class="stat-label" style="cursor: help; border-bottom: 1px dotted #555;" title="Number of evaluation prompts executed in this run">RUNS</span>
                         <span class="stat-value">${s.runs}</span>
                     </div>
                     <div class="model-stat">
-                        <span class="stat-label">AVG SCORE</span>
+                        <span class="stat-label" style="cursor: help; border-bottom: 1px dotted #555;" title="Average accuracy score (0-5) graded by the LLM-as-a-Judge based on response completeness">AVG SCORE</span>
                         <span class="stat-value" style="color:${scoreColor(s.avg_score)}">${s.avg_score}/5</span>
                     </div>
                     <div class="model-stat">
-                        <span class="stat-label">TOK/S</span>
+                        <span class="stat-label" style="cursor: help; border-bottom: 1px dotted #555;" title="Throughput - average number of generated tokens per second">TOK/S</span>
                         <span class="stat-value" style="color:#3fb950;">${s.avg_tps.toFixed(1)}</span>
                     </div>
                     <div class="model-stat">
-                        <span class="stat-label">GPU POWER</span>
+                        <span class="stat-label" style="cursor: help; border-bottom: 1px dotted #555;" title="Average active power consumed by the GPU during generation (Watts)">GPU POWER</span>
                         <span class="stat-value" style="color:#f78166;">${s.avg_power_w.toFixed(0)}W</span>
                     </div>
                     <div class="model-stat">
-                        <span class="stat-label">J / TOKEN</span>
+                        <span class="stat-label" style="cursor: help; border-bottom: 1px dotted #555;" title="Joules per Token - calculated as (Average Watts * Generation Seconds) / Total Tokens. Low value indicates higher energy efficiency.">J / TOKEN</span>
                         <span class="stat-value" style="color:#d2a8ff;">${s.avg_j_tok.toFixed(4)}</span>
                     </div>
                     <div class="score-bar">
@@ -484,11 +484,11 @@
                         <th>TIME</th>
                         <th>ID</th>
                         <th>MODEL</th>
-                        <th>SCORE</th>
-                        <th>TOK/S</th>
-                        <th>TTFT</th>
-                        <th>POWER</th>
-                        <th>J/TOK</th>
+                        <th style="cursor: help;" title="LLM-as-a-Judge accuracy score (0-5) based on answer completeness and truthfulness">SCORE</th>
+                        <th style="cursor: help;" title="Throughput: average number of generated tokens per second">TOK/S</th>
+                        <th style="cursor: help;" title="Time To First Token: latency in milliseconds before the initial token is output">TTFT</th>
+                        <th style="cursor: help;" title="Average active GPU power draw (Watts) during token generation">POWER</th>
+                        <th style="cursor: help;" title="Joules per Token: silicon energy efficiency (average watts * duration / total tokens)">J/TOK</th>
                         <th>TAGS</th>
                         <th></th>
                     </tr>

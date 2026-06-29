@@ -16,7 +16,8 @@ HTML_FILES = [
     "files.html", 
     "status.html",
     "research.html",
-    "intercom.html"
+    "intercom.html",
+    "benchmarks.html"
 ]
 TRAILERS_DIR = os.path.join(BASE_DIR, "assets/trailers")
 
