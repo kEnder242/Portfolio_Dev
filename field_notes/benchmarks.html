@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="style.css?v=6c0ea37d">
     <style>
         /* ── Page-level overrides ─────────────────────────────── */
         body { background: #010409; }
@@ -283,9 +283,13 @@
     </style>
 </head>
 <body>
-    <script src="mission-control.js?v=f4aec311"></script>
+    <button id="menu-toggle">☰ MENU</button>
 
-    <main class="main-content">
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
         <div class="bench-header">
             <h1>Silicon Benchmarking</h1>
             <p>[BKM-032] LLM-as-a-Judge | Scored 1-5 | Live silicon metrics from DCGM</p>
@@ -651,5 +655,6 @@
         // Auto-refresh every 5 minutes
         setInterval(loadBenchmarks, 300000);
     </script>
+    <script src="mission-control.js?v=f4aec311"></script>
 </body>
 </html>
