@@ -113,7 +113,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
         5. **Vibe-Aware Tone**: Pass the current triage vibe context into `evaluate_grounding()` to dynamically shape Pinky's critique tone.
     *   **Proof (Validation)**: Run unit tests and verify that a casual direct query to the Brain results in a Brain response on the Insight Pane with Pinky remaining silent, whereas high-interest queries trigger a vibe-aware Grounding Gate critique in the Chat Pane.
 
-*   [ ] **Task 1.7 (Silicon Benchmark presentation & hygiene)**:
+*   [x] **Task 1.7 (Silicon Benchmark presentation & hygiene)**:
     *   **Why**: Clean up failed boot run metrics from the public-facing dashboard presentation to prevent skewed averages, while retaining transparency via interactive toggles and clean back-end data hygiene.
     *   **How (Mechanism)**:
         1. **Front-End Toggle**: Add a "Show Failures" checkbox next to the control buttons in `field_notes/benchmarks.html`.
