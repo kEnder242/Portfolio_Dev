@@ -88,20 +88,26 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
 ### 📋 Context & Research Blueprint
 1. **The Standard Waterfall (The Interest Loop)**:
    - **Trigger**: A general query is parsed.
-   - **Flow**: User -> Triage -> Pinky (first pass in Chat Pane) -> Brain & Deep Thought (Insight Pane, scaling down based on interest decay) -> Pinky (Grounding Gate critique in Chat Pane).
-   - **Role**: Pinky is the conversational interface/foil for the entire cascade.
+   - **Flow**: User -> Triage -> Pinky (first pass in Chat Pane) -> Brain & Deep Thought (Insight Pane, scaling down based on interest decay).
+   - **The Grounding Gate Trigger**:
+     - Calculated as `importance = fuel`. If the strategic text is long (`len(text) > 800`), boost importance by `+0.2` (capped at `1.0`).
+     - **If `importance > 0.5`**: Prompt Pinky to critique the output in the Chat Pane. The critique's tone adapts dynamically to the active triage vibe (e.g., forensic, historical, analytical).
+     - **If `importance <= 0.5`**: Pinky remains silent, leaving the detailed strategic output in the Insight Pane.
 2. **The Direct Brain Exception (Non-Interest Loop)**:
-   - **Trigger**: The user explicitly addresses the Brain (e.g. "Hi Brain! How are you doing!"). Triage sets `addressed_to: BRAIN` and `vibe: CASUAL`.
-   - **Flow**: User -> Triage -> Brain Node directly replies and streams directly to the Chat Pane (instead of the Insight Pane).
-   - **Role**: The Brain acts as the direct conversational participant, bypassing Pinky and the standard interest cascade.
+   - **Trigger**: The user explicitly addresses the Brain (e.g., "Hi Brain! How are you doing!"). Triage sets `addressed_to: BRAIN`.
+   - **Flow**: User -> Triage -> Brain Node directly replies.
+   - **Functional Restriction**: The Brain and Deep Thought nodes write *exclusively* to the **Insight Pane**. Pinky's Console (Chat Pane) is strictly reserved for Pinky. If the query does not trigger the Grounding Gate threshold (`> 0.5`), Pinky remains silent, and the conversational Chat Pane has no unnecessary interjection.
 
 ### 🛠️ Tasks
 *   [ ] **Task 1.6 (Waterfall & Direct Routing Path Refactor)**:
     *   **Why**: Ensure the hub cleanly supports both the full interest-based waterfall cascade and the direct-address conversational exception for the Brain.
-    *   **How (Mechanism)**: Update the routing logic in `src/logic/cognitive_hub.py` to:
-        1. If `"brain"` or `"deep"` is addressed and vibe is `CASUAL`, route directly to the Brain to generate a direct chat reply streamed to the `chat` channel.
-        2. Otherwise, for standard technical/archival cascades, execute the full sequence (Pinky first pass -> Brain/Thought insight stream -> Pinky Grounding Gate critique).
-    *   **Proof (Validation)**: Verify that queries directly addressing the Brain conversationally output directly to the Chat Pane without Pinky, while technical queries run the full sequential loop.
+    *   **How (Mechanism)**: Update the routing logic and Grounding Gate in `src/logic/cognitive_hub.py` to:
+        1. Parse the triage target (`addressed_to: BRAIN`).
+        2. Ensure the Brain node's fast response is routed exclusively to the `insight` channel (Insight Pane), bypassing Pinky's initial conversational turn.
+        3. Implement the `0.5` fuel threshold check inside `evaluate_grounding()`, including the length-based importance scaling.
+        4. Pass the current triage vibe context into `evaluate_grounding()` to dynamically shape Pinky's critique tone.
+    *   **Proof (Validation)**: Run unit tests and verify that a casual direct query to the Brain results in a Brain response on the Insight Pane with Pinky remaining silent, whereas high-interest queries trigger a vibe-aware Grounding Gate critique in the Chat Pane.
+
 
 
 
