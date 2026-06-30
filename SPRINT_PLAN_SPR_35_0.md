@@ -101,7 +101,7 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
    - **Functional Restriction**: The Brain and Deep Thought nodes write *exclusively* to the **Insight Pane**. Pinky's Console (Chat Pane) is strictly reserved for Pinky. If the query does not trigger the Grounding Gate threshold (`> 0.5`), Pinky remains silent, and the conversational Chat Pane has no unnecessary interjection.
 
 ### 🛠️ Tasks
-*   [ ] **Task 1.6 (Waterfall & Direct Routing Path Refactor)**:
+*   [x] **Task 1.6 (Waterfall & Direct Routing Path Refactor)**:
     *   **Why**: Ensure the hub cleanly supports both the full interest-based waterfall cascade and the direct-address conversational exception for the Brain, while standardizing naming conventions.
     *   **How (Mechanism)**: Update the routing logic and Grounding Gate in `src/logic/cognitive_hub.py` to:
         1. **Terminology Cleanup**: Rename all code-level references of `fuel` to `interest` (e.g., in `evaluate_grounding()`, `_run_brain_leg()`, and `process_query()`).
