@@ -80,5 +80,29 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
         5. **Test Alignment**: Resolve case-sensitive source name string mismatches (e.g. `[BRAIN (ARCHIVE)]` vs `Brain`) in `test_frontend_5x5.py` and `test_v5_sprint32_mechanics.py`.
     *   **Proof (Validation)**: Run `pytest src/tests/test_v5_sprint32_mechanics.py` and `test_frontend_1x1.py` and verify all tests pass with green logs.
 
+---
+
+## 🔄 CONCEPT 4: THE HEMISPHERIC HANDOVER & DIRECT ROUTING ALIGNMENT
+*Objective: Define the execution paths for standard interest waterfalls vs. direct brain conversational overrides.*
+
+### 📋 Context & Research Blueprint
+1. **The Standard Waterfall (The Interest Loop)**:
+   - **Trigger**: A general query is parsed.
+   - **Flow**: User -> Triage -> Pinky (first pass in Chat Pane) -> Brain & Deep Thought (Insight Pane, scaling down based on interest decay) -> Pinky (Grounding Gate critique in Chat Pane).
+   - **Role**: Pinky is the conversational interface/foil for the entire cascade.
+2. **The Direct Brain Exception (Non-Interest Loop)**:
+   - **Trigger**: The user explicitly addresses the Brain (e.g. "Hi Brain! How are you doing!"). Triage sets `addressed_to: BRAIN` and `vibe: CASUAL`.
+   - **Flow**: User -> Triage -> Brain Node directly replies and streams directly to the Chat Pane (instead of the Insight Pane).
+   - **Role**: The Brain acts as the direct conversational participant, bypassing Pinky and the standard interest cascade.
+
+### 🛠️ Tasks
+*   [ ] **Task 1.6 (Waterfall & Direct Routing Path Refactor)**:
+    *   **Why**: Ensure the hub cleanly supports both the full interest-based waterfall cascade and the direct-address conversational exception for the Brain.
+    *   **How (Mechanism)**: Update the routing logic in `src/logic/cognitive_hub.py` to:
+        1. If `"brain"` or `"deep"` is addressed and vibe is `CASUAL`, route directly to the Brain to generate a direct chat reply streamed to the `chat` channel.
+        2. Otherwise, for standard technical/archival cascades, execute the full sequence (Pinky first pass -> Brain/Thought insight stream -> Pinky Grounding Gate critique).
+    *   **Proof (Validation)**: Verify that queries directly addressing the Brain conversationally output directly to the Chat Pane without Pinky, while technical queries run the full sequential loop.
+
+
 
 
