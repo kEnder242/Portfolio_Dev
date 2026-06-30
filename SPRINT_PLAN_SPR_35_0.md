@@ -69,13 +69,16 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
     *   **Why**: Ensure the daily automated training sequence runs correctly at 2am after active development is complete.
     *   **How (Mechanism)**: Remove the `disable_induction.lock` file and perform a system check to verify that `is_window` status checks remain stable and responsive.
     *   **Proof (Validation)**: Remove `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/disable_induction.lock`, run a status query, and verify from log check that `disable_induction.lock` file is absent.
-*   [x] **Task 1.5 (Fidelity & Telemetry Restoration)**:
-    *   **Why**: Correct telemetry reporting blind spots caused by the V5 transition to decoupled subprocesses, and restore the conversational waterfall Grounding Gate.
+*   [x] **Task 1.5 (Fidelity & Telemetry Restoration / Hemispheric Handover Paradox)**:
+    *   **Problem Description (Deviation vs. Exception)**: 
+        Under [FEAT-234] (Scalar Fuel), queries classified as `"addressed_to": "BRAIN"` are routed directly to the Sovereign leg (`_run_brain_leg`), bypassing Pinky's initial conversational turn. This is a desired *exception* to optimize prefill/VRAM latency. However, during the V5 foyer refactor, the Grounding Gate (`evaluate_grounding`) was omitted. This caused a severe *deviation*: Deep Thought's output streamed solely to the **Insight Pane**, leaving the main **Chat Pane** empty (dead air) and omitting Pinky's final conversational critique.
     *   **How (Mechanism)**:
-        1. Implement `/telemetry_ingest` route in `foyer/router.py` and POST relay in `nodes/loader.py` to stream token times from subprocesses back to the Foyer.
-        2. Restore `evaluate_grounding` (Grounding Gate) and `_distill_sovereign_brief` (Context Precision) in `cognitive_hub.py` to prompt Pinky for final chat critiques.
-        3. Lazy-load Liger Llama kernel patches in `loader.py`.
-        4. Fix case-sensitive verification mismatches in `test_frontend_5x5.py`.
-    *   **Proof (Validation)**: Run `pytest src/tests/test_v5_sprint32_mechanics.py` and verify all tests pass (including `evaluate_grounding` and `_distill_sovereign_brief`). Run `test_frontend_1x1.py` and verify successful end-to-end loop completion.
+        1. **Telemetry Bridge**: Implement `/telemetry_ingest` route in `foyer/router.py` and POST relay thread in `nodes/loader.py` to stream generation tokens and metrics from decoupled node subprocesses back to the Foyer.
+        2. **Sovereign RAG Precision**: Restore `_distill_sovereign_brief` context distillation in `cognitive_hub.py` to synthesize RAG into a dense brief for KENDER.
+        3. **Grounding Gate Restoration**: Re-integrate `evaluate_grounding` inside `cognitive_hub.py`. Upon Deep Thought completing its synthesis, invoke Pinky's `think` tool to critique the output and stream a terminal summary directly into the **Chat Pane**, preserving the direct-route latency exception while correcting the dead-air deviation.
+        4. **Liger Llama Support**: Lazy-load `apply_liger_kernel_to_llama` in `loader.py` to optimize PyTorch execution for the Llama-3.2-3B resident model.
+        5. **Test Alignment**: Resolve case-sensitive source name string mismatches (e.g. `[BRAIN (ARCHIVE)]` vs `Brain`) in `test_frontend_5x5.py` and `test_v5_sprint32_mechanics.py`.
+    *   **Proof (Validation)**: Run `pytest src/tests/test_v5_sprint32_mechanics.py` and `test_frontend_1x1.py` and verify all tests pass with green logs.
+
 
 
