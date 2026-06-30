@@ -69,4 +69,13 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
     *   **Why**: Ensure the daily automated training sequence runs correctly at 2am after active development is complete.
     *   **How (Mechanism)**: Remove the `disable_induction.lock` file and perform a system check to verify that `is_window` status checks remain stable and responsive.
     *   **Proof (Validation)**: Remove `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/disable_induction.lock`, run a status query, and verify from log check that `disable_induction.lock` file is absent.
+*   [x] **Task 1.5 (Fidelity & Telemetry Restoration)**:
+    *   **Why**: Correct telemetry reporting blind spots caused by the V5 transition to decoupled subprocesses, and restore the conversational waterfall Grounding Gate.
+    *   **How (Mechanism)**:
+        1. Implement `/telemetry_ingest` route in `foyer/router.py` and POST relay in `nodes/loader.py` to stream token times from subprocesses back to the Foyer.
+        2. Restore `evaluate_grounding` (Grounding Gate) and `_distill_sovereign_brief` (Context Precision) in `cognitive_hub.py` to prompt Pinky for final chat critiques.
+        3. Lazy-load Liger Llama kernel patches in `loader.py`.
+        4. Fix case-sensitive verification mismatches in `test_frontend_5x5.py`.
+    *   **Proof (Validation)**: Run `pytest src/tests/test_v5_sprint32_mechanics.py` and verify all tests pass (including `evaluate_grounding` and `_distill_sovereign_brief`). Run `test_frontend_1x1.py` and verify successful end-to-end loop completion.
+
 
