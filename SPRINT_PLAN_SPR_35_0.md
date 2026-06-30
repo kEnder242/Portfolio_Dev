@@ -113,8 +113,10 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
         5. **Vibe-Aware Tone**: Pass the current triage vibe context into `evaluate_grounding()` to dynamically shape Pinky's critique tone.
     *   **Proof (Validation)**: Run unit tests and verify that a casual direct query to the Brain results in a Brain response on the Insight Pane with Pinky remaining silent, whereas high-interest queries trigger a vibe-aware Grounding Gate critique in the Chat Pane.
 
-
-
-
-
-
+*   [ ] **Task 1.7 (Silicon Benchmark presentation & hygiene)**:
+    *   **Why**: Clean up failed boot run metrics from the public-facing dashboard presentation to prevent skewed averages, while retaining transparency via interactive toggles and clean back-end data hygiene.
+    *   **How (Mechanism)**:
+        1. **Front-End Toggle**: Add a "Show Failures" checkbox next to the control buttons in `field_notes/benchmarks.html`.
+        2. **Default Filter**: Update `renderAll(data)` to filter out any run where `judge_score <= 1` and `response` contains `[ERROR]`, unless "Show Failures" is checked. Update averages (Average Judge Score, Total Runs) to dynamically recalculate based on active filter state.
+        3. **Back-End Purge**: Write a Python maintenance script `src/debug/benchmarks/clean_failed_runs.py` using BKM-011 logic to remove any failed runs (`ttft_ms == 0.0` or containing `[ERROR]`) from `HomeLabAI/logs/benchmarks.jsonl`.
+    *   **Proof (Validation)**: Run the maintenance script to purge failures. Load `benchmarks.html`, verify only successful runs are shown by default, and checking the toggle exposes the failures.
