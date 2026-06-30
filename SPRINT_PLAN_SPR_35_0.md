@@ -83,16 +83,18 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
 ---
 
 ## 🔄 CONCEPT 4: THE HEMISPHERIC HANDOVER & DIRECT ROUTING ALIGNMENT
-*Objective: Define the execution paths for standard interest waterfalls vs. direct brain conversational overrides.*
+*Objective: Define the execution paths for standard interest waterfalls vs. direct brain conversational overrides, utilizing a unified interest scalar and dynamic peer-vote boosting.*
 
 ### 📋 Context & Research Blueprint
 1. **The Standard Waterfall (The Interest Loop)**:
    - **Trigger**: A general query is parsed.
    - **Flow**: User -> Triage -> Pinky (first pass in Chat Pane) -> Brain & Deep Thought (Insight Pane, scaling down based on interest decay).
    - **The Grounding Gate Trigger**:
-     - Calculated as `importance = fuel`. If the strategic text is long (`len(text) > 800`), boost importance by `+0.2` (capped at `1.0`).
-     - **If `importance > 0.5`**: Prompt Pinky to critique the output in the Chat Pane. The critique's tone adapts dynamically to the active triage vibe (e.g., forensic, historical, analytical).
-     - **If `importance <= 0.5`**: Pinky remains silent, leaving the detailed strategic output in the Insight Pane.
+     - **Calculated Interest**: Triage produces `importance`, `casual`, and `intrigue`. We calculate the initial interest as `interest = ((1.0 - casual) * (intrigue + importance)) / 2` (standardizing on the term `interest` instead of the legacy `fuel`).
+     - **Dynamic Peer Boosting ([FEAT-238] Council of Hemispheres)**: Mid-relay nodes (Pinky, Brain) can "upvote" or signal context gravity during inference, dynamically boosting the active `interest` level prior to the Sovereign leg or Grounding Gate check.
+     - **Length Scaling**: If the final strategic text is long (`len(text) > 800`), boost interest by `+0.2` (capped at `1.0`).
+     - **If `interest > 0.5`**: Prompt Pinky to critique the output in the Chat Pane. The critique's tone adapts dynamically to the active triage vibe (e.g., forensic, historical, analytical).
+     - **If `interest <= 0.5`**: Pinky remains silent, leaving the detailed strategic output in the Insight Pane.
 2. **The Direct Brain Exception (Non-Interest Loop)**:
    - **Trigger**: The user explicitly addresses the Brain (e.g., "Hi Brain! How are you doing!"). Triage sets `addressed_to: BRAIN`.
    - **Flow**: User -> Triage -> Brain Node directly replies.
@@ -100,13 +102,17 @@ To fulfill the strategic goals of closed-loop training and context safety, we re
 
 ### 🛠️ Tasks
 *   [ ] **Task 1.6 (Waterfall & Direct Routing Path Refactor)**:
-    *   **Why**: Ensure the hub cleanly supports both the full interest-based waterfall cascade and the direct-address conversational exception for the Brain.
+    *   **Why**: Ensure the hub cleanly supports both the full interest-based waterfall cascade and the direct-address conversational exception for the Brain, while standardizing naming conventions.
     *   **How (Mechanism)**: Update the routing logic and Grounding Gate in `src/logic/cognitive_hub.py` to:
-        1. Parse the triage target (`addressed_to: BRAIN`).
-        2. Ensure the Brain node's fast response is routed exclusively to the `insight` channel (Insight Pane), bypassing Pinky's initial conversational turn.
-        3. Implement the `0.5` fuel threshold check inside `evaluate_grounding()`, including the length-based importance scaling.
-        4. Pass the current triage vibe context into `evaluate_grounding()` to dynamically shape Pinky's critique tone.
+        1. **Terminology Cleanup**: Rename all code-level references of `fuel` to `interest` (e.g., in `evaluate_grounding()`, `_run_brain_leg()`, and `process_query()`).
+        2. **Unified Interest Calculation**: Implement the formula `interest = ((1.0 - casual) * (intrigue + importance)) / 2` using the triage output fields.
+        3. **Direct Brain Route**: Parse triage target (`addressed_to: BRAIN`) and route the Brain's response to the `insight` channel, bypassing Pinky's first turn.
+        4. **Grounding Gate & Dynamic Boosting**: 
+           - Implement the `0.5` interest threshold check inside `evaluate_grounding()`.
+           - Implement a parser in the stream handler (`_process_node_stream()`) to look for peer-vote tags (e.g., `<boost_interest>` or similar signals) to dynamically raise the turn's active interest score mid-flight.
+        5. **Vibe-Aware Tone**: Pass the current triage vibe context into `evaluate_grounding()` to dynamically shape Pinky's critique tone.
     *   **Proof (Validation)**: Run unit tests and verify that a casual direct query to the Brain results in a Brain response on the Insight Pane with Pinky remaining silent, whereas high-interest queries trigger a vibe-aware Grounding Gate critique in the Chat Pane.
+
 
 
 
