@@ -301,6 +301,7 @@
             <select id="tag-filter" onchange="setTagFilterFromSelect(this.value)" style="display:none;"></select>
             <button class="ctrl-btn run-btn" onclick="triggerEvalRun()">RUN EVAL</button>
             <button class="ctrl-btn" onclick="loadBenchmarks()">REFRESH</button>
+            <button class="ctrl-btn" id="download-btn" onclick="downloadBenchmarkData()" style="display:none;">DOWNLOAD JSON</button>
             <span id="loader-indicator" style="display:none; font-size:0.72rem; color:#58a6ff; font-family:monospace;">
                 <span class="loader"></span>Loading...
             </span>
@@ -603,20 +604,22 @@
                 if (!r.ok) throw new Error(`Attendant returned ${r.status}. Is the Lab running?`);
                 const data = await r.json();
                 allData = data;
+                document.getElementById('download-btn').style.display = 'inline-block';
 
                 buildTagButtons(data.tags || []);
                 renderAll(data);
 
                 const scored = (data.runs || []).filter(r => r.judge_score > 0);
                 const avgScore = scored.length
-                    ? (scored.reduce((a, b) => a + b.judge_score, 0) / scored.length).toFixed(2)
-                    : '—';
+                     ? (scored.reduce((a, b) => a + b.judge_score, 0) / scored.length).toFixed(2)
+                     : '—';
                 setStatus(
                     `[OK] ${data.total} runs | Avg judge score: ${avgScore}/5 | Models: ${Object.keys(data.aggregates || {}).length}`,
                     '#3fb950'
                 );
             } catch(err) {
                 setStatus(`[ERROR] ${err.message}`, '#f85149');
+                document.getElementById('download-btn').style.display = 'none';
                 document.getElementById('model-comparison').innerHTML = '';
                 document.getElementById('run-history').innerHTML = `
                     <div class="empty-state">
@@ -627,6 +630,17 @@
             } finally {
                 document.getElementById('loader-indicator').style.display = 'none';
             }
+        }
+
+        function downloadBenchmarkData() {
+            if (!allData) return;
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", url);
+            dlAnchorElem.setAttribute("download", `benchmarks_kpi_${Date.now()}.json`);
+            dlAnchorElem.click();
+            URL.revokeObjectURL(url);
         }
 
         // ── Trigger eval run ────────────────────────────────────
