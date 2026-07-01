@@ -1281,3 +1281,14 @@
 3.  **Grace Window**: Prevents shutdown race conditions during the engine warmup phase by respecting a boot grace period.
 
 
+## [FEAT-400] ROLE TOKEN (Multi‑LoRA Persona Switch)
+
+**Status:** DESIGN
+
+**Logic:** A single special token (e.g., `<|PINKY|>`) is injected after the `PREVIOUS STAGE OUTPUT` and before the `USER PROMPT`. The hub interprets this token to switch the active LoRA adapter for the upcoming generation while preserving the KV‑cache built from the static prefix.
+
+**Rationale:** Eliminates cache invalidation when swapping personalities, reduces latency, and enables a chat‑room‑like experience where different agents can “overhear” without resetting context.
+
+**Mechanism:** A mapping table links each ROLE TOKEN to a LoRA adapter. The token is added to the tokenizer vocabulary if needed. During request processing the hub loads the specified LoRA before generating the final response.
+
+**Refactor Strategy:** Update `loader.py` and `acme_lab.py` to recognize ROLE TOKENs and perform adapter switching. Add unit tests for cache integrity during token‑driven swaps.
