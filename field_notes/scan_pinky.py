@@ -31,6 +31,7 @@ DATA_DIR = "field_notes/data"
 STATE_FILE = os.path.join(DATA_DIR, "scan_state.json")
 THEMES_FILE = os.path.join(DATA_DIR, "themes.json")
 AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")
+GRAPH_RELATIONS_FILE = os.path.join(DATA_DIR, "graph_relations.json")
 
 # Limits
 SLOW_BURN_BATCH_LIMIT = 2  # Total batches to process in a background run
@@ -144,6 +145,57 @@ def save_year_data(year, events):
     
     with open(filepath, 'w') as f:
         json.dump(existing, f, indent=2)
+
+def save_graph_relations(events):
+    """Extract relation triplets from events and save atomically to graph_relations.json.
+    
+    Deduplicates by (source, target, type). Source = date: summary.
+    Writes to .tmp then renames for atomicity, safe for re-scans.
+    """
+    filepath = GRAPH_RELATIONS_FILE
+
+    # Read existing relations
+    if os.path.exists(filepath):
+        with open(filepath, 'r') as f:
+            existing = json.load(f)
+    else:
+        existing = []
+
+    n_before = len(existing)
+
+    # Build dedup set from existing entries
+    seen = set()
+    for rel in existing:
+        seen.add((rel.get('source', ''), rel.get('target', ''), rel.get('type', '')))
+
+    # Extract and append new relations
+    for event in events:
+        source = f"{event.get('date', 'Unknown')}: {event.get('summary', '')}"
+        for rel in event.get('relations', []):
+            target = rel.get('target', '').strip()
+            rtype = rel.get('type', '').strip()
+            if not target or not rtype:
+                continue
+            key = (source, target, rtype)
+            if key not in seen:
+                seen.add(key)
+                existing.append({
+                    "source": source,
+                    "target": target,
+                    "type": rtype
+                })
+
+    n_added = len(existing) - n_before
+    if n_added == 0:
+        return  # nothing new, skip write
+
+    # Atomic write: temp file then rename
+    tmp = filepath + ".tmp"
+    with open(tmp, 'w') as f:
+        json.dump(existing, f, indent=2)
+    os.replace(tmp, filepath)
+
+    print(f"   > Graph relations: {n_added} new, {len(existing)} total")
 
 def main():
     print("--- Pinky Lazy-Data Scanner v4.2 (Smart Slow Burn) ---")
@@ -271,10 +323,17 @@ def main():
             Classify sensitivity: \"Public\" (Resume safe) or \"Sensitive\" (PII, internal, personal).
             {date_instruction}
             
+            For each event, extract relationship triplets connecting it to projects, technologies,
+            or systems mentioned. Each relation has:
+              - target: The project, technology, or system name
+              - type: One of "milestone_of" (event was a milestone for target),
+                      "utilizes" (event involves using target), or
+                      "resolves" (event resolved an issue with target)
+            
             Return a JSON list:
             [
-                {{ "date": "YYYY-MM-DD", "summary": "Technical win", "evidence": "Quote", "sensitivity": "Public", "tags": ["IPMI"] }},
-                {{ "date": "YYYY-MM-DD", "summary": "Internal meeting", "evidence": "Quote", "sensitivity": "Sensitive", "tags": [] }}
+                {{ "date": "YYYY-MM-DD", "summary": "Technical win", "evidence": "Quote", "sensitivity": "Public", "tags": ["IPMI"], "relations": [{{"target": "ProjectName", "type": "milestone_of"}}] }},
+                {{ "date": "YYYY-MM-DD", "summary": "Internal meeting", "evidence": "Quote", "sensitivity": "Sensitive", "tags": [], "relations": [] }}
             ]
 
             [NOTES]
@@ -300,8 +359,11 @@ def main():
                             with open(AUDIT_FILE, "a") as f:
                                 f.write(json.dumps(event) + "\n")
                     
+                    all_public_events = []
                     for year, year_events in year_buckets.items():
                         save_year_data(year, year_events)
+                        all_public_events.extend(year_events)
+                    save_graph_relations(all_public_events)
                         
                 batches_processed_total += 1
                 
