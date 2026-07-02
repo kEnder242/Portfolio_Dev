@@ -119,8 +119,12 @@ To optimize prompt sizes and increase query speed, the system can utilize a loca
 
 ### 6.1 Markdown as the Single Source of Truth
 *   **The Law:** The plain-text files `FeatureTracker.md` and `Protocols.md` remain the absolute, single source of truth. They are version-controlled in Git and edited directly by humans.
-*   **Housekeeping-Free Sync:** Synchronization is handled automatically "for free." A background hook in the file-save listener (triggered by `[FEAT-050]`) calls a parser script (`sync_chroma_dna.py`). 
-*   **The Parser:** This script reads the markdown files, splits them into logical blocks by header (e.g., `## [FEAT-XXX]`), generates embeddings, and replaces changed vectors in the ChromaDB collections. This ensures the database is updated instantly upon saving the markdown file without manual intervention.
+*   **The Runtime vs. Development Distinction:** 
+    *   *Production Runtime:* `FEAT-050` (Vibe Check on Save) is active *only* on the target Linux RTX 2080 Ti running the `acme_lab` resident service.
+    *   *Development Workspace:* We do not have a background daemon watcher running in the development workspace. Running a continuous watcher process during development is resource-heavy and unnecessary.
+*   **Development-Side Sync Hook Options:**
+    1.  **Git Pre-Commit Hook (Recommended):** A git pre-commit hook (`.git/hooks/pre-commit`) that automatically executes `python3 sync_chroma_dna.py` before committing changes. Since Git is our system of record, this guarantees the vector database is updated on every save/commit cycle without background process overhead.
+    2.  **Safe-Scalpel Integration:** Integrate the parser call directly into `atomic_patcher.py` so that any AI-driven modifications automatically trigger a DB sync.
 
 ### 6.2 Dual-Collection Separation (Behavior vs. Structure)
 To prevent confusion between behavioral instructions (rules for the AI agent) and structural constraints (rules for the code/hardware), ChromaDB uses two isolated collections:
