@@ -23,4 +23,9 @@ This sprint captures the design discussion around the **waterfall template**, **
 - [ ] Verify that KV‑cache hit rate stays > 95% when switching personalities.
 - [ ] Update sprint notes with any open questions for the next design review.
 
+## OpenAgent Hybrid Execution (Verification Gate)
+- [ ] Delegate the tokenizer extension and prototype unit tests to OpenAgent:
+  * Execution: Run `opencode play feature/role-token-prototype` using the DeepSeek/Ollama parallel mapping.
+  * Verification: Verify OpenAgent successfully implements and verifies the test suite without using Google Gemini tokens.
+
 *No tasks are created yet; this file serves as the sprint narrative and reference for upcoming work.*
