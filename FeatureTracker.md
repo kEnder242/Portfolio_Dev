@@ -1292,3 +1292,14 @@
 **Mechanism:** A mapping table links each ROLE TOKEN to a LoRA adapter. The token is added to the tokenizer vocabulary if needed. During request processing the hub loads the specified LoRA before generating the final response.
 
 **Refactor Strategy:** Update `loader.py` and `acme_lab.py` to recognize ROLE TOKENs and perform adapter switching. Add unit tests for cache integrity during token‑driven swaps.
+
+## [FEAT-401] Semantic Annealing Pipeline
+
+**Status:** DESIGN
+
+**Logic:** Integrates background self-evaluation with online/offline human feedback. Ingested events and night dream cycles are verified by a background evaluator, while user chat corrections (online) or dashboard flags (offline) write persistent correction rules to resolve factual errors and feed the RAG correction loop.
+
+**Rationale:** Decouples structural testing from qualitative validation, preventing fragile unit tests while providing forensic traceability. Employs semantic similarity checks (>0.85) to merge related insights, preventing database bloat once raw inputs are exhausted.
+
+**Mechanism:** Evaluation worker `evaluate_rag.py` (triggered in `mass_scan.py`), validation output ledger `validation_ledger.jsonl`, user correction ledger `overrides.json` parsed via `cognitive_hub.py`, and rendering UI panels on `status.html`.
+
