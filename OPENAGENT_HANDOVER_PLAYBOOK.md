@@ -81,6 +81,19 @@ If OpenAgent crashes or fails to respond:
     ```
     Always start a **fresh session** (TUI or CLI) after a service restart to avoid context carryover.
 
+4.  **Directory Context (Ignoring `.venv`):**
+    Always launch OpenAgent from the root `/home/jallred/Dev_Lab` folder (not within subdirectories). The root contains the authoritative `.opencodeignore` which excludes heavy `.venv/` libraries. Launching from subdirectories bypasses ignores, causing context blowouts.
+
+5.  **Model Selection for Logic Diffs:**
+    Use `opencode/deepseek-v4-flash-free` for coding logic and complex refactoring. Smaller models (like `omnicoder-9b`) are prone to path hallucinations and syntax failures.
+
+6.  **Complex Tasks (Silent Exits):**
+    For multi-phase changes (e.g., parsing + scoring + ranking), do not delegate the entire logic block in a single prompt. Slice the instruction card into atomic steps:
+    *   *Step A:* Implement parser and utilities.
+    *   *Step B:* Implement core algorithm.
+    *   *Step C:* Implement verification test suite.
+    This prevents the model from reading files and exiting silently due to context/reasoning bounds.
+
 ---
 
 ## 5. Live Verification Guide (Restoring Workspace Tools)
