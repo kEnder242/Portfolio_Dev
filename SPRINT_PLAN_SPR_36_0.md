@@ -171,37 +171,45 @@ This phase integrates background self-evaluation with online/offline human feedb
 - [ ] Refactor `can_burn` with NVML VRAM safety gating to prevent CUDA OOM panics.
 - [ ] Certify the entire Semantic Annealing pipeline via a round-trip test (mock ingestion -> automated evaluation -> simulated user correction -> override validation).
 
-## Phase 3: WYWO & Whiteboard Stability (Integrated News Cycle)
-This phase addresses context truncation in morning briefings (WYWO) and stabilizes the workspace environment against crash-reload cycles triggered when modifying markdown/whiteboard ledgers.
+## Phase 3: The Integrated Briefing & Workspace Resilience (Integrated News Cycle)
+This phase addresses context starvation in morning briefings (WYWO) and isolates the workspace environment against crash-reload cycles triggered when modifying markdown/whiteboard ledgers.
 
 ### 1. The Core Design: Integrated News Cycle & Directory Isolation
-- **Integrated News Cycle:** Morning briefings will dynamically synthesize recruiter activity, continuous scan metrics, and system pager logs alongside historical Diamond Wisdom context.
-- **Directory Isolation (The Whiteboard Fix):** Restricting workspace-save hot-reloads to source code files (`.py`) while ignoring modifications to `whiteboard.md` and `whiteboard/` directory structures to prevent unexpected process restarts.
+- **Integrated News Cycle (Goal 10):** The morning briefing will transition from a simple string-match lookup of truncated text (`wisdom_text[:500]`) to a multi-source synthesis pipeline in `cognitive_hub.py`. The new pipeline will ingest recruiter telemetry, background scan progress, and pager warnings to present a unified "integrated news cycle" briefing.
+- **Directory Isolation (Goal 11):** Writing thoughts to the whiteboard currently triggers directory watchers (e.g., in `lab-attendant.service` or systemd configurations), causing process restarts. We will configure nodemon/attendant watchers to monitor only `.py` code changes, explicitly ignoring `whiteboard.md` and the `whiteboard/` directory structure.
 
 ### 2. Implementation Tasks & Goals
 
 #### Goal 10: Integrated WYWO News Briefing
-- **Why:** The current morning briefing truncates text to 500 characters and lacks integration with live recruiter and scan progress datasets.
+- **Why:** The current morning briefing truncates text to 500 characters, losing critical architectural detail. It also lacks integration with active recruiter results (`recruiter_report.json`), scan telemetry (`status.json`), and system health alerts (`pager_activity.json`).
 - **Tasks:**
-  - [ ] Implement `trigger_morning_briefing` context parser in `cognitive_hub.py` to combine full Diamond Wisdom with `recruiter_report.json` and `status.json`.
-  - [ ] Support "Passive Mode" (WYWO Intent Gate): trigger briefings only on intent-based queries (e.g., *"What's up?"*) instead of connection handshakes.
+  - [ ] Refactor `trigger_morning_briefing` in `cognitive_hub.py` to fetch full Diamond Wisdom without truncation, scaling context memory up to 4,000 characters.
+  - [ ] Add JSON parsers in `cognitive_hub.py` to extract metrics from `recruiter_report.json` (jobs found, last run timestamp) and `status.json` (scanner progress %, active resident engine state).
+  - [ ] Query the last 3 warnings or critical alerts from `pager_activity.json` and append them to the briefing context payload.
+  - [ ] Implement the "Passive Mode" (WYWO Intent Gate): add a configuration setting to bypass automatic trigger on connection handshake.
+  - [ ] Update triage regex patterns in `cognitive_hub.py` to detect user requests matching intents like *"What's up?"*, *"WYWO"*, or *"Status brief"* and route them to the new briefing generator.
 - **Verification Plan:**
-  - Inject query `"What's up?"` via Intercom WebSocket.
-  - Verify returned payload contains recruiter job counts and continuous scan completion percentage.
+  - Create `src/tests/test_wywo_integration.py` to mock input JSON states for `recruiter_report.json`, `status.json`, and `pager_activity.json`.
+  - **BKM-032 Structural Gate:** The automated test must verify that the briefing payload contains keys for `recruiter_summary`, `scan_progress`, and `recent_alerts`. String-matching on exact LLM text quips is prohibited.
+  - Assert that query `"What's up?"` triggers the briefing stream, and verify that the output text successfully combines all active telemetry sources.
 
 #### Goal 11: Whiteboard & Watcher Isolation
-- **Why:** Writing thoughts to the whiteboard triggers directory watchers, restarting the lab attendant process.
+- **Why:** Writing thoughts to the whiteboard file (`whiteboard.md`) triggers filesystem watchers, initiating a full process restart of the attendant and nodes. We must protect the sandbox whiteboard from triggering service recycles.
 - **Tasks:**
-  - [ ] Implement `handle_workspace_save` in `cognitive_hub.py` to perform a non-blocking vibe check and loop prevention.
-  - [ ] Update the attendant/nodemon/watcher to ignore `whiteboard.md` and the `whiteboard/` directory.
+  - [ ] Implement the `handle_workspace_save` logic inside `cognitive_hub.py` to support rate-limiting (cooldown window of 10s) and trigger non-blocking vibe checks.
+  - [ ] Update the attendant's folder watcher configurations (e.g. `.nodemonignore` or the python watchdog monitor in the attendant) to ignore `.md` extensions, specifically targeting `whiteboard.md` and the `whiteboard/` directory.
+  - [ ] Unify process-level exclusion logic in the attendant's event loop to ensure file writes to sandbox ledgers do not raise socket connection resets.
 - **Verification Plan:**
-  - Create Playwright test `src/tests/test_whiteboard_stability.py` modeled after `test_visibility_truth.py`.
-  - Simulate a whiteboard file write, wait 8 seconds, and assert that the process PID remains identical and the socket remains open.
+  - Create Playwright integration test at `src/tests/test_whiteboard_stability.py` modeled after `test_visibility_truth.py`.
+  - **BKM-022 Integrity Check:** The script must read the PID from `HomeLabAI/server.pid` prior to writing.
+  - Automate a Chromium browser turn to send query: *"Update whiteboard with: [PECI Stress Run]"*.
+  - Assert that `whiteboard.md` is modified, wait 8 seconds, and assert that the server PID remains unchanged (proving the watcher ignored the save and no process restart occurred).
+  - Assert that the browser WebSocket connection status remains `"connected"`.
 
 ---
 
 ## Acceptance Criteria (Phase 3)
-- [ ] Implement expanded context briefing in `cognitive_hub.py`.
-- [ ] Add passive intent gating to trigger briefings via user queries.
-- [ ] Exclude whiteboard files from systemd/attendant directory watchers.
-- [ ] Create and execute Playwright test `src/tests/test_whiteboard_stability.py` confirming process PID stability.
+- [ ] Implement the expanded, multi-source context briefing in `cognitive_hub.py`.
+- [ ] Add passive intent-based triggers for the briefing and verify via `test_wywo_integration.py`.
+- [ ] Configure watchers to exclude `whiteboard.md` and `whiteboard/` directory edits from restarting python processes.
+- [ ] Execute Playwright test `test_whiteboard_stability.py` to certify process PID stability and socket resilience during whiteboard saves.
