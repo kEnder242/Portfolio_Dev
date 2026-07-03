@@ -1099,12 +1099,14 @@
                                 msg.includes('distilled');
             
             // 2. Detect if it is an acme-lab specific process (Blue)
-            const isAcme = ['system', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect'].includes(source);
+            const isAcme = ['system', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect', 'nibbler', 'nibble', 'nibble_v2', 'curator', 'rag', 'induction', 'refiner', 'attendant'].includes(source);
             
-            if (hasArtifact) {
-                extraClass = 'has-artifact';
-            } else if (isAcme) {
-                extraClass = 'source-acme';
+            if (severity === 'info') {
+                if (hasArtifact) {
+                    extraClass = 'has-artifact';
+                } else if (isAcme) {
+                    extraClass = 'source-acme';
+                }
             }
             
             div.className = `alert-item severity-${severity} ${extraClass}`;

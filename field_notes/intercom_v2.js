@@ -352,6 +352,7 @@ function connect() {
     appendMsg(`Connecting to ${targetUrl}...`, 'system-msg');
     try {
         ws = new WebSocket(targetUrl);
+        window.ws = ws;
         ws.onopen = () => {
             statusDot.className = 'status-dot online';
             ws.send(JSON.stringify({ 
