@@ -27,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=6c0ea37d">
+    <link rel="stylesheet" href="style.css?v=4d3a86d4">
     <style>
         .vitals-grid {
             display: grid;
@@ -1099,7 +1099,11 @@
                                 msg.includes('distilled');
             
             // 2. Detect if it is an acme-lab specific process (Blue)
-            const isAcme = ['system', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect', 'nibbler', 'nibble', 'nibble_v2', 'curator', 'rag', 'induction', 'refiner', 'attendant'].includes(source);
+            const isAcme = ['system', 'systemd', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect', 'nibbler', 'nibble', 'nibble_v2', 'curator', 'rag', 'induction', 'refiner', 'attendant'].includes(source) || 
+                           msg.includes('nibble') || 
+                           msg.includes('nibbler') || 
+                           msg.includes('curator') || 
+                           msg.includes('attendant');
             
             if (severity === 'info') {
                 if (hasArtifact) {
