@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# research_build.py [v2.0]
+# research_build.py [v3.0]
 # Purpose: Generate research.html from standard-schema RESEARCH_SYNTHESIS.md.
-# Mandate: High-Fidelity ArXiv ID-ONLY links. Zero FEAT markers in HTML.
-# Schema: | Anchor | ArXiv ID | Logic | Lab Implementation [FEAT] | Status |
+# Mandate: High-Fidelity ArXiv ID-ONLY links. Include clickable Git Links.
+# Schema: | Anchor | ArXiv ID | Theoretical Logic | Lab Implementation [FEAT] | Git Link | Status |
 
 import os
 import re
@@ -12,17 +12,26 @@ SOURCE_MD = "/home/jallred/Dev_Lab/HomeLabAI/docs/plans/RESEARCH_SYNTHESIS.md"
 TEMPLATE_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/research.html"
 OUTPUT_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/research.html"
 
+def format_git_link(git_link_md):
+    # Matches markdown link [text](url)
+    match = re.match(r'\[(.*?)\]\((.*?)\)', git_link_md)
+    if match:
+        text = match.group(1)
+        url = match.group(2)
+        return f'<a href="{url}" style="color:var(--accent-color); text-decoration:none;">{text}</a>'
+    return git_link_md
+
 def parse_standard_table(content):
-    # Matches tables with the 5-column standard schema
-    header_pattern = r'\| Research Anchor \| ArXiv ID \| Theoretical Logic \| Lab Implementation \[FEAT\] \| Status \|'
-    table_regex = re.compile(header_pattern + r'\n\| :--- \| :--- \| :--- \| :--- \| :--- \|\n(.*?)(?:\n\n|\n$)', re.DOTALL)
+    # Matches tables with the 6-column standard schema
+    header_pattern = r'\| Research Anchor \| ArXiv ID \| Theoretical Logic \| Lab Implementation \[FEAT\] \| (?:Git Link|Git Link / Reason) \| Status \|'
+    table_regex = re.compile(header_pattern + r'\n\| :--- \| :--- \| :--- \| :--- \| :--- \| :--- \|\n(.*?)(?:\n\n|\n$)', re.DOTALL)
     
     all_data = []
     for match in table_regex.finditer(content):
         rows = match.group(1).strip().split('\n')
         for row in rows:
             cells = [c.strip() for c in row.split('|') if c.strip()]
-            if len(cells) >= 5:
+            if len(cells) >= 6:
                 # 1. Name
                 name = cells[0].replace('**', '').strip()
                 
@@ -36,14 +45,18 @@ def parse_standard_table(content):
                 impl = re.sub(r'\[FEAT-.*?\]', '', cells[3]).strip()
                 impl = impl.replace('**', '')
                 
-                # 5. Status
-                status = cells[4].replace('**', '')
+                # 5. Git Link
+                git_link = format_git_link(cells[4])
+                
+                # 6. Status
+                status = cells[5].replace('**', '')
                 
                 all_data.append({
                     "name": name,
                     "arxiv": arxiv_id,
                     "logic": logic,
                     "implementation": impl,
+                    "git_link": git_link,
                     "status": status
                 })
     return all_data
@@ -65,13 +78,16 @@ def generate_html_rows(research_data):
                         <td>{anchor_display}</td>
                         <td>{item['logic']}</td>
                         <td>{item['implementation']}</td>
+                        <td>{item['git_link']}</td>
                         <td><span class="impact-badge {status_class}">{item['status']}</span></td>
                     </tr>"""
         html_rows += row + "\n"
     return html_rows
 
 def main():
-    if not os.path.exists(SOURCE_MD): return
+    if not os.path.exists(SOURCE_MD):
+        print(f"Error: {SOURCE_MD} not found.")
+        return
     with open(SOURCE_MD, 'r') as f: md_content = f.read()
 
     research_data = parse_standard_table(md_content)
