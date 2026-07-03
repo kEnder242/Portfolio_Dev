@@ -139,6 +139,25 @@ This phase integrates background self-evaluation with online/offline human feedb
   - Verify the validation metrics (cache hit rate, temporal accuracy) are rendered dynamically from `validation_ledger.jsonl`.
   - Verify draft insights render their unique reference IDs correctly.
 
+#### Goal 8: Relational Neighborhood Expansion (GraphRAG Retrieval)
+- **Why:** Chronological neighborhood expansion fails for non-date references. We must traverse active edges in `graph_relations.json` to inject structurally adjacent context into the retrieval payload.
+- **Tasks:**
+  - [ ] Update `archive_node.py`'s `get_context` to parse `graph_relations.json` when a candidate matches a known project, technology, or system entity.
+  - [ ] Retrieve related adjacency nodes (edges) and append them as `[RELATIONAL_NEIGHBOR_EXPANSION]` to the context output.
+- **Verification Plan:**
+  - Seed a relationship mapping in `graph_relations.json` (e.g. `Montana` -> `utilizes` -> `XPIV devpi`).
+  - Query RAG for "Montana setup".
+  - Assert that `XPIV devpi` is successfully pulled into the retrieved context via edge traversal.
+
+#### Goal 9: NVML VRAM Guard Integration
+- **Why:** Multi-LoRA inference and background scanner pipelines share a single 11GB GPU. We must monitor VRAM actively to prevent CUDA OOM panics when the user triggers reasoning turns.
+- **Tasks:**
+  - [ ] Refactor `can_burn` in `field_notes/utils.py` to query NVIDIA NVML (via `nvidia-ml-py` or system telemetry) for active VRAM utilization.
+  - [ ] Enforce a strict VRAM threshold safety gate (e.g., skip scanning/triage loops if free VRAM is less than 2.0GB).
+- **Verification Plan:**
+  - Run the scanner while vLLM is loaded.
+  - Check `can_burn` returns correct telemetry and pauses processing if VRAM limits are exceeded.
+
 ---
 
 ## Acceptance Criteria (Phase 2)
@@ -148,6 +167,8 @@ This phase integrates background self-evaluation with online/offline human feedb
 - [ ] Update `aggregate_years.py` to enforce expert overrides on compile.
 - [ ] Refactor `refine_gem.py` with the 0.85 similarity merge gate.
 - [ ] Update `status.html` to display validation health and draft gem IDs.
+- [ ] Update `archive_node.py` to support relational neighborhood expansion via `graph_relations.json`.
+- [ ] Refactor `can_burn` with NVML VRAM safety gating to prevent CUDA OOM panics.
 - [ ] Certify the entire Semantic Annealing pipeline via a round-trip test (mock ingestion -> automated evaluation -> simulated user correction -> override validation).
 
 *No tasks are created yet; this file serves as the sprint narrative and reference for upcoming work.*
