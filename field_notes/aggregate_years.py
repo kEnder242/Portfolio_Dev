@@ -29,6 +29,16 @@ def get_year_range(year_str):
         
     return []
 
+def get_gem_id(event):
+    """Generates a deterministic 4-character hex ID for an event."""
+    import hashlib
+    d = str(event.get('date', 'Unknown'))
+    s = event.get('summary', '')
+    if isinstance(s, list): s = " ".join(s)
+    s = s.strip().lower()
+    fp = f"{d}|{s}"
+    return "GEM-" + hashlib.md5(fp.encode('utf-8')).hexdigest()[:4]
+
 def aggregate_years():
     logging.info("--- Consolidating Logs into Yearly Summaries [v2.4] ---")
     
@@ -38,6 +48,15 @@ def aggregate_years():
         try:
             with open(MANIFEST_FILE, 'r') as f:
                 manifest = json.load(f)
+        except: pass
+
+    # 1.1 Load Overrides (Goal 5)
+    overrides_file = os.path.join(DATA_DIR, "overrides.json")
+    overrides = {}
+    if os.path.exists(overrides_file):
+        try:
+            with open(overrides_file, 'r') as f:
+                overrides = json.load(f).get("overrides", {})
         except: pass
 
     # 2. Find all processed JSON files
@@ -86,6 +105,16 @@ def aggregate_years():
                     
                     for event in data:
                         new_event = event.copy()
+                        
+                        # Calculate original deterministic ID (Goal 5)
+                        gem_id = get_gem_id(new_event)
+                        new_event['id'] = gem_id
+                        
+                        # Apply overrides before verification
+                        if gem_id in overrides:
+                            new_event.update(overrides[gem_id])
+                            logging.info(f"   [OVERRIDE] Applied correction to {gem_id}: {overrides[gem_id]}")
+                        
                         # Sanity: Does the event actually belong in this year?
                         # If the event has a specific date, we honor it. 
                         # If it's a range date (e.g. "Oct 2007 - Dec 2007") and we are distributing to 2012, 
@@ -139,8 +168,16 @@ def aggregate_years():
             if year == "2024" and "2007" in str(item.get('date', '')) or "2007" in str(item.get('summary', '')):
                 continue
             
+            # Inject deterministic ID if missing
+            if 'id' not in item:
+                item['id'] = get_gem_id(item)
+            
             fp = get_fingerprint(item)
             if fp not in seen:
+                # Apply overrides to existing events (Goal 5)
+                if item['id'] in overrides:
+                    item.update(overrides[item['id']])
+                    logging.info(f"   [OVERRIDE] Applied correction to existing {item['id']}: {overrides[item['id']]}")
                 final_events.append(item)
                 seen.add(fp)
                 

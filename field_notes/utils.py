@@ -109,7 +109,19 @@ def get_vram_usage():
     except:
         return 0.0
 
-def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95):
+def get_free_vram_gb():
+    """Returns free VRAM in gigabytes using nvidia-smi."""
+    try:
+        output = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,nounits,noheader"],
+            encoding="utf-8"
+        )
+        free_mb = float(output.strip())
+        return free_mb / 1024.0
+    except:
+        return 6.0  # Safe fallback estimate
+
+def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95, min_free_vram_gb=2.0):
     """
     Politeness check for background tasks.
     Returns (bool, reason)
@@ -133,8 +145,12 @@ def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95):
     if load > max_load:
         return False, f"System Load High ({load:.2f})"
     
-    # 4. Check VRAM
+    # 4. Check VRAM Gating (Goal 9: Absolute Free VRAM Guard + Ratio)
     if check_vram:
+        free_vram = get_free_vram_gb()
+        if free_vram < min_free_vram_gb:
+            return False, f"Free VRAM Low ({free_vram:.2f} GB < {min_free_vram_gb} GB)"
+            
         vram = get_vram_usage()
         if vram > vram_threshold:
             return False, f"VRAM High ({vram*100:.1f}%)"

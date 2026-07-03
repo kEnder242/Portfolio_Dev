@@ -13,10 +13,118 @@ from utils import update_status
 DATA_DIR = "field_notes/data"
 logging.basicConfig(level=logging.INFO, format='[REFINE] %(message)s')
 
+def cosine_similarity(a, b):
+    import numpy as np
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+def deduplicate_gems():
+    import glob
+    import numpy as np
+    from sentence_transformers import SentenceTransformer
+    
+    logging.info("Running Semantic De-duplication check [Goal 6]...")
+    
+    try:
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+    except Exception as e:
+        logging.error(f"Failed to load SentenceTransformer: {e}")
+        return
+        
+    json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    ignore = ["themes.json", "status.json", "queue.json", "state.json", "search_index.json", "pager_activity.json", "file_manifest.json", "overrides.json"]
+    
+    events_by_date = {}
+    for jf in json_files:
+        if os.path.basename(jf) in ignore: continue
+        try:
+            with open(jf, 'r') as f:
+                data = json.load(f)
+                if not isinstance(data, list): continue
+                for i, event in enumerate(data):
+                    date = event.get('date')
+                    if not date: continue
+                    if date not in events_by_date:
+                        events_by_date[date] = []
+                    events_by_date[date].append({
+                        "file_path": jf,
+                        "index": i,
+                        "event": event
+                    })
+        except: pass
+
+    modified_files = set()
+    file_contents = {}
+    
+    def get_content(path):
+        if path not in file_contents:
+            with open(path, 'r') as f:
+                file_contents[path] = json.load(f)
+        return file_contents[path]
+
+    for date, items in events_by_date.items():
+        if len(items) < 2: continue
+        
+        summaries = [it["event"].get("summary", "") for it in items]
+        embeddings = model.encode(summaries)
+        
+        merged_indices = set()
+        for i in range(len(items)):
+            if i in merged_indices: continue
+            for j in range(i + 1, len(items)):
+                if j in merged_indices: continue
+                
+                sim = cosine_similarity(embeddings[i], embeddings[j])
+                if sim > 0.85:
+                    logging.info(f"   [MERGE] Found duplicates on {date} (similarity: {sim:.2f})")
+                    logging.info(f"     1: {summaries[i][:50]}...")
+                    logging.info(f"     2: {summaries[j][:50]}...")
+                    
+                    event_i = items[i]["event"]
+                    event_j = items[j]["event"]
+                    
+                    if len(event_j.get("summary", "")) > len(event_i.get("summary", "")):
+                        event_i["summary"] = event_j["summary"]
+                        
+                    ev_i = event_i.get("evidence", "")
+                    ev_j = event_j.get("evidence", "")
+                    if ev_j and ev_j not in ev_i:
+                        event_i["evidence"] = f"{ev_i}\n\nEvidence 2: {ev_j}".strip()
+                        
+                    tags_i = set(event_i.get("tags", []))
+                    tags_j = set(event_j.get("tags", []))
+                    event_i["tags"] = list(tags_i.union(tags_j))
+                    event_i["rank"] = 4
+                    
+                    merged_indices.add(j)
+                    
+                    content_i = get_content(items[i]["file_path"])
+                    content_j = get_content(items[j]["file_path"])
+                    
+                    content_i[items[i]["index"]] = event_i
+                    modified_files.add(items[i]["file_path"])
+                    content_j[items[j]["index"]] = None
+                    modified_files.add(items[j]["file_path"])
+
+    for path in modified_files:
+        content = file_contents[path]
+        cleaned_content = [item for item in content if item is not None]
+        try:
+            with open(path, 'w') as f:
+                json.dump(cleaned_content, f, indent=2)
+            logging.info(f"💾 Saved merged changes to {os.path.basename(path)}")
+        except Exception as e:
+            logging.error(f"Failed to save {path}: {e}")
+
 def main():
     logging.info("--- Technical Gem Refinement Loop ---")
     
-    # 1. Target the Brain (Hybrid Mode)
+    # 1. Run Semantic Deduplication (Goal 6)
+    try:
+        deduplicate_gems()
+    except Exception as e:
+        logging.error(f"Deduplication check failed: {e}")
+        
+    # 2. Target the Brain (Hybrid Mode)
     engine = get_engine_v2(mode="HYBRID") # Pinky Orchestrator + Brain Backend
     
     # 2. Find a low-rank artifact
