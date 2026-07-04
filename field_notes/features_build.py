@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# features_build.py [v1.0]
-# Purpose: Generate features.html from FeatureTracker.md with cross-linking, status styling, and markdown description support.
+# features_build.py [v1.1]
+# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions and cross-linking.
 
 import os
 import re
@@ -13,7 +13,6 @@ OUTPUT_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/features.html"
 def convert_internal_links(md_content):
     # Convert [FEAT-XXX] references to markdown hash links: [FEAT-XXX](#FEAT-XXX)
     md_content = re.sub(r'\[FEAT-(\d{3}(?:\.\d+)?)\]', r'[FEAT-\1](#FEAT-\1)', md_content)
-    # Convert [SCAR #X] references to lookups or just keep them formatted
     return md_content
 
 def parse_feature_block(block):
@@ -76,8 +75,12 @@ def generate_rows(features):
         else:
             status_class = "impact-stable"
             
-        # Build specification column content
-        spec_content = f'<div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">{item["title"]}</div>'
+        # Build specification column content with Collapsible Details
+        spec_content = f"""<details class="feature-details">
+                                <summary>
+                                    {item["title"]}
+                                </summary>
+                                <div style="margin-top: 10px; border-left: 2px solid var(--accent-dim); padding-left: 15px; padding-top: 2px; padding-bottom: 2px;">"""
         
         if item['intro']:
             intro_md = convert_internal_links(item['intro'])
@@ -98,6 +101,9 @@ def generate_rows(features):
                     {f_val_html}
                 </div>
             </div>"""
+            
+        spec_content += """     </div>
+                            </details>"""
             
         row = f"""                    <tr id="{item['id']}">
                         <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">{item['id']}</td>
