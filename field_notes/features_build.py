@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# features_build.py [v1.1]
-# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions and cross-linking.
+# features_build.py [v1.2]
+# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and title cleaning.
 
 import os
 import re
@@ -44,6 +44,9 @@ def parse_feature_tracker(content):
         feat_id = match.group(1)
         feat_title = match.group(2)
         
+        # Clean up redundant tags in title like [DEFEATURED] or [CONSOLIDATED]
+        feat_title = re.sub(r'\[(DEFEATURED|CONSOLIDATED)\]\s*', '', feat_title).strip()
+        
         start_idx = match.end()
         end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
         
@@ -63,7 +66,17 @@ def generate_rows(features):
     html_rows = ""
     for item in features:
         # Determine status and class
-        status = item['fields'].get('Status', 'UNKNOWN')
+        status_val = item['fields'].get('Status', 'UNKNOWN').strip()
+        
+        # Split status and detail (e.g. DEFEATURED (Feb 2026) -> DEFEATURED, (Feb 2026))
+        status_match = re.match(r'^([^(]+)(?:\s*(\(.*?\)))?$', status_val)
+        if status_match:
+            status = status_match.group(1).strip()
+            status_detail = status_match.group(2).strip() if status_match.group(2) else None
+        else:
+            status = status_val
+            status_detail = None
+            
         status_upper = status.upper()
         
         if "ACTIVE" in status_upper or "UNITY-ALIGNED" in status_upper:
@@ -80,11 +93,21 @@ def generate_rows(features):
                                 <summary>
                                     {item["title"]}
                                 </summary>
-                                <div style="margin-top: 10px; border-left: 2px solid var(--accent-dim); padding-left: 15px; padding-top: 2px; padding-bottom: 2px;">"""
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">"""
         
+        # If status_detail was extracted, display it inside the details block to keep column clean
+        if status_detail:
+            spec_content += f"""
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>{status_detail}</p>
+                </div>
+            </div>"""
+
         if item['intro']:
             intro_md = convert_internal_links(item['intro'])
-            spec_content += f'<div style="font-size: 0.85rem; color: #aaa; margin-bottom: 10px;">{markdown.markdown(intro_md)}</div>'
+            spec_content += f'<div style="font-size: 0.8rem; color: #aaa; margin-bottom: 8px;">{markdown.markdown(intro_md)}</div>'
             
         for f_name, f_val in item['fields'].items():
             if f_name == 'Status':
@@ -95,9 +118,9 @@ def generate_rows(features):
             
             # Format the output beautifully
             spec_content += f"""
-            <div style="margin-bottom: 8px;">
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">{f_name}</span>
-                <div class="feature-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5; margin-left: 10px; margin-top: 4px;">
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     {f_val_html}
                 </div>
             </div>"""
@@ -106,11 +129,11 @@ def generate_rows(features):
                             </details>"""
             
         row = f"""                    <tr id="{item['id']}">
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">{item['id']}</td>
-                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">{item['id']}</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             {spec_content}
                         </td>
-                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <span class="impact-badge {status_class}">{status}</span>
                         </td>
                     </tr>"""
