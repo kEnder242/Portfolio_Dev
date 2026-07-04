@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature DNA | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=e8c0e963">
+    <style>
+        /* High-Density Table Styling */
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-stack);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+        .ledger-table th {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .ledger-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #222;
+            vertical-align: top;
+            line-height: 1.4;
+        }
+        .ledger-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+        .feature-body p { margin-top: 0; margin-bottom: 8px; }
+        .feature-body ul, .feature-body ol { margin-top: 0; margin-bottom: 8px; padding-left: 20px; }
+        .feature-body li { margin-bottom: 4px; }
+        .feature-body a { color: var(--accent-color); text-decoration: none; border-bottom: 1px dashed var(--accent-color); }
+        .feature-body a:hover { color: #fff; border-bottom-style: solid; }
+        .feature-body code { background: #222; padding: 2px 4px; border-radius: 3px; font-family: var(--font-stack); color: #e2e2e2; }
+        
+        .field-label { font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); font-size: 0.8rem; text-transform: uppercase; margin-top: 6px; display: inline-block; }
+        
+        .impact-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .impact-live { background: #238636; color: #fff; }
+        .impact-design { background: #1f6feb; color: #fff; }
+        .impact-stable { background: #6e7681; color: #fff; }
+        .impact-archived { background: #d29922; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div id="sys-console">
+            <div>[INIT] Mounting Feature DNA Matrix...</div>
+        </div>
+
+        <section id="ledger">
+            <h2 class="section-title">The Feature DNA Association Matrix</h2>
+            
+            <div class="disclaimer-box" style="margin-bottom: 25px;">
+                <span style="color: var(--accent-color); font-weight: bold;">[PHILOSOPHY: THE BONES & AVIONICS TRACEABILITY]</span><br>
+                <strong>The Bones (Anti-Slop Immutability)</strong>: Operational and configuration constants (PIDs, ports, paths, exact regex) are treated as rigid, immutable skeletal nodes. Conversationalizing or summarizing these anchors creates documentation drift and is prohibited.<br>
+                <strong>Avionics Traceability (DO-178C/DO-254)</strong>: No capability is certified active without bi-directional requirement-to-test tracing. Every feature must declare its operational <em>Mechanism</em> (code path) and <em>Verification</em> (diagnostic or test script). Unverified items are marked stale/uncertified.
+            </div>
+
+            <table class="ledger-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Feature ID</th>
+                        <th style="width: 75%;">Feature Specifications & Traceability DNA</th>
+                        <th style="width: 10%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Injected by features_build.py -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="mission-control.js?v=e8c0e963"></script>
+</body>
+</html>

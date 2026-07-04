@@ -213,3 +213,41 @@ This phase addresses context starvation in morning briefings (WYWO) and isolates
 - [ ] Add passive intent-based triggers for the briefing and verify via `test_wywo_integration.py`.
 - [ ] Configure watchers to exclude `whiteboard.md` and `whiteboard/` directory edits from restarting python processes.
 - [ ] Execute Playwright test `test_whiteboard_stability.py` to certify process PID stability and socket resilience during whiteboard saves.
+
+## Active Sprint 36.2: Avionics-Grade Feature Dashboard (Phase 12)
+
+### Story 1: Feature Tracker HTML Page Generation (`features_build.py`)
+*   **Why**: Provide a structured, high-density, searchable visualization of all active, design-stage, and defeatured capabilities within the Zero Trust gate (`notes.jason-lab.dev`), serving as the definitive requirement matrix of the Bicameral Mind.
+*   **How**:
+    *   Create a Python parser `features_build.py` inside `Portfolio_Dev/field_notes/` that reads `/home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md`.
+    *   Parse features via regex `r'^## \[(FEAT-\d{3}(?:\.\d+)?)\]\s*(.*?)$'`.
+    *   Map status keywords (`ACTIVE`, `DESIGN`, `DEFEATURED`, `ARCHIVED`) to appropriate semantic color badges:
+        *   `ACTIVE` / `UNITY-ALIGNED` -> `impact-live` (Green)
+        *   `DESIGN` / `TRANSFORMING` -> `impact-design` (Blue)
+        *   `DEFEATURED` / `ARCHIVED` -> `impact-stable` (Grey)
+    *   Format specifications (Logic, Rationale, Mechanism, Verification) using `markdown` for rendering lists, inline code, and links.
+    *   Assemble a static template `features.html` and inject parsed HTML rows into the table `<tbody>`.
+*   **Tasks**:
+    *   [ ] Design the base template `features.html` containing the high-density layout.
+    *   [ ] Write `features_build.py` to parse features and build the dynamic rows.
+    *   [ ] Validate the compiled output layout locally.
+
+### Story 2: Navigation & Build Integration
+*   **Why**: Fully integrate the Feature Tracker into the modular web navigation component and automate the compilation under the site-build pipeline to prevent staging outdated/uncompiled pages.
+*   **How**:
+    *   Add a "Lab Features" link to [mission-control.js](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mission-control.js) referencing `features.html`.
+    *   Bump component deployment version to `[MODULAR_V1.6]`.
+    *   Update [build_site.py](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/build_site.py) to append `"features.html"` to `HTML_FILES` for cache-busting, and add a compilation hook executing `features_build.py` automatically before cache-busting.
+*   **Tasks**:
+    *   [ ] Add the menu link in `mission-control.js` and bump version.
+    *   [ ] Update `build_site.py` to compile features during unified site builds.
+
+### Story 3: Philosophy Integration & "The Bones" Alignment
+*   **Why**: Establish the design philosophy of "The Bones" (anti-slop technical immutability) and map it to aviation-grade documentation standards (traceability of DO-178C/DO-254) to guide co-pilot modeling.
+*   **How**:
+    *   Inject a styled `[PHILOSOPHY]` container at the header of the compiled `features.html` page summarizing:
+        *   **The Bones**: The structural configuration constants (IDs, file paths, ports, regex patterns) that remain rigid and immutable, acting as the skeletal defense against LLM conversational drift.
+        *   **Avionics Traceability**: Defining clear technical features linked to verification code/tests, establishing a traceable requirements matrix where no feature exists without verification criteria.
+*   **Tasks**:
+    *   [ ] Refine and inject the custom `[PHILOSOPHY]` markdown/HTML block inside `features.html`.
+
