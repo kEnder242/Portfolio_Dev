@@ -215,7 +215,7 @@ def main():
     end_tag = "</tbody>"
     
     start_idx = html_content.find(start_tag) + len(start_tag)
-    end_idx = html_content.find(end_tag)
+    end_idx = html_content.rfind(end_tag)
     
     if start_idx == -1 or end_idx == -1:
         print("Error: tbody tags not found in template HTML.")
