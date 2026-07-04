@@ -16,6 +16,7 @@ HTML_FILES = [
     "files.html", 
     "status.html",
     "research.html",
+    "protocols.html",
     "intercom.html",
     "benchmarks.html"
 ]
@@ -56,8 +57,20 @@ def generate_trailers():
             print(f"❌ Failed to capture {html_file}: {e}")
 
 def main(args):
-    print("=== FIELD NOTES BUILD SYSTEM v2.1 (Trailers Enabled) ===")
+    print("=== FIELD NOTES BUILD SYSTEM v2.2 (Trailers Enabled) ===")
     
+    # Rebuild dynamically compiled pages
+    print("--- COMPILING DYNAMIC CONTENT ---")
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "research_build.py")], check=True)
+    except Exception as e:
+        print(f"❌ Failed to run research_build.py: {e}")
+        
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "protocols_build.py")], check=True)
+    except Exception as e:
+        print(f"❌ Failed to run protocols_build.py: {e}")
+        
     hashes = {}
     for filename in SOURCE_FILES:
         path = os.path.join(BASE_DIR, filename)

@@ -1303,3 +1303,15 @@
 
 **Mechanism:** Evaluation worker `evaluate_rag.py` (triggered in `mass_scan.py`), validation output ledger `validation_ledger.jsonl`, user correction ledger `overrides.json` parsed via `cognitive_hub.py`, and rendering UI panels on `status.html`.
 
+## [FEAT-402] Asymmetric Telemetry Probe (Failover Optimization)
+**Status:** ACTIVE
+**Logic:** Differentiates between hard offline states (Connection Refused) and soft loading states (inference lag) to optimize the remote KENDER 4090 failover.
+**Rationale:** Prevents premature failover during long-running tasks or loading peaks, while ensuring rapid re-connection when the primary host boots.
+**Mechanism:** Strict 5-second check timeout, asymmetric cache (300s success, 15s failure), 180-second loading grace period, and dynamic interjections for turns exceeding 10 seconds of remote latency.
+
+## [FEAT-403] Dream Pass Synthesis (Fine-Tuning Prep)
+**Status:** ACTIVE
+**Logic:** Structured dataset creation utilizing a specialized `[DREAM_PASS]` header on KENDER to synthesize raw, messy chat history into idealized instruction-response pairs for LoRA training.
+**Rationale:** Standardizes weight training on high-signal logical constructs rather than noisy interactive chat.
+**Mechanism:** Persona-locked generation prompts, Stage 2 regex-based output cleaning, and validation of dataset format prior to adapter training.
+

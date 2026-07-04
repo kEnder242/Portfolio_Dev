@@ -17,10 +17,11 @@ class MissionControl extends HTMLElement {
                     <li><a href="status.html" class="mission-link ${activePage === 'status.html' ? 'active' : ''}">Lab Status</a></li>
                     <li><a href="intercom.html" class="mission-link ${activePage === 'intercom.html' ? 'active' : ''}">AI Lab: Intercom</a></li>
                     <li><a href="research.html" class="mission-link ${activePage === 'research.html' ? 'active' : ''}">Research Pipeline</a></li>
+                    <li><a href="protocols.html" class="mission-link ${activePage === 'protocols.html' ? 'active' : ''}">Lab Protocols</a></li>
                     <li><a href="benchmarks.html" class="mission-link ${activePage === 'benchmarks.html' ? 'active' : ''}">Silicon Benchmarks</a></li>
                 </ul>
                 <div style="font-size: 0.6rem; color: #444; margin-top: 20px; border-top: 1px solid #222; padding-top: 5px;">
-                    DEPLOYMENT: [MODULAR_V1.4]
+                    DEPLOYMENT: [MODULAR_V1.5]
                 </div>
             </section>
         `;
