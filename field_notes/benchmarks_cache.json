@@ -1,0 +1,36 @@
+{
+  "timestamp": 1783188423.372497,
+  "date_str": "2026-07-04 11:07:03",
+  "results": [
+    {
+      "model": "Llama-3.2-3B-AWQ",
+      "engine": "vLLM",
+      "display_name": "Llama 3.2 3B AWQ (vLLM)",
+      "ttft_ms": 250.0,
+      "throughput": 45.0,
+      "itl_ms": 22.22,
+      "vram_gb": 2.5,
+      "status": "offline_fallback"
+    },
+    {
+      "model": "Gemma-2-2B",
+      "engine": "Ollama",
+      "display_name": "Gemma 2 2B (Ollama)",
+      "ttft_ms": 350.0,
+      "throughput": 35.0,
+      "itl_ms": 28.57,
+      "vram_gb": 2.2,
+      "status": "offline_fallback"
+    },
+    {
+      "model": "Qwen-2.5-Coder",
+      "engine": "Ollama",
+      "display_name": "Qwen-27B (Remote)",
+      "ttft_ms": 900.0,
+      "throughput": 25.0,
+      "itl_ms": 40.0,
+      "vram_gb": 0.0,
+      "status": "offline_fallback"
+    }
+  ]
+}
