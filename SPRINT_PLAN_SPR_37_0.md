@@ -20,8 +20,8 @@
         4.  `Qwen-27B` (Remote Sovereign on KENDER).
     *   Update [benchmarks.html](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/benchmarks.html) to present a console-dense side-by-side comparison table using simple horizontal bar visualizations (Class 1 CSS flexboxes) to compare TTFT/Throughput.
 *   **Tasks**:
-    *   [ ] Write a telemetry benchmarking runner `bench_models.py` inside `Portfolio_Dev/field_notes/` that communicates with the active local endpoints (vLLM on port 8088/8765, Ollama on port 11434, and KENDER remote gateway).
-    *   [ ] Integrate local NVML checks to capture peak VRAM footprints during each model execution run.
+    *   [ ] Write a telemetry benchmarking runner `bench_models.py` inside `Portfolio_Dev/field_notes/` that communicates with the active local endpoints (vLLM on port 8088/8765, Ollama on port 11434, and KENDER remote gateway). It must respect Turing 7.5 launch constraints (e.g., calling endpoints under active environment flags: `NCCL_SOCKET_IFNAME=lo`, `NCCL_P2P_DISABLE=1`, `VLLM_ATTENTION_BACKEND=XFORMERS`).
+    *   [ ] Integrate local NVML checks to capture peak VRAM footprints during each model execution run, guarding against the "333MiB Wall" zombie VRAM deadlock.
     *   [ ] Update the build pipeline in [build_site.py](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/build_site.py) to execute `bench_models.py` and output a JSON cache containing the performance metrics.
     *   [ ] Redesign [benchmarks.html](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/benchmarks.html) to render these dynamic metrics.
 
