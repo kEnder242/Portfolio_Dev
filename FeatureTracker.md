@@ -1,10 +1,11 @@
 # Feature Tracker: The DNA Association Matrix
 **Role: [FEAT] Technical Capabilities | [VIBE] Persona & Style**
 
-> [!IMPORTANT]
-> **PURPOSE:** This is the relational hub mapping the Lab's logic to silicon.
-> **[FEAT]**: Hardcoded logic, technical tools, and software-level functions.
-> **[VIBE]**: Node personalities, interaction flavor, and cognitive styles.
+# Philosophy
+
+**Features as "The Bones"**: Prototyping is fluid, but established system capabilities must be frozen as features with unique Feature IDs in [FeatureTracker.md](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md). These features form the rigid, skeletal bones of the codebase.
+
+**AI Grounding via Token Anchors**: During iterative refactoring or bug fixes, AI co-pilots are prone to context drift and accidental deletion of logic. To prevent this, we reference Feature IDs directly in prompts and code comments. This leverages the model's self-attention, anchoring the AI to our documented structural constraints and preserving the codebase's integrity.
 
 ---
 

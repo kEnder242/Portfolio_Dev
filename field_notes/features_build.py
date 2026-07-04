@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# features_build.py [v1.3]
-# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and title cleaning.
+# features_build.py [v1.4]
+# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and dynamic philosophy parsing.
 
 import os
 import re
@@ -14,6 +14,29 @@ def convert_internal_links(md_content):
     # Convert [FEAT-XXX] references to markdown hash links: [FEAT-XXX](#FEAT-XXX)
     md_content = re.sub(r'\[FEAT-(\d{3}(?:\.\d+)?)\]', r'[FEAT-\1](#FEAT-\1)', md_content)
     return md_content
+
+def parse_philosophy(content):
+    # Find the "# Philosophy" heading
+    philosophy_start = content.find("# Philosophy")
+    if philosophy_start == -1:
+        return ""
+    
+    # Find the first "## [FEAT-" heading after "# Philosophy"
+    first_feat = re.search(r'^## \[(FEAT-\d{3})\]', content[philosophy_start:], re.MULTILINE)
+    if not first_feat:
+        return content[philosophy_start:].strip()
+        
+    philosophy_end = philosophy_start + first_feat.start()
+    
+    # Extract the block
+    philosophy_block = content[philosophy_start:philosophy_end].strip()
+    
+    # Remove the "# Philosophy" heading line from the block
+    lines = philosophy_block.split('\n')
+    if lines and lines[0].startswith('# Philosophy'):
+        lines = lines[1:]
+        
+    return '\n'.join(lines).strip()
 
 def parse_feature_block(block):
     # Matches fields like **Logic:** (colon inside asterisks) or **Logic**: (colon outside)
@@ -74,7 +97,6 @@ def generate_rows(features):
         status_val = item['fields'].get('Status', 'UNKNOWN').strip()
         
         # Robust status-bleeding parser check
-        # Group 1: known status keyword, Group 2: any remaining details or bled text
         clean_status = "UNKNOWN"
         for word in ["ACTIVE", "DESIGN", "DEFEATURED", "ARCHIVED", "CONSOLIDATED", "DORMANT"]:
             if word in status_val.upper():
@@ -87,7 +109,6 @@ def generate_rows(features):
         status = clean_status
         status_detail = status_val[len(status):].strip()
         
-        # Clean up leading punctuation from detail (like colons or spaces)
         if status_detail.startswith(':'):
             status_detail = status_detail[1:].strip()
         if not status_detail:
@@ -166,6 +187,7 @@ def main():
     with open(SOURCE_MD, 'r') as f:
         content = f.read()
         
+    phil_md = parse_philosophy(content)
     features = parse_feature_tracker(content)
     if not features:
         print("Error: No features parsed from FeatureTracker.md.")
@@ -176,6 +198,19 @@ def main():
     with open(TEMPLATE_HTML, 'r') as f:
         html_content = f.read()
         
+    # Inject philosophy block if found
+    if phil_md:
+        phil_start_tag = '<div class="disclaimer-box" id="philosophy-box" style="margin-bottom: 15px; padding: 10px; font-size: 0.8rem; border-left-width: 3px;">'
+        phil_end_tag = '</div>'
+        
+        phil_box_idx = html_content.find(phil_start_tag)
+        if phil_box_idx != -1:
+            phil_content_start = phil_box_idx + len(phil_start_tag)
+            phil_content_end = html_content.find(phil_end_tag, phil_content_start)
+            if phil_content_end != -1:
+                philosophy_html = f"\n                <span style=\"color: var(--accent-color); font-weight: bold;\">[PHILOSOPHY: THE BONES]</span><br>\n                {markdown.markdown(phil_md)}\n            "
+                html_content = html_content[:phil_content_start] + philosophy_html + html_content[phil_content_end:]
+                
     start_tag = "<tbody>"
     end_tag = "</tbody>"
     
