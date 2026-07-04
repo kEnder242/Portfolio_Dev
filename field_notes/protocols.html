@@ -451,7 +451,7 @@
 1.  <strong>Compare</strong>: Contrast active code with the documented goal. Fix any deviations from the original plan immediately to reduce drift.
 2.  <strong>Save</strong>: Commit file edits to Git after each sub-task is completed but <strong>BEFORE</strong> testing.
 3.  <strong>Review</strong>: Execute a <code>git diff</code> on the latest commit. Verify that no "Ghost Grafts" or accidental deletions occurred.
-4.  <strong>Validate</strong>: Run the specified diagnostic or test script. Repeat steps 1-4 until the task is complete and passing.</p>
+4.  <strong>Validate</strong>: Run the specified diagnostic or test script (including <code>build_site.py</code> if static page templates, styles, or source markdown documents were modified). Repeat steps 1-4 until the task is complete and passing.</p>
                             </div>
                         </td>
                     </tr>
@@ -568,6 +568,6 @@
         </section>
     </main>
 
-    <script src="mission-control.js?v=e8c0e963"></script>
+    <script src="mission-control.js?v=06008725"></script>
 </body>
 </html>

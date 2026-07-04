@@ -228,9 +228,9 @@ This phase addresses context starvation in morning briefings (WYWO) and isolates
     *   Format specifications (Logic, Rationale, Mechanism, Verification) using `markdown` for rendering lists, inline code, and links.
     *   Assemble a static template `features.html` and inject parsed HTML rows into the table `<tbody>`.
 *   **Tasks**:
-    *   [ ] Design the base template `features.html` containing the high-density layout.
-    *   [ ] Write `features_build.py` to parse features and build the dynamic rows.
-    *   [ ] Validate the compiled output layout locally.
+    *   [x] Design the base template `features.html` containing the high-density layout.
+    *   [x] Write `features_build.py` to parse features and build the dynamic rows.
+    *   [x] Validate the compiled output layout locally.
 
 ### Story 2: Navigation & Build Integration
 *   **Why**: Fully integrate the Feature Tracker into the modular web navigation component and automate the compilation under the site-build pipeline to prevent staging outdated/uncompiled pages.
@@ -239,8 +239,8 @@ This phase addresses context starvation in morning briefings (WYWO) and isolates
     *   Bump component deployment version to `[MODULAR_V1.6]`.
     *   Update [build_site.py](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/build_site.py) to append `"features.html"` to `HTML_FILES` for cache-busting, and add a compilation hook executing `features_build.py` automatically before cache-busting.
 *   **Tasks**:
-    *   [ ] Add the menu link in `mission-control.js` and bump version.
-    *   [ ] Update `build_site.py` to compile features during unified site builds.
+    *   [x] Add the menu link in `mission-control.js` and bump version.
+    *   [x] Update `build_site.py` to compile features during unified site builds.
 
 ### Story 3: Philosophy Integration & "The Bones" Alignment
 *   **Why**: Establish the design philosophy of "The Bones" (anti-slop technical immutability) and map it to aviation-grade documentation standards (traceability of DO-178C/DO-254) to guide co-pilot modeling.
@@ -249,5 +249,5 @@ This phase addresses context starvation in morning briefings (WYWO) and isolates
         *   **The Bones**: The structural configuration constants (IDs, file paths, ports, regex patterns) that remain rigid and immutable, acting as the skeletal defense against LLM conversational drift.
         *   **Avionics Traceability**: Defining clear technical features linked to verification code/tests, establishing a traceable requirements matrix where no feature exists without verification criteria.
 *   **Tasks**:
-    *   [ ] Refine and inject the custom `[PHILOSOPHY]` markdown/HTML block inside `features.html`.
+    *   [x] Refine and inject the custom `[PHILOSOPHY]` markdown/HTML block inside `features.html`.
 
