@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# features_build.py [v1.2]
+# features_build.py [v1.3]
 # Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and title cleaning.
 
 import os
@@ -16,8 +16,8 @@ def convert_internal_links(md_content):
     return md_content
 
 def parse_feature_block(block):
-    # Matches fields like **Logic:** or **Status:** at the start of a line or block
-    field_pattern = re.compile(r'(?:^|\n)\*\*([^*:]+):\*\*')
+    # Matches fields like **Logic:** (colon inside asterisks) or **Logic**: (colon outside)
+    field_pattern = re.compile(r'(?:^|\n)\*\*([^*:]+)(?::\*\*|\*\*:)')
     matches = list(field_pattern.finditer(block))
     
     fields = {}
@@ -30,6 +30,11 @@ def parse_feature_block(block):
         start_pos = m.end()
         end_pos = matches[idx+1].start() if idx + 1 < len(matches) else len(block)
         field_value = block[start_pos:end_pos].strip()
+        
+        # Clean up leading colon if matched outside
+        if field_value.startswith(':'):
+            field_value = field_value[1:].strip()
+            
         fields[field_name] = field_value
         
     return intro, fields
@@ -68,13 +73,24 @@ def generate_rows(features):
         # Determine status and class
         status_val = item['fields'].get('Status', 'UNKNOWN').strip()
         
-        # Split status and detail (e.g. DEFEATURED (Feb 2026) -> DEFEATURED, (Feb 2026))
-        status_match = re.match(r'^([^(]+)(?:\s*(\(.*?\)))?$', status_val)
-        if status_match:
-            status = status_match.group(1).strip()
-            status_detail = status_match.group(2).strip() if status_match.group(2) else None
-        else:
-            status = status_val
+        # Robust status-bleeding parser check
+        # Group 1: known status keyword, Group 2: any remaining details or bled text
+        clean_status = "UNKNOWN"
+        for word in ["ACTIVE", "DESIGN", "DEFEATURED", "ARCHIVED", "CONSOLIDATED", "DORMANT"]:
+            if word in status_val.upper():
+                clean_status = word
+                break
+        
+        if clean_status == "UNKNOWN":
+            clean_status = status_val.split()[0].upper() if status_val.split() else "UNKNOWN"
+            
+        status = clean_status
+        status_detail = status_val[len(status):].strip()
+        
+        # Clean up leading punctuation from detail (like colons or spaces)
+        if status_detail.startswith(':'):
+            status_detail = status_detail[1:].strip()
+        if not status_detail:
             status_detail = None
             
         status_upper = status.upper()
@@ -97,11 +113,12 @@ def generate_rows(features):
         
         # If status_detail was extracted, display it inside the details block to keep column clean
         if status_detail:
+            status_detail_html = markdown.markdown(convert_internal_links(status_detail), extensions=['fenced_code'])
             spec_content += f"""
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Status Details</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>{status_detail}</p>
+                    {status_detail_html}
                 </div>
             </div>"""
 
