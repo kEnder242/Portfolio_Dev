@@ -3,7 +3,7 @@
 
 # Philosophy
 
-**Features as "The Bones"**: Prototyping is fluid, but established system capabilities must be frozen as features with unique Feature IDs in [FeatureTracker.md](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md). These features form the rigid, skeletal bones of the codebase.
+**Features as "The Bones"**: Prototyping is fluid, but established system capabilities must be frozen as features with unique Feature IDs in [FeatureTracker.md](https://github.com/kEnder242/Portfolio_Dev/blob/main/FeatureTracker.md). These features form the rigid, skeletal bones of the codebase.
 
 **AI Grounding via Token Anchors**: During iterative refactoring or bug fixes, AI co-pilots are prone to context drift and accidental deletion of logic. To prevent this, we reference Feature IDs directly in prompts and code comments. This leverages the model's self-attention, anchoring the AI to our documented structural constraints and preserving the codebase's integrity.
 
