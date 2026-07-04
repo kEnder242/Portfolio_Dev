@@ -458,116 +458,85 @@
                             else errCount++;
                             sumRecall += entry.keyword_recall || 0.0;
                         }
-                      } catch(e) {}
-                  }
-  
-                  parsedEntries.reverse(); // Newest first
-                  const avgRecall = parsedEntries.length > 0 ? (sumRecall / parsedEntries.length) * 100 : 0;
-                  
-                  let html = `
-                      <div style="margin-bottom:20px; display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px;">
-                          <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid var(--accent-color);">
-                              <div style="font-size:0.7rem; color:#888;">EVALUATIONS RUN</div>
-                              <div style="font-size:1.5rem; font-weight:bold; color:#eee;">${parsedEntries.length}</div>
-                          </div>
-                          <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #28a745;">
-                              <div style="font-size:0.7rem; color:#888;">PASS RATE</div>
-                              <div style="font-size:1.5rem; font-weight:bold; color:#28a745;">${parsedEntries.length > 0 ? ((passCount/parsedEntries.length)*100).toFixed(1) : 0}%</div>
-                          </div>
-                          <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #ffcc00;">
-                              <div style="font-size:0.7rem; color:#888;">AVG RECALL</div>
-                              <div style="font-size:1.5rem; font-weight:bold; color:#ffcc00;">${avgRecall.toFixed(1)}%</div>
-                          </div>
-                          <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #ff3b30;">
-                              <div style="font-size:0.7rem; color:#888;">FAIL/ERRORS</div>
-                              <div style="font-size:1.5rem; font-weight:bold; color:#ff3b30;">${failCount + errCount}</div>
-                          </div>
-                      </div>
-                      <table style="width:100%; border-collapse:collapse; font-size:0.75rem; text-align:left; color:#aaa;">
-                          <thead>
-                              <tr style="border-bottom:1px solid #333; color:#eee;">
-                                  <th style="padding:8px;">Timestamp</th>
-                                  <th style="padding:8px;">Domain</th>
-                                  <th style="padding:8px;">Query</th>
-                                  <th style="padding:8px; text-align:center;">Recall</th>
-                                  <th style="padding:8px; text-align:center;">Verdict</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                  `;
-  
-                  for (const entry of parsedEntries) {
-                      const ts = new Date(entry.timestamp).toLocaleString();
-                      const verdict = (entry.kender_audit || {}).verdict || "UNKNOWN";
-                      let verdictColor = "#888";
-                      if (verdict === "PASS") verdictColor = "#28a745";
-                      else if (verdict === "FAIL") verdictColor = "#ff3b30";
-                      else if (verdict === "BORDERLINE") verdictColor = "#ffcc00";
-  
-                      html += `
-                          <tr style="border-bottom:1px solid #222;">
-                              <td style="padding:8px; white-space:nowrap; color:#666;">${ts}</td>
-                              <td style="padding:8px;"><span style="color:#58a6ff; font-family:monospace; background:rgba(88,166,255,0.05); padding:2px 6px; border:1px solid rgba(88,166,255,0.1);">${entry.domain}</span></td>
-                              <td style="padding:8px; color:#ddd;">${entry.query}</td>
-                              <td style="padding:8px; text-align:center; color:#ffcc00; font-weight:bold;">${(entry.keyword_recall*100).toFixed(0)}%</td>
-                              <td style="padding:8px; text-align:center; color:${verdictColor}; font-weight:bold;">${verdict}</td>
-                          </tr>
-                      `;
-                  }
-  
-                  // Fetch and load drafts (Goal 7)
-                  let draftsHtml = `<h3 style="color:var(--accent-color); margin-top:30px; margin-bottom:15px; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #333; padding-bottom:5px;">Pending Draft Insights (Rank &lt; 4)</h3>`;
-                  try {
-                      const years = ["2024", "2023", "2022"];
-                      const drafts = [];
-                      for (const y of years) {
-                          const ry = await fetch(`data/${y}.json?t=${Date.now()}`);
-                          if (ry.ok) {
-                              const events = await ry.json();
-                              for (const ev of events) {
-                                  if (ev.rank === undefined || ev.rank < 4) {
-                                      drafts.push(ev);
-                                  }
-                              }
-                          }
-                      }
+                    } catch(e) {}
+                }
 
-                      if (drafts.length === 0) {
-                          draftsHtml += "<div style='color:#666; font-size:0.75rem; padding:10px;'>No pending low-rank drafts. All events are Diamond-refined (Rank 4).</div>";
-                      } else {
-                          draftsHtml += `<div style="max-height:220px; overflow-y:auto; border:1px solid #222; background:rgba(255,255,255,0.01); padding:10px;">`;
-                          for (const d of drafts) {
-                              const gemId = d.id || "GEM-unknown";
-                              draftsHtml += `
-                                  <div style="border-bottom:1px solid #222; padding:8px 0; font-size:0.75rem; line-height:1.4;">
-                                      <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                          <span style="color:#ffcc00; font-weight:bold; font-family:monospace; background:rgba(255,204,0,0.05); padding:2px 6px; border:1px solid rgba(255,204,0,0.1);">${gemId}</span>
-                                          <span style="color:#666;">${d.date}</span>
-                                      </div>
-                                      <div style="color:#ddd; margin-bottom:4px;">${d.summary}</div>
-                                      <div style="color:#666; font-size:0.7rem; font-style:italic;">Evidence: ${d.evidence || 'None'}</div>
-                                      <div style="margin-top:4px;">
-                                          ${(d.tags || []).map(t => `<span style="color:#888; border:1px solid #333; padding:1px 5px; margin-right:4px; font-size:0.65rem;">${t}</span>`).join('')}
-                                      </div>
-                                  </div>
-                              `;
-                          }
-                          draftsHtml += `</div>`;
-                      }
-                  } catch(err) {
-                      draftsHtml += `<div style='color:#ff3b30; font-size:0.75rem;'>Error loading pending drafts: ${err.message}</div>`;
-                  }
+                parsedEntries.reverse(); // Newest first
+                const avgRecall = parsedEntries.length > 0 ? (sumRecall / parsedEntries.length) * 100 : 0;
+                
+                let html = `
+                    <div style="margin-bottom:20px; display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px;">
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid var(--accent-color);">
+                            <div style="font-size:0.7rem; color:#888;">EVALUATIONS RUN</div>
+                            <div style="font-size:1.5rem; font-weight:bold; color:#eee;">${parsedEntries.length}</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #28a745;">
+                            <div style="font-size:0.7rem; color:#888;">PASS RATE</div>
+                            <div style="font-size:1.5rem; font-weight:bold; color:#28a745;">${parsedEntries.length > 0 ? ((passCount/parsedEntries.length)*100).toFixed(1) : 0}%</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #ffcc00;">
+                            <div style="font-size:0.7rem; color:#888;">AVG RECALL</div>
+                            <div style="font-size:1.5rem; font-weight:bold; color:#ffcc00;">${avgRecall.toFixed(1)}%</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid #333; padding:10px; border-left: 3px solid #ff3b30;">
+                            <div style="font-size:0.7rem; color:#888;">FAIL/ERRORS</div>
+                            <div style="font-size:1.5rem; font-weight:bold; color:#ff3b30;">${failCount + errCount}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background:rgba(88,166,255,0.05); border:1px solid rgba(88,166,255,0.1); padding:12px; border-radius:4px; font-size:0.75rem; color:#8b949e; margin-bottom:20px; line-height:1.4;">
+                        <strong style="color:#58a6ff;">💡 Ledger Relocation:</strong> Individual RAG query evaluation details (raw query, retrieval paths, keyword lists) are now interleaved in the <strong>Interleaved System Logs</strong> table below as expandable rows. Click on any RAG log header to review detail cards.
+                    </div>
+                `;
 
-                  html += `
-                          </tbody>
-                      </table>
-                      ${draftsHtml}
-                  `;
-                  container.innerHTML = html;
-              } catch (e) {
-                  container.innerHTML = `<div style='color:#ff3b30; padding:20px;'>Error loading ledger details: ${e.message}</div>`;
-              }
-          }
+                // Fetch and load drafts (Goal 7)
+                let draftsHtml = `<h3 style="color:var(--accent-color); margin-top:30px; margin-bottom:15px; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #333; padding-bottom:5px;">Pending Draft Insights (Rank &lt; 4)</h3>`;
+                try {
+                    const years = ["2024", "2023", "2022"];
+                    const drafts = [];
+                    for (const y of years) {
+                        const ry = await fetch(`data/${y}.json?t=${Date.now()}`);
+                        if (ry.ok) {
+                            const events = await ry.json();
+                            for (const ev of events) {
+                                if (ev.rank === undefined || ev.rank < 4) {
+                                    drafts.push(ev);
+                                }
+                            }
+                        }
+                    }
+
+                    if (drafts.length === 0) {
+                        draftsHtml += "<div style='color:#666; font-size:0.75rem; padding:10px;'>No pending low-rank drafts. All events are Diamond-refined (Rank 4).</div>";
+                    } else {
+                        draftsHtml += `<div style="max-height:220px; overflow-y:auto; border:1px solid #222; background:rgba(255,255,255,0.01); padding:10px;">`;
+                        for (const d of drafts) {
+                            const gemId = d.id || "GEM-unknown";
+                            draftsHtml += `
+                                <div style="border-bottom:1px solid #222; padding:8px 0; font-size:0.75rem; line-height:1.4;">
+                                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                        <span style="color:#ffcc00; font-weight:bold; font-family:monospace; background:rgba(255,204,0,0.05); padding:2px 6px; border:1px solid rgba(255,204,0,0.1);">${gemId}</span>
+                                        <span style="color:#666;">${d.date}</span>
+                                    </div>
+                                    <div style="color:#ddd; margin-bottom:4px;">${d.summary}</div>
+                                    <div style="color:#666; font-size:0.7rem; font-style:italic;">Evidence: ${d.evidence || 'None'}</div>
+                                    <div style="margin-top:4px;">
+                                        ${(d.tags || []).map(t => `<span style="color:#888; border:1px solid #333; padding:1px 5px; margin-right:4px; font-size:0.65rem;">${t}</span>`).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        draftsHtml += `</div>`;
+                    }
+                } catch(err) {
+                    draftsHtml += `<div style='color:#ff3b30; font-size:0.75rem;'>Error loading pending drafts: ${err.message}</div>`;
+                }
+
+                container.innerHTML = html + draftsHtml;
+            } catch (e) {
+                container.innerHTML = `<div style='color:#ff3b30; padding:20px;'>Error loading ledger details: ${e.message}</div>`;
+            }
+        }
 
         async function showKpi(btn) {
             hideAllContainers();
@@ -998,13 +967,39 @@
                 .catch(err => console.error("Status poll failed", err));
         }
 
-        function pollPager() {
-            fetch('data/pager_activity.json?t=' + new Date().getTime())
-                .then(r => r.json())
-                .then(data => {
-                    renderInterleavedTimeline(data);
-                })
-                .catch(err => console.error("Pager poll failed", err));
+        async function pollPager() {
+            try {
+                let alerts = [];
+                const r1 = await fetch('data/pager_activity.json?t=' + new Date().getTime());
+                if (r1.ok) {
+                    alerts = await r1.json();
+                }
+                
+                const r2 = await fetch('data/validation_ledger.jsonl?t=' + new Date().getTime());
+                if (r2.ok) {
+                    const text = await r2.text();
+                    const lines = text.trim().split('\n').filter(l => l.trim().length > 0);
+                    for (const line of lines) {
+                        try {
+                            const entry = JSON.parse(line);
+                            if (entry) {
+                                alerts.push({
+                                    timestamp: entry.timestamp,
+                                    severity: entry.kender_audit?.verdict === 'PASS' ? 'info' : 'warning',
+                                    source: 'RAG-EVAL',
+                                    message: `[EVAL] Query: "${entry.query}" | Verdict: ${entry.kender_audit?.verdict || 'UNKNOWN'}`,
+                                    is_rag_eval: true,
+                                    rag_data: entry
+                                });
+                            }
+                        } catch (e) {}
+                    }
+                }
+                
+                renderInterleavedTimeline(alerts);
+            } catch (err) {
+                console.error("Pager/RAG poll failed", err);
+            }
         }
 
         function renderInterleavedTimeline(alerts) {
@@ -1047,6 +1042,8 @@
                     const el = createAlertElement(node.data);
                     if (openTerminals.has(el.dataset.id)) {
                         expandAlertDetail(el.querySelector('.inline-terminal'), node.data);
+                        const indicator = el.querySelector('.expand-indicator');
+                        if (indicator) indicator.textContent = '[-]';
                     }
                     root.appendChild(el);
                 } else {
@@ -1070,6 +1067,8 @@
                         const el = createAlertElement(a);
                         if (openTerminals.has(el.dataset.id)) {
                             expandAlertDetail(el.querySelector('.inline-terminal'), a);
+                            const indicator = el.querySelector('.expand-indicator');
+                            if (indicator) indicator.textContent = '[-]';
                         }
                         list.appendChild(el);
                     });
@@ -1090,6 +1089,7 @@
             
             // 1. Detect if it has an artifact/report (Green)
             const hasArtifact = source === 'recruiter' || 
+                                source === 'rag-eval' ||
                                 msg.includes('.md') || 
                                 msg.includes('.patch') || 
                                 msg.includes('.json') || 
@@ -1099,7 +1099,7 @@
                                 msg.includes('distilled');
             
             // 2. Detect if it is an acme-lab specific process (Blue)
-            const isAcme = ['system', 'systemd', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect', 'nibbler', 'nibble', 'nibble_v2', 'curator', 'rag', 'induction', 'refiner', 'attendant'].includes(source) || 
+            const isAcme = ['system', 'systemd', 'labattendant', 'foyer', 'ignition', 'pinky', 'brain', 'thought', 'recruiter', 'librarian', 'architect', 'nibbler', 'nibble', 'nibble_v2', 'curator', 'rag', 'rag-eval', 'induction', 'refiner', 'attendant'].includes(source) || 
                            msg.includes('nibble') || 
                            msg.includes('nibbler') || 
                            msg.includes('curator') || 
@@ -1120,6 +1120,7 @@
 
             div.innerHTML = `
                 <div class="alert-header">
+                    <span class="expand-indicator" style="color:var(--accent-color); font-weight:bold; margin-right:5px;">[+]</span>
                     <span class="alert-meta">[${timeStr}]</span> 
                     <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}
                 </div>
@@ -1131,10 +1132,13 @@
 
             header.onclick = (e) => {
                 e.stopPropagation();
+                const indicator = header.querySelector('.expand-indicator');
                 if (term.style.display === 'block') {
                     term.style.display = 'none';
+                    if (indicator) indicator.textContent = '[+]';
                 } else {
                     expandAlertDetail(term, alert);
+                    if (indicator) indicator.textContent = '[-]';
                 }
             };
             return div;
@@ -1145,6 +1149,45 @@
             term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>\n";
             
             try {
+                // Check if it is a RAG evaluation log
+                if (alert.is_rag_eval) {
+                    const entry = alert.rag_data;
+                    const verdict = entry.kender_audit?.verdict || "UNKNOWN";
+                    let verdictColor = "#888";
+                    if (verdict === "PASS") verdictColor = "#28a745";
+                    else if (verdict === "FAIL") verdictColor = "#ff3b30";
+                    else if (verdict === "BORDERLINE") verdictColor = "#ffcc00";
+
+                    const keywordList = Object.entries(entry.keyword_results || {})
+                        .map(([kw, hit]) => `<span style="color:${hit ? '#28a745' : '#ff3b30'}; margin-right:8px;">${hit ? '●' : '○'} ${kw}</span>`)
+                        .join('');
+
+                    const detailHtml = `
+                        <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
+                            <div><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong></div>
+                            <div style="margin-top:5px;"><strong>Raw Query:</strong> "${entry.query}"</div>
+                            <div><strong>Domain:</strong> <span style="color:#58a6ff;">${entry.domain}</span></div>
+                            <div><strong>Retrieval Time:</strong> ${entry.retrieval_time_s ? entry.retrieval_time_s.toFixed(3) + 's' : 'N/A'}</div>
+                            <div><strong>Context Length:</strong> ${entry.context_length_chars || 0} chars</div>
+                            <div><strong>Keyword Recall:</strong> <span style="color:#ffcc00; font-weight:bold;">${((entry.keyword_recall || 0)*100).toFixed(0)}%</span> (Hits: ${entry.keyword_hits || 0}/${entry.keyword_total || 0})</div>
+                            <div style="margin-left: 10px; margin-top:2px; font-size:0.7rem;">${keywordList}</div>
+                            <div style="margin-top:5px;"><strong>Vector Distance:</strong> ${entry.vector_distance !== undefined ? entry.vector_distance : 'N/A (Exact Match)'}</div>
+                            <div style="margin-top:5px;"><strong>Retrieval Paths (Sources):</strong></div>
+                            <ul style="margin: 2px 0 2px 20px; padding:0; list-style-type: square; color:#8b949e;">
+                                ${(entry.sources || []).map(src => `<li>${src}</li>`).join('')}
+                            </ul>
+                            <div style="margin-top:5px;"><strong>Kender Audit:</strong></div>
+                            <div style="margin-left:10px;">
+                                <div>Verdict: <span style="color:${verdictColor}; font-weight:bold;">${verdict}</span></div>
+                                <div>Relevance: ${entry.kender_audit?.relevance || 'N/A'} | Coverage: ${entry.kender_audit?.coverage || 'N/A'}</div>
+                                ${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    term.innerHTML = detailHtml;
+                    return;
+                }
+
                 // 1. Check for Recruiter Briefs
                 if (alert.source.toLowerCase() === 'recruiter') {
                     const briefMatch = alert.message.match(/brief_[a-zA-Z0-9_.-]+/);

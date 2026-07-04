@@ -10,7 +10,8 @@ from ai_engine_v2 import get_engine_v2
 from utils import update_status
 
 # Config
-DATA_DIR = "field_notes/data"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
 logging.basicConfig(level=logging.INFO, format='[REFINE] %(message)s')
 
 def cosine_similarity(a, b):
