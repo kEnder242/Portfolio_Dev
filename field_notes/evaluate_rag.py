@@ -33,7 +33,7 @@ KENDER_MODEL = os.environ.get("KENDER_MODEL", "llama3:latest")
 KENDER_TIMEOUT = int(os.environ.get("KENDER_TIMEOUT", "60"))
 
 
-async def call_kender(context_text: str, query: str) -> dict:
+async def call_kender(context_text: str, query: str) -> tuple[dict, str, str]:
     """Route RAG output to KENDER for BKM-032 qualitative audit.
 
     Sends the retrieved context + original query to the remote LLM
@@ -72,28 +72,31 @@ async def call_kender(context_text: str, query: str) -> dict:
                 if resp.status == 200:
                     data = await resp.json()
                     raw_response = data.get("response", "")
-                    return _parse_kender_response(raw_response)
+                    return _parse_kender_response(raw_response), prompt, raw_response
                 else:
-                    return {
+                    err_res = {
                         "relevance": 0.0,
                         "coverage": 0.0,
                         "issues": [f"KENDER HTTP {resp.status}"],
                         "verdict": "ERROR",
                     }
+                    return err_res, prompt, f"HTTP {resp.status}"
     except asyncio.TimeoutError:
-        return {
+        err_res = {
             "relevance": 0.0,
             "coverage": 0.0,
             "issues": ["KENDER timeout"],
             "verdict": "ERROR",
         }
+        return err_res, prompt, "TimeoutError"
     except Exception as e:
-        return {
+        err_res = {
             "relevance": 0.0,
             "coverage": 0.0,
             "issues": [f"KENDER error: {e}"],
             "verdict": "ERROR",
         }
+        return err_res, prompt, f"Error: {e}"
 
 
 def _parse_kender_response(raw: str) -> dict:
@@ -197,10 +200,33 @@ async def evaluate_single_anchor(anchor: dict) -> dict:
 
     # Stage 3: KENDER BKM-032 Audit
     print(f"  Routing to KENDER ({KENDER_MODEL}) for BKM-032 audit...")
-    kender_result = await call_kender(context_text[:4000], query)
+    kender_result, kender_prompt, kender_raw_resp = await call_kender(context_text[:4000], query)
     print(f"  KENDER VERDICT: {kender_result.get('verdict', 'UNKNOWN')}")
     print(f"  KENDER RELEVANCE: {kender_result.get('relevance', 0.0)}")
     print(f"  KENDER COVERAGE: {kender_result.get('coverage', 0.0)}")
+
+    # Generate unique run ID and save diagnostic details decoupled
+    import hashlib
+    query_hash = hashlib.md5(query.encode('utf-8')).hexdigest()[:8]
+    run_id = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{query_hash}"
+    
+    # Save the detailed diagnostic logs using Atomic File Swap Protocol
+    rag_runs_dir = os.path.join(os.path.dirname(LEDGER_PATH), "rag_runs")
+    os.makedirs(rag_runs_dir, exist_ok=True)
+    run_payload = {
+        "query": query,
+        "context": context_text,
+        "expected_keywords": expected_keywords,
+        "keyword_results": kw_result["keyword_results"],
+        "kender_prompt": kender_prompt,
+        "kender_response": kender_raw_resp
+    }
+    
+    # Atomic write to rag_runs directory
+    from infra.atomic_io import atomic_write_json
+    run_file_path = os.path.join(rag_runs_dir, f"{run_id}.json")
+    atomic_write_json(run_file_path, run_payload)
+    print(f"  Diagnostic log written to {run_file_path}")
 
     # Assemble result entry
     entry = {
@@ -216,6 +242,7 @@ async def evaluate_single_anchor(anchor: dict) -> dict:
         "keyword_total": kw_result["keyword_total"],
         "keyword_results": kw_result["keyword_results"],
         "kender_audit": kender_result,
+        "run_id": run_id,
     }
 
     return entry
@@ -248,11 +275,11 @@ async def main():
 
         # Append atomically after each anchor (crash-safe)
         append_ledger_atomic(entry)
-        print(f"  ✅ Appended to ledger.")
+        print("  ✅ Appended to ledger.")
 
     # --- Summary Report ---
     print(f"\n{'='*70}")
-    print(f"  EVALUATION SUMMARY")
+    print("  EVALUATION SUMMARY")
     print(f"{'='*70}")
     recalls = [r["keyword_recall"] for r in results]
     avg_recall = sum(recalls) / len(recalls) if recalls else 0.0
@@ -272,7 +299,7 @@ async def main():
 
     print(f"  Total Anchors:     {total}")
     print(f"  Avg Keyword Recall: {avg_recall:.2%}")
-    print(f"  KENDER Verdicts:")
+    print("  KENDER Verdicts:")
     print(f"    PASS:      {passed}")
     print(f"    BORDERLINE: {borderline}")
     print(f"    FAIL:      {failed}")
