@@ -76,19 +76,19 @@
     *   *Gems-to-Notes Ground Truth Connection*: In `archive_node.py`'s `get_context()`, the vector search collection (`long_term_wisdom`) acts as the "Discovery" index. Currently, when matches are found, the pipeline only inserts a reference string to the target file. We will modify `get_context()` so that for **all** retrieved candidates, it extracts the date (e.g. `2024-01-15`) and source file (e.g. `2024_01.json`), opens the raw JSON file, and copies the actual chronological text entry summary/details directly into the returned context string. This bridges the semantic-to-physical gap, providing the co-pilot with the actual ground truth notes.
     *   *Environment & Path Hardening*: Ensure all background tasks and tests run under the unified environment setup, setting `PYTHONPATH` explicitly (`export PYTHONPATH=$PYTHONPATH:$(pwd)/Portfolio_Dev/field_notes`) and utilizing absolute config paths to prevent execution failures in automated cron/nightly triggers.
 *   **Tasks**:
-    *   [ ] **Task 5.1: Decoupled RAG Diagnostics Logging**
+    *   [x] **Task 5.1: Decoupled RAG Diagnostics Logging**
         *   *Why (Rationale)*: Storing full RAG query contexts and Kender audit interactions directly in `validation_ledger.jsonl` will bloat the file and slow down `status.html` page load. We must separate the heavy diagnostic logs from the main lightweight ledger.
         *   *How (Mechanism)*: Refactor `evaluate_rag.py` to generate a unique run ID (e.g. `run_YYYYMMDD_HHMMSS`), write only metadata to `validation_ledger.jsonl`, and write the full payload (retrieved context, expected keywords, keyword results mapping, Kender prompt/response) to a separate JSON file (`data/rag_runs/run_YYYYMMDD_HHMMSS.json`) using the Atomic File Swap Protocol (`.tmp` + `os.replace`).
         *   *Proof (Verification)*: Execute `evaluate_rag.py` and verify that a lightweight entry is added to `validation_ledger.jsonl`, and a detailed JSON file is created under `field_notes/data/rag_runs/` with valid JSON formatting.
-    *   [ ] **Task 5.2: Lazy-Load Expandable Dashboard Panel**
+    *   [x] **Task 5.2: Lazy-Load Expandable Dashboard Panel**
         *   *Why (Rationale)*: Expanding a RAG evaluation row currently only shows high-level metadata. To display the complete context and audit details without page-load lag, the UI must lazy-load the detailed logs only when requested.
         *   *How (Mechanism)*: Refactor the `expandAlertDetail` Javascript function in `status.html` (lines 1153-1189) so that for RAG logs, it performs an asynchronous `fetch()` to `data/rag_runs/run_YYYYMMDD_HHMMSS.json` and renders the context and audit response inside the expanded pre-formatted panel.
         *   *Proof (Verification)*: Load the dashboard in a browser, expand a RAG evaluation row, and verify that the browser fetches the specific JSON file and renders the full context text correctly.
-    *   [ ] **Task 5.3: Gems-to-Notes Ground Truth Connection**
+    *   [x] **Task 5.3: Gems-to-Notes Ground Truth Connection**
         *   *Why (Rationale)*: Currently, `get_context()` only returns document anchors and references, leaving the resident models (Pinky/Brain) without the actual raw chronological note text. We must bridge the gap between vector semantic searches and raw date-based notes.
         *   *How (Mechanism)*: Refactor the raw acquisition stage of `get_context()` in `archive_node.py` (lines 789-828). For each retrieved candidate, extract the date/source, load the target JSON note file (e.g. `2024_01.json`), find the matching chronological entry, and inject its actual raw note text directly into the returned context string.
         *   *Proof (Verification)*: Run `pytest src/debug/test_tool_registry.py` and query the tool directly to verify the returned JSON context contains actual raw note paragraphs matching the candidate dates.
-    *   [ ] **Task 5.4: Environment & Path Hardening**
+    *   [x] **Task 5.4: Environment & Path Hardening**
         *   *Why (Rationale)*: Background tasks and triggers fail if import paths or config targets are relative and context-dependent.
         *   *How (Mechanism)*: Refactor `evaluate_rag.py` to resolve configuration paths using absolute path utilities (`os.path.abspath`) instead of relative paths, and verify the PYTHONPATH requirements in execution scripts.
         *   *Proof (Verification)*: Execute `evaluate_rag.py` in a separate terminal shell without manual environment variables, verifying it runs and outputs successfully.
