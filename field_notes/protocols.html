@@ -583,6 +583,35 @@
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">BKM-035</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Lab/Feature Taxonomy Separation Protocol</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Objective</strong>: Maintain a clear boundary between the Lab Infrastructure (management systems) and Resident Features (domain business logic) to prevent naming collisions and design confusion.</p>
+<ol>
+<li><strong>Scope Division</strong>:<ul>
+<li><strong><code>[LAB_INFRA]</code> (Infrastructure)</strong>: Pertains to Foyer, Attendant, WebSockets, IPC/Intercom, agent cognitive engines (Dreaming, Coherence Critic), and daemon management. Documented under <code>HomeLabAI/docs/Protocols.md</code>.</li>
+<li><strong><code>[RESIDENT_FEAT]</code> (Features)</strong>: Pertains to validation scripts, benchmarks, telemetry pipelines (RAPL, DCGM, Prometheus metrics), status templates, and user-facing dashboards. Documented under <code>Portfolio_Dev/FeatureTracker.md</code>.</li>
+</ul>
+</li>
+<li><strong>Commit Prefix Nomenclature</strong>:<ul>
+<li>All git commits and sprint stories targeting the infrastructure layer must prefix the description with <code>infra</code> (e.g. <code>feat(infra): update WebSocket handshake</code>).</li>
+<li>All commits and sprint stories targeting the resident features must prefix the description with the specific feature domain (e.g. <code>feat(telemetry): add GPU thermal logs</code>).</li>
+</ul>
+</li>
+<li><strong>Safe Scalpel Usage</strong>:<ul>
+<li>The Safe Scalpel ([FEAT-198]) atomic patcher tools (<code>replace_file_content</code> / <code>multi_replace_file_content</code>) must be used for file modifications where race conditions are expected (e.g. editing codebase files while live web servers or daemon services are active).</li>
+</ul>
+</li>
+<li><strong>Informative-Only Development Gates</strong>:<ul>
+<li>In general, development gates such as linting (e.g., <code>ruff check</code>) and verification checks should favor <strong>informative</strong> behavior (providing diagnostic feedback as context in the model output stream) over strict blocking behavior. This reduces toolchain friction and allows agents to self-correct during successive iterations without deadlocking the execution pipeline.</li>
+</ul>
+</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
