@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** March 6, 2026
+**Date:** July 6, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -15,16 +15,18 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-37-0-validation** | 2. Implementation | Bicameral Validation & RAG Diagnostics | **ACTIVE** |
 | **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Semantic Retrieval & GPU Telemetry (NVIDIA Pivot)" (Sprint SPR-34.0)
-**Goal:** Deepen retrieval precision via hierarchical indexing/MCompassRAG, and build live token/GPU telemetry & model performance benchmarks.
+## 🎯 Active Initiative: "Bicameral Validation & RAG Diagnostics" (Sprint SPR-37.0)
+**Goal:** Deepen model verification with Decoupled Diagnostic logging, resolve RAG context lookup (Gems-to-Notes), and audit multi-party coherence.
 
-## ✅ Global Milestones (June 2026)
-1.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete. Phase 5 (Cognitive Taxonomy, Cache Alignment, positive peer-to-peer prompting, Foyer native logs viewer, and LoRA training restoration) complete.
-2.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
+## ✅ Global Milestones (July 2026)
+1.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: ACTIVE. Story 1 (Multi-model benchmarking) complete. Story 2 (RAG evaluation strict year filtering) complete. Story 3 (Pinky coherence critic) complete. Story 4 (Interleaved log console dashboard) complete. Story 5 (Decoupled RAG Diagnostics & Ground Truth Chronology) complete and verified.
+2.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete. Phase 5 (Cognitive Taxonomy, Cache Alignment, positive peer-to-peer prompting, Foyer native logs viewer, and LoRA training restoration) complete.
+3.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
 2.  **GPU Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
 
 ## ✅ Global Milestones (May 2026)
