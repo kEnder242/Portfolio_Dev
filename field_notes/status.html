@@ -1162,7 +1162,7 @@
                         .map(([kw, hit]) => `<span style="color:${hit ? '#28a745' : '#ff3b30'}; margin-right:8px;">${hit ? '●' : '○'} ${kw}</span>`)
                         .join('');
 
-                    const detailHtml = `
+                    let detailHtml = `
                         <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
                             <div><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong></div>
                             <div style="margin-top:5px;"><strong>Raw Query:</strong> "${entry.query}"</div>
@@ -1182,9 +1182,46 @@
                                 <div>Relevance: ${entry.kender_audit?.relevance || 'N/A'} | Coverage: ${entry.kender_audit?.coverage || 'N/A'}</div>
                                 ${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}
                             </div>
+                            <div class="rag-run-details" style="margin-top:10px; border-top:1px dashed #30363d; padding-top:10px;">
+                                <span style="color:#8b949e;">[LOADING DECOUPLED CONTEXT LOG...]</span>
+                            </div>
                         </div>
                     `;
                     term.innerHTML = detailHtml;
+                    
+                    if (entry.run_id) {
+                        try {
+                            const detailResp = await fetch(`data/rag_runs/${entry.run_id}.json?t=${Date.now()}`);
+                            if (detailResp.ok) {
+                                const runDetail = await detailResp.json();
+                                const runDetailsDiv = term.querySelector('.rag-run-details');
+                                if (runDetailsDiv) {
+                                    runDetailsDiv.innerHTML = `
+                                        <div><strong style="color:var(--accent-color);">[DECOUPLED LOG DETAILS]</strong></div>
+                                        <div style="margin-top:5px;"><strong>Retrieved Context (Ground Truth):</strong></div>
+                                        <pre style="background:#090d13; color:#c9d1d9; border:1px solid #21262d; padding:8px; border-radius:4px; max-height:220px; overflow-y:auto; white-space:pre-wrap; font-size:0.7rem; margin-top:2px;">${runDetail.context || 'None'}</pre>
+                                        <div style="margin-top:8px;"><strong>Kender Audit Conversation:</strong></div>
+                                        <pre style="background:#090d13; color:#c9d1d9; border:1px solid #21262d; padding:8px; border-radius:4px; max-height:180px; overflow-y:auto; white-space:pre-wrap; font-size:0.7rem; margin-top:2px;">${runDetail.kender_response || 'None'}</pre>
+                                    `;
+                                }
+                            } else {
+                                const runDetailsDiv = term.querySelector('.rag-run-details');
+                                if (runDetailsDiv) {
+                                    runDetailsDiv.innerHTML = `<span style="color:#ff3b30;">[ERROR: Decoupled log not found (HTTP ${detailResp.status})]</span>`;
+                                }
+                            }
+                        } catch (fetchErr) {
+                            const runDetailsDiv = term.querySelector('.rag-run-details');
+                            if (runDetailsDiv) {
+                                runDetailsDiv.innerHTML = `<span style="color:#ff3b30;">[ERROR loading log: ${fetchErr.message}]</span>`;
+                            }
+                        }
+                    } else {
+                        const runDetailsDiv = term.querySelector('.rag-run-details');
+                        if (runDetailsDiv) {
+                            runDetailsDiv.innerHTML = `<span style="color:#8b949e;">[Decoupled log unavailable: legacy ledger entry]</span>`;
+                        }
+                    }
                     return;
                 }
 
