@@ -225,7 +225,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     const isSystem = sl_low === 'system';
     const text_low = text.toLowerCase();
-    const isSystemStrategic = (isSystem) && (text_low.includes('sovereign') || text_low.includes('engaging'));
+    const isSystemStrategic = (isSystem) && (text_low.includes('strategic') || text_low.includes('engaging'));
 
     // [Task 16.2] Markdown Pop via Marked.js
     let formattedText = text;
