@@ -37,7 +37,7 @@ We prioritize system availability by distinguishing between "Invariant" and "Tra
 *   **The Invariant Sensory Core (EarNode):** Powered by NeMo. This is the "Heart." It MUST remain resident and functional regardless of the reasoning engine state. Sensing must never fail.
 *   **The Transient Reasoning Engine (Brain/Pinky):** Powered by vLLM/Ollama. This is the "Mind." It can be downshifted, swapped, or suspended based on hardware pressure.
 
-## 5. Hardware Alignment (The "Silicon" Mandate)
+## 5. Hardware Alignment (The "Resource" Mandate)
 To survive on an 11GB VRAM budget (RTX 2080 Ti), all AI projects MUST adhere to these resource constraints:
 *   **Model Tiering**: Standardize on **Gemma 2 2B (MEDIUM)** for local reasoning. 
 *   **VRAM Parity**: Avoid models > 7B on the orchestration node to prevent clashing with the EarNode (~1GB) and system overhead.

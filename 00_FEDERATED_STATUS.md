@@ -19,13 +19,13 @@
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Semantic Retrieval & Silicon Telemetry (NVIDIA Pivot)" (Sprint SPR-34.0)
+## 🎯 Active Initiative: "Semantic Retrieval & GPU Telemetry (NVIDIA Pivot)" (Sprint SPR-34.0)
 **Goal:** Deepen retrieval precision via hierarchical indexing/MCompassRAG, and build live token/GPU telemetry & model performance benchmarks.
 
 ## ✅ Global Milestones (June 2026)
 1.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete. Phase 5 (Cognitive Taxonomy, Cache Alignment, positive peer-to-peer prompting, Foyer native logs viewer, and LoRA training restoration) complete.
 2.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
-2.  **Silicon Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
+2.  **GPU Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
 
 ## ✅ Global Milestones (May 2026)
 1.  **Governor's Gate [SPR-27.0]**: ACTIVE. Implementing resource coordination between background workers and the Lab Hub to prevent OOM events.
@@ -34,14 +34,14 @@
 ## ✅ Global Milestones (April 2026)
 1.  **Mind Healing [SPR-20.0]**: COMPLETE. Implemented Neural Buffer [FEAT-283] for WAKING state queuing, type-agnostic triage parsing [ERR-06], and Heartbeat Deferral [FEAT-283.2] to prevent weight-swap collisions.
 2.  **Stability Gauntlet [SPR-19.0]**: COMPLETED. Verified vLLM V0 stability on 2080 Ti and established PID Ledger for port reclamation.
-3.  **Silicon Stability [SPR-18.0]**: COMPLETED. Resolved Hibernation Wake-up traps and established Remote Lab Control auth discovery.
+3.  **Engine Stability [SPR-18.0]**: COMPLETED. Resolved Hibernation Wake-up traps and established Remote Lab Control auth discovery.
 4.  **Neural Relay [SPR-15.0]**: COMPLETED. Parallelized local inference and scalar fuel routing verified.
 
 ## ✅ Global Milestones (March 2026)
 1.  **Neural Relay [SPR-15.0]**: ACTIVE. Parallelized local inference implemented. Waterfall pipe in logic phase.
 2.  **Long-Tail Stability [SPR-13.0]**: COMPLETED. Resolving Windows 4090 latency misalignment and implementing Serial Capture (v12).
 3.  **Strategic Induction [SPR-13.0]**: COMPLETED. Implemented the Decoupled Pipeline (Capture/Refine) and Bicameral Bridge refactor.
-4.  **Silicon Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
+4.  **Engine Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
 
 ## 🔮 The Roadmap
 
@@ -53,14 +53,14 @@
 *   [ ] **Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes (In Progress).
 *   [ ] **Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom.
 
-### [COMPLETE] Phase 13.1: Silicon Induction & The Living Ledger
+### [COMPLETE] Phase 13.1: Archive Ingestion & The Living Ledger
 *   [x] **Neural Shock [FEAT-201]**: Logic-based mental reset feedback loop for tool hallucinations.
 *   [x] **Semantic Map (v2)**: Implemented 3-layer strategic hierarchy (Strategic, Analytical, Tactical).
 *   [ ] **Curriculum Distillation**: Formatting BKMs into instruction-tuning pairs.
 *   [ ] **LoRA Induction**: Fine-tuning the `lab_sentinel_v1` native expert.
 
-### [COMPLETE] Phase 13.2: Silicon Stability & Forensic Clarity
-*   [x] **Forensic Ledger [FEAT-151]**: Structured silicon logging with physical trace evidence.
+### [COMPLETE] Phase 13.2: Engine Stability & Forensic Clarity
+*   [x] **Forensic Ledger [FEAT-151]**: Structured engine logging with physical trace evidence.
 *   [x] **Split Status Model [FEAT-045]**: Bifurcated health (API) from logical persona (status.json).
 *   [x] **Resilience Ladder [FEAT-069]**: Autonomous Tiered Governance (Unified -> Large -> Emergency Stop).
 *   [x] **Operational Modes**: Verified DEBUG_PINKY filtering and auto-shutdown for non-service modes.
@@ -76,7 +76,7 @@
 4.  **Historical Pivot (Feb 2026)**: vLLM was briefly **TABLED** due to Ray/NCCL deadlocks; Ollama served as the bridge during characterization.
 5.  **Sovereign Ultra (27B)**: Claude-distilled Qwen resident on KENDER (4090).
 6.  **Resonant Chamber [FEAT-153]**: Implemented multi-agent coordination via "overhearing" strategic intent.
-7.  **Forensics Archive Established**: Relocated "Silicon Scars" to `HomeLabAI/docs/forensics/` to preserve pedigree.
+7.  **Forensics Archive Established**: Relocated "Technical Scars" to `HomeLabAI/docs/forensics/` to preserve pedigree.
 
 ## 🔮 The Roadmap (The Restoration Hub)
 
@@ -184,10 +184,10 @@ To force-clear browser caches after UI changes, run the automated build script:
 `python3 field_notes/build_site.py`
 
 ### Diagnostic Instruments
-Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)** for silicon verification and test suites.
+Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)** for hardware verification and test suites.
 
 ### ✅ PHASE 15: THE NEURAL RELAY
-- **Stabilization Sweep [SPR-32]**: (Complete) Modernized silicon core to vLLM 0.21.0. Resolved Turing JIT linker fragmentation and dependency wars.
+- **Stabilization Sweep [SPR-32]**: (Complete) Modernized inference core to vLLM 0.21.0. Resolved Turing JIT linker fragmentation and dependency wars.
 - **Multi-LoRA Baseline**: Re-certified Llama 3.2 3B AWQ with concurrent Voice, Brain, and History adapters.
 - **Orchestration Memory**: Implemented Token-Aware Eviction and Sovereign Context Distillation.
 - **VRAM Hibernation**: Verified 100% memory release during natural AFK drift.

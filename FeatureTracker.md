@@ -98,7 +98,7 @@
 **Logic:** A background process (`dream_cycle.py`) that periodically synthesizes chaotic interaction logs into high-density "Diamond Wisdom" paragraphs.
 **Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
 
-## [FEAT-069] Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
+## [FEAT-069] Hardware-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
 **Status:** ACTIVE
 **Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
 **SCAR #2:** Feb 13 "333MiB Wall" / Turing BF16 initialization deadlock.
@@ -224,7 +224,7 @@
 **Logic:** The Lab Attendant monitors port 8765. If the process is alive but the port is unresponsive for 3 intervals, it triggers an autonomous engine swap.
 **Mechanism:** `vram_watchdog_loop` in `lab_attendant.py`.
 
-## [FEAT-029] Absolute Zero Silicon Purification
+## [FEAT-029] Absolute Zero Hardware Purification
 **Status:** ARCHIVED (Feb 19 BKM)
 **Logic:** To break circular dependency deadlocks during driver installation, the system purges all GPU-polling services and physically erases module files (`.ko.zst`) to secure a 100% vacant hardware window.
 **Mechanism:** `SESSION_BKM_FEB_19.md`.
@@ -443,11 +443,11 @@
 ## [FEAT-118] Resonant Oracle (Magic 8-Ball Preambles)
 **Status:** DESIGN
 **Logic:** Replaces hard-coded strings with a weighted state-aware registry.
-**Categories:** `RETRIEVING`, `UNCERTAIN`, `SILICON_STRESS`, `HANDSHAKE`.
+**Categories:** `RETRIEVING`, `UNCERTAIN`, `VRAM_STRESS`, `HANDSHAKE`.
 
 ## [FEAT-119] The Blacklist Law (Process-Strict Lifecycle) [SCAR #3]
 **Status:** ACTIVE (V5 Refactor)
-**Logic:** Ensures the Lab's physical silicon is clear before boot by explicitly targeting ONLY processes we own.
+**Logic:** Ensures the Lab's physical ports and GPU VRAM are clear before boot by explicitly targeting ONLY processes we own.
 **SCAR #3:** Feb 11 "Ghost PID" port contention during marathon reload.
 **Purge-Before-Poll Hardening:** Explicitly DEPRECATED `fuser -k`. We now use `pkill -9` targeted strictly at our `setproctitle` hashes (e.g., `acme_foyer_v5`) and the vLLM engine binary. This prevents suicidal client drops (e.g., Gemini CLI crashes) when external processes touch the ports.
 **Mechanism:** `ExecStopPost` in `lab-attendant.service`.
@@ -540,7 +540,7 @@
 3.  **Self-Ignition**: Triggers the `handle_start` sequence for the Unified Base (3B) model if the gate is clear.
 **Verification**: Simulated reboot test and VRAM collision test.
 
-## [FEAT-142] Silicon Quiesce (The Freeze)
+## [FEAT-142] Service Quiesce (The Freeze)
 **Status:** DESIGN
 **Logic:** Native Attendant method to enter a safe maintenance state.
 **Mechanism:** `POST /quiesce`. Sets `maintenance.lock`, stops active residents, and reaps all ports.
@@ -557,7 +557,7 @@
 
 ## [FEAT-137] vLLM 0.17.0 Infrastructure
 **Status:** ACTIVE
-**Logic**: Establishes a stable environment for vLLM 0.17.0 on Turing (2080 Ti) silicon.
+**Logic**: Establishes a stable environment for vLLM 0.17.0 on Turing (2080 Ti) hardware.
 **Mechanism**:
 1.  **Venv**: Dedicated environment at `/home/jallred/Dev_Lab/.venv_vllm_017`.
 2.  **Models**: Staged in `/speedy/models/` (Qwen2.5-3B-Instruct, Llama-3.2-3B-Instruct-AWQ).
@@ -622,12 +622,12 @@
 **Logic:** Implements a Server-Sent Events transport for the Attendant to allow non-TTY remote tool connectivity.
 **Rationale:** The original FastMCP implementation required a TTY, which failed inside systemd services. SSE provides a persistent "Hot Link" for the Gemini CLI to stay connected to the active service without spawning redundant processes.
 **Mechanism:** `GET /events` endpoint in `lab_attendant_v2.py`.
-**High-Fidelity Signal:** Heartbeats include **Live VRAM Characterization**, allowing the Agent to perceive silicon limits before attempting heavy tool calls.
+**High-Fidelity Signal:** Heartbeats include **Live VRAM Characterization**, allowing the Agent to perceive VRAM limits before attempting heavy tool calls.
 
 ## [FEAT-157] Hybrid Contextual Unification
 **Status:** ACTIVE
 **Logic:** Transitions from weight-based character dependency to prompt-based character injection.
-**Rationale:** Removes the "Silicon Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.
+**Rationale:** Removes the "Dependency Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.
 **Mechanism:** Hub injects high-fidelity persona traits directly into the system prompt. 
 
 ## [FEAT-158] Grounded Shadow Protocol
@@ -668,7 +668,7 @@
 **Logic**: High-availability interaction style where the "Heart" (STT) and "Mind" (Reasoning) are persistent anchors of the environment.
 **Behavior**: The system is designed to be "Always On" following a power cycle. If the Agent encounters an offline state, it is treated as an anomaly rather than the default, triggering immediate diagnostic reporting.
 
-### [VIBE-010] The "Diagnostic Partner" Shift (Silicon Halt)
+### [VIBE-010] The "Diagnostic Partner" Shift (Engine Halt)
 **Objective**: Maintain safety and transparency when the physical environment fails.
 **Logic**: A persona-level transition triggered by hardware instability or orchestration failure.
 **Triggers**:
@@ -677,7 +677,7 @@
 *   **Driver**: NVIDIA driver communication loss or `nvidia-smi` hangs.
 *   **Disk Pressure**: `df -h` reporting >95% usage on `/` or `/home` (rpool pressure).
 *   **Orchestration Gap**: Lab Attendant (`:9999`) returning 404, Connection Refused, or timing out.
-**Behavior**: The Agent instantly shifts from "Autonomous Execution" to "Diagnostic Reporting." It stops all tool-use, presents the silicon vitals (PID, VRAM, Disk, Attendant logs), and adopts a "Passive Observer" stance.
+**Behavior**: The Agent instantly shifts from "Autonomous Execution" to "Diagnostic Reporting." It stops all tool-use, presents the system vitals (PID, VRAM, Disk, Attendant logs), and adopts a "Passive Observer" stance.
 **Mandate**: Do not attempt `reboot` or `sudo` cleanup without explicit "Greenlight" from the Lead Engineer.
 
 ### [VIBE-001] Tool-First Instinct
@@ -731,9 +731,9 @@
 **Logic:** Sanitize the internal `research.html` for public deployment by stripping Zero Trust dependencies and inlining high-density CSS.
 **Artifacts:** `www_deploy/research.html`, `www_deploy/sync_research.sh`, and `assets/research_snapshot.png`.
 
-## [LAW-021] Silicon Verification Law (The "Wall" Audit)
+## [LAW-021] Hardware Verification Law (The "Wall" Audit)
 **Status:** ACTIVE
-**Logic:** Mandatory silicon gate for inference engine changes. Requiring 100% stable `POST /ping` heartbeat verification of the **333MiB Breakthrough** (Turing VRAM threshold).
+**Logic:** Mandatory gate for inference engine changes. Requiring 100% stable `POST /ping` heartbeat verification of the **333MiB Breakthrough** (Turing VRAM threshold).
 **Pedigree:** Anchored in **[ENGINEERING_PEDIGREE.md](../HomeLabAI/docs/ENGINEERING_PEDIGREE.md)**.
 
 ## [FEAT-171] Intelligent Lifecycle Matrix (Disconnect vs. Close)
@@ -750,12 +750,12 @@
 
 ## [FEAT-172] Hemispheric Interjection (The Active Buffer)
 **Status:** DESIGN
-**Logic:** Transforms the Gateway (Pinky) from a reactive narrator into an active co-processor that manages the "Silicon Gap" between human intent and Brain latency.
+**Logic:** Transforms the Gateway (Pinky) from a reactive narrator into an active co-processor that manages the "Latency Gap" between human intent and Brain latency.
 **Rationale:** To eliminate "Brain Silence" and improve technical accuracy by identifying gaps in queries before the deep reasoning cycle finishes.
 **Mechanisms:**
 1.  **The Lag Shield**: Pinky perceives the `deep_think` state and provides strategic fillers or status updates (e.g., "The Brain is chewing on the 580 driver logs, but Narf! Did you include the `dmesg` output?") to maintain engagement.
 2.  **Pre-emptive Probing**: Parallel pass where Pinky identifies missing technical parameters (IPs, versions, hardware IDs) and asks for them *while* the Brain is generating.
-3.  **Organic Interrupt**: Ability for Pinky to broadcast a `[HALT]` signal if she detects a "Silicon Reality" conflict (e.g., thermals or VRAM limits) that invalidates the Brain's current derivation.
+3.  **Organic Interrupt**: Ability for Pinky to broadcast a `[HALT]` signal if she detects a "Hardware Reality" conflict (e.g., thermals or VRAM limits) that invalidates the Brain's current derivation.
 4.  **Context Hot-Plugging**: Injects user's intermediate answers into the Brain's active context window to steer generation mid-flight.
 
 ## [FEAT-173] Agentic Backtracking (Autonomous Exploration)
@@ -769,7 +769,7 @@
 
 ## [FEAT-174] Multi-LoRA Expert Routing (Poor Man's MoE)
 **Status:** ACTIVE
-**Logic:** Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident silicon (3B).
+**Logic:** Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident models (3B).
 **Rationale:** To achieve "Ultimate Expert Specialization" (DeepSeekMoE) without the VRAM penalty of a 14B+ model. 
 **Mechanisms:**
 1.  **The "Pre-Gated" Pass**: The Cognitive Hub acts as the "Router," identifying the task domain before the inference call and selecting the corresponding specialized LoRA "glasses."
@@ -786,7 +786,7 @@
 ## [FEAT-180] Tiered Resource Governance (The Resilience Ladder)
 **Status:** ACTIVE (REFINED)
 **Logic:** Replaces the monolithic Hard Stop with a multi-stage degradation hierarchy to maintain Lab availability during moderate hardware pressure.
-**Rationale:** Fallbacks introduce "Logic Drift," but a total shutdown is the final resort. Tiered governance ensures the Lab only dies when silicon integrity is at true risk.
+**Rationale:** Fallbacks introduce "Logic Drift," but a total shutdown is the final resort. Tiered governance ensures the Lab only dies when hardware integrity is at true risk.
 **Tiered Hierarchy:**
 1. **Tier 1 (vLLM):** Primary high-throughput mode.
 2. **Tier 2 (Ollama Fallback):** Auto-restart into Ollama with a 1B/3B model if VRAM pressure is >85% but <95%.
@@ -971,7 +971,7 @@
 
 ## [FEAT-213] Autonomous Forge (VRAM Handover)
 **Status:** ACTIVE
-**Logic:** A "Silicon Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.
+**Logic:** A "Process Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.
 **Mechanism:** `lab_attendant_v3.py` `mcp_train_adapter` tool.
 
 ## [FEAT-214] Parameterized Nightly Forge
@@ -979,17 +979,17 @@
 **Logic:** Updates `train_expert.py` to support `max_steps` argument, enabling autonomous alternating nightly training cycles.
 **Mechanism:** `train_expert.py` CLI argument parsing.
 
-## [FEAT-219] Silicon Handshake (Hardened Gate)
+## [FEAT-219] Service Handshake (Hardened Gate)
 **Status:** ACTIVE
 **Logic:** UI sends a key extracted from the style.css cache-busting hash; Attendant validates via middleware.
 **Mechanism:** 'key_middleware' in 'lab_attendant_v3.py' supports Header (X-Lab-Key) or Query Param (?key=).
 
 ## [FEAT-220] Diplomatic Immunity Protocol
 **Status:** ACTIVE
-**Goal:** Prevent Attendant suicide loops while enabling aggressive PGID-based silicon reclamation.
+**Goal:** Prevent Attendant suicide loops while enabling aggressive PGID-based process reclamation.
 **Mechanism:** 
 1.  _BOOT_HASH injected into os.environ['LAB_IMMUNITY_TOKEN'] of all children.
-2.  cleanup_silicon verifies the token before any kill or killpg signal.
+2.  cleanup_processes verifies the token before any kill or killpg signal.
 3.  Mismatch or Absence = Termination. Match = Immunity.
 
 ## [FEAT-221] Crosstalk Status Line
@@ -1139,7 +1139,7 @@
 ## [FEAT-257] Physical Pre-Flight Purge (Nuclear Assassin)
 **Status:** ACTIVE
 **Logic:** OS-level port clearing and process reaping via systemd.
-**Mechanism:** `ExecStopPost` logic in `lab-attendant.service` ensuring a clean silicon state when the service exits.
+**Mechanism:** `ExecStopPost` logic in `lab-attendant.service` ensuring a clean process state when the service exits.
 
 ## [FEAT-259] Targeted Hibernation (The Butler Pattern)
 **Status:** ACTIVE
@@ -1148,7 +1148,7 @@
 1.  **SPARE**: Hub (`acme_lab.py`) and Resident Nodes are spared.
 2.  **REAP**: AI Engines carrying the session token are killed.
 
-## [FEAT-260] Fast-Path STUB Engine (Silicon Proxy)
+## [FEAT-260] Fast-Path STUB Engine (Model Proxy)
 **Status:** ACTIVE
 **Logic:** A high-speed simulation mode that bypasses physical GPU hardware gates.
 **Mechanism:** Bypasses VRAM pre-flight and subprocess spawning for rapid state testing.
@@ -1193,7 +1193,7 @@
 **Logic:** Implements a 3-stage ignition sequence for remote and local engines:
 1.  **Stage 1 (Ping):** Verifies physical network/port reachability.
 2.  **Stage 2 (Tags):** Verifies API readiness and model manifest availability.
-3.  **Stage 3 (Prime):** Performs a 1-token cognitive generation to force silicon residency (The "Latch").
+3.  **Stage 3 (Prime):** Performs a 1-token cognitive generation to force engine residency (The "Latch").
 **Behavior:** Stages 1 & 2 are synchronous (Heartbeat); Stage 3 is asynchronous (Parallel Prime).
 
 ## [FEAT-287] Mutual Exclusion (Ignition Mutex)
@@ -1206,7 +1206,7 @@
 **Status:** ACTIVE
 **Logic:** Replaces the 'Nuclear Port Guard' (`fuser -k`) with strict PID file and process-name tracking.
 **Rationale:** Solves the "Zombie Port" problem where dormant engines or `TIME_WAIT` sockets block new family members, while preventing the suicidal reaping of active client connections.
-**Mechanism:** `cleanup_silicon` in `manager.py` targets specific hashes.
+**Mechanism:** `cleanup_processes` in `manager.py` targets specific hashes.
 
 ## [FEAT-289] Atomic Induction (Alarm State Lock)
 **Status:** ACTIVE
@@ -1216,7 +1216,7 @@
 
 ## [FEAT-302] Adaptive Cooldown Tracking (Recovery Backoff)
 **Status:** ACTIVE
-**Logic**: Prevents "Silicon Thrashing" during persistent hardware or orchestration failures by implementing an exponential backoff for autonomous recovery.
+**Logic**: Prevents "Engine Thrashing" during persistent hardware or orchestration failures by implementing an exponential backoff for autonomous recovery.
 **Mechanism**:
 1.  **Counter**: `recovery_attempts` increments on every watchdog-triggered ignition.
 2.  **Backoff**: `Cooldown = 5s + (Attempts * 120s)`.

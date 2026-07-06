@@ -23,11 +23,11 @@
 *   **[DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)**: **The Physician's Ledger.** Comprehensive list of tests and validation logic.
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.
 *   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Agentic tools and node duties.
-*   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Silicon Core.** Roadmap for high-throughput inference (Preserved for future Ampere+ attempts).
+*   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Inference Core.** Roadmap for high-throughput inference (Preserved for future Ampere+ attempts).
 
 ## 🛠️ Protocols & Procedures
 *   **[../HomeLabAI/docs/Protocols.md](../HomeLabAI/docs/Protocols.md)**: **The Law.**
-*   **[Silicon Upgrade Gauntlet](../HomeLabAI/docs/protocols/BKM_SILICON_UPGRADE_GAUNTLET.md)**: **The Gauntlet.** Step-by-step safety protocol for NVIDIA/Kernel/vLLM transitions.
+*   **[Hardware Upgrade Gauntlet](../HomeLabAI/docs/protocols/BKM_SILICON_UPGRADE_GAUNTLET.md)**: **The Gauntlet.** Step-by-step safety protocol for NVIDIA/Kernel/vLLM transitions.
 *   **[LORA_TRAINING_MAP.md](../HomeLabAI/docs/LORA_TRAINING_MAP.md)**: **The Pedigree Blueprint.**
 *   **[monitor/PAGERDUTY_BKM.md](./monitor/PAGERDUTY_BKM.md)**: **Example BKM.** Specific deployment guide for the Neural Pager.
 *   **[Travel_Guide_2026.md](./Travel_Guide_2026.md)**: **Confidential.** (Local Only). Contains infrastructure credentials, paths, and "Pinky" logic. **Do not commit.**
@@ -39,14 +39,14 @@
 *   **[INTERVIEW_CHEAT_SHEET.md](./INTERVIEW_CHEAT_SHEET.md)**: **Study Material.** Active document for interview prep.
 
 ## 🏺 Engineering Pedigree (Scars & Lessons)
-*   **[Forensics Archive](../HomeLabAI/docs/forensics/)**: **The Silicon Scars.** High-fidelity archive of driver crashes, VRAM deadlocks, and recovery reports.
-*   **[Silicon Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
+*   **[Forensics Archive](../HomeLabAI/docs/forensics/)**: **The Technical Scars.** High-fidelity archive of driver crashes, VRAM deadlocks, and recovery reports.
+*   **[Hardware Gauntlet Retro (Feb 19)](./RETROSPECTIVE_VLLM_RESURRECTION.md)**: Final verdict on vLLM/Turing compatibility.
 *   **[Lessons Learned (Feb 19)](./RETROSPECTIVE_LESSONS_LEARNED_FEB_19.md)**: Strategic collaborative wins & isolation BKMs.
 *   **[Recovery & Cruft Retro (Feb 19)](./RETROSPECTIVE_FEB_19_RECOVERY.md)**: Identity, telemetry, and technical debt mapping.
 *   **[Hardening Retrospective (Feb 20)](./RETROSPECTIVE_FEB_20_HARDENING.md)**: Logic restoration and content immutability.
 *   **[Feb 11 Post-Mortem](./POST_MORTEM_FEB_11_2026.md)**: Driver & Logger conflicts.
 *   **[Resurrection Retrospective (Feb 15)](./RETROSPECTIVE_FEB_15_2026.md)**: The 7B-to-3B pivot.
-*   **[Bladerunner Forensic](./RETROSPECTIVE_BLADERUNNER_FORENSIC.md)**: Deep-dive into silicon identity and state drift.
+*   **[Bladerunner Forensic](./RETROSPECTIVE_BLADERUNNER_FORENSIC.md)**: Deep-dive into engine identity and state drift.
 
 ## 🧹 Housekeeping & Drift Report (Feb 2026)
 *Status: Pending Review*

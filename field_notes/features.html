@@ -662,7 +662,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Silicon-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
+                                    Hardware-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -1292,7 +1292,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Absolute Zero Silicon Purification
+                                    Absolute Zero Hardware Purification
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -2440,7 +2440,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Categories</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>RETRIEVING</code>, <code>UNCERTAIN</code>, <code>SILICON_STRESS</code>, <code>HANDSHAKE</code>.</p>
+                    <p><code>RETRIEVING</code>, <code>UNCERTAIN</code>, <code>VRAM_STRESS</code>, <code>HANDSHAKE</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -2466,7 +2466,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Ensures the Lab's physical silicon is clear before boot by explicitly targeting ONLY processes we own.</p>
+                    <p>Ensures the Lab's physical ports and GPU VRAM are clear before boot by explicitly targeting ONLY processes we own.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -2946,7 +2946,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Silicon Quiesce (The Freeze)
+                                    Service Quiesce (The Freeze)
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -3030,7 +3030,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Establishes a stable environment for vLLM 0.17.0 on Turing (2080 Ti) silicon.</p>
+                    <p>Establishes a stable environment for vLLM 0.17.0 on Turing (2080 Ti) hardware.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -3370,7 +3370,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">High-Fidelity Signal</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Heartbeats include <strong>Live VRAM Characterization</strong>, allowing the Agent to perceive silicon limits before attempting heavy tool calls.</p>
+                    <p>Heartbeats include <strong>Live VRAM Characterization</strong>, allowing the Agent to perceive VRAM limits before attempting heavy tool calls.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -3396,7 +3396,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Removes the "Silicon Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.</p>
+                    <p>Removes the "Dependency Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -3667,14 +3667,14 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Mandatory silicon gate for inference engine changes. Requiring 100% stable <code>POST /ping</code> heartbeat verification of the <strong>333MiB Breakthrough</strong> (Turing VRAM threshold).</p>
+                    <p>Mandatory gate for inference engine changes. Requiring 100% stable <code>POST /ping</code> heartbeat verification of the <strong>333MiB Breakthrough</strong> (Turing VRAM threshold).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Artifacts</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>www_deploy/research.html</code>, <code>www_deploy/sync_research.sh</code>, and <code>assets/research_snapshot.png</code>.</p>
-<h2>[LAW-021] Silicon Verification Law (The "Wall" Audit)</h2>
+<h2>[LAW-021] Hardware Verification Law (The "Wall" Audit)</h2>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -3757,7 +3757,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Transforms the Gateway (Pinky) from a reactive narrator into an active co-processor that manages the "Silicon Gap" between human intent and Brain latency.</p>
+                    <p>Transforms the Gateway (Pinky) from a reactive narrator into an active co-processor that manages the "Latency Gap" between human intent and Brain latency.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -3772,7 +3772,7 @@
                     <ol>
 <li><strong>The Lag Shield</strong>: Pinky perceives the <code>deep_think</code> state and provides strategic fillers or status updates (e.g., "The Brain is chewing on the 580 driver logs, but Narf! Did you include the <code>dmesg</code> output?") to maintain engagement.</li>
 <li><strong>Pre-emptive Probing</strong>: Parallel pass where Pinky identifies missing technical parameters (IPs, versions, hardware IDs) and asks for them <em>while</em> the Brain is generating.</li>
-<li><strong>Organic Interrupt</strong>: Ability for Pinky to broadcast a <code>[HALT]</code> signal if she detects a "Silicon Reality" conflict (e.g., thermals or VRAM limits) that invalidates the Brain's current derivation.</li>
+<li><strong>Organic Interrupt</strong>: Ability for Pinky to broadcast a <code>[HALT]</code> signal if she detects a "Hardware Reality" conflict (e.g., thermals or VRAM limits) that invalidates the Brain's current derivation.</li>
 <li><strong>Context Hot-Plugging</strong>: Injects user's intermediate answers into the Brain's active context window to steer generation mid-flight.</li>
 </ol>
                 </div>
@@ -3830,7 +3830,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident silicon (3B).</p>
+                    <p>Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident models (3B).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -3892,7 +3892,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Fallbacks introduce "Logic Drift," but a total shutdown is the final resort. Tiered governance ensures the Lab only dies when silicon integrity is at true risk.</p>
+                    <p>Fallbacks introduce "Logic Drift," but a total shutdown is the final resort. Tiered governance ensures the Lab only dies when hardware integrity is at true risk.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -4774,7 +4774,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>A "Silicon Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.</p>
+                    <p>A "Process Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -4820,7 +4820,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Silicon Handshake (Hardened Gate)
+                                    Service Handshake (Hardened Gate)
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -4852,7 +4852,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Goal</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevent Attendant suicide loops while enabling aggressive PGID-based silicon reclamation.</p>
+                    <p>Prevent Attendant suicide loops while enabling aggressive PGID-based process reclamation.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -4860,7 +4860,7 @@
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <ol>
 <li>_BOOT_HASH injected into os.environ['LAB_IMMUNITY_TOKEN'] of all children.</li>
-<li>cleanup_silicon verifies the token before any kill or killpg signal.</li>
+<li>cleanup_processes verifies the token before any kill or killpg signal.</li>
 <li>Mismatch or Absence = Termination. Match = Immunity.</li>
 </ol>
                 </div>
@@ -5571,7 +5571,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>ExecStopPost</code> logic in <code>lab-attendant.service</code> ensuring a clean silicon state when the service exits.</p>
+                    <p><code>ExecStopPost</code> logic in <code>lab-attendant.service</code> ensuring a clean process state when the service exits.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -5614,7 +5614,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Fast-Path STUB Engine (Silicon Proxy)
+                                    Fast-Path STUB Engine (Model Proxy)
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -5817,7 +5817,7 @@
                     <p>Implements a 3-stage ignition sequence for remote and local engines:
 1.  <strong>Stage 1 (Ping):</strong> Verifies physical network/port reachability.
 2.  <strong>Stage 2 (Tags):</strong> Verifies API readiness and model manifest availability.
-3.  <strong>Stage 3 (Prime):</strong> Performs a 1-token cognitive generation to force silicon residency (The "Latch").</p>
+3.  <strong>Stage 3 (Prime):</strong> Performs a 1-token cognitive generation to force engine residency (The "Latch").</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -5887,7 +5887,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>cleanup_silicon</code> in <code>manager.py</code> targets specific hashes.</p>
+                    <p><code>cleanup_processes</code> in <code>manager.py</code> targets specific hashes.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -5939,7 +5939,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevents "Silicon Thrashing" during persistent hardware or orchestration failures by implementing an exponential backoff for autonomous recovery.</p>
+                    <p>Prevents "Engine Thrashing" during persistent hardware or orchestration failures by implementing an exponential backoff for autonomous recovery.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
