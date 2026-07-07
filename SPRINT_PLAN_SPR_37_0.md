@@ -92,3 +92,20 @@
         *   *Why (Rationale)*: Background tasks and triggers fail if import paths or config targets are relative and context-dependent.
         *   *How (Mechanism)*: Refactor `evaluate_rag.py` to resolve configuration paths using absolute path utilities (`os.path.abspath`) instead of relative paths, and verify the PYTHONPATH requirements in execution scripts.
         *   *Proof (Verification)*: Execute `evaluate_rag.py` in a separate terminal shell without manual environment variables, verifying it runs and outputs successfully.
+
+## Story 6: Resident Persona Polish & Triage Fidelity (Complete)
+*   **Context (Why/How/Proof)**:
+    *   *Lab Meta-Focus*: The topographical description in `IDENTITY_BEDROCK` dominated the attention of resident models (like Pinky). We reframed this positively to lead with the user's engineering domain, demoting topography to an operational footnote.
+    *   *BANANA-5095 Hallucination*: Triage generated fake codes/projects. We constrained the triage `situation` field to paraphrase-only.
+    *   *JSON Pretty-Printing*: Raw triage and critic JSON were streamed to the UI. We added frontend parsers to pretty-print them into compact system messages.
+    *   *No-Sidebar Print Overrides*: We added a print media query to `style.css` to omit the sidebar, menu-toggle, and `#sys-console` in print output.
+*   **Tasks**:
+    *   [x] **Task 6.1: Persona Reframe (IDENTITY_BEDROCK)**
+        *   *Why*: Reframing the topographical Bedrock stops models from narrating their own architecture when answering queries.
+        *   *How*: Refactor `loader.py` to change `IDENTITY_BEDROCK` to focus on the platform telemetry engineering domain.
+    *   [x] **Task 6.2: Constrain Triage Situation**
+        *   *Why*: Prevents triage models from inventing hallucinated project or code references.
+        *   *How*: Add grounding rule 6 to `LAB_SYSTEM_PROMPT` in `lab_node.py` to mandate paraphrase-only behavior for the `situation` field.
+    *   [x] **Task 6.3: Frontend JSON Formatting & Print styling**
+        *   *Why*: Removes raw JSON dumps from the chat console and allows printing `protocols.html` cleanly.
+        *   *How*: Add guards to the crosstalk WebSocket handler in `intercom_v2.js` to parse and format triage and critic JSON. Add `@media print` overrides to `style.css` to hide `#sidebar` and `#sys-console` during printing.
