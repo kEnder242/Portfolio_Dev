@@ -316,3 +316,24 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
     padding-left: 15px;
 }
 
+/* Print Overrides */
+@media print {
+    body {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+    nav, #sidebar, #menu-toggle, #sys-console, #crosstalk-bar {
+        display: none !important;
+    }
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        height: auto !important;
+        width: 100% !important;
+    }
+}
+
