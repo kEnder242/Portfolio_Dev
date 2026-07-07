@@ -439,8 +439,32 @@ function connect() {
                         return; // Already updated the crosstalk bar above
                     }
                     
-                    // [FEAT-313.3] Log Integration: Append all crosstalk to the console
                     const sl_low = (data.brain_source || 'System').toLowerCase();
+
+                    // [Story 6] Pretty-print triage JSON instead of dumping raw
+                    if (sl_low.includes('triage')) {
+                        try {
+                            const triage = JSON.parse(data.brain);
+                            const formatted = 'Routed to ' + triage.addressed_to + ' | Vibe: ' + triage.vibe + ' | Domain: ' + (triage.domain || 'standard');
+                            appendMsg(formatted, 'system-msg', 'Triage', data.channel || 'chat', false, { msg_id: data.msg_id });
+                            return;
+                        } catch(e) { /* not JSON, fall through */ }
+                    }
+
+                    // [Story 6] Pretty-print coherence critic JSON
+                    if (sl_low.includes('coherence') || sl_low.includes('critic')) {
+                        try {
+                            const critic = JSON.parse(data.brain);
+                            if (critic.retort) {
+                                const scoreStars = '★'.repeat(Math.min(critic.score || 0, 5)) + '☆'.repeat(5 - Math.min(critic.score || 0, 5));
+                                const formatted = scoreStars + ' ' + critic.retort;
+                                appendMsg(formatted, 'system-msg', 'Coherence Critic', data.channel || 'chat', false, { msg_id: data.msg_id });
+                                return;
+                            }
+                        } catch(e) { /* not JSON, fall through */ }
+                    }
+
+                    // [FEAT-313.3] Log Integration: Append all crosstalk to the console
                     const isPersona = sl_low.includes('pinky') || sl_low.includes('brain') || sl_low.includes('shadow');
                     const msgType = isPersona ? 'brain-msg' : 'system-msg';
                     // [Task 12.4] Respect channel for crosstalk (e.g. Brain Insight)
