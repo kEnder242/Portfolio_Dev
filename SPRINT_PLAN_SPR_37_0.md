@@ -109,3 +109,29 @@
     *   [x] **Task 6.3: Frontend JSON Formatting & Print styling**
         *   *Why*: Removes raw JSON dumps from the chat console and allows printing `protocols.html` cleanly.
         *   *How*: Add guards to the crosstalk WebSocket handler in `intercom_v2.js` to parse and format triage and critic JSON. Add `@media print` overrides to `style.css` to hide `#sidebar` and `#sys-console` during printing.
+
+---
+
+### Story 7: ChromaDB DNA Integration for Swarm Context Efficiency
+*   **Why**: The current OpenAgent delegation pattern (BKM-034) injects full text of `FeatureTracker.md` and `Protocols.md` into the context window of each session. For small local models (omnicoder-9b, gemma4:26b), this burns a significant fraction of the available KV cache before the first task token is generated. A local ChromaDB vector store can serve the same grounding data as concise, query-relevant snippets, reducing context pressure and improving task-following fidelity.
+*   **Background / Reference**:
+    *   [AGY_TO_OPENAGENT_PLAYBOOK.md §6](file:///home/jallred/Dev_Lab/Portfolio_Dev/AGY_TO_OPENAGENT_PLAYBOOK.md) documents the Dual-Collection architecture (`behavioral_dna` and `feature_dna`).
+    *   The git pre-commit hook approach and Safe-Scalpel integration paths are already defined there.
+*   **Design**:
+    *   Implement `sync_chroma_dna.py` to parse and upsert `Protocols.md` (BKMs) into a `behavioral_dna` ChromaDB collection and `FeatureTracker.md` (FEATs) into a `feature_dna` collection, with metadata tags (`bkm_id`, `feat_id`, `status`, `tools`).
+    *   Add a git pre-commit hook at `.git/hooks/pre-commit` to call `sync_chroma_dna.py` on every commit touching either source file.
+    *   Modify the BKM-034 Surgical Handover Prompt Template to replace raw file references with a query call: `opencode run "query behavioral_dna: 'safe file patching' to retrieve relevant BKMs"`.
+*   **Tasks**:
+    *   [ ] **Task 7.1: Write `sync_chroma_dna.py`**
+        *   *Why*: Provides the ingestion pipeline to populate both ChromaDB collections from the markdown sources.
+        *   *How*: Parse headers (`## BKM-XXX` and `## FEAT-XXX`) as chunk boundaries. Store full section text with `bkm_id`/`feat_id` metadata. Use `chromadb.PersistentClient` targeting `HomeLabAI/chroma_dna/`.
+        *   *Proof*: Run script and verify both collections are queryable via `chroma_client.get_collection("behavioral_dna").count()`.
+    *   [ ] **Task 7.2: Install pre-commit hook**
+        *   *Why*: Guarantees ChromaDB stays in sync with every protocol or feature edit without manual intervention.
+        *   *How*: Write `.git/hooks/pre-commit` to conditionally run `sync_chroma_dna.py` only when `Protocols.md` or `FeatureTracker.md` are in the staged file set.
+        *   *Proof*: Stage a trivial edit to `Protocols.md`, run `git commit`, verify the hook fires and the collection count increments.
+    *   [ ] **Task 7.3: Update BKM-034 Handover Template**
+        *   *Why*: Replaces verbose file injection with targeted ChromaDB retrieval queries in the handover prompt.
+        *   *How*: Update `Protocols.md` BKM-034 step 5 template and `AGY_TO_OPENAGENT_PLAYBOOK.md` to show the ChromaDB-based retrieval pattern.
+        *   *Proof*: Verify a sample handover prompt with ChromaDB query syntax retrieves the correct BKM sections when run against the populated collection.
+

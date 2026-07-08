@@ -153,3 +153,56 @@ While vector search is semantic (fuzzy/probabilistic), the system requires deter
 *   **Bidirectional Mapping:**
     *   **BKM/FEAT to Tool:** Querying ChromaDB with a metadata filter on `feature_id == "FEAT-115"` returns the record containing the `"patch_file"` tool parameter.
     *   **Tool to BKM/FEAT:** Querying ChromaDB with a metadata filter on `tools CONTAINS "patch_file"` returns the specific rule containing `FEAT-115` and `BKM-012` instantly.
+
+---
+
+## 7. Session Lifecycle Management (BKM-034.6)
+
+`opencode` exposes two execution modes for task delegation. Choosing correctly prevents context bloat and model degradation.
+
+### 7.1 `run` vs. `session` Decision Matrix
+
+| Mode | Command | Best For | Context Persistence |
+| :--- | :--- | :--- | :--- |
+| **One-shot** | `opencode run "..."` | Single atomic task with a hard verification gate | No (new session each time) |
+| **Phase session** | `opencode --session <id>` | Multiple related tasks in one Story/phase | Yes (full prior context) |
+| **Fork** | `opencode --session <id> --fork` | Branch from a known-good state before risky changes | Yes (branched snapshot) |
+| **Continue last** | `opencode -c` | Quick resume of whatever is in-flight | Yes (last session) |
+
+### 7.2 Naming Sessions
+
+Session titles are set by the **first message** sent. Use an explicit declaration to produce a searchable title in `opencode session list`:
+
+```bash
+# Creates a session titled "Sprint 37 Story 6 — Resident Persona Polish"
+opencode run "SESSION: Sprint 37 Story 6 — Resident Persona Polish. Begin Task 6.1."
+# Capture the session ID from the server output and record it in the sprint plan.
+```
+
+### 7.3 Session Granularity Rules
+
+*   **One session per Story** (not per sprint). Long-running single-session sprints accumulate context that degrades smaller local models (omnicoder-9b, gemma4:26b) before tasks complete.
+*   **Fork before risky operations** (e.g., before a mass refactor affecting 5+ files). The fork preserves a clean rollback point without losing session history.
+*   **List before starting**: Run `opencode session list` at the top of each work session to find the last relevant session ID.
+
+### 7.4 Resuming a Phase Session
+
+```bash
+# Resume by explicit ID (preferred — record the ID in the sprint plan)
+opencode --session ses_0c61ebab0ffeRC23pP7kxbiQjU
+
+# Resume the most recently active session
+opencode -c
+
+# Fork (branch) before a destructive change
+opencode --session ses_0c61ebab0ffeRC23pP7kxbiQjU --fork
+```
+
+### 7.5 Context Window Health
+
+Small local models (omnicoder-9b, gemma4:26b) have limited KV cache. When a session spans more than ~8,000 tokens of history, expect:
+*   Repeated tool-call attempts without progress
+*   Instructions from earlier in the session being ignored
+*   Silent no-ops (model returns output but takes no action)
+
+**Remediation**: Fork the session and start a new Story-scoped session. Do not increase the context window on small models — start fresh with a targeted grounding prompt.
