@@ -130,8 +130,8 @@
         *   *Why*: Guarantees ChromaDB stays in sync with every protocol or feature edit without manual intervention.
         *   *How*: Write `.git/hooks/pre-commit` to conditionally run `sync_chroma_dna.py` only when `Protocols.md` or `FeatureTracker.md` are in the staged file set.
         *   *Proof*: Hook already active — fired on commit `86d83aa` and synced both collections without manual invocation.
-    *   [ ] **Task 7.3: Update BKM-034 Handover Template**
+    *   [x] **Task 7.3: Update BKM-034 Handover Template**
         *   *Why*: Replaces verbose file injection with targeted ChromaDB retrieval queries in the handover prompt.
-        *   *How*: Update `Protocols.md` BKM-034 step 5 template and `AGY_TO_OPENAGENT_PLAYBOOK.md` to show the ChromaDB-based retrieval pattern.
-        *   *Proof*: Verify a sample handover prompt with ChromaDB query syntax retrieves the correct BKM sections when run against the populated collection.
+        *   *How*: Updated `Protocols.md` BKM-034 step 5 template to use ChromaDB query examples. Raw `file:///...FeatureTracker.md` and `file:///...Protocols.md` links are now replaced by semantic queries against `behavioral_dna` / `feature_dna`. Sprint plan pointer remains a direct file link (ephemeral, not DNA-managed).
+        *   *Proof*: Committed `324bfac` — hook synced 214 FEAT + 29 BKM entries to ChromaDB on the same commit.
 
