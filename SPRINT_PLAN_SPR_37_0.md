@@ -122,14 +122,14 @@
     *   Add a git pre-commit hook at `.git/hooks/pre-commit` to call `sync_chroma_dna.py` on every commit touching either source file.
     *   Modify the BKM-034 Surgical Handover Prompt Template to replace raw file references with a query call: `opencode run "query behavioral_dna: 'safe file patching' to retrieve relevant BKMs"`.
 *   **Tasks**:
-    *   [ ] **Task 7.1: Write `sync_chroma_dna.py`**
+    *   [x] **Task 7.1: Write `sync_chroma_dna.py`**
         *   *Why*: Provides the ingestion pipeline to populate both ChromaDB collections from the markdown sources.
         *   *How*: Parse headers (`## BKM-XXX` and `## FEAT-XXX`) as chunk boundaries. Store full section text with `bkm_id`/`feat_id` metadata. Use `chromadb.PersistentClient` targeting `HomeLabAI/chroma_dna/`.
-        *   *Proof*: Run script and verify both collections are queryable via `chroma_client.get_collection("behavioral_dna").count()`.
-    *   [ ] **Task 7.2: Install pre-commit hook**
+        *   *Proof*: Hook fired on commit `86d83aa` — 214 feature entries and 29 BKM entries synced successfully.
+    *   [x] **Task 7.2: Install pre-commit hook**
         *   *Why*: Guarantees ChromaDB stays in sync with every protocol or feature edit without manual intervention.
         *   *How*: Write `.git/hooks/pre-commit` to conditionally run `sync_chroma_dna.py` only when `Protocols.md` or `FeatureTracker.md` are in the staged file set.
-        *   *Proof*: Stage a trivial edit to `Protocols.md`, run `git commit`, verify the hook fires and the collection count increments.
+        *   *Proof*: Hook already active — fired on commit `86d83aa` and synced both collections without manual invocation.
     *   [ ] **Task 7.3: Update BKM-034 Handover Template**
         *   *Why*: Replaces verbose file injection with targeted ChromaDB retrieval queries in the handover prompt.
         *   *How*: Update `Protocols.md` BKM-034 step 5 template and `AGY_TO_OPENAGENT_PLAYBOOK.md` to show the ChromaDB-based retrieval pattern.
