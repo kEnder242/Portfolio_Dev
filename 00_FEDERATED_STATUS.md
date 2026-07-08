@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** July 6, 2026
+**Date:** July 8, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -24,7 +24,7 @@
 **Goal:** Deepen model verification with Decoupled Diagnostic logging, resolve RAG context lookup (Gems-to-Notes), and audit multi-party coherence.
 
 ## ✅ Global Milestones (July 2026)
-1.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: ACTIVE. Story 1 (Multi-model benchmarking) complete. Story 2 (RAG evaluation strict year filtering) complete. Story 3 (Pinky coherence critic) complete. Story 4 (Interleaved log console dashboard) complete. Story 5 (Decoupled RAG Diagnostics & Ground Truth Chronology) complete and verified. Story 6 (Resident persona polish & triage fidelity) complete and verified.
+1.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: **COMPLETE**. All 7 Stories done and committed. Story 7 (ChromaDB DNA Integration) finalized this session: `behavioral_dna` (29 BKMs) and `feature_dna` (214 FEATs) collections live, synced via pre-commit hook on every DNA file change. BKM-034 handover template updated to use ChromaDB query syntax instead of raw file injection. Sisyphus upgraded to `devstral:24b` (SWE-bench ~68%, ~19GB VRAM Q4) with omnicoder-9b as fallback. Cloudflare app renamed from 'Jason Lab - Sovereign' to 'Jason Lab - Strategic'; `panasonic.aero` added to Lobby Access policy.
 2.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete. Phase 5 (Cognitive Taxonomy, Cache Alignment, positive peer-to-peer prompting, Foyer native logs viewer, and LoRA training restoration) complete.
 3.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
 2.  **GPU Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
