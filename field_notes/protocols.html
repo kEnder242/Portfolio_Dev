@@ -560,14 +560,14 @@
 <li><strong>Token Conservation Guardrails</strong>: For heavy sequence editing, refactoring, or iterative lint-fixing, the prompt must steer OpenAgent to run locally on the RTX 4090 or Groq/DeepSeek Free tiers to preserve Gemini's rate-limited API tokens.</li>
 <li><strong>Forensic Review Gate</strong>: After OpenAgent commits changes locally, Gemini must review the git diffs, run the system-wide diagnostic runner (<code>gold_master_batch_runner.sh</code>), and verify the code against <code>FeatureTracker.md</code> before final sprint task checkoff.</li>
 <li>
-<p><strong>Surgical Handover Prompt Template</strong>: All tasks delegated to OpenAgent must utilize the following structured format to prevent context drift and ensure correct file/line targets:
+<p><strong>Surgical Handover Prompt Template</strong>: All tasks delegated to OpenAgent must utilize the following structured format. BKM and FEAT context is retrieved from ChromaDB (behavioral_dna / feature_dna collections) rather than injected as raw file content, reducing KV cache pressure on small local models:
     ```markdown
     opencode run -m <provider/model> "
-    [GROUNDING CONTEXT]</p>
+    [GROUNDING CONTEXT — loaded from ChromaDB, not raw file injection]</p>
 <ul>
-<li>FeatureTracker: file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md</li>
-<li>Protocols BKM: file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#BKM-<id></li>
-<li>Active Task: SPRINT_PLAN_SPR_37_0.md#Task-<id></li>
+<li>BKM query:  'how to safely patch files atomically'   → retrieves BKM-011, BKM-012</li>
+<li>FEAT query: 'RAPL telemetry silicon validation'       → retrieves FEAT-098, FEAT-115</li>
+<li>Active Task: SPRINT_PLAN_SPR_37_0.md#Task-<id>        ← direct pointer (not DNA-managed)</li>
 </ul>
 <p>[TARGET SPECIFICATION]
 - File: <absolute_path_to_target_file>
@@ -577,7 +577,21 @@
 - Test Command: <validation_script_or_pytest_command>
 - Mandate: You are forbidden from committing unless this test passes.
 "
-```</p>
+<code>*   **Note**: Raw file links (`file:///...FeatureTracker.md` and `file:///...Protocols.md`) are now handled via the pre-commit-hook-synced ChromaDB collections (`behavioral_dna`, `feature_dna`). Do not re-inject those full files as context; use targeted semantic queries instead. The sprint plan task pointer remains a direct file link as it is ephemeral and not persisted to DNA.
+6.  **Session Lifecycle Management (sessions vs. run/play)**:
+*   **`opencode run`**: One-shot, ephemeral execution. Appropriate for single atomic tasks with a clear verification gate (e.g., "fix this specific bug and run this test"). Spawns a new session on each invocation.
+*   **`opencode session`** (preferred for sustained phases): Use named, resumable sessions to persist context across multiple related tasks within a phase or sprint.
+*   **Naming a session**: The session title displayed in `opencode session list` is set at creation time from the first user message. To create a distinctly named session, the first message must be an explicit phase declaration:</code>bash
+    # Start a named session for a specific sprint phase
+    opencode run --print-logs "SESSION: Sprint 37 Phase 2 — Persona Polish. Starting task 6.1: IDENTITY_BEDROCK refactor."
+    # The session ID is then captured from the output (ses_XXXX)
+    <code>*   **Resuming a session**: Use `opencode --session &lt;session_id&gt;` or `opencode -c` to resume the most recent session:</code>bash
+    opencode --session ses_0c61ebab0ffeRC23pP7kxbiQjU
+    opencode -c  # shorthand for continue last session
+    <code>*   **Sprint vs. Phase granularity**: Prefer one session per logical phase (Story or Story group) within a sprint. Avoid single-session-per-sprint as context accumulation over many tasks degrades small model performance. Fork with `--fork` when branching from a stable state:</code>bash
+    opencode --session <ses_id> --fork  # branches context at this point
+    <code>``
+*   **Session list audit**: Before starting a new phase, run</code>opencode session list` and identify the last relevant session ID to resume or fork.</p>
 </li>
 </ol>
                             </div>

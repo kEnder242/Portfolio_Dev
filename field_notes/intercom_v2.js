@@ -229,8 +229,23 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
 
     // [Task 16.2] Markdown Pop via Marked.js
     let formattedText = text;
-    // Only parse if it's not a system message and marked is available
-    if (!isSystem && window.marked) {
+    
+    // Check if the response is a JSON block to pretty-print
+    let isJSON = false;
+    let jsonFormatted = '';
+    const trimmed = text.trim();
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+        try {
+            const obj = JSON.parse(trimmed);
+            jsonFormatted = JSON.stringify(obj, null, 2);
+            isJSON = true;
+        } catch (e) {}
+    }
+
+    if (isJSON) {
+        const esc = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        formattedText = `<pre class="json-pretty-print" style="white-space: pre-wrap; font-family: monospace; background: var(--bg-card); padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.85em; margin: 5px 0;">${esc(jsonFormatted)}</pre>`;
+    } else if (!isSystem && window.marked) {
         formattedText = marked.parse(text);
     }
     
