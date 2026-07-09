@@ -15,13 +15,14 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-37-0-validation** | 2. Implementation | Bicameral Validation & RAG Diagnostics | **ACTIVE** |
+| **spr-38-0-alignment** | 2. Implementation | Swarm Shakedown & Temporal Calibration | **ACTIVE** |
+| **spr-37-0-validation** | 2. Implementation | Bicameral Validation & RAG Diagnostics | **COMPLETED** |
 | **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Bicameral Validation & RAG Diagnostics" (Sprint SPR-37.0)
-**Goal:** Deepen model verification with Decoupled Diagnostic logging, resolve RAG context lookup (Gems-to-Notes), and audit multi-party coherence.
+## 🎯 Active Initiative: "Swarm Shakedown & Temporal Calibration" (Sprint SPR-38.0)
+**Goal:** Align OpenAgent swarm coordination, resolve 2017 RAG temporal gap via Adaptive Windowing, harden triage vibes, and pretty-print JSON responses.
 
 ## ✅ Global Milestones (July 2026)
 1.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: **COMPLETE**. All 7 Stories done and committed. Story 7 (ChromaDB DNA Integration) finalized this session: `behavioral_dna` (29 BKMs) and `feature_dna` (214 FEATs) collections live, synced via pre-commit hook on every DNA file change. BKM-034 handover template updated to use ChromaDB query syntax instead of raw file injection. Sisyphus upgraded to `devstral:24b` (SWE-bench ~68%, ~19GB VRAM Q4) with omnicoder-9b as fallback. Cloudflare app renamed from 'Jason Lab - Sovereign' to 'Jason Lab - Strategic'; `panasonic.aero` added to Lobby Access policy.
