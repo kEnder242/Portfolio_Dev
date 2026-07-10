@@ -8,12 +8,12 @@ This playbook establishes the protocol for allocating tasks, grounding local mod
 
 Based on our active configuration check, we allocate the following resources to minimize token costs and ensure high-fidelity coding:
 
-| Provider/Model | Concurrency | Primary Use-Case | Invocation Command |
+| Provider/Model | Concurrency | Primary Role / Use-Case | Invocation Command |
 | :--- | :--- | :--- | :--- |
-| **`my-windows-4090/qwen3:14b`** | `5` (Ollama) | Heavy code generation, RAG refactoring, local execution | `opencode run -m my-windows-4090/qwen3:14b "task"` |
-| **`groq/llama-3.3-70b-versatile`** | High | Fast search, code diagnostics, parallel review | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
+| **`google/gemini-2.5-flash`** | Dedicated | **Sisyphus (Delegator)**: Cloud-driven orchestration, tool calling, subagent planning | `opencode run "task"` |
+| **`my-windows-4090/qwen3:14b`** | `5` (Ollama) | **Sisyphus-Junior (Ground Worker)**: Heavy code writing, RAG refactoring, local edits | `opencode run -m my-windows-4090/qwen3:14b "task"` |
+| **`groq/llama-3.3-70b-versatile`** | High | **Prometheus (Planner)**: fast parallel search, code diagnostics, reviews | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
 | **`opencode/deepseek-v4-flash-free`**| High | Low-stakes text processing, fast triage checks | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
-| **`google/gemini-3.5-flash`** | Dedicated | PMC strategic planning, design approvals, forensic gates | *Current CLI active session* |
 
 ---
 
