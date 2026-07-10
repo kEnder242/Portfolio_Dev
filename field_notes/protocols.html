@@ -643,6 +643,35 @@
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">BKM-036</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Resource Capping and Memory Ceilings for Codex/OpenCode Daemons</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Objective</strong>: Prevent background development daemons and their spawned child processes from exhausting host memory (swap-thrashing) and locking up interactive sessions (SSH/RDP).</p>
+<ol>
+<li><strong>Node.js Heap Limitation</strong>:<ul>
+<li>Enforce V8 garbage collection limits by running the Node processes with <code>NODE_OPTIONS=--max-old-space-size=2048</code>. This prevents Node from lazily ballooning up to 8GB-10GB.</li>
+</ul>
+</li>
+<li><strong>Systemd CGroup Limits</strong>:<ul>
+<li>Configure user-level systemd daemons (e.g., <code>opencode-core.service</code>) with <code>MemoryHigh=3G</code> (trigger throttle/reclaim) and <code>MemoryMax=4G</code> (hard kill/restart limit) to protect host memory.</li>
+</ul>
+</li>
+<li><strong>Process Reaper Strategy</strong>:<ul>
+<li>Ensure child process tracking is set to <code>KillMode=mixed</code> to prevent orphaned child processes (like Python synchers or vectorizers) from remaining active after the parent daemon stops or restarts.</li>
+</ul>
+</li>
+<li><strong>Prometheus/Grafana Profiling Checklist</strong>:<ul>
+<li>Monitor <code>node_memory_Active_bytes</code> vs. <code>node_memory_MemAvailable_bytes</code> in Grafana.</li>
+<li>Watch <code>node_vmstat_pswpin</code> and <code>node_vmstat_pswpout</code> to detect active paging (swap thrashing) before a lockup occurs.</li>
+<li>Check for high <code>node_cpu_seconds_total{mode="iowait"}</code> as a precursor to SSH timeouts.</li>
+</ul>
+</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
