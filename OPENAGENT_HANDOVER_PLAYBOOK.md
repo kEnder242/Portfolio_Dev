@@ -11,7 +11,7 @@ Based on our active configuration check, we allocate the following resources to 
 | Provider/Model | Concurrency | Primary Role / Use-Case | Invocation Command |
 | :--- | :--- | :--- | :--- |
 | **`google/gemini-2.5-flash`** | Dedicated | **Sisyphus (Delegator)**: Cloud-driven orchestration, tool calling, subagent planning | `opencode run "task"` |
-| **`my-windows-4090/qwen3:14b`** | `5` (Ollama) | **Sisyphus-Junior (Ground Worker)**: Heavy code writing, RAG refactoring, local edits | `opencode run -m my-windows-4090/qwen3:14b "task"` |
+| **`my-windows-4090/qwen2.5-coder:14b`** | `5` (Ollama) | **Sisyphus-Junior (Ground Worker)**: specialized coding model, MCP tool use, syntax edits | `opencode run -m my-windows-4090/qwen2.5-coder:14b "task"` |
 | **`groq/llama-3.3-70b-versatile`** | High | **Prometheus (Planner)**: fast parallel search, code diagnostics, reviews | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
 | **`opencode/deepseek-v4-flash-free`**| High | Low-stakes text processing, fast triage checks | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
 
