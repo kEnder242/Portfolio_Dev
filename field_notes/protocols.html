@@ -598,13 +598,17 @@
     <code>*   **Sprint vs. Phase granularity**: Prefer one session per logical phase (Story or Story group) within a sprint. Avoid single-session-per-sprint as context accumulation over many tasks degrades small model performance. Fork with `--fork` when branching from a stable state:</code>bash
     opencode --session <ses_id> --fork  # branches context at this point
     <code>``
+*   **Sustained Sprint Sessions (Persistence)**: When the user requests completing the entire sprint in a single session, Sisyphus should reuse the same subagent session ID (</code>ses_...<code>returned by</code>task()<code>) for subsequent tasks in the sprint rather than starting a fresh subagent session on each task. Sisyphus must maintain a persistent task checklist/ledger inside the session context.
 *   **Session list audit**: Before starting a new phase, run</code>opencode session list<code>and identify the last relevant session ID to resume or fork.
 9.  **Playbook Protocol Refinement (Swarm Pain Points)**:
 *   **Strict Verification Gate Enforcement**: Subagents are forbidden from committing code changes if the AST parse (</code>ast.parse<code>) or validation tests fail. Committing syntax errors constitutes a severe protocol violation.
 *   **DNA Grounding Enforcement**: Swarm agents must query the</code>feature_dna<code>collection (grounded in</code>FeatureTracker.md<code>) before making edits to ensure they do not introduce regressional bugs or overwrite active rules.
 *   **Delegation-Guiding Prompts**: Prompts sent to subagents must embed strict boundaries (e.g.,</code>MUST DO<code>/</code>MUST NOT DO<code>rules) to prevent local models from losing context or inventing instructions.
 *   **Named Session Enforcement**: Avoid generating sessions with generic titles (e.g. "Greeting" or "New session"). Always use the</code>SESSION: Sprint XX Story YY<code>format on the first query of a session.
-*   **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like</code>qwen2.5-coder`) primarily for <em>heavy code generation/refactoring</em>. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.</p>
+*   **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like</code>qwen2.5-coder<code>) primarily for *heavy code generation/refactoring*. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.
+10. **DNA Query Translation (Semantic Paraphrasing)**:
+*   **The Principle**: Sisyphus must not query ChromaDB with raw, conversational user prompts verbatim (e.g.</code>"I want to edit a file"<code>).
+*   **The Practice**: Sisyphus must translate the user's conversational intent into precise domain-specific search query keywords (e.g.</code>"safe file write"<code>,</code>"atomic file patch"<code>,</code>"lint gate"<code>) before querying the</code>behavioral_dna<code>and</code>feature_dna` collections. This ensures maximum retrieval confidence (minimum distance score).</p>
 </li>
 </ol>
                             </div>
