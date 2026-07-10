@@ -10,7 +10,7 @@ Based on our active configuration check, we allocate the following resources to 
 
 | Provider/Model | Concurrency | Primary Use-Case | Invocation Command |
 | :--- | :--- | :--- | :--- |
-| **`my-windows-4090/omnicoder-9b`** | `1` (Local) | Heavy code generation, local refactors, file editing | `opencode run -m my-windows-4090/omnicoder-9b "task"` |
+| **`my-windows-4090/qwen3:14b`** | `5` (Ollama) | Heavy code generation, RAG refactoring, local execution | `opencode run -m my-windows-4090/qwen3:14b "task"` |
 | **`groq/llama-3.3-70b-versatile`** | High | Fast search, code diagnostics, parallel review | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
 | **`opencode/deepseek-v4-flash-free`**| High | Low-stakes text processing, fast triage checks | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
 | **`google/gemini-3.5-flash`** | Dedicated | PMC strategic planning, design approvals, forensic gates | *Current CLI active session* |
@@ -114,3 +114,15 @@ To reload the language server and restore your `Dev_Lab` workspace tools:
 1.  Exit your current `agy` CLI shell or VS Code/editor session.
 2.  Launch a fresh shell or restart the editor.
 3.  The language server will boot cleanly, skip the migrations, load `Dev_Lab`, and re-expose all MCP tools and indexers.
+
+---
+
+## 6. Playbook Protocol Refinement (Swarm Pain Points)
+
+Based on recent integration tests, follow these strict execution guardrails:
+1.  **Deadlock Prevention (Ollama Concurrency)**: Ensure `"maxConcurrency": 5` is defined in `opencode.json` for the local 4090. If set to `1`, parallel subagent requests to Ollama will freeze the model.
+2.  **Lint-Gated Commits**: Subagents are strictly prohibited from committing code if the verification check (`ast.parse` or `pytest`) fails. Breaking syntax in the codebase violates DNA integrity.
+3.  **DNA Grounding**: Subagents must actively check the `feature_dna` and `behavioral_dna` collections via ChromaDB before proposing code changes to avoid clobbering active architectural rules.
+4.  **No-Hallucination Prompts**: Avoid leaving prompts open-ended. Always embed explicit `MUST DO` / `MUST NOT DO` constraints so local models do not lose context or hallucinate user instructions.
+5.  **Session Naming Rules**: The first prompt of any new session must explicitly start with `SESSION: Sprint XX Story YY — Phase Z` to ensure the session is properly indexed with a clear title instead of generic "New session" or "Greeting".
+6.  **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like `qwen2.5-coder`) primarily for *heavy code generation/refactoring*. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.

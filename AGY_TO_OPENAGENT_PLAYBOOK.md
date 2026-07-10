@@ -71,7 +71,7 @@ To minimize Google API token consumption and protect rate-limited pools:
 
 | Provider | Concurrency | Cost | Primary Use-Case | Conservation Priority |
 | :--- | :--- | :--- | :--- | :--- |
-| **Local Ollama (4090)** | `1` (Serialized) | $0.00 | Heavy code generation (`sisyphus`), deep local refactors | **MAXIMIZE:** Run all heavy sequence writing here. |
+| **Local Ollama (4090)** | `5` (Ollama) | $0.00 | Heavy code generation (`sisyphus`), deep local refactors | **MAXIMIZE:** Run all heavy sequence writing here. |
 | **Groq (Free Tier)** | High | $0.00 | Fast search (`explore`), file classification (`librarian`), short edits | **HIGH:** Use `llama-3.1-8b-instant` for low-stakes search/LSP tasks. |
 | **DeepSeek (OpenCode Free)** | High | $0.00 | Background subtasks (`sisyphus-junior`) | **HIGH:** Offload parallel execution here. |
 | **Google Gemini (API)** | Unlimited | Paid/Tiered | PM Planning (`prometheus`), visual analysis, final design reviews | **RESERVE:** Use only for strategic coordination. |
@@ -206,3 +206,15 @@ Small local models (omnicoder-9b, gemma4:26b) have limited KV cache. When a sess
 *   Silent no-ops (model returns output but takes no action)
 
 **Remediation**: Fork the session and start a new Story-scoped session. Do not increase the context window on small models — start fresh with a targeted grounding prompt.
+
+---
+
+## 8. Playbook Protocol Refinement (Swarm Pain Points)
+
+Based on recent integration tests, follow these strict execution guardrails:
+1.  **Deadlock Prevention (Ollama Concurrency)**: Ensure `"maxConcurrency": 5` is defined in `opencode.json` for the local 4090. If set to `1`, parallel subagent requests to Ollama will deadlock the model.
+2.  **Lint-Gated Commits**: Subagents are strictly prohibited from committing code if the verification check (`ast.parse` or `pytest`) fails. Breaking syntax in the codebase violates DNA integrity.
+3.  **DNA Grounding**: Subagents must actively check the `feature_dna` and `behavioral_dna` collections via ChromaDB before proposing code changes to avoid clobbering active architectural rules.
+4.  **No-Hallucination Prompts**: Avoid leaving prompts open-ended. Always embed explicit `MUST DO` / `MUST NOT DO` constraints so local models do not lose context or hallucinate user instructions.
+5.  **Session Naming Rules**: The first prompt of any new session must explicitly start with `SESSION: Sprint XX Story YY — Phase Z` to ensure the session is properly indexed with a clear title instead of generic "New session" or "Greeting".
+6.  **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like `qwen2.5-coder`) primarily for *heavy code generation/refactoring*. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.

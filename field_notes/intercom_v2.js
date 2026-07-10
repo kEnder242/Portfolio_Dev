@@ -289,6 +289,21 @@ function sendText() {
     const content = textInput.value.trim();
     if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
 
+    // [FEAT] /topic command: Refresh cognitive history buffer
+    if (content.startsWith('/topic')) {
+        const topicArg = content.slice(6).trim();
+        sessionStorage.removeItem('acme_chat_history');
+        const msg = topicArg
+            ? `Cognitive history buffer refreshed. Topic context: "${topicArg}".`
+            : 'Cognitive history buffer refreshed. Topic context reset.';
+        appendMsg(msg, 'system-msg', 'System');
+        document.dispatchEvent(new CustomEvent('topic-reset', {
+            detail: { topic: topicArg || '', timestamp: new Date().toISOString() }
+        }));
+        textInput.value = '';
+        return;
+    }
+
     const request_id = `UI_${Math.random().toString(36).substr(2, 6)}`;
     appendMsg(content, 'user-msg', 'ME');
     lastMsgSource = 'me';
