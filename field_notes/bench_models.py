@@ -99,6 +99,26 @@ class VRAMTracker:
             self.thread.join(timeout=1.0)
         return self.peak_vram
 
+
+def safe_read_json(file_path: str, default=None):
+    """Safely read and parse a JSON file. Returns `default` if file is missing, empty, or invalid."""
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read().strip()
+            if not content:
+                print(f"⚠️  Warning: File {file_path} is empty. Using default value.")
+                return default
+            return json.loads(content)
+    except FileNotFoundError:
+        print(f"⚠️  Warning: File {file_path} not found. Using default value.")
+        return default
+    except json.JSONDecodeError as e:
+        print(f"❌ Error: File {file_path} contains invalid JSON: {e}. Using default value.")
+        return default
+    except Exception as e:
+        print(f"❌ Error: Failed to read {file_path}: {e}. Using default value.")
+        return default
+
 def test_vllm_model(model_name):
     """Benchmarks vLLM model by streaming a completion."""
     url = f"http://localhost:{VLLM_PORT}/v1/completions"
@@ -280,10 +300,15 @@ def main():
         print(f"⚠️  Ollama Qwen-2.5-Coder offline/failed ({e}). Loading pre-characterized fallback...")
         results.append(FALLBACKS["Qwen-2.5-Coder"])
 
+    moe_pipeline = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_pipeline_metrics.json")
+    moe_benchmark = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_benchmark_results.json")
+
     output_data = {
         "timestamp": time.time(),
         "date_str": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-        "results": results
+        "results": results,
+        "moe_pipeline": moe_pipeline,
+        "moe_benchmark": moe_benchmark
     }
 
     # Atomic write pattern: write to tmp file then rename
