@@ -60,16 +60,16 @@ This sprint focuses on designing and benchmarking a federated inference architec
         ================================================================================
         ```
 
-### Story 3: MoE+ Benchmarking Framework (KPIs) [atlas / unspecified-high]
+### Story 3: MoE+ Benchmarking Framework (KPIs) [atlas / unspecified-high] - COMPLETE
 *   **Why**: Create a diagnostic framework that evaluates the *architecture* (useful work per second) rather than just raw tokens/sec, measuring TTFT, Time to Useful Answer, Cold model load time, and RAG retrieval latency.
 *   **Design**:
     *   Implement metric trackers in the benchmark script to record RAG retrieval time, routing decision time, model warm-up time, and prompt ingestion time.
     *   Format these metrics into a structured JSON report.
 *   **Tasks**:
-    *   [ ] Extend the performance benchmarking page `benchmarks.html` to display pipeline-stage latency metrics (RAG, routing, warming, execution).
-    *   [ ] Update the site builder `build_site.py` to parse these multi-stage JSON metrics.
+    *   [x] Extend the performance benchmarking page `benchmarks.html` to display pipeline-stage latency metrics (RAG, routing, warming, execution).
+    *   [x] Update the site builder `build_site.py` to parse these multi-stage JSON metrics.
 *   **Verification Gate**:
-    *   [ ] Execute a simulated run and verify that the metrics compile and display cleanly on the local `benchmarks.html` page.
+    *   [x] Execute a simulated run and verify that the metrics compile and display cleanly on the local `benchmarks.html` page.
 
 ### Story 4: Static HTML Design & Content Review (Airlock Realignment) [Sisyphus-Junior / quick] - COMPLETE
 *   **Why**: Update the public entry-point (www_deploy/index.html) to present a clean visual divider separating public static assets from zero-trust protected resources. Review and plan the sanitization/migration of stories.html to the public space.
