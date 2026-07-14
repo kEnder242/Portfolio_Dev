@@ -15,18 +15,20 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-39-0-moe-research** | 1. Planning | Federated Routing & "MoE+" Research | **ACTIVE** |
 | **spr-38-0-alignment** | 2. Implementation | Swarm Shakedown & Temporal Calibration | **COMPLETED** |
 | **spr-37-0-validation** | 2. Implementation | Bicameral Validation & RAG Diagnostics | **COMPLETED** |
 | **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Swarm Shakedown & Temporal Calibration" (Sprint SPR-38.0)
-**Goal:** Align OpenAgent swarm coordination, resolve 2017 RAG temporal gap via Adaptive Windowing, harden triage vibes, and pretty-print JSON responses. **[STATUS: COMPLETED]**
+## 🎯 Active Initiative: "Federated Routing & "MoE+" Research" (Sprint SPR-39.0)
+**Goal:** Design and benchmark a federated inference architecture (MoE+) utilizing lightweight routing, model specialization, and latency-hiding background workflows. **[STATUS: ACTIVE]**
 
 ## ✅ Global Milestones (July 2026)
-1.  **Swarm Shakedown & Temporal Calibration [SPR-38.0]**: **COMPLETE**. All 4 Stories completed. Story 1 (OpenAgent Shakedown and Model Concurrency Deadlock Fixes) done; Story 2 (RAG Adaptive Temporal Compass and /reset mitigation) done; Story 3 (Vibe Triage Meta rule) done; Story 4 (JSON Pretty-Printing in Intercom) done. protocols.md, AGY_TO_OPENAGENT_PLAYBOOK.md, and OPENAGENT_HANDOVER_PLAYBOOK.md updated with swarm category mappings, Ollama deadlock mitigations, and protocol pain points (lint-gating, DNA grounding, named sessions).
-2.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: **COMPLETE**. All 7 Stories done and committed. Story 7 (ChromaDB DNA Integration) finalized this session: `behavioral_dna` (29 BKMs) and `feature_dna` (214 FEATs) collections live, synced via pre-commit hook on every DNA file change. BKM-034 handover template updated to use ChromaDB query syntax instead of raw file injection. Sisyphus upgraded to `devstral:24b` (SWE-bench ~68%, ~19GB VRAM Q4) with omnicoder-9b as fallback. Cloudflare app renamed from 'Jason Lab - Sovereign' to 'Jason Lab - Strategic'; `panasonic.aero` added to Lobby Access policy.
+1.  **Federated Routing & "MoE+" Research [SPR-39.0]**: **ACTIVE**. Sprint Plan drafted and double-written to workspace and brain cache, defining Stories for latency-hiding pre-gated pipelines, router accuracy evaluation, and stage-by-stage benchmark KPI tracking.
+2.  **Swarm Shakedown & Temporal Calibration [SPR-38.0]**: **COMPLETE**. All 4 Stories completed. Story 1 (OpenAgent Shakedown and Model Concurrency Deadlock Fixes) done; Story 2 (RAG Adaptive Temporal Compass and /reset mitigation) done; Story 3 (Vibe Triage Meta rule) done; Story 4 (JSON Pretty-Printing in Intercom) done. protocols.md, AGY_TO_OPENAGENT_PLAYBOOK.md, and OPENAGENT_HANDOVER_PLAYBOOK.md updated with swarm category mappings, Ollama deadlock mitigations, and protocol pain points (lint-gating, DNA grounding, named sessions).
+3.  **Bicameral Validation & RAG Diagnostics [SPR-37.0]**: **COMPLETE**. All 7 Stories done and committed. Story 7 (ChromaDB DNA Integration) finalized this session: `behavioral_dna` (29 BKMs) and `feature_dna` (214 FEATs) collections live, synced via pre-commit hook on every DNA file change. BKM-034 handover template updated to use ChromaDB query syntax instead of raw file injection. Sisyphus upgraded to `devstral:24b` (SWE-bench ~68%, ~19GB VRAM Q4) with omnicoder-9b as fallback. Cloudflare app renamed from 'Jason Lab - Sovereign' to 'Jason Lab - Strategic'; `panasonic.aero` added to Lobby Access policy.
 2.  **Semantic & Telemetry [SPR-34.0]**: COMPLETE. Goal 1 (Hierarchical Semantic Map, MCompassRAG domain filtering/fallback, V5 dreaming, and client disconnect auto-shutdown) complete and verified. Phase 2 (Live Telemetry) and Phase 3 (Benchmarking Page) complete. Phase 4 (CORS Remediation, Tiered Idle Verification [FEAT-374], and Baseline Eval) complete. Phase 5 (Cognitive Taxonomy, Cache Alignment, positive peer-to-peer prompting, Foyer native logs viewer, and LoRA training restoration) complete.
 3.  **Alignment & Identity [SPR-33.0]**: COMPLETE. Corrected Acme Lab grounding, refined Deep Thought naive/hesitant persona, un-gagged Pinky RAG summaries, consolidated triage broadcasts, and verified Continuous Burn logs. Ported V4 recovery backoff [FEAT-302] and telemetry [FEAT-323] to V5.
 2.  **GPU Core Upgrade [SPR-32.0]**: COMPLETE. Stabilized vLLM 0.21.0 Turing stack, multi-LoRA concurrent resident nodes, and VRAM hibernation.
@@ -48,6 +50,11 @@
 4.  **Engine Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
 
 ## 🔮 The Roadmap
+
+### [ACTIVE] Phase 16: Federated Routing & "MoE+" Research (Sprint SPR-39.0)
+*   [ ] **Latency-Hiding Pre-Gating [FEAT-MOE01]**: Overlap intent classification, RAG retrieval, and model warming to hide load times.
+*   [ ] **Lightweight Router Calibration [FEAT-MOE02]**: Benchmark routing/escalation accuracy of 3B local models.
+*   [ ] **Multi-Stage Workflow Benchmarking [FEAT-MOE03]**: Record and display metrics for each pipeline stage (TTFT, warm-up, tool call) on `benchmarks.html`.
 
 ### [ACTIVE] Phase 15: The Neural Relay (Sprint SPR-15.0)
 *   [x] **Parallel Local Fan-out [FEAT-229.1]**: Spark Pinky and Shadow nodes simultaneously.
