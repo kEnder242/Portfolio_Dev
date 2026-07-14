@@ -17,16 +17,17 @@ This sprint focuses on designing and benchmarking a federated inference architec
 *   **Verification Gate**:
     *   [ ] Run the simulator and assert that context collection and RAG query finish execution *before* the simulated heavy model starts generating, hiding at least 1-2 seconds of cold model startup time.
 
-### Story 2: Lightweight Router Evaluation (Llama 3B / Qwen 1.5B) [Sisyphus-Junior / quick]
-*   **Why**: Evaluate how accurately a small local model (like Llama-3.2-3B or Qwen3-1.5B) can classify incoming requests and perform tool routing, determining if we need to escalate to a larger model.
+### Story 2: MoE+ Federated Router Harness (bench_moe_plus.py) [Sisyphus-Junior / quick]
+*   **Why**: Benchmark the full federated routing latency (Llama 3B Router -> Pinky -> Brain -> Deep Thought) under different start conditions (cold vs. warm starts) to evaluate routing decisions and escalation accuracy.
 *   **Design**:
-    *   Develop a classification dataset (sprint queries, coding tasks, casual greetings, database queries).
-    *   Query the local Llama-3.2-3B-AWQ model on port 8088 (or another small Ollama variant like `gemma4:e2b` or `qwen3.5:1.5b`) to benchmark classification accuracy and latency.
+    *   Develop a representative evaluation dataset of 20 queries spanning conversation, coding, and deep reasoning.
+    *   Write `HomeLabAI/src/debug/bench_moe_plus.py` to timing-audit the Llama-3.2-3B router's classification latency and accuracy.
+    *   Simulate cold starts programmatically in the script by requesting `"keep_alive": 0` (or `"0s"`) during queries to force Ollama to unload models.
 *   **Tasks**:
-    *   [ ] Create a small evaluation dataset of 20 representative queries spanning coding, conversation, and reasoning.
-    *   [ ] Write an evaluation script `bench_router.py` in `HomeLabAI/src/debug/` that measures classification accuracy, TTFT, and decision time on small local models.
+    *   [ ] Create a small evaluation dataset of 20 representative queries mapping to MoE+ experts.
+    *   [ ] Write the benchmarking script `bench_moe_plus.py` in `HomeLabAI/src/debug/` incorporating cold/warm start testing.
 *   **Verification Gate**:
-    *   [ ] Run `bench_router.py` and print a table showing the routing accuracy, TTFT, and decision latency.
+    *   [ ] Run `bench_moe_plus.py` and print a table showing the routing accuracy, TTFT, and full-route decision latency.
 
 ### Story 3: MoE+ Benchmarking Framework (KPIs) [atlas / unspecified-high]
 *   **Why**: Create a diagnostic framework that evaluates the *architecture* (useful work per second) rather than just raw tokens/sec, measuring TTFT, Time to Useful Answer, Cold model load time, and RAG retrieval latency.
