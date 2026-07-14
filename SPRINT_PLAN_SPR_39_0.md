@@ -17,7 +17,7 @@ This sprint focuses on designing and benchmarking a federated inference architec
 *   **Verification Gate**:
     *   [x] Run the simulator and assert that context collection and RAG query finish execution *before* the simulated heavy model starts generating, hiding at least 1-2 seconds of cold model startup time.
 
-### Story 2: MoE+ Federated Router Harness (bench_moe_plus.py) [Sisyphus-Junior / quick]
+### Story 2: MoE+ Federated Router Harness (bench_moe_plus.py) [Sisyphus-Junior / quick] - COMPLETE
 *   **Why**: Benchmark the full federated routing latency (Llama 3B Router -> Pinky -> Brain -> Deep Thought) under different start conditions (cold vs. warm starts) to evaluate routing decisions and escalation accuracy.
 *   **Design Blueprints**:
     *   **Dataset Configuration (`HomeLabAI/src/debug/moe_queries.json`)**:
@@ -40,10 +40,25 @@ This sprint focuses on designing and benchmarking a federated inference architec
         - Calculate average decision latencies, routing accuracy, and total route timings.
         - Output the results to `/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_benchmark_results.json`.
 *   **Tasks**:
-    *   [ ] Create the evaluation dataset `moe_queries.json` containing 20 queries mapping to MoE+ experts.
-    *   [ ] Write the benchmarking script `bench_moe_plus.py` in `HomeLabAI/src/debug/` implementing routing and start state configurations.
+    *   [x] Create the evaluation dataset `moe_queries.json` containing 20 queries mapping to MoE+ experts.
+    *   [x] Write the benchmarking script `bench_moe_plus.py` in `HomeLabAI/src/debug/` implementing routing and start state configurations.
 *   **Verification Gate**:
-    *   [ ] Run `bench_moe_plus.py` and verify it prints a clean tabular summary of performance and writes `moe_benchmark_results.json` successfully.
+    *   [x] Run `bench_moe_plus.py` and verify it prints a clean tabular summary of performance and writes `moe_benchmark_results.json` successfully.
+    *   **Results Summary**:
+        ```text
+        ================================================================================
+                            MoE+ Federated Router Benchmark Results                     
+        ================================================================================
+        Metric                         | Cold Start           | Warm Start          
+        --------------------------------------------------------------------------------
+        Total Queries                  | 20                   | 20                  
+        Routing Accuracy               | 90.0%                | 95.0%               
+        Avg Router Latency (ms)        | 80.0                 | 80.0                
+        Avg Warmup Latency (ms)        | 2000.0               | 0.0                 
+        Avg Expert Latency (ms)        | 1208.4               | 483.6               
+        Avg Total Latency (ms)         | 3288.4               | 563.6               
+        ================================================================================
+        ```
 
 ### Story 3: MoE+ Benchmarking Framework (KPIs) [atlas / unspecified-high]
 *   **Why**: Create a diagnostic framework that evaluates the *architecture* (useful work per second) rather than just raw tokens/sec, measuring TTFT, Time to Useful Answer, Cold model load time, and RAG retrieval latency.
