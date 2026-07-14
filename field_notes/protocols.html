@@ -608,7 +608,10 @@
 *   **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like</code>qwen2.5-coder<code>) primarily for *heavy code generation/refactoring*. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.
 10. **DNA Query Translation (Semantic Paraphrasing)**:
 *   **The Principle**: Sisyphus must not query ChromaDB with raw, conversational user prompts verbatim (e.g.</code>"I want to edit a file"<code>).
-*   **The Practice**: Sisyphus must translate the user's conversational intent into precise domain-specific search query keywords (e.g.</code>"safe file write"<code>,</code>"atomic file patch"<code>,</code>"lint gate"<code>) before querying the</code>behavioral_dna<code>and</code>feature_dna` collections. This ensures maximum retrieval confidence (minimum distance score).</p>
+*   **The Practice**: Sisyphus must translate the user's conversational intent into precise domain-specific search query keywords (e.g.</code>"safe file write"<code>,</code>"atomic file patch"<code>,</code>"lint gate"<code>) before querying the</code>behavioral_dna<code>and</code>feature_dna<code>collections. This ensures maximum retrieval confidence (minimum distance score).
+11. **Explicit Blueprint Prompting (No-Boilerplate Guardrail)**:
+*   **The Principle**: Cloud orchestrators (Gemini) must not delegate open-ended logic or design descriptions to local 14B workers. They must compile exact HTML/CSS blocks, BeautifulSoup scripts, or shell templates directly inside the prompt's</code>[TARGET SPECIFICATION]`.
+*   <strong>The Practice</strong>: This minimizes local token generations, reduces context overhead, avoids structural hallucinations, and allows the user to review the exact code/design inside the Master Sprint Plan prior to execution.</p>
 </li>
 </ol>
                             </div>
