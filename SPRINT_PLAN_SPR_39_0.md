@@ -39,3 +39,18 @@ This sprint focuses on designing and benchmarking a federated inference architec
     *   [ ] Update the site builder `build_site.py` to parse these multi-stage JSON metrics.
 *   **Verification Gate**:
     *   [ ] Execute a simulated run and verify that the metrics compile and display cleanly on the local `benchmarks.html` page.
+
+### Story 4: Static HTML Design & Content Review (Airlock Realignment) [Sisyphus-Junior / quick]
+*   **Why**: Update the public entry-point (www_deploy/index.html) to present a clean visual divider separating public static assets from zero-trust protected resources. Review and plan the sanitization/migration of stories.html to the public space.
+*   **Design**:
+    *   Add an `.airlock-divider` visual line with a blue bubble labeled "Airlock" in `www_deploy/index.html` below the public links and above the private ones.
+    *   Refactor `sync_protocols.sh` and `sync_research.sh` to update "Return to Airlock" to "Return to Front Page".
+    *   Design the `sync_stories.sh` deployment script to filter out `<article>` elements tagged with `data-scope="private"` and refactor the sidebar (stripping out `<mission-control>`).
+*   **Tasks**:
+    *   [ ] Add the CSS and HTML for the Airlock divider to `www_deploy/index.html`.
+    *   [ ] Update the synchronization scripts to replace "Return to Airlock" with "Return to Front Page".
+    *   [ ] Draft the `sync_stories.sh` template to sanitize stories and strip private links.
+    *   [ ] Tag sensitive or personal stories in `stories.html` with `data-scope="private"`.
+*   **Verification Gate**:
+    *   [ ] Run the synchronization scripts and verify that `www_deploy/index.html` renders the visual divider correctly, and that "Return to Front Page" links point back to `index.html` instead of using the old "Airlock" label.
+
