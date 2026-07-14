@@ -6,28 +6,44 @@ This sprint focuses on designing and benchmarking a federated inference architec
 
 ## Active Stories & Task Ledger
 
-### Story 1: Latency Hiding & Pre-Gated Routing Pipeline [Sisyphus / planning]
+### Story 1: Latency Hiding & Pre-Gated Routing Pipeline [Sisyphus / planning] - COMPLETE
 *   **Why**: Prove that routing and intent classification can run in the background (latency hiding) while heavyweight coding/reasoning models are warming up, transforming model startup latency into useful preparation work (RAG, workspace gathering, prompt compilation).
 *   **Design**:
     *   Design a pipeline sequence: Intent Classification -> Begin RAG -> Warm Model -> Collect Workspace Context -> Compile Prompt -> Execute.
     *   Implement a latency-hiding simulator script `HomeLabAI/src/debug/simulate_moe_pipeline.py` that executes these tasks concurrently (using `asyncio`) to measure overlap benefits.
 *   **Tasks**:
-    *   [ ] Draft the pipeline sequence mapping out the intent classification, RAG retrieval, context collection, and model selection.
-    *   [ ] Write the latency-hiding simulator script `simulate_moe_pipeline.py` in `HomeLabAI/src/debug/` to measure overlapping task execution.
+    *   [x] Draft the pipeline sequence mapping out the intent classification, RAG retrieval, context collection, and model selection.
+    *   [x] Write the latency-hiding simulator script `simulate_moe_pipeline.py` in `HomeLabAI/src/debug/` to measure overlapping task execution.
 *   **Verification Gate**:
-    *   [ ] Run the simulator and assert that context collection and RAG query finish execution *before* the simulated heavy model starts generating, hiding at least 1-2 seconds of cold model startup time.
+    *   [x] Run the simulator and assert that context collection and RAG query finish execution *before* the simulated heavy model starts generating, hiding at least 1-2 seconds of cold model startup time.
 
 ### Story 2: MoE+ Federated Router Harness (bench_moe_plus.py) [Sisyphus-Junior / quick]
 *   **Why**: Benchmark the full federated routing latency (Llama 3B Router -> Pinky -> Brain -> Deep Thought) under different start conditions (cold vs. warm starts) to evaluate routing decisions and escalation accuracy.
-*   **Design**:
-    *   Develop a representative evaluation dataset of 20 queries spanning conversation, coding, and deep reasoning.
-    *   Write `HomeLabAI/src/debug/bench_moe_plus.py` to timing-audit the Llama-3.2-3B router's classification latency and accuracy.
-    *   Simulate cold starts programmatically in the script by requesting `"keep_alive": 0` (or `"0s"`) during queries to force Ollama to unload models.
+*   **Design Blueprints**:
+    *   **Dataset Configuration (`HomeLabAI/src/debug/moe_queries.json`)**:
+        Define a JSON list of 20 representative queries mapping to MoE+ experts:
+        ```json
+        [
+          { "id": 1, "query": "write a python function to check if a string contains duplicates", "expected_expert": "coding" },
+          { "id": 2, "query": "solve this logic puzzle: if all A are B and all B are C, are all A C?", "expected_expert": "deep_reasoning" },
+          { "id": 3, "query": "what is your system context or operational history?", "expected_expert": "conversation" },
+          { "id": 4, "query": "what is the RLM pattern or recursive language search strategy in Acme Lab?", "expected_expert": "research" }
+          // ... 20 queries total spanning all four categories
+        ]
+        ```
+    *   **Harness Script (`HomeLabAI/src/debug/bench_moe_plus.py`)**:
+        - Read the dataset `moe_queries.json`.
+        - Query the local router (Llama-3.2-3B) via Ollama (`http://localhost:11434/api/generate`) or fallback mock metrics if offline (80ms Router Latency, 95% routing accuracy).
+        - Test two configurations:
+          - **Cold Start**: Force Ollama to unload the expert model by setting `"keep_alive": 0` or `"0s"`, adding 1.5s–3.0s simulated warmup latency.
+          - **Warm Start**: Model is cached, adding 0s warmup latency.
+        - Calculate average decision latencies, routing accuracy, and total route timings.
+        - Output the results to `/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_benchmark_results.json`.
 *   **Tasks**:
-    *   [ ] Create a small evaluation dataset of 20 representative queries mapping to MoE+ experts.
-    *   [ ] Write the benchmarking script `bench_moe_plus.py` in `HomeLabAI/src/debug/` incorporating cold/warm start testing.
+    *   [ ] Create the evaluation dataset `moe_queries.json` containing 20 queries mapping to MoE+ experts.
+    *   [ ] Write the benchmarking script `bench_moe_plus.py` in `HomeLabAI/src/debug/` implementing routing and start state configurations.
 *   **Verification Gate**:
-    *   [ ] Run `bench_moe_plus.py` and print a table showing the routing accuracy, TTFT, and full-route decision latency.
+    *   [ ] Run `bench_moe_plus.py` and verify it prints a clean tabular summary of performance and writes `moe_benchmark_results.json` successfully.
 
 ### Story 3: MoE+ Benchmarking Framework (KPIs) [atlas / unspecified-high]
 *   **Why**: Create a diagnostic framework that evaluates the *architecture* (useful work per second) rather than just raw tokens/sec, measuring TTFT, Time to Useful Answer, Cold model load time, and RAG retrieval latency.
@@ -40,7 +56,7 @@ This sprint focuses on designing and benchmarking a federated inference architec
 *   **Verification Gate**:
     *   [ ] Execute a simulated run and verify that the metrics compile and display cleanly on the local `benchmarks.html` page.
 
-### Story 4: Static HTML Design & Content Review (Airlock Realignment) [Sisyphus-Junior / quick]
+### Story 4: Static HTML Design & Content Review (Airlock Realignment) [Sisyphus-Junior / quick] - COMPLETE
 *   **Why**: Update the public entry-point (www_deploy/index.html) to present a clean visual divider separating public static assets from zero-trust protected resources. Review and plan the sanitization/migration of stories.html to the public space.
 *   **Design Blueprints**:
     *   **Airlock Divider CSS & HTML**:
@@ -103,11 +119,11 @@ This sprint focuses on designing and benchmarking a federated inference architec
             f.write(str(soup))
         ```
 *   **Tasks**:
-    *   [ ] Add the CSS and HTML for the Airlock divider to `www_deploy/index.html`.
-    *   [ ] Update the synchronization scripts to replace "Return to Airlock" with "Return to Front Page".
-    *   [ ] Draft the `sync_stories.sh` template to sanitize stories and strip private links.
-    *   [ ] Tag sensitive or personal stories in `stories.html` with `data-scope="private"`.
+    *   [x] Add the CSS and HTML for the Airlock divider to `www_deploy/index.html`.
+    *   [x] Update the synchronization scripts to replace "Return to Airlock" with "Return to Front Page".
+    *   [x] Draft the `sync_stories.sh` template to sanitize stories and strip private links.
+    *   [x] Tag sensitive or personal stories in `stories.html` with `data-scope="private"`.
 *   **Verification Gate**:
-    *   [ ] Run the synchronization scripts and verify that `www_deploy/index.html` renders the visual divider correctly, and that "Return to Front Page" links point back to `index.html` instead of using the old "Airlock" label.
+    *   [x] Run the synchronization scripts and verify that `www_deploy/index.html` renders the visual divider correctly, and that "Return to Front Page" links point back to `index.html` instead of using the old "Airlock" label.
 
 
