@@ -14,6 +14,26 @@ moe_stage_duration_seconds = Gauge(
     "Duration of MoE+ pipeline stages in seconds",
     ["stage"]
 )
+moe_model_ttft_seconds = Gauge(
+    "moe_model_ttft_seconds",
+    "Model Time to First Token in seconds",
+    ["model", "engine"]
+)
+moe_model_throughput_tokens_per_second = Gauge(
+    "moe_model_throughput_tokens_per_second",
+    "Model throughput in tokens per second",
+    ["model", "engine"]
+)
+moe_model_itl_seconds = Gauge(
+    "moe_model_itl_seconds",
+    "Model inter-token latency in seconds",
+    ["model", "engine"]
+)
+moe_model_vram_bytes = Gauge(
+    "moe_model_vram_bytes",
+    "Model peak VRAM footprint in bytes",
+    ["model", "engine"]
+)
 
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -335,6 +355,14 @@ def main():
             if start_val is not None and end_val is not None:
                 duration = end_val - start_val
                 moe_stage_duration_seconds.labels(stage=stage).set(duration)
+
+    # Expose model metrics to Prometheus
+    for res in results:
+        moe_model_ttft_seconds.labels(model=res["model"], engine=res["engine"]).set(res["ttft_ms"] / 1000.0)
+        moe_model_throughput_tokens_per_second.labels(model=res["model"], engine=res["engine"]).set(res["throughput"])
+        moe_model_itl_seconds.labels(model=res["model"], engine=res["engine"]).set(res["itl_ms"] / 1000.0)
+        moe_model_vram_bytes.labels(model=res["model"], engine=res["engine"]).set(res["vram_gb"] * 1024.0 * 1024.0 * 1024.0)
+
 
     output_data = {
         "timestamp": time.time(),
