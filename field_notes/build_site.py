@@ -63,7 +63,7 @@ def main(args):
     # Rebuild dynamically compiled pages
     print("--- COMPILING DYNAMIC CONTENT ---")
     try:
-        subprocess.run([sys.executable, os.path.join(BASE_DIR, "bench_models.py")], check=True)
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "bench_models.py"), "--no-serve"], check=True)
     except Exception as e:
         print(f"❌ Failed to run bench_models.py: {e}")
         

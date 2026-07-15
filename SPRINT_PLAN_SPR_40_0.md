@@ -10,7 +10,7 @@ This sprint focuses on transitioning the MoE+ mixture-of-experts benchmarking fr
 *   **Why**: Shift from post-processed offline JSON metrics to live-streaming application events, enabling correlation of query latency phases (intent triage, context aggregation, model warmup, and inference) directly with hardware metrics (VRAM, Power, and Thermals).
 *   **Design**:
     *   Integrate `prometheus_client` into `HomeLabAI/src/debug/bench_moe_plus.py` and `Portfolio_Dev/field_notes/bench_models.py`.
-    *   Expose a `/metrics` HTTP endpoint (on port `8000`) or configure pushing to the local Prometheus Pushgateway.
+    *   Expose a `/metrics` HTTP endpoint (on port `8010` and `8011`) or configure pushing to the local Prometheus Pushgateway.
     *   Expose critical telemetry metrics:
         *   `moe_router_latency_seconds` (Gauge/Histogram)
         *   `moe_warmup_latency_seconds` (Gauge/Histogram)
@@ -22,18 +22,18 @@ This sprint focuses on transitioning the MoE+ mixture-of-experts benchmarking fr
     *   [ ] Install `prometheus-client` in both virtual environments:
         *   `/home/jallred/Dev_Lab/Portfolio_Dev/.venv/bin/pip install prometheus_client`
         *   `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pip install prometheus_client`
-    *   [ ] Refactor `/home/jallred/Dev_Lab/HomeLabAI/src/debug/bench_moe_plus.py` to start a prometheus server on port `8000` and stream metrics.
-    *   [ ] Refactor `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/bench_models.py` to expose telemetry on port `8001` or push to a local scraping registry.
+    *   [ ] Refactor `/home/jallred/Dev_Lab/HomeLabAI/src/debug/bench_moe_plus.py` to start a prometheus server on port `8010` and stream metrics.
+    *   [ ] Refactor `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/bench_models.py` to expose telemetry on port `8011` or push to a local scraping registry.
 *   **Verification Gate**:
     *   Run curl commands on the endpoints:
-        *   `curl -s http://localhost:8000/metrics`
-        *   `curl -s http://localhost:8001/metrics`
+        *   `curl -s http://localhost:8010/metrics`
+        *   `curl -s http://localhost:8011/metrics`
         *   Verify that the custom `moe_` gauges are rendering correctly.
 
 ### Story 2: Grafana Latency Nuance Dashboard & Panel Build [Sisyphus-Junior / quick]
 *   **Why**: Construct a high-fidelity visual ledger showing query-relative latency contributions, bimodal cold/warm start splits, and box-plot distributions across different experts.
 *   **Design**:
-    *   Configure Prometheus to scrape the new MoE+ endpoint at `http://localhost:8000/metrics`.
+    *   Configure Prometheus to scrape the new MoE+ endpoint at `http://localhost:8010/metrics`.
     *   In Grafana (`https://monitor.jason-lab.dev`), create panels:
         *   **Stacked Area Chart**: Y-axis represents latency duration (ms), X-axis represents calendar time. Stacked layers of Triage + RAG + Warmup + Execution show contribution.
         *   **Latency Heatmap**: Y-axis represents latency buckets, X-axis represents calendar time. Show the bimodal distribution of cold start vs warm start queries.

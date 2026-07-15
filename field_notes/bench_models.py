@@ -6,6 +6,14 @@ import time
 import requests
 import subprocess
 import threading
+from prometheus_client import Gauge, start_http_server
+
+# Prometheus metrics
+moe_stage_duration_seconds = Gauge(
+    "moe_stage_duration_seconds",
+    "Duration of MoE+ pipeline stages in seconds",
+    ["stage"]
+)
 
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -267,6 +275,14 @@ def test_ollama_model(model_name):
     }
 
 def main():
+    # Start Prometheus metrics server if not disabled
+    if "--no-serve" not in sys.argv:
+        try:
+            start_http_server(8011)
+            print("💡 Prometheus metrics endpoint active on http://localhost:8011")
+        except Exception as e:
+            print(f"⚠️  Failed to start Prometheus server on port 8011: {e}")
+
     print("--- Silicon Performance Benchmarking Start ---")
     results = []
     
@@ -303,6 +319,23 @@ def main():
     moe_pipeline = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_pipeline_metrics.json")
     moe_benchmark = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_benchmark_results.json")
 
+    # Expose pipeline stage durations as Prometheus metrics
+    if moe_pipeline:
+        stages = [
+            "intent_classification",
+            "rag_retrieval",
+            "workspace_context",
+            "model_warming",
+            "prompt_compilation",
+            "total_pipeline"
+        ]
+        for stage in stages:
+            start_val = moe_pipeline.get(f"{stage}_start")
+            end_val = moe_pipeline.get(f"{stage}_end")
+            if start_val is not None and end_val is not None:
+                duration = end_val - start_val
+                moe_stage_duration_seconds.labels(stage=stage).set(duration)
+
     output_data = {
         "timestamp": time.time(),
         "date_str": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
@@ -326,6 +359,15 @@ def main():
             except OSError:
                 pass
         sys.exit(1)
+
+    # Keep-alive loop so Prometheus can scrape metrics if serving
+    if "--no-serve" not in sys.argv:
+        print("Metrics endpoint active. Sleeping to allow scraping (Ctrl+C to exit)...")
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nStopping metrics server.")
 
 if __name__ == "__main__":
     main()
