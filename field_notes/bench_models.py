@@ -42,6 +42,7 @@ PROMPT = "Explain silicon routing in two sentences."
 
 # Endpoints
 VLLM_PORT = 8088
+OLLAMA_HOST = "192.168.1.26"
 OLLAMA_PORT = 11434
 
 # Pre-characterized metrics fallbacks
@@ -56,24 +57,34 @@ FALLBACKS = {
         "vram_gb": 2.5,
         "status": "offline_fallback"
     },
-    "Gemma-2-2B": {
-        "model": "Gemma-2-2B",
+    "gemma4:e2b": {
+        "model": "gemma4:e2b",
         "engine": "Ollama",
-        "display_name": "Gemma 2 2B (Ollama)",
-        "ttft_ms": 350.0,
-        "throughput": 35.0,
-        "itl_ms": 28.57, # 1000 / 35
-        "vram_gb": 2.2,
+        "display_name": "Gemma 4 5B (KENDER)",
+        "ttft_ms": 380.0,
+        "throughput": 38.0,
+        "itl_ms": 26.31,
+        "vram_gb": 3.2,
         "status": "offline_fallback"
     },
-    "Qwen-2.5-Coder": {
-        "model": "Qwen-2.5-Coder",
+    "qwen2.5-coder:14b": {
+        "model": "qwen2.5-coder:14b",
         "engine": "Ollama",
-        "display_name": "Qwen-27B (Remote)",
-        "ttft_ms": 900.0,
-        "throughput": 25.0,
-        "itl_ms": 40.00, # 1000 / 25
-        "vram_gb": 0.0,
+        "display_name": "Qwen-2.5-Coder 14B (KENDER)",
+        "ttft_ms": 480.0,
+        "throughput": 30.0,
+        "itl_ms": 33.33,
+        "vram_gb": 8.5,
+        "status": "offline_fallback"
+    },
+    "devstral:24b": {
+        "model": "devstral:24b",
+        "engine": "Ollama",
+        "display_name": "Devstral 24B (KENDER)",
+        "ttft_ms": 720.0,
+        "throughput": 18.0,
+        "itl_ms": 55.56,
+        "vram_gb": 14.5,
         "status": "offline_fallback"
     }
 }
@@ -166,7 +177,7 @@ def test_vllm_model(model_name):
     token_times = []
     
     try:
-        response = requests.post(url, json=payload, stream=True, timeout=5)
+        response = requests.post(url, json=payload, stream=True, timeout=(5, 60))
         response.raise_for_status()
         
         for line in response.iter_lines():
@@ -219,7 +230,7 @@ def test_vllm_model(model_name):
 def test_ollama_model(model_name):
     """Benchmarks Ollama model by streaming a generation request."""
     # First probe if the model is locally loaded
-    probe_url = f"http://localhost:{OLLAMA_PORT}/api/tags"
+    probe_url = f"http://{OLLAMA_HOST}:{OLLAMA_PORT}/api/tags"
     resp = requests.get(probe_url, timeout=3)
     resp.raise_for_status()
     available_models = [m.get("name") for m in resp.json().get("models", [])]
@@ -234,7 +245,7 @@ def test_ollama_model(model_name):
     if not matched_model:
         raise Exception(f"Model {model_name} not available in Ollama tags")
 
-    url = f"http://localhost:{OLLAMA_PORT}/api/generate"
+    url = f"http://{OLLAMA_HOST}:{OLLAMA_PORT}/api/generate"
     payload = {
         "model": matched_model,
         "prompt": PROMPT,
@@ -250,7 +261,7 @@ def test_ollama_model(model_name):
     token_times = []
     
     try:
-        response = requests.post(url, json=payload, stream=True, timeout=5)
+        response = requests.post(url, json=payload, stream=True, timeout=(5, 180))
         response.raise_for_status()
         
         for line in response.iter_lines():
@@ -316,25 +327,35 @@ def main():
         print(f"⚠️  vLLM offline/failed ({e}). Loading pre-characterized fallback...")
         results.append(FALLBACKS["Llama-3.2-3B-AWQ"])
         
-    # 2. Benchmark Gemma-2-2B (Ollama)
-    print("Benchmarking Gemma-2-2B (Ollama port 11434)...")
+    # 2. Benchmark gemma4:e2b (Ollama)
+    print("Benchmarking gemma4:e2b (Ollama port 11434)...")
     try:
-        metrics = test_ollama_model("Gemma-2-2B")
+        metrics = test_ollama_model("gemma4:e2b")
         results.append(metrics)
         print(f"✅ Online success: {metrics}")
     except Exception as e:
-        print(f"⚠️  Ollama Gemma-2-2B offline/failed ({e}). Loading pre-characterized fallback...")
-        results.append(FALLBACKS["Gemma-2-2B"])
+        print(f"⚠️  Ollama gemma4:e2b offline/failed ({e}). Loading pre-characterized fallback...")
+        results.append(FALLBACKS["gemma4:e2b"])
 
-    # 3. Benchmark Qwen-2.5-Coder (Ollama)
-    print("Benchmarking Qwen-2.5-Coder (Ollama port 11434)...")
+    # 3. Benchmark qwen2.5-coder:14b (Ollama)
+    print("Benchmarking qwen2.5-coder:14b (Ollama port 11434)...")
     try:
-        metrics = test_ollama_model("Qwen-2.5-Coder")
+        metrics = test_ollama_model("qwen2.5-coder:14b")
         results.append(metrics)
         print(f"✅ Online success: {metrics}")
     except Exception as e:
-        print(f"⚠️  Ollama Qwen-2.5-Coder offline/failed ({e}). Loading pre-characterized fallback...")
-        results.append(FALLBACKS["Qwen-2.5-Coder"])
+        print(f"⚠️  Ollama qwen2.5-coder:14b offline/failed ({e}). Loading pre-characterized fallback...")
+        results.append(FALLBACKS["qwen2.5-coder:14b"])
+
+    # 4. Benchmark devstral:24b (Ollama)
+    print("Benchmarking devstral:24b (Ollama port 11434)...")
+    try:
+        metrics = test_ollama_model("devstral:24b")
+        results.append(metrics)
+        print(f"✅ Online success: {metrics}")
+    except Exception as e:
+        print(f"⚠️  Ollama devstral:24b offline/failed ({e}). Loading pre-characterized fallback...")
+        results.append(FALLBACKS["devstral:24b"])
 
     moe_pipeline = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_pipeline_metrics.json")
     moe_benchmark = safe_read_json("/home/jallred/Dev_Lab/HomeLabAI/src/debug/moe_benchmark_results.json")
