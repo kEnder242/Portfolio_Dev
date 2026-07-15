@@ -1,0 +1,154 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            }
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "targets": [
+        {
+          "expr": "moe_stage_duration_seconds{stage!=\"total_pipeline\"}",
+          "legendFormat": "{{stage}}",
+          "refId": "A"
+        }
+      ],
+      "title": "MoE+ Pipeline Stage Durations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "targets": [
+        {
+          "expr": "moe_router_latency_seconds",
+          "legendFormat": "{{start_type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Routing Latency Heatmap",
+      "type": "heatmap"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "targets": [
+        {
+          "expr": "moe_router_latency_seconds",
+          "legendFormat": "Router",
+          "refId": "A"
+        },
+        {
+          "expr": "moe_warmup_latency_seconds",
+          "legendFormat": "Warmup",
+          "refId": "B"
+        },
+        {
+          "expr": "moe_expert_latency_seconds",
+          "legendFormat": "Expert",
+          "refId": "C"
+        }
+      ],
+      "title": "State Timeline: Router vs Warmup vs Expert",
+      "type": "state-timeline"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 4,
+      "targets": [
+        {
+          "expr": "moe_model_ttft_seconds",
+          "legendFormat": "TTFT",
+          "refId": "A"
+        },
+        {
+          "expr": "moe_model_itl_seconds",
+          "legendFormat": "ITL",
+          "refId": "B"
+        }
+      ],
+      "title": "Latency Variance (TTFT vs ITL)",
+      "type": "boxplot"
+    }
+  ],
+  "schemaVersion": 34,
+  "style": "dark",
+  "tags": [
+    "moe-plus"
+  ],
+  "title": "MoE+ Latency Nuance",
+  "uid": "moe-latency-nuance",
+  "version": 1
+}

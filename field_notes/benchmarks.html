@@ -241,6 +241,146 @@
             margin-bottom: 30px;
         }
 
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #1f242c;
+        }
+        .tab-btn {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            color: #8b949e;
+            padding: 10px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tab-btn:hover {
+            background: #21262d;
+            color: #c9d1d9;
+        }
+        .tab-btn.active {
+            background: #1f6feb;
+            border-color: #1f6feb;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .tab-content {
+            display: block;
+        }
+        .tab-content.hidden {
+            display: none;
+        }
+
+        /* Grafana embed panels */
+        .grafana-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .grafana-panel {
+            background: #12161f;
+            border: 1px solid #1f242c;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .grafana-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #c9d1d9;
+            padding: 12px 15px;
+            border-bottom: 1px solid #1f242c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .grafana-embed {
+            position: relative;
+            height: 300px;
+            background: #0b0e14;
+        }
+        .grafana-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .grafana-embed iframe.iframe-loaded + .grafana-fallback {
+            display: none;
+        }
+        .grafana-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #6a737d;
+            background: #0b0e14;
+            z-index: 1;
+        }
+        .grafana-fallback .fallback-icon {
+            font-size: 1.5rem;
+            color: #f78166;
+            margin-bottom: 10px;
+        }
+        .grafana-fallback .fallback-detail {
+            font-size: 0.7rem;
+            color: #484f58;
+            margin-top: 8px;
+        }
+        .grafana-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: #484f58;
+            padding: 8px 15px;
+            border-top: 1px solid #1f242c;
+            background: #0d1117;
+        }
+
+        .iframe-fallback {
+            display: none;
+            background: #12161f;
+            border: 1px dashed #444;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+        .iframe-fallback p {
+            margin: 0 0 8px 0;
+            color: #f78166;
+        }
+        .iframe-fallback pre {
+            margin: 0;
+            background: #0b0e14;
+            padding: 10px;
+            border-radius: 3px;
+            color: #58a6ff;
+            font-size: 0.75rem;
+            overflow-x: auto;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .bar-row {
@@ -289,10 +429,71 @@
             <button class="console-btn" onclick="loadBenchmarks()">REFRESH TELEMETRY</button>
         </div>
 
-        <div id="benchmark-content">
-            <!-- Rendered dynamically via JS -->
-            <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#8b949e;">
-                Bootstrapping console logs...
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab(event, 'local-tab')">Local 2080 Ti</button>
+            <button class="tab-btn" onclick="switchTab(event, 'kender-tab')">KENDER 4090</button>
+        </div>
+
+        <div id="local-tab" class="tab-content">
+            <div id="benchmark-content">
+                <!-- Rendered dynamically via JS -->
+                <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#8b949e;">
+                    Bootstrapping console logs...
+                </div>
+            </div>
+        </div>
+
+        <div id="kender-tab" class="tab-content hidden">
+            <div class="section-header">GRAFANA TELEMETRY PANELS</div>
+
+            <div class="grafana-embeds">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>MoE+ Pipeline Stage Durations</span>
+                        <span class="chart-subtitle">Stacked Area Chart (Live Telemetry)</span>
+                    </div>
+                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=1&orgId=1" width="100%" height="300" frameborder="0"></iframe>
+                    <div class="iframe-fallback">
+                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <pre>moe_stage_duration_seconds{stage!="total_pipeline"}</pre>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>Routing Latency Heatmap</span>
+                        <span class="chart-subtitle">Heatmap (Live Telemetry)</span>
+                    </div>
+                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=2&orgId=1" width="100%" height="300" frameborder="0"></iframe>
+                    <div class="iframe-fallback">
+                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <pre>moe_router_latency_seconds</pre>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>State Timeline: Router vs Warmup vs Expert</span>
+                        <span class="chart-subtitle">State Timeline (Live Telemetry)</span>
+                    </div>
+                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=3&orgId=1" width="100%" height="300" frameborder="0"></iframe>
+                    <div class="iframe-fallback">
+                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <pre>moe_router_latency_seconds, moe_warmup_latency_seconds, moe_expert_latency_seconds</pre>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>Latency Variance (TTFT vs ITL)</span>
+                        <span class="chart-subtitle">Box Plot (Live Telemetry)</span>
+                    </div>
+                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=4&orgId=1" width="100%" height="300" frameborder="0"></iframe>
+                    <div class="iframe-fallback">
+                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <pre>moe_model_ttft_seconds, moe_model_itl_seconds</pre>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -632,6 +833,31 @@
             }
         }
 
+        function switchTab(event, tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+            
+            // Add active class to the clicked tab button
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+        
         // Boot
         window.addEventListener('load', loadBenchmarks);
     </script>
