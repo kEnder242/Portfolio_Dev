@@ -1,14 +1,14 @@
-# Field Notes | Technical Portfolio
+# Technical Portfolio: Field Notes
 
-**A "Class 1" Engineering Dashboard driven by a Bicameral Synthesis Pipeline.**
+**A static engineering dashboard built from 18 years of technical logs.**
 
-This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career environment built with a philosophy of radical simplicity and active intelligence.
+This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career environment built with a focus on simplicity and static generation.
 
 ---
 
 ## 🌐 Live Showcase
 **[https://notes.jason-lab.dev](https://notes.jason-lab.dev)**
-*An interactive demo of the "Class 1" dashboard, including the Career Timeline and Artifact Map.*
+*An interactive demo of the dashboard, including the Career Timeline and Artifact Map.*
 
 ---
 
@@ -19,19 +19,19 @@ This project adheres to a strict "Class 1" design constraint: **Robust, self-con
 *   **No Build Step:** WYSIWYG. Viewable via `python3 -m http.server`.
 
 ## 🧠 The Architecture: Static Synthesis
-The backend is a **Static Synthesis Pipeline** that indexes 18 years of raw engineering logs into a static knowledge graph (JSON/HTML). It utilizes a **"Dual-Protocol" Attendant (V2)** to coordinate high-fidelity analysis between local reflex and remote strategy.
+The backend is a static generation pipeline that indexes 18 years of raw engineering logs into a knowledge graph (JSON/HTML). It uses a dual-component system (local and remote) to analyze and structure the data.
 
-*   **Bicameral Coordination:** Local reflex (Pinky) and remote strategy (Brain) collaborate to synthesize the 18-year archive into structured data.
-*   **Resident Peer Presence [VIBE-011]:** The portfolio is the face of an "Always Ready" distributed environment.
-*   **Neural Pedigree Recall:** Driven by LoRA-hardened weights encoding 18 years of technical history directly into the model's neurons for intuitive recall.
-*   **Resonant Chamber [FEAT-153]:** Coordinated synthesis via agentic "overhearing," allowing the Foil (Pinky) to ground the Sovereign's (Brain) strategic intent.
+*   **Dual-Component Coordination:** Local and remote components collaborate to structure the 18-year archive into data.
+*   **Static Availability:** The portfolio is a static representation of a distributed environment.
+*   **Historical Data Encoding:** Uses LoRA adapters to encode 18 years of technical history for structured recall.
+*   **Component Interaction:** Local and remote components interact to refine and structure data.
 
 ```mermaid
 graph TD
     A[Raw Notes] -->|Librarian| B(Timeline Queue)
-    B -->|Nibbler Script| C{"Pinky (Local Auditor)"}
+    B -->|Nibbler Script| C{"Local Component"}
     A -->|Artifact Scanner| C
-    C -->|Handover Signal| G{"Brain (Sovereign Architect)"}
+    C -->|Handover Signal| G{"Remote Component"}
     G -->|Strategic Signal| C
     C -->|Events & Redaction| D[Timeline Data]
     C -->|Rank & Synopsis| E[Artifact Map Data]
@@ -40,12 +40,12 @@ graph TD
 
 ### Key Components
 1.  **The Librarian (`scan_librarian.py`):** Classifies raw text files as Logs, References, or Strategic Context using heuristics.
-2.  **The Nibbler (`nibble.py`):** A background worker for the **Timeline**. It "nibbles" at the log archives, sending chunks to Pinky to extract technical events and redact PII.
+2.  **Timeline Processor (`nibble.py`):** A background worker that processes log archives in chunks to extract technical events and redact PII.
 3.  **The Curator (`scan_artifacts.py`):** A specialized scanner for the **Artifact Map**. It analyzes files (PDFs, Scripts, Decks) to assign a "Showcase Rank" (0-4) and synopsis. High-value items ("4-Star") are hardcoded with expert descriptions and direct links.
 4.  **The Dashboard (`index.html`, `timeline.html`, `files.html`):** A "System Admin" style interface featuring:
     *   **Persistent Navigation:** "Mission Control" links remain visible during searches.
     *   **Content-Aware Search:** Filters matches sidebar titles, index keys, and story body text.
-    *   **Typewriter FX:** Simulates a live terminal stream for timeline events.
+    *   **Terminal Animation:** Simulates a terminal output for timeline events.
 
 ## 🚀 Usage (Maintenance)
 This repo is the "Code" layer. The "Data" layer stays local.
@@ -83,10 +83,10 @@ These services ensure the platform is always available:
 *   **Backend Link:** `HomeLabAI_Dev/` (Symlink to `~/Dev_Lab/HomeLabAI`)
 
 ## 🤖 Credits & Collaboration
-This project was architected and implemented in an agentic loop with **Google Gemini CLI**.
+This project was developed with assistance from **Google Gemini CLI**.
 *   **Concept & Strategy:** Jason Allred
 *   **Code & Integration:** Gemini CLI (Agent)
-*   **Indexing Engine:** Bicameral Mind (Pinky + Brain)
+*   **Indexing Engine:** Dual-Component System (Local + Remote)
 
 ---
 *Status: Live & Operational.*
