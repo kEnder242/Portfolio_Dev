@@ -25,6 +25,7 @@ The backend is a static generation pipeline that indexes 18 years of raw enginee
 
 *   **Dual-Component Coordination:** Local and remote components collaborate to structure the log archive into structured JSON payloads.
 *   **Static Availability:** The portfolio serves as the static representation of a distributed research environment.
+*   **Deep Thought (Remote Node):** The remote Windows compute node (192.168.1.26) running Qwen/DeepSeek models to perform strategic consolidation and heavy reasoning.
 *   **Historical Data Encoding:** Uses LoRA adapters to encode 18-year technical histories for structured recall.
 *   **Component Interaction:** Local and remote components interact to validate and structure the data during refinement cycles.
 
@@ -32,9 +33,13 @@ The backend is a static generation pipeline that indexes 18 years of raw enginee
 graph TD
     A[Raw Notes / knowledge_base] -->|Librarian| B(file_manifest.json)
     B -->|Queue Manager| C(queue.json)
-    C -->|Timeline Processor / force_feed.py| D[Timeline Data]
-    A -->|Artifact Scanner / scan_artifacts.py| E[Artifact Map Data]
-    D & E -->|Build System / build_site.py| F[Static HTML Site]
+    C -->|Timeline Processor / force_feed.py| D{"Local Component (Pinky)"}
+    A -->|Artifact Scanner / scan_artifacts.py| D
+    D -->|Handover / Query| H{"Deep Thought (Remote Compute Node)"}
+    H -->|Refined Analysis| D
+    D -->|Events & Redaction| E[Timeline Data]
+    D -->|Rank & Synopsis| F[Artifact Map Data]
+    E & F -->|Build System / build_site.py| G[Static HTML Site]
 ```
 
 ### Core Architecture Components
