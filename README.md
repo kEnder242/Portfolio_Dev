@@ -1,8 +1,8 @@
 # Technical Portfolio: Field Notes
 
-**A static engineering dashboard built from 18 years of technical logs.**
+**A zero-dependency static engineering dashboard built from 18 years of technical logs.**
 
-This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career environment built with a focus on simplicity and static generation.
+This repository contains the source code for [notes.jason-lab.dev](https://notes.jason-lab.dev), a professional portfolio and career environment built with a focus on simplicity, native web standards, and static generation.
 
 ---
 
@@ -12,60 +12,75 @@ This repository contains the source code for [notes.jason-lab.dev](https://notes
 
 ---
 
-## 🏗️ The Philosophy: "Class 1"
-This project adheres to a strict "Class 1" design constraint: **Robust, self-contained, and framework-free.**
-*   **No React/Vue/Angular:** Pure HTML, CSS, and Vanilla JS.
-*   **No Backend Runtime:** The site runs as static files (JSON/HTML).
-*   **No Build Step:** WYSIWYG. Viewable via `python3 -m http.server`.
+## 🏗️ The Philosophy: Zero-Framework Native Architecture
+This project adheres to a strict design constraint ensuring the platform is robust, self-contained, and run-anywhere:
+*   **No Frameworks (No React/Vue/Angular):** Pure HTML5, modern vanilla CSS, and standard ES modules (such as custom Web Components).
+*   **Serverless & Static:** The site runs completely as static files, utilizing lazy-loaded JSON payloads for dynamic search indexing.
+*   **Zero-Dependency Runtime:** Viewable instantly in any browser. Local preview requires only a basic static web server (e.g., `python3 -m http.server`).
+
+---
 
 ## 🧠 The Architecture: Static Synthesis
-The backend is a static generation pipeline that indexes 18 years of raw engineering logs into a knowledge graph (JSON/HTML). It uses a dual-component system (local and remote) to analyze and structure the data.
+The backend is a static generation pipeline that indexes 18 years of raw engineering logs into a static knowledge graph. It uses a dual-component system (local and remote) to analyze and structure the data.
 
-*   **Dual-Component Coordination:** Local and remote components collaborate to structure the 18-year archive into data.
-*   **Static Availability:** The portfolio is a static representation of a distributed environment.
-*   **Historical Data Encoding:** Uses LoRA adapters to encode 18 years of technical history for structured recall.
-*   **Component Interaction:** Local and remote components interact to refine and structure data.
+*   **Dual-Component Coordination:** Local and remote components collaborate to structure the log archive into structured JSON payloads.
+*   **Static Availability:** The portfolio serves as the static representation of a distributed research environment.
+*   **Historical Data Encoding:** Uses LoRA adapters to encode 18-year technical histories for structured recall.
+*   **Component Interaction:** Local and remote components interact to validate and structure the data during refinement cycles.
 
 ```mermaid
 graph TD
-    A[Raw Notes] -->|Librarian| B(Timeline Queue)
-    B -->|Nibbler Script| C{"Local Component"}
-    A -->|Artifact Scanner| C
-    C -->|Handover Signal| G{"Remote Component"}
-    G -->|Strategic Signal| C
-    C -->|Events & Redaction| D[Timeline Data]
-    C -->|Rank & Synopsis| E[Artifact Map Data]
-    D & E --> F[Static Dashboard]
+    A[Raw Notes / knowledge_base] -->|Librarian| B(file_manifest.json)
+    B -->|Queue Manager| C(queue.json)
+    C -->|Timeline Processor / force_feed.py| D[Timeline Data]
+    A -->|Artifact Scanner / scan_artifacts.py| E[Artifact Map Data]
+    D & E -->|Build System / build_site.py| F[Static HTML Site]
 ```
 
-### Key Components
-1.  **The Librarian (`scan_librarian.py`):** Classifies raw text files as Logs, References, or Strategic Context using heuristics.
-2.  **Timeline Processor (`nibble.py`):** A background worker that processes log archives in chunks to extract technical events and redact PII.
+### Core Architecture Components
+1.  **The Librarian (`scan_librarian.py`):** Classifies raw text files in the `knowledge_base` into type categories (Logs, References, or Strategic Context) and builds the file manifest.
+2.  **Timeline Processor (`nibble.py`):** A background worker for the **Timeline**. It processes log archives in month/year chunks, sending them to the local LLM endpoint to extract technical events and redact private info.
 3.  **The Curator (`scan_artifacts.py`):** A specialized scanner for the **Artifact Map**. It analyzes files (PDFs, Scripts, Decks) to assign a "Showcase Rank" (0-4) and synopsis. High-value items ("4-Star") are hardcoded with expert descriptions and direct links.
-4.  **The Dashboard (`index.html`, `timeline.html`, `files.html`):** A "System Admin" style interface featuring:
-    *   **Persistent Navigation:** "Mission Control" links remain visible during searches.
-    *   **Content-Aware Search:** Filters matches sidebar titles, index keys, and story body text.
-    *   **Terminal Animation:** Simulates a terminal output for timeline events.
+4.  **The Dashboard (`index.html`, `timeline.html`, `files.html`):** A "System Admin" style interface featuring persistent navigation components (using custom Web Components), content-aware search filtering, and custom terminal animation effects.
 
-## 🚀 Usage (Maintenance)
-This repo is the "Code" layer. The "Data" layer stays local.
+---
+
+## 🚀 Usage & Site Compilation
+
+### Primary Developer Commands
 
 ```bash
-# 1. Update Manifest (Classify new files)
-python3 field_notes/scan_librarian.py
+# 1. Compile and Rebuild the Static Templates
+# Recompiles Protocols.md, RESEARCH_SYNTHESIS.md, and FeatureTracker.md into HTML templates,
+# runs model benchmarks, and updates cache-busting hashes on static assets.
+python3 field_notes/build_site.py
 
-# 2. Queue Changes
-python3 field_notes/scan_queue.py
-
-# 3. Process Timeline (The Slow Burn)
+# 2. Aggressively Run the Backlog Synthesis Loop
+# Automates the entire timeline processing sequence (Librarian -> Queue Manager -> Nibbler loop).
 python3 field_notes/force_feed.py
 
-# 4. Refresh Artifact Map
+# 3. Rebuild the Showcase Artifact Map
+# Re-scans project directories to refresh rankings, descriptions, and file locations.
 python3 field_notes/scan_artifacts.py ALL
+```
 
-# 5. Clean Artifact Data (Reset)
+### Granular Maintenance Commands
+
+```bash
+# Update File Classifications (Manifest)
+python3 field_notes/scan_librarian.py
+
+# Split and Queue Changed Log Chunks
+python3 field_notes/scan_queue.py
+
+# Run a Single Queue Item Processing Step (Nibbler)
+python3 field_notes/nibble.py
+
+# Clean Artifact Data Cache
 python3 field_notes/clean_artifacts.py
 ```
+
+---
 
 ## 🚀 Lab Deployment & Services
 As part of the **Federated Lab** architecture, this repository acts as the **Platform Host** for `z87-Linux`.
@@ -75,12 +90,14 @@ These services ensure the platform is always available:
 *   `cloudflared.service`: Connects `jason-lab.dev` to the local machine.
 *   `code-server@jallred.service`: VS Code Web IDE (`code.jason-lab.dev`).
 *   `acme-pager.service`: Streamlit Log/Note Pager (`pager.jason-lab.dev`).
-*   `acme-notes.service`: Static Timeline Server (`notes.jason-lab.dev`).
+*   `field-notes.service`: Static Timeline Server (`notes.jason-lab.dev` / serves port 9001).
 
 ### Local Environment
 *   **Path:** `~/Dev_Lab/Portfolio_Dev`
 *   **Data Source:** `raw_notes/` (Symlink to `~/knowledge_base`)
 *   **Backend Link:** `HomeLabAI_Dev/` (Symlink to `~/Dev_Lab/HomeLabAI`)
+
+---
 
 ## 🤖 Credits & Collaboration
 This project was developed with assistance from **Google Gemini CLI**.
