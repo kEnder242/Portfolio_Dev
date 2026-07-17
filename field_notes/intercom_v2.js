@@ -146,11 +146,6 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         } catch (e) {}
     }
 
-    if (channel === 'whiteboard' || channel === 'workspace') {
-        if (editor) editor.value(text);
-        return;
-    }
-
     const msg = document.createElement('div');
     const msgType = (source && source.toLowerCase() === "system") ? "system-msg" : type;
     
@@ -519,6 +514,19 @@ function connect() {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
             } else if (data.type === 'cabinet') {
                 updateFileTree(data.files);
+            } else if (data.type === 'tool_log') {
+                // [SPR_41] Tool Log: Render collapsible card in sidebar
+                if (window.renderToolLogEntry) {
+                    window.renderToolLogEntry({
+                        time: data.time || new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                        node: data.node || 'System',
+                        tool: data.tool || 'unknown',
+                        params: data.params || null,
+                        output_path: data.output_path || null,
+                        error: data.error || null,
+                        detail: data.detail || null
+                    });
+                }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
                 editor.value(data.content);

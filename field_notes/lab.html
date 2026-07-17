@@ -9,44 +9,6 @@
         main { display: flex; gap: 20px; transition: all 0.3s ease; height: 85vh; }
         #intercom-main { flex: 1; display: flex; flex-direction: column; }
         
-        /* Whiteboard: Engineering Canvas (Soft Blue-Grey) */
-        #whiteboard-sidebar {
-            width: 40%;
-            background: #eef2f7;
-            border-left: 2px solid var(--border-color);
-            padding: 0;
-            display: none;
-            flex-direction: column;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
-        }
-        #whiteboard-sidebar.active { display: flex; }
-        
-        .whiteboard-header { 
-            background: #dde4ed;
-            padding: 10px 20px;
-            border-bottom: 2px solid #ccd6dd; 
-            color: #d73a49;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        /* Notepad-Fidelity Textarea */
-        #whiteboard-content {
-            flex: 1;
-            width: 100%;
-            background: transparent;
-            border: none;
-            padding: 20px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-            color: #111;
-            resize: none;
-            line-height: 1.4;
-            outline: none;
-        }
-
         #chat-console {
             background: #000;
             border: 1px solid var(--border-color);
@@ -73,9 +35,26 @@
         .folder { font-weight: bold; color: #aaa; }
         .file { padding-left: 15px; }
         
-        .workbench-controls { padding: 5px 20px; background: #dde4ed; border-top: 1px solid #ccd6dd; display: flex; gap: 10px; }
-        .wb-btn { background: #fff; border: 1px solid #ccd6dd; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; color: #555; border-radius: 3px; }
-        .wb-btn:hover { background: #f0f0f0; border-color: #999; }
+        /* Tool Log Card Styles */
+        #tool-log-section { margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; overflow-y: auto; max-height: 40vh; }
+        .tool-log-title { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .tool-log-badge { font-size: 0.6rem; background: #222; color: #888; padding: 1px 6px; border-radius: 8px; }
+        .tool-card { margin-bottom: 4px; border: 1px solid #222; border-left: 3px solid var(--accent-color); border-radius: 3px; background: #0a0a0a; }
+        .tool-card summary { cursor: pointer; padding: 4px 8px; font-size: 0.72rem; color: #aaa; display: flex; align-items: center; gap: 6px; user-select: none; }
+        .tool-card summary:hover { background: #111; }
+        .tool-card summary::-webkit-details-marker { color: #555; }
+        .tool-card[open] { border-left-color: #4caf50; }
+        .tool-card[open] summary { background: #111; color: #ccc; border-bottom: 1px solid #222; }
+        .tool-card-body { padding: 6px 8px 8px 24px; font-size: 0.7rem; color: #777; line-height: 1.5; }
+        .tool-card-body .param-row { display: flex; gap: 8px; margin-bottom: 2px; }
+        .tool-card-body .param-key { color: #555; min-width: 50px; }
+        .tool-card-body .param-val { color: #999; font-family: monospace; word-break: break-all; }
+        .tool-card-body .output-link { color: var(--accent-color); text-decoration: none; font-size: 0.68rem; }
+        .tool-card-body .output-link:hover { text-decoration: underline; }
+        .tool-timestamp { color: #555; font-family: monospace; font-size: 0.65rem; min-width: 55px; }
+        .tool-node-badge { background: #1a1a2e; color: #7ec8e3; padding: 0 4px; border-radius: 2px; font-size: 0.65rem; }
+        .tool-name { color: #ccc; font-weight: bold; }
+        .tool-empty { font-size: 0.7rem; color: #444; font-style: italic; padding: 8px; }
     </style>
 </head>
 <body>
@@ -87,6 +66,13 @@
         <section id="filing-cabinet">
             <div class="cabinet-title">📁 Filing Cabinet</div>
             <div id="file-tree"><em>Synchronizing...</em></div>
+        </section>
+
+        <section id="tool-log-section">
+            <div class="tool-log-title">🔧 Tool Log <span class="tool-log-badge" id="tool-log-count">0</span></div>
+            <div id="tool-log-container">
+                <div class="tool-empty">Awaiting tool executions...</div>
+            </div>
         </section>
     </nav>
         
@@ -101,7 +87,6 @@
                     <div id="audio-level"></div>
                 </div>
                 <span id="lab-version" style="margin-left: auto; color: #555;">v3.3.1</span>
-                <button id="sidebar-toggle" style="margin-left: 10px; background: none; border: 1px solid #333; color: #555; cursor: pointer;">📋 Whiteboard</button>
             </div>
 
             <div id="chat-console">
@@ -115,44 +100,13 @@
             </div>
         </div>
 
-        <div id="whiteboard-sidebar">
-            <div class="whiteboard-header">
-                <span>⚪ WHITEBOARD (LIVE)</span>
-                <span style="font-size: 0.6rem; color: #777;">[EDITABLE_WORKSPACE]</span>
-            </div>
-            <textarea id="whiteboard-content" spellcheck="false" placeholder="Brain logic and architectural drafts will stream here..."></textarea>
-            <div class="workbench-controls">
-                <button class="wb-btn" id="wb-undo">Undo</button>
-                <button class="wb-btn" id="wb-clear">Clear</button>
-                <button class="wb-btn" id="wb-save" style="margin-left: auto; color: #d73a49; font-weight: bold;">Commit</button>
-            </div>
-        </div>
     </main>
 
     <script src="mission-control.js?v=94e04f0a"></script>
-    <script src="intercom_v2.js?v=baa22eb5"></script>
+    <script src="intercom_v2.js?v=35212657"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const wbToggle = document.getElementById('sidebar-toggle');
-            const wbSidebar = document.getElementById('whiteboard-sidebar');
-            const wbContent = document.getElementById('whiteboard-content');
-            
-            // 1. Sidebar Persistence
-            if (wbToggle && wbSidebar) {
-                wbToggle.onclick = () => wbSidebar.classList.toggle('active');
-            }
-
-            // 2. Whiteboard Functionality (Notepad-Fidelity)
-            document.getElementById('wb-clear').onclick = () => {
-                if(confirm("Clear the whiteboard?")) wbContent.value = "";
-            };
-            document.getElementById('wb-undo').onclick = () => document.execCommand('undo');
-            document.getElementById('wb-save').onclick = () => {
-                alert("Workbench Saved to ~/AcmeLab/workspace/whiteboard.md");
-                // TODO: Wire up real save-to-disk endpoint
-            };
-
-            // 3. Filing Cabinet: Interactive Tree
+            // Filing Cabinet: Interactive Tree
             function loadCabinet() {
                 fetch('search_index.json')
                     .then(r => r.json())
@@ -174,7 +128,6 @@
 
                         // Render Workspace Zones
                         html += '<div class="tree-item folder" style="margin-top:10px;">📂 Workspace (Read-Write)</div>';
-                        html += '<div class="tree-item file" style="margin-left:10px;">📄 whiteboard.md</div>';
                         html += '<div class="tree-item file" style="margin-left:10px;">📄 active_draft.txt</div>';
                         
                         tree.innerHTML = html;
@@ -185,22 +138,49 @@
             }
             loadCabinet();
 
-            // 4. Brain Intercept: Listen for whiteboard updates
-            // (The intercom_v2.js handles the raw WS, we can listen for DOM changes or global events)
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList') {
-                        const lastMsg = mutation.target.lastElementChild;
-                        if (lastMsg && lastMsg.innerText.includes("[THE EDITOR]")) {
-                            // Extract content and pin to whiteboard
-                            const cleanContent = lastMsg.innerText.replace("[THE EDITOR]", "").trim();
-                            wbContent.value = cleanContent;
-                            wbSidebar.classList.add('active'); // Auto-reveal on thinking
-                        }
-                    }
-                });
-            });
-            observer.observe(document.getElementById('chat-console'), { childList: true });
+            // Tool Log: Global render helper (called from intercom_v2.js)
+            window.renderToolLogEntry = function(entry) {
+                const container = document.getElementById('tool-log-container');
+                const countBadge = document.getElementById('tool-log-count');
+                if (!container) return;
+
+                // Remove empty placeholder if present
+                const empty = container.querySelector('.tool-empty');
+                if (empty) empty.remove();
+
+                // Cap at 50 entries (remove oldest)
+                while (container.children.length >= 50) {
+                    container.removeChild(container.lastElementChild);
+                }
+
+                const card = document.createElement('details');
+                card.className = 'tool-card';
+                card.innerHTML = `
+                    <summary>
+                        <span class="tool-timestamp">${entry.time || '--:--:--'}</span>
+                        <span class="tool-node-badge">${entry.node || '?'}</span>
+                        <span class="tool-name">${entry.tool || 'unknown_tool'}</span>
+                    </summary>
+                    <div class="tool-card-body">
+                        ${entry.params ? `<div class="param-row"><span class="param-key">params:</span><span class="param-val">${escapeHtml(JSON.stringify(entry.params))}</span></div>` : ''}
+                        ${entry.output_path ? `<div class="param-row"><span class="param-key">output:</span><a class="output-link" href="file://${entry.output_path}" target="_blank">${entry.output_path}</a></div>` : ''}
+                        ${entry.error ? `<div class="param-row" style="color:#e57373;"><span class="param-key">error:</span><span class="param-val">${escapeHtml(entry.error)}</span></div>` : ''}
+                        ${entry.detail ? `<div style="margin-top:4px;color:#888;">${escapeHtml(entry.detail)}</div>` : ''}
+                    </div>
+                `;
+
+                // Insert newest at top
+                container.insertBefore(card, container.firstChild);
+
+                // Update badge count
+                if (countBadge) countBadge.textContent = container.children.length;
+            };
+
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
         });
     </script>
 </body>
