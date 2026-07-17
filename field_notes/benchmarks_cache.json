@@ -1,6 +1,6 @@
 {
-  "timestamp": 1784268055.3365097,
-  "date_str": "2026-07-16 23:00:55",
+  "timestamp": 1784268887.5964353,
+  "date_str": "2026-07-16 23:14:47",
   "results": [
     {
       "model": "Llama-3.2-3B-AWQ",
@@ -16,30 +16,30 @@
       "model": "gemma4:e2b",
       "engine": "Ollama",
       "display_name": "gemma4:e2b (Ollama)",
-      "ttft_ms": 31084.776639938354,
-      "throughput": 1.5574256015569945,
-      "itl_ms": 7.862508296966553,
-      "vram_gb": 2.046875,
+      "ttft_ms": 30796.672344207764,
+      "throughput": 1.575355042216794,
+      "itl_ms": 6.4047326644261675,
+      "vram_gb": 0.544921875,
       "status": "online"
     },
     {
       "model": "qwen2.5-coder:14b",
       "engine": "Ollama",
       "display_name": "qwen2.5-coder:14b (Ollama)",
-      "ttft_ms": 24781.382083892822,
-      "throughput": 2.679143137362995,
-      "itl_ms": 14.31060187956866,
-      "vram_gb": 2.046875,
+      "ttft_ms": 24201.663732528687,
+      "throughput": 2.740053231115211,
+      "itl_ms": 14.416599974912755,
+      "vram_gb": 5.3623046875,
       "status": "online"
     },
     {
       "model": "devstral:24b",
       "engine": "Ollama",
       "display_name": "devstral:24b (Ollama)",
-      "ttft_ms": 71731.6951751709,
-      "throughput": 0.698846483200325,
-      "itl_ms": 259.25000111262005,
-      "vram_gb": 2.0390625,
+      "ttft_ms": 74591.10283851624,
+      "throughput": 0.6637028536744342,
+      "itl_ms": 288.62495024998987,
+      "vram_gb": 2.0927734375,
       "status": "online"
     }
   ],

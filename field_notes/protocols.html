@@ -352,6 +352,7 @@
 </li>
 <li><strong>The Prohibition</strong>: Manual <code>pkill</code>, <code>kill</code>, <code>nohup</code>, or direct <code>python3 src/acme_lab.py</code> execution is strictly <strong>FORBIDDEN</strong>. These actions bypass the Attendant's logging, port-reaping, and state-tracking logic.</li>
 <li><strong>Legacy Support</strong>: <code>LAB_REST_CURL_CONTROL</code> (Default: ENABLED) preserves backward compatibility for existing <code>curl</code> scripts and remote status indicators while steering the agent toward the high-fidelity Proxy path.</li>
+<li><strong>Code Reload Mandate</strong>: Any codebase modifications made to Foyer routing (<code>router.py</code>, <code>cognitive_hub.py</code>), node adapters (<code>loader.py</code>), or Attendant services must be followed immediately by <code>sudo systemctl restart lab-attendant.service</code>. Failing to restart the service after file modifications causes the system to run stale memory footprints, leading to false validation passes.</li>
 </ol>
 <p><strong>Lead Engineer's Mandate (Tool Stewardship)</strong>: "If a tool is broken or lacks a necessary capability, do NOT bypass it with a pkill or shell hack. Fix the tool or extend the API. A bypass is a 'Silicon Scar' that blinds future agents; a fix is a permanent upgrade to the Lab"</p>
                             </div>
@@ -502,6 +503,7 @@
 <li><strong>Fast Hibernation</strong>: Set <code>afk_timeout=60</code> in <code>acme_lab.py</code> to observe auto-hibernation cycles in 1 minute.</li>
 <li><strong>Traceability</strong>: Always check <code>status.json</code> or the Attendant journal for the <code>reason</code> field to verify which trigger caused an ignition.</li>
 <li><strong>Silicon Reset</strong>: Use <code>sudo systemctl restart lab-attendant.service</code> to ensure a perfectly clean slate between tests. The <code>on_shutdown</code> hook ensures all session orphans are reaped.</li>
+<li><strong>Hot-Reload Prevention</strong>: The state machine does not support dynamic code reloading. Always execute <code>sudo systemctl restart lab-attendant.service</code> after editing files before running any inject verification scripts.</li>
 </ol>
                             </div>
                         </td>

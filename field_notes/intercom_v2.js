@@ -623,3 +623,55 @@ function sendFeedback(btn, vote, topic, fuel, source) {
     
     console.log("[FEEDBACK] Sent:", { vote, topic, fuel, source });
 }
+
+// Tool Log: Global render helper
+window.renderToolLogEntry = function(entry) {
+    const container = document.getElementById('tool-log-container');
+    const countBadge = document.getElementById('tool-log-count');
+    if (!container) return;
+
+    // Remove empty placeholder if present
+    const empty = container.querySelector('.tool-empty');
+    if (empty) empty.remove();
+
+    // Cap at 50 entries (remove oldest)
+    while (container.children.length >= 50) {
+        container.removeChild(container.lastElementChild);
+    }
+
+    const card = document.createElement('details');
+    card.className = 'tool-card';
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    card.innerHTML = `
+        <summary>
+            <span class="tool-timestamp">${entry.time || '--:--:--'}</span>
+            <span class="tool-node-badge">${entry.node || '?'}</span>
+            <span class="tool-name">${entry.tool || 'unknown_tool'}</span>
+        </summary>
+        <div class="tool-card-body">
+            ${entry.params ? `<div class="param-row"><span class="param-key">params:</span><span class="param-val">${escapeHtml(JSON.stringify(entry.params))}</span></div>` : ''}
+            ${entry.output_path ? `<div class="param-row"><span class="param-key">output:</span><a class="output-link" href="file://${entry.output_path}" target="_blank">${entry.output_path}</a></div>` : ''}
+            ${entry.error ? `<div class="param-row" style="color:#e57373;"><span class="param-key">error:</span><span class="param-val">${escapeHtml(entry.error)}</span></div>` : ''}
+            ${entry.detail ? `<div style="margin-top:4px;color:#888;">${escapeHtml(entry.detail)}</div>` : ''}
+        </div>
+    `;
+
+    // Insert newest at top
+    container.insertBefore(card, container.firstChild);
+
+    // Update badge count
+    if (countBadge) {
+        countBadge.textContent = container.querySelectorAll('.tool-card').length;
+    }
+};
+

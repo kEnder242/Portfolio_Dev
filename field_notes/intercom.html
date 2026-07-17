@@ -95,6 +95,104 @@
             flex: 1; background: #000; border: 1px solid #333; color: #fff; 
             padding: 10px; border-radius: 4px; outline: none; font-family: inherit;
         }
+
+        /* Tool Log Card Styles */
+        #tool-log-section { 
+            margin-top: 15px; 
+            border-top: 1px solid var(--border-color); 
+            padding-top: 15px; 
+            overflow-y: auto; 
+            max-height: 35vh; 
+        }
+        .tool-log-title { 
+            font-size: 0.7rem; 
+            color: #555; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .tool-log-badge { 
+            font-size: 0.6rem; 
+            background: #222; 
+            color: #888; 
+            padding: 1px 6px; 
+            border-radius: 8px; 
+        }
+        .tool-card { 
+            margin-bottom: 4px; 
+            border: 1px solid var(--border-color); 
+            border-left: 3px solid var(--accent-color); 
+            border-radius: 3px; 
+            background: #0a0a0a; 
+        }
+        .tool-card summary { 
+            cursor: pointer; 
+            padding: 4px 8px; 
+            font-size: 0.72rem; 
+            color: #aaa; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            user-select: none; 
+        }
+        .tool-card summary:hover { 
+            background: #111; 
+        }
+        .tool-card summary::-webkit-details-marker { 
+            color: #555; 
+        }
+        .tool-card[open] { 
+            border-left-color: #4caf50; 
+        }
+        .tool-card[open] summary { 
+            background: #111; 
+            color: #ccc; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+        .tool-card-body { 
+            padding: 6px 8px 8px 24px; 
+            font-size: 0.7rem; 
+            color: #777; 
+            line-height: 1.5; 
+        }
+        .tool-card-body .param-row { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 2px; 
+        }
+        .tool-card-body .param-key { 
+            color: #555; 
+            min-width: 50px; 
+        }
+        .tool-card-body .param-val { 
+            color: #999; 
+            font-family: monospace; 
+            word-break: break-all; 
+        }
+        .tool-card-body .output-link { 
+            color: var(--accent-color); 
+            text-decoration: none; 
+            font-size: 0.68rem; 
+        }
+        .tool-card-body .output-link:hover { 
+            text-decoration: underline; 
+        }
+        .tool-timestamp { 
+            color: #555; 
+            font-family: monospace; 
+            font-size: 0.65rem; 
+            min-width: 55px; 
+        }
+        .tool-node-badge { 
+            background: #1a1a2e; 
+            color: #7ec8e3; 
+            padding: 0 4px; 
+            border-radius: 2px; 
+            font-size: 0.65rem; 
+        }
         
         /* Workspace: Reverted to Dark Grey 'Reports' style */
 
@@ -175,13 +273,22 @@
             <div class="status-panel" style="margin-left: auto; border: none; padding: 0;">
                 <span id="connection-dot" class="status-dot offline"></span>
                 <span id="lab-version" style="font-size: 0.6rem; color: #444;">v3.6.4</span>
-            </div>
         </div>
+
+        <section id="tool-log-section">
+            <div class="tool-log-title">
+                <span>🔧 Tool Call Logs</span>
+                <span class="tool-log-badge" id="tool-log-count">0</span>
+            </div>
+            <div id="tool-log-container">
+                <div class="tool-empty" style="font-size: 0.7rem; color: #444; padding: 5px 8px; font-style: italic;">No tools executed in this session</div>
+            </div>
+        </section>
 
     </main>
 
     <script src="assets/marked.min.js"></script>
-    <script src="intercom_v2.js?v=ce3c806a"></script>
+    <script src="intercom_v2.js?v=dcf0a7bc"></script>
     <script src="mission-control.js?v=06008725"></script>
 </body>
 </html>
