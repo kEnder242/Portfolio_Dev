@@ -9,8 +9,6 @@ let isMicActive = false;
 let audioContext = null;
 let micStream = null;
 let processor = null;
-let editor = null;
-
 // DOM Elements
 const chatConsole = document.getElementById('chat-console');
 const insightConsole = document.getElementById('insight-console');
@@ -21,7 +19,6 @@ const statusDot = document.getElementById('connection-dot');
 const activeFilename = document.getElementById('active-filename');
 const resizer = document.getElementById('resizer');
 const consoleRow = document.getElementById('console-row');
-const workspaceContainer = document.getElementById('workspace-container');
 
 let lastSystemState = "";
 let lastMsgSource = "";
@@ -35,7 +32,6 @@ const MAX_SEEN_IDS = 50;
 let isRestoringHistory = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    initEditor();
     initResizer();
     loadHistory();
     connect();
@@ -59,37 +55,13 @@ function loadHistory() {
         });
         
         const savedFile = sessionStorage.getItem('acme_active_file');
-        const savedContent = sessionStorage.getItem('acme_active_file_content');
-        if (savedFile && savedContent !== null) {
+        if (savedFile) {
             activeFilename.textContent = savedFile;
-            // Delay editor value update slightly to ensure editor has finished loading
-            setTimeout(() => {
-                if (editor) editor.value(savedContent);
-            }, 100);
         }
     } catch (e) {
         console.error("Failed to load history", e);
     } finally {
         isRestoringHistory = false;
-    }
-}
-
-function initEditor() {
-    editor = new EasyMDE({
-        element: document.getElementById('workspace-content'),
-        spellChecker: false,
-        autosave: { enabled: false },
-        status: ["lines", "words"],
-        toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen"],
-        minHeight: "100px"
-    });
-
-    if (editor && editor.codemirror) {
-        editor.codemirror.on("change", () => {
-            try {
-                sessionStorage.setItem('acme_active_file_content', editor.value());
-            } catch (e) {}
-        });
     }
 }
 
@@ -107,11 +79,6 @@ function initResizer() {
 
             if (newConsoleHeight > 10 && newConsoleHeight < 80) {
                 consoleRow.style.height = `${newConsoleHeight}%`;
-                workspaceContainer.style.flex = "1";
-                workspaceContainer.style.height = "auto";
-                if (editor && editor.codemirror) {
-                    editor.codemirror.refresh();
-                }
             }
         });
         document.addEventListener('mouseup', () => { isResizing = false; });
@@ -310,14 +277,6 @@ function sendText() {
     textInput.value = '';
 }
 
-async function saveWorkspace() {
-    const content = editor.value();
-    const filename = activeFilename.textContent === 'no file open' ? 'scratchpad.md' : activeFilename.textContent;
-    if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: "workspace_save", filename: filename, content: content }));
-        appendMsg(`Saving ${filename}...`, 'system-msg', 'System');
-    }
-}
 
 // --- MICROPHONE ---
 async function toggleMic() {
@@ -529,10 +488,8 @@ function connect() {
                 }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
-                editor.value(data.content);
                 try {
                     sessionStorage.setItem('acme_active_file', data.filename);
-                    sessionStorage.setItem('acme_active_file_content', data.content);
                 } catch (e) {}
             } else if (data.brain) {
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
