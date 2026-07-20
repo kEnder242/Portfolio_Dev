@@ -135,9 +135,11 @@
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
 
 ### [BACKLOG]
+*   [BACKLOG] **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
 *   [BACKLOG] **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
 *   [BACKLOG] **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
 *   [BACKLOG] **GPU Fractioning Research**: Investigate NVIDIA Run:ai or similar software partitioning to enforce strict VRAM quotas for concurrent resident nodes.
+
 *   [BACKLOG] **Adversarial Internal Debate**: Experiment with an adversarial reviewer node (Byzantine Consensus) to force the Brain to defend technical logic more rigorously.
 *   [BACKLOG] **Hemispheric Interjection**: [FEAT-172] Transform Pinky into an "Active Buffer" that provides pre-emptive clarifying questions while the Brain is thinking.
 *   [BACKLOG] **Intelligent Socket Logic**: [FEAT-171] Implement mode-aware shutdown triggers. Debug modes use a 5-minute idle timer on disconnect; Service mode ignores disconnects.
