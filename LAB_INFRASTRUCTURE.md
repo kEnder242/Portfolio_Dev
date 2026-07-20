@@ -52,4 +52,37 @@ Established **`chroma-server.service`** as a systemd user daemon running on port
 - Reduces git pre-commit hook and vector retrieval latency from ~20s to **66ms**.
 - All client scripts (`sync_chroma_dna.py`, `archive_node.py`, `refine_gem.py`) implement a graceful `try HttpClient(port=8001) except Exception: PersistentClient(...)` failover.
 
+---
+
+## [LAB-008] Headroom Token Optimization Proxy (Port 8787)
+**Status:** ACTIVE
+**Date:** July 2026
+
+### Context
+`headroom proxy --port 8787` was previously launched manually in the background, making it vulnerable to process termination or unmonitored memory drift.
+
+### Decision
+Established **`headroom-proxy.service`** as a systemd user daemon running on port 8787.
+
+### Mechanism
+- Configured with `MemoryHigh=500M`, `MemoryMax=1000M`, and circuit breaker caps (`StartLimitBurst=3` per BKM-038).
+- Intercepts LLM tool outputs to compress context by 60–90% automatically.
+
+---
+
+## [LAB-009] Field Notes Nightly Subconscious Timer (2:00 AM)
+**Status:** ACTIVE
+**Date:** July 2026
+
+### Context
+The subconscious scanner (`field_notes/nibble.py`) required manual invocation or ad-hoc timers to process raw notes.
+
+### Decision
+Established **`field-notes-nibble.timer`** as a systemd user timer scheduled for `02:00:00` daily.
+
+### Mechanism
+- Triggers `field-notes-nibble.service` oneshot execution using `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python`.
+- Automates off-peak historical note indexing and summary synthesis.
+
+
 
