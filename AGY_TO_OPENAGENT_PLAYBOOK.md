@@ -1,8 +1,12 @@
 # AGY to OpenAgent Transition & Federated Swarm Playbook
 
+> [!NOTE]
+> **Unified Master Playbook Reference:** For active model topologies, port 4096 dashboard execution rules (BKM-034 Point 12), and circuit breaker troubleshooting (BKM-038), refer to the primary **[`OPENAGENT_HANDOVER_PLAYBOOK.md`](OPENAGENT_HANDOVER_PLAYBOOK.md)**.
+
 ---
 
 ## 1. The Resonant Planning & Delegation Protocol (BKM-030.1)
+
 
 To transition tasks between AGY (Gemini-driven, high-fidelity co-pilot) and OpenAgent (Groq/Ollama-driven, autonomous swarm) without state thrashing or intent loss:
 

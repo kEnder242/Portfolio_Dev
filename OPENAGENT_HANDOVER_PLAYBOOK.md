@@ -1,137 +1,105 @@
-# 📖 OpenAgent Handover & Co-Pilot Playbook (Sprint 36)
+# 📖 OpenAgent Handover & Co-Pilot Playbook
 
-This playbook establishes the protocol for allocating tasks, grounding local models, and validating execution when coordinating between **Antigravity** (Gemini-driven co-pilot) and **OpenAgent** (Groq/Ollama-driven autonomous coding swarm).
+This playbook serves as the definitive reference guide for task allocation, model grounding, session management, and verification when coordinating between **Antigravity (AGY)** (Gemini-driven strategic co-pilot) and **OpenAgent** (autonomous coding swarm attached to port 4096).
 
 ---
 
-## 1. Model & Swarm Allocation Matrix
+## 1. Model Allocation & Swarm Topology
 
-Based on our active configuration check, we allocate the following resources to minimize token costs and ensure high-fidelity coding:
+Tasks are allocated based on model strengths to minimize API costs, prevent rate-limiting, and ensure high-fidelity coding execution:
 
-| Provider/Model | Concurrency | Primary Role / Use-Case | Invocation Command |
+| Role / Engine | Provider / Model | Primary Function | Invocation Command Pattern |
 | :--- | :--- | :--- | :--- |
-| **`google/gemini-2.5-flash`** | Dedicated | **Sisyphus (Delegator)**: Cloud-driven orchestration, tool calling, subagent planning | `opencode run "task"` |
-| **`my-windows-4090/qwen2.5-coder:14b`** | `5` (Ollama) | **Sisyphus-Junior (Ground Worker)**: specialized coding model, MCP tool use, syntax edits | `opencode run -m my-windows-4090/qwen2.5-coder:14b "task"` |
-| **`groq/llama-3.3-70b-versatile`** | High | **Prometheus (Planner)**: fast parallel search, code diagnostics, reviews | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
-| **`opencode/deepseek-v4-flash-free`**| High | Low-stakes text processing, fast triage checks | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
+| **Strategic Guardian** | `google/gemini-2.5-flash` / `pro` | Master plan creation, architecture design, code review, git commits | AGY CLI Turn |
+| **Sisyphus (Lead Worker)** | `mistral-large-latest` (via OpenCode) | Primary developer subagent for complex refactoring and multi-file logic | `opencode run --dir <dir> --attach http://127.0.0.1:4096/ "SESSION: ..."` |
+| **Sisyphus-Junior (Ground Worker)** | `qwen2.5-coder:14b` (Windows 4090) | High-speed local code generation, syntax editing, line-by-line diffs | `opencode run -m my-windows-4090/qwen2.5-coder:14b "task"` |
+| **Prometheus (Planner / Reviewer)** | `groq/llama-3.3-70b-versatile` | Parallel test suites, fast code reviews, independent verification | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
+| **Triage / Utility** | `opencode/deepseek-v4-flash-free` | Fast text processing, status parsing, lightweight search | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
 
 ---
 
-## 2. Incremental Grounding Protocol (The Handoff)
+## 2. Session Lifecycle & Webview Visibility (BKM-034 Point 12)
 
-Before executing any delegated task, **OpenAgent must be grounded** to prevent context drift.
-
-### Step 1: Pre-Flight Check (LSP Grounding)
-Add the path of the Feature Tracker and Playbook directly to the target instructions so OpenAgent loads them at startup:
+### 2.1 Mandatory Shell Execution (Port 4096)
+All tactical developer tasks delegated to OpenAgent must be launched via the shell-based `opencode` CLI attached to port 4096:
 ```bash
-opencode run --prompt "Review the system rules in file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md and BKM-015 in file:///home/jallred/Dev_Lab/Portfolio_Dev/AGY_TO_OPENAGENT_PLAYBOOK.md before starting."
+/home/jallred/.opencode/bin/opencode run --dir <target_dir> --attach http://127.0.0.1:4096/ "SESSION: Sprint XX Story YY — <Title>..."
 ```
+> [!IMPORTANT]
+> Never use internal `invoke_subagent` for developer/implementation tasks. `invoke_subagent` is strictly reserved for read-only research tasks. Attaching to port 4096 ensures all active worker sessions render live on the local TUI and webview dashboard at `http://192.168.1.238:4096/`.
 
-### Step 2: Incremental Task Scoping
-Do **not** hand over the entire sprint plan at once. Allocate tasks incrementally, starting with Phase 1 prototypes.
+### 2.2 Named Sessions & Persistence
+- **Session Declaration:** The first prompt of a new session must explicitly start with `SESSION: Sprint XX Story YY — <Title>`. This guarantees the session is indexed with a clear title on the web dashboard instead of generic titles like "New session".
+- **Resuming Sessions:** To continue work in an existing session, use `--session <session_id>` or `-c`:
+  ```bash
+  opencode run --dir <dir> --attach http://127.0.0.1:4096/ --session ses_XXXX "Next task prompt..."
+  ```
+- **Forking Context:** Use `--fork` when branching from a known stable state without dirtying the parent session.
 
-*   **Task 1 (Goal 1 Prototype):** Token Vocabulary mapping and configuration setup.
-    ```bash
-    opencode run "Implement Goal 1, Task 1.1: Define and write the token-to-adapter registry file 'HomeLabAI/config/role_tokens.json' matching the nodes configured in infrastructure.json."
-    ```
+### 2.3 Socket-Activated Daemon Warm-Up
+The OpenAgent daemon (`opencode-core.service`) is socket-activated on port 4096 with `StopWhenUnneeded=true`. Before launching a heavy turn, AGY sends a fast socket ping (`curl -I http://127.0.0.1:4096/`) to wake the server from hibernation.
 
 ---
 
-## 3. Communication & Execution Loop
+## 3. Context & Token Optimization
+
+### 3.1 Narrow Workspace Scoping
+- **The Rule:** Always set `--dir` to the narrowest sub-project directory (e.g. `--dir /home/jallred/Dev_Lab/HomeLabAI`).
+- **The Pitfall:** Initializing OpenAgent at the parent root (`/home/jallred/Dev_Lab`) causes the server to index both sub-repositories, compiling 40K+ baseline tokens on turn 1 and exhausting cloud TPM limits.
+- **On-Demand Cross-Repo References:** To reference files outside the target workspace (like `Portfolio_Dev/SPRINT_PLAN_SPR_42_0.md`), include absolute markdown links using the `file://` scheme in the prompt. OpenAgent will fetch that specific file on-demand without indexing the rest of the repository.
+
+### 3.2 Vector DNA Grounding (Port 8001)
+- Instead of injecting full markdown files (`FeatureTracker.md` or `Protocols.md`) into prompt text, BKM and FEAT context is retrieved dynamically from ChromaDB vector collections (`behavioral_dna`, `feature_dna`) running on port 8001.
+- **Semantic Translation:** Translate conversational user prompts into precise domain keywords (e.g., `"atomic write"`, `"safe file patch"`, `"circuit breaker"`) before querying vector collections.
+
+### 3.3 Explicit Blueprint Prompting
+Cloud orchestrators (Gemini) must compile exact HTML/CSS blocks, BeautifulSoup scripts, or shell templates directly inside the prompt's `[TARGET SPECIFICATION]` section. This minimizes local model reasoning drift, prevents path hallucinations, and allows code inspection inside the sprint plan before execution.
+
+---
+
+## 4. Safety Gates & Troubleshooting Ledger
 
 ```
   ┌────────────────────────────────────────────────────────────┐
-  │ 1. Ground & Delegate (Gemini CLI)                          │
-  │    - Set task card in SPRINT_PLAN_SPR_36_0.md              │
-  │    - Run target opencode command                           │
+  │ 1. Ground & Delegate (Antigravity / Gemini)                │
+  │    - Master Plan entry in SPRINT_PLAN_SPR_XX_X.md          │
+  │    - Launch opencode CLI attached to port 4096              │
   └─────────────────────────────┬──────────────────────────────┘
                                 │
                                 ▼
   ┌────────────────────────────────────────────────────────────┐
-  │ 2. Execute & Log (OpenAgent Swarm)                         │
-  │    - Code changes written directly to workspace            │
-  │    - Local test run outputs written to command terminal   │
+  │ 2. Execute & Verify (OpenAgent Swarm)                      │
+  │    - Code changes written to local target directory        │
+  │    - Pytest / verification scripts executed in-session     │
+  │    - Worker prohibited from git commit                     │
   └─────────────────────────────┬──────────────────────────────┘
                                 │
                                 ▼
   ┌────────────────────────────────────────────────────────────┐
-  │ 3. Forensic Review & Gate (Gemini CLI)                     │
-  │    - Read git diffs of written code                       │
-  │    - Run verification script or systemd checks             │
-  │    - Certify task status in Master Plan                    │
+  │ 3. Forensic Review & Gate (Antigravity / Gemini)           │
+  │    - Inspect git diffs of modified files                   │
+  │    - Verify test suite & assertion outputs                 │
+  │    - Perform git add and git commit                        │
   └────────────────────────────────────────────────────────────┘
 ```
 
----
+### 4.1 Git Ownership & Review Gate
+OpenAgent workers perform file edits and execute test suites locally, but are **strictly prohibited from executing `git commit`**. AGY (the Strategic Guardian) performs the git diff audit, verifies test results, and executes the git commit upon task certification.
 
-## 4. Diagnostics & Troubleshooting Ledger
+### 4.2 Circuit Breaker & Anti-Looping (BKM-038)
+- `opencode-core.service` is configured with `StartLimitIntervalSec=60s` and `StartLimitBurst=3`.
+- If a worker process crashes or gets stuck in a loop, systemd halts the service after 3 bursts instead of spinning continuously.
+- On completion, AGY verifies zero established sockets (`ss -tp | grep 11434`) remain connected to remote compute nodes (Node KENDER).
 
-If OpenAgent crashes or fails to respond:
-
-1.  **Check Service Status:**
-    ```bash
-    systemctl --user status opencode-core.service opencode-proxy.service
-    ```
-2.  **Inspect Logs for Context Blowup:**
-    If logs show `Session too large to compact`, verify that `.opencodeignore` is active in `~/Dev_Lab/.opencodeignore` and excludes the target folders.
-3.  **Kill Stuck Sessions:**
-    If the coordinator hangs on a background agent:
-    ```bash
-    systemctl --user restart opencode-core.service
-    ```
-    Always start a **fresh session** (TUI or CLI) after a service restart to avoid context carryover.
-
-4.  **Directory Context (Ignoring `.venv`):**
-    Always launch OpenAgent from the root `/home/jallred/Dev_Lab` folder (not within subdirectories). The root contains the authoritative `.opencodeignore` which excludes heavy `.venv/` libraries. Launching from subdirectories bypasses ignores, causing context blowouts.
-
-5.  **Model Selection for Logic Diffs:**
-    Use `opencode/deepseek-v4-flash-free` for coding logic and complex refactoring. Smaller models (like `omnicoder-9b`) are prone to path hallucinations and syntax failures.
-
-6.  **Complex Tasks (Silent Exits):**
-    For multi-phase changes (e.g., parsing + scoring + ranking), do not delegate the entire logic block in a single prompt. Slice the instruction card into atomic steps:
-    *   *Step A:* Implement parser and utilities.
-    *   *Step B:* Implement core algorithm.
-    *   *Step C:* Implement verification test suite.
-    This prevents the model from reading files and exiting silently due to context/reasoning bounds.
+### 4.3 Common Failure Recovery
+1. **`Session too large to compact`:** Verify `.opencodeignore` exists in the target directory and excludes `.venv/` and `node_modules/`.
+2. **`HttpClient connection failed` (ChromaDB):** All refactored scripts include a failover handler (`try HttpClient(port=8001) except Exception: PersistentClient(...)`), ensuring disk fallback if port 8001 is offline.
 
 ---
 
-## 5. Live Verification Guide (Restoring Workspace Tools)
+## 5. Historical Evolution & Sprint Retrospective Wins
 
-### The Crash Cause
-The Gemini CLI language server failed to start because the database migration `MIGRATION_ID_POPULATE_PROJECT_UPDATED_AT` panicked on a nil pointer dereference inside the summaries store initialization. This caused the CLI to fall back to a restricted safe mode (preventing workspace tools from loading).
-
-### The Fix Applied
-1.  We manually added the panicked migration ID to the list of completed migrations in `/home/jallred/.gemini/config/.migrated`:
-    ```text
-    MIGRATION_ID_POPULATE_PROJECT_UPDATED_AT
-    MIGRATION_ID_SIDECAR_USER_CONFIG_BYPASS
-    ```
-2.  This instructs the language server to bypass the broken migration step.
-
-### Restoring Your Active Terminal Session
-To reload the language server and restore your `Dev_Lab` workspace tools:
-1.  Exit your current `agy` CLI shell or VS Code/editor session.
-2.  Launch a fresh shell or restart the editor.
-3.  The language server will boot cleanly, skip the migrations, load `Dev_Lab`, and re-expose all MCP tools and indexers.
-
----
-
-## 6. Playbook Protocol Refinement (Swarm Pain Points)
-
-Based on recent integration tests, follow these strict execution guardrails:
-1.  **Deadlock Prevention (Ollama Concurrency)**: Ensure `"maxConcurrency": 5` is defined in `opencode.json` for the local 4090. If set to `1`, parallel subagent requests to Ollama will freeze the model.
-2.  **Lint-Gated Commits**: Subagents are strictly prohibited from committing code if the verification check (`ast.parse` or `pytest`) fails. Breaking syntax in the codebase violates DNA integrity.
-3.  **DNA Grounding**: Subagents must actively check the `feature_dna` and `behavioral_dna` collections via ChromaDB before proposing code changes to avoid clobbering active architectural rules.
-4.  **No-Hallucination Prompts**: Avoid leaving prompts open-ended. Always embed explicit `MUST DO` / `MUST NOT DO` constraints so local models do not lose context or hallucinate user instructions.
-5.  **Session Naming Rules**: The first prompt of any new session must explicitly start with `SESSION: Sprint XX Story YY — Phase Z` to ensure the session is properly indexed with a clear title instead of generic "New session" or "Greeting".
-6.  **VRAM Inversion Strategy**: Evaluate if the local 4090 VRAM should be inverted: instead of running heavy orchestrators locally (which suffer high latency and context limits), utilize cloud endpoints for orchestration and reservation, and load local models (like `qwen2.5-coder`) primarily for *heavy code generation/refactoring*. Evaluate if coding models still require tool usage or if they can rely on unified diff patches.
-7.  **Explicit Blueprint Prompting (No-Boilerplate Guardrail)**: Cloud orchestrators (Gemini) must compile exact HTML/CSS blocks, BeautifulSoup scripts, or shell templates directly inside the prompt's `[TARGET SPECIFICATION]` rather than delegating open-ended logic or design descriptions. This minimizes local token generations, prevents structural/path hallucinations, and enables user review of the exact code inside the Master Sprint Plan prior to execution.
-8.  **AGY Git Ownership**: All git staging, branching, and commits must be handled directly by AGY (cloud orchestrator) as part of the post-implementation review and validation gate, rather than delegating Git operations to local subagent workers. This prevents uncommitted files in working trees, ensures correct commit messages, and preserves Git history integrity.
-9.  **Mandatory Shell-Based Execution**: All tactical worker delegation must be initiated via the shell-based `opencode` CLI rather than using the built-in `invoke_subagent` tool. The built-in tool is reserved for read-only research tasks or meta-analysis. This ensures all developer tasks are properly registered in the OpenAgent session list and visible in the local TUI/dashboard.
-10. **Socket-Activated Server Hibernation & Warm-Up**: The OpenAgent server daemon (`opencode-core.service`) automatically hibernates when idle (using `StopWhenUnneeded=true`) and is woken up via socket activation (`opencode.socket`). Before sending a task to the server (via `opencode run --attach http://127.0.0.1:4096/`), AGY (the parent co-pilot client) must proactively wake the server from hibernation by querying the socket (e.g. running `curl -I http://127.0.0.1:4096/` or `opencode session list | cat`) and waiting 1-2 seconds for initialization to complete before executing.
-11. **Narrow Scope & On-Demand Reference Pattern**:
-    *   **Dual-Directory Crawl Pitfall**: Initializing OpenAgent targeting the parent directory `/home/jallred/Dev_Lab` to capture both repositories causes the codebase crawler to index every file and git status tree, creating a massive baseline context (40K+ tokens) that easily exhausts cloud API TPM limits on the first or second turn.
-    *   **Subdirectory Ignore Bypass**: Running OpenAgent from a subdirectory (e.g. `HomeLabAI`) without a local `.opencodeignore` present in that specific subdirectory bypasses the root ignore rules, forcing the server to index massive directories like `.venv/` (triggering 80K+ token context blowouts).
-    *   **The On-Demand Reference Practice**: Initialize `--dir` pointing to the narrowest active sub-project (e.g. `--dir /home/jallred/Dev_Lab/HomeLabAI`). If you need to reference external files (such as the sprint plan in `Portfolio_Dev`), provide the absolute path using the `file://` scheme directly in the prompt (e.g., `file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_39_0.md#Story-1`). OpenAgent will read it on-demand without indexing the rest of the portfolio repository.
-    *   **Relieving the Coordinator (BKM-020 Integration)**: To prevent multiple tool round-trips (which repeat the 40K baseline context back and forth), the prompt must contain detailed implementation context matching BKM-020's "Task Verbosity" principle. Provide explicit blueprints, exact target file paths, timing assertions, and output JSON structures. High-density instructions allow the orchestrator (`Sisyphus`) to design, write, and run the worker tests in a single, self-contained turn, preventing multi-turn context inflation.
+- **Sprint 36:** Established basic model matrix (Gemini orchestrator + Qwen local ground worker).
+- **Sprint 38:** Added session naming conventions (`SESSION: Sprint XX Story YY`) and Ollama concurrency fixes.
+- **Sprint 40:** Integrated real-time Grafana/Prometheus telemetry and socket-activated server hibernation.
+- **Sprint 42:** Standardized BKM-034 Point 12 (mandatory shell execution on port 4096 for webview visibility), implemented ICM persistent memory hybrid offloading (BKM-037), and established daemon circuit breakers (BKM-038).
