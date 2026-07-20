@@ -35,3 +35,21 @@ The Lab memory infrastructure has been updated to a **Hybrid Persistent Pipeline
 - Driven by `~/.config/icm/config.toml` (or OpenCode `icm` plugin configuration).
 - Preserves 100% of persistent memory capabilities without impacting subagent execution speed or CPU/RAM budgets.
 
+---
+
+## [LAB-007] ChromaDB HTTP Vector Daemon (Port 8001)
+**Status:** ACTIVE
+**Date:** July 2026
+
+### Context
+Cold-loading PyTorch and SentenceTransformers in-process on every git pre-commit hook (`sync_chroma_dna.py`) was causing 15–20s commit delays.
+
+### Decision
+Established **`chroma-server.service`** as a systemd user daemon running on port 8001 (`ExecStart=chroma run --path ~/AcmeLab/chroma_db --port 8001`).
+
+### Mechanism
+- Configured with `MemoryHigh=1G`, `MemoryMax=1.5G`, and systemd circuit breaker limits (`StartLimitIntervalSec=60s`, `StartLimitBurst=3` per BKM-038).
+- Reduces git pre-commit hook and vector retrieval latency from ~20s to **66ms**.
+- All client scripts (`sync_chroma_dna.py`, `archive_node.py`, `refine_gem.py`) implement a graceful `try HttpClient(port=8001) except Exception: PersistentClient(...)` failover.
+
+
