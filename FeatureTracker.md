@@ -1316,3 +1316,76 @@
 **Rationale:** Standardizes weight training on high-signal logical constructs rather than noisy interactive chat.
 **Mechanism:** Persona-locked generation prompts, Stage 2 regex-based output cleaning, and validation of dataset format prior to adapter training.
 
+## [FEAT-404] Context Starvation Protocol & Abort Gate
+**Status:** ACTIVE
+**Logic:** Enforces a strict `[ERROR: CONTEXT_STARVED]` protocol when queries reference specific historical topics or GEM IDs while RAG context is empty and tools are unavailable. Traps the starvation token mid-stream in `_process_node_stream` to immediately cancel LLM generation, bypass downstream waterfall legs, and alert Foyer.
+**Rationale:** Prevents small models (3B/7B) from hallucinating speculative facts, dates, or code structures when asked about unrecognized or unindexed historical projects. Without this abort gate, context-starved nodes generate plausible text that bleeds into subsequent waterfall reasoning legs and user output.
+**Mechanism:** Dynamic injection of `CONTEXT_VALIDITY` in `loader.py` during tool-bound turns, token trapping in `cognitive_hub.py`, and mid-stream task cancellation.
+
+## [FEAT-405] Gems-to-Notes Ground Truth Synthesis
+**Status:** ACTIVE
+**Logic:** Resolves vector search candidates from `long_term_wisdom` by opening target physical JSON note files (e.g. `2024_01.json`) and extracting the raw chronological text entry (summary, evidence, or synopsis) directly into the returned RAG context payload.
+**Rationale:** Bridges vector embedding discovery anchors to actual physical note text. Without this ground truth bridge, RAG queries return only abstract document IDs or file paths, forcing LLMs to guess underlying historical validation details.
+**Mechanism:** Physical file path resolution in `archive_node.py`, neighborhood expansion of adjacent entries, and structured `[ACQUISITION]` context payload formatting.
+
+## [FEAT-406] Coherence Judge Evaluation Ledger & Retort
+**Status:** ACTIVE
+**Logic:** Executes a post-generation critique loop where Pinky evaluates strategic reasoning for logic errors, slop, or contradictions using guided JSON decoding (`score`, `reasoning`, `slop_found`, `retort`). Captures `retort` in `turn_thought_trace["critique"]`, writes evaluations atomically to `.round_table_evals.json`, and dispatches the retort directly to the UI chat stream under "Pinky (Coherence Critic)".
+**Rationale:** Establishes automated peer evaluation of strategic LLM output, surfacing logic gaps, logging historical quality metrics over time, and presenting immediate critique feedback to the user.
+**Mechanism:** Guided decoding schema in `cognitive_hub.py` (`evaluate_grounding`), atomic file replace (`.tmp`), and `execute_dispatch` terminal summary broadcast.
+
+## [FEAT-407] Tag-Delimited Grounding Isolation (<historical_record>)
+**Status:** ACTIVE
+**Logic:** Wraps RAG retrieval evidence within `<historical_record>` XML boundary tags during `HISTORICAL`, `FORENSIC`, and `TECHNICAL` turns, injecting a strict `GROUNDING_PROTOCOL` instruction restricting generation exclusively to tagged evidence.
+**Rationale:** Protects against context leakage between historical query briefs and live operational parameters (such as current OS runtime, host CPU/GPU hardware, or active ports). Without XML boundary tags, small models mix past historical events with present-day runtime state.
+**Mechanism:** Conditional string wrapping and positive grounding guidance injection in `cognitive_hub.py` (`_process_node_stream`).
+
+## [FEAT-408] Tool-Driven Waterfall Cascade
+**Status:** ACTIVE
+**Logic:** Dynamically queries active resident MCP tools via `_get_node_tools` during multi-leg waterfall execution (`_run_brain_leg`), passing active tool definitions to remote reasoners instead of empty tool lists.
+**Rationale:** Enables downstream reasoning models (Brain/Deep Thought) to execute active tools when handling complex queries. Without dynamic tool passing, remote nodes remain context-starved and cannot query internal memory or telemetry servers.
+**Mechanism:** `_get_node_tools` introspection in `cognitive_hub.py`, tool list injection into `_process_node_stream`.
+
+## [FEAT-409] WYWO Vibe Routing & Standup Synthesis
+**Status:** ACTIVE
+**Logic:** Classifies casual recall and status-check queries into the `WYWO` (While You Were Out) vibe, automatically querying recent nightly dialogue records (`nightly_dialogue.json`) and subconscious dream wisdom from the vector archive to synthesize a high-density standup briefing.
+**Rationale:** Provides structured, automated retrieval of overnight self-reflection and subconscious debate results when the user resumes interaction. Without this vibe classification, status queries route to standard casual banter without surfacing overnight progress.
+**Mechanism:** Triage prompt rule 8 in `lab_node.py`, context building in `cognitive_hub.py` (`process_query`), and `[MODE]: STANDUP` behavioral guidance.
+
+## [FEAT-410] Adaptive Two-Tier RAG Compass
+**Status:** ACTIVE
+**Logic:** Implements a two-tier resolution strategy for archive queries: Tier 1 matches internal entry `date` attributes where present; Tier 2 falls back to filename range bounds (`2016_2019.json`) for un-timestamped legacy notes. Dynamically expands candidate selection when target matches yield fewer than 2 entries.
+**Rationale:** Eliminates context pollution from arbitrary +-1 year range hacks while preserving temporal boundaries for modern timestamped entries and safely handling early un-timestamped archives.
+**Mechanism:** Year parsing and Gaussian temporal decay weighting in `archive_node.py` (`get_context`), candidate sorting via RRF score * temporal weight.
+
+## [FEAT-411] Structured Append-Only Tool Log Archive
+**Status:** ACTIVE
+**Logic:** Records tool executions to an append-only workspace file (`tool_log.md`) with timestamps, node identifiers, parameters, and clickable `file:///` links, streaming execution payloads via WebSockets to client UI cards.
+**Rationale:** Provides complete auditability of tool invocations without polluting the active LLM chat context window or mutating workspace whiteboard state.
+**Mechanism:** `append_to_tool_log` in `loader.py`, telemetry queue worker thread, and `window.renderToolLogEntry` in `intercom_v2.js`.
+
+## [FEAT-412] Connection-Aware Idle Hibernation Deferral
+**Status:** ACTIVE
+**Logic:** Polls active Foyer client WebSocket connections before initiating VRAM hibernation, doubling the default AFK timeout (to 600s) and extending idle grace periods (+300s) while active browser sessions remain open.
+**Rationale:** Prevents jarring model unloading and cold-start latency spikes while an engineer is actively interacting with or viewing the web dashboard.
+**Mechanism:** Client connection counter in `foyer/router.py` (`delayed_shutdown`), status check deferral in `acme_lab.py`.
+
+## [FEAT-413] Decoupled Queue Drainer & Node Boot Mutex
+**Status:** ACTIVE
+**Logic:** Separates request queue processing into an asynchronous background loop with node-level initialization locks, preventing race conditions during cold node boots and damping casual routing penalties.
+**Rationale:** Solves queue stalls and socket deadlocks when multiple user or background requests arrive during node cold starts.
+**Mechanism:** Async queue drainer task in `foyer/router.py`, initialization mutex per resident node.
+
+## [FEAT-414] MoE+ Latency-Hiding Telemetry Stack & Preamble Fill
+**Status:** ACTIVE
+**Logic:** Overlaps intent triage, RAG retrieval, and workspace gathering with model warmup latency, streaming Pinky preamble tokens to fill the air while remote compute engines (KENDER 4090 / vLLM / Brain) ignite or load KV cache. Streams multi-stage latency gauges via Prometheus on port 8010.
+**Rationale:** Prevents 3–10 seconds of dead silence during remote GPU model ignition or heavy reasoning steps, providing continuous feedback and microsecond-level telemetry to Prometheus/Grafana.
+**Mechanism:** `benchmark_routing` in `bench_moe_plus.py`, Prometheus gauge metrics on port 8010, concurrent preamble streaming in `cognitive_hub.py`.
+
+## [FEAT-415] Asynchronous Non-Blocking Engine Health Gate
+**Status:** ACTIVE
+**Logic:** Offloads synchronous HTTP engine health check probes during node initialization to the asyncio loop executor (`loop.run_in_executor`), preventing network latency or remote host hangs from blocking the main event loop.
+**Rationale:** Prevents the main event loop from freezing when checking remote compute node health (e.g. KENDER over Tailscale/LAN). Without executor offloading, network timeouts block all local WebSocket and HTTP handling.
+**Mechanism:** `loop.run_in_executor` HTTP check in `loader.py` (`ping_engine`), non-blocking health caching with 15s failure TTL.
+
+

@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-42-0-realignment** | 2. Implementation | Portfolio Navigation Realignment & Feature Assertion Engine | **ACTIVE** |
 | **spr-40-0-observability** | 2. Implementation | Real-Time Observability & Grafana Pipeline Synthesis | **COMPLETED** |
 | **spr-39-0-moe-research** | 2. Implementation | Federated Routing & "MoE+" Research | **COMPLETED** |
 | **spr-38-0-alignment** | 2. Implementation | Swarm Shakedown & Temporal Calibration | **COMPLETED** |
@@ -22,6 +23,9 @@
 | **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
 | **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
+
+## 🎯 Active Initiative: "Portfolio Navigation Realignment & Feature Assertion Engine" (Sprint SPR-42.0)
+**Goal:** Eliminate metaphorical "hubris" leakage from the public portfolio (replacing `Security & Yield` with `Security & Manageability`), align all site navigation headings with genuine silicon validation engineering domains, establish a CI/CD feature assertion test suite (`test_feature_assertions.py`), refine the two-tier RAG compass, and expand the WYWO standup briefing. **[STATUS: ACTIVE]**
 
 ## 🎯 Active Initiative: "Real-Time Observability & Grafana Pipeline Synthesis" (Sprint SPR-40.0)
 **Goal:** Transition the MoE+ mixture-of-experts benchmarking framework from static JSON metrics to a real-time, Prometheus-scraped telemetry stack, visualizable via a multi-lane Grafana dashboard embedded back into our static files. **[STATUS: COMPLETE]**
