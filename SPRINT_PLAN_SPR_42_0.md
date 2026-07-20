@@ -48,11 +48,11 @@ cd /home/jallred/Dev_Lab/HomeLabAI && .venv/bin/python3 -m py_compile src/logic/
 ### Story 2: CI/CD Feature Assertion Test Suite (`test_feature_assertions.py`) [HomeLabAI]
 *   **Why**: Code refactorings and model swaps risk silently degrading registered system features (`FEAT-404` to `FEAT-415`). An automated assertion test suite ensures features are continuously validated before commits.
 *   **Task Checkboxes**:
-    - [ ] **Task 2.1 (Suite Creation)**: Create `/home/jallred/Dev_Lab/HomeLabAI/src/tests/test_feature_assertions.py`.
-    - [ ] **Task 2.2 (FEAT-404 Assertion)**: Implement `test_feat_404_context_starvation()` to verify `[ERROR: CONTEXT_STARVED]` emission and mid-stream task abort.
-    - [ ] **Task 2.3 (FEAT-407 Assertion)**: Implement `test_feat_407_historical_record_isolation()` to verify `<historical_record>` XML tag wrapping and `GROUNDING_PROTOCOL` injection for `HISTORICAL` and `TECHNICAL` turns.
-    - [ ] **Task 2.4 (FEAT-409 Assertion)**: Implement `test_feat_409_wywo_vibe_routing()` to verify triage classification of status queries to `WYWO` vibe and context loading from `nightly_dialogue.json`.
-    - [ ] **Task 2.5 (FEAT-411 Assertion)**: Implement `test_feat_411_append_to_tool_log()` to verify structured tool execution logging to `tool_log.md`.
+    - [x] **Task 2.1 (Suite Creation)**: Create `/home/jallred/Dev_Lab/HomeLabAI/src/tests/test_feature_assertions.py`.
+    - [x] **Task 2.2 (FEAT-404 Assertion)**: Implement `test_feat_404_context_starvation()` to verify `[ERROR: CONTEXT_STARVED]` emission and mid-stream task abort.
+    - [x] **Task 2.3 (FEAT-407 Assertion)**: Implement `test_feat_407_historical_record_isolation()` to verify `<historical_record>` XML tag wrapping and `GROUNDING_PROTOCOL` injection for `HISTORICAL` and `TECHNICAL` turns.
+    - [x] **Task 2.4 (FEAT-409 Assertion)**: Implement `test_feat_409_wywo_vibe_routing()` to verify triage classification of status queries to `WYWO` vibe and context loading from `nightly_dialogue.json`.
+    - [x] **Task 2.5 (FEAT-411 Assertion)**: Implement `test_feat_411_append_to_tool_log()` to verify structured tool execution logging to `tool_log.md`.
 *   **OpenAgent Delegation Plan (BKM-034)**:
     - *Role:* `Silicon Benchmarking & Test Developer` (`self` / `opencode`)
     - *Target Dir:* `/home/jallred/Dev_Lab/HomeLabAI`
@@ -67,9 +67,10 @@ cd /home/jallred/Dev_Lab/HomeLabAI && .venv/bin/python3 -m py_compile src/logic/
 ### Story 3: Two-Tier RAG Compass Refinement (FEAT-410) [HomeLabAI]
 *   **Why**: Eliminate arbitrary $\pm 1$ year range hacks while maintaining temporal safety between legacy range archives (`2016_2019.json`) and granular timestamped notes (`date: "YYYY-MM-DD"`).
 *   **Task Checkboxes**:
-    - [ ] **Task 3.1 (Tier 1 Implementation)**: Parse candidate entry's internal `date` attribute (e.g. `"2024-01-15"`) in `archive_node.py` (`get_context`) and calculate Gaussian temporal decay weight relative to query target date.
-    - [ ] **Task 3.2 (Tier 2 Fallback)**: If candidate entry lacks an internal `date` attribute, evaluate filename range guidelines (e.g., `2016_2019.json`) and assign fallback weight (`0.5`).
-    - [ ] **Task 3.3 (Regression Verification)**: Execute RAG test suite to confirm zero regressions on date retrieval.
+    - [x] **Task 3.1 (Compass Candidate Refactor)**: Refactor candidate scoring inside `get_context` in `/home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py` (L743–L775).
+    - [x] **Task 3.2 (Tier 1 Scoring)**: Evaluate candidate entry internal `date` attribute (e.g. `date: YYYY-MM-DD`) when present, calculating Gaussian weight decay against query `target_date`.
+    - [x] **Task 3.3 (Tier 2 Scoring)**: Fall back to filename range bounds (e.g. `2016_2019.json`) for un-timestamped legacy notes (`weight = 0.5` if range spans target, `0.1` fallback).
+    - [x] **Task 3.4 (Test Suite Verification)**: Run `.venv/bin/pytest src/tests/test_archive_rrf.py -v` and verify zero regressions.
 *   **OpenAgent Delegation Plan (BKM-034)**:
     - *Role:* `Archive & RAG Specialist` (`self` / `opencode`)
     - *Target Dir:* `/home/jallred/Dev_Lab/HomeLabAI`
