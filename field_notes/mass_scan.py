@@ -147,6 +147,7 @@ def hallway_protocol(keyword):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--keyword", help="Run a targeted Hallway Protocol scan.")
+    parser.add_argument("--once", action="store_true", help="Run a single epoch pass and exit cleanly.")
     args = parser.parse_args()
 
     if args.keyword:

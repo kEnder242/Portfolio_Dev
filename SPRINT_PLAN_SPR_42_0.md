@@ -179,3 +179,23 @@ Beyond checking `git diff`, a conceptual audit of the modified system areas reve
     ```bash
     cd /home/jallred/Dev_Lab/HomeLabAI && .venv/bin/pytest src/tests/test_wywo_integration.py -v
     ```
+
+---
+
+### 🚀 Phase 7: Nightly Synthesis & Hibernation Alignment (FEAT-101 / FEAT-416)
+*   **Why:** Running `mass_scan.py` as an infinite 24/7 background loop (`field-notes-nibbler.service`) constantly reset the Lab Attendant's idle timer, preventing H2 Lean Sleep VRAM hibernation and keeping the RTX 2080 Ti continuously awake.
+*   **Target Architecture**:
+    1. **Normal Scan Jobs (On-Demand):** Fast finishing scans (`scan_librarian.py` & `scan_queue.py`) process new files interactively in seconds, then exit immediately to allow full hibernation.
+    2. **Continuous Refinement Scans (2:00 AM Bounded Pass):** Added `--once` flag to `field_notes/mass_scan.py` (executes 1 bounded Epoch: Nibble -> Refine 50 gems -> De-duplicate -> Aggregate years -> Pulse Pager -> Exit).
+    3. **Nightly Systemd Integration:** Grouped deep refinement into `field-notes-nightly.timer` @ 2:00 AM triggering `field-notes-nightly.service`. Disabled continuous daytime `field-notes-nibbler.service`.
+*   **Task Checkboxes**:
+    - [x] **Task 7.1 (`mass_scan.py --once` Implementation)**: Add `--once` CLI argument to `field_notes/mass_scan.py` to break out of the infinite loop after 1 completed Epoch.
+    - [x] **Task 7.2 (Systemd Service Alignment)**: Update `field-notes-nightly.service` to execute `field_notes/mass_scan.py --once`, enable `field-notes-nightly.timer` at 2:00 AM, and disable continuous `field-notes-nibbler.service`.
+    - [x] **Task 7.3 (Feature & Lab Documentation)**: Update `FEAT-101` and register `FEAT-416` in `FeatureTracker.md`.
+*   **Verification Gate**:
+    ```bash
+    # Test mass_scan.py --once execution
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python field_notes/mass_scan.py --help | grep -q "--once" && echo "Pass" || echo "Fail"
+    systemctl --user status field-notes-nightly.timer
+    ```
+

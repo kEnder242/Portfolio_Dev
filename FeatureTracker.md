@@ -374,10 +374,11 @@
 **Logic:** Distinguishes between daily logs, reference documents, and strategic summaries using "Deep Sample" body analysis.
 **Mechanism:** Heuristic rules engine in `scan_librarian.py`.
 
-## [FEAT-101] Load-Aware Nibbling
+## [FEAT-101] Dual-Pipeline Synthesis & Load-Aware Nibbling
 **Status:** ACTIVE
-**Logic:** Background workers defer processing if the system load (`node_load1`) is too high, protecting the EarNode's VRAM budget.
-**Mechanism:** `nibble.py` checks system vitals via Prometheus before initiating AI scans.
+**Logic:** Delineates on-demand fast finishing scans (`scan_librarian.py`) from continuous slow-burn historical refinement (`mass_scan.py`). Deep multi-epoch synthesis is strictly bound to off-peak 2:00 AM windows (`field-notes-nightly.timer`) via a single-epoch bounded pass (`--once`), preserving full H2 Lean Sleep VRAM hibernation during daytime working hours.
+**Mechanism:** `scan_librarian.py` (on-demand fast finishing), `mass_scan.py --once` (single-epoch 2AM timer), `field-notes-nightly.timer` systemd unit.
+
 
 ## [FEAT-102] Nuclear Cache Busting
 **Status:** ACTIVE
@@ -1387,5 +1388,12 @@
 **Logic:** Offloads synchronous HTTP engine health check probes during node initialization to the asyncio loop executor (`loop.run_in_executor`), preventing network latency or remote host hangs from blocking the main event loop.
 **Rationale:** Prevents the main event loop from freezing when checking remote compute node health (e.g. KENDER over Tailscale/LAN). Without executor offloading, network timeouts block all local WebSocket and HTTP handling.
 **Mechanism:** `loop.run_in_executor` HTTP check in `loader.py` (`ping_engine`), non-blocking health caching with 15s failure TTL.
+
+## [FEAT-416] Single-Epoch Nightly Refinement Sweeper
+**Status:** ACTIVE
+**Logic:** Executes a single bounded epoch of note nibbling, gem refinement (up to 50 historical items), de-duplication, and yearly aggregation during the 2:00 AM maintenance window, exiting cleanly upon completion to yield the GPU to other nightly jobs and trigger H2 Lean Sleep.
+**Rationale:** Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.
+**Mechanism:** `--once` flag in `field_notes/mass_scan.py`, oneshot service `field-notes-nightly.service`, and `field-notes-nightly.timer` systemd unit.
+
 
 
