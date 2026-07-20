@@ -6405,6 +6405,390 @@
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-404">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-404</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Context Starvation Protocol & Abort Gate
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces a strict <code>[ERROR: CONTEXT_STARVED]</code> protocol when queries reference specific historical topics or GEM IDs while RAG context is empty and tools are unavailable. Traps the starvation token mid-stream in <code>_process_node_stream</code> to immediately cancel LLM generation, bypass downstream waterfall legs, and alert Foyer.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents small models (3B/7B) from hallucinating speculative facts, dates, or code structures when asked about unrecognized or unindexed historical projects. Without this abort gate, context-starved nodes generate plausible text that bleeds into subsequent waterfall reasoning legs and user output.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Dynamic injection of <code>CONTEXT_VALIDITY</code> in <code>loader.py</code> during tool-bound turns, token trapping in <code>cognitive_hub.py</code>, and mid-stream task cancellation.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-405">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-405</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Gems-to-Notes Ground Truth Synthesis
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Resolves vector search candidates from <code>long_term_wisdom</code> by opening target physical JSON note files (e.g. <code>2024_01.json</code>) and extracting the raw chronological text entry (summary, evidence, or synopsis) directly into the returned RAG context payload.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Bridges vector embedding discovery anchors to actual physical note text. Without this ground truth bridge, RAG queries return only abstract document IDs or file paths, forcing LLMs to guess underlying historical validation details.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Physical file path resolution in <code>archive_node.py</code>, neighborhood expansion of adjacent entries, and structured <code>[ACQUISITION]</code> context payload formatting.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-406">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-406</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Coherence Judge Evaluation Ledger & Retort
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Executes a post-generation critique loop where Pinky evaluates strategic reasoning for logic errors, slop, or contradictions using guided JSON decoding (<code>score</code>, <code>reasoning</code>, <code>slop_found</code>, <code>retort</code>). Captures <code>retort</code> in <code>turn_thought_trace["critique"]</code>, writes evaluations atomically to <code>.round_table_evals.json</code>, and dispatches the retort directly to the UI chat stream under "Pinky (Coherence Critic)".</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes automated peer evaluation of strategic LLM output, surfacing logic gaps, logging historical quality metrics over time, and presenting immediate critique feedback to the user.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guided decoding schema in <code>cognitive_hub.py</code> (<code>evaluate_grounding</code>), atomic file replace (<code>.tmp</code>), and <code>execute_dispatch</code> terminal summary broadcast.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-407">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-407</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Tag-Delimited Grounding Isolation (<historical_record>)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Wraps RAG retrieval evidence within <code>&lt;historical_record&gt;</code> XML boundary tags during <code>HISTORICAL</code>, <code>FORENSIC</code>, and <code>TECHNICAL</code> turns, injecting a strict <code>GROUNDING_PROTOCOL</code> instruction restricting generation exclusively to tagged evidence.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Protects against context leakage between historical query briefs and live operational parameters (such as current OS runtime, host CPU/GPU hardware, or active ports). Without XML boundary tags, small models mix past historical events with present-day runtime state.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Conditional string wrapping and positive grounding guidance injection in <code>cognitive_hub.py</code> (<code>_process_node_stream</code>).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-408">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-408</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Tool-Driven Waterfall Cascade
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Dynamically queries active resident MCP tools via <code>_get_node_tools</code> during multi-leg waterfall execution (<code>_run_brain_leg</code>), passing active tool definitions to remote reasoners instead of empty tool lists.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enables downstream reasoning models (Brain/Deep Thought) to execute active tools when handling complex queries. Without dynamic tool passing, remote nodes remain context-starved and cannot query internal memory or telemetry servers.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>_get_node_tools</code> introspection in <code>cognitive_hub.py</code>, tool list injection into <code>_process_node_stream</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-409">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-409</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    WYWO Vibe Routing & Standup Synthesis
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Classifies casual recall and status-check queries into the <code>WYWO</code> (While You Were Out) vibe, automatically querying recent nightly dialogue records (<code>nightly_dialogue.json</code>) and subconscious dream wisdom from the vector archive to synthesize a high-density standup briefing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides structured, automated retrieval of overnight self-reflection and subconscious debate results when the user resumes interaction. Without this vibe classification, status queries route to standard casual banter without surfacing overnight progress.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Triage prompt rule 8 in <code>lab_node.py</code>, context building in <code>cognitive_hub.py</code> (<code>process_query</code>), and <code>[MODE]: STANDUP</code> behavioral guidance.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-410">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-410</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Adaptive Two-Tier RAG Compass
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a two-tier resolution strategy for archive queries: Tier 1 matches internal entry <code>date</code> attributes where present; Tier 2 falls back to filename range bounds (<code>2016_2019.json</code>) for un-timestamped legacy notes. Dynamically expands candidate selection when target matches yield fewer than 2 entries.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates context pollution from arbitrary +-1 year range hacks while preserving temporal boundaries for modern timestamped entries and safely handling early un-timestamped archives.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Year parsing and Gaussian temporal decay weighting in <code>archive_node.py</code> (<code>get_context</code>), candidate sorting via RRF score * temporal weight.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-411">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-411</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Structured Append-Only Tool Log Archive
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Records tool executions to an append-only workspace file (<code>tool_log.md</code>) with timestamps, node identifiers, parameters, and clickable <code>file:///</code> links, streaming execution payloads via WebSockets to client UI cards.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides complete auditability of tool invocations without polluting the active LLM chat context window or mutating workspace whiteboard state.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>append_to_tool_log</code> in <code>loader.py</code>, telemetry queue worker thread, and <code>window.renderToolLogEntry</code> in <code>intercom_v2.js</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-412">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-412</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Connection-Aware Idle Hibernation Deferral
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Polls active Foyer client WebSocket connections before initiating VRAM hibernation, doubling the default AFK timeout (to 600s) and extending idle grace periods (+300s) while active browser sessions remain open.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents jarring model unloading and cold-start latency spikes while an engineer is actively interacting with or viewing the web dashboard.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Client connection counter in <code>foyer/router.py</code> (<code>delayed_shutdown</code>), status check deferral in <code>acme_lab.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-413">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-413</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Decoupled Queue Drainer & Node Boot Mutex
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Separates request queue processing into an asynchronous background loop with node-level initialization locks, preventing race conditions during cold node boots and damping casual routing penalties.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Solves queue stalls and socket deadlocks when multiple user or background requests arrive during node cold starts.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Async queue drainer task in <code>foyer/router.py</code>, initialization mutex per resident node.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-414">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-414</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    MoE+ Latency-Hiding Telemetry Stack & Preamble Fill
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Overlaps intent triage, RAG retrieval, and workspace gathering with model warmup latency, streaming Pinky preamble tokens to fill the air while remote compute engines (KENDER 4090 / vLLM / Brain) ignite or load KV cache. Streams multi-stage latency gauges via Prometheus on port 8010.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents 3–10 seconds of dead silence during remote GPU model ignition or heavy reasoning steps, providing continuous feedback and microsecond-level telemetry to Prometheus/Grafana.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>benchmark_routing</code> in <code>bench_moe_plus.py</code>, Prometheus gauge metrics on port 8010, concurrent preamble streaming in <code>cognitive_hub.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-415">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-415</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Asynchronous Non-Blocking Engine Health Gate
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Offloads synchronous HTTP engine health check probes during node initialization to the asyncio loop executor (<code>loop.run_in_executor</code>), preventing network latency or remote host hangs from blocking the main event loop.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents the main event loop from freezing when checking remote compute node health (e.g. KENDER over Tailscale/LAN). Without executor offloading, network timeouts block all local WebSocket and HTTP handling.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>loop.run_in_executor</code> HTTP check in <code>loader.py</code> (<code>ping_engine</code>), non-blocking health caching with 15s failure TTL.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
