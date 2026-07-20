@@ -135,8 +135,6 @@
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
 
 ### [BACKLOG]
-*   [HIGH PRIORITY] **`HttpClient(port=8000)` Service Offloading Refactor**: Refactor `sync_chroma_dna.py` (git pre-commit hook), `archive_node.py` (archive node init), and `refine_gem.py` (continuous burn scanner) from `chromadb.PersistentClient` to `chromadb.HttpClient(host="127.0.0.1", port=8000)` to eliminate cold ONNX process initializations (reducing pre-commit hook delay from 20s to <1s).
-*   [HIGH PRIORITY] **Airlock Sanitizer Guard Assertions**: Update `www_deploy/sync_stories.sh` to add regex guard assertions that raise explicit exceptions if expected section IDs (`#security`, `#architecture`, `#validation`, `#leadership`) are missing from `field_notes/stories.html` before executing DOM decomposition.
 *   [BACKLOG] **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
 *   [BACKLOG] **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
 *   [BACKLOG] **GPU Fractioning Research**: Investigate NVIDIA Run:ai or similar software partitioning to enforce strict VRAM quotas for concurrent resident nodes.
