@@ -2084,19 +2084,19 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Load-Aware Nibbling
+                                    Dual-Pipeline Synthesis & Load-Aware Nibbling
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Background workers defer processing if the system load (<code>node_load1</code>) is too high, protecting the EarNode's VRAM budget.</p>
+                    <p>Delineates on-demand fast finishing scans (<code>scan_librarian.py</code>) from continuous slow-burn historical refinement (<code>mass_scan.py</code>). Deep multi-epoch synthesis is strictly bound to off-peak 2:00 AM windows (<code>field-notes-nightly.timer</code>) via a single-epoch bounded pass (<code>--once</code>), preserving full H2 Lean Sleep VRAM hibernation during daytime working hours.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>nibble.py</code> checks system vitals via Prometheus before initiating AI scans.</p>
+                    <p><code>scan_librarian.py</code> (on-demand fast finishing), <code>mass_scan.py --once</code> (single-epoch 2AM timer), <code>field-notes-nightly.timer</code> systemd unit.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -6781,6 +6781,38 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>loop.run_in_executor</code> HTTP check in <code>loader.py</code> (<code>ping_engine</code>), non-blocking health caching with 15s failure TTL.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-416">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-416</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Single-Epoch Nightly Refinement Sweeper
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Executes a single bounded epoch of note nibbling, gem refinement (up to 50 historical items), de-duplication, and yearly aggregation during the 2:00 AM maintenance window, exiting cleanly upon completion to yield the GPU to other nightly jobs and trigger H2 Lean Sleep.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>--once</code> flag in <code>field_notes/mass_scan.py</code>, oneshot service <code>field-notes-nightly.service</code>, and <code>field-notes-nightly.timer</code> systemd unit.</p>
                 </div>
             </div>     </div>
                             </details>
