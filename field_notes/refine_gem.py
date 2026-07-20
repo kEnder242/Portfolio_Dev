@@ -18,17 +18,86 @@ def cosine_similarity(a, b):
     import numpy as np
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
+def get_embedding_function():
+    """Get an embedding function with ChromaDB HttpClient fallback.
+
+    Attempts to connect to a ChromaDB server at 127.0.0.1:8000 and use its
+    SentenceTransformer embedding function.  Falls back to local
+    SentenceTransformer initialization if the server is unreachable.
+
+    Returns:
+        An object with an ``encode(texts)`` method that returns a NumPy array
+        of embeddings, or ``None`` if both paths fail.
+    """
+    # Attempt 1: ChromaDB HttpClient -> SentenceTransformerEmbeddingFunction
+    try:
+        import chromadb
+        from chromadb.utils import embedding_functions
+
+        logging.info(
+            "Attempting HttpClient connection for embeddings at "
+            "127.0.0.1:8001..."
+        )
+        client = chromadb.HttpClient(host="127.0.0.1", port=8001)
+        heartbeat = client.heartbeat()
+
+        logging.info(
+            f"HttpClient heartbeat successful (tick: {heartbeat}). "
+            "Offloading embeddings to ChromaDB server."
+        )
+
+        ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name="all-MiniLM-L6-v2"
+        )
+        logging.info(
+            "Final embedding method: ChromaDB "
+            "SentenceTransformerEmbeddingFunction (server-side)."
+        )
+
+        # SentenceTransformerEmbeddingFunction is callable but does not expose
+        # an ``.encode()`` method; wrap it so the downstream code can call
+        # ``.encode(texts)`` unchanged.
+        class _ChromaDBEmbedder:
+            def encode(self, texts):
+                import numpy as np
+                return np.array(ef(texts))
+
+        return _ChromaDBEmbedder()
+
+    except ImportError:
+        logging.warning(
+            "chromadb package not installed. "
+            "Falling back to local SentenceTransformer."
+        )
+    except Exception as e:
+        logging.warning(
+            f"HttpClient connection failed: {e}. "
+            "Falling back to local SentenceTransformer."
+        )
+
+    # Attempt 2: Local SentenceTransformer
+    try:
+        from sentence_transformers import SentenceTransformer
+
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+        logging.info(
+            "Final embedding method: local SentenceTransformer "
+            "(all-MiniLM-L6-v2)."
+        )
+        return model
+    except Exception as e:
+        logging.error(f"Failed to load SentenceTransformer: {e}")
+        return None
+
+
 def deduplicate_gems():
     import glob
     import numpy as np
-    from sentence_transformers import SentenceTransformer
-    
+
     logging.info("Running Semantic De-duplication check [Goal 6]...")
-    
-    try:
-        model = SentenceTransformer("all-MiniLM-L6-v2")
-    except Exception as e:
-        logging.error(f"Failed to load SentenceTransformer: {e}")
+
+    model = get_embedding_function()
+    if model is None:
         return
         
     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))

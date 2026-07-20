@@ -126,9 +126,23 @@ def parse_protocols(filepath):
         
     return protocols
 
+def get_chroma_client():
+    """Initialize ChromaDB client with HttpClient fallback."""
+    try:
+        logging.info("Attempting to connect to ChromaDB HttpClient on port 8001...")
+        client = chromadb.HttpClient(host="127.0.0.1", port=8001)
+        # Verify connection
+        heartbeat = client.heartbeat()
+        logging.info(f"HttpClient heartbeat successful: {heartbeat}")
+        return client
+    except Exception as e:
+        logging.warning(f"HttpClient connection failed: {e}. Falling back to PersistentClient.")
+        return chromadb.PersistentClient(path=DB_PATH)
+
+
 def sync():
     logging.info(f"Connecting to ChromaDB at {DB_PATH}...")
-    client = chromadb.PersistentClient(path=DB_PATH)
+    client = get_chroma_client()
     
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
