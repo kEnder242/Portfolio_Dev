@@ -70,19 +70,24 @@ Established **`headroom-proxy.service`** as a systemd user daemon running on por
 
 ---
 
-## [LAB-009] Field Notes Nightly Subconscious Timer (2:00 AM)
+## [LAB-009] Field Notes Dual-Pipeline Synthesis Daemons (Nibbler & Nightly Timer)
 **Status:** ACTIVE
 **Date:** July 2026
 
 ### Context
-The subconscious scanner (`field_notes/nibble.py`) required manual invocation or ad-hoc timers to process raw notes.
+The Nibbler ("every once in a while" load-aware scanner) was previously muddled with the scheduled 2:00 AM nightly aggregation sweep.
 
 ### Decision
-Established **`field-notes-nibble.timer`** as a systemd user timer scheduled for `02:00:00` daily.
+Separated the continuous background scanning daemon from the off-peak nightly maintenance timer into two distinct systemd units:
 
 ### Mechanism
-- Triggers `field-notes-nibble.service` oneshot execution using `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python`.
-- Automates off-peak historical note indexing and summary synthesis.
+1. **Continuous Slow-Burn Nibbler (`field-notes-nibbler.service`)**:
+   - Runs `field_notes/mass_scan.py` in a persistent, load-aware background loop (`Type=simple`).
+   - Monitors VRAM utilization and system load before processing chunks via `nibble_v2.py` and `scan_queue.py`.
+2. **Nightly Maintenance Sweep (`field-notes-nightly.timer`)**:
+   - Triggers `field-notes-nightly.service` oneshot execution at **2:00 AM daily** (`OnCalendar=*-*-* 02:00:00`).
+   - Runs `field_notes/aggregate_years.py` to compile yearly timeline records during off-peak hours.
+
 
 
 
