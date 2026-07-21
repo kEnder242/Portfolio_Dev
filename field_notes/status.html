@@ -1024,8 +1024,10 @@
             let currentDayFolder = null;
 
             sortedAlerts.forEach(alert => {
+                if (!alert || !alert.timestamp) return;
                 const severity = (alert.severity || 'info').toLowerCase();
-                const ts = alert.timestamp.includes('T') ? alert.timestamp : alert.timestamp.replace(' ', 'T');
+                const rawTs = String(alert.timestamp);
+                const ts = rawTs.includes('T') ? rawTs : rawTs.replace(' ', 'T');
                 const day = ts.split('T')[0];
 
                 if (severity === 'critical' || severity === 'warning') {
