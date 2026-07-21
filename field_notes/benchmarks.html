@@ -442,19 +442,73 @@
                 </div>
             </div>
 
-            <div class="section-header" style="margin-top:30px;">ENTERPRISE TELEMETRY PORTAL (GRAFANA)</div>
+            <div class="section-header" style="margin-top:30px;">GRAFANA LIVE TELEMETRY EMBEDS</div>
 
-            <div class="chart-card" style="border-left:4px solid #58a6ff;">
-                <div class="chart-title">
-                    <span>LIVE GRAFANA DASHBOARD PORTAL</span>
-                    <span class="status-badge status-online">PROMETHEUS ACTIVE</span>
+            <!-- Time Window Range & Slider Control Bar -->
+            <div class="chart-card" style="border-left:4px solid #1f6feb; padding:15px 20px; margin-bottom:25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                    <div>
+                        <div style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; font-weight:700; color:#e6edf3; margin-bottom:4px;">
+                            TELEMETRY TIME RANGE CONTROLS
+                        </div>
+                        <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
+                            Select a preset range or use the window slider to dynamically adjust Grafana query windows.
+                        </div>
+                    </div>
+                    <a href="https://monitor.jason-lab.dev/d/moe-latency-nuance/moe-latency-nuance" target="_blank" class="console-btn" style="text-decoration:none; background:#1f6feb; border-color:#1f6feb; color:#fff;">
+                        ↗ OPEN FULL GRAFANA DASHBOARD
+                    </a>
                 </div>
-                <p style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:#8b949e; margin:0 0 15px 0;">
-                    Live timeseries telemetry (DCGM GPU metrics, MoE+ routing heatmaps, state timelines) is collected on <strong>port 9400/8011</strong> and visualized in Grafana.
-                </p>
-                <a href="https://monitor.jason-lab.dev/d/moe-latency-nuance/moe-latency-nuance" target="_blank" class="console-btn" style="text-decoration:none; display:inline-block; background:#1f6feb; border-color:#1f6feb; color:#fff;">
-                    ↗ OPEN LIVE GRAFANA DASHBOARD (monitor.jason-lab.dev)
-                </a>
+
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:15px; padding-top:12px; border-top:1px solid #1f242c;">
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:#8b949e; text-transform:uppercase;">PRESETS:</span>
+                    <button class="console-btn range-btn" onclick="setTimeRange('now-15m', 'now', this)">15M</button>
+                    <button class="console-btn range-btn active" onclick="setTimeRange('now-1h', 'now', this)" style="background:#1f6feb; color:#fff; border-color:#1f6feb;">1H</button>
+                    <button class="console-btn range-btn" onclick="setTimeRange('now-6h', 'now', this)">6H</button>
+                    <button class="console-btn range-btn" onclick="setTimeRange('now-24h', 'now', this)">24H</button>
+                    <button class="console-btn range-btn" onclick="setTimeRange('now-7d', 'now', this)">7D</button>
+
+                    <div style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+                        <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:#6a737d;">WINDOW SLIDER:</span>
+                        <input type="range" id="timeSlider" min="1" max="168" value="1" style="accent-color:#1f6feb; cursor:pointer;" oninput="onSliderChange(this.value)" />
+                        <span id="sliderLabel" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#58a6ff; font-weight:700; min-width:85px;">Last 1 Hour</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Grafana Live Panel Embeds -->
+            <div class="grafana-grid">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>MoE+ Pipeline Stage Durations</span>
+                        <span class="chart-subtitle">Stacked Area Chart (Live Telemetry)</span>
+                    </div>
+                    <iframe class="grafana-panel-iframe" data-panel-id="1" src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=1&orgId=1&from=now-1h&to=now&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>Routing Latency Heatmap</span>
+                        <span class="chart-subtitle">Heatmap (Live Telemetry)</span>
+                    </div>
+                    <iframe class="grafana-panel-iframe" data-panel-id="2" src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=2&orgId=1&from=now-1h&to=now&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>State Timeline: Router vs Warmup vs Expert</span>
+                        <span class="chart-subtitle">State Timeline (Live Telemetry)</span>
+                    </div>
+                    <iframe class="grafana-panel-iframe" data-panel-id="3" src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=3&orgId=1&from=now-1h&to=now&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span>Latency Variance (TTFT vs ITL)</span>
+                        <span class="chart-subtitle">Box Plot (Live Telemetry)</span>
+                    </div>
+                    <iframe class="grafana-panel-iframe" data-panel-id="4" src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=4&orgId=1&from=now-1h&to=now&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+                </div>
             </div>
         </div>
 
@@ -906,6 +960,47 @@
             }
         }
         
+        function setTimeRange(fromStr, toStr, btnEl) {
+            if (btnEl) {
+                document.querySelectorAll('.range-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = '#161b22';
+                    b.style.color = '#c9d1d9';
+                    b.style.borderColor = '#21262d';
+                });
+                btnEl.classList.add('active');
+                btnEl.style.background = '#1f6feb';
+                btnEl.style.color = '#fff';
+                btnEl.style.borderColor = '#1f6feb';
+            }
+
+            const iframes = document.querySelectorAll('.grafana-panel-iframe');
+            iframes.forEach(iframe => {
+                const panelId = iframe.dataset.panelId;
+                iframe.src = `https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=${panelId}&orgId=1&from=${fromStr}&to=${toStr}&theme=dark`;
+            });
+        }
+
+        function onSliderChange(hours) {
+            const h = parseInt(hours);
+            let fromStr = `now-${h}h`;
+            let label = `Last ${h} Hour${h > 1 ? 's' : ''}`;
+            if (h >= 24) {
+                const days = Math.round(h / 24);
+                label = `Last ${days} Day${days > 1 ? 's' : ''}`;
+            }
+            document.getElementById('sliderLabel').textContent = label;
+            
+            document.querySelectorAll('.range-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = '#161b22';
+                b.style.color = '#c9d1d9';
+                b.style.borderColor = '#21262d';
+            });
+
+            setTimeRange(fromStr, 'now', null);
+        }
+
         // Boot
         window.addEventListener('load', loadBenchmarks);
     </script>
