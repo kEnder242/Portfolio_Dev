@@ -1103,7 +1103,32 @@
             });
         }
 
+        function classifyExpandTier(alert) {
+            const source = (alert.source || '').toLowerCase();
+            const message = (alert.message || '').toLowerCase();
+            const richSources = ['recruiter', 'massscan', 'benchmark', 'foyer', 'ignition', 'labattendant', 'montana'];
+            const inlineSources = ['tailscaled', 'cloudflared', 'mctp'];
+
+            if (
+                alert.is_rag_eval &&
+                richSources.includes(source) &&
+                message.includes('crash_') &&
+                message.includes('.log') &&
+                (message.includes('gem refined') || message.includes('distilled')) &&
+                message.includes('nightly-dialogue')
+            ) {
+                return 'rich';
+            }
+
+            if (inlineSources.includes(source)) {
+                return 'inline';
+            }
+
+            return 'none';
+        }
+
         function createAlertElement(alert) {
+            const tier = classifyExpandTier(alert);
             const div = document.createElement('div');
             div.dataset.id = alert.timestamp + '-' + alert.source;
             
@@ -1119,7 +1144,7 @@
                                 msg.includes('.md') || 
                                 msg.includes('.patch') || 
                                 msg.includes('.json') || 
-                                msg.includes('report') || 
+                                msg.match(/\breport[: ]/) || 
                                 msg.includes('artifact') ||
                                 msg.includes('gem refined') || 
                                 msg.includes('distilled');
@@ -1139,34 +1164,65 @@
                 }
             }
             
-            div.className = `alert-item severity-${severity} ${extraClass}`;
+            const tierClass = tier === 'none' ? 'no-expand' : `expandable-${tier}`;
+            div.className = `alert-item severity-${severity} ${extraClass} ${tierClass}`;
             
             const d = new Date(alert.timestamp.includes('T') ? alert.timestamp : alert.timestamp.replace(' ', 'T'));
             const timeStr = !isNaN(d.getTime()) ? d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "??:??";
 
-            div.innerHTML = `
-                <div class="alert-header">
-                    <span class="expand-indicator" style="color:var(--accent-color); font-weight:bold; margin-right:5px;">[+]</span>
-                    <span class="alert-meta">[${timeStr}]</span> 
-                    <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}
-                </div>
-                <div class="inline-terminal"></div>
-            `;
+            if (tier === 'none') {
+                div.innerHTML = `
+                    <div class="alert-header">
+                        <span class="alert-meta">[${timeStr}]</span> 
+                        <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}
+                    </div>
+                `;
+            } else {
+                const indicatorStyle = tier === 'rich'
+                    ? 'color:var(--accent-color); font-weight:bold; margin-right:5px;'
+                    : 'color:#666; font-weight:bold; margin-right:5px;';
+                const indicatorText = tier === 'rich' ? '[+]' : '[>]';
+                div.innerHTML = `
+                    <div class="alert-header">
+                        <span class="expand-indicator" style="${indicatorStyle}">${indicatorText}</span>
+                        <span class="alert-meta">[${timeStr}]</span> 
+                        <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}
+                    </div>
+                    <div class="inline-terminal"></div>
+                `;
+            }
             
             const header = div.querySelector('.alert-header');
-            const term = div.querySelector('.inline-terminal');
 
-            header.onclick = (e) => {
-                e.stopPropagation();
-                const indicator = header.querySelector('.expand-indicator');
-                if (term.style.display === 'block') {
-                    term.style.display = 'none';
-                    if (indicator) indicator.textContent = '[+]';
-                } else {
-                    expandAlertDetail(term, alert);
-                    if (indicator) indicator.textContent = '[-]';
-                }
-            };
+            if (tier === 'rich') {
+                const term = div.querySelector('.inline-terminal');
+                header.onclick = (e) => {
+                    e.stopPropagation();
+                    const indicator = header.querySelector('.expand-indicator');
+                    if (term.style.display === 'block') {
+                        term.style.display = 'none';
+                        if (indicator) indicator.textContent = '[+]';
+                    } else {
+                        expandAlertDetail(term, alert);
+                        if (indicator) indicator.textContent = '[-]';
+                    }
+                };
+            } else if (tier === 'inline') {
+                const term = div.querySelector('.inline-terminal');
+                header.onclick = (e) => {
+                    e.stopPropagation();
+                    const indicator = header.querySelector('.expand-indicator');
+                    if (term.style.display === 'block') {
+                        term.style.display = 'none';
+                        if (indicator) indicator.textContent = '[>]';
+                    } else {
+                        term.style.display = 'block';
+                        term.innerHTML = `<span style="color:#999;">Metadata: ${JSON.stringify(alert)}</span>`;
+                        if (indicator) indicator.textContent = '[-]';
+                    }
+                };
+            }
+            
             return div;
         }
 
