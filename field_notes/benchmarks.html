@@ -430,73 +430,39 @@
         </div>
 
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab(event, 'local-tab')">Local 2080 Ti</button>
-            <button class="tab-btn" onclick="switchTab(event, 'kender-tab')">KENDER 4090</button>
+            <button class="tab-btn active" onclick="switchTab(event, 'kender-tab')">KENDER 4090</button>
+            <button class="tab-btn" onclick="switchTab(event, 'local-tab')">Local 2080 Ti</button>
         </div>
 
-        <div id="local-tab" class="tab-content">
-            <div id="benchmark-content">
+        <div id="kender-tab" class="tab-content">
+            <div id="kender-benchmark-content">
                 <!-- Rendered dynamically via JS -->
                 <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#8b949e;">
                     Bootstrapping console logs...
                 </div>
             </div>
+
+            <div class="section-header" style="margin-top:30px;">ENTERPRISE TELEMETRY PORTAL (GRAFANA)</div>
+
+            <div class="chart-card" style="border-left:4px solid #58a6ff;">
+                <div class="chart-title">
+                    <span>LIVE GRAFANA DASHBOARD PORTAL</span>
+                    <span class="status-badge status-online">PROMETHEUS ACTIVE</span>
+                </div>
+                <p style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:#8b949e; margin:0 0 15px 0;">
+                    Live timeseries telemetry (DCGM GPU metrics, MoE+ routing heatmaps, state timelines) is collected on <strong>port 9400/8011</strong> and visualized in Grafana.
+                </p>
+                <a href="https://monitor.jason-lab.dev/d/moe-latency-nuance/moe-latency-nuance" target="_blank" class="console-btn" style="text-decoration:none; display:inline-block; background:#1f6feb; border-color:#1f6feb; color:#fff;">
+                    ↗ OPEN LIVE GRAFANA DASHBOARD (monitor.jason-lab.dev)
+                </a>
+            </div>
         </div>
 
-        <div id="kender-tab" class="tab-content hidden">
-            <div id="kender-benchmark-content">
+        <div id="local-tab" class="tab-content hidden">
+            <div id="benchmark-content">
                 <!-- Rendered dynamically via JS -->
-            </div>
-
-            <div class="section-header" style="margin-top:30px;">GRAFANA TELEMETRY PANELS (REMOTE EMBEDS)</div>
-
-            <div class="grafana-embeds">
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span>MoE+ Pipeline Stage Durations</span>
-                        <span class="chart-subtitle">Stacked Area Chart (Live Telemetry)</span>
-                    </div>
-                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=1&orgId=1" width="100%" height="300" frameborder="0"></iframe>
-                    <div class="iframe-fallback">
-                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
-                        <pre>moe_stage_duration_seconds{stage!="total_pipeline"}</pre>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span>Routing Latency Heatmap</span>
-                        <span class="chart-subtitle">Heatmap (Live Telemetry)</span>
-                    </div>
-                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=2&orgId=1" width="100%" height="300" frameborder="0"></iframe>
-                    <div class="iframe-fallback">
-                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
-                        <pre>moe_router_latency_seconds</pre>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span>State Timeline: Router vs Warmup vs Expert</span>
-                        <span class="chart-subtitle">State Timeline (Live Telemetry)</span>
-                    </div>
-                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=3&orgId=1" width="100%" height="300" frameborder="0"></iframe>
-                    <div class="iframe-fallback">
-                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
-                        <pre>moe_router_latency_seconds, moe_warmup_latency_seconds, moe_expert_latency_seconds</pre>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span>Latency Variance (TTFT vs ITL)</span>
-                        <span class="chart-subtitle">Box Plot (Live Telemetry)</span>
-                    </div>
-                    <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=4&orgId=1" width="100%" height="300" frameborder="0"></iframe>
-                    <div class="iframe-fallback">
-                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
-                        <pre>moe_model_ttft_seconds, moe_model_itl_seconds</pre>
-                    </div>
+                <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#8b949e;">
+                    Bootstrapping console logs...
                 </div>
             </div>
         </div>
