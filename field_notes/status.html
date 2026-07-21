@@ -295,6 +295,7 @@
         let currentLabSession = "";
 
         function logToConsole(text, color = '#888') {
+            if (!consoleRow) return;
             const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const div = document.createElement('div');
             div.style.color = color;
@@ -308,6 +309,18 @@
                 consoleRow.removeChild(consoleRow.firstChild);
             }
         }
+
+        // Global Error & Promise Rejection Trap for Live Console Output
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            const fileName = url ? url.split('/').pop() : 'script';
+            logToConsole(`[JS ERROR] ${msg} (${fileName}:${lineNo})`, '#ff3b30');
+            return false;
+        };
+
+        window.addEventListener('unhandledrejection', function(event) {
+            const reason = event.reason ? (event.reason.message || event.reason) : 'Unknown Promise Error';
+            logToConsole(`[UNHANDLED REJECTION] ${reason}`, '#ff3b30');
+        });
 
         function hideAllContainers() {
             iframeMain.style.display = 'none';
