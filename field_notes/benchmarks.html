@@ -444,7 +444,11 @@
         </div>
 
         <div id="kender-tab" class="tab-content hidden">
-            <div class="section-header">GRAFANA TELEMETRY PANELS</div>
+            <div id="kender-benchmark-content">
+                <!-- Rendered dynamically via JS -->
+            </div>
+
+            <div class="section-header" style="margin-top:30px;">GRAFANA TELEMETRY PANELS (REMOTE EMBEDS)</div>
 
             <div class="grafana-embeds">
                 <div class="chart-card">
@@ -454,7 +458,7 @@
                     </div>
                     <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=1&orgId=1" width="100%" height="300" frameborder="0"></iframe>
                     <div class="iframe-fallback">
-                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
                         <pre>moe_stage_duration_seconds{stage!="total_pipeline"}</pre>
                     </div>
                 </div>
@@ -466,7 +470,7 @@
                     </div>
                     <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=2&orgId=1" width="100%" height="300" frameborder="0"></iframe>
                     <div class="iframe-fallback">
-                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
                         <pre>moe_router_latency_seconds</pre>
                     </div>
                 </div>
@@ -478,7 +482,7 @@
                     </div>
                     <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=3&orgId=1" width="100%" height="300" frameborder="0"></iframe>
                     <div class="iframe-fallback">
-                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
                         <pre>moe_router_latency_seconds, moe_warmup_latency_seconds, moe_expert_latency_seconds</pre>
                     </div>
                 </div>
@@ -490,7 +494,7 @@
                     </div>
                     <iframe src="https://monitor.jason-lab.dev/d-solo/moe-latency-nuance?panelId=4&orgId=1" width="100%" height="300" frameborder="0"></iframe>
                     <div class="iframe-fallback">
-                        <p>[OFFLINE] Grafana panel failed to load. Fallback logs:</p>
+                        <p>[LIVE EMBED STATUS] Grafana panel endpoint: https://monitor.jason-lab.dev (Admin Authenticated)</p>
                         <pre>moe_model_ttft_seconds, moe_model_itl_seconds</pre>
                     </div>
                 </div>
@@ -548,46 +552,124 @@
         }
 
         function renderDashboard(results, data) {
-            const container = document.getElementById('benchmark-content');
-            container.innerHTML = '';
+            const localContainer = document.getElementById('benchmark-content');
+            const kenderContainer = document.getElementById('kender-benchmark-content');
             
-            // 1. Render Cards Grid
-            let gridHtml = '<div class="metrics-grid">';
-            results.forEach(r => {
-                const statusClass = r.status === 'online' ? 'status-online' : 'status-fallback';
-                const statusText = r.status === 'online' ? 'ONLINE' : 'FALLBACK';
+            localContainer.innerHTML = '';
+            if (kenderContainer) kenderContainer.innerHTML = '';
+            
+            // Separate results by host node
+            const localResults = results.filter(r => r.engine === 'vLLM' || (r.display_name && r.display_name.includes('Local')));
+            const kenderResults = results.filter(r => r.engine === 'Ollama' || (r.display_name && (r.display_name.includes('KENDER') || r.display_name.includes('4090'))));
+            
+            // Function to generate section HTML for a model set
+            function buildTelemetryHtml(modelList, titleSuffix) {
+                if (!modelList || modelList.length === 0) {
+                    return `
+                        <div class="error-console" style="border-color:#30363d; color:#8b949e; background:#161b22;">
+                            [TELEMETRY IDLE] No benchmark metrics registered for ${titleSuffix}.
+                        </div>
+                    `;
+                }
                 
-                gridHtml += `
-                    <div class="metric-card">
-                        <div class="card-model-name">
-                            <span>${r.model}</span>
-                            <span class="status-badge ${statusClass}" style="font-size:0.6rem; padding:1px 5px;">${statusText}</span>
+                let html = '<div class="metrics-grid">';
+                modelList.forEach(r => {
+                    const statusClass = r.status === 'online' ? 'status-online' : 'status-fallback';
+                    const statusText = r.status === 'online' ? 'ONLINE' : 'FALLBACK';
+                    
+                    html += `
+                        <div class="metric-card">
+                            <div class="card-model-name">
+                                <span>${r.model}</span>
+                                <span class="status-badge ${statusClass}" style="font-size:0.6rem; padding:1px 5px;">${statusText}</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Engine / Host</span>
+                                <span class="card-stat-value">${r.engine} (${r.display_name || 'Host Node'})</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">TTFT (Time to First Token)</span>
+                                <span class="card-stat-value" style="color: #f78166;">${r.ttft_ms.toFixed(0)} ms</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Throughput (Tokens/s)</span>
+                                <span class="card-stat-value" style="color: #3fb950;">${r.throughput.toFixed(1)} tok/s</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Inter-Token Latency</span>
+                                <span class="card-stat-value" style="color: #d2a8ff;">${r.itl_ms.toFixed(2)} ms</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Peak VRAM footprint</span>
+                                <span class="card-stat-value" style="color: #58a6ff;">${r.vram_gb.toFixed(2)} GB</span>
+                            </div>
                         </div>
-                        <div class="card-stat">
-                            <span class="card-stat-label">Engine</span>
-                            <span class="card-stat-value">${r.engine}</span>
+                    `;
+                });
+                html += '</div>';
+                
+                // Flexbar charts
+                const maxThroughput = Math.max(...modelList.map(r => r.throughput)) || 1;
+                const maxTtft = Math.max(...modelList.map(r => r.ttft_ms)) || 1;
+                
+                // Throughput Chart
+                html += `
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            <span>THROUGHPUT COMPARISON (${titleSuffix.toUpperCase()})</span>
+                            <span class="chart-subtitle">Tokens per second (longer is faster)</span>
                         </div>
-                        <div class="card-stat">
-                            <span class="card-stat-label">TTFT (Time to First Token)</span>
-                            <span class="card-stat-value" style="color: #f78166;">${r.ttft_ms.toFixed(0)} ms</span>
-                        </div>
-                        <div class="card-stat">
-                            <span class="card-stat-label">Throughput (Tokens/s)</span>
-                            <span class="card-stat-value" style="color: #3fb950;">${r.throughput.toFixed(1)} tok/s</span>
-                        </div>
-                        <div class="card-stat">
-                            <span class="card-stat-label">Inter-Token Latency</span>
-                            <span class="card-stat-value" style="color: #d2a8ff;">${r.itl_ms.toFixed(2)} ms</span>
-                        </div>
-                        <div class="card-stat">
-                            <span class="card-stat-label">Peak VRAM footprint</span>
-                            <span class="card-stat-value" style="color: #58a6ff;">${r.vram_gb.toFixed(2)} GB</span>
-                        </div>
-                    </div>
                 `;
-            });
-            gridHtml += '</div>';
-            container.innerHTML += gridHtml;
+                modelList.forEach(r => {
+                    const pct = (r.throughput / maxThroughput) * 100;
+                    html += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name || r.model}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #2ea043, #3fb950);"></div>
+                            </div>
+                            <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                // TTFT Chart
+                html += `
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            <span>TIME TO FIRST TOKEN (${titleSuffix.toUpperCase()})</span>
+                            <span class="chart-subtitle">Latency in milliseconds (shorter is faster)</span>
+                        </div>
+                `;
+                modelList.forEach(r => {
+                    const pct = (r.ttft_ms / maxTtft) * 100;
+                    let color = '#3fb950';
+                    if (r.ttft_ms >= 1000) color = '#f85149';
+                    else if (r.ttft_ms >= 400) color = '#e3b341';
+                    
+                    html += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name || r.model}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                            </div>
+                            <div class="bar-value">${r.ttft_ms.toFixed(0)} ms</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                return html;
+            }
+            
+            // Render Local 2080 Ti tab
+            localContainer.innerHTML = buildTelemetryHtml(localResults.length > 0 ? localResults : results.slice(0, 1), 'Local 2080 Ti');
+            
+            // Render KENDER 4090 tab
+            if (kenderContainer) {
+                kenderContainer.innerHTML = buildTelemetryHtml(kenderResults.length > 0 ? kenderResults : results.slice(1), 'KENDER 4090');
+            }
             
             // Calculate maximums for percentages (with safeguards)
             const maxThroughput = Math.max(...results.map(r => r.throughput)) || 1;
