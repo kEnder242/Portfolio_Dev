@@ -8,6 +8,9 @@ import subprocess
 import threading
 from prometheus_client import Gauge, start_http_server
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from utils import trigger_pager
+
 # Prometheus metrics
 moe_stage_duration_seconds = Gauge(
     "moe_stage_duration_seconds",
@@ -433,6 +436,16 @@ def main():
             json.dump(output_data, f, indent=2)
         os.replace(tmp_file, CACHE_FILE)
         print(f"✅ Successfully wrote atomic cache to: {CACHE_FILE}")
+        summary_lines = []
+        for res in results:
+            parts = [
+                f"{res['display_name']}",
+                f"TTFT: {res['ttft_ms']:.0f}ms",
+                f"Throughput: {res['throughput']:.1f} tok/s",
+                f"VRAM: {res['vram_gb']:.1f}GB"
+            ]
+            summary_lines.append(" - ".join(parts))
+        trigger_pager("Benchmark Complete:\n" + "\n".join(summary_lines), severity="info", source="benchmark")
     except Exception as e:
         print(f"❌ Failed writing cache: {e}")
         if os.path.exists(tmp_file):

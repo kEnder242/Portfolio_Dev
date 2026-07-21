@@ -281,6 +281,10 @@ def main():
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
         update_status("IDLE", f"Epoch {epoch_count} complete.")
         trigger_pager(f"Epoch {epoch_count} Synthesis Complete. Lab is Idle.", severity="info", source="MassScan")
+        if args.once:
+            trigger_pager("Nightly Dialogue Summary: Refinement & Dream Synthesis Complete.", severity="info", source="nightly-dialogue")
+            logging.info("Single epoch requested (--once). Exiting cleanly.")
+            break
         time.sleep(600) # Wait 10 mins before next full manifest check
 
 if __name__ == "__main__":

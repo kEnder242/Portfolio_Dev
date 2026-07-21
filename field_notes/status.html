@@ -1189,15 +1189,15 @@
         function classifyExpandTier(alert) {
             const source = (alert.source || '').toLowerCase();
             const message = (alert.message || '').toLowerCase();
-            const richSources = ['recruiter', 'massscan', 'benchmark', 'foyer', 'ignition', 'labattendant', 'montana'];
+            const richSources = ['recruiter', 'massscan', 'benchmark', 'foyer', 'ignition', 'labattendant', 'montana', 'nightly-dialogue', 'privacy-audit'];
             const inlineSources = ['tailscaled', 'cloudflared', 'mctp'];
 
             if (
-                alert.is_rag_eval &&
-                richSources.includes(source) &&
-                message.includes('crash_') &&
-                message.includes('.log') &&
-                (message.includes('gem refined') || message.includes('distilled')) &&
+                alert.is_rag_eval ||
+                richSources.includes(source) ||
+                (message.includes('crash_') && message.includes('.log')) ||
+                message.includes('gem refined') ||
+                message.includes('distilled') ||
                 message.includes('nightly-dialogue')
             ) {
                 return 'rich';
@@ -1416,7 +1416,140 @@
                     }
                 }
                 
-                // 2. Generic Artifact/File parser (.md, .patch, .json, .log)
+                // 3. MassScan Progress Panel
+                const src = (alert.source || '').toLowerCase();
+                if (src === 'massscan') {
+                    const msg = alert.message || '';
+                    const epochMatch = msg.match(/Epoch\s+(\d+)\/(\d+)/i);
+                    const stepMatch = msg.match(/Step\s+(\d+)\/(\d+)/i);
+                    const gemsMatch = msg.match(/gems refined[=:]?\s*(\d+)/i);
+                    const rankMatch = msg.match(/rank upgrades?[=:]?\s*(\d+)/i);
+                    const rankDetailMatch = msg.match(/(\d+)\s*[→➡]\s*(\d+)/);
+                    
+                    let epochHtml = '', stepHtml = '', gemsHtml = '', rankHtml = '';
+                    if (epochMatch) {
+                        const pct = ((parseInt(epochMatch[1]) / parseInt(epochMatch[2])) * 100).toFixed(0);
+                        epochHtml = `<div><strong>Epoch:</strong> ${epochMatch[1]}/${epochMatch[2]} (${pct}%) <progress value="${pct}" max="100" style="width:100px; height:6px;"></progress></div>`;
+                    }
+                    if (stepMatch) {
+                        stepHtml = `<div><strong>Step:</strong> ${stepMatch[1]}/${stepMatch[2]}</div>`;
+                    }
+                    if (gemsMatch) {
+                        gemsHtml = `<div><strong>Gems Refined:</strong> ${gemsMatch[1]}</div>`;
+                    }
+                    if (rankMatch) {
+                        const detail = rankDetailMatch ? ` <span style="color:#28a745;">↑ ${rankDetailMatch[1]} → ${rankDetailMatch[2]}</span>` : '';
+                        rankHtml = `<div><strong>Rank Upgrades:</strong> ${rankMatch[1]}${detail}</div>`;
+                    }
+                    
+                    term.innerHTML = `
+                        <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
+                            <div><strong style="color:var(--accent-color);">[MASSSCAN PROGRESS]</strong></div>
+                            <div style="margin-top:5px;">${epochHtml}</div>
+                            ${stepHtml}
+                            ${gemsHtml}
+                            ${rankHtml}
+                        </div>
+                    `;
+                    term.style.display = 'block';
+                    return;
+                }
+                
+                // 4. Lab State Transition Panel
+                if (['foyer', 'ignition', 'labattendant'].includes(src)) {
+                    const msg = alert.message || '';
+                    const stateMatch = msg.match(/State transition:\s*(\w+)\s*[→➡]\s*(\w+)/i);
+                    
+                    const stateColors = {
+                        'ONLINE': '#28a745',
+                        'HIBERNATING': '#d29922',
+                        'OFFLINE': '#ff3b30',
+                        'IGNITING': '#58a6ff'
+                    };
+                    
+                    const renderBadge = (s) => {
+                        const c = stateColors[s.toUpperCase()] || '#888';
+                        return `<span style="color:${c}; font-weight:bold; padding:1px 6px; border:1px solid ${c}; border-radius:3px; font-size:0.7rem;">${s}</span>`;
+                    };
+                    
+                    let transitionHtml = '';
+                    if (stateMatch) {
+                        transitionHtml = `
+                            <div style="margin-top:5px;">
+                                <strong>Transition:</strong>
+                                ${renderBadge(stateMatch[1])}
+                                <span style="color:#666; margin:0 4px;">→</span>
+                                ${renderBadge(stateMatch[2])}
+                            </div>
+                        `;
+                    }
+                    
+                    let reasonHtml = '';
+                    const reasonMatch = msg.match(/reason[:\s]+(.+?)(?:\.|$)/i);
+                    if (reasonMatch) {
+                        reasonHtml = `<div><strong>Trigger:</strong> ${reasonMatch[1].trim()}</div>`;
+                    }
+                    
+                    let statusData = null;
+                    try {
+                        const resp = await fetch('data/status.json?t=' + Date.now());
+                        if (resp.ok) statusData = await resp.json();
+                    } catch (e) {}
+                    
+                    let vramHtml = '', residentHtml = '';
+                    if (statusData && statusData.vitals) {
+                        vramHtml = `<div><strong>VRAM:</strong> ${statusData.vitals.vram || 'N/A'}</div>`;
+                        if (statusData.vitals.resident_list) {
+                            const residents = Array.isArray(statusData.vitals.resident_list)
+                                ? statusData.vitals.resident_list.join(', ')
+                                : statusData.vitals.resident_list;
+                            residentHtml = `<div><strong>Residents:</strong> ${residents}</div>`;
+                        }
+                    }
+                    
+                    let statusSummaryHtml = '';
+                    if (statusData) {
+                        const sysStatus = statusData.status || 'UNKNOWN';
+                        statusSummaryHtml = `
+                            <div style="margin-top:5px; border-top:1px solid #30363d; padding-top:5px;">
+                                <div><strong>System Status:</strong> ${renderBadge(sysStatus)}</div>
+                                <div><strong>Message:</strong> ${statusData.message || 'N/A'}</div>
+                                ${vramHtml}
+                                ${residentHtml}
+                            </div>
+                        `;
+                    }
+                    
+                    term.innerHTML = `
+                        <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
+                            <div><strong style="color:var(--accent-color);">[LAB STATE TRANSITION]</strong></div>
+                            ${transitionHtml}
+                            ${reasonHtml}
+                            ${statusSummaryHtml ? '<div style="margin-top:5px;">' + statusSummaryHtml + '</div>' : ''}
+                        </div>
+                    `;
+                    term.style.display = 'block';
+                    return;
+                }
+                
+                // 5. Nightly Dialogue Panel
+                if ((alert.message || '').toLowerCase().includes('nightly-dialogue')) {
+                    let dialogueContent = "[DIALOGUE DATA UNAVAILABLE]\n";
+                    try {
+                        const resp = await fetch('data/nightly_dialogue.json?t=' + Date.now());
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            dialogueContent = `[NIGHTLY DIALOGUE - ${data.topic || 'Unknown Topic'}]\nTimestamp: ${data.timestamp || 'N/A'}\n\n${data.content || '(empty dialogue)'}`;
+                        }
+                    } catch (e) {
+                        dialogueContent = "[DIALOGUE DATA UNAVAILABLE]\nFetch error: " + e.message;
+                    }
+                    term.style.display = 'block';
+                    simulateTyping(term, dialogueContent);
+                    return;
+                }
+                
+                // 6. Generic Artifact/File parser (.md, .patch, .json, .log)
                 const fileMatch = alert.message.match(/[a-zA-Z0-9_.-]+\.(md|patch|json|log|jsonl)/i);
                 if (fileMatch) {
                     const fileName = fileMatch[0];
