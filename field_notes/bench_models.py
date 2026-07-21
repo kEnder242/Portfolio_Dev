@@ -305,6 +305,30 @@ def test_ollama_model(model_name):
         "status": "online"
     }
 
+def publish_prometheus_metrics(results, moe_pipeline):
+    """Exposes benchmark and pipeline metrics to Prometheus gauges."""
+    if moe_pipeline:
+        stages = [
+            "intent_classification",
+            "rag_retrieval",
+            "workspace_context",
+            "model_warming",
+            "prompt_compilation",
+            "total_pipeline"
+        ]
+        for stage in stages:
+            start_val = moe_pipeline.get(f"{stage}_start")
+            end_val = moe_pipeline.get(f"{stage}_end")
+            if start_val is not None and end_val is not None:
+                duration = end_val - start_val
+                moe_stage_duration_seconds.labels(stage=stage).set(duration)
+
+    for res in results:
+        moe_model_ttft_seconds.labels(model=res["model"], engine=res["engine"]).set(res["ttft_ms"] / 1000.0)
+        moe_model_throughput_tokens_per_second.labels(model=res["model"], engine=res["engine"]).set(res["throughput"])
+        moe_model_itl_seconds.labels(model=res["model"], engine=res["engine"]).set(res["itl_ms"] / 1000.0)
+        moe_model_vram_bytes.labels(model=res["model"], engine=res["engine"]).set(res["vram_gb"] * 1024.0 * 1024.0 * 1024.0)
+
 def main():
     # Start Prometheus metrics server if not disabled
     if "--no-serve" not in sys.argv:
@@ -313,6 +337,15 @@ def main():
             print("💡 Prometheus metrics endpoint active on http://localhost:8011")
         except Exception as e:
             print(f"⚠️  Failed to start Prometheus server on port 8011: {e}")
+
+    # Immediately populate Prometheus with existing cache so Grafana has data right away
+    existing_cache = safe_read_json(CACHE_FILE)
+    if existing_cache:
+        print("⚡ Pre-populating Prometheus gauges from existing cache...")
+        publish_prometheus_metrics(
+            existing_cache.get("results", list(FALLBACKS.values())),
+            existing_cache.get("moe_pipeline")
+        )
 
     print("--- Silicon Performance Benchmarking Start ---")
     results = []
