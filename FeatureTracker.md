@@ -1398,7 +1398,15 @@
 ## [FEAT-417] Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
 **Status:** ACTIVE
 **Logic:** Consolidates site-wide JavaScript error trapping into `script.js` using `window.onerror` and `window.addEventListener('unhandledrejection')`. If a `#sys-console` element is present on the page (e.g. `status.html`, `files.html`), error payloads are automatically formatted with timestamps and file location and streamed in live terminal red (`#ff3b30`) directly to the console. On pages where UI space is constrained (e.g. `intercom.html`, `stories.html`), errors are logged cleanly without taking up DOM UI space.
-**Rationale:** Eliminates hidden silent JavaScript failures across static site pages and dashboards, converting `#sys-console` from a static placeholder into a live, real-time forensic terminal output.
+**Rationale:** Eliminates hidden silent JavaScript failures across static site pages, surfacing live diagnostic tracebacks directly in the user interface.
+**Mechanism:** `window.onerror` and `unhandledrejection` handlers in `field_notes/script.js`.
+
+## [FEAT-418] Pure Interest Cascade & Un-Gagged Pinky Routing
+**Status:** ACTIVE
+**Logic:** Replaces mandatory Triage `addressed_to` recipient guessing with a pure Interest Cascade where all unaddressed queries default to `addressed_to: "NONE"`. Unaddressed turns always execute Pinky's first turn. `importance` and `intrigue` scale `current_interest`, which naturally ignites the collaborative Round Table (Pinky + Brain + Archive) when `current_interest > 0.5`. Direct routing to Brain or Pinky occurs strictly when explicit role tokens (`<|BRAIN|>`, `<|PINKY|>`) are present in the user input.
+**Rationale:** Eliminates artificial routing traps where Triage inferred `addressed_to: "BRAIN"` for casual or important queries and gagged/bypassed Pinky. Aligns the system with the core law that the Interest Cascade IS the Round Table.
+**Mechanism:** Optional `addressed_to` schema in `cognitive_hub.py`, `NONE` routing default, pure interest escalation loop.
+ite pages and dashboards, converting `#sys-console` from a static placeholder into a live, real-time forensic terminal output.
 **Mechanism:** Global event listener IIFE in `field_notes/script.js`, auto-detection of `#sys-console` element, `window.onSystemError` custom hook, and version-stamped asset deployment via `build_site.py`.
 
 
