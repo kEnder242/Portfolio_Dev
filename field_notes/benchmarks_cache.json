@@ -10,7 +10,14 @@
       "throughput": 45.0,
       "itl_ms": 22.22,
       "vram_gb": 2.5,
-      "status": "offline_fallback"
+      "status": "offline_fallback",
+      "cold_ttft_ms": 450.0,
+      "warm_ttft_ms": 150.0,
+      "raw_tok_per_s": 45.0,
+      "effective_tok_per_s": 33.75,
+      "power_watts": 150,
+      "energy_cost_per_1m": 0.11,
+      "cloud_savings_pct": 62
     },
     {
       "model": "gemma4:e2b",
@@ -20,7 +27,14 @@
       "throughput": 1.9240897656611746,
       "itl_ms": 6.348699331283569,
       "vram_gb": 2.587890625,
-      "status": "online"
+      "status": "online",
+      "cold_ttft_ms": 37742.77,
+      "warm_ttft_ms": 15097.11,
+      "raw_tok_per_s": 1.9240897656611746,
+      "effective_tok_per_s": 1.34,
+      "power_watts": 200,
+      "energy_cost_per_1m": 3.47,
+      "cloud_savings_pct": 55
     },
     {
       "model": "qwen2.5-coder:14b",
@@ -30,7 +44,14 @@
       "throughput": 2.4649287044223716,
       "itl_ms": 14.195701655219583,
       "vram_gb": 2.587890625,
-      "status": "online"
+      "status": "online",
+      "cold_ttft_ms": 40541.08,
+      "warm_ttft_ms": 16216.43,
+      "raw_tok_per_s": 2.4649287044223716,
+      "effective_tok_per_s": 1.72,
+      "power_watts": 300,
+      "energy_cost_per_1m": 4.07,
+      "cloud_savings_pct": 58
     },
     {
       "model": "devstral:24b",
@@ -40,7 +61,14 @@
       "throughput": 0.564840108777873,
       "itl_ms": 313.1966710090637,
       "vram_gb": 2.587890625,
-      "status": "online"
+      "status": "online",
+      "cold_ttft_ms": 133805.05,
+      "warm_ttft_ms": 53522.02,
+      "raw_tok_per_s": 0.564840108777873,
+      "effective_tok_per_s": 0.39,
+      "power_watts": 400,
+      "energy_cost_per_1m": 23.81,
+      "cloud_savings_pct": 45
     }
   ],
   "moe_pipeline": {

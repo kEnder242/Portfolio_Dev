@@ -228,6 +228,120 @@
             font-weight: 500;
         }
 
+        /* Dual-value metric rows */
+        .dual-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #1f242c;
+            font-size: 0.8rem;
+        }
+        .dual-stat:last-child {
+            border-bottom: none;
+        }
+        .dual-stat-label {
+            color: #8b949e;
+            font-family: 'JetBrains Mono', monospace;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        .dual-stat-values {
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            text-align: right;
+        }
+        .dual-stat-values .value-cold {
+            color: #f78166;
+        }
+        .dual-stat-values .value-warm {
+            color: #3fb950;
+        }
+        .dual-stat-values .value-raw {
+            color: #3fb950;
+        }
+        .dual-stat-values .value-eff {
+            color: #58a6ff;
+        }
+        .dual-stat-values .value-power {
+            color: #e3b341;
+        }
+        .dual-stat-values .value-vram {
+            color: #58a6ff;
+        }
+        .dual-stat-values .value-energy {
+            color: #d2a8ff;
+        }
+        .dual-stat-values .value-savings {
+            font-weight: 700;
+        }
+        .dual-stat-values .sep {
+            color: #6a737d;
+            margin: 0 2px;
+        }
+        .unit-sub {
+            font-size: 0.7rem;
+            color: #6a737d;
+        }
+
+        /* Chart mode toggle buttons */
+        .chart-title-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chart-toggle {
+            display: flex;
+            gap: 0;
+            border: 1px solid #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .toggle-btn {
+            background: #161b22;
+            border: none;
+            color: #8b949e;
+            padding: 4px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .toggle-btn:not(:last-child) {
+            border-right: 1px solid #21262d;
+        }
+        .toggle-btn:hover {
+            background: #21262d;
+            color: #c9d1d9;
+        }
+        .toggle-btn.active {
+            background: #1f6feb;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* Toggleable chart groups */
+        .chart-group {
+            display: block;
+        }
+        .chart-group.hidden {
+            display: none;
+        }
+
+        /* Savings percentage color classes */
+        .savings-high {
+            color: #3fb950;
+        }
+        .savings-med {
+            color: #e3b341;
+        }
+        .savings-low {
+            color: #f78166;
+        }
+
         /* Error state */
         .error-console {
             background: rgba(248, 81, 73, 0.05);
@@ -607,66 +721,119 @@
                                 <span class="card-stat-label">Engine / Host</span>
                                 <span class="card-stat-value">${r.engine} (${r.display_name || 'Host Node'})</span>
                             </div>
-                            <div class="card-stat">
-                                <span class="card-stat-label">TTFT (Time to First Token)</span>
-                                <span class="card-stat-value" style="color: #f78166;">${r.ttft_ms.toFixed(0)} ms</span>
+                            <div class="dual-stat">
+                                <span class="dual-stat-label">TTFT (Cold | Warm)</span>
+                                <div class="dual-stat-values">
+                                    <span class="value-cold">${r.cold_ttft_ms.toFixed(0)} ms</span>
+                                    <span class="sep">|</span>
+                                    <span class="value-warm">${r.warm_ttft_ms.toFixed(0)} ms</span>
+                                </div>
+                            </div>
+                            <div class="dual-stat">
+                                <span class="dual-stat-label">Speed (Raw | Eff.)</span>
+                                <div class="dual-stat-values">
+                                    <span class="value-raw">${r.raw_tok_per_s.toFixed(1)}</span>
+                                    <span class="sep">|</span>
+                                    <span class="value-eff">${r.effective_tok_per_s.toFixed(1)} tok/s</span>
+                                </div>
+                            </div>
+                            <div class="dual-stat">
+                                <span class="dual-stat-label">Power / VRAM</span>
+                                <div class="dual-stat-values">
+                                    <span class="value-power">${r.power_watts}W</span>
+                                    <span class="sep">/</span>
+                                    <span class="value-vram">${r.vram_gb.toFixed(2)} GB</span>
+                                </div>
                             </div>
                             <div class="card-stat">
-                                <span class="card-stat-label">Throughput (Tokens/s)</span>
-                                <span class="card-stat-value" style="color: #3fb950;">${r.throughput.toFixed(1)} tok/s</span>
+                                <span class="card-stat-label">Marginal Energy Cost</span>
+                                <span class="card-stat-value" style="color: #d2a8ff;">$${r.energy_cost_per_1m.toFixed(2)} / 1M tok</span>
                             </div>
                             <div class="card-stat">
-                                <span class="card-stat-label">Inter-Token Latency</span>
-                                <span class="card-stat-value" style="color: #d2a8ff;">${r.itl_ms.toFixed(2)} ms</span>
-                            </div>
-                            <div class="card-stat">
-                                <span class="card-stat-label">Peak VRAM footprint</span>
-                                <span class="card-stat-value" style="color: #58a6ff;">${r.vram_gb.toFixed(2)} GB</span>
+                                <span class="card-stat-label">Cloud Savings Floor</span>
+                                <span class="card-stat-value" style="color: ${r.cloud_savings_pct >= 55 ? '#3fb950' : r.cloud_savings_pct >= 40 ? '#e3b341' : '#f78166'};">${r.cloud_savings_pct.toFixed(0)}%</span>
                             </div>
                         </div>
                     `;
                 });
                 html += '</div>';
                 
-                // Flexbar charts
-                const maxThroughput = Math.max(...modelList.map(r => r.throughput)) || 1;
-                const maxTtft = Math.max(...modelList.map(r => r.ttft_ms)) || 1;
+                // Flexbar charts — dual-mode with toggles
+                const suffix = titleSuffix.replace(/\s+/g, '_').toLowerCase();
                 
-                // Throughput Chart
+                // Throughput Chart: Raw | Effective toggle
+                const maxRaw = Math.max(...modelList.map(r => r.raw_tok_per_s)) || 1;
+                const maxEff = Math.max(...modelList.map(r => r.effective_tok_per_s)) || 1;
+                const maxTputOverall = Math.max(maxRaw, maxEff);
+                
                 html += `
                     <div class="chart-card">
                         <div class="chart-title">
                             <span>THROUGHPUT COMPARISON (${titleSuffix.toUpperCase()})</span>
-                            <span class="chart-subtitle">Tokens per second (longer is faster)</span>
+                            <div class="chart-title-right">
+                                <span class="chart-subtitle">tok/s (longer = faster)</span>
+                                <div class="chart-toggle">
+                                    <button class="toggle-btn active" data-mode="raw" onclick="toggleThroughputMode(event, '${suffix}')">RAW</button>
+                                    <button class="toggle-btn" data-mode="eff" onclick="toggleThroughputMode(event, '${suffix}')">EFF.</button>
+                                </div>
+                            </div>
                         </div>
+                        <div class="chart-group tp-raw-${suffix}">
                 `;
                 modelList.forEach(r => {
-                    const pct = (r.throughput / maxThroughput) * 100;
+                    const pct = (r.raw_tok_per_s / maxTputOverall) * 100;
                     html += `
                         <div class="bar-row">
                             <div class="bar-label">${r.display_name || r.model}</div>
                             <div class="bar-wrapper">
                                 <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #2ea043, #3fb950);"></div>
                             </div>
-                            <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
+                            <div class="bar-value">${r.raw_tok_per_s.toFixed(1)} tok/s</div>
                         </div>
                     `;
                 });
-                html += '</div>';
+                html += `
+                        </div>
+                        <div class="chart-group tp-eff-${suffix} hidden">
+                `;
+                modelList.forEach(r => {
+                    const pct = (r.effective_tok_per_s / maxTputOverall) * 100;
+                    html += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name || r.model}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #58a6ff, #79c0ff);"></div>
+                            </div>
+                            <div class="bar-value">${r.effective_tok_per_s.toFixed(1)} tok/s</div>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
 
-                // TTFT Chart
+                // TTFT Chart: Cold | Warm toggle
+                const maxColdTtft = Math.max(...modelList.map(r => r.cold_ttft_ms)) || 1;
+                const maxWarmTtft = Math.max(...modelList.map(r => r.warm_ttft_ms)) || 1;
+                const maxTtftOverall = Math.max(maxColdTtft, maxWarmTtft);
+                
                 html += `
                     <div class="chart-card">
                         <div class="chart-title">
                             <span>TIME TO FIRST TOKEN (${titleSuffix.toUpperCase()})</span>
-                            <span class="chart-subtitle">Latency in milliseconds (shorter is faster)</span>
+                            <div class="chart-title-right">
+                                <span class="chart-subtitle">Latency (ms) — shorter = faster</span>
+                                <div class="chart-toggle">
+                                    <button class="toggle-btn active" data-mode="cold" onclick="toggleTtftMode(event, '${suffix}')">COLD</button>
+                                    <button class="toggle-btn" data-mode="warm" onclick="toggleTtftMode(event, '${suffix}')">WARM</button>
+                                </div>
+                            </div>
                         </div>
+                        <div class="chart-group ttft-cold-${suffix}">
                 `;
                 modelList.forEach(r => {
-                    const pct = (r.ttft_ms / maxTtft) * 100;
+                    const pct = (r.cold_ttft_ms / maxTtftOverall) * 100;
                     let color = '#3fb950';
-                    if (r.ttft_ms >= 1000) color = '#f85149';
-                    else if (r.ttft_ms >= 400) color = '#e3b341';
+                    if (r.cold_ttft_ms >= 1000) color = '#f85149';
+                    else if (r.cold_ttft_ms >= 400) color = '#e3b341';
                     
                     html += `
                         <div class="bar-row">
@@ -674,11 +841,31 @@
                             <div class="bar-wrapper">
                                 <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
                             </div>
-                            <div class="bar-value">${r.ttft_ms.toFixed(0)} ms</div>
+                            <div class="bar-value">${r.cold_ttft_ms.toFixed(0)} ms</div>
                         </div>
                     `;
                 });
-                html += '</div>';
+                html += `
+                        </div>
+                        <div class="chart-group ttft-warm-${suffix} hidden">
+                `;
+                modelList.forEach(r => {
+                    const pct = (r.warm_ttft_ms / maxTtftOverall) * 100;
+                    let color = '#3fb950';
+                    if (r.warm_ttft_ms >= 1000) color = '#f85149';
+                    else if (r.warm_ttft_ms >= 400) color = '#e3b341';
+                    
+                    html += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name || r.model}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                            </div>
+                            <div class="bar-value">${r.warm_ttft_ms.toFixed(0)} ms</div>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
                 
                 return html;
             }
@@ -691,66 +878,117 @@
                 kenderContainer.innerHTML = buildTelemetryHtml(kenderResults.length > 0 ? kenderResults : results.slice(1), 'KENDER 4090');
             }
             
-            // Calculate maximums for percentages (with safeguards)
-            const maxThroughput = Math.max(...results.map(r => r.throughput)) || 1;
-            const maxTtft = Math.max(...results.map(r => r.ttft_ms)) || 1;
+            // ─── All-Models Comparison Charts ───
             const maxItl = Math.max(...results.map(r => r.itl_ms)) || 1;
-            
-            // 2. Render Charts
-            // A. Throughput Chart (Higher is better)
+
+            // Throughput: Raw/Effective toggle (all models)
+            const maxRawAll = Math.max(...results.map(r => r.raw_tok_per_s)) || 1;
+            const maxEffAll = Math.max(...results.map(r => r.effective_tok_per_s)) || 1;
+            const maxTputAll = Math.max(maxRawAll, maxEffAll);
+
             let throughputHtml = `
+                <div class="section-header">ALL-MODELS COMPARISON</div>
                 <div class="chart-card">
                     <div class="chart-title">
-                        <span>THROUGHPUT COMPARISON</span>
-                        <span class="chart-subtitle">Tokens per second (longer is faster)</span>
+                        <span>THROUGHPUT COMPARISON (ALL MODELS)</span>
+                        <div class="chart-title-right">
+                            <span class="chart-subtitle">tok/s (longer = faster)</span>
+                            <div class="chart-toggle">
+                                <button class="toggle-btn active" data-mode="raw" onclick="toggleThroughputMode(event, 'all')">RAW</button>
+                                <button class="toggle-btn" data-mode="eff" onclick="toggleThroughputMode(event, 'all')">EFF.</button>
+                            </div>
+                        </div>
                     </div>
+                    <div class="chart-group tp-raw-all">
             `;
             results.forEach(r => {
-                const pct = (r.throughput / maxThroughput) * 100;
+                const pct = (r.raw_tok_per_s / maxTputAll) * 100;
                 throughputHtml += `
                     <div class="bar-row">
                         <div class="bar-label">${r.display_name || r.model}</div>
                         <div class="bar-wrapper">
                             <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #2ea043, #3fb950);"></div>
                         </div>
-                        <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
+                        <div class="bar-value">${r.raw_tok_per_s.toFixed(1)} tok/s</div>
                     </div>
                 `;
             });
-            throughputHtml += '</div>';
-            container.innerHTML += throughputHtml;
+            throughputHtml += `
+                    </div>
+                    <div class="chart-group tp-eff-all hidden">
+            `;
+            results.forEach(r => {
+                const pct = (r.effective_tok_per_s / maxTputAll) * 100;
+                throughputHtml += `
+                    <div class="bar-row">
+                        <div class="bar-label">${r.display_name || r.model}</div>
+                        <div class="bar-wrapper">
+                            <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #58a6ff, #79c0ff);"></div>
+                        </div>
+                        <div class="bar-value">${r.effective_tok_per_s.toFixed(1)} tok/s</div>
+                    </div>
+                `;
+            });
+            throughputHtml += '</div></div>';
+            localContainer.innerHTML += throughputHtml;
 
-            // B. TTFT Chart (Lower is better, we color-code by latency tier or show absolute latency)
+            // TTFT Chart: Cold/Warm toggle (all models)
+            const maxColdAll = Math.max(...results.map(r => r.cold_ttft_ms)) || 1;
+            const maxWarmAll = Math.max(...results.map(r => r.warm_ttft_ms)) || 1;
+            const maxTtftAll = Math.max(maxColdAll, maxWarmAll);
+
             let ttftHtml = `
                 <div class="chart-card">
                     <div class="chart-title">
-                        <span>TIME TO FIRST TOKEN (TTFT)</span>
-                        <span class="chart-subtitle">Latency in milliseconds (shorter is faster)</span>
+                        <span>TIME TO FIRST TOKEN (ALL MODELS)</span>
+                        <div class="chart-title-right">
+                            <span class="chart-subtitle">Latency (ms) — shorter = faster</span>
+                            <div class="chart-toggle">
+                                <button class="toggle-btn active" data-mode="cold" onclick="toggleTtftMode(event, 'all')">COLD</button>
+                                <button class="toggle-btn" data-mode="warm" onclick="toggleTtftMode(event, 'all')">WARM</button>
+                            </div>
+                        </div>
                     </div>
+                    <div class="chart-group ttft-cold-all">
             `;
             results.forEach(r => {
-                const pct = (r.ttft_ms / maxTtft) * 100;
-                // Color coding based on latency
-                let color = '#3fb950'; // fast (<300ms)
-                if (r.ttft_ms >= 600) {
-                    color = '#f85149'; // slow (>=600ms)
-                } else if (r.ttft_ms >= 300) {
-                    color = '#e3b341'; // medium
-                }
+                const pct = (r.cold_ttft_ms / maxTtftAll) * 100;
+                let color = '#3fb950';
+                if (r.cold_ttft_ms >= 10000) color = '#f85149';
+                else if (r.cold_ttft_ms >= 1000) color = '#e3b341';
                 ttftHtml += `
                     <div class="bar-row">
                         <div class="bar-label">${r.display_name || r.model}</div>
                         <div class="bar-wrapper">
                             <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
                         </div>
-                        <div class="bar-value">${r.ttft_ms.toFixed(0)} ms</div>
+                        <div class="bar-value">${r.cold_ttft_ms.toFixed(0)} ms</div>
                     </div>
                 `;
             });
-            ttftHtml += '</div>';
-            container.innerHTML += ttftHtml;
+            ttftHtml += `
+                    </div>
+                    <div class="chart-group ttft-warm-all hidden">
+            `;
+            results.forEach(r => {
+                const pct = (r.warm_ttft_ms / maxTtftAll) * 100;
+                let color = '#3fb950';
+                if (r.warm_ttft_ms >= 4000) color = '#f85149';
+                else if (r.warm_ttft_ms >= 500) color = '#e3b341';
+                ttftHtml += `
+                    <div class="bar-row">
+                        <div class="bar-label">${r.display_name || r.model}</div>
+                        <div class="bar-wrapper">
+                            <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                        </div>
+                        <div class="bar-value">${r.warm_ttft_ms.toFixed(0)} ms</div>
+                    </div>
+                `;
+            });
+            ttftHtml += '</div></div>';
+            localContainer.innerHTML += ttftHtml;
 
-            // C. Inter-Token Latency (ITL) Chart (Lower is better)
+            // ITL Chart (preserved)
             let itlHtml = `
                 <div class="chart-card">
                     <div class="chart-title">
@@ -771,9 +1009,9 @@
                 `;
             });
             itlHtml += '</div>';
-            container.innerHTML += itlHtml;
+            localContainer.innerHTML += itlHtml;
 
-            // D. VRAM Footprint Chart (Lower is better, relative to 11.0 GB card capacity)
+            // VRAM Footprint Chart (preserved)
             let vramHtml = `
                 <div class="chart-card">
                     <div class="chart-title">
@@ -795,7 +1033,7 @@
                 `;
             });
             vramHtml += '</div>';
-            container.innerHTML += vramHtml;
+            localContainer.innerHTML += vramHtml;
 
             // E. MoE+ Benchmarking Framework
             const moePipeline = data && data.moe_pipeline;
@@ -858,9 +1096,9 @@
                 `;
 
                 pipelineHtml += '</div>';
-                container.innerHTML += pipelineHtml;
+                localContainer.innerHTML += pipelineHtml;
             } else {
-                container.innerHTML += `
+                localContainer.innerHTML += `
                     <div class="section-header">MOE+ BENCHMARKING FRAMEWORK</div>
                     <div class="error-console">
                         [MOE+ METRICS UNAVAILABLE] MoE+ benchmarking data could not be loaded. Verify that the benchmarking scripts have executed successfully.
@@ -931,8 +1169,44 @@
                 });
 
                 routingHtml += '</div>';
-                container.innerHTML += routingHtml;
+                localContainer.innerHTML += routingHtml;
             }
+        }
+
+        /**
+         * Toggle TTFT chart between Cold and Warm mode for a given suffix group.
+         */
+        function toggleTtftMode(event, suffix) {
+            const btn = event.currentTarget;
+            const mode = btn.dataset.mode;
+            const chartCard = btn.closest('.chart-card');
+            if (!chartCard) return;
+
+            // Update button states
+            chartCard.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Toggle visible chart group
+            chartCard.querySelectorAll('.chart-group').forEach(g => g.classList.add('hidden'));
+            const target = chartCard.querySelector('.ttft-' + mode + '-' + suffix);
+            if (target) target.classList.remove('hidden');
+        }
+
+        /**
+         * Toggle Throughput chart between Raw and Effective mode for a given suffix group.
+         */
+        function toggleThroughputMode(event, suffix) {
+            const btn = event.currentTarget;
+            const mode = btn.dataset.mode;
+            const chartCard = btn.closest('.chart-card');
+            if (!chartCard) return;
+
+            chartCard.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            chartCard.querySelectorAll('.chart-group').forEach(g => g.classList.add('hidden'));
+            const target = chartCard.querySelector('.tp-' + mode + '-' + suffix);
+            if (target) target.classList.remove('hidden');
         }
 
         function switchTab(event, tabId) {
