@@ -115,6 +115,15 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
 
 .tree-year.open .year-content { display: block; }
 
+/* Time-band sub-folders within day folders */
+.tree-band { margin-bottom: 3px; }
+.band-label { cursor: pointer; color: #8b949e; padding: 3px 0; user-select: none; font-size: 0.85em; }
+.band-label:hover { color: var(--accent-color); }
+.band-label::after { content: '[+]'; display: inline-block; width: 30px; color: #555; margin-right: 5px; font-size: 0.8em; }
+.tree-band.open .band-label::after { content: '[-]'; color: var(--accent-color); }
+.band-content { display: none; margin-left: 10px; border-left: 1px dashed #333; padding-left: 15px; }
+.tree-band.open .band-content { display: block; }
+
 /* Strategy Block */
 .strategy-block {
     margin: 5px 0 15px 0;

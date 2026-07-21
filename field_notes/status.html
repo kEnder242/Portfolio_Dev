@@ -27,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Status | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=c98a31d0">
+    <link rel="stylesheet" href="style.css?v=b6d6dce2">
     <style>
         .vitals-grid {
             display: grid;
@@ -1019,6 +1019,7 @@
             // [FEAT-118] Non-Destructive Refresh: Preserve open state
             const openNodes = new Set();
             document.querySelectorAll('.tree-year.open').forEach(n => openNodes.add(n.id));
+            document.querySelectorAll('.tree-band.open').forEach(n => openNodes.add(n.id));
             const openTerminals = new Set();
             document.querySelectorAll('.inline-terminal').forEach(t => {
                 if(t.style.display === 'block') openTerminals.add(t.closest('.alert-item').dataset.id);
@@ -1035,6 +1036,9 @@
             const sortedAlerts = alerts.sort((a, b) => parseTs(b.timestamp) - parseTs(a.timestamp));
             const nodes = [];
             let currentDayFolder = null;
+            let currentTimeBand = null;
+            const BAND_RANGES = ['00:00-05:59', '06:00-11:59', '12:00-17:59', '18:00-23:59'];
+            const BAND_LABELS = ['Overnight', 'Morning', 'Afternoon', 'Evening'];
 
             sortedAlerts.forEach(alert => {
                 if (!alert || !alert.timestamp) return;
@@ -1046,12 +1050,29 @@
                 if (severity === 'critical' || severity === 'warning') {
                     nodes.push({ type: 'priority', data: alert });
                     currentDayFolder = null;
+                    currentTimeBand = null;
                 } else {
                     if (!currentDayFolder || currentDayFolder.day !== day) {
                         currentDayFolder = { type: 'folder', day: day, items: [] };
                         nodes.push(currentDayFolder);
+                        currentTimeBand = null;
                     }
-                    currentDayFolder.items.push(alert);
+
+                    const hour = new Date(ts).getHours();
+                    const bandIdx = Math.floor(hour / 6);
+                    const bandKey = 'band-' + day + '-' + bandIdx;
+
+                    if (!currentTimeBand || currentTimeBand.bandKey !== bandKey) {
+                        currentTimeBand = {
+                            band: BAND_RANGES[bandIdx],
+                            label: BAND_LABELS[bandIdx],
+                            items: [],
+                            bandKey: bandKey,
+                            bandIdx: bandIdx
+                        };
+                        currentDayFolder.items.push(currentTimeBand);
+                    }
+                    currentTimeBand.items.push(alert);
                 }
             });
 
@@ -1078,25 +1099,49 @@
                     }
                     folderIndex++;
                     
+                    const totalLogs = node.items.reduce((sum, band) => sum + band.items.length, 0);
                     const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
                     dayNode.innerHTML = `
                         <div class="year-label" onclick="this.parentElement.classList.toggle('open')">
-                            ${displayDate} (${node.items.length} logs)
+                            ${displayDate} (${totalLogs} logs)
                         </div>
                         <div class="year-content">
                             <div class="file-list"></div>
                         </div>
                     `;
                     const list = dayNode.querySelector('.file-list');
-                    node.items.forEach(a => {
-                        const el = createAlertElement(a);
-                        if (openTerminals.has(el.dataset.id)) {
-                            expandAlertDetail(el.querySelector('.inline-terminal'), a);
-                            const indicator = el.querySelector('.expand-indicator');
-                            if (indicator) indicator.textContent = '[-]';
+                    
+                    let bandIndex = 0;
+                    node.items.forEach(band => {
+                        const bandNode = document.createElement('div');
+                        bandNode.className = 'tree-band';
+                        bandNode.id = band.bandKey;
+                        
+                        // Auto-expand most recent band on initial load
+                        if (openNodes.has(bandNode.id) || (initialLoad && folderIndex === 1 && bandIndex === 0)) {
+                            bandNode.classList.add('open');
                         }
-                        list.appendChild(el);
+                        bandIndex++;
+                        
+                        bandNode.innerHTML = `
+                            <div class="band-label" onclick="this.parentElement.classList.toggle('open')">
+                                ${band.label} (${band.band}) (${band.items.length} logs)
+                            </div>
+                            <div class="band-content"></div>
+                        `;
+                        
+                        const bandContent = bandNode.querySelector('.band-content');
+                        band.items.forEach(a => {
+                            const el = createAlertElement(a);
+                            if (openTerminals.has(el.dataset.id)) {
+                                expandAlertDetail(el.querySelector('.inline-terminal'), a);
+                                const indicator = el.querySelector('.expand-indicator');
+                                if (indicator) indicator.textContent = '[-]';
+                            }
+                            bandContent.appendChild(el);
+                        });
+                        list.appendChild(bandNode);
                     });
                     root.appendChild(dayNode);
                 }
