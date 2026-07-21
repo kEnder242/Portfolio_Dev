@@ -1,3 +1,38 @@
+// ── CONSOLIDATED GLOBAL ERROR TRAP (FEAT-268) ──
+(function() {
+    function reportError(msg, url, lineNo) {
+        const fileName = url ? url.split('/').pop() : 'script';
+        const formatted = `[JS ERROR] ${msg} (${fileName}:${lineNo})`;
+        
+        // 1. Route to sys-console if element exists on page (e.g. status.html)
+        const consoleRow = document.getElementById('sys-console');
+        if (consoleRow) {
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const div = document.createElement('div');
+            div.style.color = '#ff3b30';
+            div.style.marginBottom = '2px';
+            div.innerText = `[${time}] ${formatted}`;
+            consoleRow.appendChild(div);
+            consoleRow.scrollTop = consoleRow.scrollHeight;
+        }
+
+        // 2. Custom page error callback if defined by host page
+        if (typeof window.onSystemError === 'function') {
+            window.onSystemError(formatted);
+        }
+    }
+
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+        reportError(msg, url, lineNo);
+        return false;
+    };
+
+    window.addEventListener('unhandledrejection', function(event) {
+        const reason = event.reason ? (event.reason.message || event.reason) : 'Unknown Promise Error';
+        reportError(`Unhandled Rejection: ${reason}`, '', 0);
+    });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Load Search Index
     let searchIndex = {};
