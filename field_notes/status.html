@@ -1012,11 +1012,14 @@
             });
 
             root.innerHTML = "";
-            const sortedAlerts = alerts.sort((a, b) => {
-                const da = new Date(a.timestamp.includes('T') ? a.timestamp : a.timestamp.replace(' ', 'T'));
-                const db = new Date(b.timestamp.includes('T') ? b.timestamp : b.timestamp.replace(' ', 'T'));
-                return db - da;
-            });
+            const parseTs = (ts) => {
+                if (!ts) return 0;
+                const clean = ts.includes('T') ? ts : ts.replace(' ', 'T');
+                const d = new Date(clean).getTime();
+                return isNaN(d) ? 0 : d;
+            };
+
+            const sortedAlerts = alerts.sort((a, b) => parseTs(b.timestamp) - parseTs(a.timestamp));
             const nodes = [];
             let currentDayFolder = null;
 
@@ -1037,6 +1040,9 @@
                 }
             });
 
+            const initialLoad = openNodes.size === 0;
+            let folderIndex = 0;
+
             nodes.forEach(node => {
                 if (node.type === 'priority') {
                     const el = createAlertElement(node.data);
@@ -1050,7 +1056,12 @@
                     const dayNode = document.createElement('div');
                     dayNode.className = 'tree-year';
                     dayNode.id = 'day-' + node.day;
-                    if (openNodes.has(dayNode.id)) dayNode.classList.add('open');
+                    
+                    // Auto-open most recent day folder on initial load, or if previously open
+                    if (openNodes.has(dayNode.id) || (initialLoad && folderIndex === 0)) {
+                        dayNode.classList.add('open');
+                    }
+                    folderIndex++;
                     
                     const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     

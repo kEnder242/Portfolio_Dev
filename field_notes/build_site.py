@@ -61,6 +61,18 @@ def deploy_to_airlock():
     print("--- DEPLOYING TO PUBLIC AIRLOCK (www_deploy) ---")
     www_dir = os.path.expanduser("~/Dev_Lab/www_deploy")
     if os.path.exists(www_dir):
+        # Sync data directory for status/logs
+        src_data = os.path.join(BASE_DIR, "data")
+        dst_data = os.path.join(www_dir, "data")
+        if os.path.exists(src_data):
+            os.makedirs(dst_data, exist_ok=True)
+            import shutil
+            for item in os.listdir(src_data):
+                s = os.path.join(src_data, item)
+                d = os.path.join(dst_data, item)
+                if os.path.isfile(s):
+                    shutil.copy2(s, d)
+
         for script in ["sync_protocols.sh", "sync_stories.sh", "sync_research.sh"]:
             script_path = os.path.join(www_dir, script)
             if os.path.exists(script_path):
