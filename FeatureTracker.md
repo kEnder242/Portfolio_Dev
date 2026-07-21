@@ -1395,5 +1395,12 @@
 **Rationale:** Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.
 **Mechanism:** `--once` flag in `field_notes/mass_scan.py`, oneshot service `field-notes-nightly.service`, and `field-notes-nightly.timer` systemd unit.
 
+## [FEAT-417] Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
+**Status:** ACTIVE
+**Logic:** Consolidates site-wide JavaScript error trapping into `script.js` using `window.onerror` and `window.addEventListener('unhandledrejection')`. If a `#sys-console` element is present on the page (e.g. `status.html`, `files.html`), error payloads are automatically formatted with timestamps and file location and streamed in live terminal red (`#ff3b30`) directly to the console. On pages where UI space is constrained (e.g. `intercom.html`, `stories.html`), errors are logged cleanly without taking up DOM UI space.
+**Rationale:** Eliminates hidden silent JavaScript failures across static site pages and dashboards, converting `#sys-console` from a static placeholder into a live, real-time forensic terminal output.
+**Mechanism:** Global event listener IIFE in `field_notes/script.js`, auto-detection of `#sys-console` element, `window.onSystemError` custom hook, and version-stamped asset deployment via `build_site.py`.
+
+
 
 

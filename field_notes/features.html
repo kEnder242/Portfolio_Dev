@@ -6821,6 +6821,38 @@
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-417">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-417</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Consolidates site-wide JavaScript error trapping into <code>script.js</code> using <code>window.onerror</code> and <code>window.addEventListener('unhandledrejection')</code>. If a <code>#sys-console</code> element is present on the page (e.g. <code>status.html</code>, <code>files.html</code>), error payloads are automatically formatted with timestamps and file location and streamed in live terminal red (<code>#ff3b30</code>) directly to the console. On pages where UI space is constrained (e.g. <code>intercom.html</code>, <code>stories.html</code>), errors are logged cleanly without taking up DOM UI space.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates hidden silent JavaScript failures across static site pages and dashboards, converting <code>#sys-console</code> from a static placeholder into a live, real-time forensic terminal output.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Global event listener IIFE in <code>field_notes/script.js</code>, auto-detection of <code>#sys-console</code> element, <code>window.onSystemError</code> custom hook, and version-stamped asset deployment via <code>build_site.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
