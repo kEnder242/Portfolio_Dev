@@ -1016,10 +1016,8 @@
         }
 
         function renderInterleavedTimeline(alerts) {
-            // [FEAT-118] Non-Destructive Refresh: Preserve open state
             const openNodes = new Set();
             document.querySelectorAll('.tree-year.open').forEach(n => openNodes.add(n.id));
-            document.querySelectorAll('.tree-band.open').forEach(n => openNodes.add(n.id));
             const openTerminals = new Set();
             document.querySelectorAll('.inline-terminal').forEach(t => {
                 if(t.style.display === 'block') openTerminals.add(t.closest('.alert-item').dataset.id);
@@ -1036,16 +1034,14 @@
             const sortedAlerts = alerts.sort((a, b) => parseTs(b.timestamp) - parseTs(a.timestamp));
             const nodes = [];
             let currentDayFolder = null;
-            let currentTimeBand = null;
             let pendingAlert = null;
             let dedupCount = 0;
             let prevKey = null;
-            const BAND_RANGES = ['00:00-05:59', '06:00-11:59', '12:00-17:59', '18:00-23:59'];
-            const BAND_LABELS = ['Overnight', 'Morning', 'Afternoon', 'Evening'];
+
             const flushPending = () => {
-                if (pendingAlert && dedupCount > 0) {
+                if (pendingAlert && dedupCount > 0 && currentDayFolder) {
                     pendingAlert._dedupCount = dedupCount;
-                    currentTimeBand.items.push(pendingAlert);
+                    currentDayFolder.items.push(pendingAlert);
                 }
                 pendingAlert = null;
                 dedupCount = 0;
@@ -1064,29 +1060,11 @@
                     flushPending();
                     nodes.push({ type: 'priority', data: alert });
                     currentDayFolder = null;
-                    currentTimeBand = null;
                 } else {
                     if (!currentDayFolder || currentDayFolder.day !== day) {
                         flushPending();
                         currentDayFolder = { type: 'folder', day: day, items: [] };
                         nodes.push(currentDayFolder);
-                        currentTimeBand = null;
-                    }
-
-                    const hour = new Date(ts).getHours();
-                    const bandIdx = Math.floor(hour / 6);
-                    const bandKey = 'band-' + day + '-' + bandIdx;
-
-                    if (!currentTimeBand || currentTimeBand.bandKey !== bandKey) {
-                        flushPending();
-                        currentTimeBand = {
-                            band: BAND_RANGES[bandIdx],
-                            label: BAND_LABELS[bandIdx],
-                            items: [],
-                            bandKey: bandKey,
-                            bandIdx: bandIdx
-                        };
-                        currentDayFolder.items.push(currentTimeBand);
                     }
 
                     const key = alert.source + '|' + normalizeMessage(alert.message);
@@ -1120,18 +1098,17 @@
                     dayNode.className = 'tree-year';
                     dayNode.id = 'day-' + node.day;
                     
-                    // Auto-open most recent day folder on initial load, or if previously open
                     if (openNodes.has(dayNode.id) || (initialLoad && folderIndex === 0)) {
                         dayNode.classList.add('open');
                     }
                     folderIndex++;
                     
-                    const totalLogs = node.items.reduce((sum, band) => sum + band.items.length, 0);
+                    const totalLogs = node.items.length;
                     const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
                     dayNode.innerHTML = `
                         <div class="year-label" onclick="this.parentElement.classList.toggle('open')">
-                            ${displayDate} (${totalLogs} logs)
+                            📅 ${displayDate} (${totalLogs} logs)
                         </div>
                         <div class="year-content">
                             <div class="file-list"></div>
@@ -1139,38 +1116,20 @@
                     `;
                     const list = dayNode.querySelector('.file-list');
                     
-                    let bandIndex = 0;
-                    node.items.forEach(band => {
-                        const bandNode = document.createElement('div');
-                        bandNode.className = 'tree-band';
-                        bandNode.id = band.bandKey;
-                        
-                        // Auto-expand most recent band on initial load
-                        if (openNodes.has(bandNode.id) || (initialLoad && folderIndex === 1 && bandIndex === 0)) {
-                            bandNode.classList.add('open');
-                        }
-                        bandIndex++;
-                        
-                        bandNode.innerHTML = `
-                            <div class="band-label" onclick="this.parentElement.classList.toggle('open')">
-                                ${band.label} (${band.band}) (${band.items.length} logs)
-                            </div>
-                            <div class="band-content"></div>
-                        `;
-                        
-                        const bandContent = bandNode.querySelector('.band-content');
-                        band.items.forEach(a => {
-                            const el = createAlertElement(a);
-                            const t = classifyExpandTier(a);
-                            if (t === 'rich' || openTerminals.has(el.dataset.id)) {
-                                expandAlertDetail(el.querySelector('.inline-terminal'), a);
+                    node.items.forEach(alertItem => {
+                        const el = createAlertElement(alertItem);
+                        const t = classifyExpandTier(alertItem);
+                        if (t === 'rich' || openTerminals.has(el.dataset.id)) {
+                            const term = el.querySelector('.inline-terminal');
+                            if (term) {
+                                expandAlertDetail(term, alertItem);
                                 const indicator = el.querySelector('.expand-indicator');
                                 if (indicator) indicator.textContent = '[-]';
                             }
-                            bandContent.appendChild(el);
-                        });
-                        list.appendChild(bandNode);
+                        }
+                        list.appendChild(el);
                     });
+                    
                     root.appendChild(dayNode);
                 }
             });
