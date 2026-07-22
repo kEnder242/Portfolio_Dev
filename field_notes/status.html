@@ -1334,31 +1334,7 @@
                         .map(([kw, hit]) => `<span style="color:${hit ? '#28a745' : '#ff3b30'}; margin-right:8px;">${hit ? '●' : '○'} ${kw}</span>`)
                         .join('');
 
-                    let detailHtml = `
-                        <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
-                            <div><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong></div>
-                            <div style="margin-top:5px;"><strong>Raw Query:</strong> "${entry.query}"</div>
-                            <div><strong>Domain:</strong> <span style="color:#58a6ff;">${entry.domain}</span></div>
-                            <div><strong>Retrieval Time:</strong> ${entry.retrieval_time_s ? entry.retrieval_time_s.toFixed(3) + 's' : 'N/A'}</div>
-                            <div><strong>Context Length:</strong> ${entry.context_length_chars || 0} chars</div>
-                            <div><strong>Keyword Recall:</strong> <span style="color:#ffcc00; font-weight:bold;">${((entry.keyword_recall || 0)*100).toFixed(0)}%</span> (Hits: ${entry.keyword_hits || 0}/${entry.keyword_total || 0})</div>
-                            <div style="margin-left: 10px; margin-top:2px; font-size:0.7rem;">${keywordList}</div>
-                            <div style="margin-top:5px;"><strong>Vector Distance:</strong> ${entry.vector_distance !== undefined ? entry.vector_distance : 'N/A (Exact Match)'}</div>
-                            <div style="margin-top:5px;"><strong>Retrieval Paths (Sources):</strong></div>
-                            <ul style="margin: 2px 0 2px 20px; padding:0; list-style-type: square; color:#8b949e;">
-                                ${(entry.sources || []).map(src => `<li>${src}</li>`).join('')}
-                            </ul>
-                            <div style="margin-top:5px;"><strong>Kender Audit:</strong></div>
-                            <div style="margin-left:10px;">
-                                <div>Verdict: <span style="color:${verdictColor}; font-weight:bold;">${verdict}</span></div>
-                                <div>Relevance: ${entry.kender_audit?.relevance || 'N/A'} | Coverage: ${entry.kender_audit?.coverage || 'N/A'}</div>
-                                ${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}
-                            </div>
-                            <div class="rag-run-details" style="margin-top:10px; border-top:1px dashed #30363d; padding-top:10px;">
-                                <span style="color:#8b949e;">[LOADING DECOUPLED CONTEXT LOG...]</span>
-                            </div>
-                        </div>
-                    `;
+                    let detailHtml = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong><div style="margin-top:4px;"><strong>Raw Query:</strong> "${entry.query}"</div><div><strong>Domain:</strong> <span style="color:#58a6ff;">${entry.domain}</span> | <strong>Retrieval Time:</strong> ${entry.retrieval_time_s ? entry.retrieval_time_s.toFixed(3) + 's' : 'N/A'} | <strong>Context Length:</strong> ${entry.context_length_chars || 0} chars</div><div><strong>Keyword Recall:</strong> <span style="color:#ffcc00;font-weight:bold;">${((entry.keyword_recall || 0)*100).toFixed(0)}%</span> (Hits: ${entry.keyword_hits || 0}/${entry.keyword_total || 0})</div><div style="margin-top:2px;font-size:0.7rem;">${keywordList}</div><div style="margin-top:4px;"><strong>Vector Distance:</strong> ${entry.vector_distance !== undefined ? entry.vector_distance : 'N/A (Exact Match)'}</div><div style="margin-top:4px;"><strong>Retrieval Paths (Sources):</strong></div><ul style="margin:2px 0 2px 20px;padding:0;list-style-type:square;color:#8b949e;">${(entry.sources || []).map(src => `<li>${src}</li>`).join('')}</ul><div style="margin-top:4px;"><strong>Kender Audit:</strong> Verdict <span style="color:${verdictColor};font-weight:bold;">${verdict}</span> (Relevance: ${entry.kender_audit?.relevance || 'N/A'} | Coverage: ${entry.kender_audit?.coverage || 'N/A'})</div>${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}<div class="rag-run-details" style="margin-top:8px;border-top:1px dashed #30363d;padding-top:6px;"><span style="color:#8b949e;">[LOADING DECOUPLED CONTEXT LOG...]</span></div></div>`;
                     term.innerHTML = detailHtml;
                     
                     if (entry.run_id) {
@@ -1368,13 +1344,7 @@
                                 const runDetail = await detailResp.json();
                                 const runDetailsDiv = term.querySelector('.rag-run-details');
                                 if (runDetailsDiv) {
-                                    runDetailsDiv.innerHTML = `
-                                        <div><strong style="color:var(--accent-color);">[DECOUPLED LOG DETAILS]</strong></div>
-                                        <div style="margin-top:5px;"><strong>Retrieved Context (Ground Truth):</strong></div>
-                                        <pre style="background:#090d13; color:#c9d1d9; border:1px solid #21262d; padding:8px; border-radius:4px; max-height:220px; overflow-y:auto; white-space:pre-wrap; font-size:0.7rem; margin-top:2px;">${runDetail.context || 'None'}</pre>
-                                        <div style="margin-top:8px;"><strong>Kender Audit Conversation:</strong></div>
-                                        <pre style="background:#090d13; color:#c9d1d9; border:1px solid #21262d; padding:8px; border-radius:4px; max-height:180px; overflow-y:auto; white-space:pre-wrap; font-size:0.7rem; margin-top:2px;">${runDetail.kender_response || 'None'}</pre>
-                                    `;
+                                    runDetailsDiv.innerHTML = `<strong style="color:var(--accent-color);">[DECOUPLED LOG DETAILS]</strong><div style="margin-top:4px;"><strong>Retrieved Context (Ground Truth):</strong></div><pre style="background:#090d13;color:#c9d1d9;border:1px solid #21262d;padding:8px;border-radius:4px;max-height:220px;overflow-y:auto;white-space:pre-wrap;font-size:0.7rem;margin-top:2px;">${runDetail.context || 'None'}</pre><div style="margin-top:6px;"><strong>Kender Audit Conversation:</strong></div><pre style="background:#090d13;color:#c9d1d9;border:1px solid #21262d;padding:8px;border-radius:4px;max-height:180px;overflow-y:auto;white-space:pre-wrap;font-size:0.7rem;margin-top:2px;">${runDetail.kender_response || 'None'}</pre>`;
                                 }
                             } else {
                                 const runDetailsDiv = term.querySelector('.rag-run-details');
@@ -1405,14 +1375,7 @@
                         const r = await fetch(`data/recruiter_briefs/${briefName.trim()}`);
                         if (r.ok) {
                             const text = await r.text();
-                            term.innerHTML = `
-                                <div style="margin-bottom: 12px; font-family: monospace; font-size: 0.75rem;">
-                                    <a href="data/recruiter_briefs/${briefName.trim()}" target="_blank" style="color: #3fb950; text-decoration: underline; font-weight: bold;">📄 VIEW BRIEF IN NEW TAB</a>
-                                    &nbsp;|&nbsp;
-                                    <a href="data/recruiter_briefs/${briefName.trim()}" download style="color: #3fb950; text-decoration: underline; font-weight: bold;">⬇️ DOWNLOAD MARKDOWN FILE</a>
-                                </div>
-                                <div class='markdown-body'>${marked.parse(text)}</div>
-                            `;
+                            term.innerHTML = `<div style="margin-bottom:8px;font-family:monospace;font-size:0.75rem;"><a href="data/recruiter_briefs/${briefName.trim()}" target="_blank" style="color:#3fb950;text-decoration:underline;font-weight:bold;">📄 VIEW BRIEF IN NEW TAB</a> &nbsp;|&nbsp; <a href="data/recruiter_briefs/${briefName.trim()}" download style="color:#3fb950;text-decoration:underline;font-weight:bold;">⬇️ DOWNLOAD MARKDOWN FILE</a></div><div class='markdown-body'>${marked.parse(text)}</div>`;
                             term.style.display = 'block';
                             return;
                         }
