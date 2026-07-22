@@ -115,404 +115,7 @@
         .severity-warning { color: #ffcc00; font-weight: bold; border-left-color: #ffcc00; background: rgba(255,204,0,0.05); margin-bottom: 10px; padding: 10px 15px; border-top: 1px solid #443300; border-bottom: 1px solid #443300; border-right: 1px solid #443300; }
         .severity-info { color: #888; border-left-color: #444; background: rgba(255,255,255,0.02); }
         .source-acme { border-left-color: #58a6ff !important; background: rgba(88, 166, 255, 0.04); color: #c9d1d9; }
-        .has-artifact, .expandable-rich { 
-            border-left: 4px solid #3fb950 !important; 
-            background: rgba(63, 185, 80, 0.08) !important; 
-            color: #e6edf3 !important; 
-            margin: 6px 0;
-            border-radius: 0 4px 4px 0;
-        }
-        .has-artifact .expand-indicator, .expandable-rich .expand-indicator { color: #3fb950 !important; }
-        .has-artifact .alert-source, .expandable-rich .alert-source { color: #56d364 !important; font-weight: bold; }
-        .alert-item { transition: all 0.2s ease; cursor: pointer; }
-        .alert-item:hover { background: rgba(255,255,255,0.05); border-right: 2px solid var(--accent-color); }
-        .inline-terminal { display: none; background: #000; border: 1px solid #333; padding: 15px; font-family: monospace; font-size: 0.8rem; line-height: 1.4; color: #aaa; margin: 10px 0; overflow-x: auto; white-space: pre-wrap; border-left: 2px solid var(--accent-color); }
-        .markdown-body { color: #ccc; line-height: 1.6; }
-        .markdown-body h1, .markdown-body h2 { color: var(--accent-color); margin-top: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .markdown-body ul { padding-left: 20px; }
-        .markdown-body li { margin-bottom: 5px; }
-        .markdown-body a { color: #4daafc; text-decoration: none; border-bottom: 1px dashed #444; position: relative; z-index: 10; pointer-events: auto; }
-        .markdown-body a:hover { color: #ffffff; border-bottom-style: solid; }
-        .markdown-body p { margin: 5px 0; }
-        .markdown-body ul, .markdown-body ol { margin: 5px 0; }
-        .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin: 10px 0 5px 0; }
-        
-        .alert-meta { font-size: 0.7rem; color: #555; margin-right: 10px; }
-        .alert-header { cursor: pointer; display: block; width: 100%; }
-        .alert-header:hover { opacity: 0.8; }
-        
-        .log-tree-container { margin-top: 20px; }
-
-        /* Remote Control Suite */
-        .control-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .btn-lab {
-            background: #161b22;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-family: var(--font-stack);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-lab:hover { background: #21262d; border-color: var(--accent-color); color: #fff; }
-        .btn-lab:active { transform: translateY(1px); }
-        .btn-lab.danger { border-color: #f85149; }
-        .btn-lab.danger:hover { background: #b62324; color: #fff; }
-
-        /* Console styling */
-        #sys-console {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 12px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            height: 120px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <mission-control active-page="status.html"></mission-control>
-
-    <main style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px;">
-            <h1 style="margin:0;">Lab Status</h1>
-            <div style="font-size: 0.8rem; color: #888;">Live Node: <span style="color:var(--accent-color)">z87-Linux (Brain/Pinky Host)</span></div>
-        </div>
-
-        <!-- Telemetry Vitual Cards -->
-        <div class="vitals-grid">
-            <div class="vital-card">
-                <div class="vital-label">Lab Attendant API</div>
-                <div class="vital-value" id="attendant-status" style="color:#28a745;">ONLINE</div>
-            </div>
-            <div class="vital-card">
-                <div class="vital-label">Active GPU VRAM</div>
-                <div class="vital-value" id="vram-val">0.0 / 11.0 GB</div>
-            </div>
-            <div class="vital-card">
-                <div class="vital-label">Base Model</div>
-                <div class="vital-value" id="model-val">Llama-3.2-3B-AWQ</div>
-            </div>
-            <div class="vital-card">
-                <div class="vital-label">Sensory Node</div>
-                <div class="vital-value" id="earnode-val" style="color:#28a745;">NeMo Active</div>
-            </div>
-        </div>
-
-        <!-- System Console Output -->
-        <div id="sys-console">
-            <div>[INIT] Uplink established. Monitoring telemetry...</div>
-        </div>
-
-        <!-- Remote Ignition Suite -->
-        <div class="control-grid">
-            <button class="btn-lab" onclick="triggerLabAction('start')">⚡ Safe-Pilot Ignition</button>
-            <button class="btn-lab" onclick="triggerLabAction('quiesce')">❄️ Service Quiesce</button>
-            <button class="btn-lab" onclick="triggerLabAction('ping')">🩺 Native Health Ping</button>
-            <button class="btn-lab danger" onclick="triggerLabAction('stop')">🛑 Emergency Stop</button>
-        </div>
-
-        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="margin:0; border:none; padding:0;">Interleaved System Logs</h2>
-            <div style="font-size: 0.8rem; color: #888;">Showing last 24 Hours (Pager + Ledger)</div>
-        </div>
-
-        <!-- Timeline Log Root -->
-        <div class="log-tree-container" id="log-tree-root">
-            <div style="color: #444; padding: 20px;">[WAIT] Sorting priority timeline...</div>
-        </div>
-    </main>
-
-    <script src="assets/marked.min.js"></script>
-    <script src="mission-control.js?v=06008725"></script>
-    <script>
-        const iframeMain = document.getElementById('grafana-main');
-        const root = document.getElementById('log-tree-root');
-        const consoleRow = document.getElementById('sys-console');
-        let currentTimeRange = '8h';
-        let currentPanelId = 6;
-        let lastKnownState = "";
-        let lastKnownMsg = "";
-        let currentLabKey = "";
-        let currentLabSession = "";
-
-        function logToConsole(text, color = '#888') {
-            if (!consoleRow) return;
-            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const div = document.createElement('div');
-            div.style.color = color;
-            div.style.marginBottom = '2px';
-            div.innerText = `[${time}] ${text}`;
-            consoleRow.appendChild(div);
-            consoleRow.scrollTop = consoleRow.scrollHeight;
-            
-            // Keep last 50 lines to prevent DOM bloat
-            while (consoleRow.children.length > 50) {
-                consoleRow.removeChild(consoleRow.firstChild);
-            }
-        }
-
-        // Global Error & Promise Rejection Trap for Live Console Output
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            const fileName = url ? url.split('/').pop() : 'script';
-            logToConsole(`[JS ERROR] ${msg} (${fileName}:${lineNo})`, '#ff3b30');
-            return false;
-        };
-
-        window.addEventListener('unhandledrejection', function(event) {
-            const reason = event.reason ? (event.reason.message || event.reason) : 'Unknown Promise Error';
-            logToConsole(`[UNHANDLED REJECTION] ${reason}`, '#ff3b30');
-        });
-
-        function hideAllContainers() {
-            iframeMain.style.display = 'none';
-            document.getElementById('ledger-container').style.display = 'none';
-            document.getElementById('kpi-container').style.display = 'none';
-            document.getElementById('sys-graph-container').style.display = 'none';
-            document.getElementById('rageval-container').style.display = 'none';
-            _stopSysGraph();
-        }
-
-        async function triggerLabAction(action) {
-            logToConsole(`Dispatching remote command: ${action.toUpperCase()}...`, '#58a6ff');
-            try {
-                const r = await fetch(`http://localhost:8765/${action}`, {
-                    method: 'POST',
-                    headers: { 'X-Lab-Key': currentLabKey || "unknown" }
-                });
-                const res = await r.json();
-                if (r.ok) {
-                    logToConsole(`Command SUCCESS: ${JSON.stringify(res)}`, '#3fb950');
-                } else {
-                    logToConsole(`Command REJECTED: ${res.error || 'Unknown'}`, '#ff3b30');
-                }
-            } catch (err) {
-                logToConsole(`Network FAIL: ${err.message}`, '#ff3b30');
-            }
-        }
-
-        async function pollPager() {
-            try {
-                let alerts = [];
-                // 1. Fetch pager activity
-                try {
-                    const r = await fetch('data/pager_activity.json?t=' + Date.now());
-                    if (r.ok) alerts = await r.json();
-                } catch (e) {}
-
-                // 2. Fetch validation ledger (RAG evaluations)
-                try {
-                    const r = await fetch('data/validation_ledger.jsonl?t=' + Date.now());
-                    if (r.ok) {
-                        const text = await r.text();
-                        const lines = text.trim().split('\n');
-                        lines.forEach(line => {
-                            if (!line.trim()) return;
-                            try {
-                                const entry = JSON.parse(line);
-                                const verdict = entry.kender_audit?.verdict || "UNKNOWN";
-                                let sev = "info";
-                                if (verdict === "FAIL") sev = "critical";
-                                else if (verdict === "BORDERLINE") sev = "warning";
-                                
-                                alerts.push({
-                                    timestamp: entry.timestamp,
-                                    severity: sev,
-                                    source: "RAG-Eval",
-                                    message: `Query: "${entry.query}" | Verdict: ${verdict} (Recall: ${((entry.keyword_recall||0)*100).toFixed(0)}%)`,
-                                    is_rag_eval: true,
-                                    rag_data: entry
-                                });
-                            } catch (e) {}
-                        });
-                    }
-                } catch (e) {}
-                
-                renderInterleavedTimeline(alerts);
-            } catch (err) {
-                console.error("Pager/RAG poll failed", err);
-            }
-        }
-
-        function renderInterleavedTimeline(alerts) {
-            // [FEAT-118] Non-Destructive Refresh: Preserve open state
-            const openNodes = new Set();
-            document.querySelectorAll('.tree-year.open').forEach(n => openNodes.add(n.id));
-            document.querySelectorAll('.tree-band.open').forEach(n => openNodes.add(n.id));
-            const openTerminals = new Set();
-            document.querySelectorAll('.inline-terminal').forEach(t => {
-                if(t.style.display === 'block') openTerminals.add(t.closest('.alert-item').dataset.id);
-            });
-
-            root.innerHTML = "";
-            const parseTs = (ts) => {
-                if (!ts) return 0;
-                const clean = ts.includes('T') ? ts : ts.replace(' ', 'T');
-                const d = new Date(clean).getTime();
-                return isNaN(d) ? 0 : d;
-            };
-
-            const sortedAlerts = alerts.sort((a, b) => parseTs(b.timestamp) - parseTs(a.timestamp));
-            const nodes = [];
-            let currentDayFolder = null;
-            let currentTimeBand = null;
-            let pendingAlert = null;
-            let dedupCount = 0;
-            let prevKey = null;
-            const BAND_RANGES = ['00:00-05:59', '06:00-11:59', '12:00-17:59', '18:00-23:59'];
-            const BAND_LABELS = ['Overnight', 'Morning', 'Afternoon', 'Evening'];
-            const flushPending = () => {
-                if (pendingAlert && dedupCount > 0) {
-                    pendingAlert._dedupCount = dedupCount;
-                    currentTimeBand.items.push(pendingAlert);
-                }
-                pendingAlert = null;
-                dedupCount = 0;
-                prevKey = null;
-            };
-
-            sortedAlerts.forEach(alert => {
-                if (!alert || !alert.timestamp) return;
-                const severity = (alert.severity || 'info').toLowerCase();
-                const tier = classifyExpandTier(alert);
-                const rawTs = String(alert.timestamp);
-                const ts = rawTs.includes('T') ? rawTs : rawTs.replace(' ', 'T');
-                const day = ts.split('T')[0];
-
-                if (severity === 'critical' || severity === 'warning' || tier === 'rich') {
-                    flushPending();
-                    nodes.push({ type: 'priority', data: alert });
-                    currentDayFolder = null;
-                    currentTimeBand = null;
-                } else {
-                    if (!currentDayFolder || currentDayFolder.day !== day) {
-                        flushPending();
-                        currentDayFolder = { type: 'folder', day: day, items: [] };
-                        nodes.push(currentDayFolder);
-                        currentTimeBand = null;
-                    }
-
-                    const hour = new Date(ts).getHours();
-                    const bandIdx = Math.floor(hour / 6);
-                    const bandKey = 'band-' + day + '-' + bandIdx;
-
-                    if (!currentTimeBand || currentTimeBand.bandKey !== bandKey) {
-                        flushPending();
-                        currentTimeBand = {
-                            band: BAND_RANGES[bandIdx],
-                            label: BAND_LABELS[bandIdx],
-                            items: [],
-                            bandKey: bandKey,
-                            bandIdx: bandIdx
-                        };
-                        currentDayFolder.items.push(currentTimeBand);
-                    }
-
-                    const key = alert.source + '|' + normalizeMessage(alert.message);
-                    if (key === prevKey && pendingAlert) {
-                        dedupCount++;
-                    } else {
-                        flushPending();
-                        pendingAlert = alert;
-                        dedupCount = 1;
-                        prevKey = key;
-                    }
-                }
-            });
-            flushPending();
-
-            const initialLoad = openNodes.size === 0;
-            let folderIndex = 0;
-
-            nodes.forEach(node => {
-                if (node.type === 'priority') {
-                    const el = createAlertElement(node.data);
-                    const tier = classifyExpandTier(node.data);
-                    // Auto-expand rich tier items OR items that were open
-                    if (tier === 'rich' || openTerminals.has(el.dataset.id)) {
-                        expandAlertDetail(el.querySelector('.inline-terminal'), node.data);
-                        const indicator = el.querySelector('.expand-indicator');
-                        if (indicator) indicator.textContent = '[-]';
-                    }
-                    root.appendChild(el);
-                } else {
-                    const dayNode = document.createElement('div');
-                    dayNode.className = 'tree-year';
-                    dayNode.id = 'day-' + node.day;
-                    
-                    // Auto-open most recent day folder on initial load, or if previously open
-                    if (openNodes.has(dayNode.id) || (initialLoad && folderIndex === 0)) {
-                        dayNode.classList.add('open');
-                    }
-                    folderIndex++;
-                    
-                    const totalLogs = node.items.reduce((sum, band) => sum + band.items.length, 0);
-                    const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                    
-                    dayNode.innerHTML = `
-                        <div class="year-label" onclick="this.parentElement.classList.toggle('open')">
-                            ${displayDate} (${totalLogs} logs)
-                        </div>
-                        <div class="year-content">
-                            <div class="file-list"></div>
-                        </div>
-                    `;
-                    const list = dayNode.querySelector('.file-list');
-                    
-                    let bandIndex = 0;
-                    node.items.forEach(band => {
-                        const bandNode = document.createElement('div');
-                        bandNode.className = 'tree-band';
-                        bandNode.id = band.bandKey;
-
-                        if (openNodes.has(bandNode.id) || (initialLoad && folderIndex === 1 && bandIndex === 0)) {
-                            bandNode.classList.add('open');
-                        }
-                        bandIndex++;
-
-                        bandNode.innerHTML = `
-                            <div class="band-label" onclick="this.parentElement.classList.toggle('open')">
-                                [${band.band}] ${band.label} (${band.items.length} logs)
-                            </div>
-                            <div class="band-content">
-                                <div class="band-file-list"></div>
-                            </div>
-                        `;
-
-                        const bandList = bandNode.querySelector('.band-file-list');
-                        band.items.forEach(a => {
-                            const el = createAlertElement(a);
-                            const t = classifyExpandTier(a);
-                            if (t === 'rich' || openTerminals.has(el.dataset.id)) {
-                                expandAlertDetail(el.querySelector('.inline-terminal'), a);
-                                const indicator = el.querySelector('.expand-indicator');
-                                if (indicator) indicator.textContent = '[-]';
-                            }
-                            bandList.appendChild(el);
-                        });
-
-                        list.appendChild(bandNode);
-                    });
-
-                    root.appendChild(dayNode);
-                }
-            });
-        }
+        .has-artifact { border-left-color: #3fb950 !important; background: rgba(63, 185, 80, 0.05) !important; color: #c9d1d9; }
         .alert-item { transition: all 0.2s ease; cursor: pointer; }
         .alert-item:hover { background: rgba(255,255,255,0.05); border-right: 2px solid var(--accent-color); }
         .inline-terminal { display: none; background: #000; border: 1px solid #333; padding: 15px; font-family: monospace; font-size: 0.8rem; line-height: 1.4; color: #aaa; margin: 10px 0; overflow-x: auto; white-space: pre-wrap; border-left: 2px solid var(--accent-color); }
@@ -1505,8 +1108,8 @@
             nodes.forEach(node => {
                 if (node.type === 'priority') {
                     const el = createAlertElement(node.data);
-                    const tier = classifyExpandTier(node.data);
-                    if (tier === 'rich' || openTerminals.has(el.dataset.id)) {
+                    const t = classifyExpandTier(node.data);
+                    if (t === 'rich' || openTerminals.has(el.dataset.id)) {
                         expandAlertDetail(el.querySelector('.inline-terminal'), node.data);
                         const indicator = el.querySelector('.expand-indicator');
                         if (indicator) indicator.textContent = '[-]';
@@ -1558,7 +1161,8 @@
                         const bandContent = bandNode.querySelector('.band-content');
                         band.items.forEach(a => {
                             const el = createAlertElement(a);
-                            if (openTerminals.has(el.dataset.id)) {
+                            const t = classifyExpandTier(a);
+                            if (t === 'rich' || openTerminals.has(el.dataset.id)) {
                                 expandAlertDetail(el.querySelector('.inline-terminal'), a);
                                 const indicator = el.querySelector('.expand-indicator');
                                 if (indicator) indicator.textContent = '[-]';
@@ -1660,19 +1264,19 @@
                 div.innerHTML = `
                     <div class="alert-header">
                         <span class="alert-meta">[${timeStr}]</span> 
-                        <span class="alert-source" style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}${dedupBadge}
+                        <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}${dedupBadge}
                     </div>
                 `;
             } else {
                 const indicatorStyle = tier === 'rich'
-                    ? 'color:#3fb950; font-weight:bold; margin-right:5px; text-shadow:0 0 8px rgba(63,185,80,0.8);'
+                    ? 'color:var(--accent-color); font-weight:bold; margin-right:5px;'
                     : 'color:#666; font-weight:bold; margin-right:5px;';
                 const indicatorText = tier === 'rich' ? '[+]' : '[>]';
                 div.innerHTML = `
                     <div class="alert-header">
                         <span class="expand-indicator" style="${indicatorStyle}">${indicatorText}</span>
                         <span class="alert-meta">[${timeStr}]</span> 
-                        <span class="alert-source" style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}${dedupBadge}
+                        <span style="color:#fff; font-weight:bold;">${alert.source}:</span> ${alert.message}${dedupBadge}
                     </div>
                     <div class="inline-terminal"></div>
                 `;
