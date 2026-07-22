@@ -13,8 +13,45 @@ COLLECTION_FEATURE = "feature_dna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
+INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+
+
+def parse_infrastructure(filepath):
+    """Parses LAB_INFRASTRUCTURE.md for hardware, storage, and playbook sections."""
+    if not os.path.exists(filepath):
+        logging.error(f"LAB_INFRASTRUCTURE.md not found at {filepath}")
+        return []
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    pattern = re.compile(r"^(#{2,4})\s+(.*?)$", re.MULTILINE)
+    matches = list(pattern.finditer(content))
+    infra_items = []
+
+    for i, match in enumerate(matches):
+        name = match.group(2).strip()
+        start_idx = match.end()
+        end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
+        block_content = content[start_idx:end_idx].strip()
+        if not block_content: continue
+
+        import hashlib
+        unique_id = f"INFRA_{hashlib.md5(name.encode('utf-8', errors='ignore')).hexdigest()[:8]}"
+
+        infra_items.append({
+            "id": unique_id,
+            "document": f"INFRASTRUCTURE SECTION: {name}\n\n{block_content}",
+            "metadata": {
+                "name": name,
+                "type": "INFRA",
+                "source": "LAB_INFRASTRUCTURE.md"
+            }
+        })
+
+    return infra_items
 
 def get_safe_collection(client, name, ef):
     try:
@@ -189,6 +226,25 @@ def sync():
         logging.info("behavioral_dna sync complete.")
     else:
         logging.warning("No protocols parsed from Protocols.md.")
+
+    # 3. Sync LAB_INFRASTRUCTURE.md into behavioral_dna
+    logging.info("Parsing LAB_INFRASTRUCTURE.md...")
+    infra_items = parse_infrastructure(INFRASTRUCTURE_PATH)
+    if infra_items:
+        collection_dna = get_safe_collection(client, COLLECTION_DNA, ef)
+        logging.info("Clearing existing LAB_INFRASTRUCTURE.md entries from behavioral_dna...")
+        try:
+            collection_dna.delete(where={"source": "LAB_INFRASTRUCTURE.md"})
+        except Exception as e:
+            logging.warning(f"Could not clear LAB_INFRASTRUCTURE entries: {e}")
+
+        ids = [i["id"] for i in infra_items]
+        documents = [i["document"] for i in infra_items]
+        metadatas = [i["metadata"] for i in infra_items]
+
+        logging.info(f"Uploading {len(ids)} Infrastructure entries to behavioral_dna...")
+        collection_dna.add(ids=ids, documents=documents, metadatas=metadatas)
+        logging.info("LAB_INFRASTRUCTURE.md sync complete.")
 
 if __name__ == "__main__":
     sync()
