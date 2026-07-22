@@ -1318,7 +1318,7 @@
 
         async function expandAlertDetail(term, alert) {
             term.style.display = 'block';
-            term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>\n";
+            term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>";
             
             try {
                 // Check if it is a RAG evaluation log
@@ -1445,15 +1445,7 @@
                         rankHtml = `<div><strong>Rank Upgrades:</strong> ${rankMatch[1]}${detail}</div>`;
                     }
                     
-                    term.innerHTML = `
-                        <div style="font-family: monospace; font-size: 0.75rem; padding: 10px; line-height: 1.5; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:5px;">
-                            <div><strong style="color:var(--accent-color);">[MASSSCAN PROGRESS]</strong></div>
-                            <div style="margin-top:5px;">${epochHtml}</div>
-                            ${stepHtml}
-                            ${gemsHtml}
-                            ${rankHtml}
-                        </div>
-                    `;
+                    term.innerHTML = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><strong style="color:var(--accent-color);">[MASSSCAN PROGRESS]</strong>${epochHtml ? `<div style="margin-top:2px;">${epochHtml}</div>` : ''}${stepHtml}${gemsHtml}${rankHtml}</div>`;
                     term.style.display = 'block';
                     return;
                 }
@@ -1510,16 +1502,7 @@
                         }
                     }
                     
-                    term.innerHTML = `
-                        <div style="font-family: monospace; font-size: 0.75rem; padding: 6px 10px; line-height: 1.35; color: #ccc; background:#0d1117; border: 1px solid #30363d; border-radius:4px; margin-top:3px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <strong style="color:var(--accent-color);">[LAB STATE TRANSITION]</strong>
-                                ${stateMatch ? `<span>${renderBadge(stateMatch[1])} <span style="color:#666; margin:0 2px;">→</span> ${renderBadge(stateMatch[2])}</span>` : ''}
-                            </div>
-                            ${reasonMatch ? `<div style="margin-top:2px;"><strong>Trigger:</strong> ${reasonMatch[1].trim()}</div>` : ''}
-                            ${statusData ? `<div style="margin-top:4px; border-top:1px dashed #21262d; padding-top:4px; font-size:0.7rem; color:#888;"><strong>VRAM:</strong> ${statusData.vitals?.vram || 'N/A'} | <strong>Status:</strong> ${renderBadge(statusData.status || 'ONLINE')}</div>` : ''}
-                        </div>
-                    `;
+                    term.innerHTML = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong style="color:var(--accent-color);">[LAB STATE TRANSITION]</strong>${stateMatch ? `<span>${renderBadge(stateMatch[1])} <span style="color:#666;margin:0 2px;">→</span> ${renderBadge(stateMatch[2])}</span>` : ''}</div>${reasonMatch ? `<div style="margin-top:2px;"><strong>Trigger:</strong> ${reasonMatch[1].trim()}</div>` : ''}${statusData ? `<div style="margin-top:4px;border-top:1px dashed #21262d;padding-top:4px;font-size:0.7rem;color:#888;"><strong>VRAM:</strong> ${statusData.vitals?.vram || 'N/A'} | <strong>Status:</strong> ${renderBadge(statusData.status || 'ONLINE')}</div>` : ''}</div>`;
                     term.style.display = 'block';
                     return;
                 }
