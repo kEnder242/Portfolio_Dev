@@ -229,12 +229,15 @@ def scan_sector(year, curated_only=False):
             data['filename'] = filename
             data['method'] = "AI (Reasoning)" if REASONING_MODE else "AI"
         else:
-            data = {
-                "filename": filename, "synopsis": h_synopsis,
-                "rank": h_rank, "type": "Document" if h_rank > 2 else "Data", 
-                "keywords": [], "method": "Heuristic"
-            }
-            if is_star: data['method'] = "Expert Hardcode"
+            if filename in existing_map and existing_map[filename].get('synopsis') and existing_map[filename].get('method') in ['AI', 'AI (Reasoning)', 'Expert Hardcode']:
+                data = existing_map[filename]
+            else:
+                data = {
+                    "filename": filename, "synopsis": h_synopsis,
+                    "rank": h_rank, "type": "Document" if h_rank > 2 else "Data", 
+                    "keywords": [], "method": "Heuristic"
+                }
+                if is_star: data['method'] = "Expert Hardcode"
 
         if filename in CURATED_MAP and 'id' in CURATED_MAP[filename]:
             data['drive_id'] = CURATED_MAP[filename]['id']

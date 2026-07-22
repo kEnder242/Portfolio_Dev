@@ -25,3 +25,5 @@ monitor/pager_activity.json
 field_notes/data/
 field_notes/data_contaminated_backup/
 venv/
+env/
+*.egg-info/
