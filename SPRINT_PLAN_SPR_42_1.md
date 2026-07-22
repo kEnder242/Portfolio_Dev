@@ -357,3 +357,22 @@ Story 9 (Tier System) ──┤
 ```
 
 **Recommended execution order:** Story 9 first (smallest diff, highest UX impact), then Story 8, then Story 10, then Story 11. Stories 8 and 9 have no cross-dependencies and can be parallelized if using separate OpenAgent sessions on branched workspaces.
+
+---
+
+## 🔬 Forensic Retrospective: The Interest Cascade & Symmetrical Routing Evolution
+
+### 📜 Architectural Evolution & Drift Audit
+
+1. **Original Intent (Sprint 26.0 — Feb 2026 / Commit `f50d92f`):**
+   - **Internal Waterfall Cascade:** Unaddressed queries always hit Pinky first on Turn 1. If `importance` or `intrigue` calculated `interest > 0.5`, the internal waterfall escalated the turn into the **Round Table** (Brain + Archive).
+
+2. **Where Routing Drift Occurred (Sprint 32 & 35 / Commit `5aa16b4` & `fd7e88c`):**
+   - **Guided Decoding Constraint:** Introduced Guided JSON Schema decoding for Triage. To satisfy Pydantic schema validation, `"addressed_to"` was marked as a mandatory required enum (`"required": ["addressed_to", ...]`).
+   - **Forced Guessing:** Because the Triage model was forced to output a non-null recipient on every turn, it began inferring `"addressed_to": "BRAIN"` for any query it deemed "important" or "technical" — even casual greetings like `"what's up?"`.
+   - **Pre-Emptive Bypass:** In `cognitive_hub.py`, `if "brain" in target: await self._run_brain_leg()` was added. This turned what was supposed to be a downstream Interest Cascade into a pre-emptive bypass of Pinky's first turn.
+
+3. **The Symmetrical Formulaic Solution (`[FEAT-418]`):**
+   - **Lead Speaker (Turn 1):** `addressed_to` determines who LEADS Turn 1 (`"PINKY"` / `"NONE"` -> Pinky leads, `"BRAIN"` -> Brain leads, `"MICE"` -> Both lead together).
+   - **Partner Interjection (Turn 2):** `current_interest > 0.5` determines if the OTHER mouse interjects on Turn 2 to complete the Round Table (if Pinky led Turn 1 and interest > 0.5, Brain interjects; if Brain led Turn 1 and interest > 0.5, Pinky interjects).
+   - **Casual Greeting Grounding:** Triage prompt grounds casual greetings (*"what's up"*, *"hey"*, *"hi"*) as `vibe: "CASUAL"`, `addressed_to: "PINKY"`, and `importance: 0.1`, ensuring zero warm-up delays for casual banter.

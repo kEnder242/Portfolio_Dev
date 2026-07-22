@@ -1401,14 +1401,16 @@
 **Rationale:** Eliminates hidden silent JavaScript failures across static site pages, surfacing live diagnostic tracebacks directly in the user interface.
 **Mechanism:** `window.onerror` and `unhandledrejection` handlers in `field_notes/script.js`.
 
-## [FEAT-418] Pure Interest Cascade & Un-Gagged Pinky Routing
+## [FEAT-418] The Symmetrical Interest Cascade (Lead Speaker + Interjection Threshold)
 **Status:** ACTIVE
-**Logic:** Replaces mandatory Triage `addressed_to` recipient guessing with a pure Interest Cascade where all unaddressed queries default to `addressed_to: "NONE"`. Unaddressed turns always execute Pinky's first turn. `importance` and `intrigue` scale `current_interest`, which naturally ignites the collaborative Round Table (Pinky + Brain + Archive) when `current_interest > 0.5`. Direct routing to Brain or Pinky occurs strictly when explicit role tokens (`<|BRAIN|>`, `<|PINKY|>`) are present in the user input.
-**Rationale:** Eliminates artificial routing traps where Triage inferred `addressed_to: "BRAIN"` for casual or important queries and gagged/bypassed Pinky. Aligns the system with the core law that the Interest Cascade IS the Round Table.
-**Mechanism:** Optional `addressed_to` schema in `cognitive_hub.py`, `NONE` routing default, pure interest escalation loop.
-ite pages and dashboards, converting `#sys-console` from a static placeholder into a live, real-time forensic terminal output.
-**Mechanism:** Global event listener IIFE in `field_notes/script.js`, auto-detection of `#sys-console` element, `window.onSystemError` custom hook, and version-stamped asset deployment via `build_site.py`.
-
-
-
-
+**Logic:** Establishes a symmetrical 2-variable formula for multi-agent interaction:
+  1. `addressed_to` determines **Lead Speaker (Turn 1)**:
+     - `"PINKY"` / `"NONE"` -> Pinky leads Turn 1.
+     - `"BRAIN"` -> Brain leads Turn 1.
+     - `"MICE"` -> Pinky & Brain both lead Turn 1.
+  2. `current_interest > 0.5` determines **Partner Interjection (Turn 2)**:
+     - If Pinky led Turn 1 and `current_interest > 0.5`, Brain interjects on Turn 2 with technical ground truth.
+     - If Brain led Turn 1 and `current_interest > 0.5`, Pinky interjects on Turn 2 with an intuitive foil quip.
+  3. Grounding Triage so casual greetings ("what's up", "hey", "hi") evaluate as `vibe: "CASUAL"`, `addressed_to: "PINKY"`, and `importance: 0.1`.
+**Rationale:** Formulas decouple explicit speaker expectations (Lead Speaker) from ambient overhearing (Partner Interjection), eliminating awkward warm-up delays for casual quips while allowing emergent Round Table interjections whenever interest is high.
+**Mechanism:** Lead/Partner turn loop in `cognitive_hub.py`, `triage_schema` with `addressed_to` enum (`NONE`, `PINKY`, `BRAIN`, `MICE`), and `current_interest` interjection threshold.
