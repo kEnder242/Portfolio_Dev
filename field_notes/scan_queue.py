@@ -4,8 +4,11 @@ import re
 import json
 import hashlib
 import sys
+import psutil
+import time
 
 from utils import RAW_NOTES_DIR, DATA_DIR
+from infra.status_model import StatusModel
 
 # Config
 # Absolute GLOB paths using utils single-source-of-truth
@@ -16,6 +19,28 @@ RAS_GLOB = os.path.join(RAW_NOTES_DIR, "**/ras-*.txt")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
+
+def should_yield() -> bool:
+    """Check if Scan Queue should yield due to non-idle mode, memory pressure, or high load."""
+    # Check StatusModel for logical mode
+    status_model = StatusModel()
+    if status_model.state["logical"]["mode"] != "IDLE":
+        print("[SCAN_QUEUE] Yielding: Non-IDLE mode detected")
+        return True
+
+    # Check RAM
+    ram_available_gb = psutil.virtual_memory().available / (1024 ** 3)
+    if ram_available_gb < 3.0:
+        print(f"[SCAN_QUEUE] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB)")
+        return True
+
+    # Check system load
+    load_avg = psutil.getloadavg()[0]
+    if load_avg > 2.0:
+        print(f"[SCAN_QUEUE] Yielding: High System Load (Load Avg: {load_avg:.1f})")
+        return True
+
+    return False
 
 def ensure_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)

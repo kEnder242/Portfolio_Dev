@@ -8,12 +8,14 @@ import requests
 import hashlib
 import logging
 import difflib
+import psutil
 
 # Add current directory to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 from ai_engine_v2 import get_engine_v2
 from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn, DATA_DIR
+from infra.status_model import StatusModel
 
 # Config
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
@@ -45,6 +47,28 @@ elif REASONING_MODE: engine_mode = "REASONING"
 
 ENGINE = get_engine_v2(mode=engine_mode)
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 4.0))
+
+def should_yield() -> bool:
+    """Check if Nibbler should yield due to non-idle mode, memory pressure, or high load."""
+    # Check StatusModel for logical mode
+    status_model = StatusModel()
+    if status_model.state["logical"]["mode"] != "IDLE":
+        log("[NIBBLER] Yielding: Non-IDLE mode detected")
+        return True
+
+    # Check RAM
+    ram_available_gb = psutil.virtual_memory().available / (1024 ** 3)
+    if ram_available_gb < 3.0:
+        log(f"[NIBBLER] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB)")
+        return True
+
+    # Check system load
+    load_avg = psutil.getloadavg()[0]
+    if load_avg > 2.0:
+        log(f"[NIBBLER] Yielding: High System Load (Load Avg: {load_avg:.1f})")
+        return True
+
+    return False
 
 def check_politeness():
     if FAST_MODE: return True
@@ -203,6 +227,12 @@ def main():
         content_hash = hashlib.md5(task['content'].encode('utf-8')).hexdigest()
         if state.get(task['id']) == content_hash:
             log(f"   > Skipping {task['id']} (Hash match)")
+            continue
+
+        # --- IDLE-ONLY & RAM/LOAD SENTINEL ---
+        if should_yield():
+            log("[NIBBLER] Yielding due to system conditions")
+            time.sleep(30)
             continue
 
         # --- POLITENESS CHECK ---
