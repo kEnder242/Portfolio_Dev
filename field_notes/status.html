@@ -1015,9 +1015,18 @@
             }
         }
 
+        window._userOpenDayFolders = window._userOpenDayFolders || new Set();
+
+        function toggleDayFolder(dayNode) {
+            dayNode.classList.toggle('open');
+            if (dayNode.classList.contains('open')) {
+                window._userOpenDayFolders.add(dayNode.id);
+            } else {
+                window._userOpenDayFolders.delete(dayNode.id);
+            }
+        }
+
         function renderInterleavedTimeline(alerts) {
-            const openNodes = new Set();
-            document.querySelectorAll('.tree-year.open').forEach(n => openNodes.add(n.id));
             const openTerminals = new Set();
             document.querySelectorAll('.inline-terminal').forEach(t => {
                 if(t.style.display === 'block') openTerminals.add(t.closest('.alert-item').dataset.id);
@@ -1080,9 +1089,6 @@
             });
             flushPending();
 
-            const initialLoad = openNodes.size === 0;
-            let folderIndex = 0;
-
             nodes.forEach(node => {
                 if (node.type === 'priority') {
                     const el = createAlertElement(node.data);
@@ -1098,16 +1104,15 @@
                     dayNode.className = 'tree-year';
                     dayNode.id = 'day-' + node.day;
                     
-                    if (openNodes.has(dayNode.id) || (initialLoad && folderIndex === 0)) {
+                    if (window._userOpenDayFolders.has(dayNode.id)) {
                         dayNode.classList.add('open');
                     }
-                    folderIndex++;
                     
                     const totalLogs = node.items.length;
                     const displayDate = new Date(node.day + "T12:00:00").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
                     dayNode.innerHTML = `
-                        <div class="year-label" onclick="this.parentElement.classList.toggle('open')">
+                        <div class="year-label" onclick="toggleDayFolder(this.parentElement)">
                             📅 ${displayDate} (${totalLogs} logs)
                         </div>
                         <div class="year-content">
