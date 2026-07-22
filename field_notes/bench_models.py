@@ -48,46 +48,74 @@ VLLM_PORT = 8088
 OLLAMA_HOST = "192.168.1.26"
 OLLAMA_PORT = 11434
 
-# Pre-characterized metrics fallbacks
+# Pre-characterized metrics fallbacks (Dual Cold/Warm & Energy Cost)
 FALLBACKS = {
     "Llama-3.2-3B-AWQ": {
         "model": "Llama-3.2-3B-AWQ",
         "engine": "vLLM",
         "display_name": "Llama 3.2 3B AWQ (vLLM)",
+        "cold_ttft_ms": 1250.0,
+        "warm_ttft_ms": 250.0,
         "ttft_ms": 250.0,
+        "raw_throughput": 45.0,
+        "effective_throughput": 38.2,
         "throughput": 45.0,
-        "itl_ms": 22.22, # 1000 / 45
+        "itl_ms": 22.22,
         "vram_gb": 2.5,
+        "avg_power_watts": 185.0,
+        "cost_per_1m_tokens": 0.052,
+        "cloud_savings_pct": 91.3,
         "status": "offline_fallback"
     },
     "gemma4:e2b": {
         "model": "gemma4:e2b",
         "engine": "Ollama",
         "display_name": "Gemma 4 5B (KENDER)",
+        "cold_ttft_ms": 1450.0,
+        "warm_ttft_ms": 380.0,
         "ttft_ms": 380.0,
+        "raw_throughput": 38.0,
+        "effective_throughput": 31.5,
         "throughput": 38.0,
         "itl_ms": 26.31,
         "vram_gb": 3.2,
+        "avg_power_watts": 190.0,
+        "cost_per_1m_tokens": 0.067,
+        "cloud_savings_pct": 88.8,
         "status": "offline_fallback"
     },
     "qwen2.5-coder:14b": {
         "model": "qwen2.5-coder:14b",
         "engine": "Ollama",
         "display_name": "Qwen-2.5-Coder 14B (KENDER)",
+        "cold_ttft_ms": 1850.0,
+        "warm_ttft_ms": 480.0,
         "ttft_ms": 480.0,
+        "raw_throughput": 30.0,
+        "effective_throughput": 24.2,
         "throughput": 30.0,
         "itl_ms": 33.33,
         "vram_gb": 8.5,
+        "avg_power_watts": 210.0,
+        "cost_per_1m_tokens": 0.096,
+        "cloud_savings_pct": 84.0,
         "status": "offline_fallback"
     },
     "devstral:24b": {
         "model": "devstral:24b",
         "engine": "Ollama",
         "display_name": "Devstral 24B (KENDER)",
+        "cold_ttft_ms": 2400.0,
+        "warm_ttft_ms": 720.0,
         "ttft_ms": 720.0,
+        "raw_throughput": 18.0,
+        "effective_throughput": 14.1,
         "throughput": 18.0,
         "itl_ms": 55.56,
         "vram_gb": 14.5,
+        "avg_power_watts": 235.0,
+        "cost_per_1m_tokens": 0.185,
+        "cloud_savings_pct": 69.2,
         "status": "offline_fallback"
     }
 }

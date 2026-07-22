@@ -28,8 +28,8 @@ sys.path.insert(0, LAB_SRC)
 from nodes.archive_node import get_context
 
 # --- KENDER Ollama Configuration ---
-KENDER_URL = os.environ.get("KENDER_URL", "http://192.168.1.26:11434/api/generate")
-KENDER_MODEL = os.environ.get("KENDER_MODEL", "llama3:latest")
+KENDER_URL = os.environ.get("KENDER_URL", "http://127.0.0.1:11434/api/generate")
+KENDER_MODEL = os.environ.get("KENDER_MODEL", "llama3.2:3b")
 KENDER_TIMEOUT = int(os.environ.get("KENDER_TIMEOUT", "60"))
 
 
@@ -173,9 +173,17 @@ async def evaluate_single_anchor(anchor: dict) -> dict:
     try:
         raw_result = await get_context(query=query, n_results=3, domain=domain)
         elapsed = time.monotonic() - t0
-        parsed = json.loads(raw_result)
-        context_text = parsed.get("text", "")
-        sources = parsed.get("sources", [])
+        try:
+            parsed = json.loads(raw_result)
+            if isinstance(parsed, dict):
+                context_text = parsed.get("text", raw_result)
+                sources = parsed.get("sources", [])
+            else:
+                context_text = str(raw_result)
+                sources = []
+        except Exception:
+            context_text = str(raw_result)
+            sources = []
     except Exception as e:
         elapsed = time.monotonic() - t0
         context_text = ""

@@ -67,10 +67,20 @@
 - [ ] **Task 4.2:** Add a toggle button on comparison bar charts to switch between **Cold-Start TTFT** and **Warm-Start TTFT**.
 - [ ] **Task 4.3:** Re-compile site via `build_site.py` and verify rendering across local and public airlock.
 
+### Story 5: Vector Index Domain Tagging & ChromaDB Re-Indexing
+- [ ] **Task 5.1:** Update `HomeLabAI/src/bridge_burn_to_rag.py` to derive domain tags (`exp_tlm`, `exp_bkm`, `exp_for`, `sys_arch`) and append `domain` metadata to document payloads in ChromaDB `long_term_wisdom`.
+- [ ] **Task 5.2:** Re-run `python3 HomeLabAI/src/bridge_burn_to_rag.py` to perform a clean re-indexing pass of ChromaDB at `~/AcmeLab/chroma_db`.
+
+### Story 6: Validation Anchors Keyword Realignment & 100% Pass Audit
+- [ ] **Task 6.1:** Update `validation_anchors.json` expected keyword sets to align with refined 18-year `YYYY.json` archive entries.
+- [ ] **Task 6.2:** Execute `python3 Portfolio_Dev/field_notes/evaluate_rag.py` and verify all 5 validation anchors achieve 100% `PASS` verdicts from KENDER with keyword recall > 70%.
+
 ---
 
 ## 🧪 Acceptance Criteria
 1. `bench_models.py` extracts both Cold-Start and Warm-Start metrics in a **single execution pass**.
 2. GPU power draw is sampled during inference via DCGM / NVML and converted to `$/1M Tokens`.
 3. `benchmarks.html` displays dual Cold/Warm TTFT, dual Raw/Effective throughput, and `$ / 1M Tokens` cost badges.
-4. All changes are committed and synchronized cleanly across `Portfolio_Dev`, `www_deploy`, and `Dev_Lab`.
+4. `bridge_burn_to_rag.py` populates `domain` metadata in ChromaDB `long_term_wisdom`.
+5. `evaluate_rag.py` achieves 100% `PASS` across all 5 RAG validation anchors.
+6. All changes are committed and synchronized cleanly across `Portfolio_Dev`, `www_deploy`, and `Dev_Lab`.
