@@ -5,20 +5,24 @@
 
 ---
 
-## 🎯 Master Architecture Goals
+## 🎯 Master Architecture Goals & Target File Map
 
 1. **Memory Pressure Protections (`LAB-088` & `LAB-089`):**
+   - **Target Files:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/common/types.py`, `Portfolio_Dev/field_notes/nibble_v2.py`, `Portfolio_Dev/field_notes/scan_queue.py`.
    - EarNode pre-loads on startup for VRAM allocation hygiene, but automatically unloads under RAM pressure (`available_ram < 3.0 GB`) or during Swarm / Heads-Down mode. Re-enabled for manual integration testing.
    - Nibbler (`nibble_v2.py`) is strictly **IDLE ONLY** (Priority 0: Evict First), requiring pre-flight RAM checks (`available_ram >= 3.0 GB`) before every chunk pass.
 
 2. **Shared Vector Embedding Service:**
+   - **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/bridge_burn_to_rag.py`.
    - Consolidate PyTorch and `SentenceTransformer` imports across `archive_node.py` and `bridge_burn_to_rag.py` into a single shared HTTP/socket embedding daemon, saving ~1.5 GB RAM.
 
 3. **Vocal Probe Enforcement & Interleaved Log Error Visibility:**
+   - **Target Files:** `HomeLabAI/src/nodes/loader.py`, `Portfolio_Dev/field_notes/data/pager_activity.json`, `Portfolio_Dev/field_notes/status.html`.
    - Restore the full Vocal Probe (`/v1/chat/completions` token check with `unified-base`) in `loader.py` instead of trusting `/v1/models` (`200 OK`).
    - Wire vLLM engine errors directly to `trigger_pager()` for display on `status.html`.
 
 4. **Git & Scanner Hardening (`BKM-035`):**
+   - **Target Files:** `Portfolio_Dev/.gitignore`, `Portfolio_Dev/field_notes/scan_artifacts.py`.
    - Delete duplicate `Portfolio_Dev/venv/` and enforce git curation.
    - Harden `scan_artifacts.py` so LLM fallback failures never overwrite rich AI synopses with generic `"Heuristic"` placeholders.
 
@@ -27,16 +31,18 @@
 ## 📜 Story Backlog & Detailed Implementation Tasks
 
 ### **Story 1: `LAB-088` / `FEAT-420` — Emergency Deafness & EarNode Lifecycle Management**
+- **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/v5/common/types.py`
 - **Rationale:** Prevent NeMo EarNode (~2.5 GB RAM / ~1.0 GB VRAM) from causing memory lockups during subagent swarms or RAG synthesis.
 - **Mechanism:**
-  - Keep startup pre-loading for contiguous CUDA VRAM organization on RTX 2080 Ti.
-  - Add `unload_sensory_ear()` trigger in Foyer Router whenever `available_ram < 3.0 GB` or Swarm / Heads-Down mode is declared.
-  - Re-arm EarNode upon manual integration test request.
+  - In `router.py`, keep startup pre-loading for contiguous CUDA VRAM organization on RTX 2080 Ti.
+  - Add `unload_sensory_ear()` trigger in `FoyerRouter` whenever `available_ram < 3.0 GB` or Swarm / Heads-Down mode is declared.
+  - Add `rearm_sensory_ear()` upon manual integration test request.
 - **Proof:** Run memory stress probe while initiating subagent swarm; verify EarNode drops cleanly and available RAM remains > 3.0 GB.
 
 ---
 
 ### **Story 2: `LAB-089` / `FEAT-421` — Idle-Only Nibbler & RAM Sentinel**
+- **Target Files:** `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py`, `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/scan_queue.py`
 - **Rationale:** Nibbler is continuous background refinement and must yield to all interactive/agentic tasks.
 - **Mechanism:**
   - In `nibble_v2.py` / `scan_queue.py`, add pre-flight check:
@@ -47,6 +53,7 @@
 ---
 
 ### **Story 3: Shared Embedding Daemon (PyTorch RAM Deduplication)**
+- **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/bridge_burn_to_rag.py`
 - **Rationale:** Eliminate duplicate PyTorch + SentenceTransformer loads across `archive_node.py` and `bridge_burn_to_rag.py`.
 - **Mechanism:**
   - Route all RAG vector embeddings through the persistent ChromaDB HTTP daemon on port 8001 (or a single FastEmbed service).
@@ -56,6 +63,7 @@
 ---
 
 ### **Story 4: Interleaved Log Error Visibility & Vocal Probe Enforcement**
+- **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py`, `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/pager_activity.json`, `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`
 - **Rationale:** Never trust `200 OK` on `/v1/models`. Surface real engine errors to the user UI.
 - **Mechanism:**
   - Restore full Vocal Probe (`/v1/chat/completions` with payload `{"model": "unified-base", "messages": [{"role": "user", "content": "Respond with SUCCESS."}]}`) in `src/nodes/loader.py`.
@@ -65,9 +73,10 @@
 ---
 
 ### **Story 5: Scanner Hardening & Git Hygiene Cleanup (`BKM-035`)**
+- **Target Files:** `/home/jallred/Dev_Lab/Portfolio_Dev/.gitignore`, `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/scan_artifacts.py`
 - **Rationale:** Prevent loss of rich AI synopses in `artifacts_*.json` and eliminate virtualenv indexing bloat.
 - **Mechanism:**
-  - Delete `Portfolio_Dev/venv/`.
+  - Verify `Portfolio_Dev/venv/` removal and `.gitignore` rule.
   - Update `scan_artifacts.py`: if `ENGINE.generate()` fails or returns None, preserve `existing_map[filename]` AI entry instead of overwriting with `method: "Heuristic"`.
 - **Proof:** Run `scan_artifacts.py` with offline engine; verify `artifacts_DOCS.json` preserves all 360 high-fidelity AI synopses.
 
