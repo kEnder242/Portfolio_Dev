@@ -471,8 +471,6 @@ function connect() {
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
-            } else if (data.type === 'cabinet') {
-                updateFileTree(data.files);
             } else if (data.type === 'tool_log') {
                 // [SPR_41] Tool Log: Render collapsible card in sidebar
                 if (window.renderToolLogEntry) {
@@ -566,21 +564,6 @@ function openFile(fn) {
     }
 }
 
-function updateFileTree(files) {
-    const tree = document.getElementById('file-tree');
-    if (tree) {
-        tree.innerHTML = '';
-        files.forEach(f => {
-            const item = document.createElement('div');
-            item.className = 'tree-item';
-            item.textContent = f;
-            item.onclick = () => {
-                ws.send(JSON.stringify({ type: "read_file", filename: f }));
-            };
-            tree.appendChild(item);
-        });
-    }
-}
 
 async function pollSystemStatus() {
     try {

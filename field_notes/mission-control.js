@@ -7,7 +7,7 @@ class MissionControl extends HTMLElement {
 
         this.innerHTML = `
             <div class="nav-home" style="margin-bottom: 20px; font-family: var(--mono-stack, monospace); font-size: 0.85rem;">
-                <a href="https://www.jason-lab.dev/index.html" style="color: var(--accent-color, #4daafc); text-decoration: none;">← Return to Front Page</a>
+                <a href="https://www.jason-lab.dev/index.html" style="color: var(--accent-color, #4daafc); text-decoration: none;">← Front Page</a>
             </div>
 
             <section id="public-airlock" style="margin-bottom: 20px;">

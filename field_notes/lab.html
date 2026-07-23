@@ -21,18 +21,7 @@
             margin-bottom: 20px;
         }
 
-        /* Filing Cabinet Styles */
-        #filing-cabinet {
-            margin-top: 20px;
-            border-top: 1px solid #222;
-            padding-top: 15px;
-            overflow-y: auto;
-            max-height: 40vh;
-        }
-        .cabinet-title { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .tree-item { font-size: 0.75rem; color: #888; cursor: pointer; padding: 2px 5px; border-radius: 3px; }
-        .tree-item:hover { background: #111; color: var(--accent-color); }
-        .folder { font-weight: bold; color: #aaa; }
+        /* Tool Log Styles */
         .file { padding-left: 15px; }
         
         /* Tool Log Card Styles */
@@ -101,38 +90,6 @@
     <script src="intercom_v2.js?v=35212657"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Filing Cabinet: Interactive Tree
-            function loadCabinet() {
-                fetch('search_index.json')
-                    .then(r => r.json())
-                    .then(data => {
-                        const tree = document.getElementById('file-tree');
-                        const years = Object.keys(data.files || {}).sort().reverse();
-                        let html = '';
-                        
-                        // Render Top-Level Archive
-                        html += '<div class="tree-item folder">📂 Archive (Read-Only)</div>';
-                        years.slice(0, 8).forEach(year => {
-                            html += `<details style="margin-left: 10px;">`;
-                            html += `<summary class="tree-item">${year}</summary>`;
-                            data.files[year].forEach(f => {
-                                html += `<div class="tree-item file">📄 ${f}</div>`;
-                            });
-                            html += `</details>`;
-                        });
-
-                        // Render Workspace Zones
-                        html += '<div class="tree-item folder" style="margin-top:10px;">📂 Workspace (Read-Write)</div>';
-                        html += '<div class="tree-item file" style="margin-left:10px;">📄 active_draft.txt</div>';
-                        
-                        tree.innerHTML = html;
-                    })
-                    .catch(() => {
-                        document.getElementById('file-tree').innerHTML = "<em>Index Refinement Required</em>";
-                    });
-            }
-            loadCabinet();
-
             // Tool Log: Global render helper (called from intercom_v2.js)
             window.renderToolLogEntry = function(entry) {
                 const container = document.getElementById('tool-log-container');
