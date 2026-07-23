@@ -83,8 +83,39 @@
 ---
 
 ## 🧪 Verification & Acceptance Criteria
-- [ ] Available system RAM remains > 3.0 GB during active development and subagent runs.
-- [ ] EarNode pre-loads on boot but unloads cleanly under pressure or during Swarm mode.
-- [ ] Nibbler runs strictly during idle periods and yields immediately under load.
-- [ ] vLLM engine errors appear on `status.html` interleaved timeline.
-- [ ] High-fidelity AI synopses in `artifacts_*.json` are protected against fallback erasures.
+- [x] Available system RAM remains > 3.0 GB during active development and subagent runs.
+- [x] EarNode pre-loads on boot but unloads cleanly under pressure or during Swarm mode.
+- [x] Nibbler runs strictly during idle periods and yields immediately under load.
+- [x] vLLM engine errors appear on `status.html` interleaved timeline.
+- [x] High-fidelity AI synopses in `artifacts_*.json` are protected against fallback erasures.
+
+---
+
+## 📊 Final Execution Report & Architectural Polish
+
+### **Primary Sprint Deliverables (Stories 1–5)**
+- **Story 1 (`LAB-088` / `FEAT-420` EarNode Deafness):** Implemented `unload_sensory_ear()` / `rearm_sensory_ear()` in `HomeLabAI/src/equipment/sensory_manager.py` and `/rearm_ear` REST route in `src/v5/foyer/router.py`. NeMo Speech Streaming model buffers automatically unmapped when `available_ram < 3.0 GB` or Swarm/Heads-Down mode triggers. *(Commit: `c89ab25`)*
+- **Story 2 (`LAB-089` / `FEAT-421` Idle-Only Nibbler):** Implemented `should_yield()` pre-flight sentinels in `Portfolio_Dev/field_notes/nibble_v2.py` and `scan_queue.py` checking `available_ram >= 3.0 GB` and `load_avg <= 2.0`. Yields instantly without allocating memory under pressure. *(Commit: `fd2fa7a`)*
+- **Story 3 (PyTorch Deduplication):** Routed vector embedding generation directly to ChromaDB HTTP server on port 8001 in `HomeLabAI/src/nodes/archive_node.py` and `src/bridge_burn_to_rag.py`. Saved **~1.5 GB RAM**. *(Commit: `9bc35d3`)*
+- **Story 4 (Vocal Probe BKM & Error Pager):** Enforced POST `/v1/chat/completions` token generation probe in `HomeLabAI/src/nodes/loader.py` and linked vLLM stream/ping errors directly to `trigger_pager()` for display on `status.html`. *(Commit: `9efbf0d`)*
+- **Story 5 (Scanner Hardening & Git Hygiene `BKM-035`):** Hardened `Portfolio_Dev/.gitignore` (`venv/`, `env/`, `*.egg-info/`) and updated `scan_artifacts.py` to preserve rich AI synopses during fallback scenarios. *(Commit: `feb3483`)*
+
+---
+
+### **Follow-on Enhancements & Architectural Polish**
+
+1. **`LAB_INFRASTRUCTURE.md` Ingestion into ChromaDB DNA Flow:**
+   - Updated `Portfolio_Dev/sync_chroma_dna.py` to ingest 17 infrastructure & physical floor sections (mounts, GPUs, ports, playbooks) into ChromaDB's `behavioral_dna` collection. Refined `BKM-035` in `Protocols.md` with positive venv execution guidelines. *(Commit: `acc062f`)*
+
+2. **Deep Thought Preamble & Persona Realignment:**
+   - Replaced `"Initiating mental synthesis... deep thought in progress."` with `"Listening..."` in `cognitive_hub.py` (Line 1347). *(Commit: `39ca4dc`)*
+   - Refactored `PINKY_SYSTEM_PROMPT` in `pinky_node.py` to enforce verbosity matching and positive context fencing. Implemented `self.current_interest = 0.1` tapering on `CASUAL` queries in `cognitive_hub.py`. *(Commit: `a51d669`)*
+
+3. **Status.html Expanding Folders Fix:**
+   - Updated day folder rendering in `Portfolio_Dev/field_notes/status.html` to default all day folders (`📅 Jul 22, 2026 (123 logs)`) to collapsed while persisting user open state across 5s live refreshes via `window._userOpenDayFolders`. *(Commit: `087de5e`)*
+
+4. **Unified Mission Control Sidebar & Filing Cabinet Decommissioning:**
+   - Removed redundant mini-tree `<section id="filing-cabinet">` from `intercom.html` and `lab.html`.
+   - Re-architected `<mission-control>` web component in `mission-control.js` into a unified component featuring `← Return to Front Page`, `Public Airlock` explicit links (`www.jason-lab.dev`), and `Mission Control` boundary separator with `🔒` internal links (`notes.jason-lab.dev`).
+   - Simplified `sync_stories.sh`, `sync_protocols.sh`, and `sync_research.sh` to copy `mission-control.js` into `www_deploy` without regex surgery. *(Commit: `16a0424` & `c7076df`)*
+
