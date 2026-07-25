@@ -81,6 +81,10 @@ def run_task(cmd_list):
     try:
         env = os.environ.copy()
         env["MAX_LOAD"] = "5.0"
+        lab_root = os.path.dirname(os.path.dirname(BASE_DIR))
+        homelab_src = os.path.join(lab_root, "HomeLabAI/src")
+        curr_pp = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = f"{BASE_DIR}:{homelab_src}:{curr_pp}" if curr_pp else f"{BASE_DIR}:{homelab_src}"
         cwd = BASE_DIR
         subprocess.run([sys.executable] + cmd_list, check=True, env=env, cwd=cwd)
         return True

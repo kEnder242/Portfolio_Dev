@@ -10,9 +10,14 @@ import logging
 import difflib
 import psutil
 
-# Add current directory to path
+# Add current directory and HomeLabAI/src to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
+LAB_ROOT = os.path.dirname(os.path.dirname(BASE_DIR))
+HOMELAB_SRC = os.path.join(LAB_ROOT, "HomeLabAI/src")
+for p in [BASE_DIR, HOMELAB_SRC]:
+    if p not in sys.path:
+        sys.path.append(p)
+
 from ai_engine_v2 import get_engine_v2
 from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn, DATA_DIR
 from infra.status_model import StatusModel
