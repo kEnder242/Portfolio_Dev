@@ -33,32 +33,25 @@ def tune_encoding_xml():
         tree = ET.parse(ENCODING_XML)
         root = tree.getroot()
         
-        # 1. Hardware Acceleration Type
+        # Enforce Intel iGPU VAAPI Transcoding (0 MB NVIDIA VRAM impact)
         hw_type = root.find("HardwareAccelerationType")
         if hw_type is None:
             hw_type = ET.SubElement(root, "HardwareAccelerationType")
             
-        if intel_igpu:
-            hw_type.text = "vaapi"
-            va_dev = root.find("VaapiDevice")
-            if va_dev is None:
-                va_dev = ET.SubElement(root, "VaapiDevice")
-            va_dev.text = "/dev/dri/renderD128"
-            logging.info("Selected Primary Transcoder: Intel iGPU VAAPI (/dev/dri/renderD128)")
-        elif nvidia_gpu:
-            hw_type.text = "nvenc"
-            logging.info("Selected Primary Transcoder: NVIDIA NVENC (dGPU)")
-        else:
-            hw_type.text = "none"
-            logging.info("Selected Primary Transcoder: Software (CPU)")
+        hw_type.text = "vaapi"
+        va_dev = root.find("VaapiDevice")
+        if va_dev is None:
+            va_dev = ET.SubElement(root, "VaapiDevice")
+        va_dev.text = "/dev/dri/renderD128"
+        logging.info("Enforced Transcoder: Intel iGPU VAAPI (/dev/dri/renderD128 - 0 MB NVIDIA VRAM)")
             
-        # 2. HEVC Encoding Safety (Intel Haswell iGPU does not support HEVC hardware encode)
+        # 2. HEVC Encoding Safety (Intel Haswell iGPU hardware does not support HEVC hardware encode)
         allow_hevc = root.find("AllowHevcEncoding")
         if allow_hevc is None:
             allow_hevc = ET.SubElement(root, "AllowHevcEncoding")
-        allow_hevc.text = "false" if intel_igpu else "true"
+        allow_hevc.text = "false"
         
-        # 3. Clean Hardware Decoding Codecs (Only enable H.264 hardware decode to prevent MPEG4/VC1 code 234 crashes)
+        # 3. Clean Hardware Decoding Codecs (Only H.264 uses iGPU hwdecoder; legacy MPEG4/VC1 decode in CPU software to avoid code 234)
         hw_codecs = root.find("HardwareDecodingCodecs")
         if hw_codecs is not None:
             for child in list(hw_codecs):
@@ -66,13 +59,11 @@ def tune_encoding_xml():
         else:
             hw_codecs = ET.SubElement(root, "HardwareDecodingCodecs")
             
-        # Always enable H.264 hardware decode
         h264_elem = ET.SubElement(hw_codecs, "string")
         h264_elem.text = "h264"
         
-        # Write back tuned config
         tree.write(ENCODING_XML)
-        logging.info("Successfully updated encoding.xml with tuned Option C configuration.")
+        logging.info("Successfully updated encoding.xml for Intel iGPU VAAPI operation.")
         return True
     except Exception as e:
         logging.error(f"Failed to tune encoding.xml: {e}")
