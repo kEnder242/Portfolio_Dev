@@ -833,9 +833,10 @@
         }
 
         async function triggerLabAction(action) {
-            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            // [FIX] pager.jason-lab.dev is the dedicated tunnel for the Attendant (Port 9999)
-            const url = isLocal ? `http://localhost:8765/${action}` : `https://pager.jason-lab.dev/${action}`;
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
+            // [FIX] Route to local Foyer port 8765 on LAN/IP or fallback to pager tunnel when remote
+            const url = isLocal ? `http://${hostname}:8765/${action}` : `https://pager.jason-lab.dev/${action}`;
             
             // [FIX] Remove confirmation for benign 'wake' action
             if (action !== 'wake' && !confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
