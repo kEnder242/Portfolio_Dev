@@ -42,8 +42,8 @@ def tune_encoding_xml():
         va_dev = root.find("VaapiDevice")
         if va_dev is None:
             va_dev = ET.SubElement(root, "VaapiDevice")
-        va_dev.text = "/dev/dri/renderD128"
-        logging.info("Enforced Transcoder: Intel iGPU VAAPI (/dev/dri/renderD128 - 0 MB NVIDIA VRAM)")
+        va_dev.text = "/dev/dri/renderD129"
+        logging.info("Enforced Transcoder: Intel iGPU VAAPI (/dev/dri/renderD129 - 0 MB NVIDIA VRAM)")
             
         # 2. HEVC Encoding Safety (Intel Haswell iGPU hardware does not support HEVC hardware encode)
         allow_hevc = root.find("AllowHevcEncoding")
