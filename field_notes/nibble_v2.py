@@ -61,10 +61,10 @@ def should_yield() -> bool:
         log("[NIBBLER] Yielding: Non-IDLE mode detected")
         return True
 
-    # Check RAM
+    # Check RAM (Nibbler footprint is ~30MB; 1.5GB available provides 50x safety headroom)
     ram_available_gb = psutil.virtual_memory().available / (1024 ** 3)
-    if ram_available_gb < 3.0:
-        log(f"[NIBBLER] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB)")
+    if ram_available_gb < 1.5:
+        log(f"[NIBBLER] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB < 1.5 GB)")
         return True
 
     # Check system load
