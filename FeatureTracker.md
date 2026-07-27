@@ -1451,6 +1451,13 @@
 **Rationale:** Provides rigorous factual verification and hallucination detection without adding latency to the user's initial streaming response.
 **Mechanism:** Non-blocking async evaluator task in `cognitive_hub.py` and live badge renderer in `intercom_v2.js`.
 
+## [FEAT-434] Retrospective & Year-Based Triage Pre-Rule
+**Status:** ACTIVE
+**Logic:** Explicit pre-triage regex rule matching year tokens (`2018`, `2020`, `2024`, `2026`) and retrospective intent phrases ("what did I do in...", "search notes for..."). Forces Triage to evaluate as `addressed_to: BRAIN, vibe: DEEP_RESEARCH, domain: lab_history, importance: 0.9`.
+**Rationale:** Prevents historical archive research queries from being mis-classified as `CASUAL` importance `0.1` greetings that bypass RAG candidate retrieval.
+**Mechanism:** Pre-triage grounding rule and regex filter in `cognitive_hub.py`.
+
+
 
 
 
