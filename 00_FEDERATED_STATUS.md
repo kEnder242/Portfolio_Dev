@@ -215,3 +215,23 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
 - **Orchestration Memory**: Implemented Token-Aware Eviction and Sovereign Context Distillation.
 - **VRAM Hibernation**: Verified 100% memory release during natural AFK drift.
 - **Closed-Loop & Adaptive LoRAs [SPR-35]**: (Active) Integrated automated dataset distillation, vibe-grouping schema, and hemispheric sandbox tool isolation. Completed Task 1.5 (Fidelity & Telemetry Restoration) and Task 1.6 (Waterfall & Direct Routing Path Refactor) to resolve routing/handover deviations while preserving direct Brain routing exceptions, unifying interest terminology, and enabling peer-vote interest boosting.
+
+---
+
+## 💡 Backlog & Future Federated Topology (M5 Air 32GB MLX + GigaToken)
+
+### 🏛️ Proposed Hardware Affinity & Node Specialization
+1. **Node 1: z87-Linux (RTX 2080 Ti 11GB VRAM)** -> **Sovereign Gateway & Sensory Gateway**
+   - **Role:** Foyer Router (`acme_foyer_v5`), NeMo EarNode (PCM audio stream parsing), ChromaDB RAG Vector Store (`behavioral_dna`, `feature_dna`), Public Airlock (`www.jason-lab.dev`), and Pinky (Llama 3.2 3B AWQ + Multi-LoRA adapters: `cli_voice_v1`, `shadow_brain_v2`, `lab_history_v1`).
+   - **Multi-LoRA Mandate:** Preserves local 11GB VRAM residency with multi-adapter switching intact.
+
+2. **Node 2: KENDER (RTX 4090 24GB VRAM)** -> **Silicon Heavy Compute & GPU Fast Path**
+   - **Role:** High-throughput CUDA inference, Qwen 2.5 Coder, DeepSeek reasoning, heavy code generation.
+
+3. **Node 3: M5 MacBook Air (32GB Unified Memory / MLX)** -> **GigaToken Deep Thought & Hybrid Architecture Node**
+   - **Role:** Deep strategic reasoning, 128K–1M token context ingestion (GigaToken), and experimental architecture evaluation (Jamba 1.5 Mini Mamba-Transformer SSM, SmolLM3-3B, OLMo Hybrid, NoPE - No Position Embeddings).
+   - **Why Unified Memory:** Apple Silicon's 32GB Unified Memory allows MLX to allocate 24+ GB of RAM directly to LLM KV cache tables at ~150–200 GB/s bandwidth without hitches or PCIe bus bottlenecks.
+
+4. **GigaToken Context Expansion Strategy**:
+   - Bypasses local 16K VRAM clamps for deep retrospective queries (`vibe: "DEEP_RESEARCH"`), streaming up to 128K+ tokens of raw multi-year archive notes directly to the 32GB M5 Air / MLX or remote 4090 nodes without degrading local 2080 Ti VRAM residency.
+

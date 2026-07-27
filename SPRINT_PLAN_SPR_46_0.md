@@ -1,7 +1,7 @@
 # Master Sprint Plan: Sprint 46 — Progressive Cooldown Engine, Poison Quarantine & Foyer Heap Trimming
 
 > **Sprint Narrative:**
-> Following system memory audits and operational feedback, Sprint 46 establishes complete memory self-governance across the Federated Lab. It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`) to eliminate sentinel polling hammering, a **Poison Chunk Quarantine Protocol** (`FEAT-429`) to isolate failing note chunks, an automated **Foyer C-Arena Heap Trimming Sentinel** (`FEAT-430`) to prevent PyTorch memory bloat in `acme_foyer_v5`, and a **GigaToken Remote Synthesis Gate** (`FEAT-431`) as a high-context Stretch Goal.
+> Following system memory audits and operational feedback, Sprint 46 establishes complete memory self-governance across the Federated Lab. It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`) to eliminate sentinel polling hammering, a **Poison Chunk Quarantine Protocol** (`FEAT-429`) to isolate failing note chunks, and an automated **Foyer C-Arena Heap Trimming Sentinel** (`FEAT-430`) to prevent PyTorch memory bloat in `acme_foyer_v5`.
 
 ---
 
@@ -18,10 +18,6 @@
 3. **`FEAT-430` — Foyer C-Arena Heap Trimming Sentinel:**
    - **Target Files:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
    - **Mechanism:** Periodic `malloc_trim(0)` execution in Foyer's idle cleanup loop to stabilize process RSS < 1.0 GB.
-
-4. **`FEAT-431` — (Stretch Goal) GigaToken Remote Synthesis Gate:**
-   - **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
-   - **Mechanism:** When handling `vibe: "DEEP_RESEARCH"`, bypasses 4K token chunking limits for remote inference endpoints, packaging up to 32K–64K tokens of raw multi-year archive context while keeping local 11GB VRAM clamped at 16K safety limits.
 
 ---
 
@@ -55,21 +51,12 @@
 
 ---
 
-### **Story 4: `FEAT-431` — (Stretch Goal) GigaToken Remote Synthesis Gate**
-- **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
-- **Tasks:**
-  1. Add `is_remote_endpoint` check in `cognitive_hub.py`.
-  2. If query vibe is `DEEP_RESEARCH` and target engine is remote, expand RAG candidate context window up to 32K tokens.
-  3. Maintain 16K safety ceiling for local vLLM / RTX 2080 Ti endpoints to prevent VRAM OOM.
-
----
-
 ## 🤖 OpenAgent Delegation Playbook (BKM-034 Point 12 Compliance)
 
 Launch OpenAgent attached to port 4096 using the command:
 
 ```bash
-/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "Read file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_46_0.md and execute Story 1 (FEAT-428), Story 2 (FEAT-429), Story 3 (FEAT-430), and Stretch Goal Story 4 (FEAT-431). Follow all acceptance criteria and verify tests pass."
+/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "Read file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_46_0.md and execute Story 1 (FEAT-428), Story 2 (FEAT-429), and Story 3 (FEAT-430). Follow all acceptance criteria and verify tests pass."
 ```
 
 ---
@@ -80,5 +67,4 @@ Launch OpenAgent attached to port 4096 using the command:
 - [ ] Chunks failing 3 consecutive times are marked `QUARANTINED` in `chunk_state.json`.
 - [ ] `scan_queue.py` bypasses `QUARANTINED` chunks without stopping queue progression.
 - [ ] `malloc_trim(0)` runs periodically in `foyer/router.py`, maintaining `acme_foyer_v5` RSS < 1.0 GB.
-- [ ] Remote queries with `DEEP_RESEARCH` vibe expand context to 32K tokens without local VRAM OOM.
 - [ ] All workspace git repositories remain clean and aligned on `main`.
