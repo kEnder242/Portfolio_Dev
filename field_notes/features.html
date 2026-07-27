@@ -7050,7 +7050,39 @@
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-stable">BACKLOG</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-433">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-433</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Asynchronous Sanity Critic Protocol
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Fires a non-blocking background evaluator (<code>asyncio.create_task</code>) after initial turn response streaming completes. Evaluates response accuracy against historical BKMs, broadcasting a <code>sanity_check</code> WebSocket payload to render a live <strong>"🛡️ Sanity Verified"</strong> badge on Intercom chat cards.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides rigorous factual verification and hallucination detection without adding latency to the user's initial streaming response.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Non-blocking async evaluator task in <code>cognitive_hub.py</code> and live badge renderer in <code>intercom_v2.js</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     </tbody>

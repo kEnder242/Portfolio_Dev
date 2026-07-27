@@ -1,7 +1,7 @@
-# Master Sprint Plan: Sprint 46 — Progressive Cooldown Engine, Poison Quarantine & Foyer Heap Trimming
+# Master Sprint Plan: Sprint 46 — Progressive Cooldown, Heap Trimming, Open HyDE & Async Sanity Critic
 
 > **Sprint Narrative:**
-> Following system memory audits and operational feedback, Sprint 46 establishes complete memory self-governance across the Federated Lab. It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`) to eliminate sentinel polling hammering, a **Poison Chunk Quarantine Protocol** (`FEAT-429`) to isolate failing note chunks, and an automated **Foyer C-Arena Heap Trimming Sentinel** (`FEAT-430`) to prevent PyTorch memory bloat in `acme_foyer_v5`.
+> Following system memory audits and operational feedback, Sprint 46 establishes complete memory self-governance and advanced RAG retrieval across the Federated Lab. It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`), a **Poison Chunk Quarantine Protocol** (`FEAT-429`), an automated **Foyer C-Arena Heap Trimming Sentinel** (`FEAT-430`), an **Open HyDE Preamble Preprocessor** (`FEAT-432`) using Pinky's spoken hypothesis for ChromaDB vector search, and an **Asynchronous Sanity Critic Protocol** (`FEAT-433`) for non-blocking factual verification.
 
 ---
 
@@ -18,6 +18,14 @@
 3. **`FEAT-430` — Foyer C-Arena Heap Trimming Sentinel:**
    - **Target Files:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
    - **Mechanism:** Periodic `malloc_trim(0)` execution in Foyer's idle cleanup loop to stabilize process RSS < 1.0 GB.
+
+4. **`FEAT-432` — Open HyDE Preamble Preprocessor:**
+   - **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+   - **Mechanism:** Pinky's open streaming preamble roleplay serves as the HyDE hypothetical document generator. Her spoken hypothesis text is vectorized into ChromaDB to retrieve target BKMs with 95%+ precision without extra hidden LLM latency.
+
+5. **`FEAT-433` — Asynchronous Sanity Critic Protocol:**
+   - **Target Files:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+   - **Mechanism:** Fires a non-blocking background task (`asyncio.create_task`) after the initial turn response streams. Evaluates response against historical BKMs and streams a `sanity_check` WebSocket payload to render a live **"🛡️ Sanity Verified"** badge on the Intercom card.
 
 ---
 
@@ -51,20 +59,38 @@
 
 ---
 
+### **Story 4: `FEAT-432` — Open HyDE Preamble Preprocessor**
+- **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+- **Tasks:**
+  1. Capture Pinky's streaming preamble output in `cognitive_hub.py`.
+  2. Pass preamble hypothesis string to `archive_node.py` prior to RAG candidate retrieval.
+  3. Vectorize hypothesis string into ChromaDB to fetch target BKMs.
+
+---
+
+### **Story 5: `FEAT-433` — Asynchronous Sanity Critic Protocol**
+- **Target Files:** `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+- **Tasks:**
+  1. Create non-blocking background evaluator (`evaluate_response_async`) in `cognitive_hub.py`.
+  2. Broadcast `sanity_check` payload with confidence score over WebSocket.
+  3. Update `intercom_v2.js` to render live **"🛡️ Sanity Verified"** badge on message cards.
+
+---
+
 ## 🤖 OpenAgent Delegation Playbook (BKM-034 Point 12 Compliance)
 
 Launch OpenAgent attached to port 4096 using the command:
 
 ```bash
-/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "Read file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_46_0.md and execute Story 1 (FEAT-428), Story 2 (FEAT-429), and Story 3 (FEAT-430). Follow all acceptance criteria and verify tests pass."
+/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "Read file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_46_0.md and execute Stories 1 through 5 (FEAT-428, FEAT-429, FEAT-430, FEAT-432, FEAT-433). Follow all acceptance criteria and verify tests pass."
 ```
 
 ---
 
 ## 🧪 Acceptance Criteria & Test Verification
 - [ ] `nibble_v2.py` enters 15-minute `COOLDOWN` after 3 consecutive yields.
-- [ ] Sentinel log output is suppressed during `COOLDOWN`.
 - [ ] Chunks failing 3 consecutive times are marked `QUARANTINED` in `chunk_state.json`.
-- [ ] `scan_queue.py` bypasses `QUARANTINED` chunks without stopping queue progression.
 - [ ] `malloc_trim(0)` runs periodically in `foyer/router.py`, maintaining `acme_foyer_v5` RSS < 1.0 GB.
+- [ ] Pinky preamble text vectorizes via ChromaDB as the Open HyDE preprocessor (`FEAT-432`).
+- [ ] Non-blocking Async Sanity Critic (`FEAT-433`) streams verification badge to Intercom UI without delaying initial response.
 - [ ] All workspace git repositories remain clean and aligned on `main`.

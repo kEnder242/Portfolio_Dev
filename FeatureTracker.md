@@ -1440,10 +1440,17 @@
 **Mechanism:** `is_remote_endpoint` check and context window scaler in `archive_node.py` and `cognitive_hub.py`.
 
 ## [FEAT-432] HyDE Local RAG Preprocessor (Backlog)
-**Status:** BACKLOG
+**Status:** ACTIVE
 **Logic:** Implements Hypothetical Document Embeddings ([arXiv:2212.10496](https://arxiv.org/abs/2212.10496)) using Pinky's live streaming preamble roleplay as the hypothesis generator. Pinky's spoken intuitive hypothesis ("Egad Brain, I bet Glibc C-arenas are caching PyTorch allocations!") streams to the UI as preamble text while being vectorized into ChromaDB to retrieve target BKMs with 95%+ precision.
 **Rationale:** Dramatically increases vector retrieval precision for short interrogative queries against dense BKM technical notes without extra background LLM latency or cloud API keys.
 **Mechanism:** Open hypothesis streaming in `cognitive_hub.py` and pre-search vectorization in `archive_node.py`.
+
+## [FEAT-433] Asynchronous Sanity Critic Protocol
+**Status:** ACTIVE
+**Logic:** Fires a non-blocking background evaluator (`asyncio.create_task`) after initial turn response streaming completes. Evaluates response accuracy against historical BKMs, broadcasting a `sanity_check` WebSocket payload to render a live **"🛡️ Sanity Verified"** badge on Intercom chat cards.
+**Rationale:** Provides rigorous factual verification and hallucination detection without adding latency to the user's initial streaming response.
+**Mechanism:** Non-blocking async evaluator task in `cognitive_hub.py` and live badge renderer in `intercom_v2.js`.
+
 
 
 
