@@ -108,6 +108,11 @@ Ground truth compiled directly from [`/home/jallred/study/references/resume.txt`
 - **Task 4.1**: Update `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mass_scan.py` to index new raw notes against `resume.txt` and append micro-details to `career_compass.json` Tier 2 Mesh.
 - **Task 4.2**: Verify zero prompt context bloat (<300 token Tier 1 preservation).
 
+### 🔹 Story 5: M5 Air MLX Offloading & Async Sanity Judge Readiness
+- **Task 5.1**: Define REST/WebSocket interface for Node 3 (M5 MacBook Air 32GB Unified Memory / Apple MLX framework on port 8090).
+- **Task 5.2**: Create `src/nodes/mlx_judge_node.py` stub in `HomeLabAI` capable of offloading non-blocking 256K context evaluation to Apple MLX.
+- **Task 5.3**: Register `[LAB-010] M5 Air MLX Unified Memory Node & Async Judge Protocol` entry in `Portfolio_Dev/LAB_INFRASTRUCTURE.md`.
+
 ---
 
 ## 4. Verification & Validation Commands

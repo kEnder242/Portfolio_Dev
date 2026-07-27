@@ -88,6 +88,24 @@ Separated the continuous background scanning daemon from the off-peak nightly ma
    - Triggers `field-notes-nightly.service` oneshot execution at **2:00 AM daily** (`OnCalendar=*-*-* 02:00:00`).
    - Runs `field_notes/aggregate_years.py` to compile yearly timeline records during off-peak hours.
 
+---
+
+## [LAB-010] M5 Air MLX Unified Memory Node & Async Judge Protocol
+**Status:** PROPOSED / READY FOR SPRINT 47
+**Date:** July 2026
+
+### Context
+Evaluating long-form 256K context responses or performing full-archive coherence checks locally on the RTX 2080 Ti (11GB VRAM) introduces KV-cache memory pressure and latency stalls. 
+
+### Decision
+Integrate **Node 3: M5 MacBook Air (32GB Unified Memory / Apple MLX Framework)** into the Federated Lab topology as a dedicated **Async Sanity Judge & GigaToken Node**.
+
+### Mechanism
+- **Hardware & Framework:** 32GB Unified Memory architecture leveraging Apple MLX framework over local WiFi/Tailscale Mesh.
+- **Model Target:** Jamba 1.5 Mini (Mamba-SSM hybrid) or quantized MLX GigaToken models on port 8090.
+- **Async Execution:** Operates strictly asynchronously over a REST/WebSocket endpoint (`http://192.168.1.x:8090/evaluate`). Evaluates complete turn traces in the background without delaying initial UI preamble or response streaming on z87-Linux / KENDER 4090.
+- **Feedback Discipline:** Factual corrections route to ChromaDB RAG & Gems (`refine_gem.py`); style/persona retorts route strictly to the offline LoRA dataset (`cli_voice_v1`).
+
 
 
 
