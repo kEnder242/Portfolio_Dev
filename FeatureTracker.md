@@ -1414,3 +1414,16 @@
   3. Grounding Triage so casual greetings ("what's up", "hey", "hi") evaluate as `vibe: "CASUAL"`, `addressed_to: "PINKY"`, and `importance: 0.1`.
 **Rationale:** Formulas decouple explicit speaker expectations (Lead Speaker) from ambient overhearing (Partner Interjection), eliminating awkward warm-up delays for casual quips while allowing emergent Round Table interjections whenever interest is high.
 **Mechanism:** Lead/Partner turn loop in `cognitive_hub.py`, `triage_schema` with `addressed_to` enum (`NONE`, `PINKY`, `BRAIN`, `MICE`), and `current_interest` interjection threshold.
+
+## [FEAT-428] Exponential Backoff & Cooldown State Engine
+**Status:** ACTIVE
+**Logic:** Implements a progressive 3-tier backoff engine for background archive processing (`scan_queue.py` & `nibble_v2.py`). When yielding due to memory pressure (`available_ram < 1.5 GB`), load average (`load_avg > 2.0`), or non-IDLE logical state, the worker transitions through progressive sleep delays (15s -> 60s -> 15m `COOLDOWN` window).
+**Rationale:** Eliminates tight-loop log spam and sentinel polling hammering when host memory or load stays constrained for extended periods.
+**Mechanism:** `consecutive_yields` counter and `COOLDOWN` state in `scan_queue.py` and `nibble_v2.py` (`should_yield`).
+
+## [FEAT-429] Poison Chunk Quarantine Protocol
+**Status:** ACTIVE
+**Logic:** Automatically quarantines archive note chunks that encounter repeated execution failures (3 consecutive context length, JSON parsing, or API errors). Flagged chunks are tagged as `QUARANTINED` in `chunk_state.json` and isolated from immediate queue sweeps.
+**Rationale:** Prevents a single corrupted or oversize note file from trapping background workers in an infinite fail-retry loop that hammers host CPU and LLM inference endpoints.
+**Mechanism:** Failure counter, `QUARANTINED` status tag in `chunk_state.json`, and automatic queue bypass in `scan_queue.py`.
+
