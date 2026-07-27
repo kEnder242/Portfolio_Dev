@@ -15,6 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-47-0-prereflection** | 1. Planning | Unified Pre-Reflection Triage & Evergreen Career Compass | **APPROVED / READY** |
+| **spr-46-0-resilience** | 2. Implementation | Progressive Cooldown Engine & Async Sanity Critic | **COMPLETED** |
 | **spr-44-0-resilience** | 2. Implementation | Lab Resilience, Memory Guardrails & Telemetry Visibility | **COMPLETED** |
 | **spr-42-0-realignment** | 2. Implementation | Portfolio Navigation Realignment & Feature Assertion Engine | **COMPLETED** |
 | **spr-40-0-observability** | 2. Implementation | Real-Time Observability & Grafana Pipeline Synthesis | **COMPLETED** |
