@@ -10,6 +10,8 @@
 
 This sprint implements the **Unified Pre-Reflection Triage Engine**, the **Evergreen Career Compass Memory Ledger**, and the **Deep Thought HyDE Vector Pipeline**. It eliminates hardcoded pre-triage rules (e.g. year regexes) in favor of native LLM intent translation (*"I think the user is trying to say..."*) while establishing an authoritative 6-era ground truth map compiled from your actual resume ([`resume.txt`](file:///home/jallred/study/references/resume.txt)).
 
+> **Infrastructure Note**: [`HomeLabAI/docs/LAB_INFRASTRUCTURE.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md) is established as the sole authoritative infrastructure manual (with entry `[LAB-010]` registered). Duplicate copies in `Portfolio_Dev` have been removed to preserve a single source of truth.
+
 ---
 
 ## 1. Architectural Guiding Star & Memory Hierarchy
