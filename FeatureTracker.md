@@ -1451,11 +1451,12 @@
 **Rationale:** Provides rigorous factual verification and hallucination detection without adding latency to the user's initial streaming response.
 **Mechanism:** Non-blocking async evaluator task in `cognitive_hub.py` and live badge renderer in `intercom_v2.js`.
 
-## [FEAT-434] Retrospective & Year-Based Triage Pre-Rule
+## [FEAT-435] Evergreen Career Compass Memory Ledger
 **Status:** ACTIVE
-**Logic:** Explicit pre-triage regex rule matching year tokens (`2018`, `2020`, `2024`, `2026`) and retrospective intent phrases ("what did I do in...", "search notes for..."). Forces Triage to evaluate as `addressed_to: BRAIN, vibe: DEEP_RESEARCH, domain: lab_history, importance: 0.9`.
-**Rationale:** Prevents historical archive research queries from being mis-classified as `CASUAL` importance `0.1` greetings that bypass RAG candidate retrieval.
-**Mechanism:** Pre-triage grounding rule and regex filter in `cognitive_hub.py`.
+**Logic:** Establishes an authoritative 6-era memory ledger (`data/career_compass.json`) compiled from verified resume ground truth. Tier 1 Anchor Map (<300 tokens) is injected into `BicameralNode` system prompt bedrock (`loader.py`), while Tier 2 Keyword Mesh scales micro-details infinitely on disk and ChromaDB RAG.
+**Rationale:** Grounds Pinky and Brain in 18 years of technical history (PCIe validation bring-up, Redfish, PECI, MCTP, Intel VISA signal trace) without inflating system prompt token context.
+**Mechanism:** `data/career_compass.json` Tier 1 Anchor Map, `BicameralNode` prompt bedrock in `loader.py`, and `test_career_compass_bedrock.py` token ceiling assertion (<350 tokens).
+
 
 
 

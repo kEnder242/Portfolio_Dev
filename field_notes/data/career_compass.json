@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-07-27",
+  "tier_1_anchor_map": {
+    "era_2005_2008": [
+      "Validation Engineer: Server firmware, EFI/Windows/Linux network tools, Perl/TCL automation",
+      "Automated 80% of manual NIC testing using Expect scripts and custom test routines",
+      "Built automated IPMI recovery test suites for IA64 and x86 platform bring-up"
+    ],
+    "era_2008_2010": [
+      "BMC Firmware Engineer: Implemented IPMI 2.0, DCMI, Serial Over LAN (SOL) in C",
+      "Built lightweight RMCP socket libraries and early HECI interface for BMC manageability",
+      "Automated build and integration flows during SVN to ClearCase SCM transitions"
+    ],
+    "era_2011_2015": [
+      "Post-Silicon Debug Software Developer: Owned Intel VISA signal-trace debug app",
+      "Automated internal signal trace visualization and SoC subsystem debug workflows",
+      "Built TeamCity CI API test suites verifying platform debug toolkit stability"
+    ],
+    "era_2016_2016": [
+      "Pre-Silicon Graphics Modeling Engineer: GPU/SoC simulation under Linux environments",
+      "Developed high-throughput log analysis pipelines using Python, grep, and xargs",
+      "Parses pre-silicon wave traces and validation logs for early bug resolution"
+    ],
+    "era_2016_2019": [
+      "Datacenter PAE (Intel Federal): 100-node Mellanox cluster debug & BIOS microcode triage",
+      "Developed C++ & IPMI thermal/power transient automation; Optane AEP mailbox tools",
+      "Collaborated with RAS validation group on AEP persistent memory platform bring-up"
+    ],
+    "era_2019_2024": [
+      "Manageability Test Content Lead: 100+ automated IPMI, Redfish, PECI, MCTP Python tests",
+      "Validated PCIe, memory controller, power management, and platform RAS mechanisms",
+      "Executed production validation in SIMICS (S3E/SSM); led telemetry and daily triage"
+    ],
+    "era_2024_2026": [
+      "Federated AI Architecture & Telemetry: Acme Lab, HomeLabAI, Portfolio Dev, vLLM",
+      "DCGM GPU telemetry pipeline integration, Multi-LoRA serve, NeMo EarNode, NVIDIA prep",
+      "Agentic-R & CLaRa synthesis; continuous burn indexing over 18-year archive"
+    ]
+  },
+  "tier_2_keyword_mesh": {
+    "keywords": [
+      "IPMI", "Redfish", "PECI", "MCTP", "Intel VISA", "PCIe", "RAS", "SIMICS", "S3E", "SSM",
+      "AEP", "Optane", "DCMI", "SOL", "RMCP", "HECI", "TeamCity", "Mellanox", "DCGM", "vLLM",
+      "Perl", "TCL", "Expect", "C++", "C", "Python", "EFI", "BIOS", "microcode", "power telemetry"
+    ],
+    "domain_highlights": {
+      "manageability": "100+ Python automated tests covering IPMI, Redfish, PECI, MCTP, and SIMICS virtual platforms",
+      "debuggability": "Intel VISA signal trace lead developer, SoC subsystem logic analyzer, JTAG hardware debug",
+      "telemetry": "Time-series power and performance telemetry visualization pipelines, DCGM Prometheus exporter"
+    }
+  }
+}
