@@ -218,24 +218,25 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
 
 ---
 
-## 💡 Backlog & Future Federated Topology (M5 Air 32GB MLX + GigaToken)
+## 💡 Backlog & Future Federated Topology (M5 Air MLX + MLX Sanity Judge & Feedback Loop)
 
-### 🏛️ Proposed Hardware Affinity & Node Specialization
-1. **Node 1: z87-Linux (RTX 2080 Ti 11GB VRAM)** -> **Sovereign Gateway & Sensory Gateway**
-   - **Role:** Foyer Router (`acme_foyer_v5`), NeMo EarNode (PCM audio stream parsing), ChromaDB RAG Vector Store (`behavioral_dna`, `feature_dna`), Public Airlock (`www.jason-lab.dev`), and Pinky (Llama 3.2 3B AWQ + Multi-LoRA adapters: `cli_voice_v1`, `shadow_brain_v2`, `lab_history_v1`).
-   - **Multi-LoRA Mandate:** Preserves local 11GB VRAM residency with multi-adapter switching intact.
+### 🏛️ Proposed Node Topology & Actor Roles
+1. **Node 1: z87-Linux (RTX 2080 Ti 11GB VRAM)** -> **Gateway, Triage & Pinky**
+   - **Role:** Foyer Router (`acme_foyer_v5`), NeMo EarNode, ChromaDB RAG Vector Store, and Pinky (Llama 3.2 3B AWQ + Multi-LoRA: `cli_voice_v1`, `shadow_brain_v2`, `lab_history_v1`).
+   - **Mandate:** Maintains sub-second initial response latency (preamble fill) and multi-LoRA persona switching.
 
-2. **Node 2: KENDER (RTX 4090 24GB VRAM)** -> **Silicon Heavy Compute & GPU Fast Path**
-   - **Role:** High-throughput CUDA inference, Qwen 2.5 Coder, DeepSeek reasoning, heavy code generation.
+2. **Node 2: KENDER (RTX 4090 24GB VRAM)** -> **Heavy Technical Brain**
+   - **Role:** High-throughput CUDA inference (Qwen 2.5 Coder / DeepSeek), heavy code generation, and complex technical synthesis.
 
-3. **Node 3: M5 MacBook Air (32GB Unified Memory / MLX)** -> **GigaToken Deep Thought & Hybrid Architecture Node**
-   - **Role:** Deep strategic reasoning, 128K–1M token context ingestion (GigaToken), and experimental architecture evaluation:
-     - **SmolLM3-3B:** Hyper-optimized 3B edge model for fast tool use and intent triage (potential drop-in upgrade for Pinky).
-     - **OLMo Hybrid:** Fully open MoE/Mamba hybrid architecture (AI2) for audit-verifiable strategic reasoning over multi-year logs.
-     - **Jamba 1.5 Mini & NoPE:** Mamba-Transformer SSM and No-Position-Embedding models for long-context deep thought.
-   - **Why Unified Memory:** Apple Silicon's 32GB Unified Memory allows MLX to allocate 24+ GB of RAM directly to LLM KV cache tables at ~150–200 GB/s bandwidth without hitches or PCIe bus bottlenecks.
+3. **Node 3: M5 MacBook Air (32GB Unified Memory / MLX)** -> **Async Sanity Judge & GigaToken Node**
+   - **Role:** Performs ONLY the final **Asynchronous Sanity Check / Coherence Judge** step at the end of the Round Table. Ingests full un-truncated 256K context via Jamba 1.5 Mini (Mamba-SSM).
+   - **Non-Blocking Guarantee:** Runs asynchronously in the background without delaying initial UI preamble/response streaming.
 
+### 🔁 The Strategic MLX Feedback Loop (RAG vs GEM vs LoRA Discipline)
+- **Fact & Archive Feedback (RAG / GEM)**:
+  - When MLX Sanity Judge identifies factual corrections or Diamond-level insights, it routes corrections directly to ChromaDB vector store and `refine_gem.py`.
+  - *Discipline:* Facts, dates, and technical specs live strictly in RAG & Gems—NEVER in LoRAs (eliminating past over-training scars).
+- **Tone & Persona Feedback (LoRA Tuning)**:
+  - When MLX identifies exemplary persona retorts or tone corrections, it appends instruction pairs to the offline LoRA dataset (`cli_voice_v1`) strictly for style and format compliance.
 
-4. **GigaToken Context Expansion Strategy**:
-   - Bypasses local 16K VRAM clamps for deep retrospective queries (`vibe: "DEEP_RESEARCH"`), streaming up to 128K+ tokens of raw multi-year archive notes directly to the 32GB M5 Air / MLX or remote 4090 nodes without degrading local 2080 Ti VRAM residency.
 
