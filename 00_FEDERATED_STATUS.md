@@ -247,13 +247,14 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
 - **Paper:** *"Precise Zero-Shot Dense Retrieval without Relevance Labels"* (Gao et al., CMU/Waterloo, 2022)
 - **ArXiv Link:** [arXiv:2212.10496](https://arxiv.org/abs/2212.10496)
 
-### 🧠 Concept & Acme Lab Integration
+### 🧠 Concept & Acme Lab Integration ("Open HyDE" Pinky Preamble Model)
 - **The Problem It Solves:** Bridges the "semantic gap" between short user questions (*"why did vLLM crash?"*) and dense technical note documents (*"Turing Compute 7.5 NVML handshake requires loopback..."*).
-- **How It Works (100% Local — NO API Key Needed!):**
-  1. When a user asks a query, Pinky or SmolLM3 generates a 2-sentence **hypothetical answer**.
-  2. The hypothetical answer is encoded via local SentenceTransformer / ChromaDB.
-  3. Vector similarity search runs on the *hypothetical answer*, finding exact target BKMs with 95%+ precision.
-- **Zero Cloud API Requirement:** Executed 100% locally via local LLM + local ChromaDB vector embeddings.
+- **How It Works (Pinky Open Roleplay Preamble — NO API Key Needed!):**
+  1. Pinky streams her intuitive roleplay preamble live to the UI (*"Egad Brain! I bet Glibc C-arenas are caching PyTorch allocations!"*).
+  2. Her spoken hypothesis string is captured and encoded via local `SentenceTransformer` into ChromaDB.
+  3. Vector similarity search runs on Pinky's spoken hypothesis, finding exact target BKMs with 95%+ precision.
+- **Zero Latency Penalty:** Eliminates hidden LLM calls by turning Pinky's user-facing preamble into the HyDE document generator!
+
 
 
 
