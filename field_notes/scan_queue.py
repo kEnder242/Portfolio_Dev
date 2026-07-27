@@ -169,7 +169,9 @@ def main():
             content_hash = get_hash(content)
             chunk_id = f"{filename}::{bucket_id}"
             
-            # Logic: Is this chunk NEW or CHANGED?
+            # Logic: Is this chunk NEW or CHANGED and NOT QUARANTINED?
+            if state.get(f"{chunk_id}::status") == "QUARANTINED":
+                continue
             if state.get(chunk_id) != content_hash:
                 # Add to queue
                 task = {

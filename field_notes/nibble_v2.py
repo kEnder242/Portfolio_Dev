@@ -9,6 +9,7 @@ import hashlib
 import logging
 import difflib
 import psutil
+import threading
 
 # Add current directory and HomeLabAI/src to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -75,13 +76,33 @@ def should_yield() -> bool:
 
     return False
 
-def check_politeness():
-    if FAST_MODE: return True
+# FEAT-428 Progressive Cooldown State
+CONSECUTIVE_YIELDS = 0
+
+def check_system_load():
+    global CONSECUTIVE_YIELDS
+    if FAST_MODE: 
+        CONSECUTIVE_YIELDS = 0
+        return True
     ready, reason = can_burn(max_load=MAX_LOAD)
     if not ready:
-        log(f"Yielding: {reason}")
+        CONSECUTIVE_YIELDS += 1
+        if CONSECUTIVE_YIELDS == 1:
+            log(f"[FEAT-428] Cooldown Tier 1 ({reason}). Sleeping 15s...")
+            time.sleep(15)
+        elif CONSECUTIVE_YIELDS == 2:
+            log(f"[FEAT-428] Cooldown Tier 2 ({reason}). Sleeping 60s...")
+            time.sleep(60)
+        else:
+            if CONSECUTIVE_YIELDS == 3:
+                log(f"[FEAT-428] Cooldown Tier 3 ({reason}). Entering COOLDOWN mode (sleeping 15m)...")
+            time.sleep(900)
         return False
-    return True
+    else:
+        if CONSECUTIVE_YIELDS > 0:
+            log(f"[FEAT-428] System load clear. Cooldown reset (was {CONSECUTIVE_YIELDS}).")
+        CONSECUTIVE_YIELDS = 0
+        return True
 
 def load_json(path):
     if os.path.exists(path):

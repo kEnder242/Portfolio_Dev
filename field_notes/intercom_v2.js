@@ -349,6 +349,12 @@ function connect() {
             const data = JSON.parse(e.data);
             console.log("[WS RECV]", data);
             
+            // [FEAT-433] Asynchronous Sanity Critic Badge Handler
+            if (data.type === 'sanity_check') {
+                appendMsg(`🛡️ Sanity Verified (Confidence: ${(data.confidence * 100).toFixed(0)}%)`, 'system-msg', 'SanityCritic', 'chat');
+                return;
+            }
+            
             // [FEAT-339] Message De-duplication
             if (data.msg_id) {
                 if (seenMsgIds.has(data.msg_id)) {
