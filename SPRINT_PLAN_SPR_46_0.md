@@ -16,16 +16,17 @@
    - **Mechanism:** Chunk-level failure tracker (`consecutive_failures`). Tag chunks failing 3x as `QUARANTINED` in `chunk_state.json`.
 
 3. **`FEAT-430` — Foyer C-Arena Heap Trimming Sentinel:**
-   - **Target Files:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
+   - **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/v5/ignition/manager.py`
    - **Mechanism:** Periodic `malloc_trim(0)` execution in Foyer's idle cleanup loop to stabilize process RSS < 1.0 GB.
 
 4. **`FEAT-432` — Open HyDE Preamble Preprocessor:**
-   - **Target Files:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+   - **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py`
    - **Mechanism:** Pinky's open streaming preamble roleplay serves as the HyDE hypothetical document generator. Her spoken hypothesis text is vectorized into ChromaDB to retrieve target BKMs with 95%+ precision without extra hidden LLM latency.
 
 5. **`FEAT-433` — Asynchronous Sanity Critic Protocol:**
-   - **Target Files:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+   - **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py`, `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js`
    - **Mechanism:** Fires a non-blocking background task (`asyncio.create_task`) after the initial turn response streams. Evaluates response against historical BKMs and streams a `sanity_check` WebSocket payload to render a live **"🛡️ Sanity Verified"** badge on the Intercom card.
+
 
 ---
 
