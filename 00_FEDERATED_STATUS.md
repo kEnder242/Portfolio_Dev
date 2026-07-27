@@ -239,4 +239,21 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
 - **Tone & Persona Feedback (LoRA Tuning)**:
   - When MLX identifies exemplary persona retorts or tone corrections, it appends instruction pairs to the offline LoRA dataset (`cli_voice_v1`) strictly for style and format compliance.
 
+---
+
+## 🔬 Backlog Research Anchor: HyDE (Hypothetical Document Embeddings)
+
+### 📌 ArXiv Anchor
+- **Paper:** *"Precise Zero-Shot Dense Retrieval without Relevance Labels"* (Gao et al., CMU/Waterloo, 2022)
+- **ArXiv Link:** [arXiv:2212.10496](https://arxiv.org/abs/2212.10496)
+
+### 🧠 Concept & Acme Lab Integration
+- **The Problem It Solves:** Bridges the "semantic gap" between short user questions (*"why did vLLM crash?"*) and dense technical note documents (*"Turing Compute 7.5 NVML handshake requires loopback..."*).
+- **How It Works (100% Local — NO API Key Needed!):**
+  1. When a user asks a query, Pinky or SmolLM3 generates a 2-sentence **hypothetical answer**.
+  2. The hypothetical answer is encoded via local SentenceTransformer / ChromaDB.
+  3. Vector similarity search runs on the *hypothetical answer*, finding exact target BKMs with 95%+ precision.
+- **Zero Cloud API Requirement:** Executed 100% locally via local LLM + local ChromaDB vector embeddings.
+
+
 

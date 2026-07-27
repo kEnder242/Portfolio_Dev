@@ -1439,5 +1439,12 @@
 **Rationale:** Maximizes synthesis quality for multi-year retrospective queries on high-memory remote endpoints without triggering local VRAM OOM errors.
 **Mechanism:** `is_remote_endpoint` check and context window scaler in `archive_node.py` and `cognitive_hub.py`.
 
+## [FEAT-432] HyDE Local RAG Preprocessor (Backlog)
+**Status:** BACKLOG
+**Logic:** Implements Hypothetical Document Embeddings ([arXiv:2212.10496](https://arxiv.org/abs/2212.10496)) using local LLMs (Pinky / SmolLM3). Generates a 2-sentence hypothetical answer prior to vector search, encoding the hypothetical document via local ChromaDB to bridge the semantic query-to-document gap.
+**Rationale:** Dramatically increases vector retrieval precision for short interrogative queries against dense BKM technical notes without requiring external cloud API keys.
+**Mechanism:** `generate_hypothetical_doc` preprocessor in `archive_node.py` prior to `chromadb` query vectorization.
+
+
 
 
