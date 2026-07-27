@@ -229,8 +229,12 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
    - **Role:** High-throughput CUDA inference, Qwen 2.5 Coder, DeepSeek reasoning, heavy code generation.
 
 3. **Node 3: M5 MacBook Air (32GB Unified Memory / MLX)** -> **GigaToken Deep Thought & Hybrid Architecture Node**
-   - **Role:** Deep strategic reasoning, 128K–1M token context ingestion (GigaToken), and experimental architecture evaluation (Jamba 1.5 Mini Mamba-Transformer SSM, SmolLM3-3B, OLMo Hybrid, NoPE - No Position Embeddings).
+   - **Role:** Deep strategic reasoning, 128K–1M token context ingestion (GigaToken), and experimental architecture evaluation:
+     - **SmolLM3-3B:** Hyper-optimized 3B edge model for fast tool use and intent triage (potential drop-in upgrade for Pinky).
+     - **OLMo Hybrid:** Fully open MoE/Mamba hybrid architecture (AI2) for audit-verifiable strategic reasoning over multi-year logs.
+     - **Jamba 1.5 Mini & NoPE:** Mamba-Transformer SSM and No-Position-Embedding models for long-context deep thought.
    - **Why Unified Memory:** Apple Silicon's 32GB Unified Memory allows MLX to allocate 24+ GB of RAM directly to LLM KV cache tables at ~150–200 GB/s bandwidth without hitches or PCIe bus bottlenecks.
+
 
 4. **GigaToken Context Expansion Strategy**:
    - Bypasses local 16K VRAM clamps for deep retrospective queries (`vibe: "DEEP_RESEARCH"`), streaming up to 128K+ tokens of raw multi-year archive notes directly to the 32GB M5 Air / MLX or remote 4090 nodes without degrading local 2080 Ti VRAM residency.
