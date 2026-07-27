@@ -1427,3 +1427,10 @@
 **Rationale:** Prevents a single corrupted or oversize note file from trapping background workers in an infinite fail-retry loop that hammers host CPU and LLM inference endpoints.
 **Mechanism:** Failure counter, `QUARANTINED` status tag in `chunk_state.json`, and automatic queue bypass in `scan_queue.py`.
 
+## [FEAT-430] Foyer C-Arena Heap Trimming Sentinel
+**Status:** ACTIVE
+**Logic:** Executes periodic glibc heap trimming (`ctypes.CDLL('libc.so.6').malloc_trim(0)`) in Foyer's idle cleanup loop and request completion hooks (`router.py`).
+**Rationale:** Prevents PyTorch tensor allocation fragmentation and CPython memory arena bloat from inflating `acme_foyer_v5` process RSS footprint over long uptimes.
+**Mechanism:** `malloc_trim(0)` invocation in `delayed_shutdown` and post-request cleanup handlers in `foyer/router.py`.
+
+

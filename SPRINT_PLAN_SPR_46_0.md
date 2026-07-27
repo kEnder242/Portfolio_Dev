@@ -1,7 +1,7 @@
-# Master Sprint Plan: Sprint 46 — Progressive Cooldown Engine & Poison Chunk Quarantine
+# Master Sprint Plan: Sprint 46 — Progressive Cooldown Engine, Poison Quarantine & Foyer Heap Trimming
 
 > **Sprint Narrative:**
-> Following the memory sentinel recalibrations in Sprint 44/45 and the system triage in Sprint 45, Sprint 46 establishes robust operational self-governance for the background note refinement pipeline (`scan_queue.py` & `nibble_v2.py`). It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`) to eliminate tight-loop log spam and sentinel hammering, alongside a **Poison Chunk Quarantine Protocol** (`FEAT-429`) to isolate broken or context-overflowing note files from infinite retry sweeps.
+> Following system memory audits and operational feedback, Sprint 46 establishes complete memory self-governance across the Federated Lab. It implements a 3-tier **Progressive Cooldown Engine** (`FEAT-428`) to eliminate sentinel polling hammering, a **Poison Chunk Quarantine Protocol** (`FEAT-429`) to isolate failing note chunks, and an automated **Foyer C-Arena Heap Trimming Sentinel** (`FEAT-430`) to prevent PyTorch/CPython memory bloat in `acme_foyer_v5`.
 
 ---
 
@@ -20,9 +20,14 @@
      - If a note chunk fails 3 consecutive times due to context overflow, JSON parse error, or HTTP failure, tag status as `QUARANTINED` in `chunk_state.json`.
      - Queue sweeps automatically bypass `QUARANTINED` files.
 
+3. **`FEAT-430` — Foyer C-Arena Heap Trimming Sentinel:**
+   - **Target Files:** `/home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py`, `/home/jallred/Dev_Lab/HomeLabAI/src/v5/ignition/manager.py`
+   - **Mechanism:** Periodic `malloc_trim(0)` execution in Foyer's idle cleanup loop.
+     - Trims CPython memory arena bloat in resident node sub-processes (`Pinky`, `Brain`, `Archive`, `Thought`, `Lab`), stabilizing Foyer process RSS at ~800 MB.
+
 ---
 
-## 📜 Story Backlog & Detailed Implementation Tasks
+## 📜 Story Backlog & Implementation Tasks
 
 ### **Story 1: `FEAT-428` — Progressive Cooldown Engine**
 - **Target Files:** `Portfolio_Dev/field_notes/scan_queue.py`, `Portfolio_Dev/field_notes/nibble_v2.py`
@@ -44,19 +49,30 @@
 
 ---
 
+### **Story 3: `FEAT-430` — Foyer C-Arena Heap Trimming Sentinel**
+- **Target Files:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
+- **Tasks:**
+  1. Add `ctypes.CDLL('libc.so.6').malloc_trim(0)` to `delayed_shutdown` and idle maintenance loops in `router.py`.
+  2. Call `malloc_trim(0)` after request completion to return freed PyTorch C-arenas back to OS `MemAvailable`.
+
+---
+
 ## 🤖 OpenAgent Delegation Playbook (BKM-034 Point 12 Compliance)
 
-When delegating Story 1 & Story 2 to OpenAgent via the OpenCode CLI, execute the exact command below attached to port 4096:
+> **Delegation Learning:** Never pass long inline instruction blocks via the CLI. Point OpenAgent directly to this Sprint Plan file!
+
+Launch OpenAgent attached to port 4096 using the command:
 
 ```bash
-/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "SESSION: Sprint 46 Story 1 & 2 — Progressive Cooldown Engine (FEAT-428) & Poison Chunk Quarantine (FEAT-429). Implement 3-tier progressive backoff in nibble_v2.py/scan_queue.py (15s -> 60s -> 15m COOLDOWN) and quarantine chunks failing 3 consecutive times as QUARANTINED in chunk_state.json."
+/home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "Read file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_46_0.md and execute Story 1 (FEAT-428), Story 2 (FEAT-429), and Story 3 (FEAT-430). Follow all acceptance criteria and verify tests pass."
 ```
 
 ---
 
 ## 🧪 Acceptance Criteria & Test Verification
-- [ ] `nibble_v2.py` enters 15-minute `COOLDOWN` after 3 consecutive yields under low RAM or non-IDLE mode.
+- [ ] `nibble_v2.py` enters 15-minute `COOLDOWN` after 3 consecutive yields.
 - [ ] Sentinel log output is suppressed during `COOLDOWN`.
 - [ ] Chunks failing 3 consecutive times are marked `QUARANTINED` in `chunk_state.json`.
 - [ ] `scan_queue.py` bypasses `QUARANTINED` chunks without stopping queue progression.
+- [ ] `malloc_trim(0)` runs periodically in `foyer/router.py`, maintaining `acme_foyer_v5` RSS < 1.0 GB.
 - [ ] All workspace git repositories remain clean and aligned on `main`.
