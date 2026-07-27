@@ -1433,4 +1433,11 @@
 **Rationale:** Prevents PyTorch tensor allocation fragmentation and CPython memory arena bloat from inflating `acme_foyer_v5` process RSS footprint over long uptimes.
 **Mechanism:** `malloc_trim(0)` invocation in `delayed_shutdown` and post-request cleanup handlers in `foyer/router.py`.
 
+## [FEAT-431] GigaToken Remote Synthesis Gate (Stretch Goal)
+**Status:** ACTIVE
+**Logic:** Bypasses local context token clamping when routing deep historical research queries (`vibe: "DEEP_RESEARCH"`) to remote compute engines or external cloud endpoints (KENDER / Gemini / DeepSeek). Packages up to 32K–64K tokens of raw multi-year archive notes while maintaining 16K safety limits for local RTX 2080 Ti VRAM.
+**Rationale:** Maximizes synthesis quality for multi-year retrospective queries on high-memory remote endpoints without triggering local VRAM OOM errors.
+**Mechanism:** `is_remote_endpoint` check and context window scaler in `archive_node.py` and `cognitive_hub.py`.
+
+
 
