@@ -1463,6 +1463,17 @@
 **Rationale:** Eliminates redundant LLM passes, resolves intent/nuance for historical retrospective queries, and reduces casual greeting latency to under 50ms.
 **Mechanism:** `prereflection_triage_result` JSON schema, greeting short-circuit check, and unified execution loop in `cognitive_hub.py`.
 
+## [FEAT-437] 3-Tier HyDE Failover Cascade & Vector Plumbing
+**Status:** ACTIVE
+**Logic:** Establishes a 3-tier HyDE failover cascade for ChromaDB vector search (`archive_node.py` & `cognitive_hub.py`):
+  1. `DEEP_THOUGHT_REMOTE`: High-precision HyDE vector synthesized on KENDER 4090.
+  2. `PINKY_LOCAL_VLLM`: Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Deep Thought is offline (`OLLAMA: None`).
+  3. `DIRECT_RAW_QUERY`: Direct raw query vector fallback.
+  Vector queries pass `query_texts=[hyde_vector_text]` directly to `chroma-server.service` on port 8001 (`LAB-007`) to ensure 100% embedding space alignment.
+**Rationale:** Guarantees uninterrupted high-precision vector retrieval even during remote node offline states.
+**Mechanism:** `resolve_hyde_vector` 3-tier cascade, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_hyde_plumbing.py`.
+
+
 
 
 
