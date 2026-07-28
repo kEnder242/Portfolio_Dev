@@ -1457,6 +1457,13 @@
 **Rationale:** Grounds Pinky and Brain in 18 years of technical history (PCIe validation bring-up, Redfish, PECI, MCTP, Intel VISA signal trace) without inflating system prompt token context.
 **Mechanism:** `data/career_compass.json` Tier 1 Anchor Map, `BicameralNode` prompt bedrock in `loader.py`, and `test_career_compass_bedrock.py` token ceiling assertion (<350 tokens).
 
+## [FEAT-436] Unified Intent-HyDE Pre-Reflection Engine
+**Status:** ACTIVE
+**Logic:** Refactors the triage loop in `cognitive_hub.py` to execute a single 150-token Pre-Reflection pass. Outputs Inferred Intent (*"I think the user is trying to say..."*), Triage Routing (`addressed_to`, `vibe`, `importance`), and HyDE Synthesis vector in a single pass. Includes a short-circuit early-exit for simple greetings (`"hi"`, `"hey"`) in <15 tokens (~50ms) as `PINKY CASUAL 0.1`.
+**Rationale:** Eliminates redundant LLM passes, resolves intent/nuance for historical retrospective queries, and reduces casual greeting latency to under 50ms.
+**Mechanism:** `prereflection_triage_result` JSON schema, greeting short-circuit check, and unified execution loop in `cognitive_hub.py`.
+
+
 
 
 
