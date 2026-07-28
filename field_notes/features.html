@@ -7149,6 +7149,42 @@
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-437">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-437</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    3-Tier HyDE Failover Cascade & Vector Plumbing
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a 3-tier HyDE failover cascade for ChromaDB vector search (<code>archive_node.py</code> &amp; <code>cognitive_hub.py</code>):
+  1. <code>DEEP_THOUGHT_REMOTE</code>: High-precision HyDE vector synthesized on KENDER 4090.
+  2. <code>PINKY_LOCAL_VLLM</code>: Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Deep Thought is offline (<code>OLLAMA: None</code>).
+  3. <code>DIRECT_RAW_QUERY</code>: Direct raw query vector fallback.
+  Vector queries pass <code>query_texts=[hyde_vector_text]</code> directly to <code>chroma-server.service</code> on port 8001 (<code>LAB-007</code>) to ensure 100% embedding space alignment.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees uninterrupted high-precision vector retrieval even during remote node offline states.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>resolve_hyde_vector</code> 3-tier cascade, <code>hyde_vector_text</code> parameter in <code>archive_node.get_context</code>, and <code>test_hyde_plumbing.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
