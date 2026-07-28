@@ -1473,6 +1473,20 @@
 **Rationale:** Guarantees uninterrupted high-precision vector retrieval even during remote node offline states.
 **Mechanism:** `resolve_hyde_vector` 3-tier cascade, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_hyde_plumbing.py`.
 
+## [FEAT-438] Nightly Continuous Burn Map Synthesizer Integration
+**Status:** ACTIVE
+**Logic:** Integrates `synthesize_career_mesh()` into the background scanner pipeline (`mass_scan.py`). Step 6 TLC scans raw note gems and `resume.txt` to continuously enrich `data/career_compass.json` Tier 2 Keyword Mesh without modifying Tier 1 Bedrock.
+**Rationale:** Allows 18-year archive processing and newly discovered technical terms to scale infinitely on disk and vector RAG while keeping system prompt context strictly under 300 tokens.
+**Mechanism:** `synthesize_career_mesh()` in `field_notes/mass_scan.py`, atomic write swap, and `test_tier_1_token_ceiling` validation.
+
+## [FEAT-439] M5 Air MLX Offloading & Async Sanity Judge Protocol
+**Status:** ACTIVE
+**Logic:** Integrates Node 3 (M5 MacBook Air 32GB Unified Memory / Apple MLX Framework on port 8090) into the Round Table topology as an Asynchronous Sanity Judge & GigaToken Node. Evaluates full 256K context turn traces asynchronously in the background without delaying initial response streaming.
+**Rationale:** Enables un-truncated 256K context evaluation on Apple MLX unified memory with a two-lane feedback loop (Factual -> ChromaDB `:8001`; Style -> `cli_voice_v1` LoRA dataset).
+**Mechanism:** `src/nodes/mlx_judge_node.py`, `MLXAsyncJudge` driver, `[LAB-010]` infrastructure registration, and `test_mlx_judge_node.py`.
+
+
+
 
 
 

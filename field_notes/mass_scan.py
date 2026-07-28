@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import json
+import re
 import subprocess
 import requests
 import logging
@@ -148,6 +149,67 @@ def hallway_protocol(keyword):
     except Exception as e:
         logging.error(f"Hallway Protocol failed: {e}")
 
+def synthesize_career_mesh():
+    """[FEAT-438] Indexes raw notes and gems against resume.txt to update Tier 2 Keyword Mesh without inflating Tier 1 Bedrock."""
+    compass_file = os.path.join(DATA_DIR, "career_compass.json")
+    resume_file = os.path.expanduser("~/study/references/resume.txt")
+    if not os.path.exists(compass_file):
+        logging.warning("[COMPASS] career_compass.json not found. Skipping synthesis.")
+        return
+
+    try:
+        with open(compass_file, 'r') as f:
+            compass = json.load(f)
+        
+        # Load resume terms if available
+        resume_text = ""
+        if os.path.exists(resume_file):
+            with open(resume_file, 'r') as f:
+                resume_text = f.read()
+
+        keywords = set(compass.get("tier_2_keyword_mesh", {}).get("keywords", []))
+        
+        # Extract potential technical terms from resume
+        if resume_text:
+            found_terms = re.findall(r'\b[A-Z0-9]{2,10}\b', resume_text)
+            for t in found_terms:
+                if len(t) >= 2 and not t.isdigit() and t not in ["AND", "THE", "FOR", "WITH", "FROM", "OUT"]:
+                    keywords.add(t)
+
+        # Scan processed JSONs for matching high-rank terms
+        json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+        for jf in json_files:
+            fname = os.path.basename(jf)
+            if any(x in fname for x in ["status", "themes", "queue", "state", "search_index", "pager_activity", "file_manifest", "career_compass"]):
+                continue
+            try:
+                with open(jf, 'r') as f:
+                    data = json.load(f)
+                    if isinstance(data, list):
+                        for ev in data:
+                            summary = str(ev.get("summary", ""))
+                            techs = re.findall(r'\b[A-Z0-9]{3,10}\b', summary)
+                            for tech in techs:
+                                if tech in resume_text or tech in keywords:
+                                    keywords.add(tech)
+            except Exception:
+                pass
+
+        # Update Tier 2 Mesh
+        tier_2 = compass.get("tier_2_keyword_mesh", {})
+        tier_2["keywords"] = sorted(list(keywords))
+        tier_2["last_scanned"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        compass["tier_2_keyword_mesh"] = tier_2
+
+        # Atomic write
+        tmp_file = compass_file + ".tmp"
+        with open(tmp_file, 'w') as f:
+            json.dump(compass, f, indent=2)
+        os.replace(tmp_file, compass_file)
+        logging.info(f"[COMPASS] Successfully synthesized Tier 2 Keyword Mesh ({len(keywords)} terms). Tier 1 Anchor Map preserved.")
+    except Exception as e:
+        logging.error(f"[COMPASS] Failed to synthesize career mesh: {e}")
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--keyword", help="Run a targeted Hallway Protocol scan.")
@@ -281,6 +343,7 @@ def main():
         update_status("ONLINE", "Tidying Archive...")
         run_task([CLEANER])
         run_task([AGGREGATOR])
+        synthesize_career_mesh()
 
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
         update_status("IDLE", f"Epoch {epoch_count} complete.")
@@ -293,3 +356,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
