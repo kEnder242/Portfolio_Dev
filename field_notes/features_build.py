@@ -6,9 +6,11 @@ import os
 import re
 import markdown
 
-SOURCE_MD = "/home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md"
-TEMPLATE_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/features.html"
-OUTPUT_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/features.html"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SOURCE_MD = os.path.abspath(os.path.join(BASE_DIR, "../FeatureTracker.md"))
+TEMPLATE_HTML = os.path.join(BASE_DIR, "features.html")
+OUTPUT_HTML = os.path.join(BASE_DIR, "features.html")
+REL_SOURCE_MD = "Portfolio_Dev/FeatureTracker.md"
 
 def convert_internal_links(md_content):
     # Convert [FEAT-XXX] references to markdown hash links: [FEAT-XXX](#FEAT-XXX)
@@ -197,7 +199,15 @@ def main():
     
     with open(TEMPLATE_HTML, 'r') as f:
         html_content = f.read()
-        
+
+    source_comment = f"<!-- [SOURCE_OF_TRUTH] Compiled from: {REL_SOURCE_MD}. Do NOT edit features.html directly! -->\n"
+    if "<!-- [SOURCE_OF_TRUTH]" not in html_content:
+        body_idx = html_content.find("<body>")
+        if body_idx != -1:
+            html_content = html_content[:body_idx+6] + "\n" + source_comment + html_content[body_idx+6:]
+    else:
+        html_content = re.sub(r'<!-- \[SOURCE_OF_TRUTH\].*?-->\n', source_comment, html_content)
+
     # Inject philosophy block if found
     if phil_md:
         phil_start_tag = '<div class="disclaimer-box" id="philosophy-box" style="margin-bottom: 15px; padding: 10px; font-size: 0.8rem; border-left-width: 3px;">'

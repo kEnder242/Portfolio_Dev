@@ -111,6 +111,8 @@
     </style>
 </head>
 <body>
+<!-- [SOURCE_OF_TRUTH] Compiled from: Portfolio_Dev/FeatureTracker.md. Do NOT edit features.html directly! -->
+
 
     <button id="menu-toggle">☰ MENU</button>
 
@@ -7177,6 +7179,70 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>resolve_hyde_vector</code> 3-tier cascade, <code>hyde_vector_text</code> parameter in <code>archive_node.get_context</code>, and <code>test_hyde_plumbing.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-438">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-438</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Nightly Continuous Burn Map Synthesizer Integration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Integrates <code>synthesize_career_mesh()</code> into the background scanner pipeline (<code>mass_scan.py</code>). Step 6 TLC scans raw note gems and <code>resume.txt</code> to continuously enrich <code>data/career_compass.json</code> Tier 2 Keyword Mesh without modifying Tier 1 Bedrock.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Allows 18-year archive processing and newly discovered technical terms to scale infinitely on disk and vector RAG while keeping system prompt context strictly under 300 tokens.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>synthesize_career_mesh()</code> in <code>field_notes/mass_scan.py</code>, atomic write swap, and <code>test_tier_1_token_ceiling</code> validation.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-439">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-439</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    M5 Air MLX Offloading & Async Sanity Judge Protocol
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Integrates Node 3 (M5 MacBook Air 32GB Unified Memory / Apple MLX Framework on port 8090) into the Round Table topology as an Asynchronous Sanity Judge &amp; GigaToken Node. Evaluates full 256K context turn traces asynchronously in the background without delaying initial response streaming.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enables un-truncated 256K context evaluation on Apple MLX unified memory with a two-lane feedback loop (Factual -&gt; ChromaDB <code>:8001</code>; Style -&gt; <code>cli_voice_v1</code> LoRA dataset).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>src/nodes/mlx_judge_node.py</code>, <code>MLXAsyncJudge</code> driver, <code>[LAB-010]</code> infrastructure registration, and <code>test_mlx_judge_node.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>

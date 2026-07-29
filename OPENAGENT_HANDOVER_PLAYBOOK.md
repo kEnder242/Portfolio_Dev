@@ -52,8 +52,34 @@ The OpenAgent daemon (`opencode-core.service`) is socket-activated on port 4096 
 - Instead of injecting full markdown files (`FeatureTracker.md` or `Protocols.md`) into prompt text, BKM and FEAT context is retrieved dynamically from ChromaDB vector collections (`behavioral_dna`, `feature_dna`) running on port 8001.
 - **Semantic Translation:** Translate conversational user prompts into precise domain keywords (e.g., `"atomic write"`, `"safe file patch"`, `"circuit breaker"`) before querying vector collections.
 
-### 3.3 Explicit Blueprint Prompting
-Cloud orchestrators (Gemini) must compile exact HTML/CSS blocks, BeautifulSoup scripts, or shell templates directly inside the prompt's `[TARGET SPECIFICATION]` section. This minimizes local model reasoning drift, prevents path hallucinations, and allows code inspection inside the sprint plan before execution.
+### 3.3 Pre-Grounded Blueprint & Swarm Delegation Prompting
+Cloud orchestrators (Gemini) compile structured prompt blueprints containing explicit file anchors, context briefing, and subagent delegation directives. This eliminates broad workspace scanning, prevents path hallucinations, and leverages OpenAgent's internal specialist swarm (`Prometheus`, `Sisyphus-Junior`, `Hephaestus`):
+
+```markdown
+SESSION: Sprint XX Story YY — <Title>
+
+[PRE-GROUNDED CONTEXT BRIEFING]
+- Architecture & Planning: Sprint plan at file://<path_to_sprint_plan>.md#Story-YY.
+- Scope Guidance: Pre-grounding complete. Skip broad workspace scans; focus directly on the target files listed below.
+
+[TARGET SPECIFICATION]
+- Primary Output Target: <absolute_path_to_target_file>
+- Reference Implementation / Specs: <file_links_or_patterns>
+- Operational Requirements:
+  1. <Requirement 1>
+  2. <Requirement 2>
+
+[SWARM DELEGATION DIRECTIVE]
+- You are Sisyphus (Lead Manager).
+- Delegate sub-tasks to your internal specialists:
+  • Use `Prometheus` for test structure validation or pre-review.
+  • Use `Sisyphus-Junior` or local tools for code edits.
+  • Use `Hephaestus` for verification and log checks.
+
+[VERIFICATION GATE]
+- Test Command: <pytest_or_verification_script>
+- Mandate: Do NOT run git commit. Report execution summary when complete.
+```
 
 ---
 
@@ -91,9 +117,22 @@ OpenAgent workers perform file edits and execute test suites locally, but are **
 - If a worker process crashes or gets stuck in a loop, systemd halts the service after 3 bursts instead of spinning continuously.
 - On completion, AGY verifies zero established sockets (`ss -tp | grep 11434`) remain connected to remote compute nodes (Node KENDER).
 
-### 4.3 Common Failure Recovery
-1. **`Session too large to compact`:** Verify `.opencodeignore` exists in the target directory and excludes `.venv/` and `node_modules/`.
-2. **`HttpClient connection failed` (ChromaDB):** All refactored scripts include a failover handler (`try HttpClient(port=8001) except Exception: PersistentClient(...)`), ensuring disk fallback if port 8001 is offline.
+### 4.4 Token Behavior & Provider Quota Matrix
+To prevent rate-limit crashes and manage cloud token budgets effectively:
+
+- **Google Gemini Free Tier (`google/gemini-2.5-flash`)**: 250,000 Input Tokens/Min (TPM) capacity with 20 Requests/Min (RPM) limit. Primary model for OpenAgent orchestration.
+- **Groq (`groq/llama-3.3-70b-versatile`)**: Strict 12,000 TPM limit. Ideal for concise sub-task planning or verification prompts (<10k tokens). Cannot accept heavy OpenCode initial payloads (80k+ tokens).
+- **DeepSeek Free Tier (`opencode/deepseek-v4-flash-free`)**: Generous free tier for text processing, status checks, and triage.
+- **Node KENDER (`my-windows-4090/qwen2.5-coder:14b`)**: **Strict Isolation Mandate.** KENDER's local Ollama instance is reserved exclusively for live Round Table integration tests and high-speed local code generation (`Sisyphus-Junior`). It MUST NOT be used for top-level OpenAgent orchestration to avoid compute and VRAM resource contention during automated test runs.
+
+### 4.5 Delegation Helper Scripts
+To prevent shell tokenization and escaping errors (e.g. bash syntax errors when passing multi-line prompts with parentheses or `file://` URLs), all CLI delegations are routed through the Python helper script:
+- **`scratch_delegate.py`**: `/home/jallred/Dev_Lab/HomeLabAI/src/tests/scratch_delegate.py`
+  - Accepts `--story`, `--title`, `--file`, `--details`, `--verification`.
+  - Automatically formats the Pre-Grounded Blueprint template and executes `/home/jallred/.opencode/bin/opencode run --dir ... --attach http://127.0.0.1:4096/ --auto` safely via `subprocess.run`.
+
+### 4.6 Orchestrator Non-Coding Mandate
+The Strategic Guardian (**Antigravity / Gemini**) is strictly an **architect, planner, and git reviewer**. The orchestrator MUST NOT directly write code, implement features, or generate unit test files itself when an OpenAgent developer swarm is available. All code writing, test file creation, and refactoring MUST be delegated to OpenAgent.
 
 ---
 
@@ -103,3 +142,4 @@ OpenAgent workers perform file edits and execute test suites locally, but are **
 - **Sprint 38:** Added session naming conventions (`SESSION: Sprint XX Story YY`) and Ollama concurrency fixes.
 - **Sprint 40:** Integrated real-time Grafana/Prometheus telemetry and socket-activated server hibernation.
 - **Sprint 42:** Standardized BKM-034 Point 12 (mandatory shell execution on port 4096 for webview visibility), implemented ICM persistent memory hybrid offloading (BKM-037), and established daemon circuit breakers (BKM-038).
+- **Sprint 47.1:** Enforced Submodule `.opencodeignore` context isolation, established the Pre-Grounded Blueprint template, documented model token quota ceilings, and added `scratch_delegate.py` helper script mapping.

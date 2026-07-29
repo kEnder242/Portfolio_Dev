@@ -7,9 +7,11 @@ import os
 import re
 import markdown
 
-SOURCE_MD = "/home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md"
-TEMPLATE_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/protocols.html"
-OUTPUT_HTML = "/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/protocols.html"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SOURCE_MD = os.path.abspath(os.path.join(BASE_DIR, "../../HomeLabAI/docs/Protocols.md"))
+TEMPLATE_HTML = os.path.join(BASE_DIR, "protocols.html")
+OUTPUT_HTML = os.path.join(BASE_DIR, "protocols.html")
+REL_SOURCE_MD = "HomeLabAI/docs/Protocols.md"
 
 def convert_relative_links(md_content):
     def replacer(match):
@@ -97,7 +99,15 @@ def main():
     
     with open(TEMPLATE_HTML, 'r') as f:
         html_content = f.read()
-        
+
+    source_comment = f"<!-- [SOURCE_OF_TRUTH] Compiled from: {REL_SOURCE_MD}. Do NOT edit protocols.html directly! -->\n"
+    if "<!-- [SOURCE_OF_TRUTH]" not in html_content:
+        body_idx = html_content.find("<body>")
+        if body_idx != -1:
+            html_content = html_content[:body_idx+6] + "\n" + source_comment + html_content[body_idx+6:]
+    else:
+        html_content = re.sub(r'<!-- \[SOURCE_OF_TRUTH\].*?-->\n', source_comment, html_content)
+
     start_tag = "<tbody>"
     end_tag = "</tbody>"
     
