@@ -166,8 +166,8 @@ To maintain clean boundaries between **Agent Operational Mechanics** (AGY / Open
 
 ## 📊 Delegation Ready Checklist
 
-- [ ] Story 1: `career_ledger` & `artifact_vault` ChromaDB Collections (`src/forge/index_*.py`)
-- [ ] Story 2: Composite Multi-Voice HyDE Synthesis (`src/logic/cognitive_hub.py`)
-- [ ] Story 3: Multi-Collection Cosine Reranker (`src/nodes/archive_node.py`)
-- [ ] Story 4: FeatureTracker & Protocol Documentation Updates
-- [ ] Story 5: End-to-End RAG Matrix Capstone Integration Suite (`test_integration_rag_matrix.py`)
+- [x] Story 1: `career_ledger` & `artifact_vault` ChromaDB Collections (`src/forge/index_*.py`)
+- [x] Story 2: Composite Multi-Voice HyDE Synthesis (`src/logic/cognitive_hub.py`)
+- [x] Story 3: Multi-Collection Cosine Reranker (`src/nodes/archive_node.py`)
+- [x] Story 4: FeatureTracker & Protocol Documentation Updates
+- [x] Story 5: End-to-End RAG Matrix Capstone Integration Suite (`test_integration_rag_matrix.py`)
