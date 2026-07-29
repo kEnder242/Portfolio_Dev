@@ -1485,12 +1485,19 @@
 **Rationale:** Enables un-truncated 256K context evaluation on Apple MLX unified memory with a two-lane feedback loop (Factual -> ChromaDB `:8001`; Style -> `cli_voice_v1` LoRA dataset).
 **Mechanism:** `src/nodes/mlx_judge_node.py`, `MLXAsyncJudge` driver, `[LAB-010]` infrastructure registration, and `test_mlx_judge_node.py`.
 
+---
 
+## [FEAT-440] Taxonomy Separation: Agent DNA vs. User Work History
+**Status:** ACTIVE
+**Logic:** Separates system/behavioral instructions (behavioral_dna, feature_dna) from historical user pedigree (career_ledger, artifact_vault, lab_journal) across ChromaDB collections.
+**Rationale:** Prevents context bleeding between internal cognitive prompts and 18-year career work history.
+**Mechanism:** 5 distinct ChromaDB collections on port 8001, populated via index_artifacts_to_rag.py and index_resume_to_rag.py.
 
-
-
-
-
+## [FEAT-441] ChromaDB Multi-Collection Cosine Reranker
+**Status:** ACTIVE
+**Logic:** get_context() in archive_node.py queries all 5 ChromaDB collections in parallel via asyncio.gather and applies a unified cosine distance filter (<0.45 cutoff) and distance-based sorting.
+**Rationale:** Delivers high-precision context retrieval with domain-badged metadata ([ARTIFACT], [CAREER], [BEHAVIORAL_DNA], [FEATURE_DNA], [LAB_JOURNAL]) across heterogeneous document stores.
+**Mechanism:** Parallel async HTTP queries, distance sorting, domain badge formatting in archive_node.py.
 
 
 

@@ -37,7 +37,11 @@ All tactical developer tasks delegated to OpenAgent must be launched via the she
 - **Forking Context:** Use `--fork` when branching from a known stable state without dirtying the parent session.
 
 ### 2.3 Socket-Activated Daemon Warm-Up
-The OpenAgent daemon (`opencode-core.service`) is socket-activated on port 4096 with `StopWhenUnneeded=true`. Before launching a heavy turn, AGY sends a fast socket ping (`curl -I http://127.0.0.1:4096/`) to wake the server from hibernation.
+The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencode.socket` on `0.0.0.0:4096` with `StopWhenUnneeded=true`. Before launching any session, `delegate.py` calls `wake_web_ui()` which HTTP-GETs `http://127.0.0.1:4096/` — this TCP connect triggers the `opencode.socket` → `opencode-proxy.service` → `codex:4097` activation chain.
+
+**Port separation (do not confuse):**
+- `4097` = `codex serve` REST API (system-level service, always running). Used for session creation and message dispatch.
+- `4096` = Web UI proxy (user-level, socket-activated, idle-stops after 5min). Required for browser access at `http://192.168.1.238:4096/`.
 
 ---
 
@@ -69,16 +73,37 @@ SESSION: Sprint XX Story YY — <Title>
   1. <Requirement 1>
   2. <Requirement 2>
 
-[SWARM DELEGATION DIRECTIVE]
-- You are Sisyphus (Lead Manager).
-- Delegate sub-tasks to your internal specialists:
-  • Use `Prometheus` for test structure validation or pre-review.
-  • Use `Sisyphus-Junior` or local tools for code edits.
-  • Use `Hephaestus` for verification and log checks.
+[SWARM DELEGATION DIRECTIVE — TASK() CALLS ONLY]
+You are Sisyphus (Lead Orchestrator). You MUST NOT implement code directly.
+Use the task() tool to delegate ALL implementation and verification work:
+
+  task(agent="sisyphus-junior", category="quick", run_in_background=false, prompt="""
+    ## 1. TASK
+    <exact implementation task for KENDER/qwen2.5-coder>
+    ## 2. EXPECTED OUTCOME
+    - [ ] File: <path> created/modified
+    - [ ] Verification: <command> exits 0
+    ## 3. MUST DO
+    - Write the code to <path>
+    - Run <verification command>
+    ## 4. MUST NOT DO
+    - Do NOT git commit
+  """)
+
+  task(agent="prometheus", category="deep", run_in_background=false, prompt="""
+    ## 1. TASK
+    <test structure / validation task>
+    ...
+  """)
+
+> [!IMPORTANT]
+> Narrating "I will delegate to Sisyphus-Junior" is NOT delegation.
+> Delegation ONLY occurs when Sisyphus emits a `task()` tool call.
+> If Sisyphus writes code directly, the delegation mandate has FAILED.
 
 [VERIFICATION GATE]
 - Test Command: <pytest_or_verification_script>
-- Mandate: Do NOT run git commit. Report execution summary when complete.
+- Mandate: Do NOT run git commit. Report execution summary including which agents were invoked.
 ```
 
 ---
@@ -126,10 +151,12 @@ To prevent rate-limit crashes and manage cloud token budgets effectively:
 - **Node KENDER (`my-windows-4090/qwen2.5-coder:14b`)**: **Strict Isolation Mandate.** KENDER's local Ollama instance is reserved exclusively for live Round Table integration tests and high-speed local code generation (`Sisyphus-Junior`). It MUST NOT be used for top-level OpenAgent orchestration to avoid compute and VRAM resource contention during automated test runs.
 
 ### 4.5 Delegation Helper Scripts
-To prevent shell tokenization and escaping errors (e.g. bash syntax errors when passing multi-line prompts with parentheses or `file://` URLs), all CLI delegations are routed through the Python helper script:
-- **`scratch_delegate.py`**: `/home/jallred/Dev_Lab/HomeLabAI/src/tests/scratch_delegate.py`
-  - Accepts `--story`, `--title`, `--file`, `--details`, `--verification`.
-  - Automatically formats the Pre-Grounded Blueprint template and executes `/home/jallred/.opencode/bin/opencode run --dir ... --attach http://127.0.0.1:4096/ --auto` safely via `subprocess.run`.
+All CLI delegations are routed through:
+- **`delegate.py`**: `/home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py`
+  - Calls `wake_web_ui()` to activate port 4096 socket chain.
+  - Creates session via `POST http://127.0.0.1:4097/session`.
+  - Dispatches prompt via `POST http://127.0.0.1:4097/session/<id>/message` (headless REST, no TUI required).
+  - **Do NOT use `opencode run --attach` from scripts** — it is a blocking foreground TUI and hangs when the webview is down.
 
 ### 4.6 Orchestrator Non-Coding Mandate
 The Strategic Guardian (**Antigravity / Gemini**) is strictly an **architect, planner, and git reviewer**. The orchestrator MUST NOT directly write code, implement features, or generate unit test files itself when an OpenAgent developer swarm is available. All code writing, test file creation, and refactoring MUST be delegated to OpenAgent.
@@ -143,3 +170,4 @@ The Strategic Guardian (**Antigravity / Gemini**) is strictly an **architect, pl
 - **Sprint 40:** Integrated real-time Grafana/Prometheus telemetry and socket-activated server hibernation.
 - **Sprint 42:** Standardized BKM-034 Point 12 (mandatory shell execution on port 4096 for webview visibility), implemented ICM persistent memory hybrid offloading (BKM-037), and established daemon circuit breakers (BKM-038).
 - **Sprint 47.1:** Enforced Submodule `.opencodeignore` context isolation, established the Pre-Grounded Blueprint template, documented model token quota ceilings, and added `scratch_delegate.py` helper script mapping.
+- **Sprint 48 (RAG Matrix):** Discovered critical delegation gap: prose "delegate to Sisyphus-Junior" directives do NOT invoke the OmO `task()` tool — Sisyphus must emit explicit `task(agent="sisyphus-junior", ...)` tool calls for KENDER to receive work. Fixed `delegate.py` to use headless REST POST dispatch instead of blocking `subprocess.run(opencode run --attach)`. Fixed port 4096 socket wakeup via `wake_web_ui()`. Audit gate added: verify `providerID=my-windows-4090` in session message log after each story.
