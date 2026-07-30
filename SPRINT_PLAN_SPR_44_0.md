@@ -114,16 +114,15 @@
   1. `sudo systemctl restart lab-attendant.service`
   2. `pytest src/tests/test_qpr_hyde.py`
   3. Inject live test query via `intercom.html` and verify `attendant.log` confirms refined query lookup.
-- **Spoon-Fed OpenAgent Delegation Command**:
+- **BKM-034 Swarm Delegation Command**:
   ```bash
-  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/HomeLabAI --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 6 — FEAT-442 QPR & HyDE Integration
-
-  CONTEXT:
-  - Target file: /home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py
-  - Task: Implement pre-retrieval query de-noising in get_context() before ChromaDB search.
-  - Rule: Refine noisy user queries into domain-specific indexing terms. Keep original query as fallback if top vector similarity distance is > 0.45 (< 0.70 score).
-  - Test File: Create src/tests/test_qpr_hyde.py testing QPR refinement and fallback logic.
-  - Validation Gate: Restart lab-attendant.service via systemctl, run pytest, and verify clean execution."
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py \
+    --story 6 \
+    --title "FEAT-442 QPR & HyDE Integration" \
+    --file "src/logic/cognitive_hub.py" \
+    --details "Implement pre-retrieval query de-noising qpr_refine_query() in cognitive_hub.py and integrate into archive_node.py get_context() with distance fallback (>0.45)." \
+    --verification "pytest src/tests/test_qpr_hyde.py" \
+    --dir "/home/jallred/Dev_Lab/HomeLabAI"
   ```
 
 ---
@@ -136,17 +135,15 @@
   1. `sudo systemctl restart lab-attendant.service`
   2. `pytest src/tests/test_par_eval_scoring.py`
   3. Run `python3 src/debug/uber_5x5_v5.py --fast` with false-premise probe and verify 5/5 PASS certification.
-- **Spoon-Fed OpenAgent Delegation Command**:
+- **BKM-034 Swarm Delegation Command**:
   ```bash
-  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/HomeLabAI --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 7 — FEAT-443 PAR-Eval & Refusal Interceptor
-
-  CONTEXT:
-  - Target files: /home/jallred/Dev_Lab/HomeLabAI/src/nodes/mlx_judge_node.py & src/debug/uber_5x5_v5.py
-  - Task: 
-    1. Add refusal JSON schema {'refusal': True, 'reason': 'PREMISE_MISMATCH'} to MLXAsyncJudge evaluate_256k_context().
-    2. Update evaluate_fidelity() in uber_5x5_v5.py to intercept validated refusal payloads and score them as 5/5 PASS.
-  - Test File: Create src/tests/test_par_eval_scoring.py.
-  - Validation Gate: Restart lab-attendant.service, run uber_5x5_v5.py --fast, and confirm valid refusal queries pass 5/5."
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py \
+    --story 7 \
+    --title "FEAT-443 PAR-Eval & Refusal Interceptor" \
+    --file "src/nodes/mlx_judge_node.py" \
+    --details "Add refusal JSON schema {'refusal': True, 'reason': 'PREMISE_MISMATCH'} to MLXAsyncJudge evaluate_256k_context() and update evaluate_fidelity() in uber_5x5_v5.py to intercept and score refusals as 5/5 PASS." \
+    --verification "pytest src/tests/test_par_eval_scoring.py" \
+    --dir "/home/jallred/Dev_Lab/HomeLabAI"
   ```
 
 ---
@@ -159,17 +156,17 @@
   1. `sudo systemctl restart lab-attendant.service`
   2. Trigger turn trace via live UI, confirm `judge_backpressure.jsonl` appends event.
   3. Verify `status.html` renders `Amber [JUDGE]` badge and `generate_judge_ledger.py` compiles clean Markdown.
-- **Spoon-Fed OpenAgent Delegation Command**:
+- **BKM-034 Swarm Delegation Command**:
   ```bash
-  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 8 — FEAT-444 Judicial Backpressure Ledger
-
-  CONTEXT:
-  - Target files: 
-    1. /home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py (write judge results to field_notes/data/judge_backpressure.jsonl)
-    2. /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html (render Amber [JUDGE] timeline badge)
-    3. Create /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/generate_judge_ledger.py to compile JUDGE_FIELD_LEDGER.md.
-  - Validation Gate: Restart lab-attendant.service, trigger turn trace, confirm judge_backpressure.jsonl appends, status.html shows Amber badge, and generate_judge_ledger.py outputs markdown."
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py \
+    --story 8 \
+    --title "FEAT-444 Judicial Backpressure Ledger" \
+    --file "field_notes/status.html" \
+    --details "Stream M5 judge evaluation logs to field_notes/data/judge_backpressure.jsonl in router.py. Interleave Amber [JUDGE] badges in status.html and create generate_judge_ledger.py to compile JUDGE_FIELD_LEDGER.md." \
+    --verification "python3 field_notes/generate_judge_ledger.py" \
+    --dir "/home/jallred/Dev_Lab/Portfolio_Dev"
   ```
+
 
 
 
