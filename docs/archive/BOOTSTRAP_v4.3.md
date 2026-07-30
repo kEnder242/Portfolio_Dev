@@ -55,7 +55,6 @@ To update this "Immutable" file:
 
 ## 🛠️ Global Execution Commands (refer to attendant for more info)
 *   **Start Lab**: `curl -X POST http://localhost:9999/start`
-*   **Check Status**: `curl http://localhost:9999/status`
 *   **Heartbeat check**: `curl -s http://localhost:9999/heartbeat | jq .`
 *   **Hard Reset**: `curl -X POST http://localhost:9999/hard_reset`
 *   **Build Site**: `python3 Portfolio_Dev/field_notes/build_site.py`
