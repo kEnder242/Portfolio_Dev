@@ -2,11 +2,11 @@
 **"The Map Room"**
 
 > [!IMPORTANT]
-> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.3.md](../BOOTSTRAP_v4.3.md)**.
+> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.4.md](../BOOTSTRAP_v4.4.md)**.
 
 ## 📍 Primary Entry Points
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist (Phase 15), and core mandates. **Start here for context.**
-*   **[SPRINT_PLAN_SPR_30_0.md](./SPRINT_PLAN_SPR_30_0.md)**: **ACTIVE.** Refactor Readiness (Preparation for Sprint 31).
+*   **[SPRINT_PLAN_SPR_48_0.md](./SPRINT_PLAN_SPR_48_0.md)**: **COMPLETED.** ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker.
 *   **[LAB_TIMING_REPORT.md](./LAB_TIMING_REPORT.md)**: **The Resonant Clock.** Physical latency and wake benchmarks.
 *   **[conductor/](./conductor/)**: **The Orchestrator.** SDLC management, product goals, and active feature tracks.
 *   **[FeatureTracker.md](./FeatureTracker.md)**: **The DNA.** The relational hub mapping Features to Code, Research, and Tests. **Primary truth anchor for architectural intent.**
