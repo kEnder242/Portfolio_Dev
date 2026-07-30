@@ -1499,6 +1499,31 @@
 **Rationale:** Delivers high-precision context retrieval with domain-badged metadata ([ARTIFACT], [CAREER], [BEHAVIORAL_DNA], [FEATURE_DNA], [LAB_JOURNAL]) across heterogeneous document stores.
 **Mechanism:** Parallel async HTTP queries, distance sorting, domain badge formatting in archive_node.py.
 
+---
+
+## [FEAT-442] Query Pre-Flight Refinement (QPR) & HyDE Synergy
+**Status:** PROPOSED (Sprint 44 Story 6)
+**Logic:** Pre-retrieval query de-noising in `cognitive_hub.py` prior to ChromaDB vector search. Translates vague or noisy human queries into domain-specific indexing terms while preserving original query as fallback if top vector similarity < 0.70.
+**Rationale:** Prevents semantic dilution and false-premise noise from degrading vector recall and HyDE hypothetical document generation.
+**Mechanism:** `cognitive_hub.py` pre-retrieval hook, similarity threshold sentinel, and `test_qpr_hyde.py`.
+
+---
+
+## [FEAT-443] Premise-Aware RAG-EVAL (PAR-Eval) & Valid Refusal Scoring
+**Status:** PROPOSED (Sprint 44 Story 7)
+**Logic:** Upgrades `MLXAsyncJudge` with structured refusal payload `{ "refusal": true, "reason": "PREMISE_MISMATCH" }`. Enhances 5x5 benchmark harness (`uber_5x5.py`) to intercept validated refusals ("Jason did not perform GPU VRAM work at Intel") and score them as **5/5 PASS**.
+**Rationale:** Replaces GIGO benchmark failures with true intelligence verification—validating that system pushes back on false premises instead of hallucinating.
+**Mechanism:** `mlx_judge_node.py` refusal schema, `uber_5x5.py` score interceptor, and `test_par_eval_scoring.py`.
+
+---
+
+## [FEAT-444] Judicial Backpressure Ledger & Stream Integration
+**Status:** PROPOSED (Sprint 44 Story 8)
+**Logic:** Streams M5 Judge evaluation findings and design critiques to `/field_notes/data/judge_backpressure.jsonl`. Renders `Amber [JUDGE]` badges on `status.html` interleaved timeline and compiles curated design ledger `JUDGE_FIELD_LEDGER.md`.
+**Rationale:** Provides an automated backpressure feedback channel for system friction, bad queries, and script constraints without blocking live UI response streaming.
+**Mechanism:** `judge_backpressure.jsonl` writer in `router.py`, `status.html` badge renderer, and `generate_judge_ledger.py`.
+
+
 
 
 

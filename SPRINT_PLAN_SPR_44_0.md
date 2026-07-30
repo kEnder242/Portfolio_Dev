@@ -102,20 +102,74 @@
 
 ---
 
-### **Follow-on Enhancements & Architectural Polish**
+---
 
-1. **`LAB_INFRASTRUCTURE.md` Ingestion into ChromaDB DNA Flow:**
-   - Updated `Portfolio_Dev/sync_chroma_dna.py` to ingest 17 infrastructure & physical floor sections (mounts, GPUs, ports, playbooks) into ChromaDB's `behavioral_dna` collection. Refined `BKM-035` in `Protocols.md` with positive venv execution guidelines. *(Commit: `acc062f`)*
+## 🚀 Active Backlog — Atomic Story Cards (Stories 6–8)
 
-2. **Deep Thought Preamble & Persona Realignment:**
-   - Replaced `"Initiating mental synthesis... deep thought in progress."` with `"Listening..."` in `cognitive_hub.py` (Line 1347). *(Commit: `39ca4dc`)*
-   - Refactored `PINKY_SYSTEM_PROMPT` in `pinky_node.py` to enforce verbosity matching and positive context fencing. Implemented `self.current_interest = 0.1` tapering on `CASUAL` queries in `cognitive_hub.py`. *(Commit: `a51d669`)*
+### 🎴 STORY CARD 6: `FEAT-442` — Query Pre-Flight Refinement (QPR) & HyDE Synergy
+- **Feature ID**: `FEAT-442` (Proposed / Active)
+- **Target Repository & Files**: `HomeLabAI` $\rightarrow$ `src/logic/cognitive_hub.py`, `src/tests/test_qpr_hyde.py`
+- **Objective & Technical Spec**: Implement pre-retrieval query de-noising in `get_context()` before ChromaDB vector search. Translates noisy human queries into domain-specific indexing terms. Keeps original query as fallback if top vector similarity distance > 0.45 (score < 0.70). Prevents semantic noise from degrading HyDE hypothetical doc generation.
+- **Live-Lab Validation Gate**:
+  1. `sudo systemctl restart lab-attendant.service`
+  2. `pytest src/tests/test_qpr_hyde.py`
+  3. Inject live test query via `intercom.html` and verify `attendant.log` confirms refined query lookup.
+- **Spoon-Fed OpenAgent Delegation Command**:
+  ```bash
+  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/HomeLabAI --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 6 — FEAT-442 QPR & HyDE Integration
 
-3. **Status.html Expanding Folders Fix:**
-   - Updated day folder rendering in `Portfolio_Dev/field_notes/status.html` to default all day folders (`📅 Jul 22, 2026 (123 logs)`) to collapsed while persisting user open state across 5s live refreshes via `window._userOpenDayFolders`. *(Commit: `087de5e`)*
+  CONTEXT:
+  - Target file: /home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py
+  - Task: Implement pre-retrieval query de-noising in get_context() before ChromaDB search.
+  - Rule: Refine noisy user queries into domain-specific indexing terms. Keep original query as fallback if top vector similarity distance is > 0.45 (< 0.70 score).
+  - Test File: Create src/tests/test_qpr_hyde.py testing QPR refinement and fallback logic.
+  - Validation Gate: Restart lab-attendant.service via systemctl, run pytest, and verify clean execution."
+  ```
 
-4. **Unified Mission Control Sidebar & Filing Cabinet Decommissioning:**
-   - Removed redundant mini-tree `<section id="filing-cabinet">` from `intercom.html` and `lab.html`.
-   - Re-architected `<mission-control>` web component in `mission-control.js` into a unified component featuring `← Return to Front Page`, `Public Airlock` explicit links (`www.jason-lab.dev`), and `Mission Control` boundary separator with `🔒` internal links (`notes.jason-lab.dev`).
-   - Simplified `sync_stories.sh`, `sync_protocols.sh`, and `sync_research.sh` to copy `mission-control.js` into `www_deploy` without regex surgery. *(Commit: `16a0424` & `c7076df`)*
+---
+
+### 🎴 STORY CARD 7: `FEAT-443` — Premise-Aware RAG-EVAL (PAR-Eval) & Valid Refusal Scoring
+- **Feature ID**: `FEAT-443` (Proposed / Active)
+- **Target Repository & Files**: `HomeLabAI` $\rightarrow$ `src/nodes/mlx_judge_node.py`, `src/debug/uber_5x5_v5.py`, `src/tests/test_par_eval_scoring.py`
+- **Objective & Technical Spec**: Enhance `MLXAsyncJudge` with structured refusal schema `{ "refusal": true, "reason": "PREMISE_MISMATCH" }`. Update 5x5 benchmark harness (`uber_5x5.py`) `evaluate_fidelity()` to intercept validated refusal payloads ("Jason did not perform GPU VRAM work at Intel") and score them as **5/5 PASS**.
+- **Live-Lab Validation Gate**:
+  1. `sudo systemctl restart lab-attendant.service`
+  2. `pytest src/tests/test_par_eval_scoring.py`
+  3. Run `python3 src/debug/uber_5x5_v5.py --fast` with false-premise probe and verify 5/5 PASS certification.
+- **Spoon-Fed OpenAgent Delegation Command**:
+  ```bash
+  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/HomeLabAI --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 7 — FEAT-443 PAR-Eval & Refusal Interceptor
+
+  CONTEXT:
+  - Target files: /home/jallred/Dev_Lab/HomeLabAI/src/nodes/mlx_judge_node.py & src/debug/uber_5x5_v5.py
+  - Task: 
+    1. Add refusal JSON schema {'refusal': True, 'reason': 'PREMISE_MISMATCH'} to MLXAsyncJudge evaluate_256k_context().
+    2. Update evaluate_fidelity() in uber_5x5_v5.py to intercept validated refusal payloads and score them as 5/5 PASS.
+  - Test File: Create src/tests/test_par_eval_scoring.py.
+  - Validation Gate: Restart lab-attendant.service, run uber_5x5_v5.py --fast, and confirm valid refusal queries pass 5/5."
+  ```
+
+---
+
+### 🎴 STORY CARD 8: `FEAT-444` — Judicial Backpressure Ledger (`JUDGE_FIELD_LEDGER.md`)
+- **Feature ID**: `FEAT-444` (Proposed / Active)
+- **Target Repository & Files**: `HomeLabAI` & `Portfolio_Dev` $\rightarrow$ `src/v5/foyer/router.py`, `field_notes/status.html`, `field_notes/generate_judge_ledger.py`
+- **Objective & Technical Spec**: Stream M5 Judge evaluation findings and design critiques to `/field_notes/data/judge_backpressure.jsonl`. Interleave `Amber [JUDGE]` badges on `status.html` live timeline and compile curated design ledger `JUDGE_FIELD_LEDGER.md` for human/architect review.
+- **Live-Lab Validation Gate**:
+  1. `sudo systemctl restart lab-attendant.service`
+  2. Trigger turn trace via live UI, confirm `judge_backpressure.jsonl` appends event.
+  3. Verify `status.html` renders `Amber [JUDGE]` badge and `generate_judge_ledger.py` compiles clean Markdown.
+- **Spoon-Fed OpenAgent Delegation Command**:
+  ```bash
+  /home/jallred/.opencode/bin/opencode run --dir /home/jallred/Dev_Lab/Portfolio_Dev --attach http://127.0.0.1:4096/ "SESSION: Sprint 44 Story 8 — FEAT-444 Judicial Backpressure Ledger
+
+  CONTEXT:
+  - Target files: 
+    1. /home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py (write judge results to field_notes/data/judge_backpressure.jsonl)
+    2. /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html (render Amber [JUDGE] timeline badge)
+    3. Create /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/generate_judge_ledger.py to compile JUDGE_FIELD_LEDGER.md.
+  - Validation Gate: Restart lab-attendant.service, trigger turn trace, confirm judge_backpressure.jsonl appends, status.html shows Amber badge, and generate_judge_ledger.py outputs markdown."
+  ```
+
+
 
