@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const href = link ? link.getAttribute('href') : '';
                     const id = href.startsWith('#') ? href.substring(1) : '';
 
-                    const isVisible = (term === '' || text.includes(term) || matchedIds.has(id));
+                    const isVisible = (term === '' || text.includes(term) || (id && matchedIds.has(id)));
                     item.style.display = isVisible ? '' : 'none';
                     if (isVisible) hasVisibleItems = true;
                 });
@@ -92,6 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const header = list.previousElementSibling;
                 if (header && header.tagName === 'H2') {
                     header.style.display = hasVisibleItems ? '' : 'none';
+                }
+            });
+
+            // Filter Main Body Articles & Section Containers
+            const articles = document.querySelectorAll('main article, article');
+            articles.forEach(art => {
+                const artId = art.id;
+                const artText = art.textContent.toLowerCase();
+                const isArticleVisible = (term === '' || (artId && matchedIds.has(artId)) || artText.includes(term));
+                art.style.display = isArticleVisible ? '' : 'none';
+            });
+
+            const mainSections = document.querySelectorAll('main section');
+            mainSections.forEach(sec => {
+                const secArticles = sec.querySelectorAll('article');
+                if (secArticles.length > 0) {
+                    const hasVisible = Array.from(secArticles).some(a => a.style.display !== 'none');
+                    sec.style.display = hasVisible ? '' : 'none';
                 }
             });
         });
