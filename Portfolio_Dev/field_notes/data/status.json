@@ -1,0 +1,9 @@
+{
+  "status": "IDLE",
+  "message": "Epoch 1 complete.",
+  "last_items": 0,
+  "total_events": 0,
+  "timestamp": "2026-08-03 02:00:12",
+  "engine": "LOCAL",
+  "progress_pct": 0
+}

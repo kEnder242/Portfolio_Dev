@@ -1265,10 +1265,11 @@
 
             if (tier === 'rich') {
                 const term = div.querySelector('.inline-terminal');
-                header.onclick = (e) => {
-                    e.stopPropagation();
-                    const indicator = header.querySelector('.expand-indicator');
-                    if (term.style.display === 'block') {
+                if (term) {
+                    header.onclick = (e) => {
+                        e.stopPropagation();
+                        const indicator = header.querySelector('.expand-indicator');
+                        if (term.style.display === 'block') {
                         term.style.display = 'none';
                         if (indicator) indicator.textContent = '[+]';
                     } else {
@@ -1278,10 +1279,11 @@
                 };
             } else if (tier === 'inline') {
                 const term = div.querySelector('.inline-terminal');
-                header.onclick = (e) => {
-                    e.stopPropagation();
-                    const indicator = header.querySelector('.expand-indicator');
-                    if (term.style.display === 'block') {
+                if (term) {
+                    header.onclick = (e) => {
+                        e.stopPropagation();
+                        const indicator = header.querySelector('.expand-indicator');
+                        if (term.style.display === 'block') {
                         term.style.display = 'none';
                         if (indicator) indicator.textContent = '[>]';
                     } else {
