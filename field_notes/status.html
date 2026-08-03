@@ -1097,7 +1097,10 @@
                     const el = createAlertElement(node.data);
                     const t = classifyExpandTier(node.data);
                     if (t === 'rich' || openTerminals.has(el.dataset.id)) {
-                        expandAlertDetail(el.querySelector('.inline-terminal'), node.data);
+                        const termElement = el.querySelector('.inline-terminal');
+                        if (termElement) {
+                            expandAlertDetail(termElement, node.data);
+                        }
                         const indicator = el.querySelector('.expand-indicator');
                         if (indicator) indicator.textContent = '[-]';
                     }
@@ -1270,13 +1273,14 @@
                         e.stopPropagation();
                         const indicator = header.querySelector('.expand-indicator');
                         if (term.style.display === 'block') {
-                        term.style.display = 'none';
-                        if (indicator) indicator.textContent = '[+]';
-                    } else {
-                        expandAlertDetail(term, alert);
-                        if (indicator) indicator.textContent = '[-]';
-                    }
-                };
+                            term.style.display = 'none';
+                            if (indicator) indicator.textContent = '[+]';
+                        } else {
+                            expandAlertDetail(term, alert);
+                            if (indicator) indicator.textContent = '[-]';
+                        }
+                    };
+                }
             } else if (tier === 'inline') {
                 const term = div.querySelector('.inline-terminal');
                 if (term) {
@@ -1284,14 +1288,15 @@
                         e.stopPropagation();
                         const indicator = header.querySelector('.expand-indicator');
                         if (term.style.display === 'block') {
-                        term.style.display = 'none';
-                        if (indicator) indicator.textContent = '[>]';
-                    } else {
-                        term.style.display = 'block';
-                        term.innerHTML = `<span style="color:#999;">Metadata: ${JSON.stringify(alert)}</span>`;
-                        if (indicator) indicator.textContent = '[-]';
-                    }
-                };
+                            term.style.display = 'none';
+                            if (indicator) indicator.textContent = '[>]';
+                        } else {
+                            term.style.display = 'block';
+                            term.innerHTML = `<span style="color:#999;">Metadata: ${JSON.stringify(alert)}</span>`;
+                            if (indicator) indicator.textContent = '[-]';
+                        }
+                    };
+                }
             }
             
             return div;
