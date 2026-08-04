@@ -46,5 +46,41 @@
     "severity": "INFO",
     "source": "nightly-dialogue",
     "message": "Nightly Dialogue Summary: Refinement & Dream Synthesis Complete."
+  },
+  {
+    "timestamp": "2026-08-04 02:00:00",
+    "severity": "INFO",
+    "source": "MassScan",
+    "message": "Initiating High-Fidelity Synthesis Burn."
+  },
+  {
+    "timestamp": "2026-08-04 02:00:01",
+    "severity": "INFO",
+    "source": "MassScan",
+    "message": "Epoch 1 Synthesis Complete. Lab is Idle."
+  },
+  {
+    "timestamp": "2026-08-04 02:00:01",
+    "severity": "INFO",
+    "source": "nightly-dialogue",
+    "message": "Nightly Dialogue Summary: Refinement & Dream Synthesis Complete."
+  },
+  {
+    "timestamp": "2026-08-04 10:10:51",
+    "severity": "INFO",
+    "source": "MassScan",
+    "message": "Initiating High-Fidelity Synthesis Burn."
+  },
+  {
+    "timestamp": "2026-08-04 10:10:52",
+    "severity": "INFO",
+    "source": "MassScan",
+    "message": "Epoch 1 Synthesis Complete. Lab is Idle."
+  },
+  {
+    "timestamp": "2026-08-04 10:10:52",
+    "severity": "INFO",
+    "source": "nightly-dialogue",
+    "message": "Nightly Dialogue Summary: Refinement & Dream Synthesis Complete."
   }
 ]
