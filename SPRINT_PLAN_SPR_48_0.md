@@ -164,6 +164,54 @@ To maintain clean boundaries between **Agent Operational Mechanics** (AGY / Open
 
 ---
 
+## 🛠️ Phase 2: Sprint 48 Follow-Up & Hardening Stories
+
+### Story 6 (Priority 1): Boot-Commit Hash Handshake & Pytest Level Version Gate (`[FEAT-445]`)
+* **Primary Target Files**:
+  * `HomeLabAI/src/lab_attendant.py` (Add `/version` endpoint & git commit hash fingerprinting at boot time)
+  * `HomeLabAI/src/logic/cognitive_hub.py` (Expose `boot_commit` in `get_status()`)
+  * `HomeLabAI/src/tests/conftest.py` (New Central Pytest Hook / Fixture)
+  * `Portfolio_Dev/field_notes/status.html` (Display `STALE_SERVICE_BYTECODE` amber warning badge)
+* **Operational Requirements**:
+  1. **Backend Fingerprinting**: On startup, `lab_attendant.py` and `cognitive_hub.py` record `boot_commit = git rev-parse HEAD` and `boot_timestamp`. Return `boot_commit` in `/version` and `/status` HTTP responses.
+  2. **Pytest Suite-Level Hook (`conftest.py`)**: Create a root `pytest_sessionstart(session)` hook in `src/tests/conftest.py`. Before any test executes, query `http://127.0.0.1:8765/version`. Compare `boot_commit` against current workspace `git rev-parse HEAD`. If mismatched, print a high-visibility warning box:
+     `[WARNING] Running lab-attendant service commit (XXXX) != workspace HEAD (YYYY). Run: sudo systemctl restart lab-attendant.service`.
+  3. **UI Warning Badge**: If `/status` reports a mismatch, `status.html` renders an Amber `[STALE BYTECODE]` alert next to System Nominal.
+* **Verification Gate Command**:
+  ```bash
+  pytest src/tests/ -v -k test_version_gate
+  ```
+
+---
+
+### Story 7: Live Non-Stub Roundtable Integration Gauntlet (`[FEAT-446]`)
+* **Primary Target Files**:
+  * `HomeLabAI/src/tests/test_integration_roundtable_live.py` (New Integration Test)
+  * `HomeLabAI/src/logic/cognitive_hub.py` (Triage Pipeline Verification)
+* **Operational Requirements**:
+  1. **Direct Triage Engine Testing**: Unlike legacy tests that pass synthetic `hyde_vector_text` directly to ChromaDB, test `CognitiveHub.process_query()` directly with live model prompts to verify `triage_schema` output formatting and interest mode routing.
+  2. **Live Multi-Node Exchange Validation**: Run non-stub end-to-end evaluation validating Pinky/Brain turn-taking, Coherence Critic scoring, and vector retrieval without `LAB_TEST_STUB=1`.
+* **Verification Gate Command**:
+  ```bash
+  python3 src/tests/test_integration_roundtable_live.py
+  ```
+
+---
+
+### Story 8: Dynamic Cosine Distance Calibration & RAG Fallback Telemetry (`[FEAT-447]`)
+* **Primary Target Files**:
+  * `HomeLabAI/src/nodes/archive_node.py` (Dynamic distance scoring)
+  * `Portfolio_Dev/field_notes/data/status.json` (Vector engine health telemetry)
+* **Operational Requirements**:
+  1. Calibrate distance cutoff threshold from static `0.45` to dynamic `0.55` (matched to `all-MiniLM-L6-v2` embeddings).
+  2. Log vector RAG collection hit rates and fallback query events to `status.json`.
+* **Verification Gate Command**:
+  ```bash
+  pytest src/tests/test_multi_collection_reranker.py -v
+  ```
+
+---
+
 ## 📊 Delegation Ready Checklist
 
 - [x] Story 1: `career_ledger` & `artifact_vault` ChromaDB Collections (`src/forge/index_*.py`)
@@ -171,3 +219,7 @@ To maintain clean boundaries between **Agent Operational Mechanics** (AGY / Open
 - [x] Story 3: Multi-Collection Cosine Reranker (`src/nodes/archive_node.py`)
 - [x] Story 4: FeatureTracker & Protocol Documentation Updates
 - [x] Story 5: End-to-End RAG Matrix Capstone Integration Suite (`test_integration_rag_matrix.py`)
+- [ ] Story 6 (Priority 1): Boot-Commit Hash Handshake & Pytest Level Version Gate (`[FEAT-445]`)
+- [ ] Story 7: Live Non-Stub Roundtable Integration Gauntlet (`[FEAT-446]`)
+- [ ] Story 8: Dynamic Cosine Distance Calibration & RAG Fallback Telemetry (`[FEAT-447]`)
+
