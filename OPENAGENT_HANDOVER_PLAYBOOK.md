@@ -11,9 +11,10 @@ Tasks are allocated based on model strengths to minimize API costs, prevent rate
 | Role / Engine | Provider / Model | Primary Function | Invocation Command Pattern |
 | :--- | :--- | :--- | :--- |
 | **Strategic Guardian** | `google/gemini-2.5-flash` / `pro` | Master plan creation, architecture design, code review, git commits | AGY CLI Turn |
-| **Sisyphus (Lead Worker)** | `mistral-large-latest` (via OpenCode) | Primary developer subagent for complex refactoring and multi-file logic | `opencode run --dir <dir> --attach http://127.0.0.1:4096/ "SESSION: ..."` |
-| **Sisyphus-Junior (Ground Worker)** | `qwen2.5-coder:14b` (Windows 4090) | High-speed local code generation, syntax editing, line-by-line diffs | `opencode run -m my-windows-4090/qwen2.5-coder:14b "task"` |
-| **Prometheus (Planner / Reviewer)** | `groq/llama-3.3-70b-versatile` | Parallel test suites, fast code reviews, independent verification | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
+| **Sisyphus (Lead Orchestrator)** | `opencode/deepseek-v4-flash-free` | Lead worker & orchestrator for task delegation, diff auditing, and state tracking | `opencode run --dir <dir> --attach http://127.0.0.1:4096/ "SESSION: ..."` |
+| **Atlas (Plan Executor)** | `groq/llama-3.3-70b-versatile` | Plan Executor for `delegate.py` story dispatches; blocked from direct file edits (`disabled_tools`) | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
+| **Prometheus (Planner / Reviewer)** | `groq/llama-3.3-70b-versatile` | Strategic planner, pre-flight context auditor, test suite verifier | `opencode run -m groq/llama-3.3-70b-versatile "task"` |
+| **Sisyphus-Junior (Ground Worker)** | `my-windows-4090/qwen3:14b` (Windows 4090) | High-speed local code generation, syntax editing, line-by-line diffs (native `tool_calls`) | `opencode run -m my-windows-4090/qwen3:14b "task"` |
 | **Triage / Utility** | `opencode/deepseek-v4-flash-free` | Fast text processing, status parsing, lightweight search | `opencode run -m opencode/deepseek-v4-flash-free "task"` |
 
 ---
