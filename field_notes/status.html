@@ -651,14 +651,16 @@
         // Series: CPU% | RAM% | VRAM% | GPU Temp°C (scaled /100) | GPU Power W (scaled /3)
 
         const SYS_SERIES = [
-            { key: 'cpu_pct',   label: 'CPU %',      color: '#58a6ff', scale: v => v },
-            { key: 'ram_pct',   label: 'RAM %',      color: '#3fb950', scale: v => v },
-            { key: 'vram_pct',  label: 'VRAM %',     color: '#d2a8ff', scale: v => v },
-            { key: 'gpu_temp_c',label: 'GPU Temp °C',color: '#f78166', scale: v => v },
-            { key: 'gpu_power_w',label:'GPU Power W', color: '#ffa657', scale: v => v },
+            { key: 'cpu_pct',       label: 'CPU %',          color: '#58a6ff', scale: v => v },
+            { key: 'ram_pct',       label: 'RAM %',          color: '#3fb950', scale: v => v },
+            { key: 'vram_pct',      label: 'VRAM %',         color: '#d2a8ff', scale: v => v },
+            { key: 'gpu_temp_c',    label: 'GPU Temp °C',    color: '#f78166', scale: v => v },
+            { key: 'gpu_power_w',   label: 'GPU Power W',    color: '#ffa657', scale: v => v },
+            { key: 'swap_pct',      label: 'Swap Used %',    color: '#e3b341', scale: v => v },
+            { key: 'pressure_pct',  label: 'Mem Pressure ×4',color: '#f85149', scale: v => Math.min(v * 4, 100) },
         ];
         const MAX_POINTS = 60;  // 5 min at 5s intervals
-        let _sysHistory = { cpu_pct:[], ram_pct:[], vram_pct:[], gpu_temp_c:[], gpu_power_w:[] };
+        let _sysHistory = { cpu_pct:[], ram_pct:[], vram_pct:[], gpu_temp_c:[], gpu_power_w:[], swap_pct:[], pressure_pct:[] };
         let _sysTimer = null;
         let _sysActive = false;
         let _sysCanvas = null;
@@ -705,9 +707,11 @@
 
             // Auto-scale: clamp temp/power to a 0-100 normalised range
             // GPU Temp: typical 30–100°C → display raw; GPU Power: /3 to fit ~0-100 notional range
+            // Mem Pressure: PSI avg10 ×4 so 25% stall = full chart (climbs before OOM while RAM% looks flat)
             const scaleValue = (key, v) => {
                 if (key === 'gpu_power_w') return Math.min(v / 3.0, 100); // 300W = 100%
-                return Math.min(v, 100);
+                const s = SYS_SERIES.find(s => s.key === key);
+                return s ? Math.min(s.scale(v), 100) : Math.min(v, 100);
             };
 
             SYS_SERIES.forEach(s => {
@@ -747,11 +751,11 @@
             if (!legend || !data) return;
             SYS_SERIES.forEach(s => {
                 const el = document.getElementById('sysval_' + s.key);
-                if (el) el.textContent = s.key === 'gpu_temp_c'
-                    ? (data[s.key] || 0).toFixed(0) + '°C'
-                    : s.key === 'gpu_power_w'
-                    ? (data[s.key] || 0).toFixed(0) + 'W'
-                    : (data[s.key] || 0).toFixed(1) + '%';
+                if (!el) return;
+                if (s.key === 'gpu_temp_c')    el.textContent = (data[s.key] || 0).toFixed(0) + '°C';
+                else if (s.key === 'gpu_power_w') el.textContent = (data[s.key] || 0).toFixed(0) + 'W';
+                else if (s.key === 'pressure_pct') el.textContent = (data[s.key] || 0).toFixed(2) + '%';
+                else el.textContent = (data[s.key] || 0).toFixed(1) + '%';
             });
         }
 
