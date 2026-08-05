@@ -1523,6 +1523,14 @@
 **Rationale:** Provides an automated backpressure feedback channel for system friction, bad queries, and script constraints without blocking live UI response streaming.
 **Mechanism:** `judge_backpressure.jsonl` writer in `router.py`, `status.html` badge renderer, and `generate_judge_ledger.py`.
 
+---
+
+## [FEAT-447] Dynamic Cosine Distance Calibration & RAG Fallback Telemetry
+**Status:** ACTIVE
+**Logic:** Calibrates vector similarity cutoff threshold in `archive_node.get_context()` from static 0.45 to dynamic 0.55 (matched to `all-MiniLM-L6-v2` embeddings). Logs RAG collection hit rates, candidates found, HyDE fallback events, and distance thresholds to `status.json`.
+**Rationale:** Prevents valid semantic matches from being dropped by overly tight 0.45 distance cutoffs while providing real-time vector engine health telemetry to the status center.
+**Mechanism:** `DISTANCE_THRESHOLD = 0.55` and `_log_rag_telemetry()` in `archive_node.py`, atomic write to `status.json`.
+
 
 
 
