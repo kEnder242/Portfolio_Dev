@@ -89,3 +89,25 @@
   1. **Telemetry Collector (`live_telemetry.py`)**: Create a lightweight module that queries Prometheus on `http://127.0.0.1:9400` (DCGM GPU metrics) and Foyer status on `http://127.0.0.1:8765/status`.
   2. **Live Metrics Struct**: Extract live VRAM usage, GPU power draw, active LoRA adapter name, and host swap memory usage (`psutil.swap_memory()`).
   3. **Attendant Integration**: Wire `live_telemetry.py` into `manager.py`'s vitals loop so live operational benchmarks are recorded continuously to `field_notes/data/status.json` during active Round Table turns.
+
+---
+
+## 📜 Pre-Execution Planning & Discovery Ledger (Sprint 49.0 Refinement Log)
+
+> **Purpose**: Document all pre-sprint discoveries, architectural refinements, and prompt payload synchronizations established prior to initiating story delegation.
+
+### 1. Root Cause Forensics & Memory Avalanche Resolution
+* **The Incident**: Un-stubbed Story 7 live integration test hit `POST http://localhost:8765/inject`. Node KENDER (Windows RTX 4090) was offline. Foyer triggered local failover, attempting to spin up `qwen2.5-coder:14b` in local Ollama alongside vLLM (`Llama-3.2-3B`), ChromaDB (`:8001`), and NeMo STT.
+* **The Forensic Truth**: The 34GB memory demand collapsed local 15GB RAM / 11GB VRAM, thrashing physical disk swap (`/dev/sda5`), swapping out `gnome-shell`, and freezing mouse hardware interrupts.
+* **The Architectural Rule**: Local failover on `z87-Linux` is **strictly forbidden** from loading a second foundation model into memory. When KENDER is offline, local fallback routes exclusively to the resident `unified-base` on `127.0.0.1:8088`.
+
+### 2. Dual-Channel Agent Context Architecture ([BKM-041] / [LAB-012])
+* **Channel 1 (Automagic Injection)**: ICM (`/home/jallred/.local/bin/icm`) + `BeforeAgent` hook in `settings.json` + `~/.config/icm/config.toml` (`chroma_url = "http://localhost:8001"`). Automagically injects top vector matches into system prompts before every turn.
+* **Channel 2 (On-Demand Tool Bridge)**: `clara-dna` FastMCP server (`AcmeLab/src/clara_dna_mcp_server.py`) registered in `~/.gemini/config/mcp_config.json` (AGY) and `HomeLabAI/.opencode.json` (OpenAgent) for exact BKM/FEAT lookups (`get_protocol()`, `query_dna()`).
+* **Port 8001 Law**: Port 8001 is ChromaDB. (Port 8000 is Prometheus RAPL Exporter). All vector embedding functions and HTTP clients connect exclusively to `:8001`.
+
+### 3. Prompt Payload Simplification & Single Source of Truth
+* **Prompt Clutter Elimination**: Removed 35+ lines of redundant negative constraint roleplay (`MUST NOT DO`, `task() roleplay`) from `OPENAGENT_HANDOVER_PLAYBOOK.md` and `delegate.py`.
+* **Programmatic Code Source of Truth**: [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py#L165) (lines 165–174) is designated as the single programmatic code source of truth for the live delegation prompt payload sent over REST.
+* **System Integration Test Whitelist Pattern**: Replaced ad-hoc script exemptions with an explicit **System Integration Test Whitelist** (`test_uber_5x5.py`, `test_vllm_adapter_swap.py`, `test_integration_roundtable.py`) that MUST enforce the `UNITY` abstraction pointer. Standalone experimental tools remain un-gated in their own bucket.
+
