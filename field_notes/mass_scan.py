@@ -56,12 +56,18 @@ def handle_resume(signum, frame):
 signal.signal(signal.SIGUSR1, handle_pause)
 signal.signal(signal.SIGUSR2, handle_resume)
 
+def atomic_write_text(path, content):
+    """Atomically writes text content to path via a temp file + os.replace."""
+    tmp_path = path + ".tmp"
+    with open(tmp_path, "w") as f:
+        f.write(content)
+    os.replace(tmp_path, path)
+
 def register_pid():
     """Writes the current PID to the Lab's run directory for Attendant tracking."""
     try:
         os.makedirs(LAB_RUN_DIR, exist_ok=True)
-        with open(MASS_SCAN_PID_FILE, "w") as f:
-            f.write(str(os.getpid()))
+        atomic_write_text(MASS_SCAN_PID_FILE, str(os.getpid()))
         logging.info(f"Registered PID {os.getpid()} at {MASS_SCAN_PID_FILE}")
     except Exception as e:
         logging.error(f"Failed to register PID: {e}")
@@ -110,6 +116,35 @@ def get_low_rank_items():
         except: pass
     return items
 
+LOCK_ACQUIRE_TIMEOUT = 10.0
+
+def wait_for_roundtable_lock(lock_path, timeout=LOCK_ACQUIRE_TIMEOUT):
+    """Polls every 0.5s for the Round Table lock to clear, up to timeout seconds.
+    Returns True if the lock cleared, False if it is still held."""
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        if not check_lock(lock_path):
+            return True
+        time.sleep(0.5)
+    return False
+
+def lock_pid_alive(pid):
+    """Returns True if the given PID is still alive, False otherwise.
+    Non-int/empty values are treated as alive (True)."""
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return True
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    except OSError:
+        return False
+
 def check_lock(lock_path):
     """Returns True if background tasks should yield to Intercom."""
     if os.path.exists(lock_path):
@@ -117,6 +152,22 @@ def check_lock(lock_path):
         if time.time() - os.path.getmtime(lock_path) > 1800:
             logging.warning("[LOCK] Stale Round Table Lock detected (>30m). Ignoring.")
             return False
+        # If the lock file holds a valid PID that is no longer alive, treat as stale
+        try:
+            with open(lock_path, 'r') as f:
+                content = f.read().strip()
+            if content:
+                pid = int(content)
+                if not lock_pid_alive(pid):
+                    logging.warning(f"[LOCK] Round Table Lock PID {pid} is dead. Removing stale lock.")
+                    try:
+                        os.remove(lock_path)
+                    except OSError as e:
+                        logging.error(f"[LOCK] Failed to remove stale lock {lock_path}: {e}")
+                    return False
+        except (ValueError, OSError):
+            # Empty or unreadable content: fall back to mtime check only
+            pass
         return True
     return False
 
@@ -244,7 +295,8 @@ def main():
         if check_lock(lock_path):
             logging.info("[LOCK] Round Table Active. Entering Low-Power Wait...")
             update_status("WAITING", "Round Table Active. Scanner yielded.")
-            time.sleep(300) # Wait 5 minutes
+            if not wait_for_roundtable_lock(lock_path):
+                time.sleep(300) # Wait 5 minutes
             continue
 
         epoch_count += 1

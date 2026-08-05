@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Add the directory to sys.path to import nibble_v2
 sys.path.append(os.path.abspath("Portfolio_Dev/field_notes"))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from nibble_v2 import scrub_input_buffer
 
 def test_guillotine():
