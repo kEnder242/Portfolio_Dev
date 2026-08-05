@@ -221,7 +221,7 @@ To maintain clean boundaries between **Agent Operational Mechanics** (AGY / Open
 - [x] Story 3: Multi-Collection Cosine Reranker (`src/nodes/archive_node.py`)
 - [x] Story 4: FeatureTracker & Protocol Documentation Updates
 - [x] Story 5: End-to-End RAG Matrix Capstone Integration Suite (`test_integration_rag_matrix.py`)
-- [ ] Story 6 (Priority 1): Boot-Commit Hash Handshake & Pytest Level Version Gate (`[FEAT-445]`)
+- [x] Story 6 (Priority 1): Boot-Commit Hash Handshake & Pytest Level Version Gate (`[FEAT-445]`)
 - [ ] Story 7: Live Non-Stub Roundtable Integration Gauntlet (`[FEAT-446]`)
 - [ ] Story 8: Dynamic Cosine Distance Calibration & RAG Fallback Telemetry (`[FEAT-447]`)
 
