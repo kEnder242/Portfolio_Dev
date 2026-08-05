@@ -58,8 +58,9 @@
   * `HomeLabAI/config/infrastructure.json` (`model_manifest.unified-base`)
 * **Implementation Requirements**:
   1. **Infrastructure Resolver Utility**: Ensure `manager.py` and `loader.py` import and use a centralized `get_unified_base_model()` helper that reads `config/infrastructure.json`.
-  2. **Purge Hardcoded Local Fallbacks**: Replace all hardcoded local model fallbacks (`qwen2.5-coder:14b`, `qwen-2.5-1.5b-awq`, `gemma2:2b`) in `manager.py` and `loader.py` with dynamic resolution to `unified-base`.
-  3. **Strict KENDER Failover Isolation**: In `manager.py` local failover handling, if Node KENDER (`192.168.1.26:11434`) is offline/unreachable, enforce that local fallback defaults strictly to `http://127.0.0.1:8088/v1` (`unified-base`). **Prohibit any local invocation of 14B models on z87-Linux.**
+  2. **Purge Hardcoded Local Fallbacks**: Replace hardcoded local model strings in `manager.py` and `loader.py` with dynamic resolution to `unified-base`.
+  3. **Local Fallback Route**: In `manager.py` local failover handling, if Node KENDER (`192.168.1.26:11434`) is offline/unreachable, route local fallback queries to `http://127.0.0.1:8088/v1` (`unified-base`).
+
 
 ---
 

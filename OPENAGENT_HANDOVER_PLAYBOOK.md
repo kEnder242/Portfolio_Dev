@@ -57,57 +57,26 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 - Instead of injecting full markdown files (`FeatureTracker.md` or `Protocols.md`) into prompt text, BKM and FEAT context is retrieved dynamically from ChromaDB vector collections (`behavioral_dna`, `feature_dna`) running on port 8001.
 - **Semantic Translation:** Translate conversational user prompts into precise domain keywords (e.g., `"atomic write"`, `"safe file patch"`, `"circuit breaker"`) before querying vector collections.
 
-### 3.3 Pre-Grounded Blueprint & Swarm Delegation Prompting
-Cloud orchestrators (Gemini) compile structured prompt blueprints containing explicit file anchors, context briefing, and subagent delegation directives. This eliminates broad workspace scanning, prevents path hallucinations, and leverages OpenAgent's internal specialist swarm (`Prometheus`, `Sisyphus-Junior`, `Hephaestus`):
+### 3.3 Clean Delegation Prompting
+Cloud orchestrators compile concise prompt specifications focused on target files and functional requirements. Avoid hyper-verbose negative constraints or role roleplay—Atlas orchestrates work naturally when provided a clean specification:
 
 ```markdown
 SESSION: Sprint XX Story YY — <Title>
 
-[PRE-GROUNDED CONTEXT BRIEFING]
-- Architecture & Planning: Sprint plan at file://<path_to_sprint_plan>.md#Story-YY.
-- Scope Guidance: Pre-grounding complete. Skip broad workspace scans; focus directly on the target files listed below.
+[CONTEXT & TARGET SPECIFICATION]
+- Sprint Plan Reference: file://<path_to_sprint_plan>.md#Story-YY
+- Target Files: <absolute_path_to_target_file_1>, <absolute_path_to_target_file_2>
 
-[TARGET SPECIFICATION]
-- Primary Output Target: <absolute_path_to_target_file>
-- Reference Implementation / Specs: <file_links_or_patterns>
-- Operational Requirements:
-  1. <Requirement 1>
-  2. <Requirement 2>
+[FUNCTIONAL REQUIREMENTS]
+1. <Requirement 1>
+2. <Requirement 2>
 
-[SWARM DELEGATION DIRECTIVE — TASK() CALLS ONLY]
-You are Sisyphus (Lead Orchestrator). You MUST NOT implement code directly.
-Use the task() tool to delegate ALL implementation and verification work:
-
-  task(agent="sisyphus-junior", category="quick", run_in_background=false, prompt="""
-    ## 1. TASK
-    <exact implementation task for KENDER/qwen2.5-coder>
-    ## 2. EXPECTED OUTCOME
-    - [ ] File: <path> created/modified
-    - [ ] Verification: <command> exits 0
-    ## 3. MUST DO
-    - Write the code to <path>
-    - Run <verification command>
-    ## 4. MUST NOT DO
-    - Do NOT git commit
-  """)
-
-  task(agent="prometheus", category="deep", run_in_background=false, prompt="""
-    ## 1. TASK
-    <test structure / validation task>
-    ...
-  """)
-
-> [!IMPORTANT]
-> Narrating "I will delegate to Sisyphus-Junior" is NOT delegation.
-> Delegation ONLY occurs when Sisyphus emits a `task()` tool call.
-> If Sisyphus writes code directly, the delegation mandate has FAILED.
-
-[VERIFICATION GATE]
-- Test Command: <pytest_or_verification_script>
-- Mandate: Do NOT run git commit. Report execution summary including which agents were invoked.
+[NOTE]
+Apply code modifications only. Silicon validation and testing will be performed post-dispatch by the orchestrator.
 ```
 
 ---
+
 
 ## 4. Safety Gates & Troubleshooting Ledger
 
