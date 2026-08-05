@@ -58,7 +58,10 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 - **Semantic Translation:** Translate conversational user prompts into precise domain keywords (e.g., `"atomic write"`, `"safe file patch"`, `"circuit breaker"`) before querying vector collections.
 
 ### 3.3 Clean Delegation Prompting
-Cloud orchestrators compile concise prompt specifications focused on target files and functional requirements. Avoid hyper-verbose negative constraints or role roleplay—Atlas orchestrates work naturally when provided a clean specification:
+Cloud orchestrators compile concise prompt specifications focused on target files and functional requirements. Avoid hyper-verbose negative constraints or role roleplay—Atlas orchestrates work naturally when provided a clean specification.
+
+> [!NOTE]
+> **Code Source of Truth**: The live programmatic prompt template is constructed inside [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py#L165). Any updates to the delegation prompt payload structure must be applied in `delegate.py`.
 
 ```markdown
 SESSION: Sprint XX Story YY — <Title>
@@ -72,7 +75,7 @@ SESSION: Sprint XX Story YY — <Title>
 2. <Requirement 2>
 
 [NOTE]
-Apply code modifications only. Silicon validation and testing will be performed post-dispatch by the orchestrator.
+Apply code modifications to target files only. Silicon validation and testing will be performed post-dispatch by the orchestrator.
 ```
 
 ---
