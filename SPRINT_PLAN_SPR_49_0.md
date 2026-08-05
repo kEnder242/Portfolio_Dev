@@ -22,13 +22,13 @@
 
 ---
 
-### 3. Benchmark Abstraction (`UNITY` Pointer)
-* **The Problem**: Benchmark suites (`test_uber_5x5.py`, `test_vllm_adapter_swap.py`, `test_apollo_vram.py`) currently mix hardcoded model names, raw file paths, and Ollama model strings, causing benchmark comparisons to fail or drift when foundation models change.
-* **The Solution**:
-  * Benchmarks MUST NOT hardcode model names or local paths.
-  * Benchmarks MUST query the abstract pointer string: **`UNITY`**.
-  * `UNITY` resolves dynamically via `infrastructure.json` to the current `unified-base`.
-  * **Exemption Note**: `test_liger_memory.py` is specifically designed to test Liger kernel transformers against specific model architectures (e.g. `apply_liger_kernel_to_qwen2`) and is **EXEMPT** from the `UNITY` abstraction mandate.
+### 3. System Integration Test Whitelist (`UNITY` Pointer Standard)
+* **The Whitelist Pattern**: Rather than calling out exemptions for legacy experimental tools, we explicitly **whitelist System Integration Tests** that MUST enforce the `UNITY` abstraction pointer.
+* **Whitelisted System Integration Tests**:
+  1. `HomeLabAI/src/debug/test_uber_5x5.py`
+  2. `HomeLabAI/src/debug/test_vllm_adapter_swap.py`
+  3. `HomeLabAI/src/tests/test_integration_roundtable.py`
+* **Whitelisting Law**: Every whitelisted integration test MUST resolve its local target model dynamically via the abstract key `UNITY` (reading `infrastructure.json["model_manifest"]["unified-base"]`). Hardcoding specific model strings or local disk paths in whitelisted tests is strictly forbidden. Experimental tools outside this whitelist (e.g. kernel/exploration scripts) remain in their own bucket.
 
 ---
 
@@ -63,17 +63,18 @@
 
 ---
 
-### Story 2: Benchmark Harness Abstraction (`UNITY` Pointer Standard)
+### Story 2: Whitelisted Integration Test Abstraction (`UNITY` Pointer Standard)
 * **Primary Target Files**:
   * `HomeLabAI/src/debug/test_uber_5x5.py`
   * `HomeLabAI/src/debug/test_vllm_adapter_swap.py`
-  * `HomeLabAI/src/debug/test_apollo_vram.py`
+  * `HomeLabAI/src/tests/test_integration_roundtable.py`
 * **Context Anchors & Reference Files**:
   * `HomeLabAI/config/infrastructure.json`
 * **Implementation Requirements**:
-  1. **Abstract Model Resolution**: Update benchmark scripts to resolve target local model names using the abstract key `UNITY` (reading `infrastructure.json["model_manifest"]["unified-base"]`).
-  2. **Purge Hardcoded Model Strings**: Remove explicit model strings (`"qwen..."`, `"llama..."`, raw `/speedy/...` paths) from test argument parsers and default parameters.
-  3. **Preserve Liger Exemption**: Maintain explicit architecture tests in `test_liger_memory.py` without modifying its kernel-specific model imports.
+  1. **Abstract Model Resolution**: Update all whitelisted integration scripts to resolve target local model names using the abstract key `UNITY` (reading `infrastructure.json["model_manifest"]["unified-base"]`).
+  2. **Purge Hardcoded Model Strings**: Remove explicit model strings (`"qwen..."`, `"llama..."`, raw `/speedy/...` paths) from test argument parsers, default parameters, and payload constructors.
+  3. **Whitelisted Scope**: Focus strictly on the whitelisted integration tests; leave standalone experimental tools un-gated in their own bucket.
+
 
 ---
 
