@@ -271,30 +271,6 @@
                 <div style="margin-top: 10px; text-align: center; font-size: 0.8rem; color: #666;">
                     Mobile users: <a href="https://monitor.jason-lab.dev" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Login to Monitor</a> if telemetry is blocked.
                 </div>
-                <!-- [FEAT-T20.6] PSI/Swap live strip — visible only when MEMORY panel active -->
-                <div id="psi-strip" style="display:none; margin-top:10px; padding:10px 14px; background:rgba(255,255,255,0.03); border:1px solid #1c1f26; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:0.72rem;">
-                    <div style="display:flex; gap:28px; align-items:center; flex-wrap:wrap;">
-                        <div style="display:flex; flex-direction:column; gap:4px; min-width:180px;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span style="color:#888;">SWAP USED</span>
-                                <span id="psi-swap-val" style="color:#e3b341; font-weight:600;">—</span>
-                            </div>
-                            <div style="height:3px; background:#111; border-radius:2px; overflow:hidden;">
-                                <div id="psi-swap-bar" style="height:100%; width:0%; background:#e3b341; transition:width 0.4s;"></div>
-                            </div>
-                        </div>
-                        <div style="display:flex; flex-direction:column; gap:4px; min-width:180px;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span style="color:#888;">MEM PRESSURE <span style="color:#333;">(PSI avg10)</span></span>
-                                <span id="psi-pressure-val" style="color:#f85149; font-weight:600;">—</span>
-                            </div>
-                            <div style="height:3px; background:#111; border-radius:2px; overflow:hidden;">
-                                <div id="psi-pressure-bar" style="height:100%; width:0%; background:#f85149; transition:width 0.4s;"></div>
-                            </div>
-                        </div>
-                        <span style="margin-left:auto; color:#2a2e38; font-size:0.62rem;">5s live | /sys_metrics</span>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -357,43 +333,6 @@
             _stopSysGraph();
         }
 
-        // PSI strip state
-        let _psiTimer = null;
-
-        async function _updatePsiStrip() {
-            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const base = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
-            try {
-                const r = await fetch(`${base}/sys_metrics?t=${Date.now()}`, { credentials: 'include' });
-                if (!r.ok) return;
-                const d = await r.json();
-                const swap = d.swap_pct ?? 0;
-                const psi  = d.pressure_pct ?? 0;
-
-                document.getElementById('psi-swap-val').textContent     = swap.toFixed(1) + '%';
-                document.getElementById('psi-pressure-val').textContent = psi.toFixed(2) + '%';
-                document.getElementById('psi-swap-bar').style.width     = Math.min(swap, 100) + '%';
-                // PSI bar: scale 0–5% → 0–100% so early movement is visible
-                document.getElementById('psi-pressure-bar').style.width = Math.min(psi * 20, 100) + '%';
-                // Color pressure bar: green < 0.1%, amber < 1%, red >= 1%
-                const pColor = psi >= 1 ? '#f85149' : psi >= 0.1 ? '#e3b341' : '#3fb950';
-                document.getElementById('psi-pressure-bar').style.background = pColor;
-                document.getElementById('psi-pressure-val').style.color = pColor;
-            } catch(e) {}
-        }
-
-        function _startPsiStrip() {
-            document.getElementById('psi-strip').style.display = 'block';
-            _updatePsiStrip();
-            if (_psiTimer) clearInterval(_psiTimer);
-            _psiTimer = setInterval(_updatePsiStrip, 5000);
-        }
-
-        function _stopPsiStrip() {
-            document.getElementById('psi-strip').style.display = 'none';
-            if (_psiTimer) { clearInterval(_psiTimer); _psiTimer = null; }
-        }
-
         function updatePanel(id, btn) {
             currentPanelId = id;
             const base = "https://monitor.jason-lab.dev/d-solo/pinky-status-01/neural-uplink-status?orgId=1&theme=dark";
@@ -401,9 +340,6 @@
 
             hideAllContainers();
             iframeMain.style.display = 'block';
-
-            // Show PSI strip only on MEMORY panel (id=8)
-            if (id === 8) { _startPsiStrip(); } else { _stopPsiStrip(); }
 
             // UI Toggle
             document.querySelectorAll('.telemetry-tab').forEach(t => t.classList.remove('active'));
@@ -716,12 +652,12 @@
 
         const SYS_SERIES = [
             { key: 'cpu_pct',       label: 'CPU %',          color: '#58a6ff', scale: v => v },
-            { key: 'ram_pct',       label: 'RAM %',          color: '#3fb950', scale: v => v },
+            { key: 'ram_pct',       label: 'System RAM %',   color: '#e3b341', scale: v => v },
             { key: 'vram_pct',      label: 'VRAM %',         color: '#d2a8ff', scale: v => v },
             { key: 'gpu_temp_c',    label: 'GPU Temp °C',    color: '#f78166', scale: v => v },
             { key: 'gpu_power_w',   label: 'GPU Power W',    color: '#ffa657', scale: v => v },
-            { key: 'swap_pct',      label: 'Swap Used %',    color: '#e3b341', scale: v => v },
-            { key: 'pressure_pct',  label: 'Mem Pressure ×4',color: '#f85149', scale: v => Math.min(v * 4, 100) },
+            { key: 'swap_pct',      label: 'Swap Used %',    color: '#8b949e', scale: v => v },
+            { key: 'pressure_pct',  label: 'Mem Pressure (PSI ×10)', color: '#f85149', scale: v => Math.min(v * 10, 100) },
         ];
         const MAX_POINTS = 60;  // 5 min at 5s intervals
         let _sysHistory = { cpu_pct:[], ram_pct:[], vram_pct:[], gpu_temp_c:[], gpu_power_w:[], swap_pct:[], pressure_pct:[] };
@@ -791,22 +727,39 @@
                 ctx.lineJoin = 'round';
                 ctx.lineCap = 'round';
                 vals.forEach((v, i) => {
-                    const sv = scaleValue(s.key, v);
+                    let sv = scaleValue(s.key, v);
+                    if (s.key === 'pressure_pct') {
+                        const ramVal = (_sysHistory['ram_pct'] && _sysHistory['ram_pct'][i]) || 0;
+                        sv = Math.min(scaleValue('ram_pct', ramVal) + sv, 100);
+                    }
                     const x = startX + i * step;
                     const y = TOP_PAD + chartH - (sv / 100) * chartH;
                     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
                 });
                 ctx.stroke();
 
-                // Gradient fill
-                const lastSv = scaleValue(s.key, vals[vals.length - 1]);
-                const fillX0 = startX + (n - 1) * step;
-                const fillY0 = TOP_PAD + chartH - (lastSv / 100) * chartH;
-                ctx.lineTo(fillX0, H - BOTTOM_PAD);
-                ctx.lineTo(startX, H - BOTTOM_PAD);
-                ctx.closePath();
-                ctx.fillStyle = s.color + '18';
-                ctx.fill();
+                // Gradient fill: for PSI, fill band riding on top of RAM line
+                if (s.key === 'pressure_pct' && _sysHistory['ram_pct'] && _sysHistory['ram_pct'].length === n) {
+                    const ramVals = _sysHistory['ram_pct'];
+                    for (let i = n - 1; i >= 0; i--) {
+                        const ramSv = scaleValue('ram_pct', ramVals[i]);
+                        const rx = startX + i * step;
+                        const ry = TOP_PAD + chartH - (ramSv / 100) * chartH;
+                        ctx.lineTo(rx, ry);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = s.color + '25';
+                    ctx.fill();
+                } else {
+                    const lastSv = scaleValue(s.key, vals[vals.length - 1]);
+                    const fillX0 = startX + (n - 1) * step;
+                    const fillY0 = TOP_PAD + chartH - (lastSv / 100) * chartH;
+                    ctx.lineTo(fillX0, H - BOTTOM_PAD);
+                    ctx.lineTo(startX, H - BOTTOM_PAD);
+                    ctx.closePath();
+                    ctx.fillStyle = s.color + '18';
+                    ctx.fill();
+                }
             });
         }
 
@@ -956,8 +909,6 @@
             setInterval(pollStatus, 10000);
             setInterval(pollPager, 30000);
             setInterval(pollRecruiter, 60000);
-            // MEMORY is default tab — start PSI strip immediately
-            _startPsiStrip();
 
             // [FIX] Link Click Delegation
             document.getElementById('log-tree-root').addEventListener('click', (e) => {
@@ -1027,6 +978,20 @@
 
                     const statusText = data.status === 'HIBERNATING (VRAM Free)' ? '🌙 SLEEPING' : (data.yielded ? 'YIELDED' : data.status);
                     scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${statusText}`;
+                    
+                    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+                    fetch(`${attendantBase}/version?t=${Date.now()}`, { credentials: 'omit' })
+                        .then(res => res.json())
+                        .then(vData => {
+                            if (vData && vData.boot_commit && vData.boot_commit !== 'unknown') {
+                                // Add informational badge
+                                const badgeStr = `<span id='stale-badge' style='color:#e3b341;font-size:0.7rem;font-family:monospace;margin-left:8px;'>[BOOT: ${vData.boot_commit}]</span>`;
+                                if (!scanner.innerHTML.includes('stale-badge')) {
+                                    scanner.innerHTML += badgeStr;
+                                }
+                            }
+                        }).catch(e => {});
                     msg.textContent = `> ${data.message} (${data.timestamp})`;
                     
                     if (data.progress_pct !== undefined) {

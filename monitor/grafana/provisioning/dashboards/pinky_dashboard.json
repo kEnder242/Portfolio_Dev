@@ -291,19 +291,15 @@
             },
             "properties": [
               {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "unit",
-                "value": "percent"
-              },
-              {
                 "id": "color",
                 "value": {
                   "fixedColor": "red",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
               }
             ]
           }
@@ -336,15 +332,15 @@
           "refId": "A"
         },
         {
-          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)",
+          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) + (rate(node_pressure_memory_waiting_seconds_total[1m]) * node_memory_MemTotal_bytes)",
           "interval": "",
-          "legendFormat": "System RAM Used",
+          "legendFormat": "Mem Pressure (PSI)",
           "refId": "B"
         },
         {
-          "expr": "rate(node_pressure_memory_waiting_seconds_total[1m]) * 100",
+          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)",
           "interval": "",
-          "legendFormat": "Mem Pressure (PSI)",
+          "legendFormat": "System RAM Used",
           "refId": "C"
         }
       ],
