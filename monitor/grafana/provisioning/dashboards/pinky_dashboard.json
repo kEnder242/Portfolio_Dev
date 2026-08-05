@@ -283,7 +283,31 @@
           },
           "unit": "bytes"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mem Pressure (PSI)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -316,9 +340,15 @@
           "interval": "",
           "legendFormat": "System RAM Used",
           "refId": "B"
+        },
+        {
+          "expr": "rate(node_pressure_memory_waiting_seconds_total[1m]) * 100",
+          "interval": "",
+          "legendFormat": "Mem Pressure (PSI)",
+          "refId": "C"
         }
       ],
-      "title": "Memory Usage (VRAM & System RAM)",
+      "title": "Memory Usage (VRAM, RAM, Pressure)",
       "type": "timeseries"
     },
     {
