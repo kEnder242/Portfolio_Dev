@@ -214,6 +214,16 @@ To maintain clean boundaries between **Agent Operational Mechanics** (AGY / Open
 
 ---
 
+### 🛡️ Swarm Delegation Infrastructure & 503 Self-Healing Sentinel (`delegate.py`)
+* **Primary Target File**: `HomeLabAI/src/tests/delegate.py`
+* **Key Enhancements Implemented**:
+  1. **Single Daemon Enforcement & Socket Cleanliness**: Replaced TUI `opencode run --attach` with headless REST POST (`/session/{id}/message`) on port 4097, eliminating dual-backend daemon spawns and virtual memory spikes.
+  2. **Atlas Plan Executor Routing (BKM-034)**: Configured `--agent atlas` (Groq 70B `groq/llama-3.3-70b-versatile`) as the default plan executor in session creation and prompt directives.
+  3. **Instant Web GUI Session Titles & Poking**: Included `"title": session_title` directly in initial `POST /session` payload and shifted `wake_web_ui()` to execute post-session creation, rendering full titles instantly on `http://192.168.1.238:4096/`.
+  4. **503 / 429 Self-Healing Backoff & Neural Pager Telemetry**: Implemented exponential backoff with random jitter (`max_retries=3`) for HTTP 502/503/504/429 transient errors, logging retry events to `pager_activity.json` for live UI visibility on `status.html`.
+
+---
+
 ## 📊 Delegation Ready Checklist
 
 - [x] Story 1: `career_ledger` & `artifact_vault` ChromaDB Collections (`src/forge/index_*.py`)
