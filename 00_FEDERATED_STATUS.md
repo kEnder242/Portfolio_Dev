@@ -15,12 +15,13 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
 | **spr-48-0-rag-matrix** | 2. Implementation | ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker | **COMPLETED** |
 | **spr-47-0-prereflection** | 2. Implementation | Unified Pre-Reflection Triage & Evergreen Career Compass | **COMPLETED** |
 | **spr-46-0-resilience** | 2. Implementation | Progressive Cooldown Engine & Async Sanity Critic | **COMPLETED** |
 
-## 🎯 Active Initiative: "ChromaDB RAG Corpus Expansion & Multi-Voice Cosine Reranker" (Sprint SPR-48.0)
-**Goal:** Expand RAG collections to 5 distinct ChromaDB stores (`behavioral_dna`, `feature_dna`, `career_ledger`, `artifact_vault`, `lab_journal`), synthesize 3-part Composite HyDE vector queries (`[VALIDATION]`, `[STRATEGY]`, `[SRE]`), implement parallel multi-collection cosine distance reranking (`archive_node.py`), enforce BKM-039 RAG taxonomy separation, and establish capstone integration test (`test_integration_rag_matrix.py`). **[STATUS: COMPLETE]**
+## 🎯 Active Initiative: "Single Source of Truth, Integration Test Abstraction & DCGM Harvester" (Sprint SPR-49.0)
+**Goal:** Enforce centralized `get_unified_base_model()` resolution from `infrastructure.json` (`model_manifest.unified-base`), abstract whitelisted integration tests with the `UNITY` pointer standard, implement Class-1 Prometheus DCGM GPU harvester in `live_telemetry.py`, and wire live VRAM, power draw, and host swap metrics into the Ignition vitals loop (`status.json`). **[STATUS: COMPLETE]**
 
 | **spr-44-0-resilience** | 2. Implementation | Lab Resilience, Memory Guardrails & Telemetry Visibility | **COMPLETED** |
 | **spr-42-0-realignment** | 2. Implementation | Portfolio Navigation Realignment & Feature Assertion Engine | **COMPLETED** |
