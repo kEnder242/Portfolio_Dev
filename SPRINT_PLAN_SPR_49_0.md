@@ -137,4 +137,13 @@
 * **LAB-018 — claude-mem fully removed**: found **dual registration** — opencode plugin was cleared, but a **second Claude-Code install at `~/.claude/plugins/cache/thedotmack/claude-mem`** (registered in `~/.claude/settings.json` `enabledPlugins` + 6 hooks) kept the daemon (bun worker-service + uv `chroma~mcp` 0.2.6 + python) alive at ~230MB. AGY **never used it** (zero refs in live AGY/opencode configs; only transcript archives matched). Verified removed all dirs, stripped hooks, killed daemon. Backup: `~/.claude/settings.json.backup-claude-mem-20260805224615`. **redundancy**: claude-mem duplicated ICM + clara-dna memory stack, but with a fire-on-every-tool-event mechanism (73GB VA per event) that was the real danger.
 * **VS Code interpreter wiring**: `~/.vscode-server/data/Machine/settings.json` pointed at `HomeLabAI/.venv` (venv path + default interpreter) so the Python env survives restarts.
 
+### 7. Story 1 Execution & Verification (2026-08-05) [COMPLETED]
+* **Target Files**: [`HomeLabAI/src/v5/ignition/manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/ignition/manager.py#L31) & [`HomeLabAI/src/nodes/loader.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py#L27)
+* **Execution Details**: Dispatched via `delegate.py --story 1 --agent sisyphus-junior` (Node KENDER `qwen3:14b`).
+* **Implementation Summary**:
+  1. Added `get_unified_base_model()` helper function in both `loader.py` and `manager.py` that dynamically reads `HomeLabAI/config/infrastructure.json` and resolves the `model_manifest.unified-base` pointer (defaulting to `"llama-3.2-3b-awq"`).
+  2. Updated `_bg_prime_kender()` in `manager.py` to use `"qwen3:14b"` for KENDER VRAM warmup, with dynamic fallback logging to `http://127.0.0.1:8088/v1` (`unified-base`).
+  3. Verified syntax via `python3 -m py_compile` and committed to `HomeLabAI` repository.
+
+
 
