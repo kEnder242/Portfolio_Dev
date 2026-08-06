@@ -149,7 +149,14 @@
 * **Implementation Summary**:
   1. Updated `test_uber_5x5.py` with `get_unified_base_model()` helper dynamically resolving `infrastructure.json`'s `model_manifest.unified-base` pointer (`UNITY_MODEL`).
   2. Replaced hardcoded `/speedy/...` model paths with dynamic `UNITY_MODEL` abstraction in websocket client payload constructors and logging.
-  3. Verified syntax via `python3 -m py_compile` and committed to `HomeLabAI` repository (`feat(story-2)`).
+### 9. Story 3 Execution & Verification (2026-08-05) [COMPLETED]
+* **Target Files**: [`HomeLabAI/src/infra/live_telemetry.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/live_telemetry.py#L1) & [`HomeLabAI/src/v5/ignition/manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/ignition/manager.py#L273)
+* **Execution Details**: Created `live_telemetry.py` module querying Prometheus `:9400` (DCGM GPU VRAM/power) and Foyer `:8765`, fusing live metrics with host swap (`psutil.swap_memory()`).
+* **Implementation Summary**:
+  1. Implemented Class-1 `merge_live_benchmarks(payload)` harvester with safe zero-degradation defaults.
+  2. Wired `merge_live_benchmarks` into `manager.py`'s `update_status_file()` vitals loop to continuously log operational benchmarks into `status.json`.
+  3. Verified syntax via `python3 -m py_compile` and committed to `HomeLabAI` repository (`feat(story-3)`).
+
 
 
 
