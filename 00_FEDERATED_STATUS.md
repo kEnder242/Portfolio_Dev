@@ -42,6 +42,19 @@
 ## 🎯 Active Initiative: "Real-Time Observability & Grafana Pipeline Synthesis" (Sprint SPR-40.0)
 **Goal:** Transition the MoE+ mixture-of-experts benchmarking framework from static JSON metrics to a real-time, Prometheus-scraped telemetry stack, visualizable via a multi-lane Grafana dashboard embedded back into our static files. **[STATUS: COMPLETE]**
 
+## 🗺️ Tabled Roadmap: Multi-Tier Specialist Swarm Pipeline (4-Tier Swarm)
+> **Context:** Tabled during Sprint 49.0 for future expansion. Atlas and Sisyphus currently run clean 2-tier execution.
+*   **Level 1 (Strategic Architect)**: AGY (Antigravity CLI / Gemini) writing sprint plans and issuing `delegate.py` specs.
+*   **Level 2 (Todo Orchestrator)**: `Atlas` (`cohere/command-a-plus-05-2026`) or `Sisyphus` (`opencode/deepseek-v4-flash-free`) managing the todo tree and emitting `task()` calls.
+*   **Level 3 (Specialist Advisory Tier)**:
+    *   `Oracle`: Deep RAG architectural search across ChromaDB collections.
+    *   `Librarian` / `Explore`: Fast documentation BKM lookup and ripgrep symbol exploration.
+    *   `Metis`: Step-by-step task refiner.
+    *   `Momus` (`groq/llama-3.3-70b-versatile`): Sub-second pre-commit git diff critic.
+*   **Level 4 (Ground Worker Tier)**:
+    *   `Sisyphus-Junior` (`my-windows-4090/qwen3:14b` @ Node KENDER): Physical line-by-line file edits & diffs.
+    *   `Hephaestus` (`groq/llama-3.3-70b-versatile`): Fast single-file triage & repair.
+
 ## ✅ Global Milestones (July 2026)
 1.  **Real-Time Observability & Grafana Pipeline Synthesis [SPR-40.0]**: **COMPLETE**. Exposed model-level telemetry (TTFT, throughput, ITL, VRAM) as Prometheus Gauges. Designed and provisioned the `MoE+ Latency Nuance` dashboard containing stacked area charts, routing heatmaps, state timeline Gantt charts, and box plots. Integrated Class 1 CSS-style tab navigation toggle into `benchmarks.html` to swap views between Local 2080 Ti and KENDER 4090, embedding Grafana panels via anonymous `<iframe>` embeds with offline fallbacks. Compiled and verified site builds.
 2.  **Federated Routing & "MoE+" Research [SPR-39.0]**: **COMPLETE**. All 4 Stories completed. Story 1 (Latency Hiding & Pre-Gated Routing Pipeline), Story 2 (MoE+ Federated Router Harness), and Story 3 (MoE+ Benchmarking Framework) implemented and verified. Story 4 (Airlock Realignment) done: index.html updated with custom `.airlock-divider` CSS/HTML blocks, and `sync_stories.sh` parser created to strip private data and mission-control tags from stories.html for public airlock access.
