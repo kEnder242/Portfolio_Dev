@@ -93,11 +93,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Goal**: Instruct the Linux kernel to **NEVER kill or freeze the SSH daemon** during memory pressure events. This ensures VSCode SSH remains responsive even if a heavy python process hits an OOM condition.
 
 ### 📊 **Experiment 3: Swap Pressure Sentinel Probe**
-* **Procedure**: Monitor `/proc/meminfo` (`SwapFree` vs `SwapTotal`) during active speech input to verify if swap thrashing is causing the kernel I/O stall.
-
----
-
-### 📋 Summary Matrix
+* **Procedure**: Monitor `/proc/meminfo` (`SwapFree` vs `SwapTotal`) during active speech input to verify if swap thrash### 📋 Summary Matrix
 
 | Metric / Aspect | Initial Expectation | What Actually Happened | Recommended Action |
 | :--- | :--- | :--- | :--- |
@@ -105,11 +101,27 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Crash Cause** | Suspected OpenCode memory leak | Browser WS + PCM streaming + LLM KV-cache thrashed system RAM/swap | Apply `OOMScoreAdjust=-1000` to SSH & profile WS memory |
 | **Working Tree** | Clean working directory | `intercom_v2.js` dirty with uncommitted `SECURITY` patch | Review/clean `intercom_v2.js` diff before next sprint |
 
+> [!NOTE]
+> **Audio Subsystem Policy (Non-Mandatory / Budget Sentinel)**:
+> Live PCM audio streaming (EarNode 16kHz speech input) is classified as an **optional, non-mandatory capability** ("nice-to-have"). If memory budget or system swap space becomes constrained under heavy local LLM load, the audio streaming subsystem can be gracefully disabled/dropped without impacting core text chat, RAG, or telemetry operations.
+
 ---
 
 ## 6. Sprint 50 Actionable Stories for OpenAgent Delegation
 
-### 🎯 Story 1: Standalone WebSocket RSS Profiler & Audio Ring-Buffer Sentinel (`FEAT-425`, `FEAT-427`)
+| Story | Feature DNA | Objective | Status |
+| :--- | :--- | :--- | :--- |
+| **Story 3** | `LAB-090` | Standalone SSH OOM Immunity Sentinel Installer | **COMPLETED** |
+| **Story 1** | `FEAT-425`, `FEAT-427` | WebSocket RSS Memory Profiler & PCM Ring-Buffer Clamp | **COMPLETED** |
+| **Story 2** | `FEAT-426` | Intercom Loopback & Origin Security Guard | **IN PROGRESS (`task-1705`)** |
+| **Story 4** | `LAB-091`, `LAB-092` | Kernel SysRq Emergency Protocol & EarlyOOM Sentinel | **APPROVED (Queued)** |
+| **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **APPROVED (Planned)** |
+| **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
+| **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
+
+---
+
+### 🎯 Story 1: Standalone WebSocket RSS Profiler & Audio Ring-Buffer Sentinel (`FEAT-425`, `FEAT-427`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   1. Create `HomeLabAI/src/infra/profile_ws_memory.py`: A `psutil`-based standalone harness that measures RSS memory footprint of `lab-attendant` before, during, and after WebSocket connection audio streaming.
   2. Implement strict ring-buffer clamping on Float32 $\rightarrow$ Signed Int16 PCM audio conversion in `Portfolio_Dev/field_notes/intercom_v2.js` (max 32k PCM chunk buffer) to prevent unmanaged browser/backend heap expansion.
@@ -117,11 +129,10 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
   * [NEW] [`HomeLabAI/src/infra/profile_ws_memory.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/profile_ws_memory.py)
   * [MODIFY] [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js)
 * **Verification Command**: `python3 HomeLabAI/src/infra/profile_ws_memory.py --duration 10`
-* **User Intervention Needed**: None (Pure userland Python/JS).
 
 ---
 
-### 🎯 Story 2: Intercom Loopback & Origin Security Guard (`FEAT-426`)
+### 🎯 Story 2: Intercom Loopback & Origin Security Guard (`FEAT-426`) — **[STATUS: IN PROGRESS]**
 * **Task Specification**:
   1. Clean up `Portfolio_Dev/field_notes/intercom_v2.js` uncommitted working tree diff.
   2. Enforce explicit `ws://127.0.0.1:8765` loopback binding and `X-Lab-Key` token header validation in `HomeLabAI/src/v5/attendant/attendant.py`.
@@ -130,80 +141,65 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
   * [MODIFY] [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js)
   * [MODIFY] [`HomeLabAI/src/v5/attendant/attendant.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/attendant/attendant.py)
 * **Verification Command**: `python3 HomeLabAI/src/v5/ignition/manager.py --test-attendant`
-* **User Intervention Needed**: None (Pure userland Python/JS).
 
 ---
 
----
-
-### 🎯 Story 3: Standalone SSH OOM Immunity Sentinel Installer (`LAB-090`)
+### 🎯 Story 3: Standalone SSH OOM Immunity Sentinel Installer (`LAB-090`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   1. Create `HomeLabAI/src/infra/setup_ssh_immunity.sh`: A shell script that generates the SystemD override `/etc/systemd/system/sshd.service.d/override.conf` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`.
   2. Provide automated verification probing `systemctl show sshd -p OOMScoreAdjust,MemoryMin,CPUSchedulingPolicy`.
 * **Target File**:
   * [NEW] [`HomeLabAI/src/infra/setup_ssh_immunity.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_ssh_immunity.sh)
 * **Verification Command**: `bash HomeLabAI/src/infra/setup_ssh_immunity.sh --verify`
-* **User Intervention Needed**: Requires `sudo bash HomeLabAI/src/infra/setup_ssh_immunity.sh` to write SystemD drop-in overrides.
-
-> [!IMPORTANT]
-> **SSH Protection Commands (`sudo` required)**:
-> ```bash
-> sudo mkdir -p /etc/systemd/system/sshd.service.d
-> sudo bash -c 'cat <<EOF > /etc/systemd/system/sshd.service.d/override.conf
-> [Service]
-> OOMScoreAdjust=-1000
-> MemoryMin=256M
-> CPUSchedulingPolicy=rr
-> CPUSchedulingPriority=50
-> EOF'
-> sudo systemctl daemon-reload && sudo systemctl restart sshd
-> ```
 
 ---
 
----
-
-### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`)
+### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`) — **[STATUS: QUEUED]**
 * **Task Specification**:
   Create `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`) and tune `earlyoom` (5% RAM / 10% Swap threshold).
 * **Target File**:
   * [NEW] [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh)
-* **Verification Command**: `bash HomeLabAI/src/infra/setup_sysrq_earlyoom.sh --verify`
-* **User Intervention Needed**: Requires `sudo` to apply `sysctl` and install `earlyoom`.
 
 ---
 
-### 🧪 Story 5: Real-Time Audio Streaming vs Integration Test Memory Benchmark (`FEAT-428`)
+### 🧪 Story 5: Real-Time Audio Streaming vs Integration Test Memory Benchmark (`FEAT-428`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Create `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated 60-second real-time Float32 $\rightarrow$ Signed Int16 PCM audio buffers over WebSocket to `lab-attendant`.
-  2. Profile RSS memory, swap usage, and vLLM KV-cache allocation during streaming.
-  3. Close the gap between integration tests (which stub audio) and live `intercom.html` usage.
-* **Target File**:
-  * [NEW] [`HomeLabAI/src/tests/test_live_audio_memory_benchmark.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_audio_memory_benchmark.py)
-* **Verification Command**: `python3 HomeLabAI/src/tests/test_live_audio_memory_benchmark.py --duration 60`
-* **User Intervention Needed**: None.
+  Create `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated 60-second real-time PCM audio buffers over WebSocket to `lab-attendant` and profile RSS memory vs vLLM KV-cache allocation.
 
 ---
 
-### 🛡️ Story 6: Lab-Attendant Cgroup Memory Hard Cap Sentinel (`LAB-093`)
+### 🛡️ Story 6: Lab-Attendant Cgroup Memory Hard Cap Sentinel (`LAB-093`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Update `HomeLabAI/config/systemd/lab-attendant.service` to include `MemoryMax=4G`, `MemoryHigh=3.5G`, and `ManagedOOMPreference=kill`.
-  2. Ensure systemd isolates `lab-attendant` during runaway RAM spikes, protecting host OS and SSH from thrashing lockup.
-* **Target File**:
-  * [MODIFY] [`HomeLabAI/config/systemd/lab-attendant.service`](file:///home/jallred/Dev_Lab/HomeLabAI/config/systemd/lab-attendant.service)
-* **Verification Command**: `systemctl --user daemon-reload && systemctl --user status lab-attendant.service`
-* **User Intervention Needed**: None (Userland SystemD unit).
+  Update `HomeLabAI/config/systemd/lab-attendant.service` to include `MemoryMax=4G`, `MemoryHigh=3.5G`, and `ManagedOOMPreference=kill`.
 
 ---
 
-### 🧹 Story 7: Foyer Disconnect Memory Reclaim Sentinel (`FEAT-429`)
+### 🧹 Story 7: Foyer Disconnect Memory Reclaim Sentinel (`FEAT-429`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Implement explicit `on_close()` cleanup handlers in `HomeLabAI/src/v5/attendant/attendant.py` and `ear_node.py`.
-  2. Trigger explicit audio ring-buffer clearing and `gc.collect()` upon browser WebSocket disconnect or tab closure.
-* **Target Files**:
-  * [MODIFY] [`HomeLabAI/src/v5/attendant/attendant.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/attendant/attendant.py)
-  * [MODIFY] [`HomeLabAI/src/nodes/ear_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/ear_node.py)
-* **Verification Command**: `python3 HomeLabAI/src/v5/ignition/manager.py --test-attendant`
-* **User Intervention Needed**: None.
->   * **Restart AGY / OpenCode?** Not required. `sshd` restart will reconnect active VSCode tunnels seamlessly without dropping session state.
+  Implement explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
+
+---
+
+## 7. Refinement & Implementation Log
+
+### 🛠️ Story 3 Implementation Details (`LAB-090`)
+* **Executed By**: OpenAgent (`ses_022c55e1fffeEidyL2qcfO0fYd`, 184s).
+* **Fix Summary**: Created [`HomeLabAI/src/infra/setup_ssh_immunity.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_ssh_immunity.sh). The script idempotently writes `/etc/systemd/system/sshd.service.d/override.conf` with:
+  ```ini
+  [Service]
+  OOMScoreAdjust=-1000
+  MemoryMin=256M
+  CPUSchedulingPolicy=rr
+  ```
+  It executes `sudo systemctl daemon-reload` and validates effective values using `systemctl show sshd -p OOMScoreAdjust,MemoryMin,CPUSchedulingPolicy`.
+* **Git Commit**: `feat(story-3): add setup_ssh_immunity.sh installer for SSH OOM immunity sentinel (LAB-090)`
+
+### 🛠️ Story 1 Implementation Details (`FEAT-425`, `FEAT-427`)
+* **Executed By**: OpenAgent (`ses_022c26ee0ffe2bCNth58Cx6jqF`, 118s).
+* **Fix Summary**:
+  1. Created [`HomeLabAI/src/infra/profile_ws_memory.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/profile_ws_memory.py): Standalone `psutil` profiler that measures baseline, peak, and retained RSS memory during PCM streaming.
+  2. Updated [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js): Introduced `const PCM_CHUNK_CAP = 32768` (1 second mono 16kHz PCM ceiling) and clamped microphone Float32 $\rightarrow$ Signed Int16 downsampling via `Math.min(inSamples, PCM_CHUNK_CAP)`.
+* **Git Commits**:
+  * `feat(story-1): add profile_ws_memory.py psutil memory profiler harness (FEAT-425)`
+  * `feat(story-1): clamp PCM mic downsampling chunk length in intercom_v2.js (FEAT-427)`nnect active VSCode tunnels seamlessly without dropping session state.
 
