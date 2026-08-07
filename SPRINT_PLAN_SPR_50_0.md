@@ -126,7 +126,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 13** | `FEAT-434` | Delegate.py Multi-Mode Planning & Investigation Sentinel | **COMPLETED** |
 | **Story 14** | `LAB-097` | OOM Root-Cause Diagnostic Investigation (`--mode investigate`) | **COMPLETED** |
 | **Story 15** | `FEAT-441` | `journal_ledger` Raw Spoken Dialogue & RAG Cache (`[FEAT-441-Cache]`) | **COMPLETED** |
-| **Story 16** | `FEAT-442` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **APPROVED (Planned)** |
+| **Story 16** | `FEAT-442` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **COMPLETED** |
 | **Story 17** | `FEAT-443` | Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) | **APPROVED (Planned)** |
 | **Story 18** | `FEAT-444` | Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) | **APPROVED (Planned)** |
 | **Story 19** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
