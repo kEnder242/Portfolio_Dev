@@ -129,9 +129,9 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 16** | `FEAT-442` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **COMPLETED** |
 | **Story 17** | `FEAT-443` | Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) | **COMPLETED** |
 | **Story 18** | `FEAT-444` | Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) | **COMPLETED** |
-| **Story 19** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
-| **Story 20** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **APPROVED (Planned)** |
-| **Story 21** | `FEAT-445` | Unit Test Suite & End-to-End Integration Gauntlet Certification | **APPROVED (Planned)** |
+| **Story 19** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **COMPLETED** |
+| **Story 20** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **COMPLETED** |
+| **Story 21** | `FEAT-445` | Unit Test Suite & End-to-End Integration Gauntlet Certification | **COMPLETED** |
 
 ---
 

@@ -15,7 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-50-0-memory-resil** | **Sprint 50.0** | Delegated Implementation & Telemetry Expansion | **100% COMPLETED (9/9 Stories)** | Hardened host OS (SSH Immunity, SysRq, EarlyOOM + Neural Pager Hook), secured Foyer loopback & handshake token, profiled WebSocket audio RSS, added cgroup caps (4G) & disconnect GC reclaim, implemented automated delegation retrospective (`DELEGATION_RETROSPECTIVE.md`). |
+| **spr-50-0-memory-resil** | **Active Sprint**: `SPR-50-0` (Foyer & Memory Architecture Stabilization Gauntlet) — **COMPLETED**
+  - **Stories 1–21**: **100% COMPLETED** (System-Load Gauntlet, Memory Caps, `journal_ledger` Spoken Dialogue, RAG Cache, Ear Buffer Leak Clamp, Two-Stage Dream Engine, 2.5k Token Sentinel, Deque Eviction, Waterfall TTL Sweeper, Judge Semaphore, Heap Scavenger, & Unit Suite). |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
 | **spr-48-0-rag-matrix** | 2. Implementation | ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker | **COMPLETED** |
 | **spr-47-0-prereflection** | 2. Implementation | Unified Pre-Reflection Triage & Evergreen Career Compass | **COMPLETED** |
