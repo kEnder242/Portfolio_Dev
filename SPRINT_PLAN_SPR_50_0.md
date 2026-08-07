@@ -115,9 +115,9 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 1** | `FEAT-425`, `FEAT-427` | WebSocket RSS Memory Profiler & PCM Ring-Buffer Clamp | **COMPLETED** |
 | **Story 2** | `FEAT-426` | Intercom Loopback & Origin Security Guard | **COMPLETED** |
 | **Story 4** | `LAB-091`, `LAB-092` | Kernel SysRq Emergency Protocol & EarlyOOM Sentinel | **COMPLETED** |
-| **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **APPROVED (Planned)** |
-| **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
-| **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
+| **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **COMPLETED** |
+| **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **COMPLETED** |
+| **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **COMPLETED** |
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
 | **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **COMPLETED** |
 
@@ -238,3 +238,18 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Executed By**: OpenAgent (`ses_02296ce10ffe74J8664yeeZnyA`, 290s).
 * **Fix Summary**: Created [`HomeLabAI/src/infra/earlyoom_pager_notifier.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh) and updated [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh) to configure `EARLYOOM_ARGS="-m 5 -s 10 -N /home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh"`. Whenever `earlyoom` executes a process kill, it appends a `CRITICAL` telemetry event to `pager_activity.json` capturing killed PID, process name, free RAM/swap, and OOM score for real-time visibility on `pager.html` and `status.html`.
 * **Git Commit**: `feat(story-9): add earlyoom_pager_notifier.sh hook & configure -N flag in setup_sysrq_earlyoom.sh (FEAT-431)`
+
+### 🛠️ Story 5 Implementation Details (`FEAT-428`)
+* **Executed By**: OpenAgent (`ses_0226fc2a6ffeIHhLc2ZPM6lZlp`, 534s).
+* **Fix Summary**: Created [`HomeLabAI/src/tests/test_live_audio_memory_benchmark.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_audio_memory_benchmark.py) to stream simulated 60s Signed Int16 PCM 16kHz audio over WebSocket to Foyer (`127.0.0.1:8765`) while profiling RSS memory, swap, and GPU VRAM via `psutil` and `pynvml`. Handshake token auth correctly handled (`FEAT-426`).
+* **Git Commit**: `feat(story-5): add test_live_audio_memory_benchmark.py for real-time PCM memory profiling (FEAT-428)`
+
+### 🛠️ Story 6 Implementation Details (`LAB-093`)
+* **Executed By**: OpenAgent (`ses_022677aa6ffeqDjb3H14aYh5o7`, 73s).
+* **Fix Summary**: Updated [`HomeLabAI/docs/lab-attendant.service`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/lab-attendant.service) to add `MemoryMax=4G`, `MemoryHigh=3.5G`, and `ManagedOOMPreference=kill` under `[Service]`. Protects the host system from runaway memory allocations.
+* **Git Commit**: `feat(story-6): add MemoryMax=4G, MemoryHigh=3.5G, and ManagedOOMPreference=kill to lab-attendant.service (LAB-093)`
+
+### 🛠️ Story 7 Implementation Details (`FEAT-429`)
+* **Executed By**: OpenAgent (`ses_0226627baffe23JOH0QUO5NsLL`, 156s).
+* **Fix Summary**: Updated [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py) to implement defensive disconnect memory reclamation. Flushes `self.sensory.audio_buffer` and triggers `gc.collect()` upon browser WebSocket disconnect or tab closure. Verified via `pytest src/tests/test_integration_foyer.py` (2/2 passed).
+* **Git Commit**: `feat(story-7): add Foyer disconnect memory reclaim sentinel & gc.collect() hook (FEAT-429)`

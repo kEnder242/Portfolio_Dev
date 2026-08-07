@@ -15,7 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-50-0-memory-resilience** | 2. Implementation | SSH OOM Immunity Sentinel, EarlyOOM & SysRq Protocol, Foyer Loopback Security, WS Memory Profiler | **ACTIVE (Stories 1-4 COMPLETED)** |
+| **spr-50-0-memory-resil** | **Sprint 50.0** | Delegated Implementation & Telemetry Expansion | **100% COMPLETED (9/9 Stories)** | Hardened host OS (SSH Immunity, SysRq, EarlyOOM + Neural Pager Hook), secured Foyer loopback & handshake token, profiled WebSocket audio RSS, added cgroup caps (4G) & disconnect GC reclaim, implemented automated delegation retrospective (`DELEGATION_RETROSPECTIVE.md`). |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
 | **spr-48-0-rag-matrix** | 2. Implementation | ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker | **COMPLETED** |
 | **spr-47-0-prereflection** | 2. Implementation | Unified Pre-Reflection Triage & Evergreen Career Compass | **COMPLETED** |
