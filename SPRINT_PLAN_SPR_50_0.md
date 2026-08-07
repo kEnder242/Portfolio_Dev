@@ -120,8 +120,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **COMPLETED** |
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
 | **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **COMPLETED** |
-| **Story 10** | `FEAT-432` | Foyer Exception Audit & Warning Logger Upgrade | **APPROVED (Planned)** |
-| **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Cold-Start Wake Transition Test | **APPROVED (Planned)** |
+| **Story 10** | `FEAT-432` | Foyer Exception Audit & Warning Logger Upgrade | **COMPLETED** |
+| **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Cold-Start Wake Transition Test | **COMPLETED** |
 | **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **APPROVED (Planned)** |
 
 ---
