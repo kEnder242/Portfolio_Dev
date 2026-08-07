@@ -125,13 +125,13 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **COMPLETED** |
 | **Story 13** | `FEAT-434` | Delegate.py Multi-Mode Planning & Investigation Sentinel | **COMPLETED** |
 | **Story 14** | `LAB-097` | OOM Root-Cause Diagnostic Investigation (`--mode investigate`) | **COMPLETED** |
-| **Story 15** | `FEAT-435` | `journal_ledger` Raw Spoken Dialogue & RAG Cache (`[FEAT-435-Cache]`) | **APPROVED (Planned)** |
-| **Story 16** | `FEAT-436` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **APPROVED (Planned)** |
-| **Story 17** | `FEAT-437` | Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) | **APPROVED (Planned)** |
-| **Story 18** | `FEAT-438` | Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) | **APPROVED (Planned)** |
+| **Story 15** | `FEAT-441` | `journal_ledger` Raw Spoken Dialogue & RAG Cache (`[FEAT-441-Cache]`) | **APPROVED (Planned)** |
+| **Story 16** | `FEAT-442` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **APPROVED (Planned)** |
+| **Story 17** | `FEAT-443` | Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) | **APPROVED (Planned)** |
+| **Story 18** | `FEAT-444` | Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) | **APPROVED (Planned)** |
 | **Story 19** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
 | **Story 20** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **APPROVED (Planned)** |
-| **Story 21** | `FEAT-439` | Unit Test Suite & End-to-End Integration Gauntlet Certification | **APPROVED (Planned)** |
+| **Story 21** | `FEAT-445` | Unit Test Suite & End-to-End Integration Gauntlet Certification | **APPROVED (Planned)** |
 
 ---
 
@@ -267,39 +267,40 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 📜 Story 15: `journal_ledger` Raw Spoken Dialogue & RAG Cache (`FEAT-435`) — **[STATUS: PLANNED]**
+### 📜 Story 15: `journal_ledger` Raw Spoken Dialogue & RAG Cache (`FEAT-441`) — **[STATUS: PLANNED]**
 * **Task Specification**:
   1. Refactor `HomeLabAI/src/logic/cognitive_hub.py` to maintain a 24-hour `journal_ledger` capturing **only raw out-loud spoken chat dialogue** (`User`, `Pinky`, `Brain`), excluding internal scratchpads/prompt templates (Transparency BKM Exception).
-  2. Implement `[FEAT-435-Cache]` lightweight RAG Cache dict `_rag_cache[query_hash]` in `cognitive_hub.py` to reuse RAG search payloads across follow-up turns without duplicate vector DB fetches.
+  2. Implement `[FEAT-441-Cache]` lightweight RAG Cache dict `_rag_cache[query_hash]` in `cognitive_hub.py` to reuse RAG search payloads across follow-up turns without duplicate vector DB fetches.
 * **Target File**:
   * [MODIFY] [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)
 * **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
 
 ---
 
-### 🔊 Story 16: Sensory Ear Audio Buffer Unloaded Leak Clamp (`FEAT-436`) — **[STATUS: PLANNED]**
+### 🔊 Story 16: Sensory Ear Audio Buffer Unloaded Leak Clamp (`FEAT-442`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Update `HomeLabAI/src/v5/foyer/sensory/sensory_manager.py` to move the sliding-window buffer trim logic (`if len(self.audio_buffer) >= 24000: ...`) **OUTSIDE** the `self.ear` check in `process_binary_chunk()`.
+  1. Update `HomeLabAI/src/equipment/sensory_manager.py` to move the sliding-window buffer trim logic (`if len(self.audio_buffer) >= 24000: ...`) **OUTSIDE** the `self.ear` check in `process_binary_chunk()`.
   2. Ensure incoming audio PCM chunks are ALWAYS trimmed/reset even when EarNode is unloaded, eliminating multi-gigabyte RAM heap leaks during low-memory conditions.
 * **Target File**:
-  * [MODIFY] [`HomeLabAI/src/v5/foyer/sensory/sensory_manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/sensory/sensory_manager.py)
+  * [MODIFY] [`HomeLabAI/src/equipment/sensory_manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/equipment/sensory_manager.py)
 * **Verification Command**: `python3 HomeLabAI/src/tests/test_live_audio_memory_benchmark.py`
 
 ---
 
-### 🌙 Story 17: Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) (`FEAT-437`) — **[STATUS: PLANNED]**
+### 🌙 Story 17: Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) (`FEAT-443`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Update `HomeLabAI/src/infra/dream_node.py` and `HomeLabAI/src/nodes/archive_node.py` to implement a 2-stage hibernation dream engine:
+  1. Create `HomeLabAI/src/infra/dream_node.py` and update `HomeLabAI/src/dream_cycle.py` & `HomeLabAI/src/nodes/archive_node.py` to implement a 2-stage hibernation dream engine:
      - **Stage 1 (Memory Consolidation)**: Reads 24h raw `journal_ledger`, distills full-day context into a `journal_kb` entry, indexes it into `archive_node` (ChromaDB), and resets `journal_ledger`.
      - **Stage 2 (Natural Dreaming & WYWO)**: Pinky & Brain reflect autonomously on `journal_kb`, generating creative ideas and logging a **"While You Were Out (WYWO)" Morning Briefing** for the user upon wake.
 * **Target Files**:
-  * [MODIFY] [`HomeLabAI/src/infra/dream_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/dream_node.py)
+  * [NEW] [`HomeLabAI/src/infra/dream_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/dream_node.py)
+  * [MODIFY] [`HomeLabAI/src/dream_cycle.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/dream_cycle.py)
   * [MODIFY] [`HomeLabAI/src/nodes/archive_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py)
 * **Verification Command**: `python3 HomeLabAI/src/infra/dream_node.py --test-dream`
 
 ---
 
-### 🛡️ Story 18: Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) (`FEAT-438`) — **[STATUS: PLANNED]**
+### 🛡️ Story 18: Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) (`FEAT-444`) — **[STATUS: PLANNED]**
 * **Task Specification**:
   1. Update `HomeLabAI/src/logic/cognitive_hub.py` to enforce a hard 2,500 token cap on single-turn transient file drops or RAG context injections.
   2. Applies head+tail truncation with document links if single-turn attachments exceed 2,500 tokens to guarantee vLLM stability.
@@ -330,7 +331,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🧪 Story 21: Unit Test Suite & End-to-End Integration Gauntlet Certification (`FEAT-439`) — **[STATUS: PLANNED]**
+### 🧪 Story 21: Unit Test Suite & End-to-End Integration Gauntlet Certification (`FEAT-445`) — **[STATUS: PLANNED]**
 * **Task Specification**:
   1. Create `HomeLabAI/src/tests/test_memory_architecture.py` to verify unit tests for `journal_ledger`, `_rag_cache`, `sensory_manager` buffer trim, and `dream_node` two-stage consolidation.
   2. Execute `test_uber_5x5.py` and `test_integration_foyer.py` end-to-end to certify memory stability.
