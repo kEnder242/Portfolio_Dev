@@ -118,6 +118,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **APPROVED (Planned)** |
 | **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
+| **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **APPROVED (Queued)** |
 
 ---
 
@@ -177,6 +178,17 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 ### 🧹 Story 7: Foyer Disconnect Memory Reclaim Sentinel (`FEAT-429`) — **[STATUS: PLANNED]**
 * **Task Specification**:
   Implement explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
+
+---
+
+### 📊 Story 8: Automated Delegation Retrospective & Friction Audit Stage (`FEAT-430`) — **[STATUS: APPROVED / QUEUED]**
+* **Task Specification**:
+  1. Create `HomeLabAI/src/infra/delegate_retrospective.py`: An automated friction parser that reads `/tmp/delegate_story_*.log` step logs, queries REST session metrics (`tokens`, `duration`, `child_sessions`), and compares prompt target paths vs `git diff` actuals to detect path search thrash.
+  2. Wire `--retrospective` flag into `delegate.py` so running `python3 delegate.py --retrospective` synthesizes `DELEGATION_RETROSPECTIVE.md` artifact for end-of-sprint user review and approval.
+* **Target Files**:
+  * [NEW] [`HomeLabAI/src/infra/delegate_retrospective.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/delegate_retrospective.py)
+  * [MODIFY] [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/delegate.py --retrospective`
 
 ---
 

@@ -1595,16 +1595,16 @@
 **Rationale:** Ensures that if `lab-attendant` or audio stream buffers experience memory pressure, systemd isolates and terminates only `lab-attendant`, keeping host OS, SSH, and other services 100% online.
 **Mechanism:** `lab-attendant.service` systemd unit configuration.
 
----
-
 ## [FEAT-429] Foyer Disconnect Memory Reclaim Sentinel
 **Status:** PROPOSED (Sprint 50 Story 7)
-**Logic:** Implements explicit `on_close()` cleanup hooks in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
+**Logic:** Implements explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
 **Rationale:** Prevents memory accumulation and orphan audio buffer leaks across multiple browser reloads or tab closures.
 **Mechanism:** `on_close()` handler in `attendant.py` and garbage collection sentinel.
 
+---
 
-
-
-
-
+## [FEAT-430] Automated Delegation Retrospective & Friction Audit Stage
+**Status:** PROPOSED (Sprint 50 Story 8)
+**Logic:** Creates `HomeLabAI/src/infra/delegate_retrospective.py` and wires `--retrospective` flag into `delegate.py`. Automatically parses `/tmp/delegate_story_*.log`, queries REST session metrics (`tokens`, `time`, `child_sessions`), compares prompt target paths vs `git diff` actuals to detect path search thrash, and synthesizes a Delegation Friction Ledger artifact for user review and sign-off.
+**Rationale:** Eliminates manual friction accounting, automatically capturing prompt path mismatches and provider 503 fallbacks at the end of every heads-down execution segment.
+**Mechanism:** `delegate_retrospective.py` parser, `delegate.py --retrospective` CLI integration, and `DELEGATION_RETROSPECTIVE.md` report synthesizer.
