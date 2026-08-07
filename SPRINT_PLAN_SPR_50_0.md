@@ -113,8 +113,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | :--- | :--- | :--- | :--- |
 | **Story 3** | `LAB-090` | Standalone SSH OOM Immunity Sentinel Installer | **COMPLETED** |
 | **Story 1** | `FEAT-425`, `FEAT-427` | WebSocket RSS Memory Profiler & PCM Ring-Buffer Clamp | **COMPLETED** |
-| **Story 2** | `FEAT-426` | Intercom Loopback & Origin Security Guard | **IN PROGRESS (`task-1705`)** |
-| **Story 4** | `LAB-091`, `LAB-092` | Kernel SysRq Emergency Protocol & EarlyOOM Sentinel | **APPROVED (Queued)** |
+| **Story 2** | `FEAT-426` | Intercom Loopback & Origin Security Guard | **COMPLETED** |
+| **Story 4** | `LAB-091`, `LAB-092` | Kernel SysRq Emergency Protocol & EarlyOOM Sentinel | **COMPLETED** |
 | **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **APPROVED (Planned)** |
 | **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
@@ -132,14 +132,14 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🎯 Story 2: Intercom Loopback & Origin Security Guard (`FEAT-426`) — **[STATUS: IN PROGRESS]**
+### 🎯 Story 2: Intercom Loopback & Origin Security Guard (`FEAT-426`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   1. Clean up `Portfolio_Dev/field_notes/intercom_v2.js` uncommitted working tree diff.
-  2. Enforce explicit `ws://127.0.0.1:8765` loopback binding and `X-Lab-Key` token header validation in `HomeLabAI/src/v5/attendant/attendant.py`.
+  2. Enforce explicit `ws://127.0.0.1:8765` loopback binding and `X-Lab-Key` token header validation in `HomeLabAI/src/v5/foyer/router.py`.
   3. Rebuild static distribution files (`build_site.py`).
 * **Target Files**:
   * [MODIFY] [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js)
-  * [MODIFY] [`HomeLabAI/src/v5/attendant/attendant.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/attendant/attendant.py)
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
 * **Verification Command**: `python3 HomeLabAI/src/v5/ignition/manager.py --test-attendant`
 
 ---
@@ -154,7 +154,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`) — **[STATUS: QUEUED]**
+### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   Create `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`) and tune `earlyoom` (5% RAM / 10% Swap threshold).
 * **Target File**:
@@ -184,22 +184,22 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ### 🛠️ Story 3 Implementation Details (`LAB-090`)
 * **Executed By**: OpenAgent (`ses_022c55e1fffeEidyL2qcfO0fYd`, 184s).
-* **Fix Summary**: Created [`HomeLabAI/src/infra/setup_ssh_immunity.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_ssh_immunity.sh). The script idempotently writes `/etc/systemd/system/sshd.service.d/override.conf` with:
-  ```ini
-  [Service]
-  OOMScoreAdjust=-1000
-  MemoryMin=256M
-  CPUSchedulingPolicy=rr
-  ```
-  It executes `sudo systemctl daemon-reload` and validates effective values using `systemctl show sshd -p OOMScoreAdjust,MemoryMin,CPUSchedulingPolicy`.
+* **Fix Summary**: Created [`HomeLabAI/src/infra/setup_ssh_immunity.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_ssh_immunity.sh). The script idempotently writes `/etc/systemd/system/sshd.service.d/override.conf` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`, and verifies effective values via `systemctl show sshd`.
 * **Git Commit**: `feat(story-3): add setup_ssh_immunity.sh installer for SSH OOM immunity sentinel (LAB-090)`
 
 ### 🛠️ Story 1 Implementation Details (`FEAT-425`, `FEAT-427`)
 * **Executed By**: OpenAgent (`ses_022c26ee0ffe2bCNth58Cx6jqF`, 118s).
-* **Fix Summary**:
-  1. Created [`HomeLabAI/src/infra/profile_ws_memory.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/profile_ws_memory.py): Standalone `psutil` profiler that measures baseline, peak, and retained RSS memory during PCM streaming.
-  2. Updated [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js): Introduced `const PCM_CHUNK_CAP = 32768` (1 second mono 16kHz PCM ceiling) and clamped microphone Float32 $\rightarrow$ Signed Int16 downsampling via `Math.min(inSamples, PCM_CHUNK_CAP)`.
+* **Fix Summary**: Created [`HomeLabAI/src/infra/profile_ws_memory.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/profile_ws_memory.py) (`psutil` profiler) and updated [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js) (`PCM_CHUNK_CAP = 32768`).
 * **Git Commits**:
   * `feat(story-1): add profile_ws_memory.py psutil memory profiler harness (FEAT-425)`
-  * `feat(story-1): clamp PCM mic downsampling chunk length in intercom_v2.js (FEAT-427)`nnect active VSCode tunnels seamlessly without dropping session state.
+  * `feat(story-1): clamp PCM mic downsampling chunk length in intercom_v2.js (FEAT-427)`
 
+### 🛠️ Story 2 Implementation Details (`FEAT-426`)
+* **Executed By**: OpenAgent (`ses_022c064f9ffebTzsB8oq4bVwsP`, 575s).
+* **Fix Summary**: OpenAgent auto-located [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py). Enforced explicit `web.run_app(self.app, host="127.0.0.1", port=PORT)` loopback binding, origin validation, and `X-Lab-Key` handshake token verification.
+* **Git Commit**: `feat(story-2): enforce 127.0.0.1 loopback binding & X-Lab-Key handshake validation in router.py (FEAT-426)`
+
+### 🛠️ Story 4 Implementation Details (`LAB-091`, `LAB-092`)
+* **Executed By**: OpenAgent (`ses_022b76133ffer7tj1RFZWokJBE`, 188s).
+* **Fix Summary**: Created [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh). Configures `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`), deploys `earlyoom` drop-in override `--mem 5 --swap 10`, and validates live status.
+* **Git Commit**: `feat(story-4): add setup_sysrq_earlyoom.sh installer for Kernel SysRq and EarlyOOM sentinel (LAB-091, LAB-092)`
