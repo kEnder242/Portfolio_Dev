@@ -161,6 +161,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
+---
+
 ### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`)
 * **Task Specification**:
   Create `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`) and tune `earlyoom` (5% RAM / 10% Swap threshold).
@@ -168,15 +170,40 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
   * [NEW] [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh)
 * **Verification Command**: `bash HomeLabAI/src/infra/setup_sysrq_earlyoom.sh --verify`
 * **User Intervention Needed**: Requires `sudo` to apply `sysctl` and install `earlyoom`.
-> sudo bash -c 'echo "kernel.sysrq = 1" > /etc/sysctl.d/99-sysrq.conf'
-> sudo sysctl --system
-> 
-> # 3. Install & Tune EarlyOOM Kicker (LAB-092)
-> sudo apt-get update && sudo apt-get install -y earlyoom
-> sudo systemctl enable --now earlyoom
-> ```
-> 
-> * **Reboot / AGY Restart Required?**:
->   * **Reboot `z87-Linux`?** Optional (not strictly required—`sysctl --system` and `systemctl daemon-reload` apply changes immediately).
+
+---
+
+### 🧪 Story 5: Real-Time Audio Streaming vs Integration Test Memory Benchmark (`FEAT-428`)
+* **Task Specification**:
+  1. Create `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated 60-second real-time Float32 $\rightarrow$ Signed Int16 PCM audio buffers over WebSocket to `lab-attendant`.
+  2. Profile RSS memory, swap usage, and vLLM KV-cache allocation during streaming.
+  3. Close the gap between integration tests (which stub audio) and live `intercom.html` usage.
+* **Target File**:
+  * [NEW] [`HomeLabAI/src/tests/test_live_audio_memory_benchmark.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_audio_memory_benchmark.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/test_live_audio_memory_benchmark.py --duration 60`
+* **User Intervention Needed**: None.
+
+---
+
+### 🛡️ Story 6: Lab-Attendant Cgroup Memory Hard Cap Sentinel (`LAB-093`)
+* **Task Specification**:
+  1. Update `HomeLabAI/config/systemd/lab-attendant.service` to include `MemoryMax=4G`, `MemoryHigh=3.5G`, and `ManagedOOMPreference=kill`.
+  2. Ensure systemd isolates `lab-attendant` during runaway RAM spikes, protecting host OS and SSH from thrashing lockup.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/config/systemd/lab-attendant.service`](file:///home/jallred/Dev_Lab/HomeLabAI/config/systemd/lab-attendant.service)
+* **Verification Command**: `systemctl --user daemon-reload && systemctl --user status lab-attendant.service`
+* **User Intervention Needed**: None (Userland SystemD unit).
+
+---
+
+### 🧹 Story 7: Foyer Disconnect Memory Reclaim Sentinel (`FEAT-429`)
+* **Task Specification**:
+  1. Implement explicit `on_close()` cleanup handlers in `HomeLabAI/src/v5/attendant/attendant.py` and `ear_node.py`.
+  2. Trigger explicit audio ring-buffer clearing and `gc.collect()` upon browser WebSocket disconnect or tab closure.
+* **Target Files**:
+  * [MODIFY] [`HomeLabAI/src/v5/attendant/attendant.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/attendant/attendant.py)
+  * [MODIFY] [`HomeLabAI/src/nodes/ear_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/ear_node.py)
+* **Verification Command**: `python3 HomeLabAI/src/v5/ignition/manager.py --test-attendant`
+* **User Intervention Needed**: None.
 >   * **Restart AGY / OpenCode?** Not required. `sshd` restart will reconnect active VSCode tunnels seamlessly without dropping session state.
 

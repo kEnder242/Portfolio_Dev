@@ -1579,6 +1579,30 @@
 **Rationale:** Prevents unmanaged memory growth in browser heap and backend WebSockets during long speech turns.
 **Mechanism:** `intercom_v2.js` PCM buffer clamp.
 
+---
+
+## [FEAT-428] Real-Time PCM Audio Stream Memory Benchmark
+**Status:** PROPOSED (Sprint 50 Story 5)
+**Logic:** Creates `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated Float32 $\rightarrow$ Int16 PCM audio buffers to `lab-attendant` while profiling `psutil` RSS RAM and vLLM KV-cache utilization.
+**Rationale:** Closes the gap between integration tests (which stub audio) and live `intercom.html` usage, verifying true memory footprint during real-time speech interaction.
+**Mechanism:** `test_live_audio_memory_benchmark.py` harness and `status.json` telemetry logging.
+
+---
+
+## [LAB-093] Lab-Attendant Cgroup Memory Sentinel
+**Status:** PROPOSED (Sprint 50 Story 6)
+**Logic:** Configures `MemoryMax=4G` and `ManagedOOMPreference=kill` in `lab-attendant.service`.
+**Rationale:** Ensures that if `lab-attendant` or audio stream buffers experience memory pressure, systemd isolates and terminates only `lab-attendant`, keeping host OS, SSH, and other services 100% online.
+**Mechanism:** `lab-attendant.service` systemd unit configuration.
+
+---
+
+## [FEAT-429] Foyer Disconnect Memory Reclaim Sentinel
+**Status:** PROPOSED (Sprint 50 Story 7)
+**Logic:** Implements explicit `on_close()` cleanup hooks in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
+**Rationale:** Prevents memory accumulation and orphan audio buffer leaks across multiple browser reloads or tab closures.
+**Mechanism:** `on_close()` handler in `attendant.py` and garbage collection sentinel.
+
 
 
 
