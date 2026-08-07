@@ -1608,3 +1608,11 @@
 **Logic:** Creates `HomeLabAI/src/infra/delegate_retrospective.py` and wires `--retrospective` flag into `delegate.py`. Automatically parses `/tmp/delegate_story_*.log`, queries REST session metrics (`tokens`, `time`, `child_sessions`), compares prompt target paths vs `git diff` actuals to detect path search thrash, and synthesizes a Delegation Friction Ledger artifact for user review and sign-off.
 **Rationale:** Eliminates manual friction accounting, automatically capturing prompt path mismatches and provider 503 fallbacks at the end of every heads-down execution segment.
 **Mechanism:** `delegate_retrospective.py` parser, `delegate.py --retrospective` CLI integration, and `DELEGATION_RETROSPECTIVE.md` report synthesizer.
+
+---
+
+## [FEAT-431] EarlyOOM Telemetry & Neural Pager Hook
+**Status:** PROPOSED (Sprint 50 Story 9)
+**Logic:** Configures `earlyoom` with an executive notification hook (`earlyoom_pager_notifier.sh`) that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever an OOM termination occurs.
+**Rationale:** Captures the exact "WHY" behind every OOM kill (killed PID, process command, RAM/swap free percentages, and OOM score) for real-time visibility on `pager.html` and `status.html` without dropping SSH connections.
+**Mechanism:** `earlyoom_pager_notifier.sh` script, `earlyoom` SystemD drop-in environment hook, and `pager_activity.json` event log.

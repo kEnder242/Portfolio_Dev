@@ -119,6 +119,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
+| **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **APPROVED (Queued)** |
 
 ---
 
@@ -181,7 +182,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 📊 Story 8: Automated Delegation Retrospective & Friction Audit Stage (`FEAT-430`) — **[STATUS: APPROVED / QUEUED]**
+### 📊 Story 8: Automated Delegation Retrospective & Friction Audit Stage (`FEAT-430`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   1. Create `HomeLabAI/src/infra/delegate_retrospective.py`: An automated friction parser that reads `/tmp/delegate_story_*.log` step logs, queries REST session metrics (`tokens`, `duration`, `child_sessions`), and compares prompt target paths vs `git diff` actuals to detect path search thrash.
   2. Wire `--retrospective` flag into `delegate.py` so running `python3 delegate.py --retrospective` synthesizes `DELEGATION_RETROSPECTIVE.md` artifact for end-of-sprint user review and approval.
@@ -189,6 +190,18 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
   * [NEW] [`HomeLabAI/src/infra/delegate_retrospective.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/delegate_retrospective.py)
   * [MODIFY] [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)
 * **Verification Command**: `python3 HomeLabAI/src/tests/delegate.py --retrospective`
+
+---
+
+### 🚨 Story 9: EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) (`FEAT-431`) — **[STATUS: APPROVED / QUEUED]**
+* **Task Specification**:
+  1. Create `HomeLabAI/src/infra/earlyoom_pager_notifier.sh`: An executive notification script that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever `earlyoom` executes a process kill.
+  2. Update `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `EARLYOOM_ARGS="--mem 5 --swap 10 -N /home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh"`.
+  3. Ensure every OOM termination renders an explicit **`CRITICAL [OOM SENTINEL]`** alert on `pager.html` and `status.html` capturing killed PID, process name, RAM/swap free percentages, and OOM score.
+* **Target Files**:
+  * [NEW] [`HomeLabAI/src/infra/earlyoom_pager_notifier.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh)
+  * [MODIFY] [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh)
+* **Verification Command**: `bash HomeLabAI/src/infra/setup_sysrq_earlyoom.sh --verify`
 
 ---
 
