@@ -125,10 +125,13 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **COMPLETED** |
 | **Story 13** | `FEAT-434` | Delegate.py Multi-Mode Planning & Investigation Sentinel | **COMPLETED** |
 | **Story 14** | `LAB-097` | OOM Root-Cause Diagnostic Investigation (`--mode investigate`) | **COMPLETED** |
-| **Story 15** | `FEAT-435` | Bounded Conversation Memory & Prompt Context Cap | **APPROVED (Planned)** |
+| **Story 15** | `FEAT-435` | `journal_ledger` Raw Spoken Dialogue & RAG Cache (`[FEAT-435-Cache]`) | **APPROVED (Planned)** |
 | **Story 16** | `FEAT-436` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **APPROVED (Planned)** |
-| **Story 17** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
-| **Story 18** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **APPROVED (Planned)** |
+| **Story 17** | `FEAT-437` | Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) | **APPROVED (Planned)** |
+| **Story 18** | `FEAT-438` | Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) | **APPROVED (Planned)** |
+| **Story 19** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
+| **Story 20** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **APPROVED (Planned)** |
+| **Story 21** | `FEAT-439` | Unit Test Suite & End-to-End Integration Gauntlet Certification | **APPROVED (Planned)** |
 
 ---
 
@@ -264,13 +267,13 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🧹 Story 15: Bounded Conversation Memory & Prompt Context Cap (`FEAT-435`) — **[STATUS: PLANNED]**
+### 📜 Story 15: `journal_ledger` Raw Spoken Dialogue & RAG Cache (`FEAT-435`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Update `HomeLabAI/src/v5/foyer/logic/cognitive_hub.py` to convert `self.round_table_memory` from perpetual list accumulation to a bounded sliding window (`deque(maxlen=5)`).
-  2. In `_process_node_stream()`, cap prompt prepending to a max token ceiling ($\le 3000$ tokens) with middle truncation to eliminate $O(n^2)$ prompt explosion.
+  1. Refactor `HomeLabAI/src/logic/cognitive_hub.py` to maintain a 24-hour `journal_ledger` capturing **only raw out-loud spoken chat dialogue** (`User`, `Pinky`, `Brain`), excluding internal scratchpads/prompt templates (Transparency BKM Exception).
+  2. Implement `[FEAT-435-Cache]` lightweight RAG Cache dict `_rag_cache[query_hash]` in `cognitive_hub.py` to reuse RAG search payloads across follow-up turns without duplicate vector DB fetches.
 * **Target File**:
-  * [MODIFY] [`HomeLabAI/src/v5/foyer/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/logic/cognitive_hub.py)
-* **Verification Command**: `python3 HomeLabAI/src/tests/test_integration_foyer.py`
+  * [MODIFY] [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
 
 ---
 
@@ -284,24 +287,56 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🗃️ Story 17: Unbounded Request IDs & Waterfall Buffer TTL Sweeper (`LAB-095`) — **[STATUS: PLANNED]**
+### 🌙 Story 17: Two-Stage Subconscious Dream Engine (`journal_kb` + WYWO) (`FEAT-437`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Update `HomeLabAI/src/v5/foyer/logic/cognitive_hub.py` to replace `self.processed_ids = set()` with `deque(maxlen=1000)` to prevent monotonic set growth.
+  1. Update `HomeLabAI/src/infra/dream_node.py` and `HomeLabAI/src/nodes/archive_node.py` to implement a 2-stage hibernation dream engine:
+     - **Stage 1 (Memory Consolidation)**: Reads 24h raw `journal_ledger`, distills full-day context into a `journal_kb` entry, indexes it into `archive_node` (ChromaDB), and resets `journal_ledger`.
+     - **Stage 2 (Natural Dreaming & WYWO)**: Pinky & Brain reflect autonomously on `journal_kb`, generating creative ideas and logging a **"While You Were Out (WYWO)" Morning Briefing** for the user upon wake.
+* **Target Files**:
+  * [MODIFY] [`HomeLabAI/src/infra/dream_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/dream_node.py)
+  * [MODIFY] [`HomeLabAI/src/nodes/archive_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py)
+* **Verification Command**: `python3 HomeLabAI/src/infra/dream_node.py --test-dream`
+
+---
+
+### 🛡️ Story 18: Single-Turn Transient Context Cap Sentinel ($\le 2,500$ tokens) (`FEAT-438`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/logic/cognitive_hub.py` to enforce a hard 2,500 token cap on single-turn transient file drops or RAG context injections.
+  2. Applies head+tail truncation with document links if single-turn attachments exceed 2,500 tokens to guarantee vLLM stability.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### 🗃️ Story 19: Unbounded Request IDs & Waterfall Buffer TTL Sweeper (`LAB-095`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/logic/cognitive_hub.py` to replace `self.processed_ids = set()` with `deque(maxlen=1000)` to prevent monotonic set growth.
   2. Update `HomeLabAI/src/v5/foyer/router.py` to add a 30-second TTL cleanup loop for orphaned `pending_chunks` keys when streams error out or abort.
 * **Target Files**:
-  * [MODIFY] [`HomeLabAI/src/v5/foyer/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/logic/cognitive_hub.py)
+  * [MODIFY] [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)
   * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
 * **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
 
 ---
 
-### ⚖️ Story 18: Judge Task Concurrency Semaphore & Heap Scavenger Loop (`LAB-096`) — **[STATUS: PLANNED]**
+### ⚖️ Story 20: Judge Task Concurrency Semaphore & Heap Scavenger Loop (`LAB-096`) — **[STATUS: PLANNED]**
 * **Task Specification**:
   1. Update `HomeLabAI/src/v5/foyer/router.py` to add a concurrency semaphore (`asyncio.Semaphore(2)`) to `_run_mlx_judge()` tasks to prevent un-awaited judge task backlog stacking.
   2. Add a periodic garbage collection scavenger (`gc.collect()` + `malloc_trim`) loop running every 60s in `scheduled_tasks_loop`.
 * **Target File**:
   * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
 * **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### 🧪 Story 21: Unit Test Suite & End-to-End Integration Gauntlet Certification (`FEAT-439`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Create `HomeLabAI/src/tests/test_memory_architecture.py` to verify unit tests for `journal_ledger`, `_rag_cache`, `sensory_manager` buffer trim, and `dream_node` two-stage consolidation.
+  2. Execute `test_uber_5x5.py` and `test_integration_foyer.py` end-to-end to certify memory stability.
+* **Target File**:
+  * [NEW] [`HomeLabAI/src/tests/test_memory_architecture.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_memory_architecture.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_memory_architecture.py`
 
 ---
 
