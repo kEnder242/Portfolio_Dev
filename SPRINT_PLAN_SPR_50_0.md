@@ -121,7 +121,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
 | **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **COMPLETED** |
 | **Story 10** | `FEAT-432` | Foyer Exception Audit & Warning Logger Upgrade | **APPROVED (Planned)** |
-| **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Wake Cycle Integration Test | **APPROVED (Planned)** |
+| **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Cold-Start Wake Transition Test | **APPROVED (Planned)** |
+| **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **APPROVED (Planned)** |
 
 ---
 
@@ -218,14 +219,24 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🧪 Story 11: Foyer On-Demand Hibernation & Wake Cycle Integration Test (`LAB-094`) — **[STATUS: PLANNED]**
+### 🧪 Story 11: Foyer On-Demand Hibernation & Cold-Start Wake Transition Integration Test (`LAB-094`) — **[STATUS: PLANNED]**
 * **Task Specification**:
-  1. Add an automated integration test to `HomeLabAI/src/tests/test_integration_foyer.py` that verifies the complete hibernation & wake cycle.
-  2. Test posts to `POST /status_update` (`{"state": "HIBERNATING"}`), asserts `self.residents.booted == False`, then sends a text query over WebSocket (`ws://127.0.0.1:8765/`).
-  3. Asserts the state transition (`HIBERNATING` $\rightarrow$ `WAKING` $\rightarrow$ `OPERATIONAL`) and verifies that no silent exceptions or state reversions occur.
+  1. Add an automated integration test to `HomeLabAI/src/tests/test_integration_foyer.py` that verifies the cold-start wake sequence.
+  2. Test posts `POST /status_update` (`{"state": "HIBERNATING"}`), asserts `self.residents.booted == False`, then sends a text query over WebSocket (`ws://127.0.0.1:8765/`).
+  3. Asserts the state transition (`HIBERNATING` $\rightarrow$ `WAKING` $\rightarrow$ `OPERATIONAL`), verifies physical RAM stays under 3.5G/4G cgroup caps during model loading, and confirms no silent exceptions or state reversions occur.
 * **Target File**:
   * [MODIFY] [`HomeLabAI/src/tests/test_integration_foyer.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_integration_foyer.py)
 * **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### 🧪 Story 12: Live Operational System-Load Gauntlet (`uber_5x5.py`) (`FEAT-433`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Once the lab is verified `OPERATIONAL` following the cold-start wake transition, execute `python3 HomeLabAI/src/tests/uber_5x5.py`.
+  2. Run the full 25-turn evaluation gauntlet under live operational system load to verify LLM reasoning quality, RAG accuracy, turn-trace scores, and long-run RSS memory stability under the 4GB cgroup cap.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/tests/uber_5x5.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/uber_5x5.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/uber_5x5.py`
 
 ---
 
