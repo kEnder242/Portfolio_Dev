@@ -1531,6 +1531,54 @@
 **Rationale:** Prevents valid semantic matches from being dropped by overly tight 0.45 distance cutoffs while providing real-time vector engine health telemetry to the status center.
 **Mechanism:** `DISTANCE_THRESHOLD = 0.55` and `_log_rag_telemetry()` in `archive_node.py`, atomic write to `status.json`.
 
+---
+
+## [LAB-090] SSH OOM Immunity Sentinel
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Configures systemd service override for `sshd.service` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`.
+**Rationale:** Guarantees that SSH and remote VSCode tunnel sessions are never killed or swap-frozen during extreme host RAM pressure.
+**Mechanism:** `/etc/systemd/system/sshd.service.d/override.conf` or user systemd override unit.
+
+---
+
+## [LAB-091] Kernel SysRq Emergency Protocol
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Enables kernel-level SysRq magic key interface (`kernel.sysrq = 1`).
+**Rationale:** Provides an out-of-band emergency mechanism to safely sync disks (`echo s > /proc/sysrq-trigger`) and trigger instant kernel reboot (`echo b`) during hard userland freezes.
+**Mechanism:** `/etc/sysctl.d/99-sysrq.conf` sysctl configuration.
+
+---
+
+## [LAB-092] Proactive Memory Kicker (EarlyOOM Sentinel)
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Deploys `earlyoom` with 5% RAM and 10% Swap thresholds.
+**Rationale:** Terminates runaway background Python memory consumers *before* host swap space thrashing locks the OS and I/O bus.
+**Mechanism:** `earlyoom` system service configuration.
+
+---
+
+## [FEAT-425] Standalone WebSocket RSS Memory Profiler
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Creates `psutil` profiling harness `HomeLabAI/src/infra/profile_ws_memory.py` measuring memory footprint during live WebSocket PCM audio streaming.
+**Rationale:** Isolates exact RSS memory overhead added by WebSockets vs LLM KV-cache allocations.
+**Mechanism:** `profile_ws_memory.py` harness with `status.json` reporting.
+
+---
+
+## [FEAT-426] Intercom Loopback & Origin Security Guard
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Hardens `intercom_v2.js` and `lab-attendant` with explicit `127.0.0.1` loopback binding, origin header validation, and `X-Lab-Key` token checks.
+**Rationale:** Prevents unauthorized cross-origin WebSocket connections while ensuring local development uses secure loopback IPC.
+**Mechanism:** `intercom_v2.js` and `attendant.py` WebSocket handler.
+
+---
+
+## [FEAT-427] Audio PCM Stream Buffer Sentinel
+**Status:** PROPOSED (Sprint 50)
+**Logic:** Implements a strict ring-buffer cap on Float32 $\rightarrow$ Int16 PCM audio downsampling in `intercom_v2.js`.
+**Rationale:** Prevents unmanaged memory growth in browser heap and backend WebSockets during long speech turns.
+**Mechanism:** `intercom_v2.js` PCM buffer clamp.
+
 
 
 

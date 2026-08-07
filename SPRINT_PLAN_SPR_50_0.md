@@ -104,3 +104,69 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Agent Role** | Pure Diagnostic RAG & Report Synthesis | Atlas jumped directly into code mutation & checklist creation | Use `@prometheus` or `@oracle` for pure research prompts |
 | **Crash Cause** | Suspected OpenCode memory leak | Browser WS + PCM streaming + LLM KV-cache thrashed system RAM/swap | Apply `OOMScoreAdjust=-1000` to SSH & profile WS memory |
 | **Working Tree** | Clean working directory | `intercom_v2.js` dirty with uncommitted `SECURITY` patch | Review/clean `intercom_v2.js` diff before next sprint |
+
+---
+
+## 6. Sprint 50 Actionable Stories for OpenAgent Delegation
+
+### 🎯 Story 1: Standalone WebSocket RSS Profiler & Audio Ring-Buffer Sentinel (`FEAT-425`, `FEAT-427`)
+* **Task Specification**:
+  1. Create `HomeLabAI/src/infra/profile_ws_memory.py`: A `psutil`-based standalone harness that measures RSS memory footprint of `lab-attendant` before, during, and after WebSocket connection audio streaming.
+  2. Implement strict ring-buffer clamping on Float32 $\rightarrow$ Signed Int16 PCM audio conversion in `Portfolio_Dev/field_notes/intercom_v2.js` (max 32k PCM chunk buffer) to prevent unmanaged browser/backend heap expansion.
+* **Target Files**:
+  * [NEW] [`HomeLabAI/src/infra/profile_ws_memory.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/profile_ws_memory.py)
+  * [MODIFY] [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js)
+* **Verification Command**: `python3 HomeLabAI/src/infra/profile_ws_memory.py --duration 10`
+* **User Intervention Needed**: None (Pure userland Python/JS).
+
+---
+
+### 🎯 Story 2: Intercom Loopback & Origin Security Guard (`FEAT-426`)
+* **Task Specification**:
+  1. Clean up `Portfolio_Dev/field_notes/intercom_v2.js` uncommitted working tree diff.
+  2. Enforce explicit `ws://127.0.0.1:8765` loopback binding and `X-Lab-Key` token header validation in `HomeLabAI/src/v5/attendant/attendant.py`.
+  3. Rebuild static distribution files (`build_site.py`).
+* **Target Files**:
+  * [MODIFY] [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js)
+  * [MODIFY] [`HomeLabAI/src/v5/attendant/attendant.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/attendant/attendant.py)
+* **Verification Command**: `python3 HomeLabAI/src/v5/ignition/manager.py --test-attendant`
+* **User Intervention Needed**: None (Pure userland Python/JS).
+
+---
+
+### 🎯 Story 3: Host Infrastructure Hardening & OS Sentinel Deploy (`LAB-090`, `LAB-091`, `LAB-092`)
+* **Task Specification**:
+  Create host installation script `HomeLabAI/src/infra/setup_host_resilience.sh` to generate SystemD overrides and sysctl configurations.
+* **Target File**:
+  * [NEW] [`HomeLabAI/src/infra/setup_host_resilience.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_host_resilience.sh)
+
+> [!WARNING]
+> **User Intervention Required (`sudo` & OS Reboot / Service Restart)**:
+> Installing host-level SystemD overrides, `sysctl` kernel flags, and `earlyoom` requires root privileges. OpenAgent cannot run `sudo` non-interactively.
+> The human user must execute the following commands on `z87-Linux`:
+> 
+> ```bash
+> # 1. Apply SSH OOM Immunity Sentinel (LAB-090)
+> sudo mkdir -p /etc/systemd/system/sshd.service.d
+> sudo bash -c 'cat <<EOF > /etc/systemd/system/sshd.service.d/override.conf
+> [Service]
+> OOMScoreAdjust=-1000
+> MemoryMin=256M
+> CPUSchedulingPolicy=rr
+> CPUSchedulingPriority=50
+> EOF'
+> sudo systemctl daemon-reload && sudo systemctl restart sshd
+> 
+> # 2. Enable Kernel SysRq Emergency Key Interface (LAB-091)
+> sudo bash -c 'echo "kernel.sysrq = 1" > /etc/sysctl.d/99-sysrq.conf'
+> sudo sysctl --system
+> 
+> # 3. Install & Tune EarlyOOM Kicker (LAB-092)
+> sudo apt-get update && sudo apt-get install -y earlyoom
+> sudo systemctl enable --now earlyoom
+> ```
+> 
+> * **Reboot / AGY Restart Required?**:
+>   * **Reboot `z87-Linux`?** Optional (not strictly required—`sysctl --system` and `systemctl daemon-reload` apply changes immediately).
+>   * **Restart AGY / OpenCode?** Not required. `sshd` restart will reconnect active VSCode tunnels seamlessly without dropping session state.
+
