@@ -1,8 +1,20 @@
 const CONFIG = {
-    LOCAL_URL: "ws://localhost:8765",
+    // [SECURITY] Enforce loopback binding for local development
+    LOCAL_URL: "ws://127.0.0.1:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-    VERSION: "5.0.0-foyer"
+    VERSION: "5.0.0-foyer",
+    SECURITY: {
+        REQUIRE_XLAB_KEY: true,
+        VALIDATE_ORIGIN: true,
+        ALLOWED_ORIGINS: ["http://localhost:8080", "https://notes.jason-lab.dev"]
+    }
 };
+
+// [PCM CAP] Hard ceiling on a single Int16 PCM chunk: 32768 samples @ 16kHz
+// = exactly 1 second of mono PCM. Clamps the mic downsampling allocation so
+// a single audio rotate can never daisy-chain Int16 buffer expansion and
+// grow the browser heap without a bound.
+const PCM_CHUNK_CAP = 32768;
 
 let ws = null;
 let isMicActive = false;
@@ -298,8 +310,13 @@ async function startMic() {
         processor.onaudioprocess = (e) => {
             if (!isMicActive || !ws || ws.readyState !== WebSocket.OPEN) return;
             const inputData = e.inputBuffer.getChannelData(0);
-            const pcmData = new Int16Array(inputData.length);
-            for (let i = 0; i < inputData.length; i++) {
+            // Clamp the Int16 allocation to PCM_CHUNK_CAP so no single
+            // processing event can expand browser heap past the 1s PCM
+            // ceiling (prevents daisy-chained int16 buffer expansion).
+            const inSamples = inputData.length;
+            const chunkLen = Math.min(inSamples, PCM_CHUNK_CAP);
+            const pcmData = new Int16Array(chunkLen);
+            for (let i = 0; i < chunkLen; i++) {
                 const s = Math.max(-1, Math.min(1, inputData[i]));
                 pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
             }
