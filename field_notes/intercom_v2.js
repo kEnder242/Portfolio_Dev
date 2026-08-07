@@ -3,6 +3,10 @@ const CONFIG = {
     LOCAL_URL: "ws://127.0.0.1:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
     VERSION: "5.0.0-foyer",
+    // [FEAT-426] Static fallback key. Overridden at runtime by the Foyer's
+    // /status session_token (browsers cannot set custom WS headers, so the key
+    // rides the handshake frame as `lab_key`). Empty fallback fails closed.
+    LAB_KEY: "",
     SECURITY: {
         REQUIRE_XLAB_KEY: true,
         VALIDATE_ORIGIN: true,
@@ -35,6 +39,7 @@ const consoleRow = document.getElementById('console-row');
 let lastSystemState = "";
 let lastMsgSource = "";
 let currentSocketId = "Unknown"; // [FEAT-344] Persistence Tracker
+let currentLabKey = ""; // [FEAT-426] X-Lab-Key for WS handshake + heartbeat fetch
 
 // [FEAT-339] Message De-duplication
 const seenMsgIds = new Set();
@@ -346,12 +351,33 @@ function stopMic() {
 }
 
 // --- CONNECTION ---
-function connect() {
+// [FEAT-426] X-Lab-Key source: the Foyer exposes its session token via the
+// REST /status endpoint on the same host as the WS. Browsers cannot set custom
+// WS headers, so the key rides the handshake frame as `lab_key` instead.
+async function getLabKey(target) {
+    try {
+        const statusUrl = target.replace(/^ws/, 'http') + '/status';
+        const resp = await fetch(statusUrl, { cache: 'no-store' });
+        if (resp.ok) {
+            const data = await resp.json();
+            if (data.session_token) {
+                return data.session_token;
+            }
+        }
+    } catch (e) {
+        // Fall through to the static fallback.
+    }
+    return CONFIG.LAB_KEY || '';
+}
+
+async function connect() {
     const targetUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? CONFIG.LOCAL_URL : CONFIG.REMOTE_URL;
 
     appendMsg(`Connecting to ${targetUrl}...`, 'system-msg');
     try {
+        // [FEAT-426] Fetch the session key before opening the socket.
+        currentLabKey = await getLabKey(targetUrl);
         ws = new WebSocket(targetUrl);
         window.ws = ws;
         ws.onopen = () => {
@@ -359,7 +385,8 @@ function connect() {
             ws.send(JSON.stringify({ 
                 type: "handshake", 
                 version: CONFIG.VERSION,
-                client: "intercom" 
+                client: "intercom",
+                lab_key: currentLabKey
             }));
         };
         ws.onmessage = (e) => {
