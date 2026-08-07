@@ -24,6 +24,7 @@ monitor/pager_activity.json
 # Field Notes Data (Private Logs/Indices)
 field_notes/data/
 field_notes/data_contaminated_backup/
+field_notes/benchmarks_cache.json
 venv/
 env/
 *.egg-info/
