@@ -124,6 +124,11 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Cold-Start Wake Transition Test | **COMPLETED** |
 | **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **COMPLETED** |
 | **Story 13** | `FEAT-434` | Delegate.py Multi-Mode Planning & Investigation Sentinel | **COMPLETED** |
+| **Story 14** | `LAB-097` | OOM Root-Cause Diagnostic Investigation (`--mode investigate`) | **COMPLETED** |
+| **Story 15** | `FEAT-435` | Bounded Conversation Memory & Prompt Context Cap | **APPROVED (Planned)** |
+| **Story 16** | `FEAT-436` | Sensory Ear Audio Buffer Unloaded Leak Clamp | **APPROVED (Planned)** |
+| **Story 17** | `LAB-095` | Unbounded Request IDs & Waterfall Buffer TTL Sweeper | **APPROVED (Planned)** |
+| **Story 18** | `LAB-096` | Judge Task Concurrency Semaphore & Heap Scavenger Loop | **APPROVED (Planned)** |
 
 ---
 
@@ -246,6 +251,57 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Target File**:
   * [MODIFY] [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)
 * **Verification Command**: `python3 HomeLabAI/src/tests/delegate.py --help`
+
+---
+
+### 🕵️‍♂️ Story 14: OOM Root-Cause Diagnostic Investigation (`LAB-097`) — **[STATUS: COMPLETED]**
+* **Task Specification**:
+  1. Dispatch `--mode investigate` to OpenAgent (Prometheus) over REST via `delegate.py` to audit root-cause memory leaks.
+  2. Audit identified 4 core memory leaks: $O(n^2)$ prompt explosion in `cognitive_hub.py`, uncapped audio buffer when Ear is unloaded in `sensory_manager.py`, unbounded `processed_ids`, and orphaned `pending_chunks`.
+* **Target File**:
+  * [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/delegate.py --mode investigate ...`
+
+---
+
+### 🧹 Story 15: Bounded Conversation Memory & Prompt Context Cap (`FEAT-435`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/v5/foyer/logic/cognitive_hub.py` to convert `self.round_table_memory` from perpetual list accumulation to a bounded sliding window (`deque(maxlen=5)`).
+  2. In `_process_node_stream()`, cap prompt prepending to a max token ceiling ($\le 3000$ tokens) with middle truncation to eliminate $O(n^2)$ prompt explosion.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/logic/cognitive_hub.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### 🔊 Story 16: Sensory Ear Audio Buffer Unloaded Leak Clamp (`FEAT-436`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/v5/foyer/sensory/sensory_manager.py` to move the sliding-window buffer trim logic (`if len(self.audio_buffer) >= 24000: ...`) **OUTSIDE** the `self.ear` check in `process_binary_chunk()`.
+  2. Ensure incoming audio PCM chunks are ALWAYS trimmed/reset even when EarNode is unloaded, eliminating multi-gigabyte RAM heap leaks during low-memory conditions.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/sensory/sensory_manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/sensory/sensory_manager.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/test_live_audio_memory_benchmark.py`
+
+---
+
+### 🗃️ Story 17: Unbounded Request IDs & Waterfall Buffer TTL Sweeper (`LAB-095`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/v5/foyer/logic/cognitive_hub.py` to replace `self.processed_ids = set()` with `deque(maxlen=1000)` to prevent monotonic set growth.
+  2. Update `HomeLabAI/src/v5/foyer/router.py` to add a 30-second TTL cleanup loop for orphaned `pending_chunks` keys when streams error out or abort.
+* **Target Files**:
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/logic/cognitive_hub.py)
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### ⚖️ Story 18: Judge Task Concurrency Semaphore & Heap Scavenger Loop (`LAB-096`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/v5/foyer/router.py` to add a concurrency semaphore (`asyncio.Semaphore(2)`) to `_run_mlx_judge()` tasks to prevent un-awaited judge task backlog stacking.
+  2. Add a periodic garbage collection scavenger (`gc.collect()` + `malloc_trim`) loop running every 60s in `scheduled_tasks_loop`.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
 
 ---
 
