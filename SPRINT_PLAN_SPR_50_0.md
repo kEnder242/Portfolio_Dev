@@ -134,19 +134,20 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🎯 Story 3: Host Infrastructure Hardening & OS Sentinel Deploy (`LAB-090`, `LAB-091`, `LAB-092`)
-* **Task Specification**:
-  Create host installation script `HomeLabAI/src/infra/setup_host_resilience.sh` to generate SystemD overrides and sysctl configurations.
-* **Target File**:
-  * [NEW] [`HomeLabAI/src/infra/setup_host_resilience.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_host_resilience.sh)
+---
 
-> [!WARNING]
-> **User Intervention Required (`sudo` & OS Reboot / Service Restart)**:
-> Installing host-level SystemD overrides, `sysctl` kernel flags, and `earlyoom` requires root privileges. OpenAgent cannot run `sudo` non-interactively.
-> The human user must execute the following commands on `z87-Linux`:
-> 
+### 🎯 Story 3: Standalone SSH OOM Immunity Sentinel Installer (`LAB-090`)
+* **Task Specification**:
+  1. Create `HomeLabAI/src/infra/setup_ssh_immunity.sh`: A shell script that generates the SystemD override `/etc/systemd/system/sshd.service.d/override.conf` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`.
+  2. Provide automated verification probing `systemctl show sshd -p OOMScoreAdjust,MemoryMin,CPUSchedulingPolicy`.
+* **Target File**:
+  * [NEW] [`HomeLabAI/src/infra/setup_ssh_immunity.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_ssh_immunity.sh)
+* **Verification Command**: `bash HomeLabAI/src/infra/setup_ssh_immunity.sh --verify`
+* **User Intervention Needed**: Requires `sudo bash HomeLabAI/src/infra/setup_ssh_immunity.sh` to write SystemD drop-in overrides.
+
+> [!IMPORTANT]
+> **SSH Protection Commands (`sudo` required)**:
 > ```bash
-> # 1. Apply SSH OOM Immunity Sentinel (LAB-090)
 > sudo mkdir -p /etc/systemd/system/sshd.service.d
 > sudo bash -c 'cat <<EOF > /etc/systemd/system/sshd.service.d/override.conf
 > [Service]
@@ -156,8 +157,17 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 > CPUSchedulingPriority=50
 > EOF'
 > sudo systemctl daemon-reload && sudo systemctl restart sshd
-> 
-> # 2. Enable Kernel SysRq Emergency Key Interface (LAB-091)
+> ```
+
+---
+
+### 🎯 Story 4: Kernel SysRq Emergency Protocol & EarlyOOM Sentinel (`LAB-091`, `LAB-092`)
+* **Task Specification**:
+  Create `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`) and tune `earlyoom` (5% RAM / 10% Swap threshold).
+* **Target File**:
+  * [NEW] [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh)
+* **Verification Command**: `bash HomeLabAI/src/infra/setup_sysrq_earlyoom.sh --verify`
+* **User Intervention Needed**: Requires `sudo` to apply `sysctl` and install `earlyoom`.
 > sudo bash -c 'echo "kernel.sysrq = 1" > /etc/sysctl.d/99-sysrq.conf'
 > sudo sysctl --system
 > 
