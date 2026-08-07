@@ -119,7 +119,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
-| **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **APPROVED (Queued)** |
+| **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **COMPLETED** |
 
 ---
 
@@ -233,3 +233,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Executed By**: OpenAgent (`ses_022b31cd1ffeaWnn631LxGbJS7`, 394s).
 * **Fix Summary**: Created [`HomeLabAI/src/infra/delegate_retrospective.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/delegate_retrospective.py) and added `--retrospective` CLI flag to [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py). Automatically parses `/tmp/delegate_story_*.log` step logs, queries REST session metrics (`127.0.0.1:4097/session`), compares declared prompt paths vs `git diff` actuals, and synthesizes [`DELEGATION_RETROSPECTIVE.md`](file:///home/jallred/Dev_Lab/DELEGATION_RETROSPECTIVE.md).
 * **Git Commit**: `feat(story-8): add delegate_retrospective.py automated friction audit engine (FEAT-430)`
+
+### 🛠️ Story 9 Implementation Details (`FEAT-431`)
+* **Executed By**: OpenAgent (`ses_02296ce10ffe74J8664yeeZnyA`, 290s).
+* **Fix Summary**: Created [`HomeLabAI/src/infra/earlyoom_pager_notifier.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh) and updated [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh) to configure `EARLYOOM_ARGS="-m 5 -s 10 -N /home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh"`. Whenever `earlyoom` executes a process kill, it appends a `CRITICAL` telemetry event to `pager_activity.json` capturing killed PID, process name, free RAM/swap, and OOM score for real-time visibility on `pager.html` and `status.html`.
+* **Git Commit**: `feat(story-9): add earlyoom_pager_notifier.sh hook & configure -N flag in setup_sysrq_earlyoom.sh (FEAT-431)`
