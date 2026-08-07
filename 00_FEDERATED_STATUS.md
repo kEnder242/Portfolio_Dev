@@ -46,6 +46,9 @@
 ## 🎯 Active Initiative: "Real-Time Observability & Grafana Pipeline Synthesis" (Sprint SPR-40.0)
 **Goal:** Transition the MoE+ mixture-of-experts benchmarking framework from static JSON metrics to a real-time, Prometheus-scraped telemetry stack, visualizable via a multi-lane Grafana dashboard embedded back into our static files. **[STATUS: COMPLETE]**
 
+### 📋 Tabled Roadmap: Judicial Backpressure Expansion (`FEAT-444`)
+> **Context:** Tabled during Sprint 50.0 for future architectural expansion. Expands `FEAT-444` Judicial Backpressure Ledger to incorporate Swarm Delegation Backpressure (Handover Reflection), streaming OpenAgent execution friction directly into the orchestrator feedback loop.
+
 ## 🗺️ Tabled Roadmap: Multi-Tier Specialist Swarm Pipeline (4-Tier Swarm)
 > **Context:** Tabled during Sprint 49.0 for future expansion. Atlas and Sisyphus currently run clean 2-tier execution.
 *   **Level 1 (Strategic Architect)**: AGY (Antigravity CLI / Gemini) writing sprint plans and issuing `delegate.py` specs.
