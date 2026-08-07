@@ -118,7 +118,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 5** | `FEAT-428` | Real-Time Audio Streaming Memory Benchmark | **APPROVED (Planned)** |
 | **Story 6** | `LAB-093` | Lab-Attendant Cgroup Memory Hard Cap | **APPROVED (Planned)** |
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **APPROVED (Planned)** |
-| **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **APPROVED (Queued)** |
+| **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
 
 ---
 
@@ -215,3 +215,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Executed By**: OpenAgent (`ses_022b76133ffer7tj1RFZWokJBE`, 188s).
 * **Fix Summary**: Created [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh). Configures `/etc/sysctl.d/99-sysrq.conf` (`kernel.sysrq = 1`), deploys `earlyoom` drop-in override `--mem 5 --swap 10`, and validates live status.
 * **Git Commit**: `feat(story-4): add setup_sysrq_earlyoom.sh installer for Kernel SysRq and EarlyOOM sentinel (LAB-091, LAB-092)`
+
+### 🛠️ Story 8 Implementation Details (`FEAT-430`)
+* **Executed By**: OpenAgent (`ses_022b31cd1ffeaWnn631LxGbJS7`, 394s).
+* **Fix Summary**: Created [`HomeLabAI/src/infra/delegate_retrospective.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/delegate_retrospective.py) and added `--retrospective` CLI flag to [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py). Automatically parses `/tmp/delegate_story_*.log` step logs, queries REST session metrics (`127.0.0.1:4097/session`), compares declared prompt paths vs `git diff` actuals, and synthesizes [`DELEGATION_RETROSPECTIVE.md`](file:///home/jallred/Dev_Lab/DELEGATION_RETROSPECTIVE.md).
+* **Git Commit**: `feat(story-8): add delegate_retrospective.py automated friction audit engine (FEAT-430)`
