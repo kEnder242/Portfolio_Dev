@@ -123,6 +123,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 10** | `FEAT-432` | Foyer Exception Audit & Warning Logger Upgrade | **COMPLETED** |
 | **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Cold-Start Wake Transition Test | **COMPLETED** |
 | **Story 12** | `FEAT-433` | Live Operational System-Load Gauntlet (`uber_5x5.py`) | **APPROVED (Planned)** |
+| **Story 13** | `FEAT-434` | Delegate.py Multi-Mode Planning & Investigation Sentinel | **COMPLETED** |
 
 ---
 
@@ -240,6 +241,17 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
+### 🎛️ Story 13: Delegate.py Multi-Mode Planning & Investigation Sentinel (`FEAT-434`) — **[STATUS: COMPLETED]**
+* **Task Specification**:
+  1. Update `HomeLabAI/src/tests/delegate.py` to add `--mode [execute|plan|investigate]` CLI flag (defaulting to `execute`).
+  2. Implement automatic REST agent routing (`agent = "prometheus"` for plan/investigate; `agent = "atlas"` for execute).
+  3. Swapped mandate block dynamically per mode (read-only plan, read-only diagnostic, execution mandate) to allow token-efficient architecture review without physical code edits.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/delegate.py --help`
+
+---
+
 ## 7. Refinement & Implementation Log
 
 ### 🛠️ Story 3 Implementation Details (`LAB-090`)
@@ -273,6 +285,16 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 * **Executed By**: OpenAgent (`ses_02296ce10ffe74J8664yeeZnyA`, 290s).
 * **Fix Summary**: Created [`HomeLabAI/src/infra/earlyoom_pager_notifier.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh) and updated [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh) to configure `EARLYOOM_ARGS="-m 5 -s 10 -N /home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh"`. Whenever `earlyoom` executes a process kill, it appends a `CRITICAL` telemetry event to `pager_activity.json` capturing killed PID, process name, free RAM/swap, and OOM score for real-time visibility on `pager.html` and `status.html`.
 * **Git Commit**: `feat(story-9): add earlyoom_pager_notifier.sh hook & configure -N flag in setup_sysrq_earlyoom.sh (FEAT-431)`
+
+### 🛠️ Story 11 Implementation Details (`LAB-094`)
+* **Executed By**: Antigravity (AGY Direct Implementation).
+* **Fix Summary**: Added `test_foyer_hibernation_wake_cycle()` to [`HomeLabAI/src/tests/test_integration_foyer.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_integration_foyer.py). Forces `HIBERNATING` state via `POST /status_update`, connects over WebSocket (`ws://localhost:8765/`), performs handshake token authentication, and asserts cold wake sequence transition without silent exception traps. Verified via `pytest` (3/3 passed).
+* **Git Commit**: `feat(story-11): add test_foyer_hibernation_wake_cycle integration test (LAB-094)`
+
+### 🛠️ Story 13 Implementation Details (`FEAT-434`)
+* **Executed By**: Antigravity (AGY Direct Implementation).
+* **Fix Summary**: Updated [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py) to support `--mode [execute|plan|investigate]`. Automatically routes REST sessions to `prometheus` for read-only planning/investigation runs and `atlas` for execution runs. Dynamically injects specialized prompt mandates and session titles (`Sprint 50 Story N — [PLAN:PROMETHEUS] <Title>`) to allow token-efficient architectural review without physical code edits. Verified via `python3 delegate.py --help`.
+* **Git Commit**: `feat(delegate): add --mode [execute|plan|investigate] support with Prometheus read-only routing (FEAT-434)`
 
 ### 🛠️ Story 5 Implementation Details (`FEAT-428`)
 * **Executed By**: OpenAgent (`ses_0226fc2a6ffeIHhLc2ZPM6lZlp`, 534s).
