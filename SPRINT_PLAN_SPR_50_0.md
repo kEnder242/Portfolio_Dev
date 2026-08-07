@@ -120,6 +120,8 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 | **Story 7** | `FEAT-429` | Foyer Disconnect Memory Reclaim Sentinel | **COMPLETED** |
 | **Story 8** | `FEAT-430` | Automated Delegation Retrospective & Friction Audit Stage | **COMPLETED** |
 | **Story 9** | `FEAT-431` | EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) | **COMPLETED** |
+| **Story 10** | `FEAT-432` | Foyer Exception Audit & Warning Logger Upgrade | **APPROVED (Planned)** |
+| **Story 11** | `LAB-094` | Foyer On-Demand Hibernation & Wake Cycle Integration Test | **APPROVED (Planned)** |
 
 ---
 
@@ -193,7 +195,7 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
 
 ---
 
-### 🚨 Story 9: EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) (`FEAT-431`) — **[STATUS: APPROVED / QUEUED]**
+### 🚨 Story 9: EarlyOOM Telemetry & Neural Pager Hook ("WHY" Forensics) (`FEAT-431`) — **[STATUS: COMPLETED]**
 * **Task Specification**:
   1. Create `HomeLabAI/src/infra/earlyoom_pager_notifier.sh`: An executive notification script that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever `earlyoom` executes a process kill.
   2. Update `HomeLabAI/src/infra/setup_sysrq_earlyoom.sh` to configure `EARLYOOM_ARGS="--mem 5 --swap 10 -N /home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh"`.
@@ -202,6 +204,28 @@ To get an accurate, empirical picture of the OOM dynamics without risking system
   * [NEW] [`HomeLabAI/src/infra/earlyoom_pager_notifier.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/earlyoom_pager_notifier.sh)
   * [MODIFY] [`HomeLabAI/src/infra/setup_sysrq_earlyoom.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/setup_sysrq_earlyoom.sh)
 * **Verification Command**: `bash HomeLabAI/src/infra/setup_sysrq_earlyoom.sh --verify`
+
+---
+
+### 🚨 Story 10: Foyer Exception Audit & Warning Logger Upgrade (`FEAT-432`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Audit and refactor `HomeLabAI/src/v5/foyer/router.py` to eliminate silent `except: pass` traps (specifically lines 977 in `ear_poller_loop`, 160 in forensic ledger, 218, 598, 625).
+  2. Replace silent exception suppression with explicit `logger.warning("[FOYER] ...", exc_info=True)` calls.
+  3. Emit a structured WebSocket `{"type": "error", "message": "Wake failed: <cause>"}` frame to `intercom.html` whenever a resident wake or query processing task fails, preventing silent "bounce back" state traps.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py)
+* **Verification Command**: `python3 HomeLabAI/src/tests/test_integration_foyer.py`
+
+---
+
+### 🧪 Story 11: Foyer On-Demand Hibernation & Wake Cycle Integration Test (`LAB-094`) — **[STATUS: PLANNED]**
+* **Task Specification**:
+  1. Add an automated integration test to `HomeLabAI/src/tests/test_integration_foyer.py` that verifies the complete hibernation & wake cycle.
+  2. Test posts to `POST /status_update` (`{"state": "HIBERNATING"}`), asserts `self.residents.booted == False`, then sends a text query over WebSocket (`ws://127.0.0.1:8765/`).
+  3. Asserts the state transition (`HIBERNATING` $\rightarrow$ `WAKING` $\rightarrow$ `OPERATIONAL`) and verifies that no silent exceptions or state reversions occur.
+* **Target File**:
+  * [MODIFY] [`HomeLabAI/src/tests/test_integration_foyer.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_integration_foyer.py)
+* **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py`
 
 ---
 
