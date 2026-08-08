@@ -8,8 +8,8 @@
 
 | Story | Feature ID | Target / Module | Description | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **Story 1** | `FEAT-451` | `src/logic/cognitive_hub.py` | Persona Boundary Hardening: Ground Deep Thought in Brain persona docs; remove Pinky tics ("Narf!", "Poit!") from preambles without ad-hoc regex censorship | **PLANNED** |
-| **Story 2** | `FEAT-452` | `src/logic/cognitive_hub.py` | Casual Greeting Fast-Path: Respect prompt judge classification (`t_parsed.get("casual")`) to set `hyde_vector_text = ""` and skip RAG on greetings without hardcoded string arrays (BKM-015) | **PLANNED** |
+| **Story 1** | `FEAT-451` | Persona Boundary Hardening (Brain persona spec, zero regex censorship) | **COMPLETED** |
+| **Story 2** | `FEAT-452` | Casual Fast-Path & 4-Domain HyDE Map Contract (BKM-015 compliant) | **COMPLETED** |
 | **Story 3** | `FEAT-455` | `src/v5/foyer/router.py` & `cognitive_hub.py` | Zero-Latency Un-blocked Async Preamble: Decouple Deep Thought preamble streaming from `request_lock` and resident wake checks to restore instant space-filling pre-reflection | **PLANNED** |
 | **Story 4** | `FEAT-453` | `field_notes/intercom_v2.js` / HTML | Mobile Crosstalk Bar System Routing: Route `[SYSTEM]`, `[HEARTBEAT]`, and `[REMOTE]` diagnostic floods into a dedicated scrollable Crosstalk Bar component | **PLANNED** |
 | **Story 5** | `LAB-099` | Thermal & Process Scheduling Guardrails (`Nice=19`, thread caps, thermal watchdog) | **COMPLETED** |
