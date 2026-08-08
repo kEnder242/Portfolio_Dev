@@ -12,7 +12,7 @@
 | **Story 2** | `FEAT-452` | `src/logic/cognitive_hub.py` | Casual Greeting Fast-Path: Respect prompt judge classification (`t_parsed.get("casual")`) to set `hyde_vector_text = ""` and skip RAG on greetings without hardcoded string arrays (BKM-015) | **PLANNED** |
 | **Story 3** | `FEAT-455` | `src/v5/foyer/router.py` & `cognitive_hub.py` | Zero-Latency Un-blocked Async Preamble: Decouple Deep Thought preamble streaming from `request_lock` and resident wake checks to restore instant space-filling pre-reflection | **PLANNED** |
 | **Story 4** | `FEAT-453` | `field_notes/intercom_v2.js` / HTML | Mobile Crosstalk Bar System Routing: Route `[SYSTEM]`, `[HEARTBEAT]`, and `[REMOTE]` diagnostic floods into a dedicated scrollable Crosstalk Bar component | **PLANNED** |
-| **Story 5** | `LAB-099` | `src/infra/thermal_guard.py` & `delegate.py` | Thermal & Process Scheduling Guardrails: Implement `nice -n 19`, worker thread caps (`OMP_NUM_THREADS=2`), and thermal zone monitoring in `scheduled_tasks_loop()` | **PLANNED** |
+| **Story 5** | `LAB-099` | Thermal & Process Scheduling Guardrails (`Nice=19`, thread caps, thermal watchdog) | **COMPLETED** |
 | **Story 6** | `FEAT-454` | Integration Gauntlet | End-to-End Sprint 51 Verification Suite & `/grill-me` Interactive Alignment Certification | **PLANNED** |
 
 ---
