@@ -10,7 +10,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Story 1** | `FEAT-451` | Persona Boundary Hardening (Brain persona spec, zero regex censorship) | **COMPLETED** |
 | **Story 2** | `FEAT-452` | Casual Fast-Path & 4-Domain HyDE Map Contract (BKM-015 compliant) | **COMPLETED** |
-| **Story 3** | `FEAT-455` | `src/v5/foyer/router.py` & `cognitive_hub.py` | Zero-Latency Un-blocked Async Preamble: Decouple Deep Thought preamble streaming from `request_lock` and resident wake checks to restore instant space-filling pre-reflection | **PLANNED** |
+| **Story 3** | `FEAT-455` | Zero-Latency Un-blocked Async Preamble (Decoupled from `request_lock`) | **COMPLETED** |
 | **Story 4** | `FEAT-453` | `field_notes/intercom_v2.js` / HTML | Mobile Crosstalk Bar System Routing: Route `[SYSTEM]`, `[HEARTBEAT]`, and `[REMOTE]` diagnostic floods into a dedicated scrollable Crosstalk Bar component | **PLANNED** |
 | **Story 5** | `LAB-099` | Thermal & Process Scheduling Guardrails (`Nice=19`, thread caps, thermal watchdog) | **COMPLETED** |
 | **Story 6** | `FEAT-454` | Integration Gauntlet | End-to-End Sprint 51 Verification Suite & `/grill-me` Interactive Alignment Certification | **PLANNED** |
