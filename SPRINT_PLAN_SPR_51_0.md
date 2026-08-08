@@ -43,14 +43,15 @@
 * **BKM Compliance (Zero Regex Censorship)**: Ad-hoc regex string-matching (`re.sub("narf", ...)`) is forbidden as a symptom patch.
 * **The Solution**: Ground Deep Thought pre-reflections directly in the **Brain Persona Documentation** within `src/logic/cognitive_hub.py`. The system prompt explicitly enforces that Deep Thought represents the Brain's pre-conscious analytical stream, strictly forbidding Pinky catchphrases.
 
-#### **B. HyDE vs. Casual Greetings (`FEAT-452`)**
-* **The Problem**: Triage classification happens *after* or *during* the LLM pass, but the async pre-reflection preamble was assuming *every* message required HyDE synthesis (broadcasting `"Synthesizing Composite HyDE..."` before evaluating the prompt). For simple greetings (*"hello"*, *"good morning"*), this forced HyDE vector generation and ChromaDB lookups, polluting prompt context with random 18-year-old technical notes.
-* **Architectural Insight**: **Preamble is async and fires before triage completes.** We cannot wait for triage output (`t_parsed`), or we lose zero-latency async execution.
-* **BKM Compliance (BKM-015: No Hardcoded Keywords)**: Hardcoding string arrays like `["hello", "hi"]` is strictly forbidden.
-* **The Solution (Prompt Engineering & Preamble Decoupling)**:
-  1. Update Deep Thought's preamble prompt instructions so the pre-reflection model itself decides whether to emit a HyDE vector or a simple greeting preamble:
-     * *Instruction*: "If the user prompt is a casual greeting or pleasantry, emit a brief, warm pre-thought (e.g. 'Receiving greeting... warming Foyer...'), setting `hyde_vector_text = ''`. Do NOT attempt to synthesize complex validation vectors or BKM scars for greetings."
-  2. In `_fetch_rag_context()`, evaluate `t_parsed.get("casual")` or `t_parsed.get("vibe") == "CASUAL"`: if casual, bypass HyDE and skip ChromaDB RAG entirely.
+#### **B. HyDE vs. Casual Greetings — The HyDE Domain Map Contract (`FEAT-452`)**
+* **The Problem**: Previously, the preamble prompt used a vague directive (*"For technical, historical, or validation queries, synthesize HyDE..."*), causing Deep Thought to attempt HyDE vector generation on casual turns, status queries, or general chit-chat.
+* **The Solution (The HyDE Domain Map)**: Give the pre-reflection model an explicit **Lab Domain Map**. HyDE synthesis is strictly gated: **If the prompt does NOT map to one of these 4 domains, HyDE is BYPASSED (`hyde_vector_text = ""`) and RAG is SKIPPED entirely.**
+* **The 4-Domain HyDE Map**:
+  1. **`exp_tlm` (Silicon Telemetry)**: PCIe error bursts, RAPL power/thermal caps, NVIDIA GPU metrics, MSR registers, Redfish sensors.
+  2. **`exp_bkm` (Validation & SRE BKMs)**: Point-of-failure playbooks, diagnostic shell BKMs, test runner steps, systemd service topologies.
+  3. **`exp_for` (Forensic Debugging)**: Kernel panic tracebacks, OOM crash logs, backpressure ledgers, memory pressure root cause analysis.
+  4. **`lab_history` (18-Year Acme Lab Archive)**: Historical project notes (2005–2025), career milestones, past sprint retrospectives.
+* **Rule**: Greetings (*"hello"*), status checks, general conversation, or meta-questions NOT on the map set `hyde_vector_text = ""` and `vibe = "CASUAL"`. No hardcoded string arrays (BKM-015 compliant).
 
 #### **C. Deep Thought Un-blocking & Latency Retrospective (`FEAT-455`)**
 * **Retrospective**: Deep Thought preamble was architected as a zero-latency space-filler while heavy models (vLLM / Round Table) initialize. During recent memory refactorings, pre-reflection was placed *inside* `async with self.request_lock:` and made sequential to resident wake checks (`_wrap_residents_for_sandbox()`).
