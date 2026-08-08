@@ -264,6 +264,56 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     }
 }
 
+// [FEAT-453] Crosstalk Diagnostic Routing
+const DIAGNOSTIC_PREFIX_RE = /^\[(SYSTEM|HEARTBEAT|REMOTE)\]/i;
+
+function getCrosstalkStatusLine() {
+    const bar = document.getElementById('crosstalk-bar');
+    if (!bar) return null;
+    let statusLine = bar.querySelector('.crosstalk-status-line');
+    if (!statusLine) {
+        statusLine = document.createElement('div');
+        statusLine.className = 'crosstalk-status-line';
+        statusLine.innerText = bar.innerText; // Preserve markup default ("Nominal...")
+        bar.textContent = ''; // Move the default text into the status line
+        bar.appendChild(statusLine);
+    }
+    return statusLine;
+}
+
+function routeDiagnosticToCrosstalk(text) {
+    const bar = document.getElementById('crosstalk-bar');
+    if (!bar) return;
+
+    // [FEAT-453] Convert the bar into a scrollable log container (idempotent).
+    bar.style.overflowY = 'auto';
+    bar.style.whiteSpace = 'normal';
+    bar.style.maxHeight = (window.matchMedia('(max-width: 768px)').matches ? '30vh' : 'none');
+    bar.style.height = 'auto';
+    bar.style.minHeight = '1.2rem';
+
+    getCrosstalkStatusLine();
+
+    const entry = document.createElement('div');
+    entry.className = 'crosstalk-log-entry';
+    entry.style.fontSize = '0.7rem';
+    entry.style.color = '#d29922';
+    entry.style.borderTop = '1px solid #1b1b1b';
+    entry.style.padding = '2px 0';
+    entry.style.wordBreak = 'break-word';
+    const stamp = new Date().toISOString().substr(11, 8); // HH:MM:SS UTC
+    entry.textContent = `[${stamp} UTC] ${text}`;
+    bar.appendChild(entry);
+
+    // Cap at 200 log entries (drop the oldest, keep the status line).
+    while (bar.querySelectorAll('.crosstalk-log-entry').length > 200) {
+        const oldest = bar.querySelector('.crosstalk-log-entry');
+        if (oldest) oldest.remove();
+    }
+
+    bar.scrollTop = bar.scrollHeight;
+}
+
 function sendText() {
     const content = textInput.value.trim();
     if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
@@ -416,52 +466,54 @@ async function connect() {
             if (data.type === 'crosstalk' || data.type === 'status') {
                 const bar = document.getElementById('crosstalk-bar');
                 if (bar) {
+                    // [FEAT-453] Status text targets the dedicated status line so log entries survive
+                    const statusLine = getCrosstalkStatusLine();
                     if (data.type === 'status') {
                         if (data.state === "hibernating") {
-                            bar.innerText = "🌙 HIBERNATING";
+                            statusLine.innerText = "🌙 HIBERNATING";
                             bar.classList.add('status-hibernating');
                         } else if (data.state === "waking") {
-                            bar.innerText = "⚡ [IGNITION IN PROGRESS]";
+                            statusLine.innerText = "⚡ [IGNITION IN PROGRESS]";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "quiesced") {
-                            bar.innerText = "⚙️ MAINTENANCE (QUIESCED)";
+                            statusLine.innerText = "⚙️ MAINTENANCE (QUIESCED)";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "offline") {
-                            bar.innerText = "💀 OFFLINE";
+                            statusLine.innerText = "💀 OFFLINE";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "init") {
                             // [FEAT-265.6] Functional Gate: Distinguish between Up and Vocal
                             if (data.full_lab_ready || data.operational) {
-                                bar.innerText = "⚡ Mind is OPERATIONAL.";
+                                statusLine.innerText = "⚡ Mind is OPERATIONAL.";
                             } else {
-                                bar.innerText = "⏳ SYNCHRONIZING NODES...";
+                                statusLine.innerText = "⏳ SYNCHRONIZING NODES...";
                             }
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "ready") {
                             // Legacy support for older Hub signals
-                            bar.innerText = "⚡ Mind is READY.";
+                            statusLine.innerText = "⚡ Mind is READY.";
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "working") {
-                            bar.innerText = `🧠 ${data.message || "THINKING..."}`;
+                            statusLine.innerText = `🧠 ${data.message || "THINKING..."}`;
                             bar.classList.remove('status-hibernating');
                         } else if (data.state === "error") {
-                            bar.innerText = `⚠️ ${data.message || "SYSTEM ERROR"}`;
+                            statusLine.innerText = `⚠️ ${data.message || "SYSTEM ERROR"}`;
                             bar.classList.remove('status-hibernating');
                         }
                     } else if (data.type === 'crosstalk') {
                         // Store the current non-crosstalk text if we don't have a better state tracker
                         if (!window.lastStatusMessage) {
-                            window.lastStatusMessage = bar.innerText;
+                            window.lastStatusMessage = statusLine.innerText;
                         }
                         
-                        bar.innerText = `⚡ ${data.brain}`;
+                        statusLine.innerText = `⚡ ${data.brain}`;
                         bar.classList.remove('status-hibernating');
                         // Clear after 15s if no new updates
                         if (window.crosstalkTimeout) clearTimeout(window.crosstalkTimeout);
                         window.crosstalkTimeout = setTimeout(() => {
                             // Revert to the last known stable status
                             if (window.lastStatusMessage && !bar.classList.contains('status-hibernating')) {
-                                bar.innerText = window.lastStatusMessage;
+                                statusLine.innerText = window.lastStatusMessage;
                             }
                         }, 15000);
                     }
@@ -516,6 +568,11 @@ async function connect() {
                     if (data.version && data.version !== CONFIG.VERSION) {
                         alert(`CACHE_LOCK_VIOLATION: Browser is running Intercom ${CONFIG.VERSION} but the Lab is at ${data.version}. \n\nThis mismatch will break the X-Lab-Key dependency and cause Remote Control errors. \n\nPlease perform a hard-refresh (Ctrl+F5) immediately.`);
                     }
+                    // [FEAT-453] Diagnostic status lines route to the Crosstalk Bar, not the chat log
+                    if (DIAGNOSTIC_PREFIX_RE.test(data.message)) {
+                        routeDiagnosticToCrosstalk(data.message);
+                        return;
+                    }
                     const cleanMsg = data.message.replace(/^\[SYSTEM\]\s*/, "");
                     appendMsg(`${cleanMsg} (v${data.version})`, 'system-msg', 'System');
                 }
@@ -540,6 +597,11 @@ async function connect() {
                     sessionStorage.setItem('acme_active_file', data.filename);
                 } catch (e) {}
             } else if (data.brain) {
+                // [FEAT-453] Safety net: diagnostic-prefixed brain lines go to the Crosstalk Bar
+                if (DIAGNOSTIC_PREFIX_RE.test(data.brain)) {
+                    routeDiagnosticToCrosstalk(data.brain);
+                    return;
+                }
                 appendMsg(data.brain, 'brain-msg', data.brain_source || 'Brain', data.channel || 'chat', data.clear || false, {
                     msg_id: data.msg_id, // [FIX] Task 2.4: Bridge the ID
                     hub_pid: data.hub_pid, // [FIX] Task 2.5: Bridge the PID
