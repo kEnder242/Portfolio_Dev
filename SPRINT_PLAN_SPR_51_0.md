@@ -44,21 +44,18 @@
 * **The Solution**: Ground Deep Thought pre-reflections directly in the **Brain Persona Documentation** within `src/logic/cognitive_hub.py`. The system prompt explicitly enforces that Deep Thought represents the Brain's pre-conscious analytical stream, strictly forbidding Pinky catchphrases.
 
 #### **B. HyDE vs. Casual Greetings (`FEAT-452`)**
-* **The Problem**: For simple greetings (*"hello"*, *"good morning"*), Deep Thought attempted to generate a complex 3-part HyDE (Hypothetical Document Embeddings) vector query and trigger ChromaDB RAG retrieval. This forced ChromaDB to pull random 18-year-old technical notes into prompt context, producing overly formal, robotic replies.
-* **BKM Compliance (BKM-015: No Hardcoded Keyword Lists)**: Hardcoding string arrays like `["hello", "hi", "hey"]` is strictly forbidden.
-* **The Solution (Prompt Judge Classification)**: The pre-reflection/triage pass **already outputs** structured JSON containing `"casual": true/false` and `"vibe": "CASUAL" | "TECHNICAL"`. In `_fetch_rag_context()`, we evaluate the prompt judge's decision:
-  ```python
-  # Zero hardcoding: respect the prompt judge's casual classification
-  if t_parsed.get("casual") or t_parsed.get("vibe") == "CASUAL":
-      hyde_vector_text = ""
-      # Bypass RAG retrieval entirely for casual turns
-      return ""
-  ```
+* **The Problem**: Triage classification happens *after* or *during* the LLM pass, but the async pre-reflection preamble was assuming *every* message required HyDE synthesis (broadcasting `"Synthesizing Composite HyDE..."` before evaluating the prompt). For simple greetings (*"hello"*, *"good morning"*), this forced HyDE vector generation and ChromaDB lookups, polluting prompt context with random 18-year-old technical notes.
+* **Architectural Insight**: **Preamble is async and fires before triage completes.** We cannot wait for triage output (`t_parsed`), or we lose zero-latency async execution.
+* **BKM Compliance (BKM-015: No Hardcoded Keywords)**: Hardcoding string arrays like `["hello", "hi"]` is strictly forbidden.
+* **The Solution (Prompt Engineering & Preamble Decoupling)**:
+  1. Update Deep Thought's preamble prompt instructions so the pre-reflection model itself decides whether to emit a HyDE vector or a simple greeting preamble:
+     * *Instruction*: "If the user prompt is a casual greeting or pleasantry, emit a brief, warm pre-thought (e.g. 'Receiving greeting... warming Foyer...'), setting `hyde_vector_text = ''`. Do NOT attempt to synthesize complex validation vectors or BKM scars for greetings."
+  2. In `_fetch_rag_context()`, evaluate `t_parsed.get("casual")` or `t_parsed.get("vibe") == "CASUAL"`: if casual, bypass HyDE and skip ChromaDB RAG entirely.
 
 #### **C. Deep Thought Un-blocking & Latency Retrospective (`FEAT-455`)**
-* **Retrospective**: Deep Thought pre-reflection was architected as a zero-latency space-filler while heavy models (vLLM / Round Table) initialize. During recent memory refactorings, pre-reflection streaming was placed *inside* `async with self.request_lock:` and made sequential to resident wake checks (`_wrap_residents_for_sandbox()`).
+* **Retrospective**: Deep Thought preamble was architected as a zero-latency space-filler while heavy models (vLLM / Round Table) initialize. During recent memory refactorings, pre-reflection was placed *inside* `async with self.request_lock:` and made sequential to resident wake checks (`_wrap_residents_for_sandbox()`).
 * **Why It Was Lost**: We **did not tag the un-blocking contract with a dedicated `FEAT` ID**, so the sequence lock swallowed pre-reflection execution.
-* **The Solution**: Tag with `[FEAT-455]` (Zero-Latency Un-blocked Async Preamble). Preamble streaming will be spawned as an un-gated `asyncio.create_task()` immediately upon WebSocket frame receipt, prior to acquiring heavy system locks or resident wake checks.
+* **The Solution**: Tagged with `[FEAT-455]`. Preamble streaming will be spawned as an un-gated `asyncio.create_task()` immediately upon WebSocket frame receipt, decoupled from resident wake locks. Broadcast message updated to generic `"Deep Thought pre-reflecting..."` instead of assuming HyDE.
 
 #### **D. Mobile Crosstalk Bar UI (`FEAT-453`)**
 * **The Problem**: `[SYSTEM]` heartbeats, `[REMOTE]` wake signals, and judge evaluation telemetry stream directly into the main chat log, swallowing actual dialogue on mobile viewports.
