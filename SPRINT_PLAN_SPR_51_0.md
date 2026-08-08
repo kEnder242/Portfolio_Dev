@@ -11,9 +11,9 @@
 | **Story 1** | `FEAT-451` | Persona Boundary Hardening (Brain persona spec, zero regex censorship) | **COMPLETED** |
 | **Story 2** | `FEAT-452` | Casual Fast-Path & 4-Domain HyDE Map Contract (BKM-015 compliant) | **COMPLETED** |
 | **Story 3** | `FEAT-455` | Zero-Latency Un-blocked Async Preamble (Decoupled from `request_lock`) | **COMPLETED** |
-| **Story 4** | `FEAT-453` | `field_notes/intercom_v2.js` / HTML | Mobile Crosstalk Bar System Routing: Route `[SYSTEM]`, `[HEARTBEAT]`, and `[REMOTE]` diagnostic floods into a dedicated scrollable Crosstalk Bar component | **PLANNED** |
+| **Story 4** | `FEAT-453` | Mobile Crosstalk Bar System Routing (Scrollable 200-log history) | **COMPLETED** |
 | **Story 5** | `LAB-099` | Thermal & Process Scheduling Guardrails (`Nice=19`, thread caps, thermal watchdog) | **COMPLETED** |
-| **Story 6** | `FEAT-454` | Integration Gauntlet | End-to-End Sprint 51 Verification Suite & `/grill-me` Interactive Alignment Certification | **PLANNED** |
+| **Story 6** | `FEAT-454` | Sprint 51 Escapes & Dual-Flow Hibernation Test Suite (`test_sprint51_escapes.py`) | **COMPLETED** |
 
 ---
 

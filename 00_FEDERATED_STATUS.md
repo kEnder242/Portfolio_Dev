@@ -15,10 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-50-0-memory-resil** |- **Active Sprint**: `SPR-51-0` (Conversational Polish, Deep Thought Refinement, & Mobile Crosstalk UI) — **PLANNED**
-  - **Stories 1–5**: Persona Boundary Hardening (`FEAT-451`), Casual Greeting Fast-Path (`FEAT-452`), Deep Thought Latency Audit (`LAB-098`), Mobile Crosstalk Bar System Routing (`FEAT-453`), & Gauntlet Certification (`FEAT-454`).
-- **Completed Sprints**:
-  - `SPR-50-0` (Foyer & Memory Architecture Stabilization Gauntlet) — **100% COMPLETED** (Stories 1–21). |
+| **spr-51-0-polish** | Phase 10 | Conversational Polish & Deep Thought Refinement | **100% COMPLETED** |
+| **spr-50-0-memory-resil** | 2. Implementation | Foyer & Memory Architecture Stabilization | **COMPLETED** |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
 | **spr-48-0-rag-matrix** | 2. Implementation | ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker | **COMPLETED** |
 | **spr-47-0-prereflection** | 2. Implementation | Unified Pre-Reflection Triage & Evergreen Career Compass | **COMPLETED** |
