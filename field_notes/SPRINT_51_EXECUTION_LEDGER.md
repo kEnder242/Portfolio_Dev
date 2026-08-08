@@ -53,7 +53,9 @@
 
 | Story | Feature ID | Status | Verification | Commit Hash / Output |
 | :--- | :--- | :--- | :--- | :--- |
-| **Story 1** | `FEAT-451` | **COMPLETED** | `test_qpr_hyde.py` (5/5 PASS) | `feat(stories-1-2): implement Brain persona grounding...` |
+| **Story 1** | `FEAT-451` | **COMPLETED** | `test_sprint51_escapes.py` (6/6 PASS) | `fix(persona): replace negative prompt words with positive Brain persona grounding...` |
 | **Story 2** | `FEAT-452` | **COMPLETED** | `test_qpr_hyde.py` (5/5 PASS) | `feat(stories-1-2): implement 4-Domain HyDE map contract...` |
 | **Story 3** | `FEAT-455` | **COMPLETED** | `test_integration_foyer.py` (3/3 PASS) | `feat(story-3): add fast offline HyDE map gating to async preamble` |
-| **Story 5** | `LAB-099` | **COMPLETED** | `test_integration_foyer.py` (3/3 PASS) | `feat(story-5): implement thermal zone monitoring and worker thread caps` |
+| **Story 4** | `FEAT-453` | **COMPLETED** | Mobile UI Check & Scan Librarian | `feat(story-4): route diagnostic floods into scrollable crosstalk bar` |
+| **Story 5** | `LAB-099` | **COMPLETED** | Thermal Probe & SystemD Overrides | `feat(story-5): implement thermal zone monitoring and worker thread caps` |
+| **Story 6** | `FEAT-454` | **COMPLETED** | **Full Gauntlet: 14/14 PASSED (48.13s)** | `test(story-6): add test_sprint51_escapes.py covering persona bleed, dual-flow HyDE, and cold-start hibernation` |
