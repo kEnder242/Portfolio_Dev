@@ -237,7 +237,7 @@
           "refId": "D"
         },
         {
-          "expr": "node_hwmon_temp_celsius{chip=\"platform_coretemp_0\"} or val_cpu_temp_celsius or node_hwmon_temp_celsius",
+          "expr": "node_hwmon_temp_celsius{chip=\"platform_coretemp_0\", sensor=\"temp1\"} or val_cpu_temp_celsius",
           "interval": "",
           "legendFormat": "CPU Pkg Temp (°C)",
           "refId": "E"
