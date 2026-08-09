@@ -11,6 +11,17 @@
 ### 1. Thermal Throttling & Host Reboot Retrospective
 * **Incident Summary**: Host `z87-Linux` suffered an unexpected kernel/hardware reboot at 11:15 AM PDT during background delegation (`task-2613`).
 * **Empirical Root Cause (`journalctl -b -1`)**:
+
+### 📝 OpenAgent Handover Reflection (`router.py` Thread Caps & Cold-Start Wake)
+
+```text
+"What tripped me up most was the invisible mismatch between the sprint's framing and the file's actual state — boot_all() isn't a router.py function but a ResidentManager method reached through self.residents, and requirement 3's thermal guard already existed in near-final form (the spec implied greenfield work where it was really verification plus one hardening tweak).
+
+The instructions were also light on the single most load-bearing constraint — that the thread-cap env block must physically precede import numpy since numpy bakes in BLAS thread counts at import time — which I had to infer from the file's import order rather than from the mandate.
+
+One change that would have made this faster: a 'current-state delta' line per requirement (e.g., 'thermal guard already at lines 1042–1056 — harden only; boot lives in ResidentManager'), which would have collapsed the discovery pass and let me ship a tighter, more confident delegation prompt on the first call instead of the third."
+```
+
   ```text
   Aug 08 11:12:17 z87-Linux pcp-pmie[5588]: Severe demand for real memory 69pgsout/s@z87-Linux
   Aug 08 11:12:17 z87-Linux pcp-pmie[5588]: CPU is experiencing thermal throttling 10853%time[cpu0]@z87-Linux ... 10859%time[cpu6]@z87-Linux
