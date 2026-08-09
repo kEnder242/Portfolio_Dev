@@ -591,6 +591,8 @@ The <code>delegate.py</code> script automatically wraps your inputs into the sta
 <p><strong>REST Socket Architecture</strong>:</p>
 <ul>
 <li><code>delegate.py</code> creates a REST session on port 4097 (<code>POST http://127.0.0.1:4097/session</code>), triggers socket warm-up on port 4096 (<code>wake_web_ui()</code>), and dispatches the prompt via <code>POST http://127.0.0.1:4097/session/&lt;id&gt;/message</code>.</li>
+<li>Pre-flight health probes automatically issue <code>DELETE /session/&lt;temp_id&gt;</code> to purge temporary probe sessions, keeping the OpenCode web UI dashboard clean with zero empty <code>"New session"</code> entries.</li>
+<li>Session titles are formatted as <code>Sprint 50 Story &lt;N&gt; (Run &lt;timestamp&gt;) — [ATLAS] &lt;Title&gt;</code>.</li>
 <li>Using <code>delegate.py</code> guarantees all active worker sessions render live on the local TUI and webview dashboard at <code>http://192.168.1.238:4096/</code>.</li>
 </ul>
 </li>
@@ -626,6 +628,9 @@ The <code>delegate.py</code> script automatically wraps your inputs into the sta
 [TARGET SPECIFICATION]
 - Primary Output Target: &lt;absolute_path_to_target_file&gt;
 - Task Details: &lt;explicit_code_or_logic_changes&gt;
+
+[HANDOVER REFLECTION]
+As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?
 
 [SWARM DELEGATION DIRECTIVE — TASK() CALLS ONLY]
 You are Sisyphus (Lead Orchestrator). You MUST NOT implement code directly.

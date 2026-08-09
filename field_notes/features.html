@@ -7620,7 +7620,6 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>lab-attendant.service</code> systemd unit configuration.</p>
-<hr />
                 </div>
             </div>     </div>
                             </details>
@@ -7646,7 +7645,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Implements explicit <code>on_close()</code> cleanup hooks in <code>attendant.py</code> and <code>ear_node.py</code> triggering <code>gc.collect()</code> and audio buffer flushing upon WebSocket disconnect.</p>
+                    <p>Implements explicit <code>on_close()</code> cleanup handlers in <code>attendant.py</code> and <code>ear_node.py</code> triggering <code>gc.collect()</code> and audio buffer flushing upon WebSocket disconnect.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -7659,6 +7658,84 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>on_close()</code> handler in <code>attendant.py</code> and garbage collection sentinel.</p>
+<hr />
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-430">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-430</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Automated Delegation Retrospective & Friction Audit Stage
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 50 Story 8)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Creates <code>HomeLabAI/src/infra/delegate_retrospective.py</code> and wires <code>--retrospective</code> flag into <code>delegate.py</code>. Automatically parses <code>/tmp/delegate_story_*.log</code>, queries REST session metrics (<code>tokens</code>, <code>time</code>, <code>child_sessions</code>), compares prompt target paths vs <code>git diff</code> actuals to detect path search thrash, and synthesizes a Delegation Friction Ledger artifact for user review and sign-off.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates manual friction accounting, automatically capturing prompt path mismatches and provider 503 fallbacks at the end of every heads-down execution segment.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>delegate_retrospective.py</code> parser, <code>delegate.py --retrospective</code> CLI integration, and <code>DELEGATION_RETROSPECTIVE.md</code> report synthesizer.</p>
+<hr />
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-431">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-431</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    EarlyOOM Telemetry & Neural Pager Hook
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 50 Story 9)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Configures <code>earlyoom</code> with an executive notification hook (<code>earlyoom_pager_notifier.sh</code>) that writes structured <code>CRITICAL</code> telemetry events to <code>field_notes/data/pager_activity.json</code> whenever an OOM termination occurs.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Captures the exact "WHY" behind every OOM kill (killed PID, process command, RAM/swap free percentages, and OOM score) for real-time visibility on <code>pager.html</code> and <code>status.html</code> without dropping SSH connections.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>earlyoom_pager_notifier.sh</code> script, <code>earlyoom</code> SystemD drop-in environment hook, and <code>pager_activity.json</code> event log.</p>
                 </div>
             </div>     </div>
                             </details>
