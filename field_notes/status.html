@@ -246,10 +246,10 @@
             <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div class="telemetry-tabs" id="panel-tabs">
                     <button class="telemetry-tab active" onclick="updatePanel(8, this)">MEMORY</button>
-                    <button class="telemetry-tab" onclick="updatePanel(6, this)">POWER</button>
-                    <button class="telemetry-tab" onclick="updatePanel(4, this)">THERMAL</button>
+                    <button class="telemetry-tab" onclick="updatePanel(6, this)">POWER / THERMAL</button>
+                    <button class="telemetry-tab" onclick="updatePanel(4, this)" style="display:none">THERMAL</button>
                     <button class="telemetry-tab" onclick="updatePanel(10, this)">NETWORK</button>
-                    <button class="telemetry-tab" onclick="updatePanel(2, this)">LOAD</button>
+                    <button class="telemetry-tab" onclick="updatePanel(2, this)" style="display:none">LOAD</button>
                     <button class="telemetry-tab" id="sys-graph-tab" onclick="showSysGraph(this)">SYSTEM</button>
                     <button class="telemetry-tab" onclick="showLedger(this)">LEDGER</button>
                     <button class="telemetry-tab" onclick="showKpi(this)">KPI</button>
