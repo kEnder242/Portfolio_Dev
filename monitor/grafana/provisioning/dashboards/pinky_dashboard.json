@@ -229,9 +229,15 @@
           "interval": "",
           "legendFormat": "Actual GPU Power",
           "refId": "C"
+        },
+        {
+          "expr": "DCGM_FI_DEV_GPU_TEMP",
+          "interval": "",
+          "legendFormat": "GPU Temp (°C)",
+          "refId": "D"
         }
       ],
-      "title": "Power Profile (Multi-Modal Telemetry)",
+      "title": "Power & Thermal Profile (Multi-Modal Telemetry)",
       "type": "timeseries"
     },
     {
