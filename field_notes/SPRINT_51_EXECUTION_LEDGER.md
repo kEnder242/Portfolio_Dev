@@ -59,3 +59,51 @@
 | **Story 4** | `FEAT-453` | **COMPLETED** | Mobile UI Check & Scan Librarian | `feat(story-4): route diagnostic floods into scrollable crosstalk bar` |
 | **Story 5** | `LAB-099` | **COMPLETED** | Thermal Probe & SystemD Overrides | `feat(story-5): implement thermal zone monitoring and worker thread caps` |
 | **Story 6** | `FEAT-454` | **COMPLETED** | **Full Gauntlet: 14/14 PASSED (48.13s)** | `test(story-6): add test_sprint51_escapes.py covering persona bleed, dual-flow HyDE, and cold-start hibernation` |
+
+---
+
+## 🔬 SPRINT 51 PHASE 2: ARCHITECTURAL REPORT & NIGHTLY ADAPTER AUDIT
+
+### 1. 🔀 Division of Labor: Parallel Preamble & Dynamic Inference Architecture
+
+```mermaid
+flowchart TD
+    A["Raw User Query (WebSocket)"] --> B["Deep Thought Preamble (Kender Host / $t=0$)"]
+    
+    subgraph Parallel Execution at t=0
+        B -- "Instant Pre-Thought" --> C["Crosstalk UI Bar (#crosstalk-bar)"]
+        B -- "Zero-Latency RAG Gate" --> D{"ChromaDB rag_registry (< 5ms)"}
+    end
+
+    subgraph Dual-Flow Branching
+        D -- "Casual Turn ('hello')" --> E["Bypass HyDE & ChromaDB RAG"]
+        E --> F["Pinky (Left Hemisphere - Out-Loud Warm Response)"]
+
+        D -- "Domain Match ('RAPL / PCIe')" --> G["vLLM Base Engine (RTX 2080 Ti)"]
+        G -- "LoRA Adapter: jason-voice" --> H["Brain / Deep Thought (Right Hemisphere - Technical Analysis)"]
+    end
+```
+
+* **Zero-Latency RAG Gate**: ChromaDB is an in-memory SQLite/Parquet vector index that opens in $< 5\text{ms}$. It evaluates semantic distance against domain anchors before vLLM finishes waking up ($15\text{--}20\text{s}$).
+* **Preamble Flow**: Deep Thought emits natural pre-thoughts directly into `recent_crosstalk`, which feeds into Pinky/Brain without hardcoded scripted text.
+
+---
+
+### 2. 🕵️‍♂️ Audit of Nightly Passes & LoRA Adapter Status
+
+#### **What Currently Runs During Nightly Passes**
+1. **`dream_node.py`**: Consolidates 24-hour `journal_ledger.jsonl` into ChromaDB collection `lab_journal` and generates the "WYWO Morning Briefing" in `nightly_dialogue.json`.
+2. **`mass_scan.py` / `refine_gem.py` / `nibble_v2.py`**: Continuous burn pipeline indexing raw notes into ChromaDB `artifact_vault` and upgrading Rank 2/3 notes to Rank 4/5 "Gems".
+
+#### **Audit Result: Missing LoRA Adapter Training**
+* **Status**: **MISSING (Future Backlog)**.
+* **Finding**: The system currently performs vector indexing, gem refinement, and dream brief synthesis—**not LoRA weight training**.
+* **Phase 2 Backlog Proposal**: Implement `train_jason_voice_lora.py` during nightly passes using Unsloth/TRL or MLX. It will compile refined Gems and dialogue ledgers into a lightweight ~20MB LoRA adapter (`jason-voice-adapter`) served natively by vLLM (`--enable-lora`).
+
+---
+
+### 📋 3. Backlog Realignment
+
+1. **Telemetry Context Suppression & Persona Realignment**: Suppress over-amplified "telemetry engineer" phrasing in `lab_node.py:L10`, `cognitive_hub.py`, and system prompt templates. Refactor primary identity to **Silicon Validation & Systems Platform Engineer**.
+2. **Dynamic ChromaDB RAG Registry (`rag_registry`)**: Store collection manifests and resume domain anchors in a $<5\text{ms}$ ChromaDB collection for dynamic HyDE domain resolution.
+3. **Nightly LoRA Adapter Generation (`train_jason_voice_lora.py`)**: Train a ~20MB persona/voice adapter during nightly burn passes for vLLM Multi-LoRA serving.
