@@ -12,7 +12,15 @@
 * **Incident Summary**: Host `z87-Linux` suffered an unexpected kernel/hardware reboot at 11:15 AM PDT during background delegation (`task-2613`).
 * **Empirical Root Cause (`journalctl -b -1`)**:
 
-### 📝 OpenAgent Handover Reflection (`router.py` Thread Caps & Cold-Start Wake)
+### 📝 OpenAgent Handover Reflection (`test_rude_gauntlet.py` HTTP Polling & Thermal Upgrade)
+
+```text
+"The prompt was largely accurate in intent, but it shipped without local sensor context: it assumed thermal_zone3 was the CPU sensor when this host's zone3 is the WiFi chip (iwlwifi_1) — I had to probe /sys/class/thermal myself and reorder sensor precedence to zone2 (x86_pkg_temp) → zone3 → zone0 before delegating.
+
+The other, costlier gap was the unspecified millidegree unit: a raw sysfs read against a '78C' threshold silently passes forever (27800 > 78 reads as 'cold'), so I injected the /1000 normalization and a both-values-in-one-log requirement into the delegation.
+
+A single change — providing the actual zone/type mapping plus the raw-vs-C unit warning directly in the sprint plan — would have removed both discovery detours and made this a one-pass dispatch."
+```
 
 ```text
 "What tripped me up most was the invisible mismatch between the sprint's framing and the file's actual state — boot_all() isn't a router.py function but a ResidentManager method reached through self.residents, and requirement 3's thermal guard already existed in near-final form (the spec implied greenfield work where it was really verification plus one hardening tweak).
