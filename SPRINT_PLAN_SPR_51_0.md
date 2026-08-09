@@ -116,3 +116,12 @@
   1. Execute unit and integration test suites (`test_integration_foyer.py`, `test_memory_architecture.py`, `test_qpr_hyde.py`).
   2. Conduct interactive `/grill-me` alignment session with user for prompt nuances and Crosstalk UI behavior.
 * **Verification Command**: `pytest HomeLabAI/src/tests/test_integration_foyer.py HomeLabAI/src/tests/test_memory_architecture.py`
+
+---
+
+## ⚡ Technical Scars & Architectural Retrospective
+
+### Scar: BKM Protocol vs. Lab RAG Domain Confusion
+* **Incident / Retrospective**: In early HyDE domain map drafts, `exp_bkm` was listed as a ChromaDB RAG vector collection.
+* **Root Cause**: Conceptual blur between **Agent Operational Protocols** (BKMs like BKM-006, BKM-015, BKM-034 defined in `Protocols.md` for Antigravity/Jason) vs **Lab RAG Collections** (neural vector memory in ChromaDB: `artifact_vault`, `career_ledger`, `lab_journal`).
+* **Correction**: BKMs govern agent behavior; HyDE maps govern neural retrieval across actual lab collections (`artifact_vault`, `career_ledger`, `lab_journal`).
