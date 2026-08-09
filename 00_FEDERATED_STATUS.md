@@ -15,14 +15,12 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-52-0-kender-offload** | Phase 11 | Kender Unsloth Training Offload & 5-Stage Division of Labor | **READY FOR EXECUTION** |
 | **spr-51-0-polish** | Phase 10 | Conversational Polish & Deep Thought Refinement | **100% COMPLETED** |
 | **spr-50-0-memory-resil** | 2. Implementation | Foyer & Memory Architecture Stabilization | **COMPLETED** |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
-| **spr-48-0-rag-matrix** | 2. Implementation | ChromaDB Corpus Expansion, Multi-Voice HyDE & Cosine Reranker | **COMPLETED** |
-| **spr-47-0-prereflection** | 2. Implementation | Unified Pre-Reflection Triage & Evergreen Career Compass | **COMPLETED** |
-| **spr-46-0-resilience** | 2. Implementation | Progressive Cooldown Engine & Async Sanity Critic | **COMPLETED** |
 
-## 🎯 Active Initiative: "Host Memory Resilience, OpenAgent Swarm Realignment & Foyer Security Guard" (Sprint SPR-50.0)
+## 🎯 Active Initiative: "Kender Node Unsloth Training Offload & 5-Stage Division of Labor" (Sprint SPR-52.0)
 **Goal:** Deploy SSH OOM Immunity Sentinel (`LAB-090`), SysRq & EarlyOOM OS Protection (`LAB-091`, `LAB-092`), Foyer Loopback & `X-Lab-Key` Security Guard (`FEAT-426`), Standalone WebSocket RSS Memory Profiler (`FEAT-425`), and PCM Ring-Buffer Clamp (`FEAT-427`). **[STATUS: STORIES 1-4 COMPLETED & COMMITTED]**
 
 ## 🎯 Active Initiative: "Single Source of Truth, Integration Test Abstraction & DCGM Harvester" (Sprint SPR-49.0)
