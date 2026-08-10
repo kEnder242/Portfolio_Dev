@@ -4,6 +4,8 @@ import sys
 import glob
 import re
 import time
+import threading
+import requests
 
 # Add current directory to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +20,7 @@ DOCX_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.docx")
 RAS_GLOB = os.path.join(RAW_NOTES_DIR, "**/ras-*.txt")
 MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 ENGINE = get_engine(mode="LOCAL")
+OLLAMA_TIMEOUT = 30  # Strict 30s cap: batch indexing must never hang indefinitely
 
 def read_sample(path):
     """
@@ -100,8 +103,23 @@ def classify_file(filename, text_sample):
     
     print(f"   > Librarian analyzing {filename}...")
     try:
-        response = ENGINE.generate(prompt)
-        return extract_json(response)
+        # Daemon-thread wall-clock guard: ENGINE.generate has no timeout param and
+        # ai_engine swallows exceptions, so cap the call at OLLAMA_TIMEOUT here.
+        # (NOT ThreadPoolExecutor: its atexit handler joins non-daemon workers and
+        # would block interpreter exit on a hung request.)
+        result = {}
+        def _generate():
+            result["response"] = ENGINE.generate(prompt)
+        worker = threading.Thread(target=_generate, daemon=True)
+        worker.start()
+        worker.join(timeout=OLLAMA_TIMEOUT)
+        if worker.is_alive():
+            print(f"   > WARNING: Ollama classification timed out after {OLLAMA_TIMEOUT}s for {filename}. Skipping.")
+            return {"type": "UNKNOWN", "note": "timeout"}
+        return extract_json(result.get("response"))
+    except requests.exceptions.Timeout:
+        print(f"   > WARNING: Ollama classification timed out after {OLLAMA_TIMEOUT}s for {filename}. Skipping.")
+        return {"type": "UNKNOWN", "note": "timeout"}
     except Exception as e:
         print(f"Error classifying {filename}: {e}")
         return {"type": "UNKNOWN", "note": str(e)}

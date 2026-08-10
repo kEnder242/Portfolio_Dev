@@ -93,7 +93,7 @@ def run_task(cmd_list):
         curr_pp = env.get("PYTHONPATH", "")
         env["PYTHONPATH"] = f"{BASE_DIR}:{homelab_src}:{curr_pp}" if curr_pp else f"{BASE_DIR}:{homelab_src}"
         cwd = BASE_DIR
-        subprocess.run([sys.executable] + cmd_list, check=True, env=env, cwd=cwd)
+        subprocess.run([sys.executable] + cmd_list, check=True, env=env, cwd=cwd, timeout=1800)
         return True
     except Exception as e:
         logging.error(f"Task failed: {e}")
