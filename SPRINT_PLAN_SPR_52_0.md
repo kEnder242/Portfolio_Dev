@@ -541,6 +541,7 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 52.3**: Implement Stage 1 Kender Triage & Stage 2 Pinky HyDE in `router.py`. *(impl spec authored — impl pending Silicon, validated post-dispatch)*
 - [x] **Task 52.4**: Perform Telemetry Context Suppression in `lab_node.py:L10` and `cognitive_hub.py`.
 - [ ] **Task 52.5**: Execute full 5-stage gauntlet verification (`pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py`).
+- [ ] **Task 52.6**: Nightly Run Audit & Ollama HTTP Timeout Guard (`mass_scan.py`).
 
 ---
 
@@ -558,4 +559,22 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 2. **Adapter Staging:** LoRA weights saved to `/speedy/models/adapters/cli_voice_v1`.
 3. **vLLM Hot-Reload / Re-ignition:** `POST /v1/load_lora_adapter` or `re_ignite_vllm()` restores Foyer state to `OPERATIONAL`.
 4. **Execution Gate:** Run `pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py` after the 02:00 AM nightly forge run or manual trigger.
+
+---
+
+## 📜 Task 52.6 — Nightly Run Audit & Mass Scan Timeout Guard
+
+> **Status:** AUDITED & REMEDIATION PENDING  
+> **Observed:** Aug 10 02:00 AM Nightly Run (`field-notes-nightly.service`)
+
+### 1. Audit Context & Findings
+- **Path Bug Fix Verification:** `PermissionError` path duplication bug (`Portfolio_Dev/Portfolio_Dev`) was verified **100% resolved**. Service started cleanly at 02:00:51 AM.
+- **LoRA Weight Generation:** Adapter weights (`adapter_model.safetensors`, 97MB) updated at **02:06 AM**.
+- **Stall Condition:** `mass_scan.py` (PID 392491) entered a hanging state waiting on `scan_librarian.py` / local Ollama inference (`http://localhost:11434`) without an HTTP socket timeout, blocking process completion.
+
+### 2. Remediation Actions Required
+1. **Process Cleanup:** Kill stalled background PID 392491 (`mass_scan.py`).
+2. **Timeout Guardrail:** Enforce strict 30s socket timeout on Ollama POST calls in `mass_scan.py` and `scan_librarian.py`.
+3. **Re-Verification:** Ensure future 02:00 AM runs complete the full loop (scan -> quiesce -> train -> re-ignite) without blocking.
+
 
