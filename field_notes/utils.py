@@ -11,7 +11,7 @@ def find_lab_root():
     """Locates the absolute Lab root by searching upward for the bootstrap anchor."""
     curr = os.path.dirname(os.path.abspath(__file__))
     for _ in range(5): # Max 5 levels up
-        if os.path.exists(os.path.join(curr, "BOOTSTRAP_v4.3.md")):
+        if os.path.exists(os.path.join(curr, "BOOTSTRAP_v4.4.md")) or os.path.exists(os.path.join(curr, "BOOTSTRAP_v4.3.md")):
             return curr
         curr = os.path.dirname(curr)
     # Fallback to current directory's parent if anchor not found
