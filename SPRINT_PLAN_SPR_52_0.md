@@ -539,5 +539,23 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - **Status:** Spec authored — impl pending Silicon (validated post-dispatch).
 
 - [x] **Task 52.3**: Implement Stage 1 Kender Triage & Stage 2 Pinky HyDE in `router.py`. *(impl spec authored — impl pending Silicon, validated post-dispatch)*
-- [ ] **Task 52.4**: Perform Telemetry Context Suppression in `lab_node.py:L10` and `cognitive_hub.py`.
-- [ ] **Task 52.5**: Execute full 5-stage gauntlet verification (`test_rude_gauntlet.py`, `test_vllm_adapter_swap.py`).
+- [x] **Task 52.4**: Perform Telemetry Context Suppression in `lab_node.py:L10` and `cognitive_hub.py`.
+- [ ] **Task 52.5**: Execute full 5-stage gauntlet verification (`pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py`).
+
+---
+
+## 📜 Task 52.5 — Verification & Adapter Swap Gauntlet
+
+> **Status:** PENDING EXECUTION (Integration Gate)  
+> **Command:** `pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py`
+
+### 1. Purpose & Target Contract
+- Verifies the zero-downtime hot-reload contract for `cli_voice_v1` LoRA adapter on vLLM (`http://localhost:8088/v1/chat/completions`).
+- Tests end-to-end adapter loading, swap verification, and API response validity post-training.
+
+### 2. Key Transition Requirements & Prerequisites
+1. **Local Nightly Forge Run (`--local`):** Executes `run_mass_scan()` -> `quiesce_vllm()` -> `run_unsloth_forge()` on z87.
+2. **Adapter Staging:** LoRA weights saved to `/speedy/models/adapters/cli_voice_v1`.
+3. **vLLM Hot-Reload / Re-ignition:** `POST /v1/load_lora_adapter` or `re_ignite_vllm()` restores Foyer state to `OPERATIONAL`.
+4. **Execution Gate:** Run `pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py` after the 02:00 AM nightly forge run or manual trigger.
+
