@@ -623,8 +623,8 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 
 ## 🛠️ **Sprint 53 Task List & Execution Assignments**
 
-- [ ] **Task 53.1**: Delegation Framework & Playbook Sync *(Executor: AGY Direct)*
-- [ ] **Task 53.2**: `nibble_v2.py` Symbol Repair & `mass_scan.py` Backoff Circuit Breaker *(Executor: OpenAgent)*
+- [x] **Task 53.1**: Delegation Framework & Playbook Sync *(Executor: AGY Direct — 100% completed & committed)*
+- [x] **Task 53.2**: `nibble_v2.py` Symbol Repair & `mass_scan.py` Backoff Circuit Breaker *(Executor: OpenAgent / AGY Validation — 100% completed & committed)*
 - [ ] **Task 53.3**: Post-Scan VRAM Settling & Pre-Flight Probes in `nightly_forge.py` *(Executor: OpenAgent)*
 - [ ] **Task 53.4**: `mass_scan` Non-Destructive Dry-Run Verification *(Executor: AGY)*
 - [ ] **Task 53.5**: Live-Lab Integration Suite (`run_live_lab_gauntlet.sh`) *(Executor: OpenAgent)*

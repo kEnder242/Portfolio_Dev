@@ -262,7 +262,7 @@ def main():
             continue
 
         # --- POLITENESS CHECK ---
-        while not check_politeness():
+        while should_yield():
             update_status("YIELD", f"Nibbler Yielding (Lock/Load)", filename=task['id'])
             time.sleep(10)
 
