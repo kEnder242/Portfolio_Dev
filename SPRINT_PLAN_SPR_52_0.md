@@ -577,4 +577,47 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 2. **Timeout Guardrail:** Enforce strict 30s socket timeout on Ollama POST calls in `mass_scan.py` and `scan_librarian.py`.
 3. **Re-Verification:** Ensure future 02:00 AM runs complete the full loop (scan -> quiesce -> train -> re-ignite) without blocking.
 
+---
+
+# 🚀 SPRINT PLAN: [SPR-53.0] Mass Scan Stabilization, Post-Scan LoRA Review & Live-Lab Integration Suite
+
+> **Status:** NARRATIVE PLANNING / ARCHITECTURAL REVIEW  
+> **Focus:** 1) `mass_scan` Fix & Verification Loop, 2) Post-Scan LoRA Training Crash Review with Caution/Logging, 3) Integrated Live-Lab Test Suite & Diagnostic Script Map Maintenance.  
+> **Mandate:** Build narrative context and research findings first — refrain from creating story-tasks.
+
+---
+
+## 🧭 **Strategic Narrative & Forensics Briefing**
+
+### 1. **Mass Scan Fix & Verification Loop (`mass_scan.py` / `nibble_v2.py`)**
+* **Root Cause Forensics:** During recent nightly sweeps, `nibble_v2.py --hybrid` crashed inside the main loop at line 265 due to an unhandled `NameError: name 'check_politeness' is not defined`.
+* **Tight Loop Cascade:** Because `mass_scan.py` re-triggered `run_task([NIBBLER, flag])` immediately upon subprocess exit status 1, the scanner spawned PyTorch/CUDA initializations every 1–2 seconds.
+* **Remediation & Verification Plan:**
+  - Audit `nibble_v2.py` for undefined symbol references (`check_politeness`) and ensure politeness/load yielding functions are cleanly imported or implemented.
+  - Implement backoff and error circuit-breakers in `mass_scan.py` to prevent rapid subprocess spawn loops on non-zero exit codes.
+  - Establish a non-destructive verification loop to dry-run `mass_scan.py --once` against a single queue item before releasing to systemd.
+
+---
+
+### 2. **Post-Scan LoRA Training Crash Review (`nightly_forge.py` / `train_expert.py`)**
+* **Hypothesis:** High load or leftover GPU memory allocations from `mass_scan` / `nibble_v2` before entering Step 3 (Unsloth LoRA training) creates bus saturation and VRAM contention, leading to hard kernel GPU memory purges (`Purging GPU memory, 70 pages freed...`) and hard system locks.
+* **Caution & Deep Logging Strategy:**
+  - Inject explicit pre-training VRAM and bus health checks (`nvidia-smi` / DCGM probe) prior to launching Unsloth.
+  - Log exact memory state, active process PIDs, and PyTorch CUDA context cleanups before and after `quiesce_vllm()`.
+  - Enforce a 60s GPU settling window between note scanning termination and LoRA invocation.
+  - Perform dry-run validation with `--local` under high-density logging before enabling unattended overnight runs.
+
+---
+
+### 3. **Integrated Live-Lab Test Suite & Diagnostic Script Map**
+* **Escapes Retrospective:** Multiple escapes occurred previously due to isolated unit tests relying on stubbed mocks rather than live lab infrastructure. **Live lab integration is the Gold Standard.**
+* **Diagnostic Script Map Alignment (`HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md`):**
+  - Keep `DIAGNOSTIC_SCRIPT_MAP.md` actively updated as new tests and verification tools are created.
+  - Categorize test suites by execution tier:
+    1. **Live Fire Integration (Gold Standard):** `test_vllm_adapter_swap.py`, `test_rude_gauntlet.py`, `test_live_fire_triage.py`, `live_fire_integration.py`.
+    2. **Resilience & Watchdog:** `test_v5_queue_recovery.py`, `test_shutdown_resilience.py`, `test_v5_alarm_healing.py`.
+    3. **Nightly & Forge Verification:** `test_forge_fidelity.py`, `test_vllm_context_overflow.py`.
+  - Establish an integrated lab test runner script (`run_live_lab_gauntlet.sh`) that executes non-mocked tests against live endpoints (`:8088` vLLM, `:8765` Foyer, `:9090` Prometheus, `:11434` Ollama) to certify system health.
+
+
 
