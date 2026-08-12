@@ -540,8 +540,8 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 
 - [x] **Task 52.3**: Implement Stage 1 Kender Triage & Stage 2 Pinky HyDE in `router.py`. *(impl spec authored — impl pending Silicon, validated post-dispatch)*
 - [x] **Task 52.4**: Perform Telemetry Context Suppression in `lab_node.py:L10` and `cognitive_hub.py`.
-- [ ] **Task 52.5**: Execute full 5-stage gauntlet verification (`pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py`).
-- [ ] **Task 52.6**: Nightly Run Audit & Ollama HTTP Timeout Guard (`mass_scan.py`).
+- [x] **Task 52.5**: Execute full 5-stage gauntlet verification (`pytest HomeLabAI/src/tests/test_vllm_adapter_swap.py`). *(Executor: OpenAgent / AGY Validation — 100% completed & verified via run_live_lab_gauntlet.sh)*
+- [x] **Task 52.6**: Nightly Run Audit & Ollama HTTP Timeout Guard (`mass_scan.py`). *(Executor: AGY Direct — 100% completed & verified in mass_scan.py & scan_librarian.py)*
 
 ---
 
