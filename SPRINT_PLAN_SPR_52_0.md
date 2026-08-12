@@ -619,5 +619,42 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
     3. **Nightly & Forge Verification:** `test_forge_fidelity.py`, `test_vllm_context_overflow.py`.
   - Establish an integrated lab test runner script (`run_live_lab_gauntlet.sh`) that executes non-mocked tests against live endpoints (`:8088` vLLM, `:8765` Foyer, `:9090` Prometheus, `:11434` Ollama) to certify system health.
 
+---
+
+## 🛠️ **Sprint 53 Task List & Execution Assignments**
+
+- [ ] **Task 53.1**: Delegation Framework & Playbook Sync *(Executor: AGY Direct)*
+- [ ] **Task 53.2**: `nibble_v2.py` Symbol Repair & `mass_scan.py` Backoff Circuit Breaker *(Executor: OpenAgent)*
+- [ ] **Task 53.3**: Post-Scan VRAM Settling & Pre-Flight Probes in `nightly_forge.py` *(Executor: OpenAgent)*
+- [ ] **Task 53.4**: `mass_scan` Non-Destructive Dry-Run Verification *(Executor: AGY)*
+- [ ] **Task 53.5**: Live-Lab Integration Suite (`run_live_lab_gauntlet.sh`) *(Executor: OpenAgent)*
+- [ ] **Task 53.6**: `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Integration Alignment *(Executor: AGY Direct)*
+
+| Task ID | Feature Focus / Target | Assigned Executor | Why This Executor? |
+| :--- | :--- | :--- | :--- |
+| **Task 53.1** | Delegation Framework & Playbook Sync | **AGY (Direct)** | High-level doc syncs, playbook updates, and git commits directly without wasting subagent turns. |
+| **Task 53.2** | `nibble_v2.py` Symbol Repair & `mass_scan.py` Circuit Breaker | **OpenAgent** | Code refactoring on `nibble_v2.py` & `mass_scan.py`. Ideal for local ground worker. |
+| **Task 53.3** | Post-Scan VRAM Settling & Pre-Flight Probes | **OpenAgent** | Infrastructure scripting: Injects `nvidia-smi`/DCGM probes and settling timers into `nightly_forge.py`. |
+| **Task 53.4** | `mass_scan` Dry-Run Verification | **AGY (Silicon)** | System validation: Dry-run execution and status verification before clearing for systemd. |
+| **Task 53.5** | Live-Lab Integration Suite (`run_live_lab_gauntlet.sh`) | **OpenAgent** | Scripting a unified bash test runner calling live endpoints (`:8088`, `:8765`, `:9090`, `:11434`). |
+| **Task 53.6** | `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Alignment | **AGY (Direct)** | Documentation ledger maintenance: Keeps the physician's ledger in sync with all live-fire test suites. |
+
+---
+
+## 🛡️ **Crash Mitigation & High-Fidelity Logging Protocol**
+
+### 1. **High-Risk Hard Hang Mitigation & Deep Logging**
+- **Pre-Execution VRAM/Bus Health Probes:** Before invoking `quiesce_vllm()` or launching Unsloth LoRA fine-tuning in `nightly_forge.py`, log explicit system bus metrics:
+  ```python
+  logger.info(f"[PROBE] Pre-training VRAM: {get_vram_usage()} MB | System Load: {os.getloadavg()}")
+  ```
+- **Explicit GPU Settling Window:** Enforce a strict 60-second sleep after `mass_scan` finishes before touching vLLM/PyTorch context to allow GPU pages to flush cleanly.
+- **Atomic Progress Flush:** Write step logs to `/tmp/nightly_forge_step.log` after *every* phase transition so if a hard lock or power loss occurs, the exact hung line is preserved on disk across reboots.
+
+### 2. **Task Preservation & Non-Simplification Mandate**
+- **Immutability of Task Scope:** Completed task descriptions must **NEVER** be stripped down, simplified, or summarized away after completion. Full specifications, lines of code modified, and verification outputs must remain preserved in the sprint log for historical auditing.
+- **Execution Log Appendix:** Log task completion status, commit hashes, and verification command output at the bottom of the sprint plan document as each story completes.
+
+
 
 
