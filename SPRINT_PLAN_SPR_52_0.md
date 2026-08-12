@@ -628,7 +628,7 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 53.3**: Post-Scan VRAM Settling & Pre-Flight Probes in `nightly_forge.py` *(Executor: OpenAgent / AGY Validation — 100% completed & committed)*
 - [x] **Task 53.4**: `mass_scan` Non-Destructive Dry-Run Verification *(Executor: AGY Validation — 100% completed & verified)*
 - [x] **Task 53.5**: Live-Lab Integration Suite (`run_live_lab_gauntlet.sh`) *(Executor: OpenAgent / AGY Validation — 100% completed & committed)*
-- [ ] **Task 53.6**: `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Integration Alignment *(Executor: AGY Direct)*
+- [x] **Task 53.6**: `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Integration Alignment *(Executor: AGY Direct — 100% completed & committed)*
 
 | Task ID | Feature Focus / Target | Assigned Executor | Why This Executor? |
 | :--- | :--- | :--- | :--- |
