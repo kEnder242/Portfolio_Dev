@@ -79,10 +79,19 @@ This map defines the configuration files, hardware bindings, and fallback matrix
 
 | Role | Hardware / Binding | Context Limit | Primary Purpose | Fallback Route |
 | :--- | :--- | :--- | :--- | :--- |
-| **Primary Local Ground Worker** | Node KENDER (RTX 4090 / WSL2) | 8K | High-speed file writes, syntax edits, line-by-line diffs | Cloud Reasoning Tier |
-| **Heavy-Logic Local Node** | Node Brain (WSL2 / RTX 4090) | 8K | Local reasoning, RAG synthesis | Cloud Reasoning Tier |
+| **Primary Local Ground Worker** | Node KENDER / Windows 4090 | 8K | High-speed file writes, syntax edits, line-by-line diffs | Cloud Reasoning Tier |
+| **Heavy-Logic Local Node** | Node Brain / Mac M5 | 8K | Local reasoning, heavy multi-file logic & architecture | Cloud Reasoning Tier |
 | **Cloud Reasoning Model** | Cloud API | 262K | Complex refactoring, heavy context analysis | 1M Cloud Escape Hatch |
 | **Cloud Escape Hatch** | Cloud API | 1M | Emergency mega-context payload processing | Terminal Alert |
+
+### 4.3 Delegation Map (Category Routing Intent & Destination)
+
+| Category / Workload | Internal Intent | Hardware Destination |
+| :--- | :--- | :--- |
+| **`quick`** | Micro-edits, typos, single line fixes | Cloud Fast Inference (Groq) |
+| **`ultrabrain` / `deep`** | Heavy multi-file logic & architecture | Local Heavy Compute Node (Mac M5) |
+| **`visual-engineering`** | UI, CSS, and layout work | Vision / Cloud Tier |
+| *(Unspecified / Default)* | Standard daily coding & feature implementation | Primary Local Ground Worker (Windows 4090) |
 
 ---
 
