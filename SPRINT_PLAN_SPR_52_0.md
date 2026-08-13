@@ -621,17 +621,17 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 53.6**: `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Integration Alignment *(Executor: AGY Direct — 100% completed & committed)*
 - [ ] **Task 53.7**: `[FEAT-437]` Kender HyDE Enrichment — Implement `resolve_hyde_vector()` 3-Tier Cascade in `cognitive_hub.py`. *(Status: OPEN — FEAT-437 documented in FeatureTracker, zero code committed)*
 
-### Task 53.7 — FEAT-437: `resolve_hyde_vector()` Kender HyDE Enrichment & Pre-HyDE KB Direct Lookup
+### Task 53.7 — FEAT-437: `resolve_hyde_vector()` Kender HyDE Enrichment & Judge-Driven Non-Match Augmentation
 
-**FEAT Anchor:** [`FeatureTracker.md:L1466`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md#L1466) — `[FEAT-437] 3-Tier HyDE Failover Cascade & Pre-HyDE KB Direct Lookup` — Status: ACTIVE.
+**FEAT Anchor:** [`FeatureTracker.md:L1466`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md#L1466) — `[FEAT-437] 3-Tier HyDE Failover Cascade & Judge-Driven Non-Match Augmentation` — Status: ACTIVE.
 
-**Forensic Summary — Architecture Contract:**
-- **Taxonomy:** **KB** (`artifact_vault`, `journal_kb`, `lab_journal`) contains distilled information, static synthesis summaries, and the 18-year archive. **DNA** (`behavioral_dna`, `feature_dna`) contains system building rules and SRE playbooks.
-- **Pre-HyDE KB Direct Lookup:** Queries the **KB** (`artifact_vault` / `journal_kb`) directly on the raw user query first. If a high-confidence match is found, HyDE token generation is bypassed.
+**Forensic Summary & BKM-015 Alignment:**
+- **Taxonomy:** **KB** (`artifact_vault`, `journal_kb`, `lab_journal`) contains our distilled information, static synthesis summaries, and the 18-year archive. **DNA** (`behavioral_dna`, `feature_dna`) contains system building rules and SRE playbooks.
+- **BKM-015 Compliance (Zero Hardcoded Arrays):** We do NOT use hardcoded keyword arrays or pre-baked HyDE lists to bypass HyDE. Instead, HyDE is judge-driven: if a query does not match the 4 KB domains (e.g. casual conversational turn), HyDE synthesis naturally evaluates to empty `""`, allowing ChromaDB KB search to return cleanly without forcing a hallucinated vector.
 - **3-Tier Cascade:**
   1. **`DEEP_THOUGHT_REMOTE` (Tier 1 — Kender 4090):** Synthesizes 4-domain HyDE vector text on Kender.
   2. **`PINKY_LOCAL_VLLM` (Tier 2 — z87 vLLM):** Local triage `hyde_vector_text` fallback.
-  3. **`DIRECT_RAW_QUERY` (Tier 3 — zero-dependency floor):** Raw query string passthrough. No crash.
+  3. **`DIRECT_RAW_QUERY` (Tier 3 — zero-dependency floor):** Raw query string passthrough / empty exit. No crash.
 
 **Code Anchors — use these, do not search from scratch:**
 - **Insertion point:** `cognitive_hub.py:~1310` — immediately before `hyde = str(t_parsed.get("hyde_vector_text", "") or "")`. Call `resolve_hyde_vector()` here and assign its return value to `hyde`.
