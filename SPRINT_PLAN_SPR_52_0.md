@@ -679,6 +679,19 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 ### Task 53.12 — Parent Submodule Pointer Synchronization
 **Goal:** Stage and commit submodule pointer updates in `Dev_Lab` (`HomeLabAI` and `Portfolio_Dev`).
 
+- [x] **LAB-100**: CPU Max Scaling Frequency Cap (`cpupower` / sysfs 3.5 GHz) for Thermal Throttling Mitigation *(Status: COMPLETED & VERIFIED)*
+- [x] **LAB-101**: Kernel Panic Auto-Reset & Hung Task Panic GRUB Configuration (`kernel.hung_task_panic=1 panic=10`) *(Status: COMPLETED & VERIFIED)*
+- [x] **LAB-102**: ZFS ARC Max Memory Cap (`zfs_arc_max=3.5G` / `/etc/modprobe.d/zfs.conf`) for RAM Headroom Protection *(Status: COMPLETED & VERIFIED)*
+
+### LAB-100 — CPU Max Scaling Frequency Cap (3.5 GHz)
+**Logic:** Caps max scaling frequency to 3.5 GHz across all 8 CPU cores via `/etc/systemd/system/cap-cpu-freq.service`. Prevents peak 3.9 GHz thermal throttling events and trips.
+
+### LAB-101 — Kernel Panic Auto-Reset & Hung Task GRUB Configuration
+**Logic:** Configures `kernel.hung_task_panic=1 panic=10` in `/etc/default/grub` and compiles via `update-grub`. Forces kernel task hangs to record panic tracebacks to disk and autoreset in 10s.
+
+### LAB-102 — ZFS ARC Max Memory Cap (3.5 GiB)
+**Logic:** Sets `zfs_arc_max=3758096384` in `/etc/modprobe.d/zfs.conf` and `/sys/module/zfs/parameters/zfs_arc_max`. Reclaims **1.6 GiB DRAM** immediately (`arcstat` size: 5.0 GiB $\rightarrow$ 3.4 GiB, available: 2.3 GiB).
+
 ---
 
 ## 🛡️ **Crash Mitigation & High-Fidelity Logging Protocol**

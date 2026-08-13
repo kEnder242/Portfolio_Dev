@@ -1617,3 +1617,23 @@
 **Logic:** Configures `earlyoom` with an executive notification hook (`earlyoom_pager_notifier.sh`) that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever an OOM termination occurs.
 **Rationale:** Captures the exact "WHY" behind every OOM kill (killed PID, process command, RAM/swap free percentages, and OOM score) for real-time visibility on `pager.html` and `status.html` without dropping SSH connections.
 **Mechanism:** `earlyoom_pager_notifier.sh` script, `earlyoom` SystemD drop-in environment hook, and `pager_activity.json` event log.
+
+---
+
+## [LAB-100] CPU Max Scaling Frequency Cap (3.5 GHz)
+**Status:** COMPLETED (Sprint 53)
+**Logic:** Caps max scaling frequency across all 8 CPU cores to 3.5 GHz via `/etc/systemd/system/cap-cpu-freq.service` and `/sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq`.
+**Rationale:** Prevents peak 3.9 GHz thermal throttling events and hardware THERMTRIP trips.
+**Mechanism:** `cap-cpu-freq.service` systemd unit and sysfs scaling parameters.
+
+## [LAB-101] Kernel Panic Auto-Reset & Hung Task GRUB Configuration
+**Status:** COMPLETED (Sprint 53)
+**Logic:** Configures `kernel.hung_task_panic=1 panic=10` in `/etc/default/grub` and compiles via `update-grub`.
+**Rationale:** Converts silent hardware lockups into captured kernel panic tracebacks written to disk, auto-rebooting after 10s.
+**Mechanism:** `/etc/default/grub` configuration and `sysctl` kernel parameters.
+
+## [LAB-102] ZFS ARC Max Memory Cap (3.5 GiB)
+**Status:** COMPLETED (Sprint 53)
+**Logic:** Sets `zfs_arc_max=3758096384` in `/etc/modprobe.d/zfs.conf` and live kernel parameter `/sys/module/zfs/parameters/zfs_arc_max`.
+**Rationale:** Immediately reclaims **1.6 GiB physical DRAM** from disk cache (`arcstat` size: 5.0 GiB $\rightarrow$ 3.4 GiB) to guarantee allocation headroom for PyTorch, vLLM, and agent loops.
+**Mechanism:** `/etc/modprobe.d/zfs.conf` options file and ZFS kernel module parameter.
