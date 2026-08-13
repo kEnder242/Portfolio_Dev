@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadHistory();
     connect();
     pollSystemStatus();
+    applyCrosstalkBarStyles(document.getElementById('crosstalk-bar'));
     
     // UI Events
     sendBtn.addEventListener('click', sendText);
@@ -106,6 +107,9 @@ function initResizer() {
 let lastAppendedText = ""; // [FEAT-344] Brute Force Dedup
 
 function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat', clear = false, metadata = {}) {
+    // [FEAT-453] Diagnostic rows never land here: [SYSTEM]/[HEARTBEAT]/[REMOTE]
+    // prefixed text is routed to the scrollable #crosstalk-bar by
+    // routeDiagnosticToCrosstalk() before appendMsg() is ever reached.
     // [FEAT-344] Brute Force Dedup: Ignore if exact same text as last message
     if (text === lastAppendedText && source !== 'ME') {
         return;
@@ -281,22 +285,32 @@ function getCrosstalkStatusLine() {
     return statusLine;
 }
 
+// [FEAT-453] Enforce the scrollable multi-line crosstalk container spec:
+// max-height: 25vh, overflow-y: auto, white-space: normal, font-size: 0.7rem.
+// Applied idempotently at load time AND before every diagnostic append, so the
+// inline styles always beat the static stylesheet's nowrap/hidden defaults.
+function applyCrosstalkBarStyles(bar) {
+    if (!bar) return;
+    bar.style.maxHeight = '25vh';
+    bar.style.overflowY = 'auto';
+    bar.style.overflowX = 'hidden';
+    bar.style.whiteSpace = 'normal';
+    bar.style.fontSize = '0.7rem';
+    bar.style.height = 'auto';
+    bar.style.minHeight = '1.2rem';
+}
+
 function routeDiagnosticToCrosstalk(text) {
     const bar = document.getElementById('crosstalk-bar');
     if (!bar) return;
 
     // [FEAT-453] Convert the bar into a scrollable log container (idempotent).
-    bar.style.overflowY = 'auto';
-    bar.style.whiteSpace = 'normal';
-    bar.style.maxHeight = (window.matchMedia('(max-width: 768px)').matches ? '30vh' : 'none');
-    bar.style.height = 'auto';
-    bar.style.minHeight = '1.2rem';
+    applyCrosstalkBarStyles(bar);
 
     getCrosstalkStatusLine();
 
     const entry = document.createElement('div');
     entry.className = 'crosstalk-log-entry';
-    entry.style.fontSize = '0.7rem';
     entry.style.color = '#d29922';
     entry.style.borderTop = '1px solid #1b1b1b';
     entry.style.padding = '2px 0';
@@ -501,6 +515,11 @@ async function connect() {
                             bar.classList.remove('status-hibernating');
                         }
                     } else if (data.type === 'crosstalk') {
+                        // [FEAT-453] Diagnostic-prefixed crosstalk never touches the chat panes
+                        if (data.brain && DIAGNOSTIC_PREFIX_RE.test(data.brain)) {
+                            routeDiagnosticToCrosstalk(data.brain);
+                            return;
+                        }
                         // Store the current non-crosstalk text if we don't have a better state tracker
                         if (!window.lastStatusMessage) {
                             window.lastStatusMessage = statusLine.innerText;
