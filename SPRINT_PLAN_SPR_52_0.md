@@ -649,6 +649,19 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] `python -m pytest HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py` — 9/9 scenarios PASS: (a) Tier 1 hit, (b) Tier 1 timeout → Tier 2, (c) both offline → Tier 3 raw passthrough.
 - [x] Live query with Kender online: `server.log` shows `[FEAT-437][TIER1]` with non-empty HyDE vector from Deep Thought.
 
+- [ ] **Task 53.8**: Dynamic HyDE Domain Map Loading (`data/hyde_domain_map.json`) & `run_live_lab_gauntlet.sh` Repair. *(Status: OPEN — Spec locked, dispatch pending)*
+
+### Task 53.8 — FEAT-437 Dynamic HyDE Domain Map Loading & Gauntlet Repair
+
+**Functional Requirements:**
+1. **Dynamic HyDE Domain Map Loading (`HomeLabAI/src/data/hyde_domain_map.json`)**:
+   - Extract hardcoded prompt text in `HYDE_SYNTHESIS_PROMPT` into `HomeLabAI/src/data/hyde_domain_map.json`.
+   - Update `cognitive_hub.py` to load `HYDE_SYNTHESIS_PROMPT` dynamically from `hyde_domain_map.json` at startup with non-fatal fallback.
+   - Eliminates inline string literals per BKM-015 / dynamic prompt loading mandate.
+2. **`run_live_lab_gauntlet.sh` Verifier Repair**:
+   - Fix Test 3 path from `src/tests/test_live_fire_triage.py` to `src/debug/test_live_fire_triage.py`.
+   - Update error handling so all test passes execute and emit PASS/FAIL metrics cleanly.
+
 ---
 
 ## 🛡️ **Crash Mitigation & High-Fidelity Logging Protocol**
