@@ -15,19 +15,29 @@ logging.basicConfig(level=logging.INFO, format="[JELLYFIN-AUTOTUNE] %(levelname)
 
 ENCODING_XML = "/var/lib/jellyfin-data/config/config/encoding.xml"
 
+def get_igpu_render_node():
+    by_path = "/dev/dri/by-path/pci-0000:00:02.0-render"
+    if os.path.exists(by_path):
+        return os.path.realpath(by_path)
+    for dev in ["/dev/dri/renderD129", "/dev/dri/renderD128"]:
+        if os.path.exists(dev):
+            return dev
+    return None
+
 def probe_hardware():
-    intel_igpu = os.path.exists("/dev/dri/renderD128")
+    igpu_dev = get_igpu_render_node()
+    intel_igpu = igpu_dev is not None
     nvidia_gpu = os.path.exists("/dev/nvidia0")
     
-    logging.info(f"Hardware Probe: Intel iGPU (/dev/dri/renderD128)={intel_igpu}, NVIDIA dGPU (/dev/nvidia0)={nvidia_gpu}")
-    return intel_igpu, nvidia_gpu
+    logging.info(f"Hardware Probe: Intel iGPU ({igpu_dev})={intel_igpu}, NVIDIA dGPU (/dev/nvidia0)={nvidia_gpu}")
+    return intel_igpu, nvidia_gpu, igpu_dev
 
 def tune_encoding_xml():
     if not os.path.exists(ENCODING_XML):
         logging.error(f"Encoding config file not found at {ENCODING_XML}")
         return False
 
-    intel_igpu, nvidia_gpu = probe_hardware()
+    intel_igpu, nvidia_gpu, igpu_dev = probe_hardware()
     
     try:
         tree = ET.parse(ENCODING_XML)
@@ -38,12 +48,14 @@ def tune_encoding_xml():
         if hw_type is None:
             hw_type = ET.SubElement(root, "HardwareAccelerationType")
             
+        # Hardware acceleration: Intel iGPU VAAPI dynamically resolved via PCI bus path (0 MB NVIDIA VRAM impact)
         hw_type.text = "vaapi"
         va_dev = root.find("VaapiDevice")
         if va_dev is None:
             va_dev = ET.SubElement(root, "VaapiDevice")
-        va_dev.text = "/dev/dri/renderD129"
-        logging.info("Enforced Transcoder: Intel iGPU VAAPI (/dev/dri/renderD129 - 0 MB NVIDIA VRAM)")
+        target_node = igpu_dev if igpu_dev else "/dev/dri/renderD129"
+        va_dev.text = target_node
+        logging.info(f"Enforced Transcoder: Intel iGPU VAAPI ({target_node} - 0 MB NVIDIA VRAM impact)")
             
         # 2. HEVC Encoding Safety (Intel Haswell iGPU hardware does not support HEVC hardware encode)
         allow_hevc = root.find("AllowHevcEncoding")
