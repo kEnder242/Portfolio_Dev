@@ -1463,20 +1463,20 @@
 **Rationale:** Eliminates redundant LLM passes, resolves intent/nuance for historical retrospective queries, and reduces casual greeting latency to under 50ms.
 **Mechanism:** `prereflection_triage_result` JSON schema, greeting short-circuit check, and unified execution loop in `cognitive_hub.py`.
 
-## [FEAT-437] 3-Tier HyDE Failover Cascade & Judge-Driven Non-Match Augmentation
-**Status:** ACTIVE
+## [FEAT-437] 3-Tier HyDE Failover Cascade & Dynamic Feedback Loop
+**Status:** COMPLETED (Commit `37a1f59`)
 **Logic:** Augments the 3-tier HyDE failover cascade for ChromaDB KB vector search (`archive_node.py` & `cognitive_hub.py`):
   1. `DEEP_THOUGHT_REMOTE` (Tier 1): High-precision HyDE vector synthesized on KENDER 4090 based on the 4-Domain HyDE Map Contract.
   2. `PINKY_LOCAL_VLLM` (Tier 2): Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Kender is offline.
-  3. `DIRECT_RAW_QUERY` / `NON_MATCH_BIPASS` (Tier 3): Zero-dependency raw query fallback floor.
-  BKM-015 Compliance: Zero hardcoded keyword arrays or pre-baked HyDE lists. If the judge/triage determines a query does not match the 4 KB domains (e.g. casual conversational turn), HyDE synthesis naturally evaluates to empty `""`, causing ChromaDB KB search to safely return no records without forcing a hallucinated vector or bypassing BKM-015.
+  3. `DIRECT_RAW_QUERY` / `NON_MATCH_BYPASS` (Tier 3): Zero-dependency raw query fallback floor.
+  BKM-015 Compliance & Dynamic Loop: Zero hardcoded keyword arrays or pre-baked HyDE lists. Reads the dynamic keyword mesh directly from `data/career_compass.json` (populated by `mass_scan.py` FEAT-438), closing the feedback loop between the 18-year archive scanner and HyDE vector synthesis. If the judge/triage determines a query does not match the 4 KB domains (e.g. casual turn), HyDE synthesis evaluates to empty `""`, bypassing ChromaDB retrieval without forcing a hallucinated vector.
   Taxonomy: Distinguishes between **KB** (`artifact_vault`, `journal_kb`, `lab_journal` — distilled information and 18-year archive) and **DNA** (`behavioral_dna`, `feature_dna` — system building rules and SRE playbooks).
-**Rationale:** Guarantees uninterrupted high-precision KB vector retrieval across remote/local nodes while upholding BKM-015 judge-driven clean exits for casual turns.
-**Mechanism:** `resolve_hyde_vector` 3-tier cascade, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_feat437_resolve_hyde_vector.py`.
+**Rationale:** Guarantees uninterrupted high-precision KB vector retrieval across remote/local nodes while upholding BKM-015 judge-driven clean exits for casual turns and dynamic prompt learning.
+**Mechanism:** `resolve_hyde_vector` 3-tier cascade, `_load_hyde_synthesis_prompt` dynamic loader from `career_compass.json`, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_feat437_resolve_hyde_vector.py`.
 
 ## [FEAT-438] Nightly Continuous Burn Map Synthesizer Integration
-**Status:** ACTIVE
-**Logic:** Integrates `synthesize_career_mesh()` into the background scanner pipeline (`mass_scan.py`). Step 6 TLC scans raw note gems and `resume.txt` to continuously enrich `data/career_compass.json` Tier 2 Keyword Mesh without modifying Tier 1 Bedrock.
+**Status:** COMPLETED
+**Logic:** Integrates `synthesize_career_mesh()` into the background scanner pipeline (`mass_scan.py`). Step 6 TLC scans raw note gems and `resume.txt` to continuously enrich `data/career_compass.json` Tier 2 Keyword Mesh without modifying Tier 1 Bedrock. Feeds directly into FEAT-437 HyDE prompt synthesis.
 **Rationale:** Allows 18-year archive processing and newly discovered technical terms to scale infinitely on disk and vector RAG while keeping system prompt context strictly under 300 tokens.
 **Mechanism:** `synthesize_career_mesh()` in `field_notes/mass_scan.py`, atomic write swap, and `test_tier_1_token_ceiling` validation.
 
