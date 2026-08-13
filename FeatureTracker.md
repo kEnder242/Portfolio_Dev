@@ -1643,3 +1643,9 @@
 **Logic:** Configures drop-in systemd cgroup limits for `opencode-core.service` (`MemoryHigh=3.0G`, `MemoryMax=3.5G`) and `lab-attendant.service` (`MemoryHigh=1.5G`, `MemoryMax=2.0G`).
 **Rationale:** Enforces strict memory budgets per service so an agent indexing burst or audio stream buffer spike cannot starve host DRAM or trigger host-wide thrashing.
 **Mechanism:** Systemd drop-in configuration files `/etc/systemd/system/*.service.d/50-memory-limit.conf`.
+
+## [LAB-104] OpenCode Scale-to-Zero Wake-on-Touch SystemD Gateway
+**Status:** COMPLETED
+**Logic:** Configures `opencode.socket` (`0.0.0.0:4096`) and `opencode-proxy.service` with `TriggerLimitIntervalSec=0` and `--exit-idle-time=45m`.
+**Rationale:** Allows OpenCode REST engine to scale down to zero when idle (0% CPU/DRAM), automatically waking up in 200ms when `delegate.py` or a browser touches port 4096.
+**Mechanism:** `~/.config/systemd/user/opencode.socket`, `opencode-proxy.service`, and `delegate.py wake_web_ui()`.
