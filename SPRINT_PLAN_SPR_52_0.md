@@ -662,6 +662,23 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
    - Fix Test 3 path from `src/tests/test_live_fire_triage.py` to `src/debug/test_live_fire_triage.py`.
    - Update error handling so all test passes execute and emit PASS/FAIL metrics cleanly.
 
+- [ ] **Task 53.9**: Repair `run_live_lab_gauntlet.sh` Verifier & Execute Full Gauntlet *(Delegation: RECOMMENDED for OpenAgent)*
+- [ ] **Task 53.10**: Implement Real VRAM Probing (`pynvml` / `nvidia-smi`) in `nightly_forge.py` *(Delegation: RECOMMENDED for OpenAgent)*
+- [ ] **Task 53.11**: Resolve FeatureTracker FEAT-ID Collisions & Align Table Statuses *(Delegation: AGY Direct)*
+- [ ] **Task 53.12**: Commit Parent Submodule Pointers in `Dev_Lab` *(Delegation: AGY Direct / User Gate)*
+
+### Task 53.9 — Repair `run_live_lab_gauntlet.sh` & Execute Full Suite
+**Goal:** Fix Test 3 path (`src/debug/test_live_fire_triage.py`), remove `set -e` abort behavior, and capture clean PASS metrics across all 4 integration tests into `/tmp/run_live_lab_gauntlet.log`.
+
+### Task 53.10 — Real VRAM Probing in `nightly_forge.py`
+**Goal:** Replace `get_vram_usage()` stub with real `nvidia-smi` / `pynvml` queries before Unsloth LoRA fine-tuning runs.
+
+### Task 53.11 — FeatureTracker Alignment & FEAT-ID De-collision
+**Goal:** Flip Sprint 50–52 tracker statuses from `PROPOSED` to `COMPLETED` with commit hashes, and resolve ID overlaps.
+
+### Task 53.12 — Parent Submodule Pointer Synchronization
+**Goal:** Stage and commit submodule pointer updates in `Dev_Lab` (`HomeLabAI` and `Portfolio_Dev`).
+
 ---
 
 ## 🛡️ **Crash Mitigation & High-Fidelity Logging Protocol**
