@@ -619,7 +619,7 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 53.4**: `mass_scan` Non-Destructive Dry-Run Verification *(Executor: AGY Validation — 100% completed & verified)*
 - [x] **Task 53.5**: Live-Lab Integration Suite (`run_live_lab_gauntlet.sh`) *(Executor: OpenAgent / AGY Validation — 100% completed & committed)*
 - [x] **Task 53.6**: `DIAGNOSTIC_SCRIPT_MAP.md` Audit & Integration Alignment *(Executor: AGY Direct — 100% completed & committed)*
-- [ ] **Task 53.7**: `[FEAT-437]` Kender HyDE Enrichment — Implement `resolve_hyde_vector()` 3-Tier Cascade in `cognitive_hub.py`. *(Status: OPEN — FEAT-437 documented in FeatureTracker, zero code committed)*
+- [x] **Task 53.7**: `[FEAT-437]` Kender HyDE Enrichment — Implement `resolve_hyde_vector()` 3-Tier Cascade in `cognitive_hub.py`. *(Status: COMPLETED & VERIFIED — Atlas direct execution, 9/9 pytest PASSing)*
 
 ### Task 53.7 — FEAT-437: `resolve_hyde_vector()` Kender HyDE Enrichment & Judge-Driven Non-Match Augmentation
 
@@ -627,6 +627,10 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 
 **Forensic Summary & BKM-015 Alignment:**
 - **Taxonomy:** **KB** (`artifact_vault`, `journal_kb`, `lab_journal`) contains our distilled information, static synthesis summaries, and the 18-year archive. **DNA** (`behavioral_dna`, `feature_dna`) contains system building rules and SRE playbooks.
+- **3-Tier Memory Topography:**
+  - **Layer 1 (Diamond Tier)**: Star artifacts + `career_compass.json` Tier 1 Anchor Map (<300 tokens). System prompt bedrock in `loader.py`.
+  - **Layer 2 (Archive Tier / KB)**: Distilled RAG knowledge base in ChromaDB (`artifact_vault`, `journal_kb`, `lab_journal`). Targeted by HyDE synthesis.
+  - **Layer 3 (Raw Tier)**: Direct telemetry (RAPL/MSR power caps, NVIDIA DCGM GPU metrics) + raw disk notes in `~/knowledge_base`.
 - **BKM-015 Compliance (Zero Hardcoded Arrays):** We do NOT use hardcoded keyword arrays or pre-baked HyDE lists to bypass HyDE. Instead, HyDE is judge-driven: if a query does not match the 4 KB domains (e.g. casual conversational turn), HyDE synthesis naturally evaluates to empty `""`, allowing ChromaDB KB search to return cleanly without forcing a hallucinated vector.
 - **3-Tier Cascade:**
   1. **`DEEP_THOUGHT_REMOTE` (Tier 1 — Kender 4090):** Synthesizes 4-domain HyDE vector text on Kender.
@@ -640,10 +644,10 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - **Spec constants:** Define at module level: `DEEP_THOUGHT_REMOTE = "deep_thought_remote"`, `PINKY_LOCAL_VLLM = "pinky_local_vllm"`, `DIRECT_RAW_QUERY = "direct_raw_query"`.
 
 **Verification Gates:**
-- [ ] `grep "DEEP_THOUGHT_REMOTE\|resolve_hyde_vector" HomeLabAI/src/logic/cognitive_hub.py` returns hits.
-- [ ] Kender offline simulation: Tier 2 fires, no crash, `server.log` shows `[FEAT-437][TIER2]`.
-- [ ] `python -m pytest HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py` — 3 scenarios PASS: (a) Tier 1 hit, (b) Tier 1 timeout → Tier 2, (c) both offline → Tier 3 raw passthrough.
-- [ ] Live query with Kender online: `server.log` shows `[FEAT-437][TIER1]` with non-empty HyDE vector from Deep Thought.
+- [x] `grep "DEEP_THOUGHT_REMOTE\|resolve_hyde_vector" HomeLabAI/src/logic/cognitive_hub.py` returns hits (4 hits verified).
+- [x] Kender offline simulation: Tier 2 fires, no crash, `server.log` shows `[FEAT-437][TIER2]`.
+- [x] `python -m pytest HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py` — 9/9 scenarios PASS: (a) Tier 1 hit, (b) Tier 1 timeout → Tier 2, (c) both offline → Tier 3 raw passthrough.
+- [x] Live query with Kender online: `server.log` shows `[FEAT-437][TIER1]` with non-empty HyDE vector from Deep Thought.
 
 ---
 
