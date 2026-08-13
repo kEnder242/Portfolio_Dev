@@ -1637,3 +1637,9 @@
 **Logic:** Sets `zfs_arc_max=3758096384` in `/etc/modprobe.d/zfs.conf` and live kernel parameter `/sys/module/zfs/parameters/zfs_arc_max`.
 **Rationale:** Immediately reclaims **1.6 GiB physical DRAM** from disk cache (`arcstat` size: 5.0 GiB $\rightarrow$ 3.4 GiB) to guarantee allocation headroom for PyTorch, vLLM, and agent loops.
 **Mechanism:** `/etc/modprobe.d/zfs.conf` options file and ZFS kernel module parameter.
+
+## [LAB-103] Service Cgroup Memory Limits (`opencode-core` & `lab-attendant`)
+**Status:** COMPLETED (Sprint 53)
+**Logic:** Configures drop-in systemd cgroup limits for `opencode-core.service` (`MemoryHigh=3.0G`, `MemoryMax=3.5G`) and `lab-attendant.service` (`MemoryHigh=1.5G`, `MemoryMax=2.0G`).
+**Rationale:** Enforces strict memory budgets per service so an agent indexing burst or audio stream buffer spike cannot starve host DRAM or trigger host-wide thrashing.
+**Mechanism:** Systemd drop-in configuration files `/etc/systemd/system/*.service.d/50-memory-limit.conf`.
