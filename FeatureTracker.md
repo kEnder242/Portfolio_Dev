@@ -1463,15 +1463,16 @@
 **Rationale:** Eliminates redundant LLM passes, resolves intent/nuance for historical retrospective queries, and reduces casual greeting latency to under 50ms.
 **Mechanism:** `prereflection_triage_result` JSON schema, greeting short-circuit check, and unified execution loop in `cognitive_hub.py`.
 
-## [FEAT-437] 3-Tier HyDE Failover Cascade & Vector Plumbing
+## [FEAT-437] 3-Tier HyDE Failover Cascade & Pre-HyDE KB Direct Lookup
 **Status:** ACTIVE
 **Logic:** Establishes a 3-tier HyDE failover cascade for ChromaDB vector search (`archive_node.py` & `cognitive_hub.py`):
-  1. `DEEP_THOUGHT_REMOTE`: High-precision HyDE vector synthesized on KENDER 4090.
-  2. `PINKY_LOCAL_VLLM`: Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Deep Thought is offline (`OLLAMA: None`).
-  3. `DIRECT_RAW_QUERY`: Direct raw query vector fallback.
-  Vector queries pass `query_texts=[hyde_vector_text]` directly to `chroma-server.service` on port 8001 (`LAB-007`) to ensure 100% embedding space alignment.
-**Rationale:** Guarantees uninterrupted high-precision vector retrieval even during remote node offline states.
-**Mechanism:** `resolve_hyde_vector` 3-tier cascade, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_hyde_plumbing.py`.
+  1. `PRE_HYDE_KB_DIRECT`: Direct vector lookup on raw user query against distilled KB (`artifact_vault` & `journal_kb`) before invoking HyDE. High-confidence hits bypass HyDE token generation.
+  2. `DEEP_THOUGHT_REMOTE`: High-precision HyDE vector synthesized on KENDER 4090 when direct lookup is low-confidence or context expansion is required.
+  3. `PINKY_LOCAL_VLLM`: Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Deep Thought is offline.
+  4. `DIRECT_RAW_QUERY`: Zero-dependency raw query fallback floor.
+  Taxonomy: Distinguishes between **KB** (`artifact_vault`, `journal_kb`, `lab_journal` — distilled information and 18-year archive) and **DNA** (`behavioral_dna`, `feature_dna` — system building rules and SRE playbooks).
+**Rationale:** Preserves token context by executing fast direct KB lookups first, while guaranteeing uninterrupted high-precision vector retrieval during remote node offline states.
+**Mechanism:** `resolve_hyde_vector` 3-tier cascade, `hyde_vector_text` parameter in `archive_node.get_context`, and `test_feat437_resolve_hyde_vector.py`.
 
 ## [FEAT-438] Nightly Continuous Burn Map Synthesizer Integration
 **Status:** ACTIVE
