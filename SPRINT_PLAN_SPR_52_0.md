@@ -692,16 +692,16 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 ### LAB-102 — ZFS ARC Max Memory Cap (3.5 GiB)
 **Logic:** Sets `zfs_arc_max=3758096384` in `/etc/modprobe.d/zfs.conf` and `/sys/module/zfs/parameters/zfs_arc_max`. Reclaims **1.6 GiB DRAM** immediately (`arcstat` size: 5.0 GiB $\rightarrow$ 3.4 GiB, available: 2.3 GiB).
 
-- [ ] **Task 53.13**: Fix `_tel_collector` AttributeError in `cognitive_hub.py` *(Status: OPEN — Spec locked)*
-- [ ] **Task 53.14**: Route `[SYSTEM]` / `system-msg` Diagnostic Messages to Crosstalk-Bar in `intercom_v2.js` *(Status: OPEN — Spec locked)*
+- [x] **Task 53.13**: Fix `_tel_collector` AttributeError in `cognitive_hub.py` *(Status: COMPLETED & VERIFIED)*
+- [ ] **Task 53.14**: Scrollable Multi-Line Crosstalk Bar & System Message Routing (`intercom_v2.js` / `intercom.html`) *(Status: OPEN — Spec locked)*
 - [ ] **Task 53.15**: Full Integration Shakedown Test: Hibernation-to-Ignition Wake Cycle (`test_live_fire_triage.py`) *(Status: OPEN — Spec locked)*
 - [ ] **Task 53.16**: Full Integration Shakedown Test: 5x5 Full Spectrum Stress Gauntlet (`src/debug/uber_5x5_v5.py`) *(Status: OPEN — Spec locked)*
 
 ### Task 53.13 — CognitiveHub `_tel_collector` Telemetry Fix
-**Goal:** Initialize `self._tel_collector = _get_telemetry_collector()` in `CognitiveHub.__init__` with non-fatal fallback. Fixes uncaught `AttributeError: 'CognitiveHub' object has no attribute '_tel_collector'` that crashed greeting turns (`hello`/`hi`).
+**Goal:** Initialize `self._tel_collector = _get_telemetry_collector()` in `CognitiveHub.__init__` with non-fatal fallback. Fixes uncaught `AttributeError: 'CognitiveHub' object has no attribute '_tel_collector'` that crashed greeting turns (`hello`/`hi`). *(Status: COMPLETED & VERIFIED)*
 
-### Task 53.14 — Crosstalk Diagnostic Routing (`intercom_v2.js`)
-**Goal:** Update `appendMsg()` in `field_notes/intercom_v2.js` to route all `source === 'System'` and `[SYSTEM]` messages into `routeDiagnosticToCrosstalk(text)` instead of appending to `chatConsole`, keeping the main chat pane clean for out-loud dialogue per FEAT-453.
+### Task 53.14 — Scrollable Multi-Line Crosstalk Bar & System Message Routing (`FEAT-453`)
+**Goal:** Offload ALL `[SYSTEM]`, `[HEARTBEAT]`, and `[REMOTE]` diagnostic noise out of main chat console windows (`chatConsole` / `insightConsole`) into a dedicated, scrollable `#crosstalk-bar` container (`max-height: 25vh`, `overflow-y: auto`). Preserves top status line while rendering scrollable amber diagnostic history beneath it, keeping primary chat panes 100% clean for out-loud dialogue per FEAT-453.
 
 ### Task 53.15 — Full Integration Shakedown 1: Hibernation-to-Ignition Wake Cycle
 **Goal:** Run `python3 HomeLabAI/src/debug/test_live_fire_triage.py` against live server on port 8765. Verifies cold socket wake, handshake token exchange, triage short-circuiting, and non-blocking response streaming.
