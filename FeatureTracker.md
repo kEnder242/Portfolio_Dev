@@ -1632,10 +1632,10 @@
 **Rationale:** Converts silent hardware lockups into captured kernel panic tracebacks written to disk, auto-rebooting after 10s.
 **Mechanism:** `/etc/default/grub` configuration and `sysctl` kernel parameters.
 
-## [LAB-102] ZFS ARC Max Memory Cap (3.5 GiB)
+## [LAB-102] ZFS ARC Max Memory Cap (1.0 GiB)
 **Status:** COMPLETED (Sprint 53)
-**Logic:** Sets `zfs_arc_max=3758096384` in `/etc/modprobe.d/zfs.conf` and live kernel parameter `/sys/module/zfs/parameters/zfs_arc_max`.
-**Rationale:** Immediately reclaims **1.6 GiB physical DRAM** from disk cache (`arcstat` size: 5.0 GiB $\rightarrow$ 3.4 GiB) to guarantee allocation headroom for PyTorch, vLLM, and agent loops.
+**Logic:** Sets `zfs_arc_max=1073741824` in `/etc/modprobe.d/zfs.conf` and live kernel parameter `/sys/module/zfs/parameters/zfs_arc_max`.
+**Rationale:** Empirically verified via `arcstat` (98-100% metadata hit rate). Immediately reclaims **2.4 GiB physical DRAM** from disk cache (Available RAM increased from 3.5 GiB $\rightarrow$ 5.9 GiB) to guarantee allocation headroom for PyTorch, vLLM, and agent loops.
 **Mechanism:** `/etc/modprobe.d/zfs.conf` options file and ZFS kernel module parameter.
 
 ## [LAB-103] Service Cgroup Memory Limits (`opencode-core` & `lab-attendant`)
