@@ -696,6 +696,9 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 53.14**: Scrollable Multi-Line Crosstalk Bar & System Message Routing (`intercom_v2.js` / `intercom.html`) *(Status: COMPLETED & VERIFIED)*
 - [x] **Task 53.15**: Full Integration Shakedown Test: Hibernation-to-Ignition Wake Cycle (`test_live_fire_triage.py`) *(Status: COMPLETED & VERIFIED)*
 - [x] **Task 53.16**: Full Integration Shakedown Test: 5x5 Full Spectrum Stress Gauntlet (`src/debug/uber_5x5_v5.py`) *(Status: COMPLETED & VERIFIED)*
+- [ ] **Task 53.17**: RAG Eval & Context Expansion + Expander in Web Intercom UI (`intercom_v2.js` / `style.css` / `cognitive_hub.py`) *(Status: OPEN — Spec locked)*
+- [ ] **Task 53.18**: Fix Collapsible Interleaved System Log Rendering Regression (`style.css`) *(Status: OPEN — Spec locked)*
+- [ ] **Task 53.19**: Nightly Task Re-Ordering, Explicit Cooldowns, & High-Density Logging (`nightly_forge.py`) *(Status: OPEN — Spec locked)*
 
 ### Task 53.13 — CognitiveHub `_tel_collector` Telemetry Fix
 **Goal:** Initialize `self._tel_collector = _get_telemetry_collector()` in `CognitiveHub.__init__` with non-fatal fallback. Fixes uncaught `AttributeError: 'CognitiveHub' object has no attribute '_tel_collector'` that crashed greeting turns (`hello`/`hi`). *(Status: COMPLETED & VERIFIED)*
@@ -708,6 +711,15 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 
 ### Task 53.16 — Full Integration Shakedown 2: 5x5 Full-Spectrum Stress Gauntlet
 **Goal:** Run `python3 HomeLabAI/src/debug/uber_5x5_v5.py` against live server on port 8765. Verifies 5-turn multi-vibe conversation, refusal interceptor scoring, and state machine stability across 75 minutes of natural idle drift. *(Status: COMPLETED & VERIFIED — 5/5 Cycles Certified)*
+
+### Task 53.17 — RAG Eval & Context Expansion + Expander in Web Intercom UI (`FEAT-454`)
+**Goal:** Implement full RAG evaluation payload broadcasting in `cognitive_hub.py` containing user query, synthetic 3-part HyDE vector, resolution tier, retrieved document snippets, similarity scores, and distilled summaries. Update `intercom_v2.js` and `style.css` to render interactive `<details class="rag-eval-card">` components with `+` click expanders that reveal full raw context snippets, clickable file references (`[Ref: filename.md]`), and score metrics upon user expansion.
+
+### Task 53.18 — Fix Collapsible Interleaved System Log Rendering Regression
+**Goal:** Resolve CSS rendering regression in `style.css` where `.system-inline` flex layout squished nested `<details><summary>` collapsible system log cards and prevented click expansion. Update `.system-inline details` and `.tool-card` CSS rules to enforce `display: block !important`, `cursor: pointer`, and clean vertical drawer expansion.
+
+### Task 53.19 — Nightly Task Re-Ordering, Explicit Cooldowns, & High-Density Logging
+**Goal:** Re-order nightly maintenance tasks in `nightly_forge.py` so light housekeeping (`mass_scan.py`) runs first, followed by explicit 30s CPU/memory cooldown, VRAM quiesce, 15s settling window, and heavy Unsloth LoRA fine-tuning (`train_expert.py` / `run_kender_forge`) placed strictly at the **VERY END**. Expand logging across all phases to capture detailed timestamps, RAM/swap consumption, VRAM metrics, and exit codes in `/tmp/nightly_forge_step.log`.
 
 ---
 
