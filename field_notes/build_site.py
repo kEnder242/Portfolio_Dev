@@ -57,11 +57,11 @@ def generate_trailers():
         except Exception as e:
             print(f"❌ Failed to capture {html_file}: {e}")
 
-def deploy_to_airlock():
+def deploy_to_airlock(snapshots=False):
     print("--- DEPLOYING TO PUBLIC AIRLOCK (www_deploy) ---")
-    www_dir = os.path.expanduser("~/Dev_Lab/www_deploy")
+    www_dir = os.path.join(os.path.dirname(BASE_DIR), "www_deploy")
     if os.path.exists(www_dir):
-        # Sync data directory for status/logs
+        # Sync json data files to public airlock data directory
         src_data = os.path.join(BASE_DIR, "data")
         dst_data = os.path.join(www_dir, "data")
         if os.path.exists(src_data):
@@ -73,12 +73,16 @@ def deploy_to_airlock():
                 if os.path.isfile(s):
                     shutil.copy2(s, d)
 
+        env = os.environ.copy()
+        if snapshots:
+            env["ENABLE_SNAPSHOTS"] = "1"
+
         for script in ["sync_protocols.sh", "sync_stories.sh", "sync_research.sh"]:
             script_path = os.path.join(www_dir, script)
             if os.path.exists(script_path):
                 print(f"Running {script}...")
                 try:
-                    subprocess.run(["/bin/bash", script_path], check=True, cwd=www_dir)
+                    subprocess.run(["/bin/bash", script_path], check=True, cwd=www_dir, env=env)
                 except Exception as e:
                     print(f"❌ Failed to execute {script}: {e}")
 
@@ -150,12 +154,13 @@ def main(args):
         generate_trailers()
 
     if not args.no_deploy:
-        deploy_to_airlock()
+        deploy_to_airlock(snapshots=args.snapshots)
 
     print("=== BUILD COMPLETE ===")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--snapshots", action="store_true", help="Generate shot-scraper PNG screenshots during deploy (disabled by default)")
     parser.add_argument("--trailers", action="store_true", help="Generate cinematic widescreen previews")
     parser.add_argument("--benchmark", action="store_true", help="Run live model inference benchmarks (bench_models.py)")
     parser.add_argument("--no-deploy", action="store_true", help="Skip automatic airlock deployment")
