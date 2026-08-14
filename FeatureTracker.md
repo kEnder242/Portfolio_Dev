@@ -1535,7 +1535,7 @@
 ---
 
 ## [LAB-090] SSH OOM Immunity Sentinel
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Configures systemd service override for `sshd.service` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`.
 **Rationale:** Guarantees that SSH and remote VSCode tunnel sessions are never killed or swap-frozen during extreme host RAM pressure.
 **Mechanism:** `/etc/systemd/system/sshd.service.d/override.conf` or user systemd override unit.
@@ -1543,7 +1543,7 @@
 ---
 
 ## [LAB-091] Kernel SysRq Emergency Protocol
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Enables kernel-level SysRq magic key interface (`kernel.sysrq = 1`).
 **Rationale:** Provides an out-of-band emergency mechanism to safely sync disks (`echo s > /proc/sysrq-trigger`) and trigger instant kernel reboot (`echo b`) during hard userland freezes.
 **Mechanism:** `/etc/sysctl.d/99-sysrq.conf` sysctl configuration.
@@ -1551,7 +1551,7 @@
 ---
 
 ## [LAB-092] Proactive Memory Kicker (EarlyOOM Sentinel)
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Deploys `earlyoom` with 5% RAM and 10% Swap thresholds.
 **Rationale:** Terminates runaway background Python memory consumers *before* host swap space thrashing locks the OS and I/O bus.
 **Mechanism:** `earlyoom` system service configuration.
@@ -1559,7 +1559,7 @@
 ---
 
 ## [FEAT-425] Standalone WebSocket RSS Memory Profiler
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Creates `psutil` profiling harness `HomeLabAI/src/infra/profile_ws_memory.py` measuring memory footprint during live WebSocket PCM audio streaming.
 **Rationale:** Isolates exact RSS memory overhead added by WebSockets vs LLM KV-cache allocations.
 **Mechanism:** `profile_ws_memory.py` harness with `status.json` reporting.
@@ -1567,7 +1567,7 @@
 ---
 
 ## [FEAT-426] Intercom Loopback & Origin Security Guard
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Hardens `intercom_v2.js` and `lab-attendant` with explicit `127.0.0.1` loopback binding, origin header validation, and `X-Lab-Key` token checks.
 **Rationale:** Prevents unauthorized cross-origin WebSocket connections while ensuring local development uses secure loopback IPC.
 **Mechanism:** `intercom_v2.js` and `attendant.py` WebSocket handler.
@@ -1575,7 +1575,7 @@
 ---
 
 ## [FEAT-427] Audio PCM Stream Buffer Sentinel
-**Status:** PROPOSED (Sprint 50)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Implements a strict ring-buffer cap on Float32 $\rightarrow$ Int16 PCM audio downsampling in `intercom_v2.js`.
 **Rationale:** Prevents unmanaged memory growth in browser heap and backend WebSockets during long speech turns.
 **Mechanism:** `intercom_v2.js` PCM buffer clamp.
@@ -1583,7 +1583,7 @@
 ---
 
 ## [FEAT-428] Real-Time PCM Audio Stream Memory Benchmark
-**Status:** PROPOSED (Sprint 50 Story 5)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Creates `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated Float32 $\rightarrow$ Int16 PCM audio buffers to `lab-attendant` while profiling `psutil` RSS RAM and vLLM KV-cache utilization.
 **Rationale:** Closes the gap between integration tests (which stub audio) and live `intercom.html` usage, verifying true memory footprint during real-time speech interaction.
 **Mechanism:** `test_live_audio_memory_benchmark.py` harness and `status.json` telemetry logging.
@@ -1591,13 +1591,15 @@
 ---
 
 ## [LAB-093] Lab-Attendant Cgroup Memory Sentinel
-**Status:** PROPOSED (Sprint 50 Story 6)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Configures `MemoryMax=4G` and `ManagedOOMPreference=kill` in `lab-attendant.service`.
 **Rationale:** Ensures that if `lab-attendant` or audio stream buffers experience memory pressure, systemd isolates and terminates only `lab-attendant`, keeping host OS, SSH, and other services 100% online.
 **Mechanism:** `lab-attendant.service` systemd unit configuration.
 
+---
+
 ## [FEAT-429] Foyer Disconnect Memory Reclaim Sentinel
-**Status:** PROPOSED (Sprint 50 Story 7)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Implements explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
 **Rationale:** Prevents memory accumulation and orphan audio buffer leaks across multiple browser reloads or tab closures.
 **Mechanism:** `on_close()` handler in `attendant.py` and garbage collection sentinel.
@@ -1605,7 +1607,7 @@
 ---
 
 ## [FEAT-430] Automated Delegation Retrospective & Friction Audit Stage
-**Status:** PROPOSED (Sprint 50 Story 8)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Creates `HomeLabAI/src/infra/delegate_retrospective.py` and wires `--retrospective` flag into `delegate.py`. Automatically parses `/tmp/delegate_story_*.log`, queries REST session metrics (`tokens`, `time`, `child_sessions`), compares prompt target paths vs `git diff` actuals to detect path search thrash, and synthesizes a Delegation Friction Ledger artifact for user review and sign-off.
 **Rationale:** Eliminates manual friction accounting, automatically capturing prompt path mismatches and provider 503 fallbacks at the end of every heads-down execution segment.
 **Mechanism:** `delegate_retrospective.py` parser, `delegate.py --retrospective` CLI integration, and `DELEGATION_RETROSPECTIVE.md` report synthesizer.
@@ -1613,7 +1615,7 @@
 ---
 
 ## [FEAT-431] EarlyOOM Telemetry & Neural Pager Hook
-**Status:** PROPOSED (Sprint 50 Story 9)
+**Status:** COMPLETED (Sprint 50)
 **Logic:** Configures `earlyoom` with an executive notification hook (`earlyoom_pager_notifier.sh`) that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever an OOM termination occurs.
 **Rationale:** Captures the exact "WHY" behind every OOM kill (killed PID, process command, RAM/swap free percentages, and OOM score) for real-time visibility on `pager.html` and `status.html` without dropping SSH connections.
 **Mechanism:** `earlyoom_pager_notifier.sh` script, `earlyoom` SystemD drop-in environment hook, and `pager_activity.json` event log.
