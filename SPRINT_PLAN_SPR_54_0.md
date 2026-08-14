@@ -167,3 +167,40 @@ We audited the entire Sprint 54 plan against your overarching intent:
 | **Stage 1 Triage** | Deep Thought handles zero-latency preamble & intent triage at $t=0$. | `router.py:L1024` uses static array of 25 hardcoded keywords (`is_domain_match`). | **MEDIUM DISCREPANCY**: Hardcoded keywords violate BKM-015 (zero hardcoded arrays). | **FIX IN STORY 54.2**: Load domain map dynamically from `hyde_domain_map.json`. |
 | **OpenRouter Keys** | Store keys securely outside git repositories. | OpenCode config used `{env:OPENROUTER_API_KEY}`. | **ALIGNED**: Saved key to `~/.config/environment.d/70-openrouter-key.conf`. | **NO CHANGE NEEDED**. |
 | **Delegation Spec** | Concise, self-contained story cards pointing to specific files and verification commands. | Sprint plans previously mixed narrative prose with inline code diffs. | **IMPROVED**: Formatted Stories 54.1–54.4 as clean `delegate.py` command cards. | **READY FOR EXECUTION**. |
+
+---
+
+## 📜 **7. Sprint 54 Execution & Intent Violation Ledger**
+
+### 📊 **Story Execution Summary**
+
+| Story | Title | Executor | Status | Tries / Retries | Intent Alignment |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **54.1** | `FEAT-437` Pinky LoRA HyDE Inversion | AGY Direct | **COMPLETED** | 1 (Direct) | **100% Intent Aligned**: Restored Pinky local vLLM as Tier 1 HyDE generator. |
+| **54.2** | `FEAT-437` Dynamic HyDE Domain Map Loading | OpenAgent (OpenRouter) | **COMPLETED** | 3 (M5-Air hung $\rightarrow$ OpenRouter) | **Intent Aligned with Schema Adaptations**: Extracted keywords & prompts to JSON. |
+| **54.3** | `FEAT-456` Real VRAM Probing & Gauntlet Repair | OpenAgent (OpenRouter) | **COMPLETED** | 1 (OpenRouter) | **100% Intent Aligned**: Swapped dummy VRAM stub with `nvidia-smi` CSV queries; fixed test path. |
+| **54.4** | `FEAT-457` FeatureTracker Alignment & Submodule Sync | AGY Direct | **COMPLETED** | 1 (Direct) | **100% Intent Aligned**: Updated FeatureTracker, built site, synced ChromaDB, committed submodules. |
+
+---
+
+### 🚨 **Intent vs. 'To The Letter' Violation Ledger**
+
+1. **Story 54.2 (HyDE Domain Map Extractor)**:
+   - **Letter of Request**: Extract hardcoded domain keywords and synthesis prompts into `HomeLabAI/src/data/hyde_domain_map.json`.
+   - **Intent Violation / Divergence**: OpenAgent attempted to read `AGENTS.md` and synthesized a full project architecture document alongside `hyde_domain_map.json` because the initial prompt lacked exact JSON key schemas.
+   - **Mitigation / Remediation**: Validated `hyde_domain_map.json` structure, verified with `test_qpr_hyde.py` (5/5 PASSED), and committed only clean schema-compliant code.
+
+2. **OpenAgent Delegation Topology Stalls**:
+   - **Initial Condition**: M5-Air (`my-m5-air`) was configured with a **262K context window**, causing prompt KV memory thrashing and API hangs during heavy delegation dispatches.
+   - **Remediation**:
+     1. Capped M5-Air context limit to **32K (32,768)** in `opencode.json`.
+     2. Re-assigned heavy orchestrator roles (`prometheus`, `sisyphus`, `atlas`) to **OpenRouter (`nvidia/nemotron-3.5-lightning:free`)**.
+     3. Assigned light sub-agent execution roles (`sisyphus-junior`, `hephaestus`) to M5-Air for fast local execution.
+
+---
+
+### 📌 **Stalled / Hung Dispatch Log**
+
+*   **Attempt 1 (Story 54.1 on M5-Air)**: Hung on LM Studio context allocation (`262K`). Process killed after 340s timeout; completed AGY Direct.
+*   **Attempt 2 (Story 54.2 on M5-Air)**: Returned `APIError: Prompt context exceeded`. Switched provider to OpenRouter; completed in 28s.
+*   **Attempt 3 (Story 54.3 on OpenRouter)**: Dispatched cleanly via OpenRouter Nemotron-3.5; completed in 150.8s with full `nvidia-smi` implementation.
