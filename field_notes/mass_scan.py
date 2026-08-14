@@ -164,9 +164,7 @@ def check_lock(lock_path):
                         os.remove(lock_path)
                     except OSError as e:
                         logging.error(f"[LOCK] Failed to remove stale lock {lock_path}: {e}")
-        logging.warning("[GOVERNOR] Task failed, initiating 60s backoff...")
-        time.sleep(60)
-        return False
+                    return False
         except (ValueError, OSError):
             # Empty or unreadable content: fall back to mtime check only
             pass
