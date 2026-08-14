@@ -1671,3 +1671,40 @@
 **Logic:** Synchronizes git submodule pointers between `Dev_Lab`, `Portfolio_Dev`, and `HomeLabAI`. Updates FeatureTracker DNA matrices across ChromaDB vector database (`feature_dna`).
 **Rationale:** Maintains 100% git and vector database synchronization across the federated workspace.
 **Mechanism:** `FeatureTracker.md`, `git submodule update`, and `sync_feature_dna.py` git hooks.
+
+## [FEAT-458] Atlas Identity Guard & OpenAgent REST Persona Binding Contract
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Requires `delegate.py` to pass `"agent": agent` in BOTH `POST /session` AND `POST /session/<id>/message` REST payloads using exact registered display names (`"Atlas - Plan Executor"`, `"Prometheus - Plan Builder"`). Implements `[IDENTITY ASSERTION & HARD-STOP GUARD]` to force non-Atlas models (e.g. Sisyphus) to emit `[HANDOVER REFLECTION]` and exit with 0 file edits.
+**Rationale:** Prevents silent persona demotion and guarantees OpenAgent swarm orchestrator identity integrity.
+**Mechanism:** `src/tests/delegate.py`, `~/.config/opencode/oh-my-openagent.json`, and `BKM-034` in `Protocols.md`.
+
+## [FEAT-459] Deep Thought Preamble Insight Routing & Persona Partitioning
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Routes Deep Thought's $t=0$ preamble triage logs (`_spawn_deep_thought_preamble`) to `type: "chat"` and `channel: "insight"` so they render directly inside Brain's Insight window. Enforces strict persona partitioning: Deep Thought emits analytical readiness reflections while Pinky retains character tics (`Narf!`, `Poit!`) on the chat channel.
+**Rationale:** Eliminates persona bleed and fixes web UI window routing.
+**Mechanism:** `_spawn_deep_thought_preamble` in `HomeLabAI/src/v5/foyer/router.py`.
+
+## [FEAT-460] Build Trailer Render Process Cleanup Trap
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Adds explicit subprocess cleanup (`pkill -f 'shot-scraper|chromium'`) to `deploy_to_airlock()` in `build_site.py`.
+**Rationale:** Prevents Playwright/shot-scraper headless Chromium rendering instances from lingering in RAM after static site compilation.
+**Mechanism:** `deploy_to_airlock()` in `Portfolio_Dev/field_notes/build_site.py`.
+
+## [LAB-105] SystemD Cgroup Process Management & Hardened Restart Policy
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Configures `KillMode=control-group` and `TimeoutStopSec=5` in `lab-attendant.service`.
+**Rationale:** Eliminates 30-second restart delays and ensures `systemctl restart lab-attendant.service` cleanly tears down 100% of child processes, vLLM servers, and background loopers in 5 seconds max without manual `kill -9` intervention.
+**Mechanism:** `/etc/systemd/system/lab-attendant.service`.
+
+## [LAB-106] Pre-Flight SystemD Page Cache Reclamation
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Adds `ExecStartPre=-/usr/bin/sudo /usr/sbin/sysctl -w vm.drop_caches=3` to `lab-attendant.service`.
+**Rationale:** Automatically reclaims 7-10 GB of dirty file page caches created by build tools before PyTorch and vLLM allocate safetensors checkpoint shards in host RAM.
+**Mechanism:** `/etc/systemd/system/lab-attendant.service`.
+
+## [LAB-107] Kernel Virtual Memory Pressure & EarlyOOM Protection Daemon
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Configures `vm.vfs_cache_pressure=150` in `/etc/sysctl.d/99-lab-memory.conf` and earlyoom daemon parameters (`-m 10 -s 5 --prefer '(chrome|steam)' --avoid '(acme_foyer_v5|vllm)'`).
+**Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
+**Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
+

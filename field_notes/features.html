@@ -7861,6 +7861,120 @@
                             <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-458">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-458</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Atlas Identity Guard & OpenAgent REST Persona Binding Contract
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Requires <code>delegate.py</code> to pass <code>"agent": agent</code> in BOTH <code>POST /session</code> AND <code>POST /session/&lt;id&gt;/message</code> REST payloads using exact registered display names (<code>"Atlas - Plan Executor"</code>, <code>"Prometheus - Plan Builder"</code>). Implements <code>[IDENTITY ASSERTION &amp; HARD-STOP GUARD]</code> to force non-Atlas models (e.g. Sisyphus) to emit <code>[HANDOVER REFLECTION]</code> and exit with 0 file edits.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents silent persona demotion and guarantees OpenAgent swarm orchestrator identity integrity.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>src/tests/delegate.py</code>, <code>~/.config/opencode/oh-my-openagent.json</code>, and <code>BKM-034</code> in <code>Protocols.md</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-459">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-459</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Deep Thought Preamble Insight Routing & Persona Partitioning
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Routes Deep Thought's $t=0$ preamble triage logs (<code>_spawn_deep_thought_preamble</code>) to <code>type: "chat"</code> and <code>channel: "insight"</code> so they render directly inside Brain's Insight window. Enforces strict persona partitioning: Deep Thought emits analytical readiness reflections while Pinky retains character tics (<code>Narf!</code>, <code>Poit!</code>) on the chat channel.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates persona bleed and fixes web UI window routing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>_spawn_deep_thought_preamble</code> in <code>HomeLabAI/src/v5/foyer/router.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-460">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-460</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Build Trailer Render Process Cleanup Trap
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Configures <code>vm.vfs_cache_pressure=150</code> in <code>/etc/sysctl.d/99-lab-memory.conf</code> and earlyoom daemon parameters (<code>-m 10 -s 5 --prefer '(chrome|steam)' --avoid '(acme_foyer_v5|vllm)'</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>/etc/sysctl.d/99-lab-memory.conf</code> and <code>/etc/default/earlyoom</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
