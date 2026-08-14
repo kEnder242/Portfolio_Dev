@@ -291,13 +291,13 @@ function getCrosstalkStatusLine() {
 // inline styles always beat the static stylesheet's nowrap/hidden defaults.
 function applyCrosstalkBarStyles(bar) {
     if (!bar) return;
-    bar.style.maxHeight = '25vh';
+    bar.style.maxHeight = '4.5rem';
     bar.style.overflowY = 'auto';
     bar.style.overflowX = 'hidden';
     bar.style.whiteSpace = 'normal';
     bar.style.fontSize = '0.7rem';
     bar.style.height = 'auto';
-    bar.style.minHeight = '1.2rem';
+    bar.style.minHeight = '2.4rem';
 }
 
 function routeDiagnosticToCrosstalk(text) {
@@ -319,8 +319,8 @@ function routeDiagnosticToCrosstalk(text) {
     entry.textContent = `[${stamp} UTC] ${text}`;
     bar.appendChild(entry);
 
-    // Cap at 200 log entries (drop the oldest, keep the status line).
-    while (bar.querySelectorAll('.crosstalk-log-entry').length > 200) {
+    // Cap at 10 log entries (drop the oldest, keep the status line).
+    while (bar.querySelectorAll('.crosstalk-log-entry').length > 10) {
         const oldest = bar.querySelector('.crosstalk-log-entry');
         if (oldest) oldest.remove();
     }

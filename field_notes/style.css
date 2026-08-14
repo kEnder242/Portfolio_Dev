@@ -336,12 +336,12 @@ details[open] summary::before {
     padding: 5px 15px;
     background: #000;
     border-bottom: 1px solid #222;
-    max-height: 25vh !important;
+    max-height: 4.5rem !important;
     overflow-y: auto !important;
     overflow-x: hidden;
     white-space: normal !important;
     word-break: break-word;
-    min-height: 1.2rem;
+    min-height: 2.4rem;
     height: auto;
 }
 
