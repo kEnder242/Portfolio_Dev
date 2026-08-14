@@ -243,8 +243,17 @@ main { flex-grow: 1; overflow-y: auto; padding: 40px; padding-right: 60px; max-w
     user-select: none;
 }
 
-.system-inline details summary:hover {
-    color: var(--accent-color) !important;
+.system-inline details summary::before,
+.rag-eval-card summary::before {
+    content: '[+] ';
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+details[open] summary::before {
+    content: '[-] ';
+    color: #ffcc00;
+    font-weight: bold;
 }
 
 .rag-eval-card summary {
