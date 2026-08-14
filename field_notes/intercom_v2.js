@@ -569,11 +569,13 @@ async function connect() {
                         } catch(e) { /* not JSON, fall through */ }
                     }
 
-                    // [FEAT-313.3] Log Integration: Append all crosstalk to the console
+                    // [FEAT-453] Log Integration: Persona lines go to chat log; system/stage diagnostic lines go to Crosstalk Bar
                     const isPersona = sl_low.includes('pinky') || sl_low.includes('brain') || sl_low.includes('shadow');
-                    const msgType = isPersona ? 'brain-msg' : 'system-msg';
-                    // [Task 12.4] Respect channel for crosstalk (e.g. Brain Insight)
-                    appendMsg(data.brain, msgType, data.brain_source || 'System', data.channel || 'chat', false, { msg_id: data.msg_id });
+                    if (!isPersona || (data.channel === 'stage') || (data.brain && data.brain.includes('STAGE'))) {
+                        routeDiagnosticToCrosstalk(`[${data.brain_source || 'STAGE'}] ${data.brain}`);
+                        return;
+                    }
+                    appendMsg(data.brain, 'brain-msg', data.brain_source || 'System', data.channel || 'chat', false, { msg_id: data.msg_id });
                 }
             }
 
