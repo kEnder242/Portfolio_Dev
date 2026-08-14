@@ -269,7 +269,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
 }
 
 // [FEAT-453] Crosstalk Diagnostic Routing
-const DIAGNOSTIC_PREFIX_RE = /^\[(SYSTEM|HEARTBEAT|REMOTE)\]/i;
+const DIAGNOSTIC_PREFIX_RE = /^\[(SYSTEM|HEARTBEAT|REMOTE|FOYER|INIT|LOCK|GOVERNOR|LAB|STAGE|PAGER)\]/i;
 
 function getCrosstalkStatusLine() {
     const bar = document.getElementById('crosstalk-bar');
@@ -587,13 +587,9 @@ async function connect() {
                     if (data.version && data.version !== CONFIG.VERSION) {
                         alert(`CACHE_LOCK_VIOLATION: Browser is running Intercom ${CONFIG.VERSION} but the Lab is at ${data.version}. \n\nThis mismatch will break the X-Lab-Key dependency and cause Remote Control errors. \n\nPlease perform a hard-refresh (Ctrl+F5) immediately.`);
                     }
-                    // [FEAT-453] Diagnostic status lines route to the Crosstalk Bar, not the chat log
-                    if (DIAGNOSTIC_PREFIX_RE.test(data.message)) {
-                        routeDiagnosticToCrosstalk(data.message);
-                        return;
-                    }
-                    const cleanMsg = data.message.replace(/^\[SYSTEM\]\s*/, "");
-                    appendMsg(`${cleanMsg} (v${data.version})`, 'system-msg', 'System');
+                    // [FEAT-453] All system/diagnostic status lines route to the Crosstalk Bar, not Pinky's main console
+                    routeDiagnosticToCrosstalk(msg);
+                    return;
                 }
             } else if (data.type === 'file_content_request') {
                 ws.send(JSON.stringify({ type: "read_file", filename: data.filename }));
