@@ -82,6 +82,12 @@ def deploy_to_airlock():
                 except Exception as e:
                     print(f"❌ Failed to execute {script}: {e}")
 
+        # [FEAT-456] Clean up lingering shot-scraper/chromium render processes
+        try:
+            subprocess.run(["/usr/bin/pkill", "-f", "shot-scraper|chromium"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+
 def main(args):
     print("=== FIELD NOTES BUILD SYSTEM v2.3 (Trailers Enabled) ===")
     
