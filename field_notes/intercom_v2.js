@@ -610,6 +610,27 @@ async function connect() {
                         detail: data.detail || null
                     });
                 }
+            } else if (data.type === 'rag_eval') {
+                // [FEAT-454] Render interactive collapsible RAG Eval card with + click expansion
+                if (window.renderRagEvalCard) {
+                    window.renderRagEvalCard(data);
+                } else {
+                    const esc = (unsafe) => String(unsafe).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    const cardHtml = `
+                        <details class="rag-eval-card" style="margin: 6px 0; border: 1px solid #2a2a3a; background: #0b0c10; border-left: 3px solid #7ec8e3; border-radius: 4px; padding: 4px 8px;">
+                            <summary style="cursor: pointer; color: #7ec8e3; font-size: 0.78rem; font-weight: bold; user-select: none;">
+                                🔍 [RAG EVAL] HyDE: ${esc(data.hyde || 'Direct')} (${data.n_results || 3} docs) <span style="color: #666; font-size: 0.7rem;">[Tier: ${esc(data.tier || '2')}]</span>
+                            </summary>
+                            <div class="rag-eval-body" style="padding: 8px 4px 4px 4px; font-size: 0.75rem; color: #aaa; border-top: 1px solid #1a1a2e; margin-top: 4px;">
+                                <div style="margin-bottom: 4px;"><strong>Query:</strong> ${esc(data.query || '')}</div>
+                                <div style="margin-bottom: 4px;"><strong>Doc ID:</strong> <a href="#" onclick="openFile('${esc(data.doc_id || '')}'); return false;" style="color: var(--accent-color); text-decoration: none;">[Ref: ${esc(data.doc_id || '')}]</a></div>
+                                <div style="margin-bottom: 4px;"><strong>Raw Context (Click to expand):</strong></div>
+                                <pre style="white-space: pre-wrap; font-family: monospace; background: #050508; padding: 6px; border-radius: 3px; border: 1px solid #1a1a2e; max-height: 200px; overflow-y: auto; color: #88c0d0; font-size: 0.72rem;">${esc(data.full_context || data.snippet || '')}</pre>
+                            </div>
+                        </details>
+                    `;
+                    appendMsg(cardHtml, 'system-msg', 'System');
+                }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
                 try {

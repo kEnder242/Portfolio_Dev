@@ -696,9 +696,9 @@ STAGE_LEDGER_PATH = os.path.join(DATA_DIR, "foyer_stage_ledger.jsonl")
 - [x] **Task 53.14**: Scrollable Multi-Line Crosstalk Bar & System Message Routing (`intercom_v2.js` / `intercom.html`) *(Status: COMPLETED & VERIFIED)*
 - [x] **Task 53.15**: Full Integration Shakedown Test: Hibernation-to-Ignition Wake Cycle (`test_live_fire_triage.py`) *(Status: COMPLETED & VERIFIED)*
 - [x] **Task 53.16**: Full Integration Shakedown Test: 5x5 Full Spectrum Stress Gauntlet (`src/debug/uber_5x5_v5.py`) *(Status: COMPLETED & VERIFIED)*
-- [ ] **Task 53.17**: RAG Eval & Context Expansion + Expander in Web Intercom UI (`intercom_v2.js` / `style.css` / `cognitive_hub.py`) *(Status: OPEN — Spec locked)*
-- [ ] **Task 53.18**: Fix Collapsible Interleaved System Log Rendering Regression (`style.css`) *(Status: OPEN — Spec locked)*
-- [ ] **Task 53.19**: Nightly Task Re-Ordering, Explicit Cooldowns, & High-Density Logging (`nightly_forge.py`) *(Status: OPEN — Spec locked)*
+- [x] **Task 53.17**: RAG Eval & Context Expansion + Expander in Web Intercom UI (`intercom_v2.js` / `style.css` / `cognitive_hub.py`) *(Status: COMPLETED & VERIFIED)*
+- [x] **Task 53.18**: Fix Collapsible Interleaved System Log Rendering Regression (`style.css`) *(Status: COMPLETED & VERIFIED)*
+- [x] **Task 53.19**: Nightly Task Re-Ordering, Explicit Cooldowns, & High-Density Logging (`nightly_forge.py`) *(Status: COMPLETED & VERIFIED)*
 
 ### Task 53.13 — CognitiveHub `_tel_collector` Telemetry Fix
 **Goal:** Initialize `self._tel_collector = _get_telemetry_collector()` in `CognitiveHub.__init__` with non-fatal fallback. Fixes uncaught `AttributeError: 'CognitiveHub' object has no attribute '_tel_collector'` that crashed greeting turns (`hello`/`hi`). *(Status: COMPLETED & VERIFIED)*
