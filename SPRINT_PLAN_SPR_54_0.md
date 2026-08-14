@@ -14,18 +14,21 @@ When the **"Open HyDE"** concept was first anchored in `00_FEDERATED_STATUS.md` 
 
 ---
 
-### 🚨 **The Drift & Historical Discovery**
-In Sprint 47 (`FEAT-436`/`FEAT-437`), the 3-Tier HyDE Failover Cascade was implemented in `cognitive_hub.py`. During implementation, the order was inverted:
-* **What Happened**: `resolve_hyde_vector()` assigned **Tier 1 (HyDE Synthesis)** to Deep Thought on Kender (RTX 4090) and made Pinky a Tier 2 backup failover.
-* **The Failure Mode**:
-  1. Deep Thought lacks Pinky's fine-tuned LoRA weights, producing generic open-source HyDE strings instead of lab-grounded BKM terms.
-  2. If Kender was offline or slow (>8s), the pipeline stalled before falling back to Pinky.
-  3. Deep Thought's zero-latency preamble streaming capability at $t=0$ was bypassed during intent triage.
+### 🚨 **The Inversion Discovery & Sprint 51/52 Forensics**
+A forensic search across the sprint archives revealed that the formal **5-Stage Division of Labor Inversion** was documented in **Sprint 51 and Sprint 52** ([`SPRINT_51_EXECUTION_LEDGER.md:L115-159`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/SPRINT_51_EXECUTION_LEDGER.md#L115-L159) and [`SPRINT_PLAN_SPR_52_0.md:L22-30`](file:///home/jallred/Dev_Lab/Portfolio_Dev/SPRINT_PLAN_SPR_52_0.md#L22-L30)):
+
+* **Sprint 46–48 Baseline**: Deep Thought generated HyDE vectors sequentially inside `cognitive_hub.py`, missing Pinky's fine-tuned LoRA domain weights.
+* **Sprint 51 Execution Ledger**: Formally reshuffled the pipeline into the **5-Stage Waterfall**:
+  1. **Stage 1 (Deep Thought on Kender 4090 / $t=0$)**: Zero-Latency Preamble & Intent Triage (*"Narf! Checking validation logs..."*).
+  2. **Stage 2 (Pinky vLLM + LoRA)**: Pinky generates the 3-Part HyDE hypothetical document (`[VALIDATION]`, `[STRATEGY]`, `[SRE]`) using her fine-tuned `cli_voice_v1` LoRA weights.
+  3. **Stage 3 (Brain Node)**: ChromaDB vector retrieval & short technical answer.
+  4. **Stage 4 (Deep Thought)**: Strategic Synthesis if `importance >= 0.7`.
+  5. **Stage 5 (Pinky Out-Loud & Drainer)**: Final vibe review & Waterfall Drainer Pop delivery.
 
 ---
 
 ### 🔄 **The Inversion Mandate: Restoring the True Division of Labor**
-In Sprint 54, we formally invert the pipeline roles to align with model strengths and hardware topology:
+In Sprint 54, we implement and certify this exact 5-stage architecture in code (`cognitive_hub.py` and `router.py`):
 
 ```
 [User Query]
