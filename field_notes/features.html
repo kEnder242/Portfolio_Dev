@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feature DNA | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=fece60dc">
+    <link rel="stylesheet" href="style.css?v=d3efbf46">
     <style>
         /* Console-Dense Table Styling */
         .ledger-table {
@@ -7156,35 +7156,42 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    3-Tier HyDE Failover Cascade & Vector Plumbing
+                                    3-Tier HyDE Failover Cascade & Dynamic Feedback Loop
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Commit <code>37a1f59</code>)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Establishes a 3-tier HyDE failover cascade for ChromaDB vector search (<code>archive_node.py</code> &amp; <code>cognitive_hub.py</code>):
-  1. <code>DEEP_THOUGHT_REMOTE</code>: High-precision HyDE vector synthesized on KENDER 4090.
-  2. <code>PINKY_LOCAL_VLLM</code>: Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Deep Thought is offline (<code>OLLAMA: None</code>).
-  3. <code>DIRECT_RAW_QUERY</code>: Direct raw query vector fallback.
-  Vector queries pass <code>query_texts=[hyde_vector_text]</code> directly to <code>chroma-server.service</code> on port 8001 (<code>LAB-007</code>) to ensure 100% embedding space alignment.</p>
+                    <p>Augments the 3-tier HyDE failover cascade for ChromaDB KB vector search (<code>archive_node.py</code> &amp; <code>cognitive_hub.py</code>):
+  1. <code>DEEP_THOUGHT_REMOTE</code> (Tier 1): High-precision HyDE vector synthesized on KENDER 4090 based on the 4-Domain HyDE Map Contract.
+  2. <code>PINKY_LOCAL_VLLM</code> (Tier 2): Local vLLM Llama 3.2 3B AWQ backup HyDE generator when Kender is offline.
+  3. <code>DIRECT_RAW_QUERY</code> / <code>NON_MATCH_BYPASS</code> (Tier 3): Zero-dependency raw query fallback floor.
+  BKM-015 Compliance &amp; Dynamic Loop: Zero hardcoded keyword arrays or pre-baked HyDE lists. Reads the dynamic keyword mesh directly from <code>data/career_compass.json</code> (populated by <code>mass_scan.py</code> FEAT-438), closing the feedback loop between the 18-year archive scanner and HyDE vector synthesis. If the judge/triage determines a query does not match the 4 KB domains (e.g. casual turn), HyDE synthesis evaluates to empty <code>""</code>, bypassing ChromaDB retrieval without forcing a hallucinated vector.
+  Taxonomy: Distinguishes between <strong>KB</strong> (<code>artifact_vault</code>, <code>journal_kb</code>, <code>lab_journal</code> — distilled information and 18-year archive) and <strong>DNA</strong> (<code>behavioral_dna</code>, <code>feature_dna</code> — system building rules and SRE playbooks).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Guarantees uninterrupted high-precision vector retrieval even during remote node offline states.</p>
+                    <p>Guarantees uninterrupted high-precision KB vector retrieval across remote/local nodes while upholding BKM-015 judge-driven clean exits for casual turns and dynamic prompt learning.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>resolve_hyde_vector</code> 3-tier cascade, <code>hyde_vector_text</code> parameter in <code>archive_node.get_context</code>, and <code>test_hyde_plumbing.py</code>.</p>
+                    <p><code>resolve_hyde_vector</code> 3-tier cascade, <code>_load_hyde_synthesis_prompt</code> dynamic loader from <code>career_compass.json</code>, <code>hyde_vector_text</code> parameter in <code>archive_node.get_context</code>, and <code>test_feat437_resolve_hyde_vector.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-live">ACTIVE</span>
+                            <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-438">
@@ -7198,7 +7205,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Integrates <code>synthesize_career_mesh()</code> into the background scanner pipeline (<code>mass_scan.py</code>). Step 6 TLC scans raw note gems and <code>resume.txt</code> to continuously enrich <code>data/career_compass.json</code> Tier 2 Keyword Mesh without modifying Tier 1 Bedrock.</p>
+                    <p>Integrates <code>synthesize_career_mesh()</code> into the background scanner pipeline (<code>mass_scan.py</code>). Step 6 TLC scans raw note gems and <code>resume.txt</code> to continuously enrich <code>data/career_compass.json</code> Tier 2 Keyword Mesh without modifying Tier 1 Bedrock. Feeds directly into FEAT-437 HyDE prompt synthesis.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -7216,7 +7223,7 @@
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-live">ACTIVE</span>
+                            <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-439">
@@ -7715,33 +7722,142 @@
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 50 Story 9)</p>
-                </div>
-            </div>
-            <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Configures <code>earlyoom</code> with an executive notification hook (<code>earlyoom_pager_notifier.sh</code>) that writes structured <code>CRITICAL</code> telemetry events to <code>field_notes/data/pager_activity.json</code> whenever an OOM termination occurs.</p>
+                    <p>Configures <code>opencode.socket</code> (<code>0.0.0.0:4096</code>) and <code>opencode-proxy.service</code> with <code>TriggerLimitIntervalSec=0</code> and <code>--exit-idle-time=45m</code>.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Captures the exact "WHY" behind every OOM kill (killed PID, process command, RAM/swap free percentages, and OOM score) for real-time visibility on <code>pager.html</code> and <code>status.html</code> without dropping SSH connections.</p>
+                    <p>Allows OpenCode REST engine to scale down to zero when idle (0% CPU/DRAM), automatically waking up in 200ms when <code>delegate.py</code> or a browser touches port 4096.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>earlyoom_pager_notifier.sh</code> script, <code>earlyoom</code> SystemD drop-in environment hook, and <code>pager_activity.json</code> event log.</p>
+                    <p><code>~/.config/systemd/user/opencode.socket</code>, <code>opencode-proxy.service</code>, and <code>delegate.py wake_web_ui()</code>.</p>
+<hr />
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-stable">PROPOSED</span>
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-437">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-437</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Pinky LoRA HyDE Inversion & Dynamic Domain Mapping
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Inverts <code>resolve_hyde_vector()</code> so Pinky's local vLLM pass (holding fine-tuned <code>cli_voice_v1</code> LoRA weights) acts as Tier 1 HyDE generator, with Kender <code>deep_think</code> as Tier 2 fallback. Moves synthesis prompts and 4-domain terms into <code>HomeLabAI/src/data/hyde_domain_map.json</code> loaded dynamically at startup.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Restores true division of labor: Pinky holds the 18-year archive weights needed for high-precision HyDE synthesis, while Deep Thought handles $t=0$ Preamble in <code>router.py</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>resolve_hyde_vector()</code> in <code>cognitive_hub.py</code>, <code>hyde_domain_map.json</code>, and <code>test_feat437_resolve_hyde_vector.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-456">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-456</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Real VRAM Probing & Gauntlet Path Repair
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces dummy VRAM stub in <code>nightly_forge.py</code> with real <code>nvidia-smi</code> CSV queries (<code>memory.total</code>). Fixes <code>run_live_lab_gauntlet.sh</code> test invocation path to point to <code>../debug/test_live_fire_triage.py</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides accurate VRAM reporting in MB and restores 100% test gauntlet execution.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>get_vram_usage()</code> in <code>nightly_forge.py</code> and <code>run_live_lab_gauntlet.sh</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-457">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-457</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    FeatureTracker Alignment & Submodule Synchronization
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Synchronizes git submodule pointers between <code>Dev_Lab</code>, <code>Portfolio_Dev</code>, and <code>HomeLabAI</code>. Updates FeatureTracker DNA matrices across ChromaDB vector database (<code>feature_dna</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Maintains 100% git and vector database synchronization across the federated workspace.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>FeatureTracker.md</code>, <code>git submodule update</code>, and <code>sync_feature_dna.py</code> git hooks.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
                     </tbody>

@@ -1649,3 +1649,23 @@
 **Logic:** Configures `opencode.socket` (`0.0.0.0:4096`) and `opencode-proxy.service` with `TriggerLimitIntervalSec=0` and `--exit-idle-time=45m`.
 **Rationale:** Allows OpenCode REST engine to scale down to zero when idle (0% CPU/DRAM), automatically waking up in 200ms when `delegate.py` or a browser touches port 4096.
 **Mechanism:** `~/.config/systemd/user/opencode.socket`, `opencode-proxy.service`, and `delegate.py wake_web_ui()`.
+
+---
+
+## [FEAT-437] Pinky LoRA HyDE Inversion & Dynamic Domain Mapping
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Inverts `resolve_hyde_vector()` so Pinky's local vLLM pass (holding fine-tuned `cli_voice_v1` LoRA weights) acts as Tier 1 HyDE generator, with Kender `deep_think` as Tier 2 fallback. Moves synthesis prompts and 4-domain terms into `HomeLabAI/src/data/hyde_domain_map.json` loaded dynamically at startup.
+**Rationale:** Restores true division of labor: Pinky holds the 18-year archive weights needed for high-precision HyDE synthesis, while Deep Thought handles $t=0$ Preamble in `router.py`.
+**Mechanism:** `resolve_hyde_vector()` in `cognitive_hub.py`, `hyde_domain_map.json`, and `test_feat437_resolve_hyde_vector.py`.
+
+## [FEAT-456] Real VRAM Probing & Gauntlet Path Repair
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Replaces dummy VRAM stub in `nightly_forge.py` with real `nvidia-smi` CSV queries (`memory.total`). Fixes `run_live_lab_gauntlet.sh` test invocation path to point to `../debug/test_live_fire_triage.py`.
+**Rationale:** Provides accurate VRAM reporting in MB and restores 100% test gauntlet execution.
+**Mechanism:** `get_vram_usage()` in `nightly_forge.py` and `run_live_lab_gauntlet.sh`.
+
+## [FEAT-457] FeatureTracker Alignment & Submodule Synchronization
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Synchronizes git submodule pointers between `Dev_Lab`, `Portfolio_Dev`, and `HomeLabAI`. Updates FeatureTracker DNA matrices across ChromaDB vector database (`feature_dna`).
+**Rationale:** Maintains 100% git and vector database synchronization across the federated workspace.
+**Mechanism:** `FeatureTracker.md`, `git submodule update`, and `sync_feature_dna.py` git hooks.
