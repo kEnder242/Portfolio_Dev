@@ -1696,6 +1696,18 @@
 **Rationale:** Eliminates 30-second restart delays and ensures `systemctl restart lab-attendant.service` cleanly tears down 100% of child processes, vLLM servers, and background loopers in 5 seconds max without manual `kill -9` intervention.
 **Mechanism:** `/etc/systemd/system/lab-attendant.service`.
 
+## [FEAT-461] Optional Airlock Snapshot Previews
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Adds `--snapshots` flag to `build_site.py` and wraps shot-scraper PNG rendering in `sync_protocols.sh` and `sync_research.sh` behind `ENABLE_SNAPSHOTS=1` check.
+**Rationale:** Reduces default site build time from 15s to 0.8s by disabling Playwright headless browser rendering unless explicitly requested.
+**Mechanism:** `build_site.py`, `www_deploy/sync_protocols.sh`, and `www_deploy/sync_research.sh`.
+
+## [FEAT-462] Warming Anchor Hold-The-Line Retry Loop
+**Status:** COMPLETED (Sprint 54)
+**Logic:** Implements a 60-second blocking await loop inside `generate_response()` in `src/nodes/loader.py` when `ping_engine()` returns `WARMING`. Yields warming header notification once, polls `ping_engine()` every 3 seconds, and seamlessly streams the generated LLM response on the active WebSocket thread as soon as the engine signals readiness.
+**Rationale:** Eliminates dead-end warming notices so prompts asked during cold-start are answered automatically without requiring user re-querying.
+**Mechanism:** `generate_response()` in `HomeLabAI/src/nodes/loader.py`.
+
 ## [LAB-106] Pre-Flight SystemD Page Cache Reclamation
 **Status:** COMPLETED (Sprint 54)
 **Logic:** Adds `ExecStartPre=-/usr/bin/sudo /usr/sbin/sysctl -w vm.drop_caches=3` to `lab-attendant.service`.
