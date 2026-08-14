@@ -59,6 +59,23 @@ To support OpenRouter model routing without exposing secret keys in git reposito
 
 ---
 
-## 🛠️ **3. Sprint 54 Implementation Stories (Draft / Contextual Stage)**
+## 🏛️ **4. Core Architectural Patterns Incorporated from Backlog Audit**
 
-*(Implementation story details and test specs will be added after final narrative alignment)*
+From our audit of the previous overwrite (Task 53.7/53.8 in `SPRINT_PLAN_SPR_52_0.md`), we are explicitly incorporating the following **high-value design patterns** into Sprint 54:
+
+1. **3-Tier Memory Topography**:
+   - **Layer 1 (Bedrock Tier)**: Star artifacts + `career_compass.json` Tier 1 Anchor Map (<300 tokens) loaded directly into system prompt context.
+   - **Layer 2 (Archive Tier / KB)**: ChromaDB vector collections (`artifact_vault`, `journal_kb`, `lab_journal`). Targeted by Pinky's LoRA-grounded HyDE vectors.
+   - **Layer 3 (Raw Telemetry Tier)**: Real-time hardware telemetry (`nvidia-smi` / DCGM GPU metrics, RAPL power caps) + raw notes in `~/knowledge_base`.
+
+2. **BKM-015 Compliance (Judge-Driven Casual Exit)**:
+   - Zero hardcoded keyword arrays or regex pre-baked HyDE bypass lists.
+   - HyDE synthesis is judge-driven: if a query does not match the 4 KB domains (e.g. casual turn `"hi"`), HyDE synthesis naturally evaluates to empty `""`, letting the ChromaDB query exit cleanly without forcing a hallucinated vector.
+
+3. **Dynamic HyDE Prompt Loading (`data/hyde_domain_map.json`)**:
+   - Extract hardcoded prompt text in `HYDE_SYNTHESIS_PROMPT` out of Python inline code into `HomeLabAI/src/data/hyde_domain_map.json`.
+   - `cognitive_hub.py` loads `hyde_domain_map.json` dynamically at startup with non-fatal fallback.
+
+4. **Real VRAM Probing & Gauntlet Repair (`[FEAT-456]`)**:
+   - Integrate `pynvml` / `nvidia-smi` VRAM probing into `nightly_forge.py` and repair `run_live_lab_gauntlet.sh` verifier paths.
+
