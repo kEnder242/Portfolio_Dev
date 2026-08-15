@@ -204,3 +204,50 @@ We audited the entire Sprint 54 plan against your overarching intent:
 *   **Attempt 1 (Story 54.1 on M5-Air)**: Hung on LM Studio context allocation (`262K`). Process killed after 340s timeout; completed AGY Direct.
 *   **Attempt 2 (Story 54.2 on M5-Air)**: Returned `APIError: Prompt context exceeded`. Switched provider to OpenRouter; completed in 28s.
 *   **Attempt 3 (Story 54.3 on OpenRouter)**: Dispatched cleanly via OpenRouter Nemotron-3.5; completed in 150.8s with full `nvidia-smi` implementation.
+
+---
+
+## 📜 **8. Post-Execution Log — FEAT-028 Deep Thought Regression Fix (2026-08-14)**
+
+> **Recorded by:** Sisyphus (orchestrator) — appended post-deployment per user request.
+> **Commit:** `549aecd` — `fix(foyer): restore Deep Thought ping->API health check and gate HyDE routing on lab state`
+
+### 🚨 **The Regression Found — A FEAT Ignored During the V4→V5 Refactor**
+
+During Sprint 54 execution, a production incident surfaced: the lab was **hammering the remote Deep Thought node (KENDER, 192.168.1.26:11434) with a request every ~7–8 seconds while HIBERNATING**.
+
+**Root Cause Chain:**
+1. `get_vram_status()` returns `self.status.vocal` — which is `false` during HIBERNATING.
+2. `cognitive_hub.py` used `if not self.get_vram_status():` as the *only* gate for routing every query to remote Deep Thought for HyDE synthesis (the "Brain Early-Reply" path).
+3. Result: while hibernating, **every turn triggered a remote generation call** — exactly the traffic the lab should produce **zero** of during hibernation.
+
+**The Deeper Cause (refactor scar):** The original ping→API health check — `resolve_thought_url()` + `check_thought_health()` — **was deleted in commit `ca31a51` during the V4→V5 promotion** (Sprint 31). A later commit (`cd48b9b`) then *re-wired the routing trigger to `not get_vram_status()`*, coupling "should I call Deep Thought" to a **VRAM/vocal state flag instead of a reachability probe**. The deletion of the health check + the re-wiring of the trigger together recreated the exact hammering behavior FEAT-028 was built to prevent — a classic "FEAT ignored in refactor" regression: the feature survived in documentation and routing logic, but its protective probe layer was silently dropped.
+
+### 🛠️ **The Fix (3 Files, +297/−30)**
+
+**`src/v5/foyer/router.py`** (+233) — restored and V5-adapted the deleted health machinery:
+- `resolve_thought_url()` — config-driven target resolution from `config/infrastructure.json` (`nodes.thought.primary` → `http://192.168.1.26:11434/api/tags`); **no hardcoded machine name** (per user directive: "we can call it deep thought" — do not hardcode KENDER).
+- `is_deep_thought_reachable()` — Tier 1 probe: TCP socket ping → GET `/api/tags` (2s timeout) → 200 + non-empty model list; BKM-026 60s failure penalty box (`_last_thought_fail`).
+- `check_thought_health()` — [FEAT-028/FEAT-265.31] state-aware probe: **Sovereignty Gate** (aborts during `BOOTING`/`INIT`/`HIBERNATING`) → Tier 1 API check → Tier 2 Heavy Prime (1-token `/api/generate` generation probe = the FEAT-028 "Mind alive" check), gated by FEAT-134 AFK presence, FEAT-285 120s cooldown, FEAT-286.2 single-in-flight latch.
+- `thought_health_loop()` — 20s periodic probe, registered in `on_startup`.
+
+**`src/logic/cognitive_hub.py`** (+71/−26) — the routing gate correction:
+- Brain Early-Reply now gated on `lab_state != "HIBERNATING"` **AND** an awaited `is_deep_thought_reachable()` probe; unreachable → fall back to local triage.
+- HIBERNATING → explicit "zero remote traffic" skip (no wait loop).
+- `_prime_first_try()` also hibernation-gated (no remote quip traffic while dormant).
+
+**`src/v5/ignition/manager.py`** (+11/−12) — **Interleaved System Logs fix** (separate user directive):
+- Removed the filter that suppressed `python3` / `acme_foyer` / `acme_ignition` lines from `journal_monitor`.
+- **Why**: "Interleaved system logs are supposed to show what the lab is doing, not filter them out." The lab's own activity was being hidden from the UI log stream.
+
+### ✅ **Verification & Deployment**
+- `py_compile` clean on all 3 files; import smoke test: `resolve_thought_url()` → `http://192.168.1.26:11434/api/tags`; live probe against KENDER: socket ping OK, `/api/tags` 200, `llama3.1:8b` present (preferred Heavy Prime probe model).
+- Committed as `549aecd`; deployed via `sudo systemctl restart lab-attendant.service`.
+- Post-deploy: `127.0.0.1:8765/health` → `{"status": "ONLINE", "version": "5.0.0-foyer"}`; boot commit `549aecd`; log shows `[HEALTH] Deep Thought health loop active.`
+- **Live gate confirmation**: lab was HIBERNATING at deploy time → sovereignty gate suppressed all probes (debug-level abort) → **zero remote traffic**, the exact intended behavior.
+
+### 🧭 **The Scars (What to Avoid)**
+1. **Never re-trigger remote routing off a VRAM/vocal flag.** Reachability is a *socket/API question*, not a memory-pressure question. When deleting a health-check function, grep for all trigger sites before removing it.
+2. **A feature documented ≠ a feature present.** FEAT-028 survived in the sprint narrative while its probe layer was deleted in a refactor. Cross-reference FeatureTracker against live code when promoting major versions (V4→V5).
+3. **Hibernation must mean zero egress.** "When we're hibernating we shouldn't be generating traffic" — any remote-generation path needs an explicit state gate, not an implicit vocal-state coincidence.
+4. **Do not hardcode remote node names** — resolve from `infrastructure.json` (nodes → hosts) so node identity stays configuration data.
