@@ -851,17 +851,17 @@
             const hostname = window.location.hostname;
             const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
             
-            // [FEAT-463] Cloudflare Zero Trust HTTPS-safe endpoint:
-            // When accessed via https://notes.jason-lab.dev, POSTing to http://127.0.0.1:8765 is blocked by browsers as Mixed Content.
-            // Route HTTPS requests to https://acme.jason-lab.dev/${action} (same zero-trust tunnel) and local to http://127.0.0.1:8765.
-            let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `https://acme.jason-lab.dev/${action}`;
+            // [FEAT-463] Same-Origin Tunnel Routing:
+            // When accessed via https://notes.jason-lab.dev, use same-origin /attendant/${action} which Cloudflare Tunnel
+            // proxies directly to localhost:8765. Same-origin requests bypass CORS preflights and Mixed-Content blocks.
+            let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `${window.location.origin}/attendant/${action}`;
             let fallbackUrl = `https://acme.jason-lab.dev/${action}`;
             
             // Remove confirmation for benign 'wake' action
             if (action !== 'wake' && !confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
             const key = currentLabKey || currentLabSession || "unknown";
-            logToConsole(`[REMOTE] Sending ${action.toUpperCase()} signal...`, 'var(--accent-color)');
+            logToConsole(`[REMOTE] Sending ${action.toUpperCase()} signal to ${primaryUrl}...`, 'var(--accent-color)');
 
             const sendRequest = async (targetUrl) => {
                 const response = await fetch(targetUrl, { 
@@ -876,7 +876,7 @@
                 let result = {};
                 try { if (text) result = JSON.parse(text); } catch (e) {}
                 if (!response.ok) {
-                    throw new Error(result.message || result.error || `Status ${response.status}`);
+                    throw new Error(`HTTP ${response.status} (${response.statusText || 'Error'}): ${result.message || result.error || text.substring(0,60)}`);
                 }
                 return result;
             };
@@ -886,13 +886,16 @@
                 logToConsole(`[ATTENDANT] ${result.message || 'Signal Acknowledged'}`, '#28a745');
                 setTimeout(pollStatus, 2000);
             } catch (primaryErr) {
+                logToConsole(`[TELEMETRY] Primary endpoint ${primaryUrl} failed: ${primaryErr.message}`, '#ffc107');
                 // Try fallback URL if primary call failed
                 try {
+                    logToConsole(`[REMOTE] Trying fallback endpoint ${fallbackUrl}...`, 'var(--accent-color)');
                     let result = await sendRequest(fallbackUrl);
                     logToConsole(`[ATTENDANT-TUNNEL] ${result.message || 'Signal Acknowledged'}`, '#28a745');
                     setTimeout(pollStatus, 2000);
                 } catch (fallbackErr) {
-                    logToConsole(`[ERROR] Remote Control failed (${action}): ${primaryErr.message}`, '#f85149');
+                    logToConsole(`[ERROR DIAGNOSTIC] Origin: ${window.location.origin} | Target: ${primaryUrl} | Key: ${key}`, '#f85149');
+                    logToConsole(`[ERROR] Remote Control failed (${action}): ${fallbackErr.message}`, '#f85149');
                 }
             }
         }
