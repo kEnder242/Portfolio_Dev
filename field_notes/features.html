@@ -8145,12 +8145,12 @@
                             <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
-                    <tr id="FEAT-465">
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-465</td>
+                    <tr id="FEAT-466">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-466</td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Sprint 56 DNA & Telemetry Realignment
+                                    Crosstalk Bar Orchestrator Error Telemetry
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -8162,13 +8162,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Records FEAT-463, FEAT-464, FEAT-465, and updated FEAT-459 scope in <code>FeatureTracker.md</code> and triggers auto-sync to ChromaDB <code>feature_dna</code> collection.</p>
+                    <p>Catches unhandled Python exceptions in <code>_spawn_deep_thought_preamble()</code> and <code>run_division_of_labor()</code> in <code>router.py</code>, and immediately broadcasts a <code>type: crosstalk</code> WebSocket error frame to the UI.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Maintains 100% DNA alignment across vector search collections.</p>
+                    <p>Eliminates silent UI stalls by rendering backend stage/orchestrator exceptions directly in the Crosstalk Bar log container in real-time.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
