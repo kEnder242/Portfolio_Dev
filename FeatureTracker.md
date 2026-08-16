@@ -1734,8 +1734,9 @@
 **Rationale:** Aligns vitals grid with V5 architecture state machine and removes redundant telemetry cards.
 **Mechanism:** `Portfolio_Dev/field_notes/status.html`.
 
-## [FEAT-465] Sprint 56 DNA & Telemetry Realignment
+## [FEAT-466] Crosstalk Bar Orchestrator Error Telemetry
 **Status:** COMPLETED (Sprint 56)
-**Logic:** Records FEAT-463, FEAT-464, FEAT-465, and updated FEAT-459 scope in `FeatureTracker.md` and triggers auto-sync to ChromaDB `feature_dna` collection.
-**Rationale:** Maintains 100% DNA alignment across vector search collections.
+**Logic:** Catches unhandled Python exceptions in `_spawn_deep_thought_preamble()` and `run_division_of_labor()` in `router.py`, and immediately broadcasts a `type: crosstalk` WebSocket error frame to the UI.
+**Rationale:** Eliminates silent UI stalls by rendering backend stage/orchestrator exceptions directly in the Crosstalk Bar log container in real-time.
+**Mechanism:** `_spawn_deep_thought_preamble()` and `run_division_of_labor()` in `HomeLabAI/src/v5/foyer/router.py`.
 **Mechanism:** `Portfolio_Dev/FeatureTracker.md`.
