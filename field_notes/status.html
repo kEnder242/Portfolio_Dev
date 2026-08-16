@@ -851,8 +851,10 @@
             const hostname = window.location.hostname;
             const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
             
-            // [FEAT-463] Direct local Foyer binding: default to port 8765 loopback or host LAN IP
-            let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `http://127.0.0.1:8765/${action}`;
+            // [FEAT-463] Cloudflare Zero Trust HTTPS-safe endpoint:
+            // When accessed via https://notes.jason-lab.dev, POSTing to http://127.0.0.1:8765 is blocked by browsers as Mixed Content.
+            // Route HTTPS requests to https://acme.jason-lab.dev/${action} (same zero-trust tunnel) and local to http://127.0.0.1:8765.
+            let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `https://acme.jason-lab.dev/${action}`;
             let fallbackUrl = `https://pager.jason-lab.dev/${action}`;
             
             // Remove confirmation for benign 'wake' action
@@ -864,8 +866,6 @@
             const sendRequest = async (targetUrl) => {
                 const response = await fetch(targetUrl, { 
                     method: 'POST',
-                    mode: 'cors',
-                    credentials: 'omit',
                     headers: { 
                         'X-Lab-Key': key,
                         'Content-Type': 'application/json'
@@ -886,7 +886,7 @@
                 logToConsole(`[ATTENDANT] ${result.message || 'Signal Acknowledged'}`, '#28a745');
                 setTimeout(pollStatus, 2000);
             } catch (primaryErr) {
-                // Try fallback URL if primary local call failed
+                // Try fallback URL if primary call failed
                 try {
                     let result = await sendRequest(fallbackUrl);
                     logToConsole(`[ATTENDANT-TUNNEL] ${result.message || 'Signal Acknowledged'}`, '#28a745');
