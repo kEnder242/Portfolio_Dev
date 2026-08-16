@@ -5750,19 +5750,37 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Neural Buffer
+                                    Neural Buffer & Pre-Wake Prompt Replay
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 56)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Message queuing during hibernation/restoration cycles.</p>
+                    <p>Caches pre-wake user prompts (e.g., initial cold-boot greetings like "hi") received while logical resident nodes are igniting (<code>not self.residents.booted</code>). Holds the intent in <code>_dispatch_buffered_intent</code> while broadcasting <code>SYNCING</code> state, and automatically replays the prompt into the 5-Stage Division of Labor pipeline as soon as physical silicon and logical nodes finish booting.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees that first-turn prompts asked during cold-start are answered automatically without requiring user re-querying or dropping frames.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>queue_drainer()</code> in <code>HomeLabAI/src/v5/foyer/router.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-stable">PLANNED</span>
+                            <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-284">
