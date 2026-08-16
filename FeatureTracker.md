@@ -1678,11 +1678,11 @@
 **Rationale:** Prevents silent persona demotion and guarantees OpenAgent swarm orchestrator identity integrity.
 **Mechanism:** `src/tests/delegate.py`, `~/.config/opencode/oh-my-openagent.json`, and `BKM-034` in `Protocols.md`.
 
-## [FEAT-459] Deep Thought Preamble Insight Routing & Persona Partitioning
-**Status:** COMPLETED (Sprint 54)
-**Logic:** Routes Deep Thought's $t=0$ preamble triage logs (`_spawn_deep_thought_preamble`) to `type: "chat"` and `channel: "insight"` so they render directly inside Brain's Insight window. Enforces strict persona partitioning: Deep Thought emits analytical readiness reflections while Pinky retains character tics (`Narf!`, `Poit!`) on the chat channel.
-**Rationale:** Eliminates persona bleed and fixes web UI window routing.
-**Mechanism:** `_spawn_deep_thought_preamble` in `HomeLabAI/src/v5/foyer/router.py`.
+## [FEAT-459] Deep Thought Unified Preamble & Dynamic LLM Greeting Fusion
+**Status:** UPDATED (Sprint 56)
+**Logic:** Fuses $t=0$ HyDE vector synthesis and casual greeting preambles into a single LLM-generated JSON pass from Deep Thought on KENDER (`_spawn_deep_thought_preamble`). Replaces Python regex domain keyword checks and static `casual_reflections` string arrays, fully restoring **BKM-015** compliance ("No hardcoded string lists"). If the query is casual, Deep Thought sets `"is_casual": true` and dynamically generates a 1-sentence analytical greeting; if technical, it outputs `"is_casual": false` alongside the 3-part Composite HyDE vector. Routes preambles to `channel: "insight"` for persona partitioning.
+**Rationale:** Restores BKM-015 compliance, eliminates persona bleed, and provides dynamic LLM preamble responses without adding extra inference passes.
+**Mechanism:** `_spawn_deep_thought_preamble` in `HomeLabAI/src/v5/foyer/router.py` & `_HYDE_SYNTHESIS_PROMPT` in `HomeLabAI/src/logic/cognitive_hub.py`.
 
 ## [FEAT-460] Build Trailer Render Process Cleanup Trap
 **Status:** COMPLETED (Sprint 54)
@@ -1720,3 +1720,20 @@
 **Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
 **Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
 
+## [FEAT-463] Remote Lab Control Direct Endpoint Binding & Failure Fallback
+**Status:** COMPLETED (Sprint 56)
+**Logic:** Replaces domain-guessing fetch URLs in `triggerLabAction()` with direct loopback binding (`http://127.0.0.1:8765/${action}` with `mode: 'cors'`) and automatic fallback to `https://pager.jason-lab.dev/${action}` on network timeout.
+**Rationale:** Prevents Mixed Content (HTTP vs HTTPS) security blocks and CORS NetworkErrors when executing remote lab actions from static web pages.
+**Mechanism:** `triggerLabAction()` in `Portfolio_Dev/field_notes/status.html`.
+
+## [FEAT-464] Live Vitals Telemetry Grid Modernization
+**Status:** COMPLETED (Sprint 56)
+**Logic:** Removes obsolete 0.0% VRAM and System RAM cards from `status.html`, renames `Silicon Mode` to `Bicameral State` (`OPERATIONAL`, `HIBERNATING`, `WARMING`), defaults `Active Model` to `Llama-3.2-3B-AWQ`, and sets default `Web Intercom` status to `HIBERNATING`.
+**Rationale:** Aligns vitals grid with V5 architecture state machine and removes redundant telemetry cards.
+**Mechanism:** `Portfolio_Dev/field_notes/status.html`.
+
+## [FEAT-465] Sprint 56 DNA & Telemetry Realignment
+**Status:** COMPLETED (Sprint 56)
+**Logic:** Records FEAT-463, FEAT-464, FEAT-465, and updated FEAT-459 scope in `FeatureTracker.md` and triggers auto-sync to ChromaDB `feature_dna` collection.
+**Rationale:** Maintains 100% DNA alignment across vector search collections.
+**Mechanism:** `Portfolio_Dev/FeatureTracker.md`.
