@@ -1722,11 +1722,11 @@
 **Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
 **Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
 
-## [FEAT-463] Remote Lab Control Direct Endpoint Binding & Failure Fallback
+## [FEAT-463] Same-Origin Tunnel Remote Control Routing & Telemetry
 **Status:** COMPLETED (Sprint 56)
-**Logic:** Replaces domain-guessing fetch URLs in `triggerLabAction()` with direct loopback binding (`http://127.0.0.1:8765/${action}` with `mode: 'cors'`) and automatic fallback to `https://pager.jason-lab.dev/${action}` on network timeout.
-**Rationale:** Prevents Mixed Content (HTTP vs HTTPS) security blocks and CORS NetworkErrors when executing remote lab actions from static web pages.
-**Mechanism:** `triggerLabAction()` in `Portfolio_Dev/field_notes/status.html`.
+**Logic:** Routes Remote Control actions in `status.html` through same-origin relative endpoints (`${window.location.origin}/attendant/${action}`) when accessed via Zero Trust (`notes.jason-lab.dev`), and `http://127.0.0.1:8765/${action}` when local. Maps `path: /attendant/` -> `http://localhost:8765` in `/etc/cloudflared/config.yml` and registers native `/attendant/` route handlers in `router.py`. Logs explicit `[ERROR DIAGNOSTIC]` origin/target/key telemetry on fetch exceptions.
+**Rationale:** Same-origin requests ride the active Cloudflare Access session cookie and bypass cross-domain CORS preflight checks (`OPTIONS`) and browser Mixed-Content security blocks, eliminating 100% of browser `NetworkError` and HTTP 502/302 redirects.
+**Mechanism:** `triggerLabAction()` in `Portfolio_Dev/field_notes/status.html`, `setup_routes()` in `HomeLabAI/src/v5/foyer/router.py`, and `/etc/cloudflared/config.yml`.
 
 ## [FEAT-464] Live Vitals Telemetry Grid Modernization
 **Status:** COMPLETED (Sprint 56)

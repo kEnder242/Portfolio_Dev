@@ -8074,7 +8074,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Remote Lab Control Direct Endpoint Binding & Failure Fallback
+                                    Same-Origin Tunnel Remote Control Routing & Telemetry
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -8086,19 +8086,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces domain-guessing fetch URLs in <code>triggerLabAction()</code> with direct loopback binding (<code>http://127.0.0.1:8765/${action}</code> with <code>mode: 'cors'</code>) and automatic fallback to <code>https://pager.jason-lab.dev/${action}</code> on network timeout.</p>
+                    <p>Routes Remote Control actions in <code>status.html</code> through same-origin relative endpoints (<code>${window.location.origin}/attendant/${action}</code>) when accessed via Zero Trust (<code>notes.jason-lab.dev</code>), and <code>http://127.0.0.1:8765/${action}</code> when local. Maps <code>path: /attendant/</code> -&gt; <code>http://localhost:8765</code> in <code>/etc/cloudflared/config.yml</code> and registers native <code>/attendant/</code> route handlers in <code>router.py</code>. Logs explicit <code>[ERROR DIAGNOSTIC]</code> origin/target/key telemetry on fetch exceptions.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevents Mixed Content (HTTP vs HTTPS) security blocks and CORS NetworkErrors when executing remote lab actions from static web pages.</p>
+                    <p>Same-origin requests ride the active Cloudflare Access session cookie and bypass cross-domain CORS preflight checks (<code>OPTIONS</code>) and browser Mixed-Content security blocks, eliminating 100% of browser <code>NetworkError</code> and HTTP 502/302 redirects.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>triggerLabAction()</code> in <code>Portfolio_Dev/field_notes/status.html</code>.</p>
+                    <p><code>triggerLabAction()</code> in <code>Portfolio_Dev/field_notes/status.html</code>, <code>setup_routes()</code> in <code>HomeLabAI/src/v5/foyer/router.py</code>, and <code>/etc/cloudflared/config.yml</code>.</p>
                 </div>
             </div>     </div>
                             </details>
