@@ -190,25 +190,17 @@
                     <div class="progress-container"><div class="progress-bar" id="burn-progress"></div></div>
                 </div>
                 <div class="vital-card">
-                    <div class="vital-label">Silicon Mode</div>
-                    <div class="vital-value" id="engine-mode"><span class="status-led led-offline"></span>OFFLINE</div>
-                    <div id="ignition-reason" style="font-size: 0.7em; color: #666; margin-top: 4px; font-family: monospace;">-</div>
+                    <div class="vital-label">Bicameral State</div>
+                    <div class="vital-value" id="engine-mode"><span class="status-led led-offline"></span>OPERATIONAL</div>
+                    <div id="ignition-reason" style="font-size: 0.7em; color: #666; margin-top: 4px; font-family: monospace;">[UNITY-3B]</div>
                 </div>
                 <div class="vital-card">
                     <div class="vital-label">Active Model</div>
-                    <div class="vital-value" id="model-name">-</div>
+                    <div class="vital-value" id="model-name">Llama-3.2-3B-AWQ</div>
                 </div>
                 <div class="vital-card">
                     <div class="vital-label">Web Intercom</div>
-                    <div class="vital-value" id="intercom-status"><span class="status-led led-offline"></span>OFFLINE</div>
-                </div>
-                <div class="vital-card">
-                    <div class="vital-label">VRAM Usage</div>
-                    <div class="vital-value" id="vram-status">0.0%</div>
-                </div>
-                <div class="vital-card">
-                    <div class="vital-label">System RAM</div>
-                    <div class="vital-value" id="ram-status">0.0%</div>
+                    <div class="vital-value" id="intercom-status"><span class="status-led led-yielded"></span>HIBERNATING</div>
                 </div>
                 <div class="vital-card" id="job-hunt-card" style="display:none; border-left-color: #ffc107;">
                     <div class="vital-label">Recruiter Brief</div>
@@ -858,47 +850,50 @@
         async function triggerLabAction(action) {
             const hostname = window.location.hostname;
             const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
-            // [FIX] Route to local Foyer port 8765 on LAN/IP or fallback to pager tunnel when remote
-            const url = isLocal ? `http://${hostname}:8765/${action}` : `https://pager.jason-lab.dev/${action}`;
             
-            // [FIX] Remove confirmation for benign 'wake' action
+            // [FEAT-463] Direct local Foyer binding: default to port 8765 loopback or host LAN IP
+            let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `http://127.0.0.1:8765/${action}`;
+            let fallbackUrl = `https://pager.jason-lab.dev/${action}`;
+            
+            // Remove confirmation for benign 'wake' action
             if (action !== 'wake' && !confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
 
-            // [SECURITY] Use discovered key from pollStatus instead of scraping DOM
             const key = currentLabKey || currentLabSession || "unknown";
-
             logToConsole(`[REMOTE] Sending ${action.toUpperCase()} signal...`, 'var(--accent-color)');
 
-            try {
-                const response = await fetch(url, { 
+            const sendRequest = async (targetUrl) => {
+                const response = await fetch(targetUrl, { 
                     method: 'POST',
+                    mode: 'cors',
+                    credentials: 'omit',
                     headers: { 
                         'X-Lab-Key': key,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({})
                 });
-
-                let result = {};
                 const text = await response.text();
-                try {
-                    if (text) result = JSON.parse(text);
-                } catch (e) {
-                    // [FEAT-267] Clean error display without consuming body twice
-                    const snippet = text ? text.substring(0, 60) : "Empty Response";
-                    throw new Error(`Invalid format (Status ${response.status}): ${snippet}...`);
-                }
-                
+                let result = {};
+                try { if (text) result = JSON.parse(text); } catch (e) {}
                 if (!response.ok) {
-                    throw new Error(result.message || result.error || `Server Error ${response.status}`);
+                    throw new Error(result.message || result.error || `Status ${response.status}`);
                 }
-                
+                return result;
+            };
+
+            try {
+                let result = await sendRequest(primaryUrl);
                 logToConsole(`[ATTENDANT] ${result.message || 'Signal Acknowledged'}`, '#28a745');
-                
-                // Refresh status immediately
                 setTimeout(pollStatus, 2000);
-            } catch (err) {
-                logToConsole(`[ERROR] Remote Control failed: ${err.message}`, '#f85149');
+            } catch (primaryErr) {
+                // Try fallback URL if primary local call failed
+                try {
+                    let result = await sendRequest(fallbackUrl);
+                    logToConsole(`[ATTENDANT-TUNNEL] ${result.message || 'Signal Acknowledged'}`, '#28a745');
+                    setTimeout(pollStatus, 2000);
+                } catch (fallbackErr) {
+                    logToConsole(`[ERROR] Remote Control failed (${action}): ${primaryErr.message}`, '#f85149');
+                }
             }
         }
 
