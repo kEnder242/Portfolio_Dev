@@ -7904,7 +7904,45 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Deep Thought Preamble Insight Routing & Persona Partitioning
+                                    Deep Thought Unified Preamble & Dynamic LLM Greeting Fusion
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 56)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Fuses $t=0$ HyDE vector synthesis and casual greeting preambles into a single LLM-generated JSON pass from Deep Thought on KENDER (<code>_spawn_deep_thought_preamble</code>). Replaces Python regex domain keyword checks and static <code>casual_reflections</code> string arrays, fully restoring <strong>BKM-015</strong> compliance ("No hardcoded string lists"). If the query is casual, Deep Thought sets <code>"is_casual": true</code> and dynamically generates a 1-sentence analytical greeting; if technical, it outputs <code>"is_casual": false</code> alongside the 3-part Composite HyDE vector. Routes preambles to <code>channel: "insight"</code> for persona partitioning.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Restores BKM-015 compliance, eliminates persona bleed, and provides dynamic LLM preamble responses without adding extra inference passes.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>_spawn_deep_thought_preamble</code> in <code>HomeLabAI/src/v5/foyer/router.py</code> &amp; <code>_HYDE_SYNTHESIS_PROMPT</code> in <code>HomeLabAI/src/logic/cognitive_hub.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">UPDATED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-460">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-460</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Build Trailer Render Process Cleanup Trap
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -7916,19 +7954,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Routes Deep Thought's $t=0$ preamble triage logs (<code>_spawn_deep_thought_preamble</code>) to <code>type: "chat"</code> and <code>channel: "insight"</code> so they render directly inside Brain's Insight window. Enforces strict persona partitioning: Deep Thought emits analytical readiness reflections while Pinky retains character tics (<code>Narf!</code>, <code>Poit!</code>) on the chat channel.</p>
+                    <p>Configures <code>KillMode=control-group</code> and <code>TimeoutStopSec=5</code> in <code>lab-attendant.service</code>.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Eliminates persona bleed and fixes web UI window routing.</p>
+                    <p>Eliminates 30-second restart delays and ensures <code>systemctl restart lab-attendant.service</code> cleanly tears down 100% of child processes, vLLM servers, and background loopers in 5 seconds max without manual <code>kill -9</code> intervention.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>_spawn_deep_thought_preamble</code> in <code>HomeLabAI/src/v5/foyer/router.py</code>.</p>
+                    <p><code>/etc/systemd/system/lab-attendant.service</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -7937,12 +7975,50 @@
                             <span class="impact-badge impact-stable">COMPLETED</span>
                         </td>
                     </tr>
-                    <tr id="FEAT-460">
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-460</td>
+                    <tr id="FEAT-461">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-461</td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <details class="feature-details">
                                 <summary>
-                                    Build Trailer Render Process Cleanup Trap
+                                    Optional Airlock Snapshot Previews
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 54)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Adds <code>--snapshots</code> flag to <code>build_site.py</code> and wraps shot-scraper PNG rendering in <code>sync_protocols.sh</code> and <code>sync_research.sh</code> behind <code>ENABLE_SNAPSHOTS=1</code> check.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Reduces default site build time from 15s to 0.8s by disabling Playwright headless browser rendering unless explicitly requested.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>build_site.py</code>, <code>www_deploy/sync_protocols.sh</code>, and <code>www_deploy/sync_research.sh</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-462">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-462</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Warming Anchor Hold-The-Line Retry Loop
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -7967,6 +8043,120 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>/etc/sysctl.d/99-lab-memory.conf</code> and <code>/etc/default/earlyoom</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-463">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-463</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Remote Lab Control Direct Endpoint Binding & Failure Fallback
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 56)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces domain-guessing fetch URLs in <code>triggerLabAction()</code> with direct loopback binding (<code>http://127.0.0.1:8765/${action}</code> with <code>mode: 'cors'</code>) and automatic fallback to <code>https://pager.jason-lab.dev/${action}</code> on network timeout.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents Mixed Content (HTTP vs HTTPS) security blocks and CORS NetworkErrors when executing remote lab actions from static web pages.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>triggerLabAction()</code> in <code>Portfolio_Dev/field_notes/status.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-464">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-464</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Live Vitals Telemetry Grid Modernization
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 56)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Removes obsolete 0.0% VRAM and System RAM cards from <code>status.html</code>, renames <code>Silicon Mode</code> to <code>Bicameral State</code> (<code>OPERATIONAL</code>, <code>HIBERNATING</code>, <code>WARMING</code>), defaults <code>Active Model</code> to <code>Llama-3.2-3B-AWQ</code>, and sets default <code>Web Intercom</code> status to <code>HIBERNATING</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Aligns vitals grid with V5 architecture state machine and removes redundant telemetry cards.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/status.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-465">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-465</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Sprint 56 DNA & Telemetry Realignment
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 56)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Records FEAT-463, FEAT-464, FEAT-465, and updated FEAT-459 scope in <code>FeatureTracker.md</code> and triggers auto-sync to ChromaDB <code>feature_dna</code> collection.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Maintains 100% DNA alignment across vector search collections.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/FeatureTracker.md</code>.</p>
                 </div>
             </div>     </div>
                             </details>
