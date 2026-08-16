@@ -350,7 +350,7 @@
 
             try {
                 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+                const attendantBase = isLocal ? 'http://localhost:8765' : 'https://acme.jason-lab.dev';
                 const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`, { credentials: 'include' });
                 if (!r.ok) throw new Error(`Attendant returned ${r.status}. Is the Lab running?`);
                 const payload = await r.json();
@@ -555,7 +555,7 @@
 
             // Detect attendant URL (local vs tunnel)
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+            const attendantBase = isLocal ? 'http://localhost:8765' : 'https://acme.jason-lab.dev';
 
             try {
                 const r = await fetch(`${attendantBase}/telemetry_kpi?n=100&t=${Date.now()}`, { credentials: 'include' });
@@ -771,7 +771,7 @@
         async function _fetchSysMetric() {
             if (!_sysActive) return;
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+            const attendantBase = isLocal ? 'http://localhost:8765' : 'https://acme.jason-lab.dev';
             try {
                 const r = await fetch(`${attendantBase}/sys_metrics?t=${Date.now()}`, { credentials: 'include' });
                 if (!r.ok) return;
@@ -855,7 +855,7 @@
             // When accessed via https://notes.jason-lab.dev, POSTing to http://127.0.0.1:8765 is blocked by browsers as Mixed Content.
             // Route HTTPS requests to https://acme.jason-lab.dev/${action} (same zero-trust tunnel) and local to http://127.0.0.1:8765.
             let primaryUrl = isLocal ? `http://${hostname}:8765/${action}` : `https://acme.jason-lab.dev/${action}`;
-            let fallbackUrl = `https://pager.jason-lab.dev/${action}`;
+            let fallbackUrl = `https://acme.jason-lab.dev/${action}`;
             
             // Remove confirmation for benign 'wake' action
             if (action !== 'wake' && !confirm(`Are you sure you want to trigger ${action.toUpperCase()}?`)) return;
@@ -975,7 +975,7 @@
                     scanner.innerHTML = `<span class="status-led ${ledClass}"></span>${statusText}`;
                     
                     const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                    const attendantBase = isLocal ? 'http://localhost:8765' : 'https://pager.jason-lab.dev';
+                    const attendantBase = isLocal ? 'http://localhost:8765' : 'https://acme.jason-lab.dev';
                     fetch(`${attendantBase}/version?t=${Date.now()}`, { credentials: 'omit' })
                         .then(res => res.json())
                         .then(vData => {
@@ -1551,7 +1551,7 @@
                     if (crashMatch) {
                         const logFile = crashMatch[0];
                         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                        const url = isLocal ? `http://localhost:8765/logs?file=${logFile}` : `https://pager.jason-lab.dev/logs?file=${logFile}`;
+                        const url = isLocal ? `http://localhost:8765/logs?file=${logFile}` : `https://acme.jason-lab.dev/logs?file=${logFile}`;
                         
                         const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" }, credentials: 'include' });
                         if (r.ok) {
@@ -1562,7 +1562,7 @@
                         }
                     } else {
                         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                        const url = isLocal ? `http://localhost:8765/logs?file=trace_brain.json` : `https://pager.jason-lab.dev/logs?file=trace_brain.json`;
+                        const url = isLocal ? `http://localhost:8765/logs?file=trace_brain.json` : `https://acme.jason-lab.dev/logs?file=trace_brain.json`;
                         const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" }, credentials: 'include' });
                         if (r.ok) {
                             const text = await r.text();
