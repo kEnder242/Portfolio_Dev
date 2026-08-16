@@ -1177,9 +1177,11 @@
 **Logic:** Resolves 401 Unauthorized errors during Remote Lab Control actions.
 **Mechanism:** Attendant publishes its current auth key (`vitals.style_key`) in `status.json`. UI polling loop extracts this key for subsequent REST calls. Attendant middleware hardened to accept CORS `OPTIONS` preflights (HTTP 200).
 
-## [FEAT-283] Neural Buffer
-**Status:** PLANNED
-**Logic:** Message queuing during hibernation/restoration cycles.
+## [FEAT-283] Neural Buffer & Pre-Wake Prompt Replay
+**Status:** COMPLETED (Sprint 56)
+**Logic:** Caches pre-wake user prompts (e.g., initial cold-boot greetings like "hi") received while logical resident nodes are igniting (`not self.residents.booted`). Holds the intent in `_dispatch_buffered_intent` while broadcasting `SYNCING` state, and automatically replays the prompt into the 5-Stage Division of Labor pipeline as soon as physical silicon and logical nodes finish booting.
+**Rationale:** Guarantees that first-turn prompts asked during cold-start are answered automatically without requiring user re-querying or dropping frames.
+**Mechanism:** `queue_drainer()` in `HomeLabAI/src/v5/foyer/router.py`.
 
 ## [FEAT-284] Engine-Aware Foyer Gate
 **Status:** ACTIVE
