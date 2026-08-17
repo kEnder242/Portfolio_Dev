@@ -307,11 +307,73 @@ What happens when parts of the federated environment are offline?
 5. **Hybrid Cache for Preambles**:
    - Cache dynamic preamble quips keyed on intent topic (Silicon Validation, Telemetry, Casual) so subsequent cold-boots have zero-latency preambles.
 
+### 📋 **Detailed Delegation Cards & Ambiguity-Free Task Specifications**
+
+To ensure OpenAgent / delegate workers execute without context thrashing, hallucination, or ambiguous branching:
+
 ---
 
-### 📋 **Action Tasks for Execution**
+#### 🗂️ **Story 54.5: Non-Blocking Intent Ignition Fork**
+* **Target File**: `HomeLabAI/src/v5/foyer/router.py` (around lines 1260–1318)
+* **Goal**: Completely eliminate the 8-second pre-wake freeze by firing `enqueue_intent()` at millisecond zero while running preamble synthesis as a parallel background task.
+* **Exact Mechanics**:
+  1. In `_spawn_deep_thought_preamble(self, query, source, request_id)`:
+     - Immediately invoke `await self.enqueue_intent(query, source=source, request_id=request_id)` as the **very first step**.
+     - Spawn the preamble LLM call and broadcast as an un-awaited background coroutine: `asyncio.create_task(self._run_preamble_synthesis(query, source, request_id))` (or inline task).
+  2. If the user query arrives while `self.residents.booted` is `False`, `enqueue_intent()` immediately triggers `_dispatch_buffered_intent()` (`FEAT-283`), starting vLLM warming instantly.
+* **Potential Pitfalls & Edge Cases**:
+  - *Race Condition*: Do not emit `stage1_kender_triage` completion twice. Ensure `_emit_stage_progress` remains idempotent.
+  - *Broadcast Order*: If preamble finishes *after* Pinky already starts replying, tag preamble frame with `channel: "insight"` and `final: False` so it does not clobber the chat console.
+* **Verification Command**:
+  `PYTHONPATH=HomeLabAI/src python3 -m py_compile HomeLabAI/src/v5/foyer/router.py`
+  `curl -s http://127.0.0.1:8765/version`
 
-- [ ] **Task 54.5: Non-Blocking Intent Ignition Fork**: Decouple `_spawn_deep_thought_preamble()` in `router.py` to enqueue the intent into the engine pipeline immediately at $t=0$ while running preamble synthesis as a parallel non-blocking task.
-- [ ] **Task 54.6: Fast Reflex `think` Preamble Integration**: Update `synthesize_hyde_vector` in `cognitive_hub.py` to use Deep Thought's `@mcp.tool() think` for rapid (<500ms) quips, and eliminate duplicate HyDE synthesis in Pass 1.
-- [ ] **Task 54.7: Standalone $t=0$ Pinky Warming Pop**: Update `loader.py` and `router.py` so cold-boot warming notices are broadcast immediately as independent completed message frames rather than accumulating into the final answer buffer.
-- [ ] **Task 54.8: Frontend Speculative Pre-Warm Trigger**: Add an `onfocus` / `onkeydown` speculative pre-warm beacon in `intercom_v2.js` that pings `/attendant/wake` on first user interaction.
+---
+
+#### 🗂️ **Story 54.6: Fast Reflex `think` Preamble Integration**
+* **Target File**: `HomeLabAI/src/logic/cognitive_hub.py` (around lines 1380–1405) & `HomeLabAI/src/nodes/thought_node.py`
+* **Goal**: Switch the $t=0$ preamble generator from heavy 8k `deep_think` to shallow `@mcp.tool() think`, eliminating 8s timeouts and removing redundant Pass-1 HyDE generation.
+* **Exact Mechanics**:
+  1. In `synthesize_hyde_vector()` (rename or alias to `synthesize_preamble_quip()`):
+     - Check if `"thought"` is in `self.residents` and reachability probe is healthy.
+     - Call `self.residents["thought"].call_tool("think", {"query": query})` with `timeout=3.0` (fast reflex).
+     - If response is received, format as `"[DEEP THOUGHT]: <quip>"`.
+  2. If unreachable or times out, immediately return local fallback quip: `"Deep Thought: System operational. Analyzing telemetry stream..."` without throwing exceptions.
+  3. Ensure Stage 1 Triage inside `process_query()` (lines 800–850) remains the sole authoritative synthesizer of `hyde_vector_text` using Pinky's local LoRA weights.
+* **Potential Pitfalls & Edge Cases**:
+  - *Tool Signature*: Deep Thought's `think` tool takes `{"query": str, "context": str}`. Do NOT pass heavy `task=HYDE_SYNTHESIS_PROMPT` to `think`.
+  - *JSON vs Plain Text*: `think` returns a concise text quip (<15 words). Router should format it cleanly into the `insight` window.
+* **Verification Command**:
+  `PYTHONPATH=HomeLabAI/src python3 -m py_compile HomeLabAI/src/logic/cognitive_hub.py`
+
+---
+
+#### 🗂️ **Story 54.7: Standalone $t=0$ Pinky Warming Pop**
+* **Target File**: `HomeLabAI/src/nodes/loader.py` (lines 415–445) & `HomeLabAI/src/v5/foyer/router.py` (lines 1320–1365)
+* **Goal**: Deliver the warming status notice to the UI at $t=0$ as an independent completed message, instead of buffering it into the same final frame as the eventual answer.
+* **Exact Mechanics**:
+  1. In `generate_response()` (`loader.py`):
+     - When `not ok` and `msg == "WARMING"`, do NOT just yield a string token into the shared token generator stream.
+     - Emit a standalone broadcast message directly via router or callback with `final=True`, or yield a dedicated warming event token that the Waterfall Drainer flushes immediately.
+  2. In `waterfall_drainer()` (`router.py`):
+     - If an incoming token chunk starts with `"Narf! The local engine is warming"`, flush it immediately to `self.broadcast({"type": "chat", "brain": token, "final": True, "brain_source": "Pinky"})` and reset the buffer so the eventual real answer is accumulated in a fresh turn.
+* **Potential Pitfalls & Edge Cases**:
+  - *Buffer Key Collision*: Ensure `pending_chunks[(request_id, source)]` is cleared after flushing the warming pop so subsequent tokens don't concatenate to the warming message.
+* **Verification Command**:
+  `PYTHONPATH=HomeLabAI/src python3 -m py_compile HomeLabAI/src/nodes/loader.py`
+
+---
+
+#### 🗂️ **Story 54.8: Frontend Speculative Pre-Warm Trigger**
+* **Target File**: `Portfolio_Dev/field_notes/intercom_v2.js` & `Portfolio_Dev/field_notes/intercom.html`
+* **Goal**: Trigger `/attendant/wake` speculatively on user interaction (input focus or mic hover) to hide cold-boot latency completely.
+* **Exact Mechanics**:
+  1. In `intercom_v2.js`:
+     - Attach a throttled (debounce 60s) event listener to `#user-input` (`focus`, `keydown`) and `#record-btn` (`mouseenter`, `touchstart`).
+     - On first interaction, issue a silent non-blocking fetch: `fetch('/attendant/wake', { method: 'POST' }).catch(() => {})`.
+  2. This signals `lab-attendant` to begin resident node ignition while the user is still typing their prompt or getting ready to speak!
+* **Potential Pitfalls & Edge Cases**:
+  - *Spamming Wake Endpoint*: Must use a client-side timestamp throttle (`lastPreWarmTime`) to ensure it fires at most once every 60 seconds.
+  - *Zero Trust Origin*: Use relative URL `${window.location.origin}/attendant/wake` (per `FEAT-463`) to avoid CORS.
+* **Verification Command**:
+  `python3 Portfolio_Dev/field_notes/build_site.py`
