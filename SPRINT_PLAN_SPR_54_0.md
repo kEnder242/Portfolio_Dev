@@ -377,3 +377,23 @@ To ensure OpenAgent / delegate workers execute without context thrashing, halluc
   - *Zero Trust Origin*: Use relative URL `${window.location.origin}/attendant/wake` (per `FEAT-463`) to avoid CORS.
 * **Verification Command**:
   `python3 Portfolio_Dev/field_notes/build_site.py`
+
+---
+
+#### 🗂️ **Story 54.9: Live Telemetry & Latency Benchmark Certification**
+* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py`
+* **Goal**: Validate and certify that cold-boot warming pops arrive in $<100\text{ms}$, Deep Thought quips arrive in $<1.5\text{s}$, and steady-state TTFT is $\le 550\text{ms}$.
+* **Expected Timing Budget (The Model Target)**:
+
+| Mode | Pipeline Stage | Target Latency | Responsible Node |
+| :--- | :--- | :--- | :--- |
+| **❄️ Cold Boot** | **Pinky Warming Pop** | **$< 100\text{ms}$** | `loader.py` standalone broadcast |
+| **❄️ Cold Boot** | **Deep Thought Quip** | **$< 1.5\text{s}$** | `thought_node.py` (`think` reflex tool) |
+| **❄️ Cold Boot** | **Intent Unfreeze & Delivery** | **$< 22.0\text{s}$** | `router.py` (`_dispatch_buffered_intent`) |
+| **🔥 Hot Steady State** | **Stage 1 Triage & HyDE** | **$350\text{ms} - 550\text{ms}$** | Pinky Local LoRA (`cli_voice_v1`) |
+| **🔥 Hot Steady State** | **Stage 2 Archive Retrieval** | **$50\text{ms} - 120\text{ms}$** | ChromaDB HttpClient (Port 8001) |
+| **🔥 Hot Steady State** | **Stage 3 Brain Fast Answer** | **$600\text{ms} - 1.1\text{s}$** | Brain Node (`unified-base` on vLLM) |
+| **🔥 Hot Steady State** | **Total Turnaround (TTFT)** | **$< 550\text{ms}$** | End-to-End WebSocket Stream |
+
+* **Verification Command**:
+  `PYTHONPATH=HomeLabAI/src python3 HomeLabAI/src/debug/test_perf_5x5_timed.py`
