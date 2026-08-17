@@ -251,3 +251,67 @@ During Sprint 54 execution, a production incident surfaced: the lab was **hammer
 2. **A feature documented ≠ a feature present.** FEAT-028 survived in the sprint narrative while its probe layer was deleted in a refactor. Cross-reference FeatureTracker against live code when promoting major versions (V4→V5).
 3. **Hibernation must mean zero egress.** "When we're hibernating we shouldn't be generating traffic" — any remote-generation path needs an explicit state gate, not an implicit vocal-state coincidence.
 4. **Do not hardcode remote node names** — resolve from `infrastructure.json` (nodes → hosts) so node identity stays configuration data.
+
+---
+
+## 📜 **9. Post-Execution Log — Cold-Boot Latency, Preamble Decoupling & Hybrid Fallback Architecture (2026-08-16)**
+
+> **Recorded by:** Antigravity (Orchestrator) — Forensic Analysis & Action Tasks per user directive.
+> **Focus:** Eliminating cold-boot latency bottlenecks, un-blending warming notices, decoupling preamble from intent queuing, and ensuring 100% offline fallback resilience.
+
+### 🚨 **Forensic Findings: The Dual-Delay & Double-Triage Bottleneck**
+
+During cold-boot testing from an idle state (`HIBERNATING` / `WAKING`), two major latency compounding bugs were discovered:
+
+1. **Sequential Intent Blocking (The 8s Pre-Wake Freeze)**:
+   - In `_spawn_deep_thought_preamble()` (`router.py`), the Foyer awaited Deep Thought (`synthesize_hyde_vector`) with an 8.0s timeout **before calling `enqueue_intent()`**.
+   - When the remote node (KENDER / RTX 4090) was idle, Ollama required 12–18s to load `llama3.1:8b` from disk into VRAM.
+   - The 8.0s timeout expired, discarded the generation, and emitted the static fallback: `"[DEEP THOUGHT]: Deep Thought: System operational. Awaiting command parameters."`
+   - **Critical Impact**: vLLM and resident nodes on `z87-Linux` were forced to sit completely dormant for 8 full seconds before even receiving the ignition signal!
+
+2. **Redundant Dual-Triage & HyDE Synthesis**:
+   - **Pass 1 (Preamble)**: Deep Thought was invoked in `_spawn_deep_thought_preamble()` to synthesize a Composite HyDE vector.
+   - **Pass 2 (Stage 1 / process_query)**: The Hub invoked Pinky's local fine-tuned LoRA (`cli_voice_v1`) to synthesize the exact same Composite HyDE vector (`[VALIDATION] | [STRATEGY] | [SRE]`) in Stage 1!
+   - Because Pinky's LoRA was explicitly fine-tuned on 18 years of lab archives, Pinky is the authoritative HyDE generator. Calling Deep Thought for HyDE in Pass 1 was redundant and introduced unnecessary remote network overhead.
+
+3. **Waterfall Drainer Pop Accumulation (The Blended Warming Message)**:
+   - In `loader.py` (`FEAT-462`), when the engine was cold, a warming notice was yielded into Pinky's token generator.
+   - The Waterfall Drainer (`router.py`) in Pop Mode accumulated all incoming chunks into `pending_chunks[(request_id, source)]` and **only flushed when `final=True` was received**.
+   - Result: The warming notice (*"The local engine is warming its anchors..."*) and Pinky's eventual answer (*"Hey! What's on your mind?"*) popped into the UI at the exact same moment (30s later) instead of the warming notice popping at $t=0$.
+
+---
+
+### 🛡️ **Fail-Safe Fallback Matrix (Zero-Dependency Resilience)**
+
+What happens when parts of the federated environment are offline?
+
+| Scenario | Primary Route | Fallback Behavior |
+| :--- | :--- | :--- |
+| **KENDER (Remote 4090) Online** | Stage 1 Preamble via `think` (<500ms reflex quip); Stage 4 Deliberation via `deep_think` | Full bicameral consensus & dynamic quips active. |
+| **KENDER Offline / Sleep** | Deep Thought unreachable probe fails | Preamble immediately yields local fallback quip; Stage 1 triage and HyDE vector generation execute 100% locally via Pinky's `cli_voice_v1` LoRA. |
+| **vLLM Cold / Warming** | Intent enqueued at $t=0$; Pinky pops warming notice at $t=0$ | Intent held in `_dispatch_buffered_intent` (`FEAT-283`) and auto-replayed the instant vLLM signals `warmed = True`. |
+| **Both Remote & Local Cold** | Preamble non-blocking fork | UI immediately renders warming notices on both channels; zero silent stalls. |
+
+---
+
+### 💡 **Cold-State Acceleration: Brainstorming & Optimization Vectors**
+
+1. **Immediate $t=0$ Intent Enqueue (Non-Blocking Parallel Fork)**:
+   - Fork preamble generation and intent enqueuing into parallel async tasks so vLLM ignition begins at millisecond zero without waiting for Deep Thought.
+2. **Fast Reflex `think` for Preamble Quips**:
+   - Use Deep Thought's shallow `@mcp.tool() think` (`max_tokens=100`, shallow system prompt) for the $t=0$ preamble instead of heavy `deep_think`. Completes in <500ms.
+3. **Speculative Pre-Warm on Web Intercom Focus / Input Hover (`FEAT-T22.1`)**:
+   - When the user focuses the text input or hovers over the mic button in `intercom.html`, fire a lightweight `POST /attendant/wake` or `HEAD /v1/models` probe to start warming vLLM *before* the user even hits Enter!
+4. **Instant Standalone Warming Pop**:
+   - When `loader.py` detects a cold engine, emit an immediate standalone broadcast frame (`final=True`) so Pinky's voice acknowledges the user at $t=0$.
+5. **Hybrid Cache for Preambles**:
+   - Cache dynamic preamble quips keyed on intent topic (Silicon Validation, Telemetry, Casual) so subsequent cold-boots have zero-latency preambles.
+
+---
+
+### 📋 **Action Tasks for Execution**
+
+- [ ] **Task 54.5: Non-Blocking Intent Ignition Fork**: Decouple `_spawn_deep_thought_preamble()` in `router.py` to enqueue the intent into the engine pipeline immediately at $t=0$ while running preamble synthesis as a parallel non-blocking task.
+- [ ] **Task 54.6: Fast Reflex `think` Preamble Integration**: Update `synthesize_hyde_vector` in `cognitive_hub.py` to use Deep Thought's `@mcp.tool() think` for rapid (<500ms) quips, and eliminate duplicate HyDE synthesis in Pass 1.
+- [ ] **Task 54.7: Standalone $t=0$ Pinky Warming Pop**: Update `loader.py` and `router.py` so cold-boot warming notices are broadcast immediately as independent completed message frames rather than accumulating into the final answer buffer.
+- [ ] **Task 54.8: Frontend Speculative Pre-Warm Trigger**: Add an `onfocus` / `onkeydown` speculative pre-warm beacon in `intercom_v2.js` that pings `/attendant/wake` on first user interaction.
