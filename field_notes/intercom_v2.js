@@ -57,12 +57,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // UI Events
     sendBtn.addEventListener('click', sendText);
-    textInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendText(); });
+    textInput.addEventListener('keydown', (e) => { 
+        triggerSpeculativePreWarm();
+        if (e.key === 'Enter') sendText(); 
+    });
+    textInput.addEventListener('focus', triggerSpeculativePreWarm);
+    micBtn.addEventListener('mouseenter', triggerSpeculativePreWarm);
     micBtn.addEventListener('click', toggleMic);
     document.getElementById('menu-toggle').addEventListener('click', () => {
         document.getElementById('sidebar').classList.toggle('collapsed');
     });
 });
+
+// [FEAT-T22.1 / Story 54.8] Speculative Pre-Warm Trigger
+let lastPreWarmTime = 0;
+function triggerSpeculativePreWarm() {
+    const now = Date.now();
+    if (now - lastPreWarmTime < 60000) return; // 60s debounce
+    lastPreWarmTime = now;
+    try {
+        fetch(`${window.location.origin}/attendant/wake`, { method: 'POST' }).catch(() => {});
+    } catch (e) {}
+}
 
 function loadHistory() {
     try {
