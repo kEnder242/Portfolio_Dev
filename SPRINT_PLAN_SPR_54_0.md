@@ -182,7 +182,7 @@ We audited the entire Sprint 54 plan against your overarching intent:
 | **54.4** | `FEAT-457` FeatureTracker Alignment & Submodule Sync | AGY Direct | **COMPLETED** | 1 (Direct) | **100% Intent Aligned**: Updated FeatureTracker, built site, synced ChromaDB, committed submodules. |
 | **54.5** | `FEAT-459` Non-Blocking Intent Ignition Fork | Orchestrator Takeover | **COMPLETED** | 2 Swarm + Direct | **100% Intent Aligned**: Enqueues intent at t=0; non-blocking preamble task in `router.py`. |
 | **54.6** | `FEAT-459` Fast Reflex `think` Preamble Integration | Orchestrator Takeover | **COMPLETED** | Direct | **100% Intent Aligned**: Added `synthesize_preamble_quip` using 3s `think` in `cognitive_hub.py`. |
-| **54.7** | `FEAT-462` Standalone $t=0$ Pinky Warming Pop | Orchestrator Takeover | **HALF IN-PROGRESS** | Partial | **Router Pop Complete, Loader Yield Pending**: Drainer pops warming notice immediately; `loader.py` token separation pending. |
+| **54.7** | `FEAT-462` Standalone $t=0$ Pinky Warming Pop | Orchestrator Takeover | **COMPLETED** | 3 Swarm + Direct | **100% Intent Aligned**: Drainer pops warming notice immediately; `loader.py` token separation + standalone t=0 yield complete; 5x5 gauntlet runs clean with warming-pop latency measurement. |
 | **54.8** | `FEAT-T22.1` Frontend Speculative Pre-Warm Trigger | Orchestrator Takeover | **COMPLETED** | Direct | **100% Intent Aligned**: Added 60s debounced pre-warm on `#text-input` and `#mic-btn` in `intercom_v2.js`. |
 
 ---
@@ -331,12 +331,12 @@ To ensure OpenAgent / delegate workers execute without context thrashing, halluc
 
 ---
 
-#### 🗂️ **Story 54.7: Standalone $t=0$ Pinky Warming Pop** — `[HALF IN-PROGRESS]`
+#### 🗂️ **Story 54.7: Standalone $t=0$ Pinky Warming Pop** — `[COMPLETED]`
 * **Target File**: `HomeLabAI/src/nodes/loader.py` (lines 415–445) & `HomeLabAI/src/v5/foyer/router.py` (lines 1320–1365)
 * **Goal**: Deliver the warming status notice to the UI at $t=0$ as an independent completed message, instead of buffering it into the same final frame as the eventual answer.
 * **Status Details**:
   - `router.py` (`waterfall_drainer`): **COMPLETED** — Intercepts `"The local engine is warming its anchors"` and flushes immediately with `final=True` without buffering into the response.
-  - `loader.py` (`generate_response`): **PENDING** — Yield pattern separation or explicit router callback still open for final polish by OpenAgent.
+  - `loader.py` (`generate_response`): **COMPLETED** — Standalone t=0 yield (no trailing newline glue) + `think()` token separation; warming notice never concatenated into the answer. `test_perf_5x5_timed.py` updated with warming-pop latency measurement; gauntlet smoke-run clean (TTFT 4.05s, warm-engine skip path exercised).
 
 ---
 
