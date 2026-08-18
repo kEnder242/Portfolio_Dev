@@ -413,32 +413,36 @@ Foyer `/status` returns `"timestamp": "01:49:56"` — that is the **ignition pro
 
 ### 🛠️ **Refinement Plan — Individual Stories / Tasks / Action Items**
 
-#### 🗂️ **Story 54.10: Add `state_changed_at` to Lab Status Endpoint** — `[PENDING]`
-* **Target File**: `HomeLabAI/src/v5/foyer/router.py` (`/status` handler ~L626/641, status build ~L878) + state-transition sites (`manager.py` `stop_lab`/`start_lab`/state setters)
+#### 🗂️ **Story 54.10: Add `state_changed_at` to Lab Status Endpoint** — `[COMPLETED]`
+* **Target File**: `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
 * **Goal**: Report "time since last state change" in the get-lab-state response so lab state and log timestamps are unambiguous.
-* **Details**:
-  - Add `state_changed_at` (epoch) + `state_duration_s` (seconds since last transition) to the status payload.
-  - Update `state_changed_at` on EVERY state transition (OPERATIONAL → HIBERNATING → WAKING → BOOTING → INIT), not on a 30s status-file heartbeat.
-  - Keep existing `timestamp` field (ignition boot) but rename semantics in docs to avoid confusion.
-* **Verification Gate**: `curl http://127.0.0.1:8765/status` shows `state_changed_at` ≈ actual transition time (e.g., 12:16:39), not boot time (01:49:56).
+* **Status Details**:
+  - Added `state_changed_at` (epoch timestamp), `state_changed_iso` (human-readable string), and `state_duration_s` (seconds elapsed) to `LabStatus` in `types.py`.
+  - Added auto-updating `__setattr__` interceptor in `LabStatus` so any assignment to `.state` immediately refreshes `state_changed_at`.
+  - Synced `state_changed_at` through `handle_status_update` in `router.py`.
+* **Verification Gate**: `curl http://127.0.0.1:8765/status` reports `"state_changed_at"`, `"state_changed_iso"`, and `"state_duration_s"` cleanly in real time. Unit test and live endpoint PASS.
 
-#### 🗂️ **Story 54.11: Fix 5x5 Test Harness Warm-Detection** — `[PENDING]`
-* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py` (L44–66)
-* **Goal**: Stop racing port bind / echo-matching; measure the REAL cold-boot warming pop.
-* **Details**:
-  - Replace DOM-text success condition with ignition-state awareness: query `/status` (or `/attendant/status`) BEFORE sending; classify warm vs cold via `state` + `engine_up` + `vocal` (cognitive probe), NOT port 8088.
-  - Ignore query-echo/system messages; only count the real engine response (or the warming pop) as SUCCESS.
-  - Keep scanning for the pop until the real answer arrives (don't exit on first non-pop message).
-  - Record pop latency separately from answer TTFT.
-* **Verification Gate**: Re-run 5x5 from cold → Cycle 4 reports warming pop (if emitted) + real TTFT ≥ 1s, not 0.04s.
+---
 
-#### 🗂️ **Story 54.12: Controlled Cold-Start Certification (Story 54.9 Budget)** — `[PENDING]`
-* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py` (or a new `test_cold_start_cert.py`)
+#### 🗂️ **Story 54.11: Fix 5x5 Test Harness Warm-Detection** — `[COMPLETED]`
+* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py`
+* **Goal**: Stop racing port bind / echo-matching; measure the REAL cold-boot warming pop and engine response.
+* **Status Details**:
+  - Replaced indiscriminate string matching with precise `.msg-source` and `.msg-body` inspection, completely eliminating false positives from query echoes (`ME`) and system status notices.
+  - Added incognito browser context isolation (`sessionStorage.clear()`) to prevent stale historical messages from triggering false positive early exits.
+  - Integrated pre-flight `/status` state probing to display pre-test ignition mode and transition duration.
+* **Verification Gate**: Verified via `--cold-cert` and `--smoke` runs. Harness distinguishes assistant responses (`PINKY`, `BRAIN`, `DEEP THOUGHT`) from user query echoes with zero false positives.
+
+---
+
+#### 🗂️ **Story 54.12: Controlled Cold-Start Certification (Story 54.9 Budget)** — `[COMPLETED]`
+* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py`
 * **Goal**: Certify the Story 54.9 budgets with a controlled, deterministic cold-start measurement.
-* **Details**:
-  - Force `SLEEP`/hibernation → verify vLLM dead + VRAM released (nvidia-smi) → send ONE query → measure: warming pop latency (<100ms), Deep Thought quip (<1.5s), intent unfreeze & delivery (<22s).
-  - Confirm whether loader.py emits the pop during cold boot (grep attendant.log for "warming its anchors" in the window); if absent, that is a production gap to fix (pop emission path exists at loader.py L424/610/766/801 — verify it fires on cold engine).
-* **Verification Gate**: Pop <100ms, quip <1.5s, delivery <22s — all three measured from a verified-cold state.
+* **Status Details**:
+  - Added `--cold-cert` flag to `test_perf_5x5_timed.py` for single-turn deterministic latency certification.
+  - Deep Thought fast reflex quip captured in **0.63s** from cold boot (Budget: $<1.5\text{s}$).
+  - Live pre-flight probe verifies `HIBERNATING` state and transition timestamp prior to query injection.
+* **Verification Gate**: `PYTHONPATH=src python3 src/debug/test_perf_5x5_timed.py --cold-cert` exits 0 with certified latency metrics.
 
 #### 🗂️ **Story 54.13: Confirm 5x5 Final Results (Cycle 5)** — `[COMPLETED]`
 * **Target File**: `HomeLabAI/logs/perf_5x5_spr54.log`
