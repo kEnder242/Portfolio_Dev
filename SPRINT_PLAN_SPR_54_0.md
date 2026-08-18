@@ -364,3 +364,103 @@ To ensure OpenAgent / delegate workers execute without context thrashing, halluc
 
 * **Verification Command**:
   `PYTHONPATH=HomeLabAI/src python3 HomeLabAI/src/debug/test_perf_5x5_timed.py`
+
+---
+
+## 📜 **10. Post-Execution Log — Hibernation Reality Check & 5x5 Test Harness Forensics (2026-08-18)**
+
+> **Recorded by:** Atlas (Orchestrator) — appended per user directive: "make a refinement plan and append it to the end of our sprint file. Keep the detail of your full report for context and reference, but also provide a section for individual stories/tasks/action items."
+> **Focus:** Separating conjecture from reality — production hibernation/wake behavior vs. the 5x5 test harness — and refining Story 54.9 certification.
+
+### 🚨 **The User Correction (Ground Truth)**
+
+The user corrected an earlier wrong claim that the engine "stays warm for 10 minutes." **The engine SHOULD hibernate** — the sprint moved hibernation meaning from VRAM to SRAM: after ~10 minutes of idle, vLLM is unloaded from VRAM entirely (SIGKILL), releasing memory. The 5x5 gauntlet is **meant to trigger a cold start** — that is the 5x5 MO. Querying lab state before the test is fine, but the moment you talk to the lab it wakes up; hence the 5-minute + 5-minute wait cadence.
+
+### ✅ **Production Reality: Hibernation WORKS as Intended (Live Proof, 2026-08-18)**
+
+Live evidence from `/home/jallred/Dev_Lab/attendant.log` during the 5x5 run:
+
+| Time (2026-08-18) | Event | Evidence |
+| :--- | :--- | :--- |
+| 12:16:34 | `[FOYER] Releasing logical nodes for hibernation...` | Hibernation fired after idle gap |
+| 12:16:39 | `[FOYER] Lab state is HIBERNATING. Hibernating logical nodes...` (×3) | State transition committed |
+| ~12:16 | Old vLLM PID **1478611** (started 11:51:05) SIGKILLed | `pgrep` confirmed dead |
+| 12:21:17 | Cycle 4 client (7771aa51) connects → `[FEAT-283] Pre-wake intent detected during cold boot. Initiating resident node ignition...` | Cold-boot pre-wake path fired |
+| 12:21:17 | `[FEAT-283] Neural Buffer holding prompt '[ME] [STRATEGIC] Ana...' until node ignition finishes...` | Prompt buffered during ignition |
+| 12:21:17 | NEW vLLM PID **1492236** spawned | Engine restarted on demand |
+| 12:23:14 | `[HUB] Engine warming. Synthesizing HyDE via Deep Thought immediately.` | Warming path engaged |
+| 12:21–12:24 | Real pipeline TTFTs (TEL INGEST): **5060ms / 17406ms / 25841ms** | Actual cold-boot latency |
+
+**Current live state (verified post-run):** lab IS hibernating — no vLLM process, VRAM 2140 MiB of 11264 (released), foyer `/status` = `{"state": "HIBERNATING", "status": "HIBERNATING (VRAM Free)", "engine_up": false, "vram_used": 2592, "vram_total": 11264, "timestamp": "01:49:56", "connected_clients": 0}`. The attendant KNOWS the lab is hibernating, and it IS. Production code = working as intended.
+
+### 🐛 **The Test Harness Flaw (Test Code, NOT Production)**
+
+`test_perf_5x5_timed.py` (L44–66) warm-detection is broken:
+
+1. **Success condition races port bind**: it scans `.brain-msg .msg-body` and treats ANY text with `len > 0` not containing `"warming its anchors"` as a "real answer."
+2. **Result at Cycle 4**: matched a non-engine message (query echo / system message) at **0.04s** → declared `SUCCESS` + "Engine already warm — warming pop skipped" — **while the engine was genuinely COLD** (proven by FEAT-283 pre-wake + Neural Buffer + 5–25s real TTFTs).
+3. **The warming pop was never captured**: grep for `"anchors|warming its"` in attendant.log 12:21–12:24 returned EMPTY. Whether loader.py actually emitted the pop during Cycle 4 is UNCONFIRMED — the test exited on the bogus 0.04s match before the pop (or real answer) arrived.
+
+**User's design question answered**: "can you consider if we were 'warming' in the test instead of testing the warming logic in the foyer?" → **No.** The test triggering the wake is the INTENDED 5x5 MO (user-confirmed). Production foyer warming logic (FEAT-283 pre-wake) fired correctly. Only the test's DETECTION is flawed.
+
+**User's vocal-test warning (verbatim)**: "be careful about vLLM saying it's online, we learned never to trust the API. It was the 'vocal' test/learning." → Port-bound/API-ready ≠ engine ready. The ignition cognitive vocality probe (`manager.py` L185–234: "Cognitive probe SUCCESS. Engine is vocal." → `status.vocal = True`) is the source of truth, NOT port 8088 reachability.
+
+### 🕵️ **Status Timestamp Confusion (User-Suggested Fix)**
+
+Foyer `/status` returns `"timestamp": "01:49:56"` — that is the **ignition process start time** (Aug 17 01:49:56), NOT the state-change time. The lab actually went HIBERNATING at 12:16:39 on Aug 18 — a ~20-hour discrepancy. The user asked: *"would it help to have a 'last time since state changed' reported in the 'get lab state'? Might help avoid being confused about the lab and log timestamps."* → **YES.** A `state_changed_at` / `last_state_change` field (updated on every state transition) would directly resolve this confusion.
+
+---
+
+### 🛠️ **Refinement Plan — Individual Stories / Tasks / Action Items**
+
+#### 🗂️ **Story 54.10: Add `state_changed_at` to Lab Status Endpoint** — `[PENDING]`
+* **Target File**: `HomeLabAI/src/v5/foyer/router.py` (`/status` handler ~L626/641, status build ~L878) + state-transition sites (`manager.py` `stop_lab`/`start_lab`/state setters)
+* **Goal**: Report "time since last state change" in the get-lab-state response so lab state and log timestamps are unambiguous.
+* **Details**:
+  - Add `state_changed_at` (epoch) + `state_duration_s` (seconds since last transition) to the status payload.
+  - Update `state_changed_at` on EVERY state transition (OPERATIONAL → HIBERNATING → WAKING → BOOTING → INIT), not on a 30s status-file heartbeat.
+  - Keep existing `timestamp` field (ignition boot) but rename semantics in docs to avoid confusion.
+* **Verification Gate**: `curl http://127.0.0.1:8765/status` shows `state_changed_at` ≈ actual transition time (e.g., 12:16:39), not boot time (01:49:56).
+
+#### 🗂️ **Story 54.11: Fix 5x5 Test Harness Warm-Detection** — `[PENDING]`
+* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py` (L44–66)
+* **Goal**: Stop racing port bind / echo-matching; measure the REAL cold-boot warming pop.
+* **Details**:
+  - Replace DOM-text success condition with ignition-state awareness: query `/status` (or `/attendant/status`) BEFORE sending; classify warm vs cold via `state` + `engine_up` + `vocal` (cognitive probe), NOT port 8088.
+  - Ignore query-echo/system messages; only count the real engine response (or the warming pop) as SUCCESS.
+  - Keep scanning for the pop until the real answer arrives (don't exit on first non-pop message).
+  - Record pop latency separately from answer TTFT.
+* **Verification Gate**: Re-run 5x5 from cold → Cycle 4 reports warming pop (if emitted) + real TTFT ≥ 1s, not 0.04s.
+
+#### 🗂️ **Story 54.12: Controlled Cold-Start Certification (Story 54.9 Budget)** — `[PENDING]`
+* **Target File**: `HomeLabAI/src/debug/test_perf_5x5_timed.py` (or a new `test_cold_start_cert.py`)
+* **Goal**: Certify the Story 54.9 budgets with a controlled, deterministic cold-start measurement.
+* **Details**:
+  - Force `SLEEP`/hibernation → verify vLLM dead + VRAM released (nvidia-smi) → send ONE query → measure: warming pop latency (<100ms), Deep Thought quip (<1.5s), intent unfreeze & delivery (<22s).
+  - Confirm whether loader.py emits the pop during cold boot (grep attendant.log for "warming its anchors" in the window); if absent, that is a production gap to fix (pop emission path exists at loader.py L424/610/766/801 — verify it fires on cold engine).
+* **Verification Gate**: Pop <100ms, quip <1.5s, delivery <22s — all three measured from a verified-cold state.
+
+#### 🗂️ **Story 54.13: Confirm 5x5 Final Results (Cycle 5)** — `[COMPLETED]`
+* **Target File**: `HomeLabAI/logs/perf_5x5_spr54.log`
+* **Goal**: Close out the current 5x5 run — confirm Cycle 5 (20-min wait) outcome and whether the engine hibernated/woke again in the gap.
+* **Status Details**: Gauntlet COMPLETED (all 6 cycles ran, 75-min window). Per-cycle results:
+
+| Cycle | Wait | Reported TTFT | Reported Verdict | Reality |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | 0 min | 2.11s | SUCCESS, "already warm" | Warm (engine up from prior session) |
+| 2 | 5 min | 4.06s | SUCCESS, "already warm" | Warm |
+| 3 | 10 min | 4.06s | SUCCESS, "already warm" | Warm |
+| 4 | 15 min | **0.04s** | SUCCESS, "already warm" | **COLD — BOGUS**: hibernation fired 12:16:39, FEAT-283 pre-wake 12:21:17, real TTFTs 5.06s/17.4s/25.8s |
+| 5 | 20 min | 2.05s | SUCCESS, "already warm" | Unverifiable (echo-match possible) |
+| 6 | 25 min | 2.06s | SUCCESS, "already warm" | Unverifiable (echo-match possible) |
+
+* **Verdict**: The gauntlet's final banner "🏆 GAUNTLET COMPLETE: Sprint 29 Performance Bedrock is CERTIFIED" is **INVALID** — the harness never captured the warming pop in ANY cycle, and Cycle 4's 0.04s TTFT is a false positive (echo/system message match). Certification requires Story 54.11 (harness fix) + Story 54.12 (controlled cold-start) first.
+* **Verification Gate**: ✅ Log reviewed; per-cycle table appended above.
+
+---
+
+### 🧭 **The Scars (What to Avoid)**
+1. **Never trust vLLM "online"** — port bind / API reachability ≠ engine ready. The cognitive vocality probe (`status.vocal`) is the source of truth (the "vocal test" lesson).
+2. **A test that matches ANY message is not measuring the engine** — the 5x5 harness must distinguish query echo/system messages from real engine responses, or every cycle reports a bogus 0.04s TTFT.
+3. **Status timestamps must mean state-change time, not boot time** — `timestamp: "01:49:56"` (ignition boot) vs actual HIBERNATING at 12:16:39 is a 20h ambiguity; `state_changed_at` resolves it.
+4. **The 5x5 test triggering a cold start is the MO, not a bug** — production FEAT-283 pre-wake + Neural Buffer + engine warming all fired correctly; only the test's detection was flawed.
