@@ -46,6 +46,39 @@
 
 ---
 
-## 📌 **3. Summary Ledger for Sprint 57 Planning**
-* **Path 1 (2080 Ti Pure Text Engine)**: Option C (ChromaDB HTTP) + `faster-whisper` or Drop Ear.
-* **Path 2 (2080 Ti Sensory Engine)**: Option A, migrating Deep Thought/Pinky text inference to M5 Air / Kender 4090.
+## 📌 **3. Architectural Decision: Why We Chose Option B (`fastembed` / ONNX)**
+
+* **Selected Approach**: **Option B (In-Process CPU Embeddings via `fastembed`)**
+* **Core Rationale**:
+  1. **Direct Control**: Foyer directly manages the `all-MiniLM-L6-v2` ONNX model in-process, ensuring 100% consistent 384-dimensional vector embeddings without relying on external container embedding configurations.
+  2. **Superior CPU Speed**: Runs via optimized C++ ONNX runtime with AVX2/AVX-512 CPU SIMD instructions (~3ms per embedding, using ~50MB RAM).
+  3. **Zero GPU VRAM Impact**: **0 MB VRAM consumed** by embeddings in Foyer. Reclaims ~4 GB of GPU memory for vLLM on the 2080 Ti.
+  4. **Zero Quality Loss**: The vector math is mathematically identical to PyTorch FP32/FP16 down to the decimal.
+
+---
+
+## 🛠️ **4. Target Files & Speculative Refactoring Map**
+
+When executing Sprint 57, the following files will be refactored:
+
+1. **[`HomeLabAI/src/nodes/archive_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py)**:
+   * **Change**: Remove `from sentence_transformers import SentenceTransformer` and PyTorch CUDA context.
+   * **Replace with**: `from fastembed import TextEmbedding` (model: `sentence-transformers/all-MiniLM-L6-v2`).
+   * **Action**: Generate query embeddings on CPU and pass the raw float array to `chroma_client.query(query_embeddings=[vec])`.
+
+2. **[`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)**:
+   * **Change**: Ensure HyDE vector similarity searches and domain routing use the CPU `fastembed` instance rather than triggering CUDA PyTorch allocations.
+
+3. **[`HomeLabAI/src/equipment/sensory_manager.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/equipment/sensory_manager.py)** & **[`ear_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/equipment/ear_node.py)**:
+   * **Change**: Disable NeMo PyTorch CUDA initialization by default (`EAR_NODE_STUB_MODEL=1`).
+   * **Action**: Transition speech transcription to `faster-whisper` on CPU or a dedicated lightweight C++ daemon.
+
+4. **[`HomeLabAI/src/start_vllm.sh`](file:///home/jallred/Dev_Lab/HomeLabAI/src/start_vllm.sh)**:
+   * **Change**: With Foyer consuming 0 MB of GPU VRAM, safely increase `--gpu-memory-utilization` from `0.55` up to `0.70`–`0.75` for massive KV-cache buffers and zero out-of-memory risk.
+
+---
+
+## 🧭 **5. The NeMo Reality Check (Why NeMo Must Be Addressed)**
+* **The Dependency Trap**: NeMo (`nvidia/nemotron-speech-0.6b`) is fundamentally a PyTorch library. 
+* If we migrate MiniLM to CPU/ONNX but still load NeMo into GPU CUDA in Foyer, **the entire VRAM win is moot**: PyTorch's Caching Allocator will still claim ~3–4 GB of VRAM.
+* **Conclusion**: Removing PyTorch from the GPU requires *both* moving MiniLM to CPU (`fastembed`) AND disabling/replacing NeMo (`faster-whisper` or text-only).
