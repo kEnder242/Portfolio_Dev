@@ -125,11 +125,9 @@ When executing Sprint 57, the following files will be refactored:
 
 ---
 
-## 📋 **8. Deferred Backlog Stories for Sprint 57 Execution**
-
-* 🗂️ **Story 57.1: Un-collapse Step 3 (Local Brain-LoRA Waterfall Handoff)**
-  * Wire local `shadow_brain_v2` on vLLM (port 8088) to perform the local technical synthesis pass and stream its baseline before remote escalation to Kender Deep Thought (`llama3.1:8b` / `qwen2.5:32b`).
-* 🗂️ **Story 57.2: Expand vLLM KV-Cache Allocation (`start_vllm.sh`)**
-  * With Foyer permanently consuming 0 MB VRAM, increase `--gpu-memory-utilization` from `0.55` to `0.70` in `start_vllm.sh` to expand the resident KV-cache pool and maximize multi-user concurrency.
-* 🗂️ **Story 57.3: Benchmark `faster-whisper` on CPU**
+* 🗂️ **Story 57.1: Un-collapse Step 3 (Local Brain-LoRA Waterfall Handoff)** — `[COMPLETED / VERIFIED]`
+  * Committed `96e4249`. Wired local `shadow_brain_v2` on vLLM (port 8088) to perform the local technical synthesis pass (`Brain (Local Baseline)`) and stream its baseline before remote escalation to Kender Deep Thought (`llama3.1:8b` / `qwen2.5:32b`). Added trace collision guard and grounding gate multi-source evaluation.
+* 🗂️ **Story 57.2: Expand vLLM KV-Cache Allocation (`start_vllm.sh`)** — `[COMPLETED / VERIFIED]`
+  * Committed `47a65ff`. With Foyer permanently consuming 0 MB VRAM, increased `--gpu-memory-utilization` from `0.55` to `0.70` in `start_vllm.sh` to expand the resident KV-cache pool and maximize multi-user concurrency.
+* 🗂️ **Story 57.3: Benchmark `faster-whisper` on CPU** — `[IN BACKLOG]`
   * Evaluate `faster-whisper` (CTranslate2) on CPU for zero-VRAM voice transcription when re-enabling Web Intercom microphone support.
