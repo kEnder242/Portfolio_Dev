@@ -82,3 +82,35 @@ When executing Sprint 57, the following files will be refactored:
 * **The Dependency Trap**: NeMo (`nvidia/nemotron-speech-0.6b`) is fundamentally a PyTorch library. 
 * If we migrate MiniLM to CPU/ONNX but still load NeMo into GPU CUDA in Foyer, **the entire VRAM win is moot**: PyTorch's Caching Allocator will still claim ~3–4 GB of VRAM.
 * **Conclusion**: Removing PyTorch from the GPU requires *both* moving MiniLM to CPU (`fastembed`) AND disabling/replacing NeMo (`faster-whisper` or text-only).
+
+---
+
+## 🔬 **6. Round Table & HyDE Waterfall Architecture Audit**
+
+### **Intended 5-Stage Waterfall Topology**
+```text
+[1] KENDER (Triage & Interest)
+      │
+      ▼
+[2] Pinky-LoRA (Fast Intuitive HyDE Synthesis)
+      │
+      ▼
+[3] Brain-LoRA (Local RAG Discovery & Technical Baseline)
+      │
+      ▼
+[4] KENDER (Deep Thought Heavy Strategic Reasoning)
+      │
+      ▼
+[5] Pinky-LoRA (Grounding Gate & Coherence Critique)
+```
+
+### **The Disconnects Identified & Sprint 57 Fixes**
+1. **The Grounding Context Gap (Step 5)**:
+   * *Issue*: In `_run_brain_leg`, RAG context from ChromaDB was provided to Deep Thought (Step 4), but `evaluate_grounding` (Step 5) only received Deep Thought's raw prose. Without the raw RAG documents in its context, Pinky-LoRA fell back on its strongest trained prior (resume/career milestones).
+   * *Fix*: Forward `[RAG_CONTEXT]` into `evaluate_grounding` so Pinky critiques Deep Thought against real technical ground truth.
+2. **Step 3 (Local Brain-LoRA) Short-Circuiting**:
+   * *Issue*: `_run_brain_leg` was escalating directly to remote Deep Thought without letting local `shadow_brain_v2` establish the local technical baseline first.
+   * *Fix*: Formalize the handoff so local Brain-LoRA executes Step 3 before remote escalation.
+3. **Step 2 (Pinky HyDE) Cold Boot Bypass**:
+   * *Issue*: During engine warm-up, Deep Thought was synthesizing HyDE directly, skipping Pinky's fast intuitive pass.
+   * *Fix*: Ensure Pinky-LoRA generates the initial HyDE anchor as soon as the resident stack wakes.
