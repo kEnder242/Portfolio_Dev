@@ -105,12 +105,31 @@ When executing Sprint 57, the following files will be refactored:
 ```
 
 ### **The Disconnects Identified & Sprint 57 Fixes**
-1. **The Grounding Context Gap (Step 5)**:
-   * *Issue*: In `_run_brain_leg`, RAG context from ChromaDB was provided to Deep Thought (Step 4), but `evaluate_grounding` (Step 5) only received Deep Thought's raw prose. Without the raw RAG documents in its context, Pinky-LoRA fell back on its strongest trained prior (resume/career milestones).
-   * *Fix*: Forward `[RAG_CONTEXT]` into `evaluate_grounding` so Pinky critiques Deep Thought against real technical ground truth.
-2. **Step 3 (Local Brain-LoRA) Short-Circuiting**:
-   * *Issue*: `_run_brain_leg` was escalating directly to remote Deep Thought without letting local `shadow_brain_v2` establish the local technical baseline first.
-   * *Fix*: Formalize the handoff so local Brain-LoRA executes Step 3 before remote escalation.
-3. **Step 2 (Pinky HyDE) Cold Boot Bypass**:
-   * *Issue*: During engine warm-up, Deep Thought was synthesizing HyDE directly, skipping Pinky's fast intuitive pass.
-   * *Fix*: Ensure Pinky-LoRA generates the initial HyDE anchor as soon as the resident stack wakes.
+1. **The Grounding Context Gap (Step 5)** — `[COMPLETED / VERIFIED]`:
+   * *Fix Applied*: Forwarded `[UNDERLYING TECHNICAL EVIDENCE]` (raw `rag_context`) directly into `evaluate_grounding()` in `cognitive_hub.py` (`206c395`). Pinky now evaluates Deep Thought against real ChromaDB documents instead of falling back on resume priors.
+2. **Step 3 (Local Brain-LoRA) Short-Circuiting** — `[DEFERRED TO SPRINT 57 TRACK]`:
+   * *Status*: Slated as the primary centerpiece story for tomorrow's Sprint 57 track.
+3. **Step 2 (Pinky HyDE) Cold Boot Bypass** — `[DEFERRED TO SPRINT 57 TRACK]`:
+   * *Status*: Slated for Sprint 57 waterfall stabilization.
+
+---
+
+## 🏆 **7. Completed Early Wins (Pre-Sprint 57)**
+
+| Milestone / Story | Status | Verification & Impact |
+| :--- | :---: | :--- |
+| **EarNode NeMo Disabling** | `[COMPLETED]` | Committed `500c167`. Disabled NeMo PyTorch CUDA initialization by default across `sensory_manager.py` and `ear_node.py`. |
+| **Option B (`fastembed` CPU ONNX)** | `[COMPLETED]` | Committed `bcbfac0`. Replaced PyTorch `SentenceTransformer` with CPU `fastembed` in `archive_node.py`. Vector queries execute in ~20ms on CPU with **0 MB GPU VRAM**. |
+| **Grounding Gate RAG Forwarding** | `[COMPLETED]` | Committed `206c395`. Raw RAG evidence forwarded to `evaluate_grounding()`. |
+| **GPU VRAM Reclaim Verified** | `[COMPLETED]` | `nvidia-smi` confirms Foyer uses **0 MB VRAM**. Over **4.2 GB of GPU VRAM is completely free** on the RTX 2080 Ti (6.9 GB used vs 11.2 GB total). |
+
+---
+
+## 📋 **8. Deferred Backlog Stories for Sprint 57 Execution**
+
+* 🗂️ **Story 57.1: Un-collapse Step 3 (Local Brain-LoRA Waterfall Handoff)**
+  * Wire local `shadow_brain_v2` on vLLM (port 8088) to perform the local technical synthesis pass and stream its baseline before remote escalation to Kender Deep Thought (`llama3.1:8b` / `qwen2.5:32b`).
+* 🗂️ **Story 57.2: Expand vLLM KV-Cache Allocation (`start_vllm.sh`)**
+  * With Foyer permanently consuming 0 MB VRAM, increase `--gpu-memory-utilization` from `0.55` to `0.70` in `start_vllm.sh` to expand the resident KV-cache pool and maximize multi-user concurrency.
+* 🗂️ **Story 57.3: Benchmark `faster-whisper` on CPU**
+  * Evaluate `faster-whisper` (CTranslate2) on CPU for zero-VRAM voice transcription when re-enabling Web Intercom microphone support.
