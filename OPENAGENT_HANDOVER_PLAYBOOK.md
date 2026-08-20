@@ -72,11 +72,28 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 
 | Role | Hardware / Binding | Context Limit | Primary Purpose | Fallback Route |
 | :--- | :--- | :--- | :--- | :--- |
-| **Sisyphus (Lead)** | OpenRouter Free (`openrouter/free`) | 200K | Direct code edits, surgical refactoring | OpenCode DeepSeek-v4 $\rightarrow$ Cohere $\rightarrow$ Mistral $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
+| **Sisyphus (Lead)** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
+| **Atlas / Prometheus** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
 | **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8000: `Qwen3.8-27B-4bit`) | 32K | High-speed local reasoning & code generation | Windows 4090 (`qwen2.5-coder:14b`) |
 | **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434) | 16K–32K | Local ground worker code edits, offline execution | Cloud Free Tier |
-| **Cloud Fast Fallback** | OpenCode Free Tier (`deepseek-v4-flash-free`) | 256K | Fast non-Google cloud execution | Cohere / Mistral |
-| **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) / Mistral (`codestral`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
+| **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
+
+### 4.3 Dynamic Category Taxonomy (Web GUI vs. Headless Dispatch)
+
+When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:4096/`), agents like Sisyphus decompose tasks and spawn background subagents via `task(category="...")`. In contrast to direct `delegate.py` dispatches (which bind to an agent identity), subagents resolve their model bindings strictly from the **`categories`** block in `oh-my-openagent.json`:
+
+| Category | Typical Subagent Tasks | Primary Model Binding | Fallback Chain |
+| :--- | :--- | :--- | :--- |
+| **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
+| **`deep`** | Complex local implementation, heavy coding | `my-m5-mlx/mlx-community/Qwen3.8-27B-4bit` | DeepSeek $\rightarrow$ OpenRouter Free $\rightarrow$ 4090 $\rightarrow$ Cohere |
+| **`writing`** | Documentation, docstrings, summaries, sprint logs | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX |
+| **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Qwen 3.6 Plus |
+| **`quick`** | Trivial lookups, file checks, regex queries | `opencode/longcat-2.0-free` | OpenRouter Free $\rightarrow$ DeepSeek $\rightarrow$ 4090 |
+| **`unspecified-high`** | General high-complexity fallback | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere |
+| **`unspecified-low`** | General low-complexity fallback | `opencode/longcat-2.0-free` | DeepSeek $\rightarrow$ OpenRouter Free $\rightarrow$ 4090 |
+
+> [!WARNING]
+> If a category (such as `writing` or `unspecified-low`) is omitted from `oh-my-openagent.json`, `oh-my-openagent` falls back to its upstream hardcoded default (often Claude Opus or OpenRouter paid tier). This bypasses the free ladder and triggers immediate provider authorization or rate-limit failures. All 7 categories must remain explicitly mapped in `oh-my-openagent.json`.
 
 ---
 
