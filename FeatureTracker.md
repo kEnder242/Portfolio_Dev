@@ -248,13 +248,13 @@
 
 ## [FEAT-032] Strategic Sentinel (Amygdala Filter)
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L1) — Strategic Sentinel (Amygdala Filter).
+**Code:** *none found (documented only)*
 **Logic:** Dual-gated input filter. Voice mode uses keyword sentinel (strat_keys); Typing mode uses 1B model (stubbed) to prevent casual clutter.
 **Mechanism:** `self.mic_active` toggle in `acme_lab.py`.
 
 ## [FEAT-034] Barge-In Logic (Interrupts)
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L1) — Barge-In Logic (Interrupts).
+**Code:** *none found (documented only)*
 **Logic:** Allows user to cancel long reasoning cycles using voice interrupt keys ("wait", "stop", "hold on", "shut up").
 **Mechanism:** `ear_poller` loop in `acme_lab.py`.
 
@@ -307,7 +307,7 @@
 
 ## [FEAT-082] Neural Priming
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L1) — Neural Priming.
+**Code:** *none found (documented only)*
 **Logic:** Proactively loads the selected model into VRAM upon WebSocket connection.
 **Mechanism:** Triggers an immediate `check_brain_health` probe with `num_predict: 1` in `acme_lab.py` during the handshake.
 
@@ -325,13 +325,13 @@
 
 ## [FEAT-085] Intelligent Keep-Alive
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L1) — Intelligent Keep-Alive.
+**Code:** *none found (documented only)*
 **Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
 **Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
 
 ## [FEAT-086] Tiered Brain Response (Preamble)
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L1) — Tiered Brain Response (Preamble).
+**Code:** *none found (documented only)*
 **Logic:** Provides sub-second feedback for deep strategic tasks by broadcasting an immediate "Thinking..." message.
 **Mechanism:** Hardcoded async broadcast in `acme_lab.py` triggered before shunting to the reasoning node.
 
@@ -677,7 +677,7 @@
 
 ## [FEAT-148] SML Fidelity Ladder (Resilience Ladder)
 **Status:** ACTIVE
-**Code:** [field_notes/data_contaminated_backup/vram_characterization.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data_contaminated_backup/vram_characterization.json#L1) — SML Fidelity Ladder (Resilience Ladder).
+**Code:** [field_notes/data/vram_characterization.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/vram_characterization.json#L1) — SML Fidelity Ladder (Resilience Ladder).
 **Logic:** Implements an abstracted model hierarchy (Small/Medium/Large) to allow the Lab to adapt reasoning depth to available VRAM headroom.
 **Mechanism:** 
 1. **Characterization**: `vram_characterization.json` maps abstract tiers to physical weight files and utilization targets.
