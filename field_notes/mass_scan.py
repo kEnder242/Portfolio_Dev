@@ -19,6 +19,7 @@ from utils import update_status, get_vram_usage, trigger_pager, ROUND_TABLE_LOCK
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LAB_RUN_DIR = os.path.expanduser("~/Dev_Lab/HomeLabAI/run")
 MASS_SCAN_PID_FILE = os.path.join(LAB_RUN_DIR, "mass_scan.pid")
+# [FEAT-101] Dual-Pipeline Synthesis & Load-Aware Nibbling
 LIBRARIAN = os.path.join(BASE_DIR, "scan_librarian.py")
 QUEUE_MGR = os.path.join(BASE_DIR, "scan_queue.py")
 NIBBLER = os.path.join(BASE_DIR, "nibble_v2.py")

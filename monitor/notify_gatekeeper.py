@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 BASE_DIR = os.path.dirname(__file__)
 LOG_PATH = os.path.join(BASE_DIR, "../field_notes/data/pager_activity.json")
 SECRETS_PATH = os.path.join(BASE_DIR, "secrets.json")
+# [FEAT-142] Service Quiesce (The Freeze)
 MAINTENANCE_LOCK = os.path.join(BASE_DIR, "../field_notes/data/maintenance.lock")
 
 # NTFY Config

@@ -215,6 +215,7 @@ class ArchiveMemory:
     def get_context(self, bucket=None, raw_text=""):
         """
         Retrieves historical context for a specific bucket (e.g., '2024-01').
+# [FEAT-103] Cynical Ranking Algorithm
         Implements Agentic-R utility-based re-ranking.
         """
         context = ""

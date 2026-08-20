@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # research_build.py [v3.0]
+# [FEAT-095] Public Research Ledger (Static Airlock)
 # Purpose: Generate research.html from standard-schema RESEARCH_SYNTHESIS.md.
 # Mandate: High-Fidelity ArXiv ID-ONLY links. Include clickable Git Links.
 # Schema: | Anchor | ArXiv ID | Theoretical Logic | Lab Implementation [FEAT] | Git Link | Status |

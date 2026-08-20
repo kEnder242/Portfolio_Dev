@@ -1,3 +1,4 @@
+# [FEAT-100] Librarian Heuristic File Classification
 import json
 import os
 import sys
@@ -139,6 +140,7 @@ def main():
         glob.glob(DOCX_GLOB, recursive=True)
     )
     
+# [FEAT-239] Neural Action Tags
     # [VIBE-007] Archaeology Hints & Manual Overrides
     OVERRIDES = {
         "notes_2024_PIAV.txt": {"type": "LOG", "year": "2019-2024", "tags": ["PIAV", "Manageability"]},

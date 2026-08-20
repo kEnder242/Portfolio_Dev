@@ -11,6 +11,7 @@ from ai_engine_v2 import get_engine_v2
 from utils import update_status, DATA_DIR, RAW_NOTES_DIR
 
 REASONING_MODE = "--reasoning" in sys.argv
+# [FEAT-157] Hybrid Contextual Unification
 HYBRID_MODE = "--hybrid" in sys.argv
 engine_mode = "LOCAL"
 if HYBRID_MODE: engine_mode = "HYBRID"

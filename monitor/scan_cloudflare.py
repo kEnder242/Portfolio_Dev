@@ -38,6 +38,7 @@ def fetch_cf_logs(secrets):
             pseudo_logs = []
             for entry in audit_result:
                 action = entry.get("action", {})
+# [FEAT-156] SSE Evolution (Hot Link)
                 # Look for Access login/token creation events
                 if "login" in action.get("type", "").lower() or "access" in action.get("type", "").lower():
                     pseudo_logs.append({
