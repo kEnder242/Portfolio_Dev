@@ -120,6 +120,19 @@ def main(args):
     except Exception as e:
         print(f"❌ Failed to run features_build.py: {e}")
         
+    # [SPR-55] Hard-gate: verify FeatureTracker.md **Code:** links resolve (skip with --no-verify)
+    if not args.no_verify:
+        print("--- VERIFYING FEATURE CODE LINKS ---")
+        verifier = os.path.join(BASE_DIR, "verify_feature_links.py")
+        result = subprocess.run([sys.executable, verifier], check=False)
+        if result.returncode != 0:
+            print("❌ BUILD HALTED: FeatureTracker.md Code-field link drift detected. "
+                  "Fix links or rerun with --no-verify to bypass.")
+            sys.exit(1)
+        print("✅ Feature code link verification passed.")
+    else:
+        print("--- SKIPPING FEATURE CODE LINK VERIFICATION (--no-verify) ---")
+        
     hashes = {}
     for filename in SOURCE_FILES:
         path = os.path.join(BASE_DIR, filename)
@@ -166,6 +179,7 @@ if __name__ == "__main__":
     parser.add_argument("--trailers", action="store_true", help="Generate cinematic widescreen previews")
     parser.add_argument("--benchmark", action="store_true", help="Run live model inference benchmarks (bench_models.py)")
     parser.add_argument("--no-deploy", action="store_true", help="Skip automatic airlock deployment")
+    parser.add_argument("--no-verify", action="store_true", help="Skip FeatureTracker.md Code-link verification hard gate")
     args = parser.parse_args()
     main(args)
 
