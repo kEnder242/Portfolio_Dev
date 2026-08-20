@@ -18,6 +18,16 @@ def convert_internal_links(md_content):
     md_content = re.sub(r'\[FEAT-(\d{3}(?:\.\d+)?)\]', r'[FEAT-\1](#FEAT-\1)', md_content)
     return md_content
 
+def format_code_link(code_md):
+    # Matches markdown link [text](url) in a **Code:** field and renders it
+    # as a clickable anchor (mirrors research_build.format_git_link).
+    match = re.match(r'\[(.*?)\]\((.*?)\)', code_md)
+    if match:
+        text = match.group(1)
+        url = match.group(2)
+        return f'<a href="{url}" style="color:var(--accent-color); text-decoration:none;">{text}</a>'
+    return code_md
+
 def parse_philosophy(content):
     # Find the "# Philosophy" heading
     philosophy_start = content.find("# Philosophy")
@@ -67,7 +77,7 @@ def parse_feature_block(block):
 
 def parse_feature_tracker(content):
     # Features start with ## [FEAT-XXX] Title
-    header_pattern = re.compile(r'^## \[(FEAT-\d{3}(?:\.\d+)?)\]\s*(.*?)$', re.MULTILINE)
+    header_pattern = re.compile(r'^## \[((?:FEAT|LAB)-\d{3}(?:\.\d+)?)\]\s*(.*?)$', re.MULTILINE)
     matches = list(header_pattern.finditer(content))
     
     features = []
@@ -156,6 +166,15 @@ def generate_rows(features):
                 
             f_val_md = convert_internal_links(f_val)
             f_val_html = markdown.markdown(f_val_md, extensions=['fenced_code', 'tables'])
+            
+            # [SPR-55] Render **Code:** fields as clickable git links
+            if f_name == 'Code':
+                code_html = f_val_html
+                # Replace the first markdown anchor with a styled clickable link
+                code_anchor = re.search(r'<a href="([^"]+)">([^<]+)</a>', code_html)
+                if code_anchor:
+                    code_html = f'<a href="{code_anchor.group(1)}" style="color:var(--accent-color); text-decoration:none;">{code_anchor.group(2)}</a>'
+                f_val_html = code_html
             
             # Format the output beautifully
             spec_content += f"""
