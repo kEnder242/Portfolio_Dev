@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-55-feat-code-mapping** | Phase 12 | FEAT/LAB Code Mapping & Link-Drift Gate | **COMPLETED** |
 | **spr-52-0-kender-offload** | Phase 11 | Kender Unsloth Training Offload & 5-Stage Division of Labor | **READY FOR EXECUTION** |
 | **spr-51-0-polish** | Phase 10 | Conversational Polish & Deep Thought Refinement | **100% COMPLETED** |
 | **spr-50-0-memory-resil** | 2. Implementation | Foyer & Memory Architecture Stabilization | **COMPLETED** |
@@ -22,6 +23,9 @@
 
 ## 🎯 Active Initiative: "Kender Node Unsloth Training Offload & 5-Stage Division of Labor" (Sprint SPR-52.0)
 **Goal:** Deploy SSH OOM Immunity Sentinel (`LAB-090`), SysRq & EarlyOOM OS Protection (`LAB-091`, `LAB-092`), Foyer Loopback & `X-Lab-Key` Security Guard (`FEAT-426`), Standalone WebSocket RSS Memory Profiler (`FEAT-425`), and PCM Ring-Buffer Clamp (`FEAT-427`). **[STATUS: STORIES 1-4 COMPLETED & COMMITTED]**
+
+## 🎯 Active Initiative: "FEAT/LAB Code Mapping & Link-Drift Gate" (Sprint SPR-55)
+**Goal:** Locate the code home of every FEAT/LAB entry in the Feature Tracker, add **`Code:`** fields with git links, tag untagged ACTIVE/DESIGN features at their primary code locations, publish a machine-readable feature map, and install a link-drift verification hard gate into the site build. **[STATUS: COMPLETE — 271/271 features mapped & reviewed, 157 tags applied across 97 files, verifier gate live in build_site.py]**
 
 ## 🎯 Active Initiative: "Single Source of Truth, Integration Test Abstraction & DCGM Harvester" (Sprint SPR-49.0)
 **Goal:** Enforce centralized `get_unified_base_model()` resolution from `infrastructure.json` (`model_manifest.unified-base`), abstract whitelisted integration tests with the `UNITY` pointer standard, implement Class-1 Prometheus DCGM GPU harvester in `live_telemetry.py`, and wire live VRAM, power draw, and host swap metrics into the Ignition vitals loop (`status.json`). **[STATUS: COMPLETE]**
@@ -62,6 +66,7 @@
     *   `Hephaestus` (`groq/llama-3.3-70b-versatile`): Fast single-file triage & repair.
 
 ## ✅ Global Milestones (July 2026)
+0.  **FEAT/LAB Code Mapping & Link-Drift Gate [SPR-55]**: **COMPLETE**. Located and verified the code home of all **271/271** Feature Tracker entries (259 FEAT incl. 6 sub-versions + 12 LAB). Added **`Code:`** git-link fields to every entry, applied 157 tag comments across 97 files as a cohesive diff, published `field_notes/FEATURE_CODE_MAP.md`, and wired `verify_feature_links.py` into `build_site.py` as a hard gate (skippable via `--no-verify`). Key findings: 12 ECHO duplicate ID groups need renumbering sign-off; 4 features remain STILL-LOST (FEAT-337/342/339/118); 71 Uncharted code tags have no tracker entry. Documented in `field_notes/features_review.md`.
 1.  **Real-Time Observability & Grafana Pipeline Synthesis [SPR-40.0]**: **COMPLETE**. Exposed model-level telemetry (TTFT, throughput, ITL, VRAM) as Prometheus Gauges. Designed and provisioned the `MoE+ Latency Nuance` dashboard containing stacked area charts, routing heatmaps, state timeline Gantt charts, and box plots. Integrated Class 1 CSS-style tab navigation toggle into `benchmarks.html` to swap views between Local 2080 Ti and KENDER 4090, embedding Grafana panels via anonymous `<iframe>` embeds with offline fallbacks. Compiled and verified site builds.
 2.  **Federated Routing & "MoE+" Research [SPR-39.0]**: **COMPLETE**. All 4 Stories completed. Story 1 (Latency Hiding & Pre-Gated Routing Pipeline), Story 2 (MoE+ Federated Router Harness), and Story 3 (MoE+ Benchmarking Framework) implemented and verified. Story 4 (Airlock Realignment) done: index.html updated with custom `.airlock-divider` CSS/HTML blocks, and `sync_stories.sh` parser created to strip private data and mission-control tags from stories.html for public airlock access.
 3.  **Swarm Shakedown & Temporal Calibration [SPR-38.0]**: **COMPLETE**. All 4 Stories completed. Story 1 (OpenAgent Shakedown and Model Concurrency Deadlock Fixes) done; Story 2 (RAG Adaptive Temporal Compass and /reset mitigation) done; Story 3 (Vibe Triage Meta rule) done; Story 4 (JSON Pretty-Printing in Intercom) done. protocols.md, AGY_TO_OPENAGENT_PLAYBOOK.md, and OPENAGENT_HANDOVER_PLAYBOOK.md updated with swarm category mappings, Ollama deadlock mitigations, and protocol pain points (lint-gating, DNA grounding, named sessions).

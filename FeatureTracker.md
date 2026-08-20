@@ -2011,3 +2011,10 @@
 **Rationale:** Eliminates silent UI stalls by rendering backend stage/orchestrator exceptions directly in the Crosstalk Bar log container in real-time.
 **Mechanism:** `_spawn_deep_thought_preamble()` and `run_division_of_labor()` in `HomeLabAI/src/v5/foyer/router.py`.
 **Mechanism:** `Portfolio_Dev/FeatureTracker.md`.
+
+## [FEAT-465] FEAT/LAB Code Mapping & Link-Drift Gate
+**Status:** COMPLETED (Sprint 55)
+**Code:** [field_notes/features_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/features_build.py#L1) — FEAT/LAB Code Mapping & Link-Drift Gate.
+**Logic:** Located the code home of every FEAT/LAB entry in the Feature Tracker, added **`Code:`** git-link fields, tagged untagged ACTIVE/DESIGN features at their primary code locations, published a machine-readable feature map, and installed a link-drift verification hard gate into the site build.
+**Rationale:** Eliminates untracked features and broken code references by making every feature's implementation location explicit, verifiable, and build-gated.
+**Mechanism:** `field_notes/features_build.py`, `field_notes/verify_feature_links.py`, `field_notes/build_site.py`, `FeatureTracker.md` **`Code:`** fields, and `field_notes/FEATURE_CODE_MAP.md`.
