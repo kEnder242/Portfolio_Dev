@@ -11,7 +11,7 @@
 
 ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/behavior_test.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L25) — Unity Pattern (Multi-LoRA Residency) [SCAR #5].
 **Logic:** Run all concurrent local nodes (Pinky, Shadow Brain, Lab Actor) on a shared **Unified 3B Base Model** footprint. 
 **Rationale:** To maximize VRAM efficiency on the 11GB 2080 Ti. By sharing the base weights, we only pay the VRAM penalty once, while switching "personalities" through low-overhead LoRA adapters.
 **SCAR #5:** Windows Isolation. Windows (Node 'Brain') remains Sovereign and decoupled from Linux model sync.
@@ -19,7 +19,7 @@
 
 ## [FEAT-154] Environmental Awareness Node (The Lab Actor)
 **Status:** ACTIVE (UNITY-ALIGNED)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/manual_vllm_igniter.sh](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/manual_vllm_igniter.sh#L14) — Environmental Awareness Node (The Lab Actor).
 **Logic:** The "Lab" is a first-class LLM resident running on the **Unified 3B Base**.
 **Rationale:** To maintain [FEAT-030] Unity compliance. The Lab Actor shares the same VRAM footprint as Pinky and the Shadow Brain, ensuring zero additional memory overhead.
 **Mechanism:** A specialized, low-latency LoRA adapter (`lab_sentinel_v1`) that transforms the 3B base into a situational auditor. It "hears" user input + hardware telemetry and outputs high-level coordination hints (e.g. `[EXIT_LIKELY]`, `[STRATEGIC]`) to the other nodes.
@@ -64,7 +64,7 @@
 
 ## [FEAT-023] The Stoic Strategist (Identity Anchor)
 **Status:** ACTIVE (RE-GROUNDED)
-**Code:** *none found (documented only)*
+**Code:** [field_notes/evaluate_rag.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/evaluate_rag.py#L160) — The Stoic Strategist (Identity Anchor).
 **Logic:** Brain is the "Stoic Reasoner" (Opus Distillation); Pinky is the "Intuitive Foil" (AYPWIP literalism). 
 **Verification:** `src/debug/test_persona_bugs.py`.
 
@@ -91,17 +91,17 @@
 
 ## [FEAT-053] Contextual Tics
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L418) — Contextual Tics.
 **Logic:** Updates `monitor_task_with_tics` to provide Brain-health-specific feedback (e.g., "Resonating weights", "Sovereign unreachable") during long reasoning tasks.
 
 ## [FEAT-055] Manual Task Trigger (Fast Alarm)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/trigger_mute.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/trigger_mute.py#L6) — Manual Task Trigger (Fast Alarm).
 **Logic:** Adds `--trigger-task` flag to `acme_lab.py` to allow immediate execution of scheduled jobs (Recruiter/Architect) for debugging.
 
 ## [FEAT-066] The "Temporal Moat" (Context Aging)
 **Status:** ACTIVE (TRANSFORMING)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_banter_decay.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_banter_decay.py#L21) — The "Temporal Moat" (Context Aging).
 **Logic:** Dynamically shifts Pinky's cognitive mode and polling interval (`reflex_ttl`) based on session interaction density.
 **Rationale:** Simple frequency decay was too system-noisy. Mode-based scaling allows Pinky to remain a constant presence while shifting focus between "Collaborative Frame" (High Activity) and "Literal Grounding" (Idle).
 **Modes:**
@@ -111,13 +111,13 @@
 
 ## [FEAT-067] Diamond Dreaming (Subconscious Consolidation)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L6) — Diamond Dreaming (Subconscious Consolidation).
 **Logic:** A background process (`dream_cycle.py`) that periodically synthesizes chaotic interaction logs into high-density "Diamond Wisdom" paragraphs.
 **Mechanism:** Employs a cross-host fallback (Windows 4090 -> Local 2080 Ti) to ensure memory evolution even during partial outages.
 
 ## [FEAT-069] Hardware-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/jellyfin_autotune.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/jellyfin_autotune.py#L4) — Hardware-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2].
 **Logic:** Automatically "Downshifts" or suspends reasoning engines based on real-time NVML telemetry to maintain Lab availability during hardware multi-tenancy.
 **SCAR #2:** Feb 13 "333MiB Wall" / Turing BF16 initialization deadlock.
 **Mechanism:**
@@ -129,7 +129,7 @@
 
 ## [FEAT-070] Hallucination Shunting
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/cognitive_audit.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/cognitive_audit.py#L24) — Hallucination Shunting.
 **Logic:** If a reasoning node attempts to use an unknown or hallucinated tool, the orchestrator intercepts the error and shunts it back to the Pinky Gateway for characterful recovery and user feedback.
 
 ## [FEAT-064] Static Site Synthesis (build_site.py)
@@ -140,7 +140,7 @@
 
 ## [FEAT-065] Cross-Platform Synchronization
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/delegate_retrospective.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/delegate_retrospective.py#L4) — Cross-Platform Synchronization.
 **Logic:** Shell-based synchronization (`sync_to_linux.sh`, `sync_to_windows.sh`) using `rsync` and Google Drive mounts to maintain code parity across the hybrid lab.
 
 ## [FEAT-062] Protocol Handshake (Version Sync)
@@ -151,7 +151,7 @@
 
 ## [FEAT-063] Cache-Busting Deployment
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L7) — Cache-Busting Deployment.
 **Logic:** Uses query-string versioning (e.g., `script.js?v=fc6916a8`) in `intercom.html` to force browsers and Cloudflare to bypass stale caches during infrastructure updates.
 
 ## [FEAT-058] Strategic Console Routing
@@ -163,13 +163,13 @@
 
 ## [FEAT-059] Real-Time PCM Audio Streaming
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L3) — Real-Time PCM Audio Streaming.
 **Logic:** Browser-based voice capture downsamples audio to 16kHz mono and converts to Signed Int16 PCM before WebSocket streaming.
 **Verification:** `src/debug/test_web_binary.py`.
 
 ## [FEAT-076] Sovereign Response Verification
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/cognitive_audit.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/cognitive_audit.py#L13) — Sovereign Response Verification.
 **Logic:** A multi-layered test suite that verifies the Brain's reasoning capacity and its primary-to-fallback lifecycle.
 **Verification:** 
 - `src/debug/test_pi_flow.py`: Verifies end-to-end technical accuracy and bicameral delegation.
@@ -197,30 +197,30 @@
 
 ## [FEAT-056] MIB Memory Wipe (Neuralyzer)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L3) — MIB Memory Wipe (Neuralyzer).
 **Logic:** Allows user to manually clear the interaction context using trigger phrases like "Look at the light" or "Neuralyzer".
 **Mechanism:** Resets `self.recent_interactions` in `acme_lab.py`.
 **Verification:** `src/debug/test_mib_wipe.py`.
 
 ## [FEAT-057] Deep Context (Amnesia Removal)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/harness_brain.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/harness_brain.py#L13) — Deep Context (Amnesia Removal).
 **Logic:** Removed amnesic slicing (`[-3:]`) and increased interaction cap from 10 to 50, providing Pinky with deep mid-term memory.
 **Verification:** `src/debug/test_mib_wipe.py`.
 
 ## [FEAT-043] Dead-Man's Switch
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/assets/marked.min.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/assets/marked.min.js#L65) — Dead-Man's Switch.
 **Logic:** Triggers a `CRITICAL` alert to `pager_activity.json` if the Lab port 8765 is unresponsive for more than 5 minutes, signaling unrecoverable failure.
 
 ## [FEAT-048] Monitor Task with Tics
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/monitor_wall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/monitor_wall.py#L16) — Monitor Task with Tics.
 **Logic:** Sends periodic "Thinking..." updates to the user during long-running Brain reasoning tasks to provide progress feedback.
 
 ## [FEAT-049] Scheduled Tasks (Alarm Clock)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/forge/serial_harvest_v2.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/serial_harvest_v2.py#L9) — Scheduled Tasks (Alarm Clock).
 **Logic:** Background loop that triggers automated jobs: Nightly Recruiter (02:00 AM) and Hierarchy Refactor (03:00 AM).
 
 ## [FEAT-050] Strategic Vibe Check on Save
@@ -230,7 +230,7 @@
 
 ## [FEAT-031] Logger Isolation (The Montana Fix)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/pinky_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/pinky_node.py#L4) — Logger Isolation (The Montana Fix).
 **Logic:** Hardens the Lab against stdout/stderr hijacking by asynchronous libraries.
 **Mechanism:** 
 1.  **Redirection**: Routes `acme_lab.py` and `loader.py` logging to `sys.stderr`.
@@ -248,13 +248,13 @@
 
 ## [FEAT-032] Strategic Sentinel (Amygdala Filter)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/thought_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/thought_node.py#L6) — Strategic Sentinel (Amygdala Filter).
 **Logic:** Dual-gated input filter. Voice mode uses keyword sentinel (strat_keys); Typing mode uses 1B model (stubbed) to prevent casual clutter.
 **Mechanism:** `self.mic_active` toggle in `acme_lab.py`.
 
 ## [FEAT-034] Barge-In Logic (Interrupts)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_routing_logic.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_routing_logic.py#L2) — Barge-In Logic (Interrupts).
 **Logic:** Allows user to cancel long reasoning cycles using voice interrupt keys ("wait", "stop", "hold on", "shut up").
 **Mechanism:** `ear_poller` loop in `acme_lab.py`.
 
@@ -266,13 +266,13 @@
 
 ## [FEAT-029] Absolute Zero Hardware Purification
 **Status:** ARCHIVED (Feb 19 BKM)
-**Code:** *none found (documented only)*
+**Code:** [field_notes/jellyfin_autotune.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/jellyfin_autotune.py#L4) — Absolute Zero Hardware Purification.
 **Logic:** To break circular dependency deadlocks during driver installation, the system purges all GPU-polling services and physically erases module files (`.ko.zst`) to secure a 100% vacant hardware window.
 **Mechanism:** `SESSION_BKM_FEB_19.md`.
 
 ## [FEAT-027] Iron Partition (Identity Separation)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/atomic_io.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/atomic_io.py#L15) — Iron Partition (Identity Separation).
 **Logic:** Server-side identity gating that ensures session artifacts and short-term context are strictly re-initialized during context switches.
 **Rationale:** Prevents "Cross-Session Pollution" and ensures the Lab foyer remains a clean slate for new users.
 
@@ -284,7 +284,7 @@
 
 ## [FEAT-072] Morning Briefing
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_memory_architecture.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_architecture.py#L8) — Morning Briefing.
 **Logic:** Pinky summarizes the "Nightly Dialogue" or "Dream Synthesis" upon the user's first connection of the day.
 
 ## [FEAT-073] Insight Pruning (Curated Redaction)
@@ -307,13 +307,13 @@
 
 ## [FEAT-082] Neural Priming
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_kender_restore.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_kender_restore.py#L13) — Neural Priming.
 **Logic:** Proactively loads the selected model into VRAM upon WebSocket connection.
 **Mechanism:** Triggers an immediate `check_brain_health` probe with `num_predict: 1` in `acme_lab.py` during the handshake.
 
 ## [FEAT-083] Smaller Sovereign (8B Priority)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/test_liger.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/test_liger.py#L21) — Smaller Sovereign (8B Priority).
 **Logic:** Prioritizes 8B class models (Llama 3.1) over large models (Mixtral) to guarantee <10s load times.
 **Verification:** Forensic logs confirm `llama3.1:8b` selection on KENDER despite LARGE tier request.
 
@@ -325,13 +325,13 @@
 
 ## [FEAT-085] Intelligent Keep-Alive
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_frontend_5x5.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_frontend_5x5.py#L26) — Intelligent Keep-Alive.
 **Logic:** Proactively primes the Brain every 2 minutes only while a client is connected.
 **Mechanism:** Conditional generation probes in `acme_lab.py` ensure the model remains resident in VRAM during active sessions.
 
 ## [FEAT-086] Tiered Brain Response (Preamble)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/cognitive_audit.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/cognitive_audit.py#L13) — Tiered Brain Response (Preamble).
 **Logic:** Provides sub-second feedback for deep strategic tasks by broadcasting an immediate "Thinking..." message.
 **Mechanism:** Hardcoded async broadcast in `acme_lab.py` triggered before shunting to the reasoning node.
 
@@ -350,13 +350,13 @@
 
 ## [FEAT-089] Zero Trust Guest Expansion
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L20) — Zero Trust Guest Expansion.
 **Logic:** Securely allows authorized third-party recruiters (e.g., from `intel.com`) to access the technical lobby.
 **Mechanism:** Cloudflare Access Policy updates for `notes.jason-lab.dev` and `acme.jason-lab.dev`.
 
 ## [FEAT-090] Non-Blocking Parallel Dispatch
 **Status:** ACTIVE (HYBRID)
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_delegate_canary.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_delegate_canary.py#L4) — Non-Blocking Parallel Dispatch.
 **Logic:** Stream components individually to the UI for "Live Feedback" [VIBE-002], but bundle them in the `conversations.log` for unified turn history.
 **Mechanism:** Node responses are broadcast to the user as they finish using `asyncio.as_completed` (or parallel handlers), allowing Pinky's fast replies to appear instantly while Brain calculates.
 
@@ -368,25 +368,25 @@
 
 ## [FEAT-092] Persona De-personalization (Cognitive Firewall)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/train/distill_training_data.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/distill_training_data.py#L27) — Persona De-personalization (Cognitive Firewall).
 **Logic:** Explicitly separates user-narrative (Portfolio) from agent-logic (HomeLabAI) to prevent identity bleed.
 **Mechanism:** Refactored system prompts and taxonomy to remove specific professional history anchors (e.g., "18 years", "Silicon Validation") from core cognitive profiles.
 
 ## [FEAT-093] Dynamic Environment Portability
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_federated_failover.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_federated_failover.py#L10) — Dynamic Environment Portability.
 **Logic:** Ensures the Lab is not hardcoded to a specific network or hardware set.
 **Mechanism:** Dynamic IP resolution (`resolve_ip`) and configuration-driven node affinity (`infrastructure.json`) allowing deployment outside the primary lab.
 
 ## [FEAT-094] Lively Room Banter (Handover Fillers)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/train/distill_training_data.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/distill_training_data.py#L24) — Lively Room Banter (Handover Fillers).
 **Logic:** Improves perceived responsiveness by having the Gateway (Pinky) provide filler acknowledgments during strategic handovers.
 **Mechanism:** Async broadcast of characterful quips (e.g., "Hmm...") immediately after shunting tasks to the Brain.
 
 ## [FEAT-105] Multi-Agent Simulation (MAS)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/atomic_patcher.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/atomic_patcher.py#L56) — Multi-Agent Simulation (MAS).
 **Logic:** Treat the Lab as a collaborative session between nodes that coordinate answers in real-time.
 **Mechanism:** Combined with [FEAT-094] and [FEAT-108] to simulate inter-agent coordination rather than a linear API flow.
 
@@ -398,19 +398,19 @@
 
 ## [FEAT-108] Inter-Agent Handover Signal
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/cognitive_hub.py#L9) — Inter-Agent Handover Signal.
 **Logic:** Immediate low-latency trigger from Hub to Brain upon strategic intent detection.
 **Mechanism:** Dedicated trigger packet sent to Brain node to initiate a `shallow_quip` while Pinky generates fillers.
 
 ## [FEAT-107] System-Agnostic IPC
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/setup_sysrq_earlyoom.sh](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/setup_sysrq_earlyoom.sh#L65) — System-Agnostic IPC.
 **Logic:** Decouples the Lab from hardcoded hostnames or network paths.
 **Mechanism:** Generalizing KENDER/localhost resolution via `infrastructure.json` and dynamic DNS fallbacks.
 
 ## [FEAT-095] Search Indexing Pipeline (v2.1)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/simulate_moe_pipeline.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/simulate_moe_pipeline.py#L4) — Search Indexing Pipeline (v2.1).
 **Logic:** Automated generation of a flattened keyword-to-ID mapping for lightning-fast static search.
 **Mechanism:** `scan_pinky.py` processes raw notes to produce `search_index.json`.
 
@@ -453,13 +453,13 @@
 
 ## [FEAT-102] Nuclear Cache Busting
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L7) — Nuclear Cache Busting.
 **Logic:** Forces mobile browsers and Cloudflare to bypass stale caches during infrastructure updates.
 **Mechanism:** Global versioning via `?v=X.X` query strings and forced timestamp updates in `build_site.py`.
 
 ## [FEAT-103] Cynical Ranking Algorithm
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/ai_engine_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/ai_engine_v2.py#L218) — Cynical Ranking Algorithm.
 **Logic:** Assigns a 0-4 "Showcase Value" scale to artifacts, with Rank 4 ("Diamond") representing high-value technical gems.
 **Mechanism:** AI-driven classification in `scan_artifacts.py` based on technical density and impact.
 
@@ -477,13 +477,13 @@
 
 ## [FEAT-111] Cognitive Identity Lock
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L17) — Cognitive Identity Lock.
 **Logic:** Hardened persona boundaries for failover nodes.
 **Mechanism:** Explicit "ANTI-BANTER" and "Laconic Authority" tokens in the `[FAILOVER ARCHITECT]` prompt in `acme_lab.py`.
 
 ## [FEAT-112] Sequential Brain Strategy Chain
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_live_fire_triage.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_live_fire_triage.py#L8) — Sequential Brain Strategy Chain.
 **Logic:** Prevents remote engine collisions by serializing "Quip" and "Deep Think" tasks.
 **Mechanism:** Async `brain_strategy_chain` in `acme_lab.py` ensures the 4090 handles one reasoning task at a time.
 
@@ -495,7 +495,7 @@
 
 ## [FEAT-114] Sovereign Bridge (Handover Context)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/harness_brain.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/harness_brain.py#L13) — Sovereign Bridge (Handover Context).
 **Logic:** Injects the results of the initial "Signal" quip or Hub-level strategic intent into the technical derivation's context window.
 **Rationale:** Moves from isolation to "Overhearing." Rigid isolation prevented cross-hemispheric synergy. This feature allows nodes to "overhear" Hub-level strategic intent before generation.
 **Mechanism:** Hub injects the results of the Brain's "Strategic Signal" (FEAT-028) directly into Pinky's context window *before* dispatching the final turn. 
@@ -526,13 +526,13 @@
 
 ## [FEAT-118] Resonant Oracle (Magic 8-Ball Preambles)
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_sprint51_escapes.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_sprint51_escapes.py#L5) — Resonant Oracle (Magic 8-Ball Preambles).
 **Logic:** Replaces hard-coded strings with a weighted state-aware registry.
 **Categories:** `RETRIEVING`, `UNCERTAIN`, `VRAM_STRESS`, `HANDSHAKE`.
 
 ## [FEAT-119] The Blacklist Law (Process-Strict Lifecycle) [SCAR #3]
 **Status:** ACTIVE (V5 Refactor)
-**Code:** *none found (documented only)*
+**Code:** [src/train/refine_persona.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/refine_persona.py#L3) — The Blacklist Law (Process-Strict Lifecycle) [SCAR #3].
 **Logic:** Ensures the Lab's physical ports and GPU VRAM are clear before boot by explicitly targeting ONLY processes we own.
 **SCAR #3:** Feb 11 "Ghost PID" port contention during marathon reload.
 **Purge-Before-Poll Hardening:** Explicitly DEPRECATED `fuser -k`. We now use `pkill -9` targeted strictly at our `setproctitle` hashes (e.g., `acme_foyer_v5`) and the vLLM engine binary. This prevents suicidal client drops (e.g., Gemini CLI crashes) when external processes touch the ports.
@@ -540,7 +540,7 @@
 
 ## [FEAT-372] Pre-Emptive Sensory Boot
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_memory_foil.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_foil.py#L20) — Pre-Emptive Sensory Boot.
 **Logic:** Loads the NeMo EarNode immediately on Foyer startup and exempts it from hibernation.
 **Rationale:** Preserves the ~1.5GB VRAM footprint permanently to eliminate the 45-second latency delay upon waking, ensuring voice interactiveness is instantly available.
 
@@ -577,7 +577,7 @@
 
 ## [FEAT-127] Cumulative Synthesis (Layered Refinement)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/thought_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/thought_node.py#L6) — Cumulative Synthesis (Layered Refinement).
 **Logic:** Archive refinement must follow a cumulative pattern where new technical insights are layered onto existing history rather than replacing it.
 **Mandate:** A strict semantic de-duplication gate (0.85 similarity) must be enforced within the same calendar day to prevent redundant narratives while ensuring no previous engineering work is lost.
 **Mechanism:** `aggregate_years.py` groups monthly JSONs, merges them with existing yearly summaries, and performs cross-file de-duplication. Integrated into `mass_scan.py` lifecycle.
@@ -602,7 +602,7 @@
 
 ## [FEAT-129] The Philosophical Core
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py#L308) — The Philosophical Core.
 **Logic:** Explicitly extracts core engineering principles ("Class 1", "Verify over Velocity") from the 2024 Philosophy document.
 **Mechanism:** Injected into the Architect Node's system prompt and RAG context to influence the overall personality and decision-making logic of the Lab.
 
@@ -632,7 +632,7 @@
 
 ## [FEAT-136] Safe-Pilot Autonomous Ignition [SCAR #4]
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L5) — Safe-Pilot Autonomous Ignition [SCAR #4].
 **Logic**: Enables the Lab to come online automatically after a system reboot without manual operator intervention, while maintaining a safety guard against VRAM collisions.
 **SCAR #4:** Mar 2 "Cold Start" misunderstanding / Reboot recovery gap.
 **Mechanism**:
@@ -687,7 +687,7 @@
 
 ## [FEAT-149] Resident Heartbeat / Auto-Bounce
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_goodnight_bounce.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_goodnight_bounce.py#L95) — Resident Heartbeat / Auto-Bounce.
 **Logic:** Implements a persistent loop for the communication hub in `SERVICE_UNATTENDED` mode. 
 **Behavior**: Detects graceful shutdowns triggered by the `close_lab` tool and automatically restarts the resident boot sequence instead of terminating the process.
 **Mechanism**: A `while True` loop wrapping the server execution in `acme_lab.py`.
@@ -695,7 +695,7 @@
 
 ## [FEAT-151] Unified Trace Monitoring (Forensic Ledger)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_goodnight_bounce.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_goodnight_bounce.py#L19) — Unified Trace Monitoring (Forensic Ledger).
 **Logic:** Provides "Appliance-Grade" visibility during autonomous transitions by capturing raw log traces directly in the **Forensic Ledger** (`pager_activity.json`).
 **Mandate:** All system alerts and deltas are preserved for long-term auditability. The **Atomic File Swap Protocol [BKM-022]** must be used for ledger updates to ensure the integrity of the historical sequence without data loss.
 **Mechanism:** `TraceMonitor` utility marks EOF at start and captures only the "Delta" (new lines) if a failure or state transition occurs.
@@ -703,7 +703,7 @@
 
 ## [FEAT-211] Shadow Archivist (Proactive Context Grafting)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/harness_brain.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/harness_brain.py#L13) — Shadow Archivist (Proactive Context Grafting).
 **Logic:** The Shadow Brain acts as the "Proactive Archivist," retrieving relevant historical JSONs/links during the 4090's warm-up period.
 **Rationale:** Eliminates "Wait-to-Ask" latency. High-fidelity context is "grafted" onto the Sovereign's derivation before it begins.
 **Mechanism:** `cognitive_hub.py` triggers a parallel `archive.get_context` call via the Shadow Brain when strategic intent or years are detected.
@@ -718,7 +718,7 @@
 
 ## [FEAT-004] [CONSOLIDATED] Shadow Dispatch (Predictive Intent)
 **Status:** CONSOLIDATED (Mar 2026)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/simulate_moe_pipeline.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/simulate_moe_pipeline.py#L48) — Shadow Dispatch (Predictive Intent).
 **Reason:** Absorbed into [FEAT-207] Tricameral Airtime and [FEAT-211] Shadow Archivist.
 
 ## [FEAT-172] [CONSOLIDATED] Hemispheric Interjection (The Active Buffer)
@@ -728,7 +728,7 @@
 
 ## [FEAT-186] [CONSOLIDATED] The "Pre-warm" Lobby (Predictive Warm-up)
 **Status:** CONSOLIDATED (Mar 2026)
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_lab_sprint20.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_lab_sprint20.py#L73) — The "Pre-warm" Lobby (Predictive Warm-up).
 **Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
 
 ## [FEAT-156] SSE Evolution (Hot Link)
@@ -741,14 +741,14 @@
 
 ## [FEAT-157] Hybrid Contextual Unification
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/scan_artifacts.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/scan_artifacts.py#L14) — Hybrid Contextual Unification.
 **Logic:** Transitions from weight-based character dependency to prompt-based character injection.
 **Rationale:** Removes the "Dependency Fragility" of physical LoRA binary files. If an adapter is missing or a model version changes, the Lab maintains its character through direct context injection. This acts as the "Safety Fallback" for character continuity.
 **Mechanism:** Hub injects high-fidelity persona traits directly into the system prompt. 
 
 ## [FEAT-158] Grounded Shadow Protocol
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_memory_foil.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_foil.py#L13) — Grounded Shadow Protocol.
 **Logic:** Refactors the Brain-to-Shadow failover from a "Pinky Hallucination" into a "Stoic Shadow" mode.
 **Rationale:** Previous failovers led to unhelpful hallucinations. The Stoic Shadow provides clinical, lead-engineer precision when the primary Sovereign is offline.
 **Mechanism:** Uses local weights to perform technical derivations with a clinical persona when KENDER is offline.
@@ -762,14 +762,14 @@
 
 ## [FEAT-161] Synthetic Character Distillation
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/forge/distill_documentation.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/distill_documentation.py#L6) — Synthetic Character Distillation.
 **Logic:** Uses the Sovereign Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
 **Rationale:** Raw logs are too noisy for effective fine-tuning. Distillation creates high-signal training data that bridges ASCII evidence with agentic character.
 **Mechanism:** `src/forge/distill_gems.py`. Successfully verified small-batch distillation using KENDER compute.
 
 ## [FEAT-162] Multi-LoRA Cognitive Loadout
 **Status:** ACTIVE (Dormant)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/atomic_patcher.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/atomic_patcher.py#L56) — Multi-LoRA Cognitive Loadout.
 **Logic:** Dynamic loading of pedigree-hardened weights at runtime via vLLM.
 **Rationale:** vLLM `--enable-lora` allows specific task-adapters (e.g. `pedigree_v2`) to be requested per-query, providing a specialized "Cognitive Loadout" for high-stakes tasks like career strategy.
 **Status:** Awaiting `pedigree_v2` weights from Phase 7 burn.
@@ -849,7 +849,7 @@
 
 ## [FEAT-095] Public Research Ledger (Static Airlock)
 **Status:** COMPLETE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/research_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/research_build.py#L3) — Public Research Ledger (Static Airlock).
 **Logic:** Sanitize the internal `research.html` for public deployment by stripping Zero Trust dependencies and inlining high-density CSS.
 **Artifacts:** `www_deploy/research.html`, `www_deploy/sync_research.sh`, and `assets/research_snapshot.png`.
 
@@ -860,7 +860,7 @@
 
 ## [FEAT-171] Intelligent Lifecycle Matrix (Disconnect vs. Close)
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/test_lab_integration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/test_lab_integration.py#L9) — Intelligent Lifecycle Matrix (Disconnect vs. Close).
 **Logic:** Context-aware lifecycle management distinguishing between passive network events and explicit tool triggers.
 **Rationale:** To ensure debug sessions clean up properly on exit without interrupting persistent background operations (Dreaming/Recruiter).
 
@@ -884,7 +884,7 @@
 
 ## [FEAT-173] Agentic Backtracking (Autonomous Exploration)
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/tests/live_fire_integration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/live_fire_integration.py#L56) — Agentic Backtracking (Autonomous Exploration).
 **Logic:** Implements the AT2QA (arXiv:2603.01853) pattern of decoupling agents from rigid retrieval workflows in favor of iterative tool-decision agency.
 **Rationale:** To solve the "Search Trap" where a single thin tool-result leads to reasoning failure or hallucination.
 **Mechanism:** 
@@ -894,7 +894,7 @@
 
 ## [FEAT-174] Multi-LoRA Expert Routing (Poor Man's MoE)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/atomic_patcher.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/atomic_patcher.py#L56) — Multi-LoRA Expert Routing (Poor Man's MoE).
 **Logic:** Applies Mixture-of-Experts (MoE) architectural lessons to a Multi-LoRA environment on small resident models (3B).
 **Rationale:** To achieve "Ultimate Expert Specialization" (DeepSeekMoE) without the VRAM penalty of a 14B+ model. 
 **Mechanisms:**
@@ -929,7 +929,7 @@
 
 ## [FEAT-182] Neural Resonance (Strategic Interjection)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_pi_flow.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_pi_flow.py#L11) — Neural Resonance (Strategic Interjection).
 **Logic:** Implements true 'overhearing' synergy using the [FEAT-172] Active Buffer mechanism.
 **Rationale:** Eliminates the 'Hollow Echo Chamber' by ensuring Pinky's initial intuition informs the Brain's deep reasoning chain in real-time.
 **Mechanism:** Injects a [PINKY_HEARING] block into the Brain's context window containing the results of the triage facilitate task.
@@ -943,14 +943,14 @@
 
 ## [FEAT-184] The "Amygdala" Weight (Sentinel v2.1)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_memory_architecture.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_architecture.py#L10) — The "Amygdala" Weight (Sentinel v2.1).
 **Logic:** Refines the sentinel from a keyword list into a true "Uncertainty Gate."
 **Rationale:** Keyword sentinels are too rigid. A logic-based check can decide if the Brain needs to interject based on the complexity or inconsistency of the query.
 **Mechanism:** `cognitive_hub.py` Uncertainty Gate reflex plumbed into the triage layer.
 
 ## [FEAT-185] Alluring Instrumentation (Juicy Tooling)
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/thought_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/thought_node.py#L9) — Alluring Instrumentation (Juicy Tooling).
 **Logic:** Refactors tool descriptions to be highly enticing and precise for agentic reasoning.
 **Rationale:** If tool descriptions sound like high-precision instruments of truth, the LLM is statistically more likely to reach for them during complex reasoning.
 **Mechanism:** Applying 'The Strategic Architect's Scalpel' terminology across the toolset.
@@ -964,21 +964,21 @@
 
 ## [FEAT-187] CLaRa Model Re-training (Unified 3B Refinement)
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/debug/harness_prompt_iteration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/harness_prompt_iteration.py#L9) — CLaRa Model Re-training (Unified 3B Refinement).
 **Logic:** Fine-tunes the Unified 3B Base (Llama 3.2) using "Synergy Pairs" from interaction logs.
 **Rationale:** Moves beyond prompt injection to make "Neural Resonance" a native behavior of the resident nodes.
 **Mechanism:** Utilizes the [FORGE-01] infrastructure to train on processed conversation turns where Pinky/Brain cooperation was successful.
 
 ## [FEAT-188] Resonant Memory (Bicameral Momentum)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L3) — Resonant Memory (Bicameral Momentum).
 **Logic:** Expands the 'Overhearing' mechanism from a single-turn injection to a multi-turn semantic buffer.
 **Rationale:** To build behavioral momentum. The Brain should 'overhear' not just the immediate triage intuition, but the evolution of Pinky's sentiment over the last 3 interactions.
 **Mechanism:** CognitiveHub maintains a 3-turn buffer of Pinky's triage results and injects them as a [RESONANT_HISTORY] block.
 
 ## [FEAT-189] Vibe-Driven Tool Pruning
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/forge/generate_sentinel_curriculum.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/generate_sentinel_curriculum.py#L34) — Vibe-Driven Tool Pruning.
 **Logic:** Dynamically filters the Brain's available MCP toolset based on the Hub's Vibe Check.
 **Rationale:** Reduces the 'Hallucination Surface Area.' If the vibe is 'Tactical,' the Brain should only see high-precision diagnostic tools, preventing it from reaching for broad archival tools unnecessarily.
 **Mechanism:** Hub generates a 'tool_allowlist' based on the retrieved vibe metadata.
@@ -1024,28 +1024,28 @@
 
 ## [FEAT-199] Hub-Level CORS Support
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/test_liger.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/test_liger.py#L5) — Hub-Level CORS Support.
 **Logic:** Implements 'aiohttp_cors' in 'acme_lab.py' to allow cross-origin WebSocket handshakes.
 **Rationale:** Necessary for browser-based Intercom access when the UI is served via a different port (e.g., 9001) or hostname.
 **Mechanism:** CORS configuration in Hub's 'run' loop allowing all origins by default.
 
 ## [FEAT-198] Safe-Scalpel (Surgical MCP Tool)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/system_scalpel.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/system_scalpel.py#L6) — Safe-Scalpel (Surgical MCP Tool).
 **Logic:** A system-level MCP server providing the `safe_scalpel` tool for lint-gated code patching directly to the Gemini CLI.
 **Rationale:** Promotes the surgical patching logic from a "resident" tool to a first-class system capability. Ensures exactly-once replacement and provides detailed linting feedback (Ruff/ESLint).
 **Mechanism:** `system_scalpel.py` standalone MCP server registered in `settings.json`.
 
 ## [FEAT-200] UI Debug Visibility
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_relay_interest_buildup.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_relay_interest_buildup.py#L7) — UI Debug Visibility.
 **Logic:** Injects comprehensive packet logging into the Intercom UI.
 **Rationale:** To provide the Lead Engineer with real-time visibility into Hub-to-UI data flow, facilitating rapid forensic diagnostics of connection or routing issues.
 **Mechanism:** 'console.log("[WS RECV]", data)' in 'intercom_v2.js'.
 
 ## [FEAT-201] Neural Shock (Negative Feedback Loop)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/behavior_test.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L15) — Neural Shock (Negative Feedback Loop).
 **Logic:** Replaces extreme shutdowns with a logic-based "Shock" to the LLM when it hallucinations a tool.
 **Rationale:** Halts logic-drift without killing the session. Provides a negative penalty header forcing the node to re-derive its reasoning.
 **Mechanism:** `[SYSTEM_SHOCK]` interjection re-injected into the query context on tool-execution error.
@@ -1073,14 +1073,14 @@
 
 ## [FEAT-208] Manifest Authority
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/forge/dedupe_prompts.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/dedupe_prompts.py#L8) — Manifest Authority.
 **Logic:** Links the extraction harvester to the Librarian's `file_manifest.json` for dynamic source file resolution.
 **Rationale:** Eliminates hardcoded log mappings. Ensures that new files categorized by the Librarian are immediately accessible to the Bridge.
 **Mechanism:** `serial_harvest_v2.py` performs a real-time year/type lookup against the manifest.
 
 ## [FEAT-209] Double-Tap Search Pattern
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/behavior_test.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L25) — Double-Tap Search Pattern.
 **Logic:** Implements redundant archival searching by querying both the raw daily log (`type:LOG`) and the distilled review/resume (`type:META`) for a given artifact year.
 **Rationale:** Maximizes technical block yield. If a detail is missing from the chronological log, the high-level performance review often contains the "Physical Truth."
 **Mechanism:** Sequential multi-file loop in `serial_harvest_v2.py` for every identified gem.
@@ -1150,7 +1150,7 @@
 
 ## [FEAT-221] Crosstalk Status Line
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/utils.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/utils.py#L32) — Crosstalk Status Line.
 **Logic:** Offloads inter-agent "thinking" banter from the primary Pinky console to a dedicated 1-line status bar.
 **Mechanism:** 
 1.  'intercom_v2.js' intercepts 'crosstalk' packets and updates the '#crosstalk-bar' element.
@@ -1168,7 +1168,7 @@
 
 ## [FEAT-223] Global Error Sentry
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/script.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/script.js#L1) — Global Error Sentry.
 **Logic:** Prevents "Silent Death" of the UI by catching syntax and runtime errors before scripts load.
 **Mechanism:** 
 1. Inline script in <head> hooks window.onerror and unhandledrejection.
@@ -1208,7 +1208,7 @@
 
 ## [FEAT-236] Relay Route Awareness
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_routing_logic.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_routing_logic.py#L18) — Relay Route Awareness.
 **Logic:** Injects situational "Route Data" (Role, Fuel, Destination) into node context windows to prevent hemispheric identity bleed.
 **Rationale:** Prevents small models from "Roleplaying" other nodes (e.g., Pinky calculating Pi). Nodes become aware of their specific duty in the current turn sequence.
 **Mechanisms:**
@@ -1245,13 +1245,13 @@
 
 ## [FEAT-244] Speaker Masking
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_rude_gauntlet.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_rude_gauntlet.py#L80) — Speaker Masking.
 **Logic:** Hub-side selective muting based on the `addressed_to` scalar from Sentinel.
 **Mechanism:** Prevents nodes from speaking if they are not the intended target of the semantic address.
 
 ## [FEAT-245] Identity Shielding (Semantic Isolation)
 **Status:** ACTIVE (Modernization Planned Sprint 31)
-**Code:** *none found (documented only)*
+**Code:** [src/test_cache_integration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/test_cache_integration.py#L10) — Identity Shielding (Semantic Isolation).
 **Logic:** Distinction between Current Lab State (The Brain) and Historical Archive (Deep Thought) to prevent memory bleed.
 **Refactor Strategy:** Merge into [VIBE-012] (Hemispheric Independence). Enforce boundaries through modular prompt injection.
 **Rationale:** Prevents \"Memory Bleed\" where nodes hallucinate personal experiences from the 18-year archive.
@@ -1270,7 +1270,7 @@
 
 ## [FEAT-249] VRAM Hibernation Matrix (Deep Sleep)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [pulse_monitor.sh](https://gitlab.com/kEnder242/Dev_Lab/blob/main/pulse_monitor.sh#L6) — VRAM Hibernation Matrix (Deep Sleep).
 **Logic:** Tiered VRAM reclamation based on client connectivity and activity timers.
 **Mechanism:** Reclaims ~6GB VRAM after 10m idle time.
 
@@ -1282,13 +1282,13 @@
 
 ## [FEAT-249.4] Shadow Mute Recovery [FOR REVIEW]
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_memory_foil.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_foil.py#L13) — Shadow Mute Recovery [FOR REVIEW].
 **Logic:** Lowers Shadow activation threshold to 0.0 when KENDER is offline.
 **Rationale:** Ensures local technical failover is always active when sovereign compute is unreachable.
 
 ## [FEAT-249.5] Sovereign Fallback (Double-Tap Shadow)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L7) — Sovereign Fallback (Double-Tap Shadow).
 **Logic:** Re-invokes Shadow at high fuel (>0.6) for technical synthesis when Brain is offline.
 
 ## [FEAT-250] Surgical Ignition (Immunity-Aware)
@@ -1299,12 +1299,12 @@
 
 ## [FEAT-251.2] Forensic Wait (Early Crash Detection)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/jellyfin_autotune.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/jellyfin_autotune.py#L5) — Forensic Wait (Early Crash Detection).
 **Logic:** Monitor logs for 'Traceback' during boot to bypass blind 120s timeouts.
 
 ## [FEAT-252] Dynamic Secret Rotation
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/features_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/features_build.py#L3) — Dynamic Secret Rotation.
 **Logic:** Unique `uuid4` session tokens generated on every ignition to invalidate old sessions.
 
 ## [FEAT-253] Dynamic Role Discovery
@@ -1314,18 +1314,18 @@
 
 ## [FEAT-254] VRAM Pre-Flight Gate
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_perf_5x5_timed.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_perf_5x5_timed.py#L34) — VRAM Pre-Flight Gate.
 **Logic:** Refuse ignition if `FreeVRAM < RequiredVRAM`.
 
 ## [FEAT-257] Physical Pre-Flight Purge (Nuclear Assassin)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/train/refine_persona.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/refine_persona.py#L4) — Physical Pre-Flight Purge (Nuclear Assassin).
 **Logic:** OS-level port clearing and process reaping via systemd.
 **Mechanism:** `ExecStopPost` logic in `lab-attendant.service` ensuring a clean process state when the service exits.
 
 ## [FEAT-259] Targeted Hibernation (The Butler Pattern)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/behavior_test.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L25) — Targeted Hibernation (The Butler Pattern).
 **Logic:** Surgical reaping of session-specific engine processes during hibernation while sparing the management layer.
 **Mechanism:** 
 1.  **SPARE**: Hub (`acme_lab.py`) and Resident Nodes are spared.
@@ -1333,7 +1333,7 @@
 
 ## [FEAT-260] Fast-Path STUB Engine (Model Proxy)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/harness_prompt_iteration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/harness_prompt_iteration.py#L9) — Fast-Path STUB Engine (Model Proxy).
 **Logic:** A high-speed simulation mode that bypasses physical GPU hardware gates.
 **Mechanism:** Bypasses VRAM pre-flight and subprocess spawning for rapid state testing.
 
@@ -1373,7 +1373,7 @@
 
 ## [FEAT-284] Engine-Aware Foyer Gate
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L6) — Engine-Aware Foyer Gate.
 **Logic:** Explicitly blocks user queries during the 'WAKING' state.
 
 ## [FEAT-285] High-Fidelity Priming Telemetry
@@ -1383,7 +1383,7 @@
 
 ## [FEAT-286] Escalation Probe Protocol
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [HubProbe.py](https://gitlab.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Escalation Probe Protocol.
 **Logic:** Implements a 3-stage ignition sequence for remote and local engines:
 1.  **Stage 1 (Ping):** Verifies physical network/port reachability.
 2.  **Stage 2 (Tags):** Verifies API readiness and model manifest availability.
@@ -1399,7 +1399,7 @@
 
 ## [FEAT-288] Hash-Based Port Authority
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/thought_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/thought_node.py#L8) — Hash-Based Port Authority.
 **Logic:** Replaces the 'Nuclear Port Guard' (`fuser -k`) with strict PID file and process-name tracking.
 **Rationale:** Solves the "Zombie Port" problem where dormant engines or `TIME_WAIT` sockets block new family members, while preventing the suicidal reaping of active client connections.
 **Mechanism:** `cleanup_processes` in `manager.py` targets specific hashes.
@@ -1423,7 +1423,7 @@
 
 ## [FEAT-318] Quiescence Telemetry (The Settle Window)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/five_by_five_gauntlet.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/five_by_five_gauntlet.py#L9) — Quiescence Telemetry (The Settle Window).
 **Logic**: Exposes the remaining boot grace window to the dashboard and test harnesses for deterministic sequencing.
 **Mechanism**: `/status` endpoint returns `quiescence_remaining` in seconds, derived from the internal `boot_grace_period` (decremented every 2s pulse).
 **Rationale**: Eliminates "Wait-and-Guess" patterns in user interfaces and automated endurance tests.
@@ -1437,7 +1437,7 @@
 
 ## [FEAT-368] Vocal Handshake
 **Status:** ACTIVE (Modernization Planned Sprint 31)
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_deep_thought_vocal.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_deep_thought_vocal.py#L8) — Vocal Handshake.
 **Logic:** Immediate persona feedback during engine ignition. If the engine is still warming, Pinky provides a hardcoded Semantic Handshake instead of crashing or providing reflex-only output.
 **Mechanism:** Triggered within `cognitive_hub.py` and `acme_lab.py` during engine-down events or triage connection errors.
 **Refactor Strategy:** Harden into a "Systemic Handshake" that triggers on all engine latency events, not just explicit connection errors.
@@ -1446,19 +1446,19 @@
 
 ## [FEAT-369] Turing JIT Path Resilience
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/bridge_burn_to_rag.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/bridge_burn_to_rag.py#L66) — Turing JIT Path Resilience.
 **Logic**: Automates the restoration of fragmented CUDA libraries after driver upgrades.
 **Mechanism**: Injects `LD_LIBRARY_PATH` dynamically into systemd and ignition scripts.
 
 ## [FEAT-370] Boot Storm Mitigation
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/repro_vram_corruption.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/repro_vram_corruption.py#L43) — Boot Storm Mitigation.
 **Logic**: Prevents redundant logical node tasks during high-frequency ignition cycles.
 **Mechanism**: Uses `asyncio.Lock` and a 'booting' latch in the Resident Manager.
 
 ## [FEAT-371] Robust Token Extraction (Multi-Source)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/test_dispatch_logic.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_dispatch_logic.py#L16) — Robust Token Extraction (Multi-Source).
 **Logic**: Ensures model responses are never muzzled by vLLM's internal parsing logic.
 **Mechanism**: `_stream_vllm` now extracts tokens from both `content` and `tool_calls` function arguments.
 
@@ -1476,7 +1476,7 @@
 
 ## [FEAT-220.1] Physical Scavenging (Process Adoption)
 **Status:** DEFEATURED (Sprint 31)
-**Code:** *none found (documented only)*
+**Code:** [src/train/refine_persona.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/refine_persona.py#L3) — Physical Scavenging (Process Adoption).
 **Logic**: Scans active ports/processes on boot and "adopts" existing foyer or engine processes into the ledger.
 **Mechanism**: Omitted in V5 in favor of clean-slate namespaces via `ExecStartPre` namespace cleanup (`pkill -9`). Removes "ghost state" traps.
 
@@ -1506,7 +1506,7 @@
 ## [FEAT-401] Semantic Annealing Pipeline
 
 **Status:** DESIGN
-**Code:** *none found (documented only)*
+**Code:** [src/debug/simulate_moe_pipeline.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/simulate_moe_pipeline.py#L4) — Semantic Annealing Pipeline.
 
 **Logic:** Integrates background self-evaluation with online/offline human feedback. Ingested events and night dream cycles are verified by a background evaluator, while user chat corrections (online) or dashboard flags (offline) write persistent correction rules to resolve factual errors and feed the RAG correction loop.
 
@@ -1516,14 +1516,14 @@
 
 ## [FEAT-402] Asymmetric Telemetry Probe (Failover Optimization)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [HubProbe.py](https://gitlab.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Asymmetric Telemetry Probe (Failover Optimization).
 **Logic:** Differentiates between hard offline states (Connection Refused) and soft loading states (inference lag) to optimize the remote KENDER 4090 failover.
 **Rationale:** Prevents premature failover during long-running tasks or loading peaks, while ensuring rapid re-connection when the primary host boots.
 **Mechanism:** Strict 5-second check timeout, asymmetric cache (300s success, 15s failure), 180-second loading grace period, and dynamic interjections for turns exceeding 10 seconds of remote latency.
 
 ## [FEAT-403] Dream Pass Synthesis (Fine-Tuning Prep)
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L447) — Dream Pass Synthesis (Fine-Tuning Prep).
 **Logic:** Structured dataset creation utilizing a specialized `[DREAM_PASS]` header on KENDER to synthesize raw, messy chat history into idealized instruction-response pairs for LoRA training.
 **Rationale:** Standardizes weight training on high-signal logical constructs rather than noisy interactive chat.
 **Mechanism:** Persona-locked generation prompts, Stage 2 regex-based output cleaning, and validation of dataset format prior to adapter training.
@@ -1593,14 +1593,14 @@
 
 ## [FEAT-413] Decoupled Queue Drainer & Node Boot Mutex
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_v5_stabilization.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_v5_stabilization.py#L70) — Decoupled Queue Drainer & Node Boot Mutex.
 **Logic:** Separates request queue processing into an asynchronous background loop with node-level initialization locks, preventing race conditions during cold node boots and damping casual routing penalties.
 **Rationale:** Solves queue stalls and socket deadlocks when multiple user or background requests arrive during node cold starts.
 **Mechanism:** Async queue drainer task in `foyer/router.py`, initialization mutex per resident node.
 
 ## [FEAT-414] MoE+ Latency-Hiding Telemetry Stack & Preamble Fill
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L67) — MoE+ Latency-Hiding Telemetry Stack & Preamble Fill.
 **Logic:** Overlaps intent triage, RAG retrieval, and workspace gathering with model warmup latency, streaming Pinky preamble tokens to fill the air while remote compute engines (KENDER 4090 / vLLM / Brain) ignite or load KV cache. Streams multi-stage latency gauges via Prometheus on port 8010.
 **Rationale:** Prevents 3–10 seconds of dead silence during remote GPU model ignition or heavy reasoning steps, providing continuous feedback and microsecond-level telemetry to Prometheus/Grafana.
 **Mechanism:** `benchmark_routing` in `bench_moe_plus.py`, Prometheus gauge metrics on port 8010, concurrent preamble streaming in `cognitive_hub.py`.
@@ -1614,7 +1614,7 @@
 
 ## [FEAT-416] Single-Epoch Nightly Refinement Sweeper
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1) — Single-Epoch Nightly Refinement Sweeper.
 **Logic:** Executes a single bounded epoch of note nibbling, gem refinement (up to 50 historical items), de-duplication, and yearly aggregation during the 2:00 AM maintenance window, exiting cleanly upon completion to yield the GPU to other nightly jobs and trigger H2 Lean Sleep.
 **Rationale:** Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.
 **Mechanism:** `--once` flag in `field_notes/mass_scan.py`, oneshot service `field-notes-nightly.service`, and `field-notes-nightly.timer` systemd unit.
@@ -1727,7 +1727,7 @@
 
 ## [FEAT-440] Taxonomy Separation: Agent DNA vs. User Work History
 **Status:** ACTIVE
-**Code:** *none found (documented only)*
+**Code:** [src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L144) — Taxonomy Separation: Agent DNA vs. User Work History.
 **Logic:** Separates system/behavioral instructions (behavioral_dna, feature_dna) from historical user pedigree (career_ledger, artifact_vault, lab_journal) across ChromaDB collections.
 **Rationale:** Prevents context bleeding between internal cognitive prompts and 18-year career work history.
 **Mechanism:** 5 distinct ChromaDB collections on port 8001, populated via index_artifacts_to_rag.py and index_resume_to_rag.py.
@@ -1779,7 +1779,7 @@
 
 ## [LAB-090] SSH OOM Immunity Sentinel
 **Status:** COMPLETED (Sprint 50)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures systemd service override for `sshd.service` with `OOMScoreAdjust=-1000`, `MemoryMin=256M`, and `CPUSchedulingPolicy=rr`.
 **Rationale:** Guarantees that SSH and remote VSCode tunnel sessions are never killed or swap-frozen during extreme host RAM pressure.
 **Mechanism:** `/etc/systemd/system/sshd.service.d/override.conf` or user systemd override unit.
@@ -1788,7 +1788,7 @@
 
 ## [LAB-091] Kernel SysRq Emergency Protocol
 **Status:** COMPLETED (Sprint 50)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Enables kernel-level SysRq magic key interface (`kernel.sysrq = 1`).
 **Rationale:** Provides an out-of-band emergency mechanism to safely sync disks (`echo s > /proc/sysrq-trigger`) and trigger instant kernel reboot (`echo b`) during hard userland freezes.
 **Mechanism:** `/etc/sysctl.d/99-sysrq.conf` sysctl configuration.
@@ -1797,7 +1797,7 @@
 
 ## [LAB-092] Proactive Memory Kicker (EarlyOOM Sentinel)
 **Status:** COMPLETED (Sprint 50)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Deploys `earlyoom` with 5% RAM and 10% Swap thresholds.
 **Rationale:** Terminates runaway background Python memory consumers *before* host swap space thrashing locks the OS and I/O bus.
 **Mechanism:** `earlyoom` system service configuration.
@@ -1806,7 +1806,7 @@
 
 ## [FEAT-425] Standalone WebSocket RSS Memory Profiler
 **Status:** COMPLETED (Sprint 50)
-**Code:** *none found (documented only)*
+**Code:** [src/forge/dream_voice_FAST.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/dream_voice_FAST.py#L32) — Standalone WebSocket RSS Memory Profiler.
 **Logic:** Creates `psutil` profiling harness `HomeLabAI/src/infra/profile_ws_memory.py` measuring memory footprint during live WebSocket PCM audio streaming.
 **Rationale:** Isolates exact RSS memory overhead added by WebSockets vs LLM KV-cache allocations.
 **Mechanism:** `profile_ws_memory.py` harness with `status.json` reporting.
@@ -1842,7 +1842,7 @@
 
 ## [LAB-093] Lab-Attendant Cgroup Memory Sentinel
 **Status:** COMPLETED (Sprint 50)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures `MemoryMax=4G` and `ManagedOOMPreference=kill` in `lab-attendant.service`.
 **Rationale:** Ensures that if `lab-attendant` or audio stream buffers experience memory pressure, systemd isolates and terminates only `lab-attendant`, keeping host OS, SSH, and other services 100% online.
 **Mechanism:** `lab-attendant.service` systemd unit configuration.
@@ -1851,7 +1851,7 @@
 
 ## [FEAT-429] Foyer Disconnect Memory Reclaim Sentinel
 **Status:** COMPLETED (Sprint 50)
-**Code:** *none found (documented only)*
+**Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L3) — Foyer Disconnect Memory Reclaim Sentinel.
 **Logic:** Implements explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
 **Rationale:** Prevents memory accumulation and orphan audio buffer leaks across multiple browser reloads or tab closures.
 **Mechanism:** `on_close()` handler in `attendant.py` and garbage collection sentinel.
@@ -1878,35 +1878,35 @@
 
 ## [LAB-100] CPU Max Scaling Frequency Cap (3.5 GHz)
 **Status:** COMPLETED (Sprint 53)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Caps max scaling frequency across all 8 CPU cores to 3.5 GHz via `/etc/systemd/system/cap-cpu-freq.service` and `/sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq`.
 **Rationale:** Prevents peak 3.9 GHz thermal throttling events and hardware THERMTRIP trips.
 **Mechanism:** `cap-cpu-freq.service` systemd unit and sysfs scaling parameters.
 
 ## [LAB-101] Kernel Panic Auto-Reset & Hung Task GRUB Configuration
 **Status:** COMPLETED (Sprint 53)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures `kernel.hung_task_panic=1 panic=10` in `/etc/default/grub` and compiles via `update-grub`.
 **Rationale:** Converts silent hardware lockups into captured kernel panic tracebacks written to disk, auto-rebooting after 10s.
 **Mechanism:** `/etc/default/grub` configuration and `sysctl` kernel parameters.
 
 ## [LAB-102] ZFS ARC Max Memory Cap (1.0 GiB)
 **Status:** COMPLETED (Sprint 53)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Sets `zfs_arc_max=1073741824` in `/etc/modprobe.d/zfs.conf` and live kernel parameter `/sys/module/zfs/parameters/zfs_arc_max`.
 **Rationale:** Empirically verified via `arcstat` (98-100% metadata hit rate). Immediately reclaims **2.4 GiB physical DRAM** from disk cache (Available RAM increased from 3.5 GiB $\rightarrow$ 5.9 GiB) to guarantee allocation headroom for PyTorch, vLLM, and agent loops.
 **Mechanism:** `/etc/modprobe.d/zfs.conf` options file and ZFS kernel module parameter.
 
 ## [LAB-103] Service Cgroup Memory Limits (`opencode-core` & `lab-attendant`)
 **Status:** COMPLETED (Sprint 53)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures drop-in systemd cgroup limits for `opencode-core.service` (`MemoryHigh=3.0G`, `MemoryMax=3.5G`) and `lab-attendant.service` (`MemoryHigh=1.5G`, `MemoryMax=2.0G`).
 **Rationale:** Enforces strict memory budgets per service so an agent indexing burst or audio stream buffer spike cannot starve host DRAM or trigger host-wide thrashing.
 **Mechanism:** Systemd drop-in configuration files `/etc/systemd/system/*.service.d/50-memory-limit.conf`.
 
 ## [LAB-104] OpenCode Scale-to-Zero Wake-on-Touch SystemD Gateway
 **Status:** COMPLETED
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures `opencode.socket` (`0.0.0.0:4096`) and `opencode-proxy.service` with `TriggerLimitIntervalSec=0` and `--exit-idle-time=45m`.
 **Rationale:** Allows OpenCode REST engine to scale down to zero when idle (0% CPU/DRAM), automatically waking up in 200ms when `delegate.py` or a browser touches port 4096.
 **Mechanism:** `~/.config/systemd/user/opencode.socket`, `opencode-proxy.service`, and `delegate.py wake_web_ui()`.
@@ -1936,7 +1936,7 @@
 
 ## [FEAT-458] Atlas Identity Guard & OpenAgent REST Persona Binding Contract
 **Status:** COMPLETED (Sprint 54)
-**Code:** *none found (documented only)*
+**Code:** [src/train/distill_training_data.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/distill_training_data.py#L27) — Atlas Identity Guard & OpenAgent REST Persona Binding Contract.
 **Logic:** Requires `delegate.py` to pass `"agent": agent` in BOTH `POST /session` AND `POST /session/<id>/message` REST payloads using exact registered display names (`"Atlas - Plan Executor"`, `"Prometheus - Plan Builder"`). Implements `[IDENTITY ASSERTION & HARD-STOP GUARD]` to force non-Atlas models (e.g. Sisyphus) to emit `[HANDOVER REFLECTION]` and exit with 0 file edits.
 **Rationale:** Prevents silent persona demotion and guarantees OpenAgent swarm orchestrator identity integrity.
 **Mechanism:** `src/tests/delegate.py`, `~/.config/opencode/oh-my-openagent.json`, and `BKM-034` in `Protocols.md`.
@@ -1950,14 +1950,14 @@
 
 ## [FEAT-460] Build Trailer Render Process Cleanup Trap
 **Status:** COMPLETED (Sprint 54)
-**Code:** *none found (documented only)*
+**Code:** [src/lab_attendant.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/lab_attendant.py#L58) — Build Trailer Render Process Cleanup Trap.
 **Logic:** Adds explicit subprocess cleanup (`pkill -f 'shot-scraper|chromium'`) to `deploy_to_airlock()` in `build_site.py`.
 **Rationale:** Prevents Playwright/shot-scraper headless Chromium rendering instances from lingering in RAM after static site compilation.
 **Mechanism:** `deploy_to_airlock()` in `Portfolio_Dev/field_notes/build_site.py`.
 
 ## [LAB-105] SystemD Cgroup Process Management & Hardened Restart Policy
 **Status:** COMPLETED (Sprint 54)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures `KillMode=control-group` and `TimeoutStopSec=5` in `lab-attendant.service`.
 **Rationale:** Eliminates 30-second restart delays and ensures `systemctl restart lab-attendant.service` cleanly tears down 100% of child processes, vLLM servers, and background loopers in 5 seconds max without manual `kill -9` intervention.
 **Mechanism:** `/etc/systemd/system/lab-attendant.service`.
@@ -1978,21 +1978,21 @@
 
 ## [LAB-106] Pre-Flight SystemD Page Cache Reclamation
 **Status:** COMPLETED (Sprint 54)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Adds `ExecStartPre=-/usr/bin/sudo /usr/sbin/sysctl -w vm.drop_caches=3` to `lab-attendant.service`.
 **Rationale:** Automatically reclaims 7-10 GB of dirty file page caches created by build tools before PyTorch and vLLM allocate safetensors checkpoint shards in host RAM.
 **Mechanism:** `/etc/systemd/system/lab-attendant.service`.
 
 ## [LAB-107] Kernel Virtual Memory Pressure & EarlyOOM Protection Daemon
 **Status:** COMPLETED (Sprint 54)
-**Code:** infra config (systemd/sysctl artifacts)
+**Code:** *none found (documented only)*
 **Logic:** Configures `vm.vfs_cache_pressure=150` in `/etc/sysctl.d/99-lab-memory.conf` and earlyoom daemon parameters (`-m 10 -s 5 --prefer '(chrome|steam)' --avoid '(acme_foyer_v5|vllm)'`).
 **Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
 **Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
 
 ## [FEAT-463] Same-Origin Tunnel Remote Control Routing & Telemetry
 **Status:** COMPLETED (Sprint 56)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1) — Same-Origin Tunnel Remote Control Routing & Telemetry.
 **Logic:** Routes Remote Control actions in `status.html` through same-origin relative endpoints (`${window.location.origin}/attendant/${action}`) when accessed via Zero Trust (`notes.jason-lab.dev`), and `http://127.0.0.1:8765/${action}` when local. Maps `path: /attendant/` -> `http://localhost:8765` in `/etc/cloudflared/config.yml` and registers native `/attendant/` route handlers in `router.py`. Logs explicit `[ERROR DIAGNOSTIC]` origin/target/key telemetry on fetch exceptions.
 **Rationale:** Same-origin requests ride the active Cloudflare Access session cookie and bypass cross-domain CORS preflight checks (`OPTIONS`) and browser Mixed-Content security blocks, eliminating 100% of browser `NetworkError` and HTTP 502/302 redirects.
 **Mechanism:** `triggerLabAction()` in `Portfolio_Dev/field_notes/status.html`, `setup_routes()` in `HomeLabAI/src/v5/foyer/router.py`, and `/etc/cloudflared/config.yml`.
@@ -2006,7 +2006,7 @@
 
 ## [FEAT-466] Crosstalk Bar Orchestrator Error Telemetry
 **Status:** COMPLETED (Sprint 56)
-**Code:** *none found (documented only)*
+**Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1) — Crosstalk Bar Orchestrator Error Telemetry.
 **Logic:** Catches unhandled Python exceptions in `_spawn_deep_thought_preamble()` and `run_division_of_labor()` in `router.py`, and immediately broadcasts a `type: crosstalk` WebSocket error frame to the UI.
 **Rationale:** Eliminates silent UI stalls by rendering backend stage/orchestrator exceptions directly in the Crosstalk Bar log container in real-time.
 **Mechanism:** `_spawn_deep_thought_preamble()` and `run_division_of_labor()` in `HomeLabAI/src/v5/foyer/router.py`.
