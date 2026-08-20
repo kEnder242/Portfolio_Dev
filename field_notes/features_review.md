@@ -1,84 +1,83 @@
-# High-Fidelity Feature DNA Audit & Traceability Review
-**Date:** July 4, 2026
-**Subject:** Verification and Traceability Audit of the Bicameral Lab Feature Matrix (FEAT-011 / BKM-032 Alignment)
+# FEAT Code Review — SPR-55 Audit Report
+
+**Date:** 2026-08-20
+**Sprint:** 55 (FEAT Code Mapping)
+**Method:** Document-first re-verification per FEAT_AUDIT_V5 methodology. Every verdict cites live file:line evidence (`.omo/evidence/crossref.json`, 271 entries).
 
 ---
 
-## 🏛️ Executive Summary
-This audit provides a verification-rigor review of the 70+ capabilities documented in the Lab's DNA matrix ([FeatureTracker.md](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md)). 
+## 🟥 LOST (in tracker, no live code)
 
-Grounded in the "Features as The Bones" philosophy, each capability has been evaluated for **Traceability** (Mechanism code validation) and **Verification** (existence of active automated test scripts) to ensure that iterative refactoring and bug-fixing do not introduce regressions.
+| FEAT | Tracker | Verdict | Evidence / Recommendation |
+| --- | --- | --- | --- |
+| FEAT-337 | absent | **STILL-LOST** | `_check_resident_health` absent from src. Only tag: `src/debug/test_warm_wake.py:9,77`. **Rec**: re-record in tracker + restore resident liveness loop (30-60s `list_tools`). |
+| FEAT-342 | absent | **STILL-LOST** | `_synchronize_and_probe` absent. Tag recycled onto `src/tests/test_rude_gauntlet.py:7,13`. **Rec**: restore wake-reprobe + BKM-009 scythe in ignition. |
+| FEAT-339 | absent | **STILL-LOST** | `_run_deep_smoke` absent. Tag recycled onto task-cleanup `router.py:392,838`; also `loader.py:179,224,375` (unrelated LoRA/tier logic). **Rec**: re-record; optional deep-smoke diagnostic tool. |
+| FEAT-118 | DESIGN L444 | **STILL-LOST** | `get_oracle_signal` only in backups `cognitive_hub.py.graft:19`, `.nuclear:21,28` + test strings. Never shipped (V4). **Rec**: mark ARCHIVED or implement weighted preamble picker. |
 
-The goal of this review is to isolate "The Bones" (our rigid, codified system features) from "AI slop" (conversational drift) and establish a clear checklist of verification gaps.
+## 🟠 MISSING FROM TRACKER (code tags exist — Uncharted)
 
----
+**71 tag outliers** exist in code with NO FeatureTracker entry (`.omo/evidence/outliers.json`). 65 in HomeLabAI/src, 4 in field_notes, 2 in root scripts; 24 are sub-version ids (FEAT-XXX.Y).
 
-## 🧬 Traceability DNA Matrix & Certification Levels
+Representative (all 71 listed in outliers.json):
+- FEAT-017 → `start_lab.sh:3`
+- FEAT-074 → `nodes/archive_node.py:417,423`
+- FEAT-175 → `field_notes/scan_librarian.py:160,187,204`
+- FEAT-192 → `nodes/archive_node.py:1328`, `nodes/brain_node.py:64`
+- FEAT-227 → `logic/cognitive_hub.py:1157`
+- FEAT-251.4 → `debug/test_brain_smoke.py:12`
+- FEAT-217 → `v5/foyer/router.py:764`, `debug/lifecycle_gauntlet.py:6`
 
-We classify each core capability into verification levels:
-*   **Level A (Production-Ready / Fully Verified)**: Has a documented Rationale, active Mechanism, and a matching, passing test script verifying execution on silicon.
-*   **Level B (Operational / Passively Verified)**: Active in code and telemetry but lacks a dedicated unit test script (verified via integration logs or user feedback).
-*   **Level C (Dormant / Passive)**: Code is present in the repository but is currently bypassed, stubbed, or inactive in the current loop.
-*   **Level D (Design / Conceptual)**: Documented requirements with no active code implementation.
+**Rec**: add new tracker entries per audit (next free FEAT ids), documenting these as ACTIVE features with code homes. This is the exact gap HISTORICAL_VERIFICATION remediation #4 flagged (FEAT-451-455, LAB-094-099 never backfilled).
 
-### 1. Level A Features (Fully Certified)
+## 🟨 DUPLICATED / ECHO (same id, distinct content — 12 groups, 26 entries)
 
-| Feature ID | Feature Name | Code Mechanism | Verification Script / Anchor | Notes |
-| :--- | :--- | :--- | :--- | :--- |
-| `[FEAT-030]` | Unity Pattern (Multi-LoRA) | `loader.py` (vLLM `--enable-lora`) | Shared base model deployment logs | Enforces shared VRAM footprint. |
-| `[FEAT-036]` | VRAM Guard | `lab_attendant.py` (`vram_watchdog_loop`) | `src/test_vram_guard.py` | Auto-stubs nodes on VRAM spike. |
-| `[FEAT-031]` | Logger Isolation (Montana Fix) | `acme_lab.py` (`reclaim_logger()`) | `src/debug/test_forensic_logging.py` | Strip global handlers from Chroma/NeMo. |
-| `[FEAT-069]` | Silicon-Aware Runtime | `lab_attendant.py` (NVML Tiers) | `src/debug/test_downshift_protocol.py` | Swaps Llama base based on VRAM usage. |
-| `[FEAT-133]` | Staged Ignition | `acme_lab.py` (Sequence ready) | `src/test_liveliness.py` | Staggers boot (Archive -> Pinky -> Brain). |
-| `[FEAT-149]` | Resident Heartbeat (Auto-Bounce)| `acme_lab.py` (Service server loop) | `src/debug/test_goodnight_bounce.py` | Prevents foyer exit on client disconnect. |
-| `[FEAT-151]` | Unified Trace Monitoring | `TraceMonitor` (`pager_activity.json`) | `src/debug/test_goodnight_bounce.py` | Append-only ledger updates with swap. |
-| `[FEAT-137]` | vLLM 0.17.0 Infrastructure | `.venv_vllm_017` / `TRITON_ATTN` | `src/debug/test_vllm_017_stability.py` | Base environment tuning on Turing. |
+| Group | Entry A | Entry B |
+| --- | --- | --- |
+| FEAT-088 | L291 Semantic Career Recall | L725 Nightly Recruiter (Target Acquisition) |
+| FEAT-095 | L347 Search Indexing Pipeline (v2.1) | L730 Public Research Ledger (Static Airlock) |
+| FEAT-172 | L613 [CONSOLIDATED] Hemispheric Interjection | L752 Hemispheric Interjection |
+| FEAT-186 | L617 [CONSOLIDATED] Pre-warm Lobby | L827 Pre-warm Lobby |
+| FEAT-240 | L945 Native MCP Relay | L1069 Native MCP Sampling Bridge |
+| FEAT-220 | L988 Diplomatic Immunity Protocol | L1274 (220.1) Physical Scavenging |
+| FEAT-249 | L1100 VRAM Hibernation Matrix | L1105-1115 (249.3/249.4/249.5) |
+| FEAT-428 | L1420 Exponential Backoff State Engine | L1587 PCM Audio Memory Benchmark |
+| FEAT-429 | L1426 Poison Chunk Quarantine | L1603 Disconnect Memory Reclaim |
+| FEAT-430 | L1432 C-Arena Heap Trimming Sentinel | L1611 Delegation Retrospective |
+| FEAT-431 | L1438 GigaToken Remote Synthesis Gate | L1619 EarlyOOM Telemetry |
+| FEAT-437 | L1468 3-Tier HyDE Failover Cascade | L1659 Pinky LoRA HyDE Inversion |
 
-### 2. Level B Features (Active but Lacking Dedicated Unit Tests)
+**Rec**: ECHO entries are distinct features sharing ids — must NOT be merged without user sign-off (FeatureTrackerDesign.md). Recommend renumbering the newer entries (e.g. FEAT-437 → FEAT-467) in a dedicated cleanup sprint.
 
-These features represent **verification gaps** under BKM-032. While fully operational in production, they lack isolated validation scripts:
+## 🟦 INFRA (LAB — 12 entries, code = systemd/sysctl artifacts)
 
-*   **`[FEAT-154]` Environmental Awareness Node (Lab Actor)**:
-    *   *Mechanism*: LoRA adapter (`lab_sentinel_v1`) generating high-level coordination hints.
-    *   *Verification Gap*: No isolated simulation test to inject telemetry and assert coordinator token output.
-*   **`[FEAT-207]` Bicameral Airtime (Tricameral Sync)**:
-    *   *Mechanism*: `CognitiveHub` parallel dispatch (Pinky -> Shadow -> Sovereign).
-    *   *Verification Gap*: Relies on end-to-end integration tests (`test_pi_flow.py`). Needs an isolated test asserting correct context injection during handover.
-*   **`[FEAT-119]` The Blacklist Law (Process-Strict Lifecycle)**:
-    *   *Mechanism*: `pkill -9` directed at setproctitle hashes in `ExecStopPost`.
-    *   *Verification Gap*: Bypasses standard process tests. Verification is passive (systemd journal output).
+LAB-090/091/092/093/100/101/102/103/104/105/106/107 (L1539-1719) map to `/etc/systemd/system/` + `/etc/sysctl.d/` artifacts as "infra config" locations — no src exists. **Rec**: `**Code:**` fields point to artifact paths; verify at review batch F.
 
-### 3. Level C Features (Dormant / Archived)
+## 🟩 INCONSISTENT / DRIFT (status vs code)
 
-*   **`[FEAT-037]` Hierarchical Mind (The Architect)**:
-    *   *Status*: Active (Dormant).
-    *   *Mechanism*: `generate_bkm` and `build_semantic_map` tools.
-    *   *Notes*: Code exists but active utilization in daily co-pilot cycles is low.
-*   **`[FEAT-162]` Multi-LoRA Cognitive Loadout**:
-    *   *Status*: Active (Dormant).
-    *   *Notes*: Bypassed pending final `pedigree_v2` weights from the Phase 7 training run.
-*   **`[FEAT-029]` Absolute Zero Silicon Purification**:
-    *   *Status*: ARCHIVED.
-    *   *Notes*: Replaced by cleaner process namespace segregation (`pkill -9` targeting process title hashes).
+| FEAT | Issue |
+| --- | --- |
+| FEAT-030 | ACTIVE but no code tag found anywhere (DOC-ONLY). Unity Pattern lives where? |
+| FEAT-186 | DESIGN but tagged `[CONSOLIDATED]` in tracker + ECHO dup. |
+| FEAT-249.x | Sub-versions 249.3/249.4/249.5 exist in tracker but base 249.3 tagged in code (loader.py). |
 
----
+## ✅ PRIOR-AUDIT CLOSE-OUT (dated verdicts)
 
-## 🦴 "The Bones" Integrity Audit
-We audited the configuration constants to verify that "The Bones" are isolated from LLM parsing:
+| Item | Verdict 2026-08-20 |
+| --- | --- |
+| FEAT-322 (Uncharted, FeatureTrackerAudit) | DEFEATURED (Sprint 31) — MAPPED (tagged) |
+| FEAT-323 (Uncharted) | ACTIVE — MAPPED (tagged) |
+| FEAT-318.7 / 320 / 321 (Phantoms) | **NOT IN TRACKER** — confirmed gone |
+| FEAT-030 (Echo) | ACTIVE — DOC-ONLY (no tag found) |
+| FEAT-080 (Echo) | ACTIVE — MAPPED |
+| FEAT-302 (Drift) | ACTIVE — MAPPED |
+| FEAT-186 (Drift) | DESIGN — ECHO (dup) |
+| FEAT-337/342/339/118 (V5 audit) | **STILL-LOST** (T3 re-verified, all 4) |
+| FEAT-028 (V5 survivor) | ACTIVE — MAPPED (restored 549aecd) |
 
-1.  **Role Token Registry (`role_tokens.json`)**: Enforces BKM-015 compliance. Token-to-LoRA mapping is loaded from a static registry file, preventing the LLM from inventing dynamic paths.
-2.  **Hardware Characterization (`vram_characterization.json`)**: Maps abstract SML (Small/Medium/Large) tiers to physical weights and utilization profiles. The LLM handles intent, while the configuration file dictates the hardware parameters.
-3.  **Infrastructure Config (`infrastructure.json`)**: Isolates target host IPs (KENDER vs Localhost) from codebase variables, allowing network portability without logic updates.
-
----
-
-## 🛠️ Verification Gaps & Recommendations
-
-To bring the Lab's feature matrix to 100% Level A compliance under the "Features as The Bones" standard, the following additions are recommended for future sprints:
-
-1.  **Implement `test_lab_actor_telemetry.py`**:
-    *   *Goal*: Validate `[FEAT-154]`. Inject simulated GPU thermal warnings (NVML mock) and assert that the sentinel adapter outputs coordinator tokens (e.g. `[SILICON_STRESS]`).
-2.  **Implement `test_tricameral_handover.py`**:
-    *   *Goal*: Validate `[FEAT-207]`. Mock KENDER latency (>10s) and assert that the gateway (Pinky) immediately injects "Thinking..." fillers to prevent client socket timeout.
-3.  **Feature Cleanup**:
-    *   *Action*: Formally archive `[FEAT-037]` (Architect Mind) and remove its tool definitions from the active agent registry if it is not scheduled for utilization in the next 3 sprints. This reduces prompt-token overhead.
+## Recommendations (priority order)
+1. Renumber ECHO duplicate groups (12 groups) — needs user sign-off.
+2. Backfill 71 Uncharted outliers as new tracker entries (remediation #4 completion).
+3. Restore FEAT-342 → FEAT-337 → FEAT-339 (V5 restoration order, unchanged).
+4. Tag FEAT-030 at its real code home during batch A.
+5. Mark FEAT-118 ARCHIVED (never shipped, backups only).
