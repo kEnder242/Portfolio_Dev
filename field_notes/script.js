@@ -1,3 +1,4 @@
+# [FEAT-223] Global Error Sentry
 // ── CONSOLIDATED GLOBAL ERROR TRAP (FEAT-268) ──
 (function() {
     function reportError(msg, url, lineNo) {
@@ -27,6 +28,7 @@
         return false;
     };
 
+# [FEAT-417] Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
     window.addEventListener('unhandledrejection', function(event) {
         const reason = event.reason ? (event.reason.message || event.reason) : 'Unknown Promise Error';
         reportError(`Unhandled Rejection: ${reason}`, '', 0);

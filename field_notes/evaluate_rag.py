@@ -2,6 +2,7 @@
 Goal 4: RAG Evaluation Pipeline.
 
 Loads validation anchors from HomeLabAI/config/validation_anchors.json,
+# [FEAT-228] Agnostic Context Engine (get_context)
 invokes the ArchiveNode get_context() RAG pipeline for each anchor,
 evaluates keyword recall, routes output to KENDER (remote Ollama) for
 BKM-032 qualitative audit, and appends results atomically to the
@@ -156,6 +157,7 @@ def append_ledger_atomic(entry: dict) -> None:
         f.write(line)
 
 
+# [FEAT-023] The Stoic Strategist (Identity Anchor)
 async def evaluate_single_anchor(anchor: dict) -> dict:
     """Run a single validation anchor through the full evaluation pipeline."""
     query = anchor["query"]

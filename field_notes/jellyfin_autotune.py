@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Jellyfin Hardware Auto-Tuner & Dual-GPU Pipeline (Option C)
+# [FEAT-069] Hardware-Aware Adaptive Runtime (Resilience Ladder) [SCAR #2]
+# [FEAT-251.2] Forensic Wait (Early Crash Detection)
+# [FEAT-029] Absolute Zero Hardware Purification
 [FEAT-427] Automatically probes host hardware (Intel iGPU VAAPI & NVIDIA NVENC)
 and tunes Jellyfin encoding.xml for zero-crash, dual-GPU media transcoding.
 """

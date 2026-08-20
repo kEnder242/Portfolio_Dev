@@ -1,5 +1,6 @@
 import time
 import os
+# [FEAT-098] RAPL-Sim Custom Exporter (v3.0)
 from prometheus_client import start_http_server, Gauge
 
 # --- Configuration ---

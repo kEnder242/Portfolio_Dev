@@ -1,3 +1,4 @@
+# [FEAT-064] Static Site Synthesis (build_site.py)
 import os
 import hashlib
 import re
@@ -77,6 +78,7 @@ def deploy_to_airlock(snapshots=False):
         if snapshots:
             env["ENABLE_SNAPSHOTS"] = "1"
 
+# [FEAT-461] Optional Airlock Snapshot Previews
         for script in ["sync_protocols.sh", "sync_stories.sh", "sync_research.sh"]:
             script_path = os.path.join(www_dir, script)
             if os.path.exists(script_path):

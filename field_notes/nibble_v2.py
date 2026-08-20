@@ -305,6 +305,7 @@ def main():
             [OUTPUT]
             Generate a JSON list containing ONE high-value entry.
             Prefix the summary with [STRATEGIC_ANCHOR].
+# [FEAT-129] The Philosophical Core
             The summary should capture the primary focal point, philosophical shift, or major career milestone.
             
             [FORMAT]

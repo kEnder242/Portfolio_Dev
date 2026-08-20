@@ -71,6 +71,7 @@ def parse_feature_tracker(filepath):
         content = f.read()
 
     # Regex to match headers like:
+# [FEAT-400] ROLE TOKEN (Multi‑LoRA Persona Switch)
     # ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
     # ### [VIBE-012] Hemispheric Independence
     pattern = re.compile(r"^(#{2,4})\s+\[((?:FEAT|VIBE)-\d+)\]\s+(.*?)$", re.MULTILINE)

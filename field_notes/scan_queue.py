@@ -169,6 +169,7 @@ def main():
             content_hash = get_hash(content)
             chunk_id = f"{filename}::{bucket_id}"
             
+# [FEAT-429] Poison Chunk Quarantine Protocol
             # Logic: Is this chunk NEW or CHANGED and NOT QUARANTINED?
             if state.get(f"{chunk_id}::status") == "QUARANTINED":
                 continue

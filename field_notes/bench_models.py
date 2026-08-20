@@ -369,6 +369,7 @@ def main():
         except Exception as e:
             print(f"⚠️  Failed to start Prometheus server on port 8011: {e}")
 
+# [FEAT-099] Grafana Provisioning as Code
     # Immediately populate Prometheus with existing cache so Grafana has data right away
     existing_cache = safe_read_json(CACHE_FILE)
     if existing_cache:

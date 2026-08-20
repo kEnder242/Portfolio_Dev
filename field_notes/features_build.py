@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # features_build.py [v1.4]
+# [FEAT-252] Dynamic Secret Rotation
 # Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and dynamic philosophy parsing.
 
 import os

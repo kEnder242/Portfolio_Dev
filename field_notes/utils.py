@@ -29,6 +29,7 @@ STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 ATTENDANT_URL = "http://localhost:9999/mutex"
 
+# [FEAT-221] Crosstalk Status Line
 def update_status(status, message, last_items=0, filename=None, engine="LOCAL", progress_pct=None):
     """Updates the status.json for the front-end dashboard."""
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -119,6 +120,7 @@ def get_free_vram_gb():
         free_mb = float(output.strip())
         return free_mb / 1024.0
     except:
+# [FEAT-373] Multi-Language Safe-Scalpel (Passive Mode)
         return 6.0  # Safe fallback estimate
 
 def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95, min_free_vram_gb=2.0):
