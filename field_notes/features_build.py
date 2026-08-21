@@ -189,11 +189,11 @@ def generate_rows(features):
                             </details>"""
             
         row = f"""                    <tr id="{item['id']}">
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">{item['id']}</td>
-                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">{item['id']}</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             {spec_content}
                         </td>
-                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <span class="impact-badge {status_class}">{status}</span>
                         </td>
                     </tr>"""
