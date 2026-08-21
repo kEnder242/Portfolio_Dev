@@ -1780,15 +1780,6 @@
 
 ---
 
-## [FEAT-449] Multi-Remote Secondary Git Mirror (Bitbucket)
-**Status:** BACKLOG
-**Code:** [Portfolio_Dev/SPRINT_PLAN_SPR_58_0.md](https://github.com/kEnder242/Portfolio_Dev/blob/main/SPRINT_PLAN_SPR_58_0.md#L15) — Multi-Remote Secondary Git Mirror (Bitbucket).
-**Logic:** Configures dual-push secondary Git remotes (`git remote set-url --add --push`) pointing to private Bitbucket repositories alongside GitHub origin for automated redundancy across cloud hosting providers.
-**Rationale:** Protects the 18-year archive and agentic codebase against single-platform outage or provider-level account restrictions without adding manual workflow friction.
-**Mechanism:** Dual-push Git remote configuration across `Portfolio_Dev` and `HomeLabAI` repositories.
-
----
-
 ## [LAB-090] SSH OOM Immunity Sentinel
 **Status:** COMPLETED (Sprint 50)
 **Code:** *none found (documented only)*
@@ -2001,6 +1992,13 @@
 **Logic:** Configures `vm.vfs_cache_pressure=150` in `/etc/sysctl.d/99-lab-memory.conf` and earlyoom daemon parameters (`-m 10 -s 5 --prefer '(chrome|steam)' --avoid '(acme_foyer_v5|vllm)'`).
 **Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
 **Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
+
+## [LAB-108] Multi-Remote Secondary Git Mirror (Bitbucket)
+**Status:** BACKLOG
+**Code:** [Portfolio_Dev/SPRINT_PLAN_SPR_58_0.md](https://github.com/kEnder242/Portfolio_Dev/blob/main/SPRINT_PLAN_SPR_58_0.md#L15) — Multi-Remote Secondary Git Mirror (Bitbucket).
+**Logic:** Configures dual-push secondary Git remotes (`git remote set-url --add --push`) pointing to private Bitbucket repositories alongside GitHub origin for automated redundancy across cloud hosting providers.
+**Rationale:** Protects the 18-year archive and agentic codebase against single-platform outage or provider-level account restrictions without adding manual workflow friction.
+**Mechanism:** Dual-push Git remote configuration across `Portfolio_Dev` and `HomeLabAI` repositories.
 
 ## [FEAT-463] Same-Origin Tunnel Remote Control Routing & Telemetry
 **Status:** COMPLETED (Sprint 56)
