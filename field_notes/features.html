@@ -4197,25 +4197,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/distill_documentation.py#L6" style="color:var(--accent-color); text-decoration:none;">src/forge/distill_documentation.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L266" style="color:var(--accent-color); text-decoration:none;">field_notes/mass_scan.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Uses the Sovereign Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.</p>
+                    <p>Autonomous distillation engine in <code>mass_scan.py</code> (Step 6 TLC) that extracts Rank 4/5 gems and standalone code artifacts (<code>artifacts_*.json</code>) into bidirectional instruction-tuning pairs in <code>journal_ledger.jsonl</code> (593 active pairs). Grounded in GenRead (<a href="https://arxiv.org/abs/2209.10063">arXiv:2209.10063</a>) and Query2Doc (<a href="https://arxiv.org/abs/2303.07678">arXiv:2303.07678</a>).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Raw logs are too noisy for effective fine-tuning. Distillation creates high-signal training data that bridges ASCII evidence with agentic character.</p>
+                    <p>Transforms terse notes and standalone tools into natural-language training pairs with forward tool inquiries and reverse Jeopardy category searches, eliminating catastrophic forgetting via cumulative full-replay training.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>src/forge/distill_gems.py</code>. Successfully verified small-batch distillation using KENDER compute.</p>
+                    <p><code>distill_journal_ledger()</code> in <code>field_notes/mass_scan.py</code>, <code>test_forge_distillation_unit.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -8926,6 +8926,45 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>DISTANCE_THRESHOLD = 0.55</code> and <code>_log_rag_telemetry()</code> in <code>archive_node.py</code>, atomic write to <code>status.json</code>.</p>
+<hr />
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-448">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-448</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Tri-Field Gem Schema & Self-RAG Refinement
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/refine_gem.py#L225" style="color:var(--accent-color); text-decoration:none;">field_notes/refine_gem.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Upgrades the BKM gem extraction prompt and schema in <code>refine_gem.py</code> to extract <code>summary</code>, <code>trigger_context</code>, <code>technical_gem</code>, and <code>anchors</code> (3–6 exact technical acronyms). Grounded in Self-RAG (<a href="https://arxiv.org/abs/2310.11511">arXiv:2310.11511</a>) and Query2Doc (<a href="https://arxiv.org/abs/2303.07678">arXiv:2303.07678</a>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Structures historical knowledge into rich hypothetical problem scenarios and dense hardware tokens, enabling Pinky's Stage 2 HyDE expansion to prime vector search with &gt;95% cosine precision.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>refine_gem.py</code> Tri-Field prompt, <code>distill_journal_ledger()</code> bridge in <code>mass_scan.py</code>, <code>test_forge_distillation_unit.py</code>.</p>
 <hr />
                 </div>
             </div>     </div>

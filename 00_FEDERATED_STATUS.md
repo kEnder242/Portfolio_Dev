@@ -15,11 +15,15 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-58-0-relational-mesh** | Phase 13 | Relational Co-Occurrence Mesh, HyDE-Jeopardy Distillation, Tri-Field Schema & Hybrid RiR RAG | **COMPLETED & CERTIFIED** |
 | **spr-55-feat-code-mapping** | Phase 12 | FEAT/LAB Code Mapping & Link-Drift Gate | **COMPLETED** |
 | **spr-52-0-kender-offload** | Phase 11 | Kender Unsloth Training Offload & 5-Stage Division of Labor | **READY FOR EXECUTION** |
 | **spr-51-0-polish** | Phase 10 | Conversational Polish & Deep Thought Refinement | **100% COMPLETED** |
 | **spr-50-0-memory-resil** | 2. Implementation | Foyer & Memory Architecture Stabilization | **COMPLETED** |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
+
+## 🎯 Active Initiative: "Relational Co-Occurrence Mesh & HyDE-Jeopardy Learning Feedback Loops" (Sprint SPR-58.0)
+**Goal:** Automate cumulative replay weight induction (`FEAT-160`), Tri-Field Gem Schema with `trigger_context` and `anchors` (`FEAT-448`), autonomous code artifact distillation into 593 bidirectional Jeopardy pairs (`FEAT-161`), ArXiv research grounding (Query2Doc 2303.07678, GenRead 2209.10063, Self-RAG 2310.11511), and 2:00 AM – 6:00 AM nightly pipeline orchestration. **[STATUS: COMPLETED & 7/7 SHAKEDOWN TESTS CERTIFIED]**
 
 ## 🎯 Active Initiative: "Kender Node Unsloth Training Offload & 5-Stage Division of Labor" (Sprint SPR-52.0)
 **Goal:** Deploy SSH OOM Immunity Sentinel (`LAB-090`), SysRq & EarlyOOM OS Protection (`LAB-091`, `LAB-092`), Foyer Loopback & `X-Lab-Key` Security Guard (`FEAT-426`), Standalone WebSocket RSS Memory Profiler (`FEAT-425`), and PCM Ring-Buffer Clamp (`FEAT-427`). **[STATUS: STORIES 1-4 COMPLETED & COMMITTED]**
