@@ -4177,7 +4177,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>src/forge/train_expert.py</code>. Integrated into the <code>acme_lab.py</code> Inverted Chain (Step 6) for nightly weight induction.</p>
+                    <p><code>src/forge/train_expert.py</code>. Dynamically preloads <code>libnvJitLink.so.13</code> for CUDA 13 / SM 7.5 Unsloth LoRA fine-tuning and integrates with <code>nightly_forge.py</code> for autonomous nightly weight induction.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -5683,19 +5683,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1229" style="color:var(--accent-color); text-decoration:none;">src/nodes/archive_node.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L67" style="color:var(--accent-color); text-decoration:none;">src/infra/nightly_forge.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>A "Process Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.</p>
+                    <p>REST-driven VRAM Handover in <code>nightly_forge.py</code> that sends <code>POST /release_nodes</code> and <code>POST /shutdown</code> to Foyer (port 8765) to evict resident models and reclaim VRAM down to 620MB, executes Unsloth LoRA training on the local GPU, and re-ignites the lab via <code>POST /wake</code> and <code>POST /status_update {"state": "OPERATIONAL"}</code>.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>lab_attendant_v3.py</code> <code>mcp_train_adapter</code> tool.</p>
+                    <p><code>src/infra/nightly_forge.py</code>, Foyer REST endpoints (<code>/release_nodes</code>, <code>/shutdown</code>, <code>/wake</code>, <code>/status_update</code>).</p>
                 </div>
             </div>     </div>
                             </details>
@@ -5715,19 +5715,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1" style="color:var(--accent-color); text-decoration:none;">src/infra/nightly_forge.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L130" style="color:var(--accent-color); text-decoration:none;">src/forge/train_expert.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Updates <code>train_expert.py</code> to support <code>max_steps</code> argument, enabling autonomous alternating nightly training cycles.</p>
+                    <p>Updates <code>train_expert.py</code> to support <code>--steps</code>, <code>--dataset</code>, and <code>--output</code> CLI flags with dynamic base-model resolution from <code>infrastructure.json</code>, enabling autonomous and on-demand fine-tuning cycles.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>train_expert.py</code> CLI argument parsing.</p>
+                    <p><code>src/forge/train_expert.py</code> CLI argument parsing and model auto-detection.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -8143,25 +8143,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1" style="color:var(--accent-color); text-decoration:none;">src/debug/bench_moe_plus.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L375" style="color:var(--accent-color); text-decoration:none;">field_notes/mass_scan.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Executes a single bounded epoch of note nibbling, gem refinement (up to 50 historical items), de-duplication, and yearly aggregation during the 2:00 AM maintenance window, exiting cleanly upon completion to yield the GPU to other nightly jobs and trigger H2 Lean Sleep.</p>
+                    <p>Executes a single bounded epoch of note nibbling, gem refinement (2:00 AM – 5:00 AM window), de-duplication, and yearly aggregation during the nightly maintenance sweep. At 05:00 AM, the refinement loop yields cleanly, ensuring a full 1-hour buffer (until 06:00 AM) for archive aggregation, de-duplication, and trailing tasks.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.</p>
+                    <p>Replaces continuous 24/7 scanning with bounded midnight execution, allowing the lab to remain in Lean Sleep during the day while refining up to ~150 gems nightly.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>--once</code> flag in <code>field_notes/mass_scan.py</code>, oneshot service <code>field-notes-nightly.service</code>, and <code>field-notes-nightly.timer</code> systemd unit.</p>
+                    <p><code>--once</code> flag in <code>field_notes/mass_scan.py</code>, 05:00 AM cutoff check, oneshot service <code>field-notes-nightly.service</code> (4-hour <code>TimeoutStartSec=14400</code>), and <code>field-notes-nightly.timer</code> systemd unit.</p>
                 </div>
             </div>     </div>
                             </details>

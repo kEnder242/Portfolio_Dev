@@ -758,7 +758,7 @@
 **Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L18) — Pedigree Refinement Pipeline.
 **Logic:** Automated LoRA "Burn" orchestrator. Physically encodes engineering pedigree into model weights based on Rank 4 "Gems" found in the archive.
 **Rationale:** Encodes the 18-year history into the model's neurons, transforming context searching into intuitive neural recall.
-**Mechanism:** `src/forge/train_expert.py`. Integrated into the `acme_lab.py` Inverted Chain (Step 6) for nightly weight induction.
+**Mechanism:** `src/forge/train_expert.py`. Dynamically preloads `libnvJitLink.so.13` for CUDA 13 / SM 7.5 Unsloth LoRA fine-tuning and integrates with `nightly_forge.py` for autonomous nightly weight induction.
 
 ## [FEAT-161] Synthetic Character Distillation
 **Status:** ACTIVE
@@ -1121,15 +1121,15 @@
 
 ## [FEAT-213] Autonomous Forge (VRAM Handover)
 **Status:** ACTIVE
-**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1229) — Autonomous Forge (VRAM Handover).
-**Logic:** A "Process Valet" in the Lab Attendant that quiesces the Hub, executes Unsloth training, and re-ignites the Mind upon completion.
-**Mechanism:** `lab_attendant_v3.py` `mcp_train_adapter` tool.
+**Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L67) — Autonomous Forge (VRAM Handover).
+**Logic:** REST-driven VRAM Handover in `nightly_forge.py` that sends `POST /release_nodes` and `POST /shutdown` to Foyer (port 8765) to evict resident models and reclaim VRAM down to 620MB, executes Unsloth LoRA training on the local GPU, and re-ignites the lab via `POST /wake` and `POST /status_update {"state": "OPERATIONAL"}`.
+**Mechanism:** `src/infra/nightly_forge.py`, Foyer REST endpoints (`/release_nodes`, `/shutdown`, `/wake`, `/status_update`).
 
 ## [FEAT-214] Parameterized Nightly Forge
 **Status:** ACTIVE
-**Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1) — Parameterized Nightly Forge.
-**Logic:** Updates `train_expert.py` to support `max_steps` argument, enabling autonomous alternating nightly training cycles.
-**Mechanism:** `train_expert.py` CLI argument parsing.
+**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L130) — Parameterized Nightly Forge.
+**Logic:** Updates `train_expert.py` to support `--steps`, `--dataset`, and `--output` CLI flags with dynamic base-model resolution from `infrastructure.json`, enabling autonomous and on-demand fine-tuning cycles.
+**Mechanism:** `src/forge/train_expert.py` CLI argument parsing and model auto-detection.
 
 ## [FEAT-219] Service Handshake (Hardened Gate)
 **Status:** ACTIVE
@@ -1608,10 +1608,10 @@
 
 ## [FEAT-416] Single-Epoch Nightly Refinement Sweeper
 **Status:** ACTIVE
-**Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1) — Single-Epoch Nightly Refinement Sweeper.
-**Logic:** Executes a single bounded epoch of note nibbling, gem refinement (up to 50 historical items), de-duplication, and yearly aggregation during the 2:00 AM maintenance window, exiting cleanly upon completion to yield the GPU to other nightly jobs and trigger H2 Lean Sleep.
-**Rationale:** Solves the continuous GPU pegging and VRAM hibernation block caused by infinite daytime background loops, balancing archive progress with silicon energy efficiency and multi-task night schedule coordination.
-**Mechanism:** `--once` flag in `field_notes/mass_scan.py`, oneshot service `field-notes-nightly.service`, and `field-notes-nightly.timer` systemd unit.
+**Code:** [field_notes/mass_scan.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L375) — Single-Epoch Nightly Refinement Sweeper.
+**Logic:** Executes a single bounded epoch of note nibbling, gem refinement (2:00 AM – 5:00 AM window), de-duplication, and yearly aggregation during the nightly maintenance sweep. At 05:00 AM, the refinement loop yields cleanly, ensuring a full 1-hour buffer (until 06:00 AM) for archive aggregation, de-duplication, and trailing tasks.
+**Rationale:** Replaces continuous 24/7 scanning with bounded midnight execution, allowing the lab to remain in Lean Sleep during the day while refining up to ~150 gems nightly.
+**Mechanism:** `--once` flag in `field_notes/mass_scan.py`, 05:00 AM cutoff check, oneshot service `field-notes-nightly.service` (4-hour `TimeoutStartSec=14400`), and `field-notes-nightly.timer` systemd unit.
 
 ## [FEAT-417] Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
 **Status:** ACTIVE
