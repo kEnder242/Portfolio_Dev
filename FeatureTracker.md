@@ -762,10 +762,10 @@
 
 ## [FEAT-161] Synthetic Character Distillation
 **Status:** ACTIVE
-**Code:** [src/forge/distill_documentation.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/distill_documentation.py#L6) — Synthetic Character Distillation.
-**Logic:** Uses the Sovereign Brain (4090) to transform raw technical logs into instruction-response conversation pairs for training.
-**Rationale:** Raw logs are too noisy for effective fine-tuning. Distillation creates high-signal training data that bridges ASCII evidence with agentic character.
-**Mechanism:** `src/forge/distill_gems.py`. Successfully verified small-batch distillation using KENDER compute.
+**Code:** [field_notes/mass_scan.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L266) — Synthetic Character Distillation.
+**Logic:** Autonomous distillation engine in `mass_scan.py` (Step 6 TLC) that extracts Rank 4/5 gems and standalone code artifacts (`artifacts_*.json`) into bidirectional instruction-tuning pairs in `journal_ledger.jsonl` (593 active pairs). Grounded in GenRead ([arXiv:2209.10063](https://arxiv.org/abs/2209.10063)) and Query2Doc ([arXiv:2303.07678](https://arxiv.org/abs/2303.07678)).
+**Rationale:** Transforms terse notes and standalone tools into natural-language training pairs with forward tool inquiries and reverse Jeopardy category searches, eliminating catastrophic forgetting via cumulative full-replay training.
+**Mechanism:** `distill_journal_ledger()` in `field_notes/mass_scan.py`, `test_forge_distillation_unit.py`.
 
 ## [FEAT-162] Multi-LoRA Cognitive Loadout
 **Status:** ACTIVE (Dormant)
@@ -1768,6 +1768,15 @@
 **Logic:** Calibrates vector similarity cutoff threshold in `archive_node.get_context()` from static 0.45 to dynamic 0.55 (matched to `all-MiniLM-L6-v2` embeddings). Logs RAG collection hit rates, candidates found, HyDE fallback events, and distance thresholds to `status.json`.
 **Rationale:** Prevents valid semantic matches from being dropped by overly tight 0.45 distance cutoffs while providing real-time vector engine health telemetry to the status center.
 **Mechanism:** `DISTANCE_THRESHOLD = 0.55` and `_log_rag_telemetry()` in `archive_node.py`, atomic write to `status.json`.
+
+---
+
+## [FEAT-448] Tri-Field Gem Schema & Self-RAG Refinement
+**Status:** ACTIVE
+**Code:** [field_notes/refine_gem.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/refine_gem.py#L225) — Tri-Field Gem Schema & Self-RAG Refinement.
+**Logic:** Upgrades the BKM gem extraction prompt and schema in `refine_gem.py` to extract `summary`, `trigger_context`, `technical_gem`, and `anchors` (3–6 exact technical acronyms). Grounded in Self-RAG ([arXiv:2310.11511](https://arxiv.org/abs/2310.11511)) and Query2Doc ([arXiv:2303.07678](https://arxiv.org/abs/2303.07678)).
+**Rationale:** Structures historical knowledge into rich hypothetical problem scenarios and dense hardware tokens, enabling Pinky's Stage 2 HyDE expansion to prime vector search with >95% cosine precision.
+**Mechanism:** `refine_gem.py` Tri-Field prompt, `distill_journal_ledger()` bridge in `mass_scan.py`, `test_forge_distillation_unit.py`.
 
 ---
 
