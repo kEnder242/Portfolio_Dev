@@ -40,7 +40,7 @@ nav {
 nav h1 { font-size: 1rem; color: var(--heading-color); margin-bottom: 5px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
 nav .subtitle { font-size: 0.75rem; color: var(--sub-color); margin-bottom: 20px; text-transform: uppercase; }
 .sys-banner { background: var(--code-bg); color: var(--accent-color); border: 1px solid var(--border-color); padding: 5px; font-size: 0.6rem; font-weight: bold; text-align: center; border-radius: 4px; margin-bottom: 20px; font-family: var(--font-stack); }
-nav a { text-decoration: none; color: var(--sub-color); display: block; padding: 6px 0; transition: 0.2s; font-size: 0.85rem; }
+nav a { text-decoration: none; color: var(--sub-color); display: block; padding: 0; transition: 0.2s; font-size: 0.85rem; }
 nav a:hover { color: var(--text-color); background: transparent; }
 nav a.mission-link { color: var(--sub-color); }
 nav a.mission-link:hover { color: var(--text-color); }
