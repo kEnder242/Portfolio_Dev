@@ -376,14 +376,14 @@ def main():
         # [POLITENESS] Only refine if the queue was just cleared or specifically idle
         items_to_refine = get_low_rank_items()
         if items_to_refine:
-            logging.info(f"Step 5: Refining {len(items_to_refine)} items...")
-            for i in range(min(len(items_to_refine), 50)):
+            logging.info(f"Step 5: Refining {len(items_to_refine)} items (capped at 25)...")
+            for i in range(min(len(items_to_refine), 25)):
                 if check_lock(lock_path) or os.path.exists(maint_lock): break
                 while not vram_guard(): 
                     update_status("WAITING", "VRAM Cooling...")
                     time.sleep(60)
-                logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
-                update_status("ONLINE", f"Refining Gem {i+1}/50")
+                logging.info(f"Step 5.1: Refining Gem [{i+1}/25]...")
+                update_status("ONLINE", f"Refining Gem {i+1}/25")
                 if run_task([GEM_REFINER]):
                     time.sleep(SLEEP_INTERVAL)
                 else:
