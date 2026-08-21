@@ -438,10 +438,10 @@ def main():
         if check_lock(lock_path) or os.path.exists(maint_lock): continue
 
         # 5. Eternal Slow Burn (Refinement Loop)
-        # [POLITENESS] Window-bounded: refine low-rank items during 2:00 AM – 5:00 AM window
+        # [POLITENESS] Window-bounded: refine low-rank items during 3:00 AM – 5:00 AM window
         items_to_refine = get_low_rank_items()
         if items_to_refine:
-            logging.info(f"Step 5: Refining {len(items_to_refine)} items (Active Window: 2:00 AM – 5:00 AM)...")
+            logging.info(f"Step 5: Refining {len(items_to_refine)} items (Active Window: 3:00 AM – 5:00 AM)...")
             for i, item in enumerate(items_to_refine):
                 if check_lock(lock_path) or os.path.exists(maint_lock): break
                 
