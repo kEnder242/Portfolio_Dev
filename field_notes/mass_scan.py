@@ -307,7 +307,11 @@ def distill_journal_ledger():
                     
                     finding = tech_gem if tech_gem else summary
                     ev_text = evidence if evidence else "Historical telemetry evidence."
-                    dialogue_text = f"User: What was the technical milestone and validation finding for {summary} ({date_str})?\nPinky: In {date_str}, the milestone was: {finding}\n\nEvidence: {ev_text}"
+                    raw_trigger = str(ev.get("trigger_context") or "").strip()
+                    trigger = raw_trigger if raw_trigger else f"What was the technical milestone and validation finding for {summary}?"
+                    anchors = ev.get("anchors", [])
+                    anchor_text = f"\nAnchors: {', '.join(anchors)}" if isinstance(anchors, list) and anchors else ""
+                    dialogue_text = f"User: {trigger} ({date_str})\nPinky: In {date_str}, the milestone was: {finding}\n\nEvidence: {ev_text}{anchor_text}"
                     
                     if dialogue_text not in existing_dialogues:
                         existing_dialogues.add(dialogue_text)

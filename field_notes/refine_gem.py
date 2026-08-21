@@ -223,8 +223,9 @@ def main():
     logging.info(f"Refining: {event.get('summary')} in {os.path.basename(file_path)}")
 
     refine_prompt = f"""
-    [ROLE] Senior Silicon Validation Architect.
+    [ROLE] Senior Platform Telemetry & Validation Architect.
     [BKM PROTOCOL] 1. One-liner, 2. Core Logic, 3. Trigger, 4. Scars.
+    [RESEARCH GROUNDING] Query2Doc & GenRead (Parametric Dense Retrieval Priming).
     
     [CURRENT ENTRY]
     Date: {event.get('date')}
@@ -233,12 +234,22 @@ def main():
     Evidence: {event.get('evidence')}
     
     [TASK]
-    Review the entry above. If the 'Technical Gem' is generic (e.g., 'fixed a bug', 'ran a test'), 
-    re-analyze the [Evidence] to find a specific tool name, error code, or architectural nuance.
+    Review the entry above. Analyze the [Evidence] and [Summary] to extract:
+    1. A sharp 1-line 'summary'.
+    2. 'trigger_context': The exact problem scenario, debug condition, or engineering question that triggers this knowledge.
+    3. 'technical_gem': The concrete tool name, register/MSR offset, script, or architectural BKM used to resolve it.
+    4. 'anchors': A JSON list of 3-6 exact technical acronyms, tools, error codes, or hardware terms (e.g. ["RAPL", "MSR 0x610", "PECI", "PythonSV"]).
     
     [OUTPUT FORMAT]
-    Output ONLY a JSON object with the improved fields and set "rank": 4.
-    {{ "summary": "...", "technical_gem": "...", "rank": 4, "tags": [...] }}
+    Output ONLY a valid JSON object:
+    {{
+      "summary": "...",
+      "trigger_context": "...",
+      "technical_gem": "...",
+      "anchors": ["..."],
+      "rank": 4,
+      "tags": ["..."]
+    }}
     """
     
     try:

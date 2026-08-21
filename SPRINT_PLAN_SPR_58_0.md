@@ -9,8 +9,19 @@
 ### 1. The Lesson of Raw Notes vs. Distilled Gems
 * **The Failure of Raw Notes in Fine-Tuning**: Raw daily engineering notes are terse, non-linear, fragmented, and full of ad-hoc shorthand (`"ran test on pcie, code 3, swapped harness"`). When fed directly to an LLM, the model overfits to syntax fragments rather than engineering wisdom.
 * **Why Gems Succeed**: The Nibbler and Curator extract structured **Entity-Relational Tuples**:
-  $$\\text{Tuple} = (\\text{Year/Era}, \\text{Platform/Role}, \\text{Tool/Technology}, \\text{Symptom/Error}, \\text{Architectural Nuance})$$
-* **The Opportunity (Relational Co-Occurrence Mesh)**: We can mine the 367+ Rank 4/5 gems to construct a dynamic, bidirectional association graph. When the user asks about a concept (e.g., *"power limiting"*), the model’s internal weights activate the full co-occurrence cluster: `RAPL`, `MSR 0x610`, `PL1/PL2 limits`, `matplotlib`, `2019`, `truncated pyramid`, and `Montana protocol`.
+  $$\text{Tuple} = (\text{Year/Era}, \text{Platform/Role}, \text{Tool/Technology}, \text{Symptom/Error}, \text{Architectural Nuance})$$
+* **The Opportunity (Relational Co-Occurrence Mesh)**: We can mine the 367+ Rank 4/5 gems and 246+ code artifacts to construct a dynamic, bidirectional association graph. When the user asks about a concept (e.g., *"power limiting"*), the model’s internal weights activate the full co-occurrence cluster: `RAPL`, `MSR 0x610`, `PL1/PL2 limits`, `matplotlib`, `2019`, `truncated pyramid`, and `Montana protocol`.
+
+---
+
+## 🔬 ArXiv Research Grounding & Pedigree Mapping
+
+| Research Anchor | ArXiv ID | Theoretical Logic | Lab Implementation & Sprint 58 Coverage | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **HyDE** | 2212.10496 | Precise Zero-Shot Dense Retrieval without Relevance Labels. | **Stage 2 Pinky HyDE:** Generates hypothetical document embeddings to seed ChromaDB. | **75% Live** |
+| **Query2Doc** | 2303.07678 | Fine-Tuning LLMs for Pseudo-Document Query Expansion. | **LoRA HyDE Priming:** `cli_voice_v1` LoRA trained on 606 pairs to emit dense acronyms & BKMs. | **75% Live** |
+| **GenRead** | 2209.10063 | Parametric Context Generation for Dense Retrieval. | **Jeopardy Distillation:** `distill_journal_ledger()` trains LoRA on bidirectional gem triggers. | **80% Live** |
+| **Self-RAG** | 2310.11511 | Learning to Retrieve, Generate, and Critique via Reflection. | **Refinement Loop:** Tri-Field Gem Schemas (`trigger_context`, `anchors`) & Hybrid RiR Gating. | **60% Live** |
 
 ---
 
@@ -21,7 +32,7 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                                 1. UNSTRUCTURED SOURCES                                 │
-│             ~/raw_notes (2005–2025 TXT/MD)  +  HomeLabAI/docs/Protocols.md             │
+│             ~/raw_notes (2005–2025 TXT/MD)  +  Standalone Code Artifacts & BKMs        │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │
                                             ▼
@@ -41,7 +52,7 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
                                             ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                        4. AUTONOMOUS REFINEMENT (3:00–5:00 AM)                         │
-│       refine_gem.py (BKM Protocol) ──▶ Upgrades to Rank 4 / Rank 5 (Diamond Wisdom)   │
+│       refine_gem.py (BKM Protocol) ──▶ Upgrades to Rank 4 / Rank 5 (Tri-Field Schema)  │
 │       clean_duplicates.py          ──▶ Semantic de-duplication (0.85 cosine thresh)    │
 │       aggregate_years.py           ──▶ Aggregates months into consolidated year trees   │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
@@ -49,8 +60,8 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
                                             ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                       5. INSTRUCTION DISTILLATION (05:00 AM)                           │
-│       distill_journal_ledger()     ──▶ Converts Rank 4/5 gems into Q&A dialogue pairs  │
-│       journal_ledger.jsonl         ──▶ Dataset grows autonomously (currently 360 pairs)│
+│       distill_journal_ledger()     ──▶ Converts Rank 4/5 gems + Code Tools to Q&A pairs │
+│       journal_ledger.jsonl         ──▶ Dataset grows autonomously (606 active pairs)   │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │
                                             ▼
@@ -74,53 +85,70 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
 
 ---
 
+## 💎 The Tri-Field Gem Schema (Machine-Readable Specification)
+
+### 1. JSON Schema Definition
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TriFieldGem",
+  "type": "object",
+  "required": ["summary", "trigger_context", "technical_gem", "anchors", "rank"],
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Sharp 1-line summary of the engineering accomplishment or event."
+    },
+    "trigger_context": {
+      "type": "string",
+      "description": "The exact problem scenario, debug condition, or engineering question that triggers this knowledge."
+    },
+    "technical_gem": {
+      "type": "string",
+      "description": "Concrete tool name, register/MSR offset, script, or architectural BKM used to resolve it."
+    },
+    "anchors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "3-6 exact technical acronyms, tools, error codes, or hardware terms (e.g. ['RAPL', 'MSR 0x610', 'PECI', 'PythonSV'])."
+    },
+    "rank": {
+      "type": "integer",
+      "enum": [4, 5],
+      "description": "4 for High-Fidelity Technical Gem, 5 for Diamond Wisdom."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+```
+
+### 2. Concrete Example Instance
+```json
+{
+  "summary": "PECI sideband command throughput validation under high thermal load",
+  "trigger_context": "When benchmarking sideband telemetry command rates and diagnosing PECI bus saturation",
+  "technical_gem": "Developed pecistressor.py achieving ~5300 cmd/sec sideband command throughput across OpenBMC endpoints",
+  "anchors": ["PECI", "pecistressor.py", "OpenBMC", "Sideband", "DTTC_2022"],
+  "rank": 4,
+  "tags": ["telemetry", "sideband", "peci", "firmware"]
+}
+```
+
+---
+
 ## 🧭 Honest System Assessment: What is Live vs. What is Next
 
 | Architecture Component | Status | Implementation Details |
 | :--- | :--- | :--- |
 | **Raw Note Ingestion** | **LIVE (100%)** | 0 pending chunks in `queue.json`. 18 years synthesized. |
-| **Gem Refinement Loop** | **LIVE (94.5%)** | 347 out of 367 timeline events are already Rank 4/5. |
-| **Autonomous Distillation** | **LIVE (100%)** | `distill_journal_ledger()` extracts Rank 4/5 gems into `journal_ledger.jsonl` (360 pairs). |
-| **Nightly Unsloth LoRA** | **LIVE (100%)** | REST Quiesce $\\rightarrow$ 60-step Unsloth $\\rightarrow$ Re-ignition running automatically at 2:00 AM. |
-| **HyDE Query Expansion** | **LIVE (Partial)** | Stage 2 Pinky generates HyDE queries, but currently relies on conversational LoRA rather than explicit relational training. |
-| **Bidirectional Jeopardy LoRA** | **NEXT (SPR-58)** | Need to format distillation pairs into explicit bidirectional forward/reverse triplets. |
-| **RAG + Regex / Grep (Hybrid RiR)**| **LIVE (MCP Only)**| `peek_related_notes` in `archive_node.py` uses keyword search, but Foyer Stage 3 ChromaDB lookup is purely dense vector. Needs hybrid lexical-dense fusing (BM25/grep + vector). |
-
----
-
-## 🧠 Deep Dive: The "HyDE-Jeopardy" & Relational Mapping Strategy
-
-### 1. Does LoRA Work on Natural Language or Raw Triplets?
-* **How LoRA Learns**: LoRA (Low-Rank Adaptation) adjusts the low-rank attention projection matrices ($W_q, W_v$) within the transformer layers. It learns the **conditional probability distribution of token sequences** in natural language.
-* **Why Pure Triplets (e.g. `RAPL -> 2019`) Are Insufficient**: Raw knowledge-graph triplets lack conversational syntax, leading to unnatural, stilted generation.
-* **The Solution: Natural Language Wrappers for Triplets**:
-  We format each relational edge into conversational natural language pairs that teach the model to bridge concepts bidirectionally:
-
-$$\\begin{aligned}
-\\text{Forward Query} &: \\text{"User: What validation framework was used for RAPL in 2019?"} \\
-&\\quad\\rightarrow \\text{"Pinky: In 2019, RAPL power-limiting validation utilized RAPL-Sim with Matplotlib visualization."} \\
-\\text{Reverse Query} &: \\text{"User: What telemetry and power tools were active during the 2019 validation cycle?"} \\
-&\\quad\\rightarrow \\text{"Pinky: The 2019 cycle featured RAPL power sweeps, Montana protocol logger suppression, and Python ML time-series data."} \\
-\\text{Relational Nuance} &: \\text{"User: How does the Montana protocol connect to RAPL telemetry?"} \\
-&\\quad\\rightarrow \\text{"Pinky: The Montana protocol was designed to prevent logger hijacking during high-frequency RAPL telemetry polling."}
-\\end{aligned}$$
-
----
-
-## 🔎 RAG + RegExp / Grep: Hybrid Retrieval (The ArXiv "RiR" Pattern)
-
-### 1. What We Currently Have
-* In [`HomeLabAI/src/nodes/archive_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py), we have `peek_related_notes(keyword)` (RLM Research Pattern) which performs keyword searches across text files.
-
-### 2. The ArXiv "RiR" (Retrieval-in-Retrieval) Pattern
-* **Dense Vector Failure Mode**: ChromaDB embeddings sometimes suffer from "semantic blur" where a rare acronym (e.g. `PECI`, `RAKP`, `MSR 0x610`) gets drowned out by broad semantic similarity.
-* **The Hybrid Solution (Dense Vector + Exact Lexical Grep)**:
-  1. **Stage 2 (Pinky HyDE)** emits both a dense search query AND a list of exact regex tokens (`["RAPL", "0x610", "2019"]`).
-  2. **Stage 3 (Hybrid Retriever)**:
-     - Runs ChromaDB dense vector query for top-10 chunks.
-     - Runs `ripgrep` / regex filter across `Portfolio_Dev/field_notes/data/` for exact token hits.
-     - Intersects / re-ranks results using Reciprocal Rank Fusion (RRF).
-  3. **Result**: Zero false positives on exact technical terms while retaining broad semantic understanding.
+| **Gem Refinement Loop** | **LIVE (94.5%)** | 347 out of 367 timeline events are already Rank 4/5. `refine_gem.py` updated to Tri-Field Schema. |
+| **Code Artifact Distillation** | **LIVE (100%)** | `distill_journal_ledger()` extracts Rank 4/5 gems AND `artifacts_*.json` into `journal_ledger.jsonl` (606 pairs). |
+| **Nightly Unsloth LoRA** | **LIVE (100%)** | REST Quiesce $\rightarrow$ 60-step Unsloth $\rightarrow$ Re-ignition running automatically at 2:00 AM. |
+| **HyDE Query Expansion** | **LIVE (75%)** | Stage 2 Pinky generates HyDE queries using `cli_voice_v1` LoRA weights. |
+| **RAG + Regex / Grep (Hybrid RiR)**| **LIVE (MCP Only)**| `peek_related_notes` in `archive_node.py` uses keyword search. Stage 3 ChromaDB lookup in Foyer is dense vector; ready for hybrid sparse-dense fusion. |
 
 ---
 
@@ -137,7 +165,7 @@ $$\\begin{aligned}
                 - System returns to stable OPERATIONAL baseline.
 
 03:00 AM ──▶ 4. Active Mass Scan Refinement Window (03:00 – 05:00 AM)
-                - 2 Hours of polite 60s gem refinement (~100 items upgraded to Rank 4).
+                - 2 Hours of polite 60s gem refinement (~100 items upgraded to Rank 4 with Tri-Field Schema).
                 - 05:00 AM Cutoff triggers: Step 6 TLC runs de-duplication, aggregation, and auto-distills new gems into journal_ledger.jsonl.
 
 05:00 AM ──▶ 5. Subconscious Dreaming (05:00 – 05:25 AM)
