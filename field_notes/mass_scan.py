@@ -321,11 +321,45 @@ def distill_journal_ledger():
         except Exception as e:
             logging.warning(f"[DISTILL] Error parsing {jf}: {e}")
 
+    # 2. Harvest standalone code artifacts and scripts from artifacts_*.json
+    artifact_files = glob.glob(os.path.join(DATA_DIR, "artifacts_*.json"))
+    for af in sorted(artifact_files):
+        try:
+            with open(af, "r") as f:
+                art_items = json.load(f)
+            if not isinstance(art_items, list):
+                continue
+            
+            for item in art_items:
+                fname = str(item.get("filename") or "").strip()
+                synopsis = str(item.get("synopsis") or "").strip()
+                category = str(item.get("category") or "Engineering Tool").strip()
+                rank = item.get("rank", 3)
+                
+                if not fname or not synopsis:
+                    continue
+                
+                # Pair 1: Forward Tool Identification
+                d1 = f"User: What is the {fname} tool and how is it used?\nPinky: {fname} is a {category} in Jason's technical portfolio. Purpose: {synopsis}"
+                if d1 not in existing_dialogues:
+                    existing_dialogues.add(d1)
+                    new_entries.append({"ts": int(time.time()), "dialogue": d1, "rank": rank, "type": "artifact_tool"})
+                    extracted_count += 1
+                
+                # Pair 2: Reverse Category Search (Jeopardy Style)
+                d2 = f"User: What tools did Jason develop for {category}?\nPinky: For {category}, Jason developed {fname}. Synopsis: {synopsis}"
+                if d2 not in existing_dialogues:
+                    existing_dialogues.add(d2)
+                    new_entries.append({"ts": int(time.time()), "dialogue": d2, "rank": rank, "type": "artifact_category"})
+                    extracted_count += 1
+        except Exception as e:
+            logging.warning(f"[DISTILL] Error parsing artifact file {af}: {e}")
+
     total_entries = preserved_entries + new_entries
     if total_entries:
         lines = [json.dumps(entry) + "\n" for entry in total_entries]
         atomic_write_text(ledger_file, "".join(lines))
-        logging.info(f"✨ [DISTILL] Updated journal_ledger.jsonl: {len(total_entries)} total pairs ({extracted_count} newly harvested from Rank 4/5 gems).")
+        logging.info(f"✨ [DISTILL] Updated journal_ledger.jsonl: {len(total_entries)} total pairs ({extracted_count} newly harvested from gems & code artifacts).")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -377,23 +411,19 @@ def main():
 
         # 3. Artifact Map Refresh (Hybrid/Brain Mode)
         # Only run if there is work or if specifically requested
-        if os.path.exists(QUEUE_FILE):
-            with open(QUEUE_FILE, 'r') as f:
-                queue = json.load(f)
+        # 3. Artifact Map Refresh
+        logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
+        years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
+        for idx, year in enumerate(years):
+            if check_lock(lock_path) or os.path.exists(maint_lock): break
+            while not vram_guard(): 
+                update_status("WAITING", "VRAM Cooling...")
+                time.sleep(60)
             
-            if queue:
-                logging.info("Step 3: Refreshing Artifact Map (Hybrid Mode)...")
-                years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
-                for idx, year in enumerate(years):
-                    if check_lock(lock_path) or os.path.exists(maint_lock): break
-                    while not vram_guard(): 
-                        update_status("WAITING", "VRAM Cooling...")
-                        time.sleep(60)
-                    
-                    progress = int((idx / len(years)) * 100)
-                    logging.info(f"Scanning Artifact Sector: {year} (Brain) [{progress}%]")
-                    update_status("ONLINE", f"Scanning Artifacts: {year}", progress_pct=progress)
-                    run_task([ARTIFACT_SCANNER, year, "--hybrid"])
+            progress = int((idx / len(years)) * 100)
+            logging.info(f"Scanning Artifact Sector: {year} (Brain) [{progress}%]")
+            update_status("ONLINE", f"Scanning Artifacts: {year}", progress_pct=progress)
+            run_task([ARTIFACT_SCANNER, year, "--hybrid"])
         
         if check_lock(lock_path) or os.path.exists(maint_lock): continue
 
