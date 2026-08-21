@@ -71,8 +71,8 @@ def generate_rows(bkm_list):
         html_body = markdown.markdown(body_with_absolute_links, extensions=['fenced_code', 'tables'])
         
         row = f"""                    <tr>
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">{item['id']}</td>
-                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid #222;">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">{item['id']}</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
                             <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">{item['title']}</div>
                             <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
                                 {html_body}
