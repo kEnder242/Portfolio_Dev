@@ -263,6 +263,70 @@ def synthesize_career_mesh():
     except Exception as e:
         logging.error(f"[COMPASS] Failed to synthesize career mesh: {e}")
 
+def distill_journal_ledger():
+    """[FEAT-161] Distills all Rank 4 and Rank 5 technical gems into instruction-tuning conversation pairs for train_expert.py."""
+    ledger_file = os.path.join(DATA_DIR, "journal_ledger.jsonl")
+    json_files = glob.glob(os.path.join(DATA_DIR, "20*.json"))
+    
+    existing_dialogues = set()
+    preserved_entries = []
+    if os.path.exists(ledger_file):
+        try:
+            with open(ledger_file, "r") as f:
+                for line in f:
+                    if line.strip():
+                        item = json.loads(line)
+                        d = item.get("dialogue", "")
+                        if d and d not in existing_dialogues:
+                            existing_dialogues.add(d)
+                            preserved_entries.append(item)
+        except Exception as e:
+            logging.warning(f"[DISTILL] Failed reading existing ledger: {e}")
+
+    extracted_count = 0
+    new_entries = []
+    for jf in sorted(json_files):
+        if "_" in os.path.basename(jf):
+            continue  # Skip raw month fragments; use consolidated yearly archives
+        try:
+            with open(jf, "r") as f:
+                events = json.load(f)
+            if not isinstance(events, list):
+                continue
+            
+            for ev in events:
+                rank = ev.get("rank", 0)
+                if rank >= 4:
+                    summary = str(ev.get("summary") or "").strip()
+                    evidence = str(ev.get("evidence") or "").strip()
+                    tech_gem = str(ev.get("technical_gem") or "").strip()
+                    date_str = str(ev.get("date") or "").strip()
+                    
+                    if not summary and not tech_gem:
+                        continue
+                    
+                    finding = tech_gem if tech_gem else summary
+                    ev_text = evidence if evidence else "Historical telemetry evidence."
+                    dialogue_text = f"User: What was the technical milestone and validation finding for {summary} ({date_str})?\nPinky: In {date_str}, the milestone was: {finding}\n\nEvidence: {ev_text}"
+                    
+                    if dialogue_text not in existing_dialogues:
+                        existing_dialogues.add(dialogue_text)
+                        new_entries.append({
+                            "ts": int(time.time()),
+                            "dialogue": dialogue_text,
+                            "rank": rank,
+                            "date": date_str
+                        })
+                        extracted_count += 1
+        except Exception as e:
+            logging.warning(f"[DISTILL] Error parsing {jf}: {e}")
+
+    total_entries = preserved_entries + new_entries
+    if total_entries:
+        lines = [json.dumps(entry) + "\n" for entry in total_entries]
+        atomic_write_text(ledger_file, "".join(lines))
+        logging.info(f"✨ [DISTILL] Updated journal_ledger.jsonl: {len(total_entries)} total pairs ({extracted_count} newly harvested from Rank 4/5 gems).")
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--keyword", help="Run a targeted Hallway Protocol scan.")
@@ -405,6 +469,7 @@ def main():
         run_task([CLEANER])
         run_task([AGGREGATOR])
         synthesize_career_mesh()
+        distill_journal_ledger()
 
         logging.info(f"Epoch {epoch_count} complete. Pulsing Pager.")
         update_status("IDLE", f"Epoch {epoch_count} complete.")
