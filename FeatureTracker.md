@@ -2031,3 +2031,410 @@
 **Logic:** End-to-end integration diagnostic probe (`_run_deep_smoke`) that validates the entire multi-node cascade and memory footprint on demand.
 **Mechanism:** Diagnostic test harness utility executed during test suites or manual lab health verification, decoupled from the live query hot-path.
 
+## [FEAT-017] Stable Lab Bootstrapper
+**Status:** ACTIVE
+**Code:** [start_lab.sh](https://github.com/kEnder242/Dev_Lab/blob/main/start_lab.sh#L3) — Stable Lab Bootstrapper.
+**Logic:** --- Acme Lab: Unified Bootstrapper v1.0 --- [FEAT-017] Stable Lab Bootstrapper ATTENDANT_URL="http://localhost:9999 echo "--- 🚀 INITIATING ACME LAB BOOT SEQUENCE ---
+**Mechanism:** `start_lab.sh` at line 3.
+
+## [FEAT-067.2] Attendant-Aware Ignition for Dreaming.
+**Status:** ACTIVE
+**Code:** [src/dream_cycle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/dream_cycle.py#L35) — Attendant-Aware Ignition for Dreaming..
+**Logic:** async def ensure_engine_ready(): [FEAT-067.2] Attendant-Aware Ignition for Dreaming. try: 1. Check Status
+**Mechanism:** `src/dream_cycle.py` at line 35.
+
+## [FEAT-072.1] Component Subsystem (FEAT-072.1)
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1734) — Component Subsystem (FEAT-072.1).
+**Logic:** brain_source": "The Brain", channel": "insight", final": True })
+**Mechanism:** `src/logic/cognitive_hub.py` at line 1734.
+
+## [FEAT-074] Workbench: Instructs the UI to open a specific file in the editor.
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L417) — Workbench: Instructs the UI to open a specific file in the editor..
+**Logic:** @mcp.tool() async def select_file(filename: str) -> str: [FEAT-074] Workbench: Instructs the UI to open a specific file in the editor. return json.dumps({"type": "select_file", "filename": filename})
+**Mechanism:** `src/nodes/archive_node.py` at line 417.
+
+## [FEAT-127.1] Recursive Refinement: Upgrade Tier 2 artifacts to Tier 1.
+**Status:** ACTIVE
+**Code:** [src/dream_cycle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/dream_cycle.py#L127) — Recursive Refinement: Upgrade Tier 2 artifacts to Tier 1..
+**Logic:** logging.info("✅ Dream Cycle Finished. The Lab has evolved.") async def run_refinement_dream(self): [FEAT-127.1] Recursive Refinement: Upgrade Tier 2 artifacts to Tier 1. logging.info("💎 Initiating Deep Refinement of t...
+**Mechanism:** `src/dream_cycle.py` at line 127.
+
+## [FEAT-147] Adaptive Residency (Dynamic load/unload).
+**Status:** ACTIVE
+**Code:** [src/equipment/sensory_manager.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/equipment/sensory_manager.py#L14) — Adaptive Residency (Dynamic load/unload)..
+**Logic:** Encapsulates binary PCM processing and NeMo residency. Ready for [FEAT-147] Adaptive Residency (Dynamic load/unload).  def __init__(self, broadcast_callback):
+**Mechanism:** `src/equipment/sensory_manager.py` at line 14.
+
+## [FEAT-153] Collaborative Handshake Test:
+**Status:** ACTIVE
+**Code:** [src/test_round_table.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/test_round_table.py#L10) — Collaborative Handshake Test:.
+**Logic:**  [FEAT-153] Collaborative Handshake Test: 1. Sends a strategic query. 2. Verifies the Hub coordinates Pinky and Brain.
+**Mechanism:** `src/test_round_table.py` at line 10.
+
+## [FEAT-160.1] Training Scaffolding: Unsloth Expert Forge
+**Status:** ACTIVE
+**Code:** [src/train/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/train/train_expert.py#L7) — Training Scaffolding: Unsloth Expert Forge.
+**Logic:** [FEAT-160.1] Training Scaffolding: Unsloth Expert Forge This script is intended for use on the 2080 Ti (local) AFTER mass_scan is complete. Configuration MODEL_NAME = "unsloth/llama-3.2-3b-instruct-bnb-4bit
+**Mechanism:** `src/train/train_expert.py` at line 7.
+
+## [FEAT-167.3] Pedigree Discovery: Scan archive for hidden CV synergy.
+**Status:** ACTIVE
+**Code:** [src/recruiter.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/recruiter.py#L269) — Pedigree Discovery: Scan archive for hidden CV synergy..
+**Logic:** async def run_synergy_scan(self): [FEAT-167.3] Pedigree Discovery: Scan archive for hidden CV synergy. if not self.brain or not self.signatures: return
+**Mechanism:** `src/recruiter.py` at line 269.
+
+## [FEAT-175] BKM Sentinel Keywords
+**Status:** ACTIVE
+**Code:** [field_notes/scan_librarian.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/scan_librarian.py#L160) — BKM Sentinel Keywords.
+**Logic:** Team Anchors Heuristic TEAM_TAGS = {"PIAV": "2019-2024", "PAE": "2016-2019", "MVE": "2016", "DSD": "2011-2016", "EPSD": "2005-2007"} [FEAT-175] BKM Sentinel Keywords BKM_KEYWORDS = ["root cause", "silicon failure", "v...
+**Mechanism:** `field_notes/scan_librarian.py` at line 160.
+
+## [FEAT-176] Deep-Connect Mode Detection
+**Status:** ACTIVE
+**Code:** [field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L154) — Deep-Connect Mode Detection.
+**Logic:** [FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get("mode") == "DEEP_CONNECT bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json") existing_data = []
+**Mechanism:** `field_notes/nibble.py` at line 154.
+
+## [FEAT-177] DNA Uplink: Harvest for Expert Forge
+**Status:** ACTIVE
+**Code:** [field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L263) — DNA Uplink: Harvest for Expert Forge.
+**Logic:** [FEAT-177] DNA Uplink: Harvest for Expert Forge if is_deep_connect: try: os.makedirs(EXPERTISE_DIR, exist_ok=True)
+**Mechanism:** `field_notes/nibble.py` at line 263.
+
+## [FEAT-179] Targeted scan for the Hallway Protocol.
+**Status:** ACTIVE
+**Code:** [field_notes/mass_scan.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L175) — Targeted scan for the Hallway Protocol..
+**Logic:** def hallway_protocol(keyword): [FEAT-179] Targeted scan for the Hallway Protocol. logging.info(f"=== HALLWAY PROTOCOL: Targeted Search for '{keyword}' ===") 1. Grep for matching files in raw_notes
+**Mechanism:** `field_notes/mass_scan.py` at line 175.
+
+## [FEAT-192] Verifies and optionally forces engine readiness via a generation probe.
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1328) — Verifies and optionally forces engine readiness via a generation probe..
+**Logic:** @mcp.tool() async def ping_engine(force: bool = False) -> str: [FEAT-192] Verifies and optionally forces engine readiness via a generation probe. success, msg = await node.ping_engine(force=force)
+**Mechanism:** `src/nodes/archive_node.py` at line 1328.
+
+## [FEAT-206] self._probe_ttl_failure = 15   # 15 Seconds [FEAT-206]
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L128) — self._probe_ttl_failure = 15   # 15 Seconds [FEAT-206].
+**Logic:** self._engine_cache = None self._last_probe = 0 self._probe_ttl_success = 300  # 5 Minutes [FEAT-206] self._probe_ttl_failure = 15   # 15 Seconds [FEAT-206]
+**Mechanism:** `src/nodes/loader.py` at line 128.
+
+## [FEAT-212] Direct REST Priming + Hub WebSocket Probing.
+**Status:** ACTIVE
+**Code:** [src/debug/prime_remote_brain.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/prime_remote_brain.py#L6) — Direct REST Priming + Hub WebSocket Probing..
+**Logic:** Architect Prime & Probe (B+A) [FEAT-212] Direct REST Priming + Hub WebSocket Probing. This script proves model residency on the 4090 and audits the Hub's triage turns. 
+**Mechanism:** `src/debug/prime_remote_brain.py` at line 6.
+
+## [FEAT-215] Automated Verification of the 01:00 AM - 04:00 AM sequence.
+**Status:** ACTIVE
+**Code:** [src/debug/lifecycle_gauntlet.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/lifecycle_gauntlet.py#L6) — Automated Verification of the 01:00 AM - 04:00 AM sequence..
+**Logic:** Lifecycle Gauntlet (Shakedown Protocol v3.0) [FEAT-215] Automated Verification of the 01:00 AM - 04:00 AM sequence. [FEAT-217] Sequenced Batch Forge Verification (3 souls in 1 pass). 
+**Mechanism:** `src/debug/lifecycle_gauntlet.py` at line 6.
+
+## [FEAT-217] Sequenced Batch Forge - bypass MCP catch-22
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L764) — Sequenced Batch Forge - bypass MCP catch-22.
+**Logic:** elif task == "forge": [FEAT-217] Sequenced Batch Forge - bypass MCP catch-22 async def _run_batch_forge(): try:
+**Mechanism:** `src/v5/foyer/router.py` at line 764.
+
+## [FEAT-227] Component Subsystem (FEAT-227)
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1157) — Component Subsystem (FEAT-227).
+**Logic:** except Exception as e: logging.error(f"[HUB] Journal ledger write failed: {e}") [FEAT-247] Physical Audit Gate async def evaluate_grounding(self, source, text, interest=0.8, shutdown_event=None, request_id="default", ...
+**Mechanism:** `src/logic/cognitive_hub.py` at line 1157.
+
+## [FEAT-232] Feedback Harvester
+**Status:** ACTIVE
+**Code:** [src/forge/harvest_feedback.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/harvest_feedback.py#L4) — Feedback Harvester.
+**Logic:** [FEAT-232] Feedback Harvester Scrapes server.log for user feedback packets and formats them for curriculum induction. FORGE_DIR = os.path.dirname(os.path.abspath(__file__)) SRC_DIR = os.path.dirname(FORGE_DIR)
+**Mechanism:** `src/forge/harvest_feedback.py` at line 4.
+
+## [FEAT-233.2] Internal Token Buffer
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L165) — Internal Token Buffer.
+**Logic:** self.trigger_morning_briefing_cb = trigger_morning_briefing self.last_prime_callback = last_prime_callback self.waterfall_queue = waterfall_queue # [FEAT-233.2] Internal Token Buffer self.hibernate_callback = hibernat...
+**Mechanism:** `src/logic/cognitive_hub.py` at line 165.
+
+## [FEAT-233.5] Internal Waterfall Proxy: Handshakes the node and yields tokens.
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L470) — Internal Waterfall Proxy: Handshakes the node and yields tokens..
+**Logic:** return await task [FEAT-408] Tool-Driven Waterfall Cascade async def _process_node_stream(self, node_id, query, context, source_name, tools=None, behavioral_guidance="", shutdown_event=None, interest_threshold=0.0, te...
+**Mechanism:** `src/logic/cognitive_hub.py` at line 470.
+
+## [FEAT-233.7] Real-time token ingestion from decoupled nodes.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1204) — Real-time token ingestion from decoupled nodes..
+**Logic:** async def handle_stream_ingest(self, request): [FEAT-233.7] Real-time token ingestion from decoupled nodes. try: data = await request.json()
+**Mechanism:** `src/v5/foyer/router.py` at line 1204.
+
+## [FEAT-240.2] The Relay Pattern: Standard-compliant 'Thinking' turn.
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L151) — The Relay Pattern: Standard-compliant 'Thinking' turn..
+**Logic:** async def think(query: str, context: str = "", tools: list = None, behavioral_guidance: str = "", internal: bool = False, temperature: float = 0.0, repetition_penalty: float = 1.1, use_lora: bool = True, response_form...
+**Mechanism:** `src/nodes/loader.py` at line 151.
+
+## [FEAT-251.4] Simple smoke test to verify Brain/Shadow response via Hub.
+**Status:** ACTIVE
+**Code:** [src/debug/test_brain_smoke.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_brain_smoke.py#L12) — Simple smoke test to verify Brain/Shadow response via Hub..
+**Logic:** async def test_brain_smoke(): [FEAT-251.4] Simple smoke test to verify Brain/Shadow response via Hub. print("--- [TEST] Brain Cognitive Smoke Test ---") try:
+**Mechanism:** `src/debug/test_brain_smoke.py` at line 12.
+
+## [FEAT-254.2] Metadata Displacement: Context shifts from system to user
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L462) — Metadata Displacement: Context shifts from system to user.
+**Logic:** system_prompt = system_override or self.system_prompt [FEAT-254.2] Metadata Displacement: Context shifts from system to user This prevents 3B models from confusing system data with their core identity. user_context = 
+**Mechanism:** `src/nodes/loader.py` at line 462.
+
+## [FEAT-255.1] Dynamic Registry: Sync engine type with status.json
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L290) — Dynamic Registry: Sync engine type with status.json.
+**Logic:** return True, "Cached [FEAT-255.1] Dynamic Registry: Sync engine type with status.json resolved_ip = self._resolve_primary_host() if self.primary_host == "localhost":
+**Mechanism:** `src/nodes/loader.py` at line 290.
+
+## [FEAT-255.3] Handshake Resilience: Tolerate ZMQ/Transfer/Connection errors during boot
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L396) — Handshake Resilience: Tolerate ZMQ/Transfer/Connection errors during boot.
+**Logic:** return True, f"Online: {target} ({engine_type}) except Exception as e: [FEAT-255.3] Handshake Resilience: Tolerate ZMQ/Transfer/Connection errors during boot err_msg = str(e).lower()
+**Mechanism:** `src/nodes/loader.py` at line 396.
+
+## [FEAT-255.4] Reactive Discovery: Flush session and cache on error
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L408) — Reactive Discovery: Flush session and cache on error.
+**Logic:** self._handshake_backoff = 2 # Reset on fatal error [FEAT-255.4] Reactive Discovery: Flush session and cache on error self._engine_cache = None self._last_probe = 0
+**Mechanism:** `src/nodes/loader.py` at line 408.
+
+## [FEAT-255.6] Exponential Backoff: Give the larynx time to clear its throat
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L399) — Exponential Backoff: Give the larynx time to clear its throat.
+**Logic:** err_msg = str(e).lower() if any(k in err_msg for k in ["transfer", "reset", "disconnected", "incomplete", "refused", "eof", "connect call failed", "cannot connect", "clientconnectorerror"]): [FEAT-255.6] Exponential B...
+**Mechanism:** `src/nodes/loader.py` at line 399.
+
+## [FEAT-255.7] Dynamic Resolution with [FEAT-265] Discovery.
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L262) — Dynamic Resolution with [FEAT-265] Discovery..
+**Logic:** def _resolve_primary_host(self): [FEAT-255.7] Dynamic Resolution with [FEAT-265] Discovery. if self.primary_host in ["localhost", "127.0.0.1", "z87-Linux"]: target = "127.0.0.1
+**Mechanism:** `src/nodes/loader.py` at line 262.
+
+## [FEAT-259.1] Global Sensory Sentinel.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1464) — Global Sensory Sentinel..
+**Logic:** async def ear_poller_loop(self): [FEAT-259.1] Global Sensory Sentinel. while True: try:
+**Mechanism:** `src/v5/foyer/router.py` at line 1464.
+
+## [FEAT-265.15] Unified Boot: Trigger Ear and logical nodes concurrently based on state transitions
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L823) — Unified Boot: Trigger Ear and logical nodes concurrently based on state transitions.
+**Logic:** [FEAT-265.15] Unified Boot: Trigger Ear and logical nodes concurrently based on state transitions if self.status.state in ["HIBERNATING", "OFFLINE"]: if self.residents.booted: logger.info(f"[FOYER] Lab state is {self....
+**Mechanism:** `src/v5/foyer/router.py` at line 823.
+
+## [FEAT-265.20] Boot Patience: Wait for Hub Foyer to open
+**Status:** ACTIVE
+**Code:** [src/debug/test_hibernation_cycle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_hibernation_cycle.py#L86) — Boot Patience: Wait for Hub Foyer to open.
+**Logic:** print("[*] STEP 3: Triggering Architect Wake via Intent...") [FEAT-265.20] Boot Patience: Wait for Hub Foyer to open foyer_up = False for _ in range(12): # 60s max wait for foyer
+**Mechanism:** `src/debug/test_hibernation_cycle.py` at line 86.
+
+## [FEAT-265.28] Physical Settle: Wait for VOCAL baseline before starting cycle
+**Status:** ACTIVE
+**Code:** [src/debug/test_hibernation_cycle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_hibernation_cycle.py#L38) — Physical Settle: Wait for VOCAL baseline before starting cycle.
+**Logic:** [FEAT-265.28] Physical Settle: Wait for VOCAL baseline before starting cycle print("[*] STEP 0: Verifying Vocal Baseline...") for _ in range(24): # 120s max try:
+**Mechanism:** `src/debug/test_hibernation_cycle.py` at line 38.
+
+## [FEAT-265.8] Ignition sequence.
+**Status:** ACTIVE
+**Code:** [src/v5/ignition/manager.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/ignition/manager.py#L130) — Ignition sequence..
+**Logic:** async def start_lab(self, reason="INTENT"): [FEAT-265.8] Ignition sequence. if self.status.state in ["WAKING", "OPERATIONAL"]: return True
+**Mechanism:** `src/v5/ignition/manager.py` at line 130.
+
+## [FEAT-266.9] Memo Layer: Retrieves pre-synthesized observations.
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L473) — Memo Layer: Retrieves pre-synthesized observations..
+**Logic:** @mcp.tool() async def get_observational_memo(topic: str = None, year: str = None) -> str:  [FEAT-266.9] Memo Layer: Retrieves pre-synthesized observations.
+**Mechanism:** `src/nodes/archive_node.py` at line 473.
+
+## [FEAT-270] Track consecutive failures
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L192) — Track consecutive failures.
+**Logic:** self.consecutive_parse_failures = 0 self.lora_enabled = True self.triage_failures = 0 # [FEAT-270] Track consecutive failures [FEAT-181] Semantic Integration
+**Mechanism:** `src/logic/cognitive_hub.py` at line 192.
+
+## [FEAT-286.2] Strict Latching: Only one active background prime
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L560) — Strict Latching: Only one active background prime.
+**Logic:** [FEAT-286.2] Strict Latching: Only one active background prime if getattr(self, "_priming_in_progress", False): logger.debug("[HEALTH] Heavy Prime Bypassed: Task already in progress.") return
+**Mechanism:** `src/v5/foyer/router.py` at line 560.
+
+## [FEAT-295] Tooling Parity: Mock think instead of think
+**Status:** ACTIVE
+**Code:** [src/tests/test_hub_intent.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_hub_intent.py#L10) — Tooling Parity: Mock think instead of think.
+**Logic:** pinky.call_tool = AsyncMock() [FEAT-295] Tooling Parity: Mock think instead of think pinky.list_tools = AsyncMock() pinky.list_tools.return_value = MagicMock(tools=[MagicMock(name="think")])
+**Mechanism:** `src/tests/test_hub_intent.py` at line 10.
+
+## [FEAT-296] Fast-Forward: Load and potentially reverse the queue
+**Status:** ACTIVE
+**Code:** [src/forge/dream_voice.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/dream_voice.py#L97) — Fast-Forward: Load and potentially reverse the queue.
+**Logic:** [FEAT-296] Fast-Forward: Load and potentially reverse the queue with open(REFINED_PROMPTS, "r") as f_in: all_lines = f_in.readlines() if order == "reverse":
+**Mechanism:** `src/forge/dream_voice.py` at line 97.
+
+## [FEAT-304] Protocol Hardening: Ensure logs do not corrupt the MCP JSON-RPC pipe
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L14) — Protocol Hardening: Ensure logs do not corrupt the MCP JSON-RPC pipe.
+**Logic:** [FEAT-304] Protocol Hardening: Ensure logs do not corrupt the MCP JSON-RPC pipe reclaim_logger(role="ARCHIVE") logger = logging.getLogger(__name__) try:
+**Mechanism:** `src/nodes/archive_node.py` at line 14.
+
+## [FEAT-307] Sanitary Filter: Redirect turn-level noise to stderr
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L173) — Sanitary Filter: Redirect turn-level noise to stderr.
+**Logic:** stream_source = self.name if not internal else None [FEAT-307] Sanitary Filter: Redirect turn-level noise to stderr This is critical to prevent logs from breaking the stdio MCP transport. import sys
+**Mechanism:** `src/nodes/loader.py` at line 173.
+
+## [FEAT-308] Component Subsystem (FEAT-308)
+**Status:** ACTIVE
+**Code:** [src/debug/test_vllm_crash_recovery.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_vllm_crash_recovery.py#L12) — Component Subsystem (FEAT-308).
+**Logic:** async def test_vllm_crash_recovery(): print("[#] Starting vLLM Crash Recovery Verification [FEAT-308]") 1. Capture Initial State try:
+**Mechanism:** `src/debug/test_vllm_crash_recovery.py` at line 12.
+
+## [FEAT-309.3] Serve specific log trace files or the main log.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L894) — Serve specific log trace files or the main log..
+**Logic:**  [FEAT-309.3] Serve specific log trace files or the main log.  try:
+**Mechanism:** `src/v5/foyer/router.py` at line 894.
+
+## [FEAT-310] Physical Truth Scavenging: Reap any high-memory orphans (>1GB)
+**Status:** ACTIVE
+**Code:** [apply_fixes.py](https://github.com/kEnder242/Dev_Lab/blob/main/apply_fixes.py#L15) — Physical Truth Scavenging: Reap any high-memory orphans (>1GB).
+**Logic:** old = "        # 2. Stale Identity Purge \[Task 22\] new = """        # [FEAT-310] Physical Truth Scavenging: Reap any high-memory orphans (>1GB) to ensure silicon room for the engine load. Adheres to [BKM-031]. try:
+**Mechanism:** `apply_fixes.py` at line 15.
+
+## [FEAT-320] Adaptive Priority: If a model is already running on remote Ollama, use it.
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L219) — Adaptive Priority: If a model is already running on remote Ollama, use it..
+**Logic:** def _resolve_best_model(self, available_models, engine_type, running_model=None): [FEAT-080] Dynamic selection based on host capability. [FEAT-320] Adaptive Priority: If a model is already running on remote Ollama, us...
+**Mechanism:** `src/nodes/loader.py` at line 219.
+
+## [FEAT-321] Neural Queue Fidelity Test
+**Status:** ACTIVE
+**Code:** [src/debug/test_queue_fidelity.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_queue_fidelity.py#L9) — Neural Queue Fidelity Test.
+**Logic:** [FEAT-321] Neural Queue Fidelity Test LAB_DIR = "/home/jallred/Dev_Lab/HomeLabAI ATTENDANT_URL = "http://127.0.0.1:8765 STATUS_URL = "http://localhost:9001/intercom.html
+**Mechanism:** `src/debug/test_queue_fidelity.py` at line 9.
+
+## [FEAT-326] Socket Persistence: 300s heartbeat for cold-wake resilience
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1069) — Socket Persistence: 300s heartbeat for cold-wake resilience.
+**Logic:** async def handle_websocket(self, ws_request): [FEAT-326] Socket Persistence: 300s heartbeat for cold-wake resilience [FEAT-426] Origin Security Guard: browsers cannot set custom WS headers, so the authoritative check ...
+**Mechanism:** `src/v5/foyer/router.py` at line 1069.
+
+## [FEAT-330] Auto-wake logic
+**Status:** ACTIVE
+**Code:** [src/debug/dynamic_prompt_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/dynamic_prompt_lab.py#L25) — Auto-wake logic.
+**Logic:** def run_test(config): [FEAT-330] Auto-wake logic try: attendant_status = requests.get(f"http://localhost:8765/status?key={config.get('key', '92e785ba')}", timeout=2).json()
+**Mechanism:** `src/debug/dynamic_prompt_lab.py` at line 25.
+
+## [FEAT-344] Sovereignty Gate: Suppress probes during raw silicon boot / hibernation.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L481) — Sovereignty Gate: Suppress probes during raw silicon boot / hibernation..
+**Logic:** [FEAT-265.31/FEAT-028] State-Aware Deep Thought probe: ping->API + Heavy Prime (GPU Wake). [FEAT-344] Sovereignty Gate: Suppress probes during raw silicon boot / hibernation. state = getattr(self.status, "state", "UNK...
+**Mechanism:** `src/v5/foyer/router.py` at line 481.
+
+## [FEAT-347] Nuclear JSON Extractor: Multi-block match for 3B resilience
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L393) — Nuclear JSON Extractor: Multi-block match for 3B resilience.
+**Logic:** return None [FEAT-347] Nuclear JSON Extractor: Multi-block match for 3B resilience This handles cases where models output multiple blocks or trailing garbage. json_blocks = re.findall(r'(\{.*?\})', text, re.DOTALL)
+**Mechanism:** `src/logic/cognitive_hub.py` at line 393.
+
+## [FEAT-350] Gibberish Guard: Stable Baseline
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L189) — Gibberish Guard: Stable Baseline.
+**Logic:** self.request_lock = asyncio.Lock() [FEAT-350] Gibberish Guard: Stable Baseline self.consecutive_parse_failures = 0 self.lora_enabled = True
+**Mechanism:** `src/logic/cognitive_hub.py` at line 189.
+
+## [FEAT-355] VISIBLE CONSENSUS: Use <thought> tags to debate with Pinky or Deep Thought.\n
+**Status:** ACTIVE
+**Code:** [src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L12) — VISIBLE CONSENSUS: Use <thought> tags to debate with Pinky or Deep Thought.\n.
+**Logic:** 1. INTUITIVE REFINEMENT: Focus on grounding Pinky's enthusiasm with technical truth.\n 2. FOIL TO SOVEREIGNTY: Provide the first-pass thought trace for Deep Thought to critique.\n 3. [FEAT-355] VISIBLE CONSENSUS: Use ...
+**Mechanism:** `src/nodes/brain_node.py` at line 12.
+
+## [FEAT-361] 100% Transparency: No masking of inter-node whispers.
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L352) — 100% Transparency: No masking of inter-node whispers..
+**Logic:** [NEW] Push to waterfall queue for real-time UI delivery [FEAT-361] 100% Transparency: No masking of inter-node whispers. if hasattr(self, 'waterfall_queue') and self.waterfall_queue: await self.waterfall_queue.put(data)
+**Mechanism:** `src/logic/cognitive_hub.py` at line 352.
+
+## [FEAT-365] Characterful reflexes and persistence heartbeats.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1451) — Characterful reflexes and persistence heartbeats..
+**Logic:** async def reflex_loop(self): [FEAT-365] Characterful reflexes and persistence heartbeats. tics = ["Narf!", "Poit!", "Zort!", "Checking circuits...", "Egad!", "Trotro!"] while True:
+**Mechanism:** `src/v5/foyer/router.py` at line 1451.
+
+## [FEAT-367] Hardened UI Truth: Waits for physical log entries before asserting DOM.
+**Status:** ACTIVE
+**Code:** [src/tests/test_visibility_truth.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_visibility_truth.py#L8) — Hardened UI Truth: Waits for physical log entries before asserting DOM..
+**Logic:**  [FEAT-367] Hardened UI Truth: Waits for physical log entries before asserting DOM. Ensures 100% voice restoration and no 'easy pass' on reflexes. 
+**Mechanism:** `src/tests/test_visibility_truth.py` at line 8.
+
+## [FEAT-434] career_compass_path = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/career_compass.json")
+**Status:** ACTIVE
+**Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L93) — career_compass_path = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/career_compass.json").
+**Logic:** logging.warning(f"[{self.name}] Liger application failed: {e}") Load Career Compass Tier 1 Anchor Map Bedrock [FEAT-434] career_compass_path = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/career_compas...
+**Mechanism:** `src/nodes/loader.py` at line 93.
+
+## [FEAT-445] Memory Architecture & Stability Unit Test Suite.
+**Status:** ACTIVE
+**Code:** [src/tests/test_memory_architecture.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_memory_architecture.py#L2) — Memory Architecture & Stability Unit Test Suite..
+**Logic:**  [FEAT-445] Memory Architecture & Stability Unit Test Suite. Verifies: 1. journal_ledger spoken-only dialogue filtering & 24h retention contract.
+**Mechanism:** `src/tests/test_memory_architecture.py` at line 2.
+
+## [FEAT-451] Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality)
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L68) — Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality).
+**Logic:** return refined [FEAT-451] Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality) BRAIN_PERSONA_SPEC = ( [PERSONA]: You are Deep Thought - the Brain's pre-conscious analytical stre...
+**Mechanism:** `src/logic/cognitive_hub.py` at line 68.
+
+## [FEAT-454] Component Subsystem (FEAT-454)
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1477) — Component Subsystem (FEAT-454).
+**Logic:** self._rag_cache[cache_key] = result_text if len(self._rag_cache) > 128: self._rag_cache.pop(next(iter(self._rag_cache))) except Exception as e:
+**Mechanism:** `src/logic/cognitive_hub.py` at line 1477.
+
+## [FEAT-455] Zero-Latency Un-blocked Async Preamble: the receive
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1132) — Zero-Latency Un-blocked Async Preamble: the receive.
+**Logic:** req_id = data.get("request_id") [FEAT-455] Zero-Latency Un-blocked Async Preamble: the receive loop must return instantly — never await file I/O or the broadcast inline. The Deep Thought preamble + enqueue run as
+**Mechanism:** `src/v5/foyer/router.py` at line 1132.
+
+## [FEAT-470] Legacy backfill: alias Deep Thought -> "brain" only when the local
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L613) — Legacy backfill: alias Deep Thought -> "brain" only when the local.
+**Logic:** }) self.turn_thought_trace[node_id] = full_text if node_id == "thought": [FEAT-470] Legacy backfill: alias Deep Thought -> "brain" only when the local
+**Mechanism:** `src/logic/cognitive_hub.py` at line 613.
+
+## [LAB-010] Lazy import — M5 Air may not be available at startup.
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L35) — Lazy import — M5 Air may not be available at startup..
+**Logic:** [LAB-010] Lazy import — M5 Air may not be available at startup. try: from nodes.mlx_judge_node import MLXAsyncJudge as _MLXAsyncJudge _mlx_judge = _MLXAsyncJudge()
+**Mechanism:** `src/v5/foyer/router.py` at line 35.
+
+## [LAB-088] Component Subsystem (LAB-088)
+**Status:** ACTIVE
+**Code:** [src/equipment/sensory_manager.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/equipment/sensory_manager.py#L51) — Component Subsystem (LAB-088).
+**Logic:** EarNode taking a break to free up VRAM when system is low on RAM or in Swarm/Heads-Down mode. Preserves CUDA context for quick rearming. [LAB-088]  if not self.ear:
+**Mechanism:** `src/equipment/sensory_manager.py` at line 51.
+
+## [LAB-095] TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1436) — TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds.
+**Logic:** del chunk_timestamps[buf_key] [LAB-095] TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds now_ts = time.time() stale_keys = [k for k, ts in chunk_timestamps.items() if now_ts - ts > 30]
+**Mechanism:** `src/v5/foyer/router.py` at line 1436.
+
+## [LAB-096] Heap Scavenger: Periodic garbage collection every 60s
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1511) — Heap Scavenger: Periodic garbage collection every 60s.
+**Logic:** continue [LAB-096] Heap Scavenger: Periodic garbage collection every 60s collected = gc.collect() if collected > 0:
+**Mechanism:** `src/v5/foyer/router.py` at line 1511.
+
+## [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3)
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1489) — Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3).
+**Logic:** while True: try: [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3) thermal_halt = False
+**Mechanism:** `src/v5/foyer/router.py` at line 1489.

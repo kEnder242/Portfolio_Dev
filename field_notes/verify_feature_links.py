@@ -20,6 +20,7 @@ DEFAULT_REPORT = os.path.join(DEV_LAB_ROOT, ".omo/evidence/drift_report.txt")
 REPO_BASES = {
     "github.com/kEnder242/HomeLabAI":   os.path.join(DEV_LAB_ROOT, "HomeLabAI"),
     "github.com/kEnder242/Portfolio_Dev": os.path.join(DEV_LAB_ROOT, "Portfolio_Dev"),
+    "github.com/kEnder242/Dev_Lab":       DEV_LAB_ROOT,
     "gitlab.com/kEnder242/Dev_Lab":     DEV_LAB_ROOT,
 }
 
