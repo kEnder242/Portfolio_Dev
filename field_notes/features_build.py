@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-# features_build.py [v2.0]
-# [FEAT-465] FEAT/LAB Code Mapping & Dynamic Table Generator
-# Purpose: Generate features.html from FeatureTracker.md with 5-column ledger layout matching research.html:
-# [Feature ID & Name | Logic | Acme Implementation / Mechanism | Git Link | Status]
+# features_build.py [v1.4]
+# [FEAT-252] Dynamic Secret Rotation
+# Purpose: Generate features.html from FeatureTracker.md with collapsible <details> accordions, status-detail extraction, and dynamic philosophy parsing.
 
 import os
 import re
@@ -10,54 +9,50 @@ import markdown
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE_MD = os.path.abspath(os.path.join(BASE_DIR, "../FeatureTracker.md"))
+TEMPLATE_HTML = os.path.join(BASE_DIR, "features.html")
 OUTPUT_HTML = os.path.join(BASE_DIR, "features.html")
 REL_SOURCE_MD = "Portfolio_Dev/FeatureTracker.md"
 
-
 def convert_internal_links(md_content):
-    if not md_content:
-        return ""
-    return re.sub(r'\[((?:FEAT|LAB)-\d{3}(?:\.\d+)?)\]', r'[\1](#\1)', md_content)
-
+    # Convert [FEAT-XXX] references to markdown hash links: [FEAT-XXX](#FEAT-XXX)
+    md_content = re.sub(r'\[FEAT-(\d{3}(?:\.\d+)?)\]', r'[FEAT-\1](#FEAT-\1)', md_content)
+    return md_content
 
 def format_code_link(code_md):
-    if not code_md or "none found" in code_md or "documented only" in code_md:
-        return '<span style="color:#666; font-style:italic;">None (Doc Only)</span>'
-    
-    match = re.search(r'\[(.*?)\]\((.*?)\)', code_md)
+    # Matches markdown link [text](url) in a **Code:** field and renders it
+    # as a clickable anchor (mirrors research_build.format_git_link).
+    match = re.match(r'\[(.*?)\]\((.*?)\)', code_md)
     if match:
         text = match.group(1)
         url = match.group(2)
-        return f'<a href="{url}" target="_blank" style="color:var(--accent-color); text-decoration:none; font-family:var(--font-stack); font-size:0.8rem;">{text}</a>'
-    
-    url_match = re.search(r'(https://[^\s)]+)', code_md)
-    if url_match:
-        url = url_match.group(1)
-        display = url.split('/')[-1] if '/' in url else url
-        return f'<a href="{url}" target="_blank" style="color:var(--accent-color); text-decoration:none; font-family:var(--font-stack); font-size:0.8rem;">{display}</a>'
-        
+        return f'<a href="{url}" style="color:var(--accent-color); text-decoration:none;">{text}</a>'
     return code_md
 
-
 def parse_philosophy(content):
+    # Find the "# Philosophy" heading
     philosophy_start = content.find("# Philosophy")
     if philosophy_start == -1:
         return ""
     
-    first_feat = re.search(r'^## \[((?:FEAT|LAB)-\d{3})\]', content[philosophy_start:], re.MULTILINE)
+    # Find the first "## [FEAT-" heading after "# Philosophy"
+    first_feat = re.search(r'^## \[(FEAT-\d{3})\]', content[philosophy_start:], re.MULTILINE)
     if not first_feat:
         return content[philosophy_start:].strip()
         
     philosophy_end = philosophy_start + first_feat.start()
+    
+    # Extract the block
     philosophy_block = content[philosophy_start:philosophy_end].strip()
+    
+    # Remove the "# Philosophy" heading line from the block
     lines = philosophy_block.split('\n')
     if lines and lines[0].startswith('# Philosophy'):
         lines = lines[1:]
         
     return '\n'.join(lines).strip()
 
-
 def parse_feature_block(block):
+    # Matches fields like **Logic:** (colon inside asterisks) or **Logic**: (colon outside)
     field_pattern = re.compile(r'(?:^|\n)\*\*([^*:]+)(?::\*\*|\*\*:)')
     matches = list(field_pattern.finditer(block))
     
@@ -72,6 +67,7 @@ def parse_feature_block(block):
         end_pos = matches[idx+1].start() if idx + 1 < len(matches) else len(block)
         field_value = block[start_pos:end_pos].strip()
         
+        # Clean up leading colon if matched outside
         if field_value.startswith(':'):
             field_value = field_value[1:].strip()
             
@@ -79,15 +75,18 @@ def parse_feature_block(block):
         
     return intro, fields
 
-
 def parse_feature_tracker(content):
+    # Features start with ## [FEAT-XXX] Title
     header_pattern = re.compile(r'^## \[((?:FEAT|LAB)-\d{3}(?:\.\d+)?)\]\s*(.*?)$', re.MULTILINE)
     matches = list(header_pattern.finditer(content))
     
     features = []
     for i, match in enumerate(matches):
         feat_id = match.group(1)
-        feat_title = match.group(2).strip()
+        feat_title = match.group(2)
+        
+        # Clean up redundant tags in title like [DEFEATURED] or [CONSOLIDATED]
+        feat_title = re.sub(r'\[(DEFEATURED|CONSOLIDATED)\]\s*', '', feat_title).strip()
         
         start_idx = match.end()
         end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
@@ -104,213 +103,103 @@ def parse_feature_tracker(content):
         
     return features
 
-
 def generate_rows(features):
     html_rows = ""
     for item in features:
-        feat_id = item['id']
-        title = item['title']
-        fields = item['fields']
+        # Determine status and class
+        status_val = item['fields'].get('Status', 'UNKNOWN').strip()
         
-        status_val = fields.get('Status', 'ACTIVE').strip()
-        clean_status = "ACTIVE"
-        for word in ["ACTIVE", "DESIGN", "DEFEATURED", "ARCHIVED", "CONSOLIDATED", "DORMANT", "TODO", "COMPLETED"]:
+        # Robust status-bleeding parser check
+        clean_status = "UNKNOWN"
+        for word in ["ACTIVE", "DESIGN", "DEFEATURED", "ARCHIVED", "CONSOLIDATED", "DORMANT"]:
             if word in status_val.upper():
                 clean_status = word
                 break
-                
-        status_upper = clean_status.upper()
-        if status_upper in ["ACTIVE", "COMPLETED"]:
+        
+        if clean_status == "UNKNOWN":
+            clean_status = status_val.split()[0].upper() if status_val.split() else "UNKNOWN"
+            
+        status = clean_status
+        status_detail = status_val[len(status):].strip()
+        
+        if status_detail.startswith(':'):
+            status_detail = status_detail[1:].strip()
+        if not status_detail:
+            status_detail = None
+            
+        status_upper = status.upper()
+        
+        if "ACTIVE" in status_upper or "UNITY-ALIGNED" in status_upper:
             status_class = "impact-live"
-        elif status_upper in ["DESIGN", "TODO"]:
+        elif "DESIGN" in status_upper or "TRANSFORMING" in status_upper:
             status_class = "impact-design"
-        elif status_upper in ["DEFEATURED", "ARCHIVED", "CONSOLIDATED"]:
+        elif "ARCHIVED" in status_upper or "DORMANT" in status_upper:
             status_class = "impact-archived"
         else:
             status_class = "impact-stable"
             
-        logic_raw = fields.get('Logic') or item['intro'] or fields.get('Goal') or ""
-        logic_html = markdown.markdown(convert_internal_links(logic_raw)).strip()
+        # Build specification column content with Collapsible Details
+        spec_content = f"""<details class="feature-details">
+                                <summary>
+                                    {item["title"]}
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">"""
         
-        mech_raw = fields.get('Mechanism') or fields.get('Rationale') or fields.get('Refactor Strategy') or ""
-        mech_html = markdown.markdown(convert_internal_links(mech_raw)).strip()
-        
-        code_raw = fields.get('Code', '')
-        code_html = format_code_link(code_raw)
-        
-        row = f"""                    <tr id="{feat_id}">
-                        <td style="vertical-align: top; padding: 10px 12px; border-bottom: 1px solid #222;">
-                            <span style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); font-size: 0.85rem;">[{feat_id}]</span><br>
-                            <span style="color: #fff; font-weight: 500; font-size: 0.85rem;">{title}</span>
+        # If status_detail was extracted, display it inside the details block to keep column clean
+        if status_detail:
+            status_detail_html = markdown.markdown(convert_internal_links(status_detail), extensions=['fenced_code'])
+            spec_content += f"""
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    {status_detail_html}
+                </div>
+            </div>"""
+
+        if item['intro']:
+            intro_md = convert_internal_links(item['intro'])
+            spec_content += f'<div style="font-size: 0.8rem; color: #aaa; margin-bottom: 8px;">{markdown.markdown(intro_md)}</div>'
+            
+        for f_name, f_val in item['fields'].items():
+            if f_name == 'Status':
+                continue
+                
+            f_val_md = convert_internal_links(f_val)
+            f_val_html = markdown.markdown(f_val_md, extensions=['fenced_code', 'tables'])
+            
+            # [SPR-55] Render **Code:** fields as clickable git links
+            if f_name == 'Code':
+                code_html = f_val_html
+                # Replace the first markdown anchor with a styled clickable link
+                code_anchor = re.search(r'<a href="([^"]+)">([^<]+)</a>', code_html)
+                if code_anchor:
+                    code_html = f'<a href="{code_anchor.group(1)}" style="color:var(--accent-color); text-decoration:none;">{code_anchor.group(2)}</a>'
+                f_val_html = code_html
+            
+            # Format the output beautifully
+            spec_content += f"""
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">{f_name}</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    {f_val_html}
+                </div>
+            </div>"""
+            
+        spec_content += """     </div>
+                            </details>"""
+            
+        row = f"""                    <tr id="{item['id']}">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">{item['id']}</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            {spec_content}
                         </td>
-                        <td style="vertical-align: top; padding: 10px 12px; border-bottom: 1px solid #222; font-size: 0.8rem; line-height: 1.4; color: var(--text-color);">
-                            {logic_html}
-                        </td>
-                        <td style="vertical-align: top; padding: 10px 12px; border-bottom: 1px solid #222; font-size: 0.8rem; line-height: 1.4; color: #aaa;">
-                            {mech_html}
-                        </td>
-                        <td style="vertical-align: top; padding: 10px 12px; border-bottom: 1px solid #222; font-size: 0.8rem;">
-                            {code_html}
-                        </td>
-                        <td style="vertical-align: top; padding: 10px 12px; border-bottom: 1px solid #222; text-align: center;">
-                            <span class="impact-badge {status_class}">{clean_status}</span>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge {status_class}">{status}</span>
                         </td>
                     </tr>"""
         html_rows += row + "\n"
         
     return html_rows
-
-
-def build_full_page(features, phil_md):
-    rows_html = generate_rows(features)
-    
-    phil_html = ""
-    if phil_md:
-        phil_html = f"""
-            <div class="disclaimer-box" id="philosophy-box" style="margin-bottom: 15px; padding: 10px; font-size: 0.8rem; border-left-width: 3px;">
-                <span style="color: var(--accent-color); font-weight: bold;">[PHILOSOPHY: THE BONES]</span><br>
-                {markdown.markdown(phil_md)}
-            </div>"""
-
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feature DNA Matrix | Jason Allred</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* High-Density Ledger Table Styling */
-        .ledger-table {{
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-stack);
-            font-size: 0.85rem;
-            margin-top: 15px;
-            background: rgba(255, 255, 255, 0.01);
-        }}
-        .ledger-table th {{
-            text-align: left;
-            padding: 12px 12px;
-            border-bottom: 2px solid var(--border-color);
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.75rem;
-        }}
-        .ledger-table td {{
-            padding: 10px 12px;
-            border-bottom: 1px solid #222;
-            vertical-align: top;
-            line-height: 1.4;
-        }}
-        .ledger-table tr:hover {{ background: rgba(255, 255, 255, 0.02); }}
-
-        .anchor-link {{ color: #fff; text-decoration: none; font-weight: bold; border-bottom: 1px dashed #444; }}
-        .anchor-link:hover {{ color: var(--accent-color); border-bottom-color: var(--accent-color); }}
-
-        .impact-badge {{
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }}
-        .impact-live {{ background: #238636; color: #fff; }}
-        .impact-design {{ background: #1f6feb; color: #fff; }}
-        .impact-stable {{ background: #6e7681; color: #fff; }}
-        .impact-archived {{ background: #9a6600; color: #fff; }}
-
-        /* Search Filter Input Box */
-        .filter-container {{
-            margin-bottom: 15px;
-            position: relative;
-        }}
-        #feat-search {{
-            width: 100%;
-            padding: 8px 12px;
-            background-color: #111;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-family: var(--font-stack);
-            font-size: 0.8rem;
-            border-radius: 4px;
-            outline: none;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }}
-        #feat-search:focus {{
-            border-color: var(--accent-color);
-        }}
-    </style>
-</head>
-<body>
-<!-- [SOURCE_OF_TRUTH] Compiled from: {REL_SOURCE_MD}. Do NOT edit features.html directly! -->
-
-    <button id="menu-toggle">☰ MENU</button>
-
-    <nav id="sidebar">
-        <mission-control></mission-control>
-    </nav>
-
-    <main>
-        <div id="sys-console">
-            <div>[INIT] Mounting Feature DNA Matrix...</div>
-        </div>
-
-        <section id="ledger">
-            <h2 class="section-title">The Feature DNA Association Matrix</h2>
-            {phil_html}
-
-            <div class="filter-container">
-                <input type="text" id="feat-search" placeholder="Filter features by ID, name, logic, mechanism, or code (e.g. active, vllm, FEAT-030, cognitive_hub)...">
-            </div>
-
-            <table class="ledger-table">
-                <thead>
-                    <tr>
-                        <th style="width: 22%;">Feature ID & Name</th>
-                        <th style="width: 26%;">Theoretical / Operational Logic</th>
-                        <th style="width: 26%;">Acme Implementation / Mechanism</th>
-                        <th style="width: 16%;">Git Link</th>
-                        <th style="width: 10%; text-align: center;">Status</th>
-                    </tr>
-                </thead>
-                <tbody id="features-table-body">
-{rows_html}
-                </tbody>
-            </table>
-        </section>
-    </main>
-
-    <script src="mission-control.js"></script>
-    <script src="script.js"></script>
-    <script>
-        // Live client-side search filter across all columns
-        document.addEventListener('DOMContentLoaded', () => {{
-            const searchInput = document.getElementById('feat-search');
-            const tableBody = document.getElementById('features-table-body');
-            if (searchInput && tableBody) {{
-                searchInput.addEventListener('input', (e) => {{
-                    const query = e.target.value.toLowerCase().trim();
-                    const rows = tableBody.getElementsByTagName('tr');
-                    for (let row of rows) {{
-                        const text = row.innerText.toLowerCase();
-                        if (!query || text.includes(query)) {{
-                            row.style.display = '';
-                        }} else {{
-                            row.style.display = 'none';
-                        }}
-                    }}
-                }});
-            }}
-        }});
-    </script>
-</body>
-</html>
-"""
-
 
 def main():
     if not os.path.exists(SOURCE_MD):
@@ -326,13 +215,48 @@ def main():
         print("Error: No features parsed from FeatureTracker.md.")
         return
         
-    full_html = build_full_page(features, phil_md)
+    new_rows = generate_rows(features)
+    
+    with open(TEMPLATE_HTML, 'r') as f:
+        html_content = f.read()
+
+    source_comment = f"<!-- [SOURCE_OF_TRUTH] Compiled from: {REL_SOURCE_MD}. Do NOT edit features.html directly! -->\n"
+    if "<!-- [SOURCE_OF_TRUTH]" not in html_content:
+        body_idx = html_content.find("<body>")
+        if body_idx != -1:
+            html_content = html_content[:body_idx+6] + "\n" + source_comment + html_content[body_idx+6:]
+    else:
+        html_content = re.sub(r'<!-- \[SOURCE_OF_TRUTH\].*?-->\n', source_comment, html_content)
+
+    # Inject philosophy block if found
+    if phil_md:
+        phil_start_tag = '<div class="disclaimer-box" id="philosophy-box" style="margin-bottom: 15px; padding: 10px; font-size: 0.8rem; border-left-width: 3px;">'
+        phil_end_tag = '</div>'
+        
+        phil_box_idx = html_content.find(phil_start_tag)
+        if phil_box_idx != -1:
+            phil_content_start = phil_box_idx + len(phil_start_tag)
+            phil_content_end = html_content.find(phil_end_tag, phil_content_start)
+            if phil_content_end != -1:
+                philosophy_html = f"\n                <span style=\"color: var(--accent-color); font-weight: bold;\">[PHILOSOPHY: THE BONES]</span><br>\n                {markdown.markdown(phil_md)}\n            "
+                html_content = html_content[:phil_content_start] + philosophy_html + html_content[phil_content_end:]
+                
+    start_tag = "<tbody>"
+    end_tag = "</tbody>"
+    
+    start_idx = html_content.find(start_tag) + len(start_tag)
+    end_idx = html_content.rfind(end_tag)
+    
+    if start_idx == -1 or end_idx == -1:
+        print("Error: tbody tags not found in template HTML.")
+        return
+        
+    updated_html = html_content[:start_idx] + "\n" + new_rows + "                    " + html_content[end_idx:]
     
     with open(OUTPUT_HTML, 'w') as f:
-        f.write(full_html)
+        f.write(updated_html)
         
-    print(f"✅ Successfully compiled {OUTPUT_HTML} ({len(features)} features) in 5-column ledger layout.")
-
+    print(f"✅ Successfully compiled {OUTPUT_HTML} from {SOURCE_MD}")
 
 if __name__ == "__main__":
     main()
