@@ -10,6 +10,7 @@ import random
 import glob
 import argparse
 import signal
+import datetime
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -373,17 +374,24 @@ def main():
         if check_lock(lock_path) or os.path.exists(maint_lock): continue
 
         # 5. Eternal Slow Burn (Refinement Loop)
-        # [POLITENESS] Only refine if the queue was just cleared or specifically idle
+        # [POLITENESS] Window-bounded: refine low-rank items during 2:00 AM – 5:00 AM window
         items_to_refine = get_low_rank_items()
         if items_to_refine:
-            logging.info(f"Step 5: Refining {len(items_to_refine)} items (capped at 50)...")
-            for i in range(min(len(items_to_refine), 50)):
+            logging.info(f"Step 5: Refining {len(items_to_refine)} items (Active Window: 2:00 AM – 5:00 AM)...")
+            for i, item in enumerate(items_to_refine):
                 if check_lock(lock_path) or os.path.exists(maint_lock): break
+                
+                # [FEAT-416] 05:00 AM Maintenance Cutoff: leave 1-hour buffer for trailing tasks and aggregation
+                now = datetime.datetime.now()
+                if 5 <= now.hour < 22:
+                    logging.info(f"Step 5.1: 05:00 AM maintenance cutoff reached ({now.strftime('%H:%M:%S')}). Gracefully yielding refinement loop.")
+                    break
+                
                 while not vram_guard(): 
                     update_status("WAITING", "VRAM Cooling...")
                     time.sleep(60)
-                logging.info(f"Step 5.1: Refining Gem [{i+1}/50]...")
-                update_status("ONLINE", f"Refining Gem {i+1}/50")
+                logging.info(f"Step 5.1: Refining Gem [{i+1}/{len(items_to_refine)}]...")
+                update_status("ONLINE", f"Refining Gem {i+1}/{len(items_to_refine)}")
                 if run_task([GEM_REFINER]):
                     time.sleep(SLEEP_INTERVAL)
                 else:
