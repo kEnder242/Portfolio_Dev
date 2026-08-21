@@ -1,11 +1,11 @@
-# [FEAT-097] Dynamic Typewriter Rendering
+// [FEAT-097] Dynamic Typewriter Rendering
 const CONFIG = {
     // [SECURITY] Enforce loopback binding for local development
     LOCAL_URL: "ws://127.0.0.1:8765",
     REMOTE_URL: "wss://acme.jason-lab.dev",
-# [FEAT-284] Engine-Aware Foyer Gate
+    // [FEAT-284] Engine-Aware Foyer Gate
     VERSION: "5.0.0-foyer",
-# [FEAT-249.5] Sovereign Fallback (Double-Tap Shadow)
+    // [FEAT-249.5] Sovereign Fallback (Double-Tap Shadow)
     // [FEAT-426] Static fallback key. Overridden at runtime by the Foyer's
     // /status session_token (browsers cannot set custom WS headers, so the key
     // rides the handshake frame as `lab_key`). Empty fallback fails closed.
@@ -19,7 +19,7 @@ const CONFIG = {
 
 // [PCM CAP] Hard ceiling on a single Int16 PCM chunk: 32768 samples @ 16kHz
 // = exactly 1 second of mono PCM. Clamps the mic downsampling allocation so
-# [FEAT-089] Zero Trust Guest Expansion
+// [FEAT-089] Zero Trust Guest Expansion
 // a single audio rotate can never daisy-chain Int16 buffer expansion and
 // grow the browser heap without a bound.
 const PCM_CHUNK_CAP = 32768;
