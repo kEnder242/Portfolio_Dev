@@ -11,7 +11,7 @@
 
 ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
 **Status:** ACTIVE
-**Code:** [src/behavior_test.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L25) — Unity Pattern (Multi-LoRA Residency) [SCAR #5].
+**Code:** [src/start_vllm.sh](https://github.com/kEnder242/HomeLabAI/blob/main/src/start_vllm.sh#L3) — Unity Pattern (Multi-LoRA Residency) [SCAR #5].
 **Logic:** Run all concurrent local nodes (Pinky, Shadow Brain, Lab Actor) on a shared **Unified 3B Base Model** footprint. 
 **Rationale:** To maximize VRAM efficiency on the 11GB 2080 Ti. By sharing the base weights, we only pay the VRAM penalty once, while switching "personalities" through low-overhead LoRA adapters.
 **SCAR #5:** Windows Isolation. Windows (Node 'Brain') remains Sovereign and decoupled from Linux model sync.
@@ -525,9 +525,9 @@
 **Hemispheres:** Brain receives raw data for derivation; Pinky receives summaries for contextual banter.
 
 ## [FEAT-118] Resonant Oracle (Magic 8-Ball Preambles)
-**Status:** DESIGN
+**Status:** ARCHIVED (Superseded by FEAT-414 / FEAT-436 Intent-Preamble Engine)
 **Code:** [src/tests/test_sprint51_escapes.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_sprint51_escapes.py#L5) — Resonant Oracle (Magic 8-Ball Preambles).
-**Logic:** Replaces hard-coded strings with a weighted state-aware registry.
+**Logic:** Early V4 dynamic telemetry-weighted preamble picker prototype (`get_oracle_signal()`). Superseded by modern unified Intent-HyDE Pre-Reflection (`FEAT-436`) and MoE+ Preamble streaming (`FEAT-414`).
 **Categories:** `RETRIEVING`, `UNCERTAIN`, `VRAM_STRESS`, `HANDSHAKE`.
 
 ## [FEAT-119] The Blacklist Law (Process-Strict Lifecycle) [SCAR #3]
@@ -727,9 +727,9 @@
 **Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
 
 ## [FEAT-186] [CONSOLIDATED] The "Pre-warm" Lobby (Predictive Warm-up)
-**Status:** CONSOLIDATED (Mar 2026)
+**Status:** DEFEATURED (Superseded by Systemd Socket Activation & Scale-to-Zero)
 **Code:** [src/tests/test_lab_sprint20.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_lab_sprint20.py#L73) — The "Pre-warm" Lobby (Predictive Warm-up).
-**Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
+**Reason:** Absorbed and subsequently defeatured to eliminate idle thrashing against the Hibernation Matrix. Replaced by systemd socket activation.
 
 ## [FEAT-156] SSE Evolution (Hot Link)
 **Status:** ACTIVE
@@ -956,11 +956,9 @@
 **Mechanism:** Applying 'The Strategic Architect's Scalpel' terminology across the toolset.
 
 ## [FEAT-186] The "Pre-warm" Lobby (Predictive Warm-up)
-**Status:** DESIGN
+**Status:** DEFEATURED (Superseded by Systemd Socket Activation & Scale-to-Zero)
 **Code:** [src/tests/test_lab_sprint20.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_lab_sprint20.py#L73) — The "Pre-warm" Lobby (Predictive Warm-up).
-**Logic:** Implements predictive Brain loading during Pinky triage.
-**Rationale:** Reduces perceived latency. If triage indicates a high likelihood of Brain involvement, the Hub starts pre-loading the Sovereign context while Pinky is still responding.
-**Mechanism:** Hub triggers a non-blocking `check_brain_health` probe based on initial triage sentiment.
+**Logic:** Implemented predictive Brain loading during Pinky triage. Defeatured because aggressive pre-warming constantly fought and broke the Hibernation Matrix idle windows. Replaced by clean systemd socket activation.
 
 ## [FEAT-187] CLaRa Model Re-training (Unified 3B Refinement)
 **Status:** DESIGN
@@ -1140,13 +1138,9 @@
 **Mechanism:** 'key_middleware' in 'lab_attendant_v3.py' supports Header (X-Lab-Key) or Query Param (?key=).
 
 ## [FEAT-220] Diplomatic Immunity Protocol
-**Status:** ACTIVE
+**Status:** DEFEATURED (Superseded by Systemd CGroup Memory Limits)
 **Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L61) — Diplomatic Immunity Protocol.
-**Goal:** Prevent Attendant suicide loops while enabling aggressive PGID-based process reclamation.
-**Mechanism:** 
-1.  _BOOT_HASH injected into os.environ['LAB_IMMUNITY_TOKEN'] of all children.
-2.  cleanup_processes verifies the token before any kill or killpg signal.
-3.  Mismatch or Absence = Termination. Match = Immunity.
+**Goal:** Prevented Attendant suicide loops during V4 PGID process reclamation. Defeatured in V5 by moving process management into single-user SystemD cgroups (`50-MemoryMax.conf`).
 
 ## [FEAT-221] Crosstalk Status Line
 **Status:** ACTIVE
@@ -2018,3 +2012,22 @@
 **Logic:** Located the code home of every FEAT/LAB entry in the Feature Tracker, added **`Code:`** git-link fields, tagged untagged ACTIVE/DESIGN features at their primary code locations, published a machine-readable feature map, and installed a link-drift verification hard gate into the site build.
 **Rationale:** Eliminates untracked features and broken code references by making every feature's implementation location explicit, verifiable, and build-gated.
 **Mechanism:** `field_notes/features_build.py`, `field_notes/verify_feature_links.py`, `field_notes/build_site.py`, `FeatureTracker.md` **`Code:`** fields, and `field_notes/FEATURE_CODE_MAP.md`.
+
+## [FEAT-337] Resident Liveness Health Polling Loop
+**Status:** DEFEATURED (Superseded by Hibernation Matrix to Prevent Idle Wake Thrashing)
+**Code:** [src/debug/test_warm_wake.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_warm_wake.py#L9) — Resident Liveness Health Polling Loop.
+**Logic:** Periodic 30–60s active polling (`list_tools`) to probe resident nodes. Defeatured because continuous active background polling actively prevented GPU/VRAM idle sleep and broke the Hibernation Matrix.
+**Mechanism:** Replaced by on-demand error boundaries and state machine transitions.
+
+## [FEAT-342] Ignition Reprobe & Zombie Process Scythe
+**Status:** DEFEATURED (Superseded by Clean Systemd Daemon Lifecycle to Prevent Suicide Loops)
+**Code:** [src/tests/test_rude_gauntlet.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_rude_gauntlet.py#L7) — Ignition Reprobe & Zombie Process Scythe.
+**Logic:** Aggressive pre-ignition port killing and socket probing (`_synchronize_and_probe`). Defeatured because aggressive socket scything was the primary root cause of V4 suicide restart storms.
+**Mechanism:** Replaced by native SystemD user units and socket-activated clean process lifecycle.
+
+## [FEAT-339] Full-Chain Deep Smoke Diagnostics
+**Status:** TODO (Integration Diagnostic Test Harness)
+**Code:** [src/debug/test_foyer_resilience.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_foyer_resilience.py#L7) — Full-Chain Deep Smoke Diagnostics.
+**Logic:** End-to-end integration diagnostic probe (`_run_deep_smoke`) that validates the entire multi-node cascade and memory footprint on demand.
+**Mechanism:** Diagnostic test harness utility executed during test suites or manual lab health verification, decoupled from the live query hot-path.
+

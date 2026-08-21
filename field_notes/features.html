@@ -159,7 +159,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/behavior_test.py#L25" style="color:var(--accent-color); text-decoration:none;">src/behavior_test.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/start_vllm.sh#L3" style="color:var(--accent-color); text-decoration:none;">src/start_vllm.sh</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -2932,6 +2932,12 @@
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Superseded by FEAT-414 / FEAT-436 Intent-Preamble Engine)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_sprint51_escapes.py#L5" style="color:var(--accent-color); text-decoration:none;">src/tests/test_sprint51_escapes.py</a>
@@ -2940,7 +2946,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces hard-coded strings with a weighted state-aware registry.</p>
+                    <p>Early V4 dynamic telemetry-weighted preamble picker prototype (<code>get_oracle_signal()</code>). Superseded by modern unified Intent-HyDE Pre-Reflection (<code>FEAT-436</code>) and MoE+ Preamble streaming (<code>FEAT-414</code>).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -2952,7 +2958,7 @@
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-archived">ARCHIVED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-119">
@@ -4000,7 +4006,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Status Details</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Mar 2026)</p>
+                    <p>(Superseded by Systemd Socket Activation &amp; Scale-to-Zero)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -4012,13 +4018,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Reason</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Absorbed into <a href="#FEAT-207">FEAT-207</a> Tricameral Airtime.</p>
+                    <p>Absorbed and subsequently defeatured to eliminate idle thrashing against the Hibernation Matrix. Replaced by systemd socket activation.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-stable">CONSOLIDATED</span>
+                            <span class="impact-badge impact-stable">DEFEATURED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-156">
@@ -4874,6 +4880,12 @@
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Superseded by Systemd Socket Activation &amp; Scale-to-Zero)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_lab_sprint20.py#L73" style="color:var(--accent-color); text-decoration:none;">src/tests/test_lab_sprint20.py</a>
@@ -4882,25 +4894,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Implements predictive Brain loading during Pinky triage.</p>
-                </div>
-            </div>
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Rationale</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Reduces perceived latency. If triage indicates a high likelihood of Brain involvement, the Hub starts pre-loading the Sovereign context while Pinky is still responding.</p>
-                </div>
-            </div>
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Mechanism</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Hub triggers a non-blocking <code>check_brain_health</code> probe based on initial triage sentiment.</p>
+                    <p>Implemented predictive Brain loading during Pinky triage. Defeatured because aggressive pre-warming constantly fought and broke the Hibernation Matrix idle windows. Replaced by clean systemd socket activation.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-stable">DEFEATURED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-187">
@@ -5776,6 +5776,12 @@
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Superseded by Systemd CGroup Memory Limits)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L61" style="color:var(--accent-color); text-decoration:none;">src/nodes/loader.py</a>
@@ -5784,23 +5790,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Goal</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevent Attendant suicide loops while enabling aggressive PGID-based process reclamation.</p>
-                </div>
-            </div>
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Mechanism</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <ol>
-<li>_BOOT_HASH injected into os.environ['LAB_IMMUNITY_TOKEN'] of all children.</li>
-<li>cleanup_processes verifies the token before any kill or killpg signal.</li>
-<li>Mismatch or Absence = Termination. Match = Immunity.</li>
-</ol>
+                    <p>Prevented Attendant suicide loops during V4 PGID process reclamation. Defeatured in V5 by moving process management into single-user SystemD cgroups (<code>50-MemoryMax.conf</code>).</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
-                            <span class="impact-badge impact-live">ACTIVE</span>
+                            <span class="impact-badge impact-stable">DEFEATURED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-221">
@@ -10306,6 +10302,120 @@
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
                             <span class="impact-badge impact-stable">COMPLETED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-337">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-337</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Resident Liveness Health Polling Loop
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Superseded by Hibernation Matrix to Prevent Idle Wake Thrashing)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_warm_wake.py#L9" style="color:var(--accent-color); text-decoration:none;">src/debug/test_warm_wake.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Periodic 30–60s active polling (<code>list_tools</code>) to probe resident nodes. Defeatured because continuous active background polling actively prevented GPU/VRAM idle sleep and broke the Hibernation Matrix.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaced by on-demand error boundaries and state machine transitions.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">DEFEATURED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-342">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-342</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Ignition Reprobe & Zombie Process Scythe
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Superseded by Clean Systemd Daemon Lifecycle to Prevent Suicide Loops)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_rude_gauntlet.py#L7" style="color:var(--accent-color); text-decoration:none;">src/tests/test_rude_gauntlet.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Aggressive pre-ignition port killing and socket probing (<code>_synchronize_and_probe</code>). Defeatured because aggressive socket scything was the primary root cause of V4 suicide restart storms.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaced by native SystemD user units and socket-activated clean process lifecycle.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">DEFEATURED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-339">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">FEAT-339</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <details class="feature-details">
+                                <summary>
+                                    Full-Chain Deep Smoke Diagnostics
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Integration Diagnostic Test Harness)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/test_foyer_resilience.py#L7" style="color:var(--accent-color); text-decoration:none;">src/debug/test_foyer_resilience.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>End-to-end integration diagnostic probe (<code>_run_deep_smoke</code>) that validates the entire multi-node cascade and memory footprint on demand.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Diagnostic test harness utility executed during test suites or manual lab health verification, decoupled from the live query hot-path.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #222;">
+                            <span class="impact-badge impact-stable">TODO</span>
                         </td>
                     </tr>
                     </tbody>
