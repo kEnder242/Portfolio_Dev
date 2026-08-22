@@ -276,8 +276,9 @@ def distill_journal_ledger():
                 for line in f:
                     if line.strip():
                         item = json.loads(line)
-                        d = item.get("dialogue", "")
-                        if d and d not in existing_dialogues:
+                        d = str(item.get("dialogue", "")).strip()
+                        # Only preserve complete conversational pairs with responses
+                        if d and ("Pinky:" in d or "Assistant:" in d) and d not in existing_dialogues:
                             existing_dialogues.add(d)
                             preserved_entries.append(item)
         except Exception as e:
