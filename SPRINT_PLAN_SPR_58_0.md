@@ -180,6 +180,21 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
 
 ---
 
+## 🎯 Sprint 58 User Stories: Agentic-R Retrieval Enhancement (ArXiv: 2601.11888)
+
+### Story 58.1: Marginal Utility Re-Ranking (Maximal Marginal Relevance - MMR)
+* **Goal**: Upgrade `get_context()` in `HomeLabAI/src/nodes/archive_node.py` to rank multi-collection ChromaDB candidates using a Marginal Information Utility penalty.
+* **Mechanism**: Candidate chunks are scored by $\text{Score}(d) = \lambda \cdot \text{Sim}(d, q) - (1-\lambda) \cdot \max_{d_j \in S} \text{Sim}(d, d_j)$. Prevents redundant chunks and boosts orthogonal technical details (MSR offsets, script flags, error codes).
+* **Target Files**: `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/tests/test_archive_rrf.py`.
+
+### Story 58.2: Autonomous Search Pivot Loop (Grep-Gated RiR Pivot)
+* **Goal**: Implement an autonomous search pivot loop when ChromaDB vector distance exceeds threshold ($>0.50$) or returns generic summaries without technical anchors.
+* **Mechanism**: Uses fast `ripgrep` across `Portfolio_Dev/field_notes/data/` for the exact extracted hardware anchors (`["RAPL", "0x610", "PECI"]`). Injects exact line-level evidence into the context before response synthesis.
+* **Engine Choice**: **`ripgrep` (`grep`)** is chosen over `peek_related_notes` because it returns raw evidence and surrounding lines in $<5\text{ms}$ with zero intermediate JSON abstraction latency.
+* **Target Files**: `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/v5/foyer/router.py`.
+
+---
+
 ## 📝 Sprint 58 Retrospective: Cumulative Replay vs. Continual Drift & Gem Evolution
 
 ### 1. Cumulative Full-Replay vs. Continual Drift
