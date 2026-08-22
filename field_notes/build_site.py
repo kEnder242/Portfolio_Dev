@@ -168,8 +168,7 @@ def main(args):
     if args.trailers:
         generate_trailers()
 
-    if not args.no_deploy:
-        deploy_to_airlock(snapshots=args.snapshots)
+    deploy_to_airlock(snapshots=args.snapshots)
 
     print("=== BUILD COMPLETE ===")
 
@@ -178,7 +177,6 @@ if __name__ == "__main__":
     parser.add_argument("--snapshots", action="store_true", help="Generate shot-scraper PNG screenshots during deploy (disabled by default)")
     parser.add_argument("--trailers", action="store_true", help="Generate cinematic widescreen previews")
     parser.add_argument("--benchmark", action="store_true", help="Run live model inference benchmarks (bench_models.py)")
-    parser.add_argument("--no-deploy", action="store_true", help="Skip automatic airlock deployment")
     parser.add_argument("--no-verify", action="store_true", help="Skip FeatureTracker.md Code-link verification hard gate")
     args = parser.parse_args()
     main(args)
