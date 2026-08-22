@@ -1780,6 +1780,24 @@
 
 ---
 
+## [FEAT-450] Maximal Marginal Relevance (MMR) Utility Re-Ranking
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L637) — Maximal Marginal Relevance (MMR) Utility Re-Ranking.
+**Logic:** Implements utility-based diversity re-ranking over multi-collection ChromaDB candidates using Jaccard word-overlap penalties ($\lambda=0.7$). Grounded in Agentic-R ([arXiv:2601.11888](https://arxiv.org/abs/2601.11888)).
+**Rationale:** Eliminates redundant semantic near-duplicates and promotes orthogonal technical nuggets (exact MSR registers, script arguments, command outputs) into top context slots.
+**Mechanism:** `compute_mmr_ranking()` in `src/nodes/archive_node.py`, `test_agentic_r_retrieval.py`.
+
+---
+
+## [FEAT-451] Autonomous Grep-Gated RiR Search Pivot
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L679) — Autonomous Grep-Gated RiR Search Pivot.
+**Logic:** Executes an autonomous search pivot using fast Ripgrep across `field_notes/data/` and raw archives when ChromaDB vector distance exceeds $0.50$ or returns zero results. Extracts hardware tokens and injects line-level evidence. Grounded in Agentic-R ([arXiv:2601.11888](https://arxiv.org/abs/2601.11888)).
+**Rationale:** Prevents retrieval failure on rare hardware tokens or new register definitions where embeddings alone produce weak distance scores.
+**Mechanism:** `execute_grep_search_pivot()` in `src/nodes/archive_node.py`, `test_agentic_r_retrieval.py`.
+
+---
+
 ## [LAB-090] SSH OOM Immunity Sentinel
 **Status:** COMPLETED (Sprint 50)
 **Code:** *none found (documented only)*
