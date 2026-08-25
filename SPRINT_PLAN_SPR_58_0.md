@@ -215,6 +215,19 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
 * **Target Files**: `HomeLabAI/src/infra/nightly_forge.py`, `HomeLabAI/src/tests/test_nightly_forge_shakedown.py`.
 * **Delegation Verification**: Unit test asserting `re_ignite_vllm()` is called post-dreaming and verifies HTTP 200 from `/status_update`.
 
+### Direct Orchestrator Task: OpenCode Daemon Reset & Swarm Certification (Pre-Task)
+* **Status**: **CERTIFIED & LIVE**
+* **Scope**: Reset `opencode-core.service` to apply `big-pickle` and OpenRouter free fallbacks; validated REST session attachment on port 4097.
+
+### Direct Orchestrator Task: Daytime Monitored Forge Shakedown (Self-Verification — No Delegation)
+* **Goal**: Execute and certify a live 10-step fine-tuning pass of `train_expert.py` under the 165W power limit without delegating, observing real-time DCGM telemetry on Prometheus/Grafana.
+* **Execution Steps**:
+  1. Clamp GPU power: `sudo nvidia-smi -pl 165`.
+  2. Run 10-step daytime forge run: `PYTHONPATH=. python3 src/forge/train_expert.py --steps 10 --dataset data/distillation/distilled_qa_pairs.jsonl`.
+  3. Query Prometheus DCGM metrics (`DCGM_FI_DEV_POWER_USAGE`, `DCGM_FI_DEV_GPU_TEMP`) to assert peak wattage $\le 165\text{W}$ and smooth step pacing (50ms).
+  4. Verify adapter integrity in `HomeLabAI/models/jason_voice_lora/adapter_model.safetensors`.
+  5. Restore Foyer and vLLM to `OPERATIONAL`.
+
 ---
 
 ## 📝 Sprint 58 Retrospective: Cumulative Replay vs. Continual Drift & Gem Evolution
