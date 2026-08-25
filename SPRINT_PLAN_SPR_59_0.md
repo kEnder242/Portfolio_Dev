@@ -121,10 +121,14 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/curator/scan_curator.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (Lines ~120–180: `evaluate_gem_quality()`)
   * [`Portfolio_Dev/field_notes/data/validation_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/validation_ledger.jsonl)
-* **Finalized Design (`/grill-me`)**:
-  * **Domain-Adaptive Batteries**: Evaluator uses category-specific batteries (e.g. Silicon Validation vs. Agent Architecture vs. Platform Telemetry).
-  * **Self-Identifying Evaluator Prompt**: Model outputs structured JSON declaring domain first: `{"domain": "SILICON_VALIDATION", "checks": {"has_reproducible_commands": bool, "has_verifiable_registers_or_ports": bool, "has_isolated_cause_and_effect": bool, "is_syntactically_valid_bkm": bool, "has_zero_generic_filler": bool}}`.
-  * **Deterministic Scoring**: $\text{Rank} = 1 + \sum(\text{True assertions})$.
+* **Finalized Design**:
+  * **Universal Epistemic 5-Question Battery**: Avoids brittle domain-classification drift by evaluating the core epistemic rigor of any engineering artifact:
+    1. `has_exact_identifiers`: Cites specific physical registers, ports, IPs, or error codes (e.g. MSR 0x610, port 8088, PCIe AER 0x10) rather than vague prose.
+    2. `has_reproduction_recipe`: Contains copy-pasteable CLI commands or script reproduction steps.
+    3. `isolates_cause_and_effect`: Clearly explains the physical failure mechanism and how the fix operates.
+    4. `is_actionable_bkm`: Provides immediately executable SRE / validation procedures.
+    5. `has_zero_conversational_fluff`: Contains pure, high-density technical truth without filler.
+  * **Deterministic Scoring**: $\text{Rank} = 1 + \sum(\text{True assertions}) \quad (1 \text{ to } 5)$.
 * **Verification**: `test_binary_evaluator_unit.py` proving 0% score variance across 20 repeated runs on identical synthetic gems.
 
 ### **Story 59.2: [FEAT-455] Context Compiler for Agent Context Compaction**
@@ -132,7 +136,7 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/compiler/context_compiler.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Module)
   * [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py#L250)
-* **Finalized Design (`/grill-me`)**:
+* **Finalized Design**:
   * **Call-Graph & Cross-Module Hierarchy**: AST extracts symbol signatures, argument types, and docstrings, combined with ripgrep-extracted caller/dependency graphs across files, stripping internal function bodies to achieve $>60\%$ token compaction with 100% symbol interface fidelity.
 * **Verification**: Benchmark comparing raw context tokens vs. compiled AST context tokens demonstrating $>50\%$ token savings with 100% symbol recall.
 
@@ -141,7 +145,7 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L930) (Lines ~930–980: `_parse_intent()`, `process_query()`)
   * [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) (Register `BKM-035`)
-* **Finalized Design (`/grill-me`)**:
+* **Finalized Design**:
   * **Intent Interception**: In `_parse_intent()`, classify `GROUNDING_CORRECTION` intent via semantic vector classification.
   * **Interactive Refinement Prompt**: Pinky acknowledges the correction in-character, logs a `FAIL` entry to `validation_ledger.jsonl`, and immediately asks one targeted follow-up question to clarify boundary conditions or register masks.
 * **Verification**: `test_copilot_feedback_loop.py` verifying conversational corrections auto-populate `validation_ledger.jsonl`.
@@ -151,7 +155,7 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1081) (Lines 1081–1107, 1515–1555)
   * [`HomeLabAI/src/tests/test_interest_speculative_prefetch.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_interest_speculative_prefetch.py)
-* **Finalized Design (`/grill-me`)**:
+* **Finalized Design**:
   * Turn 1 (Pinky) immediately sparks asynchronous background `_fetch_rag_context()`.
   * If interest $>0.5$, Turn 2 (Brain) starts instantly with pre-fetched context in memory.
   * If interest $\le 0.5$, prefetch task is cleanly cancelled/preempted. Enforced single-layer cascade (Brain does not prefetch Deep Thought).
@@ -162,10 +166,13 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1040)
   * [`HomeLabAI/src/nodes/pinky_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI)
-* **Finalized Design (`/grill-me`)**:
-  * **Weighted Random Wheel**: Helper `_get_floating_anchors()` rolls a weighted distribution across Recent Validation Scars (50%), Mass Scan Gem Milestones from `scan_state.json` (30%), and Overnight Dream Reflections from `nightly_dialogue.json` (20%).
-  * For low-density/greeting turns, inject `[FLOATING_ANCHOR_POOL]` so Pinky conversationally floats an authentic technical question rather than emitting generic assistant filler.
-* **Verification**: Integration test proving conversational topic flotation on queries like `"hi"` or `"what's up"`.
+* **Finalized Design**:
+  * **LLM-Native Candidate Selection**: Injects a 3-item `[FLOATING_CANDIDATE_POOL]` containing:
+    1. Latest `[VALIDATION_SCAR]` from `validation_ledger.jsonl`.
+    2. Latest `[MASS_SCAN_PROGRESS]` from `scan_state.json`.
+    3. Latest `[SUBCONSCIOUS_DREAM]` from `nightly_dialogue.json`.
+  * **Zero Hardcoding**: Evaluates semantic `GREETING` or `SHALLOW_INQUIRY` intent (no hardcoded string matches, BKM-015 compliant). Pinky's natural temperature ($T=0.7$) and prompt context steer topic selection organically.
+* **Verification**: Integration test proving conversational topic flotation on semantic greeting turns.
 
 ### **Story 59.6: [LAB-110] Permanent Daytime Node Residency & Hibernation Plumbing Preservation**
 * **Status**: 🔲 **TODO**
