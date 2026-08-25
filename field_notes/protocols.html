@@ -730,6 +730,16 @@ Emit task() tool calls to delegate implementation and verification work:
 <li><strong>Headless REST dispatch</strong>: <code>opencode run --attach</code> is a <strong>blocking foreground TUI</strong> requiring an active browser session on port 4096. When the webview is down, <code>subprocess.run(opencode run --attach)</code> hangs indefinitely. The correct headless pattern bypasses <code>opencode run</code> entirely: <code>POST http://127.0.0.1:4097/session/&lt;id&gt;/message</code> with <code>{"parts":[{"type":"text","text":"&lt;prompt&gt;"}]}</code>.</li>
 </ul>
 </li>
+<li>
+<p><strong>Mandatory Post-Delegation ICM Capture Protocol (The Handover Feedback Loop)</strong>:</p>
+<ul>
+<li><strong>The Problem</strong>: Subagents provide candid <code>[HANDOVER REFLECTION]</code> feedback on prompt ambiguity, missing context, and linter/LSP gaps, but unless codified into persistent memory, subsequent delegation turns repeat the same friction.</li>
+<li><strong>The Mandate</strong>: Immediately upon story completion and test certification, the Orchestrator MUST execute an ICM store with the subagent reflection and any post-dispatch resolution:
+    <code>bash
+    icm store -t errors-resolved -c "Story &lt;N&gt; Delegation Reflection: &lt;what tripped the subagent up, prompt adjustments needed, linter/import fixes applied&gt;." -i high -k "delegation,openagent,prompt-tuning,&lt;subsystem&gt;"</code></li>
+<li><strong>Enforcement Gate</strong>: No sprint story is certified until its delegation reflection has been ingested into persistent ICM memory.</li>
+</ul>
+</li>
 </ol>
                             </div>
                         </td>
