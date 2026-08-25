@@ -97,6 +97,6 @@
       "debuggability": "Intel VISA signal trace lead developer, SoC subsystem logic analyzer, JTAG hardware debug",
       "telemetry": "Time-series power and performance telemetry visualization pipelines, DCGM Prometheus exporter"
     },
-    "last_scanned": "2026-08-25 09:42:12"
+    "last_scanned": "2026-08-25 11:20:06"
   }
 }
