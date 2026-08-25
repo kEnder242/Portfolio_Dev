@@ -15,7 +15,9 @@ Following the successful baseline of Sprint 60 and deep forensic review of live 
 > 1. **Defaults = Bad Assumptions**: When triage hit ambiguous inputs, hardcoded few-shot template placeholders (`<silicon_term_or_pcie_ras>`) were emitted literally, and `ArchiveNode` defaulted to dense 18-year career notes (`notes_2018_PAE.txt`). This default context actively misled the resident models into hallucinating 2018 Intel Federal PAE history for general lab status queries.
 > 2. **Zero Context > Default Context (`[FEAT-467]`)**: When intent or domain is uncertain, the system must provide *zero context* (or minimal context) rather than injecting hallucinated career history.
 > 3. **The Triage Engine Must Be Refactored Now (`[FEAT-468]`)**: In Sprint 60, we deferred Triage to protect async streaming stability. Live testing proved Triage is the exact epicenter of all persona confusion and echo-looping. We now tackle Triage as a dedicated, pure decision satellite with explicit concurrency boundaries.
-> 4. **Multi-Agent Speaker Demarcation**: Triage must strictly infer intent from `[USER]` turns while preserving self-awareness of what `[ASSISTANT: Brain]` and `[ASSISTANT: Pinky]` previously stated, breaking the "vital signs" echo chamber.
+> 4. **Multi-Agent Speaker Demarcation & Anti-Duplication Rule**:
+>    * **Internal Only**: Speaker tags (`[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]`) are used *strictly inside the internal LLM prompt context*.
+>    * **Zero Name Stacking**: Outgoing chat strings are strictly scrubbed of all `[PINKY]`, `Pinky:`, or `[ASSISTANT]` prefixes before WebSocket broadcast so the UI never prints duplicated names (e.g. `Pinky: [ASSISTANT: Pinky] Pinky says...`).
 > 5. **DNA Scoping (`[FEAT-469]`)**: The mice receive `feature_dna` and `lab_infrastructure` to ground live lab operations, while `behavioral_dna` is strictly reserved for AGY development workflows.
 > 6. **Authentic Pinky Critic Persona (`[FEAT-470]`)**: Replace robotic `"well-crafted response"` praise with a satirical Pinky cartoon quip reacting to Brain's complexity paired with an agreed 1-sentence technical summary.
 
@@ -42,6 +44,20 @@ To completely eliminate preemption and concurrency risks while extracting Triage
 │  - Attribution of pre-reflection directly to Brain (Insight)                            │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 🛡️ Anti-Duplication & Prefix Scrubbing Contract
+
+To prevent name stacking thrash:
+* **The Rule**: Demarcation tags exist **only in the model's internal prompt memory**.
+* **The Gatekeeper Function**: `sanitize_outgoing_chat_text(text: str) -> str`:
+  ```python
+  # Strips all internal role/name prefixes so UI renders only the clean message:
+  clean = re.sub(r"^\[(?:ASSISTANT|USER|PINKY|BRAIN|ME|SYSTEM|DEEP THOUGHT)[^\]]*\]:?\s*", "", text, flags=re.IGNORECASE)
+  clean = re.sub(r"^(?:Pinky|Brain|System|Deep Thought):\s*", "", clean, flags=re.IGNORECASE)
+  ```
+* **UI Output**: WebSocket frame contains `"brain_source": "Pinky"` and `"brain": "Poit! Looking good!"`. The browser renders `Pinky: Poit! Looking good!` (clean single attribution).
 
 ---
 
@@ -78,18 +94,19 @@ To completely eliminate preemption and concurrency risks while extracting Triage
   * `HomeLabAI/src/logic/triage_engine.py`
   * `HomeLabAI/src/tests/test_triage_engine.py`
 * **Satellite Responsibilities**:
-  1. `extract_latest_user_query(turn_or_history: str) -> str`: Extracts exclusively the latest user command, stripping `[ME]` or `[USER]` prefixes.
-  2. `format_speaker_history(history_turns: List[Dict[str, str]]) -> str`: Formats turns with `[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]` tags.
-  3. `scrub_hyde_vector(hyde_text: str) -> str`: Strips literal angle brackets (`<...>`) or zeroes out string if invalid (enforcing Zero Context rule).
-  4. `is_meta_lexicon(query: str) -> bool`: Identifies live system component keywords (`audio_pipeline`, `maintenance_sweeper`, `override_parser`, `foyer`, `vllm`, `attendant`, `residents`, `features`, `bkm`).
-  5. `classify_vibe_and_domain(query: str, parsed_json: Dict[str, Any]) -> Tuple[str, str]`: Enforces `vibe="META"` and `domain="lab_internal"` when lexicon matches.
-  6. `TriageEngine` class with async `evaluate_triage(turn: str, history: List[Dict], resident_caller: Any) -> Dict[str, Any]`.
+  1. `extract_latest_user_query(turn_or_history: str) -> str`: Extracts exclusively the latest user command, stripping `[ME]`, `[USER]`, or speaker prefixes.
+  2. `format_speaker_history(history_turns: List[Dict[str, str]]) -> str`: Formats internal prompt memory with `[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]` tags.
+  3. `sanitize_outgoing_chat_text(text: str) -> str`: Strips all internal role/speaker prefixes from generated output so no duplicated name tags reach the UI.
+  4. `scrub_hyde_vector(hyde_text: str) -> str`: Strips literal angle brackets (`<...>`) or zeroes out string if invalid (enforcing Zero Context rule).
+  5. `is_meta_lexicon(query: str) -> bool`: Identifies live system component keywords (`audio_pipeline`, `maintenance_sweeper`, `override_parser`, `foyer`, `vllm`, `attendant`, `residents`, `features`, `bkm`).
+  6. `classify_vibe_and_domain(query: str, parsed_json: Dict[str, Any]) -> Tuple[str, str]`: Enforces `vibe="META"` and `domain="lab_internal"` when lexicon matches.
+  7. `TriageEngine` class with async `evaluate_triage(turn: str, history: List[Dict], resident_caller: Any) -> Dict[str, Any]`.
 * **Delegation Command**:
   ```bash
   python3 HomeLabAI/src/tests/delegate.py --story 61.1 \
     --title "Build Decoupled Triage Engine Satellite (FEAT-467/468)" \
     --file "src/logic/triage_engine.py" \
-    --details "Create a pure, decoupled satellite module src/logic/triage_engine.py implementing extract_latest_user_query, format_speaker_history, scrub_hyde_vector, is_meta_lexicon, classify_vibe_and_domain, and the TriageEngine class. Ensure scrub_hyde_vector strips template angle brackets like <silicon_term_or_pcie_ras> and returns empty string on ambiguous input. Support resident_caller via call_tool('think', ...) or native think(). Create test_triage_engine.py with at least 25 unit tests covering all functions, edge cases, and dirty inputs." \
+    --details "Create a pure, decoupled satellite module src/logic/triage_engine.py implementing extract_latest_user_query, format_speaker_history, sanitize_outgoing_chat_text, scrub_hyde_vector, is_meta_lexicon, classify_vibe_and_domain, and the TriageEngine class. Ensure sanitize_outgoing_chat_text removes any leading [PINKY], [BRAIN], [ASSISTANT:...], or Pinky: prefixes from generated output to prevent name duplication in the UI. Ensure scrub_hyde_vector strips template angle brackets like <silicon_term_or_pcie_ras> and returns empty string on ambiguous input. Support resident_caller via call_tool('think', ...) or native think(). Create test_triage_engine.py with at least 25 unit tests covering all functions, edge cases, and dirty inputs." \
     --verification "ruff check src/logic/triage_engine.py src/tests/test_triage_engine.py && pytest src/tests/test_triage_engine.py -v" \
     --dir "/home/jallred/Dev_Lab/HomeLabAI"
   ```
@@ -125,14 +142,14 @@ To completely eliminate preemption and concurrency risks while extracting Triage
 * **Satellite Responsibilities**:
   1. `build_critic_prompt(brain_brief: str, user_query: str) -> str`: Instructs Pinky to output JSON containing: `quip` (a witty/satirical cartoon reaction to Brain's complexity), `summary` (a crisp 1-sentence agreed takeaway), `score` (int 1-5), and `slop_found` (bool).
   2. `parse_critic_payload(raw_output: str) -> Dict[str, Any]`: Parses JSON payload, strips markdown fences, validates keys, and cleans up formatting.
-  3. `format_chat_delivery(parsed_critic: Dict[str, Any]) -> str`: Returns combined quip and summary string for out-loud delivery, banning robotic boilerplate (`"A well-crafted response"`).
+  3. `format_chat_delivery(parsed_critic: Dict[str, Any]) -> str`: Returns combined quip and summary string for out-loud delivery, banning robotic boilerplate (`"A well-crafted response"`) and stripping leading persona tags so UI output is clean.
   4. `format_crosstalk_telemetry(parsed_critic: Dict[str, Any]) -> Dict[str, Any]`: Returns telemetry frame for internal `CROSSTALK` broadcast.
 * **Delegation Command**:
   ```bash
   python3 HomeLabAI/src/tests/delegate.py --story 61.3 \
     --title "Build Pinky Critic Persona Satellite (FEAT-470)" \
     --file "src/nodes/pinky_critic_persona.py" \
-    --details "Create a pure, decoupled satellite module src/nodes/pinky_critic_persona.py implementing build_critic_prompt, parse_critic_payload, format_chat_delivery, and format_crosstalk_telemetry. Ensure format_chat_delivery blends a witty cartoon quip with an agreed technical summary while rejecting robotic boilerplate like 'A well-crafted response'. Create test_pinky_critic_persona.py with at least 20 unit tests." \
+    --details "Create a pure, decoupled satellite module src/nodes/pinky_critic_persona.py implementing build_critic_prompt, parse_critic_payload, format_chat_delivery, and format_crosstalk_telemetry. Ensure format_chat_delivery blends a witty cartoon quip with an agreed technical summary while rejecting robotic boilerplate like 'A well-crafted response' and stripping any leading speaker name prefixes. Create test_pinky_critic_persona.py with at least 20 unit tests." \
     --verification "ruff check src/nodes/pinky_critic_persona.py src/tests/test_pinky_critic_persona.py && pytest src/tests/test_pinky_critic_persona.py -v" \
     --dir "/home/jallred/Dev_Lab/HomeLabAI"
   ```
@@ -168,7 +185,7 @@ To completely eliminate preemption and concurrency risks while extracting Triage
   3. Execute `test_live_sprint61_e2e.py` on `ws://127.0.0.1:8765`:
      * Test 1: Live Meta Query (*"Pinky, what is the status of our audio pipeline and sweeper?"*) $\rightarrow$ Verifies `FEAT-059` / `LAB-099` details with zero Intel PAE mentions.
      * Test 2: Deep Thought Handshake $\rightarrow$ Verifies received in `CROSSTALK`, not `CHAT`.
-     * Test 3: Pinky Critic $\rightarrow$ Verifies cartoon quip + summary without robotic praise.
+     * Test 3: Pinky Critic $\rightarrow$ Verifies cartoon quip + summary without robotic praise or name duplication.
      * Test 4: Negative RAG Gating $\rightarrow$ Ambiguous query produces clean response with zero hallucinated career notes.
 
 ---
