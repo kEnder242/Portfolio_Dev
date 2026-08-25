@@ -92,34 +92,90 @@ As the Federated Lab matures past Sprint 58, our objective is **architectural di
 2. **`[FEAT-432]` Streaming Open HyDE Preprocessor**: Enhance Pinky's streaming preamble with zero-shot domain-specific acronym expansion.
 3. **`[FEAT-353]` Automated Verifier Synthesis**: Generate automated test harnesses for nightly distilled QA evaluation.
 
+## 📋 Detailed Feedback & Architectural Consensus Ledger
+
+This section records the exact user insights, engineering rationales, and design boundaries established during Sprint 59 planning to preserve complete pedigree:
+
+1. **Silicon Hard Freeze & Linux Dirty Page Cache Phenomenon**:
+   * *User Forensic Truth*: Host never lost power; it entered an unrecoverable kernel hard freeze (NumLock dead, interrupts frozen).
+   * *Forensic Reality*: In Linux, userspace logs are buffered in RAM page cache (`dirty_writeback_centisecs`). When the kernel enters unevictable D-state deadlock (DDR3 bus lockup during unquantized tensor deserialization), unflushed step logs in RAM evaporate before hitting the SSD journal.
+   * *Settling Pacing*: A 5.0-second inter-step delay (`HardwarePacingCallback`) allows switching VRM inductors to discharge and heatsink thermal mass to return to idle baseline (~30°C/15W), eliminating compounding junction heat.
+2. **Local Training Law (Zero Remote Offload)**:
+   * *Mandate*: Unsloth LoRA fine-tuning MUST remain 100% local on Pinky / Z87 (Turing RTX 2080 Ti). Remote offload to Kender (4090) or M5 Air for forge is strictly forbidden.
+3. **Anti-Embellishment Corollary (Conversational WYWO)**:
+   * *Principle*: Avoid hardcoded `vibe=casual` triggers (BKM-015 compliance). Instead, when prompt information density is shallow ("hi", "what's up"), Pinky dynamically floats genuine unresolved validation scars (`validation_ledger.jsonl`) or Diamond Gems rather than inventing assistant filler. User feedback to floated topics is treated as original ground-truth.
+4. **Tools-Over-UI / The Fourth Wall Feedback Loop (BKM-035)**:
+   * *Principle*: Deprecate cluttered UI vote buttons. When the user speaks to the "fourth wall" or expresses disagreement ("Wait, that's wrong...", "Pinky, note that..."), the Hub semantically classifies the critique and auto-populates `validation_ledger.jsonl` failure tests and Cynical Curator rubric constraints.
+5. **Single-Layer Cascade Preemption**:
+   * *Rule*: Speculative context pre-fetching runs strictly Turn 1 $\rightarrow$ Turn 2 (Pinky $\rightarrow$ Brain only). Deep Thought is never speculatively pre-fetched ahead of Brain, eliminating double-preemption thrashing and remote network storms.
+6. **Daytime Residency vs. 2:00 AM Nightly Offline Quiesce**:
+   * *Daytime Nominal (`FAST_WAKE`)*: All resident nodes (`pinky`, `brain`, `archive`, `lab`) and `Llama-3.2-3B-AWQ` remain permanently resident in System RAM and GPU VRAM with zero daytime idle timeout eviction.
+   * *Nightly Maintenance (`02:00 AM`)*: The physical `POST /release_nodes` endpoint remains active exclusively for `nightly_forge.py` to flush VRAM during the scheduled 2:00 AM window before auto-reigniting via `re_ignite_vllm()`.
+
 ---
 
-## 📋 Sprint Execution Scope
+## 📋 Sprint Execution Scope & Granular Task Specifications
 
 ### **Story 59.1: [FEAT-454] "Ask, Don't Judge" Deterministic Binary Evaluation Batteries**
 * **Status**: 🔲 **TODO**
-* **Objective**: Replace drifting 1–5 scalar scores in Cynical Curator (`scan_curator.py`) and Validation Ledger (`validation_ledger.jsonl`) with a deterministic battery of atomic boolean assertions (`is_tested`, `is_msr_clamped`, `has_reproduction_steps`, `is_syntactically_valid`).
-* **Verification**: Unit tests proving 0% score variance across identical input evaluation runs.
+* **Target Files**:
+  * [`HomeLabAI/src/curator/scan_curator.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (Lines ~120–180: `evaluate_gem_quality()`)
+  * [`Portfolio_Dev/field_notes/data/validation_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/validation_ledger.jsonl)
+* **Exact Mechanism**:
+  1. Replace 1–5 scalar integer prompts with a dictionary of 5 atomic boolean assertions (`has_reproducible_commands`, `has_verifiable_registers_or_ports`, `has_isolated_cause_and_effect`, `is_syntactically_valid_bkm`, `has_zero_generic_filler`).
+  2. Compute Rank deterministically: $\text{Rank} = 1 + \sum(\text{True assertions})$.
+* **Verification**: `test_binary_evaluator_unit.py` proving 0% score variance across 20 repeated runs on identical synthetic gems.
 
 ### **Story 59.2: [FEAT-455] Context Compiler for Agent Context Compaction**
 * **Status**: 🔲 **TODO**
-* **Objective**: Implement an AST / symbol-graph context compiler using Python `ast` and `ripgrep` to compact raw multi-file codebases into high-density structural context before injecting into OpenAgent / Sisyphus prompts, reducing KV-cache bloat and token consumption by >50%.
-* **Verification**: Benchmark comparing raw context token count vs. compiled AST context token count with 100% symbol recall.
+* **Target Files**:
+  * [`HomeLabAI/src/compiler/context_compiler.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Module)
+  * [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py#L250)
+* **Exact Mechanism**:
+  1. Use Python `ast` and `ripgrep` to extract module signatures, class hierarchies, docstrings, and function entry points into a compacted AST symbol graph.
+  2. Compact multi-file workspaces into structured symbol skeletons before injecting into OpenAgent / Sisyphus prompts.
+* **Verification**: Benchmark comparing raw context tokens vs. compiled AST context tokens demonstrating $>50\%$ token savings with 100% symbol recall.
 
-### **Story 59.3: [FEAT-456] Language-First Co-Pilot Feedback Loop & Validation Auto-Correction**
+### **Story 59.3: [FEAT-456] Language-First Co-Pilot Feedback Loop (The Fourth Wall / BKM-035)**
 * **Status**: 🔲 **TODO**
-* **Objective**: Intercept natural language user disagreements ("Wait, that's wrong...", "Pinky, note that X is Y...") via semantic intent classification (BKM-015 compliant), auto-generating evaluated failure tests in `validation_ledger.jsonl` and updating Curator rubric constraints without brittle UI vote buttons.
-* **Verification**: Unit tests validating natural language correction ingestion and JSONL ledger auto-population.
+* **Target Files**:
+  * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L930) (Lines ~930–980: `_parse_intent()`, `process_query()`)
+  * [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) (Register `BKM-035`)
+* **Exact Mechanism**:
+  1. In `_parse_intent()`, add semantic vector classification for `GROUNDING_CORRECTION` intent without hardcoded regex.
+  2. In `process_query()`, intercept `GROUNDING_CORRECTION` to capture previous response + user correction and auto-append a `FAIL` record to `validation_ledger.jsonl` with `"kender_audit": {"user_correction": ground_truth}`.
+* **Verification**: `test_copilot_feedback_loop.py` verifying conversational corrections auto-populate `validation_ledger.jsonl`.
 
 ### **Story 59.4: [FEAT-457] Single-Layer Speculative Context Pre-fetching & Interest Preemption**
 * **Status**: ✅ **COMPLETED & CERTIFIED**
-* **Objective**: Pre-fetch Turn 2 (Brain) RAG context speculatively in the background during Turn 1 (Pinky) token generation. If interest drops ($\le 0.5$) or turn aborts, cleanly cancel/preempt background task with zero penalty. Enforce single-layer cascade (do not pre-fetch Deep Thought ahead of Brain).
-* **Verification**: `test_interest_speculative_prefetch.py` passes 2/2 unit tests (0.31s).
+* **Target Files**:
+  * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1081) (Lines 1081–1107, 1515–1555)
+  * [`HomeLabAI/src/tests/test_interest_speculative_prefetch.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_interest_speculative_prefetch.py)
+* **Exact Mechanism**:
+  1. Turn 1 (Pinky) immediately sparks asynchronous background `_fetch_rag_context()`.
+  2. If interest $>0.5$, Turn 2 (Brain) starts instantly with pre-fetched context in memory.
+  3. If interest $\le 0.5$, prefetch task is cleanly cancelled/preempted. Enforced single-layer cascade (Brain does not prefetch Deep Thought).
+* **Verification**: `test_interest_speculative_prefetch.py` passed 2/2 unit tests (0.31s).
 
-### **Story 59.5: [FEAT-458] Conversational WYWO & Floating Validation Oracle (Non-Embellishment Corollary)**
+### **Story 59.5: [FEAT-458] Conversational WYWO & Floating Validation Oracle (Anti-Embellishment Corollary)**
 * **Status**: 🔲 **TODO**
-* **Objective**: During shallow or low-urgency turns, provide Pinky with a dynamic buffer of unresolved validation failures (`validation_ledger.jsonl`), refined Diamond Gems, and overnight dialogue to float conversationally as an oracle prompt rather than outputting generic assistant filler.
-* **Verification**: Integration test proving conversational topic flotation during low-information-density prompts ("hi", "what's up").
+* **Target Files**:
+  * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1040)
+  * [`HomeLabAI/src/nodes/pinky_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI)
+* **Exact Mechanism**:
+  1. Helper `_get_floating_anchors()` extracts top unresolved `FAIL` from `validation_ledger.jsonl` and top Diamond Gem from `nightly_dialogue.json`.
+  2. For low-density/greeting turns, inject `[FLOATING_ANCHOR_POOL]` so Pinky conversationally floats an authentic technical question rather than emitting generic assistant filler.
+* **Verification**: Integration test proving conversational topic flotation on queries like `"hi"` or `"what's up"`.
+
+### **Story 59.6: [LAB-110] Permanent Daytime Node Residency & Hibernation Plumbing Preservation**
+* **Status**: 🔲 **TODO**
+* **Target Files**:
+  * [`HomeLabAI/config/infrastructure.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/infrastructure.json#L2)
+  * [`HomeLabAI/src/v5/foyer/router.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L675)
+* **Exact Mechanism**:
+  1. Configure `"idle_eviction_enabled": false` and `"daytime_node_residency": "PERMANENT_RESIDENT"` in `infrastructure.json`.
+  2. Foyer maintains all nodes warm in host system RAM permanently during daytime, while keeping `POST /release_nodes` active strictly for the 2:00 AM Nightly Forge window.
+* **Verification**: Integration test verifying all resident nodes remain `READY` across extended idle intervals.
 
 ---
 
@@ -132,4 +188,4 @@ As the Federated Lab matures past Sprint 58, our objective is **architectural di
 
 ## 🧭 Next Action
 
-Execute Stories 59.1, 59.2, 59.3, and 59.5 per Sprint 59 roadmap.
+Execute Stories 59.1, 59.2, 59.3, 59.5, and 59.6 per Sprint 59 roadmap.
