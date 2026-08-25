@@ -94,6 +94,20 @@ As the Federated Lab matures past Sprint 58, our objective is **architectural di
 
 ---
 
+## 📋 Sprint Execution Scope
+
+### **Story 59.1: [FEAT-454] "Ask, Don't Judge" Deterministic Binary Evaluation Batteries**
+* **Status**: 🔲 **TODO**
+* **Objective**: Replace drifting 1–5 scalar scores in Cynical Curator (`scan_curator.py`) and Validation Ledger (`validation_ledger.jsonl`) with a deterministic battery of atomic boolean assertions (`is_tested`, `is_msr_clamped`, `has_reproduction_steps`, `is_syntactically_valid`).
+* **Verification**: Unit tests proving 0% score variance across identical input evaluation runs.
+
+### **Story 59.2: [FEAT-455] Context Compiler for Agent Context Compaction**
+* **Status**: 🔲 **TODO**
+* **Objective**: Implement an AST / symbol-graph context compiler using Python `ast` and `ripgrep` to compact raw multi-file codebases into high-density structural context before injecting into OpenAgent / Sisyphus prompts, reducing KV-cache bloat and token consumption by >50%.
+* **Verification**: Benchmark comparing raw context token count vs. compiled AST context token count with 100% symbol recall.
+
+---
+
 ## 🧭 Next Action
 
-Review the **Tier 1 candidates** (**Ask, Don't Judge** and **Context Compiler**) and backlog priorities to select the final story scope for Sprint 59 execution.
+Review Tier 2 and Tier 3 candidate deep-dives below to prioritize future sprint allocation.
