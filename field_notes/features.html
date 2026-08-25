@@ -12752,6 +12752,102 @@
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="LAB-109">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-109</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Silicon Power Capping & Hardware Surge Protection
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L30" style="color:var(--accent-color); text-decoration:none;">src/infra/nightly_forge.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforce 180W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>nvidia-smi -pl 180</code> hardware limit check during pre-flight in <code>nightly_forge.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-design">DESIGN</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-452">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-452</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Unsloth Gradient Smoothing & Transient Mitigation
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L20" style="color:var(--accent-color); text-decoration:none;">src/forge/train_expert.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Micro-batching (batch_size=1, grad_accum=4, warmup=5, max_seq_length=1536) to prevent instantaneous tensor saturation.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Unsloth Trainer argument configuration in <code>src/forge/train_expert.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-design">DESIGN</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-453">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-453</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Post-Maintenance Autonomous Morning Re-ignition
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L180" style="color:var(--accent-color); text-decoration:none;">src/infra/nightly_forge.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees Foyer and vLLM are automatically re-ignited to OPERATIONAL post 05:40 AM dreaming cycle.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>re_ignite_vllm()</code> called unconditionally at conclusion of nightly forge orchestration.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-design">DESIGN</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
