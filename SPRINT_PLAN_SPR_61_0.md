@@ -1,50 +1,57 @@
-# 🚀 Sprint Plan SPR-61.0: Epistemic Calibration, Conversational Flow & Defaults Audit
+# 🚀 Sprint Plan SPR-61.0: Modular Triage Engine Refactoring, Epistemic Meta-Grounding & Conversational Flow
 
 **Sprint:** 61.0  
 **Date:** August 25, 2026  
 **Status:** GREENLIGHT READY  
-**Theme:** *Eliminating False Defaults ("Zero Context > Default Context"), Speaker Demarcation, and Cartoon/Summary Persona Dynamics*
+**Theme:** *Decoupled Triage Satellite, "Zero Context > Default Context" Gateway, Speaker Demarcation, and Cartoon/Summary Persona Dynamics*
 
 ---
 
-## 🧭 Executive Summary & Core Architectural Principles
+## 🧭 Executive Summary & Architectural Consensus
 
-During our live co-pilot session review on August 25, 2026, a deep inspection of both conversational turns and raw evaluation logs revealed why the system thrashed into irrelevant career history and robotic loops.
+Following the successful baseline of Sprint 60 and deep forensic review of live evaluation logs (`evaluation_batch_20260825_142951.log` and `152025.log`), we established clear consensus on the core root cause of conversational thrash:
 
-### 🏛️ Core Principles & Insights
-
-1. **"Zero Context is Better than Default Context" (`[FEAT-467]`)**:
-   * Injecting *no context* (or minimal context) allows resident models to reason cleanly or ask for clarification.
-   * Injecting *default context* (e.g. falling back to 2018 Intel PAE notes when a query is ambiguous) actively misleads models and triggers severe hallucinations.
-   * **Rule**: When intent or domain is uncertain, `hyde_vector_text` is empty (`""`), and `ArchiveNode` returns zero context.
-
-2. **Speaker Demarcation in Triage Memory (`[FEAT-468]`)**:
-   * **The Catch**: Pinky repeated *"You're feeling a bit off... checking vital signs"* because Triage ingested conversation history without speaker filtering and mistook Pinky's previous turn for the user's intent.
-   * **Rule**: Triage MUST strictly evaluate the latest `[USER]` turn, never mistaking assistant dialogue for user intent, while preserving self-awareness of what Pinky and Brain stated in previous turns.
-
-3. **Scoping the DNA (`[FEAT-469]`)**:
-   * **`feature_dna` & `lab_infrastructure`**: Given to the Mice (Pinky/Brain) to ground discussions about live software modules (`AudioPipeline`, `MaintenanceSweeper`, `OverrideParser`, daemons, ports).
-   * **`behavioral_dna`**: Reserved strictly for Orchestrator/AGY development workflows. Mice do not roleplay commit rules.
-   * **`career_ledger`**: Suppressed during live system operations; queried only for explicit personal career questions.
-
-4. **Cartoon Roleplay Critic & Actionable Technical Summary (`[FEAT-470]`)**:
-   * Raw JSON diagnostic dictionaries (`{"score": 5, "slop_found": false}`) stay in `CROSSTALK`.
-   * Pinky delivers a satirical cartoon quip reacting to Brain's complexity + a 1-sentence agreed takeaway directly to `CHAT`.
+> **The Core Consensus:**
+> 1. **Defaults = Bad Assumptions**: When triage hit ambiguous inputs, hardcoded few-shot template placeholders (`<silicon_term_or_pcie_ras>`) were emitted literally, and `ArchiveNode` defaulted to dense 18-year career notes (`notes_2018_PAE.txt`). This default context actively misled the resident models into hallucinating 2018 Intel Federal PAE history for general lab status queries.
+> 2. **Zero Context > Default Context (`[FEAT-467]`)**: When intent or domain is uncertain, the system must provide *zero context* (or minimal context) rather than injecting hallucinated career history.
+> 3. **The Triage Engine Must Be Refactored Now (`[FEAT-468]`)**: In Sprint 60, we deferred Triage to protect async streaming stability. Live testing proved Triage is the exact epicenter of all persona confusion and echo-looping. We now tackle Triage as a dedicated, pure decision satellite with explicit concurrency boundaries.
+> 4. **Multi-Agent Speaker Demarcation**: Triage must strictly infer intent from `[USER]` turns while preserving self-awareness of what `[ASSISTANT: Brain]` and `[ASSISTANT: Pinky]` previously stated, breaking the "vital signs" echo chamber.
+> 5. **DNA Scoping (`[FEAT-469]`)**: The mice receive `feature_dna` and `lab_infrastructure` to ground live lab operations, while `behavioral_dna` is strictly reserved for AGY development workflows.
+> 6. **Authentic Pinky Critic Persona (`[FEAT-470]`)**: Replace robotic `"well-crafted response"` praise with a satirical Pinky cartoon quip reacting to Brain's complexity paired with an agreed 1-sentence technical summary.
 
 ---
 
-## 🛠️ Delegation BKM & Pathing Guidelines (Learnings from Sprint 60)
+## 🏛️ Architectural Boundary Definition (The Triage Refactor Contract)
 
-1. **Pathing & Import Cleanliness**:
-   * All greenfield satellites must use standard library imports and top-level absolute paths (`from typing import ...`, `import json`, `import re`).
-   * No brittle relative imports inside satellites.
-2. **Strict Verification Command Gate**:
-   * In `delegate.py`, the `--verification` flag must mandate both linting and testing:
-     `--verification "ruff check <target_files> && pytest <test_files> -v"`
-   * OpenAgent must satisfy zero lint errors and 100% green unit tests before concluding.
-3. **Decoupled Greenfield Satellites**:
-   * Subagents build pure, self-contained satellite classes and unit suites.
-   * AGY orchestrator performs core wiring into `CognitiveHub`, `router.py`, and `ArchiveNode`.
+To completely eliminate preemption and concurrency risks while extracting Triage:
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│ ARCHITECTURAL BOUNDARY PARTITION                                                         │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│ WHAT STAYS IN COGNITIVE HUB (Orchestration & Streaming):                                 │
+│  - Async WebSocket token streaming loop (_process_node_stream(), waterfall_queue)        │
+│  - Resident ignition mutex & connection lifecycle management                             │
+│  - Multi-stage Division of Labor execution and client disconnect handling                 │
+│                                                                                          │
+│ WHAT MOVES INTO TRIAGE ENGINE SATELLITE (Decision Logic & Sanitization):                 │
+│  - Speaker-demarcated turn parsing (extract_latest_user_query, format_speaker_history)   │
+│  - Lean 4-field JSON guided schema generator optimized for Llama-3.2-3B                  │
+│  - HyDE template placeholder scrubber (<...>) & Zero Context fallback                    │
+│  - Meta-lexicon classifier (mapping live lab modules to vibe="META")                     │
+│  - Attribution of pre-reflection directly to Brain (Insight)                            │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛠️ Delegation BKM & Pathing Mandate
+
+1. **Satellite Cleanliness**: All greenfield satellites use standard library imports and top-level absolute paths with zero relative-import ambiguity.
+2. **Mandatory Lint & Test Gate**: Subagent dispatches in `delegate.py` enforce:
+   `--verification "ruff check <target_files> && pytest <test_files> -v"`
+3. **Mandatory Post-Delegation ICM Capture Protocol (BKM-034 Section 12)**:
+   Immediately upon story completion and test certification, the Orchestrator executes an `icm store -t errors-resolved` capturing subagent reflection and resolutions before proceeding.
 
 ---
 
@@ -54,7 +61,7 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
 ┌──────────────────────────────────────────────────────────────────────────────────────────┐
 │ SPRINT 61 DELEGATION TOPOLOGY                                                            │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
-│ Story 61.1: triage_gateway.py      ──(OpenAgent Subagent)──> 25+ Unit Tests (Green)      │
+│ Story 61.1: triage_engine.py        ──(OpenAgent Subagent)──> 25+ Unit Tests (Green)      │
 │ Story 61.2: lab_dna_router.py      ──(OpenAgent Subagent)──> 20+ Unit Tests (Green)      │
 │ Story 61.3: pinky_critic_persona.py──(OpenAgent Subagent)──> 20+ Unit Tests (Green)      │
 │                                                                                          │
@@ -65,24 +72,25 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
 
 ---
 
-### **Story 61.1: [FEAT-467/468] Triage Gateway Satellite (`triage_gateway.py`)**
+### **Story 61.1: [FEAT-467/468] Decoupled Triage Engine Satellite (`triage_engine.py`)**
 * **Status**: 🔲 **READY FOR DELEGATION**
 * **Target Files**:
-  * `HomeLabAI/src/logic/triage_gateway.py`
-  * `HomeLabAI/src/tests/test_triage_gateway.py`
-* **Satellite Functions**:
-  1. `format_speaker_history(history_turns: List[Dict[str, str]]) -> str`: Formats turns with `[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]` tags.
-  2. `extract_latest_user_query(turn_or_history: str) -> str`: Extracts exclusively the latest user command, stripping `[ME]` or `[USER]` prefixes.
-  3. `scrub_hyde_vector(hyde_text: str) -> str`: Strips literal angle brackets (`<...>`), template placeholders, or zeroes out string if invalid.
-  4. `is_meta_lexicon(query: str) -> bool`: Checks if query mentions live lab components (`audio_pipeline`, `sweeper`, `override`, `foyer`, `vllm`, `attendant`, `residents`, `features`, `bkm`).
+  * `HomeLabAI/src/logic/triage_engine.py`
+  * `HomeLabAI/src/tests/test_triage_engine.py`
+* **Satellite Responsibilities**:
+  1. `extract_latest_user_query(turn_or_history: str) -> str`: Extracts exclusively the latest user command, stripping `[ME]` or `[USER]` prefixes.
+  2. `format_speaker_history(history_turns: List[Dict[str, str]]) -> str`: Formats turns with `[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]` tags.
+  3. `scrub_hyde_vector(hyde_text: str) -> str`: Strips literal angle brackets (`<...>`) or zeroes out string if invalid (enforcing Zero Context rule).
+  4. `is_meta_lexicon(query: str) -> bool`: Identifies live system component keywords (`audio_pipeline`, `maintenance_sweeper`, `override_parser`, `foyer`, `vllm`, `attendant`, `residents`, `features`, `bkm`).
   5. `classify_vibe_and_domain(query: str, parsed_json: Dict[str, Any]) -> Tuple[str, str]`: Enforces `vibe="META"` and `domain="lab_internal"` when lexicon matches.
+  6. `TriageEngine` class with async `evaluate_triage(turn: str, history: List[Dict], resident_caller: Any) -> Dict[str, Any]`.
 * **Delegation Command**:
   ```bash
   python3 HomeLabAI/src/tests/delegate.py --story 61.1 \
-    --title "Build Triage Gateway Satellite (FEAT-467/468)" \
-    --file "src/logic/triage_gateway.py" \
-    --details "Create a pure, decoupled satellite module src/logic/triage_gateway.py implementing format_speaker_history, extract_latest_user_query, scrub_hyde_vector, is_meta_lexicon, and classify_vibe_and_domain. Ensure scrub_hyde_vector strips template angle brackets like <silicon_term_or_pcie_ras> and returns empty string on ambiguous input. Create test_triage_gateway.py with at least 25 unit tests covering all functions, edge cases, and dirty inputs." \
-    --verification "ruff check src/logic/triage_gateway.py src/tests/test_triage_gateway.py && pytest src/tests/test_triage_gateway.py -v" \
+    --title "Build Decoupled Triage Engine Satellite (FEAT-467/468)" \
+    --file "src/logic/triage_engine.py" \
+    --details "Create a pure, decoupled satellite module src/logic/triage_engine.py implementing extract_latest_user_query, format_speaker_history, scrub_hyde_vector, is_meta_lexicon, classify_vibe_and_domain, and the TriageEngine class. Ensure scrub_hyde_vector strips template angle brackets like <silicon_term_or_pcie_ras> and returns empty string on ambiguous input. Support resident_caller via call_tool('think', ...) or native think(). Create test_triage_engine.py with at least 25 unit tests covering all functions, edge cases, and dirty inputs." \
+    --verification "ruff check src/logic/triage_engine.py src/tests/test_triage_engine.py && pytest src/tests/test_triage_engine.py -v" \
     --dir "/home/jallred/Dev_Lab/HomeLabAI"
   ```
 
@@ -93,8 +101,8 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
 * **Target Files**:
   * `HomeLabAI/src/nodes/lab_dna_router.py`
   * `HomeLabAI/src/tests/test_lab_dna_router.py`
-* **Satellite Functions**:
-  1. `get_collection_priorities(vibe: str, domain: str) -> List[str]`: Returns collection search priority. For `vibe="META"` or `domain="lab_internal"`, returns `["feature_dna", "lab_infrastructure", "lab_journal"]` and strictly omits `career_ledger` and `behavioral_dna`. For `domain="lab_history"`, returns `["career_ledger", "artifact_vault"]`.
+* **Satellite Responsibilities**:
+  1. `get_collection_priorities(vibe: str, domain: str) -> List[str]`: For `vibe="META"` or `domain="lab_internal"`, returns `["feature_dna", "lab_infrastructure", "lab_journal"]` and strictly omits `career_ledger` and `behavioral_dna`. For `domain="lab_history"`, returns `["career_ledger", "artifact_vault"]`.
   2. `filter_candidate_context(candidates: List[Dict[str, Any]], vibe: str, domain: str, max_distance: float = 0.50) -> List[Dict[str, Any]]`: Implements "Zero Context > Default Context". If top candidate distance > max_distance, returns empty list.
   3. `format_lab_dna_tag(coll: str, metadata: Dict[str, Any], doc: str) -> str`: Formats extracted context with `[FEATURE_DNA: FEAT-xxx]` and `[INFRA: component]` tags.
 * **Delegation Command**:
@@ -114,11 +122,11 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
 * **Target Files**:
   * `HomeLabAI/src/nodes/pinky_critic_persona.py`
   * `HomeLabAI/src/tests/test_pinky_critic_persona.py`
-* **Satellite Functions**:
-  1. `build_critic_prompt(brain_brief: str, user_query: str) -> str`: Constructs prompt instructing Pinky to output JSON containing: `quip` (a witty/satirical cartoon reaction to Brain's complexity), `summary` (a crisp 1-sentence agreed takeaway), `score` (int 1-5), and `slop_found` (bool).
+* **Satellite Responsibilities**:
+  1. `build_critic_prompt(brain_brief: str, user_query: str) -> str`: Instructs Pinky to output JSON containing: `quip` (a witty/satirical cartoon reaction to Brain's complexity), `summary` (a crisp 1-sentence agreed takeaway), `score` (int 1-5), and `slop_found` (bool).
   2. `parse_critic_payload(raw_output: str) -> Dict[str, Any]`: Parses JSON payload, strips markdown fences, validates keys, and cleans up formatting.
-  3. `format_chat_delivery(parsed_critic: Dict[str, Any]) -> str`: Returns the combined quip and summary string for out-loud delivery. Banned phrases (`"A well-crafted response"`, `"well crafted"`) are stripped or rejected.
-  4. `format_crosstalk_telemetry(parsed_critic: Dict[str, Any]) -> Dict[str, Any]`: Returns the telemetry frame for internal `CROSSTALK` broadcast.
+  3. `format_chat_delivery(parsed_critic: Dict[str, Any]) -> str`: Returns combined quip and summary string for out-loud delivery, banning robotic boilerplate (`"A well-crafted response"`).
+  4. `format_crosstalk_telemetry(parsed_critic: Dict[str, Any]) -> Dict[str, Any]`: Returns telemetry frame for internal `CROSSTALK` broadcast.
 * **Delegation Command**:
   ```bash
   python3 HomeLabAI/src/tests/delegate.py --story 61.3 \
@@ -138,9 +146,10 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
   * `HomeLabAI/src/nodes/archive_node.py`
   * `HomeLabAI/src/v5/foyer/router.py`
   * `HomeLabAI/src/nodes/pinky_node.py`
+  * `HomeLabAI/src/nodes/brain_node.py`
   * `HomeLabAI/src/tests/test_sprint61_integration.py`
 * **Scope**:
-  1. Wire `triage_gateway` into `CognitiveHub.process_query()` and `_process_turn()`.
+  1. Wire `triage_engine` into `CognitiveHub.process_query()` and `_process_turn()`.
   2. Wire `lab_dna_router` into `ArchiveNode.get_context()`.
   3. Wire `pinky_critic_persona` into `CognitiveHub.run_division_of_labor()` and `PinkyNode`.
   4. Demarcate Deep Thought operational handshakes in `router.py` (`_spawn_deep_thought_preamble`) to `type="crosstalk"`.
@@ -166,9 +175,9 @@ During our live co-pilot session review on August 25, 2026, a deep inspection of
 
 ## 🧭 Execution Order
 
-1. **Story 61.1**: Delegate `triage_gateway.py` to OpenAgent.
-2. **Story 61.2**: Delegate `lab_dna_router.py` to OpenAgent.
-3. **Story 61.3**: Delegate `pinky_critic_persona.py` to OpenAgent.
+1. **Story 61.1**: Delegate `triage_engine.py` to OpenAgent $\rightarrow$ Run ICM Handover Capture.
+2. **Story 61.2**: Delegate `lab_dna_router.py` to OpenAgent $\rightarrow$ Run ICM Handover Capture.
+3. **Story 61.3**: Delegate `pinky_critic_persona.py` to OpenAgent $\rightarrow$ Run ICM Handover Capture.
 4. **Story 61.4**: Core Orchestrator Wiring, Stream Demarcation & Integration Suite (`test_sprint61_integration.py`).
 5. **Story 61.5**: Lab Stack Restart (`acme-lab.service`) & Live-Fire WebSocket Gauntlet (`test_live_sprint61_e2e.py`).
 6. **Feature Links & Docs**: Update `FeatureTracker.md` and rebuild Field Notes.
