@@ -15,6 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-61-0-triage-dna-flow** | Phase 14 | Modular Triage Engine, Epistemic Meta-Grounding & Conversational Flow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_61_0.md](./SPRINT_PLAN_SPR_61_0.md) |
+| **spr-60-0-foundational-polish** | Phase 14 | Conversational Polish, Token-Efficient Short-Circuiting, Dynamic LoRA Gating | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_60_0.md](./SPRINT_PLAN_SPR_60_0.md) |
 | **spr-59-0-triage-good-fit** | Planning & Triage | Architectural Discipline, "Good Fit" Evaluation & Research Triage | **[ACTIVE]** [SPRINT_PLAN_SPR_59_0.md](./SPRINT_PLAN_SPR_59_0.md) |
 | **spr-58-0-relational-mesh** | Phase 13 | Relational Co-Occurrence Mesh, HyDE-Jeopardy Distillation, Tri-Field Schema & Hybrid RiR RAG | **COMPLETED & CERTIFIED** |
 | **spr-55-feat-code-mapping** | Phase 12 | FEAT/LAB Code Mapping & Link-Drift Gate | **COMPLETED** |
