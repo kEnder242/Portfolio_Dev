@@ -12667,19 +12667,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1436" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/router.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L60" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/maintenance_sweeper.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>del chunk_timestamps[buf_key] [LAB-095] TTL Sweeper: Clean orphaned pending_chunks keys inactive &gt; 30 seconds now_ts = time.time() stale_keys = [k for k, ts in chunk_timestamps.items() if now_ts - ts &gt; 30]</p>
+                    <p>Safely pops stale entries from <code>pending_chunks</code> and <code>chunk_timestamps</code> without KeyError.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>src/v5/foyer/router.py</code> at line 1436.</p>
+                    <p><code>MaintenanceSweeper.prune_ttl_buffer()</code> in <code>src/v5/foyer/maintenance_sweeper.py</code> at line 60.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -12699,19 +12699,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1511" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/router.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L48" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/maintenance_sweeper.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>continue [LAB-096] Heap Scavenger: Periodic garbage collection every 60s collected = gc.collect() if collected &gt; 0:</p>
+                    <p>Executes <code>gc.collect()</code> periodically and logs collected unreachable objects.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>src/v5/foyer/router.py</code> at line 1511.</p>
+                    <p><code>MaintenanceSweeper.run_heap_scavenger()</code> in <code>src/v5/foyer/maintenance_sweeper.py</code> at line 48.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -12731,19 +12731,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1489" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/router.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L16" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/maintenance_sweeper.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>while True: try: [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3) thermal_halt = False</p>
+                    <p>Reads sysfs thermal zones, detects when CPU exceeds 78°C threshold, and triggers 15s cooldown sleep.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>src/v5/foyer/router.py</code> at line 1489.</p>
+                    <p><code>MaintenanceSweeper.check_cpu_thermal_throttle()</code> in <code>src/v5/foyer/maintenance_sweeper.py</code> at line 16.</p>
                 </div>
             </div>     </div>
                             </details>

@@ -2457,21 +2457,21 @@
 
 ## [LAB-095] TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds
 **Status:** ACTIVE
-**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1436) — TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds.
-**Logic:** del chunk_timestamps[buf_key] [LAB-095] TTL Sweeper: Clean orphaned pending_chunks keys inactive > 30 seconds now_ts = time.time() stale_keys = [k for k, ts in chunk_timestamps.items() if now_ts - ts > 30]
-**Mechanism:** `src/v5/foyer/router.py` at line 1436.
+**Code:** [src/v5/foyer/maintenance_sweeper.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L60) — TTL Sweeper: Clean orphaned pending_chunks keys.
+**Logic:** Safely pops stale entries from `pending_chunks` and `chunk_timestamps` without KeyError.
+**Mechanism:** `MaintenanceSweeper.prune_ttl_buffer()` in `src/v5/foyer/maintenance_sweeper.py` at line 60.
 
 ## [LAB-096] Heap Scavenger: Periodic garbage collection every 60s
 **Status:** ACTIVE
-**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1511) — Heap Scavenger: Periodic garbage collection every 60s.
-**Logic:** continue [LAB-096] Heap Scavenger: Periodic garbage collection every 60s collected = gc.collect() if collected > 0:
-**Mechanism:** `src/v5/foyer/router.py` at line 1511.
+**Code:** [src/v5/foyer/maintenance_sweeper.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L48) — Heap Scavenger: Periodic garbage collection.
+**Logic:** Executes `gc.collect()` periodically and logs collected unreachable objects.
+**Mechanism:** `MaintenanceSweeper.run_heap_scavenger()` in `src/v5/foyer/maintenance_sweeper.py` at line 48.
 
 ## [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3)
 **Status:** ACTIVE
-**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1489) — Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3).
-**Logic:** while True: try: [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3) thermal_halt = False
-**Mechanism:** `src/v5/foyer/router.py` at line 1489.
+**Code:** [src/v5/foyer/maintenance_sweeper.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/maintenance_sweeper.py#L16) — Thermal Guard: Monitor CPU package thermal zones.
+**Logic:** Reads sysfs thermal zones, detects when CPU exceeds 78°C threshold, and triggers 15s cooldown sleep.
+**Mechanism:** `MaintenanceSweeper.check_cpu_thermal_throttle()` in `src/v5/foyer/maintenance_sweeper.py` at line 16.
 
 ## [LAB-109] Silicon Power Capping & Hardware Surge Protection
 **Status:** DESIGN
