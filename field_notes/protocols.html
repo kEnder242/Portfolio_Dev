@@ -931,6 +931,44 @@ Emit task() tool calls to delegate implementation and verification work:
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-035</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">The Fourth Wall Feedback Protocol (Semantic Critique & Validation Ledger Auto-Population)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Objective</strong>: Transform user natural language disagreements and conversational corrections into instant, permanent evaluation failure tests and rubric constraints without brittle UI vote buttons or rigid keyword matches.</p>
+<ol>
+<li><strong>The Language-First Mandate</strong>:</li>
+<li>The user is the ultimate domain expert and oracle. When the user speaks to the "fourth wall" or expresses disagreement (e.g., <em>"Wait, that's wrong, RAPL MSR 0x610 is PKG limit, not DRAM"</em> or <em>"Pinky, note that your triage missed the AER register"</em>), the system must intercept this semantically rather than treating it as a new ungrounded topic.</li>
+<li>
+<p><strong>BKM-015 Anti-Hardcoding Rule</strong>: Intent detection for user critiques MUST use semantic vector classification (<code>GROUNDING_CORRECTION</code> intent), never rigid keyword string matching.</p>
+</li>
+<li>
+<p><strong>In-Session Behavioral Flow (Interactive Refinement Prompt)</strong>:</p>
+</li>
+<li><strong>Acknowledgment</strong>: Pinky acknowledges the correction in-character with high brevity (e.g. <em>"Narf! Got it, MSR 0x610 is the PKG energy limit."</em>).</li>
+<li><strong>Refinement Inquiry</strong>: Pinky asks one targeted follow-up question to clarify boundary conditions, register masks, or reproduction steps (e.g. <em>"Should I clamp the default power limit window to 28 seconds for Haswell?"</em>).</li>
+<li>
+<p><strong>No Defensiveness</strong>: The agent must never argue, hallucinate justifications, or provide conversational filler when corrected.</p>
+</li>
+<li>
+<p><strong>Downstream Ledger &amp; Distillation Automation</strong>:</p>
+</li>
+<li><strong>Automated Failure Record</strong>: Write an instant <code>FAIL</code> entry to <code>Portfolio_Dev/field_notes/data/validation_ledger.jsonl</code>:
+     <code>json
+     {
+       "timestamp": "ISO-8601",
+       "query": "&lt;original_user_query&gt;",
+       "verdict": "FAIL",
+       "flawed_output": "&lt;previous_assistant_response&gt;",
+       "ground_truth": "&lt;user_correction_text&gt;",
+       "source": "CO_PILOT_FOURTH_WALL"
+     }</code></li>
+<li><strong>Rubric Tuning (Netflix Pattern)</strong>: Automatically append the user's assertion as a ground-truth boolean constraint to the Universal Epistemic Evaluator.</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
