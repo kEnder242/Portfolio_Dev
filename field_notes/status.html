@@ -1404,21 +1404,23 @@
                 
                 // 3. MassScan Progress Panel
                 const src = (alert.source || '').toLowerCase();
-                if (src === 'massscan') {
+                if (src === 'massscan' || src.includes('mass_scan') || src.includes('scanner')) {
                     const msg = alert.message || '';
-                    const epochMatch = msg.match(/Epoch\s+(\d+)\/(\d+)/i);
-                    const stepMatch = msg.match(/Step\s+(\d+)\/(\d+)/i);
+                    const epochMatch = msg.match(/Epoch\s+(\d+)(?:\/(\d+))?/i);
+                    const stepMatch = msg.match(/Step\s+(\d+)(?:\/(\d+))?/i);
                     const gemsMatch = msg.match(/gems refined[=:]?\s*(\d+)/i);
                     const rankMatch = msg.match(/rank upgrades?[=:]?\s*(\d+)/i);
                     const rankDetailMatch = msg.match(/(\d+)\s*[→➡]\s*(\d+)/);
                     
                     let epochHtml = '', stepHtml = '', gemsHtml = '', rankHtml = '';
                     if (epochMatch) {
-                        const pct = ((parseInt(epochMatch[1]) / parseInt(epochMatch[2])) * 100).toFixed(0);
-                        epochHtml = `<div><strong>Epoch:</strong> ${epochMatch[1]}/${epochMatch[2]} (${pct}%) <progress value="${pct}" max="100" style="width:100px; height:6px;"></progress></div>`;
+                        const cur = epochMatch[1];
+                        const tot = epochMatch[2] || cur;
+                        const pct = epochMatch[2] ? ((parseInt(cur) / parseInt(tot)) * 100).toFixed(0) : '100';
+                        epochHtml = `<div><strong>Epoch:</strong> ${cur}${epochMatch[2] ? `/${tot} (${pct}%)` : ' Complete'}</div>`;
                     }
                     if (stepMatch) {
-                        stepHtml = `<div><strong>Step:</strong> ${stepMatch[1]}/${stepMatch[2]}</div>`;
+                        stepHtml = `<div><strong>Step:</strong> ${stepMatch[1]}${stepMatch[2] ? `/${stepMatch[2]}` : ''}</div>`;
                     }
                     if (gemsMatch) {
                         gemsHtml = `<div><strong>Gems Refined:</strong> ${gemsMatch[1]}</div>`;
@@ -1427,8 +1429,41 @@
                         const detail = rankDetailMatch ? ` <span style="color:#28a745;">↑ ${rankDetailMatch[1]} → ${rankDetailMatch[2]}</span>` : '';
                         rankHtml = `<div><strong>Rank Upgrades:</strong> ${rankMatch[1]}${detail}</div>`;
                     }
-                    
-                    term.innerHTML = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><strong style="color:var(--accent-color);">[MASSSCAN PROGRESS]</strong>${epochHtml ? `<div style="margin-top:2px;">${epochHtml}</div>` : ''}${stepHtml}${gemsHtml}${rankHtml}</div>`;
+
+                    // Fetch live status.json and queue.json to enrich diagnostic context
+                    let statusData = null, queueCount = 0;
+                    try {
+                        const rStatus = await fetch('data/status.json?t=' + Date.now());
+                        if (rStatus.ok) statusData = await rStatus.json();
+                        const rQueue = await fetch('data/queue.json?t=' + Date.now());
+                        if (rQueue.ok) {
+                            const q = await rQueue.json();
+                            queueCount = Array.isArray(q) ? q.length : 0;
+                        }
+                    } catch (e) {}
+
+                    let liveHtml = '';
+                    if (statusData) {
+                        const stateColor = statusData.status === 'ONLINE' || statusData.status === 'IDLE' ? '#28a745' : (statusData.status === 'BUSY' ? '#58a6ff' : '#ffcc00');
+                        liveHtml = `
+                            <div style="margin-top:6px; padding-top:6px; border-top:1px dashed #30363d;">
+                                <div><strong>Scanner State:</strong> <span style="color:${stateColor}; font-weight:bold;">${statusData.status || 'IDLE'}</span> (${statusData.engine || 'LOCAL'})</div>
+                                <div><strong>Current Activity:</strong> ${statusData.message || 'Dormant / Idle'}</div>
+                                ${statusData.last_file ? `<div><strong>Target File:</strong> <span style="color:#8b949e;">${statusData.last_file}</span></div>` : ''}
+                                <div><strong>Archive Footprint:</strong> <span style="color:var(--accent-color); font-weight:bold;">${statusData.total_events || 0}</span> events synthesized across 18 years</div>
+                                <div><strong>Queue Depth:</strong> <span style="color:${queueCount > 0 ? '#ffcc00' : '#28a745'};">${queueCount}</span> pending chunks in queue</div>
+                            </div>
+                        `;
+                    }
+
+                    term.innerHTML = `
+                        <div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;">
+                            <strong style="color:var(--accent-color);">[MASSSCAN DIAGNOSTICS & PROGRESS]</strong>
+                            <div style="margin-top:2px; color:#fff;"><strong>Message:</strong> "${msg}"</div>
+                            ${epochHtml}${stepHtml}${gemsHtml}${rankHtml}
+                            ${liveHtml}
+                        </div>
+                    `;
                     term.style.display = 'block';
                     return;
                 }
