@@ -2490,3 +2490,39 @@
 **Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L180) — Post-Maintenance Re-ignition.
 **Logic:** Guarantees Foyer and vLLM are automatically re-ignited to OPERATIONAL post 05:40 AM dreaming cycle.
 **Mechanism:** `re_ignite_vllm()` called unconditionally at conclusion of nightly forge orchestration.
+
+## [FEAT-454] Universal Epistemic 5-Question Evaluation Battery
+**Status:** ACTIVE
+**Code:** [src/curator/scan_curator.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/scan_curator.py#L25) — Universal Epistemic 5-Question Evaluation Battery.
+**Logic:** Replaces subjective 1-5 integer scoring with 5 deterministic boolean checks (exact identifiers, reproduction recipe, cause-and-effect isolation, actionable BKM, zero fluff).
+**Mechanism:** `evaluate_gem_quality()` calculates deterministic Rank = min(5, 1 + sum(bool)). Verified via `src/tests/test_binary_evaluator_unit.py`.
+
+## [FEAT-455] AST Context Compiler for Agent Context Compaction
+**Status:** ACTIVE
+**Code:** [src/compiler/context_compiler.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/compiler/context_compiler.py#L30) — AST Context Compiler.
+**Logic:** Compiles Python codebases into structured AST symbol graphs and cross-module dependency trees, stripping implementation bodies to achieve >50% token compaction.
+**Mechanism:** `ContextCompiler` using stdlib `ast` in `src/compiler/context_compiler.py`. Verified via `src/tests/test_context_compiler.py`.
+
+## [FEAT-456] Language-First Co-Pilot Feedback Loop (The Fourth Wall / BKM-035)
+**Status:** ACTIVE
+**Code:** [src/logic/feedback_interceptor.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/feedback_interceptor.py#L22) — Feedback Interceptor.
+**Logic:** Intercepts conversational corrections semantically, auto-populates `validation_ledger.jsonl` with FAIL records and user ground-truth, and returns in-character refinement follow-ups.
+**Mechanism:** `FeedbackInterceptor` wired into `CognitiveHub.process_query()`. Verified via `src/tests/test_feedback_interceptor.py`.
+
+## [FEAT-457] Single-Layer Speculative Context Pre-fetching
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1081) — Speculative Context Pre-fetching.
+**Logic:** Pre-fetches RAG context in background during Turn 1 streaming; consumes instantly if interest >0.5 or cleanly preempts without GPU penalty.
+**Mechanism:** Async background task in `_process_turn()` and consumption in `_run_brain_leg()`. Verified via `src/tests/test_interest_speculative_prefetch.py`.
+
+## [FEAT-458] Conversational WYWO & Floating Validation Oracle
+**Status:** ACTIVE
+**Code:** [src/logic/floating_oracle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/floating_oracle.py#L42) — Floating Validation Oracle.
+**Logic:** Assembles ambient validation scars, mass-scan milestones, and subconscious dreams into a floating candidate pool for organic, temperature-steered conversation turns.
+**Mechanism:** `FloatingOracle` wired into `CognitiveHub._process_turn()`. Verified via `src/tests/test_floating_oracle.py`.
+
+## [LAB-110] Permanent Daytime Node Residency
+**Status:** ACTIVE
+**Code:** [config/infrastructure.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/infrastructure.json#L2) — Permanent Daytime Node Residency.
+**Logic:** Disables daytime idle timeouts (idle_eviction_enabled: false) to keep resident nodes and AWQ models permanently warm in memory, reserving VRAM flush exclusively for 2:00 AM maintenance.
+**Mechanism:** Configuration in `infrastructure.json` honored by Foyer router.
