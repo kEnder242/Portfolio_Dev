@@ -12769,13 +12769,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Enforce 180W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.</p>
+                    <p>Enforce 165W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>nvidia-smi -pl 180</code> hardware limit check during pre-flight in <code>nightly_forge.py</code>.</p>
+                    <p><code>nvidia-smi -pl 165</code> hardware limit check during pre-flight in <code>nightly_forge.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -12789,7 +12789,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Unsloth Gradient Smoothing & Transient Mitigation
+                                    Unsloth Gradient Smoothing & Hardware Pacing
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -12801,13 +12801,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Micro-batching (batch_size=1, grad_accum=4, warmup=5, max_seq_length=1536) to prevent instantaneous tensor saturation.</p>
+                    <p>HardwarePacingCallback (50ms inter-step delay), micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Unsloth Trainer argument configuration in <code>src/forge/train_expert.py</code>.</p>
+                    <p>Unsloth Trainer argument configuration and callback in <code>src/forge/train_expert.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
