@@ -2472,3 +2472,21 @@
 **Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1489) — Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3).
 **Logic:** while True: try: [LAB-099] Thermal Guard: Monitor CPU package thermal zones (thermal_zone0 / thermal_zone3) thermal_halt = False
 **Mechanism:** `src/v5/foyer/router.py` at line 1489.
+
+## [LAB-109] Silicon Power Capping & Hardware Surge Protection
+**Status:** DESIGN
+**Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L30) — Silicon Power Capping.
+**Logic:** Enforce 180W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.
+**Mechanism:** `nvidia-smi -pl 180` hardware limit check during pre-flight in `nightly_forge.py`.
+
+## [FEAT-452] Unsloth Gradient Smoothing & Transient Mitigation
+**Status:** DESIGN
+**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L20) — Gradient Smoothing.
+**Logic:** Micro-batching (batch_size=1, grad_accum=4, warmup=5, max_seq_length=1536) to prevent instantaneous tensor saturation.
+**Mechanism:** Unsloth Trainer argument configuration in `src/forge/train_expert.py`.
+
+## [FEAT-453] Post-Maintenance Autonomous Morning Re-ignition
+**Status:** DESIGN
+**Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L180) — Post-Maintenance Re-ignition.
+**Logic:** Guarantees Foyer and vLLM are automatically re-ignited to OPERATIONAL post 05:40 AM dreaming cycle.
+**Mechanism:** `re_ignite_vllm()` called unconditionally at conclusion of nightly forge orchestration.

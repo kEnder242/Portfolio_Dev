@@ -193,6 +193,24 @@ Below is the true data lifecycle tracing how unstructured historical notes trans
 * **Engine Choice**: **`ripgrep` (`grep`)** is chosen over `peek_related_notes` because it returns raw evidence and surrounding lines in $<5\text{ms}$ with zero intermediate JSON abstraction latency.
 * **Target Files**: `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/v5/foyer/router.py`.
 
+### Story 58.3: Silicon Power Capping & Hardware Surge Protection [LAB-109]
+* **Goal**: Prevent hardware PSU over-current trips and voltage sag on the Z87 host during heavy backward passes by capping RTX 2080 Ti TDP to 180W.
+* **Mechanism**: Enforce `sudo nvidia-smi -pl 180` at system startup via `set_gpu_power_cap.service` and verify power cap in `nightly_forge.py` pre-flight checks.
+* **Target Files**: `HomeLabAI/src/infra/nightly_forge.py`, `HomeLabAI/config/systemd/gpu-power-limit.service`.
+* **Delegation Verification**: Probe `nvidia-smi -q -d POWER` to confirm power limit is clamped to 180W.
+
+### Story 58.4: Unsloth Gradient Smoothing & Transient Mitigation [FEAT-452]
+* **Goal**: Smooth out GPU tensor core power spikes and eliminate abrupt $di/dt$ current surges during Unsloth LoRA fine-tuning.
+* **Mechanism**: Update `HomeLabAI/src/forge/train_expert.py` to use `per_device_train_batch_size = 1`, `gradient_accumulation_steps = 4`, `warmup_steps = 5`, and clamp `max_seq_length = 1536`.
+* **Target Files**: `HomeLabAI/src/forge/train_expert.py`, `HomeLabAI/src/tests/test_forge_distillation_unit.py`.
+* **Delegation Verification**: Execute dry-run with 5 steps; verify zero process faults, zero VRAM spikes, and clean weight adapter emission.
+
+### Story 58.5: Post-Maintenance Morning Autonomous Re-ignition [FEAT-453]
+* **Goal**: Prevent multi-day lab dormancy by ensuring the Foyer and vLLM are automatically re-ignited to `OPERATIONAL` state following the 05:00 AM – 05:40 AM mass scan and dreaming sweep.
+* **Mechanism**: Add an explicit final re-ignition and health check at the end of `nightly_forge.py` to wake the Foyer and leave inference nodes active for morning sessions.
+* **Target Files**: `HomeLabAI/src/infra/nightly_forge.py`, `HomeLabAI/src/tests/test_nightly_forge_shakedown.py`.
+* **Delegation Verification**: Unit test asserting `re_ignite_vllm()` is called post-dreaming and verifies HTTP 200 from `/status_update`.
+
 ---
 
 ## 📝 Sprint 58 Retrospective: Cumulative Replay vs. Continual Drift & Gem Evolution
