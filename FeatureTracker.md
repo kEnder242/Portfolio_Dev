@@ -2554,3 +2554,10 @@
 **Logic:** Replaces robotic boilerplate praise (`"A well-crafted response..."`) with a dual-output critic phase: 1) a witty, satirical Pinky cartoon quip reacting to Brain's complexity, and 2) a concise 1-sentence technical summary agreement. Demarcates raw evaluation JSON to `CROSSTALK` while streaming the quip/summary to `CHAT`.
 **Rationale:** Restores authentic Pinky & The Brain cartoon dynamics while delivering high-value conversational takeaways.
 **Mechanism:** `PinkyNode` critic prompt, `CognitiveHub.run_division_of_labor()`, and `test_pinky_critic.py`.
+
+## [FEAT-471] Dynamic Speaker Registry & Prefix Sanitization Gate
+**Status:** DESIGN (Sprint 61)
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L700) — Dynamic Speaker Registry & Sanitizer.
+**Logic:** Compiles a dynamic runtime regex pattern from registered active personas (`Pinky`, `Brain`, `Deep Thought`, `Archive`, `Lab`, `User`, `Jason`, `Assistant`, `System`, `Me`) to strip nested and dirty leading speaker/role prefixes from generated LLM outputs before WebSocket broadcast.
+**Rationale:** Eliminates hardcoded regex maintenance debt and prevents UI name stacking thrash (`Pinky: [ASSISTANT: Pinky]...`) while scaling automatically as new agent personas are added to the lab.
+**Mechanism:** `SpeakerRegistry` in `src/logic/triage_engine.py` and `test_triage_engine.py`.
