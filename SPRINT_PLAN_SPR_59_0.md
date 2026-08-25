@@ -121,9 +121,10 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/curator/scan_curator.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (Lines ~120–180: `evaluate_gem_quality()`)
   * [`Portfolio_Dev/field_notes/data/validation_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/validation_ledger.jsonl)
-* **Exact Mechanism**:
-  1. Replace 1–5 scalar integer prompts with a dictionary of 5 atomic boolean assertions (`has_reproducible_commands`, `has_verifiable_registers_or_ports`, `has_isolated_cause_and_effect`, `is_syntactically_valid_bkm`, `has_zero_generic_filler`).
-  2. Compute Rank deterministically: $\text{Rank} = 1 + \sum(\text{True assertions})$.
+* **Finalized Design (`/grill-me`)**:
+  * **Domain-Adaptive Batteries**: Evaluator uses category-specific batteries (e.g. Silicon Validation vs. Agent Architecture vs. Platform Telemetry).
+  * **Self-Identifying Evaluator Prompt**: Model outputs structured JSON declaring domain first: `{"domain": "SILICON_VALIDATION", "checks": {"has_reproducible_commands": bool, "has_verifiable_registers_or_ports": bool, "has_isolated_cause_and_effect": bool, "is_syntactically_valid_bkm": bool, "has_zero_generic_filler": bool}}`.
+  * **Deterministic Scoring**: $\text{Rank} = 1 + \sum(\text{True assertions})$.
 * **Verification**: `test_binary_evaluator_unit.py` proving 0% score variance across 20 repeated runs on identical synthetic gems.
 
 ### **Story 59.2: [FEAT-455] Context Compiler for Agent Context Compaction**
@@ -131,9 +132,8 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/compiler/context_compiler.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Module)
   * [`HomeLabAI/src/tests/delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py#L250)
-* **Exact Mechanism**:
-  1. Use Python `ast` and `ripgrep` to extract module signatures, class hierarchies, docstrings, and function entry points into a compacted AST symbol graph.
-  2. Compact multi-file workspaces into structured symbol skeletons before injecting into OpenAgent / Sisyphus prompts.
+* **Finalized Design (`/grill-me`)**:
+  * **Call-Graph & Cross-Module Hierarchy**: AST extracts symbol signatures, argument types, and docstrings, combined with ripgrep-extracted caller/dependency graphs across files, stripping internal function bodies to achieve $>60\%$ token compaction with 100% symbol interface fidelity.
 * **Verification**: Benchmark comparing raw context tokens vs. compiled AST context tokens demonstrating $>50\%$ token savings with 100% symbol recall.
 
 ### **Story 59.3: [FEAT-456] Language-First Co-Pilot Feedback Loop (The Fourth Wall / BKM-035)**
@@ -141,9 +141,9 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L930) (Lines ~930–980: `_parse_intent()`, `process_query()`)
   * [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) (Register `BKM-035`)
-* **Exact Mechanism**:
-  1. In `_parse_intent()`, add semantic vector classification for `GROUNDING_CORRECTION` intent without hardcoded regex.
-  2. In `process_query()`, intercept `GROUNDING_CORRECTION` to capture previous response + user correction and auto-append a `FAIL` record to `validation_ledger.jsonl` with `"kender_audit": {"user_correction": ground_truth}`.
+* **Finalized Design (`/grill-me`)**:
+  * **Intent Interception**: In `_parse_intent()`, classify `GROUNDING_CORRECTION` intent via semantic vector classification.
+  * **Interactive Refinement Prompt**: Pinky acknowledges the correction in-character, logs a `FAIL` entry to `validation_ledger.jsonl`, and immediately asks one targeted follow-up question to clarify boundary conditions or register masks.
 * **Verification**: `test_copilot_feedback_loop.py` verifying conversational corrections auto-populate `validation_ledger.jsonl`.
 
 ### **Story 59.4: [FEAT-457] Single-Layer Speculative Context Pre-fetching & Interest Preemption**
@@ -151,10 +151,10 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1081) (Lines 1081–1107, 1515–1555)
   * [`HomeLabAI/src/tests/test_interest_speculative_prefetch.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_interest_speculative_prefetch.py)
-* **Exact Mechanism**:
-  1. Turn 1 (Pinky) immediately sparks asynchronous background `_fetch_rag_context()`.
-  2. If interest $>0.5$, Turn 2 (Brain) starts instantly with pre-fetched context in memory.
-  3. If interest $\le 0.5$, prefetch task is cleanly cancelled/preempted. Enforced single-layer cascade (Brain does not prefetch Deep Thought).
+* **Finalized Design (`/grill-me`)**:
+  * Turn 1 (Pinky) immediately sparks asynchronous background `_fetch_rag_context()`.
+  * If interest $>0.5$, Turn 2 (Brain) starts instantly with pre-fetched context in memory.
+  * If interest $\le 0.5$, prefetch task is cleanly cancelled/preempted. Enforced single-layer cascade (Brain does not prefetch Deep Thought).
 * **Verification**: `test_interest_speculative_prefetch.py` passed 2/2 unit tests (0.31s).
 
 ### **Story 59.5: [FEAT-458] Conversational WYWO & Floating Validation Oracle (Anti-Embellishment Corollary)**
@@ -162,9 +162,9 @@ This section records the exact user insights, engineering rationales, and design
 * **Target Files**:
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1040)
   * [`HomeLabAI/src/nodes/pinky_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI)
-* **Exact Mechanism**:
-  1. Helper `_get_floating_anchors()` extracts top unresolved `FAIL` from `validation_ledger.jsonl` and top Diamond Gem from `nightly_dialogue.json`.
-  2. For low-density/greeting turns, inject `[FLOATING_ANCHOR_POOL]` so Pinky conversationally floats an authentic technical question rather than emitting generic assistant filler.
+* **Finalized Design (`/grill-me`)**:
+  * **Weighted Random Wheel**: Helper `_get_floating_anchors()` rolls a weighted distribution across Recent Validation Scars (50%), Mass Scan Gem Milestones from `scan_state.json` (30%), and Overnight Dream Reflections from `nightly_dialogue.json` (20%).
+  * For low-density/greeting turns, inject `[FLOATING_ANCHOR_POOL]` so Pinky conversationally floats an authentic technical question rather than emitting generic assistant filler.
 * **Verification**: Integration test proving conversational topic flotation on queries like `"hi"` or `"what's up"`.
 
 ### **Story 59.6: [LAB-110] Permanent Daytime Node Residency & Hibernation Plumbing Preservation**
