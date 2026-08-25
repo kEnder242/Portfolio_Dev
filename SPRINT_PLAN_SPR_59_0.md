@@ -141,14 +141,16 @@ This section records the exact user insights, engineering rationales, and design
 * **Verification**: Benchmark comparing raw context tokens vs. compiled AST context tokens demonstrating $>50\%$ token savings with 100% symbol recall.
 
 ### **Story 59.3: [FEAT-456] Language-First Co-Pilot Feedback Loop (The Fourth Wall / BKM-035)**
-* **Status**: 🔲 **TODO**
+* **Status**: 🔲 **TODO (Delegation Ready)**
 * **Target Files**:
-  * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L930) (Lines ~930–980: `_parse_intent()`, `process_query()`)
-  * [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) (Register `BKM-035`)
+  * [`HomeLabAI/src/logic/feedback_interceptor.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Modular Satellite Service)
+  * [`HomeLabAI/src/tests/test_feedback_interceptor.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Test Suite)
+  * [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) (`BKM-035` Registered)
 * **Finalized Design**:
-  * **Intent Interception**: In `_parse_intent()`, classify `GROUNDING_CORRECTION` intent via semantic vector classification.
-  * **Interactive Refinement Prompt**: Pinky acknowledges the correction in-character, logs a `FAIL` entry to `validation_ledger.jsonl`, and immediately asks one targeted follow-up question to clarify boundary conditions or register masks.
-* **Verification**: `test_copilot_feedback_loop.py` verifying conversational corrections auto-populate `validation_ledger.jsonl`.
+  * **Modular Satellite Service**: Extract critique parsing and failure ledger logging into `feedback_interceptor.py` to allow isolated OpenAgent delegation.
+  * **Semantic Intent Interception**: Classifies `GROUNDING_CORRECTION` intent without hardcoded regex (BKM-015 compliant).
+  * **Interactive Refinement Prompt**: Pinky acknowledges the correction in-character, appends a `FAIL` record to `validation_ledger.jsonl`, and immediately asks one targeted follow-up question to clarify boundary conditions or register masks.
+* **Verification**: `test_feedback_interceptor.py` verifying conversational corrections auto-populate `validation_ledger.jsonl` and return structured refinement prompts.
 
 ### **Story 59.4: [FEAT-457] Single-Layer Speculative Context Pre-fetching & Interest Preemption**
 * **Status**: ✅ **COMPLETED & CERTIFIED**
@@ -162,17 +164,14 @@ This section records the exact user insights, engineering rationales, and design
 * **Verification**: `test_interest_speculative_prefetch.py` passed 2/2 unit tests (0.31s).
 
 ### **Story 59.5: [FEAT-458] Conversational WYWO & Floating Validation Oracle (Anti-Embellishment Corollary)**
-* **Status**: 🔲 **TODO**
+* **Status**: 🔲 **TODO (Delegation Ready)**
 * **Target Files**:
-  * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1040)
-  * [`HomeLabAI/src/nodes/pinky_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI)
+  * [`HomeLabAI/src/logic/floating_oracle.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Modular Satellite Service)
+  * [`HomeLabAI/src/tests/test_floating_oracle.py`](file:///home/jallred/Dev_Lab/HomeLabAI) (New Test Suite)
 * **Finalized Design**:
-  * **LLM-Native Candidate Selection**: Injects a 3-item `[FLOATING_CANDIDATE_POOL]` containing:
-    1. Latest `[VALIDATION_SCAR]` from `validation_ledger.jsonl`.
-    2. Latest `[MASS_SCAN_PROGRESS]` from `scan_state.json`.
-    3. Latest `[SUBCONSCIOUS_DREAM]` from `nightly_dialogue.json`.
+  * **Modular Satellite Service**: Extract candidate harvesting into `floating_oracle.py` returning `[FLOATING_CANDIDATE_POOL]` from `validation_ledger.jsonl`, `scan_state.json`, and `nightly_dialogue.json`.
   * **Zero Hardcoding**: Evaluates semantic `GREETING` or `SHALLOW_INQUIRY` intent (no hardcoded string matches, BKM-015 compliant). Pinky's natural temperature ($T=0.7$) and prompt context steer topic selection organically.
-* **Verification**: Integration test proving conversational topic flotation on semantic greeting turns.
+* **Verification**: `test_floating_oracle.py` asserting accurate candidate harvesting and prompt formatting.
 
 ### **Story 59.6: [LAB-110] Permanent Daytime Node Residency & Hibernation Plumbing Preservation**
 * **Status**: 🔲 **TODO**
