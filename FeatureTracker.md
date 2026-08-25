@@ -2476,14 +2476,14 @@
 ## [LAB-109] Silicon Power Capping & Hardware Surge Protection
 **Status:** DESIGN
 **Code:** [src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L30) — Silicon Power Capping.
-**Logic:** Enforce 180W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.
-**Mechanism:** `nvidia-smi -pl 180` hardware limit check during pre-flight in `nightly_forge.py`.
+**Logic:** Enforce 165W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.
+**Mechanism:** `nvidia-smi -pl 165` hardware limit check during pre-flight in `nightly_forge.py`.
 
-## [FEAT-452] Unsloth Gradient Smoothing & Transient Mitigation
+## [FEAT-452] Unsloth Gradient Smoothing & Hardware Pacing
 **Status:** DESIGN
-**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L20) — Gradient Smoothing.
-**Logic:** Micro-batching (batch_size=1, grad_accum=4, warmup=5, max_seq_length=1536) to prevent instantaneous tensor saturation.
-**Mechanism:** Unsloth Trainer argument configuration in `src/forge/train_expert.py`.
+**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L20) — Hardware Pacing & Smoothing.
+**Logic:** HardwarePacingCallback (50ms inter-step delay), micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts.
+**Mechanism:** Unsloth Trainer argument configuration and callback in `src/forge/train_expert.py`.
 
 ## [FEAT-453] Post-Maintenance Autonomous Morning Re-ignition
 **Status:** DESIGN
