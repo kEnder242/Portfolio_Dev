@@ -2526,3 +2526,31 @@
 **Code:** [config/infrastructure.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/infrastructure.json#L2) — Permanent Daytime Node Residency.
 **Logic:** Disables daytime idle timeouts (idle_eviction_enabled: false) to keep resident nodes and AWQ models permanently warm in memory, reserving VRAM flush exclusively for 2:00 AM maintenance.
 **Mechanism:** Configuration in `infrastructure.json` honored by Foyer router.
+
+## [FEAT-467] Negative RAG Gateway: Zero Context Fallback & HyDE Template Scrubber
+**Status:** DESIGN (Sprint 61)
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L800) — Negative RAG Gateway & HyDE Scrubber.
+**Logic:** Implements the "Zero Context > Default Context" rule. When intent or domain classification is ambiguous, sets `hyde_vector_text: ""` and instructs `ArchiveNode` to return empty context rather than defaulting to career validation notes. Automatically scrubs literal angle brackets (`<...>`) and few-shot template placeholders before vector search.
+**Rationale:** Prevents models from hallucinating 2018 Intel Federal PAE history when answering general conversational questions.
+**Mechanism:** `CognitiveHub._process_turn()`, `ArchiveNode.get_context()`, and `test_triage_meta_vibe.py`.
+
+## [FEAT-468] Multi-Agent Speaker Demarcation & Echo-Chamber Shield
+**Status:** DESIGN (Sprint 61)
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L700) — Multi-Agent Speaker Demarcation.
+**Logic:** Tags conversation history turns with structured multi-agent speaker roles (`[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]`). Gates Triage intent extraction to process exclusively the latest `[USER]` turn, while preserving self-awareness of what Pinky and Brain stated in previous turns.
+**Rationale:** Eliminates echo-chamber feedback loops where the system mistakes Pinky's previous turn (*"vital signs"*) for the user's intent without sacrificing conversational memory.
+**Mechanism:** `CognitiveHub._process_turn()`, `triage_engine`, and `test_triage_cadence.py`.
+
+## [FEAT-469] Epistemic Meta-Grounding: Feature DNA & Lab Infrastructure Lexicon
+**Status:** DESIGN (Sprint 61)
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L783) — Epistemic Meta-Grounding.
+**Logic:** Grafts Acme Lab's internal live catalog (`feature_dna` and `lab_infrastructure`) into the RAG routing priority when `vibe="META"` or `domain="lab_internal"` is detected. Explicitly excludes `behavioral_dna` (which is reserved for AGY orchestrator development) and suppresses `career_ledger` during system operations.
+**Rationale:** Allows Pinky and Brain to discuss live software modules (`AudioPipeline`, `MaintenanceSweeper`, `OverrideParser`) as active lab operators without roleplaying development commit hooks.
+**Mechanism:** `ArchiveNode._query_multi_collections()` and `test_archive_lab_dna_routing.py`.
+
+## [FEAT-470] Cartoon Roleplay Critic & Actionable Technical Summary
+**Status:** DESIGN (Sprint 61)
+**Code:** [src/nodes/pinky_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/pinky_node.py#L1) — Cartoon Roleplay Critic & Summary.
+**Logic:** Replaces robotic boilerplate praise (`"A well-crafted response..."`) with a dual-output critic phase: 1) a witty, satirical Pinky cartoon quip reacting to Brain's complexity, and 2) a concise 1-sentence technical summary agreement. Demarcates raw evaluation JSON to `CROSSTALK` while streaming the quip/summary to `CHAT`.
+**Rationale:** Restores authentic Pinky & The Brain cartoon dynamics while delivering high-value conversational takeaways.
+**Mechanism:** `PinkyNode` critic prompt, `CognitiveHub.run_division_of_labor()`, and `test_pinky_critic.py`.
