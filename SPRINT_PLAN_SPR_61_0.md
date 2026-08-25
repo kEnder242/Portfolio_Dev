@@ -3,38 +3,36 @@
 **Sprint:** 61.0  
 **Date:** August 25, 2026  
 **Status:** PLANNING & ARCHITECTURAL REVIEW  
-**Theme:** *Eliminating False Defaults, Restoring Pinky/Brain Persona Dynamics, and Conversational Cadence*
+**Theme:** *Eliminating False Defaults ("Zero Context > Default Context"), Speaker Demarcation, and Cartoon/Summary Persona Dynamics*
 
 ---
 
-## 🧭 Executive Summary & The Core Root Cause: "Defaults = Bad Assumptions"
+## 🧭 Executive Summary & Core Architectural Principles
 
-During our live co-pilot session review on August 25, 2026, a deep inspection of both the conversational turns and raw evaluation logs revealed why the system thrashed into irrelevant career history and robotic loops:
+During our live co-pilot session review on August 25, 2026, a deep inspection of both conversational turns and raw evaluation logs revealed why the system thrashed into irrelevant career history and robotic loops.
 
-> **Root Cause:** **Hardcoded Defaults = Bad Assumptions.**
-> When small models or fallback routines hit unspecified branches, hardcoded defaults (such as literal placeholder strings `<silicon_term_or_pcie_ras>` and generic "well-crafted" critic templates) steered the entire cognitive engine into hallucinated context.
+### 🏛️ Core Principles & Insights
 
-Furthermore, four primary co-pilot architectural items were identified directly from the live interaction:
+1. **"Zero Context is Better than Default Context" (Negative RAG Gating)**:
+   * Injecting *no context* (or minimal context) allows the resident models to reason cleanly or ask for clarification.
+   * Injecting *default context* (e.g. falling back to 2018 Intel PAE notes when a query is ambiguous) actively misleads the models and causes severe hallucinations.
+   * **Rule**: When intent or domain is uncertain, `hyde_vector_text` must be empty (`""`), and `ArchiveNode` must return an empty context rather than defaulting to career archives.
 
-1. **Organic Conversational Onramps (15:23:58)**: Replace cold jargon dumps with natural framing (*"While you were away..."*, *"By the way, we had a failure in..."*).
-2. **Pinky Coherence Critic Tuning (15:28:27)**: Eliminate robotic `"well-crafted response"` boilerplate. Tune Pinky's critique into a blend of the classic cartoon persona (a witty/satirical reaction to Brain's verbose plan) with an actionable, punchy summary.
-3. **Deep Thought Frame Classification (15:29:58)**: Route infrastructure handshake frames (`[DEEP THOUGHT]: System operational...`) to `CROSSTALK` rather than cluttering the user's primary `CHAT` stream.
-4. **Triage Cadence & Brain Ownership (15:29:58)**: Attribute Triage reflection directly to `Brain's Insight` to streamline conversational turn cadence.
+2. **Speaker Demarcation in Triage Memory (Breaking the Echo Chamber)**:
+   * **The Catch**: Pinky repeated *"You're feeling a bit off... checking vital signs"* because Triage ingested conversation history without speaker filtering and mistook Pinky's previous turn for the user's intent.
+   * **Rule**: Triage MUST strictly evaluate the latest `[USER]` turn, never mistaking assistant dialogue for user intent.
 
----
+3. **HyDE Template Scrubbing**:
+   * Small models occasionally output few-shot template syntax literally (`<silicon_term_or_pcie_ras>`).
+   * **Rule**: Add an automated HyDE scrubber that zeroes out `hyde_vector_text` if literal angle brackets (`<...>`) or template placeholders are detected.
 
-## 🔍 Investigation: Why Pinky Was Repeating the "Vital Signs" Phrase
-
-**User Question:** *Is this canned? 'You're feeling a bit off. I'm still humming along, but I can sense a slight lag in our conversation. Let me check the lab's vital signs...'*
-
-**Forensic Finding:** **It was not a hardcoded string—it was an Echo-Chamber Feedback Loop!**
-1. **Turn 1 (15:21:15)**: Pinky dynamically generated the phrase in response to an initial prompt.
-2. **Turn 2 (15:21:21)**: Triage parsed Pinky's previous output from conversation history and mistook it for the *user's intent* (`inferred_intent: "You're feeling a bit off."`).
-3. **Turns 3–5 (15:21:52–15:30:22)**: Because Triage declared the user was feeling off, the downstream prompts repeatedly recycled the phrase back to the user across subsequent turns.
+4. **Coherence Critic Channel Demarcation**:
+   * Raw JSON evaluation payloads (`{"score": 5, "slop_found": false}`) must stay in `CROSSTALK`.
+   * Only Pinky's final witty cartoon quip + agreed technical summary is delivered out-loud.
 
 ---
 
-## 📊 Review of 4 Real Co-Pilot Feedback Items
+## 🔍 Forensic Review of 4 Real Co-Pilot Feedback Items
 
 | Item | Origin Timestamp | Verbatim User Directive | Architectural Solution |
 | :--- | :--- | :--- | :--- |
@@ -50,20 +48,21 @@ Furthermore, four primary co-pilot architectural items were identified directly 
 ### **Task 61.0: [AUDIT-01] Hardcoded Fallbacks & Default Assumptions Scan**
 * **Status**: 🔲 **READY**
 * **Scope**:
-  * Scan `cognitive_hub.py`, `triage_engine`, and `archive_node.py` for default string templates (e.g. `<silicon_term_or_pcie_ras>`).
-  * Replace dangerous defaults with safe empty fallbacks (`""`) or explicit domain-aware branches.
+  * Scan `cognitive_hub.py`, `triage_engine`, and `archive_node.py` for default string templates.
+  * Implement "Zero Context > Default Context" rule across all RAG fallback branches.
+  * Add HyDE template scrubber to strip `<...>` placeholders.
 
 ---
 
-### **Story 61.1: [FEAT-460/CADENCE-01] Brain Triage Attribution & Cadence Alignment**
+### **Story 61.1: [FEAT-460/CADENCE-01] Speaker-Demarcated Triage & Brain Insight Attribution**
 * **Status**: 🔲 **READY FOR IMPLEMENTATION**
 * **Target Files**:
   * `HomeLabAI/src/logic/cognitive_hub.py`
   * `HomeLabAI/src/tests/test_triage_cadence.py`
 * **Scope**:
   * Attribute Triage pre-reflection to `Brain (Insight)`.
-  * Eliminate turn-looping where Triage parses previous assistant output as user intent.
-  * Integrate `vibe="META"` and `domain="lab_internal"`.
+  * Enforce strict speaker isolation: Triage only parses `[USER]` turns, preventing echo-chamber turn looping.
+  * Add `vibe="META"` and `domain="lab_internal"` taxonomy for live lab modules (`audio_pipeline`, `sweeper`, `overrides`, `foyer`, `vllm`).
 
 ---
 
@@ -73,8 +72,8 @@ Furthermore, four primary co-pilot architectural items were identified directly 
   * `HomeLabAI/src/v5/foyer/router.py`
   * `HomeLabAI/src/tests/test_crosstalk_demarcation.py`
 * **Scope**:
-  * Change `_spawn_deep_thought_preamble` to broadcast operational handshakes (`"System operational..."`) with `role="CROSSTALK"` / `type="crosstalk"`.
-  * Ensure user chat log only receives final synthesized responses or conversational interjections.
+  * Broadcast Deep Thought operational handshakes (`"System operational..."`) as `type="crosstalk"`.
+  * Ensure user chat only receives synthesized responses or conversational interjections.
 
 ---
 
@@ -85,9 +84,10 @@ Furthermore, four primary co-pilot architectural items were identified directly 
   * `HomeLabAI/src/tests/test_pinky_critic.py`
 * **Scope**:
   * Rewrite Pinky Coherence Critic prompt:
-    1. **Quip**: Pinky delivers a satirical/witty reaction to Brain's grandiose plan (*"Egad, Brain! If we calculate the MSRs any faster, the cheese will melt!"*).
+    1. **Quip**: Satirical/witty cartoon reaction to Brain's grandiose plan (*"Egad, Brain! If we calculate the MSRs any faster, the cheese will melt!"*).
     2. **Summary**: A concise, 1-2 sentence distillation of the agreed technical takeaway.
-  * Ban the phrase `"A well-crafted response..."` and robotic praise.
+  * Move raw JSON scoring (`{"score": 5, "slop_found": false}`) to internal `CROSSTALK`, delivering only the final quip/summary to `CHAT`.
+  * Ban the phrase `"A well-crafted response..."` and all robotic praise.
 
 ---
 
@@ -111,13 +111,25 @@ Furthermore, four primary co-pilot architectural items were identified directly 
     1. Verify Deep Thought status appears in `CROSSTALK`, not `CHAT`.
     2. Verify Pinky Critic delivers cartoon quip + summary without robotic praise.
     3. Verify natural onramp phrasing for historical bring-up queries.
+    4. Verify zero-context fallback when an ambiguous query is sent.
+
+---
+
+## 🗺️ Ambiguity & Thrash Risk Analysis
+
+| Subsystem | Potential Thrash Risk | Prevention Mechanism |
+| :--- | :--- | :--- |
+| **Triage Intent Memory** | Parsing previous assistant dialogue as new user intent. | Strict regex filter: only process text prefixed with `[USER]` or `[ME]`. |
+| **HyDE Vector Synthesis** | Small model emitting literal template angle brackets (`<...>`). | Automated post-parser scrubber: `if "<" in hyde_text: hyde_text = ""`. |
+| **Coherence Critic Stream** | Raw JSON diagnostic dictionaries leaking into user chat. | Demarcate JSON to `CROSSTALK`; only stream formatted `[PINKY_QUIP]` and `[SUMMARY]`. |
+| **RAG Retrieval** | Career notes polluting live system queries. | "Zero Context > Default Context" rule: return empty context if cosine distance > threshold. |
 
 ---
 
 ## 🧭 Execution Order
 
 1. **Task 61.0**: Hardcoded Fallback & Assumptions Scan.
-2. **Story 61.1**: Brain Triage Attribution & Cadence Alignment (`cognitive_hub.py`).
+2. **Story 61.1**: Speaker-Demarcated Triage & Brain Insight Attribution (`cognitive_hub.py`).
 3. **Story 61.2**: Deep Thought Crosstalk Demarcation (`router.py`).
 4. **Story 61.3**: Pinky Critic Tuning (`pinky_node.py`).
 5. **Story 61.4**: Conversational Onramps (`pinky_node.py` & `brain_node.py`).
