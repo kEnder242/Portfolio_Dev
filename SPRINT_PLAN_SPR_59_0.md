@@ -106,8 +106,30 @@ As the Federated Lab matures past Sprint 58, our objective is **architectural di
 * **Objective**: Implement an AST / symbol-graph context compiler using Python `ast` and `ripgrep` to compact raw multi-file codebases into high-density structural context before injecting into OpenAgent / Sisyphus prompts, reducing KV-cache bloat and token consumption by >50%.
 * **Verification**: Benchmark comparing raw context token count vs. compiled AST context token count with 100% symbol recall.
 
+### **Story 59.3: [FEAT-456] Language-First Co-Pilot Feedback Loop & Validation Auto-Correction**
+* **Status**: 🔲 **TODO**
+* **Objective**: Intercept natural language user disagreements ("Wait, that's wrong...", "Pinky, note that X is Y...") via semantic intent classification (BKM-015 compliant), auto-generating evaluated failure tests in `validation_ledger.jsonl` and updating Curator rubric constraints without brittle UI vote buttons.
+* **Verification**: Unit tests validating natural language correction ingestion and JSONL ledger auto-population.
+
+### **Story 59.4: [FEAT-457] Single-Layer Speculative Context Pre-fetching & Interest Preemption**
+* **Status**: ✅ **COMPLETED & CERTIFIED**
+* **Objective**: Pre-fetch Turn 2 (Brain) RAG context speculatively in the background during Turn 1 (Pinky) token generation. If interest drops ($\le 0.5$) or turn aborts, cleanly cancel/preempt background task with zero penalty. Enforce single-layer cascade (do not pre-fetch Deep Thought ahead of Brain).
+* **Verification**: `test_interest_speculative_prefetch.py` passes 2/2 unit tests (0.31s).
+
+### **Story 59.5: [FEAT-458] Conversational WYWO & Floating Validation Oracle (Non-Embellishment Corollary)**
+* **Status**: 🔲 **TODO**
+* **Objective**: During shallow or low-urgency turns, provide Pinky with a dynamic buffer of unresolved validation failures (`validation_ledger.jsonl`), refined Diamond Gems, and overnight dialogue to float conversationally as an oracle prompt rather than outputting generic assistant filler.
+* **Verification**: Integration test proving conversational topic flotation during low-information-density prompts ("hi", "what's up").
+
+---
+
+## 💾 Memory Management & Idle Flow Policy (Sprint 59.0 Revision)
+
+1. **VRAM Residency (FAST_WAKE Nominal State)**: `Llama-3.2-3B-AWQ` remains permanently pinned in GPU VRAM (2.5GB) during all standard operations, enabling sub-100ms conversational turn response times. VRAM is flushed exclusively during the 2:00 AM Nightly Forge window (`quiesce_vllm()`).
+2. **Host System RAM Residency**: With `low_cpu_mem_usage=True` preventing PyTorch DDR3 memory staging leaks, the Z87 host maintains >4.5 GiB of available RAM. All resident nodes (`archive_node.py`, `pinky_node.py`, `brain_node.py`, and ChromaDB) remain resident in system memory without aggressive swap or eviction.
+
 ---
 
 ## 🧭 Next Action
 
-Review Tier 2 and Tier 3 candidate deep-dives below to prioritize future sprint allocation.
+Execute Stories 59.1, 59.2, 59.3, and 59.5 per Sprint 59 roadmap.
