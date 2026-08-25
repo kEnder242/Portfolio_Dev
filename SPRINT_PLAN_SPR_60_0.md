@@ -134,6 +134,28 @@ By extracting standalone satellites at pure functional boundaries, testability i
 
 ---
 
+### **Story 60.4: [OPS-01] Mandatory Lab Stack Restart & Quiescence Validation**
+* **Status**: 🔲 **PLANNED**
+* **Scope**:
+  * Cleanly terminate previous `acme_foyer_v5` and `acme_ignition_v5` daemons.
+  * Respect [FEAT-136] Quiescence 60s stability window to prevent VRAM thrashing.
+  * Re-ignite `acme_lab.py --mode SERVICE_UNATTENDED` in background.
+  * Verify `http://127.0.0.1:8765/version` reports `boot_commit == <HEAD>`.
+
+---
+
+### **Story 60.5: [TEST-01] Live-Fire Service Integration Test Suite (`test_live_sprint60_e2e.py`)**
+* **Status**: 🔲 **PLANNED**
+* **Scope**:
+  * Connects over physical WebSockets (`ws://127.0.0.1:8765`) using dynamic `session_token` authentication.
+  * Exercises refactored satellites on live daemon:
+    1. Sends live `GEM-xxxx` override query $\rightarrow$ verifies `overrides.json` atomic update via live `override_parser`.
+    2. Exercises live audio stream frames $\rightarrow$ verifies `audio_pipeline` sliding window slicing without memory leaks.
+    3. Triggers live heartbeat and status $\rightarrow$ verifies `maintenance_sweeper` thermal probe and heap scavenger.
+  * **Mandate**: No mocks for the running lab service. Tests must validate the physical live running process.
+
+---
+
 ## 🗺️ Existing Test Earmarks & Defeaturing Map
 
 | Existing Test Script | Subsystem Covered | Refactoring Action | Earmarked Target Story |
@@ -173,4 +195,7 @@ During subagent execution, if a refactor encounters an existing feature hook:
 1. **Story 60.1**: Dispatch `override_parser.py` (Phase 1).
 2. **Story 60.2**: Dispatch `maintenance_sweeper.py` (Phase 2).
 3. **Story 60.3**: Dispatch `audio_pipeline.py` (Phase 3).
-4. **Integration & Feature Links**: Wire satellites into `CognitiveHub` and `router.py`, run `test_sprint60_integration.py`, update `FeatureTracker.md`, and rebuild Field Notes.
+4. **Wiring & Unit Baseline**: Wire satellites into `CognitiveHub` and `router.py`, run unit suites.
+5. **Story 60.4**: Lab Stack Bounce & Quiescence Validation (serve fresh commit bytecode).
+6. **Story 60.5**: Live-Fire Service Integration Test (`test_live_sprint60_e2e.py`) over physical WebSockets.
+7. **Feature Links & Docs**: Update `FeatureTracker.md` and rebuild Field Notes.
