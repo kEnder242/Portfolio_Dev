@@ -1430,8 +1430,8 @@
                         rankHtml = `<div><strong>Rank Upgrades:</strong> ${rankMatch[1]}${detail}</div>`;
                     }
 
-                    // Fetch live status.json and queue.json to enrich diagnostic context
-                    let statusData = null, queueCount = 0;
+                    // Fetch live status.json, queue.json, and latest_synthesis_gems.json to enrich diagnostic context
+                    let statusData = null, queueCount = 0, gemsData = null;
                     try {
                         const rStatus = await fetch('data/status.json?t=' + Date.now());
                         if (rStatus.ok) statusData = await rStatus.json();
@@ -1440,6 +1440,8 @@
                             const q = await rQueue.json();
                             queueCount = Array.isArray(q) ? q.length : 0;
                         }
+                        const rGems = await fetch('data/latest_synthesis_gems.json?t=' + Date.now());
+                        if (rGems.ok) gemsData = await rGems.json();
                     } catch (e) {}
 
                     const state = statusData ? (statusData.status || 'IDLE') : 'IDLE';
@@ -1447,6 +1449,34 @@
                     const activityMsg = (statusData && statusData.message) ? statusData.message : (msg || 'Dormant / Idle');
                     const targetFile = (statusData && statusData.last_file) ? statusData.last_file : '';
                     const totalEvents = (statusData && statusData.total_events) ? statusData.total_events : 370;
+
+                    let gemsHtml = '';
+                    if (gemsData && Array.isArray(gemsData.gems) && gemsData.gems.length > 0) {
+                        const gemItems = gemsData.gems.map(g => {
+                            const rankColor = g.rank >= 5 ? '#ffcc00' : '#58a6ff';
+                            const rankLabel = g.rank >= 5 ? '💎 Rank 5' : '🔹 Rank 4';
+                            return `
+                                <div style="background:#161b22;border:1px solid #21262d;border-radius:4px;padding:6px 10px;margin-top:5px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                                        <span><strong style="color:var(--accent-color);">${g.id}</strong> <span style="color:${rankColor};font-weight:bold;font-size:0.7rem;margin-left:4px;">${rankLabel}</span> <span style="color:#8b949e;font-size:0.7rem;">(${g.date})</span></span>
+                                        <span style="font-size:0.65rem;color:#8b949e;">${(g.tags || []).map(t => `<span style="background:#0d1117;border:1px solid #30363d;padding:1px 4px;border-radius:3px;margin-left:2px;">#${t}</span>`).join('')}</span>
+                                    </div>
+                                    <div style="margin-top:3px;color:#e6edf3;font-size:0.72rem;"><strong>Knowledge:</strong> ${g.summary}</div>
+                                    ${g.evidence ? `<div style="margin-top:2px;color:#8b949e;font-size:0.68rem;font-family:monospace;"><strong>Evidence:</strong> ${g.evidence.replace(/\n+/g, ' ')}</div>` : ''}
+                                </div>
+                            `;
+                        }).join('');
+
+                        gemsHtml = `
+                            <div style="margin-top:8px;border-top:1px dashed #30363d;padding-top:6px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;margin-bottom:2px;">
+                                    <span style="color:#ffcc00;font-weight:bold;">💎 RECENT DISTILLED KNOWLEDGE & GEMS (${gemsData.source_file || 'Latest Scan'})</span>
+                                    <span style="color:#8b949e;font-size:0.68rem;">${gemsData.total_gems_extracted} gems extracted</span>
+                                </div>
+                                ${gemItems}
+                            </div>
+                        `;
+                    }
 
                     term.innerHTML = `
                         <div style="font-family:monospace;font-size:0.75rem;padding:8px 12px;line-height:1.4;color:#c9d1d9;background:#0d1117;border:1px solid #30363d;border-radius:6px;margin-top:4px;">
@@ -1460,6 +1490,7 @@
                                 <div><span style="color:#8b949e;">Archive:</span> <strong style="color:var(--accent-color);">${totalEvents}</strong> events (18-yr)</div>
                                 ${queueCount > 0 ? `<div><span style="color:#ffcc00; font-weight:bold;">⚡ Queue: ${queueCount} chunks</span></div>` : ''}
                             </div>
+                            ${gemsHtml}
                         </div>
                     `;
                     term.style.display = 'block';

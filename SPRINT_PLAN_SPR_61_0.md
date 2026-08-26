@@ -262,4 +262,20 @@ class SpeakerRegistry:
  └────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+---
+
+## 6. End-of-Sprint Paper Trail & Stability Retrospective
+
+### 6.1 Lab Stability Root-Cause Resolution (`[LAB-111]`)
+* **Forensic Audit**: Across **30/30 boot sessions in August 2026**, 100% of unexplained kernel hangs, dirty filesystem states, and `systemd-journald` lockups correlated directly to `/dev/sdf1` (the ASUS BIOS Flashback USB FOB) being auto-mounted with `udisks2`'s `flush` option.
+* **The Mechanism**: Synchronous FAT allocation table writebacks locked kernel I/O threads in uninterruptible sleep (`D-State`) whenever background `sync()` or recursive searches ran, masquerading as AI memory/thermal crashes.
+* **Triple-Layer Defense Deployed**:
+  1. **Udev Ignore Rule (`99-bios-flashback-ignore.rules`)**: Disables desktop auto-mounts (`UDISKS_IGNORE="1"`).
+  2. **Safe `/etc/fstab` Auto-Mount**: Configured with `auto,user,noatime,umask=000` (omitting `flush` to use fast RAM page caching).
+  3. **Kernel BDI Writeback Throttling (`90-usb-bdi-throttle.rules`)**: Caps USB dirty RAM cache to 1% (`max_ratio=1`, `strict_limit=1`), physically preventing USB writes from stalling global `sync()`.
+
+### 6.2 Direct Distilled Knowledge Card (`[FEAT-454]` / `[FEAT-458]`)
+* **Objective**: Replace static status boilerplate ("18 years", "pipeline stages", "2:00 AM timer") on `status.html` with concrete, high-density **distilled engineering gems** mined from recent MassScan runs.
+* **Architecture**: `extract_latest_gems.py` mines the top Rank 4/5 gems from `2024.json` / `status.json["last_file"]` into `data/latest_synthesis_gems.json`, which `status.html` renders as an actionable **Synthesis Discovery Ledger** displaying Gem IDs, distilled technical takeaways, and concrete silicon/register evidence (`peci_cmds`, `RdEndpointConfigPCILocal`, `CWF/DMR`).
+
 
