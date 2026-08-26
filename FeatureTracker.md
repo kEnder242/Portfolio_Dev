@@ -2712,4 +2712,11 @@
 **Rationale:** Eliminates brittle conversational vetoes on briefly phrased historical queries while retaining full model flexibility.
 **Mechanism:** `HomeLabAI/src/logic/triage_policy_loader.py` & `HomeLabAI/src/logic/cognitive_hub.py`.
 
+## [FEAT-485] Epistemological Archival Reasoning (Temporal Scarcity Diagnostic)
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1262) — Temporal Scarcity Diagnostic & Archival Evidence Envelope.
+**Logic:** When year-filtering yields zero candidate matches for an entity but entries exist across other eras, ArchiveNode emits an `[ARCHIVAL_EVIDENCE]` envelope documenting the temporal distribution. Downstream models synthesize this scarcity to deduce definitive negative presence in the target year rather than hedging or asking for clarification.
+**Rationale:** Transforms retrieval absence into grounded epistemological proof of non-existence during specific historical periods.
+**Mechanism:** `HomeLabAI/src/nodes/archive_node.py` & `HomeLabAI/src/logic/cognitive_hub.py`.
+
 

@@ -323,3 +323,35 @@ A comprehensive static analysis was executed to map all 357 features in `Feature
    * `[VIBE-012]`: Hemispheric Independence Vector Partitioning (`sync_chroma_dna.py:L76`).
 4. **Archived Legacy Features (57 Features)**: 57 legacy V4 polling and watchdog tags safely preserved in `HomeLabAI/src/archive/lab_attendant_v4.py`.
 
+---
+
+### **Story 64.12: [FEAT-484] Declarative Policy Springboard (Dynamic Interest Fusion)**
+* **Status**: ✅ COMPLETED & CERTIFIED (57/57 Unit Tests PASS)
+* **Target Files**:
+  * `HomeLabAI/config/triage_policy.json`
+  * `HomeLabAI/src/logic/triage_policy_loader.py`
+  * `HomeLabAI/src/logic/cognitive_hub.py`
+  * `HomeLabAI/src/tests/test_triage_policy_loader.py`
+* **Accomplishments**:
+  1. Replaced rigid regex guillotines with declarative policy springboards (`importance_floor` and `interest_boost`) across all 9 vibes in `triage_policy.json`.
+  2. Implemented `get_vibe_springboard()` in `triage_policy_loader.py` to validate and serve floor/boost configurations.
+  3. Fused LLM dynamic turn scoring with declarative floors in `cognitive_hub.py`: $\text{effective\_importance} = \max(\text{importance}, \text{importance\_floor})$.
+  4. Registered `[FEAT-484]` in `FeatureTracker.md`.
+
+---
+
+### **Story 64.13: [FEAT-485] Epistemological Archival Reasoning (Temporal Scarcity Diagnostic)**
+* **Status**: ✅ COMPLETED & CERTIFIED (182/182 Tests PASS)
+* **Target Files**:
+  * `HomeLabAI/src/nodes/archive_node.py`
+  * `HomeLabAI/src/logic/cognitive_hub.py`
+  * `HomeLabAI/src/tests/test_archive_node_scarcity.py`
+  * `HomeLabAI/src/tests/test_epistemological_reasoning.py`
+  * `HomeLabAI/src/tests/test_live_prompt_turn.py`
+  * `Portfolio_Dev/FeatureTracker.md`
+* **Accomplishments**:
+  1. Upgraded `ArchiveNode.get_context()`: When year-filtering yields 0 candidate matches for an entity but records exist across other eras, construct a structured `[ARCHIVAL_EVIDENCE]` envelope detailing true timeline distribution.
+  2. Integrated `EPISTEMOLOGICAL_PROTOCOL` into `CognitiveHub` behavioral guidance: Instructs downstream models to synthesize search scarcity as definitive evidence of negative presence rather than passively hedging or asking for clarification.
+  3. Implemented `test_archive_node_scarcity.py`, `test_epistemological_reasoning.py`, and `test_live_prompt_turn.py` CLI & unit test harnesses allowing rapid prompt iteration without full vLLM restarts.
+  4. Registered `[FEAT-485]` in `FeatureTracker.md` (380/380 verified code links, 0 drift).
+
