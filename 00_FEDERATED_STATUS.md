@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-64-0-grounded-triage** | Phase 14 | Grounded Triage Policy, Speculative Relay Race, Zero-Context Retrieval & Session Horizon | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_64_0.md](./SPRINT_PLAN_SPR_64_0.md) |
 | **spr-63-0-dual-tier-rag-eval** | Phase 14 | Dual-Tier RAG Evaluation Modernization, Grounded Anchors & Live Cognitive Gauntlet | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_63_0.md](./SPRINT_PLAN_SPR_63_0.md) |
 | **spr-62-0-declarative-policy** | Phase 14 | Declarative Triage Policy, Dynamic Route Incubation Sandbox & Bidirectional Traversal | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_62_0.md](./SPRINT_PLAN_SPR_62_0.md) |
 | **spr-61-0-triage-dna-flow** | Phase 14 | Modular Triage Engine, Epistemic Meta-Grounding & Conversational Flow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_61_0.md](./SPRINT_PLAN_SPR_61_0.md) |
