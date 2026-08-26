@@ -115,7 +115,11 @@ def get_low_rank_items():
                         # Rank < 4 is a candidate for "refinement"
                         if event.get('rank', 2) < 4:
                             items.append({"file": jf, "event": event})
-        except: pass
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning(f"[SCAN] Skipping unreadable gem file {os.path.basename(jf)}: {e}")
+            quarantine_path = jf + ".quarantine.jsonl"
+            with open(quarantine_path, "a") as qf:
+                qf.write(json.dumps({"timestamp": time.strftime("%Y-%m-%d %H:%M:%S"), "error": str(e)}) + "\n")
     return items
 
 LOCK_ACQUIRE_TIMEOUT = 10.0
@@ -440,7 +444,9 @@ def main():
                 with open(QUEUE_FILE, 'r') as f:
                     queue = json.load(f)
                     initial_queue_size = len(queue)
-            except: queue = []
+            except (json.JSONDecodeError, OSError) as e:
+                logging.warning(f"[SCAN] Failed to load queue: {e}. Starting with empty queue.")
+                queue = []
 
             while queue:
                 if check_lock(lock_path) or os.path.exists(maint_lock): break

@@ -5,6 +5,9 @@ import glob
 import subprocess
 import requests
 import sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 # --- PATH RESOLUTION (SINGLE SOURCE OF TRUTH) ---
 def find_lab_root():
@@ -40,7 +43,8 @@ def update_status(status, message, last_items=0, filename=None, engine="LOCAL", 
         try:
             with open(STATUS_FILE, 'r') as f:
                 curr_data = json.load(f)
-        except: pass
+        except (json.JSONDecodeError, OSError, ValueError) as e:
+            logger.warning(f'Error reading status file: {e}')
 
     data = {
         "status": status,
@@ -79,7 +83,8 @@ def get_total_events():
             with open(f, 'r') as fp:
                 data = json.load(fp)
                 if isinstance(data, list): count += len(data)
-        except: pass
+        except (json.JSONDecodeError, OSError, ValueError) as e:
+            logger.warning(f'Error counting events in {f}: {e}')
     return count
 
 def get_system_load():
@@ -89,12 +94,12 @@ def get_system_load():
         data = response.json()
         if data['status'] == 'success' and data['data']['result']:
             return float(data['data']['result'][0]['value'][1])
-    except: 
-        # Fallback to standard OS load
+    except (requests.RequestException, ValueError, KeyError) as e:
+        logger.warning(f'Prometheus query failed: {e}. Falling back to OS load.')
         try:
             load1, _, _ = os.getloadavg()
             return load1
-        except:
+        except OSError:
             return 0.0
     return 999.0 
 
@@ -107,7 +112,7 @@ def get_vram_usage():
         )
         used, total = map(float, output.strip().split(','))
         return used / total
-    except:
+    except (subprocess.SubprocessError, ValueError, FileNotFoundError):
         return 0.0
 
 def get_free_vram_gb():
@@ -119,7 +124,7 @@ def get_free_vram_gb():
         )
         free_mb = float(output.strip())
         return free_mb / 1024.0
-    except:
+    except (subprocess.SubprocessError, ValueError, FileNotFoundError):
 # [FEAT-373] Multi-Language Safe-Scalpel (Passive Mode)
         return 6.0  # Safe fallback estimate
 
@@ -139,8 +144,8 @@ def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95, min_free_vram_g
             data = resp.json()
             if data.get("yielding"):
                 return False, "Attendant Mutex Yielding"
-    except:
-        pass # If attendant is down, fallback to system metrics
+    except (requests.RequestException, ValueError) as e:
+        logger.debug(f'Attendant mutex check failed (falling back to system metrics): {e}')
 
     # 3. Check System Load
     load = get_system_load()
@@ -176,7 +181,8 @@ def trigger_pager(message, severity="info", source="Lab"):
             try:
                 with open(pager_path, 'r') as f:
                     activities = json.load(f)
-            except: pass
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f'Error reading pager activity: {e}')
             
         activities.append(entry)
         # Keep last 20

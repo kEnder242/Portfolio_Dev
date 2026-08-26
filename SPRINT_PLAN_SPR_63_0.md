@@ -2,8 +2,8 @@
 
 **Sprint:** 63.0  
 **Date:** August 25, 2026  
-**Status:** 🏗️ READY FOR DELEGATION / GREENLIGHT  
-**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Epistemic Closed Loop (Gem Refinement in Reverse), Production Exception Hardening, AGY Reality Check & Purple Human-in-the-Loop Demarcation*
+**Status:** 🏗️ IN PROGRESS (Stories 63.1 & 63.2 Complete, 63.3 In Flight)  
+**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Epistemic Closed Loop (Gem Refinement in Reverse), 4-Tier Exception Resilience Ladder, AGY Reality Check & Purple Human-in-the-Loop Demarcation*
 
 ---
 
@@ -103,23 +103,18 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 ## 🎯 Surgical Master Delegation Specifications (BKM-043 Compliant)
 
 ### 📌 Story 63.1: Grounded Validation Anchor Bank Authoring
+* **Status**: ✅ COMPLETE (`commit a3f0b3b`)
 * **Target Workspace**: `/home/jallred/Dev_Lab/HomeLabAI`
-* **File to Modify**: `config/validation_anchors.json` (Absolute: `/home/jallred/Dev_Lab/HomeLabAI/config/validation_anchors.json`)
-* **Grep Anchor**: Entire file replacement (10-element JSON array).
-* **Signatures & Fields**: Each item MUST contain `id`, `query`, `domain`, `target_collection`, `expected_keywords`, `ground_truth_summary`.
+* **File Modified**: `config/validation_anchors.json` (Absolute: `/home/jallred/Dev_Lab/HomeLabAI/config/validation_anchors.json`)
 * **Verification Command**:
   `python3 -c 'import json; d=json.load(open("/home/jallred/Dev_Lab/HomeLabAI/config/validation_anchors.json")); assert len(d)==10; print("✅ 10 Anchors Verified")'`
 
 ---
 
 ### 📌 Story 63.2: Multi-Collection Subsystem Evaluator (`evaluate_rag.py --mode vector`)
+* **Status**: ✅ COMPLETE (`commit 5947820`)
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
-* **File to Modify**: `field_notes/evaluate_rag.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/evaluate_rag.py`)
-* **Grep Anchors**:
-  - `Anchor A`: Top-level imports around line 20 (grep: `from nodes.archive_node import`). Add `from nodes.lab_dna_router import LabDNARouter` and `from logic.traversal_dispatcher import TraversalDispatcher`.
-  - `Anchor B`: `async def call_kender` around line 37 (grep: `async def call_kender`). Deprecate/replace with local deterministic 5-question evaluation (`[FEAT-454]`).
-  - `Anchor C`: `async def run_single_evaluation` around line 170 (grep: `async def run_single_evaluation`). Route query to `LabDNARouter` / `target_collection` before fallback.
-  - `Anchor D`: `def parse_args` / `main` around line 260 (grep: `async def main`). Add `--mode` (`vector` or `live`, default `vector`).
+* **File Modified**: `field_notes/evaluate_rag.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/evaluate_rag.py`)
 * **Output Template**:
   ```python
   entry = {
@@ -147,12 +142,11 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 ---
 
 ### 📌 Story 63.3: End-to-End Live Cognitive RAG Gauntlet
+* **Status**: ⏳ IN FLIGHT
 * **Target Workspace**: `/home/jallred/Dev_Lab/HomeLabAI`
 * **Files to Create/Modify**:
   - `src/tests/test_live_rag_eval.py` (Absolute: `/home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_rag_eval.py`)
-  - `Portfolio_Dev/field_notes/evaluate_rag.py` (wire `--mode live`)
 * **Grep Anchors**:
-  - In `evaluate_rag.py`, inside `async def main()` around line 280 (grep: `async def main`): When `args.mode == "live"`, dispatch over WebSocket `ws://127.0.0.1:8765/ws`.
   - In `test_live_rag_eval.py`, new file using `wait_for_ready_and_vocal(STATUS_URL)` (grep: `wait_for_ready_and_vocal`).
 * **Assertions**:
   1. Triage emits valid non-null `vibe` and `domain`.
@@ -163,16 +157,21 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ---
 
-### 📌 Story 63.4: Production Exception & Silent Bypass Hardening Sweep
+### 📌 Story 63.4: 4-Tier Exception Resilience & Quarantine Sweep
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
 * **Files to Modify**:
   - `field_notes/utils.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/utils.py`)
   - `field_notes/aggregate_years.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/aggregate_years.py`)
   - `field_notes/mass_scan.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mass_scan.py`)
+* **Scope & Mechanics (The 4-Tier Resilience Ladder)**:
+  1. **Tier 4 (Quarantine Fallback Pattern)**: In `aggregate_years.py` and `mass_scan.py`, when a JSON line or record fails parsing, write the offending record to `<file>.quarantine.jsonl` with timestamp and error message instead of silently dropping data (`except: pass`).
+  2. **Tier 3 (Neural Pager Relay Hooks)**: In `mass_scan.py` and `nibble_v2.py`, emit warning telemetry to the Neural Pager (`infra.pager_relay`) on batch parsing anomalies.
+  3. **Tier 2 (Structured Diagnostic Logging)**: In `utils.py` (`safe_load_json`, `parse_date`), replace bare `except: pass` with explicit `except (json.JSONDecodeError, OSError, ValueError) as e: logger.warning(f"Error parsing {filepath}: {e}")`.
+  4. **Tier 1 (Fail-Fast Hard Gates)**: Ensure all build scripts (`build_site.py`, `verify_feature_links.py`) halt with `sys.exit(1)` on compilation exceptions.
 * **Grep Anchors**:
-  - In `utils.py`, lines 40-50, 80-90, 175-185 (grep: `except: pass`). Replace bare `except: pass` with explicit `except (json.JSONDecodeError, OSError, ValueError) as e: logger.warning(f"Error parsing ...: {e}")`.
-  - In `aggregate_years.py`, lines 50-65, 150-160 (grep: `except: pass`). Replace silent passes with diagnostic logging.
-  - In `mass_scan.py`, line 118 (grep: `except: pass`). Replace silent pass with error logging.
+  - In `utils.py`, grep: `except: pass` (L43, L82, L179).
+  - In `aggregate_years.py`, grep: `except: pass` (L51, L60, L154).
+  - In `mass_scan.py`, grep: `except: pass` (L118).
 * **Verification Command**:
   `python3 -c 'import sys; from field_notes.utils import safe_load_json; print("✅ Utils verified")'`
 
@@ -211,6 +210,6 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 1. `validation_anchors.json` contains 10 fully grounded queries with verified expectations.
 2. `evaluate_rag.py --mode vector` executes in <2s with >80% keyword recall across multi-collection DNA.
 3. `evaluate_rag.py --mode live` validates full Triage $\rightarrow$ Brain $\rightarrow$ Pinky Critic execution over WebSocket.
-4. Bare `except: pass` anti-patterns purged from `utils.py`, `aggregate_years.py`, and `mass_scan.py` with diagnostic warnings.
+4. 4-Tier Exception Resilience Ladder applied: Quarantine pattern in note aggregators, Neural Pager alerts on batch anomalies, and bare `except: pass` purged.
 5. `status.html` cleanly demarcates Automated RAG Benchmarks from Co-Pilot Ground-Truth traces with Purple styling.
 6. All regression tests pass (367/367), documentation is synchronized, and site builds with 0 link drift.
