@@ -60,7 +60,13 @@ def generate_trailers():
 
 def deploy_to_airlock(snapshots=False):
     print("--- DEPLOYING TO PUBLIC AIRLOCK (www_deploy) ---")
-    www_dir = os.path.join(os.path.dirname(BASE_DIR), "www_deploy")
+    # Resolve www_deploy at repository parent level: /home/jallred/Dev_Lab/www_deploy
+    repo_root = os.path.dirname(os.path.dirname(BASE_DIR))
+    www_dir = os.path.join(repo_root, "www_deploy")
+    if not os.path.exists(www_dir):
+        # Fallback to adjacent directory if run from another structure
+        www_dir = os.path.join(os.path.dirname(BASE_DIR), "www_deploy")
+
     if os.path.exists(www_dir):
         # Sync json data files to public airlock data directory
         src_data = os.path.join(BASE_DIR, "data")
@@ -72,21 +78,34 @@ def deploy_to_airlock(snapshots=False):
                 s = os.path.join(src_data, item)
                 d = os.path.join(dst_data, item)
                 if os.path.isfile(s):
-                    shutil.copy2(s, d)
+                    # Only copy if destination is missing or source is newer
+                    if not os.path.exists(d) or os.path.getmtime(s) > os.path.getmtime(d):
+                        shutil.copy2(s, d)
 
         env = os.environ.copy()
         if snapshots:
             env["ENABLE_SNAPSHOTS"] = "1"
 
-# [FEAT-461] Optional Airlock Snapshot Previews
-        for script in ["sync_protocols.sh", "sync_stories.sh", "sync_research.sh"]:
+        # [FEAT-461] Intelligent Sync: Run sync scripts only when internal source is newer than airlock target
+        sync_map = {
+            "sync_protocols.sh": (os.path.join(BASE_DIR, "protocols.html"), os.path.join(www_dir, "protocols.html")),
+            "sync_stories.sh": (os.path.join(BASE_DIR, "stories.html"), os.path.join(www_dir, "stories.html")),
+            "sync_research.sh": (os.path.join(BASE_DIR, "research.html"), os.path.join(www_dir, "research.html")),
+        }
+
+        for script, (src_file, dst_file) in sync_map.items():
             script_path = os.path.join(www_dir, script)
             if os.path.exists(script_path):
-                print(f"Running {script}...")
-                try:
-                    subprocess.run(["/bin/bash", script_path], check=True, cwd=www_dir, env=env)
-                except Exception as e:
-                    print(f"❌ Failed to execute {script}: {e}")
+                # Run if destination is missing or source file has been modified since last deploy
+                needs_sync = not os.path.exists(dst_file) or (os.path.exists(src_file) and os.path.getmtime(src_file) > os.path.getmtime(dst_file))
+                if needs_sync:
+                    print(f"Running {script} (changes detected)...")
+                    try:
+                        subprocess.run(["/bin/bash", script_path], check=True, cwd=www_dir, env=env)
+                    except Exception as e:
+                        print(f"❌ Failed to execute {script}: {e}")
+                else:
+                    print(f"Skipping {script} (up to date).")
 
         # [FEAT-456] Clean up lingering shot-scraper/chromium render processes
         try:
