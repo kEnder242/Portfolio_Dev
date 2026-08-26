@@ -2527,37 +2527,45 @@
 **Logic:** Disables daytime idle timeouts (idle_eviction_enabled: false) to keep resident nodes and AWQ models permanently warm in memory, reserving VRAM flush exclusively for 2:00 AM maintenance.
 **Mechanism:** Configuration in `infrastructure.json` honored by Foyer router.
 
-## [FEAT-467] Negative RAG Gateway: Zero Context Fallback & HyDE Template Scrubber
-**Status:** DESIGN (Sprint 61)
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L800) — Negative RAG Gateway & HyDE Scrubber.
-**Logic:** Implements the "Zero Context > Default Context" rule. When intent or domain classification is ambiguous, sets `hyde_vector_text: ""` and instructs `ArchiveNode` to return empty context rather than defaulting to career validation notes. Automatically scrubs literal angle brackets (`<...>`) and few-shot template placeholders before vector search.
-**Rationale:** Prevents models from hallucinating 2018 Intel Federal PAE history when answering general conversational questions.
-**Mechanism:** `CognitiveHub._process_turn()`, `ArchiveNode.get_context()`, and `test_triage_meta_vibe.py`.
+## [FEAT-467] Gated On-Demand RAG & Zero Context Default
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L800) — Gated On-Demand RAG & Zero Context Default.
+**Logic:** Implements the "Zero Context > Default Context" rule via gated on-demand retrieval. RAG defaults to zero context (no speculative retrieval) unless explicit anchors, named components, or historical tags are called out. Automatically scrubs literal angle brackets (`<...>`) and few-shot template placeholders before vector search.
+**Rationale:** Prevents models from hallucinating 2018 Intel Federal PAE history when answering general conversational questions while preserving surgical search when explicitly requested.
+**Mechanism:** `CognitiveHub._process_turn()`, `ArchiveNode.get_context()`, `triage_engine`, and `test_sprint61_integration.py`.
 
 ## [FEAT-468] Multi-Agent Speaker Demarcation & Echo-Chamber Shield
-**Status:** DESIGN (Sprint 61)
+**Status:** ACTIVE
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L700) — Multi-Agent Speaker Demarcation.
 **Logic:** Tags conversation history turns with structured multi-agent speaker roles (`[USER: Jason]`, `[ASSISTANT: Brain]`, `[ASSISTANT: Pinky]`). Gates Triage intent extraction to process exclusively the latest `[USER]` turn, while preserving self-awareness of what Pinky and Brain stated in previous turns.
 **Rationale:** Eliminates echo-chamber feedback loops where the system mistakes Pinky's previous turn (*"vital signs"*) for the user's intent without sacrificing conversational memory.
-**Mechanism:** `CognitiveHub._process_turn()`, `triage_engine`, and `test_triage_cadence.py`.
+**Mechanism:** `CognitiveHub._process_turn()`, `triage_engine`, and `test_sprint61_integration.py`.
 
 ## [FEAT-469] Epistemic Meta-Grounding: Feature DNA & Lab Infrastructure Lexicon
-**Status:** DESIGN (Sprint 61)
+**Status:** ACTIVE
 **Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L783) — Epistemic Meta-Grounding.
 **Logic:** Grafts Acme Lab's internal live catalog (`feature_dna` and `lab_infrastructure`) into the RAG routing priority when `vibe="META"` or `domain="lab_internal"` is detected. Explicitly excludes `behavioral_dna` (which is reserved for AGY orchestrator development) and suppresses `career_ledger` during system operations.
 **Rationale:** Allows Pinky and Brain to discuss live software modules (`AudioPipeline`, `MaintenanceSweeper`, `OverrideParser`) as active lab operators without roleplaying development commit hooks.
-**Mechanism:** `ArchiveNode._query_multi_collections()` and `test_archive_lab_dna_routing.py`.
+**Mechanism:** `ArchiveNode.get_context()`, `lab_dna_router`, and `test_sprint61_integration.py`.
 
 ## [FEAT-470] Cartoon Roleplay Critic & Actionable Technical Summary
-**Status:** DESIGN (Sprint 61)
+**Status:** ACTIVE
 **Code:** [src/nodes/pinky_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/pinky_node.py#L1) — Cartoon Roleplay Critic & Summary.
 **Logic:** Replaces robotic boilerplate praise (`"A well-crafted response..."`) with a dual-output critic phase: 1) a witty, satirical Pinky cartoon quip reacting to Brain's complexity, and 2) a concise 1-sentence technical summary agreement. Demarcates raw evaluation JSON to `CROSSTALK` while streaming the quip/summary to `CHAT`.
 **Rationale:** Restores authentic Pinky & The Brain cartoon dynamics while delivering high-value conversational takeaways.
-**Mechanism:** `PinkyNode` critic prompt, `CognitiveHub.run_division_of_labor()`, and `test_pinky_critic.py`.
+**Mechanism:** `PinkyNode` critic prompt, `pinky_critic_persona.py`, `CognitiveHub.evaluate_grounding()`, and `test_sprint61_integration.py`.
 
 ## [FEAT-471] Dynamic Speaker Registry & Prefix Sanitization Gate
-**Status:** DESIGN (Sprint 61)
+**Status:** ACTIVE
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L700) — Dynamic Speaker Registry & Sanitizer.
 **Logic:** Compiles a dynamic runtime regex pattern from registered active personas (`Pinky`, `Brain`, `Deep Thought`, `Archive`, `Lab`, `User`, `Jason`, `Assistant`, `System`, `Me`) to strip nested and dirty leading speaker/role prefixes from generated LLM outputs before WebSocket broadcast.
 **Rationale:** Eliminates hardcoded regex maintenance debt and prevents UI name stacking thrash (`Pinky: [ASSISTANT: Pinky]...`) while scaling automatically as new agent personas are added to the lab.
-**Mechanism:** `SpeakerRegistry` in `src/logic/triage_engine.py` and `test_triage_engine.py`.
+**Mechanism:** `SpeakerRegistry` in `src/logic/triage_engine.py` and `test_sprint61_integration.py`.
+
+## [FEAT-472] Dynamic Route Incubation & Solidification Pipeline
+**Status:** DESIGN (Sprint 62)
+**Code:** [src/logic/triage_engine.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L1) — Dynamic Route Incubation & Solidification.
+**Logic:** Three-tier declarative routing system featuring immutable core policy (`config/triage_policy.json`), mouse-owned supplementary playground (`config/triage_supplement.json`), and a lifecycle promotion mechanism for mouse-discovered triage routes based on live evaluation provenance.
+**Rationale:** Allows resident models to dynamically map and incubate candidate routes in a sandbox without risking mutation or corruption of production routing rules.
+**Mechanism:** `TriageEngine`, `triage_policy.json`, `triage_supplement.json`, and `test_route_incubation.py`.
+
