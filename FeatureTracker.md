@@ -2613,3 +2613,45 @@
 
 
 
+
+## [FEAT-478] Canonical Triage Schema Unification & Engine HyDE Scrubbing
+**Status:** ACTIVE
+**Code:** [src/logic/triage_engine.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L307) — Canonical Triage Schema.
+**Logic:** Removes mandatory `required: ["hyde_vector_text"]` from `_TRIAGE_SCHEMA` in `triage_engine.py:L350`. Harmonizes domain enum to include `lab_internal` and synchronizes properties (`situation`, `hints`) across engine and hub schemas.
+**Rationale:** Eliminates dual-schema divergence and prevents guided JSON decoding from structurally forcing spurious HyDE embeddings on CASUAL/SUPERVISORY turns.
+**Mechanism:** `triage_engine.py`, `cognitive_hub.py`, `src/tests/test_triage_engine.py`.
+
+## [FEAT-479] CriticResult Dataclass Realignment & Coherence Telemetry Channel Isolation
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1282) — Coherence Critique Realignment.
+**Logic:** Aligns attribute consumption in `evaluate_grounding()` with `CriticResult` dataclass fields, resolving runtime `AttributeError`. Changes diagnostic telemetry `brain_source` to `"System (Critic Telemetry)"` to prevent leakage into user chat console.
+**Rationale:** Restores broken coherence critique pipeline at runtime and prevents internal diagnostic scorecards from rendering in user chat.
+**Mechanism:** `pinky_critic_persona.py`, `cognitive_hub.py`, `src/tests/test_pinky_critic_persona.py`.
+
+## [FEAT-480] Intercom Diagnostic Regex Scoping & Chat Delivery Passthrough
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L671) — Diagnostic Regex Scope Guard.
+**Logic:** Scopes `DIAGNOSTIC_PREFIX_RE` evaluation strictly to `type: "crosstalk"` messages or adds persona source bypass, preventing persona responses starting with bracketed keywords (e.g. `[SYSTEM]`, `[STAGE]`) from being diverted to `#crosstalk-bar`.
+**Rationale:** Prevents silent UI suppression of legitimate persona chat messages.
+**Mechanism:** `field_notes/intercom_v2.js`, `field_notes/intercom.html`.
+
+## [FEAT-481] Traversal Dispatcher Dead-Code Pruning & Allowlist Reconciliation
+**Status:** ACTIVE
+**Code:** [src/logic/traversal_dispatcher.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/traversal_dispatcher.py#L27) — Traversal Dispatcher Pruning.
+**Logic:** Prunes 142 lines of unreachable dead modes (`DREAM_CACHE`, `COMPOSITE_HYDE`, `TEMPORAL_FILTER`, `COMPONENT_LOOKUP`) and reconciles `TraversalMode` enum strictly with the 3 declarative modes (`TOPIC_FIRST`, `TIME_FIRST`, `STREAM_REPLAY`).
+**Rationale:** Eliminates dead code and enforces BKM-015 simplicity.
+**Mechanism:** `traversal_dispatcher.py`, `src/tests/test_traversal_dispatcher.py`.
+
+## [FEAT-482] Declarative Policy & Schema Enum Synchronization (Vibes & Domains)
+**Status:** ACTIVE
+**Code:** [config/triage_policy.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/triage_policy.json#L4) — Policy & Schema Enum Sync.
+**Logic:** Synchronizes schema enums and declarative policy rules 1:1. Adds `SUPERVISORY` to schema enums, removes dead `DEEP_RESEARCH`, registers `ANALYTICAL` in policy, and adds `dream_stream` to domain enums.
+**Rationale:** Eliminates 3-way enum drift and prevents unrouted fallback states.
+**Mechanism:** `config/triage_policy.json`, `triage_engine.py`, `cognitive_hub.py`, `triage_policy_loader.py`.
+
+## [FEAT-483] Grounded Validation Anchor Test Suite (VAL-01–VAL-10)
+**Status:** ACTIVE
+**Code:** [src/tests/test_grounded_anchors.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_grounded_anchors.py) — Grounded Validation Anchor Tests.
+**Logic:** Parameterized end-to-end unit test suite validating all 10 real-world anchors from `config/validation_anchors.json` against triage classification and Zero-Context HyDE synthesis without tautological mocks.
+**Rationale:** Replaces synthetic self-asserting tests with genuine validation coverage.
+**Mechanism:** `config/validation_anchors.json`, `src/tests/test_grounded_anchors.py`.
