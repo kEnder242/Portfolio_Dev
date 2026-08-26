@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-62-0-declarative-policy** | Phase 14 | Declarative Triage Policy, Dynamic Route Incubation Sandbox & Bidirectional Traversal | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_62_0.md](./SPRINT_PLAN_SPR_62_0.md) |
 | **spr-61-0-triage-dna-flow** | Phase 14 | Modular Triage Engine, Epistemic Meta-Grounding & Conversational Flow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_61_0.md](./SPRINT_PLAN_SPR_61_0.md) |
 | **spr-60-0-foundational-polish** | Phase 14 | Conversational Polish, Token-Efficient Short-Circuiting, Dynamic LoRA Gating | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_60_0.md](./SPRINT_PLAN_SPR_60_0.md) |
 | **spr-59-0-triage-good-fit** | Planning & Triage | Architectural Discipline, "Good Fit" Evaluation & Research Triage | **[ACTIVE]** [SPRINT_PLAN_SPR_59_0.md](./SPRINT_PLAN_SPR_59_0.md) |

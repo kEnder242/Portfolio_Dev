@@ -230,3 +230,36 @@ class SpeakerRegistry:
 5. **Sprints vs. Features**: Sprints are orchestrator/AGY agile concepts; residents interact with `feature_dna` and `lab_infrastructure`.
 6. **Supervisory Feedback**: Direct architectural coaching from the Lab Director, acknowledging guidance and adjusting behavior without triggering external RAG.
 
+### 4. Gated On-Demand RAG & Bidirectional Traversal (Technical vs. Historical)
+
+```
+  TECHNICAL TRAVERSAL:   [Topic / Silicon Spec]      ──► [Epochs / Gems / BKMs]  (Topic-First)
+  HISTORICAL TRAVERSAL:  [Time / Era / Year Anchor]  ──► [Keywords / Narratives] (Time-First)
+```
+
+- **Gated On-Demand Retrieval**: RAG defaults to zero context (no speculative retrieval) unless explicit anchors/named components/historical tags are called out.
+- **Optional Declarative Routing**: RAG configuration is defined only on vibes requiring retrieval (`collections`, `traversal`, `max_distance`); purely conversational or supervisory vibes omit RAG fields entirely.
+- **Decoupled Actor Selection**: Triage classifies **Vibe** and **Domain**. Actor selection occurs via natural intent loops or explicit user naming, rather than rigid default actor bindings.
+
+### 5. `[FEAT-472]`: Dynamic Route Incubation & Solidification Pipeline
+
+```
+ ┌────────────────────────────────────────────────────────────────────────────────┐
+ │                      THE MOUSE ROUTE INCUBATION PIPELINE                       │
+ ├────────────────────────────────────────────────────────────────────────────────┤
+ │ 1. INCUBATION (Mouse-Owned Playground):                                        │
+ │    - Location: config/triage_supplement.json (or dynamic memory registry)      │
+ │    - Autonomy: Brain & Deep Thought have full authority to create/map new      │
+ │      candidate routes based on live session patterns or subconscious dreams.   │
+ │                                                                                │
+ │ 2. EVALUATION & PROVENANCE:                                                    │
+ │    - Telemetry tracks hit rate, latency, and user feedback on candidate routes.│
+ │    - Stored in .round_table_evals.json and forensic ledger.                    │
+ │                                                                                │
+ │ 3. SOLIDIFICATION (Orchestrator Promotion):                                    │
+ │    - Proven, high-performing mouse routes are reviewed by the Lead Architect /  │
+ │      AGY and merged into the core immutable triage_policy.json.                │
+ └────────────────────────────────────────────────────────────────────────────────┘
+```
+
+
