@@ -1032,14 +1032,32 @@
                         try {
                             const entry = JSON.parse(line);
                             if (entry) {
-                                alerts.push({
-                                    timestamp: entry.timestamp,
-                                    severity: entry.kender_audit?.verdict === 'PASS' ? 'info' : 'warning',
-                                    source: 'RAG-EVAL',
-                                    message: `[EVAL] Query: "${entry.query}" | Verdict: ${entry.kender_audit?.verdict || 'UNKNOWN'}`,
-                                    is_rag_eval: true,
-                                    rag_data: entry
-                                });
+                                const isHumanFeedback = entry.source === 'CO_PILOT_FOURTH_WALL' || entry.ground_truth;
+                                const isBenchmark = entry.run_type === 'AUTOMATED_BENCHMARK' || (!isHumanFeedback && entry.query);
+                                
+                                if (isHumanFeedback) {
+                                    alerts.push({
+                                        timestamp: entry.timestamp,
+                                        severity: 'info',
+                                        source: 'CO-PILOT COACHING',
+                                        message: `[CO-PILOT] "${entry.query || 'User Feedback'}" ➔ Ground Truth Captured [FEAT-456]`,
+                                        is_rag_eval: true,
+                                        is_human_feedback: true,
+                                        rag_data: entry
+                                    });
+                                } else {
+                                    const verdict = entry.verdict || entry.kender_audit?.verdict || 'UNKNOWN';
+                                    const collection = entry.target_collection ? `[${entry.target_collection}]` : '';
+                                    alerts.push({
+                                        timestamp: entry.timestamp,
+                                        severity: verdict === 'PASS' ? 'info' : 'warning',
+                                        source: 'RAG-BENCHMARK',
+                                        message: `[EVAL ${collection}] Query: "${entry.query}" | Verdict: ${verdict}`,
+                                        is_rag_eval: true,
+                                        is_human_feedback: false,
+                                        rag_data: entry
+                                    });
+                                }
                             }
                         } catch (e) {}
                     }
@@ -1341,20 +1359,40 @@
             term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>";
             
             try {
-                // Check if it is a RAG evaluation log
+                // Check if it is a RAG evaluation or Human Coaching log
                 if (alert.is_rag_eval) {
                     const entry = alert.rag_data;
-                    const verdict = entry.kender_audit?.verdict || "UNKNOWN";
+                    const isHuman = alert.is_human_feedback || entry.source === 'CO_PILOT_FOURTH_WALL' || entry.ground_truth;
+                    
+                    if (isHuman) {
+                        let humanHtml = `
+                            <div style="font-family:monospace;font-size:0.75rem;padding:8px 12px;line-height:1.4;color:#e6edf3;background:rgba(163, 113, 247, 0.08);border:1px solid #a371f7;border-radius:4px;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                                    <span style="background:rgba(163, 113, 247, 0.25);border:1px solid #a371f7;color:#d2a8ff;font-weight:bold;padding:2px 8px;border-radius:4px;font-size:0.72rem;">🟣 HUMAN GROUND TRUTH [FEAT-456]</span>
+                                    <span style="color:#8b949e;font-size:0.7rem;">CO-PILOT FOURTH-WALL SUPERVISION</span>
+                                </div>
+                                <div style="margin-top:4px;"><strong>Original User Context:</strong> <span style="color:#d2a8ff;">"${entry.query || 'N/A'}"</span></div>
+                                ${entry.flawed_output ? `<div style="margin-top:4px;color:#8b949e;"><strong>Prior Assistant Hallucination/Flaw:</strong><pre style="background:#090d13;color:#8b949e;padding:6px;border:1px solid #21262d;border-radius:4px;margin-top:2px;font-size:0.7rem;white-space:pre-wrap;">${entry.flawed_output}</pre></div>` : ''}
+                                <div style="margin-top:6px;color:#3fb950;"><strong>Human Ground-Truth Correction:</strong><pre style="background:#090d13;color:#7ee787;padding:6px;border:1px solid rgba(63, 185, 80, 0.3);border-radius:4px;margin-top:2px;font-size:0.7rem;white-space:pre-wrap;">${entry.ground_truth || 'N/A'}</pre></div>
+                                <div style="margin-top:6px;font-size:0.7rem;color:#8b949e;">Status: Ingested as Epistemic Boolean Constraint • Distilled to Knowledge Base</div>
+                            </div>
+                        `;
+                        term.innerHTML = humanHtml;
+                        return;
+                    }
+
+                    const verdict = entry.verdict || entry.kender_audit?.verdict || "UNKNOWN";
                     let verdictColor = "#888";
                     if (verdict === "PASS") verdictColor = "#28a745";
                     else if (verdict === "FAIL") verdictColor = "#ff3b30";
                     else if (verdict === "BORDERLINE") verdictColor = "#ffcc00";
 
+                    const collection = entry.target_collection || "artifact_vault";
                     const keywordList = Object.entries(entry.keyword_results || {})
                         .map(([kw, hit]) => `<span style="color:${hit ? '#28a745' : '#ff3b30'}; margin-right:8px;">${hit ? '●' : '○'} ${kw}</span>`)
                         .join('');
 
-                    let detailHtml = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong><div style="margin-top:4px;"><strong>Raw Query:</strong> "${entry.query}"</div><div><strong>Domain:</strong> <span style="color:#58a6ff;">${entry.domain}</span> | <strong>Retrieval Time:</strong> ${entry.retrieval_time_s ? entry.retrieval_time_s.toFixed(3) + 's' : 'N/A'} | <strong>Context Length:</strong> ${entry.context_length_chars || 0} chars</div><div><strong>Keyword Recall:</strong> <span style="color:#ffcc00;font-weight:bold;">${((entry.keyword_recall || 0)*100).toFixed(0)}%</span> (Hits: ${entry.keyword_hits || 0}/${entry.keyword_total || 0})</div><div style="margin-top:2px;font-size:0.7rem;">${keywordList}</div><div style="margin-top:4px;"><strong>Vector Distance:</strong> ${entry.vector_distance !== undefined ? entry.vector_distance : 'N/A (Exact Match)'}</div><div style="margin-top:4px;"><strong>Retrieval Paths (Sources):</strong></div><ul style="margin:2px 0 2px 20px;padding:0;list-style-type:square;color:#8b949e;">${(entry.sources || []).map(src => `<li>${src}</li>`).join('')}</ul><div style="margin-top:4px;"><strong>Kender Audit:</strong> Verdict <span style="color:${verdictColor};font-weight:bold;">${verdict}</span> (Relevance: ${entry.kender_audit?.relevance || 'N/A'} | Coverage: ${entry.kender_audit?.coverage || 'N/A'})</div>${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}<div class="rag-run-details" style="margin-top:8px;border-top:1px dashed #30363d;padding-top:6px;"><span style="color:#8b949e;">[LOADING DECOUPLED CONTEXT LOG...]</span></div></div>`;
+                    let detailHtml = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;line-height:1.35;color:#ccc;background:#0d1117;border:1px solid #30363d;border-radius:4px;"><strong style="color:var(--accent-color);">[RAG EVALUATION METRICS]</strong><div style="margin-top:4px;"><strong>Raw Query:</strong> "${entry.query}"</div><div><strong>Domain:</strong> <span style="color:#58a6ff;">${entry.domain}</span> | <strong>Target DNA:</strong> <span style="color:#d2a8ff;font-weight:bold;">${collection}</span> | <strong>Time:</strong> ${entry.retrieval_time_s ? entry.retrieval_time_s.toFixed(3) + 's' : 'N/A'}</div><div><strong>Keyword Recall:</strong> <span style="color:${verdictColor};font-weight:bold;">${((entry.keyword_recall || 0)*100).toFixed(0)}%</span> (Hits: ${entry.keyword_hits || 0}/${entry.keyword_total || 0}) | <strong>Verdict:</strong> <span style="color:${verdictColor};font-weight:bold;">${verdict}</span></div><div style="margin-top:2px;font-size:0.7rem;">${keywordList}</div><div style="margin-top:4px;"><strong>Retrieval Paths (Sources):</strong></div><ul style="margin:2px 0 2px 20px;padding:0;list-style-type:square;color:#8b949e;">${(entry.sources || []).map(src => `<li>${src}</li>`).join('')}</ul>${entry.kender_audit?.issues?.length ? `<div>Issues: <span style="color:#ffcc00;">${entry.kender_audit.issues.join(', ')}</span></div>` : ''}<div class="rag-run-details" style="margin-top:8px;border-top:1px dashed #30363d;padding-top:6px;"><span style="color:#8b949e;">[LOADING DECOUPLED CONTEXT LOG...]</span></div></div>`;
                     term.innerHTML = detailHtml;
                     
                     if (entry.run_id) {
