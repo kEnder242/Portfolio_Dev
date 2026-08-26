@@ -132,3 +132,15 @@ OpenAgent workers perform file edits and execute test suites locally, but are **
 
 ### 5.3 Retrospective Ledger
 - **Sprint 54.10:** Replaced disabled `edit` tool with `clara-dna_safe_patch`, bound M5 Air to MLX port 8000 (`Qwen3.8-27B-4bit`), eliminated Google Gemini from OpenAgent fallbacks, and established the OpenRouter Free $\rightarrow$ OpenCode Free $\rightarrow$ Cohere $\rightarrow$ M5 Air MLX $\rightarrow$ Windows 4090 fallback chain.
+
+### 5.4 Swarm Mechanics, Model Tool Limits & Upstream Bug Catalog
+* **Model Tool-Calling Limits (Node KENDER)**:
+  * `qwen2.5-coder:14b` does NOT emit OpenAI-compatible `tool_calls` through Ollama's `/v1` endpoint (returns plain text tool calls that the harness never executes).
+  * `qwen3:14b` DOES emit proper `tool_calls`. All OmO categories in `~/.config/opencode/oh-my-openagent.json` route to `my-windows-4090/qwen3:14b`.
+* **OmO `task()` Internal Mechanics**:
+  * Sisyphus only routes work to KENDER when it emits an explicit `task(category="quick", ...)` tool call. Prose instructions without `task()` result in Sisyphus doing all work itself.
+  * Every `task()` prompt must include `## MUST DO: Use the edit/write tool to apply the change to <path>`.
+* **Upstream OpenCode Bug Catalog**:
+  * *Prompt-directed delegation* (upstream #3231): Handled via `agents.sisyphus.prompt_append`.
+  * *`task` tool deferred behind ToolSearch* (upstream #3592): Kept visible with minimal MCP clutter.
+  * *Empty delegation table* (upstream #2386): Resolved via PR #414 fix in installed plugin.
