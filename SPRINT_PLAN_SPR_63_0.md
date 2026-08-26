@@ -225,7 +225,7 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
   RAG_RUNS_DIR = Path(__file__).resolve().parent / "data" / "rag_runs"
   ```
 * **Anchor 3: Signatures & CLI**:
-  - `parse_args()`: Adds `--mode` (`vector` or `live`, default `vector`), `--kender-audit` (bool, default `False` in vector mode to avoid remote LLM latency).
+  - `parse_args()`: Adds `--mode` (`vector` or `live`, default `vector`). Purges legacy remote KENDER Ollama dependency in favor of local deterministic scoring (`[FEAT-454]`).
   - `async def run_vector_evaluation(anchors: list[dict]) -> list[dict]`: Iterates over anchors, dispatches to `ArchiveNode` / `LabDNARouter` for `target_collection`, calculates recall and vector distance.
   - `evaluate_keywords(text: str, expected: list[str]) -> dict`: Case-insensitive substring matching.
 * **Anchor 4: Concrete Output Template**:
