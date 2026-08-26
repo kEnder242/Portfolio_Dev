@@ -2705,3 +2705,11 @@
 **Rationale:** Maintains high retrieval precision across distinct memory stores.
 **Mechanism:** `Portfolio_Dev/sync_chroma_dna.py`.
 
+## [FEAT-484] Declarative Policy Springboard (Dynamic Interest Fusion)
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L964) — Declarative Springboard Interest Fusion.
+**Logic:** Fuses LLM dynamic turn scoring with declarative `importance_floor` and `interest_boost` parameters from `config/triage_policy.json`, guaranteeing full dual-node synthesis for historical and technical domains without losing dynamic nuance.
+**Rationale:** Eliminates brittle conversational vetoes on briefly phrased historical queries while retaining full model flexibility.
+**Mechanism:** `HomeLabAI/src/logic/triage_policy_loader.py` & `HomeLabAI/src/logic/cognitive_hub.py`.
+
+
