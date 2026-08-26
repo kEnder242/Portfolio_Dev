@@ -106,12 +106,16 @@ def deploy_to_airlock(snapshots=False):
                         print(f"❌ Failed to execute {script}: {e}")
                 else:
                     print(f"Skipping {script} (up to date).")
+            else:
+                print(f"⚠️ Warning: Sync script not found: {script_path}")
+    else:
+        print(f"⚠️ Warning: Public airlock deployment directory not found: {www_dir}")
 
-        # [FEAT-456] Clean up lingering shot-scraper/chromium render processes
-        try:
-            subprocess.run(["/usr/bin/pkill", "-f", "shot-scraper|chromium"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except Exception:
-            pass
+    # [FEAT-456] Clean up lingering shot-scraper/chromium render processes
+    try:
+        subprocess.run(["/usr/bin/pkill", "-f", "shot-scraper|chromium"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
 
 def main(args):
     print("=== FIELD NOTES BUILD SYSTEM v2.3 (Trailers Enabled) ===")
@@ -127,17 +131,20 @@ def main(args):
     try:
         subprocess.run([sys.executable, os.path.join(BASE_DIR, "research_build.py")], check=True)
     except Exception as e:
-        print(f"❌ Failed to run research_build.py: {e}")
+        print(f"❌ Critical Error in research_build.py: {e}")
+        sys.exit(1)
         
     try:
         subprocess.run([sys.executable, os.path.join(BASE_DIR, "protocols_build.py")], check=True)
     except Exception as e:
-        print(f"❌ Failed to run protocols_build.py: {e}")
+        print(f"❌ Critical Error in protocols_build.py: {e}")
+        sys.exit(1)
         
     try:
         subprocess.run([sys.executable, os.path.join(BASE_DIR, "features_build.py")], check=True)
     except Exception as e:
-        print(f"❌ Failed to run features_build.py: {e}")
+        print(f"❌ Critical Error in features_build.py: {e}")
+        sys.exit(1)
         
     # [SPR-55] Hard-gate: verify FeatureTracker.md **Code:** links resolve (skip with --no-verify)
     if not args.no_verify:

@@ -3,12 +3,26 @@ import os
 import glob
 import logging
 import re
+import time
 
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 logging.basicConfig(level=logging.INFO, format='[AGGREGATE] %(message)s')
+
+def quarantine_record(source_file, raw_content, error):
+    """Writes a failed raw record to <source_file>.quarantine.jsonl for manual triage."""
+    quarantine_path = source_file + ".quarantine.jsonl"
+    entry = {
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "source": os.path.basename(source_file),
+        "error": str(error),
+        "raw": raw_content[:2000]
+    }
+    with open(quarantine_path, "a") as qf:
+        qf.write(json.dumps(entry) + "\n")
+    logging.warning(f"  [QUARANTINE] Wrote failed record to {os.path.basename(quarantine_path)}")
 
 def get_year_range(year_str):
     """Parses 'YYYY', 'YYYY-YYYY', or 'YYYY_MM' into a list of years."""
@@ -48,7 +62,9 @@ def aggregate_years():
         try:
             with open(MANIFEST_FILE, 'r') as f:
                 manifest = json.load(f)
-        except: pass
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning(f"Error loading manifest: {e}")
+            quarantine_record(MANIFEST_FILE, str(e), e)
 
     # 1.1 Load Overrides (Goal 5)
     overrides_file = os.path.join(DATA_DIR, "overrides.json")
@@ -57,7 +73,9 @@ def aggregate_years():
         try:
             with open(overrides_file, 'r') as f:
                 overrides = json.load(f).get("overrides", {})
-        except: pass
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning(f"Error loading overrides: {e}")
+            quarantine_record(overrides_file, str(e), e)
 
     # 2. Find all processed JSON files
     all_json = glob.glob(os.path.join(DATA_DIR, "*.json"))
@@ -151,7 +169,9 @@ def aggregate_years():
             try:
                 with open(yearly_file, 'r') as f:
                     existing_events = json.load(f)
-            except: pass
+            except (json.JSONDecodeError, OSError) as e:
+                logging.warning(f"Error loading existing {year}.json: {e}")
+                quarantine_record(yearly_file, str(e), e)
 
         seen = set()
         final_events = []
