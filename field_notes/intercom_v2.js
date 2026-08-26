@@ -667,8 +667,10 @@ async function connect() {
                     sessionStorage.setItem('acme_active_file', data.filename);
                 } catch (e) {}
             } else if (data.brain) {
-                // [FEAT-453] Safety net: diagnostic-prefixed brain lines go to the Crosstalk Bar
-                if (DIAGNOSTIC_PREFIX_RE.test(data.brain)) {
+                // [FEAT-453/480] Safety net: diagnostic-prefixed system lines go to the Crosstalk Bar.
+                // Do NOT intercept persona chat responses (Pinky/Brain) even if they contain bracketed text.
+                const isPersona = data.brain_source && /pinky|brain|insight|thought|resident/i.test(data.brain_source);
+                if (!isPersona && (data.type === 'crosstalk' || !data.type) && DIAGNOSTIC_PREFIX_RE.test(data.brain)) {
                     routeDiagnosticToCrosstalk(data.brain);
                     return;
                 }
