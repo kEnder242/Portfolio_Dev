@@ -445,6 +445,7 @@ async function getLabKey(target) {
         if (resp.ok) {
             const data = await resp.json();
             if (data.session_token) {
+                currentSocketId = data.session_token;
                 return data.session_token;
             }
         }
@@ -462,6 +463,9 @@ async function connect() {
     try {
         // [FEAT-426] Fetch the session key before opening the socket.
         currentLabKey = await getLabKey(targetUrl);
+        if (currentLabKey && currentLabKey !== 'unknown' && currentLabKey !== CONFIG.LAB_KEY) {
+            currentSocketId = currentLabKey;
+        }
         ws = new WebSocket(targetUrl);
         window.ws = ws;
         ws.onopen = () => {
@@ -476,6 +480,11 @@ async function connect() {
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log("[WS RECV]", data);
+            if (data.session_token) {
+                currentSocketId = data.session_token;
+            } else if (data.socket_id && (!currentSocketId || currentSocketId === 'Unknown')) {
+                currentSocketId = data.socket_id;
+            }
             
             // [FEAT-433] Asynchronous Sanity Critic Badge Handler
             if (data.type === 'sanity_check') {
@@ -600,12 +609,15 @@ async function connect() {
             }
 
             if (data.type === 'status') {
-                if (data.socket_id) {
+                if (data.session_token) {
+                    currentSocketId = data.session_token;
+                } else if (data.socket_id) {
                     currentSocketId = data.socket_id;
                 }
                 if (data.message) {
                     let msg = data.message;
-                    if (data.socket_id) msg += ` [SID: ${data.socket_id}]`;
+                    if (currentSocketId && currentSocketId !== "Unknown") msg += ` [SID: ${currentSocketId}]`;
+                    else if (data.socket_id) msg += ` [SID: ${data.socket_id}]`;
                     if (data.version && data.version !== CONFIG.VERSION) {
                         alert(`CACHE_LOCK_VIOLATION: Browser is running Intercom ${CONFIG.VERSION} but the Lab is at ${data.version}. \n\nThis mismatch will break the X-Lab-Key dependency and cause Remote Control errors. \n\nPlease perform a hard-refresh (Ctrl+F5) immediately.`);
                     }

@@ -2576,4 +2576,40 @@
 **Rationale:** 100% of historical unclean shutdowns (30/30 boots in August 2026) correlated to FAT filesystem dirty-bit stalls on `/dev/sdf1` during background system sync and workspace scans.
 **Mechanism:** Udev rules `90-usb-bdi-throttle.rules`, `99-bios-flashback-ignore.rules`, `/etc/fstab`, and `/etc/updatedb.conf`.
 
+## [FEAT-473] Speculative Triage Relay with Kender Priority Window & Winner-Console Routing
+**Status:** ACTIVE
+**Code:** [src/logic/speculative_triage.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/speculative_triage.py#L1) — Speculative Triage Relay.
+**Logic:** Asynchronous race relay dispatching primary triage to Remote Kender with a 2x warm latency head-start (~1000ms). If Kender is cold or lagging, triggers speculative local vLLM runner. The first runner returning valid triage JSON wins and cancels the trailing runner. Routes triage output to Brain Insight Console (Right) if Kender wins, or Pinky Console (Left) if vLLM wins.
+**Rationale:** Eliminates cold-wake latency stalls on remote Ollama while retaining deep reasoning and providing visual telemetry in the UI of which engine triaged the turn.
+**Mechanism:** `SpeculativeTriageRelay`, `CognitiveHub.process_query()`, `src/tests/test_speculative_triage.py`.
+
+## [FEAT-474] Grounded Triage Policy & Semantic Intent Verification
+**Status:** ACTIVE
+**Code:** [config/triage_policy.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/triage_policy.json#L1) — Grounded Triage Policy.
+**Logic:** Enforces canonical definitions for conversational vibes: restores `WYWO` to "While You Were Out" Standup Briefing and grounds `CASUAL` with explicit greeting classifications (`"how are things?"`, `"hello"`) to `importance: 0.1` and `rag: null`. Replaces tautological tests with genuine semantic assertions.
+**Rationale:** Prevents metaphorical drift and hallucinated vector lookups on standard conversational pleasantries.
+**Mechanism:** `config/triage_policy.json`, `src/logic/triage_engine.py`, `src/tests/test_triage_engine.py`.
+
+## [FEAT-475] Zero-Context Distance Gating & HyDE Force-Flag Removal
+**Status:** ACTIVE
+**Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1000) — Zero-Context Distance Gating.
+**Logic:** Removes mandatory `required: ["hyde_vector_text"]` constraint from JSON schemas. In `ArchiveNode.get_context()`, matches exceeding `max_distance` threshold or returning empty collections faithfully return `{"found": false, "context": ""}`. Downstream prompt assembly enforces Zero Context mode over hallucinated historical notes.
+**Rationale:** Prevents false-positive vector matches on non-technical turns from polluting resident context.
+**Mechanism:** `archive_node.py`, `cognitive_hub.py`, `src/tests/test_zero_context_rag.py`.
+
+## [FEAT-476] Intercom Session Horizon (SID) Wiring & Test Ghost Isolation
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L440) — Intercom Session Horizon (SID) Wiring.
+**Logic:** Binds `currentSocketId` directly to `data.session_token` upon `/status` and WebSocket handshake. Tracks `session_horizon_ts` in Foyer router to isolate active interactive user turns from past CLI test/evaluation logs.
+**Rationale:** Eliminates `[SID: Unknown]` in the UI and guarantees real-time message stream isolation across server sessions.
+**Mechanism:** `intercom_v2.js`, `src/v5/foyer/router.py`, `src/tests/test_session_horizon.py`.
+
+## [FEAT-477] Retrospective Delegation Audit & Deviation Ledger
+**Status:** ACTIVE
+**Code:** [docs/audits/SPRINT_60_62_DELEGATION_AUDIT.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/audits/SPRINT_60_62_DELEGATION_AUDIT.md#L1) — Delegation Audit Ledger.
+**Logic:** Forensic analysis documenting semantic drift, hallucinated test coverage, forced schema flags, and dead code across subagent delegations in Sprints 60–63.
+**Rationale:** Provides actionable root-cause analysis and remediation anchors to harden future delegation dispatches.
+**Mechanism:** `HomeLabAI/docs/audits/SPRINT_60_62_DELEGATION_AUDIT.md`.
+
+
 
