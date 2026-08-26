@@ -13274,6 +13274,44 @@
                             <span class="impact-badge impact-design">DESIGN</span>
                         </td>
                     </tr>
+                    <tr id="LAB-111">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-111</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Removable USB FOB Kernel BDI Isolation & Auto-Mount Protection
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#BKM-033" style="color:var(--accent-color); text-decoration:none;">docs/Protocols.md</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Neutralizes kernel I/O deadlocks and D-state thread stalls caused by persistent USB flash drives (e.g., ASUS BIOS Flashback FOB). Employs a three-layer defense: 1) Udev <code>UDISKS_IGNORE="1"</code> rule preventing desktop auto-mounts with the slow <code>flush</code> penalty, 2) <code>/etc/fstab</code> on-demand user mount without <code>flush</code> (<code>noauto,user,noatime</code>), and 3) Kernel Backing Device Info (BDI) throttling on all USB storage (<code>max_ratio=1</code>, <code>strict_limit=1</code>) to prevent dirty RAM writeback backlogs from stalling global <code>sync()</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>100% of historical unclean shutdowns (30/30 boots in August 2026) correlated to FAT filesystem dirty-bit stalls on <code>/dev/sdf1</code> during background system sync and workspace scans.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Udev rules <code>90-usb-bdi-throttle.rules</code>, <code>99-bios-flashback-ignore.rules</code>, <code>/etc/fstab</code>, and <code>/etc/updatedb.conf</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
