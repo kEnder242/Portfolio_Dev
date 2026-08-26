@@ -572,11 +572,11 @@
 <p><strong>The 4-Anchor Prompt Standard ([BKM-043])</strong>:
    Every delegation prompt passed in <code>--details</code> MUST explicitly specify:</p>
 </li>
+<li><strong>Grep-Stable Code Anchor</strong>: Exact target file, target function/class, and approximate line number with a grep fallback string (e.g. <code>"In field_notes/evaluate_rag.py, edit inside def main() starting around line 260; grep 'async def main' if lines shifted"</code>).</li>
 <li><strong>Import Anchor</strong>: Root namespace convention (<code>"PYTHONPATH=src: use 'from logic.x import y'"</code>).</li>
 <li><strong>Path Anchor</strong>: Directory resilience (<code>"Use Path(__file__).resolve().parent... fallback for configs"</code>).</li>
-<li><strong>Exact Signatures</strong>: Constructor kwargs, dataclass fields, and string prefix contracts (e.g. <code>MOUSE_DEF:</code>).</li>
 <li>
-<p><strong>Output Template</strong>: Concrete return dict/dataclass examples to eliminate design-by-inference.</p>
+<p><strong>Surgical Delta &amp; Output Template</strong>: Exact signatures and concrete return dict/dataclass examples to eliminate design-by-inference.</p>
 </li>
 <li>
 <p><strong>Git Forensic Ownership Gate</strong>:</p>
@@ -827,8 +827,48 @@ For internal swarm topology, model tool-calling constraints (KENDER/Qwen3), OmO 
        "flawed_output": "&lt;previous_assistant_response&gt;",
        "ground_truth": "&lt;user_correction_text&gt;",
        "source": "CO_PILOT_FOURTH_WALL"
-     }</code></li>
+     }</code><ul>
 <li><strong>Rubric Tuning (Netflix Pattern)</strong>: Automatically append the user's assertion as a ground-truth boolean constraint to the Universal Epistemic Evaluator.</li>
+</ul>
+</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-043</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Master 4-Anchor Prompt Standard (Surgical Code Anchoring)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Date:</strong> August 25, 2026<br />
+<strong>Objective</strong>: Eliminate subagent design-by-inference, whole-file re-scan thrash, and import/path errors by enforcing 4 mandatory, grep-resilient anchors in every delegation payload.</p>
+<ol>
+<li><strong>Anchor 1: Grep-Stable Code Anchor</strong>:</li>
+<li>Must specify exact target file, target function/class, and approximate line number with a grep fallback string.</li>
+<li><em>Formula</em>: <code>"In &lt;file&gt;, edit inside def &lt;func&gt;() starting around line &lt;N&gt; (grep: '&lt;unique_signature&gt;' if lines shifted)"</code>.</li>
+<li>
+<p><em>Purpose</em>: Prevents subagents from whole-file re-reading or getting lost when prior edits shift line numbers.</p>
+</li>
+<li>
+<p><strong>Anchor 2: Import &amp; Root Namespace Anchor</strong>:</p>
+</li>
+<li>Must specify explicit root namespace convention.</li>
+<li><em>Formula</em>: <code>"PYTHONPATH=src: use 'from logic.x import y'</code> (never relative <code>..</code> or <code>src.logic.x</code>)"`.</li>
+<li>
+<p><em>Purpose</em>: Eliminates Python module resolution mismatches across workspaces.</p>
+</li>
+<li>
+<p><strong>Anchor 3: Path Resilience Anchor</strong>:</p>
+</li>
+<li>Must mandate stdlib <code>pathlib.Path(__file__).resolve().parent...</code> fallbacks for all configuration and asset file reads.</li>
+<li>
+<p><em>Purpose</em>: Eliminates <code>FileNotFoundError</code> when commands run from different working directories.</p>
+</li>
+<li>
+<p><strong>Anchor 4: Surgical Delta &amp; Concrete Output Template</strong>:</p>
+</li>
+<li>Must provide concrete dataclass, dictionary schema, and return type examples rather than abstract prose instructions.</li>
+<li><em>Purpose</em>: Completely eliminates "design-by-inference" where subagents invent incompatible dictionary keys.</li>
 </ol>
                             </div>
                         </td>
