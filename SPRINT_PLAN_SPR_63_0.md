@@ -3,7 +3,7 @@
 **Sprint:** 63.0  
 **Date:** August 25, 2026  
 **Status:** 🏗️ READY FOR DELEGATION / GREENLIGHT  
-**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Epistemic Closed Loop (Gem Refinement in Reverse), AGY Reality Check & Purple Human-in-the-Loop Demarcation*
+**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Epistemic Closed Loop (Gem Refinement in Reverse), Production Exception Hardening, AGY Reality Check & Purple Human-in-the-Loop Demarcation*
 
 ---
 
@@ -163,7 +163,22 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ---
 
-### 📌 Story 63.4: AGY Reality Check & Purple UI Demarcation
+### 📌 Story 63.4: Production Exception & Silent Bypass Hardening Sweep
+* **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
+* **Files to Modify**:
+  - `field_notes/utils.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/utils.py`)
+  - `field_notes/aggregate_years.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/aggregate_years.py`)
+  - `field_notes/mass_scan.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mass_scan.py`)
+* **Grep Anchors**:
+  - In `utils.py`, lines 40-50, 80-90, 175-185 (grep: `except: pass`). Replace bare `except: pass` with explicit `except (json.JSONDecodeError, OSError, ValueError) as e: logger.warning(f"Error parsing ...: {e}")`.
+  - In `aggregate_years.py`, lines 50-65, 150-160 (grep: `except: pass`). Replace silent passes with diagnostic logging.
+  - In `mass_scan.py`, line 118 (grep: `except: pass`). Replace silent pass with error logging.
+* **Verification Command**:
+  `python3 -c 'import sys; from field_notes.utils import safe_load_json; print("✅ Utils verified")'`
+
+---
+
+### 📌 Story 63.5: AGY Reality Check & Purple UI Demarcation
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
 * **File to Modify**: `field_notes/status.html` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`)
 * **Grep Anchor**: Inside `showRagEval()` / RAG log renderer around line 1344 (grep: `RAG EVALUATION METRICS`).
@@ -180,7 +195,7 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ---
 
-### 📌 Story 63.5: Dynamic Closed Loop & Certification
+### 📌 Story 63.6: Dynamic Closed Loop & Certification
 * **Target Workspace**: `/home/jallred/Dev_Lab`
 * **Grep Anchor**: In `Portfolio_Dev/field_notes/mass_scan.py`, inside post-scan step around line 180 (grep: `latest_synthesis_gems.json`).
 * **Surgical Delta**:
@@ -196,5 +211,6 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 1. `validation_anchors.json` contains 10 fully grounded queries with verified expectations.
 2. `evaluate_rag.py --mode vector` executes in <2s with >80% keyword recall across multi-collection DNA.
 3. `evaluate_rag.py --mode live` validates full Triage $\rightarrow$ Brain $\rightarrow$ Pinky Critic execution over WebSocket.
-4. `status.html` cleanly demarcates Automated RAG Benchmarks from Co-Pilot Ground-Truth traces with Purple styling.
-5. All regression tests pass (367/367), documentation is synchronized, and site builds with 0 link drift.
+4. Bare `except: pass` anti-patterns purged from `utils.py`, `aggregate_years.py`, and `mass_scan.py` with diagnostic warnings.
+5. `status.html` cleanly demarcates Automated RAG Benchmarks from Co-Pilot Ground-Truth traces with Purple styling.
+6. All regression tests pass (367/367), documentation is synchronized, and site builds with 0 link drift.
