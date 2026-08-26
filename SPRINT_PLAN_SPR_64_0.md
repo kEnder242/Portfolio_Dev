@@ -269,3 +269,57 @@ Sprint 64.0 addresses the core architectural gaps identified during live interac
 │    └─ Update 00_FEDERATED_STATUS.md and FeatureTracker.md DNA ledgers.                   │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 🛠️ Post-Sprint Hardening & Diagnostics Maintenance (2026-08-26)
+
+### 1. Mass Scan Resilience & Exception Quarantine Trap
+* **Root Cause**: `get_low_rank_items()` in `Portfolio_Dev/field_notes/mass_scan.py` iterated through all `.json` files in `field_notes/data/`. When encountering `processed_jobs.json` (an array of job ID strings) or 0-byte uninitialized files (`vram_characterization.json`), it attempted `event.get('rank', 2)`, raising an unhandled `AttributeError: 'str' object has no attribute 'get'` that terminated `field-notes-nightly.service`.
+* **Fix Applied**:
+  1. Added `"processed_jobs"` to the automatic exclusion list.
+  2. Enforced strict dictionary validation: `if isinstance(event, dict) and event.get('rank', 2) < 4:`.
+  3. Added single-object dictionary handling (`elif isinstance(data, dict):`).
+  4. Wrapped file loading in a universal exception quarantine handler (`.quarantine.jsonl`) to ensure corrupt gems log a warning rather than crashing the background daemon.
+  5. Re-seeded `vram_characterization.json` with `{}`. Verified 193 low-rank candidate items load cleanly.
+
+### 2. Status Telemetry UI Syntax Resolution (`status.html`)
+* **Root Cause**: In `Portfolio_Dev/field_notes/status.html`, line 1453 declared `let epochHtml = '', stepHtml = '', gemsHtml = '', rankHtml = '';`, and line 1491 declared `let gemsHtml = '';` within the same block scope. This threw `SyntaxError: redeclaration of let gemsHtml`, breaking the JavaScript runtime and leaving the Interleaved System Logs panel blank.
+* **Fix Applied**: Renamed regex match to `regexGemsHtml`, unified diagnostic metrics (displaying Epoch, Step, Gems Refined, Rank Upgrades alongside live synthesis gem cards), and re-compiled static assets.
+
+---
+
+## 📊 FeatureTracker vs. Codebase Static Analysis & Bucket Ledger
+
+A comprehensive static analysis was executed to map all 357 features in `FeatureTracker.md` against 524 code tags in active and archived files:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ STATIC ANALYSIS AUDIT SUMMARY                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ Total Documented Features in Tracker:       364  (+7 Ingested)         │
+│ ────────────────────────────────────────────────────────────────────── │
+│ ✅ Valid & Grounded (Target file exists):   332  (100% of live logic)  │
+│ 📁 OS / System Infrastructure:               21  (Live in /etc/ & user)│
+│ 🗑️ Formally Defeatured / Retired:           11  (Documented as dead)  │
+│ ❌ Lost / Missing from Disk:                  0  (Zero lost features!) │
+│ 🔀 Moved / Path Drift:                        0  (All paths resolve)   │
+│ ────────────────────────────────────────────────────────────────────── │
+│ ❓ Uncharted Tags in ACTIVE Code:             0  (All 7 Formalized)    │
+│ 📦 Uncharted Tags in ARCHIVED Code:          57  (Inside src/archive/) │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Bucket Breakdown & Resolutions:
+1. **Valid & Grounded (332 Features)**: All 332 core application features have verified, active code paths with 0 link drift.
+2. **GitLab Mirror Link Normalization (4 Features)**: `FEAT-249`, `FEAT-250`, `FEAT-286`, `FEAT-402` had legacy `gitlab.com` mirror URLs. Verified all files (`pulse_monitor.sh`, `start_lab.sh`, `HubProbe.py`) exist in `/home/jallred/Dev_Lab/` and updated links to canonical GitHub paths.
+3. **Active Uncharted Features Formalized (7 Features)**:
+   * `[FEAT-120]`: Context Transparency Clickable Reference Links (`field_notes/intercom_v2.js:L202`).
+   * `[FEAT-224]`: Persona UI Hemispheric Partitioning (`field_notes/intercom_v2.js:L276`).
+   * `[FEAT-265.6]`: Functional Gateway State Discrimination (`field_notes/intercom_v2.js:L528`).
+   * `[FEAT-314]`: State-Aware Resilient WebSocket Reconnection (`field_notes/intercom_v2.js:L718`).
+   * `[VIBE-007]`: Manifest Year Archeology Fallback (`field_notes/scan_queue.py:L75`).
+   * `[VIBE-008]`: Structural Preamble Guillotine (`field_notes/nibble_v2.py:L181`).
+   * `[VIBE-012]`: Hemispheric Independence Vector Partitioning (`sync_chroma_dna.py:L76`).
+4. **Archived Legacy Features (57 Features)**: 57 legacy V4 polling and watchdog tags safely preserved in `HomeLabAI/src/archive/lab_attendant_v4.py`.
+
