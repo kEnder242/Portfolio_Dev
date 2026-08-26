@@ -1264,7 +1264,7 @@
 
 ## [FEAT-249] VRAM Hibernation Matrix (Deep Sleep)
 **Status:** ACTIVE
-**Code:** [pulse_monitor.sh](https://gitlab.com/kEnder242/Dev_Lab/blob/main/pulse_monitor.sh#L6) — VRAM Hibernation Matrix (Deep Sleep).
+**Code:** [pulse_monitor.sh](https://github.com/kEnder242/Dev_Lab/blob/main/pulse_monitor.sh#L6) — VRAM Hibernation Matrix (Deep Sleep).
 **Logic:** Tiered VRAM reclamation based on client connectivity and activity timers.
 **Mechanism:** Reclaims ~6GB VRAM after 10m idle time.
 
@@ -1287,7 +1287,7 @@
 
 ## [FEAT-250] Surgical Ignition (Immunity-Aware)
 **Status:** ACTIVE
-**Code:** [start_lab.sh](https://gitlab.com/kEnder242/Dev_Lab/blob/main/start_lab.sh#L30) — Surgical Ignition (Immunity-Aware).
+**Code:** [start_lab.sh](https://github.com/kEnder242/Dev_Lab/blob/main/start_lab.sh#L30) — Surgical Ignition (Immunity-Aware).
 **Logic:** Enable engine-only reloading while sparing the active Hub process.
 **Mechanism:** Assassin spares Port 8765 if `engine_only` is requested.
 
@@ -1377,7 +1377,7 @@
 
 ## [FEAT-286] Escalation Probe Protocol
 **Status:** ACTIVE
-**Code:** [HubProbe.py](https://gitlab.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Escalation Probe Protocol.
+**Code:** [HubProbe.py](https://github.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Escalation Probe Protocol.
 **Logic:** Implements a 3-stage ignition sequence for remote and local engines:
 1.  **Stage 1 (Ping):** Verifies physical network/port reachability.
 2.  **Stage 2 (Tags):** Verifies API readiness and model manifest availability.
@@ -1510,7 +1510,7 @@
 
 ## [FEAT-402] Asymmetric Telemetry Probe (Failover Optimization)
 **Status:** ACTIVE
-**Code:** [HubProbe.py](https://gitlab.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Asymmetric Telemetry Probe (Failover Optimization).
+**Code:** [HubProbe.py](https://github.com/kEnder242/Dev_Lab/blob/main/HubProbe.py#L5) — Asymmetric Telemetry Probe (Failover Optimization).
 **Logic:** Differentiates between hard offline states (Connection Refused) and soft loading states (inference lag) to optimize the remote KENDER 4090 failover.
 **Rationale:** Prevents premature failover during long-running tasks or loading peaks, while ensuring rapid re-connection when the primary host boots.
 **Mechanism:** Strict 5-second check timeout, asymmetric cache (300s success, 15s failure), 180-second loading grace period, and dynamic interjections for turns exceeding 10 seconds of remote latency.
@@ -2651,7 +2651,57 @@
 
 ## [FEAT-483] Grounded Validation Anchor Test Suite (VAL-01–VAL-10)
 **Status:** ACTIVE
-**Code:** [src/tests/test_grounded_anchors.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_grounded_anchors.py) — Grounded Validation Anchor Tests.
+**Code:** [src/tests/test_grounded_anchors.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_grounded_anchors.py#L1) — Grounded Validation Anchor Tests.
 **Logic:** Parameterized end-to-end unit test suite validating all 10 real-world anchors from `config/validation_anchors.json` against triage classification and Zero-Context HyDE synthesis without tautological mocks.
 **Rationale:** Replaces synthetic self-asserting tests with genuine validation coverage.
 **Mechanism:** `config/validation_anchors.json`, `src/tests/test_grounded_anchors.py`.
+
+## [FEAT-120] Context Transparency Clickable Reference Links
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L202) — Context Transparency Links.
+**Logic:** Prepends clickable file reference links into the chat stream when artifacts or RAG documents are cited by reasoning nodes.
+**Rationale:** Gives instant UI traceability to source documents without manual search.
+**Mechanism:** `field_notes/intercom_v2.js`.
+
+## [FEAT-224] Persona UI Hemispheric Partitioning
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L276) — Persona Hemispheric Alignment.
+**Logic:** Partitions message bubbles in Web Intercom: Strategic Sovereign (Brain) and Intuition (Shadow) render on the right hemisphere; Pinky and system logs render on the left.
+**Rationale:** Provides clear visual distinction between analytical reasoning turns and sensory triage turns.
+**Mechanism:** `field_notes/intercom_v2.js`, `field_notes/intercom.html`.
+
+## [FEAT-265.6] Functional Gateway State Discrimination
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L528) — Gateway State Discrimination.
+**Logic:** Differentiates between Attendant process liveness (`UP`) and LLM engine readiness (`VOCAL`), preventing premature audio streaming while weights are loading.
+**Rationale:** Eliminates buffer dropouts during engine spin-up.
+**Mechanism:** `field_notes/intercom_v2.js`.
+
+## [FEAT-314] State-Aware Resilient WebSocket Reconnection
+**Status:** ACTIVE
+**Code:** [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L718) — State-Aware Reconnect.
+**Logic:** Polls the Lab Attendant status API before retrying WebSocket reconnection, preventing retry storm thrash when the host is hibernating.
+**Rationale:** Reduces client-side CPU consumption and network chatter during host idle windows.
+**Mechanism:** `field_notes/intercom_v2.js`.
+
+## [VIBE-007] Manifest Year Archeology Fallback
+**Status:** ACTIVE
+**Code:** [field_notes/scan_queue.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/scan_queue.py#L75) — Manifest Year Fallback.
+**Logic:** Uses archive manifest year metadata as an absolute timestamp fallback when parsing raw unstructured historical notes lacking explicit ISO headers.
+**Rationale:** Prevents chronological misplacement in the 18-year timeline.
+**Mechanism:** `field_notes/scan_queue.py`.
+
+## [VIBE-008] Structural Preamble Guillotine
+**Status:** ACTIVE
+**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py#L181) — Structural Preamble Guillotine.
+**Logic:** Trims conversational filler and meta-commentary from local model responses before saving distilled timeline events.
+**Rationale:** Enforces Class 1 clean data standards and prevents chat drift in the knowledge base.
+**Mechanism:** `field_notes/nibble_v2.py`.
+
+## [VIBE-012] Hemispheric Independence Vector Partitioning
+**Status:** ACTIVE
+**Code:** [sync_chroma_dna.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/sync_chroma_dna.py#L76) — Hemispheric Vector Partitioning.
+**Logic:** Partitions ChromaDB vector collections into independent cognitive domains (`feature_dna`, `protocols`, `research`), preventing cross-domain embedding pollution.
+**Rationale:** Maintains high retrieval precision across distinct memory stores.
+**Mechanism:** `Portfolio_Dev/sync_chroma_dna.py`.
+

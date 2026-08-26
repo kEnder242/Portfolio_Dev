@@ -1450,22 +1450,22 @@
                     const rankMatch = msg.match(/rank upgrades?[=:]?\s*(\d+)/i);
                     const rankDetailMatch = msg.match(/(\d+)\s*[→➡]\s*(\d+)/);
                     
-                    let epochHtml = '', stepHtml = '', gemsHtml = '', rankHtml = '';
+                    let epochHtml = '', stepHtml = '', regexGemsHtml = '', rankHtml = '';
                     if (epochMatch) {
                         const cur = epochMatch[1];
                         const tot = epochMatch[2] || cur;
                         const pct = epochMatch[2] ? ((parseInt(cur) / parseInt(tot)) * 100).toFixed(0) : '100';
-                        epochHtml = `<div><strong>Epoch:</strong> ${cur}${epochMatch[2] ? `/${tot} (${pct}%)` : ' Complete'}</div>`;
+                        epochHtml = `<div><span style="color:#8b949e;">Epoch:</span> <strong>${cur}${epochMatch[2] ? `/${tot} (${pct}%)` : ' Complete'}</strong></div>`;
                     }
                     if (stepMatch) {
-                        stepHtml = `<div><strong>Step:</strong> ${stepMatch[1]}${stepMatch[2] ? `/${stepMatch[2]}` : ''}</div>`;
+                        stepHtml = `<div><span style="color:#8b949e;">Step:</span> <strong>${stepMatch[1]}${stepMatch[2] ? `/${stepMatch[2]}` : ''}</strong></div>`;
                     }
                     if (gemsMatch) {
-                        gemsHtml = `<div><strong>Gems Refined:</strong> ${gemsMatch[1]}</div>`;
+                        regexGemsHtml = `<div><span style="color:#8b949e;">Gems Refined:</span> <strong>${gemsMatch[1]}</strong></div>`;
                     }
                     if (rankMatch) {
                         const detail = rankDetailMatch ? ` <span style="color:#28a745;">↑ ${rankDetailMatch[1]} → ${rankDetailMatch[2]}</span>` : '';
-                        rankHtml = `<div><strong>Rank Upgrades:</strong> ${rankMatch[1]}${detail}</div>`;
+                        rankHtml = `<div><span style="color:#8b949e;">Rank Upgrades:</span> <strong>${rankMatch[1]}</strong>${detail}</div>`;
                     }
 
                     // Fetch live status.json, queue.json, and latest_synthesis_gems.json to enrich diagnostic context
@@ -1526,6 +1526,10 @@
                                 <div><span style="color:#8b949e;">Activity:</span> <strong>${activityMsg}</strong></div>
                                 ${targetFile ? `<div><span style="color:#8b949e;">Target:</span> <code style="color:#58a6ff;">${targetFile}</code></div>` : ''}
                                 <div><span style="color:#8b949e;">Archive:</span> <strong style="color:var(--accent-color);">${totalEvents}</strong> events (18-yr)</div>
+                                ${epochHtml}
+                                ${stepHtml}
+                                ${regexGemsHtml}
+                                ${rankHtml}
                                 ${queueCount > 0 ? `<div><span style="color:#ffcc00; font-weight:bold;">⚡ Queue: ${queueCount} chunks</span></div>` : ''}
                             </div>
                             ${gemsHtml}

@@ -105,21 +105,28 @@ def get_low_rank_items():
     """Finds items that could benefit from re-reasoning."""
     items = []
     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    ignored_patterns = ["themes", "status", "queue", "state", "search_index", "pager_activity", "file_manifest", "processed_jobs"]
     for jf in json_files:
-        if any(x in jf for x in ["themes", "status", "queue", "state", "search_index", "pager_activity", "file_manifest"]): continue
+        if any(x in jf for x in ignored_patterns): continue
         try:
             with open(jf, 'r') as f:
                 data = json.load(f)
                 if isinstance(data, list):
                     for event in data:
                         # Rank < 4 is a candidate for "refinement"
-                        if event.get('rank', 2) < 4:
+                        if isinstance(event, dict) and event.get('rank', 2) < 4:
                             items.append({"file": jf, "event": event})
-        except (json.JSONDecodeError, OSError) as e:
+                elif isinstance(data, dict):
+                    if data.get('rank', 2) < 4:
+                        items.append({"file": jf, "event": data})
+        except Exception as e:
             logging.warning(f"[SCAN] Skipping unreadable gem file {os.path.basename(jf)}: {e}")
             quarantine_path = jf + ".quarantine.jsonl"
-            with open(quarantine_path, "a") as qf:
-                qf.write(json.dumps({"timestamp": time.strftime("%Y-%m-%d %H:%M:%S"), "error": str(e)}) + "\n")
+            try:
+                with open(quarantine_path, "a") as qf:
+                    qf.write(json.dumps({"timestamp": time.strftime("%Y-%m-%d %H:%M:%S"), "error": str(e)}) + "\n")
+            except Exception:
+                pass
     return items
 
 LOCK_ACQUIRE_TIMEOUT = 10.0
