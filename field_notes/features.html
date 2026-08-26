@@ -13045,15 +13045,9 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Negative RAG Gateway: Zero Context Fallback & HyDE Template Scrubber
+                                    Gated On-Demand RAG & Zero Context Default
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 61)</p>
-                </div>
-            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -13063,25 +13057,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Implements the "Zero Context &gt; Default Context" rule. When intent or domain classification is ambiguous, sets <code>hyde_vector_text: ""</code> and instructs <code>ArchiveNode</code> to return empty context rather than defaulting to career validation notes. Automatically scrubs literal angle brackets (<code>&lt;...&gt;</code>) and few-shot template placeholders before vector search.</p>
+                    <p>Implements the "Zero Context &gt; Default Context" rule via gated on-demand retrieval. RAG defaults to zero context (no speculative retrieval) unless explicit anchors, named components, or historical tags are called out. Automatically scrubs literal angle brackets (<code>&lt;...&gt;</code>) and few-shot template placeholders before vector search.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevents models from hallucinating 2018 Intel Federal PAE history when answering general conversational questions.</p>
+                    <p>Prevents models from hallucinating 2018 Intel Federal PAE history when answering general conversational questions while preserving surgical search when explicitly requested.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>CognitiveHub._process_turn()</code>, <code>ArchiveNode.get_context()</code>, and <code>test_triage_meta_vibe.py</code>.</p>
+                    <p><code>CognitiveHub._process_turn()</code>, <code>ArchiveNode.get_context()</code>, <code>triage_engine</code>, and <code>test_sprint61_integration.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     <tr id="FEAT-468">
@@ -13092,12 +13086,6 @@
                                     Multi-Agent Speaker Demarcation & Echo-Chamber Shield
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 61)</p>
-                </div>
-            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -13119,13 +13107,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>CognitiveHub._process_turn()</code>, <code>triage_engine</code>, and <code>test_triage_cadence.py</code>.</p>
+                    <p><code>CognitiveHub._process_turn()</code>, <code>triage_engine</code>, and <code>test_sprint61_integration.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     <tr id="FEAT-469">
@@ -13136,12 +13124,6 @@
                                     Epistemic Meta-Grounding: Feature DNA & Lab Infrastructure Lexicon
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 61)</p>
-                </div>
-            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -13163,13 +13145,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>ArchiveNode._query_multi_collections()</code> and <code>test_archive_lab_dna_routing.py</code>.</p>
+                    <p><code>ArchiveNode.get_context()</code>, <code>lab_dna_router</code>, and <code>test_sprint61_integration.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     <tr id="FEAT-470">
@@ -13180,12 +13162,6 @@
                                     Cartoon Roleplay Critic & Actionable Technical Summary
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 61)</p>
-                </div>
-            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -13207,13 +13183,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>PinkyNode</code> critic prompt, <code>CognitiveHub.run_division_of_labor()</code>, and <code>test_pinky_critic.py</code>.</p>
+                    <p><code>PinkyNode</code> critic prompt, <code>pinky_critic_persona.py</code>, <code>CognitiveHub.evaluate_grounding()</code>, and <code>test_sprint61_integration.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-design">DESIGN</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     <tr id="FEAT-471">
@@ -13224,12 +13200,6 @@
                                     Dynamic Speaker Registry & Prefix Sanitization Gate
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
-            <div style="margin-bottom: 6px;">
-                <span class="field-label">Status Details</span>
-                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 61)</p>
-                </div>
-            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -13251,7 +13221,51 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>SpeakerRegistry</code> in <code>src/logic/triage_engine.py</code> and <code>test_triage_engine.py</code>.</p>
+                    <p><code>SpeakerRegistry</code> in <code>src/logic/triage_engine.py</code> and <code>test_sprint61_integration.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-472">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-472</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Dynamic Route Incubation & Solidification Pipeline
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Sprint 62)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L1" style="color:var(--accent-color); text-decoration:none;">src/logic/triage_engine.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Three-tier declarative routing system featuring immutable core policy (<code>config/triage_policy.json</code>), mouse-owned supplementary playground (<code>config/triage_supplement.json</code>), and a lifecycle promotion mechanism for mouse-discovered triage routes based on live evaluation provenance.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Allows resident models to dynamically map and incubate candidate routes in a sandbox without risking mutation or corruption of production routing rules.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>TriageEngine</code>, <code>triage_policy.json</code>, <code>triage_supplement.json</code>, and <code>test_route_incubation.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
