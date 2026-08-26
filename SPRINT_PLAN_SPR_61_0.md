@@ -187,3 +187,46 @@ class SpeakerRegistry:
 4. **Story 61.4**: Core Orchestrator Wiring, Stream Demarcation & Integration Suite (`test_sprint61_integration.py`).
 5. **Story 61.5**: Lab Stack Restart (`acme-lab.service`) & Live-Fire WebSocket Gauntlet (`test_live_sprint61_e2e.py`).
 6. **Feature Links & Docs**: Update `FeatureTracker.md` and rebuild Field Notes.
+
+---
+
+## 🔬 Post-Sprint Architecture Addendum: Meta Taxonomy & Supervisory Feedback Grammar
+
+### 1. Structural Distinction: System Infrastructure vs. Meta-Cognitive Supervisory Guidance
+
+```
+                                  USER INPUT
+                                      │
+               ┌──────────────────────┴──────────────────────┐
+               ▼                                             ▼
+     [INFRASTRUCTURE META]                         [SUPERVISORY / FEEDBACK META]
+  "What is the audio pipeline state?"            "The critic phase needs tuning; 
+  "Is the vLLM engine running?"                   use Pinky cartoon quips instead."
+               │                                             │
+               ▼                                             ▼
+  Queries CLaRa Vector Store                     Intercepted by Feedback Engine
+  (feature_dna, lab_infrastructure)              Updates Session Memory / Whiteboard
+  Zero Career Notes. No hallucination.           Acknowledges architectural coaching.
+```
+
+- **`lab_internal` (CLaRa Retrieval)**: Ground truth repository of the lab’s code and hardware (`feature_dna`, `lab_infrastructure`, `lab_journal`). Retrieves feature specs with Zero Context fallback.
+- **`META` (Conversational Vibe)**: Conversational mode indicating the user is speaking about the lab's operating environment, actors, or conversational cadence (not external silicon or historical PAE projects).
+
+### 2. The Supervisory Feedback Grammar
+
+| Characteristic | Linguistic Indicators | Intended System Action |
+|:---|:---|:---|
+| **Actor Referencing** | *"the critic phase"*, *"Pinky"*, *"Brain"*, *"Deep Thought"*, *"triage"* | Directs specific personas rather than requesting external research. |
+| **Language of Expectation & Normative Steering** | *"I think you need to"*, *"needs some tuning"*, *"less useful than"*, *"should belong in"*, *"would be more ideal"*, *"makes the cadence work better"* | Establishes architectural intent and behavioral constraints (SOP/BKM coaching). |
+| **Stream & Cadence Awareness** | *"in crosstalk"*, *"Brain's insight"*, *"introduce it naturally"*, *"cadence"*, *"prompted"* | Meta-evaluates user experience and WebSocket flow. |
+| **Feedback Loop Closure** | Direct critique of an immediately preceding assistant turn | Calibrates prompt/persona alignment in real time. |
+
+### 3. The 6-Part Vibe Taxonomy
+
+1. **WYWO ("While You Were Out")**: Queries subconscious consolidation, dreaming, and background crystallization from short-term memory.
+2. **Provenance / Self-Awareness**: Checks turn ledger and session context to explain *why* an actor spoke.
+3. **Live Telemetry & Interleaved System Health**: Live NVML thermals, GPU VRAM, and summary of system logs.
+4. **Multi-Agent Dynamics**: Reads `round_table_memory` and `crosstalk` buffer to inspect Pinky and Brain's debate.
+5. **Sprints vs. Features**: Sprints are orchestrator/AGY agile concepts; residents interact with `feature_dna` and `lab_infrastructure`.
+6. **Supervisory Feedback**: Direct architectural coaching from the Lab Director, acknowledging guidance and adjusting behavior without triggering external RAG.
+
