@@ -3,11 +3,11 @@
 **Sprint:** 63.0  
 **Date:** August 25, 2026  
 **Status:** 🏗️ READY FOR DELEGATION / GREENLIGHT  
-**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Grounded Hardware/BKM Anchors, Multi-Collection Routing, and Purple Human-in-the-Loop Demarcation*
+**Theme:** *Dual-Tier Evaluation Architecture (Vector Subsystem vs. Live Round Table), Epistemic Closed Loop (Gem Refinement in Reverse), AGY Reality Check & Purple Human-in-the-Loop Demarcation*
 
 ---
 
-## 🧭 Executive Summary: Forensic Breakdown of Historical RAG EVAL Failures
+## 🧭 Executive Summary: Forensic Breakdown & The Epistemic Closed Loop
 
 A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.jsonl` revealed the exact root causes behind historical RAG evaluation failures:
 
@@ -30,7 +30,31 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ---
 
-## 🏛️ Architectural Consensus: Dual-Tier Evaluation Architecture
+## 🔄 The Epistemic Closed Loop: "Gem Refinement in Reverse"
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                          THE EPISTEMIC CLOSED LOOP ARCHITECTURE                          │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  FORWARD PIPELINE (MassScan & Curator):                                                  │
+│  [Raw Engineering Notes] ──► [Information Extraction] ──► [Diamond Gem: GEM-3582]       │
+│                                                                  │                       │
+│                                                  (Jeopardy Auto-Inversion [FEAT-161])    │
+│                                                                  ▼                       │
+│  REVERSE PIPELINE (RAG Evaluation):                              │                       │
+│  [Grounding Verified] ◄── [Brain/Pinky Cognition] ◄── [Dynamic Eval Query Generated]     │
+│                                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Fixed Golden Anchors (10 Core Queries)**: Acts as the permanent CI regression baseline across Silicon Validation, Platform Telemetry, and Operational BKMs.
+2. **Dynamic Speculative Evals (Auto-Generated from Gems)**: As MassScan curates newly discovered Rank 4/5 gems, it auto-generates candidate query pairs into the pool, turning the lab into a self-testing, self-improving engine.
+3. **Decoupled Local Evaluation**: Eliminates legacy network dependencies on remote KENDER (Ollama) by running evaluation locally via `Pinky Critic` (`[FEAT-470]`) and the deterministic `Epistemic 5-Question Battery` (`[FEAT-454]`).
+
+---
+
+## 🏛️ Dual-Tier Evaluation Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────┐
@@ -57,8 +81,6 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 ---
 
 ## 💎 Grounded Evaluation Anchor Portfolio (10 Real-World Validation Queries)
-
-The evaluation suite is grounded in real 18-year validation history, platform telemetry registers, and lab operational BKMs:
 
 ### Category A: Silicon Validation & Bring-Up (`artifact_vault`)
 1. **PCIe AER Error Masks**: *"What are the PCIe AER uncorrectable error status mask register offsets and bit definitions?"*
@@ -262,11 +284,15 @@ The evaluation suite is grounded in real 18-year validation history, platform te
 
 ---
 
-### 📌 Story 63.4: Ledger Demarcation & Purple UI in `status.html`
+### 📌 Story 63.4: AGY Reality Check & Purple UI Demarcation
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
-* **File to Modify**: `field_notes/status.html` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`)
-* **Anchor 1: File & Scope**: Lines 1330–1400 (RAG Eval log renderer).
-* **Anchor 2: Logic & Purple Styling**:
+* **Files to Modify**:
+  - `field_notes/evaluate_rag.py` (Reality check audit logic)
+  - `field_notes/status.html` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`)
+* **Anchor 1: AGY Forensic Assumption Audit**:
+  - Audit actual vector chunks retrieved for all 10 anchor queries.
+  - Weed out queries with invalid assumptions, rigid keyword mismatch, or hallucinated requirements.
+* **Anchor 2: Purple UI Demarcation in `status.html`**:
   - Check `entry.source === 'CO_PILOT_FOURTH_WALL'` or `entry.ground_truth`:
     - Display Badge: **🟣 `HUMAN GROUND TRUTH`**
     - Styling: `background: rgba(163, 113, 247, 0.15); border: 1px solid #a371f7; color: #d2a8ff; font-weight: bold; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem;`
@@ -280,14 +306,15 @@ The evaluation suite is grounded in real 18-year validation history, platform te
 
 ---
 
-### 📌 Story 63.5: Full Gauntlet Verification & Certification
+### 📌 Story 63.5: Dynamic Closed Loop & Certification
 * **Target Workspace**: `/home/jallred/Dev_Lab`
 * **Scope**:
-  1. Execute `python3 Portfolio_Dev/field_notes/evaluate_rag.py --mode vector` (Verify 10/10 anchors pass with >80% recall).
-  2. Execute `PYTHONPATH=src pytest src/tests/test_live_rag_eval.py` (Verify live cognitive gauntlet).
-  3. Run `python3 Portfolio_Dev/field_notes/build_site.py` (Verify 0 link drift).
-  4. Update `00_FEDERATED_STATUS.md` and feature tracking.
-  5. Stage and commit across submodules.
+  1. Wire MassScan Gem auto-inversion hook (`[FEAT-161]`) to dynamically suggest new eval queries.
+  2. Execute `python3 Portfolio_Dev/field_notes/evaluate_rag.py --mode vector` (Verify 10/10 anchors pass with >80% recall).
+  3. Execute `PYTHONPATH=src pytest src/tests/test_live_rag_eval.py` (Verify live cognitive gauntlet).
+  4. Run `python3 Portfolio_Dev/field_notes/build_site.py` (Verify 0 link drift).
+  5. Update `00_FEDERATED_STATUS.md` and feature tracking.
+  6. Stage and commit across submodules.
 
 ---
 
