@@ -100,99 +100,13 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ---
 
-## 🎯 Master Delegation Specifications (BKM-043 Compliant)
+## 🎯 Surgical Master Delegation Specifications (BKM-043 Compliant)
 
 ### 📌 Story 63.1: Grounded Validation Anchor Bank Authoring
 * **Target Workspace**: `/home/jallred/Dev_Lab/HomeLabAI`
 * **File to Modify**: `config/validation_anchors.json` (Absolute: `/home/jallred/Dev_Lab/HomeLabAI/config/validation_anchors.json`)
-* **Anchor 1: Imports**: N/A (Pure JSON configuration).
-* **Anchor 2: Path Resilience**: Standard JSON file read by `evaluate_rag.py`.
-* **Anchor 3: Signatures & Schema**: Array of 10 structured anchor objects.
-* **Anchor 4: Concrete Output Template**:
-  ```json
-  [
-    {
-      "id": "VAL-01",
-      "query": "What are the PCIe AER uncorrectable error status mask register offsets and bit definitions?",
-      "domain": "exp_for",
-      "target_collection": "artifact_vault",
-      "expected_keywords": ["aer", "uncorrectable", "mask", "status"],
-      "ground_truth_summary": "PCIe AER uncorrectable error mask and status registers define fatal/non-fatal hardware error reporting."
-    },
-    {
-      "id": "VAL-02",
-      "query": "How does the team interact with MCTP services on OpenBMC using peci_cmds and RdEndpointConfigPCILocal?",
-      "domain": "exp_bkm",
-      "target_collection": "artifact_vault",
-      "expected_keywords": ["peci_cmds", "mctp", "openbmc", "rdendpointconfigpcilocal"],
-      "ground_truth_summary": "Interaction with MCTP services on OpenBMC using peci_cmds and RdEndpointConfigPCILocal."
-    },
-    {
-      "id": "VAL-03",
-      "query": "What platform configuration and fmod was used for the Oakstream 1-socket simulation?",
-      "domain": "exp_for",
-      "target_collection": "artifact_vault",
-      "expected_keywords": ["oakstream", "simulation", "pfrprot", "1_socket_ucc"],
-      "ground_truth_summary": "Oakstream simulation targeting 1_socket_ucc-bmc-oobmsm-pfrprot-s3m with fmod pfrprot+oobmsm+s3m+bmc."
-    },
-    {
-      "id": "VAL-04",
-      "query": "What were the key deliverables during 2018 Intel Federal PAE bring-up?",
-      "domain": "exp_bkm",
-      "target_collection": "artifact_vault",
-      "expected_keywords": ["pae", "bringup", "federal", "platform"],
-      "ground_truth_summary": "Platform Enablement and Silicon Validation deliverables for Intel Federal PAE."
-    },
-    {
-      "id": "VAL-05",
-      "query": "Which RAPL MSR register defines the Package Energy Status limit vs DRAM energy?",
-      "domain": "exp_tlm",
-      "target_collection": "artifact_vault",
-      "expected_keywords": ["rapl", "msr", "0x610", "package", "dram"],
-      "ground_truth_summary": "MSR 0x610 is MSR_PKG_ENERGY_STATUS / PKG Power Limit, while 0x618 defines DRAM Energy Status."
-    },
-    {
-      "id": "VAL-06",
-      "query": "How does DCGM export RTX 2080 Ti GPU power draw and VRAM metrics to Prometheus on port 9400?",
-      "domain": "exp_tlm",
-      "target_collection": "feature_dna",
-      "expected_keywords": ["dcgm", "prometheus", "9400", "gpu", "vram"],
-      "ground_truth_summary": "DCGM exporter daemon exposes GPU power, thermals, and VRAM utilization on port 9400 for Prometheus scraping."
-    },
-    {
-      "id": "VAL-07",
-      "query": "How does Kernel BDI strict_limit=1 and max_ratio=1 prevent USB FAT32 writeback deadlocks?",
-      "domain": "exp_bkm",
-      "target_collection": "behavioral_dna",
-      "expected_keywords": ["bdi", "usb", "strict_limit", "max_ratio", "flush"],
-      "ground_truth_summary": "LAB-111 caps USB BDI dirty memory ratio to 1% to prevent dirty buffer accumulation from stalling system-wide sync()."
-    },
-    {
-      "id": "VAL-08",
-      "query": "What are the 4 mandatory prompt anchors required when delegating tasks via delegate.py under BKM-043?",
-      "domain": "exp_bkm",
-      "target_collection": "behavioral_dna",
-      "expected_keywords": ["bkm-043", "anchors", "imports", "signatures", "template"],
-      "ground_truth_summary": "BKM-043 specifies 4 anchors: Import Anchors, Path Resilience, Exact Signatures, and Concrete Output Templates."
-    },
-    {
-      "id": "VAL-09",
-      "query": "What is the three-tier lifecycle for mouse-owned candidate routes under FEAT-472?",
-      "domain": "exp_bkm",
-      "target_collection": "feature_dna",
-      "expected_keywords": ["feat-472", "incubation", "evaluation", "solidification"],
-      "ground_truth_summary": "FEAT-472 lifecycle: 1. Incubation (triage_supplement.json), 2. Evaluation (provenance telemetry), 3. Solidification (triage_policy.json promotion)."
-    },
-    {
-      "id": "VAL-10",
-      "query": "Why does the lab default to Zero Context for conversational turns rather than default career history under FEAT-467?",
-      "domain": "exp_bkm",
-      "target_collection": "feature_dna",
-      "expected_keywords": ["feat-467", "zero context", "gated", "retrieval"],
-      "ground_truth_summary": "FEAT-467 enforces Zero Context > Default Context to prevent models from hallucinating 2018 PAE history on general queries."
-    }
-  ]
-  ```
+* **Grep Anchor**: Entire file replacement (10-element JSON array).
+* **Signatures & Fields**: Each item MUST contain `id`, `query`, `domain`, `target_collection`, `expected_keywords`, `ground_truth_summary`.
 * **Verification Command**:
   `python3 -c 'import json; d=json.load(open("/home/jallred/Dev_Lab/HomeLabAI/config/validation_anchors.json")); assert len(d)==10; print("✅ 10 Anchors Verified")'`
 
@@ -201,34 +115,12 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 ### 📌 Story 63.2: Multi-Collection Subsystem Evaluator (`evaluate_rag.py --mode vector`)
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
 * **File to Modify**: `field_notes/evaluate_rag.py` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/evaluate_rag.py`)
-* **Anchor 1: Imports**:
-  ```python
-  import argparse
-  import asyncio
-  import json
-  import os
-  import sys
-  from pathlib import Path
-  
-  LAB_SRC = str(Path(__file__).resolve().parent.parent.parent / "HomeLabAI" / "src")
-  if LAB_SRC not in sys.path:
-      sys.path.insert(0, LAB_SRC)
-  from nodes.lab_dna_router import LabDNARouter
-  from logic.traversal_dispatcher import TraversalDispatcher
-  from nodes.archive_node import ArchiveNode, get_context
-  ```
-* **Anchor 2: Path Resilience**:
-  ```python
-  DEV_LAB_ROOT = Path(__file__).resolve().parent.parent.parent
-  CONFIG_PATH = DEV_LAB_ROOT / "HomeLabAI" / "config" / "validation_anchors.json"
-  LEDGER_PATH = Path(__file__).resolve().parent / "data" / "validation_ledger.jsonl"
-  RAG_RUNS_DIR = Path(__file__).resolve().parent / "data" / "rag_runs"
-  ```
-* **Anchor 3: Signatures & CLI**:
-  - `parse_args()`: Adds `--mode` (`vector` or `live`, default `vector`). Purges legacy remote KENDER Ollama dependency in favor of local deterministic scoring (`[FEAT-454]`).
-  - `async def run_vector_evaluation(anchors: list[dict]) -> list[dict]`: Iterates over anchors, dispatches to `ArchiveNode` / `LabDNARouter` for `target_collection`, calculates recall and vector distance.
-  - `evaluate_keywords(text: str, expected: list[str]) -> dict`: Case-insensitive substring matching.
-* **Anchor 4: Concrete Output Template**:
+* **Grep Anchors**:
+  - `Anchor A`: Top-level imports around line 20 (grep: `from nodes.archive_node import`). Add `from nodes.lab_dna_router import LabDNARouter` and `from logic.traversal_dispatcher import TraversalDispatcher`.
+  - `Anchor B`: `async def call_kender` around line 37 (grep: `async def call_kender`). Deprecate/replace with local deterministic 5-question evaluation (`[FEAT-454]`).
+  - `Anchor C`: `async def run_single_evaluation` around line 170 (grep: `async def run_single_evaluation`). Route query to `LabDNARouter` / `target_collection` before fallback.
+  - `Anchor D`: `def parse_args` / `main` around line 260 (grep: `async def main`). Add `--mode` (`vector` or `live`, default `vector`).
+* **Output Template**:
   ```python
   entry = {
       "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -259,26 +151,13 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 * **Files to Create/Modify**:
   - `src/tests/test_live_rag_eval.py` (Absolute: `/home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_rag_eval.py`)
   - `Portfolio_Dev/field_notes/evaluate_rag.py` (wire `--mode live`)
-* **Anchor 1: Imports**:
-  ```python
-  import asyncio
-  import json
-  import os
-  import sys
-  import pytest
-  import aiohttp
-  from pathlib import Path
-  ```
-* **Anchor 2: Path Resilience & BKM-044 Priming**:
-  - Reads `HomeLabAI/config/validation_anchors.json`.
-  - Uses `wait_for_ready_and_vocal(STATUS_URL)` with a clean 30s timeout to verify lab liveness before starting.
-* **Anchor 3: Signatures**:
-  - `async def test_live_cognitive_rag_gauntlet()`: Sends the 10 grounded queries over WebSocket `ws://127.0.0.1:8765/ws`.
-  - Captures streaming frames: `TRIAGE`, `BRAIN_STREAM`, `PINKY_CRITIC`, `INTEREST_SCORE`.
-  - Asserts that:
-    1. Triage emits non-empty `vibe` and `domain`.
-    2. Brain output contains at least 1 grounded entity/offset.
-    3. Pinky Critic emits valid quip and agreement summary.
+* **Grep Anchors**:
+  - In `evaluate_rag.py`, inside `async def main()` around line 280 (grep: `async def main`): When `args.mode == "live"`, dispatch over WebSocket `ws://127.0.0.1:8765/ws`.
+  - In `test_live_rag_eval.py`, new file using `wait_for_ready_and_vocal(STATUS_URL)` (grep: `wait_for_ready_and_vocal`).
+* **Assertions**:
+  1. Triage emits valid non-null `vibe` and `domain`.
+  2. Brain stream outputs at least 1 grounded register/entity token.
+  3. Pinky Critic emits valid quip and agreement summary.
 * **Verification Command**:
   `PYTHONPATH=src pytest src/tests/test_live_rag_eval.py`
 
@@ -286,18 +165,13 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ### 📌 Story 63.4: AGY Reality Check & Purple UI Demarcation
 * **Target Workspace**: `/home/jallred/Dev_Lab/Portfolio_Dev`
-* **Files to Modify**:
-  - `field_notes/evaluate_rag.py` (Reality check audit logic)
-  - `field_notes/status.html` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`)
-* **Anchor 1: AGY Forensic Assumption Audit**:
-  - Audit actual vector chunks retrieved for all 10 anchor queries.
-  - Weed out queries with invalid assumptions, rigid keyword mismatch, or hallucinated requirements.
-* **Anchor 2: Purple UI Demarcation in `status.html`**:
+* **File to Modify**: `field_notes/status.html` (Absolute: `/home/jallred/Dev_Lab/Portfolio_Dev/field_notes/status.html`)
+* **Grep Anchor**: Inside `showRagEval()` / RAG log renderer around line 1344 (grep: `RAG EVALUATION METRICS`).
+* **Surgical Delta**:
   - Check `entry.source === 'CO_PILOT_FOURTH_WALL'` or `entry.ground_truth`:
     - Display Badge: **🟣 `HUMAN GROUND TRUTH`**
     - Styling: `background: rgba(163, 113, 247, 0.15); border: 1px solid #a371f7; color: #d2a8ff; font-weight: bold; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem;`
     - Subtitle: `Supervisor Coaching Trace • Fourth-Wall Feedback [FEAT-456]`
-    - Flawed Output vs Ground Truth display.
   - Check Automated Runs (`entry.run_type === 'AUTOMATED_BENCHMARK'` or standard entry):
     - Display Badge: **🟢 `PASS`** (`#3fb950`) or **🔴 `FAIL`** (`#f85149`) with Recall % and Collection pill.
   - Add quick filter buttons: `[All Records]`, `[Automated Benchmarks]`, `[Human Corrections]`.
@@ -308,13 +182,13 @@ A rigorous forensic audit of `validation_anchors.json` and `validation_ledger.js
 
 ### 📌 Story 63.5: Dynamic Closed Loop & Certification
 * **Target Workspace**: `/home/jallred/Dev_Lab`
-* **Scope**:
-  1. Wire MassScan Gem auto-inversion hook (`[FEAT-161]`) to dynamically suggest new eval queries.
-  2. Execute `python3 Portfolio_Dev/field_notes/evaluate_rag.py --mode vector` (Verify 10/10 anchors pass with >80% recall).
-  3. Execute `PYTHONPATH=src pytest src/tests/test_live_rag_eval.py` (Verify live cognitive gauntlet).
-  4. Run `python3 Portfolio_Dev/field_notes/build_site.py` (Verify 0 link drift).
-  5. Update `00_FEDERATED_STATUS.md` and feature tracking.
-  6. Stage and commit across submodules.
+* **Grep Anchor**: In `Portfolio_Dev/field_notes/mass_scan.py`, inside post-scan step around line 180 (grep: `latest_synthesis_gems.json`).
+* **Surgical Delta**:
+  1. Trigger `extract_latest_gems.py` to keep candidate eval pool synchronized with newly discovered gems.
+  2. Run `python3 Portfolio_Dev/field_notes/evaluate_rag.py --mode vector` (Verify 10/10 anchors pass with >80% recall).
+  3. Run `python3 Portfolio_Dev/field_notes/build_site.py` (Verify 0 link drift).
+  4. Update `00_FEDERATED_STATUS.md` and feature tracking.
+  5. Stage and commit across submodules.
 
 ---
 
