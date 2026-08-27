@@ -2571,10 +2571,10 @@
 
 ## [LAB-111] Removable USB FOB Kernel BDI Isolation & Auto-Mount Protection
 **Status:** ACTIVE
-**Code:** [docs/Protocols.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#BKM-033) — Removable USB FOB Kernel BDI Isolation.
-**Logic:** Neutralizes kernel I/O deadlocks and D-state thread stalls caused by persistent USB flash drives (e.g., ASUS BIOS Flashback FOB). Employs a three-layer defense: 1) Udev `UDISKS_IGNORE="1"` rule preventing desktop auto-mounts with the slow `flush` penalty, 2) `/etc/fstab` safe auto-mount without `flush` (`auto,user,noatime,umask=000`), and 3) Kernel Backing Device Info (BDI) throttling on all USB storage (`max_ratio=1`, `strict_limit=1`) to prevent dirty RAM writeback backlogs from stalling global `sync()`.
-**Rationale:** 100% of historical unclean shutdowns (30/30 boots in August 2026) correlated to FAT filesystem dirty-bit stalls on `/dev/sdf1` during background system sync and workspace scans.
-**Mechanism:** Udev rules `90-usb-bdi-throttle.rules`, `99-bios-flashback-ignore.rules`, `/etc/fstab`, and `/etc/updatedb.conf`.
+**Code:** [docs/Protocols.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#BKM-045) — Removable USB FOB Kernel BDI Isolation.
+**Logic:** Neutralizes kernel I/O deadlocks and D-state thread stalls (`hung_task_panic=1`) caused by persistent USB flash drives (e.g., ASUS BIOS Flashback FOB). Employs a four-layer defense: 1) `noauto` in `/etc/fstab` keeping offline recovery flash drives physically plugged into rear ports but unmounted at rest during OS runtime, 2) Udev `UDISKS_IGNORE="1"` rule (`99-bios-flashback-ignore.rules`) preventing desktop auto-mounts, 3) Kernel Backing Device Info (BDI) throttling on physical USB disks (`ENV{DEVTYPE}=="disk"`, `max_ratio=1`, `strict_limit=1` via `90-usb-bdi-throttle.rules`) capping dirty writeback cache to 1% of RAM, and 4) `updatedb.conf` / locate path exclusions.
+**Rationale:** Unexplained unclean reboots and `hung_task_panic=1` watchdogs correlated to FAT32 filesystem sync stalls on `/dev/sdf1` during background system writes and vector commits.
+**Mechanism:** `/etc/fstab` (`noauto`), Udev rules `90-usb-bdi-throttle.rules`, `99-bios-flashback-ignore.rules`, `/etc/updatedb.conf`, and `docs/Protocols.md` (BKM-045).
 
 ## [FEAT-473] Speculative Triage Relay with Kender Priority Window & Winner-Console Routing
 **Status:** ACTIVE

@@ -13285,25 +13285,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#BKM-033" style="color:var(--accent-color); text-decoration:none;">docs/Protocols.md</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#BKM-045" style="color:var(--accent-color); text-decoration:none;">docs/Protocols.md</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Neutralizes kernel I/O deadlocks and D-state thread stalls caused by persistent USB flash drives (e.g., ASUS BIOS Flashback FOB). Employs a three-layer defense: 1) Udev <code>UDISKS_IGNORE="1"</code> rule preventing desktop auto-mounts with the slow <code>flush</code> penalty, 2) <code>/etc/fstab</code> safe auto-mount without <code>flush</code> (<code>auto,user,noatime,umask=000</code>), and 3) Kernel Backing Device Info (BDI) throttling on all USB storage (<code>max_ratio=1</code>, <code>strict_limit=1</code>) to prevent dirty RAM writeback backlogs from stalling global <code>sync()</code>.</p>
+                    <p>Neutralizes kernel I/O deadlocks and D-state thread stalls (<code>hung_task_panic=1</code>) caused by persistent USB flash drives (e.g., ASUS BIOS Flashback FOB). Employs a four-layer defense: 1) <code>noauto</code> in <code>/etc/fstab</code> keeping offline recovery flash drives physically plugged into rear ports but unmounted at rest during OS runtime, 2) Udev <code>UDISKS_IGNORE="1"</code> rule (<code>99-bios-flashback-ignore.rules</code>) preventing desktop auto-mounts, 3) Kernel Backing Device Info (BDI) throttling on physical USB disks (<code>ENV{DEVTYPE}=="disk"</code>, <code>max_ratio=1</code>, <code>strict_limit=1</code> via <code>90-usb-bdi-throttle.rules</code>) capping dirty writeback cache to 1% of RAM, and 4) <code>updatedb.conf</code> / locate path exclusions.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>100% of historical unclean shutdowns (30/30 boots in August 2026) correlated to FAT filesystem dirty-bit stalls on <code>/dev/sdf1</code> during background system sync and workspace scans.</p>
+                    <p>Unexplained unclean reboots and <code>hung_task_panic=1</code> watchdogs correlated to FAT32 filesystem sync stalls on <code>/dev/sdf1</code> during background system writes and vector commits.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Udev rules <code>90-usb-bdi-throttle.rules</code>, <code>99-bios-flashback-ignore.rules</code>, <code>/etc/fstab</code>, and <code>/etc/updatedb.conf</code>.</p>
+                    <p><code>/etc/fstab</code> (<code>noauto</code>), Udev rules <code>90-usb-bdi-throttle.rules</code>, <code>99-bios-flashback-ignore.rules</code>, <code>/etc/updatedb.conf</code>, and <code>docs/Protocols.md</code> (BKM-045).</p>
                 </div>
             </div>     </div>
                             </details>
