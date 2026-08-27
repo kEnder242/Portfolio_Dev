@@ -29,4 +29,5 @@ venv/
 env/
 *.egg-info/
 Portfolio_Dev/
+outputs/
 
