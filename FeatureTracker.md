@@ -2719,4 +2719,33 @@
 **Rationale:** Transforms retrieval absence into grounded epistemological proof of non-existence during specific historical periods.
 **Mechanism:** `HomeLabAI/src/nodes/archive_node.py` & `HomeLabAI/src/logic/cognitive_hub.py`.
 
+## [FEAT-486] Triage-as-Primer Live Vocality Check & Kender Fast Socket Gate
+**Status:** ACTIVE
+**Code:** [src/logic/speculative_triage.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/speculative_triage.py#L24) — Triage-as-Primer & Fast Socket Gate.
+**Logic:** Wires a 200ms TCP socket reachability probe at the front gate of Speculative Triage and Foyer Router. If Remote Kender is unreachable, instantly skips the 2.5s head-start and falls back to local vLLM with zero delay. Eliminates redundant background dumb pings by using the live triage prompt as the living vocality verification.
+**Rationale:** Prevents 60-second connection timeout hangs and eliminates multi-second speculative delays during remote node outages.
+**Mechanism:** `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/v5/foyer/router.py`, `src/tests/test_kender_fast_gate.py`.
+
+## [FEAT-487] Semantic Meta-Triage Feedback Interceptor (BKM-035)
+**Status:** ACTIVE
+**Code:** [src/logic/triage_engine.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L80) — Semantic Feedback Interceptor.
+**Logic:** Replaces brittle regex pattern matching with BKM-015 compliant model-driven semantic triage. Classifies supervisory feedback, bug reports, tone adjustments, and Fourth-Wall critiques to `vibe: "META"`, `domain: "feedback"`, `addressed_to: "SYSTEM"`, immediately intercepting turns into `validation_ledger.jsonl` with zero RAG or multi-node debate overhead.
+**Rationale:** Captures 100% of natural co-pilot supervisory critiques while eliminating conversational drift and false-positive vector searches.
+**Mechanism:** `HomeLabAI/config/triage_policy.json`, `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `src/tests/test_feedback_semantic_triage.py`.
+
+## [FEAT-488] Role-Slot System Instruction Isolation & Anti-Bleed Stream Sanitizer
+**Status:** ACTIVE
+**Code:** [src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L29) — Role-Slot Instruction Isolation.
+**Logic:** Enforces strict OpenAI chat completion role segregation, placing behavioral rules and grounding protocols exclusively into the `system` role slot rather than concatenated user prompt text. Adds a streaming output sanitizer to drop stray operational markers before UI broadcast.
+**Rationale:** Eliminates prompt echoes and header duplication in small parameter base models (Llama-3.2-3B).
+**Mechanism:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `src/tests/test_prompt_isolation_guardrail.py`.
+
+## [FEAT-489] Two-Mice Sequential Streaming Handover & Distillation Pipeline
+**Status:** ACTIVE
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L650) — Two-Mice Sequential Handover.
+**Logic:** Orchestrates high-interest historical turns into a sequential two-mice distillation funnel: Brain extracts 3-4 dense technical bullet points from raw RAG context to the Right Console, and Pinky receives Brain's extract to deliver a conversational in-character TL;DR directly to the user on the Left Console.
+**Rationale:** Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/pinky_critic_persona.py`, `src/tests/test_two_mice_handover.py`.
+
+
 
