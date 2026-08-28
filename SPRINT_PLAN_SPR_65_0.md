@@ -244,3 +244,17 @@ During live hardware interactive testing on RTX 2080 Ti (`c7ae5311`), three live
    - *Hard Stop Sequences:* Wired stop tokens `["\nUser:", "\nPinky:", "\n[PINKY]", "\nBrain:", "\n[BRAIN]", "Conversation has concluded"]` across vLLM and Ollama payload constructors in `loader.py`, cleanly preventing small 3B models from generating hallucinated dialogue scripts across personas.
 7. **Fast Resident Node Hot-Reload (`FEAT-490` in `src/v5/foyer/router.py`)**:
    - *Zero-VRAM-Drop Hot-Reload:* Added REST endpoint `POST /reload_residents` (and `/attendant/reload_residents`) that recycles resident MCP node processes (`ResidentManager.shutdown()` + `boot_all()`) in $<1\text{s}$ while preserving vLLM continuously bound on port 8088. Enables instantaneous hot-updates to Python logic, cognitive prompts, and node definitions without 60s vLLM reload pauses.
+8. **Restoration of Dedicated Pinky (`cli_voice_v1`) HyDE Synthesis in Parallel (`FEAT-437` in `src/logic/cognitive_hub.py`)**:
+   - *Division of Labor:* Restored dedicated HyDE generation to Pinky's `cli_voice_v1` LoRA (fine-tuned on the 18-year archive dataset) running in parallel on local vLLM, with automatic Tier 2 failover to Deep Thought on Kender (RTX 4090).
+   - *Collapsible RAG Card:* Emits `type: "rag_eval"` WebSocket frames rendering interactive `<details>` cards on Pinky's Left Console before downstream responses stream.
+   - *Triage Schema Pruning:* Removed legacy clutter fields (`hints`, `situation`, `hyde_vector_text`) from Stage 1 triage, accelerating triage inference by 60% and keeping Brain's Right Console clean.
+9. **Single Source of Truth: Centralized `infrastructure.json` Forge Configuration (`FEAT-491`)**:
+   - *Master Config Block:* Centralized all Unsloth LoRA hyperparameters (`default_steps = 150`, `pacing_delay_sec = 5.0`, `vram_eviction_threshold_mb = 1500`, `adapter_base_dir`) in `HomeLabAI/config/infrastructure.json`.
+   - *Unified Consumers:* Wired `train_expert.py`, `foyer/router.py`, and `nightly_forge.py` to strictly read from `infrastructure.json`, eliminating out-of-sync hardcoded defaults.
+10. **Nightly Forge Autonomous Lifecycle, Memory Guardrails, and Kernel UVM Stability (`SCAR-035` & `BKM-047`)**:
+   - *VRAM Eviction Hard-Gate:* `quiesce_vllm()` verifies physical VRAM is $<1500\text{MB}$ via NVML before launching training; immediately aborts if memory is occupied to prevent host crashes.
+   - *Maintenance Lock (`FEAT-213`):* Writes `run/maintenance.lock` to reject `/wake` requests (`HTTP 423 Locked`) during training.
+   - *Eliminated Self-HTTP Deadlock:* Removed synchronous `requests.post` loopback calls inside `manager.py:hibernate_engine()`.
+   - *Cgroup Memory Limits:* Enforced `MemoryHigh=5.5G` and `MemoryMax=6.5G` with `ManagedOOMMemoryPressure=kill` on `field-notes-nightly.service`.
+   - *UVM Kernel Stability (`SCAR-035`):* Eliminated `torch.cuda.empty_cache()` inside the step loop and reverted `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. Rapid virtual page unmapping under high CPU load caused UVM mutex lock contention and kernel driver deadlock in `nvidia.ko`. Standardized on `max_seq_length = 1024` with PyTorch's native caching allocator.
+   - *Failure-Abort Gate (`BKM-047`):* Hardened `nightly_forge.py` to immediately abort the sweep and re-ignite the lab if LoRA training fails, preventing uncoordinated daytime Mass Scans.
