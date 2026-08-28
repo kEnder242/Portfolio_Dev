@@ -15,7 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-65-0-two-mice-distillation** | Phase 14 | Two-Mice Streaming Handover, Triage Vocality, Semantic Feedback Interception & Role-Slot Isolation | **PLANNED & READY FOR REVIEW** [SPRINT_PLAN_SPR_65_0.md](./SPRINT_PLAN_SPR_65_0.md) |
+| **spr-65-0-two-mice-distillation** | Phase 14 | Two-Mice Streaming Handover, Triage Vocality, Semantic Feedback Interception & Role-Slot Isolation | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_65_0.md](./SPRINT_PLAN_SPR_65_0.md) |
 | **spr-64-0-grounded-triage** | Phase 14 | Grounded Triage Policy, Speculative Relay Race, Zero-Context Retrieval & Session Horizon | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_64_0.md](./SPRINT_PLAN_SPR_64_0.md) |
 | **spr-63-0-dual-tier-rag-eval** | Phase 14 | Dual-Tier RAG Evaluation Modernization, Grounded Anchors & Live Cognitive Gauntlet | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_63_0.md](./SPRINT_PLAN_SPR_63_0.md) |
 | **spr-62-0-declarative-policy** | Phase 14 | Declarative Triage Policy, Dynamic Route Incubation Sandbox & Bidirectional Traversal | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_62_0.md](./SPRINT_PLAN_SPR_62_0.md) |
