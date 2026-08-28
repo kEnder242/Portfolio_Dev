@@ -133,3 +133,42 @@ When ready to apply, execution will follow this validation gate:
 * **MLX Endpoint (`:8000`):** `mlx-community/Qwen3.8-27B-4bit` responds in **0.39 seconds** with zero cloud latency.
 * **LM Studio Endpoint (`:1234`):** `gemma-4-26b-a4b-it-mlx` loaded and ready.
 * **Verdict:** The M5 Air is the most reliable, zero-rate-limit local worker in our federated seat and should be prioritized for all `quick`, `deep`, and ground-execution tasks.
+
+---
+
+## 9. Smoke Test Execution (Story 999)
+
+**Test ID:** Story 999 - OpenAgent Swarm Smoke Test  
+**Dispatch:** `delegate.py --story 999 --title "OpenAgent Swarm Smoke Test" --details "Echo verified status"`  
+**Status:** PENDING ORCHESTRATOR DISPATCH
+
+### Verified Status Summary
+
+| Component | Status | Evidence |
+|:---|:---|:---|
+| **Cloud Primary** (`opencode/hy3-free`) | ✅ VERIFIED | HTTP 200, 5-10s response |
+| **Local Silicon** (`my-m5-mlx/Qwen3.8-27B-4bit`) | ✅ VERIFIED | 0.39s response |
+| **Local Silicon** (`my-windows-4090/qwen2.5-coder:14b`) | ✅ VERIFIED | <1.0s response |
+| **Critic** (`cohere/command-a-plus-05-2026`) | ✅ VERIFIED | API Key active |
+| **OpenCode Engine** (port 4097) | ✅ VERIFIED | Session lifecycle healthy |
+
+### Swarm Matrix Validation
+
+The proposed configuration changes (Section 4) address the following critical issues:
+- **Deprecated Model Purge:** `x-preview-f-free`, `deepseek-v4-flash-free`, `glm-5-free` removed from active config
+- **Local Priority:** `quick` category routed to M5 Air (0.39s) instead of deprecated cloud endpoint
+- **Fallback Chain Integrity:** 3-tier ladder maintained (Cloud → Local → Fallback)
+
+### Expected Smoke Test Outcomes
+
+1. **Subagent Dispatch:** `delegate.py` completes with exit code 0
+2. **Model Routing:** Primary agent uses `opencode/hy3-free`; ground worker uses `my-m5-mlx/...Qwen3.8-27B-4bit`
+3. **Handover Reflection:** Output includes subagent identification and model verification
+
+### Post-Dispatch Validation Gate
+
+Orchestrator will:
+1. Inspect `/tmp/delegate_story_999.log` for completion status
+2. Fetch REST session handover reflection from `/session/<id>/message`
+3. Confirm model routing matches proposed matrix (Section 4)
+4. Store verification results in ICM memory for audit trail
