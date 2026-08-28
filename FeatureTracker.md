@@ -2747,5 +2747,13 @@
 **Rationale:** Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/pinky_critic_persona.py`, `src/tests/test_two_mice_handover.py`.
 
+## [FEAT-490] Fast Resident Node Hot-Reload (vLLM VRAM Preservation)
+**Status:** ACTIVE
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L628) — Fast Resident Hot-Reload.
+**Logic:** Implements a lightweight REST endpoint (`POST /reload_residents` / `POST /attendant/reload_residents`) on the Foyer Router that recycles resident MCP node processes (`ResidentManager.shutdown()` + `boot_all()`) in `<1s` while keeping vLLM permanently bound on port 8088.
+**Rationale:** Enables instantaneous updates to Python logic, cognitive prompts, and MCP node definitions without triggering 60-second vLLM re-initialization or dropping model weights from GPU VRAM.
+**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/common/residents.py`.
+
+
 
 
