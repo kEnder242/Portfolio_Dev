@@ -232,3 +232,10 @@ During live hardware interactive testing on RTX 2080 Ti (`c7ae5311`), three live
    - *Problem:* Small models classified casual intro phrasing (*"Let's talk about 2015..."*) as casual banter with 0 RAG.
    - *Fix:* Explicitly instructed the triage prompt that specific year/era references (*"2015"*, *"in 2018"*, *"what did I struggle with in year X"*) MUST classify as `vibe: HISTORICAL`, `domain: lab_history`, `addressed_to: BRAIN/MICE`, `importance: 0.8`.
    - *UI Suppression:* Filtered internal triage tokens from `waterfall_queue` to prevent raw JSON blobs from dumping into user chat consoles.
+4. **Option C: Pretty-Printed Raw Triage JSON on Brain's Console when KENDER Wins (`src/logic/speculative_triage.py` & `src/logic/cognitive_hub.py`)**:
+   - *Architecture:* When Kender wins the triage race, formatted raw JSON renders on Brain's Right Console (`channel: "insight"`, `source: "Deep Thought (Triage)"`, `console: "Right"`). When local vLLM wins, formatted raw JSON renders on Pinky's Left Console (`channel: "chat"`, `source: "Lab (Triage)"`, `console: "Left"`). Completely eliminated legacy prose `Triage: <situation>` broadcasts.
+5. **Dual-Check Gate & 10s Patient Warm Runway (`FEAT-486` in `src/logic/speculative_triage.py`)**:
+   - *Sleep-Aware Architecture:* Preserves natural Ollama model eviction and low-power sleep on Kender.
+   - *Dual-Check Probe (`_probe_ollama`):* Executes a 200ms TCP socket connection followed by a lightweight non-blocking HTTP probe to `GET http://192.168.1.26:11434/api/tags` (RAM query in $<600\text{ms}$, 0 VRAM overhead).
+   - *Patient Runway (10.0s):* If the Ollama daemon is responsive, the head-start window expands to 10.0s, giving Kender full margin to warm from disk ($5.4\text{s}$) and generate ($0.3\text{s}$) without triggering false timeouts or ghost queue dumps.
+   - *Fast Bypass:* If Kender or Ollama fails the probe, local vLLM is dispatched with zero delay ($0\text{ms}$).
