@@ -206,6 +206,8 @@ In `pinky_critic_persona.py:L215-240`, support both `"retort"` and `"cartoon_ret
 
 ---
 
+---
+
 ## 🔒 Verification & Exit Criteria
 
 1. **Kender Offline Resilience:** When `192.168.1.26:11434` is stopped, interactive queries resolve in local vLLM in `<2s` with zero 60s timeout errors.
@@ -213,3 +215,20 @@ In `pinky_critic_persona.py:L215-240`, support both `"retort"` and `"cartoon_ret
 3. **Zero Prompt Bleed:** No `GROUNDING_PROTOCOL` or `[STANCE]` headers appear in Intercom chat responses.
 4. **Two-Mice Handover:** Brain outputs structured technical bullets on the Right Console; Pinky acknowledges Brain and delivers a conversational TL;DR on the Left Console.
 5. **DNA Fast-Path Adherence:** All subagent operations consult `clara-dna` MCP or `icm recall` without reading 200KB+ files.
+
+---
+
+## 🛠️ Post-Sprint 65.0 Live Silicon Hardening & Forensic Retrospective
+
+During live hardware interactive testing on RTX 2080 Ti (`c7ae5311`), three live conversational routing defects were diagnosed and surgically corrected:
+
+1. **Safety-Gating Control-Plane Feedback Interception (`src/logic/triage_engine.py`)**:
+   - *Problem:* Historical questions referencing past struggles (*"Let's talk about 2015. What did I struggle with..."*) caused small 3B models to set `domain: "feedback"`. `is_control_plane_feedback()` previously triggered solely on `domain == "feedback"`, falsely hijacking conversational turns as Fourth-Wall bug reports and bypassing RAG.
+   - *Fix:* Gated the intercept strictly to `vibe == "META"` AND `addressed_to == "SYSTEM"`. Explicitly exempted `CASUAL`, `HISTORICAL`, and `TECHNICAL` vibes from being swallowed.
+2. **Elimination of Competing `think()` Calls & Ghost Prime Tasks (`src/logic/cognitive_hub.py`)**:
+   - *Problem:* Legacy `_prime_first_try()` dispatched an unmanaged background `think()` call to Kender concurrently with `SpeculativeTriageRelay`, competing for Ollama GPU slots and causing 3 delayed ghost replies to spill into the Right Console 15s later.
+   - *Fix:* Removed `_prime_first_try()`, ensuring Kender only receives the active Speculative Triage prompt.
+3. **Triage Taxonomy Hardening for Temporal Historical Queries (`src/logic/cognitive_hub.py`)**:
+   - *Problem:* Small models classified casual intro phrasing (*"Let's talk about 2015..."*) as casual banter with 0 RAG.
+   - *Fix:* Explicitly instructed the triage prompt that specific year/era references (*"2015"*, *"in 2018"*, *"what did I struggle with in year X"*) MUST classify as `vibe: HISTORICAL`, `domain: lab_history`, `addressed_to: BRAIN/MICE`, `importance: 0.8`.
+   - *UI Suppression:* Filtered internal triage tokens from `waterfall_queue` to prevent raw JSON blobs from dumping into user chat consoles.
