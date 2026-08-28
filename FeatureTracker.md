@@ -2754,6 +2754,26 @@
 **Rationale:** Enables instantaneous updates to Python logic, cognitive prompts, and MCP node definitions without triggering 60-second vLLM re-initialization or dropping model weights from GPU VRAM.
 **Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/common/residents.py`.
 
+## [FEAT-491] Single Source of Truth: Centralized Forge Configuration
+**Status:** ACTIVE
+**Code:** [config/infrastructure.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/infrastructure.json#L44) — Master Forge Configuration Block.
+**Logic:** Centralizes all Unsloth LoRA fine-tuning hyperparameters (`default_steps = 150`, `pacing_delay_sec = 5.0`, `vram_eviction_threshold_mb = 1500`, `adapter_base_dir`) into the root `infrastructure.json` configuration ledger.
+**Rationale:** Eliminates scattered, out-of-sync hardcoded training arguments across `train_expert.py`, `router.py`, and `nightly_forge.py`.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/forge/train_expert.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/infra/nightly_forge.py`.
+
+## [SCAR-035] CUDA Allocator & UVM Kernel Deadlock (expandable_segments vs empty_cache)
+**Context:** During high-load training iterations on Turing SM 7.5 (RTX 2080 Ti) and PCIe 3.0, setting `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` while invoking `torch.cuda.empty_cache()` inside a rapid step loop caused the NVIDIA kernel driver (`nvidia.ko` / UVM manager) to deadlock on global `mmap_lock` semaphores.
+**Impact:** GPU threads hung in uninterruptible `D` state, DCGM/Prometheus/Grafana telemetry froze at 05:48, and the system hard-locked until manual hardware reboot.
+**Remedy:** Strictly eliminate `torch.cuda.empty_cache()` inside the optimization step loop. Revert `expandable_segments` in systemd units. Standardize on `max_seq_length = 1024` with PyTorch's native caching allocator.
+
+## [BKM-047] Nightly Forge Autonomous Lifecycle & Failure Abort Law
+**Context:** Automated maintenance pipelines (`field-notes-nightly.service`) must protect host DRAM and GPU VRAM when chaining heavy sequential phases (LoRA Fine-Tuning $\rightarrow$ Mass Scan $\rightarrow$ Subconscious Dreaming).
+**Operational Mandates:**
+1. **Pre-Flight VRAM Eviction Hard-Gate:** Always poll NVML/`nvidia-smi` for up to 30s. If physical VRAM is $\ge 1500\text{MB}$, abort training immediately.
+2. **Atomic Maintenance Lock:** Write `run/maintenance.lock` before quiescing, and reject `/wake` ignition requests with `HTTP 423 Locked`.
+3. **Failure-Abort Gate:** If LoRA training fails or returns non-zero, immediately abort the sweep and re-ignite the lab to operational state. Never fall through into uncoordinated daytime Mass Scans.
+4. **Cgroup Memory Caps:** User systemd units must strictly enforce `MemoryHigh=5.5G` and `MemoryMax=6.5G` with `ManagedOOMMemoryPressure=kill`.
+
 
 
 
