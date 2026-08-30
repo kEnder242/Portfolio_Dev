@@ -167,6 +167,13 @@ The proposed configuration changes (Section 4) address the following critical is
 
 ### Post-Dispatch Validation Gate
 
+## 9.1 Post-Reboot Verification Results
+
+**Verification Status:**
+- Kernel watchdog active (panic=10, hung_task=120s)
+- M5 MLX active on port 8000
+- OpenRouter free fallback confirmed
+
 Orchestrator will:
 1. Inspect `/tmp/delegate_story_999.log` for completion status
 2. Fetch REST session handover reflection from `/session/<id>/message`
