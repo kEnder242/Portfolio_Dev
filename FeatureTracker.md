@@ -2774,6 +2774,30 @@
 3. **Failure-Abort Gate:** If LoRA training fails or returns non-zero, immediately abort the sweep and re-ignite the lab to operational state. Never fall through into uncoordinated daytime Mass Scans.
 4. **Cgroup Memory Caps:** User systemd units must strictly enforce `MemoryHigh=5.5G` and `MemoryMax=6.5G` with `ManagedOOMMemoryPressure=kill`.
 
+## [FEAT-492] Multi-Layer OS Kernel Watchdog & Forge Stability Hardening
+**Status:** ACTIVE
+**Code:** [/etc/sysctl.d/99-homelab-watchdog.conf](file:///etc/sysctl.d/99-homelab-watchdog.conf), [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L190) — Kernel Auto-Recovery & SFT Isolation.
+**Logic:** Establishes a 4-tier anti-hang architecture:
+1. **Kernel Auto-Reboot:** `kernel.panic = 10`, `kernel.panic_on_oops = 1`, `kernel.hung_task_timeout_secs = 120`, and `kernel.hung_task_panic = 1` guarantee that any uninterruptible driver deadlock or oops automatically triggers a reboot in 10 seconds rather than freezing indefinitely.
+2. **Native PyTorch Checkpointing:** `use_gradient_checkpointing = True` eliminates custom Triton JIT kernel compilation on Turing SM 7.5.
+3. **Single-Process DataLoader:** `dataset_num_proc = 1`, `dataloader_num_workers = 0`, and `dataloader_pin_memory = False` eliminate multiprocessing IPC and pinned memory contention with the physical Xorg display server.
+4. **Process Priority & Cgroup Tuning:** `field-notes-nightly.service` runs at `Nice=10` and `IOSchedulingClass=best-effort` to ensure GUI and kernel input subsystems retain priority.
+**Rationale:** Prevents hard system lockups where NumLock freezes while ping remains responsive, ensuring the host is always self-healing.
+**Mechanism:** `/etc/sysctl.d/99-homelab-watchdog.conf`, `HomeLabAI/src/forge/train_expert.py`, `HomeLabAI/config/systemd/field-notes-nightly.service`.
+
+## [SCAR-036] Xorg Display vs. Unsloth Triton CUDA Context Mutex Contention
+**Context:** When running Unsloth fine-tuning on a single GPU (RTX 2080 Ti) that simultaneously drives the physical Xorg desktop, display compositor, and streaming servers (Moonlight/Sunshine), Unsloth's custom Triton gradient checkpointing JIT kernels contest display buffer allocation locks.
+**Impact:** At 02:02 on Aug 30, the system entered an unrecoverable D-state deadlock. ICMP ping continued responding via kernel softirq, but the Xorg event loop stalled, freezing NumLock LED toggles and requiring a physical power cycle.
+**Remedy:** Switch gradient checkpointing from `"unsloth"` to standard PyTorch (`True`), isolate dataloader multiprocessing (`dataset_num_proc = 1`), and configure kernel hung task panic (`hung_task_panic = 1`, `kernel.panic = 10`) for automated crash recovery.
+
+## [BKM-048] Host Silicon Stability Protocol (20% Performance Trade-Off for 100% Uptime)
+**Philosophy:** In home lab federated environments where the compute node also serves as a display server and streaming host, always sacrifice 20% training throughput in exchange for guaranteed stability and non-blocking execution.
+**Operational Rules:**
+1. **Never use Triton dynamic JIT hooks** inside processes sharing the active Xorg display adapter.
+2. **Always clamp dataloaders to single-process** (`num_workers = 0`, `pin_memory = False`) to prevent memory space collisions.
+3. **Always enforce kernel hung task watchdog** (`hung_task_panic = 1`) to guarantee unattended recovery within 120 seconds.
+
+
 
 
 
