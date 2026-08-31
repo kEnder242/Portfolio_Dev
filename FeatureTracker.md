@@ -2797,6 +2797,14 @@
 2. **Always clamp dataloaders to single-process** (`num_workers = 0`, `pin_memory = False`) to prevent memory space collisions.
 3. **Always enforce kernel hung task watchdog** (`hung_task_panic = 1`) to guarantee unattended recovery within 120 seconds.
 
+## [BKM-049] Hardware Seat Anchoring & Resident Model Preservation
+**Philosophy:** Multi-node federated environments must preserve model residency on resource-constrained silicon (like Apple Silicon Unified Memory) rather than dynamically loading or swapping checkpoints during benchmarking or swarm execution.
+**Operational Rules:**
+1. **Report on Resident State:** Always benchmark, query, and dispatch to whatever model is already loaded in memory (`mlx-community--Qwen3.8-27B-4bit` on M5 Air).
+2. **Explicit Confirmation Gate:** Never dynamically swap, load alternate model weights, or trigger model eviction on physical hardware seats without requesting and receiving explicit user confirmation beforehand.
+3. **Prevent RAM Thrashing:** Protects Apple Unified RAM from `HTTP 507 Insufficient Storage` collisions and avoids lengthy cold-load stalls during autonomous sweeps.
+
+
 
 
 
