@@ -630,6 +630,10 @@
                             <span class="stat-value" style="color:#58a6ff;">${r.model}</span>
                         </div>
                         <div class="seat-stat">
+                            <span class="stat-label">Context Window:</span>
+                            <span class="stat-value" style="color:#d2a8ff;">${r.context_window || '32k'}</span>
+                        </div>
+                        <div class="seat-stat">
                             <span class="stat-label">Target Role:</span>
                             <span class="stat-value">${r.role}</span>
                         </div>
@@ -643,7 +647,7 @@
                         </div>
                         <div class="seat-stat">
                             <span class="stat-label">Power Draw:</span>
-                            <span class="stat-value" style="color:#e3b341;">${r.power_watts.toFixed(0)}W</span>
+                            <span class="stat-value" style="color:#e3b341;">${(r.power_watts !== null && r.power_watts !== undefined) ? r.power_watts.toFixed(0) + 'W' : 'N/A (Cloud Hosted)'}</span>
                         </div>
                     </div>
                 `;
@@ -661,7 +665,8 @@
 
             const maxThroughput = Math.max(...results.map(r => r.throughput), 50);
             const maxTtft = Math.max(...results.map(r => r.warm_ttft_ms), 1500);
-            const maxJoules = Math.max(...results.map(r => r.joules_per_ktok), 7);
+            const validJoules = results.map(r => r.joules_per_ktok).filter(j => j !== null && j !== undefined);
+            const maxJoules = validJoules.length > 0 ? Math.max(...validJoules, 5) : 5;
 
             // 1. Throughput Bars
             let tpHtml = '';
@@ -698,15 +703,17 @@
             // 3. Joules / kTok Bars
             let joulesHtml = '';
             results.forEach(r => {
-                const pct = r.joules_per_ktok > 0 ? (r.joules_per_ktok / maxJoules) * 100 : 2;
-                const color = r.joules_per_ktok < 3 ? '#3fb950' : (r.joules_per_ktok < 5 ? '#58a6ff' : '#e3b341');
+                const isCloud = (r.power_watts === null || r.joules_per_ktok === null);
+                const joulesVal = isCloud ? 'N/A (Offloaded)' : r.joules_per_ktok.toFixed(2) + ' J/kTok';
+                const pct = (!isCloud && r.joules_per_ktok > 0) ? (r.joules_per_ktok / maxJoules) * 100 : 2;
+                const color = isCloud ? '#30363d' : (r.joules_per_ktok < 2 ? '#3fb950' : (r.joules_per_ktok < 4 ? '#58a6ff' : '#e3b341'));
                 joulesHtml += `
                     <div class="bar-row">
                         <div class="bar-label">${r.display_name.split(' (')[0]}</div>
                         <div class="bar-wrapper">
                             <div class="bar-fill" style="width:${pct}%; background:${color};"></div>
                         </div>
-                        <div class="bar-value">${r.joules_per_ktok.toFixed(2)} J/kTok</div>
+                        <div class="bar-value">${joulesVal}</div>
                     </div>
                 `;
             });
