@@ -281,53 +281,11 @@
             border-radius: 2px;
         }
         .bar-value {
-            width: 110px;
+            width: 130px;
             text-align: right;
             color: #8b949e;
             flex-shrink: 0;
             font-weight: 700;
-        }
-
-        /* Live Usage Table */
-        .live-stream-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            margin-top: 10px;
-        }
-        .live-stream-table th {
-            text-align: left;
-            padding: 8px 12px;
-            background: #0b0e14;
-            color: #8b949e;
-            border-bottom: 1px solid #21262d;
-            text-transform: uppercase;
-        }
-        .live-stream-table td {
-            padding: 8px 12px;
-            border-bottom: 1px dashed #1f242c;
-            color: #c9d1d9;
-        }
-        .live-stream-table tr:hover td {
-            background: rgba(88, 166, 255, 0.05);
-        }
-
-        /* Live Shakedown Log Box */
-        .shakedown-box {
-            background: #0b0e14;
-            border: 1px solid #1f242c;
-            border-left: 4px solid #3fb950;
-            padding: 15px 20px;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            color: #c9d1d9;
-            margin-bottom: 25px;
-            display: none;
-        }
-        .shakedown-box.active {
-            display: block;
         }
 
         /* ROI Interactive Calculator */
@@ -407,13 +365,7 @@
         </div>
 
         <div class="controls-bar">
-            <button class="console-btn console-btn-primary" onclick="runFederatedShakedown()">⚡ RUN FEDERATED SHAKEDOWN</button>
-            <button class="console-btn" onclick="loadBenchmarks()">🔄 REFRESH TELEMETRY</button>
-        </div>
-
-        <div id="shakedown-container" class="shakedown-box">
-            <div style="font-weight:700; color:#58a6ff; margin-bottom:8px;">LIVE SHAKEDOWN TELEMETRY STREAM:</div>
-            <div id="shakedown-log" style="line-height:1.5;">Initializing live ping across ports...</div>
+            <button class="console-btn console-btn-primary" onclick="loadBenchmarks()">🔄 REFRESH TELEMETRY</button>
         </div>
 
         <!-- 3-Tab Navigation -->
@@ -444,19 +396,6 @@
                 </div>
                 <div id="ttft-bars"></div>
             </div>
-
-            <!-- [FEAT-496] Live Swarm Production Stream -->
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>🔴 Real-Time Swarm Workload Activity (Free Benchmarking)</span>
-                    <span class="chart-subtitle">Recent task executions logged passively via delegate.py</span>
-                </div>
-                <div id="live-usage-container">
-                    <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
-                        Polling live usage stream...
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- TAB 2: ENERGY & FINANCIAL ROI -->
@@ -471,8 +410,8 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <span>💰 Electricity Cost per 1M Tokens & Cloud ROI Multiplier</span>
-                    <span class="chart-subtitle">Calculated at $0.15/kWh residential rate compared to $3.00/MTok Claude 3.5 Sonnet</span>
+                    <span>💰 Local Electricity Cost per 1M Tokens vs. Cloud ($3.00/MTok Claude 3.5 Sonnet)</span>
+                    <span class="chart-subtitle">Calculated at $0.15/kWh residential rate (Lower cost / Higher multiplier is better)</span>
                 </div>
                 <div id="roi-multipliers-bars"></div>
             </div>
@@ -535,7 +474,7 @@
 
                 <div class="paper-card">
                     <div class="paper-title">3. Energy-Aware Federated AI Telemetry (ArXiv:2310.03013)</div>
-                    <div class="paper-desc">Defines the Joules per 1k Token metric: E_tok = (P_avg * T_gen) / N_tokens. Demonstrates M5 Air's 18W efficiency dominance for 24/7 background sweeps.</div>
+                    <div class="paper-desc">Defines the Tokens per Joule metric: T_joule = Throughput / Power. Demonstrates M5 Air's 18W efficiency dominance for 24/7 background sweeps.</div>
                 </div>
             </div>
         </div>
@@ -566,47 +505,6 @@
                 console.error(e);
                 timestampEl.textContent = 'Offline Fallback (Live Fetch Failed)';
             }
-            loadLiveUsageStream();
-        }
-
-        async function loadLiveUsageStream() {
-            const container = document.getElementById('live-usage-container');
-            if (!container) return;
-
-            try {
-                const resp = await fetch('data/live_usage_stream.jsonl?t=' + Date.now());
-                if (!resp.ok) {
-                    container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">No live workload records logged yet. Dispatches from delegate.py will appear here live.</div>';
-                    return;
-                }
-                const text = await resp.text();
-                const lines = text.trim().split('\n').filter(l => l.trim().length > 0);
-                if (lines.length === 0) {
-                    container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
-                    return;
-                }
-
-                const records = lines.slice(-8).reverse().map(l => JSON.parse(l));
-                let html = '<table class="live-stream-table"><thead><tr><th>Time</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
-                records.forEach(r => {
-                    const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
-                    html += `
-                        <tr>
-                            <td style="color:#8b949e;">${timeStr}</td>
-                            <td style="font-weight:700; color:#58a6ff;">${r.seat}</td>
-                            <td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.task_title || r.source}</td>
-                            <td style="color:#d2a8ff;">${r.model}</td>
-                            <td style="text-align:right;">${r.tokens_generated}</td>
-                            <td style="text-align:right;">${r.duration_seconds}s</td>
-                            <td style="text-align:right; font-weight:700; color:#3fb950;">${r.throughput_tok_s} tok/s</td>
-                        </tr>
-                    `;
-                });
-                html += '</tbody></table>';
-                container.innerHTML = html;
-            } catch (e) {
-                container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">No live workload stream available.</div>';
-            }
         }
 
         function renderAll(results) {
@@ -624,6 +522,7 @@
                 const statusClass = r.status === 'online' ? 'status-online' : 'status-offline';
                 const statusText = r.status === 'online' ? 'ONLINE' : 'OFFLINE / SLEEP';
                 const nameClean = r.display_name.split(' (')[0];
+                const powerText = (r.power_watts !== null && r.power_watts !== undefined) ? r.power_watts.toFixed(0) + 'W' : 'N/A (Cloud Hosted)';
                 html += `
                     <div class="seat-card">
                         <div class="seat-header">
@@ -655,7 +554,7 @@
                         </div>
                         <div class="seat-stat">
                             <span class="stat-label">Power Draw:</span>
-                            <span class="stat-value" style="color:#e3b341;">${(r.power_watts !== null && r.power_watts !== undefined) ? r.power_watts.toFixed(0) + 'W' : 'N/A (Cloud Hosted)'}</span>
+                            <span class="stat-value" style="color:#e3b341;">${powerText}</span>
                         </div>
                     </div>
                 `;
@@ -666,53 +565,52 @@
         function renderBars(results) {
             const throughputContainer = document.getElementById('throughput-bars');
             const ttftContainer = document.getElementById('ttft-bars');
-            const joulesContainer = document.getElementById('joules-bars');
+            const tokensJouleContainer = document.getElementById('tokens-joule-bars');
+            const roiMultipliersContainer = document.getElementById('roi-multipliers-bars');
             const reasoningContainer = document.getElementById('reasoning-bars');
-
-            if (!throughputContainer) return;
 
             const maxThroughput = Math.max(...results.map(r => r.throughput), 50);
             const maxTtft = Math.max(...results.map(r => r.warm_ttft_ms), 1500);
-            const validJoules = results.map(r => r.joules_per_ktok).filter(j => j !== null && j !== undefined);
-            const maxJoules = validJoules.length > 0 ? Math.max(...validJoules, 5) : 5;
-
-            // 1. Throughput Bars
-            let tpHtml = '';
-            results.forEach(r => {
-                const pct = (r.throughput / maxThroughput) * 100;
-                tpHtml += `
-                    <div class="bar-row">
-                        <div class="bar-label">${r.display_name.split(' (')[0]}</div>
-                        <div class="bar-wrapper">
-                            <div class="bar-fill" style="width:${pct}%; background:#3fb950;"></div>
-                        </div>
-                        <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
-                    </div>
-                `;
-            });
-            throughputContainer.innerHTML = tpHtml;
-
-            // 2. TTFT Bars
-            let ttftHtml = '';
-            results.forEach(r => {
-                const pct = (r.warm_ttft_ms / maxTtft) * 100;
-                ttftHtml += `
-                    <div class="bar-row">
-                        <div class="bar-label">${r.display_name.split(' (')[0]}</div>
-                        <div class="bar-wrapper">
-                            <div class="bar-fill" style="width:${pct}%; background:#58a6ff;"></div>
-                        </div>
-                        <div class="bar-value">${r.warm_ttft_ms.toFixed(0)} ms</div>
-                    </div>
-                `;
-            });
-            ttftContainer.innerHTML = ttftHtml;
-
-            // 3. Tokens per Joule Bars (Higher is better!)
-            const tokensJouleContainer = document.getElementById('tokens-joule-bars');
             const validTokensJoule = results.map(r => r.tokens_per_joule).filter(v => v !== null && v !== undefined);
             const maxTokJoule = validTokensJoule.length > 0 ? Math.max(...validTokensJoule, 1.0) : 1.0;
 
+            // 1. Throughput Bars
+            if (throughputContainer) {
+                let tpHtml = '';
+                results.forEach(r => {
+                    const pct = (r.throughput / maxThroughput) * 100;
+                    tpHtml += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width:${pct}%; background:#3fb950;"></div>
+                            </div>
+                            <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
+                        </div>
+                    `;
+                });
+                throughputContainer.innerHTML = tpHtml;
+            }
+
+            // 2. TTFT Bars
+            if (ttftContainer) {
+                let ttftHtml = '';
+                results.forEach(r => {
+                    const pct = (r.warm_ttft_ms / maxTtft) * 100;
+                    ttftHtml += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width:${pct}%; background:#58a6ff;"></div>
+                            </div>
+                            <div class="bar-value">${r.warm_ttft_ms.toFixed(0)} ms</div>
+                        </div>
+                    `;
+                });
+                ttftContainer.innerHTML = ttftHtml;
+            }
+
+            // 3. Tokens per Joule Bars (Higher is better!)
             if (tokensJouleContainer) {
                 let tjHtml = '';
                 results.forEach(r => {
@@ -734,7 +632,6 @@
             }
 
             // 4. Electricity Cost per 1M Tokens & Multiplier Bars
-            const roiMultipliersContainer = document.getElementById('roi-multipliers-bars');
             if (roiMultipliersContainer) {
                 let roiHtml = '';
                 results.forEach(r => {
@@ -755,21 +652,23 @@
                 roiMultipliersContainer.innerHTML = roiHtml;
             }
 
-            // 4. Reasoning CoT Bars
-            let reasoningHtml = '';
-            results.forEach(r => {
-                const pct = (r.reasoning_token_ratio || 0.1) * 100;
-                reasoningHtml += `
-                    <div class="bar-row">
-                        <div class="bar-label">${r.display_name.split(' (')[0]} (${r.model})</div>
-                        <div class="bar-wrapper">
-                            <div class="bar-fill" style="width:${pct}%; background:#d2a8ff;"></div>
+            // 5. Reasoning CoT Bars
+            if (reasoningContainer) {
+                let reasoningHtml = '';
+                results.forEach(r => {
+                    const pct = (r.reasoning_token_ratio || 0.1) * 100;
+                    reasoningHtml += `
+                        <div class="bar-row">
+                            <div class="bar-label">${r.display_name.split(' (')[0]} (${r.model})</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill" style="width:${pct}%; background:#d2a8ff;"></div>
+                            </div>
+                            <div class="bar-value">${pct.toFixed(0)}% CoT Depth</div>
                         </div>
-                        <div class="bar-value">${pct.toFixed(0)}% CoT Depth</div>
-                    </div>
-                `;
-            });
-            reasoningContainer.innerHTML = reasoningHtml;
+                    `;
+                });
+                reasoningContainer.innerHTML = reasoningHtml;
+            }
         }
 
         function updateRoiCalc(mtok) {
@@ -783,33 +682,6 @@
             document.getElementById('apiCostVal').textContent = '$' + apiCost.toFixed(2);
             document.getElementById('localCostVal').textContent = '$' + electricityCost.toFixed(2);
             document.getElementById('savingsVal').textContent = '$' + savings.toFixed(2) + ' (' + savingsPct + '%)';
-        }
-
-        async function runFederatedShakedown() {
-            const box = document.getElementById('shakedown-container');
-            const logEl = document.getElementById('shakedown-log');
-            box.classList.add('active');
-            logEl.innerHTML = '⚡ Initiating multi-node probe across ports (:8000, :11434, :8088, :4097)...<br>';
-
-            const endpoints = [
-                { name: 'Apple M5 Air (oLLM)', url: 'http://192.168.1.46:8000/health' },
-                { name: 'Windows Kender (Ollama)', url: 'http://192.168.1.26:11434/api/tags' },
-                { name: 'Linux z87 (vLLM)', url: 'http://127.0.0.1:8088/health' },
-                { name: 'OpenCode Swarm (REST)', url: 'http://127.0.0.1:4097/global/config' }
-            ];
-
-            for (const ep of endpoints) {
-                const t0 = performance.now();
-                try {
-                    const r = await fetch(ep.url, { method: 'GET', mode: 'no-cors' });
-                    const dt = Math.round(performance.now() - t0);
-                    logEl.innerHTML += `<span style="color:#3fb950;">✔ [ONLINE]</span> ${ep.name} responded in <strong>${dt}ms</strong><br>`;
-                } catch (e) {
-                    const dt = Math.round(performance.now() - t0);
-                    logEl.innerHTML += `<span style="color:#f78166;">✖ [TIMEOUT/OFFLINE]</span> ${ep.name} unreachable after ${dt}ms<br>`;
-                }
-            }
-            logEl.innerHTML += '<br><span style="color:#58a6ff;">✨ Federated Shakedown Sweep Complete.</span>';
         }
 
         document.addEventListener('DOMContentLoaded', loadBenchmarks);
