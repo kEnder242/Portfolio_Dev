@@ -280,7 +280,17 @@ def run_sweep():
 
         power_w = cfg["power_watts"]
         tp = metrics["throughput"]
-        joules_per_ktok = round((power_w / tp), 2) if (power_w is not None and tp > 0) else None
+        tokens_per_joule = round(tp / power_w, 3) if (power_w is not None and power_w > 0 and tp > 0) else None
+        
+        if tokens_per_joule and tokens_per_joule > 0:
+            kwh_per_1m = (1000000.0 / tokens_per_joule) / 3600000.0
+            electricity_cost_per_1m = round(kwh_per_1m * 0.15, 4)
+            cloud_multiplier = round(3.00 / electricity_cost_per_1m, 1) if electricity_cost_per_1m > 0 else 1.0
+            cloud_savings_pct = round(100.0 - (electricity_cost_per_1m / 3.00 * 100.0), 1)
+        else:
+            electricity_cost_per_1m = None
+            cloud_multiplier = None
+            cloud_savings_pct = 100.0
 
         item = {
             "model": metrics["model"],
@@ -299,9 +309,10 @@ def run_sweep():
             "itl_ms": metrics["itl_ms"],
             "vram_gb": cfg["vram_gb"],
             "power_watts": power_w,
-            "joules_per_ktok": joules_per_ktok,
-            "cost_per_1m_tokens": cfg["cost_per_1m"],
-            "cloud_savings_pct": round(100.0 - (cfg["cost_per_1m"] / 3.00 * 100.0), 1),
+            "tokens_per_joule": tokens_per_joule,
+            "electricity_cost_per_1m": electricity_cost_per_1m,
+            "cloud_multiplier": cloud_multiplier,
+            "cloud_savings_pct": cloud_savings_pct,
             "reasoning_token_ratio": cfg["reasoning_ratio"],
             "status": metrics["status"]
         }
