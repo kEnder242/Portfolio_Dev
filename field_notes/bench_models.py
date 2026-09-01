@@ -60,7 +60,7 @@ SEATS_CONFIG = {
         "reasoning_ratio": 0.85
     },
     "kender_4090": {
-        "display_name": "Windows KENDER (RTX 4090 Port 11434)",
+        "display_name": "Windows 4090RTX (Port 11434)",
         "engine": "Ollama",
         "host": "192.168.1.26",
         "port": 11434,
@@ -74,7 +74,7 @@ SEATS_CONFIG = {
         "reasoning_ratio": 0.25
     },
     "z87_2080ti": {
-        "display_name": "Linux z87 (RTX 2080 Ti Port 8088)",
+        "display_name": "Linux 2080ti (Port 8088)",
         "engine": "vLLM",
         "host": "127.0.0.1",
         "port": 8088,
