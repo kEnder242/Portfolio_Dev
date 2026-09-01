@@ -183,16 +183,30 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
             if not line:
                 continue
             line_str = line.decode("utf-8").strip()
+            if "error" in line_str.lower() and not line_str.startswith("data: "):
+                try:
+                    err_data = json.loads(line_str)
+                    if "error" in err_data:
+                        raise RuntimeError(f"Engine Error: {err_data.get('error', {}).get('message', line_str)}")
+                except Exception as ex:
+                    if isinstance(ex, RuntimeError): raise ex
+                    pass
             if line_str == "data: [DONE]":
                 break
             if line_str.startswith("data: "):
-                chunk = json.loads(line_str[6:])
-                delta = chunk["choices"][0]["delta"]
-                text = delta.get("content") or delta.get("reasoning_content") or ""
-                if text:
-                    if ttft is None:
-                        ttft = time.perf_counter() - t0
-                    tokens += 1
+                try:
+                    chunk = json.loads(line_str[6:])
+                    if "error" in chunk:
+                        raise RuntimeError(f"Stream Error: {chunk.get('error')}")
+                    delta = chunk.get("choices", [{}])[0].get("delta", {})
+                    text = delta.get("content") or delta.get("reasoning_content") or ""
+                    if text:
+                        if ttft is None:
+                            ttft = time.perf_counter() - t0
+                        tokens += 1
+                except Exception as ex:
+                    if isinstance(ex, RuntimeError): raise ex
+                    pass
 
     total_time = time.perf_counter() - t0
     gen_time = total_time - (ttft or 0)
@@ -219,7 +233,15 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
     models = resp.json().get("models", [])
     if not models:
         raise ValueError("No models found in Ollama tags")
-    model_name = models[0].get("name")
+    
+    # Prioritize 14B coder over toy 1.5B models
+    tag_names = [m.get("name", "") for m in models]
+    if "qwen2.5-coder:14b" in tag_names:
+        model_name = "qwen2.5-coder:14b"
+    elif "qwen3:14b" in tag_names:
+        model_name = "qwen3:14b"
+    else:
+        model_name = models[0].get("name")
 
     gen_url = f"http://{host}:{port}/api/generate"
     payload = {
