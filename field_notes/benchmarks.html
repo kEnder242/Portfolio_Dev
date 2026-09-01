@@ -631,14 +631,18 @@
                 tokensJouleContainer.innerHTML = tjHtml;
             }
 
-            // 4. Electricity Cost per 1M Tokens & Multiplier Bars
+            // 4. Electricity Cost per 1M Tokens & Multiplier Bars (Scaled by Multiplier)
             if (roiMultipliersContainer) {
+                const validMultipliers = results.map(r => r.cloud_multiplier).filter(m => m !== null && m !== undefined);
+                const maxMultiplier = validMultipliers.length > 0 ? Math.max(...validMultipliers, 10.0) : 10.0;
+
                 let roiHtml = '';
                 results.forEach(r => {
                     const isCloud = (r.electricity_cost_per_1m === null);
-                    const costVal = isCloud ? 'Cloud Baseline ($3.00)' : '$' + r.electricity_cost_per_1m.toFixed(4) + ' (' + r.cloud_multiplier + 'x Cheaper)';
-                    const pct = isCloud ? 100 : Math.min(100, Math.max(5, (1.0 - (r.electricity_cost_per_1m / 3.00)) * 100));
-                    const color = isCloud ? '#f78166' : '#3fb950';
+                    const costVal = isCloud ? 'Cloud Baseline ($3.00)' : '$' + r.electricity_cost_per_1m.toFixed(4) + ' (' + r.cloud_multiplier + 'x)';
+                    const multiplier = isCloud ? 1.0 : (r.cloud_multiplier || 1.0);
+                    const pct = Math.max(3, (multiplier / maxMultiplier) * 100);
+                    const color = isCloud ? '#30363d' : (multiplier >= 50 ? '#3fb950' : (multiplier >= 25 ? '#58a6ff' : '#e3b341'));
                     roiHtml += `
                         <div class="bar-row">
                             <div class="bar-label">${r.display_name.split(' (')[0]}</div>
