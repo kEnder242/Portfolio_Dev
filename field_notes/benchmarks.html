@@ -223,6 +223,32 @@
             font-weight: 600;
         }
 
+        
+        /* Live Usage Table */
+        .live-stream-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+        .live-stream-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #0b0e14;
+            color: #8b949e;
+            border-bottom: 1px solid #21262d;
+            text-transform: uppercase;
+        }
+        .live-stream-table td {
+            padding: 8px 12px;
+            border-bottom: 1px dashed #1f242c;
+            color: #c9d1d9;
+        }
+        .live-stream-table tr:hover td {
+            background: rgba(88, 166, 255, 0.05);
+        }
+
         /* Comparative Horizontal Bars */
         .chart-card {
             background: #12161f;
@@ -398,6 +424,19 @@
                 </div>
                 <div id="ttft-bars"></div>
             </div>
+
+            <!-- [FEAT-496] Live Swarm Production Stream -->
+            <div class="chart-card">
+                <div class="chart-title">
+                    <span>🔴 Real-Time Swarm Workload Stream (Passive Live Telemetry)</span>
+                    <span class="chart-subtitle">Real production executions logged passively via delegate.py</span>
+                </div>
+                <div id="live-usage-container">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
+                        Awaiting live workload events...
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- TAB 2: ENERGY & FINANCIAL ROI -->
@@ -503,7 +542,8 @@
                 
                 timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
                 renderAll(cachedData.results);
-            } catch (e) {
+            }
+            loadLiveUsageStream(); catch (e) {
                 console.error(e);
                 timestampEl.textContent = 'Offline Fallback (Live Fetch Failed)';
             }
@@ -688,6 +728,46 @@
             document.getElementById('apiCostVal').textContent = '$' + apiCost.toFixed(2);
             document.getElementById('localCostVal').textContent = '$' + electricityCost.toFixed(2);
             document.getElementById('savingsVal').textContent = '$' + savings.toFixed(2) + ' (' + savingsPct + '%)';
+        }
+
+        
+        async function loadLiveUsageStream() {
+            const container = document.getElementById('live-usage-container');
+            if (!container) return;
+
+            try {
+                const resp = await fetch('data/live_usage_stream.jsonl?t=' + Date.now());
+                if (!resp.ok) {
+                    container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">No live workload stream file found. Runs from delegate.py will appear here live.</div>';
+                    return;
+                }
+                const text = await resp.text();
+                const lines = text.trim().split('\n').filter(l => l.trim().length > 0);
+                if (lines.length === 0) {
+                    container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
+                    return;
+                }
+
+                const records = lines.slice(-10).reverse().map(l => JSON.parse(l));
+                let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
+                records.forEach(r => {
+                    const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
+                    const seatBadge = r.seat || (r.provider === 'openrouter' ? 'Cloud Swarm' : (r.provider.includes('m5') ? 'Apple M5 Air' : 'Windows 4090RTX'));
+                    tableHtml += '<tr>' +
+                        '<td style="color:#8b949e;">' + timeStr + '</td>' +
+                        '<td style="font-weight:700; color:#58a6ff;">' + seatBadge + '</td>' +
+                        '<td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (r.task_title || r.source) + '</td>' +
+                        '<td style="color:#d2a8ff;">' + r.model + '</td>' +
+                        '<td style="text-align:right;">' + r.tokens_generated + '</td>' +
+                        '<td style="text-align:right;">' + r.duration_seconds + 's</td>' +
+                        '<td style="text-align:right; font-weight:700; color:#3fb950;">' + r.throughput_tok_s + ' tok/s</td>' +
+                    '</tr>';
+                });
+                tableHtml += '</tbody></table>';
+                container.innerHTML = tableHtml;
+            } catch (e) {
+                container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live stream unavailable.</div>';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', loadBenchmarks);
