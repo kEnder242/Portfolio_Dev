@@ -542,8 +542,8 @@
                 
                 timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
                 renderAll(cachedData.results);
-            }
-            loadLiveUsageStream(); catch (e) {
+                await loadLiveUsageStream();
+            } catch (e) {
                 console.error(e);
                 timestampEl.textContent = 'Offline Fallback (Live Fetch Failed)';
             }
