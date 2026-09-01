@@ -457,9 +457,39 @@
                 <div id="roi-multipliers-bars"></div>
             </div>
 
+            <!-- [FEAT-498] Realized Lifetime ROI Counter -->
+            <div class="roi-calculator" style="border-left: 4px solid #3fb950;">
+                <div class="chart-title">
+                    <span>💎 Your Realized Sovereign ROI (Lifetime To-Date)</span>
+                    <span class="chart-subtitle" id="realized-sync-time">Tracking all lab dispatches, Intercom sessions & nightly scans</span>
+                </div>
+                <div class="calc-grid" style="margin-top: 10px;">
+                    <div class="calc-card">
+                        <div class="calc-label">Sovereign Tokens Generated</div>
+                        <div class="calc-num" id="realizedTokensVal" style="color:#d2a8ff;">0</div>
+                        <div style="font-size:0.7rem; color:#6a737d;">Total Workload Output</div>
+                    </div>
+                    <div class="calc-card">
+                        <div class="calc-label">Cloud API Equivalent</div>
+                        <div class="calc-num" id="realizedApiCostVal" style="color:#f78166;">$0.00</div>
+                        <div style="font-size:0.7rem; color:#6a737d;">Anthropic / OpenAI Cost</div>
+                    </div>
+                    <div class="calc-card">
+                        <div class="calc-label">Actual Power Cost</div>
+                        <div class="calc-num" id="realizedPowerCostVal" style="color:#58a6ff;">$0.00</div>
+                        <div style="font-size:0.7rem; color:#6a737d;">Residential Electricity ($0.15/kWh)</div>
+                    </div>
+                    <div class="calc-card">
+                        <div class="calc-label">Net Realized Savings</div>
+                        <div class="calc-num" id="realizedSavingsVal">$0.00</div>
+                        <div id="realizedPctVal" style="font-size:0.7rem; color:#3fb950;">100.0% Reduction</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="roi-calculator">
                 <div class="chart-title">
-                    <span>Homelab Cloud Replacement ROI</span>
+                    <span>🔮 Hypothetical Scaling Calculator</span>
                     <span class="chart-subtitle">Calculated against Commercial API Rates ($3.00/MTok Claude 3.5 Sonnet Rate)</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:15px; margin-top:10px;">
@@ -543,6 +573,7 @@
                 timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
                 renderAll(cachedData.results);
                 await loadLiveUsageStream();
+                await loadCumulativeTelemetry();
             } catch (e) {
                 console.error(e);
                 timestampEl.textContent = 'Offline Fallback (Live Fetch Failed)';
@@ -767,6 +798,34 @@
                 container.innerHTML = tableHtml;
             } catch (e) {
                 container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live stream unavailable.</div>';
+            }
+        }
+
+        
+        async function loadCumulativeTelemetry() {
+            try {
+                const resp = await fetch('data/cumulative_tokens.json?t=' + Date.now());
+                if (!resp.ok) return;
+                const data = await resp.json();
+
+                const tokensEl = document.getElementById('realizedTokensVal');
+                const apiEl = document.getElementById('realizedApiCostVal');
+                const powerEl = document.getElementById('realizedPowerCostVal');
+                const savingsEl = document.getElementById('realizedSavingsVal');
+                const pctEl = document.getElementById('realizedPctVal');
+                const syncEl = document.getElementById('realized-sync-time');
+
+                if (tokensEl) {
+                    const toks = data.lifetime_tokens_generated || 0;
+                    tokensEl.textContent = toks >= 1000000 ? (toks / 1000000).toFixed(2) + ' MTok' : toks.toLocaleString() + ' tok';
+                }
+                if (apiEl) apiEl.textContent = '$' + (data.commercial_api_cost_usd || 0).toFixed(2);
+                if (powerEl) powerEl.textContent = '$' + (data.actual_electricity_cost_usd || 0).toFixed(4);
+                if (savingsEl) savingsEl.textContent = '$' + (data.net_dollars_saved_usd || 0).toFixed(2);
+                if (pctEl) pctEl.textContent = (data.percent_saved || 100.0).toFixed(1) + '% Reduction';
+                if (syncEl && data.last_updated) syncEl.textContent = 'Last Activity: ' + data.last_updated;
+            } catch (e) {
+                console.error(e);
             }
         }
 
