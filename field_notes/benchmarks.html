@@ -403,7 +403,7 @@
             <button class="tab-btn" onclick="switchTab(event, 'tab-quality')">🧠 INTELLIGENCE & CoT</button>
         </div>
 
-        <!-- TAB 1: SILICON ARENA -->
+        <!-- TAB 1: SILICON ARENA (SPEED & LATENCY) -->
         <div id="tab-arena" class="tab-pane">
             <div class="seat-grid" id="seat-cards-container">
                 <!-- Rendered dynamically via JS -->
@@ -423,19 +423,6 @@
                     <span class="chart-subtitle">Warm Prompt Cache Latency in ms (Lower is better)</span>
                 </div>
                 <div id="ttft-bars"></div>
-            </div>
-
-            <!-- [FEAT-496] Live Swarm Production Stream -->
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>🔴 Real-Time Swarm Workload Stream (Passive Live Telemetry)</span>
-                    <span class="chart-subtitle">Real production executions logged passively via delegate.py</span>
-                </div>
-                <div id="live-usage-container">
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
-                        Awaiting live workload events...
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -522,30 +509,21 @@
             <div class="chart-card">
                 <div class="chart-title">
                     <span>Reasoning Depth Ratio (CoT Thinking Tokens vs Direct Output)</span>
-                    <span class="chart-subtitle">Percentage of generated tokens dedicated to internal reasoning / self-reflection</span>
+                    <span class="chart-subtitle">Percentage of generated tokens dedicated to internal reasoning / self-reflection (Test-Time Compute Scaling)</span>
                 </div>
                 <div id="reasoning-bars"></div>
             </div>
+        </div>
 
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>Foundational Academic Anchors & Pedigree</span>
-                    <span class="chart-subtitle">Theoretical frameworks governing Acme Lab Silicon Optimization</span>
-                </div>
-                
-                <div class="paper-card">
-                    <div class="paper-title">1. Roofline Model for LLM Inference (ArXiv:2208.07339)</div>
-                    <div class="paper-desc">Establishes why Apple Silicon Unified Memory is memory-bandwidth bound (~16 tok/s for 27B DFlash) while discrete GDDR6X achieves ~50-100 tok/s at 1,008 GB/s.</div>
-                </div>
-
-                <div class="paper-card">
-                    <div class="paper-title">2. Test-Time Compute Scaling & Reasoning Models (ArXiv:2408.03314)</div>
-                    <div class="paper-desc">Validates why M5 Air Qwen3.8-27B CoT thinking tokens yield higher code generation correctness than fast, non-reasoning 3B models.</div>
-                </div>
-
-                <div class="paper-card">
-                    <div class="paper-title">3. Energy-Aware Federated AI Telemetry (ArXiv:2310.03013)</div>
-                    <div class="paper-desc">Defines the Tokens per Joule metric: T_joule = Throughput / Power. Demonstrates M5 Air's 18W efficiency dominance for 24/7 background sweeps.</div>
+        <!-- [GLOBAL FOOTER]: Real-Time Swarm Workload Stream (Visible across all tabs) -->
+        <div class="chart-card" style="margin-top: 25px; border-top: 2px solid #30363d;">
+            <div class="chart-title">
+                <span>🔴 Real-Time Swarm Workload Stream (Live Telemetry)</span>
+                <span class="chart-subtitle">Real production executions logged passively across all local silicon and cloud delegations</span>
+            </div>
+            <div id="live-usage-container">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
+                    Awaiting live workload events...
                 </div>
             </div>
         </div>
