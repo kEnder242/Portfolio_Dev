@@ -2839,6 +2839,14 @@
 **Rationale:** Enforces the "LIVE IS GOD" mandate ensuring production silicon health.
 **Mechanism:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/SPRINT_PLAN_SPR_66_0.md`.
 
+## [FEAT-498] Cumulative Sovereign Token Ledger & Realized ROI Accumulator
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** Establishes a unified lifetime sovereign token counter and financial ROI ledger in `Portfolio_Dev/field_notes/data/cumulative_tokens.json`. Automatically tapped by `delegate.py`, `router.py` (Web Intercom & Mice Debate turns), and `nightly_forge.py` (archive scans). Accumulates total sovereign tokens generated, local electricity cost at $0.15/kWh, and realized dollar savings vs. commercial cloud APIs ($3.00/MTok Claude 3.5 Sonnet).
+**Rationale:** Transitions the benchmarks dashboard from hypothetical volume estimations to an authentic, real-time "My Realized ROI" counter reflecting actual homelab value delivery.
+**Mechanism:** `HomeLabAI/src/infra/cumulative_telemetry.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/benchmarks.html`.
+
+
 
 
 
