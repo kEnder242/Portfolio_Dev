@@ -296,7 +296,7 @@
             
             log(`Reading ${title}`);
 
-            let buffer = `\n\n`;
+            let buffer = `\n`;
             let lastDate = null;
 
             events.forEach(e => {
@@ -308,18 +308,22 @@
                 const isAnchor = e.rank === 5 || (e.summary && e.summary.includes("[STRATEGIC_ANCHOR]"));
                 const isDiamond = e.rank === 4;
                 const prefix = isAnchor ? "🎯 [STRATEGIC] " : "";
-                const summary = (e.summary || "").replace("[STRATEGIC_ANCHOR]", "").trim();
+                const summary = (e.summary || "").replace("[STRATEGIC_ANCHOR]", "").replace(/\s+/g, " ").trim();
                 
                 if (dateDisplay !== lastDate) {
                     buffer += `\n[${dateDisplay}] ${prefix}${summary}\n`;
                     lastDate = dateDisplay;
                 } else {
-                    buffer += `   ↳ ${prefix}${summary}\n`;
+                    buffer += `  ↳ ${prefix}${summary}\n`;
                 }
 
-                if (e.evidence) buffer += `     EVIDENCE: ${e.evidence.substring(0, 120)}\n`;
+                if (e.evidence) {
+                    const cleanEv = e.evidence.replace(/\s+/g, " ").trim();
+                    buffer += `    EVIDENCE: ${cleanEv.substring(0, 120)}\n`;
+                }
                 if (isDiamond && e.technical_gem) {
-                    buffer += `     GEM: ${e.technical_gem}\n`;
+                    const cleanGem = e.technical_gem.replace(/\s+/g, " ").trim();
+                    buffer += `    GEM: ${cleanGem}\n`;
                 }
             });
 
