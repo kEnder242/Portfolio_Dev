@@ -288,6 +288,31 @@
             font-weight: 700;
         }
 
+        /* Live Usage Table */
+        .live-stream-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+        .live-stream-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #0b0e14;
+            color: #8b949e;
+            border-bottom: 1px solid #21262d;
+            text-transform: uppercase;
+        }
+        .live-stream-table td {
+            padding: 8px 12px;
+            border-bottom: 1px dashed #1f242c;
+            color: #c9d1d9;
+        }
+        .live-stream-table tr:hover td {
+            background: rgba(88, 166, 255, 0.05);
+        }
+
         /* Live Shakedown Log Box */
         .shakedown-box {
             background: #0b0e14;
@@ -419,6 +444,19 @@
                 </div>
                 <div id="ttft-bars"></div>
             </div>
+
+            <!-- [FEAT-496] Live Swarm Production Stream -->
+            <div class="chart-card">
+                <div class="chart-title">
+                    <span>🔴 Real-Time Swarm Workload Activity (Free Benchmarking)</span>
+                    <span class="chart-subtitle">Recent task executions logged passively via delegate.py</span>
+                </div>
+                <div id="live-usage-container">
+                    <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">
+                        Polling live usage stream...
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- TAB 2: ENERGY & FINANCIAL ROI -->
@@ -479,7 +517,7 @@
                 
                 <div class="paper-card">
                     <div class="paper-title">1. Roofline Model for LLM Inference (ArXiv:2208.07339)</div>
-                    <div class="paper-desc">Establishes why Apple Silicon Unified Memory is memory-bandwidth bound (~4 tok/s for 27B at ~150 GB/s) while discrete GDDR6X achieves ~50 tok/s at 1,008 GB/s.</div>
+                    <div class="paper-desc">Establishes why Apple Silicon Unified Memory is memory-bandwidth bound (~16 tok/s for 27B DFlash) while discrete GDDR6X achieves ~50-100 tok/s at 1,008 GB/s.</div>
                 </div>
 
                 <div class="paper-card">
@@ -519,6 +557,47 @@
             } catch (e) {
                 console.error(e);
                 timestampEl.textContent = 'Offline Fallback (Live Fetch Failed)';
+            }
+            loadLiveUsageStream();
+        }
+
+        async function loadLiveUsageStream() {
+            const container = document.getElementById('live-usage-container');
+            if (!container) return;
+
+            try {
+                const resp = await fetch('data/live_usage_stream.jsonl?t=' + Date.now());
+                if (!resp.ok) {
+                    container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">No live workload records logged yet. Dispatches from delegate.py will appear here live.</div>';
+                    return;
+                }
+                const text = await resp.text();
+                const lines = text.trim().split('\n').filter(l => l.trim().length > 0);
+                if (lines.length === 0) {
+                    container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
+                    return;
+                }
+
+                const records = lines.slice(-8).reverse().map(l => JSON.parse(l));
+                let html = '<table class="live-stream-table"><thead><tr><th>Time</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
+                records.forEach(r => {
+                    const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
+                    html += `
+                        <tr>
+                            <td style="color:#8b949e;">${timeStr}</td>
+                            <td style="font-weight:700; color:#58a6ff;">${r.seat}</td>
+                            <td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.task_title || r.source}</td>
+                            <td style="color:#d2a8ff;">${r.model}</td>
+                            <td style="text-align:right;">${r.tokens_generated}</td>
+                            <td style="text-align:right;">${r.duration_seconds}s</td>
+                            <td style="text-align:right; font-weight:700; color:#3fb950;">${r.throughput_tok_s} tok/s</td>
+                        </tr>
+                    `;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML = '<div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#8b949e;">No live workload stream available.</div>';
             }
         }
 
