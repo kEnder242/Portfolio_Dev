@@ -1678,17 +1678,36 @@
                         const r = await fetch(url, { headers: { 'X-Lab-Key': currentLabKey || "unknown" }, credentials: 'include' });
                         if (r.ok) {
                             const text = await r.text();
-                            simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').slice(-10).join('\n'));
+                            simulateTyping(term, "[LAST TRACE]:\n" + text.split('\n').filter(l => l.trim().length > 0).slice(-8).join('\n'));
                         } else {
-                            simulateTyping(term, "[EVIDENCE UNAVAILABLE]\nMetadata: " + JSON.stringify(alert, null, 2));
+                            renderAlertMetaCard(term, alert);
                         }
                     }
                 } else {
-                    simulateTyping(term, "Metadata: " + JSON.stringify(alert, null, 2));
+                    renderAlertMetaCard(term, alert);
                 }
             } catch (err) {
                 term.textContent = "Error retrieving evidence: " + err.message;
             }
+        }
+
+        function renderAlertMetaCard(term, alert) {
+            const cleanMsg = (alert.message || '').replace(/\s+/g, ' ').trim();
+            const timeStr = alert.timestamp || 'N/A';
+            const srcStr = alert.source || 'SYSTEM';
+            const sevStr = (alert.severity || 'INFO').toUpperCase();
+            const sevColor = sevStr === 'CRITICAL' ? '#ff3b30' : (sevStr === 'WARNING' ? '#ffcc00' : '#58a6ff');
+
+            term.innerHTML = `
+                <div style="font-family:monospace; font-size:0.75rem; padding:6px 10px; color:#c9d1d9; background:#0d1117; border:1px solid #30363d; border-radius:4px; margin-top:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #21262d; padding-bottom:3px; margin-bottom:4px;">
+                        <span><strong style="color:${sevColor};">[${sevStr}]</strong> <strong style="color:var(--accent-color); margin-left:4px;">${srcStr}</strong></span>
+                        <span style="color:#8b949e; font-size:0.68rem;">${timeStr}</span>
+                    </div>
+                    <div style="color:#e6edf3; font-size:0.72rem; line-height:1.35;">${cleanMsg}</div>
+                </div>
+            `;
+            term.style.display = 'block';
         }
 
         function simulateTyping(el, text) {
