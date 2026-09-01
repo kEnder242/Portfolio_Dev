@@ -55,6 +55,7 @@ SEATS_CONFIG = {
         "vram_gb": 16.8,
         "architecture": "24GB Unified Memory (16.8GB Allocated)",
         "role": "Deep Architectural Reasoning & Planner",
+        "context_window": "32k (32,768)",
         "cost_per_1m": 0.012,
         "reasoning_ratio": 0.85
     },
@@ -68,6 +69,7 @@ SEATS_CONFIG = {
         "vram_gb": 14.5,
         "architecture": "24GB GDDR6X PCIe (1,008 GB/s)",
         "role": "High-Throughput Interactive Coding",
+        "context_window": "32k (32,768)",
         "cost_per_1m": 0.095,
         "reasoning_ratio": 0.25
     },
@@ -81,6 +83,7 @@ SEATS_CONFIG = {
         "vram_gb": 2.5,
         "architecture": "11GB GDDR6 Multi-LoRA (616 GB/s)",
         "role": "Sensory Foyer & Multi-LoRA Engine",
+        "context_window": "8k (8,192)",
         "cost_per_1m": 0.035,
         "reasoning_ratio": 0.10
     },
@@ -90,10 +93,11 @@ SEATS_CONFIG = {
         "host": "127.0.0.1",
         "port": 4097,
         "type": "cloud",
-        "power_watts": 0.0,
+        "power_watts": None,
         "vram_gb": 0.0,
         "architecture": "Distributed Cloud Clusters",
         "role": "Swarm Fallback & Cross-Review",
+        "context_window": "128k (128,000)",
         "cost_per_1m": 0.00,
         "reasoning_ratio": 0.40
     }
@@ -276,7 +280,7 @@ def run_sweep():
 
         power_w = cfg["power_watts"]
         tp = metrics["throughput"]
-        joules_per_ktok = ((power_w / tp) * 1000.0 / 1000.0) if tp > 0 and power_w > 0 else 0.0
+        joules_per_ktok = round((power_w / tp), 2) if (power_w is not None and tp > 0) else None
 
         item = {
             "model": metrics["model"],
@@ -285,6 +289,7 @@ def run_sweep():
             "display_name": cfg["display_name"],
             "architecture": cfg["architecture"],
             "role": cfg["role"],
+            "context_window": cfg.get("context_window", "32k"),
             "cold_ttft_ms": metrics["cold_ttft_ms"],
             "warm_ttft_ms": metrics["warm_ttft_ms"],
             "ttft_ms": metrics["warm_ttft_ms"],
@@ -294,7 +299,7 @@ def run_sweep():
             "itl_ms": metrics["itl_ms"],
             "vram_gb": cfg["vram_gb"],
             "power_watts": power_w,
-            "joules_per_ktok": round(joules_per_ktok, 2),
+            "joules_per_ktok": joules_per_ktok,
             "cost_per_1m_tokens": cfg["cost_per_1m"],
             "cloud_savings_pct": round(100.0 - (cfg["cost_per_1m"] / 3.00 * 100.0), 1),
             "reasoning_token_ratio": cfg["reasoning_ratio"],
