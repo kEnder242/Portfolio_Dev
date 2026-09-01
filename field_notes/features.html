@@ -2449,7 +2449,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/bench_models.py#L372" style="color:var(--accent-color); text-decoration:none;">field_notes/bench_models.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/bench_models.py#L360" style="color:var(--accent-color); text-decoration:none;">field_notes/bench_models.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14102,6 +14102,533 @@
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/pinky_critic_persona.py</code>, <code>src/tests/test_two_mice_handover.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-490">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-490</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Fast Resident Node Hot-Reload (vLLM VRAM Preservation)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L628" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/router.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a lightweight REST endpoint (<code>POST /reload_residents</code> / <code>POST /attendant/reload_residents</code>) on the Foyer Router that recycles resident MCP node processes (<code>ResidentManager.shutdown()</code> + <code>boot_all()</code>) in <code>&lt;1s</code> while keeping vLLM permanently bound on port 8088.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enables instantaneous updates to Python logic, cognitive prompts, and MCP node definitions without triggering 60-second vLLM re-initialization or dropping model weights from GPU VRAM.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/v5/common/residents.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-491">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-491</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Single Source of Truth: Centralized Forge Configuration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/config/infrastructure.json#L44" style="color:var(--accent-color); text-decoration:none;">config/infrastructure.json</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Centralizes all Unsloth LoRA fine-tuning hyperparameters (<code>default_steps = 150</code>, <code>pacing_delay_sec = 5.0</code>, <code>vram_eviction_threshold_mb = 1500</code>, <code>adapter_base_dir</code>) into the root <code>infrastructure.json</code> configuration ledger.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates scattered, out-of-sync hardcoded training arguments across <code>train_expert.py</code>, <code>router.py</code>, and <code>nightly_forge.py</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/forge/train_expert.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/infra/nightly_forge.py</code>.</p>
+<h2>[SCAR-035] CUDA Allocator &amp; UVM Kernel Deadlock (expandable_segments vs empty_cache)</h2>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Context</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Automated maintenance pipelines (<code>field-notes-nightly.service</code>) must protect host DRAM and GPU VRAM when chaining heavy sequential phases (LoRA Fine-Tuning $\rightarrow$ Mass Scan $\rightarrow$ Subconscious Dreaming).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Impact</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>GPU threads hung in uninterruptible <code>D</code> state, DCGM/Prometheus/Grafana telemetry froze at 05:48, and the system hard-locked until manual hardware reboot.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Remedy</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Strictly eliminate <code>torch.cuda.empty_cache()</code> inside the optimization step loop. Revert <code>expandable_segments</code> in systemd units. Standardize on <code>max_seq_length = 1024</code> with PyTorch's native caching allocator.</p>
+<h2>[BKM-047] Nightly Forge Autonomous Lifecycle &amp; Failure Abort Law</h2>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Operational Mandates</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ol>
+<li><strong>Pre-Flight VRAM Eviction Hard-Gate:</strong> Always poll NVML/<code>nvidia-smi</code> for up to 30s. If physical VRAM is $\ge 1500\text{MB}$, abort training immediately.</li>
+<li><strong>Atomic Maintenance Lock:</strong> Write <code>run/maintenance.lock</code> before quiescing, and reject <code>/wake</code> ignition requests with <code>HTTP 423 Locked</code>.</li>
+<li><strong>Failure-Abort Gate:</strong> If LoRA training fails or returns non-zero, immediately abort the sweep and re-ignite the lab to operational state. Never fall through into uncoordinated daytime Mass Scans.</li>
+<li><strong>Cgroup Memory Caps:</strong> User systemd units must strictly enforce <code>MemoryHigh=5.5G</code> and <code>MemoryMax=6.5G</code> with <code>ManagedOOMMemoryPressure=kill</code>.</li>
+</ol>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-492">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-492</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Multi-Layer OS Kernel Watchdog & Forge Stability Hardening
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="file:///etc/sysctl.d/99-homelab-watchdog.conf" style="color:var(--accent-color); text-decoration:none;">/etc/sysctl.d/99-homelab-watchdog.conf</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a 4-tier anti-hang architecture:
+1. <strong>Kernel Auto-Reboot:</strong> <code>kernel.panic = 10</code>, <code>kernel.panic_on_oops = 1</code>, <code>kernel.hung_task_timeout_secs = 120</code>, and <code>kernel.hung_task_panic = 1</code> guarantee that any uninterruptible driver deadlock or oops automatically triggers a reboot in 10 seconds rather than freezing indefinitely.
+2. <strong>Native PyTorch Checkpointing:</strong> <code>use_gradient_checkpointing = True</code> eliminates custom Triton JIT kernel compilation on Turing SM 7.5.
+3. <strong>Single-Process DataLoader:</strong> <code>dataset_num_proc = 1</code>, <code>dataloader_num_workers = 0</code>, and <code>dataloader_pin_memory = False</code> eliminate multiprocessing IPC and pinned memory contention with the physical Xorg display server.
+4. <strong>Process Priority &amp; Cgroup Tuning:</strong> <code>field-notes-nightly.service</code> runs at <code>Nice=10</code> and <code>IOSchedulingClass=best-effort</code> to ensure GUI and kernel input subsystems retain priority.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents hard system lockups where NumLock freezes while ping remains responsive, ensuring the host is always self-healing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>/etc/sysctl.d/99-homelab-watchdog.conf</code>, <code>HomeLabAI/src/forge/train_expert.py</code>, <code>HomeLabAI/config/systemd/field-notes-nightly.service</code>.</p>
+<h2>[SCAR-036] Xorg Display vs. Unsloth Triton CUDA Context Mutex Contention</h2>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Context</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>When running Unsloth fine-tuning on a single GPU (RTX 2080 Ti) that simultaneously drives the physical Xorg desktop, display compositor, and streaming servers (Moonlight/Sunshine), Unsloth's custom Triton gradient checkpointing JIT kernels contest display buffer allocation locks.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Impact</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>At 02:02 on Aug 30, the system entered an unrecoverable D-state deadlock. ICMP ping continued responding via kernel softirq, but the Xorg event loop stalled, freezing NumLock LED toggles and requiring a physical power cycle.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Remedy</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Switch gradient checkpointing from <code>"unsloth"</code> to standard PyTorch (<code>True</code>), isolate dataloader multiprocessing (<code>dataset_num_proc = 1</code>), and configure kernel hung task panic (<code>hung_task_panic = 1</code>, <code>kernel.panic = 10</code>) for automated crash recovery.</p>
+<h2>[BKM-048] Host Silicon Stability Protocol (20% Performance Trade-Off for 100% Uptime)</h2>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Philosophy</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Multi-node federated environments must preserve model residency on resource-constrained silicon (like Apple Silicon Unified Memory) rather than dynamically loading or swapping checkpoints during benchmarking or swarm execution.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Operational Rules</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ol>
+<li><strong>Report on Resident State:</strong> Always benchmark, query, and dispatch to whatever model is already loaded in memory (<code>mlx-community--Qwen3.8-27B-4bit</code> on M5 Air).</li>
+<li><strong>Explicit Confirmation Gate:</strong> Never dynamically swap, load alternate model weights, or trigger model eviction on physical hardware seats without requesting and receiving explicit user confirmation beforehand.</li>
+<li><strong>Prevent RAM Thrashing:</strong> Protects Apple Unified RAM from <code>HTTP 507 Insufficient Storage</code> collisions and avoids lengthy cold-load stalls during autonomous sweeps.</li>
+</ol>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-493">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-493</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Centralized Swarm Model Alias Registry
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decouples autonomous swarm agent personas (<code>champion_reasoner</code>, <code>champion_coder</code>, <code>fast_worker</code>) from transient upstream model checkpoint names by defining a centralized alias block in <code>HomeLabAI/config/infrastructure.json</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates brittle, multi-file reconfigurations when updating resident models on Apple Silicon or KENDER.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/tests/delegate.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-494">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-494</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    benchmarks.html 3-Tab Federated Silicon & ROI Workbench
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Upgrades <code>benchmarks.html</code> from a single-node RTX 2080 Ti snapshot into a comprehensive 3-tab workbench: Tab 1 (Silicon Arena comparison), Tab 2 (Energy &amp; Financial ROI Calculator), Tab 3 (Intelligence Quotient &amp; CoT depth), plus an interactive live shakedown waterfall runner.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enables clear visualization of speed, cost, energy, and reasoning depth across all four federated hardware tiers.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/benchmarks.html</code>, <code>Portfolio_Dev/field_notes/benchmarks_cache.json</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-495">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-495</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Dynamic Auto-Discovery Benchmark Engine & Nightly Sweep Integration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Overhauls <code>bench_models.py</code> to dynamically query endpoints (<code>:8000/v1/models</code>, <code>:11434/api/tags</code>, <code>:8088/v1/models</code>), discovering whatever model is currently resident on each hardware seat without hardcoded names. Automatically updates <code>benchmarks_cache.json</code> and Prometheus metrics.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ensures daily benchmarks automatically track resident model swaps and hardware changes without manual code edits.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/bench_models.py</code>, <code>HomeLabAI/src/infra/nightly_forge.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-496">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-496</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Passive Real-Time Swarm Telemetry Stream
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code> upon every <code>delegate.py</code> completion, rendering a live workload activity waterfall on <code>benchmarks.html</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides "free benchmarking" and real-time operational visibility into active hardware utilization under real production workloads.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/benchmarks.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-497">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-497</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Federated Silicon Multi-Node Live Certification
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>End-to-end integration certification across all 4 federated tiers (M5 Air at 16.07 tok/s, KENDER 4090 at 121.3 tok/s, Linux z87, and Cloud Swarm) validating live shakedown execution, passive telemetry logging, and dashboard rendering.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces the "LIVE IS GOD" mandate ensuring production silicon health.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/SPRINT_PLAN_SPR_66_0.md</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-498">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-498</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Cumulative Sovereign Token Ledger & Realized ROI Accumulator
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-66.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a unified lifetime sovereign token counter and financial ROI ledger in <code>Portfolio_Dev/field_notes/data/cumulative_tokens.json</code>. Automatically tapped by <code>delegate.py</code>, <code>router.py</code> (Web Intercom &amp; Mice Debate turns), and <code>nightly_forge.py</code> (archive scans). Accumulates total sovereign tokens generated, local electricity cost at $0.15/kWh, and realized dollar savings vs. commercial cloud APIs ($3.00/MTok Claude 3.5 Sonnet).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Transitions the benchmarks dashboard from hypothetical volume estimations to an authentic, real-time "My Realized ROI" counter reflecting actual homelab value delivery.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/infra/cumulative_telemetry.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/benchmarks.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-499">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-499</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Role-Hardware Abstraction & Sovereign Configuration Decoupling
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-67.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decouples persona and cognitive role identifiers (<code>DEEP_THOUGHT</code>) from physical hardware seat names (<code>M5_AIR</code>, <code>KENDER</code>, <code>localhost</code>). Updates <code>config/infrastructure.json</code> to assign Deep Thought's primary target to <code>M5_AIR</code> (24GB Unified Memory / 32k context) with <code>KENDER</code> (RTX 4090) fallback, freeing the 4090 for high-throughput coding tasks.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates hardcoded hardware assumptions and allows flexible role reallocation across heterogeneous silicon.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/nodes/thought_node.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-500">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-500</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Dynamic Deep Thought Multi-Seat Prober & Dual-Check Gate
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-67.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a dynamic, ping-first and stick prober in <code>speculative_triage.py</code>. Probes Apple M5 Air (<code>:8000</code> OpenAI REST) first. If responsive, locks to M5 Air; if sleeping or unreachable, falls back to Kender (<code>:11434</code> Ollama), and finally to local vLLM (<code>:8088</code>), maintaining full backward compatibility and zero-delay local fallback.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees zero downtime and resilient multi-seat speculative triage across heterogeneous APIs (oMLX OpenAI vs Ollama).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/speculative_triage.py</code>, <code>HomeLabAI/src/nodes/loader.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-501">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-501</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    M5 Air Sovereign Deep Thought 5x5 Silicon Certification
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-67.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Comprehensive 5x5 multi-turn live fire test validating deep CoT reasoning (<code>Qwen3.8-27B-4bit</code> on M5 Air at 16.0 tok/s, 18W power envelope) with dual-console routing and stage ledger synchronization.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces the "LIVE IS GOD" mandate certifying production silicon health.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/debug/test_live_fire_5x5_m5.py</code>, <code>Portfolio_Dev/SPRINT_PLAN_SPR_67_0.md</code>.</p>
                 </div>
             </div>     </div>
                             </details>
