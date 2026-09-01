@@ -59,6 +59,14 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 - Therefore, **Google Gemini models are strictly prohibited from OpenAgent fallback chains**.
 - OpenAgent fallbacks must route strictly through **OpenRouter Free $\rightarrow$ OpenCode Free $\rightarrow$ Cohere/Mistral $\rightarrow$ M5 Air MLX $\rightarrow$ Windows 4090**.
 
+### 3.4 Local Silicon Token Overhead & Metal Memory Ceilings
+- **The Physical Memory Constraint (24GB Apple Silicon):** When running a 27B quantized model (e.g. `Qwen3.8-27B` at 19.8 GB resident weights + OS), the attention SDPA prefill buffer for contexts larger than ~6k tokens exceeds the 24.46 GB macOS Metal allocation cap (`iogpu.wired_limit_mb`), triggering `prefill_memory_exceeded` (HTTP 400).
+- **Harness Trimming for Local Silicon:**
+  1. *MCP Optimization:* Disable heavy vector schemas (`turbovec`) in `opencode.json` for local profiles, saving ~1,200 tokens.
+  2. *Subagent Pruning:* Disable unused subagents (`multimodal-looker`, `oracle`, `librarian`, `explore`) in `oh-my-openagent.json`, saving ~800 tokens.
+  3. *Adaptive Two-Tier Payload (`delegate.py`):* Cloud Swarms receive full Tier 1 rich sprint summaries with ASCII diagrams; local runs (`--local-only`) receive the on-demand sprint file pointer to preserve activation headroom.
+  4. *Bicameral Local Topology:* Atlas (M5 Air 27B) formulates the plan and delegates execution to Sisyphus-Junior (RTX 4090 14B) via `task(agent="sisyphus-junior")`.
+
 ---
 
 ## 4. Swarm & Configuration Map
