@@ -2804,6 +2804,42 @@
 2. **Explicit Confirmation Gate:** Never dynamically swap, load alternate model weights, or trigger model eviction on physical hardware seats without requesting and receiving explicit user confirmation beforehand.
 3. **Prevent RAM Thrashing:** Protects Apple Unified RAM from `HTTP 507 Insufficient Storage` collisions and avoids lengthy cold-load stalls during autonomous sweeps.
 
+## [FEAT-493] Centralized Swarm Model Alias Registry
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** Decouples autonomous swarm agent personas (`champion_reasoner`, `champion_coder`, `fast_worker`) from transient upstream model checkpoint names by defining a centralized alias block in `HomeLabAI/config/infrastructure.json`.
+**Rationale:** Eliminates brittle, multi-file reconfigurations when updating resident models on Apple Silicon or KENDER.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/tests/delegate.py`.
+
+## [FEAT-494] benchmarks.html 3-Tab Federated Silicon & ROI Workbench
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** Upgrades `benchmarks.html` from a single-node RTX 2080 Ti snapshot into a comprehensive 3-tab workbench: Tab 1 (Silicon Arena comparison), Tab 2 (Energy & Financial ROI Calculator), Tab 3 (Intelligence Quotient & CoT depth), plus an interactive live shakedown waterfall runner.
+**Rationale:** Enables clear visualization of speed, cost, energy, and reasoning depth across all four federated hardware tiers.
+**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks_cache.json`.
+
+## [FEAT-495] Dynamic Auto-Discovery Benchmark Engine & Nightly Sweep Integration
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** Overhauls `bench_models.py` to dynamically query endpoints (`:8000/v1/models`, `:11434/api/tags`, `:8088/v1/models`), discovering whatever model is currently resident on each hardware seat without hardcoded names. Automatically updates `benchmarks_cache.json` and Prometheus metrics.
+**Rationale:** Ensures daily benchmarks automatically track resident model swaps and hardware changes without manual code edits.
+**Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `HomeLabAI/src/infra/nightly_forge.py`.
+
+## [FEAT-496] Passive Real-Time Swarm Telemetry Stream
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` upon every `delegate.py` completion, rendering a live workload activity waterfall on `benchmarks.html`.
+**Rationale:** Provides "free benchmarking" and real-time operational visibility into active hardware utilization under real production workloads.
+**Mechanism:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/benchmarks.html`.
+
+## [FEAT-497] Federated Silicon Multi-Node Live Certification
+**Sprint:** SPR-66.0
+**Status:** ACTIVE
+**Logic:** End-to-end integration certification across all 4 federated tiers (M5 Air at 16.07 tok/s, KENDER 4090 at 121.3 tok/s, Linux z87, and Cloud Swarm) validating live shakedown execution, passive telemetry logging, and dashboard rendering.
+**Rationale:** Enforces the "LIVE IS GOD" mandate ensuring production silicon health.
+**Mechanism:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/SPRINT_PLAN_SPR_66_0.md`.
+
+
 
 
 
