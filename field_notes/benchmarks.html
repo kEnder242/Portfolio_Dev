@@ -780,12 +780,17 @@
                 }
 
                 const records = lines.slice(-10).reverse().map(l => JSON.parse(l));
-                let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
+                let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
                 records.forEach(r => {
                     const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
+                    const isLocal = (r.tier === 'sovereign_local') || (r.seat && !r.seat.includes('Cloud') && r.provider !== 'openrouter');
+                    const tierBadge = isLocal 
+                        ? '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#1b4728; color:#3fb950; border:1px solid #238636;">LOCAL</span>'
+                        : '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#382714; color:#f78166; border:1px solid #bd561d;">CLOUD</span>';
                     const seatBadge = r.seat || (r.provider === 'openrouter' ? 'Cloud Swarm' : (r.provider.includes('m5') ? 'Apple M5 Air' : 'Windows 4090RTX'));
                     tableHtml += '<tr>' +
                         '<td style="color:#8b949e;">' + timeStr + '</td>' +
+                        '<td>' + tierBadge + '</td>' +
                         '<td style="font-weight:700; color:#58a6ff;">' + seatBadge + '</td>' +
                         '<td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (r.task_title || r.source) + '</td>' +
                         '<td style="color:#d2a8ff;">' + r.model + '</td>' +
