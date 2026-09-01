@@ -2846,6 +2846,28 @@
 **Rationale:** Transitions the benchmarks dashboard from hypothetical volume estimations to an authentic, real-time "My Realized ROI" counter reflecting actual homelab value delivery.
 **Mechanism:** `HomeLabAI/src/infra/cumulative_telemetry.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/benchmarks.html`.
 
+## [FEAT-499] Role-Hardware Abstraction & Sovereign Configuration Decoupling
+**Sprint:** SPR-67.0
+**Status:** ACTIVE
+**Logic:** Decouples persona and cognitive role identifiers (`DEEP_THOUGHT`) from physical hardware seat names (`M5_AIR`, `KENDER`, `localhost`). Updates `config/infrastructure.json` to assign Deep Thought's primary target to `M5_AIR` (24GB Unified Memory / 32k context) with `KENDER` (RTX 4090) fallback, freeing the 4090 for high-throughput coding tasks.
+**Rationale:** Eliminates hardcoded hardware assumptions and allows flexible role reallocation across heterogeneous silicon.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/nodes/thought_node.py`.
+
+## [FEAT-500] Dynamic Deep Thought Multi-Seat Prober & Dual-Check Gate
+**Sprint:** SPR-67.0
+**Status:** ACTIVE
+**Logic:** Implements a dynamic, ping-first and stick prober in `speculative_triage.py`. Probes Apple M5 Air (`:8000` OpenAI REST) first. If responsive, locks to M5 Air; if sleeping or unreachable, falls back to Kender (`:11434` Ollama), and finally to local vLLM (`:8088`), maintaining full backward compatibility and zero-delay local fallback.
+**Rationale:** Guarantees zero downtime and resilient multi-seat speculative triage across heterogeneous APIs (oMLX OpenAI vs Ollama).
+**Mechanism:** `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/router.py`.
+
+## [FEAT-501] M5 Air Sovereign Deep Thought 5x5 Silicon Certification
+**Sprint:** SPR-67.0
+**Status:** ACTIVE
+**Logic:** Comprehensive 5x5 multi-turn live fire test validating deep CoT reasoning (`Qwen3.8-27B-4bit` on M5 Air at 16.0 tok/s, 18W power envelope) with dual-console routing and stage ledger synchronization.
+**Rationale:** Enforces the "LIVE IS GOD" mandate certifying production silicon health.
+**Mechanism:** `HomeLabAI/src/debug/test_live_fire_5x5_m5.py`, `Portfolio_Dev/SPRINT_PLAN_SPR_67_0.md`.
+
+
 
 
 
