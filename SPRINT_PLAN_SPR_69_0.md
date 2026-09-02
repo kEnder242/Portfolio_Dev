@@ -166,7 +166,7 @@ If a delegated execution fails, drifts, or encounters a blocker, we execute this
   3. **Identified Forensics:** Subagent ended turn invoking interactive `question` (Next Steps) popup rather than returning final text, causing `finish=unknown` and bypassing textual handover reflection.
 
 ### 🛡️ Story 69.6: Delegation Harness Resilience & Interactive Escalation Gate (`[FEAT-515]`)
-* **Status:** **ACTIVE / PENDING IMPLEMENTATION**
+* **Status:** **IMPLEMENTED — PENDING VALIDATION**
 * **Core Law:** *Fix the delegation infrastructure; do not manually finish the sprint.*
 * **Tasks:**
   1. **Task 69.6.1 (Interactive Popup Breakout & Resumption):**
