@@ -258,3 +258,97 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 | **Story 70.8** | `[FEAT-524]` | Dead Air Delta Benchmark Harness | Pure AGY | `test_dead_air_delta.py` & `DEAD_AIR_DELTA_REPORT.md` |
 | **Story 70.9** | `[FEAT-525]` | Round Table Delta-T & Blackboard Drawer UI | Pure AGY | `test_benchmarks_delta_t_ui.py` (1/1 pass) |
 
+---
+
+## 🚀 Sprint 70.0 Phase 3: Live Telemetry & Public Benchmark Decoupling
+
+### 📋 Architectural Context & Master Blueprint (Turn 29362 Alignment)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PUBLIC / EXTERNAL (www.jason-lab.dev • GitHub Pages)                       │
+│  "Federated Silicon Benchmarks"                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  [🔒 ACCESS LIVE LAB TELEMETRY]  (CTA Button linking to Zero Trust tunnel)   │
+│                                                                             │
+│  STATIC HARDWARE SEAT CARDS:                                                │
+│  [ Apple M5 Air ]     [ Windows 4090 ]     [ Linux 2080 Ti ]   [ Cloud ]    │
+│                                                                             │
+│  TAB 1: PERFORMANCE ARENA        TAB 2: ENERGY & FINANCIAL ROI              │
+│  ├─ Verified Max Throughput      ├─ Energy Efficiency (Tokens/Joule)        │
+│  ├─ Warm TTFT Baseline           ├─ Electricity vs. Claude API Multiplier   │
+│  └─ Model Residency Specs        ├─ CoT Reasoning Depth Ratio               │
+│                                  └─ Interactive Cost Savings Calculator     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PRIVATE / INTERNAL (notes.jason-lab.dev:9001 • Cloudflare Access)          │
+│  "Federated Model Telemetry"                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Header: [Sync Pulse • Active Socket]  [📖 External Pedigree Benchmark Link] │
+│                                                                             │
+│  LIVE DYNAMIC HARDWARE SEATS:                                               │
+│  (Real-time DCGM VRAM %, Watts draw, Sleep/Wake status, current resident)   │
+│                                                                             │
+│  TOP: DELTA-T TIME SERIES                                                   │
+│  Cumulative stage lines across turns ($t_1 \rightarrow t_5$)                │
+│                                                                             │
+│  BOTTOM: MERGED UNIFIED LEDGER                                              │
+│  Turn-level Blackboard DNA expanding to reveal discrete subagent runs       │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Data Export & Push Protocol (Sticky Situation Governance)
+1. **Strict Git Invariant:** All automated scripts write locally to `data/`. Automated processes NEVER push. The user alone initiates remote pushes.
+2. **Sanitization Filter:** Private LAN IPs (`192.168.1.x`), raw session tokens, and local paths are stripped before export.
+3. **Static Certification:** Public benchmarks are framed as *Certified Pedigree Benchmarks (Static)* with "Last Certified" timestamps, avoiding stale live claims.
+4. **Shared Component Styling:** Public and internal surfaces share standard CSS classes to prevent UI drift.
+
+---
+
+### 📊 Story 70.10: Unified Nested Ledger (Turn Blackboard + Subagent Workload Stream) (`[FEAT-526]`)
+* **Status:** `[PENDING DELEGATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
+* **Objective:** Merge the granular subagent execution stream directly inside the expandable Blackboard Turn details cards so each turn shows its own subagent runs, while background scans display as `[BATCH]` cards.
+* **Target Files:**
+  * `Portfolio_Dev/field_notes/benchmarks.js` (Unified ledger rendering logic)
+  * `Portfolio_Dev/field_notes/benchmarks.html` (Markup container alignment)
+  * `HomeLabAI/src/tests/test_unified_ledger_ui.py` (Playwright verification suite)
+* **Acceptance Criteria:**
+  1. Each turn `<details class="feature-details">` expands to show:
+     - Distillation Bullets
+     - 1-Line Consensus
+     - Stage Delta Handover Telemetry
+     - Nested Subagent Dispatches Table (Model, Tokens, Duration, Tok/s)
+  2. Batch / non-interactive workloads render cleanly as `[BATCH] NIGHTLY_REFINEMENT` cards.
+  3. Playwright DOM assertions verify nested structure and zero console errors.
+
+---
+
+### 📊 Story 70.11: Sanitized Public Benchmark Exporter (`[FEAT-527]`)
+* **Status:** `[PENDING DELEGATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
+* **Objective:** Author an automated export script `Portfolio_Dev/field_notes/export_public_benchmarks.py` that ingests local telemetry and produces a clean, redacted `data/public_benchmarks.json` bundle.
+* **Target Files:**
+  * `Portfolio_Dev/field_notes/export_public_benchmarks.py` (Sanitizing export engine)
+  * `HomeLabAI/src/infra/test_benchmark_sanitizer.py` (Unit test verifying zero LAN IP / token leakage)
+* **Acceptance Criteria:**
+  1. Regex scanner strips all `192.168.1.x` IPs, `ses_xxx` tokens, and `/home/jallred` paths.
+  2. Generates valid `public_benchmarks.json` with hardware seats, throughput/TTFT averages, and ROI calculations.
+  3. Unit test asserts 100% pass on leak-detection test vectors.
+
+---
+
+### 📊 Story 70.12: Public Showcase Surface on Airlock (`[FEAT-528]`)
+* **Status:** `[PENDING DELEGATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
+* **Objective:** Deploy a clean, lightweight public showcase page `public_benchmarks.html` reading `public_benchmarks.json` with static cards, comparative bars, interactive ROI slider, and a zero-trust link button.
+* **Target Files:**
+  * `Portfolio_Dev/field_notes/public_benchmarks.html` (Standalone static showcase)
+  * `HomeLabAI/src/tests/test_public_benchmarks_ui.py` (Playwright DOM verification)
+* **Acceptance Criteria:**
+  1. Header contains `🔒 ACCESS LIVE LAB TELEMETRY` button pointing to Zero Trust notes.
+  2. Renders 4 static hardware seats, Throughput/TTFT bars, Tokens/Joule, and ROI calculator with zero external API/websocket dependencies.
+  3. Playwright test confirms 100% offline static rendering in < 1.0s.
+
+
