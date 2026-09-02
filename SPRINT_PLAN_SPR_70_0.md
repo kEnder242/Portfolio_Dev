@@ -181,55 +181,64 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 
 ---
 
+---
+
+## 🏷️ System Taxonomy Standard
+* **`FEAT-xxx` (Software Features):** Application & cognitive architecture (CognitiveHub, Web Intercom, Foyer Router, Context Scoping, Blackboard Ledger, Telemetry UI).
+* **`BKM-xxx` (Operational Protocols):** Agentic workflows, session discipline, delegation rules, and verification standards.
+* **`LAB-xxx` (Hardware & Infrastructure):** Physical/virtual nodes, GPU/Metal memory constraints, systemd daemons (`lab-attendant.service`), ports, and environment plumbing.
+
+---
+
 ## 🚀 Sprint 70.0 Phase 2: Follow-Up Stories & Tri-Loop Swarm Workstream
 
 ### 🛡️ Story 70.6: Direct-to-Online Boot Ignition & Manual Hibernation Hook Hardening (`[LAB-110B]`)
 * **Execution Mode:** `[DELEGATION: LOCAL SWARM]` (Atlas 4090 $\rightarrow$ Junior M5 Air via `--local-only`)
 * **Target Files:**
-  * `HomeLabAI/src/v5/ignition/manager.py`
-  * `HomeLabAI/src/v5/common/types.py`
-  * `HomeLabAI/config/infrastructure.json`
-* **Specification:**
-  1. In `manager.py:main_loop()`, if `hibernation.enabled == false` or `daytime_node_residency == "PERMANENT_RESIDENT"`, immediately fire `start_lab(reason="BOOT_PERMANENT_RESIDENT")` upon service startup. System must NEVER linger in `HIBERNATING` on cold boot.
-  2. Preserve manual testing hooks (`POST /sleep`, `POST /wake`, `POST /release_nodes`) so deliberate hibernation remains fully exercisable for integration testing.
-  3. Define launch behavior: when `hibernation.enabled == true`, boot into online with idle timer active; deliberate `/sleep` endpoint remains available.
-* **Verification:** Unit test asserting `manager.main_loop()` triggers ignition when `hibernation.enabled == false`.
+  * `HomeLabAI/src/v5/ignition/manager.py` (L54–65, L600–618)
+  * `HomeLabAI/src/v5/common/types.py` (L44–50)
+  * `HomeLabAI/config/infrastructure.json` (L5–8)
+  * `HomeLabAI/src/tests/test_direct_online_boot.py`
+* **Sub-Tasks:**
+  * **Sub-Task 70.6.1 (`manager.py:main_loop`):** On startup, inspect `infrastructure.json:hibernation.enabled` and `daytime_node_residency`. If `hibernation.enabled == false` or `daytime_node_residency == "PERMANENT_RESIDENT"`, immediately schedule `asyncio.create_task(self.start_lab(reason="BOOT_PERMANENT_RESIDENT"))`.
+  * **Sub-Task 70.6.2 (`manager.py:__init__`):** Ensure default initial state reflects launch intent without stalling in `HIBERNATING`.
+  * **Sub-Task 70.6.3 (`router.py:POST /sleep` & `POST /wake`):** Verify manual REST endpoints remain 100% operational for deliberate testing and nightly maintenance regardless of master switch.
+  * **Sub-Task 70.6.4 (Verification):** Write `test_direct_online_boot.py` asserting `main_loop` initiates boot when hibernation is disabled.
+* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_direct_online_boot.py`
 
 ---
 
-### 🧬 Story 70.7: Round Table Context Scoping & Blackboard Ledger DNA (`[LAB-523]`)
+### 🧬 Story 70.7: Round Table Context Scoping & Blackboard Ledger DNA (`[FEAT-523]`)
 * **Execution Mode:** `[DELEGATION: CLOUD SWARM]` (OpenRouter DeepSeek — after enabling in `oh-my-openagent.json`)
 * **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `HomeLabAI/src/memory/blackboard_ledger.py`
-  * `HomeLabAI/src/tests/test_blackboard_dna.py`
-* **Specification:**
-  1. Replace `source_name.lower()` sniffing with explicit enum `ContextScope.TURN` vs `ContextScope.LONG`.
-  2. Scope assignment:
-     * `ContextScope.TURN`: Triage (fresh query only) and Deep Thought (current turn debate transcript).
-     * `ContextScope.LONG`: Mice (Pinky & Brain), self-aware across conversation history via the Blackboard Ledger.
-  3. Brain writes technical distillation bullets to Blackboard during its interjection leg.
-  4. Pinky writes 1-line consensus closing entry during critique leg.
-  5. ChromaDB collection `blackboard_ledger_dna` records `{turn, topic, timestamp, distillation_bullets, consensus_1liner}`.
-* **Verification:** Unit test asserting Blackboard injection into Mice and isolation for Deep Thought and Triage.
+  * `HomeLabAI/src/logic/cognitive_hub.py` (L720–740, L1400–1430)
+  * `HomeLabAI/src/memory/blackboard_ledger.py` (New module)
+  * `HomeLabAI/src/tests/test_blackboard_dna.py` (New test suite)
+* **Sub-Tasks:**
+  * **Sub-Task 70.7.1 (`cognitive_hub.py:ContextScope`):** Replace string sniffing (`"triage" in source_name.lower()`) with `ContextScope` enum (`ContextScope.TURN` vs `ContextScope.LONG`).
+  * **Sub-Task 70.7.2 (`cognitive_hub.py:_process_node_stream`):** Triage and Deep Thought use `ContextScope.TURN` (isolated turn input). Pinky and Brain use `ContextScope.LONG` (injected with Blackboard + 1 prior turn).
+  * **Sub-Task 70.7.3 (`memory/blackboard_ledger.py`):** Implement `BlackboardLedger` class to store `{turn, topic, timestamp, distillation_bullets, consensus_1liner}`.
+  * **Sub-Task 70.7.4 (`cognitive_hub.py:1400`):** Brain writes distillation bullets to Blackboard during interjection; Pinky writes closing 1-line consensus during critique leg; commits to ChromaDB collection `blackboard_ledger_dna`.
+  * **Sub-Task 70.7.5 (Verification):** Write `test_blackboard_dna.py` verifying turn isolation for Triage/Deep Thought and Blackboard injection for Mice.
+* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_blackboard_dna.py`
 
 ---
 
-### ⏱️ Story 70.8: The "Dead Air Delta" Benchmark Harness (`[LAB-524]`)
+### ⏱️ Story 70.8: The "Dead Air Delta" Benchmark Harness (`[FEAT-524]`)
 * **Execution Mode:** `[PURE AGY]`
 * **Target Files:**
   * `HomeLabAI/src/debug/test_dead_air_delta.py`
   * `Portfolio_Dev/field_notes/DEAD_AIR_DELTA_REPORT.md`
-* **Specification:**
-  1. Construct dedicated multi-actor timing gauntlet capturing discrete handover deltas:
-     * $\Delta t_1$: User Dispatch $\rightarrow$ Triage Resolution
-     * $\Delta t_2$: Triage $\rightarrow$ Pinky Initial Stance
-     * $\Delta t_3$: Pinky $\rightarrow$ Brain Architectural Leg
-     * $\Delta t_4$: Brain $\rightarrow$ Deep Thought Oracle Leg
-     * $\Delta t_5$: Deep Thought $\rightarrow$ Pinky Summary & Judgment
-  2. Evaluate across 3 initial states: (1) Cold Boot, (2) Waking / Warming, (3) Operational Hot.
-  3. Exclude crosstalk from primary actor deltas (track crosstalk as secondary UI liveliness metric).
-* **Verification:** `DEAD_AIR_DELTA_REPORT.md` generated with empirical multi-actor timing.
+* **Sub-Tasks:**
+  * **Sub-Task 70.8.1 (`test_dead_air_delta.py`):** Construct Playwright multi-actor harness evaluating 3 initial conditions: (1) Cold Boot, (2) Waking / Warming, (3) Operational Hot.
+  * **Sub-Task 70.8.2 (`test_dead_air_delta.py`):** Measure and record the 5 discrete actor-to-actor handovers:
+    * $\Delta t_1$: User Dispatch $\rightarrow$ Triage Resolution
+    * $\Delta t_2$: Triage $\rightarrow$ Pinky Initial Stance
+    * $\Delta t_3$: Pinky $\rightarrow$ Brain Architectural Leg
+    * $\Delta t_4$: Brain $\rightarrow$ Deep Thought Oracle Leg
+    * $\Delta t_5$: Deep Thought $\rightarrow$ Pinky Summary & Judgment
+  * **Sub-Task 70.8.3 (`DEAD_AIR_DELTA_REPORT.md`):** Execute live silicon run against restarted lab attendant and author benchmark report.
+* **Verification Command:** `HomeLabAI/.venv/bin/python3 HomeLabAI/src/debug/test_dead_air_delta.py`
 
 ---
 
@@ -238,10 +247,9 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 * **Target Files:**
   * `Portfolio_Dev/field_notes/benchmarks.html`
   * `Portfolio_Dev/field_notes/benchmarks.js`
-* **Specification:**
-  1. Add "Round Table Delta-T" telemetry tab in `benchmarks.html`:
-     * Waterfall stacked bar chart showing time taken by each node per turn.
-     * $x$-axis: Turn index; $y$-axis: Milliseconds elapsed since turn dispatch.
-     * Visual breakdown: Blue (Triage) $\rightarrow$ Pink (Pinky) $\rightarrow$ Red (Brain) $\rightarrow$ Purple (Deep Thought) $\rightarrow$ Green (Pinky Judgment).
-  2. Embed expandable Blackboard Ledger drawer below chart (accordion style, mirroring `features.html`), displaying historical consensus ledgers.
-* **Verification:** Playwright DOM assertion for canvas chart and expandable blackboard drawer.
+* **Sub-Tasks:**
+  * **Sub-Task 70.9.1 (`benchmarks.html`):** Add "Round Table Delta-T" telemetry tab with canvas element for stacked waterfall bar chart.
+  * **Sub-Task 70.9.2 (`benchmarks.js`):** Render waterfall chart displaying time per actor per turn: Blue (Triage) $\rightarrow$ Pink (Pinky) $\rightarrow$ Red (Brain) $\rightarrow$ Purple (Deep Thought) $\rightarrow$ Green (Pinky Judgment).
+  * **Sub-Task 70.9.3 (`benchmarks.html`):** Embed expandable Blackboard Ledger accordion drawer below chart displaying historical turn ledgers.
+  * **Sub-Task 70.9.4 (Verification):** Playwright DOM assertion verifying canvas rendering and accordion interaction.
+* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_triage_routing_forced.py`
