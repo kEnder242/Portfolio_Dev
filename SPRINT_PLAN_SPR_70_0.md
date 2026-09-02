@@ -235,13 +235,26 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 ---
 
 ### 📊 Story 70.9: Round Table Delta-T Telemetry & Blackboard Drawer UI (`[FEAT-525]`)
-* **Execution Mode:** `[DELEGATION: LOCAL SWARM]` (Atlas 4090 $\rightarrow$ Junior M5 Air via `--local-only`)
+* **Status:** `[COMPLETE]` (Certified by Playwright DOM suite `HomeLabAI/src/tests/test_benchmarks_delta_t_ui.py`)
+* **Execution Mode:** `[HYBRID AGY + SWARM]`
+* **Implemented Features:**
+  * Added 4th navigation tab `⏱️ ROUND TABLE DELTA-T` and `#tab-delta-t` pane in `benchmarks.html`.
+  * Authored `benchmarks.js` rendering high-DPI canvas stacked waterfall chart `#delta-t-chart` with color-coded actor handover segments: Blue (Triage) $\rightarrow$ Pink (Pinky) $\rightarrow$ Red (Brain) $\rightarrow$ Purple (Deep Thought) $\rightarrow$ Green (Pinky Judgment).
+  * Implemented `#blackboard-drawer` collapsible accordion with `toggleBlackboardDrawer()` function displaying historical turn summaries and 1-line consensus records.
 * **Target Files:**
-  * `Portfolio_Dev/field_notes/benchmarks.html`
-  * `Portfolio_Dev/field_notes/benchmarks.js`
-* **Sub-Tasks:**
-  * **Sub-Task 70.9.1 (`benchmarks.html`):** Add "Round Table Delta-T" telemetry tab with canvas element for stacked waterfall bar chart.
-  * **Sub-Task 70.9.2 (`benchmarks.js`):** Render waterfall chart displaying time per actor per turn: Blue (Triage) $\rightarrow$ Pink (Pinky) $\rightarrow$ Red (Brain) $\rightarrow$ Purple (Deep Thought) $\rightarrow$ Green (Pinky Judgment).
-  * **Sub-Task 70.9.3 (`benchmarks.html`):** Embed expandable Blackboard Ledger accordion drawer below chart displaying historical turn ledgers.
-  * **Sub-Task 70.9.4 (Verification):** Playwright DOM assertion verifying canvas rendering and accordion interaction.
-* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_triage_routing_forced.py`
+  * `Portfolio_Dev/field_notes/benchmarks.html` (Tab button, styles, tab pane, canvas, and accordion markup)
+  * `Portfolio_Dev/field_notes/benchmarks.js` (Canvas waterfall renderer, drawer toggle, and DOM event wiring)
+  * `HomeLabAI/src/tests/test_benchmarks_delta_t_ui.py` (Playwright DOM certification suite)
+* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_benchmarks_delta_t_ui.py` (1 passed in 1.45s; 10/10 passed in sprint regression suite)
+
+---
+
+## 🏆 Sprint 70.0 Phase 2 Completion Matrix
+
+| Story | Feature ID | Description | Mode | Certified By |
+| :--- | :--- | :--- | :--- | :--- |
+| **Story 70.6** | `[LAB-110B]` | Direct-to-Online Boot Ignition | Tri-Loop $\rightarrow$ AGY | `test_direct_online_boot.py` (3/3 pass) |
+| **Story 70.7** | `[FEAT-523]` | Context Scoping & Blackboard Ledger DNA | Tri-Loop $\rightarrow$ AGY | `test_blackboard_dna.py` (3/3 pass) |
+| **Story 70.8** | `[FEAT-524]` | Dead Air Delta Benchmark Harness | Pure AGY | `test_dead_air_delta.py` & `DEAD_AIR_DELTA_REPORT.md` |
+| **Story 70.9** | `[FEAT-525]` | Round Table Delta-T & Blackboard Drawer UI | Pure AGY | `test_benchmarks_delta_t_ui.py` (1/1 pass) |
+
