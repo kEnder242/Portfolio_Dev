@@ -45,11 +45,18 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 ## 📋 Granular Story Breakdown
 
 ### 🛡️ Story 70.1: Hibernation Master Switch (`[FEAT-517]`)
-* **Execution Mode:** `[DELEGATION: LOCAL SWARM]` (Atlas 4090 $\rightarrow$ Junior M5 Air via `--local-only`)
+* **Status:** **COMPLETE / CERTIFIED**
+* **Execution Mode:** Tri-Loop Swarm Delegation (Atlas $\rightarrow$ Junior safe_patch $\rightarrow$ AGY AST lint alignment).
 * **Target Files:**
   * `HomeLabAI/config/infrastructure.json`
   * `HomeLabAI/src/v5/ignition/manager.py`
   * `HomeLabAI/src/v5/foyer/router.py`
+  * `HomeLabAI/src/tests/test_hibernation_master_switch.py`
+* **Delivered Artifacts:**
+  1. `infrastructure.json`: Added top-level `"hibernation": {"enabled": false, "idle_timeout_seconds": 900}`.
+  2. `manager.py`: Master Hibernation Gate in `_watchdog_loop` bypasses `stop_lab(reason="AFK_TIMEOUT")` when `enabled=False`.
+  3. `router.py`: Suppresses `self.disconnect_timer` when `hibernation.enabled=False`.
+  4. Verified via `pytest src/tests/test_hibernation_master_switch.py` (2/2 passed in 0.21s).
 * **Specification:**
   1. Add master configuration schema in `infrastructure.json`:
      ```json
