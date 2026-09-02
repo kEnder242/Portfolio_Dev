@@ -107,16 +107,21 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 
 ---
 
-### 🛡️ Story 70.4: Triage Routing Test Harness (Forced Pinky vs Brain) (`[FEAT-520]`)
-* **Execution Mode:** `[DELEGATION: LOCAL SWARM]` (Atlas 4090 $\rightarrow$ Junior M5 Air via `--local-only`)
+### 🎯 Story 70.4: Triage Routing Test Harness (`[FEAT-520]`)
+* **Status:** **COMPLETE / CERTIFIED**
+* **Execution Mode:** Direct AGY AST & Playwright Test Suite Development.
 * **Target Files:**
   * `HomeLabAI/src/tests/test_triage_routing_forced.py`
+* **Delivered Artifacts:**
+  1. Unit Harness: `test_forced_triage_routing_pinky_unit` asserts deterministic dispatch to Pinky resident.
+  2. Unit Harness: `test_forced_triage_routing_brain_unit` asserts deterministic dispatch to Brain resident.
+  3. Playwright E2E: `test_playwright_forced_routing_dom_elements` launches headless Chromium, accesses `http://localhost:9001/intercom.html`, validates `#text-input`, and verifies `.msg-source.pinky` and `.msg-source.brain` DOM rendering.
+  4. Verified via `pytest src/tests/test_triage_routing_forced.py` (3/3 passed in 1.55s).
 * **Specification:**
   1. Implement deterministic test cases:
      * *Case A (Pinky Win):* Casual greetings and quips $\rightarrow$ assert `addressed_to == "PINKY"`, `vibe == "CASUAL"`, `importance <= 0.3`.
      * *Case B (Brain Win):* Telemetry / technical queries $\rightarrow$ assert `addressed_to in ["BRAIN", "MICE"]`, `vibe in ["TECHNICAL", "HISTORICAL"]`, `importance >= 0.7`.
   2. Verify JSON schema conformity and error-free execution on local vLLM/Kender mocks.
-* **Verification:** `pytest HomeLabAI/src/tests/test_triage_routing_forced.py`.
 
 ---
 
