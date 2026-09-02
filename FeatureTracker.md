@@ -2867,6 +2867,70 @@
 **Rationale:** Enforces the "LIVE IS GOD" mandate certifying production silicon health.
 **Mechanism:** `HomeLabAI/src/debug/test_live_fire_5x5_m5.py`, `Portfolio_Dev/SPRINT_PLAN_SPR_67_0.md`.
 
+## [FEAT-517] Hibernation Master Switch
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** Master configuration switch in `config/infrastructure.json` under `"hibernation": {"enabled": false}`. In `manager.py:_watchdog_loop`, completely bypasses `stop_lab(reason="AFK_TIMEOUT")` when `enabled == false`. In `router.py`, suppresses disconnect-aware delayed shutdown timers.
+**Rationale:** Preserves models permanently in VRAM for interactive developer workflows without unexpected hibernation.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`.
+
+## [FEAT-518] Double Kickstart Warmup Race Condition Remediation
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** In `cognitive_hub.py:bridge_signal_clean`, excludes engine warming notifications (`"warming"`, `"warming its anchors"`) from non-JSON prose fallback triage synthesis. In `speculative_triage.py:_is_valid_triage`, rejects any triage dict containing warming residue.
+**Rationale:** Eliminates the flaw where cold engines yielding transient warming strings were accepted as completed triage results, dropping the first user message.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/tests/test_double_kickstart_remediation.py`.
+
+## [FEAT-519] Triage Context Squeeze & Token Cap
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** Suppresses `round_table_memory` injection during triage dispatch in `cognitive_hub.py:_process_node_stream`. Enforces explicit `max_tokens: 128` on triage thinking calls.
+**Rationale:** Prevents multi-turn conversational history (7k+ tokens) from inflating triage prompts and tripping vLLM's 8,192 token limit (`400 Bad Request`).
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/tests/test_triage_context_squeeze.py`.
+
+## [FEAT-520] Triage Routing Forced Playwright Test Harness
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** Deterministic unit and headless Chromium Playwright test suite validating Pinky vs. Brain routing. Asserts DOM element rendering (`.msg-source.pinky`, `.msg-source.brain`) on `intercom.html`.
+**Rationale:** Provides regression prevention and verifies end-to-end speaker identity in the UI.
+**Mechanism:** `HomeLabAI/src/tests/test_triage_routing_forced.py`.
+
+## [FEAT-521] 5x5 Dead Air Time & Liveliness Benchmark Report
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** Precision DOM telemetry ledger tracking every intermediate token and tic in `test_perf_5x5_timed.py`. Computes `dead_air_with_crosstalk`, `dead_air_without_crosstalk`, and `crosstalk_heavy_lifting_pct`.
+**Rationale:** Quantifies the psychological latency reduction provided by intermediate system crosstalk during multi-model inference.
+**Mechanism:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`, `Portfolio_Dev/field_notes/DEAD_AIR_LIVELINESS_REPORT.md`.
+
+## [FEAT-523] Round Table Context Scoping & Blackboard Ledger DNA
+**Sprint:** SPR-70.0
+**Status:** PLANNED
+**Logic:** Replaces string-sniffing with explicit `ContextScope` enum (`ContextScope.TURN` vs `ContextScope.LONG`). Triage and Deep Thought receive isolated `TURN` scope. Mice (Pinky & Brain) receive `LONG` scope with Blackboard Ledger + 1 prior turn. Brain writes distillation bullets; Pinky writes 1-line consensus; stored in ChromaDB `blackboard_ledger_dna`.
+**Rationale:** Resolves long context bloat while keeping conversational agents self-aware across multi-turn sessions.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
+
+## [FEAT-524] LIVE IS GOD Invariant Bytecode Gate
+**Sprint:** SPR-70.0
+**Status:** ACTIVE
+**Logic:** Pytest autouse fixture in `conftest.py` comparing `local_commit` (git HEAD) against `served_commit` on `http://127.0.0.1:8765/status`. Hard-aborts any live test if the served lab is running stale bytecode.
+**Rationale:** Strictly enforces the invariant "LIVE IS GOD", guaranteeing tests never pass falsely against outdated daemon processes.
+**Mechanism:** `HomeLabAI/src/tests/conftest.py`.
+
+## [FEAT-525] Round Table Delta-T Telemetry & Blackboard Drawer UI
+**Sprint:** SPR-70.0
+**Status:** PLANNED
+**Logic:** Visual telemetry component in `benchmarks.html` showing a stacked waterfall bar chart of time spent by each actor per turn (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought $\rightarrow$ Pinky Summary), with an expandable Blackboard Ledger accordion drawer.
+**Rationale:** Delivers granular, user-facing visibility into multi-actor inference dynamics.
+**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
+
+## [LAB-110B] Direct-to-Online Boot Ignition & Manual Hibernation Hook Hardening
+**Sprint:** SPR-70.0
+**Status:** PLANNED
+**Logic:** Enhances `IgnitionManager` to boot directly into `OPERATIONAL` on service start when `hibernation.enabled == false` or `daytime_node_residency == "PERMANENT_RESIDENT"`, eliminating cold start stalls on launch while preserving deliberate `POST /sleep` and `POST /wake` REST hooks.
+**Rationale:** Prevents unnecessary cold-boot delays while maintaining testability of hibernation plumbing.
+**Mechanism:** `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`.
+
+
 
 
 
