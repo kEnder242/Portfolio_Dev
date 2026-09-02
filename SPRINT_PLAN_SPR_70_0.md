@@ -148,3 +148,33 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 * **Story 70.4 (`[FEAT-520]`):** Certified (Triage Routing Forced Playwright Test Harness).
 * **Story 70.5 (`[FEAT-521]`):** Certified (5x5 Dead Air Time & Liveliness Benchmark Report).
 * **All Sprint Verification Gates:** 100% Passing. Zero remote git pushes executed.
+
+---
+
+## 🔬 Deep Retrospective: Forensics, Root Causes & Architectural Lessons
+
+### 1. The "Double Kickstart" Race Condition (`[FEAT-518]`)
+* **Forensic Diagnosis:** When local engines wake from hibernation, `loader.py:432` yields: `"The local engine is warming its anchors right now. Re-connecting momentarily!"`.
+* **The Glitch:** In `cognitive_hub.py:623`, `bridge_signal_clean` evaluated raw output: `if len(clean_str) > 15 and not ("Error:" in clean_str or "vLLM connection" in clean_str...)`. Because warming strings were not in the exclusion blacklist, the hub interpreted the notification as valid user prose and synthesized a fake triage payload:
+  `{"inferred_intent": "The local engine is warming...", "addressed_to": "PINKY", "vibe": "CASUAL", "importance": 0.5}`.
+* **The Cascade:** `SpeculativeTriageRelay._is_valid_triage` declared this fake triage JSON a winner because it contained `vibe`, `addressed_to`, and `importance`. The hub immediately advanced into the round-table phase on a cold engine that was still loading weights into VRAM. Downstream nodes aborted, the turn emitted `final: True`, and the user's first "Hi" was permanently dropped.
+* **Why the Second "Hi" Worked:** By the time the user realized nothing happened and said "Hi" again, weights had finished loading in the background. Triage executed on a warm engine and succeeded.
+* **Permanent Remediation:** 
+  1. Filtered all warming phrases (`"warming"`, `"warming its anchors"`) in `bridge_signal_clean` to return `None`.
+  2. Hardened `_is_valid_triage` in `speculative_triage.py` to reject any triage dict containing warming residue in `situation` or `hints`.
+
+### 2. Triage Context Squeeze & Token Cap (`[FEAT-519]`)
+* **Forensic Diagnosis:** Over multi-turn sessions, `self.round_table_memory` accumulated previous debate turns. `cognitive_hub.py:_process_node_stream` unconditionally prepended `round_table_memory` to the query, inflating triage prompts up to 7,193 tokens. Combined with default `max_tokens=1000`, this exceeded vLLM's 8,192 limit and threw `400 Bad Request`.
+* **Permanent Remediation:** Suppressed `round_table_memory` during triage turns and passed `max_tokens=128` down to `generate_response`, keeping triage prompts strictly $< 300$ tokens total.
+
+### 3. Swarm Single Task Law & Concurrency Deadlocks (`[LAB-515]`)
+* **Forensic Diagnosis:** Apple M5 Air oMLX inference (`192.168.1.46:8000`) is strictly single-stream. When Atlas emitted multiple `task()` tool calls in a single turn, multiple OpenCode child sessions connected simultaneously. M5 Air exceeded its Metal wired memory limit (`iogpu.wired_limit_mb` 24.96GB) and rejected requests with `"Model is busy"`.
+* **Harness Flaw:** `delegate.py` had contradictory prompt guidance: an invariant forbidding parallel calls juxtaposed against `"Prefer the 3-Task Micro-Pattern: Task A -> Task B -> Task C"`.
+* **Permanent Remediation:** Enforced the **Single Task Law** in `delegate.py` and disabled `compaction.auto` in `opencode.json` for local subagent child sessions.
+
+### 4. Systemic Tri-Loop Delegation Failure Post-Mortem
+* **Why Delegation Fell Back to AGY:**
+  * Iteration 1: Atlas emitted parallel tasks $\rightarrow$ M5 Air concurrency lock.
+  * Iteration 2: Prompt invariant fixed task count, but OpenCode auto-compaction hijacked the session on local subagents.
+  * Iteration 3: Auto-compaction disabled, `safe_patch` applied code, but local Qwen 27B entered an indentation error loop (`except Exception as e:\n pass` with misaligned whitespace).
+* **The Operational Mistake:** Instead of pausing to deeply investigate the subagent execution logs and fix the underlying harness between iterations, the agent performed rapid prompt-level adjustments. True Tri-Loop discipline requires diagnosing the subagent's execution environment before re-firing.
