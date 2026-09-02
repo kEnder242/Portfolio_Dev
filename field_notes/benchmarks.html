@@ -193,49 +193,79 @@
             height: 12px;
             border-radius: 2px;
         }
-        .blackboard-accordion {
+
+        /* Premium [+] and [-] details styling (from features.html) */
+        .feature-details summary::-webkit-details-marker { display: none; }
+        .feature-details summary {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            color: #f0f3f6;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+            padding: 10px 14px;
             background: #12161f;
             border: 1px solid #1f242c;
-            border-radius: 6px;
-            margin-top: 20px;
-            overflow: hidden;
+            border-radius: 4px;
+            transition: all 0.2s;
         }
-        .drawer-toggle {
-            width: 100%;
-            background: #161b22;
-            border: none;
-            border-bottom: 1px solid #1f242c;
-            padding: 14px 20px;
-            color: #f0f3f6;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .drawer-toggle:hover {
-            background: #1f242c;
+        .feature-details summary::before {
+            content: '[+]';
+            font-size: 0.75rem;
             color: #58a6ff;
-        }
-        .blackboard-content {
-            padding: 20px;
-            display: none;
-        }
-        .blackboard-content.open {
-            display: block;
-        }
-        .blackboard-entry {
-            background: #0d1117;
-            border-left: 3px solid #bc8cff;
-            border-radius: 0 4px 4px 0;
-            padding: 12px 16px;
-            margin-bottom: 14px;
             font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            width: 24px;
+            flex-shrink: 0;
+        }
+        .feature-details[open] summary::before {
+            content: '[-]';
+            color: #f778ba;
+        }
+        .feature-details summary:hover {
+            color: #58a6ff;
+            border-color: #30363d;
+        }
+        .feature-details[open] summary {
+            border-bottom: 1px solid #30363d;
+            border-radius: 4px 4px 0 0;
+            background: #161b22;
+        }
+        .feature-details .details-content {
+            border: 1px solid #30363d;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            background: #0d1117;
+            padding: 16px 20px;
+            margin-top: 0;
+        }
+        .field-label {
+            font-weight: bold;
+            color: #58a6ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-top: 4px;
+            display: inline-block;
+        }
+        .feature-body {
             font-size: 0.8rem;
-            line-height: 1.5;
+            color: #c9d1d9;
+            line-height: 1.4;
+            margin-left: 10px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .feature-body ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .feature-body li {
+            margin-bottom: 4px;
         }
 
         /* Silicon Arena Grid */
@@ -588,38 +618,33 @@
             </div>
         </div>
 
-        <!-- TAB 4: ROUND TABLE DELTA-T & BLACKBOARD DRAWER [FEAT-525] -->
+        <!-- TAB 4: ROUND TABLE DELTA-T & BLACKBOARD LEDGER [FEAT-525] -->
         <div id="tab-delta-t" class="tab-pane hidden">
             <div class="delta-t-chart-box">
                 <div class="chart-title">
-                    <span>⏱️ Round Table Delta-T Telemetry (Actor-to-Actor Waterfall)</span>
-                    <span class="chart-subtitle">Discrete handover latency across the 5 conversational stages (&Delta;t1 &rarr; &Delta;t5)</span>
+                    <span>⏱️ Round Table Delta-T Telemetry (Cumulative Stage Plot Over Turns)</span>
+                    <span class="chart-subtitle">Cumulative time from turn start across turns ($t_1 \rightarrow t_5$). Lines show cumulative progression; vertical gaps show discrete actor deltas.</span>
                 </div>
                 <div class="delta-t-legend">
-                    <div class="legend-pill"><div class="legend-color" style="background:#58a6ff;"></div><span>&Delta;t1: Triage Resolution</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f778ba;"></div><span>&Delta;t2: Pinky Stance</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f85149;"></div><span>&Delta;t3: Brain Architecture</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#bc8cff;"></div><span>&Delta;t4: Deep Thought Oracle</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#3fb950;"></div><span>&Delta;t5: Pinky Judgment</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#58a6ff;"></div><span>&Delta;t1: Triage Resolution (Cumulative)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#f778ba;"></div><span>&Delta;t2: Pinky Stance (Cumulative)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#f85149;"></div><span>&Delta;t3: Brain Architecture (Cumulative)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#bc8cff;"></div><span>&Delta;t4: Deep Thought Oracle (Cumulative)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#3fb950;"></div><span>&Delta;t5: Pinky Judgment (Total Elapsed)</span></div>
                 </div>
                 <div style="overflow-x: auto;">
-                    <canvas id="delta-t-chart" width="900" height="280"></canvas>
+                    <canvas id="delta-t-chart" width="1000" height="340"></canvas>
                 </div>
             </div>
 
-            <!-- Blackboard Ledger Accordion Drawer [FEAT-525] -->
-            <div id="blackboard-drawer" class="blackboard-accordion">
-                <button class="drawer-toggle" onclick="toggleBlackboardDrawer()">
-                    <span>📋 BLACKBOARD LEDGER DNA (TURN SUMMARY & CONSENSUS)</span>
-                    <span id="drawer-icon">▼</span>
-                </button>
-                <div id="blackboard-content" class="blackboard-content">
-                    <div class="blackboard-entry">
-                        <div style="color:#8b949e; font-size:0.7rem; margin-bottom:4px;">TURN 1 &bull; TOPIC: SILICON_MEMORY_LIMITS &bull; SCOPE: CONTEXT_SCOPE_LONG</div>
-                        <div style="color:#c9d1d9; margin-bottom:6px;"><strong>Distillation Bullets:</strong></div>
-                        <div style="color:#8b949e; margin-left:10px;">&bull; Pinky evaluated RTX 2080 Ti 11GB VRAM budget vs Apple M5 Air Unified Memory.<br>&bull; Brain confirmed Llama-3.2-3B-AWQ fits in 2.5GB footprint leaving headroom for KV cache.<br>&bull; Triage completed in 30ms speculative window.</div>
-                        <div style="color:#3fb950; margin-top:8px;"><strong>1-Line Consensus:</strong> Bicameral execution maintains sub-second interactive response (838ms) while preserving multi-node context isolation.</div>
-                    </div>
+            <!-- Blackboard Ledger DNA (features.html Pattern: Expandable Per Turn) [FEAT-525] -->
+            <div class="chart-card" style="margin-top: 25px;">
+                <div class="chart-title">
+                    <span>📋 Blackboard Ledger DNA (Expandable Turn Ledger)</span>
+                    <span class="chart-subtitle">Turn-by-turn conversational distillation and 1-line consensus records — identical to features.html DNA styling</span>
+                </div>
+                <div id="blackboard-ledger-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                    <!-- Dynamically populated from round_table_deltas.json -->
                 </div>
             </div>
         </div>
