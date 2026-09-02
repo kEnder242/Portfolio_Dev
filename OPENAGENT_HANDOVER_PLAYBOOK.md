@@ -12,10 +12,10 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | :--- | :--- | :--- |
 | **Strategic Guardian (AGY)** | Master plan creation, architecture design, code review, git commits | AGY CLI Turn |
 | **Sisyphus (Ultraworker & Autonomous Engineer)** | Primary Direct Autonomous Implementer for `delegate.py` story dispatches; directly executes safe_patch/bash | Dispatched via `delegate.py` (default) |
-| **Atlas (Plan Executor & Swarm Conductor)** | Swarm orchestrator for multi-subagent task cascades (M5 Air / Windows 4090) | Dispatched via `delegate.py --agent atlas` |
+| **Atlas (Plan Executor & Swarm Conductor)** | Swarm orchestrator for multi-subagent task cascades (Windows 4090 / M5 Air) | Dispatched via `delegate.py --agent atlas` |
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
-| **Primary Local MLX Node** | Mac M5 Air (Port 8000 MLX: `Qwen3.8-27B-4bit`) for high-speed local inference | Subagent target / primary local compute |
-| **Primary Local Ground Worker** | Node KENDER / Windows 4090 (Port 11434 Ollama: `qwen2.5-coder:14b`) | Subagent `task()` target / local backup |
+| **Primary Local Ground Worker (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `Qwen3-14B-GGUF`) for fast 75 tok/s code editing with 14.8 GB VRAM cache | Subagent `task()` primary target (`sisyphus-junior`) |
+| **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8000 MLX: `Qwen3.8-27B-4bit`) for deep architectural thought & speculative triage | Subagent target for deep reasoning |
 | **Cloud Fallback Tier** | OpenRouter Free -> OpenCode Free -> Cohere/Mistral (Non-Google) | Automatic runtime fallback |
 
 ---
@@ -60,19 +60,32 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 - OpenAgent fallbacks must route strictly through **OpenRouter Free $\rightarrow$ OpenCode Free $\rightarrow$ Cohere/Mistral $\rightarrow$ M5 Air MLX $\rightarrow$ Windows 4090**.
 
 ### 3.4 Local Silicon Token Overhead & Metal Memory Ceilings
-- **The Physical Memory Constraint (24GB Apple Silicon):** When running a 27B quantized model (e.g. `Qwen3.8-27B` at 19.8 GB resident weights + OS), the attention SDPA prefill buffer for contexts larger than ~6k tokens exceeds the 24.46 GB macOS Metal allocation cap (`iogpu.wired_limit_mb`), triggering `prefill_memory_exceeded` (HTTP 400).
-- **Harness Trimming for Local Silicon:**
-  1. *MCP Optimization:* Disable heavy vector schemas (`turbovec`) in `opencode.json` for local profiles, saving ~1,200 tokens.
-  2. *Subagent Pruning:* Disable unused subagents (`multimodal-looker`, `oracle`, `librarian`, `explore`) in `oh-my-openagent.json`, saving ~800 tokens.
-  3. *Adaptive Two-Tier Payload (`delegate.py`):* Cloud Swarms receive full Tier 1 rich sprint summaries with ASCII diagrams; local runs (`--local-only`) receive the on-demand sprint file pointer to preserve activation headroom.
-  4. *Bicameral Local Topology:* Atlas (M5 Air 27B) formulates the plan and delegates execution to Sisyphus-Junior (RTX 4090 14B) via `task(agent="sisyphus-junior")`.
+- **The Physical Memory Constraint (24GB Apple Silicon):** When running a 27B quantized model (e.g. `Qwen3.8-27B` at 21.2 GB resident weights), the attention SDPA prefill buffer for contexts larger than ~4k tokens exceeds the 24.46 GB macOS Metal allocation cap (`iogpu.wired_limit_mb`), triggering `AI_APICallError: oMLX prefill memory guard rejected this prompt`.
+- **Worker Realignment to Kender 4090:** To avoid Metal memory exhaustion, coding worker execution (`sisyphus-junior` and `unspecified-low`) is resident on Kender (RTX 4090 + Ollama). `Qwen3-14B-GGUF` takes only 9.2 GB VRAM, leaving **14.8 GB of VRAM for KV caching** at 75 tok/s.
+
+### 3.5 Subagent Tool Scoping & The ICM Ballast Tax ([BKM-051])
+- **The 24.5k Token Ghost:** OpenCode automatically injects all registered MCP tool schemas into every subagent prompt. When ICM was enabled with 31 tools + CLaRa + LSP, worker base prompts ballooned to **24,488 input tokens** before reading any code.
+- **The Mandatory Tool Denial Law:** Execution workers (`sisyphus-junior`, `hephaestus`) MUST explicitly deny non-essential tools in `oh-my-openagent.json`:
+  ```json
+  "permission": {
+    "edit": "allow",
+    "icm_*": "deny",
+    "websearch_*": "deny",
+    "codegraph_*": "deny",
+    "question": "deny"
+  }
+  ```
+  This collapses worker prompt overhead from 24.5k down to **$< 1,500$ tokens**, reducing prefill time on local silicon from 90 seconds to 2 seconds.
 
 ---
 
 ## 4. Swarm & Configuration Map
 
-### 4.1 Configuration Files
-- **OpenAgent Core Config:** `~/.config/opencode/oh-my-openagent.json`
+### 4.1 Configuration Files & Symlink Invariant
+- **Symlink Law:** OpenCode reads global configurations from `~/.config/opencode/`. Both configuration files MUST be symlinked to the version-controlled workspace repository:
+  * `~/.config/opencode/opencode.json` $\rightarrow$ `/home/jallred/Dev_Lab/opencode.json`
+  * `~/.config/opencode/oh-my-openagent.json` $\rightarrow$ `/home/jallred/Dev_Lab/oh-my-openagent.json`
+- **MCP Absolute Path Rule:** Systemd user services (`opencode-core.service`) use default system `PATH` (`/usr/bin:/bin`). Commands in `opencode.json` (such as `icm`) MUST use absolute paths (`/home/jallred/.local/bin/icm`) to prevent silent `execvp` failures.
 - **MCP Tool Bridge:** `HomeLabAI/.opencode.json` (OpenAgent) & `~/.gemini/config/mcp_config.json` (AGY)
 - **Delegation Harness:** `HomeLabAI/src/tests/delegate.py`
 
