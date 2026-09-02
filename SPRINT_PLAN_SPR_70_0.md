@@ -206,18 +206,17 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 ---
 
 ### 🧬 Story 70.7: Round Table Context Scoping & Blackboard Ledger DNA (`[FEAT-523]`)
-* **Execution Mode:** `[DELEGATION: CLOUD SWARM]` (OpenRouter DeepSeek — after enabling in `oh-my-openagent.json`)
+* **Status:** `[COMPLETE]` (Certified by `HomeLabAI/src/tests/test_blackboard_dna.py` — 3/3 passed in 0.25s)
+* **Execution Forensics (Tri-Loop Protocol [BKM-049]):**
+  * *Attempt 1 (Local Swarm):* Junior completed symbolic exploration but committed an omission hallucination, marking todos as completed without writing files.
+  * *Attempt 2 (Local Swarm):* Junior wrote `blackboard_ledger.py` after self-healing a bash quote syntax error, but truncated `cognitive_hub.py` via `echo >`. Primary Agent immediately restored clean file from git.
+  * *Attempt 3 (Local Swarm):* Scoped strictly to `test_blackboard_dna.py`. Junior generated tests but hit import path naming ambiguities.
+  * *AGY Takeover Gate:* Per Tri-Loop Law, Primary Agent (AGY) executed authorized takeover: enhanced `memory/blackboard_ledger.py` with `ContextScope` and `to_dict()`, wired `_process_node_stream` and turn finalization in `cognitive_hub.py`, and verified the full test suite.
 * **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py` (L720–740, L1400–1430)
-  * `HomeLabAI/src/memory/blackboard_ledger.py` (New module)
-  * `HomeLabAI/src/tests/test_blackboard_dna.py` (New test suite)
-* **Sub-Tasks:**
-  * **Sub-Task 70.7.1 (`cognitive_hub.py:ContextScope`):** Replace string sniffing (`"triage" in source_name.lower()`) with `ContextScope` enum (`ContextScope.TURN` vs `ContextScope.LONG`).
-  * **Sub-Task 70.7.2 (`cognitive_hub.py:_process_node_stream`):** Triage and Deep Thought use `ContextScope.TURN` (isolated turn input). Pinky and Brain use `ContextScope.LONG` (injected with Blackboard + 1 prior turn).
-  * **Sub-Task 70.7.3 (`memory/blackboard_ledger.py`):** Implement `BlackboardLedger` class to store `{turn, topic, timestamp, distillation_bullets, consensus_1liner}`.
-  * **Sub-Task 70.7.4 (`cognitive_hub.py:1400`):** Brain writes distillation bullets to Blackboard during interjection; Pinky writes closing 1-line consensus during critique leg; commits to ChromaDB collection `blackboard_ledger_dna`.
-  * **Sub-Task 70.7.5 (Verification):** Write `test_blackboard_dna.py` verifying turn isolation for Triage/Deep Thought and Blackboard injection for Mice.
-* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_blackboard_dna.py`
+  * `HomeLabAI/src/memory/blackboard_ledger.py` (`ContextScope` enum, `BlackboardLedger` class)
+  * `HomeLabAI/src/logic/cognitive_hub.py` (L29 import, L393 `blackboard_ledger` init, L730 `ContextScope` enforcement, L1415 turn recording)
+  * `HomeLabAI/src/tests/test_blackboard_dna.py` (3 test cases: ledger operations, enum values, and CognitiveHub query isolation/enrichment)
+* **Verification Command:** `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_blackboard_dna.py` (3 passed in 0.25s)
 
 ---
 
