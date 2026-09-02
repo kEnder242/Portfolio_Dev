@@ -1,9 +1,9 @@
 /**
- * [FEAT-525] Round Table Delta-T Telemetry & Blackboard Ledger DNA UI
- * 1. Cumulative Multi-Line Stage Plot Over Turns (X-axis = Turn, Y-axis = Cumulative Duration)
- * 2. Blackboard Ledger DNA (features.html-style expandable turn details)
+ * Federated Silicon Benchmarks & Round Table Delta-T Engine
+ * [FEAT-525] Multi-Seat Hardware Dashboard, ROI & Cumulative Stage Delta-T Telemetry
  */
 
+let cachedData = null;
 let cachedDeltas = null;
 
 const DEFAULT_DELTAS = [
@@ -84,6 +84,296 @@ const DEFAULT_DELTAS = [
   }
 ];
 
+// ==============================================================================
+// 1. HARDWARE & ROI BENCHMARKS LOADER
+// ==============================================================================
+async function loadBenchmarks() {
+    const timestampEl = document.getElementById('telemetry-timestamp');
+    try {
+        const resp = await fetch('benchmarks_cache.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        cachedData = await resp.json();
+        
+        if (timestampEl) timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
+        renderAll(cachedData.results);
+        await loadLiveUsageStream();
+        await loadCumulativeTelemetry();
+    } catch (e) {
+        console.warn("[Benchmarks] Using offline fallback:", e);
+        if (timestampEl) timestampEl.textContent = 'Offline Fallback (Active)';
+        // Fallback default benchmark seats
+        const fallbackResults = [
+            { display_name: "Apple M5 Air", architecture: "Apple Silicon Unified Memory", status: "online", model: "Qwen 2.5 7B Q4", context_window: "32k", role: "Mobile Triage & Junior Worker", throughput: 42.5, warm_ttft_ms: 180, power_watts: 18.5, tokens_per_joule: 2.3, cloud_multiplier: 55.2, electricity_cost_per_1m: 0.0543, reasoning_token_ratio: 0.35 },
+            { display_name: "Windows Node 'Brain' (RTX 4090)", architecture: "Ada Lovelace 24GB VRAM", status: "online", model: "Qwen 2.5 14B Q4_K_XL", context_window: "64k", role: "Primary Reasoner & Atlas Leader", throughput: 68.2, warm_ttft_ms: 220, power_watts: 280.0, tokens_per_joule: 0.24, cloud_multiplier: 28.5, electricity_cost_per_1m: 0.1052, reasoning_token_ratio: 0.65 },
+            { display_name: "Linux Node 'Pinky' (RTX 2080 Ti)", architecture: "Turing 11GB VRAM (vLLM AWQ)", status: "online", model: "Llama 3.2 3B AWQ", context_window: "32k", role: "Sensory Ear & Speculative Intercom", throughput: 94.0, warm_ttft_ms: 85, power_watts: 160.0, tokens_per_joule: 0.59, cloud_multiplier: 62.1, electricity_cost_per_1m: 0.0483, reasoning_token_ratio: 0.20 },
+            { display_name: "Cloud Swarm (DeepSeek R1 / Claude)", architecture: "Remote Distributed Swarm", status: "online", model: "DeepSeek R1 671B / Sonnet", context_window: "128k", role: "Oracle Consensus Fallback", throughput: 28.0, warm_ttft_ms: 950, power_watts: null, tokens_per_joule: null, cloud_multiplier: 1.0, electricity_cost_per_1m: null, reasoning_token_ratio: 0.85 }
+        ];
+        renderAll(fallbackResults);
+        await loadLiveUsageStream();
+        await loadCumulativeTelemetry();
+    }
+    await initDeltaTView();
+}
+
+function renderAll(results) {
+    renderSeatCards(results);
+    renderBars(results);
+    updateRoiCalc(25);
+}
+
+function renderSeatCards(results) {
+    const container = document.getElementById('seat-cards-container');
+    if (!container) return;
+    
+    let html = '';
+    results.forEach(r => {
+        const statusClass = r.status === 'online' ? 'status-online' : 'status-offline';
+        const statusText = r.status === 'online' ? 'ONLINE' : 'OFFLINE / SLEEP';
+        const nameClean = r.display_name.split(' (')[0];
+        const powerText = (r.power_watts !== null && r.power_watts !== undefined) ? r.power_watts.toFixed(0) + 'W' : 'N/A (Cloud Hosted)';
+        html += `
+            <div class="seat-card">
+                <div class="seat-header">
+                    <div>
+                        <h3 class="seat-title">${nameClean}</h3>
+                        <div class="seat-subtitle">${r.architecture}</div>
+                    </div>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Resident Model:</span>
+                    <span class="stat-value" style="color:#58a6ff;">${r.model}</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Context Window:</span>
+                    <span class="stat-value" style="color:#d2a8ff;">${r.context_window || '32k'}</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Target Role:</span>
+                    <span class="stat-value">${r.role}</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Throughput:</span>
+                    <span class="stat-value" style="color:#3fb950;">${r.throughput.toFixed(1)} tok/s</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Warm TTFT:</span>
+                    <span class="stat-value">${r.warm_ttft_ms.toFixed(0)} ms</span>
+                </div>
+                <div class="seat-stat">
+                    <span class="stat-label">Power Draw:</span>
+                    <span class="stat-value" style="color:#e3b341;">${powerText}</span>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function renderBars(results) {
+    const throughputContainer = document.getElementById('throughput-bars');
+    const ttftContainer = document.getElementById('ttft-bars');
+    const tokensJouleContainer = document.getElementById('tokens-joule-bars');
+    const roiMultipliersContainer = document.getElementById('roi-multipliers-bars');
+    const reasoningContainer = document.getElementById('reasoning-bars');
+
+    const maxThroughput = Math.max(...results.map(r => r.throughput), 50);
+    const maxTtft = Math.max(...results.map(r => r.warm_ttft_ms), 1500);
+    const validTokensJoule = results.map(r => r.tokens_per_joule).filter(v => v !== null && v !== undefined);
+    const maxTokJoule = validTokensJoule.length > 0 ? Math.max(...validTokensJoule, 1.0) : 1.0;
+
+    // 1. Throughput Bars
+    if (throughputContainer) {
+        let tpHtml = '';
+        results.forEach(r => {
+            const pct = (r.throughput / maxThroughput) * 100;
+            tpHtml += `
+                <div class="bar-row">
+                    <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width:${pct}%; background:#3fb950;"></div>
+                    </div>
+                    <div class="bar-value">${r.throughput.toFixed(1)} tok/s</div>
+                </div>
+            `;
+        });
+        throughputContainer.innerHTML = tpHtml;
+    }
+
+    // 2. TTFT Bars
+    if (ttftContainer) {
+        let ttftHtml = '';
+        results.forEach(r => {
+            const pct = (r.warm_ttft_ms / maxTtft) * 100;
+            ttftHtml += `
+                <div class="bar-row">
+                    <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width:${pct}%; background:#58a6ff;"></div>
+                    </div>
+                    <div class="bar-value">${r.warm_ttft_ms.toFixed(0)} ms</div>
+                </div>
+            `;
+        });
+        ttftContainer.innerHTML = ttftHtml;
+    }
+
+    // 3. Tokens per Joule Bars
+    if (tokensJouleContainer) {
+        let tjHtml = '';
+        results.forEach(r => {
+            const isCloud = (r.power_watts === null || r.tokens_per_joule === null);
+            const tjVal = isCloud ? 'N/A (Offloaded)' : r.tokens_per_joule.toFixed(3) + ' Tok/J';
+            const pct = (!isCloud && r.tokens_per_joule > 0) ? (r.tokens_per_joule / maxTokJoule) * 100 : 2;
+            const color = isCloud ? '#30363d' : (r.tokens_per_joule >= 0.7 ? '#3fb950' : (r.tokens_per_joule >= 0.3 ? '#58a6ff' : '#e3b341'));
+            tjHtml += `
+                <div class="bar-row">
+                    <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width:${pct}%; background:${color};"></div>
+                    </div>
+                    <div class="bar-value">${tjVal}</div>
+                </div>
+            `;
+        });
+        tokensJouleContainer.innerHTML = tjHtml;
+    }
+
+    // 4. ROI Multipliers Bars
+    if (roiMultipliersContainer) {
+        const validMultipliers = results.map(r => r.cloud_multiplier).filter(m => m !== null && m !== undefined);
+        const maxMultiplier = validMultipliers.length > 0 ? Math.max(...validMultipliers, 10.0) : 10.0;
+
+        let roiHtml = '';
+        results.forEach(r => {
+            const isCloud = (r.electricity_cost_per_1m === null);
+            const costVal = isCloud ? 'Cloud Baseline ($3.00)' : '$' + r.electricity_cost_per_1m.toFixed(4) + ' (' + r.cloud_multiplier + 'x)';
+            const multiplier = isCloud ? 1.0 : (r.cloud_multiplier || 1.0);
+            const pct = Math.max(3, (multiplier / maxMultiplier) * 100);
+            const color = isCloud ? '#30363d' : (multiplier >= 50 ? '#3fb950' : (multiplier >= 25 ? '#58a6ff' : '#e3b341'));
+            roiHtml += `
+                <div class="bar-row">
+                    <div class="bar-label">${r.display_name.split(' (')[0]}</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width:${pct}%; background:${color};"></div>
+                    </div>
+                    <div class="bar-value" style="width:200px;">${costVal}</div>
+                </div>
+            `;
+        });
+        roiMultipliersContainer.innerHTML = roiHtml;
+    }
+
+    // 5. Reasoning CoT Depth Bars
+    if (reasoningContainer) {
+        let reasoningHtml = '';
+        results.forEach(r => {
+            const pct = (r.reasoning_token_ratio || 0.1) * 100;
+            reasoningHtml += `
+                <div class="bar-row">
+                    <div class="bar-label">${r.display_name.split(' (')[0]} (${r.model})</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width:${pct}%; background:#d2a8ff;"></div>
+                    </div>
+                    <div class="bar-value">${pct.toFixed(0)}% CoT Depth</div>
+                </div>
+            `;
+        });
+        reasoningContainer.innerHTML = reasoningHtml;
+    }
+}
+
+function updateRoiCalc(mtok) {
+    const label = document.getElementById('tokenVolumeLabel');
+    if (label) label.textContent = mtok + ' MTok';
+    const apiCost = mtok * 3.00;
+    const localPowerKwh = mtok * 0.22;
+    const electricityCost = localPowerKwh * 0.15;
+    const savings = apiCost - electricityCost;
+    const savingsPct = ((savings / apiCost) * 100).toFixed(1);
+
+    const apiEl = document.getElementById('apiCostVal');
+    const localEl = document.getElementById('localCostVal');
+    const savEl = document.getElementById('savingsVal');
+    if (apiEl) apiEl.textContent = '$' + apiCost.toFixed(2);
+    if (localEl) localEl.textContent = '$' + electricityCost.toFixed(2);
+    if (savEl) savEl.textContent = '$' + savings.toFixed(2) + ' (' + savingsPct + '%)';
+}
+
+async function loadLiveUsageStream() {
+    const container = document.getElementById('live-usage-container');
+    if (!container) return;
+
+    try {
+        const resp = await fetch('data/live_usage_stream.jsonl?t=' + Date.now());
+        if (!resp.ok) {
+            container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
+            return;
+        }
+        const text = await resp.text();
+        const lines = text.trim().split('\n').filter(l => l.trim().length > 0);
+        if (lines.length === 0) {
+            container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
+            return;
+        }
+
+        const records = lines.slice(-10).reverse().map(l => JSON.parse(l));
+        let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
+        records.forEach(r => {
+            const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
+            const isLocal = (r.tier === 'sovereign_local') || (r.seat && !r.seat.includes('Cloud') && r.provider !== 'openrouter');
+            const tierBadge = isLocal 
+                ? '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#1b4728; color:#3fb950; border:1px solid #238636;">LOCAL</span>'
+                : '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#382714; color:#f78166; border:1px solid #bd561d;">CLOUD</span>';
+            const seatBadge = r.seat || (r.provider === 'openrouter' ? 'Cloud Swarm' : (r.provider.includes('m5') ? 'Apple M5 Air' : 'Windows 4090RTX'));
+            tableHtml += '<tr>' +
+                '<td style="color:#8b949e;">' + timeStr + '</td>' +
+                '<td>' + tierBadge + '</td>' +
+                '<td style="font-weight:700; color:#58a6ff;">' + seatBadge + '</td>' +
+                '<td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (r.task_title || r.source) + '</td>' +
+                '<td style="color:#d2a8ff;">' + r.model + '</td>' +
+                '<td style="text-align:right;">' + r.tokens_generated + '</td>' +
+                '<td style="text-align:right;">' + r.duration_seconds + 's</td>' +
+                '<td style="text-align:right; font-weight:700; color:#3fb950;">' + r.throughput_tok_s + ' tok/s</td>' +
+            '</tr>';
+        });
+        tableHtml += '</tbody></table>';
+        container.innerHTML = tableHtml;
+    } catch (e) {
+        container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';
+    }
+}
+
+async function loadCumulativeTelemetry() {
+    try {
+        const resp = await fetch('data/cumulative_tokens.json?t=' + Date.now());
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const tokensEl = document.getElementById('realizedTokensVal');
+        const apiEl = document.getElementById('realizedApiCostVal');
+        const powerEl = document.getElementById('realizedPowerCostVal');
+        const savingsEl = document.getElementById('realizedSavingsVal');
+        const pctEl = document.getElementById('realizedPctVal');
+        const syncEl = document.getElementById('realized-sync-time');
+
+        if (tokensEl) {
+            const toks = data.lifetime_tokens_generated || 0;
+            tokensEl.textContent = toks >= 1000000 ? (toks / 1000000).toFixed(2) + ' MTok' : toks.toLocaleString() + ' tok';
+        }
+        if (apiEl) apiEl.textContent = '$' + (data.commercial_api_cost_usd || 0).toFixed(2);
+        if (powerEl) powerEl.textContent = '$' + (data.actual_electricity_cost_usd || 0).toFixed(4);
+        if (savingsEl) savingsEl.textContent = '$' + (data.net_dollars_saved_usd || 0).toFixed(2);
+        if (pctEl) pctEl.textContent = (data.percent_saved || 100.0).toFixed(1) + '% Reduction';
+        if (syncEl && data.last_updated) syncEl.textContent = 'Last Activity: ' + data.last_updated;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// ==============================================================================
+// 2. ROUND TABLE DELTA-T & BLACKBOARD LEDGER ENGINE [FEAT-525]
+// ==============================================================================
 async function loadDeltaTData() {
     if (cachedDeltas) return cachedDeltas;
     try {
@@ -93,7 +383,7 @@ async function loadDeltaTData() {
             return cachedDeltas;
         }
     } catch (e) {
-        console.warn("[Delta-T] Could not fetch round_table_deltas.json, using defaults:", e);
+        console.warn("[Delta-T] Using default delta data:", e);
     }
     cachedDeltas = DEFAULT_DELTAS;
     return cachedDeltas;
@@ -108,25 +398,25 @@ function renderDeltaTChart(data) {
     const width = canvas.width;
     const height = canvas.height;
 
-    // Reset & clear background
+    // Background reset
     ctx.fillStyle = '#0d1117';
     ctx.fillRect(0, 0, width, height);
 
     if (!data || data.length === 0) return;
 
-    const padLeft = 80;
-    const padRight = 60;
-    const padTop = 35;
+    const padLeft = 70;
+    const padRight = 50;
+    const padTop = 40;
     const padBottom = 55;
     const chartW = width - padLeft - padRight;
     const chartH = height - padTop - padBottom;
 
-    // Max duration for scaling (Y-axis)
-    const maxVal = Math.max(1.5, ...data.map(d => d.total_s || d.cumulative.pinky_judgment)) * 1.2;
+    // Calculate Y-max from highest total_s
+    const maxVal = Math.max(1.5, ...data.map(d => d.total_s || (d.cumulative && d.cumulative.pinky_judgment) || 1.0)) * 1.25;
 
-    // Horizontal grid lines (Time)
-    ctx.lineWidth = 1;
+    // Horizontal grid lines (Time in seconds)
     const ySteps = 4;
+    ctx.lineWidth = 1;
     for (let i = 0; i <= ySteps; i++) {
         const val = (maxVal / ySteps) * i;
         const y = padTop + chartH - (val / maxVal) * chartH;
@@ -143,20 +433,19 @@ function renderDeltaTChart(data) {
         ctx.fillText(`${val.toFixed(2)}s`, padLeft - 10, y + 3);
     }
 
-    // Line keys and colors (Cumulative progression)
     const series = [
-        { key: 'triage', name: 'Δt1: Triage', color: '#58a6ff', fill: 'rgba(88, 166, 255, 0.15)' },
-        { key: 'pinky_stance', name: 'Δt2: Pinky', color: '#f778ba', fill: 'rgba(247, 120, 186, 0.12)' },
-        { key: 'brain_arch', name: 'Δt3: Brain', color: '#f85149', fill: 'rgba(248, 81, 73, 0.10)' },
-        { key: 'oracle', name: 'Δt4: Oracle', color: '#bc8cff', fill: 'rgba(188, 140, 255, 0.10)' },
-        { key: 'pinky_judgment', name: 'Δt5: Judgment', color: '#3fb950', fill: 'rgba(63, 185, 80, 0.08)' }
+        { key: 'triage', name: 'Δt1: Triage', color: '#58a6ff' },
+        { key: 'pinky_stance', name: 'Δt2: Pinky', color: '#f778ba' },
+        { key: 'brain_arch', name: 'Δt3: Brain', color: '#f85149' },
+        { key: 'oracle', name: 'Δt4: Oracle', color: '#bc8cff' },
+        { key: 'pinky_judgment', name: 'Δt5: Judgment', color: '#3fb950' }
     ];
 
     const numTurns = data.length;
     const getX = (idx) => padLeft + (numTurns > 1 ? (idx / (numTurns - 1)) * chartW : chartW / 2);
     const getY = (val) => padTop + chartH - (val / maxVal) * chartH;
 
-    // Vertical turn grid lines & X-axis labels
+    // Vertical turn grid lines & Turn labels
     data.forEach((turnData, idx) => {
         const x = getX(idx);
         ctx.strokeStyle = '#1a202c';
@@ -165,7 +454,7 @@ function renderDeltaTChart(data) {
         ctx.lineTo(x, padTop + chartH);
         ctx.stroke();
 
-        // X-axis label
+        // X-axis label (Turn)
         ctx.fillStyle = '#c9d1d9';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
@@ -174,7 +463,7 @@ function renderDeltaTChart(data) {
         // Topic sub-label
         ctx.fillStyle = '#8b949e';
         ctx.font = '9px "JetBrains Mono", monospace';
-        const topicPreview = (turnData.topic || '').slice(0, 14);
+        const topicPreview = (turnData.topic || '').slice(0, 15);
         ctx.fillText(topicPreview, x, height - padBottom + 32);
     });
 
@@ -193,7 +482,7 @@ function renderDeltaTChart(data) {
         });
         ctx.stroke();
 
-        // Draw points on the line
+        // Plot points & badges
         data.forEach((d, idx) => {
             const x = getX(idx);
             const val = d.cumulative[s.key] || 0;
@@ -208,7 +497,7 @@ function renderDeltaTChart(data) {
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Total latency badge on Judgment line (top line)
+            // Total duration badge at Judgment level
             if (s.key === 'pinky_judgment') {
                 ctx.fillStyle = '#3fb950';
                 ctx.font = 'bold 10px "JetBrains Mono", monospace';
@@ -281,16 +570,5 @@ async function initDeltaTView() {
     renderBlackboardLedger(data);
 }
 
-// Hook into tab switching and initial load
-document.addEventListener('DOMContentLoaded', () => {
-    const origSwitchTab = window.switchTab;
-    window.switchTab = function(evt, tabId) {
-        if (typeof origSwitchTab === 'function') {
-            origSwitchTab(evt, tabId);
-        }
-        if (tabId === 'tab-delta-t') {
-            setTimeout(initDeltaTView, 50);
-        }
-    };
-    initDeltaTView();
-});
+// Attach initial page loader
+window.addEventListener('DOMContentLoaded', loadBenchmarks);
