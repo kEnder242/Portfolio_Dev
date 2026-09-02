@@ -306,6 +306,21 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 
 ---
 
+### 📊 Pre-Story 70.9B: Safe-Patch Subagent Certification Harness (`[FEAT-529]`)
+* **Status:** `[PENDING DELEGATION]`
+* **Assigned Execution Mode:** `[TRI-LOOP LADDER: LOCAL (Atlas/Junior) -> CLOUD (DeepSeek/Cohere) -> AGY]` (via `delegate.py` on REST port 4097)
+* **Objective:** Certify that subagents can invoke `clara-dna_safe_patch` (or AST patcher) to make surgical modifications to existing files without resorting to destructive bash `echo >` or `cat << 'EOF' >` overwrites.
+* **Target Files:**
+  * `HomeLabAI/src/tests/fixtures/patch_target.py` (Harness target file for patch mutations)
+  * `HomeLabAI/src/tests/test_safe_patch_harness.py` (Test asserting safe_patch execution and AST validity)
+  * `HomeLabAI/src/tests/delegate.py` (Prompt injection with explicit `clara-dna_safe_patch` few-shot tool schema)
+* **Acceptance Criteria:**
+  1. `delegate.py` payload includes explicit JSON tool call example for `clara-dna_safe_patch`.
+  2. Subagent modifies `patch_target.py` surgically via tool call without clobbering surrounding code.
+  3. `ruff check` passes with 0 syntax or AST errors.
+
+---
+
 ### 📊 Story 70.10: Unified Nested Ledger (Turn Blackboard + Subagent Workload Stream) (`[FEAT-526]`)
 * **Status:** `[PENDING DELEGATION]`
 * **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
