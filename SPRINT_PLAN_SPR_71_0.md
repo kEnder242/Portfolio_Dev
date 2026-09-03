@@ -21,7 +21,7 @@ Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked
 ## 📋 Sprint 71 Stories, Sub-Tasks & Forensic Mapping
 
 ### ⏱️ Topic 1 & 1.1 / Story 7101: Config-Driven Declarative Engine Seats & 2x Timing Standard (`[FEAT-531]`)
-* **Status:** `[PENDING IMPLEMENTATION]`
+* **Status:** `[VERIFIED 100% PASS ON LIVE SILICON]`
 * **Assigned Execution Mode:** `[DIRECT: AGY]` (Architectural Refactor across Config + Core Logic)
 * **Context & Root Cause:** M5 Air timed out because `_probe_m5_air_vocal` had a hardcoded 0.3s timeout while cold M5 Air took 0.83s. Deep Thought was hardcoded with a 10s cold-start window.
 * **Consensus & Design:** 
