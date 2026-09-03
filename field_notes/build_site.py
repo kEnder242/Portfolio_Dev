@@ -91,6 +91,7 @@ def deploy_to_airlock(snapshots=False):
             "sync_protocols.sh": (os.path.join(BASE_DIR, "protocols.html"), os.path.join(www_dir, "protocols.html")),
             "sync_stories.sh": (os.path.join(BASE_DIR, "stories.html"), os.path.join(www_dir, "stories.html")),
             "sync_research.sh": (os.path.join(BASE_DIR, "research.html"), os.path.join(www_dir, "research.html")),
+            "sync_public_benchmarks.sh": (os.path.join(BASE_DIR, "public_benchmarks.html"), os.path.join(www_dir, "public_benchmarks.html")),
         }
 
         for script, (src_file, dst_file) in sync_map.items():
