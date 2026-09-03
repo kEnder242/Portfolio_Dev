@@ -17,28 +17,29 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 4. **Deterministic Triage Verification:** Build unit and integration tests forcing Pinky vs. Brain classifications to guarantee correct model routing.
 5. **Dead Air Time & Liveliness Metric (5x5 Expansion):** Quantify latency stalls between actors with and without crosstalk, measuring how much heavy lifting inter-node banter provides.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 🔮 LAYER 1: STRATEGIC GUARDIAN (AGY)                                            │
-│ • Authors bounded 4-Anchor specifications for each story.                       │
-│ • Monitors delegation heartbeats (1-minute initial check, 5-minute steady).     │
-│ • Tri-Loop Escalation: Max 3 subagent remediation attempts before AGY takeover. │
-└──────────────────────────────────────┬──────────────────────────────────────────┘
-                                       │ (REST Port 4097 / delegate.py)
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 🗺️ LAYER 2: BROAD ORCHESTRATOR (Atlas on Windows RTX 4090 / Ollama)             │
-│ • Category: unspecified-low (routes to M5 Air via oh-my-openagent.json).        │
-│ • Ingests bounded story spec and sequences micro-tasks (< 1,200 tokens).        │
-└──────────────────────────────────────┬──────────────────────────────────────────┘
-                                       │ (task(category="unspecified-low"))
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 🛠️ LAYER 3: SURGICAL WORKER (Sisyphus-Junior on Apple M5 Air / MLX)              │
-│ • Executes bounded safe_patch edits within target function stubs.               │
-│ • Zero repo-wide search/exploration; reports blockers immediately.             │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
+### 🏛️ The 3-Layer Delegation Hierarchy & "Fingertips" Contract (BKM-048 / BKM-043)
+
+#### Layer 1: Strategic Guardian (AGY / Gemini)
+* **Static Rules:** Enforce strict 4-Anchor specifications (BKM-043) and immutable API boundaries.
+* **Dynamic Ingestion:** High-level system requirements, live telemetry audits, and architecture contracts.
+* **Downstream Hand-off:** Authors complete, bounded story specifications (< 1,500 tokens) with exact target file paths, line anchors, expected code diffs, and verification commands directly into this sprint document. Dispatches pointer to Layer 2 via `delegate.py`.
+* **Feedback / Backpressure:** Ingests `[BLOCKER REPORT: ...]` from below; clarifies contracts or amends specifications rather than allowing subagents to guess.
+
+#### Layer 2: Broad Orchestrator (Atlas on Windows RTX 4090 / Ollama)
+* **Model:** `hf.co/unsloth/Qwen3-14B-GGUF:UD-Q4_K_XL` (14.8 GB KV cache headroom).
+* **Static Rules (L2 Invariants):** Pure routing, state tracking, and dispatch (strictly NO code generation, NO direct file editing, NO architectural redesign).
+* **Dynamic Ingestion:** Ingests the sprint document reference and broad story goals without code snippet pollution.
+* **Downstream Hand-off (Pointer-Based Routing):** Dispatches a single consolidated task by referencing the exact story section on disk:
+  `task(category="unspecified-low", prompt="Execute Story X in Portfolio_Dev/SPRINT_PLAN_SPR_70_0.md (Section: Story X). Follow the 4-anchor specification in that section to modify target file using clara-dna_safe_patch. Verify with pytest.")`
+  (Never duplicate or summarize large code blocks across task() arguments).
+* **Feedback / Backpressure:** Relays Junior's execution blockers straight back up to AGY; provides synthesis reflection on contract clarity.
+
+#### Layer 3: Surgical Ground Worker (Sisyphus-Junior on Kender 4090 / M5 Air)
+* **Model:** Resident on Kender 4090 (75 tok/s) with M5 Air fallback.
+* **Static Rules (L3 Invariants):** Anti-exploratory guardrails ("Research is done; implement only the function body inside the provided interface"). Zero repo-wide search or grep. Destructive bash overwrites (`echo >`, `cat << EOF >`) strictly forbidden.
+* **Dynamic Ingestion (Fingertips On-Disk):** Reads its exact 4-anchor story section from the sprint document on disk. Heavy tools (`icm_*`, `websearch_*`, `codegraph_*`) denied via BKM-051 to keep worker prompt lean (< 1,500 tokens).
+* **Execution:** Surgical AST edits via `clara-dna_safe_patch` (or `write` for new files). Runs targeted verification command.
+* **Feedback / Backpressure:** Halts immediately on missing types, broken contracts, or context pressure; emits `[BLOCKER REPORT: <CATEGORY>] <details>` upward instead of guessing.
 
 ---
 
@@ -329,6 +330,12 @@ Sprint 70 directly addresses key friction points discovered during live conversa
   * `Portfolio_Dev/field_notes/benchmarks.js` (Unified ledger rendering logic)
   * `Portfolio_Dev/field_notes/benchmarks.html` (Markup container alignment)
   * `HomeLabAI/src/tests/test_unified_ledger_ui.py` (Playwright verification suite)
+* **4-Anchor Specification (BKM-043):**
+  * **Anchor 1 (Symbol Anchor):** In `Portfolio_Dev/field_notes/benchmarks.js`, edit inside `function renderBlackboardLedger(records)` (around line 520).
+  * **Anchor 2 (Data Flow):** In `loadLiveUsageStream()`, store live usage records into `window.cachedLiveRecords = records;` so `renderBlackboardLedger` can access them.
+  * **Anchor 3 (Nested Subagent Table Schema):** For each turn record, filter `cachedLiveRecords` where `rec.turn === record.turn`. If matching dispatches exist, render an HTML table inside the `<details class="feature-details">` container with columns: `Role / Agent`, `Seat`, `Model`, `Tokens`, `Duration`, `Tok/s`.
+  * **Anchor 4 (Batch Workloads Card):** For live usage records with `is_batch === true` or where source contains `mass_scan` / `refine_gem` / `NIGHTLY_REFINEMENT`, render a separate top-level card:
+    `<details class="feature-details"><summary><span class="badge">[BATCH]</span> NIGHTLY_REFINEMENT & ARCHIVE SCANS</summary>...</details>`.
 * **Acceptance Criteria:**
   1. Each turn `<details class="feature-details">` expands to show:
      - Distillation Bullets
@@ -337,6 +344,7 @@ Sprint 70 directly addresses key friction points discovered during live conversa
      - Nested Subagent Dispatches Table (Model, Tokens, Duration, Tok/s)
   2. Batch / non-interactive workloads render cleanly as `[BATCH] NIGHTLY_REFINEMENT` cards.
   3. Playwright DOM assertions verify nested structure and zero console errors.
+* **Verification Command:** `pytest HomeLabAI/src/tests/test_unified_ledger_ui.py -v`
 
 ---
 
