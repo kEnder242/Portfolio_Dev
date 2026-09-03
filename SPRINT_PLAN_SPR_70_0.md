@@ -443,7 +443,7 @@ Before delegating multi-step feature stories in a new sprint phase, the swarm ex
 
 ---
 
-### ⏱️ Story 70.13: Live Turn Memory to Round Table Delta-T & Blackboard Telemetry Bridge (`[FEAT-529]`)
+### ⏱️ Story 7013: Live Turn Memory to Round Table Delta-T & Blackboard Telemetry Bridge (`[FEAT-529]`)
 * **Status:** `[PENDING DELEGATION]`
 * **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
 * **Objective:** Connect the live dialogue and turn collection stream from `CognitiveHub` / `BlackboardLedger` directly to `Portfolio_Dev/field_notes/data/round_table_deltas.json`. Every live turn (including Intercom chats and `test_dead_air_delta.py` sweeps) must record sub-second handover timings ($\Delta t_1 \dots \Delta t_5$), distillation bullets, and 1-line consensus so the Cumulative Stage Plot and Blackboard Drawer update automatically without synthetic mocks.
@@ -573,5 +573,20 @@ Before delegating multi-step feature stories in a new sprint phase, the swarm ex
   2. Every live turn through `CognitiveHub.process_query()` logs its true stage deltas without interrupting dialogue.
   3. `test_live_round_table_telemetry.py` passes 100% on live silicon.
 * **Verification Command:** `pytest HomeLabAI/src/tests/test_live_round_table_telemetry.py -v`
+
+---
+
+### 🏛️ Architecture Note: Atlas Just-In-Time Task Expansion Contract (BKM-048 Refinement)
+
+#### 1. Atlas's Core Job (Task Expansion & Spoon-Feeding)
+Atlas is an **Orchestration Compiler**. It does not perform full codebase implementation; instead, it bridges high-level sprint stories into surgical, bounded micro-tasks for Junior:
+* **Ingest On-Demand:** Atlas reads the assigned Story section in the sprint plan on disk.
+* **Just-In-Time Context Enrichment:** Atlas queries CLaRa-DNA (`get_protocol` / `query_dna`) to resolve BKM rules or feature schemas needed for that specific step.
+* **Spoon-Feed Task Dispatches:** Atlas extracts the exact function signature, line anchors, and target path from the sprint doc, formulating a self-contained, lean task prompt for Junior.
+* **Pass-Up Synthesis:** When Junior returns, Atlas verifies test outputs and emits a concise 2-sentence summary report back to Layer 1 (AGY).
+
+#### 2. Junior's Core Job (Fast Surgical Execution)
+* **Model:** Resident on Kender RTX 4090 / M5 Air (75 tok/s).
+* **Execution:** Ingests the spoon-fed task prompt, applies AST edits via `clara-dna_safe_patch` (or `write` for new files), runs the targeted test command, and returns pass/fail artifacts without repo-wide search or grep.
 
 
