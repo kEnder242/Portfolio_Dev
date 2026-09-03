@@ -69,7 +69,7 @@ Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked
 ---
 
 ### 🎭 Topic 3 / Story 7103: Semantic Triage Grounding & BKM-015 Restoration (`[FEAT-533]`)
-* **Status:** `[PENDING IMPLEMENTATION]`
+* **Status:** `[VERIFIED 100% PASS ON LIVE SILICON]`
 * **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py`)
 * **Context & Root Cause:** Sprint 47 introduced `raw_lower in [...]` rigid string matching. "Hello pinky" fell through, got misclassified as `exp_tlm`, and routed to `BRAIN`.
 * **Consensus & Design:** Rip out hardcoded greeting list. Restore pure prompt-guided semantic classification with explicit few-shot rules for direct resident salutations. Add cautionary BKM-015 header tags.
