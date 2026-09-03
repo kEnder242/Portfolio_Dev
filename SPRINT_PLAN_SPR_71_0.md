@@ -250,7 +250,10 @@ Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked
                              ▼
   ┌────────────────────────────────────────────────────────┐
   │ 🏁 FINAL LIVE SMOKE TEST: Full Silicon Turn Check      │
-  │    "Hello Pinky!" -> Sub-800ms, Clean Pinky Voice,    │
-  │    0s Dead Air, No RAG Spam, Accurate SID in UI        │
+  │    STATUS: 100% CERTIFIED ON LIVE OPERATIONAL SILICON  │
+  │    - test_live_sprint71_stability.py: 3/3 PASSED       │
+  │    - test_live_playwright_gitlock.py: 2/2 PASSED       │
+  │    - test_live_round_table_telemetry.py: 1/1 PASSED    │
+  │    - test_live_sprint65_e2e.py: 4/4 TURNS PASSED       │
   └────────────────────────────────────────────────────────┘
 ```
