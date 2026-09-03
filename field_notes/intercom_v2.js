@@ -473,12 +473,38 @@ async function connect() {
         window.ws = ws;
         ws.onopen = () => {
             statusDot.className = 'status-dot online';
+            
+            // [FEAT-426 / FEAT-537] Extract baked asset version hash from script tag
+            let clientCommit = "";
+            try {
+                const scriptEl = document.querySelector('script[src*="intercom_v2.js"]');
+                if (scriptEl && scriptEl.src.includes('?v=')) {
+                    clientCommit = scriptEl.src.split('?v=')[1].split('&')[0];
+                }
+            } catch (e) {}
+
             ws.send(JSON.stringify({ 
                 type: "handshake", 
                 version: CONFIG.VERSION,
                 client: "intercom",
+                client_commit: clientCommit,
                 lab_key: currentLabKey
             }));
+        };
+        ws.onclose = (event) => {
+            statusDot.className = 'status-dot offline';
+            if (event.code === 1008 && event.reason && event.reason.includes("Stale bytecode")) {
+                const reasonText = event.reason;
+                appendMsg(`⛔ CONNECTION REJECTED: ${reasonText}`, 'system-msg', 'System');
+                const bar = document.getElementById('crosstalk-bar');
+                if (bar) {
+                    bar.innerText = `⛔ HARD LOCK: ${reasonText}. Restart lab-attendant service.`;
+                    bar.style.color = '#f85149';
+                }
+                return; // Do not auto-reconnect on hard bytecode mismatch
+            }
+            appendMsg("Connection closed. Retrying in 5s...", "system-msg");
+            setTimeout(connect, 5000);
         };
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);

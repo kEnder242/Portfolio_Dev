@@ -2923,12 +2923,12 @@
 **Rationale:** Delivers granular, user-facing visibility into multi-actor inference dynamics.
 **Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
 
-## [LAB-110B] Direct-to-Online Boot Ignition & Manual Hibernation Hook Hardening
-**Sprint:** SPR-70.0
-**Status:** PLANNED
-**Logic:** Enhances `IgnitionManager` to boot directly into `OPERATIONAL` on service start when `hibernation.enabled == false` or `daytime_node_residency == "PERMANENT_RESIDENT"`, eliminating cold start stalls on launch while preserving deliberate `POST /sleep` and `POST /wake` REST hooks.
-**Rationale:** Prevents unnecessary cold-boot delays while maintaining testability of hibernation plumbing.
-**Mechanism:** `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`.
+## [FEAT-537] Universal Common Hash Key & Stale Bytecode Handshake Guard
+**Sprint:** SPR-71.0
+**Status:** ACTIVE
+**Logic:** Enforces bidirectional commit hash matching across all WebSocket handshakes. Foyer Router pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close). Frontend `intercom_v2.js` extracts baked script hash `intercom_v2.js?v=<hash>` from `build_site.py` and halts reconnect upon stale rejection.
+**Rationale:** Closes the "Uptime Preservation Trap" permanently, ensuring no test or browser UI can communicate with an outdated daemon.
+**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`.
 
 
 
