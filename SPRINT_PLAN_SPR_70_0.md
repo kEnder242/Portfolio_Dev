@@ -441,4 +441,37 @@ Before delegating multi-step feature stories in a new sprint phase, the swarm ex
   3. Playwright test confirms 100% offline static rendering in < 1.0s.
 * **Verification Command:** `pytest HomeLabAI/src/tests/test_public_benchmarks_ui.py -v`
 
+---
+
+### ⏱️ Story 70.13: Live Turn Memory to Round Table Delta-T & Blackboard Telemetry Bridge (`[FEAT-529]`)
+* **Status:** `[PENDING DELEGATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
+* **Objective:** Connect the live dialogue and turn collection stream from `CognitiveHub` / `BlackboardLedger` directly to `Portfolio_Dev/field_notes/data/round_table_deltas.json`. Every live turn (including Intercom chats and `test_dead_air_delta.py` sweeps) must record sub-second handover timings ($\Delta t_1 \dots \Delta t_5$), distillation bullets, and 1-line consensus so the Cumulative Stage Plot and Blackboard Drawer update automatically without synthetic mocks.
+* **Target Files:**
+  * `HomeLabAI/src/memory/blackboard_ledger.py` (Atomic delta export engine)
+  * `HomeLabAI/src/logic/cognitive_hub.py` (Stage timing instrumentation and dispatch)
+  * `HomeLabAI/src/tests/test_live_round_table_telemetry.py` (End-to-end verification test)
+* **4-Anchor Specification (BKM-043):**
+  * **Anchor 1 (Target Files & Class Definitions):**
+    * Modify `BlackboardLedger` in `HomeLabAI/src/memory/blackboard_ledger.py`. Add method:
+      `def append_round_table_delta(self, turn: int, topic: str, scope: str, deltas: Dict[str, float], bullets: List[str], consensus: str, output_path: Optional[str] = None) -> Dict[str, Any]:`
+      which calculates `cumulative` dictionary ($t_1 \dots t_5$) and total duration, then performs an atomic write (.tmp + replace) to `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
+  * **Anchor 2 (Stage Timing Instrumentation):**
+    * In `HomeLabAI/src/logic/cognitive_hub.py` within `process_query()`, record epoch timestamps for `t0_start`, `t1_triage`, `t2_pinky_stance`, `t3_brain_arch`, `t4_deep_thought`, and `t5_summary`.
+    * At turn conclusion (around line 1432), calculate relative deltas:
+      `deltas = {'triage': round(t1 - t0, 3), 'pinky_stance': round(t2 - t1, 3), 'brain_arch': round(t3 - t2, 3), 'oracle': round(t4 - t3, 3), 'pinky_judgment': round(t5 - t4, 3)}`
+      and invoke `self.blackboard_ledger.append_round_table_delta(...)`.
+  * **Anchor 3 (Preserve Historical Turns & Monotonic Ordering):**
+    * Read existing entries from `round_table_deltas.json` (or initialize with existing turns), append the new live turn, and cap history to the most recent 50 turns.
+  * **Anchor 4 (Verification Anchor):**
+    * Create test `HomeLabAI/src/tests/test_live_round_table_telemetry.py` that mocks a 5-stage turn dispatch, asserts atomic file write, verifies valid JSON schema matching `benchmarks.js` expectations, and confirms that `benchmarks.html` loads the new turn cleanly.
+* **Tool Invocation Law:**
+  * Modifying `blackboard_ledger.py` & `cognitive_hub.py`: Use `clara-dna_safe_patch`.
+  * Creating test file: Use standard `write` tool.
+* **Acceptance Criteria:**
+  1. `append_round_table_delta` safely persists new turn deltas and distillation bullets into `round_table_deltas.json` with file locking or atomic rename.
+  2. Every live turn through `CognitiveHub.process_query()` logs its true stage deltas.
+  3. `test_live_round_table_telemetry.py` passes 100% on live silicon.
+* **Verification Command:** `pytest HomeLabAI/src/tests/test_live_round_table_telemetry.py -v`
+
 
