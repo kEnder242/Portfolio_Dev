@@ -192,11 +192,14 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     // Update class with refinement
     if (isRefinement) msg.classList.add('refinement-msg');
     
-    // [FEAT-344] Visible Physical Truth: Prepend SID and PID to source
+    // [FEAT-344 / FEAT-536] Visible Physical Truth & Dynamic SID Healing
     if (currentSocketId && source.toLowerCase() !== "system") {
         let signature = `[SID: ${currentSocketId}]`;
         if (metadata.hub_pid) signature += ` [PID: ${metadata.hub_pid}]`;
         displaySource += ` ${signature}`;
+    } else if (source.toLowerCase() !== "system") {
+        displaySource += ` [SID: Unknown]`;
+        msg.setAttribute("data-needs-sid", "true");
     }
 
     // [FEAT-120] Context Transparency: Prepend clickable refs
@@ -484,6 +487,17 @@ async function connect() {
                 currentSocketId = data.session_token;
             } else if (data.socket_id && (!currentSocketId || currentSocketId === 'Unknown')) {
                 currentSocketId = data.socket_id;
+            }
+
+            // [FEAT-536] Auto-heal early messages stamped with [SID: Unknown]
+            if (currentSocketId && currentSocketId !== "Unknown") {
+                document.querySelectorAll('[data-needs-sid="true"]').forEach(el => {
+                    const header = el.querySelector('.msg-header .msg-source') || el.querySelector('.msg-body .msg-source');
+                    if (header && header.textContent.includes('[SID: Unknown]')) {
+                        header.textContent = header.textContent.replace('[SID: Unknown]', `[SID: ${currentSocketId}]`);
+                    }
+                    el.removeAttribute('data-needs-sid');
+                });
             }
             
             // [FEAT-433] Asynchronous Sanity Critic Badge Handler
