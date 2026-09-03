@@ -194,3 +194,51 @@ Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked
 │                              │                                │ "unknown" & Cosine >= 0.65  │
 └──────────────────────────────┴────────────────────────────────┴─────────────────────────────┘
 ```
+
+---
+
+## 🧭 Orchestration Sequence & Live Silicon Verification Strategy
+
+```
+  ┌────────────────────────────────────────────────────────┐
+  │ 1. Story 7101 (Topic 1 & 1.1) [DIRECT: AGY]            │
+  │    Config-Driven Engine Seats & 2x Probe/Race Timings  │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: test_speculative_triage_seats.py
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 2. Story 7103 (Topic 3)       [SWARM: ATLAS+JR]        │
+  │    Semantic Triage Grounding (BKM-015 Cleanup)         │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: test_fast_triage_harness.py
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 3. Story 7104 (Topic 4 & 5)   [DIRECT: AGY]            │
+  │    Domain-Vibe Decoupling & 'unknown' RAG Floor        │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: test_rag_suppression_floor.py
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 4. Story 7105 (Topic 6 & 7)   [SWARM: ATLAS+JR]        │
+  │    Two-Mice Single-Turn Gate (Fixes Brain Double-Talk) │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: test_two_mice_single_execution.py
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 5. Story 7102 (Topic 2)       [SWARM: ATLAS+JR]        │
+  │    Console Broadcast De-Duplication                    │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: test_telemetry_broadcast_dedup.py
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 6. Story 7106 (Topic 9)       [DIRECT: AGY]            │
+  │    Frontend SID Auto-Healing in intercom_v2.js         │
+  └──────────────────────────┬─────────────────────────────┘
+                             │  🧪 Verify: Live Web Intercom turn check
+                             ▼
+  ┌────────────────────────────────────────────────────────┐
+  │ 🏁 FINAL LIVE SMOKE TEST: Full Silicon Turn Check      │
+  │    "Hello Pinky!" -> Sub-800ms, Clean Pinky Voice,    │
+  │    0s Dead Air, No RAG Spam, Accurate SID in UI        │
+  └────────────────────────────────────────────────────────┘
+```
