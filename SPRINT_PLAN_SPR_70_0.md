@@ -354,24 +354,48 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 * **Objective:** Author an automated export script `Portfolio_Dev/field_notes/export_public_benchmarks.py` that ingests local telemetry and produces a clean, redacted `data/public_benchmarks.json` bundle.
 * **Target Files:**
   * `Portfolio_Dev/field_notes/export_public_benchmarks.py` (Sanitizing export engine)
-  * `HomeLabAI/src/infra/test_benchmark_sanitizer.py` (Unit test verifying zero LAN IP / token leakage)
+  * `HomeLabAI/src/tests/test_benchmark_sanitizer.py` (Unit test verifying zero LAN IP / token leakage)
+* **4-Anchor Specification (BKM-043):**
+  * **Anchor 1 (Target Files):** Create new file `Portfolio_Dev/field_notes/export_public_benchmarks.py` and test `HomeLabAI/src/tests/test_benchmark_sanitizer.py`.
+  * **Anchor 2 (Data Flow / Root Imports):** Read from `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` and `data/cumulative_tokens.json`. Strip private LAN IPs (`192.168.1.x`), session tokens (`ses_xxx`), and local paths (`/home/jallred`).
+  * **Anchor 3 (Output JSON Schema):** Output atomic JSON to `Portfolio_Dev/field_notes/data/public_benchmarks.json` with keys: `seats` (M5 Air, Windows 4090, Linux 2080ti, Cloud), `metrics` (throughput_tok_s, ttft_ms, tokens_per_joule), `benchmarks` (list of sanitized records), `last_certified_timestamp`.
+  * **Anchor 4 (Path Resilience):** Use stdlib `pathlib.Path(__file__).resolve().parent` for all file reads and writes.
+* **Tool Invocation Law:**
+  * Creating New Files: Use standard `write` tool.
+  * Modifying Existing Files: Use `clara-dna_safe_patch`.
 * **Acceptance Criteria:**
   1. Regex scanner strips all `192.168.1.x` IPs, `ses_xxx` tokens, and `/home/jallred` paths.
   2. Generates valid `public_benchmarks.json` with hardware seats, throughput/TTFT averages, and ROI calculations.
   3. Unit test asserts 100% pass on leak-detection test vectors.
+* **Verification Command:** `pytest HomeLabAI/src/tests/test_benchmark_sanitizer.py -v`
 
 ---
 
 ### 📊 Story 70.12: Public Showcase Surface on Airlock (`[FEAT-528]`)
 * **Status:** `[PENDING DELEGATION]`
 * **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
-* **Objective:** Deploy a clean, lightweight public showcase page `public_benchmarks.html` reading `public_benchmarks.json` with static cards, comparative bars, interactive ROI slider, and a zero-trust link button.
+* **Objective:** Deploy a clean, lightweight public showcase page `public_benchmarks.html` reading `public_benchmarks.json` with static cards, comparative bars, interactive ROI slider, and a zero-trust link button. Also add the sidebar link into `Portfolio_Dev/field_notes/mission-control.js`.
 * **Target Files:**
   * `Portfolio_Dev/field_notes/public_benchmarks.html` (Standalone static showcase)
+  * `Portfolio_Dev/field_notes/mission-control.js` (Sidebar web component)
   * `HomeLabAI/src/tests/test_public_benchmarks_ui.py` (Playwright DOM verification)
+* **4-Anchor Specification (BKM-043):**
+  * **Anchor 1 (Sidebar Navigation Anchor):** In `Portfolio_Dev/field_notes/mission-control.js`, edit inside `<section id="public-airlock">` (around line 15). Add link:
+    `<li style="margin-bottom: 8px;"><a href="https://www.jason-lab.dev/public_benchmarks.html" class="mission-link">Public Benchmarks</a></li>`.
+  * **Anchor 2 (Showcase Page Creation):** Create `Portfolio_Dev/field_notes/public_benchmarks.html` styled with existing class names from `style.css`.
+  * **Anchor 3 (Data Binding):** Embed inline vanilla JS that fetches `data/public_benchmarks.json` and renders:
+    1. Header CTA button: `🔒 ACCESS LIVE LAB TELEMETRY` (links to `https://notes.jason-lab.dev:9001/benchmarks.html`).
+    2. Four Hardware Seat Cards (M5 Air, Windows 4090, Linux 2080 Ti, Cloud Swarm).
+    3. Tab 1: Performance Arena (Throughput tok/s and TTFT baseline bars).
+    4. Tab 2: Energy & ROI (Tokens/Joule and interactive Electricity vs API slider).
+  * **Anchor 4 (Zero-Dependency Invariant):** Zero external framework dependencies; pure HTML5/CSS/ES6 with local fallback data if JSON fetch fails.
+* **Tool Invocation Law:**
+  * Modifying `mission-control.js`: Use `clara-dna_safe_patch`.
+  * Creating `public_benchmarks.html` and test: Use standard `write` tool.
 * **Acceptance Criteria:**
   1. Header contains `🔒 ACCESS LIVE LAB TELEMETRY` button pointing to Zero Trust notes.
   2. Renders 4 static hardware seats, Throughput/TTFT bars, Tokens/Joule, and ROI calculator with zero external API/websocket dependencies.
   3. Playwright test confirms 100% offline static rendering in < 1.0s.
+* **Verification Command:** `pytest HomeLabAI/src/tests/test_public_benchmarks_ui.py -v`
 
 
