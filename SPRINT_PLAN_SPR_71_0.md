@@ -197,6 +197,18 @@ Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked
 
 ---
 
+### 🛡️ Topic 11 / Story 7111: Universal Common Hash Key & Stale Bytecode Handshake Guard (`[FEAT-537]`)
+* **Sprint Anchor:** `SPR-71.0`
+* **Status:** `[VERIFIED 100% PASS ON LIVE SILICON]`
+* **Origin Anchor:** Restores and hardens `FEAT-426` & `FEAT-524` with totalitarian handshake enforcement.
+* **Architecture:**
+  1. `Portfolio_Dev/field_notes/build_site.py`: Regex updated to match any query string `(\?v=[^"]+)?` and dynamically injects `intercom_v2.js?v=<md5_hash>` into `intercom.html`.
+  2. `HomeLabAI/src/v5/foyer/router.py`: Rejects pre-flight headers with `HTTP 409 Conflict` on mismatch, and closes WebSocket handshakes with `WS 1008: Stale bytecode (Client != Server)`.
+  3. `Portfolio_Dev/field_notes/intercom_v2.js`: Extracts baked asset hash from its own `<script>` tag and halts retry loop with a red Hard-Lock banner on mismatch.
+  4. `HomeLabAI/src/tests/test_live_sprint71_stability.py`: Hard-gated live verification suite enforcing `assert_live_bytecode()` and handshake rejection on bogus hashes.
+
+---
+
 ## 🧭 Orchestration Sequence & Live Silicon Verification Strategy
 
 ```

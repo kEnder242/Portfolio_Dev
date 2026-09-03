@@ -179,11 +179,10 @@ def main(args):
             
         original_content = content
         
-        # [FEAT-222] Hardened Asset Replacement: Only target HTML attributes
+        # [FEAT-222 / FEAT-426] Hardened Asset Replacement: Target HTML attributes with any query string
         for filename, h in hashes.items():
-            # Matches: href="style.css" or src="script.js?v=1.0"
-            # Captures the attribute prefix (href=" or src=") to ensure we aren't in a JS string
-            pattern = r'((?:href|src)=")' + re.escape(filename) + r'(\?v=[a-f0-9\.]+)?(")'
+            # Matches: href="style.css" or src="intercom_v2.js?v=anything"
+            pattern = r'((?:href|src)=")' + re.escape(filename) + r'(\?v=[^"]+)?(")'
             new_val = r'\1' + f"{filename}?v={h}" + r'\3'
             content = re.sub(pattern, new_val, content)
             
