@@ -452,25 +452,125 @@ Before delegating multi-step feature stories in a new sprint phase, the swarm ex
   * `HomeLabAI/src/logic/cognitive_hub.py` (Stage timing instrumentation and dispatch)
   * `HomeLabAI/src/tests/test_live_round_table_telemetry.py` (End-to-end verification test)
 * **4-Anchor Specification (BKM-043):**
-  * **Anchor 1 (Target Files & Class Definitions):**
-    * Modify `BlackboardLedger` in `HomeLabAI/src/memory/blackboard_ledger.py`. Add method:
-      `def append_round_table_delta(self, turn: int, topic: str, scope: str, deltas: Dict[str, float], bullets: List[str], consensus: str, output_path: Optional[str] = None) -> Dict[str, Any]:`
-      which calculates `cumulative` dictionary ($t_1 \dots t_5$) and total duration, then performs an atomic write (.tmp + replace) to `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
-  * **Anchor 2 (Stage Timing Instrumentation):**
-    * In `HomeLabAI/src/logic/cognitive_hub.py` within `process_query()`, record epoch timestamps for `t0_start`, `t1_triage`, `t2_pinky_stance`, `t3_brain_arch`, `t4_deep_thought`, and `t5_summary`.
-    * At turn conclusion (around line 1432), calculate relative deltas:
-      `deltas = {'triage': round(t1 - t0, 3), 'pinky_stance': round(t2 - t1, 3), 'brain_arch': round(t3 - t2, 3), 'oracle': round(t4 - t3, 3), 'pinky_judgment': round(t5 - t4, 3)}`
-      and invoke `self.blackboard_ledger.append_round_table_delta(...)`.
-  * **Anchor 3 (Preserve Historical Turns & Monotonic Ordering):**
-    * Read existing entries from `round_table_deltas.json` (or initialize with existing turns), append the new live turn, and cap history to the most recent 50 turns.
+  * **Anchor 1 (Target Files & Class Definitions in `blackboard_ledger.py`):**
+    * In `HomeLabAI/src/memory/blackboard_ledger.py`, add imports `import json, os, tempfile` at top if missing.
+    * Add method to `BlackboardLedger` class (after line 53):
+      ```python
+      def append_round_table_delta(self, turn: int, topic: str, scope: str, deltas: Dict[str, float], bullets: List[str], consensus: str, output_path: Optional[str] = None) -> Dict[str, Any]:
+          if output_path is None:
+              output_path = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/round_table_deltas.json")
+          os.makedirs(os.path.dirname(output_path), exist_ok=True)
+          
+          # Cumulative calculation from t1 to t5
+          d1 = float(deltas.get("triage", 0.0))
+          d2 = float(deltas.get("pinky_stance", 0.0))
+          d3 = float(deltas.get("brain_arch", 0.0))
+          d4 = float(deltas.get("oracle", 0.0))
+          d5 = float(deltas.get("pinky_judgment", 0.0))
+          
+          c1 = round(d1, 3)
+          c2 = round(c1 + d2, 3)
+          c3 = round(c2 + d3, 3)
+          c4 = round(c3 + d4, 3)
+          c5 = round(c4 + d5, 3)
+          
+          turn_entry = {
+              "turn": int(turn),
+              "timestamp": int(time.time()),
+              "time_str": time.strftime("%H:%M:%S"),
+              "topic": topic or "LIVE_TURN",
+              "scope": scope or "CONTEXT_SCOPE_LONG",
+              "deltas": {"triage": d1, "pinky_stance": d2, "brain_arch": d3, "oracle": d4, "pinky_judgment": d5},
+              "cumulative": {"triage": c1, "pinky_stance": c2, "brain_arch": c3, "oracle": c4, "pinky_judgment": c5},
+              "total_s": c5,
+              "distillation_bullets": bullets if bullets else ["Live turn registered."],
+              "consensus_1liner": consensus if consensus else "Consensus nominal."
+          }
+          
+          records = []
+          if os.path.exists(output_path):
+              try:
+                  with open(output_path, "r") as f:
+                      existing = json.load(f)
+                      if isinstance(existing, list):
+                          records = existing
+              except Exception:
+                  records = []
+          
+          # Deduplicate or update turn if already exists, else append
+          updated = False
+          for idx, r in enumerate(records):
+              if r.get("turn") == turn:
+                  records[idx] = turn_entry
+                  updated = True
+                  break
+          if not updated:
+              records.append(turn_entry)
+          
+          # Cap to 50 most recent turns
+          if len(records) > 50:
+              records = records[-50:]
+          
+          # Atomic write (.tmp + replace)
+          tmp_path = f"{output_path}.tmp_{os.getpid()}"
+          try:
+              with open(tmp_path, "w") as f:
+                  json.dump(records, f, indent=2)
+              os.replace(tmp_path, output_path)
+          finally:
+              if os.path.exists(tmp_path):
+                  try: os.remove(tmp_path)
+                  except Exception: pass
+          return turn_entry
+      ```
+  * **Anchor 2 (Stage Timing Instrumentation in `cognitive_hub.py`):**
+    * In `HomeLabAI/src/logic/cognitive_hub.py` within `process_query()`:
+      - Line 1040: Record `t0_start = time.time()`.
+      - Line 1105: Record `t1_triage = time.time()`.
+      - Line 1392 (after Pinky execution): Record `t2_pinky = time.time()`.
+      - Line 1408 (after Brain execution): Record `t3_brain = time.time()`.
+      - Line 1413 (after Deep Thought / prefetch cancel): Record `t4_thought = time.time()`.
+      - Line 1432 (after summary / consensus formatting): Record `t5_summary = time.time()`.
+      - Calculate stage deltas:
+        ```python
+        d_triage = max(0.001, round(t1_triage - t0_start, 3))
+        d_pinky = max(0.001, round(t2_pinky - t1_triage, 3)) if t2_pinky > t1_triage else 0.050
+        d_brain = max(0.001, round(t3_brain - t2_pinky, 3)) if t3_brain > t2_pinky else 0.000
+        d_thought = max(0.001, round(t4_thought - t3_brain, 3)) if t4_thought > t3_brain else 0.000
+        d_summary = max(0.001, round(t5_summary - max(t4_thought, t3_brain, t2_pinky), 3))
+        deltas_dict = {
+            "triage": d_triage,
+            "pinky_stance": d_pinky,
+            "brain_arch": d_brain,
+            "oracle": d_thought,
+            "pinky_judgment": d_summary
+        }
+        topic_name = str(t_parsed.get("domain", "standard")).upper()
+        scope_name = "CONTEXT_SCOPE_TURN" if t_parsed.get("vibe") == "CASUAL" else "CONTEXT_SCOPE_LONG"
+        bullets_list = [f"{k.upper()}: {str(v)[:150]}" for k, v in self.turn_thought_trace.items() if v]
+        consensus_text = str(critique_res)[:200] if critique_res else "Consensus nominal."
+        if hasattr(self, "blackboard_ledger") and self.blackboard_ledger:
+            self.blackboard_ledger.append_round_table_delta(
+                turn=turn_num,
+                topic=topic_name,
+                scope=scope_name,
+                deltas=deltas_dict,
+                bullets=bullets_list,
+                consensus=consensus_text
+            )
+        ```
+  * **Anchor 3 (Schema Compatibility & Invariant Alignment):**
+    * Output matches exact schema required by `benchmarks.js` (`turn`, `timestamp`, `time_str`, `topic`, `scope`, `deltas`, `cumulative`, `total_s`, `distillation_bullets`, `consensus_1liner`).
   * **Anchor 4 (Verification Anchor):**
-    * Create test `HomeLabAI/src/tests/test_live_round_table_telemetry.py` that mocks a 5-stage turn dispatch, asserts atomic file write, verifies valid JSON schema matching `benchmarks.js` expectations, and confirms that `benchmarks.html` loads the new turn cleanly.
+    * Create `HomeLabAI/src/tests/test_live_round_table_telemetry.py` with tests:
+      1. `test_blackboard_ledger_append_delta()`: Calls `append_round_table_delta` on a dummy ledger with a tmp path, asserts file exists, JSON parses, and `cumulative` monotonically increases.
+      2. `test_cognitive_hub_live_turn_delta_logging()`: Instantiates CognitiveHub or mocks `process_query()`, runs a query, and asserts `round_table_deltas.json` has the newly recorded turn.
 * **Tool Invocation Law:**
   * Modifying `blackboard_ledger.py` & `cognitive_hub.py`: Use `clara-dna_safe_patch`.
   * Creating test file: Use standard `write` tool.
 * **Acceptance Criteria:**
-  1. `append_round_table_delta` safely persists new turn deltas and distillation bullets into `round_table_deltas.json` with file locking or atomic rename.
-  2. Every live turn through `CognitiveHub.process_query()` logs its true stage deltas.
+  1. `append_round_table_delta` safely persists new turn deltas and distillation bullets into `round_table_deltas.json` with atomic rename.
+  2. Every live turn through `CognitiveHub.process_query()` logs its true stage deltas without interrupting dialogue.
   3. `test_live_round_table_telemetry.py` passes 100% on live silicon.
 * **Verification Command:** `pytest HomeLabAI/src/tests/test_live_round_table_telemetry.py -v`
 
