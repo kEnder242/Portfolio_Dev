@@ -1,92 +1,196 @@
-# 🚀 SPRINT PLAN 71.0: Conversational Stability, Semantic Triage Decoupling & RAG Zero-Noise Hardening
+# 🚀 SPRINT PLAN 71.0: Conversational Stability, Declarative Engine Seats & Semantic RAG Decoupling
 
 **Sprint ID:** `SPR_71_0`  
-**Theme:** Real-Time Dialogue Liveliness, Semantic Vibe-First Triage (BKM-015), Zero-Context RAG Precision, and Telemetry Convergence  
+**Theme:** Real-Time Dialogue Liveliness, Declarative Multi-Seat Resolution, Semantic Triage (BKM-015), and Zero-Noise RAG Floors  
 **Status:** ACTIVE / IN PROGRESS  
 **Parent Framework:** BKM-015 (Semantic Anchor Protocol), BKM-034 (Swarm Delegation), BKM-043 (4-Anchor Standard), BKM-048 (Fingertips Protocol)  
 **Target Hardware Nodes:** z87-Linux (RTX 2080 Ti Local vLLM), KENDER (RTX 4090 Deep Thought / Atlas), M5 Air (Speculative Candidate)
 
 ---
 
-## 🧭 Executive Summary & Core Engineering Mandates
+## 🧭 Executive Summary & Core Engineering Directives
 
-Sprint 71 addresses the root causes of conversational latency and incoherence observed during live co-pilot dialogue ("hello pinky"):
-1. **Dynamic Deep Thought Head-Start Window (Sub-1s Liveliness):** Replace static 10s wait loops with an adaptive socket-probed head-start window ($2 \times t_{\text{warm}} \approx 180\text{ms}$). If remote Deep Thought is unresponsive, failover immediately to local vLLM.
-2. **Semantic Vibe-First Triage (BKM-015 Compliance):** Deprecate rigid static greeting lists (`raw_lower in [...]`) and hardcoded keyword filters. Ground intent routing in vector similarity via ChromaDB `behavioral_dna` and prompt-guided semantic classification.
-3. **Empty/Sparse Query RAG Suppression (Zero-Hallucination Floor):** Prevent RAG from returning legacy historical records on casual greetings or ungrounded turns. When intent is CASUAL or query terms have 0 semantic domain overlap, return an empty HyDE vector and bypass ChromaDB.
-4. **Console Broadcast De-duplication:** Eliminate double-printing in UI/Web Intercom by unifying crosstalk and chat telemetry payloads.
-5. **Two-Mice Mutual Exclusion Gate:** Prevent Brain from executing redundant dual responses (Strategic Brief + Secondary Reflection) when addressed as lead node.
-6. **Critic Deterministic Scoring & Sampling Hygiene:** Lower critic sampling temperature ($T=0.0$) and enforce atomic regex JSON extraction to eliminate whitespace stutter and malformed token outputs (`"{"` and `"P 1"`).
-7. **Web Intercom & Benchmarks Session Synchronization:** Ensure all live conversational turns stream to `round_table_deltas.json` and properly bind the active session ID (`SID`).
+Sprint 71 converts the live co-pilot dialogue audit into ten structured, tracked work items. It eliminates hardcoded latency traps, restores strict BKM-015 compliance, decouples conversational tone from data retrieval, and hardens inter-node consensus.
+
+### 🏛️ Execution Assignments
+* **Strategic Direct (AGY):** Large refactors, architectural policy decoupling, and core engine orchestration.
+* **Swarm Delegation (Atlas L2 + Junior L3):** Bounded, surgical implementation stories adhering to the 4-Anchor Standard (BKM-043) with line pointers and interface-first verification.
 
 ---
 
-## 📋 Sprint 71 Stories & 4-Anchor Specifications
+## 📋 Sprint 71 Stories, Sub-Tasks & Forensic Mapping
 
-### ⏱️ Story 7101: Adaptive Speculative Triage Head-Start & Cold-Socket Sentinel (`[FEAT-531]`)
-* **Objective:** Ensure triage completes in $< 150\text{ms}$ by probing remote socket health before dispatching, and clamping the speculative head-start window from 10.0s to $2 \times t_{\text{warm}}$ (~180ms).
-* **Target Files:**
-  * `HomeLabAI/src/logic/speculative_triage.py`
-  * `HomeLabAI/src/tests/test_speculative_triage_headstart.py`
-* **Acceptance Criteria:**
-  1. If KENDER or M5 Air is unresponsive, local vLLM takes over in $< 150\text{ms}$.
-  2. Speculative race terminates instantly upon first valid winner.
-
----
-
-### 🎭 Story 7102: Semantic Vibe-First Triage Grounding (BKM-015 Restoration) (`[FEAT-532]`)
-* **Objective:** Eliminate static list-matching (`raw_lower in [...]`) in `CognitiveHub` and restore dynamic vector/prompt-guided semantic classification per BKM-015. "Hello Pinky" must evaluate to `addressed_to: PINKY, vibe: CASUAL` purely from prompt semantics.
-* **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `HomeLabAI/src/logic/triage_engine.py`
-  * `HomeLabAI/src/tests/test_semantic_vibe_triage.py`
-* **Acceptance Criteria:**
-  1. Zero hardcoded greeting lists in `cognitive_hub.py`.
-  2. Salutations directed to Pinky route cleanly with `addressed_to: PINKY`.
-
----
-
-### 🛡️ Story 7103: Empty & Low-Information Query RAG Suppression Floor (`[FEAT-533]`)
-* **Objective:** When queries are casual greetings or sparse ("hello pinky", "what's up"), enforce an explicit zero-context floor. ChromaDB RAG must be bypassed completely to prevent dumping stale silicon validation history from days ago.
-* **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `HomeLabAI/src/nodes/archive_node.py`
-  * `HomeLabAI/src/tests/test_rag_suppression_floor.py`
-* **Acceptance Criteria:**
-  1. Casual greetings return `hyde_vector_text = ""` and bypass ChromaDB retrieval.
-  2. No unsolicited 18-year archive briefs on conversational turns.
+### ⏱️ Topic 1 & 1.1 / Story 7101: Config-Driven Declarative Engine Seats & 2x Timing Standard (`[FEAT-531]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[DIRECT: AGY]` (Architectural Refactor across Config + Core Logic)
+* **Context & Root Cause:** M5 Air timed out because `_probe_m5_air_vocal` had a hardcoded 0.3s timeout while cold M5 Air took 0.83s. Deep Thought was hardcoded with a 10s cold-start window.
+* **Consensus & Design:** 
+  1. Rename $t_{\text{warm}} \rightarrow t_{\text{warmed}}$ to reflect post-warmup TTFT.
+  2. Implement the **2x Rule**:
+     - Probe Timeout: $t_{\text{probe}} = 2 \times t_{\text{cold}} \approx 1.7\text{s}$.
+     - Speculative Race Head-Start: $t_{\text{headstart}} = 2 \times t_{\text{warmed}} \approx 180\text{ms}$.
+  3. Refactor `infrastructure.json` to define declarative `seats` array (`M5_AIR`, `KENDER`, `LOCAL`). Replace bespoke probe functions with a single generic loop in `speculative_triage.py`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `HomeLabAI/config/infrastructure.json` (Declarative seats definition)
+    * `HomeLabAI/src/logic/speculative_triage.py` (Generic seat iterator & 2x timing engine)
+    * `HomeLabAI/src/tests/test_speculative_triage_seats.py` (Unit verification harness)
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest src/tests/test_speculative_triage_seats.py -v
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1: INTERFACE_CONTRACT_STUB]` Define `SeatConfig` schema in `infrastructure.json` and declare `resolve_active_seat()`.
+  - `[STAGE 2: TEST_HARNESS_CREATION]` Author `test_speculative_triage_seats.py` with mock 2x probe and race timings.
+  - `[STAGE 3: CALLER_INTEGRATION_WIRING]` Replace `resolve_active_deep_thought_target()` in `speculative_triage.py` with generic seat iterator.
+  - `[STAGE 4: FULL_SILICON_CONVERGENCE]` Validate against live M5 Air (:8000), KENDER (:11434), and Local (:8088).
 
 ---
 
-### 📢 Story 7104: Console Telemetry De-Duplication & Two-Mice Single-Turn Gate (`[FEAT-534]`)
-* **Objective:** Unify triage broadcasts into a single clean payload and fix the execution loop in `CognitiveHub` so Brain never executes two separate reply legs for a single user turn.
-* **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `HomeLabAI/src/tests/test_two_mice_single_execution.py`
-* **Acceptance Criteria:**
-  1. Triage emits exactly ONE broadcast event per turn.
-  2. Lead node executes exactly once per turn.
+### 📢 Topic 2 / Story 7102: Telemetry Console Broadcast Consolidation (`[FEAT-532]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py`)
+* **Context & Root Cause:** Triage double-printed to the console by emitting back-to-back `crosstalk` summary and raw `chat` JSON broadcasts.
+* **Consensus & Design:** Consolidate into a single telemetry chat broadcast payload per turn.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `HomeLabAI/src/logic/cognitive_hub.py` (Lines 1150–1175)
+    * `HomeLabAI/src/tests/test_telemetry_broadcast_dedup.py`
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest src/tests/test_telemetry_broadcast_dedup.py -v
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1]` Stub unified `_broadcast_triage_telemetry()` method.
+  - `[STAGE 2]` Create mock test verifying exactly 1 broadcast packet emitted during triage completion.
+  - `[STAGE 3]` Replace dual `broadcast` calls in `cognitive_hub.py`.
+  - `[STAGE 4]` Live integration verify against Web Intercom stream.
 
 ---
 
-### 🎯 Story 7105: Critic Sampling Hygiene & Deterministic JSON Parser (`[FEAT-535]`)
-* **Objective:** Root-cause critic token malformation (`"{"` / whitespace padding). Enforce $T=0.0$ greedy decoding and robust regex extraction for critic telemetry.
-* **Target Files:**
-  * `HomeLabAI/src/nodes/pinky_critic_persona.py`
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `HomeLabAI/src/tests/test_critic_sampling_hygiene.py`
-* **Acceptance Criteria:**
-  1. Critic output parses valid JSON score/reasoning 100% of the time.
-  2. Zero runaway whitespace token padding.
+### 🎭 Topic 3 / Story 7103: Semantic Triage Grounding & BKM-015 Restoration (`[FEAT-533]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py`)
+* **Context & Root Cause:** Sprint 47 introduced `raw_lower in [...]` rigid string matching. "Hello pinky" fell through, got misclassified as `exp_tlm`, and routed to `BRAIN`.
+* **Consensus & Design:** Rip out hardcoded greeting list. Restore pure prompt-guided semantic classification with explicit few-shot rules for direct resident salutations. Add cautionary BKM-015 header tags.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `HomeLabAI/src/logic/cognitive_hub.py` (Lines 1040–1110)
+    * `HomeLabAI/src/tests/test_fast_triage_harness.py` (Lightweight LLM hook test)
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest src/tests/test_fast_triage_harness.py -v
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1]` Add `# [BKM-015-GUARD]` comment tag and update Guided Decoding schema.
+  - `[STAGE 2]` Build `test_fast_triage_harness.py` verifying direct name salutations route to `addressed_to: PINKY` via local vLLM.
+  - `[STAGE 3]` Remove `raw_lower in [...]` block in `cognitive_hub.py`.
+  - `[STAGE 4]` Run test against live local vLLM port 8088.
 
 ---
 
-### 📊 Story 7106: Live Turn Telemetry Socket & Session Synchronization (`[FEAT-536]`)
-* **Objective:** Ensure live Web Intercom turns consistently record stage timings to `round_table_deltas.json` and resolve active socket session IDs (`SID`).
-* **Target Files:**
-  * `HomeLabAI/src/logic/cognitive_hub.py`
-  * `Portfolio_Dev/field_notes/data/benchmarks.js`
-  * `HomeLabAI/src/tests/test_live_telemetry_socket_sync.py`
-* **Acceptance Criteria:**
-  1. Every live dialogue turn increments `round_table_deltas.json`.
-  2. Web Intercom and `benchmarks.html` reflect current session stats in real time.
+### 🛡️ Topic 4 & 5 / Story 7104: The Domain–Vibe Decoupling & Zero-Noise RAG Floor (`[FEAT-534]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[DIRECT: AGY]` (Deep Policy Architecture)
+* **Context & Root Cause:** `config/triage_policy.json` forced `TECHNICAL` $\rightarrow$ `exp_tlm` and `FORENSIC` $\rightarrow$ `exp_for`, causing RAG to dump 2013 historical notes on conversational questions.
+* **Consensus & Design:**
+  1. Decouple `domain` (Data Source) from `vibe` (Tone).
+  2. Add `unknown` to `domain: enum ["lab_history", "exp_bkm", "exp_tlm", "dream_stream", "unknown"]`.
+  3. Default all conversational vibes to `domain: "unknown"`.
+  4. Enforce **True RAG Rule**: If `domain == "unknown"` or cosine similarity $< 0.65$, return empty HyDE vector and skip ChromaDB.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `HomeLabAI/config/triage_policy.json`
+    * `HomeLabAI/src/logic/cognitive_hub.py` (`resolve_hyde_vector` & `_fetch_rag_context`)
+    * `HomeLabAI/src/tests/test_rag_suppression_floor.py`
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest src/tests/test_rag_suppression_floor.py -v
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1]` Update `triage_policy.json` schema to decouple default domains and add `unknown`.
+  - `[STAGE 2]` Create unit test asserting no RAG context returned for `domain == "unknown"`.
+  - `[STAGE 3]` Wire cosine threshold check ($0.65$) in `resolve_hyde_vector()`.
+  - `[STAGE 4]` Verify on live silicon.
+
+---
+
+### 👥 Topic 6 / Story 7105: Two-Mice Single-Execution Gate (`[FEAT-535]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py`)
+* **Context & Root Cause:** In `cognitive_hub.py`, when `lead_node == "brain"`, a failed two-mice handover fell through to the `else:` branch, executing Brain a second time.
+* **Consensus & Design:** Enforce mutual exclusion in `lead_node == "brain"` flow so Brain speaks once and only once.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `HomeLabAI/src/logic/cognitive_hub.py` (Lines 1334–1365)
+    * `HomeLabAI/src/tests/test_two_mice_single_execution.py`
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest src/tests/test_two_mice_single_execution.py -v
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1]` Patch `lead_node == "brain"` conditional branch to prevent secondary execution.
+  - `[STAGE 2]` Create mock test verifying single execution invocation for Brain-addressed turns.
+  - `[STAGE 3]` Integrate into `cognitive_hub.py`.
+  - `[STAGE 4]` Live test turn execution.
+
+---
+
+### 🧬 Topic 7 / Retrospective 7107: Critic Context Collapse & Sampling Hygiene
+* **Status:** `[RESOLVED & GROUNDED IN RETROSPECTIVE]` (No action code needed beyond Story 7105 fix)
+* **Consensus Finding:** The critic token malformation (`"{"` and `"P 1"`) was caused by Topic 6 (Brain talking twice left Pinky's response buffer empty, malforming the judge's prompt context). Enforcing single-turn execution in Story 7105 and greedy decoding ($T=0.0$) permanently resolves critic stability.
+
+---
+
+### 📊 Topic 8 / Retrospective 7108: Dialogue Turn vs Round Table Consensus
+* **Status:** `[RESOLVED & GROUNDED IN ARCHITECTURE]`
+* **Consensus Finding:** 
+  - Direct 1-on-1 turns (`addressed_to: BRAIN` or `addressed_to: PINKY`) are recorded to `journal_ledger.jsonl`.
+  - Multi-node collaborative turns record sub-second stage deltas to `round_table_deltas.json` and persist to Clara-DNA blackboard memory.
+
+---
+
+### 🔌 Topic 9 / Story 7106: Dynamic `SID` DOM Healing on Connection Handshake (`[FEAT-536]`)
+* **Status:** `[PENDING IMPLEMENTATION]`
+* **Assigned Execution Mode:** `[DIRECT: AGY]` (Frontend JS Lifecycle)
+* **Context & Root Cause:** Initial messages rendered during the first 1–2 seconds display `[SID: Unknown]` because the socket ID hasn't yet arrived from the server.
+* **Consensus & Design:** Tag early DOM elements with `data-needs-sid="true"`. Upon receiving the WebSocket `handshake` / `status` frame, dynamically heal all pending DOM tags with the true session ID.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):**
+    * `Portfolio_Dev/field_notes/intercom_v2.js` (Lines 195–205 and 480–490)
+    * `Portfolio_Dev/field_notes/data/benchmarks.js`
+  * **Anchor 2 (Verification Command):**
+    ```bash
+    grep -n "data-needs-sid" Portfolio_Dev/field_notes/intercom_v2.js
+    ```
+* **Sub-Tasks:**
+  - `[STAGE 1]` Add `data-needs-sid` attribute to initial DOM renders.
+  - `[STAGE 2]` Add auto-healing sweep inside `ws.onmessage` upon receiving `session_token` / `socket_id`.
+  - `[STAGE 3]` Test via browser reload.
+
+---
+
+### 🕒 Topic 10 / Retrospective 7110: Browser History Timestamp Normalization
+* **Status:** `[RESOLVED & GROUNDED IN RETROSPECTIVE]`
+* **Consensus Finding:** Identical timestamps (`12:48:27`) occur only when re-rendering un-timestamped messages from `sessionStorage` upon browser refresh. Live message stream generates accurate wall-clock timestamps.
+
+---
+
+## 🔬 Pre-Retrospective: The Domain–Vibe Coupling Audit
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                          THE DOMAIN–VIBE DECOUPLING CONTRACT                                │
+├──────────────────────────────┬────────────────────────────────┬─────────────────────────────┤
+│ Dimension                    │ Old Coupled State (Broken)     │ New Decoupled State (Clean) │
+├──────────────────────────────┼────────────────────────────────┼─────────────────────────────┤
+│ VIBE (Conversational Tone)   │ Forced default_domain + RAG    │ Pure Tone (CASUAL, TECH,    │
+│                              │ (e.g. TECH -> exp_tlm)         │ FORENSIC, HISTORICAL)       │
+├──────────────────────────────┼────────────────────────────────┼─────────────────────────────┤
+│ DOMAIN (Knowledge Base)      │ Auto-selected by Vibe          │ Explicit Data Target or     │
+│                              │                                │ "unknown"                   │
+├──────────────────────────────┼────────────────────────────────┼─────────────────────────────┤
+│ RAG RETRIEVAL TRIGGER        │ Fired automatically on Vibe    │ Fired ONLY if domain !=     │
+│                              │                                │ "unknown" & Cosine >= 0.65  │
+└──────────────────────────────┴────────────────────────────────┴─────────────────────────────┘
+```
