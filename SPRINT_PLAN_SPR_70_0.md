@@ -589,4 +589,15 @@ Atlas is an **Orchestration Compiler**. It does not perform full codebase implem
 * **Model:** Resident on Kender RTX 4090 / M5 Air (75 tok/s).
 * **Execution:** Ingests the spoon-fed task prompt, applies AST edits via `clara-dna_safe_patch` (or `write` for new files), runs the targeted test command, and returns pass/fail artifacts without repo-wide search or grep.
 
+#### 3. The 9-Point Swarm Operational Contract & Execution Sentinels
+1. **[1: CLaRa / BKM / FEAT Resolution]** Atlas directs tool calls to `clara-dna_get_protocol` and `clara-dna_query_dna` to resolve BKM and FEAT context on demand.
+2. **[2: Fingertips Compliance]** Dispatch prompts from Layer 1 remain lean pointers (< 200 tokens).
+3. **[3: Pass-Down / Pass-Up Protocol]** Operational mechanics: spoon-feed micro-tasks down to Junior, synthesize 2-sentence test reports up to AGY.
+4. **[4: Junior's Job & Guardrails]** Junior is a pure surgical code modifier (75 tok/s) with zero license to explore, grep, or redesign.
+5. **[5: Spoon-Fed Task Template]** Standardize the 4-anchor task payload that Atlas forwards to Junior (`[TASK]`, `[TARGET FILE]`, `[OLD CODE / ANCHOR]`, `[NEW CODE]`, `[VERIFICATION]`).
+6. **[6: Static Persona `prompt_append`]** Let OpenCode's `prompt_append` in `oh-my-openagent.json` automatically attach static worker invariants to `sisyphus-junior`.
+7. **[7: Task-to-Task Transition & Re-Mapping]** Atlas must re-inspect target files and refresh code line anchors before dispatching task $(N+1)$ to prevent drift from prior edits.
+8. **[8: Junior Anchor Pushback Gate]** Junior immediately halts and emits `[BLOCKER REPORT: ANCHOR_DRIFT_MISMATCH]` if expected code anchors or `old_pattern` do not match, forbidding destructive `sed -i` fallbacks.
+9. **[9: Atlas Worker Introduction]** Equip Atlas's system prompt with a concise mental model of Junior's capabilities (fast AST edits, pytest execution) and limits (no repo research, no guessing).
+
 
