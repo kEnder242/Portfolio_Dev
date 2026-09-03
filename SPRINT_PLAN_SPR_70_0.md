@@ -37,9 +37,38 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 #### Layer 3: Surgical Ground Worker (Sisyphus-Junior on Kender 4090 / M5 Air)
 * **Model:** Resident on Kender 4090 (75 tok/s) with M5 Air fallback.
 * **Static Rules (L3 Invariants):** Anti-exploratory guardrails ("Research is done; implement only the function body inside the provided interface"). Zero repo-wide search or grep. Destructive bash overwrites (`echo >`, `cat << EOF >`) strictly forbidden.
+* **Contract Completeness Validation Gate:** Junior MUST inspect its assigned on-disk story section before editing. If any of the mandatory 4 anchors are missing (symbol anchor, root import, schema stub, or verification command), Junior MUST REJECT the task immediately and emit `[BLOCKER REPORT: INCOMPLETE_STORY_CONTRACT] <missing anchor>`.
 * **Dynamic Ingestion (Fingertips On-Disk):** Reads its exact 4-anchor story section from the sprint document on disk. Heavy tools (`icm_*`, `websearch_*`, `codegraph_*`) denied via BKM-051 to keep worker prompt lean (< 1,500 tokens).
 * **Execution:** Surgical AST edits via `clara-dna_safe_patch` (or `write` for new files). Runs targeted verification command.
 * **Feedback / Backpressure:** Halts immediately on missing types, broken contracts, or context pressure; emits `[BLOCKER REPORT: <CATEGORY>] <details>` upward instead of guessing.
+
+---
+
+### 🔀 The 3-Tier Task Routing Strategy & Fallback Hierarchy
+
+| Tier | Mechanism | Trigger Condition | Implementation |
+| :--- | :--- | :--- | :--- |
+| **Tier 1 (Primary)** | **Pointer-Based `category` Dispatch** | Default for Atlas dispatches. | `task(category="unspecified-low", prompt="Execute Story X in <sprint_doc>...")` (Routes to Kender 4090 / M5 Air). |
+| **Tier 2 (Cloud Fallback)** | **Cloud Swarm Ladder** | Triggered under `--cloud-only` or local hardware offline. | Dispatched to `groq/llama-3.3-70b-versatile` $\rightarrow$ `opencode/big-pickle` $\rightarrow$ `cohere/command-a-plus-05-2026`. |
+| **Tier 3 (Resilience)** | **Orchestrator Two-Step Cascade** | Triggered if internal subagent execution deadlocks. | `delegate.py` executes:<br>1. `--agent atlas --mode plan`<br>2. `--agent sisyphus --mode execute`. |
+
+---
+
+### 🔁 The Closed-Loop Iteration & Remediation Plan
+
+* **Loop A (Fast In-Session Remediation):** If `pytest` fails on syntax or logic error, re-fire into the **same session ID** (`--session-id`) passing the exact pytest traceback without restarting the daemon.
+* **Loop B (Anti-Drift Tightening):** If Junior attempts directory exploration instead of file editing, re-fire with an explicit diff snippet and hard file path anchor.
+* **Loop C (Blocker Escalation):** If Junior emits `[BLOCKER REPORT: ...]`, Atlas and `delegate.py` bubble the blocker directly to the terminal for AGY contract amendment.
+
+---
+
+### 🚦 Delegation Pre-Flight Verification Gate (Proving Delegation Before Work)
+
+Before delegating multi-step feature stories in a new sprint phase, the swarm executes a fast Pre-Story (e.g., `Story 70.9B`) to prove:
+1. Atlas emits valid `task()` dispatch.
+2. Junior binds to execution silicon and modifies the fixture target via `clara-dna_safe_patch`.
+3. Pytest harness passes cleanly.
+4. Atlas synthesizes the return chunk and echoes the `[HANDOVER REFLECTION]` to AGY.
 
 ---
 
@@ -309,16 +338,30 @@ Sprint 70 directly addresses key friction points discovered during live conversa
 
 ### 📊 Pre-Story 70.9B: Safe-Patch Subagent Certification Harness (`[FEAT-529]`)
 * **Status:** `[PENDING DELEGATION]`
-* **Assigned Execution Mode:** `[TRI-LOOP LADDER: LOCAL (Atlas/Junior) -> CLOUD (DeepSeek/Cohere) -> AGY]` (via `delegate.py` on REST port 4097)
+* **Assigned Execution Mode:** `[SWARM DELEGATION: ATLAS + JUNIOR]` (via `delegate.py` on REST port 4097)
 * **Objective:** Certify that subagents can invoke `clara-dna_safe_patch` (or AST patcher) to make surgical modifications to existing files without resorting to destructive bash `echo >` or `cat << 'EOF' >` overwrites.
 * **Target Files:**
   * `HomeLabAI/src/tests/fixtures/patch_target.py` (Harness target file for patch mutations)
   * `HomeLabAI/src/tests/test_safe_patch_harness.py` (Test asserting safe_patch execution and AST validity)
-  * `HomeLabAI/src/tests/delegate.py` (Prompt injection with explicit `clara-dna_safe_patch` few-shot tool schema)
+* **4-Anchor Specification (BKM-043):**
+  * **Anchor 1 (Symbol Anchor):** In `HomeLabAI/src/tests/fixtures/patch_target.py`, edit inside `def format_node_badge(node_name: str, tier: str = "local") -> str:` (around line 5).
+  * **Anchor 2 (Root Namespace):** `PYTHONPATH=src: use 'from fixtures.patch_target import format_node_badge, calculate_energy_efficiency'`.
+  * **Anchor 3 (Code Stub to Append):**
+    ```python
+    def calculate_energy_efficiency(tokens: int, duration_s: float, watts: float) -> float:
+        """Calculate energy efficiency metric."""
+        if duration_s > 0 and watts > 0:
+            return (tokens / duration_s) / watts
+        return 0.0
+    ```
+  * **Anchor 4 (Path Resilience):** Use `pathlib.Path(__file__).resolve().parent` for all fixture reads.
+* **Tool Invocation Law:**
+  * Modifying `patch_target.py`: Use `clara-dna_safe_patch` with exact `old_pattern` and `new_pattern`.
 * **Acceptance Criteria:**
-  1. `delegate.py` payload includes explicit JSON tool call example for `clara-dna_safe_patch`.
-  2. Subagent modifies `patch_target.py` surgically via tool call without clobbering surrounding code.
-  3. `ruff check` passes with 0 syntax or AST errors.
+  1. Subagent modifies `patch_target.py` surgically via `clara-dna_safe_patch` without clobbering surrounding functions.
+  2. `calculate_energy_efficiency` calculates `(tokens / duration_s) / watts` accurately and handles division by zero.
+  3. `ruff check HomeLabAI/src/tests/fixtures/patch_target.py` passes with 0 errors.
+* **Verification Command:** `pytest HomeLabAI/src/tests/test_safe_patch_harness.py -v`
 
 ---
 
