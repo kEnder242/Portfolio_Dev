@@ -317,7 +317,12 @@ async function loadLiveUsageStream() {
             return;
         }
 
-        const records = lines.slice(-10).reverse().map(l => JSON.parse(l));
+        const allRecords = lines.map(l => {
+            try { return JSON.parse(l); } catch(e) { return null; }
+        }).filter(r => r !== null);
+        window.cachedLiveRecords = allRecords;
+
+        const records = allRecords.slice(-10).reverse();
         let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
         records.forEach(r => {
             const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
@@ -521,6 +526,8 @@ function renderBlackboardLedger(data) {
     if (!container) return;
 
     container.innerHTML = '';
+    const liveRecords = window.cachedLiveRecords || [];
+
     data.forEach((turn, idx) => {
         const details = document.createElement('details');
         details.className = 'feature-details';
@@ -528,6 +535,41 @@ function renderBlackboardLedger(data) {
         if (idx === 0) details.setAttribute('open', ''); // open latest by default
 
         const deltaSummary = `Δt1: ${(turn.deltas.triage * 1000).toFixed(0)}ms | Δt2: ${(turn.deltas.pinky_stance * 1000).toFixed(0)}ms | Δt3: ${(turn.deltas.brain_arch * 1000).toFixed(0)}ms | Δt4: ${(turn.deltas.oracle * 1000).toFixed(0)}ms | Δt5: ${(turn.deltas.pinky_judgment * 1000).toFixed(0)}ms`;
+
+        // Find nested subagent dispatches for this turn
+        const matchingDispatches = liveRecords.filter(r => r.turn === turn.turn || r.turn_id === turn.turn);
+        let subagentTableHtml = '';
+        if (matchingDispatches.length > 0) {
+            subagentTableHtml = `
+                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #1f242c;">
+                    <span class="field-label" style="color:#bc8cff;">Nested Subagent Dispatches (Turn Workload Stream)</span>
+                    <table class="live-stream-table" style="margin-top: 6px; font-size: 0.72rem;">
+                        <thead>
+                            <tr>
+                                <th>Role / Agent</th>
+                                <th>Seat</th>
+                                <th>Model</th>
+                                <th style="text-align:right;">Tokens</th>
+                                <th style="text-align:right;">Duration</th>
+                                <th style="text-align:right;">Tok/s</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${matchingDispatches.map(d => `
+                                <tr>
+                                    <td style="font-weight:600; color:#58a6ff;">${d.agent || d.role || 'subagent'}</td>
+                                    <td>${d.seat || 'Kender 4090'}</td>
+                                    <td style="color:#d2a8ff;">${d.model || ''}</td>
+                                    <td style="text-align:right;">${d.tokens_generated || 0}</td>
+                                    <td style="text-align:right;">${d.duration_seconds || 0}s</td>
+                                    <td style="text-align:right; font-weight:700; color:#3fb950;">${d.throughput_tok_s || 0} tok/s</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
 
         details.innerHTML = `
             <summary>
@@ -558,10 +600,55 @@ function renderBlackboardLedger(data) {
                         ${deltaSummary} &bull; <strong>Total Turn Duration: ${(turn.total_s * 1000).toFixed(0)}ms</strong>
                     </div>
                 </div>
+                ${subagentTableHtml}
             </div>
         `;
         container.appendChild(details);
     });
+
+    // Render [BATCH] Card for non-interactive / background scans
+    const batchRecords = liveRecords.filter(r => r.is_batch || (r.source && (r.source.includes('mass_scan') || r.source.includes('refine_gem') || r.source.includes('NIGHTLY_REFINEMENT'))));
+    if (batchRecords.length > 0) {
+        const batchDetails = document.createElement('details');
+        batchDetails.className = 'feature-details';
+        batchDetails.id = 'batch-scans-ledger';
+        batchDetails.innerHTML = `
+            <summary>
+                <span class="badge" style="background:#382714; color:#f78166; border:1px solid #bd561d; margin-right:8px;">[BATCH]</span>
+                <span style="color:#f0f3f6; font-weight:600;">NIGHTLY_REFINEMENT & ARCHIVE SCANS</span>
+                <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
+                    ${batchRecords.length} batch job(s)
+                </span>
+            </summary>
+            <div class="details-content" style="border-left: 3px solid #f78166;">
+                <table class="live-stream-table" style="margin-top: 6px; font-size: 0.72rem;">
+                    <thead>
+                        <tr>
+                            <th>Job / Source</th>
+                            <th>Seat</th>
+                            <th>Model</th>
+                            <th style="text-align:right;">Tokens</th>
+                            <th style="text-align:right;">Duration</th>
+                            <th style="text-align:right;">Tok/s</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${batchRecords.map(b => `
+                            <tr>
+                                <td style="font-weight:600; color:#f78166;">${b.source || b.task_title || 'NIGHTLY_REFINEMENT'}</td>
+                                <td>${b.seat || 'Kender 4090'}</td>
+                                <td style="color:#d2a8ff;">${b.model || ''}</td>
+                                <td style="text-align:right;">${b.tokens_generated || 0}</td>
+                                <td style="text-align:right;">${b.duration_seconds || 0}s</td>
+                                <td style="text-align:right; font-weight:700; color:#3fb950;">${b.throughput_tok_s || 0} tok/s</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        container.appendChild(batchDetails);
+    }
 }
 
 async function initDeltaTView() {
