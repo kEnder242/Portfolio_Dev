@@ -72,7 +72,7 @@
       "cloud_multiplier": 35.6,
       "cloud_savings_pct": 97.2,
       "reasoning_token_ratio": 0.1,
-      "status": "offline_fallback"
+      "status": "online"
     },
     {
       "model": "openrouter/free",
