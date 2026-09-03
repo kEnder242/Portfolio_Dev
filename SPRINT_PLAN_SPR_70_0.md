@@ -600,22 +600,22 @@ Atlas is an **Orchestration Compiler**. It does not perform full codebase implem
 8. **[8: Junior Anchor Pushback Gate]** Junior immediately halts and emits `[BLOCKER REPORT: ANCHOR_DRIFT_MISMATCH]` if expected code anchors or `old_pattern` do not match, forbidding destructive `sed -i` fallbacks.
 9. **[9: Atlas Worker Introduction]** Equip Atlas's system prompt with a concise mental model of Junior's capabilities (fast AST edits, pytest execution) and limits (no repo research, no guessing).
 
-#### 4. Interface-First & Stub-and-Fill Task Sequencing Model
-To prevent circular dependency locks (e.g. running pytest before tests are written or before methods exist), multi-file stories are sequenced across discrete progressive states:
+#### 4. Progressive Task Stages (Interface-First & Stub-and-Fill Lifecycle)
+To prevent circular dependency locks (e.g. running pytest before tests are written or before methods exist), multi-file stories are sequenced across discrete progressive **Stages**:
 
 * **Responsibility Matrix:**
   * **Layer 1 (AGY / Sprint Plan):** Defines the interface schemas, method signatures, data structures, and assertion requirements up-front.
   * **Layer 2 (Atlas Orchestrator):** Surveys incumbent files on disk, verifies anchors, and breaks the story into sequential stub-and-fill micro-tasks.
-  * **Layer 3 (Junior Worker):** Performs the AST patch or file write for that specific state and runs the stage verification command.
+  * **Layer 3 (Junior Worker):** Performs the AST patch or file write for that specific stage and runs the stage verification command.
 
-* **Progressive Stub-and-Fill Lifecycle (Natural State Flow):**
-  1. `[STATE 1: INTERFACE CONTRACT STUB]` → Target class/method interface stub added to incumbent file. Verification: `ruff check <target_file>`.
-  2. `[STATE 2: TEST HARNESS CREATION]` → Test file physically created with test assertions against the new interface. Verification: `pytest <test_file> -k "not integration"` or syntax check.
-  3. `[STATE 3: CALLER / INTEGRATION WIRING]` → Caller modules instrumented to invoke the new interface. Verification: `ruff check <caller_file>`.
-  4. `[STATE 4: FULL SILICON CONVERGENCE]` → Full end-to-end execution test on live hardware. Verification: `pytest <test_file> -v` passes 100%.
+* **Progressive Stub-and-Fill Lifecycle (Natural Stage Flow):**
+  1. `[STAGE 1: INTERFACE_CONTRACT_STUB]` → Target class/method interface stub added to incumbent file. Verification: `ruff check <target_file>`.
+  2. `[STAGE 2: TEST_HARNESS_CREATION]` → Test file physically created with test assertions against the new interface. Verification: `pytest <test_file> -k "not integration"` or syntax check.
+  3. `[STAGE 3: CALLER_INTEGRATION_WIRING]` → Caller modules instrumented to invoke the new interface. Verification: `ruff check <caller_file>`.
+  4. `[STAGE 4: FULL_SILICON_CONVERGENCE]` → Full end-to-end execution test on live hardware. Verification: `pytest <test_file> -v` passes 100%.
 
-* **State Notification & Handover:**
-  * Junior reports progress to Atlas via natural completion strings: `[PROGRESS: STATE X COMPLETE] <summary of files touched and verification outcome>`.
-  * Atlas relays a concise 2-sentence synthesis report upward to Layer 1 (AGY) upon reaching `STATE 4: FULL SILICON CONVERGENCE` or emits `[BLOCKER REPORT: <CATEGORY>]` if any state fails.
+* **Stage Notification & Handover:**
+  * Junior reports progress to Atlas via natural completion strings: `[PROGRESS: STAGE X COMPLETE] <summary of files touched and verification outcome>`.
+  * Atlas relays a concise 2-sentence synthesis report upward to Layer 1 (AGY) upon reaching `STAGE 4: FULL_SILICON_CONVERGENCE` or emits `[BLOCKER REPORT: <CATEGORY>]` if any stage fails.
 
 
