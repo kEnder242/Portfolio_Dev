@@ -2926,9 +2926,9 @@
 ## [FEAT-537] Universal Common Hash Key & Stale Bytecode Handshake Guard
 **Sprint:** SPR-71.0
 **Status:** ACTIVE
-**Logic:** Enforces bidirectional commit hash matching across all WebSocket handshakes. Foyer Router pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close). Frontend `intercom_v2.js` extracts baked script hash `intercom_v2.js?v=<hash>` from `build_site.py` and halts reconnect upon stale rejection.
-**Rationale:** Closes the "Uptime Preservation Trap" permanently, ensuring no test or browser UI can communicate with an outdated daemon.
-**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`.
+**Logic:** Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. `build_site.py` generates an untracked build artifact `field_notes/data/git_anchor.json` containing the current git commit. `intercom_v2.js` dynamically fetches `git_anchor.json` to populate the `client_commit` handshake parameter, cleanly separating asset cache-busting (`intercom_v2.js?v=<md5>`) from git bytecode locks. Foyer Router pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close) and UI halts reconnection upon stale rejection.
+**Rationale:** Closes the "Uptime Preservation Trap" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.
+**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/git_anchor.json`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`, `HomeLabAI/src/tests/test_live_playwright_gitlock.py`.
 
 
 

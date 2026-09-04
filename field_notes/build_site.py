@@ -160,6 +160,23 @@ def main(args):
     else:
         print("--- SKIPPING FEATURE CODE LINK VERIFICATION (--no-verify) ---")
         
+    # [FEAT-537] Generate untracked git_anchor.json for Live Web Intercom & test handshake validation
+    git_anchor_path = os.path.join(BASE_DIR, "data/git_anchor.json")
+    try:
+        homelab_dir = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "HomeLabAI")
+        git_target_dir = homelab_dir if os.path.exists(homelab_dir) else BASE_DIR
+        hr = subprocess.run(["git", "rev-parse", "--short=7", "HEAD"], capture_output=True, text=True, cwd=git_target_dir)
+        git_commit = hr.stdout.strip() if hr.returncode == 0 and hr.stdout.strip() else "unknown"
+        os.makedirs(os.path.dirname(git_anchor_path), exist_ok=True)
+        import time
+        import json
+        with open(git_anchor_path + ".tmp", "w") as f:
+            json.dump({"commit": git_commit, "timestamp": int(time.time()), "generator": "build_site.py"}, f, indent=2)
+        os.replace(git_anchor_path + ".tmp", git_anchor_path)
+        print(f"✅ Generated git_anchor.json (commit: {git_commit})")
+    except Exception as e:
+        print(f"⚠️ Warning: Could not generate git_anchor.json: {e}")
+
     hashes = {}
     for filename in SOURCE_FILES:
         path = os.path.join(BASE_DIR, filename)
