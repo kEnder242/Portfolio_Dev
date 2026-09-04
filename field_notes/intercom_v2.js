@@ -505,17 +505,22 @@ async function connect() {
         };
         ws.onclose = (event) => {
             statusDot.className = 'status-dot offline';
-            if (event.code === 1008 && event.reason && event.reason.includes("Stale bytecode")) {
+            const reason = event.reason || (event.code ? `Code: ${event.code}` : '');
+            if (event.code === 1008 && event.reason && (event.reason.includes("Code updated") || event.reason.includes("Stale bytecode"))) {
                 const reasonText = event.reason;
-                appendMsg(`⛔ CONNECTION REJECTED: ${reasonText}`, 'system-msg', 'System');
+                appendMsg(`⛔ ${reasonText}`, 'system-msg', 'System');
                 const bar = document.getElementById('crosstalk-bar');
                 if (bar) {
-                    bar.innerText = `⛔ HARD LOCK: ${reasonText}. Restart lab-attendant service.`;
+                    bar.innerText = `⛔ HARD LOCK: ${reasonText}`;
                     bar.style.color = '#f85149';
                 }
-                return; // Do not auto-reconnect on hard bytecode mismatch
+                return; // Do not auto-reconnect on hard commit mismatch
             }
-            appendMsg("Connection closed. Retrying in 5s...", "system-msg");
+            if (reason) {
+                appendMsg(`Connection closed (${reason}). Retrying in 5s...`, "system-msg");
+            } else {
+                appendMsg("Connection closed. Retrying in 5s...", "system-msg");
+            }
             setTimeout(connect, 5000);
         };
         ws.onmessage = (e) => {

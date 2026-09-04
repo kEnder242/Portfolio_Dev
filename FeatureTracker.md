@@ -2973,6 +2973,35 @@
 **Rationale:** Enables instantaneous prompt engineering and routing iteration without 40s silicon quiescence downtime.
 **Mechanism:** `HomeLabAI/src/v5/foyer/router.py`.
 
+## [FEAT-544] Continuous Scalar Rubric & Triage Axis Decoupling
+**Sprint:** SPR-73.0
+**Status:** ACTIVE
+**Logic:** Decouples `vibe`, `domain`, `addressed_to`, and scalars (`casual`, `intrigue`, `importance`) into orthogonal axes. Replaces single-point exemplar clamping with 3-tier continuous scoring rubrics (Low $\le 0.3$, Mid $0.4–0.7$, High $\ge 0.8$) to support nuanced scalar output.
+**Rationale:** Prevents the 3B model from snapping to binary extremes (`0.9` or `0.1`) during conversational engineering dialogue.
+**Mechanism:** `HomeLabAI/src/nodes/lab_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`.
+
+## [FEAT-545] CLaRa-DNA & Blackboard Vector Pre-Triage Expansion
+**Sprint:** SPR-73.0
+**Status:** ACTIVE
+**Logic:** Expands `vector_pre_triage.py` to query `behavioral_dna` (BKM protocols), `feature_dna`, `long_term_wisdom`, `career_ledger`, and `short_term_stream`/`lab_journal` (conversation history) before LLM routing.
+**Rationale:** Closes the "BKM is META" gap and eliminates false casual suppression hints on prior-turn and meta-architectural references.
+**Mechanism:** `HomeLabAI/src/logic/vector_pre_triage.py`.
+
+## [FEAT-546] Discourse-Aware Semantic Meta Intent Grounding
+**Sprint:** SPR-73.0
+**Status:** ACTIVE
+**Logic:** Grounding of implicit supervisory feedback, prompt tuning, scalar adjustments, and previous-turn references into `vibe: META`, `domain: feedback`/`lab_internal` without requiring literal `"feedback:"` prefixes.
+**Rationale:** Aligns triage with natural engineer dialogue and prevents feedback from falling into conversational banter.
+**Mechanism:** `HomeLabAI/src/nodes/lab_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`.
+
+## [FEAT-547] Brain Anti-Recursion Stop Tokens & Clamping
+**Sprint:** SPR-73.0
+**Status:** ACTIVE
+**Logic:** Enforces explicit stop token boundaries (`\n---\n\n**Visible Consensus**`, `\n\n**Visible Consensus**:`, `\nHuman:`) in `nodes/loader.py` and token budget clamping.
+**Rationale:** Eliminates runaway 25+ recursive `<thought>` loops in Brain archive generation.
+**Mechanism:** `HomeLabAI/src/nodes/loader.py`.
+
+
 
 
 
