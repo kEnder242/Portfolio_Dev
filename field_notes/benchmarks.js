@@ -6,84 +6,6 @@
 let cachedData = null;
 let cachedDeltas = null;
 
-const DEFAULT_DELTAS = [
-  {
-    turn: 1,
-    time_str: "14:30:15",
-    topic: "SILICON_MEMORY_LIMITS",
-    scope: "CONTEXT_SCOPE_LONG",
-    deltas: { triage: 0.030, pinky_stance: 0.120, brain_arch: 0.210, oracle: 0.180, pinky_judgment: 0.298 },
-    cumulative: { triage: 0.030, pinky_stance: 0.150, brain_arch: 0.360, oracle: 0.540, pinky_judgment: 0.838 },
-    total_s: 0.838,
-    distillation_bullets: [
-      "Pinky evaluated RTX 2080 Ti 11GB VRAM budget vs Apple M5 Air Unified Memory.",
-      "Brain confirmed Llama-3.2-3B-AWQ fits in 2.5GB footprint leaving headroom for KV cache.",
-      "Triage completed in 30ms speculative window."
-    ],
-    consensus_1liner: "Bicameral execution maintains sub-second interactive response (838ms) while preserving multi-node context isolation."
-  },
-  {
-    turn: 2,
-    time_str: "14:31:30",
-    topic: "REDFISH_TELEMETRY_PIPELINE",
-    scope: "CONTEXT_SCOPE_LONG",
-    deltas: { triage: 0.045, pinky_stance: 0.180, brain_arch: 0.310, oracle: 0.240, pinky_judgment: 0.325 },
-    cumulative: { triage: 0.045, pinky_stance: 0.225, brain_arch: 0.535, oracle: 0.775, pinky_judgment: 1.100 },
-    total_s: 1.100,
-    distillation_bullets: [
-      "Pinky probed Redfish BMC sensor endpoints on Node Pinky.",
-      "Brain mapped PCIe error burst rate against historical MSR/RAPL signatures.",
-      "Oracle affirmed Prometheus exporter scrape interval of 1000ms satisfies SLA."
-    ],
-    consensus_1liner: "Prometheus DCGM and Redfish scrapers synchronized without saturating host telemetry bandwidth."
-  },
-  {
-    turn: 3,
-    time_str: "14:33:00",
-    topic: "TRI_LOOP_AUTONOMY_GATE",
-    scope: "CONTEXT_SCOPE_TURN",
-    deltas: { triage: 0.028, pinky_stance: 0.095, brain_arch: 0.170, oracle: 0.145, pinky_judgment: 0.212 },
-    cumulative: { triage: 0.028, pinky_stance: 0.123, brain_arch: 0.293, oracle: 0.438, pinky_judgment: 0.650 },
-    total_s: 0.650,
-    distillation_bullets: [
-      "Triage identified short-form operational inquiry.",
-      "Pinky scoped turn context to TURN isolation, bypassing 35k historical baggage.",
-      "Brain recorded diagnosis directly into Blackboard Ledger."
-    ],
-    consensus_1liner: "Turn-level context isolation reduces TTFT by 41% on isolated queries."
-  },
-  {
-    turn: 4,
-    time_str: "14:34:30",
-    topic: "VLLM_PUNICA_LORA_SWITCHING",
-    scope: "CONTEXT_SCOPE_LONG",
-    deltas: { triage: 0.052, pinky_stance: 0.210, brain_arch: 0.390, oracle: 0.310, pinky_judgment: 0.388 },
-    cumulative: { triage: 0.052, pinky_stance: 0.262, brain_arch: 0.652, oracle: 0.962, pinky_judgment: 1.350 },
-    total_s: 1.350,
-    distillation_bullets: [
-      "Pinky verified PunicaWrapperGPU active for dynamic LoRA persona switching.",
-      "Brain validated zero VRAM leakage across 15 consecutive adapter hot-swaps.",
-      "Deep Thought confirmed Triton attention kernel residency is stable."
-    ],
-    consensus_1liner: "Dynamic multi-LoRA switching certified stable with zero cold-load penalty."
-  },
-  {
-    turn: 5,
-    time_str: "14:35:50",
-    topic: "DEAD_AIR_LIVELINESS_REMEDIATION",
-    scope: "CONTEXT_SCOPE_LONG",
-    deltas: { triage: 0.035, pinky_stance: 0.110, brain_arch: 0.190, oracle: 0.160, pinky_judgment: 0.255 },
-    cumulative: { triage: 0.035, pinky_stance: 0.145, brain_arch: 0.335, oracle: 0.495, pinky_judgment: 0.750 },
-    total_s: 0.750,
-    distillation_bullets: [
-      "Pinky validated crosstalk bridge eliminators in Web Intercom.",
-      "Brain proved dead air gaps never exceed 1.20s across operational turns.",
-      "10/10 automated Playwright regression tests passed in 8.24s."
-    ],
-    consensus_1liner: "Sprint 70.0 Phase 2 verified 100% operational with sub-second hot steady-state response."
-  }
-];
-
 // ==============================================================================
 // 1. HARDWARE & ROI BENCHMARKS LOADER
 // ==============================================================================
@@ -95,20 +17,13 @@ async function loadBenchmarks() {
         cachedData = await resp.json();
         
         if (timestampEl) timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
-        renderAll(cachedData.results);
+        renderAll(cachedData.results || []);
         await loadLiveUsageStream();
         await loadCumulativeTelemetry();
     } catch (e) {
-        console.warn("[Benchmarks] Using offline fallback:", e);
-        if (timestampEl) timestampEl.textContent = 'Offline Fallback (Active)';
-        // Fallback default benchmark seats
-        const fallbackResults = [
-            { display_name: "Apple M5 Air", architecture: "Apple Silicon Unified Memory", status: "online", model: "Qwen 2.5 7B Q4", context_window: "32k", role: "Mobile Triage & Junior Worker", throughput: 42.5, warm_ttft_ms: 180, power_watts: 18.5, tokens_per_joule: 2.3, cloud_multiplier: 55.2, electricity_cost_per_1m: 0.0543, reasoning_token_ratio: 0.35 },
-            { display_name: "Windows Node 'Brain' (RTX 4090)", architecture: "Ada Lovelace 24GB VRAM", status: "online", model: "Qwen 2.5 14B Q4_K_XL", context_window: "64k", role: "Primary Reasoner & Atlas Leader", throughput: 68.2, warm_ttft_ms: 220, power_watts: 280.0, tokens_per_joule: 0.24, cloud_multiplier: 28.5, electricity_cost_per_1m: 0.1052, reasoning_token_ratio: 0.65 },
-            { display_name: "Linux Node 'Pinky' (RTX 2080 Ti)", architecture: "Turing 11GB VRAM (vLLM AWQ)", status: "online", model: "Llama 3.2 3B AWQ", context_window: "32k", role: "Sensory Ear & Speculative Intercom", throughput: 94.0, warm_ttft_ms: 85, power_watts: 160.0, tokens_per_joule: 0.59, cloud_multiplier: 62.1, electricity_cost_per_1m: 0.0483, reasoning_token_ratio: 0.20 },
-            { display_name: "Cloud Swarm (DeepSeek R1 / Claude)", architecture: "Remote Distributed Swarm", status: "online", model: "DeepSeek R1 671B / Sonnet", context_window: "128k", role: "Oracle Consensus Fallback", throughput: 28.0, warm_ttft_ms: 950, power_watts: null, tokens_per_joule: null, cloud_multiplier: 1.0, electricity_cost_per_1m: null, reasoning_token_ratio: 0.85 }
-        ];
-        renderAll(fallbackResults);
+        console.warn("[Benchmarks] Telemetry cache unreachable:", e);
+        if (timestampEl) timestampEl.textContent = 'Telemetry Offline (Standby)';
+        renderAll([]);
         await loadLiveUsageStream();
         await loadCumulativeTelemetry();
     }
@@ -388,9 +303,9 @@ async function loadDeltaTData() {
             return cachedDeltas;
         }
     } catch (e) {
-        console.warn("[Delta-T] Using default delta data:", e);
+        console.warn("[Delta-T] Telemetry ledger fetch failed:", e);
     }
-    cachedDeltas = DEFAULT_DELTAS;
+    cachedDeltas = [];
     return cachedDeltas;
 }
 
@@ -407,7 +322,13 @@ function renderDeltaTChart(data) {
     ctx.fillStyle = '#0d1117';
     ctx.fillRect(0, 0, width, height);
 
-    if (!data || data.length === 0) return;
+    if (!data || data.length === 0) {
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '12px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('⚡ No live Round Table telemetry turns recorded yet. Run live deliberation to stream data.', width / 2, height / 2);
+        return;
+    }
 
     const padLeft = 70;
     const padRight = 50;
