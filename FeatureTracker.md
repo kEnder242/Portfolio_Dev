@@ -1941,13 +1941,6 @@
 **Rationale:** Restores true division of labor: Pinky holds the 18-year archive weights needed for high-precision HyDE synthesis, while Deep Thought handles $t=0$ Preamble in `router.py`.
 **Mechanism:** `resolve_hyde_vector()` in `cognitive_hub.py`, `hyde_domain_map.json`, and `test_feat437_resolve_hyde_vector.py`.
 
-## [FEAT-456] Real VRAM Probing & Gauntlet Path Repair
-**Status:** COMPLETED (Sprint 54)
-**Code:** [field_notes/build_site.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/build_site.py#L89) — Real VRAM Probing & Gauntlet Path Repair.
-**Logic:** Replaces dummy VRAM stub in `nightly_forge.py` with real `nvidia-smi` CSV queries (`memory.total`). Fixes `run_live_lab_gauntlet.sh` test invocation path to point to `../debug/test_live_fire_triage.py`.
-**Rationale:** Provides accurate VRAM reporting in MB and restores 100% test gauntlet execution.
-**Mechanism:** `get_vram_usage()` in `nightly_forge.py` and `run_live_lab_gauntlet.sh`.
-
 ## [FEAT-457] FeatureTracker Alignment & Submodule Synchronization
 **Status:** COMPLETED (Sprint 54)
 **Code:** [src/nodes/lab_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/lab_node.py#L112) — FeatureTracker Alignment & Submodule Synchronization.
