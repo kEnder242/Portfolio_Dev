@@ -2918,10 +2918,11 @@
 
 ## [FEAT-525] Round Table Delta-T Telemetry & Blackboard Drawer UI
 **Sprint:** SPR-70.0
-**Status:** PLANNED
-**Logic:** Visual telemetry component in `benchmarks.html` showing a stacked waterfall bar chart of time spent by each actor per turn (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought $\rightarrow$ Pinky Summary), with an expandable Blackboard Ledger accordion drawer.
-**Rationale:** Delivers granular, user-facing visibility into multi-actor inference dynamics.
-**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
+**Status:** ACTIVE
+**Code:** [field_notes/benchmarks.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/benchmarks.js#L380) — Round Table Delta-T Telemetry & Blackboard Drawer UI.
+**Logic:** Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} > 0$ and $d_{\text{thought}} > 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in `benchmarks.html` via cumulative canvas waterfall charts and expandable Blackboard Ledger cards.
+**Rationale:** Eliminates synthetic multipliers and conversational noise, delivering authentic physical benchmarks of multi-actor deliberation dynamics.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
 
 ## [FEAT-537] Universal Common Hash Key & Stale Bytecode Handshake Guard
 **Sprint:** SPR-71.0
