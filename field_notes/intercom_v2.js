@@ -443,7 +443,7 @@ function stopMic() {
 // WS headers, so the key rides the handshake frame as `lab_key` instead.
 async function getLabKey(target) {
     try {
-        const statusUrl = target.replace(/^ws/, 'http') + '/status';
+        const statusUrl = target.replace(/^ws/, 'http') + '/status?timeout=60';
         const resp = await fetch(statusUrl, { cache: 'no-store' });
         if (resp.ok) {
             const data = await resp.json();

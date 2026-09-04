@@ -1340,11 +1340,11 @@
 2.  **Audit Trail**: Reasons are logged to the journal and exported to `status.json`.
 3.  **Client-Aware Gate**: Hub foyer only triggers ignition if the handshake client is explicitly `intercom`.
 
-## [FEAT-265] The Waking State Machine
+## [FEAT-265] The Waking State Machine & Mandatory Blocking Status Timeout
 **Status:** ACTIVE
-**Code:** [src/acme_lab.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L6) — The Waking State Machine.
-**Logic:** Formalizes the transition from HIBERNATING to WAKING to READY.
-**Mechanism:** Modifies `on_handshake` in the Hub to await engine readiness before broadcasting status, preventing UI disconnect loops. Updates crosstalk bar to reflect intermediate states (`[IGNITION IN PROGRESS]`).
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L908) — The Waking State Machine & Mandatory Blocking Status Timeout.
+**Logic:** Formalizes the transition from `HIBERNATING` to `WAKING` to `OPERATIONAL` / `READY`. Mandates a `timeout` query parameter on `GET /status?timeout=N` (e.g. `?timeout=60`) to enforce blocking agentic synchrony and prevent non-blocking fast-polling thrashing. When the system is in an intermediate state (`WAKING`, `IGNITING`, `BOOTING`, `SYNCING`), `/status` blocks until physical silicon settles or the specified timeout expires (returning HTTP 400 if `timeout` is missing, HTTP 408 if timeout elapses).
+**Mechanism:** `handle_status()` in `HomeLabAI/src/v5/foyer/router.py`, `assert_live_bytecode()` in `HomeLabAI/src/tests/conftest.py`, `getLabKey()` in `Portfolio_Dev/field_notes/intercom_v2.js`.
 
 ## [FEAT-266] Alarm Restoration & Tiered Visibility
 **Status:** ACTIVE

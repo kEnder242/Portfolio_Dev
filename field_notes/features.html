@@ -6773,25 +6773,25 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    The Waking State Machine
+                                    The Waking State Machine & Mandatory Blocking Status Timeout
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/acme_lab.py#L6" style="color:var(--accent-color); text-decoration:none;">src/acme_lab.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L908" style="color:var(--accent-color); text-decoration:none;">src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Formalizes the transition from HIBERNATING to WAKING to READY.</p>
+                    <p>Formalizes the transition from <code>HIBERNATING</code> to <code>WAKING</code> to <code>OPERATIONAL</code> / <code>READY</code>. Mandates a <code>timeout</code> query parameter on <code>GET /status?timeout=N</code> (e.g. <code>?timeout=60</code>) to enforce blocking agentic synchrony and prevent non-blocking fast-polling thrashing. When the system is in an intermediate state (<code>WAKING</code>, <code>IGNITING</code>, <code>BOOTING</code>, <code>SYNCING</code>), <code>/status</code> blocks until physical silicon settles or the specified timeout expires (returning HTTP 400 if <code>timeout</code> is missing, HTTP 408 if timeout elapses).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Modifies <code>on_handshake</code> in the Hub to await engine readiness before broadcasting status, preventing UI disconnect loops. Updates crosstalk bar to reflect intermediate states (<code>[IGNITION IN PROGRESS]</code>).</p>
+                    <p><code>handle_status()</code> in <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>assert_live_bytecode()</code> in <code>HomeLabAI/src/tests/conftest.py</code>, <code>getLabKey()</code> in <code>Portfolio_Dev/field_notes/intercom_v2.js</code>.</p>
                 </div>
             </div>     </div>
                             </details>
