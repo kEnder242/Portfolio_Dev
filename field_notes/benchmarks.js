@@ -571,37 +571,16 @@ function renderBlackboardLedger(data) {
             `;
         }
 
-        const modeTag = turn.turn_mode || (turn.is_full_round_table ? 'FULL_ROUND_TABLE' : (turn.deltas.brain_arch > 0 ? 'TWO_MICE_HANDOVER' : 'FAST_DIALOGUE'));
-        let badgeColor = '#d29922';
-        let badgeBg = '#272115';
-        let badgeBorder = '#9e6a03';
-        let modeLabel = '[FAST DIALOGUE]';
-        let modeExplanation = '(Fast conversational path: Brain/Oracle bypassed)';
-
-        if (modeTag === 'FULL_ROUND_TABLE') {
-            badgeColor = '#3fb950';
-            badgeBg = '#14291e';
-            badgeBorder = '#238636';
-            modeLabel = '[FULL ROUND TABLE]';
-            modeExplanation = '(Full 5-Stage Silicon Deliberation)';
-        } else if (modeTag === 'TWO_MICE_HANDOVER') {
-            badgeColor = '#58a6ff';
-            badgeBg = '#161b22';
-            badgeBorder = '#1f6feb';
-            modeLabel = '[TWO-MICE HANDOVER]';
-            modeExplanation = '(Pinky + Brain Handover: Oracle bypassed)';
-        }
-
         details.innerHTML = `
             <summary>
-                <span class="badge" style="background:${badgeBg}; color:${badgeColor}; border:1px solid ${badgeBorder}; margin-right:8px; font-size:0.68rem; padding:1px 6px;">${modeLabel}</span>
+                <span class="badge" style="background:#14291e; color:#3fb950; border:1px solid #238636; margin-right:8px; font-size:0.68rem; padding:1px 6px;">[FULL ROUND TABLE]</span>
                 <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace;">TURN ${turn.turn}</span>
-                <span style="color:#f0f3f6; margin-left:10px;">${turn.topic || 'STANDARD_CONVERSATION'}</span>
+                <span style="color:#f0f3f6; margin-left:10px;">${turn.topic || 'ROUND_TABLE_DELIBERATION'}</span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
                     [${turn.scope || 'CONTEXT_SCOPE_LONG'}] &bull; ${turn.time_str || ''} &bull; <strong style="color:#3fb950;">${turn.total_s.toFixed(3)}s</strong>
                 </span>
             </summary>
-            <div class="details-content" style="border-left: 3px solid ${badgeColor};">
+            <div class="details-content" style="border-left: 3px solid #3fb950;">
                 <div style="margin-bottom: 8px;">
                     <span class="field-label" style="color:#58a6ff;">Distillation Bullets</span>
                     <div class="feature-body">
@@ -619,7 +598,7 @@ function renderBlackboardLedger(data) {
                 <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #1f242c;">
                     <span class="field-label" style="color:#8b949e;">Handover Telemetry (Cumulative Progression)</span>
                     <div class="feature-body" style="font-size:0.75rem; color:#8b949e; font-family:'JetBrains Mono',monospace;">
-                        ${deltaSummary} &bull; <strong>Total Turn Duration: ${(turn.total_s * 1000).toFixed(0)}ms</strong> <span style="color:${badgeColor}; margin-left:6px;">${modeExplanation}</span>
+                        ${deltaSummary} &bull; <strong>Total Turn Duration: ${(turn.total_s * 1000).toFixed(0)}ms</strong> <span style="color:#3fb950; margin-left:6px;">(Full 5-Stage Silicon Deliberation)</span>
                     </div>
                 </div>
                 ${subagentTableHtml}
