@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
 | **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
 | **spr-70-0-live-telemetry** | Phase 15 | Live Round Table Elapsed Time, Physical Stopwatch Checkpoints, Blackboard Ledger UI | **COMPLETED & CERTIFIED** |
 | **spr-65-0-two-mice-distillation** | Phase 14 | Two-Mice Streaming Handover, Triage Vocality, Semantic Feedback Interception & Role-Slot Isolation | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_65_0.md](./SPRINT_PLAN_SPR_65_0.md) |

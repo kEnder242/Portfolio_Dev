@@ -2945,6 +2945,35 @@
 **Rationale:** Eliminates auto-regressive context pollution and looping spam on simple greeting turns without prompt lecturing.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
 
+## [FEAT-540] Multi-Collection CLaRa-DNA Vector Pre-Triage
+**Sprint:** SPR-72.0
+**Status:** ACTIVE
+**Logic:** Sub-20ms CPU vector similarity probe across ChromaDB port 8001 collections (`behavioral_dna`, `feature_dna`, `long_term_wisdom`, `career_ledger`, `blackboard_ledger_dna`) preceding LLM routing. Uses top-1 cosine distance to pre-seed behavioral guidance with candidate topic anchors or detect casual open dialogue without regex heuristics.
+**Rationale:** Restores strict BKM-015 compliance by eliminating all hardcoded regexes and keyword overrides.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_vector_pre_triage.py`.
+
+## [FEAT-541] Two-Stage Zero-Duplicate RAG Cache
+**Sprint:** SPR-72.0
+**Status:** ACTIVE
+**Logic:** In-memory SHA256-keyed session retrieval cache (`self._rag_cache`) in `CognitiveHub`. Stores pre-triage document chunks and envelopes, granting downstream Round Table deliberation stages instant 0ms retrieval without redundant vector database queries.
+**Rationale:** Eliminates 40–80ms of dead air and redundant compute during multi-actor turns.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_rag_cache.py`.
+
+## [FEAT-542] 6-Archetype Semantic Triage Matrix
+**Sprint:** SPR-72.0
+**Status:** ACTIVE
+**Logic:** Prompt-engineered native classification matrix for the Unified 3B model covering `CASUAL`, `WYWO`, `HISTORICAL`, `OPERATIONAL`, `FORENSIC`, and `META` archetypes. Certified against live silicon without regex fallbacks.
+**Rationale:** Ensures pure model-driven vibe and domain classification adhering to BKM-015.
+**Mechanism:** `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/tests/test_live_vibe_matrix.py`.
+
+## [FEAT-543] CognitiveHub Hot-Reload & Dynamic Resident Sync
+**Sprint:** SPR-72.0
+**Status:** ACTIVE
+**Logic:** REST endpoint `POST /reload_residents` dynamically reloads `logic.cognitive_hub` and `logic.triage_engine` via `importlib.reload()`, re-instantiating `CognitiveHub` live in < 100ms without restarting the daemon service.
+**Rationale:** Enables instantaneous prompt engineering and routing iteration without 40s silicon quiescence downtime.
+**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`.
+
+
 
 
 
