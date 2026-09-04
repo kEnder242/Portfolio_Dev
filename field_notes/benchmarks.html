@@ -631,37 +631,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- TAB 3: ROUND TABLE DELTA-T & BLACKBOARD LEDGER [FEAT-525] -->
-        <div id="tab-delta-t" class="tab-pane hidden">
-            <div class="delta-t-chart-box">
-                <div class="chart-title">
-                    <span>⏱️ Round Table Delta-T Telemetry (Cumulative Stage Plot Over Turns)</span>
-                    <span class="chart-subtitle">Cumulative time from turn start across turns ($t_1 \rightarrow t_5$). Lines show cumulative progression; vertical gaps show discrete actor deltas.</span>
-                </div>
-                <div class="delta-t-legend">
-                    <div class="legend-pill"><div class="legend-color" style="background:#58a6ff;"></div><span>&Delta;t1: Triage Resolution (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f778ba;"></div><span>&Delta;t2: Pinky Stance (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f85149;"></div><span>&Delta;t3: Brain Architecture (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#bc8cff;"></div><span>&Delta;t4: Deep Thought Oracle (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#3fb950;"></div><span>&Delta;t5: Pinky Judgment (Total Elapsed)</span></div>
-                </div>
-                <div style="overflow-x: auto;">
-                    <canvas id="delta-t-chart" width="1000" height="340"></canvas>
-                </div>
-            </div>
-
-            <!-- Blackboard Ledger DNA (features.html Pattern: Expandable Per Turn) [FEAT-525] -->
-            <div class="chart-card" style="margin-top: 25px;">
-                <div class="chart-title">
-                    <span>📋 Blackboard Ledger DNA (Expandable Turn Ledger)</span>
-                    <span class="chart-subtitle">Turn-by-turn conversational distillation and 1-line consensus records — identical to features.html DNA styling</span>
-                </div>
-                <div id="blackboard-ledger-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                    <!-- Dynamically populated from round_table_deltas.json -->
-                </div>
-            </div>
-        </div>
     </main>
 
     <script>
