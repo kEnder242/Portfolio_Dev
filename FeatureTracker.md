@@ -2931,6 +2931,20 @@
 **Rationale:** Closes the "Uptime Preservation Trap" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.
 **Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/git_anchor.json`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`, `HomeLabAI/src/tests/test_live_playwright_gitlock.py`.
 
+## [FEAT-538] Ephemeral Triage Filter & Session De-Duplication
+**Sprint:** SPR-71.0
+**Status:** ACTIVE
+**Logic:** Excludes ephemeral JSON triage routing frames from `sessionStorage` in `intercom_v2.js`. Browser history restoration (`loadHistory()`) strictly preserves human dialogue and insights while preventing stale, stacked triage boxes across page reloads and reconnects.
+**Rationale:** Prevents UI clutter and false perception of duplicate triage execution upon browser reconnections.
+**Mechanism:** `Portfolio_Dev/field_notes/intercom_v2.js`.
+
+## [FEAT-539] Auto-Regressive Context Isolation & Domain Taxonomy
+**Sprint:** SPR-71.0
+**Status:** ACTIVE
+**Logic:** Dynamically bounds `ContextScope.TURN` and clamps token budget to 150 tokens for low-interest/casual queries (`importance < 0.3` or `vibe == 'CASUAL'`). Sanitizes `round_table_memory` against unclosed JSON blocks, excessive whitespace, and bounds session memory to the last 10 turns. Refines domain taxonomy to cleanly distinguish between `work_history` (18-year Intel/silicon career archive) and `acme_lab_history` (internal Acme Lab system events & DNA).
+**Rationale:** Eliminates auto-regressive context pollution and looping spam on simple greeting turns without prompt lecturing.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
+
 
 
 

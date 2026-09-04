@@ -213,7 +213,7 @@
 
         <section id="remote-control">
             <h2 class="section-title">Remote Lab Control</h2>
-            <div class="control-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="control-grid" style="grid-template-columns: repeat(5, 1fr);">
                 <div class="control-btn" onclick="triggerLabAction('wake')">
                     <span class="status-led led-online"></span>
                     Wake
@@ -221,6 +221,10 @@
                 <div class="control-btn" onclick="triggerLabAction('sleep')">
                     <span class="status-led led-online" style="background-color: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
                     Sleep
+                </div>
+                <div class="control-btn" onclick="triggerLabAction('reload_residents')">
+                    <span class="status-led led-online" style="background-color: #a371f7; box-shadow: 0 0 8px #a371f7;"></span>
+                    Reset
                 </div>
                 <div class="control-btn" onclick="triggerLabAction('lock')">
                     <span class="status-led led-busy"></span>

@@ -15,6 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
+| **spr-70-0-live-telemetry** | Phase 15 | Live Round Table Elapsed Time, Physical Stopwatch Checkpoints, Blackboard Ledger UI | **COMPLETED & CERTIFIED** |
 | **spr-65-0-two-mice-distillation** | Phase 14 | Two-Mice Streaming Handover, Triage Vocality, Semantic Feedback Interception & Role-Slot Isolation | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_65_0.md](./SPRINT_PLAN_SPR_65_0.md) |
 | **spr-64-0-grounded-triage** | Phase 14 | Grounded Triage Policy, Speculative Relay Race, Zero-Context Retrieval & Session Horizon | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_64_0.md](./SPRINT_PLAN_SPR_64_0.md) |
 | **spr-63-0-dual-tier-rag-eval** | Phase 14 | Dual-Tier RAG Evaluation Modernization, Grounded Anchors & Live Cognitive Gauntlet | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_63_0.md](./SPRINT_PLAN_SPR_63_0.md) |
