@@ -416,8 +416,8 @@ function renderDeltaTChart(data) {
     const chartW = width - padLeft - padRight;
     const chartH = height - padTop - padBottom;
 
-    // Calculate Y-max from highest total_s
-    const maxVal = Math.max(1.5, ...data.map(d => d.total_s || (d.cumulative && d.cumulative.pinky_judgment) || 1.0)) * 1.25;
+    // Calculate Y-max from highest total_elapsed_s
+    const maxVal = Math.max(1.5, ...data.map(d => d.total_elapsed_s || d.total_s || (d.checkpoints_elapsed_s && d.checkpoints_elapsed_s.pinky_judgment) || (d.cumulative && d.cumulative.pinky_judgment) || 1.0)) * 1.25;
 
     // Horizontal grid lines (Time in seconds)
     const ySteps = 4;
@@ -472,7 +472,7 @@ function renderDeltaTChart(data) {
         ctx.fillText(topicPreview, x, height - padBottom + 32);
     });
 
-    // Draw Cumulative Lines from top (Judgment) down to bottom (Triage)
+    // Draw Monotonic Elapsed Lines from top (Judgment) down to bottom (Triage)
     series.slice().reverse().forEach(s => {
         ctx.strokeStyle = s.color;
         ctx.lineWidth = 2.5;
@@ -480,7 +480,8 @@ function renderDeltaTChart(data) {
 
         data.forEach((d, idx) => {
             const x = getX(idx);
-            const val = d.cumulative[s.key] || 0;
+            const checkpoints = d.checkpoints_elapsed_s || d.cumulative || {};
+            const val = checkpoints[s.key] || 0;
             const y = getY(val);
             if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
@@ -490,7 +491,8 @@ function renderDeltaTChart(data) {
         // Plot points & badges
         data.forEach((d, idx) => {
             const x = getX(idx);
-            const val = d.cumulative[s.key] || 0;
+            const checkpoints = d.checkpoints_elapsed_s || d.cumulative || {};
+            const val = checkpoints[s.key] || 0;
             const y = getY(val);
 
             ctx.fillStyle = s.color;
@@ -502,12 +504,13 @@ function renderDeltaTChart(data) {
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Total duration badge at Judgment level
+            // Total elapsed duration badge at Judgment level
             if (s.key === 'pinky_judgment') {
                 ctx.fillStyle = '#3fb950';
                 ctx.font = 'bold 10px "JetBrains Mono", monospace';
                 ctx.textAlign = 'center';
-                ctx.fillText(`${d.total_s.toFixed(3)}s`, x, y - 9);
+                const totalElapsed = d.total_elapsed_s || d.total_s || val;
+                ctx.fillText(`${totalElapsed.toFixed(3)}s`, x, y - 9);
             }
         });
     });
@@ -516,7 +519,7 @@ function renderDeltaTChart(data) {
     ctx.fillStyle = '#8b949e';
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('▲ Cumulative Latency (s)', padLeft, padTop - 12);
+    ctx.fillText('▲ Live Elapsed Time (s)', padLeft, padTop - 12);
     ctx.textAlign = 'right';
     ctx.fillText('Turn Sequence (Chronological) ►', width - padRight, height - padBottom + 45);
 }
@@ -534,7 +537,10 @@ function renderBlackboardLedger(data) {
         details.id = `turn-${turn.turn}`;
         if (idx === 0) details.setAttribute('open', ''); // open latest by default
 
-        const deltaSummary = `Δt1: ${(turn.deltas.triage * 1000).toFixed(0)}ms | Δt2: ${(turn.deltas.pinky_stance * 1000).toFixed(0)}ms | Δt3: ${(turn.deltas.brain_arch * 1000).toFixed(0)}ms | Δt4: ${(turn.deltas.oracle * 1000).toFixed(0)}ms | Δt5: ${(turn.deltas.pinky_judgment * 1000).toFixed(0)}ms`;
+        const checkpoints = turn.checkpoints_elapsed_s || turn.cumulative || {};
+        const deltas = turn.deltas_elapsed_s || turn.deltas || {};
+        const deltaSummary = `Δt1: ${((deltas.triage || 0) * 1000).toFixed(0)}ms | Δt2: ${((deltas.pinky_stance || 0) * 1000).toFixed(0)}ms | Δt3: ${((deltas.brain_arch || 0) * 1000).toFixed(0)}ms | Δt4: ${((deltas.oracle || 0) * 1000).toFixed(0)}ms | Δt5: ${((deltas.pinky_judgment || 0) * 1000).toFixed(0)}ms`;
+        const elapsedSummary = `t1: ${(checkpoints.triage || 0).toFixed(2)}s → t2: ${(checkpoints.pinky_stance || 0).toFixed(2)}s → t3: ${(checkpoints.brain_arch || 0).toFixed(2)}s → t4: ${(checkpoints.oracle || 0).toFixed(2)}s → t5: ${(turn.total_elapsed_s || turn.total_s || 0).toFixed(2)}s`;
 
         // Find nested subagent dispatches for this turn
         const matchingDispatches = liveRecords.filter(r => r.turn === turn.turn || r.turn_id === turn.turn);
@@ -577,7 +583,7 @@ function renderBlackboardLedger(data) {
                 <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace;">TURN ${turn.turn}</span>
                 <span style="color:#f0f3f6; margin-left:10px;">${turn.topic || 'ROUND_TABLE_DELIBERATION'}</span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
-                    [${turn.scope || 'CONTEXT_SCOPE_LONG'}] &bull; ${turn.time_str || ''} &bull; <strong style="color:#3fb950;">${turn.total_s.toFixed(3)}s</strong>
+                    [${turn.scope || 'CONTEXT_SCOPE_LONG'}] &bull; ${turn.time_str || ''} &bull; <strong style="color:#3fb950;">${(turn.total_elapsed_s || turn.total_s).toFixed(3)}s</strong>
                 </span>
             </summary>
             <div class="details-content" style="border-left: 3px solid #3fb950;">
@@ -596,9 +602,13 @@ function renderBlackboardLedger(data) {
                     </div>
                 </div>
                 <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #1f242c;">
-                    <span class="field-label" style="color:#8b949e;">Handover Telemetry (Cumulative Progression)</span>
+                    <span class="field-label" style="color:#8b949e;">Live Elapsed Checkpoints ($t_1 \\rightarrow t_5$)</span>
+                    <div class="feature-body" style="font-size:0.75rem; color:#c9d1d9; font-family:'JetBrains Mono',monospace; margin-bottom: 4px;">
+                        ${elapsedSummary}
+                    </div>
+                    <span class="field-label" style="color:#8b949e; font-size:0.7rem;">Isolated Stage Durations (&Delta;t)</span>
                     <div class="feature-body" style="font-size:0.75rem; color:#8b949e; font-family:'JetBrains Mono',monospace;">
-                        ${deltaSummary} &bull; <strong>Total Turn Duration: ${(turn.total_s * 1000).toFixed(0)}ms</strong> <span style="color:#3fb950; margin-left:6px;">(Full 5-Stage Silicon Deliberation)</span>
+                        ${deltaSummary} &bull; <strong>Total Turn Elapsed: ${((turn.total_elapsed_s || turn.total_s) * 1000).toFixed(0)}ms</strong> <span style="color:#3fb950; margin-left:6px;">(Full 5-Stage Silicon Deliberation)</span>
                     </div>
                 </div>
                 ${subagentTableHtml}
