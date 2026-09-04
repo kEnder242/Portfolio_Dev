@@ -477,23 +477,23 @@
 
         <!-- 3-Tab Navigation (Delta-T Default, Arena, ROI+CoT) -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab(event, 'tab-delta-t')">⏱️ ROUND TABLE DELTA-T</button>
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-delta-t')">⏱️ LIVE ROUND TABLE ELAPSED TIME</button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-arena')">🏛️ SILICON ARENA & WORKLOAD</button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-roi')">⚡ ENERGY, ROI & CoT</button>
         </div>
 
-        <!-- TAB 1 (DEFAULT): ROUND TABLE DELTA-T & BLACKBOARD LEDGER [FEAT-525/526] -->
+        <!-- TAB 1 (DEFAULT): LIVE ROUND TABLE ELAPSED TIME & BLACKBOARD LEDGER [FEAT-525/526] -->
         <div id="tab-delta-t" class="tab-pane">
             <div class="delta-t-chart-box">
                 <div class="chart-title">
-                    <span>⏱️ Round Table Delta-T Telemetry (Cumulative Stage Plot Over Turns)</span>
-                    <span class="chart-subtitle">Cumulative time from turn start across turns ($t_1 \rightarrow t_5$). Lines show cumulative progression; vertical gaps show discrete actor deltas.</span>
+                    <span>⏱️ Live Round table elapsed time</span>
+                    <span class="chart-subtitle">Monotonic time elapsed since turn start ($t_1 \rightarrow t_5$). Lines show cumulative elapsed progression; vertical gaps represent isolated stage durations.</span>
                 </div>
                 <div class="delta-t-legend">
-                    <div class="legend-pill"><div class="legend-color" style="background:#58a6ff;"></div><span>&Delta;t1: Triage Resolution (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f778ba;"></div><span>&Delta;t2: Pinky Stance (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#f85149;"></div><span>&Delta;t3: Brain Architecture (Cumulative)</span></div>
-                    <div class="legend-pill"><div class="legend-color" style="background:#bc8cff;"></div><span>&Delta;t4: Deep Thought Oracle (Cumulative)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#58a6ff;"></div><span>&Delta;t1: Triage Resolution (Elapsed)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#f778ba;"></div><span>&Delta;t2: Pinky Stance (Elapsed)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#f85149;"></div><span>&Delta;t3: Brain Architecture (Elapsed)</span></div>
+                    <div class="legend-pill"><div class="legend-color" style="background:#bc8cff;"></div><span>&Delta;t4: Deep Thought Oracle (Elapsed)</span></div>
                     <div class="legend-pill"><div class="legend-color" style="background:#3fb950;"></div><span>&Delta;t5: Pinky Judgment (Total Elapsed)</span></div>
                 </div>
                 <div style="overflow-x: auto;">
