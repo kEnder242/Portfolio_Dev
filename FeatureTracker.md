@@ -721,16 +721,6 @@
 **Code:** [src/debug/simulate_moe_pipeline.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/simulate_moe_pipeline.py#L48) — Shadow Dispatch (Predictive Intent).
 **Reason:** Absorbed into [FEAT-207] Tricameral Airtime and [FEAT-211] Shadow Archivist.
 
-## [FEAT-172] [CONSOLIDATED] Hemispheric Interjection (The Active Buffer)
-**Status:** CONSOLIDATED (Mar 2026)
-**Code:** [src/tests/live_fire_integration.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/live_fire_integration.py#L52) — Hemispheric Interjection (The Active Buffer).
-**Reason:** Absorbed into [FEAT-207] Tricameral Airtime.
-
-## [FEAT-186] [CONSOLIDATED] The "Pre-warm" Lobby (Predictive Warm-up)
-**Status:** DEFEATURED (Superseded by Systemd Socket Activation & Scale-to-Zero)
-**Code:** [src/tests/test_lab_sprint20.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_lab_sprint20.py#L73) — The "Pre-warm" Lobby (Predictive Warm-up).
-**Reason:** Absorbed and subsequently defeatured to eliminate idle thrashing against the Hibernation Matrix. Replaced by systemd socket activation.
-
 ## [FEAT-156] SSE Evolution (Hot Link)
 **Status:** ACTIVE
 **Code:** [monitor/scan_cloudflare.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/monitor/scan_cloudflare.py#L41) — SSE Evolution (Hot Link).
@@ -841,13 +831,13 @@
 ### [VIBE-005] Subconscious Dreaming
 **Logic:** The automated background cycle that transforms chaotic raw logs into "Diamond Wisdom" abstracts.
 
-## [FEAT-088] Nightly Recruiter (Target Acquisition)
+## [FEAT-548] Nightly Recruiter (Target Acquisition)
 **Status:** ACTIVE
 **Code:** [src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L879) — Nightly Recruiter (Target Acquisition).
 **Logic:** Autonomous background worker that retrieves 3x3 CVT context from the Archive Node and tasks the Brain with agentic job searching via `deep_think`. 
 **Verification:** Confirmed via `test_recruiter.py` with mock job identification.
 
-## [FEAT-095] Public Research Ledger (Static Airlock)
+## [FEAT-549] Public Research Ledger (Static Airlock)
 **Status:** COMPLETE
 **Code:** [field_notes/research_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/research_build.py#L3) — Public Research Ledger (Static Airlock).
 **Logic:** Sanitize the internal `research.html` for public deployment by stripping Zero Trust dependencies and inlining high-density CSS.
@@ -1089,12 +1079,6 @@
 **Logic:** A rapid-verification script that executes a 1-sample pass of the entire 01:00 AM - 04:00 AM automation sequence.
 **Rationale:** To provide the Lead Engineer with high-confidence verification of the Lab's "Tendons" (Dreaming, Harvesting, Mapping, Dialogue) before concluding a session.
 **Mechanism:** `lifecycle_gauntlet.py` script shunting 1-gem/1-prompt batches through the pipeline.
-
-## [FEAT-240] Native MCP Relay (Sampling Bridge)
-**Status:** DESIGN
-**Code:** [src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L70) — Native MCP Relay (Sampling Bridge).
-**Logic:** Moves from custom tool wrappers (`facilitate`) to the standard `mcp.sampling.createMessage` protocol.
-**Mechanism:** The Hub acts as a Stateful Host, providing steering tools to nodes via the Sampling context and relaying their intents as visible events.
 
 ---
 
@@ -1852,7 +1836,7 @@
 
 ---
 
-## [FEAT-428] Real-Time PCM Audio Stream Memory Benchmark
+## [FEAT-550] Real-Time PCM Audio Stream Memory Benchmark
 **Status:** COMPLETED (Sprint 50)
 **Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py#L91) — Real-Time PCM Audio Stream Memory Benchmark.
 **Logic:** Creates `HomeLabAI/src/tests/test_live_audio_memory_benchmark.py` to stream simulated Float32 $\rightarrow$ Int16 PCM audio buffers to `lab-attendant` while profiling `psutil` RSS RAM and vLLM KV-cache utilization.
@@ -1870,7 +1854,7 @@
 
 ---
 
-## [FEAT-429] Foyer Disconnect Memory Reclaim Sentinel
+## [FEAT-551] Foyer Disconnect Memory Reclaim Sentinel
 **Status:** COMPLETED (Sprint 50)
 **Code:** [src/tests/test_live_audio_memory_benchmark.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_live_audio_memory_benchmark.py#L3) — Foyer Disconnect Memory Reclaim Sentinel.
 **Logic:** Implements explicit `on_close()` cleanup handlers in `attendant.py` and `ear_node.py` triggering `gc.collect()` and audio buffer flushing upon WebSocket disconnect.
@@ -1879,7 +1863,7 @@
 
 ---
 
-## [FEAT-430] Automated Delegation Retrospective & Friction Audit Stage
+## [FEAT-552] Automated Delegation Retrospective & Friction Audit Stage
 **Status:** COMPLETED (Sprint 50)
 **Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L397) — Automated Delegation Retrospective & Friction Audit Stage.
 **Logic:** Creates `HomeLabAI/src/infra/delegate_retrospective.py` and wires `--retrospective` flag into `delegate.py`. Automatically parses `/tmp/delegate_story_*.log`, queries REST session metrics (`tokens`, `time`, `child_sessions`), compares prompt target paths vs `git diff` actuals to detect path search thrash, and synthesizes a Delegation Friction Ledger artifact for user review and sign-off.
@@ -1888,7 +1872,7 @@
 
 ---
 
-## [FEAT-431] EarlyOOM Telemetry & Neural Pager Hook
+## [FEAT-553] EarlyOOM Telemetry & Neural Pager Hook
 **Status:** COMPLETED (Sprint 50)
 **Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L512) — EarlyOOM Telemetry & Neural Pager Hook.
 **Logic:** Configures `earlyoom` with an executive notification hook (`earlyoom_pager_notifier.sh`) that writes structured `CRITICAL` telemetry events to `field_notes/data/pager_activity.json` whenever an OOM termination occurs.
@@ -1934,7 +1918,7 @@
 
 ---
 
-## [FEAT-437] Pinky LoRA HyDE Inversion & Dynamic Domain Mapping
+## [FEAT-554] Pinky LoRA HyDE Inversion & Dynamic Domain Mapping
 **Status:** COMPLETED (Sprint 54)
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L76) — Pinky LoRA HyDE Inversion & Dynamic Domain Mapping.
 **Logic:** Inverts `resolve_hyde_vector()` so Pinky's local vLLM pass (holding fine-tuned `cli_voice_v1` LoRA weights) acts as Tier 1 HyDE generator, with Kender `deep_think` as Tier 2 fallback. Moves synthesis prompts and 4-domain terms into `HomeLabAI/src/data/hyde_domain_map.json` loaded dynamically at startup.
@@ -2412,30 +2396,6 @@
 **Logic:**  [FEAT-445] Memory Architecture & Stability Unit Test Suite. Verifies: 1. journal_ledger spoken-only dialogue filtering & 24h retention contract.
 **Mechanism:** `src/tests/test_memory_architecture.py` at line 2.
 
-## [FEAT-451] Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality)
-**Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L68) — Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality).
-**Logic:** return refined [FEAT-451] Brain Persona Spec (Positive persona grounding, shares Brain's right-hemisphere personality) BRAIN_PERSONA_SPEC = ( [PERSONA]: You are Deep Thought - the Brain's pre-conscious analytical stre...
-**Mechanism:** `src/logic/cognitive_hub.py` at line 68.
-
-## [FEAT-454] Component Subsystem (FEAT-454)
-**Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1477) — Component Subsystem (FEAT-454).
-**Logic:** self._rag_cache[cache_key] = result_text if len(self._rag_cache) > 128: self._rag_cache.pop(next(iter(self._rag_cache))) except Exception as e:
-**Mechanism:** `src/logic/cognitive_hub.py` at line 1477.
-
-## [FEAT-455] Zero-Latency Un-blocked Async Preamble: the receive
-**Status:** ACTIVE
-**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1132) — Zero-Latency Un-blocked Async Preamble: the receive.
-**Logic:** req_id = data.get("request_id") [FEAT-455] Zero-Latency Un-blocked Async Preamble: the receive loop must return instantly — never await file I/O or the broadcast inline. The Deep Thought preamble + enqueue run as
-**Mechanism:** `src/v5/foyer/router.py` at line 1132.
-
-## [FEAT-470] Legacy backfill: alias Deep Thought -> "brain" only when the local
-**Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L613) — Legacy backfill: alias Deep Thought -> "brain" only when the local.
-**Logic:** }) self.turn_thought_trace[node_id] = full_text if node_id == "thought": [FEAT-470] Legacy backfill: alias Deep Thought -> "brain" only when the local
-**Mechanism:** `src/logic/cognitive_hub.py` at line 613.
-
 ## [LAB-010] Lazy import — M5 Air may not be available at startup.
 **Status:** ACTIVE
 **Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L35) — Lazy import — M5 Air may not be available at startup..
@@ -2502,13 +2462,13 @@
 **Logic:** Intercepts conversational corrections semantically, auto-populates `validation_ledger.jsonl` with FAIL records and user ground-truth, and returns in-character refinement follow-ups.
 **Mechanism:** `FeedbackInterceptor` wired into `CognitiveHub.process_query()`. Verified via `src/tests/test_feedback_interceptor.py`.
 
-## [FEAT-457] Single-Layer Speculative Context Pre-fetching
+## [FEAT-555] Single-Layer Speculative Context Pre-fetching
 **Status:** ACTIVE
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1081) — Speculative Context Pre-fetching.
 **Logic:** Pre-fetches RAG context in background during Turn 1 streaming; consumes instantly if interest >0.5 or cleanly preempts without GPU penalty.
 **Mechanism:** Async background task in `_process_turn()` and consumption in `_run_brain_leg()`. Verified via `src/tests/test_interest_speculative_prefetch.py`.
 
-## [FEAT-458] Conversational WYWO & Floating Validation Oracle
+## [FEAT-556] Conversational WYWO & Floating Validation Oracle
 **Status:** ACTIVE
 **Code:** [src/logic/floating_oracle.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/floating_oracle.py#L42) — Floating Validation Oracle.
 **Logic:** Assembles ambient validation scars, mass-scan milestones, and subconscious dreams into a floating candidate pool for organic, temperature-steered conversation turns.
