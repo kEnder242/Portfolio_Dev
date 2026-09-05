@@ -189,6 +189,10 @@
 *   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
 
 ### [BACKLOG]
+*   [BACKLOG] **Co-Pilot Mice Feedback Forensics & Action Items**: [[copilot_mice_feedback_forensics_report.md](./field_notes/reports/copilot_mice_feedback_forensics_report.md)] (Forensic analysis of session `51dd34c1` dialogue). Implemented dynamic 2026 date/year contextual grounding in `loader.py` and `triage_engine.py`. Next backlog action items:
+    *   [BACKLOG] **Live Host Telemetry Node (`FEAT-557`)**: Wire real-time hardware telemetry (NVML / psutil) tool hooks into the Hub/Brain so live memory and resource queries return physical silicon vitals instead of falling back to historical RAG hallucinations.
+    *   [BACKLOG] **Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`)**: Strip previous assistant reflection turns (`<thought>` tags and `Brain:` prefixes) from incoming multi-turn history in `CognitiveHub` to prevent recursive self-response loops.
+    *   [BACKLOG] **Triage Feedback Domain Snapping (`FEAT-559`)**: Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
 *   [BACKLOG] **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
 *   [BACKLOG] **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
 *   [BACKLOG] **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
