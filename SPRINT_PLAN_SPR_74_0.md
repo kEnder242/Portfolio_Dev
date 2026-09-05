@@ -79,6 +79,17 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
   - Interactive quote highlights, wordy narrative cards, and cross-navigation links.
   - Static JSON data pipeline (`field_notes/philosophy_data.json`) compiled via `philosophy_build.py`.
 
+### 🧬 Story 74.4: 30-Minute State-Aware Attendant Supervisory Watchdog (`[FEAT-149 / FEAT-537]`)
+* **Status:** COMPLETED
+* **Objective:** Ensure the lab is never offline or hung unexpectedly while strictly honoring intentional quiescence and avoiding git-commit spam.
+* **Mechanism:** 
+  - `src/attendant_liveliness.py` implements a 30-minute supervisory cadence (`--supervise` / `--once`).
+  - Reads `Portfolio_Dev/field_notes/data/status.json` and canonical maintenance lockfiles (`maintenance.lock`). If the lab is in `SLEEP`, `SHUTDOWN`, or `MAINTENANCE`, the supervisor stays strictly dormant.
+  - Evaluates file mtimes across `HomeLabAI/src/` against `boot_timestamp`:
+    - **Resident List (`src/logic/`, `src/nodes/`, `src/data/`):** Triggers instant soft hot-reload (`POST /reload_residents`, <100ms, VRAM preserved).
+    - **Deep List (`src/v5/foyer/`, `src/lab_attendant.py`):** Triggers clean OS process bounce (`restart_foyer_process()`).
+    - **Nominal:** Emits `OK_NOMINAL` with zero action when no code changes are detected.
+
 ---
 
 ## 📊 Verification & Certification Criteria
@@ -86,3 +97,4 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 1. `python3 Portfolio_Dev/sync_chroma_dna.py` creates and syncs `philosophy_dna` with all 8 `PHL-xxx` narrative vectors.
 2. FastMCP tool `query_dna(collection="philosophy_dna", query="JITC token golf")` returns `PHL-001` with high relevance.
 3. `philosophy.html` renders valid HTML5 with responsive mobile/desktop cards, zero 404 links, and seamless cross-navigation to `stories.html` and `research.html`.
+4. `src/attendant_liveliness.py --once` verifies state-retention and executes 2-tier reload/reset hierarchy cleanly against live silicon.
