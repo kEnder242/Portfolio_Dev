@@ -90,6 +90,20 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
     - **Deep List (`src/v5/foyer/`, `src/lab_attendant.py`):** Triggers clean OS process bounce (`restart_foyer_process()`).
     - **Nominal:** Emits `OK_NOMINAL` with zero action when no code changes are detected.
 
+### 🧬 Story 74.5: Git-Anchored 10-Minute Rolling Reset & Dirty Gate Engine (`[FEAT-537]`)
+* **Status:** COMPLETED
+* **Objective:** Shift risk evaluation to git commit hooks, enforce monotonic escalation across subsequent commits, manage a 10-minute quiet window before auto-rebooting, and reject client connections during dirty state.
+* **Mechanism:**
+  - `src/infra/git_reset_hook.py` installed in `.git/hooks/post-commit` across `HomeLabAI` and `Portfolio_Dev`.
+  - Evaluates committed files against Risk Hierarchy:
+    - **Attendant code (`src/lab_attendant.py`, `src/attendant_liveliness.py`):** Restarts Attendant daemon immediately.
+    - **Deep risk (`src/v5/foyer/`, `src/acme_lab.py`, `.venv/`):** Sets `pending_action: DEEP_RESET` (Level 2).
+    - **Resident modules (`src/logic/`, `src/nodes/`, `src/data/`):** Sets `pending_action: SOFT_RELOAD` (Level 1).
+    - **Passive files (Docs, Markdown, HTML):** Tops up existing timer without altering escalation level.
+  - **Monotonic Escalation & Rolling Timer:** Writes atomic state to `Portfolio_Dev/field_notes/data/pending_reset.json` with a 10-minute rolling window (`timer_expiry_ts`). New commits top up the timer to +10m and escalate action level (`NONE` -> `SOFT_RELOAD` -> `DEEP_RESET`), never downgrading.
+  - **Dirty Admission Gate:** Foyer Router (`src/v5/foyer/router.py`) checks `pending_reset.json`. While dirty, rejects WebSocket/HTTP connections with `HTTP 503 / WS 1008` (`"Lab is DIRTY (Pending DEEP_RESET in 8m). Run manual reset or wait for quiet window"`), ensuring tests and clients only interact with clean live silicon.
+  - **Attendant Quiet-Window Execution:** `attendant_liveliness.py` auto-executes the queued action when the 10-minute quiet window expires and clears the dirty lock.
+
 ---
 
 ## 📊 Verification & Certification Criteria
@@ -98,3 +112,4 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 2. FastMCP tool `query_dna(collection="philosophy_dna", query="JITC token golf")` returns `PHL-001` with high relevance.
 3. `philosophy.html` renders valid HTML5 with responsive mobile/desktop cards, zero 404 links, and seamless cross-navigation to `stories.html` and `research.html`.
 4. `src/attendant_liveliness.py --once` verifies state-retention and executes 2-tier reload/reset hierarchy cleanly against live silicon.
+5. Git commit hook triggers `git_reset_hook.py`, immediately restarts attendant on attendant edits, tops up rolling timer, and escalates actions monotonically.
