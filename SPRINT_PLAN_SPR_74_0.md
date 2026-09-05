@@ -1,8 +1,8 @@
 # 🚀 SPRINT PLAN 74.0: Engineering Philosophy & Research Synthesis
-## From JIC Anti-Patterns to JITC Orchestration (`philosophy.html` & `PHL-DNA`)
+## The JITC Paradigm & Federated AI Orchestration (`philosophy.html` & `PHL-DNA`)
 
 **Sprint ID:** `SPR_74_0`  
-**Theme:** Unified Philosophy Materialization, JITC Architecture, PHL-DNA Knowledge Layer, and Web Architecture (`philosophy.html`)  
+**Theme:** Unified Philosophy Materialization, JITC (Just-In-Time Context) Architecture, PHL-DNA Knowledge Layer, and Web Architecture (`philosophy.html`)  
 **Status:** PROPOSED / DRAFT  
 **Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), LAB-012 (Dual-Channel Context), BKM-005 (Architectural Design Alignment)  
 **Target Web Targets:** `Portfolio_Dev/field_notes/philosophy.html`, `Portfolio_Dev/field_notes/philosophy_data.json`, `WWW_STRATEGY.md`  
@@ -16,7 +16,7 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 
 | Source Artifact | Link / Location | Role in Synthesis |
 | :--- | :--- | :--- |
-| **`Philosophy and Learnings 2024-2026 (Refined)`** | Google Drive (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`) | Core thesis: **The Vectors of Engineering** (Libraries over Frameworks, JIC anti-pattern, Forgotten Code, Domain Topologies). |
+| **`Philosophy and Learnings 2024-2026 (Refined)`** | Google Drive (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`) | Core thesis: **The Vectors of Engineering** (Libraries over Frameworks, Speculative Scaffolding, Forgotten Code, Domain Topologies). |
 | **Google Keep Philosophy Dump** | Google Drive (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`) | The raw 2026 insights: *The 3 Pillars*, *JITC*, *Token Golf*, *10x Debt & Whiplash*, *Feedback Pressure*, *The Perfect Foil*, *Language as Invention*. |
 | **`stories.html`** | `Portfolio_Dev/field_notes/stories.html` | Narrative reference: Style and wordy tone to match. |
 | **`research.html`** | `Portfolio_Dev/research.html` | Empirical reference: Technical whitepapers and benchmarks. |
@@ -27,8 +27,8 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 
 ## 🏛️ The Core Themes of `philosophy.html` & `PHL-DNA`
 
-### 1. 🗄️ The Memory Layer: JITC vs. JIC (Just-In-Time Context)
-* **The Shift:** Rejecting **JIC (Just-In-Case)** prompt bloating (memorizing the whole dictionary into a massive window) in favor of **JITC** (floating up the exact 2–3 required anchors).
+### 1. 🗄️ The Memory Layer: JITC (Just-In-Time Context) & Token Golf
+* **The JITC Breakthrough:** Floating up the exact 2–3 required anchors from fast indexed databases (CLaRa-DNA / ICM) milliseconds before generation, rather than choking the prompt with giant 128k monoliths.
 * **Token Golf over Token Maxing:** Trust is quantified as context size — *"I only trust a model as much as it can remember."* Precision slicing keeps attention razor-sharp.
 
 ### 2. 🎛️ The Stability Layer: Layered Feedback Loops & Backpressure
@@ -46,7 +46,7 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 
 ### 5. 🧱 The Vectors of Engineering
 * **Libraries over Frameworks:** Modular, composable components over rigid, opaque lock-in.
-* **The JIC Anti-Pattern:** Building for proven, current needs rather than speculative future bloat.
+* **Avoiding Speculative Scaffolding:** Building for proven, current needs rather than hypothetical future bloat.
 * **Forgotten Code:** The hygiene of active deprecation and code deletion to reduce cognitive load.
 
 ---
@@ -63,13 +63,13 @@ This sprint consolidates and bridges the foundational engineering philosophy doc
 
 ### 🧬 Story 74.2: Codification of the 8 Core Philosophy Cards (`PHL-001` to `PHL-008`)
 * **Objective:** Author the 8 focused philosophy cards:
-  - **`PHL-001` (JITC vs. JIC & Token Golf):** Floating ambient memory over monolithic context windows; trust quantified as memory retention.
+  - **`PHL-001` (The JITC Breakthrough & Token Golf):** Floating ambient memory over monolithic context windows; trust quantified as memory retention.
   - **`PHL-002` (Feedback Pressure & The Handover Reflection):** Customer service roots, why walled gardens fail, and closed-loop agentic retrospectives.
   - **`PHL-003` (The Perfect Foil & The PM Pivot):** AI as a peer for a busy mind; turning chaotic ideation into high-velocity architecture.
   - **`PHL-004` (The 10x Debt Law & Velocity Whiplash):** Managing development speed, the reality of packaged debt, and reading like a robot.
   - **`PHL-005` (What's Good for People is Good for AI):** SCRUM, linters, retrospectives, and 4-anchor contracts applied to stochastic models.
   - **`PHL-006` (Language as Humanity's Best Invention):** Words as executable thought vehicles; transcending the AGI consciousness debate.
-  - **`PHL-007` (The JIC Anti-Pattern):** Avoiding speculative scaffolding; building deterministic systems for current proven needs.
+  - **`PHL-007` (Speculative Scaffolding vs. Grounded Delivery):** Avoiding speculative engineering; building deterministic systems for current proven needs.
   - **`PHL-008` (Libraries over Frameworks & Forgotten Code):** Modular composability over framework lock-in; the essential hygiene of deleting dead code.
 
 ### 🧬 Story 74.3: Web Materialization (`philosophy.html`)
