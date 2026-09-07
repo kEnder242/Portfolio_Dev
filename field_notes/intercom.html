@@ -49,11 +49,27 @@
         /* Main Layout */
         main { flex: 1; display: flex; flex-direction: column; padding: 20px; gap: 15px; }
         
-        #console-row { display: flex; gap: 15px; height: 40%; min-height: 200px; }
+        #console-row { display: flex; gap: 0; height: 40%; min-height: 200px; position: relative; }
         .console-panel { 
-            flex: 1; background: #000; border: 1px solid var(--border-color); border-radius: 4px; 
+            flex: 1 1 50%; background: #000; border: 1px solid var(--border-color); border-radius: 4px; 
             padding: 15px; overflow-y: auto; font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem; box-shadow: inset 0 0 10px rgba(0,255,0,0.05);
+            font-size: 0.85rem; box-shadow: inset 0 0 10px rgba(0,255,0,0.05); min-width: 140px;
+        }
+        .col-resizer {
+            width: 8px;
+            background: #1c2128;
+            cursor: col-resize;
+            border-left: 1px solid #30363d;
+            border-right: 1px solid #30363d;
+            border-radius: 2px;
+            margin: 0 4px;
+            transition: background 0.15s ease;
+            user-select: none;
+            flex-shrink: 0;
+        }
+        .col-resizer:hover, .col-resizer.active {
+            background: var(--accent-color);
+            box-shadow: 0 0 6px rgba(88, 166, 255, 0.4);
         }
         .panel-header { font-size: 0.7rem; color: #555; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         .system-msg { color: #666; font-style: italic; }
@@ -239,6 +255,7 @@
                 <div class="panel-header">Pinky's Console</div>
                 <div class="system-msg">Uplink sequence initiated...</div>
             </div>
+            <div id="col-resizer" class="col-resizer" title="Drag to resize panels"></div>
             <div class="console-panel" id="insight-console">
                 <div class="panel-header">Brain's Insight</div>
                 <div class="system-msg" style="color:#444">Awaiting neural activity...</div>

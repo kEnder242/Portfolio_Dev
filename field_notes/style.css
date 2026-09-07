@@ -369,7 +369,7 @@ details[open] summary::before {
 }
 
 @media screen and (max-width: 768px) {
-    #resizer { display: none !important; }
+    #resizer, .col-resizer { display: none !important; }
     #crosstalk-bar { border-top: none; }
 }
 
