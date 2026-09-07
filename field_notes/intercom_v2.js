@@ -54,6 +54,7 @@ let isRestoringHistory = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     initResizer();
+    initColResizer();
     loadHistory();
     connect();
     pollSystemStatus();
@@ -128,6 +129,57 @@ function initResizer() {
         });
         document.addEventListener('mouseup', () => { isResizing = false; });
     }
+}
+
+function initColResizer() {
+    const colResizer = document.getElementById('col-resizer');
+    const chatConsole = document.getElementById('chat-console');
+    const insightConsole = document.getElementById('insight-console');
+    const consoleRow = document.getElementById('console-row');
+    if (!colResizer || !chatConsole || !insightConsole || !consoleRow) return;
+
+    // Restore saved column split if available
+    try {
+        const savedSplit = parseFloat(sessionStorage.getItem('acme_console_split_pct'));
+        if (savedSplit && savedSplit >= 15 && savedSplit <= 85) {
+            chatConsole.style.flex = `0 0 ${savedSplit}%`;
+            insightConsole.style.flex = `0 0 ${100 - savedSplit}%`;
+        }
+    } catch (e) {}
+
+    let isResizingCol = false;
+    colResizer.addEventListener('mousedown', (e) => {
+        isResizingCol = true;
+        colResizer.classList.add('active');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizingCol) return;
+        const rowRect = consoleRow.getBoundingClientRect();
+        const relativeX = e.clientX - rowRect.left;
+        const totalWidth = rowRect.width;
+        const leftPct = (relativeX / totalWidth) * 100;
+
+        if (leftPct >= 15 && leftPct <= 85) {
+            chatConsole.style.flex = `0 0 ${leftPct}%`;
+            insightConsole.style.flex = `0 0 ${100 - leftPct}%`;
+            try {
+                sessionStorage.setItem('acme_console_split_pct', leftPct.toFixed(1));
+            } catch (e) {}
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isResizingCol) {
+            isResizingCol = false;
+            colResizer.classList.remove('active');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        }
+    });
 }
 
 // --- MESSAGING ---
