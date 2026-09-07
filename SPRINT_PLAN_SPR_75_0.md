@@ -21,7 +21,7 @@ Resolve the core operational friction points identified in recent session forens
 
 ## 📜 Story Specifications
 
-### 🔴 Story 75.1: Unsloth Nightly VRAM Quiesce & Dataset Path Fix (P1)
+### 🔴 Story 75.1: Unsloth Nightly VRAM Quiesce & Dataset Path Fix (P1) [COMPLETED ✅]
 * **Objective:** Enable unattended 150-step Unsloth LoRA training at 2:00 AM without VRAM collisions or path errors.
 * **Files:**
   * [`HomeLabAI/src/infra/nightly_forge.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py)
@@ -33,7 +33,7 @@ Resolve the core operational friction points identified in recent session forens
 
 ---
 
-### 🟡 Story 75.2: Tense-Aware Triage Flowchart & Pinky Speculative Domain Foil (P2)
+### 🟡 Story 75.2: Tense-Aware Triage Flowchart & Pinky Speculative Domain Foil (P2) [COMPLETED ✅]
 * **Objective:** Implement temporal horizon discrimination in Triage and enable Pinky as a conversational clarifier for ambiguous queries.
 * **Files:**
   * [`HomeLabAI/src/logic/triage_engine.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/triage_engine.py)
@@ -49,11 +49,12 @@ Resolve the core operational friction points identified in recent session forens
 
 ---
 
-### 🟡 Story 75.3: Live Host Telemetry Tool Node (`FEAT-557`) (P2)
+### 🟡 Story 75.3: Live Host Telemetry Tool Node (`FEAT-557`) (P2) [COMPLETED ✅]
 * **Objective:** Allow Brain and Pinky to query physical GPU VRAM, host RAM, CPU load, and temperature dynamically.
 * **Files:**
   * [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py)
-  * [`HomeLabAI/src/equipment/live_telemetry.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/equipment/live_telemetry.py)
+  * [`HomeLabAI/src/nodes/lab_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/lab_node.py)
+  * [`HomeLabAI/src/infra/live_telemetry.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/live_telemetry.py)
 * **Tasks:**
   1. Expose `get_host_vitals()` as an MCP tool on `Brain` and `Lab` nodes.
   2. Return structured JSON with live GPU VRAM used/total, host RAM used/total, CPU load average, and active model residency.
@@ -61,7 +62,7 @@ Resolve the core operational friction points identified in recent session forens
 
 ---
 
-### 🟢 Story 75.4: Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`) (P3)
+### 🟢 Story 75.4: Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`) (P3) [COMPLETED ✅]
 * **Objective:** Prevent Brain's internal reflection `<thought>` tags from leaking into multi-turn history and triggering self-archive loops.
 * **Files:**
   * [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)
