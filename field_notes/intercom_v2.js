@@ -63,7 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
     sendBtn.addEventListener('click', sendText);
     textInput.addEventListener('keydown', (e) => { 
         triggerSpeculativePreWarm();
-        if (e.key === 'Enter') sendText(); 
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendText();
+        }
+    });
+    textInput.addEventListener('input', () => {
+        textInput.style.height = 'auto';
+        textInput.style.height = Math.min(textInput.scrollHeight, 120) + 'px';
     });
     textInput.addEventListener('focus', triggerSpeculativePreWarm);
     micBtn.addEventListener('mouseenter', triggerSpeculativePreWarm);
@@ -368,6 +375,7 @@ function sendText() {
             detail: { topic: topicArg || '', timestamp: new Date().toISOString() }
         }));
         textInput.value = '';
+        textInput.style.height = 'auto';
         return;
     }
 
@@ -380,6 +388,7 @@ function sendText() {
         request_id: request_id
     }));
     textInput.value = '';
+    textInput.style.height = 'auto';
 }
 
 

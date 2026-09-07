@@ -21,6 +21,24 @@
             margin-bottom: 20px;
         }
 
+        #input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        #text-input {
+            flex-grow: 1;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            font-family: var(--font-stack);
+            resize: none;
+            min-height: 20px;
+            max-height: 120px;
+            line-height: 1.4;
+        }
+
         /* Tool Log Styles */
         .file { padding-left: 15px; }
         
@@ -79,7 +97,7 @@
 
             <div id="input-container">
                 <button id="mic-btn" class="icon-btn" title="Toggle Microphone">🎤</button>
-                <input type="text" id="text-input" placeholder="Initiate query or command..." autofocus>
+                <textarea id="text-input" rows="1" placeholder="Initiate query or command..." autofocus></textarea>
                 <button id="send-btn" class="icon-btn">SEND</button>
             </div>
         </div>
