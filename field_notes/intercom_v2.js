@@ -114,10 +114,21 @@ function loadHistory() {
 function initResizer() {
     if (resizer) {
         let isResizing = false;
-        resizer.addEventListener('mousedown', () => { isResizing = true; });
-        document.addEventListener('mousemove', (e) => {
+        
+        const startResize = (e) => {
+            isResizing = true;
+            if (resizer.setPointerCapture && e.pointerId) {
+                try { resizer.setPointerCapture(e.pointerId); } catch(err) {}
+            }
+            document.body.style.cursor = 'row-resize';
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+        };
+
+        const doResize = (e) => {
             if (!isResizing) return;
             const main = document.querySelector('main');
+            if (!main) return;
             const mainRect = main.getBoundingClientRect();
             const relativeY = e.clientY - mainRect.top;
             const containerHeight = main.offsetHeight;
@@ -126,8 +137,28 @@ function initResizer() {
             if (newConsoleHeight > 10 && newConsoleHeight < 80) {
                 consoleRow.style.height = `${newConsoleHeight}%`;
             }
-        });
-        document.addEventListener('mouseup', () => { isResizing = false; });
+        };
+
+        const stopResize = (e) => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                if (resizer.releasePointerCapture && e.pointerId) {
+                    try { resizer.releasePointerCapture(e.pointerId); } catch(err) {}
+                }
+            }
+        };
+
+        resizer.addEventListener('pointerdown', startResize);
+        window.addEventListener('pointermove', doResize);
+        window.addEventListener('pointerup', stopResize);
+        window.addEventListener('pointercancel', stopResize);
+
+        // Fallback for non-pointer events
+        resizer.addEventListener('mousedown', startResize);
+        document.addEventListener('mousemove', doResize);
+        document.addEventListener('mouseup', stopResize);
     }
 }
 
@@ -142,44 +173,61 @@ function initColResizer() {
     try {
         const savedSplit = parseFloat(sessionStorage.getItem('acme_console_split_pct'));
         if (savedSplit && savedSplit >= 15 && savedSplit <= 85) {
-            chatConsole.style.flex = `0 0 ${savedSplit}%`;
-            insightConsole.style.flex = `0 0 ${100 - savedSplit}%`;
+            chatConsole.style.flex = `${savedSplit} 1 0px`;
+            insightConsole.style.flex = `${100 - savedSplit} 1 0px`;
         }
     } catch (e) {}
 
     let isResizingCol = false;
-    colResizer.addEventListener('mousedown', (e) => {
+
+    const startColResize = (e) => {
         isResizingCol = true;
         colResizer.classList.add('active');
+        if (colResizer.setPointerCapture && e.pointerId) {
+            try { colResizer.setPointerCapture(e.pointerId); } catch(err) {}
+        }
         document.body.style.cursor = 'col-resize';
         document.body.style.userSelect = 'none';
         e.preventDefault();
-    });
+    };
 
-    document.addEventListener('mousemove', (e) => {
+    const doColResize = (e) => {
         if (!isResizingCol) return;
         const rowRect = consoleRow.getBoundingClientRect();
+        if (!rowRect.width) return;
         const relativeX = e.clientX - rowRect.left;
-        const totalWidth = rowRect.width;
-        const leftPct = (relativeX / totalWidth) * 100;
+        let leftPct = (relativeX / rowRect.width) * 100;
+        leftPct = Math.max(15, Math.min(85, leftPct));
 
-        if (leftPct >= 15 && leftPct <= 85) {
-            chatConsole.style.flex = `0 0 ${leftPct}%`;
-            insightConsole.style.flex = `0 0 ${100 - leftPct}%`;
-            try {
-                sessionStorage.setItem('acme_console_split_pct', leftPct.toFixed(1));
-            } catch (e) {}
-        }
-    });
+        // Use flex-grow ratio with 0px basis so window resize preserves the exact proportion
+        chatConsole.style.flex = `${leftPct.toFixed(2)} 1 0px`;
+        insightConsole.style.flex = `${(100 - leftPct).toFixed(2)} 1 0px`;
+        try {
+            sessionStorage.setItem('acme_console_split_pct', leftPct.toFixed(1));
+        } catch (err) {}
+    };
 
-    document.addEventListener('mouseup', () => {
+    const stopColResize = (e) => {
         if (isResizingCol) {
             isResizingCol = false;
             colResizer.classList.remove('active');
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+            if (colResizer.releasePointerCapture && e.pointerId) {
+                try { colResizer.releasePointerCapture(e.pointerId); } catch(err) {}
+            }
         }
-    });
+    };
+
+    colResizer.addEventListener('pointerdown', startColResize);
+    window.addEventListener('pointermove', doColResize);
+    window.addEventListener('pointerup', stopColResize);
+    window.addEventListener('pointercancel', stopColResize);
+
+    // Fallback for mouse events
+    colResizer.addEventListener('mousedown', startColResize);
+    document.addEventListener('mousemove', doColResize);
+    document.addEventListener('mouseup', stopColResize);
 }
 
 // --- MESSAGING ---
