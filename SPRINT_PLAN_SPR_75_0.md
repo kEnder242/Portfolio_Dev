@@ -91,3 +91,19 @@ Resolve the core operational friction points identified in recent session forens
      - **Purpose Justification Required:** `true` (`"Please state your name and purpose for visiting Jason Lab."`)
      - **Session Duration:** `24h`
 * **Verification Status:** Verified against Cloudflare REST API at `2026-09-07T02:57:55Z` using active `Gemini z87` token.
+
+---
+
+### 🔵 Story 75.6: Multi-Seat Sovereign Engine Client & Dynamic Forge Failover (P2) [COMPLETED ✅]
+* **Objective:** Standardize offline batch distillation (`distill_gems.py`, `distill_training_data.py`) and dream refinement passes using a unified infrastructure client (`HomeLabAI/src/infra/engine_client.py`) with 200ms pre-flight socket lock (`FEAT-486`/`FEAT-500`), automatically routing to M5 Air (Primary MLX 27B) $\rightarrow$ KENDER (Backup Ollama 14B) $\rightarrow$ Local vLLM (RTX 2080 Ti `shadow_brain_v2`) with zero timeouts when KENDER is offline.
+* **Files:**
+  * [`HomeLabAI/src/infra/engine_client.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/engine_client.py) (New module)
+  * [`HomeLabAI/src/forge/distill_gems.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/forge/distill_gems.py)
+  * [`HomeLabAI/src/train/distill_training_data.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/train/distill_training_data.py)
+  * [`HomeLabAI/src/tests/test_engine_client.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_engine_client.py)
+* **Tasks:**
+  1. Create `HomeLabAI/src/infra/engine_client.py` with declarative seat resolution (`_load_engine_seats()`, `_probe_seat()`), 200ms TCP socket ping lock (`_probe_tcp`), and a unified `query_sovereign_engine(prompt, system_prompt, json_mode, timeout)` supporting both OpenAI (`/v1/chat/completions`) and Ollama (`/api/chat` / `/api/generate`) APIs.
+  2. Refactor `distill_gems.py` and `distill_training_data.py` to use `query_sovereign_engine`, eliminating hardcoded KENDER IP addresses and 60-second blocking connection hangs.
+  3. Verify test coverage for both sides:
+     - **Refinement Side**: 10/10 unit tests pass in `test_engine_client.py` and `test_kender_fast_gate.py` with KENDER simulated offline (falling back cleanly to M5 Air or Local vLLM to forge valid instruction-response JSON).
+     - **Vocality Side**: Live Foyer intercom turn handling (Pinky vocality and Brain insight) verified nominal on port 8765 with zero dead air.
