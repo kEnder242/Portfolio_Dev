@@ -71,15 +71,28 @@ Resolve the core operational friction points identified in recent session forens
 
 ---
 
-### 🟢 Story 75.5: Cloudflare Zero Trust Access Policy & Ingress Security Hardening (P3)
-* **Objective:** Audit edge Zero Trust Access policies for `jason-lab.dev` and document domain whitelist configuration (`intel.com`, `nvidia.com`, `supermicro.com`).
+### 🟢 Story 75.5: Cloudflare Zero Trust Dual-Tier Access Control & Doorbell Knock Policy (P3)
+* **Objective:** Implement the dual-tier access gate on `jason-lab.dev` allowing VIP auto-grant for whitelisted companies (`intel.com`, `nvidia.com`, `supermicro.com`) and a "Knock" Access Request doorbell for all other visitors requiring manual admin approval.
 * **Files:**
   * [`HomeLabAI/docs/LAB_INFRASTRUCTURE.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md)
   * [`Portfolio_Dev/field_notes/utils/list_access_logins.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/utils/list_access_logins.py)
-* **Tasks:**
-  1. Document Cloudflare Zero Trust Access Policy structure: Explain why OTP (One-Time PIN) sends verification codes directly to the visitor's email rather than triggering an admin email approval flow.
-  2. Formulate explicit rule sets for Cloudflare Zero Trust Dashboard:
-     - **Rule 1 (Admin Allow):** `Include: Specific Email -> jason.a.allred@...`
-     - **Rule 2 (Recruiter Whitelist):** `Include: Emails ending in -> @intel.com, @nvidia.com, @supermicro.com`
-     - **Rule 3 (Default Deny):** All other emails blocked from receiving OTP tokens.
-  3. Update `router.py` to optionally log `Cf-Access-Authenticated-User-Email` on incoming WebSocket and REST connections.
+  * [`Portfolio_Dev/docs/FIELD_NOTES_ARCHITECTURE.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/FIELD_NOTES_ARCHITECTURE.md)
+* **Architecture & Policy Specifications:**
+  1. **Tier 1 (VIP Auto-Grant Fast-Pass - Precedence 1):**
+     - **Action:** `Allow`
+     - **Include:** `Emails ending in -> @intel.com, @nvidia.com, @supermicro.com` + `Specific Email -> jason.a.allred@...`
+     - **Approval Required:** `OFF` *(Instant OTP delivery directly to user)*
+  2. **Tier 2 (The "Knock" Doorbell Access Request - Precedence 2):**
+     - **Action:** `Allow`
+     - **Include:** `Everyone`
+     - **Approval Required:** `ON` *(Linked to Approval Group: `Jason Admin`)*
+     - **Approval Groups:** `[{ "email_addresses": ["jason.a.allred@..."] }]`
+     - **Purpose Justification Required:** `ON` (*"Please state your name and purpose"* prompt)
+* **Division of Labor (API vs. Manual Steps):**
+  * **Automated via Script / API (`list_access_logins.py` / Cloudflare REST):**
+    - Audit and list live Zero Trust login records from `/accounts/{id}/access/logs/access_requests`.
+    - Deploy Approval Group payload and Application Policies via Cloudflare REST API (when `CLOUDFLARE_API_TOKEN` with `Account.Zero Trust:Edit` scope is exported).
+  * **Manual Steps Required by User:**
+    - Log into [one.dash.cloudflare.com](https://one.dash.cloudflare.com/) and create the API Token with `Zero Trust:Edit` scope (or apply the two Policy rules directly in the web UI under **Access** > **Applications** > **Policies**).
+    - Approve/Deny incoming guest access requests when friends/colleagues knock (via the email link Cloudflare delivers to `jason.a.allred@...`).
+
