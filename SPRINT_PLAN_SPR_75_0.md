@@ -71,28 +71,22 @@ Resolve the core operational friction points identified in recent session forens
 
 ---
 
-### 🟢 Story 75.5: Cloudflare Zero Trust Dual-Tier Access Control & Doorbell Knock Policy (P3)
-* **Objective:** Implement the dual-tier access gate on `jason-lab.dev` allowing VIP auto-grant for whitelisted companies (`intel.com`, `nvidia.com`, `supermicro.com`) and a "Knock" Access Request doorbell for all other visitors requiring manual admin approval.
+### 🟢 Story 75.5: Cloudflare Zero Trust Dual-Tier Access Control & Doorbell Knock Policy (P3) [COMPLETED ✅]
+* **Objective:** Implement the dual-tier access gate on `jason-lab.dev` allowing VIP auto-grant for whitelisted companies (`intel.com`, `nvidia.com`, `supermicro.com`, `jabil.com`, `amd.com`, `panasonic.aero`) and a "Knock" Access Request doorbell for all other visitors requiring manual admin approval.
 * **Files:**
   * [`HomeLabAI/docs/LAB_INFRASTRUCTURE.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md)
   * [`Portfolio_Dev/field_notes/utils/list_access_logins.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/utils/list_access_logins.py)
   * [`Portfolio_Dev/docs/FIELD_NOTES_ARCHITECTURE.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/FIELD_NOTES_ARCHITECTURE.md)
-* **Architecture & Policy Specifications:**
-  1. **Tier 1 (VIP Auto-Grant Fast-Pass - Precedence 1):**
-     - **Action:** `Allow`
-     - **Include:** `Emails ending in -> @intel.com, @nvidia.com, @supermicro.com` + `Specific Email -> jason.a.allred@...`
-     - **Approval Required:** `OFF` *(Instant OTP delivery directly to user)*
-  2. **Tier 2 (The "Knock" Doorbell Access Request - Precedence 2):**
-     - **Action:** `Allow`
-     - **Include:** `Everyone`
-     - **Approval Required:** `ON` *(Linked to Approval Group: `Jason Admin`)*
-     - **Approval Groups:** `[{ "email_addresses": ["jason.a.allred@..."] }]`
-     - **Purpose Justification Required:** `ON` (*"Please state your name and purpose"* prompt)
-* **Division of Labor (API vs. Manual Steps):**
-  * **Automated via Script / API (`list_access_logins.py` / Cloudflare REST):**
-    - Audit and list live Zero Trust login records from `/accounts/{id}/access/logs/access_requests`.
-    - Deploy Approval Group payload and Application Policies via Cloudflare REST API (when `CLOUDFLARE_API_TOKEN` with `Account.Zero Trust:Edit` scope is exported).
-  * **Manual Steps Required by User:**
-    - Log into [one.dash.cloudflare.com](https://one.dash.cloudflare.com/) and create the API Token with `Zero Trust:Edit` scope (or apply the two Policy rules directly in the web UI under **Access** > **Applications** > **Policies**).
-    - Approve/Deny incoming guest access requests when friends/colleagues knock (via the email link Cloudflare delivers to `jason.a.allred@...`).
-
+* **Live Deployed & Verified Policy (`notes.jason-lab.dev` / App ID `8a77121a-5cd3-4f3e-aaf0-4df2cd07cfe1`):**
+  1. **Precedence 1 — `Lobby Access` (VIP Fast-Pass):**
+     - **Action:** `allow`
+     - **Include:** `kender242@gmail.com`, `@nvidia.com`, `@intel.com`, `@jabil.com`, `@amd.com`, `@panasonic.aero`
+     - **Approval Required:** `None` (Instant OTP delivery directly to user)
+  2. **Precedence 2 — `Access Request Knock` (Doorbell Approval Gate):**
+     - **Action:** `allow`
+     - **Include:** `everyone`
+     - **Approval Required:** `true`
+     - **Approval Group:** `kender242@gmail.com` (`approvals_needed: 1`)
+     - **Purpose Justification Required:** `true` (`"Please state your name and purpose for visiting Jason Lab."`)
+     - **Session Duration:** `24h`
+* **Verification Status:** Verified against Cloudflare REST API at `2026-09-07T02:57:55Z` using active `Gemini z87` token.
