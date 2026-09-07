@@ -74,6 +74,10 @@
             color: var(--text-color);
             padding: 10px;
             font-family: var(--font-stack);
+            resize: none;
+            min-height: 20px;
+            max-height: 120px;
+            line-height: 1.4;
         }
         .icon-btn {
             background: var(--accent-dim);
@@ -193,7 +197,7 @@
 
             <div id="input-container">
                 <button id="mic-btn" class="icon-btn" title="Toggle Microphone">🎤</button>
-                <input type="text" id="text-input" placeholder="Type a command or query..." autofocus>
+                <textarea id="text-input" rows="1" placeholder="Type a command or query..." autofocus></textarea>
                 <button id="send-btn" class="icon-btn">SEND</button>
             </div>
         </div>

@@ -87,6 +87,7 @@
         #text-input { 
             flex: 1; background: #000; border: 1px solid #333; color: #fff; 
             padding: 10px; border-radius: 4px; outline: none; font-family: inherit;
+            resize: none; min-height: 20px; max-height: 120px; line-height: 1.4;
         }
 
         /* Tool Log Card Styles */
@@ -250,7 +251,7 @@
 
         <div id="input-container">
             <button id="mic-btn" class="icon-btn">🎤</button>
-            <input type="text" id="text-input" placeholder="Communicate with the Lab..." autofocus>
+            <textarea id="text-input" rows="1" placeholder="Communicate with the Lab..." autofocus></textarea>
             <button id="send-btn" class="icon-btn" style="min-width: 60px;">SEND</button>
             <div class="status-panel" style="margin-left: auto; border: none; padding: 0;">
                 <span id="connection-dot" class="status-dot offline"></span>
@@ -271,7 +272,7 @@
     </main>
 
     <script src="assets/marked.min.js"></script>
-    <script src="intercom_v2.js?v=4bb04b6b"></script>
+    <script src="intercom_v2.js?v=907fffc6"></script>
     <script src="mission-control.js?v=d9995719"></script>
 </body>
 </html>
