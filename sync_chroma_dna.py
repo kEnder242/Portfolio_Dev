@@ -10,10 +10,12 @@ from chromadb.utils import embedding_functions
 DB_PATH = os.path.expanduser("~/AcmeLab/chroma_db")
 COLLECTION_DNA = "behavioral_dna"
 COLLECTION_FEATURE = "feature_dna"
+COLLECTION_PHILOSOPHY = "philosophy_dna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
+WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/wisdom_data.json")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
@@ -178,6 +180,49 @@ def get_chroma_client():
         return chromadb.PersistentClient(path=DB_PATH)
 
 
+def parse_wisdom(filepath):
+    """Parses wisdom_data.json for WIS-xxx wisdom and philosophy cards."""
+    if not os.path.exists(filepath):
+        logging.warning(f"wisdom_data.json not found at {filepath}")
+        return []
+    import json
+    with open(filepath, "r", encoding="utf-8") as f:
+        cards = json.load(f)
+    
+    wisdom_items = []
+    for c in cards:
+        wid = c.get("id", "WIS-UNK")
+        theme = c.get("theme", "Philosophy")
+        origin_text = c.get("origin", {}).get("text", "")
+        origin_src = c.get("origin", {}).get("source", "")
+        synth_title = c.get("synthesis", {}).get("title", "")
+        synth_context = c.get("synthesis", {}).get("narrative_context", "")
+        tags = c.get("metadata", {}).get("tags", [])
+        
+        doc_content = (
+            f"ID: {wid}\n"
+            f"Theme: {theme}\n"
+            f"Title: {synth_title}\n"
+            f"Origin Quote: \"{origin_text}\"\n\n"
+            f"Synthesis: {synth_context}\n"
+            f"Tags: {', '.join(tags)}"
+        )
+        
+        wisdom_items.append({
+            "id": wid,
+            "document": doc_content,
+            "metadata": {
+                "wisdom_id": wid,
+                "theme": theme,
+                "title": synth_title,
+                "tags": ",".join(tags),
+                "source": "wisdom_data.json",
+                "type": "WISDOM"
+            }
+        })
+    return wisdom_items
+
+
 def sync():
     logging.info(f"Connecting to ChromaDB at {DB_PATH}...")
     client = get_chroma_client()
@@ -247,5 +292,21 @@ def sync():
         collection_dna.add(ids=ids, documents=documents, metadatas=metadatas)
         logging.info("LAB_INFRASTRUCTURE.md sync complete.")
 
-if __name__ == "__main__":
-    sync()
+    # 4. Sync philosophy_dna from wisdom_data.json
+    logging.info("Parsing wisdom_data.json...")
+    wisdom_items = parse_wisdom(WISDOM_DATA_PATH)
+    if wisdom_items:
+        collection_phl = get_safe_collection(client, COLLECTION_PHILOSOPHY, ef)
+        logging.info("Clearing existing wisdom_data.json entries from philosophy_dna...")
+        try:
+            collection_phl.delete(where={"source": "wisdom_data.json"})
+        except Exception as e:
+            logging.warning(f"Could not clear philosophy_dna entries: {e}")
+
+        ids = [w["id"] for w in wisdom_items]
+        documents = [w["document"] for w in wisdom_items]
+        metadatas = [w["metadata"] for w in wisdom_items]
+
+        logging.info(f"Uploading {len(ids)} Wisdom & Philosophy entries to philosophy_dna...")
+        collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
+        logging.info("philosophy_dna sync complete.")
