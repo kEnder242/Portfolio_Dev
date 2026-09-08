@@ -80,17 +80,18 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 ---
 
-### 🧬 Story 76.2: Dual-View Philosophy Studio (`philosophy.html` & `PHL-DNA`)
+### 🧬 Story 76.2: Dual-View Wisdom Studio (`wisdom.html` & `wisdom_build.py`)
 * **Feature Anchor:** `[FEAT-559]`  
-* **Objective:** Build `Portfolio_Dev/field_notes/philosophy.html` featuring a solidified public reader view and an in-place interactive workbench mode for curating philosophy cards.
+* **Objective:** Build `Portfolio_Dev/field_notes/wisdom.html` featuring a solidified public reader view and an in-place interactive workbench mode for curating wisdom cards.
 * **Target Files:**
-  - `Portfolio_Dev/field_notes/philosophy.html`
-  - `Portfolio_Dev/field_notes/philosophy_build.py`
+  - `Portfolio_Dev/field_notes/wisdom.html`
+  - `Portfolio_Dev/field_notes/wisdom_build.py`
+  - `Portfolio_Dev/field_notes/data/wisdom_data.json`
   - `Portfolio_Dev/field_notes/data/philosophy_data.json`
 * **Key Capabilities:**
   1. Solidified Reader View: Theme filtering (Memory, Stability, Human-AI, Vectors), dark-mode typography matching `stories.html`.
   2. In-Place Workbench Mode: Live `origin` quote editing, `synthesis` inspection, explicit link connector.
-  3. JSON data pipeline compiled via `philosophy_build.py`.
+  3. JSON data pipeline compiled via `wisdom_build.py` with backward-compatible `philosophy.html` symlink.
 
 ---
 
