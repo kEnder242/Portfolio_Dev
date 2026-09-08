@@ -1,11 +1,11 @@
 # 🚀 SPRINT PLAN 76.0: The Wisdom Architecture & JITC Whitepaper
-## Decoupled Origin/Synthesis, Interactive Studio, Sprint DNA & arXiv Pipeline
+## Decoupled Origin/Synthesis, Dual-View Workbench, Sprint DNA & arXiv Pipeline
 
 **Sprint ID:** `SPR_76_0`  
-**Theme:** Wisdom Architecture (`origin` vs. `synthesis`), Wisdom Studio Workbench (`wisdom.html` / `paper.html`), Dedicated `sprint_dna` ChromaDB Collection with Smart Archiving Trigger, and JITC arXiv Synthesis Pipeline  
+**Theme:** Wisdom Architecture (`origin` vs. `synthesis`), Native Dual-View Workbench (`philosophy.html` & `paper.html`), Dedicated `sprint_dna` ChromaDB Collection with Smart Archiving Trigger, and JITC arXiv Synthesis Pipeline  
 **Status:** ACTIVE / APPROVED  
 **Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), BKM-049 (Tri-Loop Delegation), BKM-040 (Git Discipline), BKM-024 (Live Verification)  
-**Target Web Targets:** `Portfolio_Dev/field_notes/wisdom.html`, `Portfolio_Dev/field_notes/paper.html`, `Portfolio_Dev/field_notes/data/wisdom_data.json`  
+**Target Web Targets:** `Portfolio_Dev/field_notes/philosophy.html`, `Portfolio_Dev/field_notes/paper.html`, `Portfolio_Dev/field_notes/data/wisdom_data.json`  
 **Target Silicon & DB:** ChromaDB Port 8001 (`sprint_dna`, `long_term_wisdom`, `philosophy_dna`), M5 Air MLX `:8000`, ICM SQLite (`wisdom-philosophy`, `agent-discipline`)  
 
 ---
@@ -23,7 +23,17 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
   - `explicit_links`: Hard-coded relationship IDs (`WIS-001` connects to `WIS-018`).
   - `tags`: Soft semantic vectors for ChromaDB querying.
 
-### 2. 🗄️ `sprint_dna` Hybrid Ingestion & Recency Decay
+### 2. 🎛️ The Native Dual-View Workbench Pattern (`philosophy.html` & `paper.html`)
+* **Solidified Default / Reader View**: By default, pages present clean, solidified, publication-ready views:
+  - `philosophy.html`: High-density philosophical essays, theme filters, quote callouts matching `stories.html`.
+  - `paper.html`: Academic paper format, section hierarchy, equations, figures, and epigraphs.
+* **Interactive Workbench Mode (`?edit=1` or Admin Toggle)**:
+  - In-place editing of human `origin` thoughts vs agent `synthesis` scaffolding.
+  - Drag-and-drop section and card re-ordering.
+  - Semantic tag editor and explicit ID relationship connector.
+  - Action buttons to trigger local silicon refinement or compile directly to LaTeX/PDF.
+
+### 3. 🗄️ `sprint_dna` Hybrid Ingestion & Recency Decay
 * **Hybrid Chunking**: Level 1 (Story Cards with prompt triggers, touched files, lessons learned) + Level 2 (Sprint Overview with high-level themes, metrics, and retros).
 * **Discrete 3-Tier Recency Curve**:
   - **Active Sprint**: Weight `1.0`
@@ -32,7 +42,7 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 * **Targeted Ambient Hook Gate**: `icm_hook.py` queries `sprint_dna` strictly when prompt contains keyword anchors (`SPR-xx`, `Story xx`, `sprint`, `plan`, `retro`, `sprint_dna`) with a 150ms fail-open timeout.
 * **Smart Archiving Trigger & Single-Worker Batch**: Moving a sprint to `docs/sprints/archive/` enqueues single-sprint distillation to M5 Air sovereign engine with execution duration telemetry.
 
-### 3. 🛑 Operational Discipline & Delegation Safety
+### 4. 🛑 Operational Discipline & Delegation Safety
 * **No Parallel Delegation**: Parallel subagent swarms cause thrashing and context fragmentation. Dispatches are strictly serialized (ICM memory `01M21GZE1CNKQHRW4B1ZE6TEVH`).
 * **BKM-049 Tri-Loop Escalation**:
   - Attempt 1: Sovereign Local Silicon (`[SWARM:LOCAL]`).
@@ -59,17 +69,17 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 ---
 
-### 🧬 Story 76.2: Wisdom Studio & Research Workbench UI (`wisdom.html` / `paper.html`)
+### 🧬 Story 76.2: Dual-View Philosophy Studio (`philosophy.html` & `PHL-DNA`)
 * **Feature Anchor:** `[FEAT-559]`  
-* **Objective:** Build an interactive, tactile Single Page Application in `Portfolio_Dev/field_notes/wisdom.html` (and symlinked `paper.html`) that allows `jallred` to curate, re-order, tag, and edit wisdom cards.
+* **Objective:** Build `Portfolio_Dev/field_notes/philosophy.html` featuring a solidified public reader view and an in-place interactive workbench mode for curating philosophy cards.
 * **Target Files:**
-  - `Portfolio_Dev/field_notes/wisdom.html`
-  - `Portfolio_Dev/field_notes/paper.html`
+  - `Portfolio_Dev/field_notes/philosophy.html`
+  - `Portfolio_Dev/field_notes/philosophy_build.py`
+  - `Portfolio_Dev/field_notes/data/philosophy_data.json`
 * **Key Capabilities:**
-  1. Visual outline with drag-and-drop sequencing (`paper_order`).
-  2. Dedicated `origin` editor (Human space) and `synthesis` inspector (Agent/Lab anchors space).
-  3. Semantic tag filtering and explicit ID relationship link builder (`explicit_links`).
-  4. LocalStorage and static export/save synchronization.
+  1. Solidified Reader View: Theme filtering (Memory, Stability, Human-AI, Vectors), dark-mode typography matching `stories.html`.
+  2. In-Place Workbench Mode: Live `origin` quote editing, `synthesis` inspection, explicit link connector.
+  3. JSON data pipeline compiled via `philosophy_build.py`.
 
 ---
 
@@ -87,17 +97,19 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 ---
 
-### 🧬 Story 76.4: Automated Synthesis Compiler & arXiv LaTeX Pipeline
+### 🧬 Story 76.4: Interactive Paper Studio & arXiv LaTeX Pipeline (`paper.html`)
 * **Feature Anchor:** `[FEAT-560]`  
-* **Objective:** Create a deterministic compilation engine that weaves ordered Wisdom Cards into an arXiv-compliant LaTeX whitepaper on the JITC Meta-Framework.
+* **Objective:** Build `Portfolio_Dev/field_notes/paper.html` with in-place section re-ordering and an automated LaTeX compilation pipeline to produce an arXiv-ready whitepaper on the JITC Meta-Framework.
 * **Target Files:**
+  - `Portfolio_Dev/field_notes/paper.html`
   - `Portfolio_Dev/scripts/build_paper.py`
   - `Portfolio_Dev/docs/whitepaper/main.tex`
   - `Portfolio_Dev/docs/whitepaper/references.bib`
 * **Success Criteria:**
-  1. `build_paper.py` reads ordered cards from `wisdom_data.json`, embeds `origin` quotes as epigraphs/blockquotes, and weaves `synthesis` explanatory text.
-  2. Compiles to clean LaTeX document adhering to arXiv formatting standards with automated PDF artifact generation.
-  3. Zero drift of human origin voice throughout compilation.
+  1. `paper.html` provides dual-view: solidified academic paper preview + interactive section re-order/quote slotting workbench.
+  2. `build_paper.py` reads ordered cards from `wisdom_data.json`, embeds `origin` quotes as epigraphs/blockquotes, and weaves `synthesis` explanatory text.
+  3. Compiles to clean LaTeX document adhering to arXiv formatting standards with automated PDF artifact generation.
+  4. Zero drift of human origin voice throughout compilation.
 
 ---
 
