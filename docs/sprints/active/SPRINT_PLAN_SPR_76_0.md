@@ -1,10 +1,10 @@
 # 🚀 SPRINT PLAN 76.0: The Wisdom Architecture & JITC Whitepaper
-## Decoupled Origin/Synthesis, Dual-View Workbench, Sprint DNA & arXiv Pipeline
+## Swarm Hardening, Decoupled Origin/Synthesis, Dual-View Workbench, Sprint DNA & arXiv Pipeline
 
 **Sprint ID:** `SPR_76_0`  
-**Theme:** Wisdom Architecture (`origin` vs. `synthesis`), Native Dual-View Workbench (`philosophy.html` & `paper.html`), Dedicated `sprint_dna` ChromaDB Collection with Smart Archiving Trigger, and JITC arXiv Synthesis Pipeline  
-**Status:** ACTIVE / APPROVED  
-**Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), BKM-049 (Tri-Loop Delegation), BKM-040 (Git Discipline), BKM-024 (Live Verification)  
+**Theme:** OpenAgent Swarm Hardening & Oracle Mode, Wisdom Architecture (`origin` vs. `synthesis`), Native Dual-View Workbench (`philosophy.html` & `paper.html`), Dedicated `sprint_dna` ChromaDB Collection with Smart Archiving Trigger, and JITC arXiv Synthesis Pipeline  
+**Status:** ACTIVE / IN PROGRESS  
+**Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), BKM-049 (Tri-Loop Delegation), BKM-040 (Git Discipline), BKM-024 (Live Verification), BKM-029 (Heads-Down Loop)  
 **Target Web Targets:** `Portfolio_Dev/field_notes/philosophy.html`, `Portfolio_Dev/field_notes/paper.html`, `Portfolio_Dev/field_notes/data/wisdom_data.json`  
 **Target Silicon & DB:** ChromaDB Port 8001 (`sprint_dna`, `long_term_wisdom`, `philosophy_dna`), M5 Air MLX `:8000`, ICM SQLite (`wisdom-philosophy`, `agent-discipline`)  
 
@@ -42,18 +42,29 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 * **Targeted Ambient Hook Gate**: `icm_hook.py` queries `sprint_dna` strictly when prompt contains keyword anchors (`SPR-xx`, `Story xx`, `sprint`, `plan`, `retro`, `sprint_dna`) with a 150ms fail-open timeout.
 * **Smart Archiving Trigger & Single-Worker Batch**: Moving a sprint to `docs/sprints/archive/` enqueues single-sprint distillation to M5 Air sovereign engine with execution duration telemetry.
 
-### 4. 🛑 Operational Discipline & Delegation Safety
+### 4. 🛑 Operational Discipline, Anti-Starvation & Swarm Hardening
 * **No Parallel Delegation**: Parallel subagent swarms cause thrashing and context fragmentation. Dispatches are strictly serialized (ICM memory `01M21GZE1CNKQHRW4B1ZE6TEVH`).
-* **BKM-049 Tri-Loop Escalation**:
-  - Attempt 1: Sovereign Local Silicon (`[SWARM:LOCAL]`).
-  - Attempt 2: Cloud Swarm (`[SWARM:CLOUD]`) for burst reasoning or adversarial critique.
-  - Attempt 3: AGY Takeover (`[AGY:TAKEOVER]`).
-* **Cloud in Planning/Review Mode**: Cloud models are leveraged as adversarial reviewers and rubric checkers, never as unconstrained ghostwriters of human thought.
+* **The Anti-Starvation Rule (Zero Google Gemini in OpenAgent)**: AGY is Layer 1 Strategic Guardian. Google/Gemini is strictly prohibited in OpenAgent fallback chains (`disabled_providers: ["google", "mistral"]`).
+* **Dedicated Oracle Dispatch Mode**: Cloud models (Nemotron-120B, Command-A+, Llama 3.3 70B) are dispatched strictly in read-only Oracle mode for high-context clustering, outline proposal, and adversarial critique.
 * **BKM-040**: Stage and commit locally only, never push.
 
 ---
 
 ## 🧬 Sprint 76 Detailed Story Specifications
+
+### 🧬 Story 76.0: OpenAgent Swarm Vetting, Oracle Mode & Canary Certification
+* **Feature Anchor:** `[FEAT-556]` / `[BKM-034]`  
+* **Objective:** Harden OpenAgent swarm configuration with live vetted free/cloud models, add first-class `--mode oracle` support to `delegate.py`, and certify REST dispatch with live canary tests.
+* **Target Files:**
+  - `Dev_Lab/oh-my-openagent.json`
+  - `HomeLabAI/src/tests/delegate.py`
+  - `HomeLabAI/src/tests/test_delegation_canary.py`
+* **Success Criteria:**
+  1. `oh-my-openagent.json` mapped to verified active models (`nvidia/nemotron-3-super-120b-a12b:free`, `nvidia/nemotron-3.5-lightning:free`, `cohere/north-mini-code:free`).
+  2. `delegate.py` implements `--mode oracle` with structured prompt contracts for clustering, outlines, and review.
+  3. Canary test passes with 0 interactive popups and sub-2s tool latency.
+
+---
 
 ### 🧬 Story 76.1: Wisdom Schema & Dual-Channel Ingestion Pipeline
 * **Feature Anchor:** `[FEAT-558]`  
@@ -117,6 +128,7 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 | Story ID | Verification Method | Silicon Target | Sign-off Status |
 | :--- | :--- | :--- | :--- |
+| **76.0** | Swarm model ping & Canary delegation suite | REST `:4097` / OpenRouter | PENDING |
 | **76.1** | Schema unit tests & ChromaDB query probe | ChromaDB `:8001` | PENDING |
 | **76.2** | UI DOM interaction & LocalStorage sync test | Browser / Static HTTP | PENDING |
 | **76.3** | Archive ingestion benchmark & M5 Air distillation timing | M5 Air MLX `:8000` | PENDING |
