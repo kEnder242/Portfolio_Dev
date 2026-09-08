@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The JITC-Loop Meta-Framework: Whitepaper Studio | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=826dbad3">
+    <style>
+        .paper-container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: #11141a;
+            border: 1px solid #1f242e;
+            padding: 48px;
+            border-radius: 8px;
+            color: #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .paper-header {
+            text-align: center;
+            border-bottom: 2px solid #2d3748;
+            padding-bottom: 24px;
+            margin-bottom: 36px;
+        }
+        .paper-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+        .paper-authors {
+            font-size: 1.1em;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .paper-abstract {
+            background: #1a202c;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95em;
+            line-height: 1.65;
+        }
+        .paper-section {
+            margin-bottom: 36px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #2d3748;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        .section-header h2 {
+            font-size: 1.4em;
+            color: #60a5fa;
+            margin: 0;
+        }
+        .origin-epigraph {
+            border-left: 3px solid #10b981;
+            padding: 10px 16px;
+            margin: 14px 0;
+            background: #0f172a;
+            color: #cbd5e1;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+        .epigraph-author {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.8em;
+            color: #34d399;
+            font-weight: 600;
+            font-style: normal;
+        }
+        .workbench-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e2430;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #2d3748;
+        }
+        .workbench-ctrls {
+            display: none;
+            background: #0d1117;
+            border: 1px dashed #38bdf8;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        .edit-active .workbench-ctrls {
+            display: block;
+        }
+        .btn-action {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-action:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+        <input type="text" id="nav-filter" placeholder="Filter sections..." aria-label="Filter navigation">
+
+        <div id="searchable-content">
+            <h2>Paper Outline</h2>
+            <ul id="paper-outline-nav">
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#sec-1">1. Introduction & The Attention Ceiling</a></li>
+                <li><a href="#sec-2">2. Token Golf & Quantified Trust</a></li>
+                <li><a href="#sec-3">3. Grounded Feedback Backpressure</a></li>
+                <li><a href="#sec-4">4. The Human-AI Interface & The Foil</a></li>
+                <li><a href="#sec-5">5. Engineering Disciplines for Latent Space</a></li>
+                <li><a href="#sec-6">6. Conclusion: Words Carry Thought</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="workbench-bar">
+            <div>
+                <strong>📄 arXiv Paper Studio</strong> &mdash; <span id="paper-mode-label">Solidified Draft Preview</span>
+            </div>
+            <div>
+                <button class="btn-action" id="toggle-paper-edit">Toggle Outline Workbench</button>
+            </div>
+        </div>
+
+        <div class="paper-container">
+            <header class="paper-header">
+                <h1 class="paper-title">The JITC-Loop Meta-Framework: Dual-Channel Memory, Token Golf, and Grounded Feedback in Sovereign Agentic Orchestration</h1>
+                <div class="paper-authors"><strong>Jason Allred</strong> &bull; Federated Lab Architecture</div>
+                <div style="font-size:0.85em; color:#64748b; margin-top:4px;">Technical Preprint &bull; Target: arXiv cs.DC / cs.SE</div>
+            </header>
+
+            <div class="paper-abstract" id="abstract">
+                <strong>Abstract</strong> &mdash; As large language model architectures scale toward multi-megatoken context windows, production agentic software engineering encounters the law of attention dilution: prompt reliability degrades exponentially as input tokens balloon. We introduce the <em>Just-In-Time Context (JITC)</em> paradigm, a federated orchestration architecture that replaces monolithic prompt injection with high-speed, dynamic vector grounding (sub-15ms) across local and cloud silicon topologies. By coupling <em>Token Golf</em> discipline (capping worker context payloads below 1,500 tokens) with closed-loop <em>Handover Reflection backpressure</em>, we demonstrate deterministic task execution across sovereign hardware endpoints without context thrashing.
+            </div>
+
+            <section class="paper-section" id="sec-1">
+                <div class="section-header">
+                    <h2>1. Introduction & The Attention Ceiling</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-001]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC)... Floating up what you need instead of memorizing the whole dictionary."
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>Standard agentic systems treat context windows as monolithic scratchpads, loading entire code repositories, historical documentation, and API specifications into the initial prompt. This practice induces severe quadratic prefill latency, memory allocation faults on unified hardware architectures, and loss of attention fidelity.</p>
+                <p>The JITC-Loop framework addresses this through dual-channel orchestration: separating structural human guidance (origin anchors) from automated machine synthesis and floating relevant memories just-in-time.</p>
+            </section>
+
+            <section class="paper-section" id="sec-2">
+                <div class="section-header">
+                    <h2>2. Token Golf & Quantified Trust</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-002]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing."
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>We formalize the <em>Token Golf Principle</em>: model reliability is inversely proportional to prompt context expansion. In high-velocity software engineering, subagents must be scoped to surgical 4-anchor contracts, stripping ambient tool ballast and achieving sub-2s execution loops.</p>
+            </section>
+
+            <section class="paper-section" id="sec-3">
+                <div class="section-header">
+                    <h2>3. Grounded Feedback Backpressure</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-003]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "A system without backpressure is a walled garden. Customer feedback should be collated and summarized... In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change would have made this faster?"
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>Drawing from industrial customer service systems, multi-agent pipelines require continuous cognitive backpressure. When execution tasks complete or stumble, the delegate emits a structured Handover Reflection that self-corrects prompt ambiguity across sequential iterations.</p>
+            </section>
+
+            <section class="paper-section" id="sec-4">
+                <div class="section-header">
+                    <h2>4. The Human-AI Interface & The Perfect Foil</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-004 / WIS-005]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "AI is the perfect foil for a busy mind. A 10x developer is a misnomer, 10x debt is pre-packaged. The skill becomes reading agentic output slowly and methodically, like a robot reading stack traces."
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>The role of the human engineer transitions from an individual contributor writing raw syntax to a Product Manager and Systems Architect governing latent space execution harnesses.</p>
+            </section>
+
+            <section class="paper-section" id="sec-5">
+                <div class="section-header">
+                    <h2>5. Engineering Disciplines for Latent Space</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-006 / WIS-008]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "What's good for people is good for AI: SCRUM sprints, retrospectives, drafts, linting, and peer review. Libraries over Frameworks, avoiding speculative scaffolding, and actively deleting forgotten code."
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>Applying traditional software engineering rigor—modular libraries, immutable origin vectors, and automated linters—transforms stochastic generative models into reliable, deterministic execution nodes.</p>
+            </section>
+
+            <section class="paper-section" id="sec-6">
+                <div class="section-header">
+                    <h2>6. Conclusion: Words Carry Thought</h2>
+                    <span style="font-size:0.8em; color:#94a3b8;">[WIS-007]</span>
+                </div>
+                <div class="origin-epigraph">
+                    "Language is humanity's best invention. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'"
+                    <span class="epigraph-author">&mdash; Jason Allred, Origin Thesis</span>
+                </div>
+                <p>By treating language as an executable, self-correcting interface, the JITC-Loop meta-framework unifies human intent and sovereign silicon into an enduring, verifiable architecture.</p>
+            </section>
+
+            <div class="workbench-ctrls">
+                <h3 style="color:#38bdf8; margin-top:0;">🎛️ Section & Origin Quote Sequencer</h3>
+                <p style="font-size:0.85em; color:#94a3b8;">Drag and re-order sections or adjust origin quote slotting before compiling to LaTeX/PDF.</p>
+                <div style="display:flex; gap:12px; margin-top:12px;">
+                    <button class="btn-action" onclick="alert('Compiled to local LaTeX template.')">Compile to LaTeX (main.tex)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let isPaperEdit = window.location.search.includes('edit=1');
+        const toggleBtn = document.getElementById('toggle-paper-edit');
+        const modeLabel = document.getElementById('paper-mode-label');
+
+        function updatePaperMode() {
+            if (isPaperEdit) {
+                document.body.classList.add('edit-active');
+                modeLabel.textContent = "Interactive Outline Workbench";
+                modeLabel.style.color = "#38bdf8";
+            } else {
+                document.body.classList.remove('edit-active');
+                modeLabel.textContent = "Solidified Draft Preview";
+                modeLabel.style.color = "#94a3b8";
+            }
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            isPaperEdit = !isPaperEdit;
+            const url = new URL(window.location);
+            if (isPaperEdit) url.searchParams.set('edit', '1');
+            else url.searchParams.delete('edit');
+            window.history.pushState({}, '', url);
+            updatePaperMode();
+        });
+
+        document.addEventListener('DOMContentLoaded', updatePaperMode);
+    </script>
+</body>
+</html>
