@@ -2954,6 +2954,13 @@
 **Rationale:** Eliminates runaway 25+ recursive `<thought>` loops in Brain archive generation.
 **Mechanism:** `HomeLabAI/src/nodes/loader.py`.
 
+## [FEAT-557] Sprint Documentation Grooming & Dedicated Sprint DNA ChromaDB Collection
+**Sprint:** BACKLOG (Candidate SPR-76.0)
+**Status:** CANDIDATE
+**Logic:** Grooms, standardizes, and indexes historical and active sprint documents (`SPRINT_PLAN_*.md`, `SPRINT_REPORT_*.md`, retrospectives) into a dedicated ChromaDB collection (`sprint_dna` on port 8001).
+**Rationale:** Prevents context window bloat when researching historical sprint decisions and story evolution. Decouples sprint narrative history and phase intent from raw codebase architecture (`feature_dna`) and invariant operational rules (`behavioral_dna`), enabling sub-millisecond semantic retrieval via `clara-dna` MCP tools and ambient hooks.
+**Mechanism:** `HomeLabAI/src/curator/sync_sprint_dna.py`, ChromaDB collection `sprint_dna`, and `clara-dna` MCP server routing.
+
 
 
 
