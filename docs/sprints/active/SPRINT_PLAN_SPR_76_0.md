@@ -1,0 +1,111 @@
+# 🚀 SPRINT PLAN 76.0: The Wisdom Architecture & JITC Whitepaper
+## Decoupled Origin/Synthesis, Interactive Studio, Sprint DNA & arXiv Pipeline
+
+**Sprint ID:** `SPR_76_0`  
+**Theme:** Wisdom Architecture (`origin` vs. `synthesis`), Wisdom Studio Workbench (`wisdom.html` / `paper.html`), Dedicated `sprint_dna` ChromaDB Collection with Smart Archiving Trigger, and JITC arXiv Synthesis Pipeline  
+**Status:** ACTIVE / APPROVED  
+**Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), BKM-049 (Tri-Loop Delegation), BKM-040 (Git Discipline), BKM-024 (Live Verification)  
+**Target Web Targets:** `Portfolio_Dev/field_notes/wisdom.html`, `Portfolio_Dev/field_notes/paper.html`, `Portfolio_Dev/field_notes/data/wisdom_data.json`  
+**Target Silicon & DB:** ChromaDB Port 8001 (`sprint_dna`, `long_term_wisdom`, `philosophy_dna`), M5 Air MLX `:8000`, ICM SQLite (`wisdom-philosophy`, `agent-discipline`)  
+
+---
+
+## 🏛️ Approved Context & Strategic Invariants (Grill-Me Alignment)
+
+During the Sprint 76.0 alignment sessions, the following fundamental design decisions and operational laws were approved:
+
+### 1. 🛡️ The Wisdom Card Law: Decoupled `origin` vs. `synthesis`
+* **`origin` (Human Sovereign)**: Contains verbatim, unmodified quotes, voice dumps, and thoughts authored by `jallred`.
+  - *Invariant Rule*: AGY, mice, and delegated models are strictly FORBIDDEN from altering, overwriting, or hallucinating within `origin`. Only the human operator modifies this field.
+* **`synthesis` (Agent Collaborative)**: Contains machine scaffolding, contextual narrative, touched codebase anchors, academic literature connections, and review critique.
+  - *Collaborative Rule*: AGY, local silicon (M5 Air/Atlas), and cloud reviewer models can iteratively draft, refine, and grade the synthesis block.
+* **Relations & Graph**:
+  - `explicit_links`: Hard-coded relationship IDs (`WIS-001` connects to `WIS-018`).
+  - `tags`: Soft semantic vectors for ChromaDB querying.
+
+### 2. 🗄️ `sprint_dna` Hybrid Ingestion & Recency Decay
+* **Hybrid Chunking**: Level 1 (Story Cards with prompt triggers, touched files, lessons learned) + Level 2 (Sprint Overview with high-level themes, metrics, and retros).
+* **Discrete 3-Tier Recency Curve**:
+  - **Active Sprint**: Weight `1.0`
+  - **Past 5 Sprints**: Weight `0.85`
+  - **Older Archived Sprints**: Weight `0.30`
+* **Targeted Ambient Hook Gate**: `icm_hook.py` queries `sprint_dna` strictly when prompt contains keyword anchors (`SPR-xx`, `Story xx`, `sprint`, `plan`, `retro`, `sprint_dna`) with a 150ms fail-open timeout.
+* **Smart Archiving Trigger & Single-Worker Batch**: Moving a sprint to `docs/sprints/archive/` enqueues single-sprint distillation to M5 Air sovereign engine with execution duration telemetry.
+
+### 3. 🛑 Operational Discipline & Delegation Safety
+* **No Parallel Delegation**: Parallel subagent swarms cause thrashing and context fragmentation. Dispatches are strictly serialized (ICM memory `01M21GZE1CNKQHRW4B1ZE6TEVH`).
+* **BKM-049 Tri-Loop Escalation**:
+  - Attempt 1: Sovereign Local Silicon (`[SWARM:LOCAL]`).
+  - Attempt 2: Cloud Swarm (`[SWARM:CLOUD]`) for burst reasoning or adversarial critique.
+  - Attempt 3: AGY Takeover (`[AGY:TAKEOVER]`).
+* **Cloud in Planning/Review Mode**: Cloud models are leveraged as adversarial reviewers and rubric checkers, never as unconstrained ghostwriters of human thought.
+* **BKM-040**: Stage and commit locally only, never push.
+
+---
+
+## 🧬 Sprint 76 Detailed Story Specifications
+
+### 🧬 Story 76.1: Wisdom Schema & Dual-Channel Ingestion Pipeline
+* **Feature Anchor:** `[FEAT-558]`  
+* **Objective:** Establish the canonical Wisdom Card schema (`WIS-xxx`) with decoupled `origin` and `synthesis` fields. Ingest existing Keep dumps, Philosophy papers, and Google Drive notes into `wisdom_data.json` while syncing vector collections.
+* **Target Files:**
+  - `Portfolio_Dev/field_notes/data/wisdom_data.json`
+  - `Portfolio_Dev/docs/philosophy/PHL-*.md`
+  - `HomeLabAI/src/curator/sync_chroma_dna.py`
+* **Success Criteria:**
+  1. JSON schema strictly enforces `origin.immutable: true` and isolates `synthesis` block.
+  2. Initial batch of 8+ core engineering philosophy cards ingested from Drive/Keep notes without altering human origin text.
+  3. ChromaDB collection `long_term_wisdom` / `philosophy_dna` on `:8001` indexed and queryable.
+
+---
+
+### 🧬 Story 76.2: Wisdom Studio & Research Workbench UI (`wisdom.html` / `paper.html`)
+* **Feature Anchor:** `[FEAT-559]`  
+* **Objective:** Build an interactive, tactile Single Page Application in `Portfolio_Dev/field_notes/wisdom.html` (and symlinked `paper.html`) that allows `jallred` to curate, re-order, tag, and edit wisdom cards.
+* **Target Files:**
+  - `Portfolio_Dev/field_notes/wisdom.html`
+  - `Portfolio_Dev/field_notes/paper.html`
+* **Key Capabilities:**
+  1. Visual outline with drag-and-drop sequencing (`paper_order`).
+  2. Dedicated `origin` editor (Human space) and `synthesis` inspector (Agent/Lab anchors space).
+  3. Semantic tag filtering and explicit ID relationship link builder (`explicit_links`).
+  4. LocalStorage and static export/save synchronization.
+
+---
+
+### 🧬 Story 76.3: `sprint_dna` Smart Archiving Trigger & Distillation Engine
+* **Feature Anchor:** `[FEAT-557]`  
+* **Objective:** Implement dedicated `sprint_dna` ChromaDB collection with hybrid chunking, 3-tier recency decay, smart archiving queue, and targeted ambient hook integration.
+* **Target Files:**
+  - `HomeLabAI/src/curator/sync_sprint_dna.py`
+  - `HomeLabAI/config/hooks/icm_hook.py`
+  - `HomeLabAI/src/engine_client.py`
+* **Success Criteria:**
+  1. All 56 archived sprint plans in `Portfolio_Dev/docs/sprints/archive/` ingested into `sprint_dna` with hybrid story/sprint embeddings and discrete recency weights (`1.0`, `0.85`, `0.30`).
+  2. Archiving a sprint file triggers a single-worker M5 Air background distillation job logging elapsed execution time.
+  3. `icm_hook.py` injects relevant sprint DNA when prompt contains sprint keywords within 150ms.
+
+---
+
+### 🧬 Story 76.4: Automated Synthesis Compiler & arXiv LaTeX Pipeline
+* **Feature Anchor:** `[FEAT-560]`  
+* **Objective:** Create a deterministic compilation engine that weaves ordered Wisdom Cards into an arXiv-compliant LaTeX whitepaper on the JITC Meta-Framework.
+* **Target Files:**
+  - `Portfolio_Dev/scripts/build_paper.py`
+  - `Portfolio_Dev/docs/whitepaper/main.tex`
+  - `Portfolio_Dev/docs/whitepaper/references.bib`
+* **Success Criteria:**
+  1. `build_paper.py` reads ordered cards from `wisdom_data.json`, embeds `origin` quotes as epigraphs/blockquotes, and weaves `synthesis` explanatory text.
+  2. Compiles to clean LaTeX document adhering to arXiv formatting standards with automated PDF artifact generation.
+  3. Zero drift of human origin voice throughout compilation.
+
+---
+
+## 📊 Verification Ledger
+
+| Story ID | Verification Method | Silicon Target | Sign-off Status |
+| :--- | :--- | :--- | :--- |
+| **76.1** | Schema unit tests & ChromaDB query probe | ChromaDB `:8001` | PENDING |
+| **76.2** | UI DOM interaction & LocalStorage sync test | Browser / Static HTTP | PENDING |
+| **76.3** | Archive ingestion benchmark & M5 Air distillation timing | M5 Air MLX `:8000` | PENDING |
+| **76.4** | `build_paper.py` compile run & LaTeX syntax check | Local Python / PDF | PENDING |
