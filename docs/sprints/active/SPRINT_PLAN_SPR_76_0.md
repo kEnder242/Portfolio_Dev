@@ -129,8 +129,8 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 | Story ID | Verification Method | Silicon Target | Sign-off Status |
 | :--- | :--- | :--- | :--- |
-| **76.0** | Swarm model ping & Canary delegation suite (`pytest test_delegation_canary.py`) | REST `:4097` / OpenRouter | ✅ CERTIFIED (Pass) |
-| **76.1** | Schema verification & ChromaDB query probe (`query_dna(philosophy_dna)`) | ChromaDB `:8001` | ✅ CERTIFIED (8/8 Cards) |
-| **76.2** | UI DOM interaction & LocalStorage sync test (`philosophy.html`) | Browser / Static HTTP | ✅ CERTIFIED |
-| **76.3** | Archive ingestion benchmark & M5 Air distillation timing (`sync_sprint_dna.py`) | ChromaDB `:8001` | ✅ CERTIFIED (182 Chunks, 22.1s) |
-| **76.4** | `build_paper.py` compile run & LaTeX generation (`docs/whitepaper/main.tex`) | Local Python / LaTeX | ✅ CERTIFIED |
+| **76.0** | Swarm model ping & Canary delegation suite | REST `:4097` / OpenRouter | PASSED |
+| **76.1** | Schema unit tests & ChromaDB query probe | ChromaDB `:8001` | PASSED |
+| **76.2** | UI DOM interaction & LocalStorage sync test | M5 Air TurboQuant `:8000` | PASSED |
+| **76.3** | Archive ingestion benchmark & M5 Air distillation timing | ChromaDB `:8001` / M5 Air | PASSED |
+| **76.4** | `build_paper.py` compile run & LaTeX syntax check | Local Python / PDF | PASSED |
