@@ -1988,13 +1988,6 @@
 **Rationale:** Forces Linux kernel to release stale directory caches before swapping memory, and configures EarlyOOM to sacrifice non-critical GUI apps if RAM drops below 10%, protecting core AI nodes from kernel I/O freezes.
 **Mechanism:** `/etc/sysctl.d/99-lab-memory.conf` and `/etc/default/earlyoom`.
 
-## [LAB-108] Multi-Remote Secondary Git Mirror (Bitbucket Redundancy)
-**Status:** DESIGN
-**Code:** *none found (documented only)*
-**Logic:** Configures dual-push secondary Git transport remotes (`git remote set-url --add --push origin <bitbucket-url>`) pointing to private secondary repositories alongside GitLab/GitHub origins for automated redundancy across cloud hosting providers.
-**Rationale:** Protects the 18-year archive, systemd operational ledgers, and agentic codebases against single-platform outage, credential revocation, or provider-level account restrictions without adding manual workflow friction.
-**Mechanism:** Host Git configuration (`.git/config`) dual-push remotes across `Dev_Lab`, `Portfolio_Dev`, and `HomeLabAI` repositories.
-
 ## [FEAT-463] Same-Origin Tunnel Remote Control Routing & Telemetry
 **Status:** COMPLETED (Sprint 56)
 **Code:** [src/debug/bench_moe_plus.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/debug/bench_moe_plus.py#L1) — Same-Origin Tunnel Remote Control Routing & Telemetry.
