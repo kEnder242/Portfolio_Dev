@@ -401,13 +401,17 @@
                     <tr>
                         <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-024</td>
                         <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
-                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Validation-Aware Synchronization & Live Integration</div>
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Validation-Aware Synchronization & Live Verification</div>
                             <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
-                                <p><strong>Objective</strong>: Ensure the physical Lab state and running daemon processes match active sprint code before testing.</p>
+                                <p><strong>Objective</strong>: Maintain continuous lab liveness and ensure physical daemon processes and silicon endpoints match active sprint code before task certification.</p>
 <ol>
-<li><strong>Sync-Gate</strong>: Before running any <code>[LIVE FIRE]</code>, <code>[SHAKEDOWN]</code>, or integration test (<code>test_integration_*.py</code>), the Agent MUST check service liveness (<code>curl http://127.0.0.1:8000/status</code> or <code>lab_heartbeat</code>).</li>
-<li><strong>Mandatory Service Reload</strong>: If any file in <code>src/logic/</code>, <code>src/nodes/</code>, or <code>src/forge/</code> was edited during the session, the Agent MUST execute <code>sudo systemctl restart lab-attendant.service</code> to flush cached Python processes before executing tests.</li>
-<li><strong>State Trust</strong>: Do not assume background processes persisted cleanly across git commits or code refactors. Re-verify liveness and run live integration tests after every service restart.</li>
+<li><strong>Two-Tier Verification Standard</strong>:<ul>
+<li><strong>Tier 1 (Fast Mock Isolation)</strong>: Unit tests and mocked suites are encouraged for rapid iteration during local coding.</li>
+<li><strong>Tier 2 (Mandatory Live Certification)</strong>: No task or bugfix may be marked complete based on mock tests alone. The Agent must verify against the active running daemon (<code>http://127.0.0.1:8765/status</code> matching local Git HEAD) and reachable hardware silicon seats.</li>
+</ul>
+</li>
+<li><strong>Sync-Gate &amp; Fresh Bytecode</strong>: Pytest automatically checks local Git HEAD against the served boot commit. If a mismatch is detected, the Agent must trigger a daemon restart/reload rather than ignoring the stale state.</li>
+<li><strong>State Trust</strong>: Do not assume background processes persisted cleanly across git commits or code refactors. Re-verify liveness and run live integration queries after every service restart.</li>
 </ol>
 <h3>BKM-020: High-Fidelity Sprint Documentation (Intent Preservation)</h3>
 <p><strong>Objective</strong>: Prevent 'Loss of Intent' during context-window shifts or session restores.
