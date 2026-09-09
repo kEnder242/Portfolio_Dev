@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Studio | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=700f9482">
+    <style>
+        /* [FEAT-560] Paper Studio: Dual-View (Academic Preview + Workbench) */
+        .paper-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .section-title { margin-bottom: 4px; }
+        .view-toggle {
+            font-family: var(--font-stack);
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .view-toggle:hover { border-color: var(--accent-color); background: var(--code-bg); }
+        .view-toggle.active { border-color: var(--accent-color); color: #fff; }
+
+        /* Academic Paper Typography */
+        .paper-body {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: "Georgia", "Times New Roman", serif;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+        .paper-title-block {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .paper-title-block h1 {
+            font-size: 1.6rem;
+            color: var(--heading-color);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .paper-title-block .paper-author {
+            font-size: 0.95rem;
+            color: var(--sub-color);
+        }
+        .paper-title-block .paper-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+        .paper-abstract {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 16px 20px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .paper-abstract .abstract-label {
+            font-weight: bold;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .paper-section {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .paper-section h2 {
+            font-size: 1.2rem;
+            color: var(--heading-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .paper-section h3 {
+            font-size: 1rem;
+            color: var(--accent-color);
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .paper-section p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .paper-epigraph {
+            border-left: 3px solid #d29922;
+            background: rgba(210, 153, 34, 0.06);
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-style: italic;
+            color: var(--sub-color);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+        .paper-epigraph .epigraph-source {
+            display: block;
+            text-align: right;
+            font-style: normal;
+            font-size: 0.78rem;
+            color: #666;
+            margin-top: 6px;
+        }
+        .paper-blockquote {
+            border-left: 2px solid var(--accent-dim);
+            padding-left: 14px;
+            margin: 14px 0;
+            color: var(--sub-color);
+            font-size: 0.9rem;
+        }
+        .paper-tags {
+            margin-top: 6px;
+        }
+        .paper-tag {
+            display: inline-block;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 1px 7px;
+            font-size: 0.65rem;
+            color: var(--accent-color);
+            margin: 2px 3px 2px 0;
+            font-family: var(--font-stack);
+        }
+        .paper-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .bib-entry {
+            margin-bottom: 10px;
+            padding-left: 2em;
+            text-indent: -2em;
+            font-size: 0.85rem;
+            color: var(--sub-color);
+        }
+        .bib-entry .bib-key {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Workbench Mode Overrides */
+        body.workbench .paper-section {
+            border: 1px dashed var(--border-color);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+        body.workbench .paper-section:hover { border-color: #238636; }
+        body.workbench .paper-section .section-drag-handle {
+            display: block;
+            cursor: grab;
+            color: #238636;
+            font-size: 0.7rem;
+            font-family: var(--font-stack);
+            margin-bottom: 6px;
+            user-select: none;
+        }
+        body.workbench .paper-section .section-drag-handle:active { cursor: grabbing; }
+        body.workbench .paper-epigraph {
+            border-left-color: #238636;
+        }
+        body.workbench .wb-editable {
+            border: 1px dashed var(--border-color);
+            padding: 4px 6px;
+            border-radius: 3px;
+            transition: border-color 0.2s;
+        }
+        body.workbench .wb-editable:hover { border-color: var(--accent-color); }
+        body.workbench .wb-editable:focus { outline: none; border-style: solid; border-color: var(--accent-color); }
+        body.workbench .quote-slot {
+            border: 2px dashed #238636;
+            padding: 8px 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            color: #3fb950;
+            font-size: 0.8rem;
+            font-family: var(--font-stack);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        body.workbench .quote-slot:hover { background: rgba(35, 134, 54, 0.1); }
+        body.workbench .quote-slot.filled {
+            border-style: solid;
+            border-color: #d29922;
+            color: var(--sub-color);
+            font-style: italic;
+            cursor: default;
+        }
+
+        .wb-toolbar {
+            display: none;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-family: var(--font-stack);
+            font-size: 0.75rem;
+            color: var(--sub-color);
+        }
+        body.workbench .wb-toolbar { display: flex; }
+        .wb-btn {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .wb-btn:hover { background: var(--accent-dim); color: #fff; }
+        .wb-btn.compile { border-color: #d29922; color: #d29922; }
+        .wb-btn.compile:hover { background: rgba(210, 153, 34, 0.2); }
+        .wb-btn.export { border-color: var(--accent-color); color: var(--accent-color); }
+        .wb-btn.add-section { border-color: #238636; color: #3fb950; }
+        .wb-btn.add-section:hover { background: rgba(35, 134, 54, 0.2); }
+        .wb-hint {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 10px;
+            font-family: var(--font-stack);
+        }
+
+        /* Quote Picker Panel */
+        .quote-picker {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            width: 380px;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            z-index: 1000;
+            font-family: var(--font-stack);
+            font-size: 0.8rem;
+        }
+        body.workbench .quote-picker.visible { display: block; }
+        .quote-picker-title {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+        .quote-option {
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            color: var(--sub-color);
+            line-height: 1.4;
+        }
+        .quote-option:hover {
+            border-color: var(--accent-color);
+            background: rgba(77, 170, 252, 0.05);
+        }
+        .quote-option .quote-source {
+            display: block;
+            font-size: 0.65rem;
+            color: #666;
+            margin-top: 4px;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+<!-- [SOURCE_OF_TRUTH] Compiled from: Portfolio_Dev/field_notes/data/wisdom_data.json via build_paper.py -->
+
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div id="sys-console">
+            <div>[INIT] Mounting Paper Studio...</div>
+        </div>
+
+        <section id="studio">
+            <div class="paper-header">
+                <h2 class="section-title">The Paper Studio: Dual-View LaTeX Pipeline</h2>
+                <div>
+                    <button id="toggle-workbench" class="view-toggle" title="Toggle workbench: re-order sections, slot quotes">⚒ Workbench</button>
+                    <button id="toggle-reader" class="view-toggle active" title="Academic paper preview">📄 Paper</button>
+                </div>
+            </div>
+            <div class="disclaimer-box" style="margin-bottom: 20px;">
+                <span style="color: var(--accent-color); font-weight: bold;">[FEAT-560 SCHEMA]</span>
+                The Paper Studio renders wisdom cards as academic paper sections. Origin quotes
+                become <strong>epigraphs</strong>; synthesis text becomes narrative body.
+                Reader View shows a solidified paper preview; Workbench Mode enables section
+                re-ordering, quote slotting, and LaTeX export via <code>build_paper.py</code>.
+            </div>
+
+            <div class="wb-toolbar" id="wb-toolbar">
+                <button class="wb-btn add-section" id="wb-add-section">+ Section</button>
+                <button class="wb-btn export" id="wb-export-order">Export Order</button>
+                <button class="wb-btn compile" id="wb-compile">Compile LaTeX</button>
+                <span id="wb-save-status"></span>
+            </div>
+
+            <div id="paper-container">
+                <div class="paper-body">
+                    <div class="paper-title-block">
+                        <h1 class="wb-editable" data-field="title" contenteditable="false">The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs</h1>
+                        <div class="paper-author">Jason Allred</div>
+                        <div class="paper-date">2026</div>
+                    </div>
+
+                    <div class="paper-abstract">
+                        <span class="abstract-label">Abstract</span>
+                        <span class="wb-editable" data-field="abstract" contenteditable="false">This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.</span>
+                    </div>
+
+                    <div class="paper-section" data-section-index="1">
+                        <span class="section-drag-handle" style="display:none;">⠿ DRAG</span>
+                        <h2 class="wb-editable" data-field="section_title" contenteditable="false">1. Introduction</h2>
+                        <p class="wb-editable" data-field="section_body" contenteditable="false">Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution. The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers.</p>
+                    </div>
+
+                    <!-- Wisdom card sections rendered by build_paper.py -->
+                    <div class="paper-section" data-section-index="2" data-card-id="WIS-001">
+                        <span class="section-drag-handle" style="display:none;">⠿ DRAG</span>
+                        <h2 class="wb-editable" data-field="section_title" contenteditable="false">2. Tooling Breadth: Structured Reasoning Across Model Stacks</h2>
+                        <div class="paper-epigraph">
+                            <span class="wb-editable" data-field="origin_quote" contenteditable="false">I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.</span>
+                            <span class="epigraph-source">— Jason Allred, Origin</span>
+                        </div>
+                        <p class="wb-editable" data-field="section_body" contenteditable="false">The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.</p>
+                        <h3>Key Takeaways</h3>
+                        <ul class="wb-editable" data-field="takeaways" contenteditable="false">
+                            <li>Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.</li>
+                            <li>Integration skill - wiring models into workflows - is the differentiator, not model choice.</li>
+                        </ul>
+                        <div class="paper-tags">
+                            <span class="paper-tag">human-ai</span><span class="paper-tag">tooling</span><span class="paper-tag">ollama</span><span class="paper-tag">nemo</span><span class="paper-tag">reasoning</span><span class="paper-tag">integration</span>
+                        </div>
+                    </div>
+
+                    <div class="paper-section" data-section-index="99">
+                        <span class="section-drag-handle" style="display:none;">⠿ DRAG</span>
+                        <h2 class="wb-editable" data-field="section_title" contenteditable="false">Conclusion</h2>
+                        <p class="wb-editable" data-field="section_body" contenteditable="false">The dual-channel architecture — immutable human origin alongside collaborative machine synthesis — provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.</p>
+                    </div>
+                </div>
+
+                <div class="paper-footer">
+                    <p>Generated by the JITC Paper Pipeline &middot; <code>build_paper.py</code> &middot; <a href="https://arxiv.org" style="color: var(--accent-color);">arXiv</a>-ready LaTeX output</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Picker (Workbench only) -->
+        <div class="quote-picker" id="quote-picker">
+            <div class="quote-picker-title">Quote Source Picker</div>
+            <div id="quote-picker-list"></div>
+        </div>
+    </main>
+
+    <script src="mission-control.js"></script>
+    <script>
+        // [FEAT-560] Story 76.4: Interactive Paper Studio
+        // Reader View (academic paper preview) + Workbench Mode (re-order, quote slotting).
+        (function () {
+            'use strict';
+
+            var currentMode = window.location.search.indexOf('edit=1') !== -1 ? 'workbench' : 'reader';
+
+            function setMode(mode) {
+                currentMode = mode;
+                document.body.classList.toggle('workbench', mode === 'workbench');
+                var readerBtn = document.getElementById('toggle-reader');
+                var wbBtn = document.getElementById('toggle-workbench');
+                if (readerBtn) readerBtn.classList.toggle('active', mode === 'reader');
+                if (wbBtn) wbBtn.classList.toggle('active', mode === 'workbench');
+                // Show/hide drag handles
+                document.querySelectorAll('.section-drag-handle').forEach(function (h) {
+                    h.style.display = mode === 'workbench' ? 'block' : 'none';
+                });
+                // URL reflection
+                var url = new URL(window.location.href);
+                if (mode === 'workbench') { url.searchParams.set('edit', '1'); }
+                else { url.searchParams.delete('edit'); }
+                window.history.replaceState({}, '', url.toString());
+            }
+
+            function initToggle() {
+                var wbBtn = document.getElementById('toggle-workbench');
+                var readerBtn = document.getElementById('toggle-reader');
+                if (wbBtn) wbBtn.addEventListener('click', function () { setMode('workbench'); });
+                if (readerBtn) readerBtn.addEventListener('click', function () { setMode('reader'); });
+                setMode(currentMode);
+            }
+
+            // --- Workbench: make synthesis fields editable ---
+            function wireWorkbench() {
+                var container = document.getElementById('paper-container');
+                if (!container) return;
+                var editables = container.querySelectorAll('.wb-editable');
+                editables.forEach(function (el) {
+                    if (el.getAttribute('contenteditable')) return;
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('spellcheck', 'false');
+                });
+                wireDragDrop(container);
+                wireAddSection();
+                wireExportOrder();
+            }
+
+            // --- Drag-and-drop section reordering ---
+            function wireDragDrop(container) {
+                var sections = container.querySelectorAll('.paper-section');
+                sections.forEach(function (section) {
+                    var handle = section.querySelector('.section-drag-handle');
+                    if (!handle || handle.dataset.wired) return;
+                    handle.dataset.wired = '1';
+                    handle.setAttribute('draggable', 'true');
+                    handle.addEventListener('dragstart', function (e) {
+                        section.dataset.dragging = 'true';
+                        e.dataTransfer.effectAllowed = 'move';
+                        section.style.opacity = '0.4';
+                    });
+                    handle.addEventListener('dragend', function () {
+                        section.style.opacity = '';
+                        delete section.dataset.dragging;
+                        container.querySelectorAll('.paper-section').forEach(function (s) {
+                            s.style.borderTop = '';
+                        });
+                    });
+                    section.addEventListener('dragover', function (e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                    });
+                    section.addEventListener('drop', function (e) {
+                        e.preventDefault();
+                        var dragging = container.querySelector('[data-dragging="true"]');
+                        if (dragging && dragging !== section) {
+                            var allSections = Array.from(container.querySelectorAll('.paper-section'));
+                            var dragIdx = allSections.indexOf(dragging);
+                            var dropIdx = allSections.indexOf(section);
+                            if (dragIdx < dropIdx) {
+                                section.parentNode.insertBefore(dragging, section.nextSibling);
+                            } else {
+                                section.parentNode.insertBefore(dragging, section);
+                            }
+                        }
+                    });
+                });
+            }
+
+            // --- Add new section ---
+            function wireAddSection() {
+                var addBtn = document.getElementById('wb-add-section');
+                if (!addBtn || addBtn.dataset.wired) return;
+                addBtn.dataset.wired = '1';
+                addBtn.addEventListener('click', function () {
+                    var container = document.getElementById('paper-container');
+                    var body = container.querySelector('.paper-body');
+                    var sections = body.querySelectorAll('.paper-section');
+                    var insertBefore = sections[sections.length - 1]; // before conclusion
+                    var section = document.createElement('div');
+                    section.className = 'paper-section';
+                    section.dataset.sectionIndex = String(sections.length);
+                    section.innerHTML =
+                        '<span class="section-drag-handle" style="display:block;">⠿ DRAG</span>' +
+                        '<h2 class="wb-editable" data-field="section_title" contenteditable="true">New Section</h2>' +
+                        '<div class="quote-slot" data-slot="origin">+ Slot an origin quote</div>' +
+                        '<p class="wb-editable" data-field="section_body" contenteditable="true">(add synthesis text)</p>';
+                    body.insertBefore(section, insertBefore);
+                    wireDragDrop(body);
+                    wireQuoteSlots();
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            }
+
+            // --- Export section order as JSON ---
+            function wireExportOrder() {
+                var exportBtn = document.getElementById('wb-export-order');
+                if (!exportBtn || exportBtn.dataset.wired) return;
+                exportBtn.dataset.wired = '1';
+                exportBtn.addEventListener('click', function () {
+                    var container = document.getElementById('paper-container');
+                    var sections = container.querySelectorAll('.paper-section');
+                    var order = [];
+                    sections.forEach(function (s, i) {
+                        var title = s.querySelector('[data-field="section_title"]');
+                        order.push({
+                            index: i + 1,
+                            title: title ? title.textContent.trim() : '',
+                            cardId: s.dataset.cardId || null
+                        });
+                    });
+                    var blob = new Blob([JSON.stringify({ sections: order }, null, 2)], { type: 'application/json' });
+                    var a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'paper_section_order.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(a.href);
+                    var status = document.getElementById('wb-save-status');
+                    if (status) {
+                        status.textContent = '✓ Exported ' + order.length + ' section(s)';
+                        setTimeout(function () { status.textContent = ''; }, 3000);
+                    }
+                });
+            }
+
+            // --- Quote Picker Panel ---
+            var WISDOM_QUOTES = [
+                { text: "I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.", source: "WIS-001" }
+            ];
+
+            // Try to load quotes from embedded schema
+            try {
+                if (window.__PAPER_QUOTES__) WISDOM_QUOTES = window.__PAPER_QUOTES__;
+            } catch (e) {}
+
+            var activeSlot = null;
+
+            function wireQuoteSlots() {
+                document.querySelectorAll('.quote-slot:not(.filled)').forEach(function (slot) {
+                    if (slot.dataset.wired) return;
+                    slot.dataset.wired = '1';
+                    slot.addEventListener('click', function () {
+                        if (slot.classList.contains('filled')) return;
+                        activeSlot = slot;
+                        var picker = document.getElementById('quote-picker');
+                        var list = document.getElementById('quote-picker-list');
+                        list.innerHTML = '';
+                        WISDOM_QUOTES.forEach(function (q, i) {
+                            var opt = document.createElement('div');
+                            opt.className = 'quote-option';
+                            opt.innerHTML = '"' + q.text.substring(0, 120) + '..."' +
+                                '<span class="quote-source">' + q.source + '</span>';
+                            opt.addEventListener('click', function () {
+                                slot.textContent = q.text;
+                                slot.classList.add('filled');
+                                slot.dataset.quoteSource = q.source;
+                                picker.classList.remove('visible');
+                                activeSlot = null;
+                            });
+                            list.appendChild(opt);
+                        });
+                        picker.classList.toggle('visible');
+                    });
+                });
+            }
+
+            // --- Compile button (opens build_paper.py instructions) ---
+            function wireCompile() {
+                var compileBtn = document.getElementById('wb-compile');
+                if (!compileBtn || compileBtn.dataset.wired) return;
+                compileBtn.dataset.wired = '1';
+                compileBtn.addEventListener('click', function () {
+                    var status = document.getElementById('wb-save-status');
+                    if (status) {
+                        status.textContent = '→ Run: python3 Portfolio_Dev/scripts/build_paper.py';
+                        status.style.color = '#d29922';
+                        setTimeout(function () { status.textContent = ''; status.style.color = ''; }, 5000);
+                    }
+                });
+            }
+
+            function init() {
+                initToggle();
+                wireWorkbench();
+                wireQuoteSlots();
+                wireCompile();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+<script>
+// [FEAT-560] Workbench context: origin quotes available for slotting.
+window.__PAPER_QUOTES__ = [
+  {
+    "text": "I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.",
+    "source": "WIS-001"
+  }
+];
+</script>
+</body>
+</html>
