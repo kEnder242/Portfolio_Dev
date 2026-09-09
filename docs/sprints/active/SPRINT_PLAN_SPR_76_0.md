@@ -134,3 +134,15 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 | **76.2** | UI DOM interaction & LocalStorage sync test | M5 Air TurboQuant `:8000` | PASSED |
 | **76.3** | Archive ingestion benchmark & M5 Air distillation timing | ChromaDB `:8001` / M5 Air | PASSED |
 | **76.4** | `build_paper.py` compile run & LaTeX syntax check | Local Python / PDF | PASSED |
+
+---
+
+## 📌 Top of Backlog: Upcoming Architectural Tracks
+
+### 🏛️ [BACKLOG-01] Argus / Momus Dedicated Local Test Runner & Lint Reviewer
+* **Concept & Problem Solved:** Maintain clean, unpolluted context windows across local multi-agent swarms. Junior on M5 Air remains a pure surgical code patcher (`safe_patch` only, no `bash`, no `pytest`). To prevent Atlas on KENDER 4090 from accumulating verbose pytest stack traces, warnings, and ruff outputs on complex multi-step stories, dispatch test execution to a dedicated persona.
+* **Proposed Tri-Cameral Local Architecture:**
+  1. **Atlas (Node KENDER 4090):** High-level task decomposition, story sequencing, micro-task generation.
+  2. **Junior (M5 Air oMLX):** Fast surgical code modification (`safe_patch` only, <2k tokens per pass).
+  3. **Argus / Momus (Node KENDER 4090 / Ollama or fast worker):** Dedicated test runner with `bash` permission. Executes `pytest`, `ruff check`, parses stack traces, and returns a concise pass/fail failure report back to Atlas for corrective re-dispatching.
+* **Benefits:** Complete context isolation between code generation, file modification, and verification execution. Keeps each agent's prefill footprint well below memory caps.
