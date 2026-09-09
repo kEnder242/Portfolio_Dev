@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisdom Studio | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=700f9482">
+    <style>
+        /* Wisdom Studio: Dual-View (Reader + Workbench) */
+        .wisdom-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .section-title { margin-bottom: 4px; }
+        .view-toggle {
+            font-family: var(--font-stack);
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .view-toggle:hover { border-color: var(--accent-color); background: var(--code-bg); }
+        .view-toggle.active { border-color: var(--accent-color); color: #fff; }
+
+        .wisdom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .wisdom-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 16px 18px;
+            font-family: var(--font-stack);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            border-radius: 4px;
+        }
+        .wisdom-card .card-title {
+            font-weight: bold;
+            color: var(--heading-color);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+        .wisdom-card .card-section {
+            margin-bottom: 10px;
+        }
+        .wisdom-card .section-label {
+            display: inline-block;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .wisdom-card .immutable-flag {
+            color: #d29922;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 6px;
+        }
+        .wisdom-card .origin-quote {
+            border-left: 2px solid var(--accent-dim);
+            padding-left: 10px;
+            color: var(--sub-color);
+            font-style: italic;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+        }
+        .wisdom-card ul.takeaways {
+            margin: 4px 0 0 0;
+            padding-left: 18px;
+        }
+        .wisdom-card ul.takeaways li { margin-bottom: 3px; }
+        .wisdom-card .tag-row { margin-top: 8px; }
+        .wisdom-card .tag {
+            display: inline-block;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 1px 7px;
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            margin: 2px 4px 2px 0;
+            font-family: var(--font-stack);
+        }
+
+        /* Workbench Mode: visibility + editable fields */
+        body.workbench .wisdom-card { border-left-color: #238636; }
+        body.workbench .wb-editable {
+            border: 1px dashed var(--border-color);
+            padding: 6px 8px;
+            border-radius: 3px;
+            transition: border-color 0.2s;
+        }
+        body.workbench .wb-editable:hover { border-color: var(--accent-color); }
+        body.workbench .wb-editable:focus { outline: none; border-style: solid; border-color: var(--accent-color); }
+        body.workbench .wb-input {
+            width: 100%;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            font-size: 0.8rem;
+            padding: 5px 8px;
+            border-radius: 3px;
+            margin: 2px 0;
+        }
+        body.workbench .wb-input:focus { outline: none; border-color: var(--accent-color); }
+        body.workbench .origin-quote.wb-locked {
+            border-color: #d29922;
+            color: #8b949e;
+            cursor: not-allowed;
+        }
+
+        .wb-toolbar {
+            display: none;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-family: var(--font-stack);
+            font-size: 0.75rem;
+            color: var(--sub-color);
+        }
+        body.workbench .wb-toolbar { display: flex; }
+        .wb-btn {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .wb-btn:hover { background: var(--accent-dim); color: #fff; }
+        .wb-btn.add-card { border-color: #238636; color: #3fb950; }
+        .wb-btn.add-card:hover { background: rgba(35, 134, 54, 0.2); }
+        .wb-btn.export { border-color: var(--accent-color); color: var(--accent-color); }
+
+        .wb-hint { font-size: 0.7rem; color: #666; margin-top: 10px; font-family: var(--font-stack); }
+        .empty-state {
+            text-align: center;
+            color: var(--sub-color);
+            font-family: var(--font-stack);
+            padding: 40px 20px;
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .empty-state code { color: var(--accent-color); }
+    </style>
+</head>
+<body>
+<!-- [SOURCE_OF_TRUTH] Compiled from: Portfolio_Dev/field_notes/data/wisdom_data.json. Do NOT edit wisdom.html directly! -->
+
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div id="sys-console">
+            <div>[INIT] Mounting Wisdom Studio...</div>
+        </div>
+
+        <section id="studio">
+            <div class="wisdom-header">
+                <h2 class="section-title">The Wisdom Studio: Dual-View Card Curator</h2>
+                <div>
+                    <button id="toggle-workbench" class="view-toggle" title="Toggle in-place workbench mode">⚒ Workbench</button>
+                    <button id="toggle-reader" class="view-toggle active" title="Public reader view">◈ Reader</button>
+                </div>
+            </div>
+            <div class="disclaimer-box" style="margin-bottom: 20px;">
+                <span style="color: var(--accent-color); font-weight: bold;">[WIS-001 SCHEMA]</span>
+                Wisdom cards pair an <strong>immutable origin</strong> (a verbatim, non-editable source quote) with a
+                <strong>live synthesis</strong> (narrative context, takeaways, and tags). Reader View is the public,
+                read-only presentation; Workbench Mode enables in-place curation of the synthesis layer.
+            </div>
+
+            <div class="wb-toolbar" id="wb-toolbar">
+                <button class="wb-btn add-card" id="wb-add-card">+ New Card</button>
+                <button class="wb-btn export" id="wb-export">Export JSON</button>
+                <span id="wb-save-status"></span>
+            </div>
+
+            <div id="wisdom-container">
+
+        <div class="wisdom-card" data-card-index="1">
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Tooling Breadth: Structured Reasoning Across Model Stacks</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Takeaways</span>
+                <ul class="takeaways wb-editable" data-field="takeaways" contenteditable="false"><li>Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.</li><li>Integration skill - wiring models into workflows - is the differentiator, not model choice.</li></ul>
+            </div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">human-ai</span><span class="tag">tooling</span><span class="tag">ollama</span><span class="tag">nemo</span><span class="tag">reasoning</span><span class="tag">integration</span></div></div>
+            </div>
+        </div></div>
+        </section>
+    </main>
+
+    <script src="mission-control.js"></script>
+    <script>
+        // [FEAT-559] Story 76.2: Dual-View Wisdom Studio
+        // Reader View (public, read-only) + Workbench Mode (in-place curation).
+        (function () {
+            'use strict';
+
+            var EDIT_TAG = '?edit=1';
+            var currentMode = window.location.search.indexOf('edit=1') !== -1 ? 'workbench' : 'reader';
+
+            function escapeHtml(str) {
+                return String(str == null ? '' : str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function setMode(mode) {
+                currentMode = mode;
+                document.body.classList.toggle('workbench', mode === 'workbench');
+                var readerBtn = document.getElementById('toggle-reader');
+                var wbBtn = document.getElementById('toggle-workbench');
+                if (readerBtn) readerBtn.classList.toggle('active', mode === 'reader');
+                if (wbBtn) wbBtn.classList.toggle('active', mode === 'workbench');
+                // Reflect mode in URL (non-destructive history replace) for shareable edit links.
+                var url = new URL(window.location.href);
+                if (mode === 'workbench') { url.searchParams.set('edit', '1'); }
+                else { url.searchParams.delete('edit'); }
+                window.history.replaceState({}, '', url.toString());
+            }
+
+            function initToggle() {
+                var wbBtn = document.getElementById('toggle-workbench');
+                var readerBtn = document.getElementById('toggle-reader');
+                if (wbBtn) wbBtn.addEventListener('click', function () { setMode('workbench'); });
+                if (readerBtn) readerBtn.addEventListener('click', function () { setMode('reader'); });
+                setMode(currentMode);
+            }
+
+            // --- Workbench: in-place editing of the synthesis layer ---
+            function wireWorkbench() {
+                var container = document.getElementById('wisdom-container');
+                if (!container) return;
+
+                // Make synthesis fields editable via contenteditable.
+                var editable = container.querySelectorAll('.wb-editable');
+                editable.forEach(function (el) {
+                    if (el.getAttribute('contenteditable')) return; // already wired
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('spellcheck', 'false');
+                });
+
+                // Add-new-card button.
+                var addBtn = document.getElementById('wb-add-card');
+                if (addBtn && !addBtn.dataset.wired) {
+                    addBtn.dataset.wired = '1';
+                    addBtn.addEventListener('click', function () {
+                        var card = document.createElement('div');
+                        card.className = 'wisdom-card';
+                        card.innerHTML =
+                            '<div class="card-title wb-editable" data-field="title" contenteditable="true">New Wisdom Card</div>' +
+                            '<div class="card-section">' +
+                            '  <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
+                            '  <div class="origin-quote wb-locked">(no origin yet)</div>' +
+                            '</div>' +
+                            '<div class="card-section">' +
+                            '  <span class="section-label">Narrative Context</span>' +
+                            '  <div class="wb-editable" data-field="narrative_context" contenteditable="true">(add narrative context)</div>' +
+                            '</div>' +
+                            '<div class="card-section">' +
+                            '  <span class="section-label">Takeaways</span>' +
+                            '  <ul class="takeaways wb-editable" data-field="takeaways" contenteditable="true"><li>(add a takeaway)</li></ul>' +
+                            '</div>' +
+                            '<div class="tag-row"><span class="section-label">Tags</span> <div class="wb-editable" data-field="tags" contenteditable="true"></div></div>';
+                        container.appendChild(card);
+                        wireCard(card);
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                }
+
+                // Export: collect current state into JSON and download.
+                var exportBtn = document.getElementById('wb-export');
+                if (exportBtn && !exportBtn.dataset.wired) {
+                    exportBtn.dataset.wired = '1';
+                    exportBtn.addEventListener('click', function () { exportCards(container); });
+                }
+
+                // Wire existing cards.
+                container.querySelectorAll('.wisdom-card').forEach(wireCard);
+            }
+
+            function wireCard(card) {
+                var editables = card.querySelectorAll('.wb-editable');
+                editables.forEach(function (el) {
+                    if (el.getAttribute('contenteditable')) return;
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('spellcheck', 'false');
+                });
+            }
+
+            function exportCards(container) {
+                var schema;
+                try {
+                    schema = window.__WISDOM_SCHEMA__ || {
+                        "schema": { "title": "Wisdom Card Schema (WIS-001)", "origin": {}, "synthesis": {} }
+                    };
+                } catch (e) { schema = { "schema": {} }; }
+
+                var cards = container.querySelectorAll('.wisdom-card');
+                var output = { "schema": schema.schema || {}, "cards": [] };
+                cards.forEach(function (card) {
+                    var getField = function (field) {
+                        var el = card.querySelector('[data-field="' + field + '"]');
+                        return el ? el.textContent.trim() : '';
+                    };
+                    var titleEl = card.querySelector('.card-title');
+                    var originEl = card.querySelector('.origin-quote');
+                    output.cards.push({
+                        "id": "WIS-" + String(output.cards.length + 1).padStart(3, '0'),
+                        "title": (titleEl ? titleEl.textContent.trim() : ''),
+                        "origin": { "immutable": true, "verbatim": originEl ? originEl.textContent.trim() : '' },
+                        "synthesis": {
+                            "narrative_context": getField('narrative_context'),
+                            "takeaways": (getField('takeaways') ? getField('takeaways').split(/\n/) : []).filter(Boolean),
+                            "tags": (getField('tags') ? getField('tags').split(/[\s,]+/) : []).filter(Boolean)
+                        }
+                    });
+                });
+
+                var blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'wisdom_data_export.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+
+                var status = document.getElementById('wb-save-status');
+                if (status) {
+                    status.textContent = '✓ Exported ' + cards.length + ' card(s)';
+                    setTimeout(function () { status.textContent = ''; }, 3000);
+                }
+            }
+
+            function init() {
+                initToggle();
+                wireWorkbench();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+<script>
+// [FEAT-559] Workbench export context: canonical card schema.
+window.__WISDOM_SCHEMA__ = {"schema": {"title": "Wisdom Card Schema (WIS-001)", "origin": {"immutable": true, "verbatim": "I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration."}, "synthesis": {"title": "Tooling Breadth: Structured Reasoning Across Model Stacks", "narrative_context": "The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.", "takeaways": ["Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.", "Integration skill - wiring models into workflows - is the differentiator, not model choice."], "tags": ["human-ai", "tooling", "ollama", "nemo", "reasoning", "integration"]}}};
+</script>
+</body>
+</html>

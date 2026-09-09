@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+
+% arXiv-compatible packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{parskip}
+
+% Custom commands for wisdom card elements
+\newcommand{\originquote}[1]{%
+  \begin{quote}
+  \textit{#1}
+  \end{quote}
+}
+\newcommand{\originmark}{%
+  \textsc{Origin}\enspace
+}
+
+% Title
+\title{The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs}
+\author{Jason Allred}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+% Abstract
+\begin{abstract}
+This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.
+\end{abstract}
+
+\tableofcontents
+\newpage
+\section{Introduction}
+
+Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution.
+
+The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers. Each wisdom card pairs an \emph{immutable origin} (verbatim human voice) with a \emph{collaborative synthesis} (machine-generated context, analysis, and connections).
+
+This dual-channel architecture preserves the provenance of every claim while enabling rapid iteration on technical papers through automated LaTeX generation.
+
+\section{Tooling Breadth: Structured Reasoning Across Model Stacks}
+\noindent\originmark
+\originquote{I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.}
+\hfill --- \textit{WIS-001}
+
+The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.
+
+\subsection{Key Takeaways}
+\begin{itemize}
+  \item Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.
+  \item Integration skill - wiring models into workflows - is the differentiator, not model choice.
+\end{itemize}
+
+\noindent\textbf{Keywords:} human-ai, tooling, ollama, nemo, reasoning, integration
+
+
+\section{Conclusion}
+
+The dual-channel architecture --- immutable human origin alongside collaborative machine synthesis --- provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.
+
+Future work includes integrating local silicon refinement engines for synthesis enhancement, automated literature connection discovery via semantic graph traversal, and multi-paper generation from wisdom card subsets filtered by tag clusters.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
