@@ -47,6 +47,7 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 * **The Anti-Starvation Rule (Zero Google Gemini in OpenAgent)**: AGY is Layer 1 Strategic Guardian. Google/Gemini is strictly prohibited in OpenAgent fallback chains (`disabled_providers: ["google", "mistral"]`).
 * **Dedicated Oracle Dispatch Mode**: Cloud models (Nemotron-120B, Command-A+, Llama 3.3 70B) are dispatched strictly in read-only Oracle mode for high-context clustering, outline proposal, and adversarial critique.
 * **BKM-040**: Stage and commit locally only, never push.
+* **New Addition**: Integrated swarm validation gates now enforce ICM memory consistency checks before any dispatch, ensuring no context fragmentation across serialized operations.
 
 ---
 
@@ -139,10 +140,14 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
 
 ## 📌 Top of Backlog: Upcoming Architectural Tracks
 
-### 🏛️ [BACKLOG-01] Argus / Momus Dedicated Local Test Runner & Lint Reviewer
-* **Concept & Problem Solved:** Maintain clean, unpolluted context windows across local multi-agent swarms. Junior on M5 Air remains a pure surgical code patcher (`safe_patch` only, no `bash`, no `pytest`). To prevent Atlas on KENDER 4090 from accumulating verbose pytest stack traces, warnings, and ruff outputs on complex multi-step stories, dispatch test execution to a dedicated persona.
-* **Proposed Tri-Cameral Local Architecture:**
-  1. **Atlas (Node KENDER 4090):** High-level task decomposition, story sequencing, micro-task generation.
-  2. **Junior (M5 Air oMLX):** Fast surgical code modification (`safe_patch` only, <2k tokens per pass).
-  3. **Argus / Momus (Node KENDER 4090 / Ollama or fast worker):** Dedicated test runner with `bash` permission. Executes `pytest`, `ruff check`, parses stack traces, and returns a concise pass/fail failure report back to Atlas for corrective re-dispatching.
-* **Benefits:** Complete context isolation between code generation, file modification, and verification execution. Keeps each agent's prefill footprint well below memory caps.
+### 🏛️ [BACKLOG-01] The Agent Cascade Architecture (Context-Isolated Swarms)
+* **Core Problem Solved:** Eliminates the AGY spoon-feeding overhead trap. If Layer 1 (AGY) has to hand-curate exact import paths, line numbers, and function signatures for every dispatch, the orchestrator's token expenditure eclipses direct AST implementation. The solution is an **Agent Cascade**—a daisy-chain of specialized, small-context local micro-agents that isolate token burdens into independent ephemeral sessions.
+* **The 4-Stage Sovereign Cascade Pipeline:**
+  1. **Stage 1: Planner / Sequencer (Atlas on KENDER 4090):** Ingests the high-level story and acceptance criteria. Emits an execution plan with ordered sub-tasks. (No code editing).
+  2. **Stage 2: Anchor & Import Resolver (Librarian / Scout on KENDER 4090):** Uses `read`, `grep`, and LSP symbols to discover the real incumbent import paths, target lines, and incumbent code blocks. Assembles the exact 4-anchor micro-patch payload.
+  3. **Stage 3: Surgical Patcher (Sisyphus-Junior on M5 Air via Headroom):** Receives the resolved micro-payload (<2,000 tokens). Applies edits strictly via `clara-dna_safe_patch` (or `write` for greenfield files). Has **zero bash** and runs **zero tests**. Context is flushed immediately upon exit.
+  4. **Stage 4: Verification & Lint Runner (Argus / Momus on KENDER 4090):** Dedicated test runner with `bash`. Runs `pytest`, `ruff check`, parses stack traces, and reports clean pass/fail or diff corrections back to Atlas without polluting Junior's or the Planner's memory windows.
+* **Key Benefits:**
+  - True sovereign self-healing without AGY intervention.
+  - Keeps each local agent's prefill footprint well under hardware caps (<3k tokens).
+  - Maximizes OpenAgent's native architectural design for lean context workflows.

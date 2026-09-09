@@ -169,3 +169,60 @@ OpenAgent workers perform file edits and execute test suites locally, but are **
   * *Prompt-directed delegation* (upstream #3231): Handled via `agents.sisyphus.prompt_append`.
   * *`task` tool deferred behind ToolSearch* (upstream #3592): Kept visible with minimal MCP clutter.
   * *Empty delegation table* (upstream #2386): Resolved via PR #414 fix in installed plugin.
+
+---
+
+## 6. The Agent Cascade Architecture (Context-Isolated Swarms)
+
+### 6.1 The Principle: Isolating Micro-Tasks to Preserve Small Contexts
+When delegating to local silicon (Node KENDER RTX 4090 / M5 Air), forcing a single agent to plan, search, edit, and verify inevitably exhausts small context windows (Metal 24GB prefill guards or KV cache degradation). Conversely, forcing Layer 1 (AGY) to manually spoon-feed exact import paths, line numbers, and function stubs causes AGY's token consumption to eclipse the cost of writing the code directly.
+
+The **Agent Cascade** solves this by establishing a turn-by-turn daisy-chain of specialized, context-isolated micro-agents orchestrated through OpenAgent's native `task()` tool:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Stage 1: The Tactical Planner (Atlas on Node KENDER 4090)                   │
+│ - Ingests the high-level Story section from the sprint plan on disk.        │
+│ - Formulates ordered, single-target execution steps (NO CODE EDITS).        │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼ task(category="unspecified-low")
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Stage 2: The Anchor & Import Resolver (Librarian / Scout on KENDER 4090)    │
+│ - Reads the target file, grep searches symbols, and verifies live imports.  │
+│ - Assembles the exact 4-anchor micro-patch payload (< 1,500 tokens).        │
+│ - Flushes session context immediately upon task completion.                 │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼ task(category="unspecified-low")
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Stage 3: The Surgical Patcher (Sisyphus-Junior on M5 Air via Headroom)      │
+│ - Ingests the spoon-fed 4-anchor patch payload.                             │
+│ - Applies edits strictly via clara-dna_safe_patch (or write for greenfield).│
+│ - Has ZERO bash and runs ZERO tests. Relays non-blocking lint feedback.    │
+│ - Flushes session context immediately upon exit.                            │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼ task(category="unspecified-low")
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Stage 4: The Verification & Lint Runner (Argus / Momus on KENDER 4090)      │
+│ - Receives the verification command (pytest, ruff check, python compile).   │
+│ - Executes via bash, parses tracebacks, and returns pass/fail report.       │
+│ - Isolates verbose pytest stack dumps away from Junior and the Planner.    │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Stage 5: Synthesis & Handover to AGY                                        │
+│ - Atlas synthesizes a 2-line completion report to Layer 1 (AGY).            │
+│ - AGY performs final git diff audit and commits to repository.              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 6.2 Agent Permission Matrix in the Cascade
+| Role / Persona | Silicon Seat | Tools Permitted | Tools Denied | Primary Mandate |
+| :--- | :--- | :--- | :--- | :--- |
+| **Atlas** (Lead Conductor) | KENDER 4090 | `read`, `task` | `edit`, `write`, `safe_patch`, `question` | Ingest sprint plan, sequence tasks |
+| **Librarian** (Scout) | KENDER 4090 | `read`, `grep`, `glob` | `write`, `edit`, `bash`, `task` | Discover import paths and incumbent code |
+| **Sisyphus-Junior** (Patcher)| M5 Air (:8002) | `clara-dna_safe_patch`, `write` | `bash`, `edit`, `icm_*`, `task` | Apply surgical code edits (<2k tokens) |
+| **Momus / Argus** (Verifier) | KENDER 4090 | `bash`, `read` | `write`, `edit`, `safe_patch`, `task` | Run pytest / ruff check, parse tracebacks |
