@@ -12,16 +12,16 @@
     <script src="mission-control.js?v=d864d11c" defer></script>
     <style>
         body {
-            background-color: #0b0e14;
-            color: #c9d1d9;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color, #0a0e14);
+            color: var(--text-color, #e6edf3);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             display: flex;
         }
         #sidebar {
             width: 260px;
-            background: #0d1117;
-            border-right: 1px solid #1f242c;
+            background: var(--sidebar-bg, #11161d);
+            border-right: 1px solid var(--border-color, #30363d);
             min-height: 100vh;
             flex-shrink: 0;
         }
@@ -428,20 +428,35 @@
             position: fixed;
             top: 15px;
             left: 15px;
-            z-index: 1000;
-            background: #1f242c;
-            color: #f0f3f6;
-            border: 1px solid #30363d;
-            padding: 6px 10px;
+            z-index: 2000;
+            background: #000;
+            color: var(--accent-color, #4daafc);
+            border: 2px solid var(--accent-color, #4daafc);
+            padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.85rem;
         }
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            #sidebar { width: 100%; min-height: auto; display: none; }
-            #sidebar.open { display: block; }
-            #menu-toggle { display: block; }
-            main { padding: 60px 15px 40px 15px; }
+        @media screen and (max-width: 1024px) {
+            #sidebar {
+                position: fixed;
+                left: -320px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                display: block;
+            }
+            #sidebar.active, #sidebar.open {
+                left: 0;
+            }
+            #menu-toggle {
+                display: block;
+            }
+            main {
+                padding: 80px 20px 40px 20px;
+            }
         }
     </style>
 </head>
@@ -648,16 +663,6 @@
             if (tabId === 'tab-delta-t' && typeof initDeltaTView === 'function') {
                 setTimeout(initDeltaTView, 50);
             }
-        }
-
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.getElementById('sidebar');
-        if (menuToggle && sidebar) {
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
-            });
-        }
     </script>
     <script src="benchmarks.js?v=spr70_2"></script>
 </body>
