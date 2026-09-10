@@ -41,6 +41,13 @@ During the Sprint 77.0 synthesis of the human operator's *"Wisdom system"* desig
 * `paper.html` transitions into `writer.html` as a dedicated **Organizer of Thoughts**.
 * Functions at the domain level: visual bucket arrangement, paragraph ordering, DNA sequence slotting, and drafting with co-authoring assistance.
 
+### 6. 📄 Intuition Paper Ingestion Strategy (Google Doc "Intuition paper (Sept 5 2026)")
+* **Levels of Buckets (Hierarchy):** Rather than forcing prose essays into single cards, the hierarchy is:
+  $$\text{Document Section} \rightarrow \text{Semantic Bucket} \rightarrow \text{Discrete Card (Epigraph/Anchor)} \rightarrow \text{Synthesis Text}$$
+* **Prior Art & Citations:** Prior art is not crammed into wisdom cards. It leverages the existing **`research_dna`** domain (`research.html` / `references.bib`), allowing `writer.html` to slot citation pointers (`[CITE: key]`) that compile cleanly to LaTeX `\cite{...}`.
+* **Diagram Action Cards:** Architecture workflows (e.g. JITC Cycle diagram) are represented as reminder action cards with a `[DIAGRAM PLACEHOLDER]` tag that render framed diagram boxes in LaTeX drafts until graphic assets are provided.
+* **Staged Import vs Immediate DB Fill (Avoiding the Chicken-and-Egg Trap):** Do *not* prematurely mass-populate `wisdom_data.json` before the schema and bucket validators are wired. Prepare clean ingestion staging specs first so schema iterations do not require manual DB migration churn.
+
 ---
 
 ## 🧬 Sprint 77 Detailed Story Specifications
