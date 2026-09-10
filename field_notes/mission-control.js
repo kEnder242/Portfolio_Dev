@@ -2,10 +2,12 @@ class MissionControl extends HTMLElement {
     connectedCallback() {
         const currentPath = window.location.pathname;
         const activePage = currentPath.split('/').pop() || 'stories.html';
+        const hostname = window.location.hostname;
+        const isPublicAirlock = hostname === 'www.jason-lab.dev' || hostname === 'jason-lab.dev' || (!hostname.includes('notes.jason-lab.dev') && (activePage === 'stories.html' || activePage === 'protocols.html' || activePage === 'research.html' || activePage === 'public_benchmarks.html' || activePage === 'index.html'));
 
-        console.log(`[MISSION CONTROL] Component connected (v2.0). Active page: ${activePage}`);
+        console.log(`[MISSION CONTROL] Component connected (v2.1). Active page: ${activePage}, isPublic: ${isPublicAirlock}`);
 
-        this.innerHTML = `
+        const publicSection = `
             <div class="nav-home" style="margin-bottom: 20px; font-family: var(--mono-stack, monospace); font-size: 0.85rem;">
                 <a href="https://www.jason-lab.dev/index.html" style="color: var(--accent-color, #4daafc); text-decoration: none;">← Front Page</a>
             </div>
@@ -19,7 +21,9 @@ class MissionControl extends HTMLElement {
                     <li style="margin-bottom: 8px;"><a href="https://www.jason-lab.dev/public_benchmarks.html" class="mission-link ${activePage === 'public_benchmarks.html' ? 'active' : ''}">Public Benchmarks</a></li>
                 </ul>
             </section>
+        `;
 
+        const internalSections = `
             <section id="mission-control">
                 <h2 style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-color, #4daafc); margin-top: 25px; letter-spacing: 1px; font-weight: bold; border-top: 1px solid var(--border-color, #30363d); padding-top: 15px;">Mission Control</h2>
                 <ul style="list-style: none; padding: 0; margin: 10px 0 0 0;">
@@ -41,6 +45,8 @@ class MissionControl extends HTMLElement {
                 </div>
             </section>
         `;
+
+        this.innerHTML = isPublicAirlock ? publicSection : (publicSection + internalSections);
 
         setTimeout(() => this.initToggle(), 50);
     }
