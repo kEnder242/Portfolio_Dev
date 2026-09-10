@@ -61,6 +61,21 @@ def get_safe_collection(client, name, ef):
     except Exception:
         return client.get_or_create_collection(name=name)
 
+# [DNA-AUDIT] Noise filter: statuses that are intentionally retired/superseded.
+# Items matching these prefixes are silently skipped during sync and reported
+# in the SKIP REPORT emitted at the end of each rebuild pass.
+DNA_NOISE_STATUSES = {
+    "DEFEATURED",
+    "ARCHIVED",
+    "CONSOLIDATED",
+}
+
+def _is_noise_status(status: str) -> bool:
+    """Return True if the status matches a known noise/retired prefix."""
+    s = status.strip().upper()
+    return any(s.startswith(n) for n in DNA_NOISE_STATUSES)
+
+
 def parse_feature_tracker(filepath):
     """
     Parses FeatureTracker.md for [FEAT-XXX] and [VIBE-XXX] blocks.
@@ -93,6 +108,18 @@ def parse_feature_tracker(filepath):
         status_match = re.search(r"^\*\*Status:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE)
         status = status_match.group(1).strip() if status_match else "UNKNOWN"
         
+        # [DNA-AUDIT] Skip noise statuses — retired/superseded items don't belong
+        # in the live retrieval index. Caller collects these for skip report.
+        if _is_noise_status(status):
+            features.append({
+                "_skipped": True,
+                "id": feat_id,
+                "name": name,
+                "status": status,
+                "reason": "NOISE_STATUS",
+            })
+            continue
+
         # Extract mechanism
         mechanism_match = re.search(r"^\*\*Mechanism:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE)
         mechanism = mechanism_match.group(1).strip() if mechanism_match else "UNKNOWN"
@@ -233,7 +260,22 @@ def sync():
     
     # 1. Sync feature_dna
     logging.info("Parsing FeatureTracker.md...")
-    features = parse_feature_tracker(FEATURE_TRACKER_PATH)
+    features_raw = parse_feature_tracker(FEATURE_TRACKER_PATH)
+
+    # [DNA-AUDIT] Split parsed items into live entries and skipped/noise entries
+    features = [f for f in features_raw if not f.get("_skipped")]
+    skipped = [f for f in features_raw if f.get("_skipped")]
+
+    # Emit skip report on every rebuild so stale/pending items are surfaced
+    if skipped:
+        logging.info("[DNA-SKIP-REPORT] %d feature entries skipped (noise filter: %s):",
+                     len(skipped), sorted(DNA_NOISE_STATUSES))
+        for s in sorted(skipped, key=lambda x: x["id"]):
+            logging.info("  SKIP [%s] %-60s | %s (reason: %s)",
+                         s["id"], s["name"][:60], s["status"], s["reason"])
+    else:
+        logging.info("[DNA-SKIP-REPORT] No entries skipped by noise filter.")
+
     if features:
         collection_feat = get_safe_collection(client, COLLECTION_FEATURE, ef)
         logging.info("Clearing existing FeatureTracker.md entries from feature_dna...")
