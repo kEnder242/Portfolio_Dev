@@ -2850,7 +2850,7 @@
 
 ## [FEAT-523] Round Table Context Scoping & Blackboard Ledger DNA
 **Sprint:** SPR-70.0
-**Status:** PLANNED
+**Status:** ACTIVE
 **Logic:** Replaces string-sniffing with explicit `ContextScope` enum (`ContextScope.TURN` vs `ContextScope.LONG`). Triage and Deep Thought receive isolated `TURN` scope. Mice (Pinky & Brain) receive `LONG` scope with Blackboard Ledger + 1 prior turn. Brain writes distillation bullets; Pinky writes 1-line consensus; stored in ChromaDB `blackboard_ledger_dna`.
 **Rationale:** Resolves long context bloat while keeping conversational agents self-aware across multi-turn sessions.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
@@ -2948,8 +2948,8 @@
 **Mechanism:** `HomeLabAI/src/nodes/loader.py`.
 
 ## [FEAT-557] Sprint Documentation Grooming & Dedicated Sprint DNA ChromaDB Collection
-**Sprint:** BACKLOG (Candidate SPR-76.0)
-**Status:** CANDIDATE
+**Sprint:** SPR-76.0
+**Status:** ACTIVE
 **Logic:** Grooms, standardizes, and indexes historical and active sprint documents (`SPRINT_PLAN_*.md`, `SPRINT_REPORT_*.md`, retrospectives) into a dedicated ChromaDB collection (`sprint_dna` on port 8001).
 **Rationale:** Prevents context window bloat when researching historical sprint decisions and story evolution. Decouples sprint narrative history and phase intent from raw codebase architecture (`feature_dna`) and invariant operational rules (`behavioral_dna`), enabling sub-millisecond semantic retrieval via `clara-dna` MCP tools and ambient hooks.
 **Mechanism:** `HomeLabAI/src/curator/sync_sprint_dna.py`, ChromaDB collection `sprint_dna`, and `clara-dna` MCP server routing.
