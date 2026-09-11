@@ -160,12 +160,16 @@ During the Sprint 77.0 synthesis of the human operator's *"Wisdom system"* desig
 
 ## 🗺️ Scope & Risk Management: Low-Hanging Fruit vs. Stretch Goals
 
-| Track | Tier | Complexity | Risk | Rationale |
+> 📜 **Cloud Oracle Swarm Review:** Full adversarial review and scalability audit saved in [`Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_77.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_77.md).
+
+| Track | Tier | Complexity | Risk | Rationale & Oracle Mitigation Gate |
 | :--- | :--- | :--- | :--- | :--- |
 | **Multi-DNA Dropdown in `wisdom.html`** | Low-Hanging Fruit | Low | Minimal | UI-only read-only locking; reuses existing ChromaDB and manifest structures. |
 | **Nightly `refine_wisdom.py`** | Low-Hanging Fruit | Low-Med | Low | Adapts proven `refine_gem.py` pattern; strictly touches `synthesis` only. |
 | **Initial 5 Buckets & Tagging** | Low-Hanging Fruit | Low | Minimal | Formalizes Sprint 74 themes; provides immediate structural clarity. |
-| **`writer.html` Rebranding & Canvas** | Low-Hanging Fruit | Med | Low | Renames `paper.html` and adds card/paragraph ordering controls. |
-| **Automated Markdown "Rebuild"** | **Stretch / Design** | High | **High** | Reverse-syncing machine synthesis into human markdown risks format corruption and git thrash. |
+| **`writer.html` Rebranding & Canvas** | Low-Hanging Fruit | Med | Low | Renames `paper.html` and adds card/paragraph ordering controls. **Oracle Invariant:** Keep editor contenteditable/DOM-first; strictly avoid heavy real-time browser IDE features. |
+| **Atomic Card Granularity Gate** | **Scope Guard** | Med | **High** | **Oracle Warning #1 (Card Explosion):** Capping cards to core axioms/pearls only (~10-25 cards). Connective narrative remains in section paragraphs, preventing a 200-card combinatorial sprawl. |
+| **Ambiguity Drift Firewall** | **Scope Guard** | Med | **High** | **Oracle Warning #2 (Prompt Drift):** Ground vLLM question generation with strict boundary prompt. Human answer stage acts as hard context reset before M5 Air re-synthesis. |
+| **Automated Markdown "Rebuild"** | **Stretch / Design** | High | **High** | Reverse-syncing machine synthesis into human markdown risks format corruption and git thrash. Unidirectional export only. |
 | **WYWO Clarification Loop** | **Stretch / Design** | Med-High | Med | Requires async queue, question ranking model, and user prompt injection. Blueprint first. |
 | **Legacy Gem/BKM Full Migration** | **Future Phase** | High | Med-High | Deferred until Wisdom System proves stable across multiple nightly cycles. |
