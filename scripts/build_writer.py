@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# [FEAT-560] Story 76.4: Interactive Paper Studio & arXiv LaTeX Pipeline
+# [FEAT-564] Story 77.4: Interactive Writer Studio & LaTeX Pipeline
 # Purpose: Read ordered wisdom cards from wisdom_data.json, embed origin quotes as
 #          epigraphs/blockquotes, weave synthesis explanatory text, and generate
 #          arXiv-ready LaTeX files in Portfolio_Dev/docs/whitepaper/.
@@ -19,8 +19,8 @@ DATA_PATH = REPO_ROOT / "field_notes" / "data" / "wisdom_data.json"
 OUTPUT_DIR = REPO_ROOT / "docs" / "whitepaper"
 MAIN_TEX = OUTPUT_DIR / "main.tex"
 REFERENCES_BIB = OUTPUT_DIR / "references.bib"
-SECTION_ORDER_PATH = REPO_ROOT / "field_notes" / "paper_section_order.json"
-PAPER_HTML = REPO_ROOT / "field_notes" / "paper.html"
+SECTION_ORDER_PATH = REPO_ROOT / "field_notes" / "writer_section_order.json"
+WRITER_HTML = REPO_ROOT / "field_notes" / "writer.html"
 
 
 # --- LaTeX Helpers ---
@@ -51,24 +51,28 @@ def latex_escape(text):
 def load_cards(data):
     """Extract cards from wisdom_data.json.
 
-    Supports two layouts:
-      * Normalized: a top-level ``cards`` list, each with origin + synthesis.
-      * Legacy/single (WIS-001): the schema holds origin+synthesis at the top level.
+    Supports layouts:
+      * Standard list: top-level JSON array of cards (WIS-001..008).
+      * Dict with cards: a top-level ``cards`` list.
+      * Legacy/single: schema holds origin+synthesis at top level.
     Returns (cards, schema_dict).
     """
-    schema = data.get("schema", {})
-    cards = data.get("cards", [])
+    if isinstance(data, list):
+        return data, {}
 
-    if not cards:
-        # Backward-compatible single-card layout: schema holds origin+synthesis.
-        card = {
-            "title": schema.get("synthesis", {}).get("title", "Wisdom Card"),
-            "origin": schema.get("origin", {}),
-            "synthesis": schema.get("synthesis", {}),
-        }
-        cards = [card]
+    if isinstance(data, dict):
+        schema = data.get("schema", {})
+        cards = data.get("cards", [])
+        if not cards and "origin" in schema:
+            card = {
+                "title": schema.get("synthesis", {}).get("title", "Wisdom Card"),
+                "origin": schema.get("origin", {}),
+                "synthesis": schema.get("synthesis", {}),
+            }
+            cards = [card]
+        return cards, schema
 
-    return cards, schema
+    return [], {}
 
 
 def load_section_order():
@@ -246,16 +250,16 @@ Future work includes integrating local silicon refinement engines for synthesis 
     return preamble + "\n".join(sections)
 
 
-def update_paper_html_quotes(cards):
-    """Update the embedded __PAPER_QUOTES__ array in paper.html with all card origins."""
-    if not PAPER_HTML.exists():
-        print(f"⚠️  {PAPER_HTML} not found — skipping quote injection.")
+def update_writer_html_quotes(cards):
+    """Update the embedded __WRITER_QUOTES__ array in writer.html with all card origins."""
+    if not WRITER_HTML.exists():
+        print(f"⚠️  {WRITER_HTML} not found — skipping quote injection.")
         return
 
     quotes = []
     for i, card in enumerate(cards):
         origin = card.get("origin", {}) or {}
-        verbatim = origin.get("verbatim", "")
+        verbatim = origin.get("text", "") or origin.get("verbatim", "")
         if verbatim:
             quotes.append({
                 "text": verbatim,
@@ -265,16 +269,16 @@ def update_paper_html_quotes(cards):
     quotes_js = json.dumps(quotes, indent=2)
     script_block = (
         "<script>\n"
-        "// [FEAT-560] Workbench context: origin quotes available for slotting.\n"
-        f"window.__PAPER_QUOTES__ = {quotes_js};\n"
+        "// [FEAT-564] Workbench context: origin quotes available for slotting.\n"
+        f"window.__WRITER_QUOTES__ = {quotes_js};\n"
         "</script>\n"
     )
 
-    content = PAPER_HTML.read_text(encoding="utf-8")
+    content = WRITER_HTML.read_text(encoding="utf-8")
 
     # Strip any existing quote block
     content = re.sub(
-        r"<script>\s*// \[FEAT-560\] Workbench context:.*?</script>\n?",
+        r"<script>\s*// \[(?:FEAT-560|FEAT-564)\] Workbench context:.*?</script>\n?",
         "",
         content,
         flags=re.DOTALL,
@@ -283,8 +287,8 @@ def update_paper_html_quotes(cards):
     # Insert before </body>
     content = content.replace("</body>", script_block + "</body>")
 
-    PAPER_HTML.write_text(content, encoding="utf-8")
-    print(f"✅ Updated paper.html with {len(quotes)} origin quote(s) for workbench picker.")
+    WRITER_HTML.write_text(content, encoding="utf-8")
+    print(f"✅ Updated writer.html with {len(quotes)} origin quote(s) for workbench picker.")
 
 
 def main():
@@ -325,8 +329,8 @@ def main():
     REFERENCES_BIB.write_text(bib_content, encoding="utf-8")
     print(f"✅ Generated {REFERENCES_BIB} ({len(cards)} reference(s)).")
 
-    # Update paper.html with origin quotes
-    update_paper_html_quotes(cards)
+    # Update writer.html with origin quotes
+    update_writer_html_quotes(cards)
 
     # Summary
     total_takeaways = sum(
