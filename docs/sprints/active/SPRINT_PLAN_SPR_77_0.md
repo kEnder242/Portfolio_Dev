@@ -146,6 +146,63 @@ During the Sprint 77.0 synthesis of the human operator's *"Wisdom system"* desig
 
 ---
 
+---
+
+## 🏛️ Phase 2: Novel Ideas Evolutionary Timeline (`timeline.html`)
+
+**Feature Anchor:** `[FEAT-566]`  
+**Target Web Targets:** `Portfolio_Dev/field_notes/timeline.html`, `Portfolio_Dev/field_notes/timeline_build.py`, `Portfolio_Dev/field_notes/data/timeline_data.json`, `Portfolio_Dev/field_notes/data/timeline_outliers.json`.  
+**Intent:** Track and showcase the original art, discovery timeline, and organic engineering evolution of the Dev_Lab. Serves as the evolutionary companion to `research.html` and the historical backbone for the Intuition whitepaper.
+
+### 1. Data Taxonomy & Naming Convention: The `discovery` Schema
+We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
+```json
+{
+  "id": "DISC-001",
+  "title": "Subconscious Dreaming Cycle",
+  "conception_date": "2026-01-14",
+  "implementation_date": "2026-01-19",
+  "bucket_id": "distillation",
+  "lane": "JITC: Distillation & Consolidation",
+  "origin_artifact": "VIBE-005 / FEAT-067",
+  "sprint_ref": "SPRINT_PLAN_SPR_52_0.md",
+  "code_anchors": ["HomeLabAI/src/infra/dream_cycle.py", "field_notes/mass_scan.py"],
+  "arxiv_inspiration": null,
+  "summary": "Automated off-peak synthesis converting raw daily notes into Rank 4/5 diamond gems.",
+  "status": "ACTIVE"
+}
+```
+
+### 2. UI Layout & Visual Design
+* **Header / Navigation:** Standard Hamburger sidebar (`mission-control.js`) with responsive drawer.
+* **Top Half: Interactive Gantt Chart:**
+  * **X-Axis:** Scrollable / pannable time scale showing `[conception -> implementation]` span.
+  * **Y-Axis:** Semantic Buckets / Swimlanes (Race tracks). Items with minimal overlap share lanes to maximize vertical density.
+  * **Interactivity:** Hover tooltip (quick summary, dates), Click event (locks list focus and highlights interconnected nodes).
+* **Bottom Half: Reactive Detail List:**
+  * Rendered from static `timeline_data.json`.
+  * Filters reactively when a Gantt bar or lane is clicked.
+  * Rich detail cards: Clickable links to specific Sprint Markdown files, Git code anchors, ArXiv inspiration pointers (cross-linked to `research.html`), and BKM/FEAT numbers.
+
+### 3. Lane / Bucket Definitions (JITC Lifecycle Anchors + Outliers)
+* **Lane 1: Triage & Classification** (e.g. QQ Protocol, Semantic Triage BKM-015, Vector Pre-Triage)
+* **Lane 2: Fingertip & Context Scoping** (e.g. 3-Tier RAG, JITC Hooks, Token Golf, ContextScope)
+* **Lane 3: Collection & Memory Vaults** (e.g. CLaRa-DNA Collections, Blackboard Ledger, ICM SQLite)
+* **Lane 4: Distillation & Dreaming** (e.g. Subconscious Dreaming, Gem Polishing, Rank 4 Extraction)
+* **Lane 5: Sovereign Orchestration & Hardware** (e.g. Decoupled Bicameral Nodes, Lean Sleep, Metal Guard)
+* **Lane 6: Outliers & Epistemology** (Novel methodology discoveries that fall outside pure JITC)
+
+### 4. Scraping, Ingestion & Consolidation Pipeline
+* **Multi-Tier Harvest:**
+  * **AGY / Author Pre-Seed:** Bootstrap initial canonical milestones (Dreaming, QQ, 3-Tier RAG, JITC, Gem Refinement).
+  * **Cloud Swarm Sweep (Prometheus / Oracle):** Broad initial pass across `FeatureTracker.md`, `docs/Protocols.md`, and archived `SPRINT_PLAN_*.md` to populate candidate `conception_date` and `implementation_date` spans.
+  * **Local Nightly Dreaming Sweep:** Ingest newly closed sprint stories and git commits, tagging bucket associations automatically.
+* **The Outlier Review Pipeline (`timeline_outliers.json`):**
+  * Items with low confidence bucket alignment ($< 0.65$ embedding similarity) are written to an `[outliers list]`.
+  * Outliers are surfaced in `timeline.html` / `wisdom.html` for human consideration $\rightarrow$ prompting the operator to confirm or declare a new bucket category.
+
+---
+
 ## 📊 Verification Ledger
 
 | Story ID | Verification Method | Silicon Target | Sign-off Status |
@@ -155,6 +212,7 @@ During the Sprint 77.0 synthesis of the human operator's *"Wisdom system"* desig
 | **77.3** | Bucket schema validation & cosine similarity deduplication test | ChromaDB `:8001` | PENDING |
 | **77.4** | `writer.html` DOM rendering, section re-ordering & `main.tex` compile | Local Python / pdflatex | PENDING |
 | **77.5** | Architectural review & WYWO prototype rubric evaluation | Design Review / BKM-005 | PENDING |
+| **77.6** | Gantt canvas rendering, lane click-filter & outlier ledger build | Chromium / Python | PENDING |
 
 ---
 
@@ -168,6 +226,8 @@ During the Sprint 77.0 synthesis of the human operator's *"Wisdom system"* desig
 | **Nightly `refine_wisdom.py`** | Low-Hanging Fruit | Low-Med | Low | Adapts proven `refine_gem.py` pattern; strictly touches `synthesis` only. |
 | **Initial 5 Buckets & Tagging** | Low-Hanging Fruit | Low | Minimal | Formalizes Sprint 74 themes; provides immediate structural clarity. |
 | **`writer.html` Rebranding & Canvas** | Low-Hanging Fruit | Med | Low | Renames `paper.html` and adds card/paragraph ordering controls. **Oracle Invariant:** Keep editor contenteditable/DOM-first; strictly avoid heavy real-time browser IDE features. |
+| **`timeline.html` Gantt & List View** | Core Deliverable | Med | Low | Canvas/SVG Gantt chart + reactive detail list from static `timeline_data.json`. High visual ROI. |
+| **Discovery Harvester & Outlier List** | Core Deliverable | Med | Low | Scrapes BKMs, FEATs, and Sprints for date ranges; routes unclassified items to `timeline_outliers.json`. |
 | **Atomic Card Granularity Gate** | **Scope Guard** | Med | **High** | **Oracle Warning #1 (Card Explosion):** Capping cards to core axioms/pearls only (~10-25 cards). Connective narrative remains in section paragraphs, preventing a 200-card combinatorial sprawl. |
 | **Ambiguity Drift Firewall** | **Scope Guard** | Med | **High** | **Oracle Warning #2 (Prompt Drift):** Ground vLLM question generation with strict boundary prompt. Human answer stage acts as hard context reset before M5 Air re-synthesis. |
 | **Automated Markdown "Rebuild"** | **Stretch / Design** | High | **High** | Reverse-syncing machine synthesis into human markdown risks format corruption and git thrash. Unidirectional export only. |
