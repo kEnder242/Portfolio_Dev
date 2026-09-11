@@ -20,51 +20,43 @@ OUTPUT_HTML = BASE_DIR / "timeline.html"
 LANES_CONFIG = [
     {
         "id": "triage",
-        "title": "JITC: Triage & Classification",
+        "title": "Triage & Classification",
         "short": "Triage",
         "color": "#388bfd",
         "bg": "rgba(56, 139, 253, 0.15)",
-        "desc": "Informational inquiry gates, silence protocols, vector pre-triage, and semantic screening."
+        "desc": "Informational inquiry gates, QQ protocol, model routing via Foyer, and semantic triage."
     },
     {
-        "id": "context",
-        "title": "JITC: Fingertip & Context Scoping",
-        "short": "Context Scoping",
+        "id": "ambient_hooks",
+        "title": "Ambient Hooks & Monitors",
+        "short": "Ambient Hooks",
         "color": "#2ea043",
         "bg": "rgba(46, 160, 67, 0.15)",
-        "desc": "Dual-channel memory, sub-100ms anchor injection, Token Golf, and prompt attention budgeting."
+        "desc": "Background watchdogs, filesystem monitors, git reset hooks, quiescence timers, and AST memory guards."
     },
     {
-        "id": "memory",
-        "title": "JITC: Collection & Memory Vaults",
-        "short": "Memory Vaults",
-        "color": "#a371f7",
-        "bg": "rgba(163, 113, 247, 0.15)",
-        "desc": "CLaRa-DNA multi-collection taxonomy, persistent ICM SQLite, and zero-symlink manifests."
+        "id": "llm_kernel",
+        "title": "LLM Kernel (Context · Attention · Reply)",
+        "short": "LLM Kernel",
+        "color": "#e3b341",
+        "bg": "rgba(227, 179, 65, 0.15)",
+        "desc": "In-LLM cognitive pipeline: runtime context assembly/Token Golf, attention & swarm delegation, and safe reply patching."
     },
     {
         "id": "distillation",
-        "title": "JITC: Distillation & Dreaming",
-        "short": "Distillation & Dreaming",
-        "color": "#e3b341",
-        "bg": "rgba(227, 179, 65, 0.15)",
-        "desc": "Off-peak subconscious dreaming, latent association synthesis, and diamond pearl polishing."
+        "title": "Distillation & Synthesis",
+        "short": "Distillation",
+        "color": "#a371f7",
+        "bg": "rgba(163, 113, 247, 0.15)",
+        "desc": "Post-turn synthesis, subconscious dreaming, blackboard gem refinement, and error-to-protocol crystallization."
     },
     {
-        "id": "orchestration",
-        "title": "Sovereign Orchestration & Silicon",
-        "short": "Sovereign Silicon",
+        "id": "storage",
+        "title": "Memory & Substrate Storage",
+        "short": "Memory & Storage",
         "color": "#f85149",
         "bg": "rgba(248, 81, 73, 0.15)",
-        "desc": "Decoupled bicameral hardware harnesses, diagnostic delegation ladders, and lean sleep/wake cycles."
-    },
-    {
-        "id": "outliers",
-        "title": "Outliers & Epistemology",
-        "short": "Outliers",
-        "color": "#db61a2",
-        "bg": "rgba(219, 97, 162, 0.15)",
-        "desc": "Human-AI feedback backpressure, customer service root paradigms, and novel evolutionary patterns."
+        "desc": "ChromaDB vector vaults, persistent ICM SQLite episodic recall, git commit ledger, and zero-torch precomputed caches."
     }
 ]
 
@@ -84,7 +76,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novel Ideas Evolutionary Timeline | Jason Allred</title>
+    <title>Lab Innovations Timeline | Jason Allred</title>
     <link rel="stylesheet" href="style.css?v=826dbad3">
     <style>
         :root {
@@ -635,10 +627,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <main>
         <header class="timeline-header">
-            <h1 class="timeline-title">🏛️ Novel Ideas & Evolutionary Timeline</h1>
+            <h1 class="timeline-title">🏛️ Lab Innovations & Evolutionary Timeline</h1>
             <p class="timeline-subtitle">
-                Original discoveries, architectural paradigms, and evolutionary milestones of the Federated Autonomous Lab.
-                Tracking the genesis, conception-to-implementation spans, and JITC lifecycle maturity.
+                Original innovations, architectural paradigms, and evolutionary milestones of the Federated Autonomous Lab.
+                Tracking the genesis, conception-to-implementation spans, and cognitive lifecycle maturity.
             </p>
 
             <div class="metrics-bar">
@@ -677,7 +669,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         <section class="controls-panel">
             <div class="search-row">
-                <input type="text" id="filter-input" class="search-box" placeholder="🔍 Search discoveries by title, tag, code anchor, or sprint ref...">
+                <input type="text" id="filter-input" class="search-box" placeholder="🔍 Search innovations by title, tag, code anchor, or sprint ref...">
                 <button id="btn-reset-filters" class="btn-filter">Reset</button>
             </div>
             <div class="lanes-filter-row" id="lanes-filter-container">
@@ -688,7 +680,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <section class="gantt-section">
             <div class="gantt-title-row">
                 <div class="gantt-title">
-                    <span>📊 Evolution Gantt Matrix</span>
+                    <span>📊 Innovations Gantt Matrix</span>
                     <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal;">[Conception ● ━━━ ◆ Implementation]</span>
                 </div>
                 <div style="font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-mono);">
@@ -704,7 +696,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         <section class="list-section">
             <div class="list-title">
-                <span id="list-counter-label">📋 All Discoveries (__METRIC_TOTAL__)</span>
+                <span id="list-counter-label">📋 All Innovations (__METRIC_TOTAL__)</span>
                 <span style="font-size: 0.8rem; color: var(--text-dim); font-weight: normal;">Sorted Chronologically</span>
             </div>
 
@@ -1020,12 +1012,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             const counterLabel = document.getElementById('list-counter-label');
             const filtered = getFilteredDiscoveries();
 
-            counterLabel.textContent = `📋 Discoveries (${filtered.length} of ${DISCOVERIES.length})`;
+            counterLabel.textContent = `📋 Innovations (${filtered.length} of ${DISCOVERIES.length})`;
 
             if (!filtered.length) {
                 container.innerHTML = `
                     <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-dim); background: var(--bg-card); border: 1px dashed var(--border-dim); border-radius: 8px;">
-                        No discoveries match the current search or swimlane criteria.
+                        No innovations match the current search or swimlane criteria.
                     </div>
                 `;
                 return;
@@ -1048,7 +1040,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <article class="discovery-card ${isSelected ? 'highlighted' : ''}" id="card-${item.id}" onclick="selectCard('${item.id}')">
                         <div class="card-header">
                             <div class="card-id-title">
-                                <span class="card-id" style="color: ${lane.color};">[${item.id}] • ${lane.short}</span>
+                                <span class="card-id" style="color: ${lane.color};">Innovation [${item.id}] • ${lane.short}</span>
                                 <h3 class="card-title">${item.title}</h3>
                             </div>
                             <div class="card-badges">

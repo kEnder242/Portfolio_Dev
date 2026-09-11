@@ -184,13 +184,19 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
   * Filters reactively when a Gantt bar or lane is clicked.
   * Rich detail cards: Clickable links to specific Sprint Markdown files, Git code anchors, ArXiv inspiration pointers (cross-linked to `research.html`), and BKM/FEAT numbers.
 
-### 3. Lane / Bucket Definitions (JITC Lifecycle Anchors + Outliers)
-* **Lane 1: Triage & Classification** (e.g. QQ Protocol, Semantic Triage BKM-015, Vector Pre-Triage)
-* **Lane 2: Fingertip & Context Scoping** (e.g. 3-Tier RAG, JITC Hooks, Token Golf, ContextScope)
-* **Lane 3: Collection & Memory Vaults** (e.g. CLaRa-DNA Collections, Blackboard Ledger, ICM SQLite)
-* **Lane 4: Distillation & Dreaming** (e.g. Subconscious Dreaming, Gem Polishing, Rank 4 Extraction)
-* **Lane 5: Sovereign Orchestration & Hardware** (e.g. Decoupled Bicameral Nodes, Lean Sleep, Metal Guard)
-* **Lane 6: Outliers & Epistemology** (Novel methodology discoveries that fall outside pure JITC)
+### 3. Lane / Bucket Definitions (Cognitive Flow Pipeline: Option B)
+> 🎨 **Paper Figure Stand-in:** `Triage Classification -> Ambient Hooks -> (Inside LLM: Context -> Attention -> Reply ) -> Distillation -> Storage`  
+> *(Author Pen & Paper Blueprint Anchor — represents the living reflex arc of the Federated Lab and serves as the conceptual architecture graphic for the forthcoming publication).*
+
+* **Lane 1: Triage & Classification** (`triage`): Informational inquiry gates, QQ protocol (BKM-004), autonomy gating (BKM-006/030), model selection routing via Foyer.
+* **Lane 2: Ambient Hooks & Monitors** (`ambient_hooks`): Invisible background watchdogs, filesystem monitors, `git_reset_hook.py`, quiescence telemetry timers (FEAT-318), and AST memory guards.
+* **Lane 3: LLM Kernel (Context · Attention · Reply)** (`llm_kernel`):
+  * *Context:* Runtime dynamic anchor injection, Token Golf (BKM-051), 3-Tier RAG packing.
+  * *Attention:* Multi-agent swarm delegation (`delegate.py`), CoT preservation, tool orchestration.
+  * *Reply:* Structured output parsing, safe patching (`clara-dna_safe_patch`), live WebSocket streaming.
+* **Lane 4: Distillation & Synthesis** (`distillation`): Post-turn synthesis, subconscious dreaming (VIBE-005), blackboard gem refinement, and error-to-protocol crystallization.
+* **Lane 5: Memory & Substrate Storage** (`storage`): ChromaDB vector vaults, persistent ICM SQLite episodic recall, git commit/branch ledger, and zero-torch precomputed caches.
+
 
 ### 4. Scraping, Ingestion & Consolidation Pipeline
 * **Multi-Tier Harvest:**
@@ -252,4 +258,22 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
   2. Standardized BKM headers (BKM-020, BKM-049, BKM-051, BKM-052, BKM-053).
   3. Hardened `field_notes/protocols_build.py` regex with resilient heading parsing.
   4. Verified via Playwright headless browser test: DOM parsed cleanly, `mission-control.js` executed, and `#sidebar` rendered 2,680 bytes of navigation HTML.
+
+---
+
+## 🏛️ Phase 4: Cognitive Flow Pipeline Alignment & Zero-Torch Policy
+
+### 1. Dual-Anchor Invariant Registration
+* **`BKM-054: Zero In-Process PyTorch on Orchestrator Host`**: Registered in `HomeLabAI/docs/Protocols.md`. Governs agent behavior and test harnesses against importing PyTorch or SentenceTransformers on the 16GB z87 host. Embeddings must be offloaded to remote silicon endpoints (M5 Air / vLLM) or read from precomputed JSON caches.
+* **`FEAT-567: Orchestrator Memory Guard & AST Import Linter`**: Registered in `Portfolio_Dev/FeatureTracker.md`. Enforces automated AST linting and assertion gates against host OOM and session resets.
+
+### 2. Cognitive Flow Pipeline (Option B) & Paper Graphic Anchor
+* **The Living Reflex Arc:** Replaced static software silos with the 5-stage cognitive lifecycle drawn from the author's pen & paper notes:
+  $$\text{Triage Classification} \longrightarrow \text{Ambient Hooks} \longrightarrow \left(\text{Inside LLM: Context} \longrightarrow \text{Attention} \longrightarrow \text{Reply}\right) \longrightarrow \text{Distillation} \longrightarrow \text{Storage}$$
+* **Whitepaper Integration:** Tagged as the official conceptual architecture graphic stand-in for the federated autonomous lab paper.
+
+### 3. Nomenclature & Visual Identity
+* **Prefix & Identifier:** Retained `DISC-xxx` as the compact machine and schema identifier.
+* **User-Facing Terminology:** Standardized all UI presentation on **"Innovations"** (e.g. *Innovations Matrix*, *Lab Innovations Timeline*, *Filter Innovations*).
+
 
