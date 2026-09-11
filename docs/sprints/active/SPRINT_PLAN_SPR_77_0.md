@@ -233,3 +233,23 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
 | **Automated Markdown "Rebuild"** | **Stretch / Design** | High | **High** | Reverse-syncing machine synthesis into human markdown risks format corruption and git thrash. Unidirectional export only. |
 | **WYWO Clarification Loop** | **Stretch / Design** | Med-High | Med | Requires async queue, question ranking model, and user prompt injection. Blueprint first. |
 | **Legacy Gem/BKM Full Migration** | **Future Phase** | High | Med-High | Deferred until Wisdom System proves stable across multiple nightly cycles. |
+
+---
+
+## 🛠️ Phase 3: Post-Execution Forensic Hardening & Navigation Alignment
+
+### 1. Navigation Scoping & Public Airlock Censorship Fix
+* **The Issue:** Censoring "Publications & Wisdom" previously swallowed all of `<section id="mission-control">` on the public airlock (`www.jason-lab.dev`), hiding internal navigation links (Artifact Files, Lab Status, AI Intercom, Feature Tracker, Model Benchmarks).
+* **The Resolution:** Refactored `field_notes/mission-control.js`:
+  * `<section id="mission-control">` is preserved on the public airlock.
+  * `<section id="publications-wisdom">` (Wisdom Studio, Writer Studio, Novel Ideas Timeline) is strictly hidden from public airlock and only rendered on internal `notes.jason-lab.dev`.
+
+### 2. Forensic Resolution of Blank Sidebar on `protocols.html`
+* **The Root Cause:** In `HomeLabAI/docs/Protocols.md` line 752, an unbalanced code fence inverted all downstream code blocks. An ASCII diagram containing `HomeLabAI/src/tests/delegate.py ... --title "<Title>"` was rendered as unescaped raw HTML.
+* **The Browser Trap:** Web browsers parse `<Title>` as an HTML `<title>` element (case-insensitive), immediately switching to RCDATA plain-text mode. This swallowed the entire bottom of `protocols.html`—including `<script src="mission-control.js"></script>`—preventing `customElements.define` from executing.
+* **The Fix:**
+  1. Balanced the code fence in `HomeLabAI/docs/Protocols.md`.
+  2. Standardized BKM headers (BKM-020, BKM-049, BKM-051, BKM-052, BKM-053).
+  3. Hardened `field_notes/protocols_build.py` regex with resilient heading parsing.
+  4. Verified via Playwright headless browser test: DOM parsed cleanly, `mission-control.js` executed, and `#sidebar` rendered 2,680 bytes of navigation HTML.
+
