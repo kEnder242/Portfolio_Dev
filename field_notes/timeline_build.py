@@ -1,4 +1,85 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+# timeline_build.py [v1.0]
+# [FEAT-566] Story 77.6: Novel Ideas Evolutionary Timeline Compiler
+# Generates Portfolio_Dev/field_notes/timeline.html from timeline_data.json,
+# timeline_outliers.json, and buckets.json.
+
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+TIMELINE_DATA_PATH = DATA_DIR / "timeline_data.json"
+OUTLIERS_DATA_PATH = DATA_DIR / "timeline_outliers.json"
+BUCKETS_DATA_PATH = DATA_DIR / "buckets.json"
+OUTPUT_HTML = BASE_DIR / "timeline.html"
+
+LANES_CONFIG = [
+    {
+        "id": "triage",
+        "title": "JITC: Triage & Classification",
+        "short": "Triage",
+        "color": "#388bfd",
+        "bg": "rgba(56, 139, 253, 0.15)",
+        "desc": "Informational inquiry gates, silence protocols, vector pre-triage, and semantic screening."
+    },
+    {
+        "id": "context",
+        "title": "JITC: Fingertip & Context Scoping",
+        "short": "Context Scoping",
+        "color": "#2ea043",
+        "bg": "rgba(46, 160, 67, 0.15)",
+        "desc": "Dual-channel memory, sub-100ms anchor injection, Token Golf, and prompt attention budgeting."
+    },
+    {
+        "id": "memory",
+        "title": "JITC: Collection & Memory Vaults",
+        "short": "Memory Vaults",
+        "color": "#a371f7",
+        "bg": "rgba(163, 113, 247, 0.15)",
+        "desc": "CLaRa-DNA multi-collection taxonomy, persistent ICM SQLite, and zero-symlink manifests."
+    },
+    {
+        "id": "distillation",
+        "title": "JITC: Distillation & Dreaming",
+        "short": "Distillation & Dreaming",
+        "color": "#e3b341",
+        "bg": "rgba(227, 179, 65, 0.15)",
+        "desc": "Off-peak subconscious dreaming, latent association synthesis, and diamond pearl polishing."
+    },
+    {
+        "id": "orchestration",
+        "title": "Sovereign Orchestration & Silicon",
+        "short": "Sovereign Silicon",
+        "color": "#f85149",
+        "bg": "rgba(248, 81, 73, 0.15)",
+        "desc": "Decoupled bicameral hardware harnesses, diagnostic delegation ladders, and lean sleep/wake cycles."
+    },
+    {
+        "id": "outliers",
+        "title": "Outliers & Epistemology",
+        "short": "Outliers",
+        "color": "#db61a2",
+        "bg": "rgba(219, 97, 162, 0.15)",
+        "desc": "Human-AI feedback backpressure, customer service root paradigms, and novel evolutionary patterns."
+    }
+]
+
+
+def load_json(path, default):
+    if path.exists():
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠️ Warning loading {path.name}: {e}")
+    return default
+
+
+HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -563,23 +644,23 @@
             <div class="metrics-bar">
                 <div class="metric-pill">
                     <span>Milestones:</span>
-                    <span class="metric-val">10</span>
+                    <span class="metric-val">__METRIC_TOTAL__</span>
                 </div>
                 <div class="metric-pill">
                     <span>Mature Axioms:</span>
-                    <span class="metric-val" style="color: var(--accent-green);">8</span>
+                    <span class="metric-val" style="color: var(--accent-green);">__METRIC_MATURE__</span>
                 </div>
                 <div class="metric-pill">
                     <span>Active Horizons:</span>
-                    <span class="metric-val" style="color: var(--accent);">2</span>
+                    <span class="metric-val" style="color: var(--accent);">__METRIC_ACTIVE__</span>
                 </div>
                 <div class="metric-pill">
                     <span>Epoch Span:</span>
-                    <span class="metric-val" style="color: var(--accent-gold);">2025-11-04 → 2026-03-11</span>
+                    <span class="metric-val" style="color: var(--accent-gold);">__EPOCH_SPAN__</span>
                 </div>
                 <div class="metric-pill" style="cursor: pointer;" id="btn-toggle-outliers">
                     <span>Pending Outliers:</span>
-                    <span class="metric-val" style="color: var(--accent-gold);">1 ⚠️</span>
+                    <span class="metric-val" style="color: __OUTLIER_COLOR__;">__METRIC_OUTLIERS__ ⚠️</span>
                 </div>
             </div>
         </header>
@@ -587,7 +668,7 @@
         <section id="outliers-drawer">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="margin: 0; color: var(--accent-gold); font-family: var(--font-mono); font-size: 1rem;">
-                    ⚠️ Outlier Review Pipeline (1 item)
+                    ⚠️ Outlier Review Pipeline (__METRIC_OUTLIERS__ item)
                 </h3>
                 <span style="font-size: 0.8rem; color: var(--text-dim);">Similarity confidence &lt; 0.65 threshold</span>
             </div>
@@ -600,7 +681,7 @@
                 <button id="btn-reset-filters" class="btn-filter">Reset</button>
             </div>
             <div class="lanes-filter-row" id="lanes-filter-container">
-                <button class="btn-filter active" data-lane="all">All Swimlanes (10)</button>
+                <button class="btn-filter active" data-lane="all">All Swimlanes (__METRIC_TOTAL__)</button>
             </div>
         </section>
 
@@ -623,7 +704,7 @@
 
         <section class="list-section">
             <div class="list-title">
-                <span id="list-counter-label">📋 All Discoveries (10)</span>
+                <span id="list-counter-label">📋 All Discoveries (__METRIC_TOTAL__)</span>
                 <span style="font-size: 0.8rem; color: var(--text-dim); font-weight: normal;">Sorted Chronologically</span>
             </div>
 
@@ -633,11 +714,11 @@
         </section>
     </main>
 
-    <script src="mission-control.js?v=93fc2cec"></script>
+    <script src="mission-control.js?v=16cf2268"></script>
     <script>
-        const DISCOVERIES = [{"id": "DISC-002", "title": "QQ Protocol (Informational Silence)", "conception_date": "2025-11-04", "implementation_date": "2025-11-12", "bucket_id": "triage", "lane": "JITC: Triage & Classification", "origin_artifact": "BKM-004 / PROTO-QQ", "sprint_ref": "SPRINT_PLAN_SPR_44_0.md", "code_anchors": ["AGENTS.md", "HomeLabAI/docs/Protocols.md"], "arxiv_inspiration": null, "summary": "Strict invariant operational law where prompts prefixed with 'QQ' are read-only informational inquiries, forbidding premature state changes, inferred work, or autonomous dispatches.", "status": "MATURE", "tags": ["qq-protocol", "triage", "operational-law", "silence", "governance"]}, {"id": "DISC-003", "title": "3-Tier Fast-Path RAG Architecture", "conception_date": "2025-12-08", "implementation_date": "2025-12-22", "bucket_id": "context", "lane": "JITC: Fingertip & Context Scoping", "origin_artifact": "FEAT-142 / BKM-046", "sprint_ref": "SPRINT_PLAN_SPR_48_0.md", "code_anchors": ["HomeLabAI/config/hooks/icm_hook.py", "HomeLabAI/src/nodes/lab_dna_router.py"], "arxiv_inspiration": "2312.10997 (Retrieval-Augmented Generation for AI-Generated Content)", "summary": "Multi-tier retrieval bypassing massive 200KB+ markdown file reads via sub-100ms vector queries on ChromaDB port 8001 and persistent SQLite ICM session memory.", "status": "MATURE", "tags": ["3-tier-rag", "fast-path", "chromadb", "icm", "retrieval"]}, {"id": "DISC-004", "title": "Just-In-Time Context (JITC) Lifecycle", "conception_date": "2026-01-02", "implementation_date": "2026-01-28", "bucket_id": "context", "lane": "JITC: Fingertip & Context Scoping", "origin_artifact": "WIS-001 / FEAT-546", "sprint_ref": "SPRINT_PLAN_SPR_54_0.md", "code_anchors": ["HomeLabAI/src/curator/sync_sprint_dna.py", "HomeLabAI/config/hooks/icm_hook.py"], "arxiv_inspiration": "2307.03172 (Lost in the Middle: How Language Models Use Long Contexts)", "summary": "The dual-channel memory architecture replacing monolithic context scaling with runtime dynamic anchor injection, floating up only the exact 2-3 required vectors milliseconds before inference.", "status": "MATURE", "tags": ["jitc", "context-scoping", "dual-channel-memory", "attention-dilution"]}, {"id": "DISC-001", "title": "Subconscious Dreaming Cycle", "conception_date": "2026-01-14", "implementation_date": "2026-01-19", "bucket_id": "distillation", "lane": "JITC: Distillation & Dreaming", "origin_artifact": "VIBE-005 / FEAT-067", "sprint_ref": "SPRINT_PLAN_SPR_52_0.md", "code_anchors": ["HomeLabAI/src/infra/nightly_forge.py", "Portfolio_Dev/field_notes/mass_scan.py"], "arxiv_inspiration": "2401.03412 (Reflexion & Self-Consolidation in Autonomous Agents)", "summary": "Automated off-peak synthesis converting raw daily notes into Rank 4/5 diamond pearls, discovering latent associations during host idle hours.", "status": "MATURE", "tags": ["dreaming", "distillation", "nightly-forge", "latent-associations", "pearls"]}, {"id": "DISC-005", "title": "Token Golf Prompt Optimization", "conception_date": "2026-01-20", "implementation_date": "2026-02-04", "bucket_id": "context", "lane": "JITC: Fingertip & Context Scoping", "origin_artifact": "WIS-002 / BKM-051 / FEAT-526", "sprint_ref": "SPRINT_PLAN_SPR_58_0.md", "code_anchors": ["HomeLabAI/src/tests/delegate.py", "HomeLabAI/docs/Protocols.md"], "arxiv_inspiration": null, "summary": "Treating prompt tokens as scarce golf strokes; minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp and subagent prompts capped strictly under 1,500 tokens.", "status": "MATURE", "tags": ["token-golf", "prompt-budget", "subagent-scoping", "efficiency"]}, {"id": "DISC-006", "title": "Multi-Stage Gem Refinement Pipeline", "conception_date": "2026-01-25", "implementation_date": "2026-02-10", "bucket_id": "distillation", "lane": "JITC: Distillation & Dreaming", "origin_artifact": "FEAT-470 / FEAT-492", "sprint_ref": "SPRINT_PLAN_SPR_62_0.md", "code_anchors": ["Portfolio_Dev/field_notes/refine_gem.py", "Portfolio_Dev/field_notes/refine_wisdom.py"], "arxiv_inspiration": "2305.14314 (Self-Refine: Iterative Refinement with Self-Feedback)", "summary": "Two-tier asynchronous refinement where small local models filter raw notes and larger reasoning models polish insights into diamond pearls while keeping origin quotes 100% immutable.", "status": "MATURE", "tags": ["gem-polishing", "refinement", "diamond-ranking", "wisdom-synthesis"]}, {"id": "DISC-007", "title": "Decoupled Bicameral Silicon Harness", "conception_date": "2026-02-12", "implementation_date": "2026-02-28", "bucket_id": "orchestration", "lane": "Sovereign Orchestration & Silicon", "origin_artifact": "SPR-76.0 / FEAT-548", "sprint_ref": "SPRINT_PLAN_SPR_76_0.md", "code_anchors": ["HomeLabAI/src/tests/delegate.py", "HomeLabAI/src/attendant_liveliness.py"], "arxiv_inspiration": null, "summary": "Physical and logical decoupling of heavy code execution (Atlas RTX 4090) and high-parameter reasoning synthesis (Junior M5 Air Qwen 27B) over a private zero-trust network.", "status": "MATURE", "tags": ["bicameral", "heterogeneous-silicon", "m5-air", "rtx-4090", "orchestration"]}, {"id": "DISC-008", "title": "The Handover Reflection Pattern", "conception_date": "2026-02-15", "implementation_date": "2026-02-24", "bucket_id": "outliers", "lane": "Outliers & Epistemology", "origin_artifact": "WIS-003 / BKM-034 / FEAT-522", "sprint_ref": "SPRINT_PLAN_SPR_75_0.md", "code_anchors": ["HomeLabAI/src/tests/delegate.py"], "arxiv_inspiration": null, "summary": "Autonomous worker subagents reflect candidly upon task completion on how the task was handed over, sending closed-loop backpressure to dispatcher prompts to self-heal instruction drift.", "status": "MATURE", "tags": ["handover-reflection", "backpressure", "feedback-loops", "prompt-drift"]}, {"id": "DISC-009", "title": "Zero-Symlink Whitepaper Thought Organizer", "conception_date": "2026-03-02", "implementation_date": "2026-03-10", "bucket_id": "memory", "lane": "JITC: Collection & Memory Vaults", "origin_artifact": "FEAT-564 / Story 77.4", "sprint_ref": "SPRINT_PLAN_SPR_77_0.md", "code_anchors": ["Portfolio_Dev/field_notes/writer.html", "Portfolio_Dev/scripts/build_writer.py"], "arxiv_inspiration": null, "summary": "Workspace-wide transition from fragile OS-level symlinks to explicit canonical manifest routing for LaTeX whitepaper publishing, eliminating cross-platform artifact resolution failure.", "status": "ACTIVE", "tags": ["writer-studio", "zero-symlinks", "whitepaper", "manifest", "latex"]}, {"id": "DISC-010", "title": "Tri-Loop Diagnostic Delegation Ladder", "conception_date": "2026-03-05", "implementation_date": "2026-03-11", "bucket_id": "orchestration", "lane": "Sovereign Orchestration & Silicon", "origin_artifact": "BKM-049 / FEAT-560", "sprint_ref": "SPRINT_PLAN_SPR_77_0.md", "code_anchors": ["HomeLabAI/src/tests/delegate.py"], "arxiv_inspiration": null, "summary": "Automated verification execution with 3-fix-retry ladder escalating across local silicon, cloud swarm models, and human AGY takeover with pre-retry hardware/log diagnostics.", "status": "ACTIVE", "tags": ["delegation", "tri-loop", "diagnostics", "bkm-049", "escalation"]}];
-        const OUTLIERS = [{"id": "OUT-001", "title": "Natural Language Audio Intercom Feedback Protocol", "conception_date": "2026-02-18", "implementation_date": "2026-02-27", "candidate_bucket": "human_ai_interface", "similarity_score": 0.582, "source": "SPR-50 Audio Stream Experiments", "summary": "Full-duplex low-latency audio stream with PCM buffer sentinel; falls between JITC context scoping and sensory human-AI interface.", "operator_status": "PENDING_REVIEW", "recommended_action": "Evaluate declaring new Sensory Stream lane or assign to Human-AI Foil."}];
-        const LANES = [{"id": "triage", "title": "JITC: Triage & Classification", "short": "Triage", "color": "#388bfd", "bg": "rgba(56, 139, 253, 0.15)", "desc": "Informational inquiry gates, silence protocols, vector pre-triage, and semantic screening."}, {"id": "context", "title": "JITC: Fingertip & Context Scoping", "short": "Context Scoping", "color": "#2ea043", "bg": "rgba(46, 160, 67, 0.15)", "desc": "Dual-channel memory, sub-100ms anchor injection, Token Golf, and prompt attention budgeting."}, {"id": "memory", "title": "JITC: Collection & Memory Vaults", "short": "Memory Vaults", "color": "#a371f7", "bg": "rgba(163, 113, 247, 0.15)", "desc": "CLaRa-DNA multi-collection taxonomy, persistent ICM SQLite, and zero-symlink manifests."}, {"id": "distillation", "title": "JITC: Distillation & Dreaming", "short": "Distillation & Dreaming", "color": "#e3b341", "bg": "rgba(227, 179, 65, 0.15)", "desc": "Off-peak subconscious dreaming, latent association synthesis, and diamond pearl polishing."}, {"id": "orchestration", "title": "Sovereign Orchestration & Silicon", "short": "Sovereign Silicon", "color": "#f85149", "bg": "rgba(248, 81, 73, 0.15)", "desc": "Decoupled bicameral hardware harnesses, diagnostic delegation ladders, and lean sleep/wake cycles."}, {"id": "outliers", "title": "Outliers & Epistemology", "short": "Outliers", "color": "#db61a2", "bg": "rgba(219, 97, 162, 0.15)", "desc": "Human-AI feedback backpressure, customer service root paradigms, and novel evolutionary patterns."}];
+        const DISCOVERIES = __JSON_DISCOVERIES__;
+        const OUTLIERS = __JSON_OUTLIERS__;
+        const LANES = __JSON_LANES__;
 
         let currentLaneFilter = 'all';
         let searchQuery = '';
@@ -1044,3 +1125,49 @@
     </script>
 </body>
 </html>
+"""
+
+
+def build_timeline_html():
+    print("--- COMPILING NOVEL IDEAS TIMELINE ---")
+    discoveries = load_json(TIMELINE_DATA_PATH, [])
+    outliers = load_json(OUTLIERS_DATA_PATH, [])
+    buckets = load_json(BUCKETS_DATA_PATH, [])
+
+    discoveries.sort(key=lambda x: (x.get("conception_date", ""), x.get("implementation_date", "")))
+
+    total_discoveries = len(discoveries)
+    mature_count = sum(1 for d in discoveries if d.get("status") == "MATURE")
+    active_count = sum(1 for d in discoveries if d.get("status") == "ACTIVE")
+    outlier_count = len(outliers)
+
+    all_dates = []
+    for d in discoveries:
+        if d.get("conception_date"):
+            all_dates.append(d["conception_date"])
+        if d.get("implementation_date"):
+            all_dates.append(d["implementation_date"])
+
+    min_date_str = min(all_dates) if all_dates else "2025-10-01"
+    max_date_str = max(all_dates) if all_dates else "2026-04-01"
+
+    outlier_color = "var(--accent-gold)" if outlier_count > 0 else "var(--text-dim)"
+
+    html = HTML_TEMPLATE
+    html = html.replace("__METRIC_TOTAL__", str(total_discoveries))
+    html = html.replace("__METRIC_MATURE__", str(mature_count))
+    html = html.replace("__METRIC_ACTIVE__", str(active_count))
+    html = html.replace("__METRIC_OUTLIERS__", str(outlier_count))
+    html = html.replace("__OUTLIER_COLOR__", outlier_color)
+    html = html.replace("__EPOCH_SPAN__", f"{min_date_str} → {max_date_str}")
+    html = html.replace("__JSON_DISCOVERIES__", json.dumps(discoveries))
+    html = html.replace("__JSON_OUTLIERS__", json.dumps(outliers))
+    html = html.replace("__JSON_LANES__", json.dumps(LANES_CONFIG))
+
+    with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"✅ Generated {OUTPUT_HTML.name} ({len(html)} bytes, {total_discoveries} discoveries)")
+
+
+if __name__ == "__main__":
+    build_timeline_html()

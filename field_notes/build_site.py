@@ -94,6 +94,7 @@ def deploy_to_airlock(snapshots=False):
             "sync_stories.sh": (os.path.join(BASE_DIR, "stories.html"), os.path.join(www_dir, "stories.html")),
             "sync_research.sh": (os.path.join(BASE_DIR, "research.html"), os.path.join(www_dir, "research.html")),
             "sync_public_benchmarks.sh": (os.path.join(BASE_DIR, "public_benchmarks.html"), os.path.join(www_dir, "public_benchmarks.html")),
+            "sync_timeline.sh": (os.path.join(BASE_DIR, "timeline.html"), os.path.join(www_dir, "timeline.html")),
         }
 
         for script, (src_file, dst_file) in sync_map.items():
@@ -147,6 +148,18 @@ def main(args):
         subprocess.run([sys.executable, os.path.join(BASE_DIR, "features_build.py")], check=True)
     except Exception as e:
         print(f"❌ Critical Error in features_build.py: {e}")
+        sys.exit(1)
+
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "wisdom_build.py")], check=True)
+    except Exception as e:
+        print(f"❌ Critical Error in wisdom_build.py: {e}")
+        sys.exit(1)
+
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "timeline_build.py")], check=True)
+    except Exception as e:
+        print(f"❌ Critical Error in timeline_build.py: {e}")
         sys.exit(1)
         
     # [SPR-55] Hard-gate: verify FeatureTracker.md **Code:** links resolve (skip with --no-verify)
