@@ -2954,6 +2954,14 @@
 **Rationale:** Prevents context window bloat when researching historical sprint decisions and story evolution. Decouples sprint narrative history and phase intent from raw codebase architecture (`feature_dna`) and invariant operational rules (`behavioral_dna`), enabling sub-millisecond semantic retrieval via `clara-dna` MCP tools and ambient hooks.
 **Mechanism:** `HomeLabAI/src/curator/sync_sprint_dna.py`, ChromaDB collection `sprint_dna`, and `clara-dna` MCP server routing.
 
+## [FEAT-567] Orchestrator Memory Guard & AST Import Linter (Zero-Torch Enforcement)
+**Sprint:** SPR-77.0
+**Status:** ACTIVE
+**Logic:** Automated AST pre-commit check and test assertion suite verifying that orchestrator Python scripts and local test fixtures do not import `torch`, `torchvision`, or `sentence_transformers`. Enforces offloading of dense vector embedding tasks to remote silicon (M5 Air port 8000 / vLLM port 8088) or precomputed cache fixtures.
+**Rationale:** Prevents catastrophic out-of-memory (OOM) host crashes and Xorg desktop resets caused by loading multi-gigabyte PyTorch C-arenas inside the 16GB z87 orchestrator runtime.
+**Mechanism:** `HomeLabAI/config/hooks/check_zero_torch.py`, `HomeLabAI/docs/Protocols.md#BKM-054`, and pytest memory guard fixture.
+
+
 
 
 
