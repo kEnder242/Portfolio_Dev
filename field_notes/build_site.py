@@ -21,6 +21,7 @@ HTML_FILES = [
     "features.html",
     "intercom.html",
     "benchmarks.html",
+    "public_benchmarks.html",
     "wisdom.html",
     "writer.html"
 ]
@@ -160,6 +161,12 @@ def main(args):
         subprocess.run([sys.executable, os.path.join(BASE_DIR, "timeline_build.py")], check=True)
     except Exception as e:
         print(f"❌ Critical Error in timeline_build.py: {e}")
+        sys.exit(1)
+
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "export_public_benchmarks.py")], check=True)
+    except Exception as e:
+        print(f"❌ Critical Error in export_public_benchmarks.py: {e}")
         sys.exit(1)
         
     # [SPR-55] Hard-gate: verify FeatureTracker.md **Code:** links resolve (skip with --no-verify)
