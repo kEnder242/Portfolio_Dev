@@ -6,7 +6,7 @@
     <title>Wisdom Studio | Jason Allred</title>
     <link rel="stylesheet" href="style.css?v=826dbad3">
     <style>
-        /* Wisdom Studio: Dual-View (Reader + Workbench) */
+        /* Wisdom Studio: Multi-DNA & Dual-View (Reader + Workbench) */
         .wisdom-header {
             display: flex;
             align-items: baseline;
@@ -28,13 +28,55 @@
             transition: background 0.2s, border-color 0.2s;
         }
         .view-toggle:hover { border-color: var(--accent-color); background: var(--code-bg); }
-        .view-toggle.active { border-color: var(--accent-color); color: #fff; }
+        .view-toggle.active { border-color: var(--accent-color); color: #fff; background: var(--code-bg); }
+
+        /* DNA Selector Bar */
+        .dna-selector-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0 16px 0;
+            padding: 8px 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--font-stack);
+            font-size: 0.8rem;
+        }
+        .dna-select {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: var(--font-stack);
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .dna-badge {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .dna-badge.rw {
+            background: rgba(35, 134, 54, 0.2);
+            border: 1px solid #238636;
+            color: #3fb950;
+        }
+        .dna-badge.ro {
+            background: rgba(210, 153, 34, 0.2);
+            border: 1px solid #d29922;
+            color: #d29922;
+        }
 
         .wisdom-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 16px;
-            margin-top: 20px;
+            margin-top: 16px;
         }
         .wisdom-card {
             background: var(--card-bg);
@@ -45,6 +87,19 @@
             font-size: 0.85rem;
             line-height: 1.5;
             border-radius: 4px;
+        }
+        .wisdom-card .card-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--sub-color);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .wisdom-card .bucket-badge {
+            color: var(--accent-color);
+            font-weight: bold;
         }
         .wisdom-card .card-title {
             font-weight: bold;
@@ -81,6 +136,23 @@
             font-size: 0.8rem;
             white-space: pre-wrap;
         }
+        .wisdom-card .review-notes {
+            font-size: 0.75rem;
+            color: #8b949e;
+            background: var(--code-bg);
+            border-left: 2px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 2px;
+        }
+        .wisdom-card .card-anchors code {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            margin-right: 4px;
+        }
         .wisdom-card ul.takeaways {
             margin: 4px 0 0 0;
             padding-left: 18px;
@@ -109,22 +181,20 @@
         }
         body.workbench .wb-editable:hover { border-color: var(--accent-color); }
         body.workbench .wb-editable:focus { outline: none; border-style: solid; border-color: var(--accent-color); }
-        body.workbench .wb-input {
-            width: 100%;
-            background: var(--code-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-family: var(--font-stack);
-            font-size: 0.8rem;
-            padding: 5px 8px;
-            border-radius: 3px;
-            margin: 2px 0;
-        }
-        body.workbench .wb-input:focus { outline: none; border-color: var(--accent-color); }
         body.workbench .origin-quote.wb-locked {
             border-color: #d29922;
             color: #8b949e;
             cursor: not-allowed;
+        }
+
+        /* Read-only DNA collection locks */
+        body.dna-ro .wb-editable {
+            border: none !important;
+            padding: 0 !important;
+            cursor: default !important;
+        }
+        body.dna-ro #wb-add-card, body.dna-ro #wb-save-disk {
+            display: none !important;
         }
 
         .wb-toolbar {
@@ -150,20 +220,9 @@
         }
         .wb-btn:hover { background: var(--accent-dim); color: #fff; }
         .wb-btn.add-card { border-color: #238636; color: #3fb950; }
-        .wb-btn.add-card:hover { background: rgba(35, 134, 54, 0.2); }
+        .wb-btn.save-disk { border-color: #238636; color: #3fb950; font-weight: bold; }
         .wb-btn.export { border-color: var(--accent-color); color: var(--accent-color); }
-
-        .wb-hint { font-size: 0.7rem; color: #666; margin-top: 10px; font-family: var(--font-stack); }
-        .empty-state {
-            text-align: center;
-            color: var(--sub-color);
-            font-family: var(--font-stack);
-            padding: 40px 20px;
-            border: 1px dashed var(--border-color);
-            border-radius: 4px;
-            margin-top: 20px;
-        }
-        .empty-state code { color: var(--accent-color); }
+        #wb-save-status { font-family: var(--font-stack); font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -182,58 +241,54 @@
 
         <section id="studio">
             <div class="wisdom-header">
-                <h2 class="section-title">The Wisdom Studio: Dual-View Card Curator</h2>
+                <h2 class="section-title">The Wisdom Studio: Multi-DNA Workbench</h2>
                 <div>
                     <button id="toggle-workbench" class="view-toggle" title="Toggle in-place workbench mode">⚒ Workbench</button>
                     <button id="toggle-reader" class="view-toggle active" title="Public reader view">◈ Reader</button>
                 </div>
             </div>
+
+            <div class="dna-selector-bar">
+                <label for="dna-select"><strong>DNA COLLECTION:</strong></label>
+                <select id="dna-select" class="dna-select">
+                    <option value="wisdom" selected>Wisdom DNA (RW)</option>
+                    <option value="writer">Writer DNA (RW)</option>
+                    <option value="feature">Feature DNA (RO)</option>
+                    <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
+                    <option value="sprint">Sprint DNA (RO)</option>
+                    <option value="philosophy">Philosophy DNA (RO)</option>
+                </select>
+                <span id="dna-badge" class="dna-badge rw">[READ-WRITE WORKBENCH]</span>
+            </div>
+
             <div class="disclaimer-box" style="margin-bottom: 20px;">
                 <span style="color: var(--accent-color); font-weight: bold;">[WIS-001 SCHEMA]</span>
                 Wisdom cards pair an <strong>immutable origin</strong> (a verbatim, non-editable source quote) with a
-                <strong>live synthesis</strong> (narrative context, takeaways, and tags). Reader View is the public,
-                read-only presentation; Workbench Mode enables in-place curation of the synthesis layer.
+                <strong>live synthesis</strong> (narrative context, takeaways, lab anchors, and tags). Reader View is the public,
+                read-only presentation; Workbench Mode enables in-place curation of the synthesis layer with direct REST disk persistence on port 8765.
             </div>
 
             <div class="wb-toolbar" id="wb-toolbar">
                 <button class="wb-btn add-card" id="wb-add-card">+ New Card</button>
+                <button class="wb-btn save-disk" id="wb-save-disk">💾 Save to Disk</button>
                 <button class="wb-btn export" id="wb-export">Export JSON</button>
                 <span id="wb-save-status"></span>
             </div>
 
-            <div id="wisdom-container">
+            <div id="wisdom-container" class="wisdom-grid">
 
-        <div class="wisdom-card" data-card-index="1">
-            <div class="card-title wb-editable" data-field="title" contenteditable="false">Tooling Breadth: Structured Reasoning Across Model Stacks</div>
-            <div class="card-section">
-                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
-                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.</div>
             </div>
-            <div class="card-section">
-                <span class="section-label">Narrative Context</span>
-                <div class="wb-editable" data-field="narrative_context" contenteditable="false">The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.</div>
-            </div>
-            <div class="card-section">
-                <span class="section-label">Takeaways</span>
-                <ul class="takeaways wb-editable" data-field="takeaways" contenteditable="false"><li>Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.</li><li>Integration skill - wiring models into workflows - is the differentiator, not model choice.</li></ul>
-            </div>
-            <div class="card-section tag-row">
-                <span class="section-label">Tags</span>
-                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">human-ai</span><span class="tag">tooling</span><span class="tag">ollama</span><span class="tag">nemo</span><span class="tag">reasoning</span><span class="tag">integration</span></div></div>
-            </div>
-        </div></div>
         </section>
     </main>
 
-    <script src="mission-control.js?v=16cf2268"></script>
+    <script src="mission-control.js"></script>
     <script>
-        // [FEAT-559] Story 76.2: Dual-View Wisdom Studio
-        // Reader View (public, read-only) + Workbench Mode (in-place curation).
+        // [FEAT-559 / FEAT-561] Story 76.2 & Story 77.1: Multi-DNA Wisdom Studio
         (function () {
             'use strict';
-
-            var EDIT_TAG = '?edit=1';
             var currentMode = window.location.search.indexOf('edit=1') !== -1 ? 'workbench' : 'reader';
+            var currentCollection = 'wisdom';
+            var isReadOnly = false;
 
             function escapeHtml(str) {
                 return String(str == null ? '' : str)
@@ -250,130 +305,233 @@
                 var wbBtn = document.getElementById('toggle-workbench');
                 if (readerBtn) readerBtn.classList.toggle('active', mode === 'reader');
                 if (wbBtn) wbBtn.classList.toggle('active', mode === 'workbench');
-                // Reflect mode in URL (non-destructive history replace) for shareable edit links.
                 var url = new URL(window.location.href);
                 if (mode === 'workbench') { url.searchParams.set('edit', '1'); }
                 else { url.searchParams.delete('edit'); }
                 window.history.replaceState({}, '', url.toString());
+                updateEditableState();
             }
 
-            function initToggle() {
-                var wbBtn = document.getElementById('toggle-workbench');
-                var readerBtn = document.getElementById('toggle-reader');
-                if (wbBtn) wbBtn.addEventListener('click', function () { setMode('workbench'); });
-                if (readerBtn) readerBtn.addEventListener('click', function () { setMode('reader'); });
-                setMode(currentMode);
-            }
-
-            // --- Workbench: in-place editing of the synthesis layer ---
-            function wireWorkbench() {
+            function updateEditableState() {
                 var container = document.getElementById('wisdom-container');
                 if (!container) return;
-
-                // Make synthesis fields editable via contenteditable.
                 var editable = container.querySelectorAll('.wb-editable');
+                var canEdit = (currentMode === 'workbench') && !isReadOnly;
                 editable.forEach(function (el) {
-                    if (el.getAttribute('contenteditable')) return; // already wired
-                    el.setAttribute('contenteditable', 'true');
-                    el.setAttribute('spellcheck', 'false');
-                });
-
-                // Add-new-card button.
-                var addBtn = document.getElementById('wb-add-card');
-                if (addBtn && !addBtn.dataset.wired) {
-                    addBtn.dataset.wired = '1';
-                    addBtn.addEventListener('click', function () {
-                        var card = document.createElement('div');
-                        card.className = 'wisdom-card';
-                        card.innerHTML =
-                            '<div class="card-title wb-editable" data-field="title" contenteditable="true">New Wisdom Card</div>' +
-                            '<div class="card-section">' +
-                            '  <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
-                            '  <div class="origin-quote wb-locked">(no origin yet)</div>' +
-                            '</div>' +
-                            '<div class="card-section">' +
-                            '  <span class="section-label">Narrative Context</span>' +
-                            '  <div class="wb-editable" data-field="narrative_context" contenteditable="true">(add narrative context)</div>' +
-                            '</div>' +
-                            '<div class="card-section">' +
-                            '  <span class="section-label">Takeaways</span>' +
-                            '  <ul class="takeaways wb-editable" data-field="takeaways" contenteditable="true"><li>(add a takeaway)</li></ul>' +
-                            '</div>' +
-                            '<div class="tag-row"><span class="section-label">Tags</span> <div class="wb-editable" data-field="tags" contenteditable="true"></div></div>';
-                        container.appendChild(card);
-                        wireCard(card);
-                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    });
-                }
-
-                // Export: collect current state into JSON and download.
-                var exportBtn = document.getElementById('wb-export');
-                if (exportBtn && !exportBtn.dataset.wired) {
-                    exportBtn.dataset.wired = '1';
-                    exportBtn.addEventListener('click', function () { exportCards(container); });
-                }
-
-                // Wire existing cards.
-                container.querySelectorAll('.wisdom-card').forEach(wireCard);
-            }
-
-            function wireCard(card) {
-                var editables = card.querySelectorAll('.wb-editable');
-                editables.forEach(function (el) {
-                    if (el.getAttribute('contenteditable')) return;
-                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('contenteditable', canEdit ? 'true' : 'false');
                     el.setAttribute('spellcheck', 'false');
                 });
             }
 
-            function exportCards(container) {
-                var schema;
-                try {
-                    schema = window.__WISDOM_SCHEMA__ || {
-                        "schema": { "title": "Wisdom Card Schema (WIS-001)", "origin": {}, "synthesis": {} }
-                    };
-                } catch (e) { schema = { "schema": {} }; }
+            function setCollection(col) {
+                currentCollection = col;
+                isReadOnly = (col === 'feature' || col === 'behavioral' || col === 'sprint' || col === 'philosophy');
+                document.body.classList.toggle('dna-ro', isReadOnly);
 
-                var cards = container.querySelectorAll('.wisdom-card');
-                var output = { "schema": schema.schema || {}, "cards": [] };
-                cards.forEach(function (card) {
-                    var getField = function (field) {
-                        var el = card.querySelector('[data-field="' + field + '"]');
+                var badge = document.getElementById('dna-badge');
+                if (badge) {
+                    if (isReadOnly) {
+                        badge.className = 'dna-badge ro';
+                        badge.textContent = '[READ-ONLY SYSTEM DNA]';
+                    } else {
+                        badge.className = 'dna-badge rw';
+                        badge.textContent = '[READ-WRITE WORKBENCH]';
+                    }
+                }
+
+                var manifest = window.__DNA_MANIFEST__ || {};
+                var cards = manifest[col] || [];
+                if (cards.length > 0) {
+                    renderCollectionCards(cards);
+                }
+                updateEditableState();
+            }
+
+            function renderCollectionCards(cards) {
+                var container = document.getElementById('wisdom-container');
+                if (!container) return;
+                var html = '';
+                cards.forEach(function (c, idx) {
+                    var cid = c.id || ('CARD-' + (idx + 1));
+                    var theme = c.theme || c.type || currentCollection.toUpperCase();
+                    var bucket_id = (c.metadata && c.metadata.bucket_id) || c.bucket_id || '';
+                    var origin = c.origin || {};
+                    var synthesis = c.synthesis || {};
+                    var verbatim = origin.text || origin.verbatim || '';
+                    var title = c.title || synthesis.title || ('Item ' + (idx + 1));
+                    var narrative = synthesis.narrative_context || '';
+                    var review_notes = synthesis.review_notes || '';
+                    var tags = (c.metadata && c.metadata.tags) || synthesis.tags || [];
+                    var anchors = synthesis.lab_anchors || [];
+
+                    var tagsHtml = tags.map(function (t) { return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('');
+                    var anchorsHtml = anchors.length ? '<div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors">' +
+                        anchors.map(function (a) { return '<code>' + escapeHtml(a) + '</code>'; }).join(' ') + '</div></div>' : '';
+
+                    html += '<div class="wisdom-card" data-card-id="' + escapeHtml(cid) + '" data-card-index="' + (idx + 1) + '">' +
+                        '<div class="card-meta-row"><span><strong>' + escapeHtml(cid) + '</strong> &bull; ' + escapeHtml(theme) + '</span>' +
+                        (bucket_id ? '<span class="bucket-badge">' + escapeHtml(bucket_id) + '</span>' : '') + '</div>' +
+                        '<div class="card-title wb-editable" data-field="title" contenteditable="false">' + escapeHtml(title) + '</div>' +
+                        '<div class="card-section"><span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
+                        '<div class="origin-quote wb-locked" data-field="origin" contenteditable="false">' + escapeHtml(verbatim) + '</div></div>' +
+                        '<div class="card-section"><span class="section-label">Narrative Context</span>' +
+                        '<div class="wb-editable" data-field="narrative_context" contenteditable="false">' + (escapeHtml(narrative) || '<span style="color:#666;">(add narrative context)</span>') + '</div></div>' +
+                        (review_notes ? '<div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">' + escapeHtml(review_notes) + '</div></div>' : '') +
+                        anchorsHtml +
+                        '<div class="card-section tag-row"><span class="section-label">Tags</span><div><div class="wb-editable" data-field="tags" contenteditable="false">' + tagsHtml + '</div></div></div>' +
+                        '</div>';
+                });
+                container.innerHTML = html;
+            }
+
+            function serializeCards(container) {
+                var cards = [];
+                container.querySelectorAll('.wisdom-card').forEach(function (card, idx) {
+                    var cid = card.dataset.cardId || ('WIS-' + String(idx + 1).padStart(3, '0'));
+                    var getField = function (f) {
+                        var el = card.querySelector('[data-field="' + f + '"]');
                         return el ? el.textContent.trim() : '';
                     };
                     var titleEl = card.querySelector('.card-title');
                     var originEl = card.querySelector('.origin-quote');
-                    output.cards.push({
-                        "id": "WIS-" + String(output.cards.length + 1).padStart(3, '0'),
-                        "title": (titleEl ? titleEl.textContent.trim() : ''),
-                        "origin": { "immutable": true, "verbatim": originEl ? originEl.textContent.trim() : '' },
+                    var bucketEl = card.querySelector('.bucket-badge');
+                    var tagsText = getField('tags');
+                    var tags = tagsText ? tagsText.split(/[\s,]+/).filter(Boolean) : [];
+
+                    cards.push({
+                        "id": cid,
+                        "theme": "Wisdom",
+                        "paper_order": idx + 1,
+                        "origin": {
+                            "author": "jallred",
+                            "text": originEl ? originEl.textContent.trim() : '',
+                            "source": "Wisdom Studio Workbench",
+                            "immutable": true
+                        },
                         "synthesis": {
+                            "title": titleEl ? titleEl.textContent.trim() : '',
                             "narrative_context": getField('narrative_context'),
-                            "takeaways": (getField('takeaways') ? getField('takeaways').split(/\n/) : []).filter(Boolean),
-                            "tags": (getField('tags') ? getField('tags').split(/[\s,]+/) : []).filter(Boolean)
+                            "review_notes": getField('review_notes'),
+                            "last_refined_by": "HUMAN_WORKBENCH",
+                            "refinement_version": 1
+                        },
+                        "metadata": {
+                            "tags": tags,
+                            "bucket_id": bucketEl ? bucketEl.textContent.trim() : 'bucket_1_jitc',
+                            "status": "APPROVED"
                         }
                     });
                 });
+                return cards;
+            }
 
-                var blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
-                var a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'wisdom_data_export.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(a.href);
+            function wireControls() {
+                var wbBtn = document.getElementById('toggle-workbench');
+                var readerBtn = document.getElementById('toggle-reader');
+                if (wbBtn) wbBtn.addEventListener('click', function () { setMode('workbench'); });
+                if (readerBtn) readerBtn.addEventListener('click', function () { setMode('reader'); });
 
-                var status = document.getElementById('wb-save-status');
-                if (status) {
-                    status.textContent = '✓ Exported ' + cards.length + ' card(s)';
-                    setTimeout(function () { status.textContent = ''; }, 3000);
+                var dnaSelect = document.getElementById('dna-select');
+                if (dnaSelect) {
+                    dnaSelect.addEventListener('change', function () {
+                        setCollection(dnaSelect.value);
+                    });
+                }
+
+                var container = document.getElementById('wisdom-container');
+                var addBtn = document.getElementById('wb-add-card');
+                if (addBtn && !addBtn.dataset.wired) {
+                    addBtn.dataset.wired = '1';
+                    addBtn.addEventListener('click', function () {
+                        if (isReadOnly) return;
+                        var card = document.createElement('div');
+                        card.className = 'wisdom-card';
+                        var newId = 'WIS-' + String(container.querySelectorAll('.wisdom-card').length + 1).padStart(3, '0');
+                        card.dataset.cardId = newId;
+                        card.innerHTML = '<div class="card-meta-row"><span><strong>' + newId + '</strong> &bull; New Wisdom</span><span class="bucket-badge">bucket_1_jitc</span></div>' +
+                            '<div class="card-title wb-editable" data-field="title" contenteditable="true">New Wisdom Card</div>' +
+                            '<div class="card-section"><span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
+                            '<div class="origin-quote wb-locked" data-field="origin" contenteditable="false">(immutable origin quote)</div></div>' +
+                            '<div class="card-section"><span class="section-label">Narrative Context</span>' +
+                            '<div class="wb-editable" data-field="narrative_context" contenteditable="true">(add narrative context)</div></div>' +
+                            '<div class="card-section"><span class="section-label">Review Notes</span>' +
+                            '<div class="review-notes wb-editable" data-field="review_notes" contenteditable="true">(review notes)</div></div>' +
+                            '<div class="card-section tag-row"><span class="section-label">Tags</span><div><div class="wb-editable" data-field="tags" contenteditable="true"><span class="tag">draft</span></div></div></div>';
+                        container.appendChild(card);
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        updateEditableState();
+                    });
+                }
+
+                var saveDiskBtn = document.getElementById('wb-save-disk');
+                if (saveDiskBtn && !saveDiskBtn.dataset.wired) {
+                    saveDiskBtn.dataset.wired = '1';
+                    saveDiskBtn.addEventListener('click', function () {
+                        if (isReadOnly) return;
+                        var status = document.getElementById('wb-save-status');
+                        if (status) status.innerHTML = '<span style="color:var(--accent-color);">Saving to disk...</span>';
+                        var cardsData = serializeCards(container);
+                        var payload = { cards: cardsData, collection: currentCollection };
+
+                        fetch('http://127.0.0.1:8765/wisdom/save', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(function (res) { return res.json(); })
+                        .then(function (data) {
+                            if (data.status === 'success') {
+                                var now = new Date().toLocaleTimeString();
+                                if (status) status.innerHTML = '<span style="color:#3fb950; font-weight:bold;">✓ Saved ' + (data.count || cardsData.length) + ' card(s) to disk at ' + now + '</span>';
+                                setTimeout(function () { if (status) status.textContent = ''; }, 4000);
+                            } else {
+                                if (status) status.innerHTML = '<span style="color:#f85149;">Error: ' + (data.message || 'Save failed') + '</span>';
+                            }
+                        })
+                        .catch(function (err) {
+                            fetch('/wisdom/save', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            })
+                            .then(function (res) { return res.json(); })
+                            .then(function (data) {
+                                var now = new Date().toLocaleTimeString();
+                                if (status) status.innerHTML = '<span style="color:#3fb950;">✓ Saved ' + cardsData.length + ' card(s) at ' + now + '</span>';
+                                setTimeout(function () { if (status) status.textContent = ''; }, 4000);
+                            })
+                            .catch(function (fbErr) {
+                                if (status) status.innerHTML = '<span style="color:#f85149;">Save failed (Foyer daemon offline): ' + escapeHtml(err.message) + '</span>';
+                            });
+                        });
+                    });
+                }
+
+                var exportBtn = document.getElementById('wb-export');
+                if (exportBtn && !exportBtn.dataset.wired) {
+                    exportBtn.dataset.wired = '1';
+                    exportBtn.addEventListener('click', function () {
+                        var cardsData = serializeCards(container);
+                        var blob = new Blob([JSON.stringify(cardsData, null, 2)], { type: 'application/json' });
+                        var a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = 'wisdom_data_export.json';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(a.href);
+                        var status = document.getElementById('wb-save-status');
+                        if (status) {
+                            status.textContent = '✓ Exported ' + cardsData.length + ' card(s)';
+                            setTimeout(function () { status.textContent = ''; }, 3000);
+                        }
+                    });
                 }
             }
 
             function init() {
-                initToggle();
-                wireWorkbench();
+                wireControls();
+                setMode(currentMode);
             }
 
             if (document.readyState === 'loading') {
@@ -383,9 +541,10 @@
             }
         })();
     </script>
-<script>
-// [FEAT-559] Workbench export context: canonical card schema.
-window.__WISDOM_SCHEMA__ = {"schema": {"title": "Wisdom Card Schema (WIS-001)", "origin": {"immutable": true, "verbatim": "I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration."}, "synthesis": {"title": "Tooling Breadth: Structured Reasoning Across Model Stacks", "narrative_context": "The companion card to WIS-002 names the actual stack: hosted (Gemini), local (Ollama), and NVIDIA NeMo tooling, combined into custom agentic workflows. The recurring phrase is 'structured reasoning and integration' - the intent is not toy experiments but reproducible reasoning pipelines.", "takeaways": ["Tool diversity is deliberate: hosted for reach, local for sovereignty, NeMo for structured reasoning.", "Integration skill - wiring models into workflows - is the differentiator, not model choice."], "tags": ["human-ai", "tooling", "ollama", "nemo", "reasoning", "integration"]}}};
-</script>
+    <script>
+        // [FEAT-559] Embedded DNA Manifest & Canonical Card Schema
+        window.__DNA_MANIFEST__ = {"wisdom": [{"id": "WIS-001", "theme": "Memory & JITC", "paper_order": 1, "origin": {"author": "jallred", "text": "Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Three Pillars & Just-In-Time Context (JITC)", "narrative_context": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.", "lab_anchors": ["HomeLabAI/config/hooks/icm_hook.py", "BKM-046", "FEAT-546"], "review_notes": "Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["memory", "jitc", "context-window", "attention-dilution", "three-pillars"], "explicit_links": ["WIS-002", "PHL-001"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-002", "theme": "Memory & JITC", "paper_order": 2, "origin": {"author": "jallred", "text": "Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Token Golf over Token Maxing & Trust Ceilings", "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.", "lab_anchors": ["HomeLabAI/docs/Protocols.md:BKM-051", "FEAT-526"], "review_notes": "Explains why worker subagent prompts must be strictly capped under 1,500 tokens.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["token-golf", "trust-metrics", "prompt-budget", "subagent-scoping"], "explicit_links": ["WIS-001", "WIS-004"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-003", "theme": "Stability & Feedback", "paper_order": 3, "origin": {"author": "jallred", "text": "Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Feedback Backpressure & The Handover Reflection", "narrative_context": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.", "lab_anchors": ["HomeLabAI/src/tests/delegate.py", "BKM-034", "FEAT-522"], "review_notes": "Directly operationalized in delegate.py [HANDOVER REFLECTION] extraction.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["feedback-pressure", "handover-reflection", "backpressure", "customer-service-roots"], "explicit_links": ["WIS-005", "PHL-002"], "status": "APPROVED", "bucket_id": "bucket_2_backpressure"}}, {"id": "WIS-004", "theme": "Human-AI Interface", "paper_order": 4, "origin": {"author": "jallred", "text": "Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Velocity Whiplash, 10x Debt & Reading Like a Robot", "narrative_context": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.", "lab_anchors": ["Portfolio_Dev/field_notes/stories.html", "BKM-011"], "review_notes": "Addresses the cognitive fatigue and governance required in agentic pair programming.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["velocity-whiplash", "10x-debt", "reading-like-a-robot", "code-comprehension"], "explicit_links": ["WIS-002", "WIS-006"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-005", "theme": "Human-AI Interface", "paper_order": 5, "origin": {"author": "jallred", "text": "The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Perfect Foil & The Architect / PM Pivot", "narrative_context": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.", "lab_anchors": ["Portfolio_Dev/00_MASTER_INDEX.md", "BKM-030"], "review_notes": "Captures the transformation in human engineering roles under agentic orchestration.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["the-perfect-foil", "pm-pivot", "pair-programming", "cognitive-resonance"], "explicit_links": ["WIS-003", "WIS-007"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-006", "theme": "Engineering Rigor", "paper_order": 6, "origin": {"author": "jallred", "text": "What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Engineering Disciplines in the Latent Space", "narrative_context": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.", "lab_anchors": ["Portfolio_Dev/FeatureTracker.md", "HomeLabAI/docs/Protocols.md:BKM-020"], "review_notes": "The foundation for treating markdown sprints as executable instruction sets.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["engineering-rigor", "scrum-for-ai", "retrospectives", "feature-anchors"], "explicit_links": ["WIS-004", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}, {"id": "WIS-007", "theme": "Language & Invention", "paper_order": 7, "origin": {"author": "jallred", "text": "Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Language as Humanity's Best Invention & The Book Analogy", "narrative_context": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.", "lab_anchors": ["Portfolio_Dev/docs/philosophy/PHL-006.md"], "review_notes": "Establishes the linguistic foundation for LLM prompt engineering as formal interface design.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["language-as-invention", "the-book-analogy", "thought-vehicles", "philosophy-of-words"], "explicit_links": ["WIS-005", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-008", "theme": "Engineering Vectors", "paper_order": 8, "origin": {"author": "jallred", "text": "The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.", "source": "Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)", "immutable": true, "created_at": "2024-06-01T12:00:00Z"}, "synthesis": {"title": "The Vectors of Engineering & Forgotten Code Hygiene", "narrative_context": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.", "lab_anchors": ["Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md", "BKM-011"], "review_notes": "Anchors human engineering hygiene directly into codebase maintenance rules.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["libraries-over-frameworks", "forgotten-code", "speculative-scaffolding", "engineering-vectors"], "explicit_links": ["WIS-006", "WIS-001"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}], "writer": [{"id": "WIS-001", "theme": "Memory & JITC", "paper_order": 1, "origin": {"author": "jallred", "text": "Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Three Pillars & Just-In-Time Context (JITC)", "narrative_context": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.", "lab_anchors": ["HomeLabAI/config/hooks/icm_hook.py", "BKM-046", "FEAT-546"], "review_notes": "Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["memory", "jitc", "context-window", "attention-dilution", "three-pillars"], "explicit_links": ["WIS-002", "PHL-001"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-002", "theme": "Memory & JITC", "paper_order": 2, "origin": {"author": "jallred", "text": "Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Token Golf over Token Maxing & Trust Ceilings", "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.", "lab_anchors": ["HomeLabAI/docs/Protocols.md:BKM-051", "FEAT-526"], "review_notes": "Explains why worker subagent prompts must be strictly capped under 1,500 tokens.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["token-golf", "trust-metrics", "prompt-budget", "subagent-scoping"], "explicit_links": ["WIS-001", "WIS-004"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-003", "theme": "Stability & Feedback", "paper_order": 3, "origin": {"author": "jallred", "text": "Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Feedback Backpressure & The Handover Reflection", "narrative_context": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.", "lab_anchors": ["HomeLabAI/src/tests/delegate.py", "BKM-034", "FEAT-522"], "review_notes": "Directly operationalized in delegate.py [HANDOVER REFLECTION] extraction.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["feedback-pressure", "handover-reflection", "backpressure", "customer-service-roots"], "explicit_links": ["WIS-005", "PHL-002"], "status": "APPROVED", "bucket_id": "bucket_2_backpressure"}}, {"id": "WIS-004", "theme": "Human-AI Interface", "paper_order": 4, "origin": {"author": "jallred", "text": "Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Velocity Whiplash, 10x Debt & Reading Like a Robot", "narrative_context": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.", "lab_anchors": ["Portfolio_Dev/field_notes/stories.html", "BKM-011"], "review_notes": "Addresses the cognitive fatigue and governance required in agentic pair programming.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["velocity-whiplash", "10x-debt", "reading-like-a-robot", "code-comprehension"], "explicit_links": ["WIS-002", "WIS-006"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-005", "theme": "Human-AI Interface", "paper_order": 5, "origin": {"author": "jallred", "text": "The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Perfect Foil & The Architect / PM Pivot", "narrative_context": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.", "lab_anchors": ["Portfolio_Dev/00_MASTER_INDEX.md", "BKM-030"], "review_notes": "Captures the transformation in human engineering roles under agentic orchestration.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["the-perfect-foil", "pm-pivot", "pair-programming", "cognitive-resonance"], "explicit_links": ["WIS-003", "WIS-007"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-006", "theme": "Engineering Rigor", "paper_order": 6, "origin": {"author": "jallred", "text": "What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Engineering Disciplines in the Latent Space", "narrative_context": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.", "lab_anchors": ["Portfolio_Dev/FeatureTracker.md", "HomeLabAI/docs/Protocols.md:BKM-020"], "review_notes": "The foundation for treating markdown sprints as executable instruction sets.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["engineering-rigor", "scrum-for-ai", "retrospectives", "feature-anchors"], "explicit_links": ["WIS-004", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}, {"id": "WIS-007", "theme": "Language & Invention", "paper_order": 7, "origin": {"author": "jallred", "text": "Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Language as Humanity's Best Invention & The Book Analogy", "narrative_context": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.", "lab_anchors": ["Portfolio_Dev/docs/philosophy/PHL-006.md"], "review_notes": "Establishes the linguistic foundation for LLM prompt engineering as formal interface design.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["language-as-invention", "the-book-analogy", "thought-vehicles", "philosophy-of-words"], "explicit_links": ["WIS-005", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-008", "theme": "Engineering Vectors", "paper_order": 8, "origin": {"author": "jallred", "text": "The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.", "source": "Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)", "immutable": true, "created_at": "2024-06-01T12:00:00Z"}, "synthesis": {"title": "The Vectors of Engineering & Forgotten Code Hygiene", "narrative_context": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.", "lab_anchors": ["Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md", "BKM-011"], "review_notes": "Anchors human engineering hygiene directly into codebase maintenance rules.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["libraries-over-frameworks", "forgotten-code", "speculative-scaffolding", "engineering-vectors"], "explicit_links": ["WIS-006", "WIS-001"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}], "philosophy": [{"id": "WIS-001", "theme": "Memory & JITC", "paper_order": 1, "origin": {"author": "jallred", "text": "Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Three Pillars & Just-In-Time Context (JITC)", "narrative_context": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.", "lab_anchors": ["HomeLabAI/config/hooks/icm_hook.py", "BKM-046", "FEAT-546"], "review_notes": "Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["memory", "jitc", "context-window", "attention-dilution", "three-pillars"], "explicit_links": ["WIS-002", "PHL-001"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-002", "theme": "Memory & JITC", "paper_order": 2, "origin": {"author": "jallred", "text": "Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Token Golf over Token Maxing & Trust Ceilings", "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.", "lab_anchors": ["HomeLabAI/docs/Protocols.md:BKM-051", "FEAT-526"], "review_notes": "Explains why worker subagent prompts must be strictly capped under 1,500 tokens.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["token-golf", "trust-metrics", "prompt-budget", "subagent-scoping"], "explicit_links": ["WIS-001", "WIS-004"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "WIS-003", "theme": "Stability & Feedback", "paper_order": 3, "origin": {"author": "jallred", "text": "Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Feedback Backpressure & The Handover Reflection", "narrative_context": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.", "lab_anchors": ["HomeLabAI/src/tests/delegate.py", "BKM-034", "FEAT-522"], "review_notes": "Directly operationalized in delegate.py [HANDOVER REFLECTION] extraction.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["feedback-pressure", "handover-reflection", "backpressure", "customer-service-roots"], "explicit_links": ["WIS-005", "PHL-002"], "status": "APPROVED", "bucket_id": "bucket_2_backpressure"}}, {"id": "WIS-004", "theme": "Human-AI Interface", "paper_order": 4, "origin": {"author": "jallred", "text": "Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Velocity Whiplash, 10x Debt & Reading Like a Robot", "narrative_context": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.", "lab_anchors": ["Portfolio_Dev/field_notes/stories.html", "BKM-011"], "review_notes": "Addresses the cognitive fatigue and governance required in agentic pair programming.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["velocity-whiplash", "10x-debt", "reading-like-a-robot", "code-comprehension"], "explicit_links": ["WIS-002", "WIS-006"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-005", "theme": "Human-AI Interface", "paper_order": 5, "origin": {"author": "jallred", "text": "The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "The Perfect Foil & The Architect / PM Pivot", "narrative_context": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.", "lab_anchors": ["Portfolio_Dev/00_MASTER_INDEX.md", "BKM-030"], "review_notes": "Captures the transformation in human engineering roles under agentic orchestration.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["the-perfect-foil", "pm-pivot", "pair-programming", "cognitive-resonance"], "explicit_links": ["WIS-003", "WIS-007"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-006", "theme": "Engineering Rigor", "paper_order": 6, "origin": {"author": "jallred", "text": "What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Engineering Disciplines in the Latent Space", "narrative_context": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.", "lab_anchors": ["Portfolio_Dev/FeatureTracker.md", "HomeLabAI/docs/Protocols.md:BKM-020"], "review_notes": "The foundation for treating markdown sprints as executable instruction sets.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["engineering-rigor", "scrum-for-ai", "retrospectives", "feature-anchors"], "explicit_links": ["WIS-004", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}, {"id": "WIS-007", "theme": "Language & Invention", "paper_order": 7, "origin": {"author": "jallred", "text": "Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'", "source": "Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)", "immutable": true, "created_at": "2026-03-01T12:00:00Z"}, "synthesis": {"title": "Language as Humanity's Best Invention & The Book Analogy", "narrative_context": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.", "lab_anchors": ["Portfolio_Dev/docs/philosophy/PHL-006.md"], "review_notes": "Establishes the linguistic foundation for LLM prompt engineering as formal interface design.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["language-as-invention", "the-book-analogy", "thought-vehicles", "philosophy-of-words"], "explicit_links": ["WIS-005", "WIS-008"], "status": "APPROVED", "bucket_id": "bucket_3_foil"}}, {"id": "WIS-008", "theme": "Engineering Vectors", "paper_order": 8, "origin": {"author": "jallred", "text": "The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.", "source": "Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)", "immutable": true, "created_at": "2024-06-01T12:00:00Z"}, "synthesis": {"title": "The Vectors of Engineering & Forgotten Code Hygiene", "narrative_context": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.", "lab_anchors": ["Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md", "BKM-011"], "review_notes": "Anchors human engineering hygiene directly into codebase maintenance rules.", "last_refined_by": "AGY", "refinement_version": 1}, "metadata": {"tags": ["libraries-over-frameworks", "forgotten-code", "speculative-scaffolding", "engineering-vectors"], "explicit_links": ["WIS-006", "WIS-001"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}], "feature": [{"id": "FEAT-561", "title": "Wisdom Studio Direct Save REST Endpoint", "origin": {"text": "Allow wisdom.html workbench mode to persist edits directly to disk on port 8765.", "source": "Sprint 77 Spec"}, "synthesis": {"narrative_context": "Provides atomic JSON writing via Foyer router /wisdom/save endpoint, eliminating manual clipboard exports.", "lab_anchors": ["HomeLabAI/src/v5/foyer/router.py"], "review_notes": "Implemented and live on port 8765."}, "metadata": {"tags": ["foyer", "rest", "wisdom", "save"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "FEAT-562", "title": "Automated Nightly Wisdom Synthesis Refiner", "origin": {"text": "Refine unpolished wisdom cards using M5 Air Qwen 27B during nightly forge.", "source": "Sprint 77 Spec"}, "synthesis": {"narrative_context": "Polishes raw origin text into structured synthesis while keeping origin immutable.", "lab_anchors": ["Portfolio_Dev/field_notes/refine_wisdom.py"], "review_notes": "Preserves verbatim text with zero byte drift."}, "metadata": {"tags": ["refiner", "m5-air", "nightly-forge"], "status": "APPROVED", "bucket_id": "bucket_1_jitc"}}, {"id": "FEAT-563", "title": "Semantic Bucketing & Deduplication Engine", "origin": {"text": "Categorize wisdom cards into 5 core buckets and detect duplicates via embeddings.", "source": "Sprint 77 Spec"}, "synthesis": {"narrative_context": "Establishes buckets.json taxonomy and flags pairs with similarity > 0.82 for human review.", "lab_anchors": ["field_notes/data/buckets.json"], "review_notes": "Flags for review rather than destructive merging."}, "metadata": {"tags": ["bucketing", "dedup", "embeddings", "taxonomy"], "status": "APPROVED", "bucket_id": "bucket_4_rigor"}}, {"id": "FEAT-564", "title": "Thought Organizer Transition (writer.html)", "origin": {"text": "Workspace-wide migration from paper.html to writer.html with zero symlinks.", "source": "Sprint 77 Spec"}, "synthesis": {"narrative_context": "Interactive thought organizer mapping cards to whitepaper sections with LaTeX compilation.", "lab_anchors": ["field_notes/writer.html", "scripts/build_writer.py"], "review_notes": "Zero symlinks created."}, "metadata": {"tags": ["writer", "latex", "whitepaper"], "status": "APPROVED", "bucket_id": "bucket_5_infra"}}, {"id": "FEAT-566", "title": "Novel Ideas Evolutionary Timeline", "origin": {"text": "Track original lab art, discoveries, and organic engineering evolution.", "source": "Sprint 77 Spec"}, "synthesis": {"narrative_context": "Interactive Gantt swimlanes and reactive detail list tracking conception-to-implementation spans.", "lab_anchors": ["field_notes/timeline.html"], "review_notes": "Visual companion to research tracker."}, "metadata": {"tags": ["timeline", "gantt", "evolution", "discoveries"], "status": "APPROVED", "bucket_id": "bucket_5_infra"}}], "behavioral": [{"id": "BKM-049", "title": "Tri-Loop Story Delegation & Diagnostic Protocol", "origin": {"text": "Three-Tier Escalation Ladder: Local Silicon -> Cloud Swarm -> AGY Takeover. Never blindly retry.", "source": "HomeLabAI/docs/Protocols.md"}, "synthesis": {"narrative_context": "Mandatory diagnostic probes across server state, logs, and harness before retrying. 3-fix-retry verification loop.", "lab_anchors": ["HomeLabAI/src/tests/delegate.py"], "review_notes": "Enforced across local and cloud-only dispatches."}, "metadata": {"tags": ["delegation", "tri-loop", "diagnostics", "bkm"], "status": "ACTIVE", "bucket_id": "bucket_4_rigor"}}, {"id": "BKM-034", "title": "Strict Swarm Delegation via REST Port 4097", "origin": {"text": "Direct attachment to OpenCode REST port 4097. opencode run --attach is strictly forbidden.", "source": "HomeLabAI/docs/Protocols.md"}, "synthesis": {"narrative_context": "Ensures clean serialized subagent dispatch with backpressure and handover reflections.", "lab_anchors": ["HomeLabAI/src/tests/delegate.py"], "review_notes": "Invariant operational law."}, "metadata": {"tags": ["delegation", "rest", "opencode", "bkm"], "status": "ACTIVE", "bucket_id": "bucket_4_rigor"}}, {"id": "BKM-040", "title": "Virtual Environment & Git Discipline", "origin": {"text": "Always invoke HomeLabAI/.venv/bin/python3; stage and commit locally, never push.", "source": "HomeLabAI/docs/Protocols.md"}, "synthesis": {"narrative_context": "Maintains repository sovereignty and local synchronization across federated nodes.", "lab_anchors": ["AGENTS.md", "HomeLabAI/docs/Protocols.md"], "review_notes": "Sovereign git policy."}, "metadata": {"tags": ["git", "venv", "sovereignty", "bkm"], "status": "ACTIVE", "bucket_id": "bucket_4_rigor"}}, {"id": "BKM-046", "title": "DNA & Wisdom Retrieval Fast-Path", "origin": {"text": "Never full-file read 200KB+ files. Query ChromaDB port 8001 or ICM.", "source": "HomeLabAI/docs/Protocols.md"}, "synthesis": {"narrative_context": "Sub-100ms vector lookups for protocols and feature anchors prevent context bloat.", "lab_anchors": ["HomeLabAI/config/hooks/icm_hook.py"], "review_notes": "JITC core pattern."}, "metadata": {"tags": ["clara-dna", "icm", "jitc", "fast-path"], "status": "ACTIVE", "bucket_id": "bucket_1_jitc"}}], "sprint": [{"id": "SPR-77.0", "title": "The Federated Wisdom System & Novel Ideas Timeline", "origin": {"text": "Wisdom Studio, Foyer direct save, semantic bucketing, thought organizer transition, and evolutionary timeline.", "source": "SPRINT_PLAN_SPR_77_0.md"}, "synthesis": {"narrative_context": "Evolves Dev_Lab knowledge curation into a multi-DNA workbench and public evolutionary showcase.", "lab_anchors": ["Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_77_0.md"], "review_notes": "In active execution."}, "metadata": {"tags": ["sprint-77", "wisdom", "timeline", "foyer"], "status": "ACTIVE", "bucket_id": "bucket_5_infra"}}, {"id": "SPR-76.0", "title": "The Decoupled Dual-Silicon Harness & Memory Architecture", "origin": {"text": "Bicameral node separation: Atlas RTX 4090 execution + Junior M5 Air reasoning.", "source": "SPRINT_PLAN_SPR_76_0.md"}, "synthesis": {"narrative_context": "Hardened OpenCode REST delegation, token golf prompt budgeting, and lean sleep/wake orchestration.", "lab_anchors": ["Portfolio_Dev/docs/sprints/archive/SPRINT_PLAN_SPR_76_0.md"], "review_notes": "Closed and certified."}, "metadata": {"tags": ["sprint-76", "decoupling", "bicameral", "m5-air"], "status": "COMPLETED", "bucket_id": "bucket_5_infra"}}]};
+        window.__WISDOM_SCHEMA__ = {"schema": {}};
+    </script>
 </body>
 </html>
