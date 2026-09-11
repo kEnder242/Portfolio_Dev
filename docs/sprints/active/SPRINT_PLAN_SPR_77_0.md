@@ -207,12 +207,12 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
 
 | Story ID | Verification Method | Silicon Target | Sign-off Status |
 | :--- | :--- | :--- | :--- |
-| **77.1** | UI dropdown switching & read-only lock assertion test | Playwright / Chromium | PENDING |
-| **77.2** | Standalone execution of `refine_wisdom.py` & JSON integrity diff | M5 Air `:8000` / Local | PENDING |
-| **77.3** | Bucket schema validation & cosine similarity deduplication test | ChromaDB `:8001` | PENDING |
+| **77.1** | UI dropdown switching, RW/RO badge, & Foyer `/wisdom/save` REST endpoint | Foyer `:8765` / Chromium | **SIGNED OFF (Live Verified)** |
+| **77.2** | Standalone execution of `refine_wisdom.py` & M5 Air zero-torch refiner | M5 Air `:8000` / Local | **SIGNED OFF (Live Verified)** |
+| **77.3** | Bucket schema validation & zero-torch precomputed ChromaDB dedup test | ChromaDB `:8001` | **SIGNED OFF (Live Verified)** |
 | **77.4** | `writer.html` DOM rendering, section re-ordering & `main.tex` compile | Local Python / pdflatex | PENDING |
 | **77.5** | Architectural review & WYWO prototype rubric evaluation | Design Review / BKM-005 | PENDING |
-| **77.6** | Gantt canvas rendering, lane click-filter & outlier ledger build | Chromium / Python | PENDING |
+| **77.6** | Gantt SVG rendering, lane click-filter, outlier ledger & airlock deploy | Python / Chromium / Airlock | **SIGNED OFF (Live Verified)** |
 
 ---
 
