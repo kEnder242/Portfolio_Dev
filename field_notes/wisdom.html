@@ -277,11 +277,194 @@
 
             <div id="wisdom-container" class="wisdom-grid">
 
+        <div class="wisdom-card" data-card-id="WIS-001" data-card-index="1">
+            <div class="card-meta-row">
+                <span><strong>WIS-001</strong> &bull; Memory &amp; JITC</span>
+                <span class="bucket-badge">bucket_1_jitc</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">The Three Pillars &amp; Just-In-Time Context (JITC)</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>HomeLabAI/config/hooks/icm_hook.py</code> <code>BKM-046</code> <code>FEAT-546</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">memory</span><span class="tag">jitc</span><span class="tag">context-window</span><span class="tag">attention-dilution</span><span class="tag">three-pillars</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-002" data-card-index="2">
+            <div class="card-meta-row">
+                <span><strong>WIS-002</strong> &bull; Memory &amp; JITC</span>
+                <span class="bucket-badge">bucket_1_jitc</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Token Golf over Token Maxing &amp; Trust Ceilings</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'—minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Explains why worker subagent prompts must be strictly capped under 1,500 tokens.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>HomeLabAI/docs/Protocols.md:BKM-051</code> <code>FEAT-526</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">token-golf</span><span class="tag">trust-metrics</span><span class="tag">prompt-budget</span><span class="tag">subagent-scoping</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-003" data-card-index="3">
+            <div class="card-meta-row">
+                <span><strong>WIS-003</strong> &bull; Stability &amp; Feedback</span>
+                <span class="bucket-badge">bucket_2_backpressure</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Feedback Backpressure &amp; The Handover Reflection</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Directly operationalized in delegate.py [HANDOVER REFLECTION] extraction.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>HomeLabAI/src/tests/delegate.py</code> <code>BKM-034</code> <code>FEAT-522</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">feedback-pressure</span><span class="tag">handover-reflection</span><span class="tag">backpressure</span><span class="tag">customer-service-roots</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-004" data-card-index="4">
+            <div class="card-meta-row">
+                <span><strong>WIS-004</strong> &bull; Human-AI Interface</span>
+                <span class="bucket-badge">bucket_3_foil</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Velocity Whiplash, 10x Debt &amp; Reading Like a Robot</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Addresses the cognitive fatigue and governance required in agentic pair programming.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>Portfolio_Dev/field_notes/stories.html</code> <code>BKM-011</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">velocity-whiplash</span><span class="tag">10x-debt</span><span class="tag">reading-like-a-robot</span><span class="tag">code-comprehension</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-005" data-card-index="5">
+            <div class="card-meta-row">
+                <span><strong>WIS-005</strong> &bull; Human-AI Interface</span>
+                <span class="bucket-badge">bucket_3_foil</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">The Perfect Foil &amp; The Architect / PM Pivot</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Captures the transformation in human engineering roles under agentic orchestration.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>Portfolio_Dev/00_MASTER_INDEX.md</code> <code>BKM-030</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">the-perfect-foil</span><span class="tag">pm-pivot</span><span class="tag">pair-programming</span><span class="tag">cognitive-resonance</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-006" data-card-index="6">
+            <div class="card-meta-row">
+                <span><strong>WIS-006</strong> &bull; Engineering Rigor</span>
+                <span class="bucket-badge">bucket_4_rigor</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Engineering Disciplines in the Latent Space</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">The foundation for treating markdown sprints as executable instruction sets.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>Portfolio_Dev/FeatureTracker.md</code> <code>HomeLabAI/docs/Protocols.md:BKM-020</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">engineering-rigor</span><span class="tag">scrum-for-ai</span><span class="tag">retrospectives</span><span class="tag">feature-anchors</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-007" data-card-index="7">
+            <div class="card-meta-row">
+                <span><strong>WIS-007</strong> &bull; Language &amp; Invention</span>
+                <span class="bucket-badge">bucket_3_foil</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Language as Humanity's Best Invention &amp; The Book Analogy</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Establishes the linguistic foundation for LLM prompt engineering as formal interface design.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>Portfolio_Dev/docs/philosophy/PHL-006.md</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">language-as-invention</span><span class="tag">the-book-analogy</span><span class="tag">thought-vehicles</span><span class="tag">philosophy-of-words</span></div></div>
+            </div>
+        </div>
+
+        <div class="wisdom-card" data-card-id="WIS-008" data-card-index="8">
+            <div class="card-meta-row">
+                <span><strong>WIS-008</strong> &bull; Engineering Vectors</span>
+                <span class="bucket-badge">bucket_4_rigor</span>
+            </div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">The Vectors of Engineering &amp; Forgotten Code Hygiene</div>
+            <div class="card-section">
+                <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
+                <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.</div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Narrative Context</span>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.</div>
+            </div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Anchors human engineering hygiene directly into codebase maintenance rules.</div></div>
+            
+            <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md</code> <code>BKM-011</code></div></div>
+            <div class="card-section tag-row">
+                <span class="section-label">Tags</span>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">libraries-over-frameworks</span><span class="tag">forgotten-code</span><span class="tag">speculative-scaffolding</span><span class="tag">engineering-vectors</span></div></div>
+            </div>
+        </div>
             </div>
         </section>
     </main>
 
-    <script src="mission-control.js"></script>
+    <script src="mission-control.js?v=93fc2cec"></script>
     <script>
         // [FEAT-559 / FEAT-561] Story 76.2 & Story 77.1: Multi-DNA Wisdom Studio
         (function () {
