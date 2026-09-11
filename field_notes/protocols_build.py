@@ -37,15 +37,16 @@ def convert_relative_links(md_content):
     return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', replacer, md_content)
 
 def parse_protocols(content):
-    # A BKM header looks like: ## BKM-001: The Cold-Start Protocol (Agent Orientation)
-    header_pattern = re.compile(r'^## (BKM-\d{3}(?:\.\d+)?):\s*(.*?)$', re.MULTILINE)
+    # Matches ## BKM-001: Title, ### BKM-020: Title, ### [BKM-049] Title, etc.
+    header_pattern = re.compile(r'^#{2,3}\s*\[?(BKM-\d{3}(?:\.\d+)?)\]?:?\s*(.*?)$', re.MULTILINE)
     
     matches = list(header_pattern.finditer(content))
     bkm_list = []
     
     for i, match in enumerate(matches):
         bkm_id = match.group(1)
-        bkm_title = match.group(2)
+        raw_title = match.group(2)
+        bkm_title = re.sub(r'^[\]:]\s*', '', raw_title).strip()
         
         start_idx = match.end()
         end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
