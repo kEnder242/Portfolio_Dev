@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Studio | Jason Allred</title>
+    <title>Writer Studio | Jason Allred</title>
     <link rel="stylesheet" href="style.css?v=826dbad3">
     <style>
-        /* [FEAT-560] Paper Studio: Dual-View (Academic Preview + Workbench) */
+        /* [FEAT-564] Writer Studio: Dual-View (Academic Preview + Workbench) */
         .paper-header {
             display: flex;
             align-items: baseline;
@@ -295,7 +295,7 @@
     </style>
 </head>
 <body>
-<!-- [SOURCE_OF_TRUTH] Compiled from: Portfolio_Dev/field_notes/data/wisdom_data.json via build_paper.py -->
+<!-- [SOURCE_OF_TRUTH] Compiled from: Portfolio_Dev/field_notes/data/wisdom_data.json via build_writer.py -->
 
     <button id="menu-toggle">☰ MENU</button>
 
@@ -305,23 +305,23 @@
 
     <main>
         <div id="sys-console">
-            <div>[INIT] Mounting Paper Studio...</div>
+            <div>[INIT] Mounting Writer Studio...</div>
         </div>
 
         <section id="studio">
             <div class="paper-header">
-                <h2 class="section-title">The Paper Studio: Dual-View LaTeX Pipeline</h2>
+                <h2 class="section-title">The Writer Studio: Dual-View Thought Organizer</h2>
                 <div>
                     <button id="toggle-workbench" class="view-toggle" title="Toggle workbench: re-order sections, slot quotes">⚒ Workbench</button>
                     <button id="toggle-reader" class="view-toggle active" title="Academic paper preview">📄 Paper</button>
                 </div>
             </div>
             <div class="disclaimer-box" style="margin-bottom: 20px;">
-                <span style="color: var(--accent-color); font-weight: bold;">[FEAT-560 SCHEMA]</span>
-                The Paper Studio renders wisdom cards as academic paper sections. Origin quotes
+                <span style="color: var(--accent-color); font-weight: bold;">[FEAT-564 SCHEMA]</span>
+                The Writer Studio renders wisdom cards as academic paper sections. Origin quotes
                 become <strong>epigraphs</strong>; synthesis text becomes narrative body.
                 Reader View shows a solidified paper preview; Workbench Mode enables section
-                re-ordering, quote slotting, and LaTeX export via <code>build_paper.py</code>.
+                re-ordering, quote slotting, and LaTeX export via <code>build_writer.py</code>.
             </div>
 
             <div class="wb-toolbar" id="wb-toolbar">
@@ -389,7 +389,7 @@
         </div>
     </main>
 
-    <script src="mission-control.js?v=d864d11c"></script>
+    <script src="mission-control.js?v=16cf2268"></script>
     <script>
         // [FEAT-560] Story 76.4: Interactive Paper Studio
         // Reader View (academic paper preview) + Workbench Mode (re-order, quote slotting).
@@ -587,7 +587,7 @@
                 compileBtn.addEventListener('click', function () {
                     var status = document.getElementById('wb-save-status');
                     if (status) {
-                        status.textContent = '→ Run: python3 Portfolio_Dev/scripts/build_paper.py';
+                        status.textContent = '→ Run: python3 Portfolio_Dev/scripts/build_writer.py';
                         status.style.color = '#d29922';
                         setTimeout(function () { status.textContent = ''; status.style.color = ''; }, 5000);
                     }
@@ -609,11 +609,39 @@
         })();
     </script>
 <script>
-// [FEAT-560] Workbench context: origin quotes available for slotting.
-window.__PAPER_QUOTES__ = [
+// [FEAT-564] Workbench context: origin quotes available for slotting.
+window.__WRITER_QUOTES__ = [
   {
-    "text": "I've built hands-on experience using Gemini, Ollama, NVIDIA NeMo tooling, and custom agentic workflows for structured reasoning and integration.",
+    "text": "Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.",
     "source": "WIS-001"
+  },
+  {
+    "text": "Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.",
+    "source": "WIS-002"
+  },
+  {
+    "text": "Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'",
+    "source": "WIS-003"
+  },
+  {
+    "text": "Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.",
+    "source": "WIS-004"
+  },
+  {
+    "text": "The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.",
+    "source": "WIS-005"
+  },
+  {
+    "text": "What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.",
+    "source": "WIS-006"
+  },
+  {
+    "text": "Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'",
+    "source": "WIS-007"
+  },
+  {
+    "text": "The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.",
+    "source": "WIS-008"
   }
 ];
 </script>
