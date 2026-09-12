@@ -300,5 +300,20 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
 * **Markdown Backflow Stub:**
   - RO items (`behavioral`, `feature`, `sprint`) display `[ 🔒 Markdown Origin (Git Anchored) - SafePatch Backflow Stubbed ]`.
 
+---
+
+## 🏛️ Phase 6: Universal Data Bridge — Sprint DNA Manifest & Read-Write Innovations (`DISC`) & Gems
+
+### 1. Architectural Intent
+1. **Automated Sprint DNA Distillation (`[FEAT-557]`):**
+   - Update `HomeLabAI/src/curator/sync_sprint_dna.py` to compile Level 2 Sprint Overviews into a canonical `sprint_data.json` and inject all 77 sprints into `dna_manifest.json["sprint"]`.
+   - Wire `sync_sprint_dna.py` into the nightly maintenance flow so new and updated sprint documents stay synchronized automatically with zero manual churn.
+2. **Read-Write Innovations (`DISC` / Novel Ideas):**
+   - Implement `POST /timeline/save_card` in `router.py` to allow in-place surgical editing and saving of `timeline_data.json` directly from `wisdom.html`.
+   - Update `wisdom.html` collection switcher to make `discovery` (`DISC`) Read-Write (`dna-badge rw`).
+3. **Technical Gems Living Layer (`GEM-xxx`):**
+   - Treat `YYYY.json` as the derived synthesis layer of engineering logs: manual refinements in `career_notes.html` or `wisdom.html` save into `YYYY.json` without modifying or clobbering immutable raw notes.
+
+
 
 
