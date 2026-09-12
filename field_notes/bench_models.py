@@ -358,13 +358,28 @@ def run_sweep():
     print(f"✅ Atomically updated {CACHE_FILE} with live sweep results!")
 
 def main():
-    if "--no-serve" not in sys.argv:
+    serve_metrics = "--no-serve" not in sys.argv
+    run_once = "--once" in sys.argv or "--no-serve" in sys.argv
+
+    if serve_metrics:
         try:
             start_http_server(8011)
             print("💡 Prometheus metrics active on http://localhost:8011")
         except Exception as e:
             print(f"⚠️ Prometheus port 8011 busy or failed: {e}")
-    run_sweep()
+
+    if run_once:
+        run_sweep()
+        return
+
+    # [FEAT-570] Persistent Daemon Loop with Bounded Heartbeat
+    print("🚀 [FEAT-570] Starting persistent model benchmark daemon (60s heartbeat)...")
+    while True:
+        try:
+            run_sweep()
+        except Exception as e:
+            print(f"⚠️ Sweep encountered error: {e}")
+        time.sleep(60)
 
 if __name__ == "__main__":
     main()
