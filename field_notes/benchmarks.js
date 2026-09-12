@@ -240,7 +240,7 @@ async function loadLiveUsageStream() {
         const records = allRecords.slice(-10).reverse();
         let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
         records.forEach(r => {
-            const timeStr = r.date_str ? r.date_str.split(' ')[1] : new Date(r.timestamp * 1000).toLocaleTimeString();
+            const timeStr = r.date_str ? r.date_str : (r.timestamp ? new Date(r.timestamp * 1000).toLocaleString() : 'N/A');
             const isLocal = (r.tier === 'sovereign_local') || (r.seat && !r.seat.includes('Cloud') && r.provider !== 'openrouter');
             const tierBadge = isLocal 
                 ? '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#1b4728; color:#3fb950; border:1px solid #238636;">LOCAL</span>'
