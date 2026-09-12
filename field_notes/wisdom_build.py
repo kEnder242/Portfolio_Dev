@@ -16,6 +16,8 @@ DATA_PATH = BASE_DIR / "data" / "wisdom_data.json"
 PHILOSOPHY_PATH = BASE_DIR / "data" / "philosophy_data.json"
 BUCKETS_PATH = BASE_DIR / "data" / "buckets.json"
 MANIFEST_PATH = BASE_DIR / "data" / "dna_manifest.json"
+SPRINT_DATA_PATH = BASE_DIR / "data" / "sprint_data.json"
+TIMELINE_DATA_PATH = BASE_DIR / "data" / "timeline_data.json"
 OUTPUT_HTML = BASE_DIR / "wisdom.html"
 REL_SOURCE = "Portfolio_Dev/field_notes/data/wisdom_data.json"
 
@@ -212,6 +214,60 @@ def build_page():
     if MANIFEST_PATH.exists():
         with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
             manifest = json.load(f)
+
+    # Automatically load compiled sprint_data.json into manifest["sprint"]
+    if SPRINT_DATA_PATH.exists():
+        try:
+            with open(SPRINT_DATA_PATH, "r", encoding="utf-8") as f:
+                manifest["sprint"] = json.load(f)
+        except Exception as e:
+            print(f"⚠️ Could not load sprint_data.json: {e}")
+
+    # Automatically load timeline_data.json into manifest["discovery"]
+    if TIMELINE_DATA_PATH.exists():
+        try:
+            with open(TIMELINE_DATA_PATH, "r", encoding="utf-8") as f:
+                raw_timeline = json.load(f)
+            disc_cards = []
+            for item in raw_timeline:
+                cid = item.get("id", "DISC-000")
+                tags = item.get("tags", [])
+                anchors = item.get("code_anchors", [])
+                disc_cards.append({
+                    "id": cid,
+                    "title": item.get("title", cid),
+                    "theme": item.get("lane", "Distillation & Synthesis"),
+                    "origin": {
+                        "author": "jallred",
+                        "text": item.get("summary", ""),
+                        "source": f"{item.get('origin_artifact', 'N/A')} ({item.get('sprint_ref', 'N/A')})",
+                        "immutable": False,
+                        "created_at": item.get("conception_date", "")
+                    },
+                    "synthesis": {
+                        "title": item.get("title", cid),
+                        "narrative_context": item.get("summary", ""),
+                        "lab_anchors": anchors,
+                        "review_notes": f"Conception: {item.get('conception_date')} | Implemented: {item.get('implementation_date')} | Status: {item.get('status')}",
+                        "last_refined_by": "HUMAN_WORKBENCH",
+                        "refinement_version": 1
+                    },
+                    "metadata": {
+                        "tags": tags,
+                        "status": item.get("status", "MATURE"),
+                        "bucket_id": item.get("bucket_id", "distillation")
+                    }
+                })
+            manifest["discovery"] = disc_cards
+        except Exception as e:
+            print(f"⚠️ Could not load timeline_data.json: {e}")
+
+    # Persist updated manifest with compiled sprint & discovery collections
+    try:
+        with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2)
+    except Exception as e:
+        print(f"⚠️ Could not save updated dna_manifest.json: {e}")
 
     page_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -523,6 +579,7 @@ def build_page():
                 <label for="dna-select"><strong>DNA COLLECTION:</strong></label>
                 <select id="dna-select" class="dna-select">
                     <option value="wisdom" selected>Wisdom DNA (RW)</option>
+                    <option value="discovery">Innovations Timeline [DISC] (RW)</option>
                     <option value="writer">Writer DNA (RW)</option>
                     <option value="feature">Feature DNA (RO)</option>
                     <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
@@ -685,12 +742,12 @@ def build_page():
 
                 return {{
                     "id": cid,
-                    "theme": "Wisdom",
+                    "theme": (currentCollection === 'discovery') ? 'Novel Ideas Timeline' : 'Wisdom',
                     "origin": {{
                         "author": "jallred",
                         "text": originEl ? originEl.textContent.trim() : '',
-                        "source": "Wisdom Studio Workbench",
-                        "immutable": true
+                        "source": (currentCollection === 'discovery') ? 'timeline_data.json' : 'Wisdom Studio Workbench',
+                        "immutable": (currentCollection !== 'discovery')
                     }},
                     "synthesis": {{
                         "title": titleEl ? titleEl.textContent.trim() : '',
@@ -805,8 +862,12 @@ def build_page():
                     collection: currentCollection
                 }};
 
-                var saveUrl = 'http://127.0.0.1:8765/wisdom/save_card';
-                var fallbackUrl = '/wisdom/save_card';
+                var saveUrl = (currentCollection === 'discovery') ?
+                    'http://127.0.0.1:8765/timeline/save_card' :
+                    'http://127.0.0.1:8765/wisdom/save_card';
+                var fallbackUrl = (currentCollection === 'discovery') ?
+                    '/timeline/save_card' :
+                    '/wisdom/save_card';
 
                 function doFetch(url) {{
                     return fetch(url, {{
@@ -890,8 +951,10 @@ def build_page():
                     addBtn.dataset.wired = '1';
                     addBtn.addEventListener('click', function () {{
                         if (isReadOnly) return;
+                        var prefix = (currentCollection === 'discovery') ? 'DISC-' : 'WIS-';
                         var newIdx = container.querySelectorAll('.wisdom-card').length + 1;
-                        var newId = 'WIS-' + String(newIdx).padStart(3, '0');
+                        var newId = prefix + String(newIdx).padStart(3, '0');
+                        var themeName = (currentCollection === 'discovery') ? 'Novel Ideas Timeline' : 'Wisdom';
                         var card = document.createElement('div');
                         card.className = 'wisdom-card';
                         card.dataset.cardId = newId;
@@ -899,7 +962,7 @@ def build_page():
 
                         card.innerHTML = '<div class="card-top-bar">' +
                             '<div class="card-meta-row">' +
-                                '<span><strong>' + newId + '</strong> &bull; Wisdom</span>' +
+                                '<span><strong>' + newId + '</strong> &bull; ' + themeName + '</span>' +
                                 '<div class="bucket-container">' + renderBucketControlsJs('bucket_1_jitc', true) + '</div>' +
                             '</div>' +
                             '<div class="card-actions">' +
