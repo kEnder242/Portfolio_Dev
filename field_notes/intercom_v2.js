@@ -557,6 +557,20 @@ async function getLabKey(target) {
         const resp = await fetch(statusUrl, { cache: 'no-store' });
         if (resp.ok) {
             const data = await resp.json();
+            if (data.dirty) {
+                const action = data.pending_action || 'RELOAD';
+                const secs = data.seconds_to_reset || 0;
+                const mins = (secs / 60).toFixed(0);
+                const dirtyMsg = `Lab is DIRTY: Pending ${action} (in ${mins}m / ${secs}s). Reload queued.`;
+                appendMsg(`⛔ ${dirtyMsg}`, 'system-msg', 'System');
+                const bar = document.getElementById('crosstalk-bar');
+                if (bar) {
+                    bar.innerText = `⛔ HARD LOCK: ${dirtyMsg}`;
+                    bar.style.color = '#f85149';
+                }
+                statusDot.className = 'status-dot offline';
+                return null;
+            }
             if (data.session_token) {
                 currentSocketId = data.session_token;
                 return data.session_token;
@@ -593,6 +607,11 @@ async function connect() {
     try {
         // [FEAT-426] Fetch the session key before opening the socket.
         currentLabKey = await getLabKey(targetUrl);
+        if (currentLabKey === null) {
+            // Lab is DIRTY and locked against incoming connections. Re-check quietly every 10s.
+            setTimeout(connect, 10000);
+            return;
+        }
         if (currentLabKey && currentLabKey !== 'unknown' && currentLabKey !== CONFIG.LAB_KEY) {
             currentSocketId = currentLabKey;
         }
