@@ -8,6 +8,7 @@
     <style>
         .safe-nav-bar { margin-bottom: 20px; }
         .safe-btn { color: #888; text-decoration: none; border: 1px solid #444; padding: 5px 10px; font-size: 0.8rem; }
+        .inline-terminal { white-space: pre-wrap !important; font-family: 'Courier New', Courier, monospace; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -299,7 +300,7 @@
             let buffer = `\n`;
             let lastDate = null;
 
-            events.forEach(e => {
+            events.forEach((e, idx) => {
                 let dateDisplay = e.date;
                 if (!dateDisplay || !dateDisplay.match(/^\d{4}-\d{2}-\d{2}$/)) {
                     dateDisplay = "LOG";
@@ -310,16 +311,33 @@
                 const prefix = isAnchor ? "🎯 [STRATEGIC] " : "";
                 const summary = (e.summary || "").replace("[STRATEGIC_ANCHOR]", "").replace(/\s+/g, " ").trim();
                 
+                // Add a blank separator line between events
+                if (idx > 0) {
+                    buffer += `\n`;
+                }
+
                 if (dateDisplay !== lastDate) {
-                    buffer += `\n[${dateDisplay}] ${prefix}${summary}\n`;
+                    buffer += `[${dateDisplay}] ${prefix}${summary}\n`;
                     lastDate = dateDisplay;
                 } else {
                     buffer += `  ↳ ${prefix}${summary}\n`;
                 }
 
                 if (e.evidence) {
-                    const cleanEv = e.evidence.replace(/\s+/g, " ").trim();
-                    buffer += `    EVIDENCE: ${cleanEv.substring(0, 120)}\n`;
+                    let cleanEv = e.evidence.replace(/\s+/g, " ").trim();
+                    // If evidence contains raw dict/list string representation, extract readable text
+                    if (cleanEv.includes("'text':")) {
+                        const texts = [];
+                        const re = /'text':\s*'([^']*)'/g;
+                        let match;
+                        while ((match = re.exec(cleanEv)) !== null) {
+                            if (match[1] && match[1].trim()) texts.push(match[1].trim());
+                        }
+                        if (texts.length > 0) {
+                            cleanEv = texts.join(" | ");
+                        }
+                    }
+                    buffer += `    EVIDENCE: ${cleanEv}\n`;
                 }
                 if (isDiamond && e.technical_gem) {
                     const cleanGem = e.technical_gem.replace(/\s+/g, " ").trim();
