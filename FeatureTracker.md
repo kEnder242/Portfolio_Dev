@@ -2961,6 +2961,28 @@
 **Rationale:** Prevents catastrophic out-of-memory (OOM) host crashes and Xorg desktop resets caused by loading multi-gigabyte PyTorch C-arenas inside the 16GB z87 orchestrator runtime.
 **Mechanism:** `HomeLabAI/config/hooks/check_zero_torch.py`, `HomeLabAI/docs/Protocols.md#BKM-054`, and pytest memory guard fixture.
 
+## [FEAT-568] In-Place Single-Card Surgical Save & Fast-Path ChromaDB Sync
+**Sprint:** SPR-77.0
+**Status:** ACTIVE
+**Logic:** Replaces bulk full-array page saves in Wisdom Studio with discrete per-card unlocking and atomic single-document ChromaDB upserts (`/wisdom/save_card`). Surgical JSON entry replacement coupled with direct ChromaDB `collection.upsert(ids=[card_id], ...)` on port 8001.
+**Rationale:** Reduces vector synchronization latency to <15ms, prevents accidental clobbering across unedited cards, and eliminates memory-intensive batch vector re-indexing.
+**Mechanism:** `Portfolio_Dev/field_notes/wisdom.html`, `HomeLabAI/src/v5/foyer/router.py` (`handle_wisdom_save_card`).
+
+## [FEAT-569] Reactive Semantic Bucket Selector & Dynamic Theme Assignment
+**Sprint:** SPR-77.0
+**Status:** ACTIVE
+**Logic:** In-place `<select>` dropdown binding individual wisdom items directly to the 5 canonical buckets in `buckets.json`. Dynamically updates the card's accent border, metadata `bucket_id`, theme tags, and vector metadata in real time.
+**Rationale:** Eliminates manual text-based bucket configuration and ensures taxonomy compliance across the JITC cognitive pipeline.
+**Mechanism:** `Portfolio_Dev/field_notes/wisdom.html`, `Portfolio_Dev/field_notes/data/buckets.json`.
+
+## [FEAT-570] Daemon Exporter Heartbeat Throttling & Port-Busy Resilience
+**Sprint:** SPR-77.0
+**Status:** ACTIVE
+**Logic:** Refactors `bench_models.py` into a persistent daemon loop with bounded sleep intervals (e.g. 60s) and socket reuse flags (`SO_REUSEADDR`). Prevents systemd `Restart=always` from triggering relentless 10-second process restart loops and socket exhaustion during host memory pressure.
+**Rationale:** Eliminates rapid process churn (counter 569+) and socket collisions on port 8011/8088 that amplify host freeze cascades during attendant memory spikes.
+**Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `~/.config/systemd/user/bench-models-exporter.service`.
+
+
 
 
 

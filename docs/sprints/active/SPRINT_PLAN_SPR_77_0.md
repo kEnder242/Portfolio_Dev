@@ -276,4 +276,29 @@ We adopt **`discovery`** (or **`timeline_event`**) as the canonical data item:
 * **Prefix & Identifier:** Retained `DISC-xxx` as the compact machine and schema identifier.
 * **User-Facing Terminology:** Standardized all UI presentation on **"Innovations"** (e.g. *Innovations Matrix*, *Lab Innovations Timeline*, *Filter Innovations*).
 
+---
+
+## 🏛️ Phase 5: In-Place Wisdom Ergonomics & Host Telemetry Loop Hardening
+
+### 1. New Feature Anchors Registered
+* **`[FEAT-568]` In-Place Single-Card Surgical Save & Fast-Path ChromaDB Sync:** Replaces bulk page saves with per-card unlocking and atomic single-document ChromaDB upsert (`POST /wisdom/save_card`).
+* **`[FEAT-569]` Reactive Semantic Bucket Selector & Dynamic Theme Assignment:** Direct `<select>` dropdown binding to the 5 canonical buckets in `buckets.json`, updating card accent border and ChromaDB metadata.
+* **`[FEAT-570]` Daemon Exporter Heartbeat Throttling & Port-Busy Resilience:** Persistent daemon loop in `bench_models.py` with 60s sleep and socket reuse (`SO_REUSEADDR`) to permanently eliminate the 10-second systemd restart loop (counter 569+).
+
+### 2. Forensic Crash Fix & Systemd Remediation
+* **Root Cause:** 7.4 GB sudden memory allocation during `lab-attendant` cold boot coupled with process churn from `bench-models-exporter.service` (respawning every 10s due to clean exit without persistent loop).
+* **Fix Plan:**
+  1. Refactor `bench_models.py` to run an internal persistent sleep loop (60s cycle), avoiding repeated process exits and restarts.
+  2. Implement socket `SO_REUSEADDR` to eliminate port 8011 `TIME_WAIT` collisions.
+  3. Reload `systemctl --user daemon-reload && systemctl --user restart bench-models-exporter.service`.
+
+### 3. Wisdom Studio In-Place Refactor Plan
+* **Card Unlock Flow:**
+  - Default: `[ 🔓 Edit ]` on top-right of card header.
+  - Active: Enables `contenteditable="true"` on narrative, title, notes, tags, and activates the bucket dropdown. Action morphs to `[ 💾 Save ]` &bull; `[ ✖ Discard ]`.
+  - Discard restores snapshot; Save posts to `/wisdom/save_card` and performs instant ChromaDB single-document upsert.
+* **Markdown Backflow Stub:**
+  - RO items (`behavioral`, `feature`, `sprint`) display `[ 🔒 Markdown Origin (Git Anchored) - SafePatch Backflow Stubbed ]`.
+
+
 
