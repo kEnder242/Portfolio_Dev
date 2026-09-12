@@ -2975,12 +2975,12 @@
 **Rationale:** Eliminates manual text-based bucket configuration and ensures taxonomy compliance across the JITC cognitive pipeline.
 **Mechanism:** `Portfolio_Dev/field_notes/wisdom.html`, `Portfolio_Dev/field_notes/data/buckets.json`.
 
-## [FEAT-570] Daemon Exporter Heartbeat Throttling & Port-Busy Resilience
+## [FEAT-570] Point-in-Time Silicon Benchmark Calibration & Service De-escalation
 **Sprint:** SPR-77.0
 **Status:** ACTIVE
-**Logic:** Refactors `bench_models.py` into a persistent daemon loop with bounded sleep intervals (e.g. 60s) and socket reuse flags (`SO_REUSEADDR`). Prevents systemd `Restart=always` from triggering relentless 10-second process restart loops and socket exhaustion during host memory pressure.
-**Rationale:** Eliminates rapid process churn (counter 569+) and socket collisions on port 8011/8088 that amplify host freeze cascades during attendant memory spikes.
-**Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `~/.config/systemd/user/bench-models-exporter.service`.
+**Logic:** Retires `bench-models-exporter.service` and returns `bench_models.py` to pure single-run execution mode (`--once`). Calibrates federated hardware tiers strictly on-demand or during scheduled nightly forge maintenance (`src/infra/nightly_forge.py` Step 9). Continuous telemetry remains 100% passive via `FEAT-496` and `FEAT-525`.
+**Rationale:** Eliminates phantom inference traffic, background GPU prompt generation, process restart loops, and socket churn on port 8011, ensuring zero unprompted server load.
+**Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `HomeLabAI/src/infra/nightly_forge.py`.
 
 
 
