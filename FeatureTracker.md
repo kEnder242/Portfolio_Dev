@@ -2982,16 +2982,35 @@
 **Rationale:** Eliminates phantom inference traffic, background GPU prompt generation, process restart loops, and socket churn on port 8011, ensuring zero unprompted server load.
 **Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `HomeLabAI/src/infra/nightly_forge.py`.
 
+## [FEAT-581] Paper Dataset Architecture & Discrete Storage
+**Sprint:** SPR-78.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/papers/manifest.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/papers/manifest.json) — Discrete Paper Dataset Storage.
+**Logic:** Establishes discrete JSON document storage under `Portfolio_Dev/papers/` indexed by `manifest.json`. Papers own structural hierarchy (Sections and Paragraphs with UUIDs) and prose ("cached word collections"), decoupling compositional essays from atomic DNA vector stores.
+**Rationale:** Eliminates concurrent write collisions between human operators and autonomous agents while providing clean git diff tracking for evolving manuscripts.
+**Mechanism:** `Portfolio_Dev/papers/manifest.json`, `Portfolio_Dev/papers/paper_jitc_intuition.json`, and Foyer REST API `/paper/*`.
 
+## [FEAT-582] Cross-Collection DNA Citation Engine
+**Sprint:** SPR-78.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/scripts/build_writer.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/build_writer.py) — Cross-Collection DNA Citation Engine.
+**Logic:** Resolves lightweight citation pointer arrays (`["PHL-002", "FEAT-104", "ARXIV:2305.12345"]`) across multiple DNA stores (`philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`, and `RESEARCH_SYNTHESIS.md`) into human-readable epigraph quotes, code anchor links, and arXiv-compliant LaTeX `\cite{...}` entries.
+**Rationale:** Implements the "Pointers, Not Copies" invariant, allowing manuscripts to dynamically reference evolving lab DNA without content duplication.
+**Mechanism:** `Portfolio_Dev/scripts/build_writer.py`, `Portfolio_Dev/field_notes/data/dna_manifest.json`, and `references.bib` generator.
 
+## [FEAT-583] Thought Organizer UI: Organization Tree & Review Inspector
+**Sprint:** SPR-78.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Thought Organizer UI: Organization Tree & Review Inspector.
+**Logic:** Provides a multi-paper thought organizing interface in `writer.html`. Features a structural Organization Tree View allowing visual slotting and drag-and-drop of DNA citation chips between Section/Paragraph containers, coupled with an in-place single-card Review Inspector side panel displaying origin quotes, synthesis text, and anchors using the `wisdom.html` layout.
+**Rationale:** Decouples structural thought organization from word-level synthesis, allowing rapid outlining and deep inspection of source material without visual clutter.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `SortableJS` drag-and-drop handler, and inspector DOM controller.
 
-
-
-
-
-
-
-
-
-
+## [FEAT-584] Synthesis Reflow & 3-Tier Revision Carousel
+**Sprint:** SPR-78.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Synthesis Reflow & 3-Tier Revision Carousel.
+**Logic:** Hydrates the structural thought tree into continuous prose in the Synthesis View. Moving citation chips marks paragraph containers `dirty`, activating an actionable `[⚡ Revise / Re-synthesize]` flow powered by the sovereign engine. Paragraphs maintain a 3-tier revision array navigable via `< >` carousel arrows inside the inspector panel.
+**Rationale:** Enables surgical, cascade LLM wordsmithing that adapts to altered structural bone associations without disrupting adjacent unedited paragraphs.
+**Mechanism:** `writer.html` synthesis renderer, Foyer REST `/paper/synthesize` endpoint, and paragraph revision history state.
 
