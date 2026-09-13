@@ -43,6 +43,7 @@ Based on operator design directives and the Sprint 77 closeout:
 ### 🟢 Phase 1: Core Foundation & Ergonomics (Low-Hanging Fruit / Unambiguous)
 
 #### 🧬 Story 78.1: Discrete Paper Dataset Storage (`[FEAT-581]`)
+* **Assigned Owner:** `[AGY:PRIMARY]` *(Status: COMPLETED during Housekeeping)*
 * **Objective:** Establish the canonical `Portfolio_Dev/papers/` directory, configure `manifest.json`, and bootstrap `paper_jitc_intuition.json` with Section -> Paragraph UUID hierarchy and citation pointer lists.
 * **Target Files:**
   - `Portfolio_Dev/papers/manifest.json`
@@ -52,6 +53,7 @@ Based on operator design directives and the Sprint 77 closeout:
   2. `paper_jitc_intuition.json` models Sections 1–3, paragraph UUIDs (`PAR-xxx`), citation arrays referencing `PHL-xxx`, `cached_words`, and `dirty` flags.
 
 #### 🧬 Story 78.2: Cross-Collection Citation Pointer Engine (`[FEAT-582]`)
+* **Assigned Owner:** `[SWARM:LOCAL]` *(Execution: delegate.py on REST :4097; Attempt 1)*
 * **Objective:** Expand `Portfolio_Dev/scripts/build_writer.py` to resolve citation pointers across multiple collections (`philosophy`, `discovery`, `sprint`, and `RESEARCH_SYNTHESIS.md`).
 * **Target Files:**
   - `Portfolio_Dev/scripts/build_writer.py`
@@ -61,6 +63,7 @@ Based on operator design directives and the Sprint 77 closeout:
   2. Compiles arXiv-ready `Portfolio_Dev/docs/whitepaper/main.tex` and `references.bib` dynamically from the active paper dataset.
 
 #### 🧬 Story 78.3: Writer Studio Multi-Paper UI & Review Inspector Panel (`[FEAT-581]` / `[FEAT-583]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097; Attempt 1/2)*
 * **Objective:** Add paper selector dropdown to `writer.html` and build the single-card Review Inspector slide-out panel for inspecting citations in-place.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
@@ -69,6 +72,7 @@ Based on operator design directives and the Sprint 77 closeout:
   2. Clicking any `[PHL-xxx]`, `[DISC-xxx]`, or `[FEAT-xxx]` badge opens the side panel showing origin quote, synthesis text, and metadata matching `wisdom.html` card design.
 
 #### 🧬 Story 78.4: Foyer REST Paper API Endpoints (`[FEAT-581]`)
+* **Assigned Owner:** `[SWARM:LOCAL]` *(Execution: delegate.py on REST :4097; Attempt 1)*
 * **Objective:** Implement `/paper/list`, `/paper/load`, and `/paper/save` in `HomeLabAI/src/v5/foyer/router.py`.
 * **Target Files:**
   - `HomeLabAI/src/v5/foyer/router.py`
@@ -81,11 +85,13 @@ Based on operator design directives and the Sprint 77 closeout:
 ### 🟡 Phase 2: Synthesis Reflow, Tag Drag-and-Drop & Revisions (Tagged for Research / Deferral)
 
 #### 🧬 Story 78.5: Structural Tree View & DNA Tag Drag-and-Drop (`[FEAT-583]`) [RISK: MEDIUM]
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Objective:** Visual drag-and-drop or slotting interface for DNA citation chips between Section and Paragraph containers.
 * **Research Focus:** Evaluate lightweight `SortableJS` (~8KB local static script) vs native HTML5 DnD to ensure buttery, bug-free tag movement without DOM corruption.
 * **Dirty Marking:** Moving a chip instantly marks the destination and origin paragraph containers `dirty = true`.
 
 #### 🧬 Story 78.6: Cascade Synthesis Reflow & 3-Tier Revision Carousel (`[FEAT-584]`) [RISK: HIGH]
+* **Assigned Owner:** `[SWARM:LOCAL]`
 * **Objective:** Implement the **[⚡ Revise / Re-synthesize]** flow to re-weave cached word collections when a paragraph's citation bones change, maintaining the last 3 revisions.
 * **UI Controls:** `< >` revision navigator inside the inspector panel allowing the operator to step through recent revisions (timestamp, prompt hash, diff) and revert if needed.
 * **Pre-flight Requirement:** Verify sovereign engine communication (`X-Lab-Key` auth) before activating automated wordsmithing.
