@@ -1,0 +1,24 @@
+{
+  "papers": [
+    {
+      "id": "PAPER-001",
+      "slug": "jitc_framework",
+      "title": "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs",
+      "file": "paper_jitc_framework.json",
+      "author": "Jason Allred",
+      "status": "DRAFT",
+      "created_at": "2026-09-05T00:00:00Z",
+      "updated_at": "2026-09-12T00:00:00Z"
+    },
+    {
+      "id": "PAPER-002",
+      "slug": "intuition_2026",
+      "title": "Intuition Paper (Sept 5 2026)",
+      "file": "paper_intuition_2026.json",
+      "author": "Jason Allred",
+      "status": "STAGED",
+      "created_at": "2026-09-05T00:00:00Z",
+      "updated_at": "2026-09-12T00:00:00Z"
+    }
+  ]
+}
