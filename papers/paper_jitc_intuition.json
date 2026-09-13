@@ -22,9 +22,9 @@
           "id": "PAR-001",
           "order": 0,
           "citations": [
-            "WIS-001",
-            "WIS-002",
-            "WIS-006"
+            "PHL-001",
+            "PHL-002",
+            "PHL-006"
           ],
           "cached_words": "This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.",
           "dirty": false,
@@ -58,7 +58,7 @@
           "id": "PAR-003",
           "order": 0,
           "citations": [
-            "WIS-001"
+            "PHL-001"
           ],
           "cached_words": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.",
           "dirty": false,
@@ -68,7 +68,7 @@
           "id": "PAR-004",
           "order": 1,
           "citations": [
-            "WIS-002"
+            "PHL-002"
           ],
           "cached_words": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf' \u2014 minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
           "dirty": false,
@@ -86,7 +86,7 @@
           "id": "PAR-005",
           "order": 0,
           "citations": [
-            "WIS-003"
+            "PHL-003"
           ],
           "cached_words": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.",
           "dirty": false,
@@ -104,7 +104,7 @@
           "id": "PAR-006",
           "order": 0,
           "citations": [
-            "WIS-004"
+            "PHL-004"
           ],
           "cached_words": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.",
           "dirty": false,
@@ -122,7 +122,7 @@
           "id": "PAR-007",
           "order": 0,
           "citations": [
-            "WIS-005"
+            "PHL-005"
           ],
           "cached_words": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.",
           "dirty": false,
@@ -140,7 +140,7 @@
           "id": "PAR-008",
           "order": 0,
           "citations": [
-            "WIS-006"
+            "PHL-006"
           ],
           "cached_words": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.",
           "dirty": false,
@@ -158,7 +158,7 @@
           "id": "PAR-009",
           "order": 0,
           "citations": [
-            "WIS-007"
+            "PHL-007"
           ],
           "cached_words": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.",
           "dirty": false,
@@ -176,7 +176,7 @@
           "id": "PAR-010",
           "order": 0,
           "citations": [
-            "WIS-008"
+            "PHL-008"
           ],
           "cached_words": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.",
           "dirty": false,
@@ -194,9 +194,9 @@
           "id": "PAR-011",
           "order": 0,
           "citations": [
-            "WIS-001",
-            "WIS-003",
-            "WIS-006"
+            "PHL-001",
+            "PHL-003",
+            "PHL-006"
           ],
           "cached_words": "The dual-channel architecture \u2014 immutable human origin alongside collaborative machine synthesis \u2014 provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.",
           "dirty": false,
@@ -207,8 +207,8 @@
   ],
   "bibliography": [
     {
-      "dna_id": "WIS-001",
-      "collection": "wisdom",
+      "dna_id": "PHL-001",
+      "collection": "philosophy",
       "label": "Allred 2026a \u2014 Memory & JITC",
       "used_in": [
         "PAR-001",
@@ -217,8 +217,8 @@
       ]
     },
     {
-      "dna_id": "WIS-002",
-      "collection": "wisdom",
+      "dna_id": "PHL-002",
+      "collection": "philosophy",
       "label": "Allred 2026b \u2014 Token Golf & Trust",
       "used_in": [
         "PAR-001",
@@ -226,8 +226,8 @@
       ]
     },
     {
-      "dna_id": "WIS-003",
-      "collection": "wisdom",
+      "dna_id": "PHL-003",
+      "collection": "philosophy",
       "label": "Allred 2026c \u2014 Feedback Backpressure",
       "used_in": [
         "PAR-005",
@@ -235,24 +235,24 @@
       ]
     },
     {
-      "dna_id": "WIS-004",
-      "collection": "wisdom",
+      "dna_id": "PHL-004",
+      "collection": "philosophy",
       "label": "Allred 2026d \u2014 Velocity Whiplash",
       "used_in": [
         "PAR-006"
       ]
     },
     {
-      "dna_id": "WIS-005",
-      "collection": "wisdom",
+      "dna_id": "PHL-005",
+      "collection": "philosophy",
       "label": "Allred 2026e \u2014 The Perfect Foil",
       "used_in": [
         "PAR-007"
       ]
     },
     {
-      "dna_id": "WIS-006",
-      "collection": "wisdom",
+      "dna_id": "PHL-006",
+      "collection": "philosophy",
       "label": "Allred 2026f \u2014 Engineering Rigor",
       "used_in": [
         "PAR-001",
@@ -261,16 +261,16 @@
       ]
     },
     {
-      "dna_id": "WIS-007",
-      "collection": "wisdom",
+      "dna_id": "PHL-007",
+      "collection": "philosophy",
       "label": "Allred 2026g \u2014 Language as Invention",
       "used_in": [
         "PAR-009"
       ]
     },
     {
-      "dna_id": "WIS-008",
-      "collection": "wisdom",
+      "dna_id": "PHL-008",
+      "collection": "philosophy",
       "label": "Allred 2026h \u2014 Engineering Vectors",
       "used_in": [
         "PAR-010"
