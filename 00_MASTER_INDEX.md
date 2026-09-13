@@ -21,6 +21,7 @@
 *   **[LORA_MOE_SYNTHESIS.md](../HomeLabAI/docs/plans/LORA_MOE_SYNTHESIS.md)**: **The "Poor Man's MoE".** Multi-LoRA expert routing strategy.
 *   **[RRF_HYBRID_RETRIEVAL.md](./docs/designs/RRF_HYBRID_RETRIEVAL.md)**: **Hybrid Design.** [ENHANCEMENT] blueprint for Sprint 31.
 *   **[DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md)**: **The Physician's Ledger.** Comprehensive list of tests and validation logic.
+*   **[papers/](./papers/)**: **The Manuscripts.** Dedicated paper dataset collections (`manifest.json` & `paper_jitc_intuition.json`).
 *   **[FIELD_NOTES_INTEGRATION.md](./FIELD_NOTES_INTEGRATION.md)**: **The Bridge.** Defines the static-to-Brain connection.
 *   **[../HomeLabAI/docs/TOOL_RUNDOWN.md](../HomeLabAI/docs/TOOL_RUNDOWN.md)**: **The Toolbox.** Agentic tools and node duties.
 *   **[../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md](../HomeLabAI/docs/plans/VLLM_INTEGRATION_PLAN.md)**: **The Inference Core.** Roadmap for high-throughput inference (Preserved for future Ampere+ attempts).

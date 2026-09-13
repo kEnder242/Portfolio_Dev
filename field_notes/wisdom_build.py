@@ -580,11 +580,10 @@ def build_page():
                 <select id="dna-select" class="dna-select">
                     <option value="wisdom" selected>Wisdom DNA (RW)</option>
                     <option value="discovery">Innovations Timeline [DISC] (RW)</option>
-                    <option value="writer">Writer DNA (RW)</option>
+                    <option value="philosophy">Philosophy DNA (RW)</option>
                     <option value="feature">Feature DNA (RO)</option>
                     <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
                     <option value="sprint">Sprint DNA (RO)</option>
-                    <option value="philosophy">Philosophy DNA (RO)</option>
                 </select>
                 <span id="dna-badge" class="dna-badge rw">[READ-WRITE STUDIO]</span>
             </div>
