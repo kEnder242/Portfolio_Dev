@@ -339,6 +339,9 @@
         .citation-chip.phl { color: #58a6ff; border-color: #388bfd; }
         .citation-chip.disc { color: #d29922; border-color: #bb8009; }
         .citation-chip.arxiv { color: #3fb950; border-color: #238636; }
+        /* [FEAT-583] FEAT-xxx code anchors: green accent family */
+        .citation-chip.feat { color: #3fb950; border-color: #238636; }
+        .citation-chip.feat:hover { background: rgba(35, 134, 54, 0.2); }
 
         /* [FEAT-583] Single-Card Review Inspector */
         .citation-inspector {
@@ -412,6 +415,58 @@
             font-size: 0.72rem;
             color: var(--sub-color);
         }
+        /* [FEAT-583] wisdom.html single-card mirror: review notes, lab anchors, tags */
+        .ci-section { margin-bottom: 12px; }
+        .ci-section[hidden] { display: none !important; }
+        .ci-origin-source {
+            display: block;
+            text-align: right;
+            font-size: 0.68rem;
+            color: #666;
+            font-style: normal;
+            margin-top: 6px;
+        }
+        .ci-review-notes {
+            font-size: 0.75rem;
+            color: #8b949e;
+            background: var(--code-bg);
+            border-left: 2px solid var(--border-color);
+            padding: 6px 10px;
+            border-radius: 2px;
+            line-height: 1.5;
+        }
+        .ci-anchors code {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            margin: 2px 4px 2px 0;
+            display: inline-block;
+        }
+        .ci-tag {
+            display: inline-block;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 1px 7px;
+            font-size: 0.68rem;
+            color: var(--accent-color);
+            margin: 2px 4px 2px 0;
+            font-family: var(--font-stack);
+        }
+        .ci-status-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 1px 6px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            color: var(--sub-color);
+            margin-left: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -441,6 +496,7 @@
                 <label for="paper-select"><strong>ACTIVE PAPER:</strong></label>
                 <select id="paper-select" class="paper-select"></select>
                 <button id="wb-save-paper" class="wb-btn" style="border-color: #238636; color: #3fb950; font-weight: bold;">💾 Save Paper</button>
+                <span id="paper-load-status" style="color: var(--accent-color); font-size: 0.75rem;"></span>
                 <span id="paper-save-status" style="color: var(--accent-color); font-size: 0.75rem;"></span>
                 <span id="paper-badge" class="dna-badge rw" style="margin-left: auto;">[PAPER DATASET]</span>
             </div>
@@ -527,6 +583,18 @@
             <div class="ci-section-label">SYNTHESIS CONTEXT & THEORETICAL LOGIC</div>
             <div class="ci-narrative" id="ci-narrative">No citation selected.</div>
             <div class="ci-meta" id="ci-meta"></div>
+            <div class="ci-section" id="ci-review-section" hidden>
+                <div class="ci-section-label">Review Notes</div>
+                <div class="ci-review-notes" id="ci-review-notes"></div>
+            </div>
+            <div class="ci-section" id="ci-anchors-section" hidden>
+                <div class="ci-section-label">Lab Anchors</div>
+                <div class="ci-anchors" id="ci-anchors"></div>
+            </div>
+            <div class="ci-section" id="ci-tags-section" hidden>
+                <div class="ci-section-label">Tags</div>
+                <div id="ci-tags"></div>
+            </div>
         </div>
     </main>
 
@@ -735,21 +803,76 @@
                 });
             }
 
-            // --- [FEAT-583] Citation Inspector Logic ---
+            // --- [FEAT-583] Citation Inspector Logic (wisdom.html single-card mirror) ---
+            function resolveCitationEntry(cid) {
+                var index = window.__CITATION_INDEX__ || {};
+                if (index[cid]) return index[cid];
+                var featLookup = window.__FEAT_LOOKUP__ || {};
+                if (featLookup[cid]) return featLookup[cid];
+                return null;
+            }
+
+            function renderCiAnchors(anchors) {
+                var wrap = document.getElementById('ci-anchors');
+                var section = document.getElementById('ci-anchors-section');
+                if (!wrap || !section) return;
+                wrap.innerHTML = '';
+                var list = (anchors || []).filter(Boolean);
+                if (!list.length) { section.hidden = true; return; }
+                section.hidden = false;
+                list.forEach(function (a) {
+                    var code = document.createElement('code');
+                    code.textContent = a;
+                    wrap.appendChild(code);
+                });
+            }
+
+            function renderCiTags(tags) {
+                var wrap = document.getElementById('ci-tags');
+                var section = document.getElementById('ci-tags-section');
+                if (!wrap || !section) return;
+                wrap.innerHTML = '';
+                if (!tags || !tags.length) { section.hidden = true; return; }
+                section.hidden = false;
+                tags.forEach(function (t) {
+                    var span = document.createElement('span');
+                    span.className = 'ci-tag';
+                    span.textContent = t;
+                    wrap.appendChild(span);
+                });
+            }
+
             function openCitationInspector(cid) {
                 var inspector = document.getElementById('citation-inspector');
                 if (!inspector) return;
-                var index = window.__CITATION_INDEX__ || {};
-                var entry = index[cid] || { id: cid, title: cid, origin_text: 'Citation not indexed in manifest.', narrative: 'N/A' };
+                var entry = resolveCitationEntry(cid) || {
+                    id: cid,
+                    title: cid,
+                    collection: 'unknown',
+                    origin_text: 'Citation not indexed in manifest. Run build_writer.py to hydrate cross-collection anchors.',
+                    narrative: 'No synthesis context available for this anchor.'
+                };
 
                 document.getElementById('ci-title').textContent = (entry.title || cid) + ' [' + cid + ']';
                 document.getElementById('ci-quote').textContent = entry.origin_text || '(No origin quote)';
-                document.getElementById('ci-narrative').textContent = entry.narrative || '(No synthesis context)';
-                
+                document.getElementById('ci-narrative').textContent = entry.narrative || entry.origin_text || '(No synthesis context)';
+
                 var metaHtml = '<strong>Collection:</strong> ' + (entry.collection || 'unknown');
+                if (entry.origin_source) metaHtml += '<br><strong>Source:</strong> ' + entry.origin_source;
                 if (entry.author) metaHtml += ' &bull; <strong>Author:</strong> ' + entry.author;
-                if (entry.tags && entry.tags.length) metaHtml += '<br><strong>Tags:</strong> ' + entry.tags.join(', ');
+                if (entry.arxiv) metaHtml += '<br><strong>arXiv:</strong> ' + entry.arxiv;
+                if (entry.status) metaHtml += ' <span class="ci-status-badge">' + entry.status + '</span>';
                 document.getElementById('ci-meta').innerHTML = metaHtml;
+
+                // wisdom.html single-card mirror: review notes + lab anchors + tags
+                var reviewBox = document.getElementById('ci-review-notes');
+                var reviewSection = document.getElementById('ci-review-section');
+                if (reviewBox && reviewSection) {
+                    if (entry.review_notes) { reviewBox.textContent = entry.review_notes; reviewSection.hidden = false; }
+                    else { reviewSection.hidden = true; }
+                }
+                renderCiAnchors(entry.lab_anchors);
+                renderCiTags(entry.tags);
 
                 inspector.classList.add('visible');
             }
@@ -763,6 +886,14 @@
                         e.stopPropagation();
                         var cid = chip.dataset.cid || chip.textContent.replace(/[\[\]]/g, '').trim();
                         openCitationInspector(cid);
+                    });
+                    chip.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            var cid = chip.dataset.cid || chip.textContent.replace(/[\[\]]/g, '').trim();
+                            openCitationInspector(cid);
+                        }
                     });
                 });
             }
@@ -779,6 +910,74 @@
             }
 
             // --- [FEAT-581] Multi-Paper Selector & Loader ---
+            function setPaperLoadStatus(msg, color) {
+                var status = document.getElementById('paper-load-status');
+                if (status) { status.textContent = msg; status.style.color = color || 'var(--accent-color)'; }
+            }
+
+            function updatePaperBadge(paper) {
+                var badge = document.getElementById('paper-badge');
+                if (badge && paper) {
+                    badge.textContent = '[' + (paper.id || 'PAPER') + ' · ' + (paper.slug || 'dataset') + ']';
+                }
+            }
+
+            function loadPaperViaREST(file) {
+                var base = window.location.origin.includes('notes.jason-lab.dev') ? '/attendant' : 'http://localhost:8765';
+                var ctrl = new AbortController();
+                var timer = setTimeout(function () { ctrl.abort(); }, 3500);
+                return fetch(base + '/paper/load?file=' + encodeURIComponent(file), { signal: ctrl.signal })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        clearTimeout(timer);
+                        if (data.status === 'success' && data.paper) return data.paper;
+                        throw new Error('REST /paper/load returned no paper');
+                    });
+            }
+
+            function loadPaperViaStatic(file) {
+                // Offline fallback: serve the paper dataset from the static papers/ directory
+                // (Portfolio_Dev/papers/<file>), resolved relative to this page's URL.
+                var url = new URL('../papers/' + file, window.location.href);
+                var ctrl = new AbortController();
+                var timer = setTimeout(function () { ctrl.abort(); }, 5000);
+                return fetch(url.href, { signal: ctrl.signal })
+                    .then(function (r) {
+                        clearTimeout(timer);
+                        if (!r.ok) throw new Error('Static paper fetch failed: ' + r.status);
+                        return r.json();
+                    });
+            }
+
+            function loadPaperByFile(file) {
+                setPaperLoadStatus('⏳ Loading ' + file + '...', '#d29922');
+                return loadPaperViaREST(file)
+                    .catch(function (restErr) {
+                        console.warn('REST /paper/load unavailable (' + restErr + ') - falling back to static papers/ dataset.');
+                        return loadPaperViaStatic(file);
+                    })
+                    .catch(function (staticErr) {
+                        console.warn('Static paper fetch failed too:', staticErr);
+                        var manifest = window.__PAPERS_MANIFEST__ || { papers: [] };
+                        var matched = manifest.papers.filter(function (p) { return p.file === file; })[0];
+                        if (matched && matched.content) return matched.content; // manifest-embedded paper body
+                        throw staticErr;
+                    })
+                    .then(function (paper) {
+                        window.__ACTIVE_PAPER__ = paper;
+                        var label = (paper && paper.title) ? paper.title : file;
+                        setPaperLoadStatus('✓ ' + label, '#3fb950');
+                        updatePaperBadge(paper);
+                        renderActivePaper(paper);
+                        setTimeout(function () { setPaperLoadStatus('', ''); }, 3500);
+                        return paper;
+                    })
+                    .catch(function (err) {
+                        console.error('Unable to load paper:', err);
+                        setPaperLoadStatus('⚠️ Could not load ' + file + ' (REST + static fallbacks failed)', '#f85149');
+                    });
+            }
+
             function wirePaperSelector() {
                 var select = document.getElementById('paper-select');
                 if (!select || select.dataset.wired) return;
@@ -793,20 +992,16 @@
                     select.appendChild(opt);
                 });
 
+                // Reflect the currently rendered paper in the dropdown + badge on boot
+                var active = window.__ACTIVE_PAPER__ || {};
+                if (active.id && manifest.papers.length) {
+                    var cur = manifest.papers.filter(function (p) { return p.id === active.id; })[0];
+                    if (cur) select.value = cur.file;
+                }
+                updatePaperBadge(active);
+
                 select.addEventListener('change', function () {
-                    var file = select.value;
-                    var base = window.location.origin.includes('notes.jason-lab.dev') ? '/attendant' : 'http://localhost:8765';
-                    fetch(base + '/paper/load?file=' + encodeURIComponent(file))
-                        .then(function (r) { return r.json(); })
-                        .then(function (data) {
-                            if (data.status === 'success' && data.paper) {
-                                window.__ACTIVE_PAPER__ = data.paper;
-                                renderActivePaper(data.paper);
-                            }
-                        })
-                        .catch(function (err) {
-                            console.warn('Could not load paper over REST:', err);
-                        });
+                    loadPaperByFile(select.value);
                 });
             }
 
@@ -886,8 +1081,8 @@
                     var pBlocks = [];
                     (sec.paragraphs || []).forEach(function (par) {
                         var chips = (par.citations || []).map(function (c) {
-                            var typeClass = c.startsWith('PHL-') ? 'phl' : (c.startsWith('DISC-') ? 'disc' : (c.startsWith('ARXIV') ? 'arxiv' : ''));
-                            return '<span class="citation-chip ' + typeClass + '" data-cid="' + c + '">[' + c + ']</span>';
+                            var typeClass = c.startsWith('PHL-') ? 'phl' : (c.startsWith('DISC-') ? 'disc' : (c.startsWith('FEAT-') ? 'feat' : (c.startsWith('ARXIV') ? 'arxiv' : '')));
+                            return '<span class="citation-chip ' + typeClass + '" data-cid="' + c + '" title="Open review inspector for ' + c + '" role="button" tabindex="0">[' + c + ']</span>';
                         }).join(' ');
 
                         var text = par.cached_words || '';
@@ -933,6 +1128,79 @@
         })();
     </script>
 <script>
+// [FEAT-583] Story 78.3: Persistent FEAT-xxx citation lookup (survives build_writer.py hydration)
+// build_writer.py indexes philosophy/wisdom/discovery/research but not the `feature` collection.
+// This static table supplies FEAT-xxx code-anchor entries for the Single-Card Review Inspector,
+// mirroring the wisdom.html card schema so FEAT chips resolve to full inspector content.
+window.__FEAT_LOOKUP__ = {
+  "FEAT-561": {
+    "id": "FEAT-561",
+    "collection": "feature",
+    "title": "Wisdom Studio Direct Save REST Endpoint",
+    "origin_text": "Allow wisdom.html workbench mode to persist edits directly to disk on port 8765.",
+    "origin_source": "Sprint 77 Spec",
+    "narrative": "Provides atomic JSON writing via Foyer router /wisdom/save endpoint, eliminating manual clipboard exports.",
+    "review_notes": "Implemented and live on port 8765.",
+    "lab_anchors": ["HomeLabAI/src/v5/foyer/router.py"],
+    "tags": ["foyer", "rest", "wisdom", "save"],
+    "status": "APPROVED",
+    "author": "Jason Allred"
+  },
+  "FEAT-562": {
+    "id": "FEAT-562",
+    "collection": "feature",
+    "title": "Automated Nightly Wisdom Synthesis Refiner",
+    "origin_text": "Refine unpolished wisdom cards using M5 Air Qwen 27B during nightly forge.",
+    "origin_source": "Sprint 77 Spec",
+    "narrative": "Polishes raw origin text into structured synthesis while keeping origin immutable.",
+    "review_notes": "Preserves verbatim text with zero byte drift.",
+    "lab_anchors": ["Portfolio_Dev/field_notes/refine_wisdom.py"],
+    "tags": ["refiner", "m5-air", "nightly-forge"],
+    "status": "APPROVED",
+    "author": "Jason Allred"
+  },
+  "FEAT-563": {
+    "id": "FEAT-563",
+    "collection": "feature",
+    "title": "Semantic Bucketing & Deduplication Engine",
+    "origin_text": "Categorize wisdom cards into 5 core buckets and detect duplicates via embeddings.",
+    "origin_source": "Sprint 77 Spec",
+    "narrative": "Establishes buckets.json taxonomy and flags pairs with similarity > 0.82 for human review.",
+    "review_notes": "Flags for review rather than destructive merging.",
+    "lab_anchors": ["field_notes/data/buckets.json"],
+    "tags": ["bucketing", "dedup", "embeddings", "taxonomy"],
+    "status": "APPROVED",
+    "author": "Jason Allred"
+  },
+  "FEAT-564": {
+    "id": "FEAT-564",
+    "collection": "feature",
+    "title": "Thought Organizer Transition (writer.html)",
+    "origin_text": "Workspace-wide migration from paper.html to writer.html with zero symlinks.",
+    "origin_source": "Sprint 77 Spec",
+    "narrative": "Interactive thought organizer mapping cards to whitepaper sections with LaTeX compilation.",
+    "review_notes": "Zero symlinks created.",
+    "lab_anchors": ["field_notes/writer.html", "scripts/build_writer.py"],
+    "tags": ["writer", "latex", "whitepaper"],
+    "status": "APPROVED",
+    "author": "Jason Allred"
+  },
+  "FEAT-566": {
+    "id": "FEAT-566",
+    "collection": "feature",
+    "title": "Novel Ideas Evolutionary Timeline",
+    "origin_text": "Track original lab art, discoveries, and organic engineering evolution.",
+    "origin_source": "Sprint 77 Spec",
+    "narrative": "Interactive Gantt swimlanes and reactive detail list tracking conception-to-implementation spans.",
+    "review_notes": "Visual companion to research tracker.",
+    "lab_anchors": ["field_notes/timeline.html"],
+    "tags": ["timeline", "gantt", "evolution", "discoveries"],
+    "status": "APPROVED",
+    "author": "Jason Allred"
+  }
+};
+</script>
+<script>
 // [FEAT-581/FEAT-582] Workbench context: active paper, manifest, citation index
 window.__PAPERS_MANIFEST__ = {
   "papers": [
@@ -968,7 +1236,7 @@ window.__ACTIVE_PAPER__ = {
   "title": "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs",
   "author": "Jason Allred",
   "created_at": "2026-09-05T00:00:00Z",
-  "updated_at": "2026-09-12T00:00:00Z",
+  "updated_at": "2026-09-13T07:06:57.691206+00:00",
   "status": "DRAFT",
   "voice_profile": {
     "tense": "present",
