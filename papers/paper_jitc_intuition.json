@@ -1,226 +1,279 @@
 {
-  "papers": [
+  "id": "PAPER-001",
+  "title": "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs",
+  "author": "Jason Allred",
+  "created_at": "2026-09-05T00:00:00Z",
+  "updated_at": "2026-09-12T00:00:00Z",
+  "status": "DRAFT",
+  "voice_profile": {
+    "tense": "present",
+    "style": "academic",
+    "tone": "authoritative",
+    "custom_prompt": null
+  },
+  "sections": [
     {
-      "id": "PAPER-001",
-      "title": "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs",
-      "author": "Jason Allred",
-      "created_at": "2026-09-05T00:00:00Z",
-      "updated_at": "2026-09-12T00:00:00Z",
-      "status": "DRAFT",
-      "voice_profile": {
-        "tense": "present",
-        "style": "academic",
-        "tone": "authoritative",
-        "custom_prompt": null
-      },
-      "sections": [
+      "id": "SEC-001",
+      "type": "abstract",
+      "order": 0,
+      "heading": "Abstract",
+      "paragraphs": [
         {
-          "id": "SEC-001",
-          "type": "abstract",
+          "id": "PAR-001",
           "order": 0,
-          "heading": "Abstract",
-          "paragraphs": [
-            {
-              "id": "PAR-001",
-              "order": 0,
-              "text": "This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.",
-              "sentences": [],
-              "citations": ["WIS-001", "WIS-002", "WIS-006"]
-            }
-          ]
+          "citations": [
+            "WIS-001",
+            "WIS-002",
+            "WIS-006"
+          ],
+          "cached_words": "This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-002",
+      "type": "body",
+      "order": 1,
+      "heading": "Introduction",
+      "paragraphs": [
+        {
+          "id": "PAR-002",
+          "order": 0,
+          "citations": [],
+          "cached_words": "Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution. The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-003",
+      "type": "body",
+      "order": 2,
+      "heading": "Memory & Just-In-Time Context (JITC)",
+      "paragraphs": [
+        {
+          "id": "PAR-003",
+          "order": 0,
+          "citations": [
+            "WIS-001"
+          ],
+          "cached_words": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.",
+          "dirty": false,
+          "revisions": []
         },
         {
-          "id": "SEC-002",
-          "type": "body",
+          "id": "PAR-004",
           "order": 1,
-          "heading": "Introduction",
-          "paragraphs": [
-            {
-              "id": "PAR-002",
-              "order": 0,
-              "text": "Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution. The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers.",
-              "sentences": [],
-              "citations": []
-            }
-          ]
-        },
-        {
-          "id": "SEC-003",
-          "type": "body",
-          "order": 2,
-          "heading": "Memory & Just-In-Time Context (JITC)",
-          "paragraphs": [
-            {
-              "id": "PAR-003",
-              "order": 0,
-              "text": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.",
-              "sentences": [],
-              "citations": ["WIS-001"]
-            },
-            {
-              "id": "PAR-004",
-              "order": 1,
-              "text": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf' — minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
-              "sentences": [],
-              "citations": ["WIS-002"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-004",
-          "type": "body",
-          "order": 3,
-          "heading": "Feedback Backpressure & The Handover Reflection",
-          "paragraphs": [
-            {
-              "id": "PAR-005",
-              "order": 0,
-              "text": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.",
-              "sentences": [],
-              "citations": ["WIS-003"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-005",
-          "type": "body",
-          "order": 4,
-          "heading": "Velocity Whiplash, 10x Debt & Reading Like a Robot",
-          "paragraphs": [
-            {
-              "id": "PAR-006",
-              "order": 0,
-              "text": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.",
-              "sentences": [],
-              "citations": ["WIS-004"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-006",
-          "type": "body",
-          "order": 5,
-          "heading": "The Perfect Foil & The Architect / PM Pivot",
-          "paragraphs": [
-            {
-              "id": "PAR-007",
-              "order": 0,
-              "text": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.",
-              "sentences": [],
-              "citations": ["WIS-005"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-007",
-          "type": "body",
-          "order": 6,
-          "heading": "Engineering Disciplines in the Latent Space",
-          "paragraphs": [
-            {
-              "id": "PAR-008",
-              "order": 0,
-              "text": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.",
-              "sentences": [],
-              "citations": ["WIS-006"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-008",
-          "type": "body",
-          "order": 7,
-          "heading": "Language as Humanity's Best Invention & The Book Analogy",
-          "paragraphs": [
-            {
-              "id": "PAR-009",
-              "order": 0,
-              "text": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.",
-              "sentences": [],
-              "citations": ["WIS-007"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-009",
-          "type": "body",
-          "order": 8,
-          "heading": "The Vectors of Engineering & Forgotten Code Hygiene",
-          "paragraphs": [
-            {
-              "id": "PAR-010",
-              "order": 0,
-              "text": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.",
-              "sentences": [],
-              "citations": ["WIS-008"]
-            }
-          ]
-        },
-        {
-          "id": "SEC-010",
-          "type": "conclusion",
-          "order": 9,
-          "heading": "Conclusion",
-          "paragraphs": [
-            {
-              "id": "PAR-011",
-              "order": 0,
-              "text": "The dual-channel architecture — immutable human origin alongside collaborative machine synthesis — provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.",
-              "sentences": [],
-              "citations": ["WIS-001", "WIS-003", "WIS-006"]
-            }
-          ]
+          "citations": [
+            "WIS-002"
+          ],
+          "cached_words": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf' \u2014 minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
+          "dirty": false,
+          "revisions": []
         }
-      ],
-      "bibliography": [
+      ]
+    },
+    {
+      "id": "SEC-004",
+      "type": "body",
+      "order": 3,
+      "heading": "Feedback Backpressure & The Handover Reflection",
+      "paragraphs": [
         {
-          "dna_id": "WIS-001",
-          "collection": "wisdom",
-          "label": "Allred 2026a — Memory & JITC",
-          "used_in": ["PAR-001", "PAR-003", "PAR-011"]
-        },
-        {
-          "dna_id": "WIS-002",
-          "collection": "wisdom",
-          "label": "Allred 2026b — Token Golf & Trust",
-          "used_in": ["PAR-001", "PAR-004"]
-        },
-        {
-          "dna_id": "WIS-003",
-          "collection": "wisdom",
-          "label": "Allred 2026c — Feedback Backpressure",
-          "used_in": ["PAR-005", "PAR-011"]
-        },
-        {
-          "dna_id": "WIS-004",
-          "collection": "wisdom",
-          "label": "Allred 2026d — Velocity Whiplash",
-          "used_in": ["PAR-006"]
-        },
-        {
-          "dna_id": "WIS-005",
-          "collection": "wisdom",
-          "label": "Allred 2026e — The Perfect Foil",
-          "used_in": ["PAR-007"]
-        },
-        {
-          "dna_id": "WIS-006",
-          "collection": "wisdom",
-          "label": "Allred 2026f — Engineering Rigor",
-          "used_in": ["PAR-001", "PAR-008", "PAR-011"]
-        },
-        {
-          "dna_id": "WIS-007",
-          "collection": "wisdom",
-          "label": "Allred 2026g — Language as Invention",
-          "used_in": ["PAR-009"]
-        },
-        {
-          "dna_id": "WIS-008",
-          "collection": "wisdom",
-          "label": "Allred 2026h — Engineering Vectors",
-          "used_in": ["PAR-010"]
+          "id": "PAR-005",
+          "order": 0,
+          "citations": [
+            "WIS-003"
+          ],
+          "cached_words": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.",
+          "dirty": false,
+          "revisions": []
         }
+      ]
+    },
+    {
+      "id": "SEC-005",
+      "type": "body",
+      "order": 4,
+      "heading": "Velocity Whiplash, 10x Debt & Reading Like a Robot",
+      "paragraphs": [
+        {
+          "id": "PAR-006",
+          "order": 0,
+          "citations": [
+            "WIS-004"
+          ],
+          "cached_words": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-006",
+      "type": "body",
+      "order": 5,
+      "heading": "The Perfect Foil & The Architect / PM Pivot",
+      "paragraphs": [
+        {
+          "id": "PAR-007",
+          "order": 0,
+          "citations": [
+            "WIS-005"
+          ],
+          "cached_words": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-007",
+      "type": "body",
+      "order": 6,
+      "heading": "Engineering Disciplines in the Latent Space",
+      "paragraphs": [
+        {
+          "id": "PAR-008",
+          "order": 0,
+          "citations": [
+            "WIS-006"
+          ],
+          "cached_words": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-008",
+      "type": "body",
+      "order": 7,
+      "heading": "Language as Humanity's Best Invention & The Book Analogy",
+      "paragraphs": [
+        {
+          "id": "PAR-009",
+          "order": 0,
+          "citations": [
+            "WIS-007"
+          ],
+          "cached_words": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-009",
+      "type": "body",
+      "order": 8,
+      "heading": "The Vectors of Engineering & Forgotten Code Hygiene",
+      "paragraphs": [
+        {
+          "id": "PAR-010",
+          "order": 0,
+          "citations": [
+            "WIS-008"
+          ],
+          "cached_words": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    },
+    {
+      "id": "SEC-010",
+      "type": "conclusion",
+      "order": 9,
+      "heading": "Conclusion",
+      "paragraphs": [
+        {
+          "id": "PAR-011",
+          "order": 0,
+          "citations": [
+            "WIS-001",
+            "WIS-003",
+            "WIS-006"
+          ],
+          "cached_words": "The dual-channel architecture \u2014 immutable human origin alongside collaborative machine synthesis \u2014 provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.",
+          "dirty": false,
+          "revisions": []
+        }
+      ]
+    }
+  ],
+  "bibliography": [
+    {
+      "dna_id": "WIS-001",
+      "collection": "wisdom",
+      "label": "Allred 2026a \u2014 Memory & JITC",
+      "used_in": [
+        "PAR-001",
+        "PAR-003",
+        "PAR-011"
+      ]
+    },
+    {
+      "dna_id": "WIS-002",
+      "collection": "wisdom",
+      "label": "Allred 2026b \u2014 Token Golf & Trust",
+      "used_in": [
+        "PAR-001",
+        "PAR-004"
+      ]
+    },
+    {
+      "dna_id": "WIS-003",
+      "collection": "wisdom",
+      "label": "Allred 2026c \u2014 Feedback Backpressure",
+      "used_in": [
+        "PAR-005",
+        "PAR-011"
+      ]
+    },
+    {
+      "dna_id": "WIS-004",
+      "collection": "wisdom",
+      "label": "Allred 2026d \u2014 Velocity Whiplash",
+      "used_in": [
+        "PAR-006"
+      ]
+    },
+    {
+      "dna_id": "WIS-005",
+      "collection": "wisdom",
+      "label": "Allred 2026e \u2014 The Perfect Foil",
+      "used_in": [
+        "PAR-007"
+      ]
+    },
+    {
+      "dna_id": "WIS-006",
+      "collection": "wisdom",
+      "label": "Allred 2026f \u2014 Engineering Rigor",
+      "used_in": [
+        "PAR-001",
+        "PAR-008",
+        "PAR-011"
+      ]
+    },
+    {
+      "dna_id": "WIS-007",
+      "collection": "wisdom",
+      "label": "Allred 2026g \u2014 Language as Invention",
+      "used_in": [
+        "PAR-009"
+      ]
+    },
+    {
+      "dna_id": "WIS-008",
+      "collection": "wisdom",
+      "label": "Allred 2026h \u2014 Engineering Vectors",
+      "used_in": [
+        "PAR-010"
       ]
     }
   ]
