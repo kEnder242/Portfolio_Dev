@@ -138,10 +138,10 @@ def build_citation_index(dna_manifest, arxiv_registry):
             # Map WIS-xxx to PHL-xxx and vice-versa for backwards compatibility
             if cid.startswith("WIS-"):
                 alt = cid.replace("WIS-", "PHL-")
-                index[alt] = entry
+                index[alt] = dict(entry, id=alt)
             elif cid.startswith("PHL-"):
                 alt = cid.replace("PHL-", "WIS-")
-                index[alt] = entry
+                index[alt] = dict(entry, id=alt)
 
     # 2. Discovery / Innovations Timeline
     for disc in dna_manifest.get("discovery", []):
@@ -348,9 +348,11 @@ def hydrate_writer_html(paper, manifest, citation_index):
                 "title": item.get("title", key)
             })
 
-    # Strip existing injected context script blocks (preserve main interactive UI script)
+    # Strip existing injected context script blocks (preserve main interactive UI script).
+    # The marker is slash-form (e.g. "[FEAT-581/FEAT-582]"), so match any FEAT-\d+
+    # run, optionally followed by /FEAT-\d+ siblings, to keep hydration idempotent.
     content = re.sub(
-        r"<script>\s*// \[(?:FEAT-564|FEAT-581|FEAT-582)\] Workbench context:.*?</script>\n?",
+        r"<script>\s*// \[FEAT-\d+(?:/FEAT-\d+)*\] Workbench context:.*?</script>\n?",
         "",
         content,
         flags=re.DOTALL,
