@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
-# [FEAT-564] Story 77.4: Interactive Writer Studio & LaTeX Pipeline
-# Purpose: Read ordered wisdom cards from wisdom_data.json, embed origin quotes as
-#          epigraphs/blockquotes, weave synthesis explanatory text, and generate
-#          arXiv-ready LaTeX files in Portfolio_Dev/docs/whitepaper/.
-# Output:  main.tex (complete LaTeX document), references.bib (bibliography)
-# Schema:  WIS-001 dual-channel (origin.immutable + synthesis.collaborative)
+# [FEAT-582] Story 78.2: Cross-Collection DNA Citation Engine & Multi-Paper Compiler
+# Purpose: Read discrete paper dataset from Portfolio_Dev/papers/, resolve cross-collection
+#          DNA citation pointers (PHL, WIS, DISC, FEAT, ArXiv), weave cached word collections
+#          with origin quotes as epigraphs, and generate arXiv-ready LaTeX + update writer.html.
+# Output:  Portfolio_Dev/docs/whitepaper/main.tex, references.bib, and writer.html hydration.
 
 import json
 import os
 import re
+import sys
 import textwrap
 from pathlib import Path
 
 # --- Paths ---
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent  # Portfolio_Dev/
-DATA_PATH = REPO_ROOT / "field_notes" / "data" / "wisdom_data.json"
+LAB_ROOT = REPO_ROOT.parent    # Dev_Lab/
+PAPERS_DIR = REPO_ROOT / "papers"
+PAPERS_MANIFEST = PAPERS_DIR / "manifest.json"
+DNA_MANIFEST = REPO_ROOT / "field_notes" / "data" / "dna_manifest.json"
+RESEARCH_MD = LAB_ROOT / "HomeLabAI" / "docs" / "plans" / "RESEARCH_SYNTHESIS.md"
+FEATURE_TRACKER_MD = REPO_ROOT / "FeatureTracker.md"
 OUTPUT_DIR = REPO_ROOT / "docs" / "whitepaper"
 MAIN_TEX = OUTPUT_DIR / "main.tex"
 REFERENCES_BIB = OUTPUT_DIR / "references.bib"
-SECTION_ORDER_PATH = REPO_ROOT / "field_notes" / "writer_section_order.json"
 WRITER_HTML = REPO_ROOT / "field_notes" / "writer.html"
 
 
@@ -30,7 +34,6 @@ def latex_escape(text):
     if not text:
         return ""
     s = str(text)
-    # Order matters: backslash first
     replacements = [
         ("\\", "\\textbackslash{}"),
         ("&", "\\&"),
@@ -48,97 +51,193 @@ def latex_escape(text):
     return s
 
 
-def load_cards(data):
-    """Extract cards from wisdom_data.json.
+# --- Loaders & Citation Resolvers ---
 
-    Supports layouts:
-      * Standard list: top-level JSON array of cards (WIS-001..008).
-      * Dict with cards: a top-level ``cards`` list.
-      * Legacy/single: schema holds origin+synthesis at top level.
-    Returns (cards, schema_dict).
-    """
-    if isinstance(data, list):
-        return data, {}
+def load_papers_manifest():
+    """Load papers manifest indexing all active manuscripts."""
+    if not PAPERS_MANIFEST.exists():
+        return {"papers": []}
+    with open(PAPERS_MANIFEST, "r", encoding="utf-8") as f:
+        return json.load(f)
 
-    if isinstance(data, dict):
-        schema = data.get("schema", {})
-        cards = data.get("cards", [])
-        if not cards and "origin" in schema:
-            card = {
-                "title": schema.get("synthesis", {}).get("title", "Wisdom Card"),
-                "origin": schema.get("origin", {}),
-                "synthesis": schema.get("synthesis", {}),
+
+def load_active_paper(paper_file_name=None):
+    """Load active paper dataset from Portfolio_Dev/papers/."""
+    manifest = load_papers_manifest()
+    papers = manifest.get("papers", [])
+    if not papers:
+        raise FileNotFoundError(f"No papers indexed in {PAPERS_MANIFEST}")
+
+    target_file = paper_file_name
+    if not target_file:
+        target_file = papers[0].get("file")
+
+    paper_path = PAPERS_DIR / target_file
+    if not paper_path.exists():
+        raise FileNotFoundError(f"Paper file {paper_path} not found")
+
+    with open(paper_path, "r", encoding="utf-8") as f:
+        return json.load(f), manifest
+
+
+def load_dna_manifest():
+    """Load master DNA manifest covering all collections."""
+    if not DNA_MANIFEST.exists():
+        return {}
+    with open(DNA_MANIFEST, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def load_arxiv_registry():
+    """Parse RESEARCH_SYNTHESIS.md into an ArXiv mapping."""
+    arxiv_map = {}
+    if not RESEARCH_MD.exists():
+        return arxiv_map
+
+    content = RESEARCH_MD.read_text(encoding="utf-8")
+    for line in content.splitlines():
+        if not line.startswith("|"):
+            continue
+        parts = [p.strip() for p in line.split("|") if p.strip()]
+        if len(parts) >= 4 and parts[1].replace(".", "").isdigit():
+            anchor_name = parts[0].replace("**", "")
+            arxiv_id = parts[1]
+            logic = parts[2]
+            arxiv_map[arxiv_id] = {
+                "name": anchor_name,
+                "arxiv": arxiv_id,
+                "logic": logic,
+                "source": "RESEARCH_SYNTHESIS.md"
             }
-            cards = [card]
-        return cards, schema
-
-    return [], {}
-
-
-def load_section_order():
-    """Load section ordering from workbench export, if available."""
-    if SECTION_ORDER_PATH.exists():
-        with open(SECTION_ORDER_PATH, "r") as f:
-            return json.load(f).get("sections", [])
-    return []
+            arxiv_map[f"ARXIV:{arxiv_id}"] = arxiv_map[arxiv_id]
+            arxiv_map[anchor_name] = arxiv_map[arxiv_id]
+    return arxiv_map
 
 
-def build_references_bib(cards):
-    """Generate a references.bib file from wisdom card metadata.
+def build_citation_index(dna_manifest, arxiv_registry):
+    """Build a unified dictionary of all resolvable citations across collections."""
+    index = {}
 
-    Each card becomes a @misc entry; tags become keywords. If the card's
-    synthesis contains an 'arxiv' or 'doi' field, those are used.
-    """
+    # 1. Philosophy & Wisdom DNA
+    for col in ["philosophy", "wisdom"]:
+        for card in dna_manifest.get(col, []):
+            cid = card.get("id", "")
+            origin = card.get("origin", {}) or {}
+            synthesis = card.get("synthesis", {}) or {}
+            entry = {
+                "id": cid,
+                "collection": col,
+                "title": synthesis.get("title") or card.get("title", cid),
+                "origin_text": origin.get("text") or origin.get("verbatim", ""),
+                "origin_source": origin.get("source", "Lab Journal"),
+                "narrative": synthesis.get("narrative_context", ""),
+                "tags": card.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+                "author": origin.get("author", "Jason Allred")
+            }
+            index[cid] = entry
+            # Map WIS-xxx to PHL-xxx and vice-versa for backwards compatibility
+            if cid.startswith("WIS-"):
+                alt = cid.replace("WIS-", "PHL-")
+                index[alt] = entry
+            elif cid.startswith("PHL-"):
+                alt = cid.replace("PHL-", "WIS-")
+                index[alt] = entry
+
+    # 2. Discovery / Innovations Timeline
+    for disc in dna_manifest.get("discovery", []):
+        did = disc.get("id", "")
+        origin = disc.get("origin", {}) or {}
+        synthesis = disc.get("synthesis", {}) or {}
+        index[did] = {
+            "id": did,
+            "collection": "discovery",
+            "title": disc.get("title", did),
+            "origin_text": origin.get("text") or synthesis.get("narrative_context", ""),
+            "origin_source": origin.get("source", "Innovations Timeline"),
+            "narrative": synthesis.get("narrative_context", ""),
+            "tags": disc.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+            "author": "Jason Allred"
+        }
+
+    # 3. ArXiv Research Anchors
+    for key, item in arxiv_registry.items():
+        index[key] = {
+            "id": key,
+            "collection": "research",
+            "title": item["name"],
+            "origin_text": item["logic"],
+            "origin_source": f"arXiv:{item['arxiv']}",
+            "narrative": item["logic"],
+            "tags": ["prior-art", "academic"],
+            "author": "Academic Literature",
+            "arxiv": item["arxiv"]
+        }
+
+    return index
+
+
+# --- LaTeX Generation ---
+
+def build_references_bib(paper, citation_index):
+    """Generate a references.bib file dynamically for all citations in the paper."""
+    used_keys = set()
+    for sec in paper.get("sections", []):
+        for par in sec.get("paragraphs", []):
+            for cite in par.get("citations", []):
+                used_keys.add(cite)
+
     entries = []
-    for i, card in enumerate(cards):
-        synthesis = card.get("synthesis", {}) or {}
-        tags = synthesis.get("tags", [])
-        title = card.get("title") or synthesis.get("title", f"Wisdom Card {i+1}")
-        key = f"wismisc{i+1:03d}"
+    for key in sorted(used_keys):
+        resolved = citation_index.get(key)
+        safe_key = re.sub(r'[^a-zA-Z0-9]', '', key)
+        if not safe_key:
+            continue
 
-        # Check for explicit citation fields
-        arxiv = synthesis.get("arxiv", "")
-        doi = synthesis.get("doi", "")
-        url = synthesis.get("url", "")
+        if resolved:
+            title = resolved.get("title", key)
+            author = resolved.get("author", "Jason Allred")
+            arxiv = resolved.get("arxiv", "")
+            tags = resolved.get("tags", [])
 
-        lines = [f"@misc{{{key},"]
-        lines.append(f"  title = {{{latex_escape(title)}}},")
-        lines.append(f"  author = {{Jason Allred}},")
-
-        if arxiv:
-            lines.append(f"  eprint = {{{latex_escape(arxiv)}}},")
-            lines.append(f"  archivePrefix = {{arXiv}},")
-        elif doi:
-            lines.append(f"  doi = {{{latex_escape(doi)}}},")
-        elif url:
-            lines.append(f"  url = {{{latex_escape(url)}}},")
-
-        lines.append(f"  year = {{2026}},")
-        if tags:
-            kw = ", ".join(tags)
-            lines.append(f"  keywords = {{{latex_escape(kw)}}},")
-        lines.append(f"  note = {{Wisdom Card WIS-{i+1:03d}}}")
-        lines.append("}")
-        entries.append("\n".join(lines))
+            lines = [f"@misc{{{safe_key},"]
+            lines.append(f"  title = {{{latex_escape(title)}}},")
+            lines.append(f"  author = {{{latex_escape(author)}}},")
+            if arxiv:
+                lines.append(f"  eprint = {{{latex_escape(arxiv)}}},")
+                lines.append(f"  archivePrefix = {{arXiv}},")
+            lines.append(f"  year = {{2026}},")
+            if tags:
+                lines.append(f"  keywords = {{{latex_escape(', '.join(tags))}}},")
+            lines.append(f"  note = {{Anchor {latex_escape(key)}}}")
+            lines.append("}")
+            entries.append("\n".join(lines))
+        else:
+            entries.append(
+                f"@misc{{{safe_key},\n"
+                f"  title = {{{latex_escape(key)}}},\n"
+                f"  author = {{Federated Lab}},\n"
+                f"  year = {{2026}}\n"
+                f"}}"
+            )
 
     return "\n\n".join(entries) + "\n"
 
 
-def build_main_tex(cards, schema, section_order=None):
-    """Generate the complete main.tex document body from wisdom cards."""
-    paper_title = "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs"
-    author = "Jason Allred"
-    abstract = (
-        "This paper presents the JITC (Just-In-Time Context) Meta-Framework, "
-        "an architectural approach to encoding engineering wisdom from long-horizon "
-        "technical practice into reproducible agent workflows. Drawing on 18 years "
-        "of raw engineering logs, we formalize a dual-channel architecture separating "
-        "immutable human origin from collaborative machine synthesis, and demonstrate "
-        "automated pipeline generation from structured wisdom cards to arXiv-formatted "
-        "LaTeX documents."
-    )
+def build_main_tex(paper, citation_index):
+    """Generate the complete main.tex document from the active paper dataset."""
+    title = paper.get("title", "The JITC Meta-Framework")
+    author = paper.get("author", "Jason Allred")
+    date = paper.get("date", "2026")
 
-    # Build preamble
+    # Find abstract paragraph if present
+    abstract_text = ""
+    for sec in paper.get("sections", []):
+        if sec.get("type") == "abstract":
+            paragraphs = sec.get("paragraphs", [])
+            if paragraphs:
+                abstract_text = paragraphs[0].get("cached_words", "")
+                break
+
     preamble = textwrap.dedent(r"""\documentclass[11pt]{article}
 
 % arXiv-compatible packages
@@ -163,191 +262,144 @@ def build_main_tex(cards, schema, section_order=None):
   \textsc{Origin}\enspace
 }
 
-% Title
-\title{""" + latex_escape(paper_title) + r"""}
+\title{""" + latex_escape(title) + r"""}
 \author{""" + latex_escape(author) + r"""}
-\date{2026}
+\date{""" + latex_escape(date) + r"""}
 
 \begin{document}
 \maketitle
+""")
 
-% Abstract
+    if abstract_text:
+        preamble += textwrap.dedent(r"""
 \begin{abstract}
-""" + latex_escape(abstract) + r"""
+""" + latex_escape(abstract_text) + r"""
 \end{abstract}
 
 \tableofcontents
 \newpage
 """)
 
-    # Build sections
-    sections = []
+    sections_tex = []
+    for sec in paper.get("sections", []):
+        if sec.get("type") == "abstract":
+            continue
 
-    # Introduction section (always first, not from a card)
-    sections.append(textwrap.dedent(r"""\section{Introduction}
+        heading = sec.get("heading", "Section")
+        sec_block = [f"\\section{{{latex_escape(heading)}}}\n"]
 
-Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution.
+        for par in sec.get("paragraphs", []):
+            citations = par.get("citations", [])
+            cached_words = par.get("cached_words", "").strip()
 
-The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers. Each wisdom card pairs an \emph{immutable origin} (verbatim human voice) with a \emph{collaborative synthesis} (machine-generated context, analysis, and connections).
+            # Epigraph for paragraph citations
+            for cite in citations:
+                resolved = citation_index.get(cite)
+                if resolved and resolved.get("origin_text"):
+                    quote = resolved["origin_text"]
+                    sec_block.append(
+                        f"\\noindent\\originmark\n"
+                        f"\\originquote{{{latex_escape(quote)}}}\n"
+                        f"\\hfill --- \\textit{{{latex_escape(cite)}}}\n\n"
+                    )
 
-This dual-channel architecture preserves the provenance of every claim while enabling rapid iteration on technical papers through automated LaTeX generation.
-"""))
+            # Paragraph prose
+            if cached_words:
+                cite_commands = []
+                for cite in citations:
+                    safe_key = re.sub(r'[^a-zA-Z0-9]', '', cite)
+                    if safe_key:
+                        cite_commands.append(f"\\cite{{{safe_key}}}")
+                
+                prose = latex_escape(cached_words)
+                if cite_commands:
+                    prose += f" {' '.join(cite_commands)}"
+                sec_block.append(f"{prose}\n\n")
 
-    # Wisdom card sections
-    for i, card in enumerate(cards):
-        origin = card.get("origin", {}) or {}
-        synthesis = card.get("synthesis", {}) or {}
-        title = card.get("title") or synthesis.get("title", f"Wisdom Card {i+1}")
-        verbatim = origin.get("verbatim", "")
-        narrative = synthesis.get("narrative_context", "")
-        takeaways = synthesis.get("takeaways", [])
-        tags = synthesis.get("tags", [])
-        card_id = card.get("id", f"WIS-{i+1:03d}")
+        sections_tex.append("".join(sec_block))
 
-        sec_num = i + 2  # +1 for intro, +1 for 1-based
-        sec = f"\\section{{{latex_escape(title)}}}\n"
-
-        # Origin quote as epigraph
-        if verbatim:
-            sec += (
-                f"\\noindent\\originmark\n"
-                f"\\originquote{{{latex_escape(verbatim)}}}\n"
-                f"\\hfill --- \\textit{{{latex_escape(card_id)}}}\n\n"
-            )
-
-        # Synthesis narrative
-        if narrative:
-            sec += f"{latex_escape(narrative)}\n\n"
-
-        # Takeaways
-        if takeaways:
-            sec += "\\subsection{Key Takeaways}\n"
-            sec += "\\begin{itemize}\n"
-            for t in takeaways:
-                sec += f"  \\item {latex_escape(t)}\n"
-            sec += "\\end{itemize}\n\n"
-
-        # Tags
-        if tags:
-            tag_str = ", ".join(tags)
-            sec += f"\\noindent\\textbf{{Keywords:}} {latex_escape(tag_str)}\n\n"
-
-        sections.append(sec)
-
-    # Conclusion
-    sections.append(textwrap.dedent(r"""\section{Conclusion}
-
-The dual-channel architecture --- immutable human origin alongside collaborative machine synthesis --- provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.
-
-Future work includes integrating local silicon refinement engines for synthesis enhancement, automated literature connection discovery via semantic graph traversal, and multi-paper generation from wisdom card subsets filtered by tag clusters.
-
+    conclusion = textwrap.dedent(r"""
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
-"""))
+""")
 
-    return preamble + "\n".join(sections)
+    return preamble + "\n".join(sections_tex) + conclusion
 
 
-def update_writer_html_quotes(cards):
-    """Update the embedded __WRITER_QUOTES__ array in writer.html with all card origins."""
+# --- HTML Hydration ---
+
+def hydrate_writer_html(paper, manifest, citation_index):
+    """Hydrate writer.html with active paper dataset, manifest, and quote picker."""
     if not WRITER_HTML.exists():
-        print(f"⚠️  {WRITER_HTML} not found — skipping quote injection.")
+        print(f"⚠️  {WRITER_HTML} not found — skipping hydration.")
         return
-
-    quotes = []
-    for i, card in enumerate(cards):
-        origin = card.get("origin", {}) or {}
-        verbatim = origin.get("text", "") or origin.get("verbatim", "")
-        if verbatim:
-            quotes.append({
-                "text": verbatim,
-                "source": card.get("id", f"WIS-{i+1:03d}")
-            })
-
-    quotes_js = json.dumps(quotes, indent=2)
-    script_block = (
-        "<script>\n"
-        "// [FEAT-564] Workbench context: origin quotes available for slotting.\n"
-        f"window.__WRITER_QUOTES__ = {quotes_js};\n"
-        "</script>\n"
-    )
 
     content = WRITER_HTML.read_text(encoding="utf-8")
 
-    # Strip any existing quote block
+    # Build quotes array for picker
+    quotes = []
+    for key, item in citation_index.items():
+        if item.get("origin_text"):
+            quotes.append({
+                "text": item["origin_text"],
+                "source": key,
+                "title": item.get("title", key)
+            })
+
+    # Strip existing injected context script blocks (preserve main interactive UI script)
     content = re.sub(
-        r"<script>\s*// \[(?:FEAT-560|FEAT-564)\] Workbench context:.*?</script>\n?",
+        r"<script>\s*// \[(?:FEAT-564|FEAT-581|FEAT-582)\] Workbench context:.*?</script>\n?",
         "",
         content,
         flags=re.DOTALL,
     )
 
-    # Insert before </body>
+    script_block = (
+        "<script>\n"
+        "// [FEAT-581/FEAT-582] Workbench context: active paper, manifest, citation index\n"
+        f"window.__PAPERS_MANIFEST__ = {json.dumps(manifest, indent=2)};\n"
+        f"window.__ACTIVE_PAPER__ = {json.dumps(paper, indent=2)};\n"
+        f"window.__CITATION_INDEX__ = {json.dumps(citation_index, indent=2)};\n"
+        f"window.__WRITER_QUOTES__ = {json.dumps(quotes, indent=2)};\n"
+        "</script>\n"
+    )
+
     content = content.replace("</body>", script_block + "</body>")
-
     WRITER_HTML.write_text(content, encoding="utf-8")
-    print(f"✅ Updated writer.html with {len(quotes)} origin quote(s) for workbench picker.")
+    print(f"✅ Hydrated {WRITER_HTML} with active paper and {len(quotes)} citation anchor(s).")
 
+
+# --- Main Orchestration ---
 
 def main():
-    if not DATA_PATH.exists():
-        print(f"Error: {DATA_PATH} not found. No LaTeX files generated.")
-        return
-
-    with open(DATA_PATH, "r") as f:
-        data = json.load(f)
-
-    cards, schema = load_cards(data)
-    section_order = load_section_order()
-
-    # Apply section ordering if workbench export exists
-    if section_order:
-        card_order_map = {}
-        for card in cards:
-            cid = card.get("id", "")
-            card_order_map[cid] = card
-        ordered = []
-        for item in section_order:
-            cid = item.get("cardId")
-            if cid and cid in card_order_map:
-                ordered.append(card_order_map[cid])
-        if ordered:
-            cards = ordered
-            print(f"📋 Applied section order from {SECTION_ORDER_PATH.name}: {len(cards)} cards.")
+    paper, manifest = load_active_paper()
+    dna = load_dna_manifest()
+    arxiv = load_arxiv_registry()
+    citation_index = build_citation_index(dna, arxiv)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Generate main.tex
-    tex_content = build_main_tex(cards, schema, section_order)
+    # Generate LaTeX
+    tex_content = build_main_tex(paper, citation_index)
     MAIN_TEX.write_text(tex_content, encoding="utf-8")
-    print(f"✅ Generated {MAIN_TEX} ({len(cards)} wisdom card section(s)).")
+    print(f"✅ Generated {MAIN_TEX} ({len(paper.get('sections', []))} sections).")
 
-    # Generate references.bib
-    bib_content = build_references_bib(cards)
+    # Generate References
+    bib_content = build_references_bib(paper, citation_index)
     REFERENCES_BIB.write_text(bib_content, encoding="utf-8")
-    print(f"✅ Generated {REFERENCES_BIB} ({len(cards)} reference(s)).")
+    print(f"✅ Generated {REFERENCES_BIB}.")
 
-    # Update writer.html with origin quotes
-    update_writer_html_quotes(cards)
+    # Hydrate HTML
+    hydrate_writer_html(paper, manifest, citation_index)
 
-    # Summary
-    total_takeaways = sum(
-        len((c.get("synthesis") or {}).get("takeaways", []))
-        for c in cards
-    )
-    total_tags = set()
-    for c in cards:
-        total_tags.update((c.get("synthesis") or {}).get("tags", []))
-
-    print(f"\n--- Pipeline Summary ---")
-    print(f"  Cards processed: {len(cards)}")
-    print(f"  Total takeaways: {total_takeaways}")
-    print(f"  Unique tags:     {len(total_tags)}")
-    print(f"  Output:          {MAIN_TEX}")
-    print(f"                   {REFERENCES_BIB}")
-    print(f"\nTo compile PDF: cd {OUTPUT_DIR} && pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex")
+    print(f"\n--- Cross-Collection Compiler Summary ---")
+    print(f"  Paper:       {paper.get('title')}")
+    print(f"  Sections:    {len(paper.get('sections', []))}")
+    print(f"  Citations:   {len(citation_index)} indexed")
+    print(f"  LaTeX:       {MAIN_TEX}")
+    print(f"  Bib:         {REFERENCES_BIB}")
 
 
 if __name__ == "__main__":
