@@ -22,7 +22,6 @@
   \textsc{Origin}\enspace
 }
 
-% Title
 \title{The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs}
 \author{Jason Allred}
 \date{2026}
@@ -30,7 +29,6 @@
 \begin{document}
 \maketitle
 
-% Abstract
 \begin{abstract}
 This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.
 \end{abstract}
@@ -38,50 +36,86 @@ This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architect
 \tableofcontents
 \newpage
 \section{Introduction}
-
-Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution.
-
-The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers. Each wisdom card pairs an \emph{immutable origin} (verbatim human voice) with a \emph{collaborative synthesis} (machine-generated context, analysis, and connections).
-
-This dual-channel architecture preserves the provenance of every claim while enabling rapid iteration on technical papers through automated LaTeX generation.
-
-\section{The Three Pillars \& Just-In-Time Context (JITC)}
-Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.
+Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution. The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers.
 
 
-\section{Token Golf over Token Maxing \& Trust Ceilings}
-A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'—minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.
+\section{Memory \& Just-In-Time Context (JITC)}
+\noindent\originmark
+\originquote{Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.}
+\hfill --- \textit{PHL-001}
+
+Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference. \cite{PHL001}
+
+\noindent\originmark
+\originquote{Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.}
+\hfill --- \textit{PHL-002}
+
+A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf' — minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp. \cite{PHL002}
 
 
 \section{Feedback Backpressure \& The Handover Reflection}
-Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.
+\noindent\originmark
+\originquote{Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'}
+\hfill --- \textit{PHL-003}
+
+Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift. \cite{PHL003}
 
 
 \section{Velocity Whiplash, 10x Debt \& Reading Like a Robot}
-Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.
+\noindent\originmark
+\originquote{Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.}
+\hfill --- \textit{PHL-004}
+
+Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity. \cite{PHL004}
 
 
 \section{The Perfect Foil \& The Architect / PM Pivot}
-AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.
+\noindent\originmark
+\originquote{The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role.}
+\hfill --- \textit{PHL-005}
+
+AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses. \cite{PHL005}
 
 
 \section{Engineering Disciplines in the Latent Space}
-Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.
+\noindent\originmark
+\originquote{What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.}
+\hfill --- \textit{PHL-006}
+
+Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts. \cite{PHL006}
 
 
 \section{Language as Humanity's Best Invention \& The Book Analogy}
-Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.
+\noindent\originmark
+\originquote{Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'}
+\hfill --- \textit{PHL-007}
+
+Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure. \cite{PHL007}
 
 
 \section{The Vectors of Engineering \& Forgotten Code Hygiene}
-Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.
+\noindent\originmark
+\originquote{The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies.}
+\hfill --- \textit{PHL-008}
+
+Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded. \cite{PHL008}
 
 
 \section{Conclusion}
+\noindent\originmark
+\originquote{Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.}
+\hfill --- \textit{PHL-001}
 
-The dual-channel architecture --- immutable human origin alongside collaborative machine synthesis --- provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.
+\noindent\originmark
+\originquote{Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense. I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'}
+\hfill --- \textit{PHL-003}
 
-Future work includes integrating local silicon refinement engines for synthesis enhancement, automated literature connection discovery via semantic graph traversal, and multi-paper generation from wisdom card subsets filtered by tag clusters.
+\noindent\originmark
+\originquote{What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.}
+\hfill --- \textit{PHL-006}
+
+The dual-channel architecture — immutable human origin alongside collaborative machine synthesis — provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim. \cite{PHL001} \cite{PHL003} \cite{PHL006}
+
 
 \bibliographystyle{plainnat}
 \bibliography{references}
