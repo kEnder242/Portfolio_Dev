@@ -2,11 +2,11 @@
 ## Multi-Paper Dataset Architecture, Cross-DNA Citation Pointers, Structure-to-Synthesis Reflow & Inspector Ergonomics
 
 **Sprint ID:** `SPR_78_0`  
-**Theme:** Transitioning `writer.html` from a single-paper static view to a composable thought organizer managing discrete paper datasets (`Portfolio_Dev/papers/`); Cross-DNA citation resolution (`WIS`, `PHL`, `DISC`, `FEAT`, `ArXiv/Research`); Inspector side-panel using the single-card wisdom layout; and decoupled structure-to-synthesis reflow.  
+**Theme:** Transitioning `writer.html` from a single-paper static view to a composable thought organizer managing discrete paper datasets (`Portfolio_Dev/papers/`); Cross-DNA citation resolution (`PHL`, `DISC`, `FEAT`, `ArXiv/Research`); Inspector side-panel using the single-card wisdom layout; and decoupled structure-to-synthesis reflow.  
 **Status:** PROPOSED / READY FOR REVIEW (Planning Phase)  
 **Parent Framework:** BKM-020 (High-Fidelity Sprint Documentation), BKM-046 (Fast-Path DNA Retrieval), BKM-024 (Live Verification), FEAT-564 (Writer Studio & LaTeX Pipeline), FEAT-581 (Paper Dataset Architecture & Storage), FEAT-582 (Cross-Collection DNA Citation Engine), FEAT-583 (Thought Organizer: Tree & Review Inspector), FEAT-584 (Synthesis Reflow & Revision Carousel).  
 **Target Web Targets:** `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/scripts/build_writer.py`, `Portfolio_Dev/papers/`, `Portfolio_Dev/field_notes/wisdom.html`.  
-**Target Silicon & DB:** ChromaDB Port 8001 (`wisdom`, `philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`), Foyer REST Port 8765 (`/paper/*`), Local vLLM / Sovereign Engine.
+**Target Silicon & DB:** ChromaDB Port 8001 (`philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`), Foyer REST Port 8765 (`/paper/*`), Local vLLM / Sovereign Engine.
 
 ---
 
@@ -17,20 +17,21 @@ Based on operator design directives and the Sprint 77 closeout:
 ### 1. 📄 The Unified Paper Paradigm (JITC + Intuition)
 * **Single Unified Document (`PAPER-001`):** The *JITC Meta-Framework* and the *Intuition Paper (Sept 5 2026)* represent one singular foundational manuscript (`paper_jitc_intuition.json`). (Note: "Intuition" is an internal development label and can be dropped from public-facing titles).
 * **3-Section Anatomy:**
-  - **Section 1: JITC Framework & Core Concepts** (synthesizes engineering intuition into system design; cites `WIS-xxx` and `PHL-xxx`).
+  - **Section 1: JITC Framework & Core Concepts** (synthesizes human intuition and mental models into system design; cites `PHL-xxx` Philosophy DNA).
   - **Section 2: Academic References & Prior Art** (theoretical grounding; cites `RESEARCH_SYNTHESIS.md` / ArXiv anchors).
   - **Section 3: Lab Implementations & Empirical Proof** (working software; cites `FEAT-xxx` code anchors).
 * **Storage Location:** `Portfolio_Dev/papers/manifest.json` indexes discrete papers stored as independent JSON documents in `Portfolio_Dev/papers/`.
 
-### 2. 🧬 Taxonomy: What Lives in DNA vs. What Lives in Papers
-* **`WIS-xxx` (Retained & Primary):** Battle-tested operational engineering heuristics (e.g. *Token Golf*, *10x Debt & Whiplash*, *The Handover Reflection*). Fully maintained in `wisdom_data.json` and ChromaDB `:8001`.
-* **`PHL-xxx` (Genuine Philosophy DNA):** High-level foundational mental models and epistemology extracted from *Philosophy and Learnings 2024–2026* (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`) and Google Keep notes (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`). The raw philosophy dumps are **not** the paper; they are reference sources for `PHL-DNA`.
+### 2. 🧬 Taxonomy: The Role of Wisdom vs. Philosophy vs. Gems
+* **Wisdom is the Overarching System:** "Wisdom" is the meta-system and framework for defining, linking, and managing all lab DNA—not an individual card prefix. The `WIS-XXX` tag prefix is formally **retired**.
+* **`PHL-xxx` (Genuine Philosophy DNA):** High-level foundational mental models, epistemology, and engineering vectors extracted from *Philosophy and Learnings 2024–2026* (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`) and Google Keep notes (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`).
+* **Gems (`GEM-xxx`):** The technical, code-level execution layer extracted from daily engineering logs.
 * **No `PAPER-xxx` in ChromaDB:** Papers are composite prose documents that **cite** DNA; they are not atomic retrieval chunks.
-* **Deprecate `writer` in `dna_manifest.json`:** Remove the redundant clone of `WIS-001..008`.
+* **Deprecate `writer` in `dna_manifest.json`:** Prune the redundant mirror collection.
 
 ### 3. 🦴 The "Bones" Model: Decoupling Structure from Wordsmithing
 * The writing workflow is explicitly split into three decoupled operational layers:
-  1. **Structural Bones (`FEAT-583` - Organization Tree View):** Drag-and-drop or slot lightweight citation chips (`[WIS-002]`, `[FEAT-104]`, `[ARXIV:2305.12345]`) into Section and Paragraph buckets.
+  1. **Structural Bones (`FEAT-583` - Organization Tree View):** Drag-and-drop or slot lightweight citation chips (`[PHL-002]`, `[FEAT-104]`, `[ARXIV:2305.12345]`) into Section and Paragraph buckets.
   2. **Card Inspection (`FEAT-583` - Single-Card Review Inspector):** Clicking any citation chip opens a clean sidebar displaying that card's origin quote, synthesis narrative, and anchors using the exact `wisdom.html` layout.
   3. **Prose Reflow (`FEAT-584` - Synthesis View):** Hydrates paragraphs into continuous prose. Modifying citation associations in the tree marks the paragraph **`dirty`**, activating an actionable **[⚡ Revise / Re-synthesize]** button that triggers an LLM re-wordsmithing pass without touching adjacent paragraphs.
   4. **Revision History (`FEAT-584` - `< >` Carousel):** Paragraphs track up to `3 revisions` with navigation arrows inside the inspector/toolbar to step back and forth or restore an earlier version.
@@ -48,10 +49,10 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/papers/paper_jitc_intuition.json`
 * **Success Criteria:**
   1. `manifest.json` cleanly tracks `PAPER-001` (`jitc_intuition`) with status, author, and date.
-  2. `paper_jitc_intuition.json` models Sections 1–3, paragraph UUIDs (`par_xxxxxx`), citation arrays, `cached_words`, and `dirty` flags.
+  2. `paper_jitc_intuition.json` models Sections 1–3, paragraph UUIDs (`PAR-xxx`), citation arrays referencing `PHL-xxx`, `cached_words`, and `dirty` flags.
 
 #### 🧬 Story 78.2: Cross-Collection Citation Pointer Engine (`[FEAT-582]`)
-* **Objective:** Expand `Portfolio_Dev/scripts/build_writer.py` to resolve citation pointers across multiple collections (`wisdom`, `discovery`, `sprint`, and `RESEARCH_SYNTHESIS.md`).
+* **Objective:** Expand `Portfolio_Dev/scripts/build_writer.py` to resolve citation pointers across multiple collections (`philosophy`, `discovery`, `sprint`, and `RESEARCH_SYNTHESIS.md`).
 * **Target Files:**
   - `Portfolio_Dev/scripts/build_writer.py`
   - `Portfolio_Dev/field_notes/data/dna_manifest.json`
@@ -65,7 +66,7 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/field_notes/writer.html`
 * **Success Criteria:**
   1. Header dropdown allows switching papers dynamically.
-  2. Clicking any `[WIS-xxx]`, `[DISC-xxx]`, or `[FEAT-xxx]` badge opens the side panel showing origin quote, synthesis text, and metadata matching `wisdom.html` card design.
+  2. Clicking any `[PHL-xxx]`, `[DISC-xxx]`, or `[FEAT-xxx]` badge opens the side panel showing origin quote, synthesis text, and metadata matching `wisdom.html` card design.
 
 #### 🧬 Story 78.4: Foyer REST Paper API Endpoints (`[FEAT-581]`)
 * **Objective:** Implement `/paper/list`, `/paper/load`, and `/paper/save` in `HomeLabAI/src/v5/foyer/router.py`.
