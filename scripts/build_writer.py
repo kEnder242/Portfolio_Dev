@@ -226,6 +226,22 @@ def build_citation_index(dna_manifest, arxiv_registry):
     for fid, fitem in features.items():
         index[fid] = fitem
 
+    # 5. Behavioral DNA (BKM-xxx from Protocols.md / dna_manifest)
+    for bkm in dna_manifest.get("behavioral", []):
+        bid = bkm.get("id", "")
+        origin = bkm.get("origin", {}) or {}
+        synthesis = bkm.get("synthesis", {}) or {}
+        index[bid] = {
+            "id": bid,
+            "collection": "behavioral",
+            "title": bkm.get("title") or synthesis.get("title", bid),
+            "origin_text": origin.get("text", ""),
+            "origin_source": origin.get("source", "HomeLabAI/docs/Protocols.md"),
+            "narrative": synthesis.get("narrative_context", ""),
+            "tags": bkm.get("metadata", {}).get("tags", []) or ["protocol", "bkm"],
+            "author": "Federated Lab"
+        }
+
     return index
 
 

@@ -19,7 +19,7 @@ REPO_ROOT = SCRIPT_DIR.parent
 PAPERS_DIR = REPO_ROOT / "papers"
 MANIFEST_FILE = PAPERS_DIR / "manifest.json"
 
-CITATION_PATTERN = re.compile(r'^(PHL|DISC|FEAT|ARXIV|GEM|WIS)-[A-Za-z0-9_\.\-]+$|^ARXIV:\d+\.\d+$')
+CITATION_PATTERN = re.compile(r'^(PHL|DISC|FEAT|BKM|PROTO|ARXIV|GEM|WIS)-[A-Za-z0-9_\.\-]+$|^ARXIV:\d+\.\d+$')
 
 def validate_paper(paper_path):
     print(f"[*] Validating {paper_path}...")

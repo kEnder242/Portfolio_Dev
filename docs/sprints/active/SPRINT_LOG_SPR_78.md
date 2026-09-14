@@ -18,6 +18,10 @@
 | **78.7** | `[AGY:PRIMARY]` | Multi-Doc PHL Scraping, Schema Guard & Full Synthesis Reflow (`[FEAT-585]`) | **COMPLETED & CERTIFIED** | Ingested `1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`, created `validate_paper_schema.py`, fully expanded `paper_jitc_intuition.json` across Sections 1-3 with 13 paragraphs |
 | **78.8** | `[AGY:PRIMARY]` | Round Table Vocality Restoration & Pre-Warm Handshake (`[FEAT-368]`, `[FEAT-486]`, `[FEAT-233]`) | **COMPLETED & VERIFIED** | Schema parsing fix + monolithic timeout removal in `router.py`, lab online |
 | **78.9** | `[AGY:PRIMARY]` | Live 5x5 Timed Gauntlet Certification (`BKM-010`, `BKM-050`, `[FEAT-501]`) | **COMPLETED & CERTIFIED** | `test_perf_5x5_timed.py` verified; live Pinky Hyde answer delivered; 0 dead air; full telemetry certified |
+| **78.10** | `[AGY:PRIMARY]` | Poly-Domain Citation Bundles in JITC Manuscript (`[FEAT-582]`, `[FEAT-585]`) | **COMPLETED & CERTIFIED** | 53 citations across 13 paragraphs, 625 indexed anchors in `dna_manifest.json`, `build_writer.py`, `validate_paper_schema.py` |
+| **78.11** | `[SWARM:CLOUD]` | Cross-Paragraph SortableJS Drag-and-Drop & Dirty State (`[FEAT-583]`) | **COMPLETED & VERIFIED** | SortableJS cross-paragraph drag-and-drop, amber dirty state indicators, `+ Cite` drawer, and removal triggers |
+| **78.12** | `[SWARM:CLOUD]` | 3-Tier Revision History `< >` Carousel & In-Place Restoration (`[FEAT-584]`) | **COMPLETED & VERIFIED** | `< >` version carousel, `[↺ Restore]` one-click rollback, 3-entry history cap, populated baseline versions |
+| **78.13** | `[AGY:PRIMARY]` | In-Browser Re-Synthesis Engine & Atomic Foyer REST (`[FEAT-581]`, `[FEAT-584]`) | **COMPLETED & CERTIFIED** | `POST /paper/synthesize` endpoint in `router.py`, live async button in `writer.html`, atomic save trigger |
 
 ---
 
