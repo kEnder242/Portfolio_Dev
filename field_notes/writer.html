@@ -851,6 +851,19 @@
         }
         .attach-btn:hover { background: #2ea043; color: #ffffff; }
 
+        .submerge-btn {
+            background: rgba(248, 81, 73, 0.12);
+            border: 1px solid rgba(248, 81, 73, 0.4);
+            color: #ff7b72;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 1px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .submerge-btn:hover { background: #da3633; color: #ffffff; }
+
         /* --- WRITING VIEW (MANUSCRIPT & REVIEW DRAWER) --- */
         #write-view-panel {
             display: none;
@@ -15492,12 +15505,12 @@ window.__WRITER_QUOTES__ = [
                 </div>
 
                 <!-- [FEAT-588] Zone A: Above Water (Attached to Active Context) -->
-                <div id="palette-attached-zone" class="palette-zone">
+                <div id="palette-attached-zone" class="palette-zone palette-attached-zone">
                     <div class="palette-zone-label">
                         <span>☀️ Above Water — Attached Citations</span>
                         <span id="palette-attached-count" class="palette-zone-count">0</span>
                     </div>
-                    <div id="palette-attached-chips" class="palette-attached-list"></div>
+                    <div id="palette-attached-list" class="palette-items-list" style="padding: 6px 0; gap: 8px;"></div>
                 </div>
 
                 <!-- [FEAT-588 / FEAT-591] The Waterline Divider -->
@@ -15507,11 +15520,10 @@ window.__WRITER_QUOTES__ = [
                 </div>
 
                 <!-- [FEAT-588] Zone B: Below Water (Suggestions & Search Pool) -->
-                <div id="palette-suggested-zone" class="palette-zone palette-zone-bottom">
+                <div id="palette-suggested-zone" class="palette-zone palette-suggested-zone">
                     <div class="palette-zone-label">
                         <span>🌊 Below Water — Suggestions &amp; Search</span>
                     </div>
-                    <div id="palette-smart-bubbles" class="palette-smart-bubbles"></div>
                     <div id="palette-chips-list" class="palette-items-list"></div>
                 </div>
             </aside>
@@ -15818,7 +15830,6 @@ window.__WRITER_QUOTES__ = [
             function renderPalette() {
                 var list = document.getElementById('palette-chips-list');
                 var countEl = document.getElementById('palette-count');
-                var bubblesEl = document.getElementById('palette-smart-bubbles');
                 if (!list) return;
 
                 list.innerHTML = '';
@@ -15852,33 +15863,13 @@ window.__WRITER_QUOTES__ = [
                 });
 
                 if (countEl) countEl.textContent = filtered.length + ' below';
-                if (waterCountEl) waterCountEl.textContent = attachedIds.length + ' above · ' + filtered.length + ' below';
+                if (waterCountEl) waterCountEl.textContent = attachedIds.length + ' attached';
                 // [FEAT-591] Live waterline stats: attached (above) vs suggestions (below)
                 var waterStatsEl = document.getElementById('palette-waterline-stats');
                 if (waterStatsEl) waterStatsEl.textContent = attachedIds.length + ' attached · ' + filtered.length + ' suggestions';
 
                 // [FEAT-588] Above-water zone: citations attached to the active context node
                 renderAttachedZone(attachedList, ctx, attachedIds);
-
-                // Smart recommendation bubbles
-                if (bubblesEl && bubblesEl.children.length === 0) {
-                    var smartRecs = ['PHL-029', 'PHL-030', 'BKM-046', 'FEAT-581', 'ARXIV:2307.03172'];
-                    bubblesEl.innerHTML = '';
-                    smartRecs.forEach(function(recId) {
-                        var bBtn = document.createElement('button');
-                        bBtn.className = 'bubble-btn';
-                        bBtn.textContent = '+ ' + recId;
-                        bBtn.draggable = true;
-                        bBtn.addEventListener('click', function() {
-                            openInspector(recId);
-                        });
-                        bBtn.addEventListener('dragstart', function(e) {
-                            STATE.draggedItem = { type: 'citation', id: recId, inBone: false, zone: 'suggested', sourceTier: 'palette', sourceId: null, sourceBoneId: null };
-                            e.dataTransfer.setData('text/plain', recId);
-                        });
-                        bubblesEl.appendChild(bBtn);
-                    });
-                }
 
                 if (filtered.length === 0) {
                     var emptyHint = document.createElement('div');
@@ -16009,39 +16000,51 @@ window.__WRITER_QUOTES__ = [
             function renderAttachedZone(container, ctx, attachedIds) {
                 if (!container) return;
                 if (!ctx) {
-                    container.innerHTML = '<div class="palette-zone-empty">👆 Select a paper / section / paragraph node in the Tree Outliner or Writing View to surface its attached citations above the waterline.</div>';
+                    container.innerHTML = '<div class="palette-zone-empty">👆 Select a paper / section / paragraph node in the Tree Outliner or Writing View to view attached citations above the waterline.</div>';
                     return;
                 }
                 if (!attachedIds || attachedIds.length === 0) {
-                    container.innerHTML = '<div class="palette-zone-empty">Nothing attached to <b style="color:var(--accent-color);">' + ctx.tier + ' · ' + ctx.id + '</b> yet. Use <b>+ Surface</b> or drag a suggestion up across the waterline.</div>';
+                    container.innerHTML = '<div class="palette-zone-empty">Nothing attached to <b style="color:var(--accent-color);">' + ctx.tier + ' · ' + ctx.id + '</b> yet. Click <b>+ Surface</b> on any suggested card below or drag it up across the waterline.</div>';
                     return;
                 }
                 attachedIds.forEach(function(citeId) {
-                    var chip = document.createElement('span');
-                    chip.className = 'dna-chip';
-                    chip.draggable = true;
-                    chip.dataset.id = citeId;
-                    chip.dataset.domain = getDomainForCite(citeId);
-                    chip.title = 'Drag down across the waterline to submerge / detach';
+                    var item = STATE.citationIndex[citeId] || { id: citeId, title: citeId, origin_text: '' };
+                    var card = document.createElement('div');
+                    card.className = 'palette-card';
+                    card.draggable = true;
+                    card.dataset.id = citeId;
+                    card.dataset.domain = getDomainForCite(citeId);
 
-                    chip.innerHTML = '<span>' + citeId + '</span><span class="chip-del" title="✖ Submerge / detach from ' + ctx.tier + '">✖</span>';
+                    card.innerHTML = 
+                        '<div class="palette-card-title">' +
+                            '<span>' + citeId + '</span>' +
+                            '<span style="font-size:0.68rem; color:var(--accent-color);">' + getDomainForCite(citeId) + '</span>' +
+                        '</div>' +
+                        '<div style="font-size:0.8rem; color:var(--text-color); margin-bottom:2px;">' + (item.title || citeId) + '</div>' +
+                        '<div class="palette-card-desc">' + (item.origin_text || item.narrative || '') + '</div>' +
+                        '<div class="card-actions">' +
+                            '<button class="submerge-btn" title="Submerge / detach from ' + ctx.tier + '">✖ Submerge</button>' +
+                            '<span style="font-size:0.6rem; color:var(--sub-color);">drag ⬇ across waterline</span>' +
+                        '</div>';
 
-                    chip.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        openInspector(citeId);
-                    });
-
-                    chip.querySelector('.chip-del').addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        submergeCitationFromContext(citeId);
-                    });
-
-                    chip.addEventListener('dragstart', function(e) {
+                    card.addEventListener('dragstart', function(e) {
                         STATE.draggedItem = { type: 'citation', id: citeId, inBone: false, zone: 'attached', sourceTier: ctx.tier, sourceId: ctx.id, sourceBoneId: null };
                         e.dataTransfer.setData('text/plain', citeId);
                     });
 
-                    container.appendChild(chip);
+                    var submergeBtn = card.querySelector('.submerge-btn');
+                    if (submergeBtn) {
+                        submergeBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            submergeCitationFromContext(citeId);
+                        });
+                    }
+
+                    card.addEventListener('click', function() {
+                        openInspector(citeId);
+                    });
+
+                    container.appendChild(card);
                 });
             }
 
