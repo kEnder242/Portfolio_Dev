@@ -4,7 +4,7 @@
 **Sprint ID:** `SPR_79_0`  
 **Theme:** Full Architectural Re-platforming of `writer.html`: Transitioning from prototype single-canvas editors to a decoupled **`[🌲 Tree View (with Palette)]`** vs. **`[🌊 Writing View]`** paradigm; establishing the **Sovereign Human Author Principle** (Author's prose is immutable; Agent only suggests connections and clean diffs); formalizing **`Bone Collections`** attached across `Paper > Section > Paragraph` tiers; adding Rename, Archive, and Gated Backdoor features; and retiring destructive cascade auto-reflow.  
 **Status:** PROPOSED / READY FOR REVIEW (Alignment Solidified)  
-**Parent Framework:** BKM-005 (Design Studio Alignment), BKM-020 (High-Fidelity Intent Preservation), BKM-046 (Fast-Path DNA Retrieval), BKM-024 (Live Verification), FEAT-581 (Paper Dataset Architecture & Storage), FEAT-582 (Cross-Collection DNA Citation Engine), FEAT-583 (Thought Organizer Tree & Palette), FEAT-584 (Writing View & Review/Clean Engine), FEAT-585 (Paper Schema & Invariant Guard).  
+**Parent Framework:** BKM-005 (Design Studio Alignment), BKM-006 / BKM-030 (Autonomy Gate & Session Discipline), BKM-020 (High-Fidelity Intent Preservation), BKM-046 (Fast-Path DNA Retrieval), BKM-024 (Live Verification), FEAT-581 (Paper Dataset Architecture & Storage), FEAT-582 (Cross-Collection DNA Citation Engine), FEAT-583 (Thought Organizer Tree & Palette), FEAT-584 (Writing View & Review/Clean Engine), FEAT-585 (Paper Schema & Invariant Guard), FEAT-586 (Multi-Tier Contextual Action Bar & Alignment Toolbox).  
 **Target Web Targets:** `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/scripts/build_writer.py`, `Portfolio_Dev/papers/`, `Portfolio_Dev/field_notes/data/dna_manifest.json`.  
 **Target Silicon & DB:** ChromaDB Port 8001 (`philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`), Foyer REST Port 8765 (`/paper/*`).  
 
@@ -114,8 +114,8 @@ flowchart TD
         Palette["DNA Palette Drawer\n• Top Smart Bubble Suggestions\n• Domain Partitions (PHL / BKM / FEAT / DISC / ArXiv)\n• Typeahead Search & Inspector"]
     end
 
-    subgraph WriteMode["🌊 Writing View (Wordsmithing & Clean Review Drawer)"]
-        ProseCanvas["Author's Prose Canvas\n• Direct human text editing\n• Glowing Amber Highlights on Dirty Sections\n• Clean Suggestion Review Drawer (Sidebar Edit Box)\n• [🚀 Kick to Manuscript] Action Flow"]
+    subgraph WriteMode["🌊 Writing View (Wordsmithing & Multi-Tier Toolbox)"]
+        ProseCanvas["Author's Prose Canvas\n• Direct human text editing\n• Click structure -> Expand Contextual Action Bar\n• [✨ Review / Consistency] & [🔍 Search References]\n• Clean Suggestion Review Drawer (Sidebar Edit Box)\n• [🚀 Kick to Manuscript] Action Flow"]
     end
 
     DataModel --> TreeMode
@@ -128,9 +128,12 @@ flowchart TD
    - Manages Paper, Section, and Paragraph containers.
    - Slot, merge, and split `Bone Collections` and `Citations`.
    - Displays agent-suggested pending DNA badges awaiting user drag-approval.
-2. **`[🌊 Writing View (with Clean Review Drawer)]`**:
+2. **`[🌊 Writing View (with Contextual Action Bar & Clean Review Drawer)]`**:
    - The primary reading and authoring canvas.
-   - When Bone Collections are altered in the Tree View, affected paragraphs render with **glowing amber cards** (`⚑ DIRTY — Bones Modified`).
+   - **Multi-Tier Contextual Action Bar (`[FEAT-586]`):** Clicking on any structural header (Paper Root, Section, Paragraph) expands a localized toolbar:
+     - **`[✨ Review / Consistency Check]`**: Verifies that prose aligns with attached bone collections/citations. Citations lacking grounding in prose are flagged as inconsistent/prune candidates, and missing connections mark the node dirty.
+     - **`[🔍 Search References / JITC Discovery]`**: Analyzes written prose at that structural tier and queries vector memory to discover citations/bones that belong there.
+   - When Bone Collections are altered, affected paragraphs render with **glowing amber cards** (`⚑ DIRTY — Bones Modified`).
    - Clicking **`[✨ Review / Clean]`** opens the **Sidebar Review Drawer**, querying local LAN silicon (M5 Air `:8002/:8000` first $\rightarrow$ Turing vLLM `:8088` / Kender 4090 fallback using configured environment routes, zero hardcoding).
    - The author can edit the suggestion directly inside the sidebar `<textarea>` and click **`[🚀 Kick to Manuscript]`** to apply it to the main paper view, clearing the dirty flag and auto-saving.
 
@@ -140,6 +143,7 @@ flowchart TD
 
 ### 🧬 Story 79.1: Multi-Tier Bone Schema & Gated Backdoor Specification (`[FEAT-581]`, `[FEAT-585]`, `BKM-004`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** COMPLETED & CERTIFIED
 * **Objective:** Define the updated Paper JSON Schema and formalize the Gated Backdoor mechanism.
 * **Implementation:**
   1. **Schema Definition (`validate_paper_schema.py`):** Update validator to support `bone_collections: [{ id, name, citations: [...] }]` and `citations: [...]` attached at all three tiers: **Paper Root**, **Section Nodes**, and **Paragraph Containers**.
@@ -152,6 +156,7 @@ flowchart TD
 
 ### 🧬 Story 79.2: Verbatim Raw Dump (RD) Ingestion & Clean Reset (`1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY`) (`[FEAT-581]`, `[FEAT-585]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** COMPLETED & CERTIFIED
 * **Objective:** Perform a 100% verbatim clean reset of `paper_jitc_intuition.json` directly from the author's original Google Doc RD (`1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY`).
 * **Implementation:**
   1. Ingest raw human text without AI summarization, preserving the author's authentic voice, sections, notes, and questions.
@@ -165,6 +170,7 @@ flowchart TD
 
 ### 🧬 Story 79.3: Clean-Room DOM Architecture & State Controller (`[FEAT-581]`, `[FEAT-583]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** COMPLETED & CERTIFIED
 * **Objective:** Cleanly refactor `Portfolio_Dev/field_notes/writer.html` into a modular, maintainable web studio.
 * **Implementation:**
   1. Strip duplicated and legacy script prototypes from `writer.html`.
@@ -178,12 +184,13 @@ flowchart TD
 
 ### 🧬 Story 79.4: Multi-Tier Bone Outliner & Domain-Partitioned Palette (`[FEAT-583]`)
 * **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
+* **Status:** READY FOR DELEGATION (Pending Human Greenlight)
 * **Objective:** Build the collapsible 3-tier AST Outliner supporting `Bone Collections` and `Citations` attached at Paper, Section, and Paragraph levels, coupled with the domain-partitioned DNA Palette drawer.
 * **Features:**
   1. Indented hierarchical nodes: `Paper` $\rightarrow$ `Section` $\rightarrow$ `Paragraph`.
   2. **Fluid Drag-and-Drop:** Dragging citations together merges them into a `Bone Collection`; dragging a citation out splits it into a singleton reference.
   3. Attach bone collections at Section headers (chapter framing) or Paragraph containers (argument proof).
-  4. Palette Drawer with top **Bubble Suggestions** and domain partition pills (`[All]`, `[PHL]`, `[BKM]`, `[FEAT: Cognitive]`, `[FEAT: Silicon]`, `[FEAT: UI]`, `[FEAT: Infra]`, `[DISC]`, `[ArXiv]`).
+  4. Palette Drawer with top **Bubble Suggestions** and domain partition pills (`[All]`, `[PHL]`, `[BKM]`, `[FEAT]`, `[DISC]`, `[ArXiv]`).
   5. Altering bones marks the container `dirty = true`.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
@@ -191,14 +198,15 @@ flowchart TD
 
 ---
 
-### 🧬 Story 79.5: Writing View with Reactive Dirty Highlighting & Clean Suggestion Review (`[FEAT-584]`)
+### 🧬 Story 79.5: Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox (`[FEAT-584]`, `[FEAT-586]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Objective:** Build the human authoring canvas with glowing amber dirty states and non-destructive Clean Suggestion review.
+* **Status:** PROPOSED & DETAILED
+* **Objective:** Implement the multi-tier contextual action bar and wordsmithing review toolbox across Paper, Section, and Paragraph tiers.
 * **Features:**
-  1. Clean, publication-ready academic typesetting for the author's prose.
-  2. **Reactive Amber Dirty State:** Paragraphs modified in the Tree View glow amber (`⚑ DIRTY — Bones Modified`).
-  3. **`[✨ Review / Clean]` Flow:** Clicking the button queries Foyer REST `POST /paper/synthesize` or local engine to generate a suggested prose update displayed in a side-by-side diff drawer.
-  4. **Human Approval:** Operator clicks `[✓ Apply Diff]` or edits directly, clearing dirty state and auto-saving.
+  1. **Expandable Contextual Action Bar:** Clicking any structural header (Paper Root, Section header, Paragraph container) expands a localized header toolbar.
+  2. **`[✨ Review / Consistency Check]` Flow:** Triggers a semantic check between prose and attached bones/citations. Flags ungrounded citations as candidates for pruning and marks the container `dirty`.
+  3. **`[🔍 Search References / JITC Discovery]` Flow:** Analyzes written prose at that tier and queries vector memory (ChromaDB / DNA manifest) to bubble up unattached citations/bones that belong there.
+  4. **Side Review Drawer:** Editable `<textarea>` for clean suggestion review and `[🚀 Kick to Manuscript]` button.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
   - `HomeLabAI/src/v5/foyer/router.py`
@@ -207,10 +215,11 @@ flowchart TD
 
 ### 🧬 Story 79.6: Top-Level Studio Features: Rename, Archive & Full Pipeline Certification (`[FEAT-581]`, `[FEAT-582]`, `BKM-024`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** PROPOSED & READY
 * **Objective:** Equip `writer.html` with top-level paper management, register `PHL-029`, and certify the complete pipeline.
 * **Features:**
   1. **Rename Feature:** Rename paper title and underlying JSON filename via Foyer REST `POST /paper/rename`.
-  2. **Archive Feature:** Export and snapshot paper state to archive directory / Git backup.
+  2. **Archive Feature:** Export and snapshot paper state to archive directory / Git backup (Option A).
   3. **Hydrate `PHL-029`:** Register *"Language as Humanity's Supreme Invention"* in `wisdom_data.json` and sync with ChromaDB.
   4. **Certify Build:** Execute `validate_paper_schema.py`, `build_writer.py`, and `build_site.py` with zero errors.
 * **Target Files:**
@@ -218,4 +227,5 @@ flowchart TD
   - `Portfolio_Dev/papers/manifest.json`
   - `Portfolio_Dev/field_notes/data/wisdom_data.json`
   - `Portfolio_Dev/scripts/build_writer.py`
+
 
