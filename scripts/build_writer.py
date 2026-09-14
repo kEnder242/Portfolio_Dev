@@ -466,7 +466,10 @@ def hydrate_writer_html(paper, manifest, citation_index):
         "</script>\n"
     )
 
-    content = content.replace("</body>", script_block + "</body>")
+    if "</head>" in content:
+        content = content.replace("</head>", script_block + "</head>")
+    else:
+        content = content.replace("<body>", "<body>\n" + script_block)
     WRITER_HTML.write_text(content, encoding="utf-8")
     print(f"✅ Hydrated {WRITER_HTML} with active paper and {len(quotes)} citation anchor(s).")
 
