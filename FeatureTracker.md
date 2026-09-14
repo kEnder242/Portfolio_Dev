@@ -3014,3 +3014,23 @@
 **Rationale:** Enables surgical, cascade LLM wordsmithing that adapts to altered structural bone associations without disrupting adjacent unedited paragraphs.
 **Mechanism:** `writer.html` synthesis renderer, Foyer REST `/paper/synthesize` endpoint, and paragraph revision history state.
 
+## [FEAT-585] Multi-Tier Paper JSON Schema & Invariant Validator
+**Sprint:** SPR-79.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/scripts/validate_paper_schema.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/validate_paper_schema.py) — Multi-Tier Paper JSON Schema & Invariant Validator.
+**Logic:** Enforces schema invariants for hierarchical manuscript datasets (`papers/*.json`). Supports multi-tier `bone_collections` and `citations` attached at Paper Root, Section Nodes, and Paragraph Containers. Validates UUID uniqueness, citation syntax across registered DNA domains (`PHL`, `BKM`, `FEAT`, `DISC`, `ARXIV`, `GEM`, `WIS`, `LAB`), and ensures authentic author prose integrity.
+**Rationale:** Provides machine-verifiable data structures allowing sovereign agents to inspect and propose structured modifications through automated schema gates without data corruption.
+**Mechanism:** `Portfolio_Dev/scripts/validate_paper_schema.py`, Foyer REST `/paper/validate`, and `HomeLabAI/src/v5/foyer/router.py`.
+
+## [FEAT-586] Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox
+**Sprint:** SPR-79.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox.
+**Logic:** Context-sensitive expandable action bar attached across all structural levels (`Paper Root`, `Section Node`, and `Paragraph Container`). Clicking any structural node expands a localized header exposing:
+1. `[✨ Review / Consistency Check]`: Evaluates prose against attached bone collections/citations. Any citation lacking grounding in the prose is flagged as inconsistent or a prune candidate; ungrounded citations flag the node as `dirty`.
+2. `[🔍 Search References / JITC Discovery]`: Analyzes written prose at that structural tier and queries vector memory (ChromaDB `philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`, and `RESEARCH_SYNTHESIS.md`) to bubble up unattached citations/bones that belong there according to the current prose.
+3. Expandable toolbar of level-specific actions (e.g., tier-level synthesis, prune unreferenced bones, bulk attach recommended citations).
+**Rationale:** Bridges the human wordsmithing workflow with sovereign vector memory, allowing the human author to perform targeted consistency audits and proactive reference discovery at any structural granularity without losing sovereign control.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, Foyer REST `/paper/review_consistency`, `/paper/discover_citations`, and AST node header controllers.
+
+

@@ -248,12 +248,25 @@ def build_citation_index(dna_manifest, arxiv_registry):
 # --- LaTeX Generation ---
 
 def build_references_bib(paper, citation_index):
-    """Generate a references.bib file dynamically for all citations in the paper."""
+    """Generate a references.bib file dynamically for all citations in the paper across all tiers."""
     used_keys = set()
+
+    def collect_cites(node):
+        if not isinstance(node, dict):
+            return
+        for c in node.get("citations", []):
+            used_keys.add(c)
+        for c in node.get("pending_citations", []):
+            used_keys.add(c)
+        for bone in node.get("bone_collections", []):
+            for c in bone.get("citations", []):
+                used_keys.add(c)
+
+    collect_cites(paper)
     for sec in paper.get("sections", []):
+        collect_cites(sec)
         for par in sec.get("paragraphs", []):
-            for cite in par.get("citations", []):
-                used_keys.add(cite)
+            collect_cites(par)
 
     entries = []
     for key in sorted(used_keys):
@@ -294,7 +307,7 @@ def build_references_bib(paper, citation_index):
 
 def build_main_tex(paper, citation_index):
     """Generate the complete main.tex document from the active paper dataset."""
-    title = paper.get("title", "The JITC Meta-Framework")
+    title = paper.get("title", "Just in time context retrieval and synthesis")
     author = paper.get("author", "Jason Allred")
     date = paper.get("date", "2026")
 
@@ -304,7 +317,7 @@ def build_main_tex(paper, citation_index):
         if sec.get("type") == "abstract":
             paragraphs = sec.get("paragraphs", [])
             if paragraphs:
-                abstract_text = paragraphs[0].get("cached_words", "")
+                abstract_text = paragraphs[0].get("text") or paragraphs[0].get("cached_words", "")
                 break
 
     preamble = textwrap.dedent(r"""\documentclass[11pt]{article}
@@ -357,12 +370,28 @@ def build_main_tex(paper, citation_index):
         heading = sec.get("heading", "Section")
         sec_block = [f"\\section{{{latex_escape(heading)}}}\n"]
 
+        # Section-level epigraphs
+        sec_cites = list(sec.get("citations", []))
+        for bone in sec.get("bone_collections", []):
+            sec_cites.extend(bone.get("citations", []))
+        for cite in sec_cites:
+            resolved = citation_index.get(cite)
+            if resolved and resolved.get("origin_text"):
+                quote = resolved["origin_text"]
+                sec_block.append(
+                    f"\\noindent\\originmark\n"
+                    f"\\originquote{{{latex_escape(quote)}}}\n"
+                    f"\\hfill --- \\textit{{{latex_escape(cite)}}}\n\n"
+                )
+
         for par in sec.get("paragraphs", []):
-            citations = par.get("citations", [])
-            cached_words = par.get("cached_words", "").strip()
+            citations = list(par.get("citations", []))
+            for bone in par.get("bone_collections", []):
+                citations.extend(bone.get("citations", []))
+            text_body = (par.get("text") or par.get("cached_words") or "").strip()
 
             # Epigraph for paragraph citations
-            for cite in citations:
+            for cite in par.get("citations", []):
                 resolved = citation_index.get(cite)
                 if resolved and resolved.get("origin_text"):
                     quote = resolved["origin_text"]
@@ -373,14 +402,14 @@ def build_main_tex(paper, citation_index):
                     )
 
             # Paragraph prose
-            if cached_words:
+            if text_body:
                 cite_commands = []
                 for cite in citations:
                     safe_key = re.sub(r'[^a-zA-Z0-9]', '', cite)
                     if safe_key:
                         cite_commands.append(f"\\cite{{{safe_key}}}")
                 
-                prose = latex_escape(cached_words)
+                prose = latex_escape(text_body)
                 if cite_commands:
                     prose += f" {' '.join(cite_commands)}"
                 sec_block.append(f"{prose}\n\n")
