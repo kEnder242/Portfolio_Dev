@@ -78,11 +78,22 @@ Please re-define ‘citation bones’ as ‘bone collection’.  This is our new
 * **Doubling Up & Inheritance:** The system explicitly supports top-level bone themes that are reiterated at lower levels (e.g., broad concepts introduced in Section 1 and proven in Section 3).
 * **Fluid Drag-and-Drop:** Dragging citations into one another merges them into a `Bone Collection`; dragging a citation out creates a singleton citation.
 
-### 3. Recovered Philosophy DNA: `PHL-029`
-* **Origin Text:**  
+### 3. Recovered & Added Philosophy DNA: `PHL-029` & `PHL-030`
+* **`PHL-029` (Language as Humanity's Supreme Invention / Are Words Thoughts?):**  
   *"Language is humanity's best invention — A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'"*  
-  — *Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)*
-* **Registered Anchor:** `PHL-029` (*"Language as Humanity's Supreme Invention / Are Words Thoughts?"*) under `bucket_3_foil`.
+  — *Google Keep Philosophy Dump (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`)*
+* **`PHL-030` (Applied Armchair Philosophy: Executing Epistemology on Silicon):**  
+  *"The invention of AI has enabled us to not only just talk about philosophy but actually apply it to machines with actual results."*  
+  — *Insight paper follow up ideas (`1rjtaMPnjo6rrS6adhhtyo2hw6BwwEIQyWC9ut0d6m7s`)*  
+  *Synthesis:* For centuries, epistemology, theory of mind, and heuristics were speculative "armchair philosophy" without experimental runtime feedback. Sovereign multi-agent architectures turn classical philosophy into executable systems engineering: epistemological priors become retrieval filters, heuristics become backpressure gates, and intuition becomes just-in-time vector retrieval verified against real silicon telemetry.
+
+### 4. Outside-Paper Roadmap & Non-DNA TODO Inventory (Captured from RD)
+The following roadmap tasks and prepwork items from the raw Google Docs (`1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY` & `1rjtaMPnjo6rrS6adhhtyo2hw6BwwEIQyWC9ut0d6m7s`) are cataloged so no intent is dropped:
+* **`TODO-001` (External Demo & Anonymization):** Remove all personal identifying info; create a sanitized public demo database (e.g. public domain / Harry Potter corpus) for public demos.
+* **`TODO-002` (Reinforced Guardrails & Censoring):** Aggressive automated filtering for internal tokens, API keys, and private paths before airlock deployment.
+* **`TODO-003` (Open Source Licensing):** Evaluate GPL v3 vs MIT/Apache 2.0 for public release of the paper datasets, build tooling, and writer studio.
+* **`TODO-004` (Manuscript Stretch Goal):** "Define intuition as a retrieval problem without using the word intuition inside the paper prose."
+* **`TODO-005` (Archive Option A Implementation):** Snapshot paper JSON state to `Portfolio_Dev/papers/archive/` coupled with automated local Git commits.
 
 ---
 
@@ -103,8 +114,8 @@ flowchart TD
         Palette["DNA Palette Drawer\n• Top Smart Bubble Suggestions\n• Domain Partitions (PHL / BKM / FEAT / DISC / ArXiv)\n• Typeahead Search & Inspector"]
     end
 
-    subgraph WriteMode["🌊 Writing View (Wordsmithing & Review/Clean Flow)"]
-        ProseCanvas["Author's Prose Canvas\n• Direct human text editing\n• Glowing Amber Highlights on Dirty Sections\n• Clean Suggestion Review Drawer (Side-by-side diff)\n• [✓ Approve] or [✗ Discard] Action Flow"]
+    subgraph WriteMode["🌊 Writing View (Wordsmithing & Clean Review Drawer)"]
+        ProseCanvas["Author's Prose Canvas\n• Direct human text editing\n• Glowing Amber Highlights on Dirty Sections\n• Clean Suggestion Review Drawer (Sidebar Edit Box)\n• [🚀 Kick to Manuscript] Action Flow"]
     end
 
     DataModel --> TreeMode
@@ -117,11 +128,11 @@ flowchart TD
    - Manages Paper, Section, and Paragraph containers.
    - Slot, merge, and split `Bone Collections` and `Citations`.
    - Displays agent-suggested pending DNA badges awaiting user drag-approval.
-2. **`[🌊 Writing View (with Review/Clean Flow)]`**:
+2. **`[🌊 Writing View (with Clean Review Drawer)]`**:
    - The primary reading and authoring canvas.
    - When Bone Collections are altered in the Tree View, affected paragraphs render with **glowing amber cards** (`⚑ DIRTY — Bones Modified`).
-   - Clicking **`[✨ Review / Clean]`** triggers a targeted agent suggestion in a side inspection drawer, presenting an exact prose integration diff.
-   - The human approves, modifies, or discards the suggestion.
+   - Clicking **`[✨ Review / Clean]`** opens the **Sidebar Review Drawer**, querying local LAN silicon (M5 Air `:8002/:8000` first $\rightarrow$ Turing vLLM `:8088` / Kender 4090 fallback using configured environment routes, zero hardcoding).
+   - The author can edit the suggestion directly inside the sidebar `<textarea>` and click **`[🚀 Kick to Manuscript]`** to apply it to the main paper view, clearing the dirty flag and auto-saving.
 
 ---
 
