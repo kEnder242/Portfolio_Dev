@@ -3,7 +3,8 @@
     {
       "id": "PAPER-001",
       "slug": "jitc_intuition",
-      "title": "The JITC Meta-Framework: Engineering Intuition & Architecture from 18 Years of Technical Logs",
+      "title": "Just in time context retrieval and synthesis",
+      "subtitle": "Applied armchair philosophy",
       "file": "paper_jitc_intuition.json",
       "author": "Jason Allred",
       "date": "2026-09-05",
