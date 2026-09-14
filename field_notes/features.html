@@ -15651,6 +15651,103 @@
                             <span class="impact-badge impact-stable">DEFERRED</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-590">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-590</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Sovereign Prose-First Layout & Unified Hover Toolbox
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-81.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Refines the wordsmithing manuscript experience in <code>writer.html</code>:
+1. Sets default workspace view to <code>🌊 Writing View</code> on initial load.
+2. Inverts paragraph DOM sequence to position human author prose on top, with supporting citation epigraphs and anchors positioned underneath as footnotes.
+3. Unifies floating gutter pills and inline banner buttons into a consolidated <code>.toolbox-hover-pill</code> (<code>[✍️ Wordsmith]</code>, <code>[🔍 Discover]</code>, <code>[↩️ Discard]</code>).
+4. Wires single-click auto-open for the Wordsmithing Drawer (<code>#wordsmithing-drawer</code>), pre-loading consistency analysis, paragraph LLM synthesis, and citation attachment without multi-step friction.
+5. Fixes citation inspector invocation bindings.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ensures human prose remains the sovereign primary artifact on the canvas, while reducing cognitive friction by providing single-click access to co-pilot tools directly on hover.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, DOM sequence inversion, consolidated <code>.toolbox-hover-pill</code>, and wordsmithing drawer auto-open controller.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-591">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-591</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Deep Water-Level DNA Palette & Collapsible Console Stream
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-81.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Expands the Water-Level DNA Palette and system diagnostics:
+1. Enhances Foyer <code>POST /paper/discover_citations</code> to compile a deep candidate pool of ~20 related anchors (combining ChromaDB cosine similarity, bone collection co-members, and contextual discoveries).
+2. Embeds an interactive Waterline Divider (<code>#palette-waterline</code>) that pops up an elevated inspection card (<code>#palette-card-popover</code>) directly over the sidebar palette on click.
+3. Supports single-click <code>[+]</code> surface and <code>[✖]</code> submerge actions alongside cross-waterline micro-dragging.
+4. Adds a collapsible toggle to <code>#sys-console</code> allowing the operator to minimize the console to a 28px status bar (<code>🟢 Ready · 0 Errors</code>) with <code>localStorage</code> persistence.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, ChromaDB vector retrieval, and collapsible console controller.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>

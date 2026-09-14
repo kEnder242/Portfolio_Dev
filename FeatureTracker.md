@@ -3059,3 +3059,29 @@
 **Logic:** Adds a `[📢 Publish Paper]` action in `writer.html`. Freezes an immutable snapshot of the active paper dataset (`www_deploy/data/papers/PAPER-001_<revision>.json`), bakes in all referenced citation origin quotes and narratives (decoupling the public reader from local ChromaDB/CLaRa-DNA residency), and compiles a standalone read-only publication viewer at `www_deploy/papers.html`. Supports multiple revision histories per manuscript with diff navigation.
 **Rationale:** Preserves the sovereign human author workflow while providing an airlocked public dissemination channel. Citations are 100% baked into the snapshot bundle so external public visitors have complete grounding without querying internal ChromaDB (Port 8001). The pipeline is strictly a one-way street (read-only publication with zero re-import dependency), eliminating citation loss and drift.
 **Mechanism:** `Portfolio_Dev/scripts/publish_paper.py`, `www_deploy/papers.html`, and Foyer `/paper/publish` endpoint.
+
+## [FEAT-590] Sovereign Prose-First Layout & Unified Hover Toolbox
+**Sprint:** SPR-81.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Sovereign Prose-First Layout & Unified Hover Toolbox.
+**Logic:** Refines the wordsmithing manuscript experience in `writer.html`:
+1. Sets default workspace view to `🌊 Writing View` on initial load.
+2. Inverts paragraph DOM sequence to position human author prose on top, with supporting citation epigraphs and anchors positioned underneath as footnotes.
+3. Unifies floating gutter pills and inline banner buttons into a consolidated `.toolbox-hover-pill` (`[✍️ Wordsmith]`, `[🔍 Discover]`, `[↩️ Discard]`).
+4. Wires single-click auto-open for the Wordsmithing Drawer (`#wordsmithing-drawer`), pre-loading consistency analysis, paragraph LLM synthesis, and citation attachment without multi-step friction.
+5. Fixes citation inspector invocation bindings.
+**Rationale:** Ensures human prose remains the sovereign primary artifact on the canvas, while reducing cognitive friction by providing single-click access to co-pilot tools directly on hover.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, DOM sequence inversion, consolidated `.toolbox-hover-pill`, and wordsmithing drawer auto-open controller.
+
+## [FEAT-591] Deep Water-Level DNA Palette & Collapsible Console Stream
+**Sprint:** SPR-81.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Deep Water-Level DNA Palette & Collapsible Console Stream.
+**Logic:** Expands the Water-Level DNA Palette and system diagnostics:
+1. Enhances Foyer `POST /paper/discover_citations` to compile a deep candidate pool of ~20 related anchors (combining ChromaDB cosine similarity, bone collection co-members, and contextual discoveries).
+2. Embeds an interactive Waterline Divider (`#palette-waterline`) that pops up an elevated inspection card (`#palette-card-popover`) directly over the sidebar palette on click.
+3. Supports single-click `[+]` surface and `[✖]` submerge actions alongside cross-waterline micro-dragging.
+4. Adds a collapsible toggle to `#sys-console` allowing the operator to minimize the console to a 28px status bar (`🟢 Ready · 0 Errors`) with `localStorage` persistence.
+**Rationale:** Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `HomeLabAI/src/v5/foyer/router.py`, ChromaDB vector retrieval, and collapsible console controller.
+
