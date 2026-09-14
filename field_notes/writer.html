@@ -16940,228 +16940,6 @@ window.__WRITER_QUOTES__ = [
                 return '';
             }
 
-            function toggleTierToolbox(tier, nodeId, nodeData, mountEl) {
-                var existing = mountEl.querySelector('.tier-toolbox');
-                if (existing) {
-                    existing.remove();
-                    return;
-                }
-
-                var tb = document.createElement('div');
-                tb.className = 'tier-toolbox';
-
-                var tbHeader = document.createElement('div');
-                tbHeader.className = 'toolbox-header';
-                tbHeader.innerHTML = 
-                    '<div style="display:flex; align-items:center; gap:6px;">' +
-                        '<span class="toolbox-tier-badge">🛠️ ' + tier.toUpperCase() + ' TOOLBOX: ' + nodeId + '</span>' +
-                    '</div>' +
-                    '<div class="toolbox-actions">' +
-                        '<button class="tb-btn btn-review" title="Audit whether attached citations are grounded in prose">✨ Review Consistency</button>' +
-                        '<button class="tb-btn btn-discover" title="Semantic search for unattached citations matching prose">🔍 Discover References</button>' +
-                        '<button class="tb-btn btn-prune" style="display:none;" title="Prune ungrounded citations">✂️ Prune Inconsistent</button>' +
-                        (tier === 'paragraph' ? '<button class="tb-btn btn-clean" title="Open Wordsmithing Drawer">✨ Clean Wordsmithing</button>' : '') +
-                        '<button class="tb-btn btn-close-tb" title="Close Toolbox">✖</button>' +
-                    '</div>';
-
-                var resultsBox = document.createElement('div');
-                resultsBox.className = 'toolbox-results';
-                resultsBox.style.display = 'none';
-
-                tb.appendChild(tbHeader);
-                tb.appendChild(resultsBox);
-                mountEl.insertBefore(tb, mountEl.firstChild.nextSibling || mountEl.firstChild);
-
-                var pruneBtn = tbHeader.querySelector('.btn-prune');
-                var lastUngrounded = [];
-
-                tbHeader.querySelector('.btn-close-tb').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    tb.remove();
-                });
-
-                if (tier === 'paragraph') {
-                    var cleanBtn = tbHeader.querySelector('.btn-clean');
-                    if (cleanBtn) {
-                        cleanBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            var sec = null;
-                            (STATE.activePaper.sections || []).forEach(function(s) {
-                                (s.paragraphs || []).forEach(function(p) { if (p.id === nodeId) sec = s; });
-                            });
-                            openReviewDrawer(nodeData, sec || { id: 'SEC-001', heading: 'Section' });
-                        });
-                    }
-                }
-
-                // Consistency Review
-                tbHeader.querySelector('.btn-review').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    resultsBox.style.display = 'flex';
-                    resultsBox.innerHTML = '<div style="color:var(--accent-color);">⏳ Auditing prose grounding against attached citations via Sovereign Engine...</div>';
-
-                    var proseText = getTierProseText(tier, nodeData);
-                    var allCites = listAllTierCitations(nodeData);
-
-                    fetch('/paper/review_consistency', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            paper_id: STATE.activePaper.id,
-                            tier: tier,
-                            id: nodeId,
-                            text: proseText,
-                            citations: allCites
-                        })
-                    })
-                    .then(function(r) { return r.json(); })
-                    .then(function(res) {
-                        if (res.status === 'success') {
-                            resultsBox.innerHTML = '';
-                            if (res.consistent) {
-                                resultsBox.innerHTML = '<div style="color:#7ee787; font-weight:600;">✅ All ' + res.grounded.length + ' attached citation(s) are actively grounded in the current prose.</div>';
-                                if (pruneBtn) pruneBtn.style.display = 'none';
-                            } else {
-                                lastUngrounded = res.ungrounded || [];
-                                var warnDiv = document.createElement('div');
-                                warnDiv.style.color = '#ffd369';
-                                warnDiv.style.fontWeight = '600';
-                                warnDiv.textContent = '⚠️ ' + lastUngrounded.length + ' attached citation(s) lack keyword/thematic grounding in prose:';
-                                resultsBox.appendChild(warnDiv);
-
-                                var chipWrap = document.createElement('div');
-                                chipWrap.style.display = 'flex';
-                                chipWrap.style.flexWrap = 'wrap';
-                                chipWrap.style.gap = '4px';
-                                chipWrap.style.marginTop = '4px';
-
-                                lastUngrounded.forEach(function(uc) {
-                                    var cChip = document.createElement('span');
-                                    cChip.className = 'dna-chip';
-                                    cChip.style.borderLeft = '3px solid #f85149';
-                                    cChip.textContent = uc;
-                                    chipWrap.appendChild(cChip);
-                                });
-                                resultsBox.appendChild(chipWrap);
-
-                                (res.notes || []).forEach(function(nt) {
-                                    var nDiv = document.createElement('div');
-                                    nDiv.style.fontSize = '0.72rem';
-                                    nDiv.style.color = 'var(--sub-color)';
-                                    nDiv.textContent = '• ' + nt;
-                                    resultsBox.appendChild(nDiv);
-                                });
-
-                                if (pruneBtn) pruneBtn.style.display = 'inline-flex';
-                                markTierDirty(tier, nodeData);
-                                showToast('Consistency check: ' + lastUngrounded.length + ' ungrounded citation(s) flagged.', 'error');
-                            }
-                        }
-                    })
-                    .catch(function(err) {
-                        resultsBox.innerHTML = '<div style="color:#ff7b72;">Error running consistency review: ' + err + '</div>';
-                    });
-                });
-
-                // Prune Inconsistent
-                pruneBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (!lastUngrounded || lastUngrounded.length === 0) return;
-                    lastUngrounded.forEach(function(uc) {
-                        removeFromNodeCitations(nodeData, uc);
-                        (nodeData.bone_collections || []).forEach(function(bone) {
-                            bone.citations = (bone.citations || []).filter(function(x) { return x !== uc; });
-                        });
-                    });
-                    // dissolve empty bones
-                    if (nodeData.bone_collections) {
-                        nodeData.bone_collections = nodeData.bone_collections.filter(function(b) {
-                            return (b.citations || []).length > 0;
-                        });
-                    }
-                    markTierDirty(tier, nodeData);
-                    pruneBtn.style.display = 'none';
-                    resultsBox.innerHTML = '<div style="color:#7ee787; font-weight:600;">✂️ Pruned ' + lastUngrounded.length + ' ungrounded citation(s) from ' + tier + '.</div>';
-                    showToast('Pruned ungrounded citations from ' + tier, 'success');
-                    renderWritingView();
-                });
-
-                // Citation Discovery
-                tbHeader.querySelector('.btn-discover').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    resultsBox.style.display = 'flex';
-                    resultsBox.innerHTML = '<div style="color:var(--accent-color);">⏳ Running JITC Semantic Discovery across ChromaDB and DNA Manifest...</div>';
-
-                    var proseText = getTierProseText(tier, nodeData);
-                    var allCites = listAllTierCitations(nodeData);
-
-                    fetch('/paper/discover_citations', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            paper_id: STATE.activePaper.id,
-                            tier: tier,
-                            id: nodeId,
-                            text: proseText,
-                            existing_citations: allCites,
-                            top_k: 6
-                        })
-                    })
-                    .then(function(r) { return r.json(); })
-                    .then(function(res) {
-                        if (res.status === 'success') {
-                            resultsBox.innerHTML = '';
-                            if (!res.candidates || res.candidates.length === 0) {
-                                resultsBox.innerHTML = '<div style="color:var(--sub-color);">No unattached candidate citations discovered matching current prose.</div>';
-                                return;
-                            }
-
-                            var titleDiv = document.createElement('div');
-                            titleDiv.style.fontWeight = '600';
-                            titleDiv.style.color = '#79c0ff';
-                            titleDiv.textContent = '🔍 Discovered ' + res.candidates.length + ' candidate citations matching prose:';
-                            resultsBox.appendChild(titleDiv);
-
-                            var grid = document.createElement('div');
-                            grid.className = 'discovery-grid';
-
-                            res.candidates.forEach(function(cand) {
-                                var card = document.createElement('div');
-                                card.className = 'discovery-card';
-                                card.innerHTML = 
-                                    '<div class="discovery-card-header">' +
-                                        '<span>' + cand.id + '</span>' +
-                                        '<span style="color:var(--accent-color); font-size:0.68rem;">Score: ' + cand.score + '</span>' +
-                                    '</div>' +
-                                    '<div style="font-size:0.75rem; color:var(--text-color);">' + (cand.title || cand.id) + '</div>' +
-                                    '<div style="font-size:0.7rem; color:var(--sub-color); line-height:1.3;">' + (cand.origin_text || '') + '</div>' +
-                                    '<button class="action-btn btn-attach-cand" style="font-size:0.68rem; padding:2px 6px; margin-top:2px;">+ Attach to ' + tier + '</button>';
-
-                                card.querySelector('.btn-attach-cand').addEventListener('click', function(e) {
-                                    e.stopPropagation();
-                                    if (!nodeData.citations) nodeData.citations = [];
-                                    if (nodeData.citations.indexOf(cand.id) === -1) {
-                                        nodeData.citations.push(cand.id);
-                                        markTierDirty(tier, nodeData);
-                                        showToast('Attached ' + cand.id + ' to ' + tier, 'success');
-                                        card.querySelector('.btn-attach-cand').textContent = 'Attached ✓';
-                                        card.querySelector('.btn-attach-cand').disabled = true;
-                                        renderWritingView();
-                                    }
-                                });
-
-                                grid.appendChild(card);
-                            });
-
-                            resultsBox.appendChild(grid);
-                        }
-                    })
-                    .catch(function(err) {
-                        resultsBox.innerHTML = '<div style="color:#ff7b72;">Error discovering citations: ' + err + '</div>';
-                    });
-                });
-            }
-
             // --- Writing View Renderer ---
             // [FEAT-587] Two-Tier Discard & Reversion Engine
             function discardParagraphChanges(par, sec) {
@@ -17183,23 +16961,10 @@ window.__WRITER_QUOTES__ = [
                 renderPalette();
             }
 
-            // [FEAT-587] Direct Helper to Trigger Consistency Review on a Node
-            function runConsistencyReviewDirect(tier, id, nodeData, targetContainer) {
-                toggleTierToolbox(tier, id, nodeData, targetContainer);
-            }
-
-            // [FEAT-587] Direct Helper to Trigger JITC Discovery on a Node
-            function runDiscoverDirect(tier, id, nodeData, targetContainer) {
-                toggleTierToolbox(tier, id, nodeData, targetContainer);
-            }
-
-            // [FEAT-586 / FEAT-588] Dynamic ChromaDB Live Discovery on Active Context Switch
+            // [FEAT-586 / FEAT-588 / FEAT-590] Dynamic ChromaDB Live Discovery on Active Context Switch
             function triggerContextDiscovery(tier, id, nodeData) {
                 if (!nodeData) return;
-                var textBody = nodeData.text || nodeData.cached_words || '';
-                if (tier === 'section') {
-                    textBody = (nodeData.paragraphs || []).map(function(p) { return p.text || ''; }).join('\n');
-                }
+                var textBody = getTierProseText(tier, nodeData);
                 if (!textBody || textBody.length < 15) return;
 
                 fetch('/paper/discover_citations', {
@@ -17227,7 +16992,7 @@ window.__WRITER_QUOTES__ = [
                 });
             }
 
-            // --- Writing View Renderer (Option C Hybrid Gutter & Hover Triggers) ---
+            // --- Writing View Renderer (Option C Direct Hover Actions) ---
             function renderWritingView() {
                 var p = STATE.activePaper;
                 if (!p) return;
@@ -17247,28 +17012,26 @@ window.__WRITER_QUOTES__ = [
                     var oldStaticBtn = titleBlock.querySelector('.tb-btn.btn-review');
                     if (oldStaticBtn) oldStaticBtn.remove();
 
-                    // [FEAT-587] Option C: Floating Hover Action Pill on Paper Root
+                    // [FEAT-587 / FEAT-590] Direct Hover Action Pill on Paper Root
                     var oldPill = titleBlock.querySelector('.hover-action-pill');
                     if (oldPill) oldPill.remove();
 
                     var rootPill = document.createElement('div');
-                    rootPill.className = 'hover-action-pill';
+                    rootPill.className = 'hover-action-pill toolbox-hover-pill';
                     rootPill.innerHTML = 
                         '<button class="hover-pill-btn btn-review-pill" title="Review whole-paper consistency">✨ Review</button>' +
-                        '<button class="hover-pill-btn" title="Discover paper-level references">🔍 Discover</button>' +
-                        '<button class="hover-pill-btn" title="Toggle Root Toolbox">🛠️</button>';
+                        '<button class="hover-pill-btn btn-disc-pill" title="Discover paper-level references in DNA Palette">🔍 Discover</button>';
 
                     rootPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
                         e.stopPropagation();
-                        runConsistencyReviewDirect('paper', p.id, p, titleBlock);
+                        setActiveContext('paper', p.id);
+                        openReviewDrawerForTier('paper', p);
                     });
-                    rootPill.querySelectorAll('.hover-pill-btn')[1].addEventListener('click', function(e) {
+                    rootPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
                         e.stopPropagation();
-                        runDiscoverDirect('paper', p.id, p, titleBlock);
-                    });
-                    rootPill.querySelectorAll('.hover-pill-btn')[2].addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        toggleTierToolbox('paper', p.id, p, titleBlock);
+                        setActiveContext('paper', p.id);
+                        triggerContextDiscovery('paper', p.id, p);
+                        showToast('🔍 Discovered paper-level citations in DNA Palette', 'info');
                     });
 
                     titleBlock.appendChild(rootPill);
@@ -17313,25 +17076,23 @@ window.__WRITER_QUOTES__ = [
                     h2.style.border = 'none';
                     h2.textContent = sec.heading || sec.id;
 
-                    // [FEAT-587] Option C: Floating Hover Action Pill on Section Header
+                    // [FEAT-587 / FEAT-590] Direct Hover Action Pill on Section Header
                     var secPill = document.createElement('div');
-                    secPill.className = 'hover-action-pill';
+                    secPill.className = 'hover-action-pill toolbox-hover-pill';
                     secPill.innerHTML = 
                         '<button class="hover-pill-btn btn-review-pill" title="Review section consistency">✨ Review</button>' +
-                        '<button class="hover-pill-btn" title="Discover section references">🔍 Discover</button>' +
-                        '<button class="hover-pill-btn" title="Toggle Section Toolbox">🛠️</button>';
+                        '<button class="hover-pill-btn btn-disc-pill" title="Discover section references in DNA Palette">🔍 Discover</button>';
 
                     secPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
                         e.stopPropagation();
-                        runConsistencyReviewDirect('section', sec.id, sec, secWrap);
+                        setActiveContext('section', sec.id);
+                        openReviewDrawerForTier('section', sec);
                     });
-                    secPill.querySelectorAll('.hover-pill-btn')[1].addEventListener('click', function(e) {
+                    secPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
                         e.stopPropagation();
-                        runDiscoverDirect('section', sec.id, sec, secWrap);
-                    });
-                    secPill.querySelectorAll('.hover-pill-btn')[2].addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        toggleTierToolbox('section', sec.id, sec, secWrap);
+                        setActiveContext('section', sec.id);
+                        triggerContextDiscovery('section', sec.id, sec);
+                        showToast('🔍 Discovered section citations in DNA Palette', 'info');
                     });
 
                     secHeaderWrap.appendChild(h2);
@@ -17356,11 +17117,11 @@ window.__WRITER_QUOTES__ = [
                             openReviewDrawer(par, sec);
                         });
 
-                        // [FEAT-587 / FEAT-590] Unified Toolbox Hover Pill on Paragraph Gutter
+                        // [FEAT-587 / FEAT-590] Unified Direct Hover Pill on Paragraph Gutter
                         var parPill = document.createElement('div');
                         parPill.className = 'hover-action-pill toolbox-hover-pill';
                         var pillHtml = '<button class="hover-pill-btn btn-wordsmith-pill" title="Wordsmith and review this paragraph">✍️ Wordsmith</button>' +
-                                       '<button class="hover-pill-btn btn-disc-pill" title="Discover matching references for this prose">🔍 Discover</button>';
+                                       '<button class="hover-pill-btn btn-disc-pill" title="Discover matching references in DNA Palette">🔍 Discover</button>';
                         if (par.dirty) {
                             pillHtml += '<button class="hover-pill-btn btn-discard-pill" title="Discard pending modifications and restore baseline">↩️ Discard</button>';
                         }
@@ -17374,7 +17135,8 @@ window.__WRITER_QUOTES__ = [
                         parPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
                             e.stopPropagation();
                             setActiveContext('paragraph', par.id);
-                            runDiscoverDirect('paragraph', par.id, par, parWrap);
+                            triggerContextDiscovery('paragraph', par.id, par);
+                            showToast('🔍 Discovered paragraph citations in DNA Palette', 'info');
                         });
                         if (par.dirty) {
                             parPill.querySelector('.btn-discard-pill').addEventListener('click', function(e) {
@@ -17388,6 +17150,10 @@ window.__WRITER_QUOTES__ = [
                         if (par.dirty) {
                             banner = document.createElement('div');
                             banner.className = 'dirty-banner';
+                            banner.style.padding = '3px 8px';
+                            banner.style.marginBottom = '6px';
+                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use ✍️ Wordsmith or ↩️ Discard)</span>';
+                        }
                             banner.style.padding = '3px 8px';
                             banner.style.marginBottom = '6px';
                             banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use ✍️ Wordsmith or ↩️ Discard)</span>';
@@ -17440,16 +17206,51 @@ window.__WRITER_QUOTES__ = [
                 applyContextFocus();
             }
 
-            // --- Clean Review Drawer Logic ---
+            // --- Wordsmithing Drawer Logic for All Tiers ---
+            function openReviewDrawerForTier(tier, nodeData) {
+                var drawer = document.getElementById('review-drawer');
+                var targetId = document.getElementById('review-target-id');
+                var chipsBox = document.getElementById('review-attached-chips');
+                var textarea = document.getElementById('review-prose-textarea');
+                var synthBtn = document.getElementById('btn-synthesize-silicon');
+                if (!drawer) return;
+
+                STATE.activeReviewParagraphId = (tier === 'paragraph') ? nodeData.id : null;
+                if (targetId) {
+                    if (tier === 'paper') targetId.textContent = 'PAPER ROOT → ' + (nodeData.title || 'Entire Paper');
+                    else if (tier === 'section') targetId.textContent = 'SECTION → ' + (nodeData.heading || nodeData.id);
+                    else targetId.textContent = nodeData.id;
+                }
+                if (textarea) {
+                    textarea.value = getTierProseText(tier, nodeData);
+                }
+
+                if (chipsBox) {
+                    chipsBox.innerHTML = '';
+                    var allCites = listAllTierCitations(nodeData);
+                    allCites.forEach(function(c) {
+                        var chip = createDnaChip(c, {});
+                        chipsBox.appendChild(chip);
+                    });
+                }
+
+                if (synthBtn) {
+                    synthBtn.style.display = (tier === 'paragraph') ? 'block' : 'none';
+                }
+
+                drawer.classList.add('open');
+            }
+
             function openReviewDrawer(par, sec) {
                 var drawer = document.getElementById('review-drawer');
                 var targetId = document.getElementById('review-target-id');
                 var chipsBox = document.getElementById('review-attached-chips');
                 var textarea = document.getElementById('review-prose-textarea');
+                var synthBtn = document.getElementById('btn-synthesize-silicon');
                 if (!drawer) return;
 
                 STATE.activeReviewParagraphId = par.id;
-                if (targetId) targetId.textContent = (sec.heading || sec.id) + ' → ' + par.id;
+                if (targetId) targetId.textContent = (sec && (sec.heading || sec.id) ? (sec.heading || sec.id) + ' → ' : '') + par.id;
                 if (textarea) textarea.value = par.text || par.cached_words || '';
 
                 if (chipsBox) {
@@ -17459,6 +17260,10 @@ window.__WRITER_QUOTES__ = [
                         var chip = createDnaChip(c, {});
                         chipsBox.appendChild(chip);
                     });
+                }
+
+                if (synthBtn) {
+                    synthBtn.style.display = 'block';
                 }
 
                 drawer.classList.add('open');
