@@ -3,8 +3,8 @@
   "title": "The JITC Meta-Framework: Engineering Philosophy from 18 Years of Technical Logs",
   "author": "Jason Allred",
   "created_at": "2026-09-05T00:00:00Z",
-  "updated_at": "2026-09-13T07:06:57.691206+00:00",
-  "status": "DRAFT",
+  "updated_at": "2026-09-14T00:43:00Z",
+  "status": "EXPANDED_DRAFT",
   "voice_profile": {
     "tense": "present",
     "style": "academic",
@@ -26,7 +26,7 @@
             "PHL-002",
             "PHL-006"
           ],
-          "cached_words": "This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural approach to encoding engineering wisdom from long-horizon technical practice into reproducible agent workflows. Drawing on 18 years of raw engineering logs, we formalize a dual-channel architecture separating immutable human origin from collaborative machine synthesis, and demonstrate automated pipeline generation from structured wisdom cards to arXiv-formatted LaTeX documents.",
+          "cached_words": "This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architectural methodology for encoding long-horizon engineering wisdom into reproducible, low-latency autonomous agent workflows. Drawing upon eighteen years of raw daily technical journals, we formalize a dual-channel cognitive architecture that rigorously decouples immutable human origin from collaborative machine synthesis. By applying 'Token Golf' constraints over monolithic context-window expansion, we demonstrate how precise, ambient vector retrieval and staged feedback backpressure eliminate attention dilution while achieving publication-ready LaTeX and live web synthesis.",
           "dirty": false,
           "revisions": []
         }
@@ -36,13 +36,27 @@
       "id": "SEC-002",
       "type": "body",
       "order": 1,
-      "heading": "Introduction",
+      "heading": "Introduction & The Problem of Attention Dilution",
       "paragraphs": [
         {
           "id": "PAR-002",
           "order": 0,
-          "citations": [],
-          "cached_words": "Engineering practice accumulates wisdom through repeated encounters with failure, recovery, and adaptation. The challenge is not collecting lessons learned but encoding them into formats that survive organizational turnover and toolchain evolution. The JITC Meta-Framework addresses this by treating engineering wisdom as structured data with explicitly separated provenance layers.",
+          "citations": [
+            "PHL-001",
+            "PHL-007"
+          ],
+          "cached_words": "Modern foundation models boast context windows spanning hundreds of thousands to millions of tokens. However, empirical systems engineering reveals a severe divergence between theoretical context capacity and factual reasoning precision: as context payloads balloon, attention mechanisms suffer from quadratic computational overhead and severe 'lost in the middle' dilution. Crucial engineering invariants, historic post-mortems, and edge-case constraints are easily washed out when buried in massive undifferentiated prompt dumps.",
+          "dirty": false,
+          "revisions": []
+        },
+        {
+          "id": "PAR-003",
+          "order": 1,
+          "citations": [
+            "PHL-002",
+            "FEAT-526"
+          ],
+          "cached_words": "In practice, model reliability can be quantified as an inverse function of prompt bloat. Trust is preserved not by token maximization, but through 'Token Golf'—the disciplined minimization of input token payloads while maximizing prompt fidelity. Rather than requiring an agent to memorize the entire dictionary during every inference turn, robust systems treat the filesystem and vector database as an external associative memory, floating up only the exact two or three anchors required milliseconds before generation.",
           "dirty": false,
           "revisions": []
         }
@@ -52,25 +66,27 @@
       "id": "SEC-003",
       "type": "body",
       "order": 2,
-      "heading": "Memory & Just-In-Time Context (JITC)",
+      "heading": "The JITC Meta-Framework: Dual-Channel Memory Architecture",
       "paragraphs": [
         {
-          "id": "PAR-003",
+          "id": "PAR-004",
           "order": 0,
           "citations": [
-            "PHL-001"
+            "PHL-001",
+            "FEAT-546"
           ],
-          "cached_words": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.",
+          "cached_words": "The Just-In-Time Context (JITC) Meta-Framework resolves attention dilution by bifurcating memory into two strictly decoupled layers: (1) an immutable Human Sovereign Anchor containing raw, unedited historical observations, voice notes, and engineering journals, and (2) an evolving Machine Synthesis Scaffolding where automated workers iteratively refine narrative framing, tags, and codebase anchors. Machine agents are mathematically prevented from modifying or hallucinating within the origin layer.",
           "dirty": false,
           "revisions": []
         },
         {
-          "id": "PAR-004",
+          "id": "PAR-005",
           "order": 1,
           "citations": [
-            "PHL-002"
+            "PHL-003",
+            "FEAT-444"
           ],
-          "cached_words": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf' \u2014 minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
+          "cached_words": "A system operating without backpressure quickly devolves into a walled garden of self-reinforcing hallucinations. Drawing from high-volume customer service and datacenter operations, JITC embeds bidirectional backpressure directly into agent handovers. By mandating a 'Handover Reflection' at the completion of every delegated story, subagents stream ground-truth execution friction back into the orchestrator's knowledge graph, enabling continuous self-correction.",
           "dirty": false,
           "revisions": []
         }
@@ -80,15 +96,29 @@
       "id": "SEC-004",
       "type": "body",
       "order": 3,
-      "heading": "Feedback Backpressure & The Handover Reflection",
+      "heading": "Theoretical Grounding & Academic Prior Art",
       "paragraphs": [
         {
-          "id": "PAR-005",
+          "id": "PAR-006",
           "order": 0,
           "citations": [
-            "PHL-003"
+            "ARXIV:2212.10496",
+            "ARXIV:2303.07678",
+            "ARXIV:2209.10063"
           ],
-          "cached_words": "Autonomous systems operating in isolation without backpressure degrade into hallucination loops. The Handover Reflection pattern forces every subagent to evaluate its dispatcher's instructions upon task completion, creating an evolutionary closed feedback loop that self-heals prompt drift.",
+          "cached_words": "The theoretical foundation of JITC synthesizes key breakthroughs in dense retrieval and test-time reasoning. We build upon Hypothetical Document Embeddings (HyDE, Gao et al. 2022) by generating speculative preambles during streaming triage to guide vector traversal. In accordance with Query2Doc (Wang et al. 2023) and GenRead (Yu et al. 2022), local resident models produce pseudo-document expansions that convert terse, acronym-dense engineering queries into semantically rich retrieval queries across archival ChromaDB collections.",
+          "dirty": false,
+          "revisions": []
+        },
+        {
+          "id": "PAR-007",
+          "order": 1,
+          "citations": [
+            "ARXIV:2310.11511",
+            "ARXIV:2602.01566",
+            "ARXIV:2402.05120"
+          ],
+          "cached_words": "To maintain epistemological rigor without human bottlenecking, the JITC pipeline integrates Self-RAG reflection tokens (Asai et al. 2023) to score retrieval relevance, supported by dual-agent Context Builder and Report Writer patterns (FS-Researcher, 2026). Autonomous delegation across heterogeneous compute tiers follows formal swarm orchestration protocols (Swarm Delegation, 2024), enforcing socket-activated, token-scoped execution boundaries across local and cloud environments.",
           "dirty": false,
           "revisions": []
         }
@@ -98,15 +128,27 @@
       "id": "SEC-005",
       "type": "body",
       "order": 4,
-      "heading": "Velocity Whiplash, 10x Debt & Reading Like a Robot",
+      "heading": "Engineering Discipline in the Latent Space",
       "paragraphs": [
         {
-          "id": "PAR-006",
+          "id": "PAR-008",
           "order": 0,
           "citations": [
-            "PHL-004"
+            "PHL-006",
+            "PHL-005"
           ],
-          "cached_words": "Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.",
+          "cached_words": "Stochastic generative agents require the exact same structural governance that keeps human engineering organizations aligned: strict sprint cadences, explicit acceptance contracts, post-mortem retrospectives, static linting, and automated unit tests. Applying hard engineering guardrails to latent-space outputs elevates the human engineer from a line-by-line typist to an overarching Systems Architect and Product Manager, converting mental ideation into verifiable execution harnesses.",
+          "dirty": false,
+          "revisions": []
+        },
+        {
+          "id": "PAR-009",
+          "order": 1,
+          "citations": [
+            "PHL-004",
+            "PHL-008"
+          ],
+          "cached_words": "Unchecked AI code generation introduces 'Velocity Whiplash,' creating technical debt at rates that easily overwhelm human working memory. To counter this, JITC enforces a 'Read Like a Robot' methodology—serializing cognitive complexity through structured lists, atomic pull-request diffs, and ruthless pruning of speculative scaffolding. Software longevity depends on compositional simplicity rather than monumental frameworks.",
           "dirty": false,
           "revisions": []
         }
@@ -116,15 +158,30 @@
       "id": "SEC-006",
       "type": "body",
       "order": 5,
-      "heading": "The Perfect Foil & The Architect / PM Pivot",
+      "heading": "Lab Implementations & Heterogeneous Silicon Architecture",
       "paragraphs": [
         {
-          "id": "PAR-007",
+          "id": "PAR-010",
           "order": 0,
           "citations": [
-            "PHL-005"
+            "FEAT-233",
+            "FEAT-486",
+            "FEAT-368"
           ],
-          "cached_words": "AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.",
+          "cached_words": "The JITC architecture is realized in the Federated Lab across heterogeneous silicon hosts: an RTX 2080 Ti running localized vLLM (Llama-3.2-3B) and an Apple Silicon M5 Air running oMLX (Qwen-27B). Through the Non-Blocking Waterfall Cascade (FEAT-233) and Live Vocality Probes (FEAT-486, FEAT-368), conversational persona triage streams to the operator in under 800ms while deep analytical synthesis completes asynchronously across the sovereign cluster.",
+          "dirty": false,
+          "revisions": []
+        },
+        {
+          "id": "PAR-011",
+          "order": 1,
+          "citations": [
+            "FEAT-581",
+            "FEAT-582",
+            "FEAT-583",
+            "FEAT-584"
+          ],
+          "cached_words": "The manuscript production layer incorporates discrete paper datasets (FEAT-581), dynamic multi-collection citation resolvers (FEAT-582), interactive visual thought organizers (FEAT-583), and three-tier revision carousels (FEAT-584). Citation chips in the writer studio resolve directly into verified codebase anchors and arXiv LaTeX bibliographies, producing mathematically grounded publications directly from working repository state.",
           "dirty": false,
           "revisions": []
         }
@@ -134,15 +191,15 @@
       "id": "SEC-007",
       "type": "body",
       "order": 6,
-      "heading": "Engineering Disciplines in the Latent Space",
+      "heading": "Language as the Transmission Vehicle for Thought",
       "paragraphs": [
         {
-          "id": "PAR-008",
+          "id": "PAR-012",
           "order": 0,
           "citations": [
-            "PHL-006"
+            "PHL-007"
           ],
-          "cached_words": "Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.",
+          "cached_words": "Debates regarding artificial general intelligence often become ensnared in metaphysical arguments over machine consciousness. The JITC framework sidesteps these ambiguities by recognizing language as humanity's most powerful invention—a high-density vehicle for serializing, preserving, and executing structured thought across time and silicon substrate. When grounded in verifiable provenance, natural language becomes an undeniable control plane for complex systems.",
           "dirty": false,
           "revisions": []
         }
@@ -150,55 +207,20 @@
     },
     {
       "id": "SEC-008",
-      "type": "body",
-      "order": 7,
-      "heading": "Language as Humanity's Best Invention & The Book Analogy",
-      "paragraphs": [
-        {
-          "id": "PAR-009",
-          "order": 0,
-          "citations": [
-            "PHL-007"
-          ],
-          "cached_words": "Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary tool for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.",
-          "dirty": false,
-          "revisions": []
-        }
-      ]
-    },
-    {
-      "id": "SEC-009",
-      "type": "body",
-      "order": 8,
-      "heading": "The Vectors of Engineering & Forgotten Code Hygiene",
-      "paragraphs": [
-        {
-          "id": "PAR-010",
-          "order": 0,
-          "citations": [
-            "PHL-008"
-          ],
-          "cached_words": "Software longevity depends on pruning complexity. Libraries compose; frameworks entomb. Speculative scaffolding must be resisted, and dead code aggressively purged to keep cognitive load bounded.",
-          "dirty": false,
-          "revisions": []
-        }
-      ]
-    },
-    {
-      "id": "SEC-010",
       "type": "conclusion",
-      "order": 9,
-      "heading": "Conclusion",
+      "order": 7,
+      "heading": "Conclusion & Future Horizons",
       "paragraphs": [
         {
-          "id": "PAR-011",
+          "id": "PAR-013",
           "order": 0,
           "citations": [
             "PHL-001",
             "PHL-003",
-            "PHL-006"
+            "PHL-006",
+            "FEAT-585"
           ],
-          "cached_words": "The dual-channel architecture \u2014 immutable human origin alongside collaborative machine synthesis \u2014 provides a durable foundation for encoding engineering wisdom. By automating the pipeline from structured wisdom cards to publication-ready LaTeX, the JITC Meta-Framework enables rapid iteration on technical papers while preserving the provenance of every claim.",
+          "cached_words": "By anchoring autonomous agents in the dual-channel JITC Meta-Framework, engineering organizations can harness the velocity of generative models while completely eliminating hallucinations and attention collapse. Through immutable provenance, strict token budgeting, bidirectional backpressure, and automated schema gates, eighteen years of engineering insight transition from passive archives into living, self-verifying software architectures.",
           "dirty": false,
           "revisions": []
         }
@@ -209,72 +231,152 @@
     {
       "dna_id": "PHL-001",
       "collection": "philosophy",
-      "label": "Allred 2026a \u2014 Memory & JITC",
-      "used_in": [
-        "PAR-001",
-        "PAR-003",
-        "PAR-011"
-      ]
+      "label": "Allred 2026a — Memory & JITC",
+      "used_in": ["PAR-001", "PAR-002", "PAR-004", "PAR-013"]
     },
     {
       "dna_id": "PHL-002",
       "collection": "philosophy",
-      "label": "Allred 2026b \u2014 Token Golf & Trust",
-      "used_in": [
-        "PAR-001",
-        "PAR-004"
-      ]
+      "label": "Allred 2026b — Token Golf & Trust",
+      "used_in": ["PAR-001", "PAR-003"]
     },
     {
       "dna_id": "PHL-003",
       "collection": "philosophy",
-      "label": "Allred 2026c \u2014 Feedback Backpressure",
-      "used_in": [
-        "PAR-005",
-        "PAR-011"
-      ]
+      "label": "Allred 2026c — Feedback Backpressure",
+      "used_in": ["PAR-005", "PAR-013"]
     },
     {
       "dna_id": "PHL-004",
       "collection": "philosophy",
-      "label": "Allred 2026d \u2014 Velocity Whiplash",
-      "used_in": [
-        "PAR-006"
-      ]
+      "label": "Allred 2026d — Velocity Whiplash",
+      "used_in": ["PAR-009"]
     },
     {
       "dna_id": "PHL-005",
       "collection": "philosophy",
-      "label": "Allred 2026e \u2014 The Perfect Foil",
-      "used_in": [
-        "PAR-007"
-      ]
+      "label": "Allred 2026e — The Perfect Foil",
+      "used_in": ["PAR-008"]
     },
     {
       "dna_id": "PHL-006",
       "collection": "philosophy",
-      "label": "Allred 2026f \u2014 Engineering Rigor",
-      "used_in": [
-        "PAR-001",
-        "PAR-008",
-        "PAR-011"
-      ]
+      "label": "Allred 2026f — Engineering Rigor",
+      "used_in": ["PAR-001", "PAR-008", "PAR-013"]
     },
     {
       "dna_id": "PHL-007",
       "collection": "philosophy",
-      "label": "Allred 2026g \u2014 Language as Invention",
-      "used_in": [
-        "PAR-009"
-      ]
+      "label": "Allred 2026g — Language as Invention",
+      "used_in": ["PAR-002", "PAR-012"]
     },
     {
       "dna_id": "PHL-008",
       "collection": "philosophy",
-      "label": "Allred 2026h \u2014 Engineering Vectors",
-      "used_in": [
-        "PAR-010"
-      ]
+      "label": "Allred 2026h — Engineering Vectors",
+      "used_in": ["PAR-009"]
+    },
+    {
+      "dna_id": "ARXIV:2212.10496",
+      "collection": "research",
+      "label": "Gao et al. 2022 — Precise Zero-Shot Dense Retrieval with HyDE",
+      "used_in": ["PAR-006"]
+    },
+    {
+      "dna_id": "ARXIV:2303.07678",
+      "collection": "research",
+      "label": "Wang et al. 2023 — Query2Doc: Query Expansion with LLMs",
+      "used_in": ["PAR-006"]
+    },
+    {
+      "dna_id": "ARXIV:2209.10063",
+      "collection": "research",
+      "label": "Yu et al. 2022 — Generate rather than Retrieve (GenRead)",
+      "used_in": ["PAR-006"]
+    },
+    {
+      "dna_id": "ARXIV:2310.11511",
+      "collection": "research",
+      "label": "Asai et al. 2023 — Self-RAG: Learning to Retrieve, Generate, and Critique",
+      "used_in": ["PAR-007"]
+    },
+    {
+      "dna_id": "ARXIV:2602.01566",
+      "collection": "research",
+      "label": "FS-Researcher 2026 — Dual-Agent Context Builder Architecture",
+      "used_in": ["PAR-007"]
+    },
+    {
+      "dna_id": "ARXIV:2402.05120",
+      "collection": "research",
+      "label": "Swarm Delegation 2024 — Agentic Swarms & Activation Proxies",
+      "used_in": ["PAR-007"]
+    },
+    {
+      "dna_id": "FEAT-233",
+      "collection": "feature",
+      "label": "FEAT-233: Non-Blocking Waterfall Cascade",
+      "used_in": ["PAR-010"]
+    },
+    {
+      "dna_id": "FEAT-368",
+      "collection": "feature",
+      "label": "FEAT-368: Vocal Handshake Engine Readiness Probe",
+      "used_in": ["PAR-010"]
+    },
+    {
+      "dna_id": "FEAT-444",
+      "collection": "feature",
+      "label": "FEAT-444: Judicial Backpressure & Handover Reflection Ledger",
+      "used_in": ["PAR-005"]
+    },
+    {
+      "dna_id": "FEAT-486",
+      "collection": "feature",
+      "label": "FEAT-486: Live Triage Vocality & Fast Socket Gate",
+      "used_in": ["PAR-010"]
+    },
+    {
+      "dna_id": "FEAT-526",
+      "collection": "feature",
+      "label": "FEAT-526: Token Golf Subagent Prompt Compaction",
+      "used_in": ["PAR-003"]
+    },
+    {
+      "dna_id": "FEAT-546",
+      "collection": "feature",
+      "label": "FEAT-546: Fast-Path ChromaDB & ICM Context Hooks",
+      "used_in": ["PAR-004"]
+    },
+    {
+      "dna_id": "FEAT-581",
+      "collection": "feature",
+      "label": "FEAT-581: Discrete Paper Dataset Storage Architecture",
+      "used_in": ["PAR-011"]
+    },
+    {
+      "dna_id": "FEAT-582",
+      "collection": "feature",
+      "label": "FEAT-582: Cross-Collection DNA Citation Resolver",
+      "used_in": ["PAR-011"]
+    },
+    {
+      "dna_id": "FEAT-583",
+      "collection": "feature",
+      "label": "FEAT-583: Thought Organizer Structural Tree & Review Inspector",
+      "used_in": ["PAR-011"]
+    },
+    {
+      "dna_id": "FEAT-584",
+      "collection": "feature",
+      "label": "FEAT-584: Synthesis Reflow & 3-Tier Revision Carousel",
+      "used_in": ["PAR-011"]
+    },
+    {
+      "dna_id": "FEAT-585",
+      "collection": "feature",
+      "label": "FEAT-585: Paper JSON Schema & Invariant Guard",
+      "used_in": ["PAR-013"]
     }
   ]
 }
