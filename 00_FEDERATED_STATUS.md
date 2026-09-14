@@ -15,7 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-78-0-writer-studio** | Phase 16 | Multi-Paper Dataset Architecture, Cross-DNA Citation Pointers, Structure-to-Synthesis Reflow | **ACTIVE & IN PROGRESS** [SPRINT_PLAN_SPR_78_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_78_0.md) |
+| **spr-79-0-thought-organizer** | Phase 17 | Decoupled Thought Organizer & Wordsmithing Studio, Multi-Tier Bone Collections, Review/Clean Flow | **ACTIVE & IN PROGRESS** [SPRINT_PLAN_SPR_79_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_79_0.md) |
+| **spr-78-0-writer-studio** | Phase 16 | Multi-Paper Dataset Architecture, Cross-DNA Citation Pointers, Structure-to-Synthesis Reflow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_78_0.md](./docs/sprints/archive/SPRINT_PLAN_SPR_78_0.md) |
 | **spr-77-0-wisdom-workbench** | Phase 16 | Universal DNA Workbench, Nightly Synthesis Refinement, Semantic Bucketing & `writer.html` | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_77_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_77_0.md) |
 | **spr-73-0-triage-rubric** | Phase 15 | Triage Rubric Health, Scalar Decoupling, BKM DNA & Discourse Grounding | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_73_0.md](./SPRINT_PLAN_SPR_73_0.md) |
 | **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
