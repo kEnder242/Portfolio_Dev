@@ -127,49 +127,60 @@ flowchart TD
 
 ## 🎯 Section 4: Active Stories Breakdown
 
-### 🧬 Story 79.1: Clean-Room DOM Architecture & State Controller (`[FEAT-581]`, `[FEAT-583]`)
+### 🧬 Story 79.1: Multi-Tier Bone Schema & Gated Backdoor Specification (`[FEAT-581]`, `[FEAT-585]`, `BKM-004`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Objective:** Define the updated Paper JSON Schema and formalize the Gated Backdoor mechanism.
+* **Implementation:**
+  1. **Schema Definition (`validate_paper_schema.py`):** Update validator to support `bone_collections: [{ id, name, citations: [...] }]` and `citations: [...]` attached at all three tiers: **Paper Root**, **Section Nodes**, and **Paragraph Containers**.
+  2. **Gated Backdoor Protocol:** Formalize the machine-writable JSON contract with automated validation, enforcing the strict BKM gate: *Antigravity (AGY) can programmatically import and structure drafts over REST/CLI, but direct file commits must request explicit human approval before application.*
+* **Target Files:**
+  - `Portfolio_Dev/scripts/validate_paper_schema.py`
+  - `HomeLabAI/src/v5/foyer/router.py`
+
+---
+
+### 🧬 Story 79.2: Verbatim Raw Dump (RD) Ingestion & Clean Reset (`1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY`) (`[FEAT-581]`, `[FEAT-585]`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Objective:** Perform a 100% verbatim clean reset of `paper_jitc_intuition.json` directly from the author's original Google Doc RD (`1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY`).
+* **Implementation:**
+  1. Ingest raw human text without AI summarization, preserving the author's authentic voice, sections, notes, and questions.
+  2. Structure into `Paper > Section > Paragraph` AST hierarchy under the new schema.
+  3. Seed initial recommended DNA citations/bones in a pending state awaiting operator drag-approval in the Tree Outliner.
+* **Target Files:**
+  - `Portfolio_Dev/papers/paper_jitc_intuition.json`
+  - `Portfolio_Dev/papers/manifest.json`
+
+---
+
+### 🧬 Story 79.3: Clean-Room DOM Architecture & State Controller (`[FEAT-581]`, `[FEAT-583]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Objective:** Cleanly refactor `Portfolio_Dev/field_notes/writer.html` into a modular, maintainable web studio.
 * **Implementation:**
-  1. Strip duplicated and legacy script prototypes.
-  2. Implement a unified client state controller (`__STUDIO_STATE__`) tracking active paper, active tab (`tree` vs `writing`), active selection, and dirty ledger.
-  3. Update `build_writer.py` to hydrate the clean-room injection target.
+  1. Strip duplicated and legacy script prototypes from `writer.html`.
+  2. Implement a unified client state controller (`__STUDIO_STATE__`) tracking active paper, active tab (`tree` vs `writing`), active selection, palette filters, and dirty state ledger.
+  3. Update `build_writer.py` to cleanly hydrate the single-injection context point.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
   - `Portfolio_Dev/scripts/build_writer.py`
 
 ---
 
-### 🧬 Story 79.2: Multi-Tier Bone Collections & Hierarchical Tree Outliner (`[FEAT-583]`)
+### 🧬 Story 79.4: Multi-Tier Bone Outliner & Domain-Partitioned Palette (`[FEAT-583]`)
 * **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
-* **Objective:** Build the collapsible 3-tier AST Outliner supporting `Bone Collections` and `Citations` attached at Paper, Section, and Paragraph levels.
+* **Objective:** Build the collapsible 3-tier AST Outliner supporting `Bone Collections` and `Citations` attached at Paper, Section, and Paragraph levels, coupled with the domain-partitioned DNA Palette drawer.
 * **Features:**
   1. Indented hierarchical nodes: `Paper` $\rightarrow$ `Section` $\rightarrow$ `Paragraph`.
-  2. **Fluid Drag-and-Drop:** Dragging citations onto each other creates a `Bone Collection`; dragging a chip out separates it into a singleton.
+  2. **Fluid Drag-and-Drop:** Dragging citations together merges them into a `Bone Collection`; dragging a citation out splits it into a singleton reference.
   3. Attach bone collections at Section headers (chapter framing) or Paragraph containers (argument proof).
-  4. Multi-level inheritance & doubling-up support.
+  4. Palette Drawer with top **Bubble Suggestions** and domain partition pills (`[All]`, `[PHL]`, `[BKM]`, `[FEAT: Cognitive]`, `[FEAT: Silicon]`, `[FEAT: UI]`, `[FEAT: Infra]`, `[DISC]`, `[ArXiv]`).
   5. Altering bones marks the container `dirty = true`.
-* **Target Files:**
-  - `Portfolio_Dev/field_notes/writer.html`
-  - `Portfolio_Dev/papers/paper_jitc_intuition.json`
-
----
-
-### 🧬 Story 79.3: Domain-Partitioned DNA Palette Drawer & Bubble Suggestions (`[FEAT-583]`)
-* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
-* **Objective:** Provide a fast, searchable palette drawer for discovering and slotting citation bones.
-* **Features:**
-  1. Top **Bubble Suggestions** row rendering smart contextual recommendations.
-  2. Domain partition pills: `[All]`, `[PHL: Philosophy]`, `[BKM: Governance]`, `[FEAT: Cognitive]`, `[FEAT: Silicon]`, `[FEAT: UI]`, `[FEAT: Infra]`, `[DISC: Discoveries]`, `[ARXIV: Prior Art]`.
-  3. Instant typeahead search across titles, summaries, and IDs.
-  4. Click-to-inspect opening the single-card Review Inspector without interrupting the drag flow.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
   - `Portfolio_Dev/field_notes/data/dna_manifest.json`
 
 ---
 
-### 🧬 Story 79.4: Writing View with Reactive Dirty Highlighting & Clean Suggestion Review (`[FEAT-584]`)
+### 🧬 Story 79.5: Writing View with Reactive Dirty Highlighting & Clean Suggestion Review (`[FEAT-584]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Objective:** Build the human authoring canvas with glowing amber dirty states and non-destructive Clean Suggestion review.
 * **Features:**
@@ -183,29 +194,17 @@ flowchart TD
 
 ---
 
-### 🧬 Story 79.5: Top-Level Studio Features: Rename, Archive & Gated Backdoor (`[FEAT-581]`, `[FEAT-585]`, `BKM-004`)
+### 🧬 Story 79.6: Top-Level Studio Features: Rename, Archive & Full Pipeline Certification (`[FEAT-581]`, `[FEAT-582]`, `BKM-024`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Objective:** Equip `writer.html` with top-level paper management and formalize agent access governance.
+* **Objective:** Equip `writer.html` with top-level paper management, register `PHL-029`, and certify the complete pipeline.
 * **Features:**
   1. **Rename Feature:** Rename paper title and underlying JSON filename via Foyer REST `POST /paper/rename`.
   2. **Archive Feature:** Export and snapshot paper state to archive directory / Git backup.
-  3. **Gated Backdoor Feature:** Ensure paper JSON schema is machine-writable with strict schema validation (`validate_paper_schema.py`), while enforcing the BKM rule: AGY direct paper writes require explicit human approval prompts.
+  3. **Hydrate `PHL-029`:** Register *"Language as Humanity's Supreme Invention"* in `wisdom_data.json` and sync with ChromaDB.
+  4. **Certify Build:** Execute `validate_paper_schema.py`, `build_writer.py`, and `build_site.py` with zero errors.
 * **Target Files:**
   - `Portfolio_Dev/field_notes/writer.html`
-  - `HomeLabAI/src/v5/foyer/router.py`
-  - `Portfolio_Dev/scripts/validate_paper_schema.py`
-
----
-
-### 🧬 Story 79.6: Metadata Calibration & Full LaTeX Pipeline Verification (`[FEAT-582]`, `BKM-024`)
-* **Assigned Owner:** `[AGY:PRIMARY]`
-* **Objective:** Calibrate paper metadata and certify full compilation pipeline.
-* **Features:**
-  1. Update `papers/manifest.json` and `papers/paper_jitc_intuition.json` with new title: *"Just in time context retrieval and synthesis"* and subtitle: *"Applied armchair philosophy"*.
-  2. Register `PHL-029` in `wisdom_data.json` and sync with ChromaDB.
-  3. Execute `validate_paper_schema.py`, `build_writer.py`, and `build_site.py` with zero errors.
-* **Target Files:**
   - `Portfolio_Dev/papers/manifest.json`
-  - `Portfolio_Dev/papers/paper_jitc_intuition.json`
   - `Portfolio_Dev/field_notes/data/wisdom_data.json`
   - `Portfolio_Dev/scripts/build_writer.py`
+
