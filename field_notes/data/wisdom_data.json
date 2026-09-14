@@ -11,24 +11,24 @@
       "created_at": "2026-03-01T12:00:00Z"
     },
     "synthesis": {
-      "title": "The Three Pillars & Just-In-Time Context (JITC)",
-      "narrative_context": "Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.",
+      "title": "Dual-Channel Memory: JITC and Feedback",
+      "narrative_context": "Monolithic context windows suffer from quadratic scaling and attention dilution, causing critical information loss. The architectural solution is a dual-channel paradigm combining precise, ambient vector retrieval (JITC) for immediate inference with layered feedback loops for long-term database distillation. This prevents the failure mode of memorizing the entire dictionary by floating up only the necessary anchors.",
       "lab_anchors": [
         "HomeLabAI/config/hooks/icm_hook.py",
         "BKM-046",
         "FEAT-546"
       ],
       "review_notes": "Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.",
-      "last_refined_by": "AGY",
-      "refinement_version": 1
+      "last_refined_by": "M5_AIR",
+      "refinement_version": 2
     },
     "metadata": {
       "tags": [
-        "memory",
         "jitc",
-        "context-window",
-        "attention-dilution",
-        "three-pillars"
+        "memory-architecture",
+        "feedback-loops",
+        "vector-retrieval",
+        "context-management"
       ],
       "explicit_links": [
         "WIS-002",

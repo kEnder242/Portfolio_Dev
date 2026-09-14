@@ -24,7 +24,7 @@ Based on operator design directives and the Sprint 77 closeout:
 
 ### 2. 🧬 Taxonomy: The Role of Wisdom vs. Philosophy vs. Gems
 * **Wisdom is the Overarching System:** "Wisdom" is the meta-system and framework for defining, linking, and managing all lab DNA—not an individual card prefix. The `WIS-XXX` tag prefix is formally **retired**.
-* **`PHL-xxx` (Genuine Philosophy DNA):** High-level foundational mental models, epistemology, and engineering vectors extracted from *Philosophy and Learnings 2024–2026* (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`) and Google Keep notes (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`).
+* **`PHL-xxx` (Genuine Philosophy DNA):** High-level foundational mental models, epistemology, and engineering vectors extracted from *Philosophy and Learnings 2024.docx* (`1MH8W3jrhrny0xU46jK27J8nrUQurXk16`), *Philosophy and Learnings 2024–2026* (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`), and Google Keep notes (`1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ`).
 * **Gems (`GEM-xxx`):** The technical, code-level execution layer extracted from daily engineering logs.
 * **No `PAPER-xxx` in ChromaDB:** Papers are composite prose documents that **cite** DNA; they are not atomic retrieval chunks.
 * **Deprecate `writer` in `dna_manifest.json`:** Prune the redundant mirror collection.
@@ -82,16 +82,42 @@ Based on operator design directives and the Sprint 77 closeout:
 
 ---
 
-### 🟡 Phase 2: Synthesis Reflow, Tag Drag-and-Drop & Revisions (Tagged for Research / Deferral)
+### 🟡 Phase 2: Synthesis Reflow, Tag Drag-and-Drop & Revisions
 
-#### 🧬 Story 78.5: Structural Tree View & DNA Tag Drag-and-Drop (`[FEAT-583]`) [RISK: MEDIUM]
-* **Assigned Owner:** `[SWARM:CLOUD]`
-* **Objective:** Visual drag-and-drop or slotting interface for DNA citation chips between Section and Paragraph containers.
-* **Research Focus:** Evaluate lightweight `SortableJS` (~8KB local static script) vs native HTML5 DnD to ensure buttery, bug-free tag movement without DOM corruption.
-* **Dirty Marking:** Moving a chip instantly marks the destination and origin paragraph containers `dirty = true`.
+#### 🧬 Story 78.5: Structural Tree View & DNA Tag Drag-and-Drop (`[FEAT-583]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
+* **Objective:** Visual drag-and-drop or slotting interface for DNA citation chips between Section and Paragraph containers in `writer.html`.
+* **Implementation:** Deploy lightweight `SortableJS` (~8KB local static script) for buttery, bug-free tag movement without DOM corruption. Moving a chip instantly marks the destination and origin paragraph containers `dirty = true`.
 
-#### 🧬 Story 78.6: Cascade Synthesis Reflow & 3-Tier Revision Carousel (`[FEAT-584]`) [RISK: HIGH]
-* **Assigned Owner:** `[SWARM:LOCAL]`
+#### 🧬 Story 78.6: Cascade Synthesis Reflow & 3-Tier Revision Carousel (`[FEAT-584]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
 * **Objective:** Implement the **[⚡ Revise / Re-synthesize]** flow to re-weave cached word collections when a paragraph's citation bones change, maintaining the last 3 revisions.
 * **UI Controls:** `< >` revision navigator inside the inspector panel allowing the operator to step through recent revisions (timestamp, prompt hash, diff) and revert if needed.
-* **Pre-flight Requirement:** Verify sovereign engine communication (`X-Lab-Key` auth) before activating automated wordsmithing.
+
+---
+
+### 🔵 Phase 3: Round Table Vocality, Multi-Doc PHL Ingestion & 5x5 Gauntlet
+
+#### 🧬 Story 78.7: Multi-Doc PHL Extraction, Staged Ingestion & Schema Gate (`[FEAT-585]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
+* **Objective:** Scrape and decompose primary documents into atomic `PHL-xxx` Philosophy DNA items and populate the active unified paper (`paper_jitc_intuition.json`).
+* **Source Documents:**
+  1. `Philosophy and Learnings 2024.docx` (`1MH8W3jrhrny0xU46jK27J8nrUQurXk16`)
+  2. `Philosophy and Learnings 2024–2026` (`1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`)
+  3. `Intuition paper (Sept 5 2026)`
+* **Backchannel & Validation:**
+  - Automated schema validator (`validate_paper_schema.py`) enforcing paragraph UUIDs, immutable origin pointers, and citation arrays.
+  - Internal backchannel allowing AGY to update paper datasets via Foyer REST `POST /paper/save` (`:8765`) or verified atomic disk writes.
+
+#### 🧬 Story 78.8: Round Table Vocality, Non-Blocking Pre-Warm & Sub-Second Triage Fallback (`[FEAT-368]`, `[FEAT-486]`, `[FEAT-233]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
+* **Baseline Anchor:** Historical Turn 1 at 20:19:45 (Sprint 70/71 round table baseline: Pinky <1s preamble $\rightarrow$ Brain/Deep Thought synthesis in ~3-5s).
+* **Objective:** Resolve M5 Air cold-start stalls and restore non-blocking waterfall fallback.
+* **Core Fixes:**
+  1. **M5 Air Startup Pre-Warm Probe (`[FEAT-368]`):** Non-blocking background socket handshake and dummy token prefill on boot to eliminate initial 7-16s KV-cache allocation stalls.
+  2. **Decoupled Waterfall Execution (`[FEAT-233]`):** Remove monolithic `asyncio.wait_for` blocking in `router.py`. If Deep Thought synthesis exceeds 2x threshold, immediately stream Pinky's conversational reply without throwing `"pipeline hit a snag"`, allowing Deep Thought to follow up or stream asynchronously.
+
+#### 🧬 Story 78.9: Live 5x5 Timed Gauntlet Certification & Blackboard Ledger Stabilization (`BKM-010`, `BKM-050`, `[FEAT-501]`)
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
+* **Objective:** Execute the full 75-minute live Playwright integration endurance test (`test_perf_5x5_timed.py --intervals 0 5 10 20 40`) against active running daemons (Foyer `:8765`, Intercom `:9001`, ChromaDB `:8001`, M5 Air OMLX `:8000`).
+* **Protocol Discipline:** If defects or timeout spikes occur, apply root-cause fixes and restart full intervals until all 5 cycles pass with complete round table blackboard telemetry.

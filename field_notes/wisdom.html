@@ -347,21 +347,21 @@
             <span class="card-save-status"></span>
         </div>
             </div>
-            <div class="card-title wb-editable" data-field="title" contenteditable="false">Dual-Channel Memory and JITC Architecture</div>
+            <div class="card-title wb-editable" data-field="title" contenteditable="false">Dual-Channel Memory: JITC and Feedback</div>
             <div class="card-section">
                 <span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>
                 <div class="origin-quote wb-locked" data-field="origin" contenteditable="false">Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.</div>
             </div>
             <div class="card-section">
                 <span class="section-label">Narrative Context</span>
-                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Monolithic context windows suffer from quadratic scaling and attention dilution, causing critical information loss. The architectural insight is a dual-channel paradigm: ambient vector retrieval (JITC) injects precise 2-3 token anchors milliseconds before inference, while layered feedback loops distill long-term memory. This prevents the 'lost in the middle' failure mode by filtering noise and floating up only necessary context.</div>
+                <div class="wb-editable" data-field="narrative_context" contenteditable="false">Monolithic context windows suffer from quadratic scaling and attention dilution, causing critical information loss. The architectural solution is a dual-channel paradigm combining precise, ambient vector retrieval (JITC) for immediate inference with layered feedback loops for long-term database distillation. This prevents the failure mode of memorizing the entire dictionary by floating up only the necessary anchors.</div>
             </div>
-            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Grounds the ChromaDB port 8001 configuration and ICM fast-path hooks for low-latency context injection.</div></div>
+            <div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.</div></div>
             
             <div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors"><code>HomeLabAI/config/hooks/icm_hook.py</code> <code>BKM-046</code> <code>FEAT-546</code></div></div>
             <div class="card-section tag-row">
                 <span class="section-label">Tags</span>
-                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">jitc</span><span class="tag">memory-architecture</span><span class="tag">feedback-loops</span><span class="tag">context-retrieval</span><span class="tag">attention-dilution</span></div></div>
+                <div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">jitc</span><span class="tag">memory-architecture</span><span class="tag">feedback-loops</span><span class="tag">vector-retrieval</span><span class="tag">context-management</span></div></div>
             </div>
         </div>
 
