@@ -18,6 +18,13 @@
 | **spr-79-0-thought-organizer** | Phase 17 | Decoupled Thought Organizer & Wordsmithing Studio, Multi-Tier Bone Collections, Review/Clean Flow | **ACTIVE & IN PROGRESS** [SPRINT_PLAN_SPR_79_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_79_0.md) |
 | **spr-78-0-writer-studio** | Phase 16 | Multi-Paper Dataset Architecture, Cross-DNA Citation Pointers, Structure-to-Synthesis Reflow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_78_0.md](./docs/sprints/archive/SPRINT_PLAN_SPR_78_0.md) |
 | **spr-77-0-wisdom-workbench** | Phase 16 | Universal DNA Workbench, Nightly Synthesis Refinement, Semantic Bucketing & `writer.html` | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_77_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_77_0.md) |
+
+## 📋 Long-Horizon Backlog & Prepwork (Captured from Raw Dumps)
+* **`TODO-001` (External Demo & Anonymization):** Remove all personal identifying info; create a sanitized public demo database (e.g. public domain / Harry Potter corpus) for external demonstrations.
+* **`TODO-002` (Reinforced Guardrails & Censoring):** Aggressive pre-airlock automated filtering for internal tokens, passwords, and private network IPs.
+* **`TODO-003` (Open Source Licensing):** Evaluate GPL v3 vs MIT/Apache 2.0 for public release of the manuscript datasets, build tooling, and writer studio.
+* **`TODO-004` (Manuscript Stretch Goal):** "Define intuition as a retrieval problem without actually using the word intuition inside the paper prose."
+* **`TODO-005` (Archive Option A Implementation):** Local disk snapshotting (`papers/archive/PAPER-001_<timestamp>.json`) coupled with automated local Git commit tags.
 | **spr-73-0-triage-rubric** | Phase 15 | Triage Rubric Health, Scalar Decoupling, BKM DNA & Discourse Grounding | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_73_0.md](./SPRINT_PLAN_SPR_73_0.md) |
 | **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
 | **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
