@@ -114,6 +114,54 @@ def load_arxiv_registry():
     return arxiv_map
 
 
+def load_features_from_tracker():
+    """Parse FeatureTracker.md to extract all FEAT-xxx and LAB-xxx entries."""
+    feat_map = {}
+    if not FEATURE_TRACKER_MD.exists():
+        return feat_map
+
+    content = FEATURE_TRACKER_MD.read_text(encoding="utf-8")
+    sections = re.split(r'\n(?=## \[(?:FEAT|LAB)-)', content)
+    for sec in sections:
+        header_match = re.match(r'## \[((?:FEAT|LAB)-[A-Za-z0-9_\.\-]+)\]\s*(.*)', sec)
+        if not header_match:
+            continue
+        fid = header_match.group(1).strip()
+        title = header_match.group(2).strip()
+
+        status_match = re.search(r'\*\*Status:\*\*\s*(.*)', sec)
+        status = status_match.group(1).strip() if status_match else "ACTIVE"
+
+        code_match = re.search(r'\*\*Code:\*\*\s*(.*)', sec)
+        code_ref = code_match.group(1).strip() if code_match else ""
+
+        logic_match = re.search(r'\*\*Logic:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        logic = logic_match.group(1).strip() if logic_match else ""
+
+        rationale_match = re.search(r'\*\*Rationale:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        rationale = rationale_match.group(1).strip() if rationale_match else ""
+
+        mechanism_match = re.search(r'\*\*Mechanism:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        mechanism = mechanism_match.group(1).strip() if mechanism_match else ""
+
+        origin_text = rationale or logic or f"{fid}: {title}"
+        narrative = f"{logic}\n\n{mechanism}".strip() if (logic or mechanism) else origin_text
+
+        feat_map[fid] = {
+            "id": fid,
+            "collection": "feature",
+            "title": title or fid,
+            "origin_text": origin_text,
+            "origin_source": f"FeatureTracker.md ({fid})",
+            "narrative": narrative,
+            "lab_anchors": [code_ref] if code_ref else [],
+            "tags": ["feature", "code-anchor", status.lower()],
+            "status": status,
+            "author": "Federated Lab"
+        }
+    return feat_map
+
+
 def build_citation_index(dna_manifest, arxiv_registry):
     """Build a unified dictionary of all resolvable citations across collections."""
     index = {}
@@ -172,6 +220,11 @@ def build_citation_index(dna_manifest, arxiv_registry):
             "author": "Academic Literature",
             "arxiv": item["arxiv"]
         }
+
+    # 4. Feature DNA (FEAT-xxx & LAB-xxx from FeatureTracker.md)
+    features = load_features_from_tracker()
+    for fid, fitem in features.items():
+        index[fid] = fitem
 
     return index
 
