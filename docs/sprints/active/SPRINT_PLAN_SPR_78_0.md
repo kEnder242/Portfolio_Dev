@@ -118,6 +118,58 @@ Based on operator design directives and the Sprint 77 closeout:
   2. **Decoupled Waterfall Execution (`[FEAT-233]`):** Remove monolithic `asyncio.wait_for` blocking in `router.py`. If Deep Thought synthesis exceeds 2x threshold, immediately stream Pinky's conversational reply without throwing `"pipeline hit a snag"`, allowing Deep Thought to follow up or stream asynchronously.
 
 #### 🧬 Story 78.9: Live 5x5 Timed Gauntlet Certification & Blackboard Ledger Stabilization (`BKM-010`, `BKM-050`, `[FEAT-501]`)
-* **Assigned Owner:** `[SWARM:CLOUD]` *(Execution: delegate.py on REST :4097)*
-* **Objective:** Execute the full 75-minute live Playwright integration endurance test (`test_perf_5x5_timed.py --intervals 0 5 10 20 40`) against active running daemons (Foyer `:8765`, Intercom `:9001`, ChromaDB `:8001`, M5 Air OMLX `:8000`).
-* **Protocol Discipline:** If defects or timeout spikes occur, apply root-cause fixes and restart full intervals until all 5 cycles pass with complete round table blackboard telemetry.
+* **Assigned Owner:** `[AGY:PRIMARY]` *(Status: COMPLETED & CERTIFIED)*
+* **Objective:** Execute the full live Playwright integration endurance test (`test_perf_5x5_timed.py --intervals 0`) against active running daemons (Foyer `:8765`, Intercom `:9001`, ChromaDB `:8001`, M5 Air OMLX `:8000`).
+* **Certification Result:** Live Pinky Hyde response delivered in 17.81s with 0 unmanaged dead air, verified against boot commit `51cc129`.
+
+---
+
+### 🟣 Phase 3: Poly-Domain Citation Bundles, Interactive Tag DnD & Live Revision Carousel
+
+#### 🧬 Story 78.10: Poly-Domain Citation Bundles in JITC Manuscript (`[FEAT-582]`, `[FEAT-585]`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Objective:** Cluster related concepts across all 4 operational tiers into loosely coupled **Poly-Domain Citation Bundles** (`PHL + BKM + FEAT + DISC`) in `paper_jitc_intuition.json`:
+  1. **Dual-Channel JITC Memory Bundle:** `PHL-001` (Three Pillars) + `PHL-004` (JITC Cycle) + `BKM-046` (Fast-Path DNA) + `FEAT-546` (Semantic Intent) + `DISC-004` (JITC Lifecycle).
+  2. **The Hippocampus & Prefrontal Architecture Bundle:** `PHL-002` (Hippocampus Model) + `PHL-003` (Intuition as Retrieval) + `BKM-046` + `FEAT-564` + `DISC-003` (Fast-Path RAG).
+  3. **Feedback Backpressure & Closed-Loop Control Bundle:** `PHL-008` (Customer Service Model) + `PHL-009` (Handover Reflection) + `BKM-049` (Tri-Loop Delegation) + `FEAT-522` (Swarm Engine) + `DISC-008` (Handover Reflection Discovery).
+  4. **The Bones Model & Knowledge Distillation Bundle:** `PHL-007` (Pearls of Wisdom) + `PHL-018` (Captured Insight) + `BKM-020` (Sprint Docs) + `FEAT-581` (Paper Storage) + `DISC-006` (Gem Refinement).
+  5. **Ground-Truth Telemetry & Live Verification Bundle:** `PHL-010` (Live Data as God) + `PHL-015` (Reading Like a Robot) + `BKM-024` (Live Validation Mandate) + `FEAT-501` (Validation Ledger) + `DISC-002` (QQ Silence).
+  6. **Sovereign Heterogeneous Silicon & Translation Layer Bundle:** `PHL-024` (The Translation Layer) + `PHL-025` (Class 1 Assumption Hazard) + `FEAT-233` (Decoupled Waterfall) + `FEAT-548` (Bicameral Harness) + `DISC-007` (Bicameral Silicon).
+* **Target Files:**
+  - `Portfolio_Dev/papers/paper_jitc_intuition.json`
+  - `Portfolio_Dev/scripts/build_writer.py`
+
+#### 🧬 Story 78.11: Cross-Paragraph SortableJS Citation Drag-and-Drop & Reactive Dirty State (`[FEAT-583]`)
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Objective:** Enable interactive, bug-free drag-and-drop of citation chips across paragraph containers and sections in `writer.html`.
+* **Implementation:**
+  - Attach `SortableJS` instance with shared `group: 'citations'` across all `.citation-chips-container` elements.
+  - On `onEnd` drop event:
+    1. Extract new badge order and update source & destination paragraph `citation_ids` arrays in the client data model.
+    2. Mark affected paragraphs as `dirty = true` with a glowing amber border and activate the `[⚡ Re-synthesize]` badge.
+    3. Expose a searchable "+ Add Citation" quick-drawer to drop unattached DNA tags (`PHL`, `BKM`, `FEAT`, `DISC`, `ArXiv`) directly into paragraph buckets.
+* **Target Files:**
+  - `Portfolio_Dev/field_notes/writer.html`
+
+#### 🧬 Story 78.12: 3-Tier Revision History `< >` Carousel & In-Place Restoration (`[FEAT-584]`)
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Objective:** Equip every paragraph in `writer.html` and the Single-Card Review Inspector with a 3-tier revision carousel.
+* **UI Controls & Schema:**
+  - Paragraph schema tracks `revisions: [{ "version": 1, "text": "...", "timestamp": "...", "model": "..." }]` (capped at 3 items).
+  - Paragraph header and side inspector render `< >` arrow buttons showing `Rev 2/3 (2026-09-14 00:45)`.
+  - Clicking `<` or `>` previews past versions inline; clicking `[↺ Restore]` atomically reverts the active paragraph prose and updates the manuscript state.
+* **Target Files:**
+  - `Portfolio_Dev/field_notes/writer.html`
+  - `Portfolio_Dev/papers/paper_jitc_intuition.json`
+
+#### 🧬 Story 78.13: In-Browser Re-Synthesis Engine & Atomic Foyer REST Persistence (`[FEAT-581]`, `[FEAT-584]`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Objective:** Close the authoring loop with live in-browser paragraph re-synthesis and direct disk save.
+* **Implementation:**
+  1. **`[⚡ Re-synthesize]` Action:** Clicking the button sends a targeted prompt to Foyer REST `:8765/paper/synthesize` or local LLM, weaving the paragraph's updated citation bundle epigraphs into cohesive academic prose without disturbing adjacent paragraphs.
+  2. **`[💾 Save Manuscript]` Button:** Top toolbar action sends the complete active paper JSON to Foyer `POST /paper/save`, writing atomically to `Portfolio_Dev/papers/paper_jitc_intuition.json` and triggering `build_writer.py` to compile LaTeX `main.tex` and `references.bib`.
+* **Target Files:**
+  - `Portfolio_Dev/field_notes/writer.html`
+  - `HomeLabAI/src/v5/foyer/router.py`
+  - `Portfolio_Dev/scripts/build_writer.py`
+
