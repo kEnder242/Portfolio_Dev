@@ -3033,4 +3033,21 @@
 **Rationale:** Bridges the human wordsmithing workflow with sovereign vector memory, allowing the human author to perform targeted consistency audits and proactive reference discovery at any structural granularity without losing sovereign control.
 **Mechanism:** `Portfolio_Dev/field_notes/writer.html`, Foyer REST `/paper/review_consistency`, `/paper/discover_citations`, and AST node header controllers.
 
+## [FEAT-587] Unified Hybrid Action Gutter & Reversion Engine
+**Sprint:** SPR-80.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Unified Hybrid Action Gutter & Reversion Engine.
+**Logic:** Implements a distraction-free wordsmithing interface in `writer.html`'s Writing View. Replaces static clutter buttons with a floating, semi-translucent action pill (`.hover-action-pill`) that smoothly fades in on cursor hover (`:hover`) across title blocks, section headers, and paragraph containers. Provides seamless click targets for citation epigraphs and structural badges. Integrates a Two-Tier Discard Engine: (1) Paragraph-level discard (`[↩️ Discard Changes]`) that clears dirty flags, empties pending citations, and reverts prose drafts to baseline, and (2) Global paper rollback (`[↩️ Revert to Disk]`) that re-fetches pristine JSON datasets from Foyer.
+**Rationale:** Preserves the Sovereign Human Author principle by providing an immersive, clean manuscript canvas while keeping high-velocity consistency checks, discovery queries, and safe rollback actions just a hover or click away.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, CSS hover transitions, review drawer rollback controller, and Foyer `/paper/load` integration.
 
+## [FEAT-588] Context-Aware Water-Level DNA Palette & Micro-Surface Controller
+**Sprint:** SPR-80.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Context-Aware Water-Level DNA Palette & Micro-Surface Controller.
+**Logic:** Dynamically binds the right-hand DNA Palette to whichever AST structural node (Paper Root, Section, or Paragraph) is active/focused in the Tree Outliner or Writing View. Structures the Palette into a Dual-Zone "Water Level" layout:
+1. Above the Waterline: Currently attached citations and bone collections with single-click `[✖]` submerge/detach actions.
+2. The Waterline: Interactive divider displaying real-time attached vs. suggested counts.
+3. Below the Waterline: Real-time suggestions ranked by semantic relevance to the active node's prose (querying ChromaDB Port 8001 / Foyer `/paper/discover_citations`) plus filtered search results, with single-click `[+]` surface/attach actions and micro-drag support across the waterline.
+**Rationale:** Eliminates cross-screen drag-and-drop fatigue and viewport scrolling friction, allowing the author to rapidly curate, attach, and prune citations with millisecond single-click speed.
+**Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `STATE.activeContext` binding, and ChromaDB vector query pipeline.
