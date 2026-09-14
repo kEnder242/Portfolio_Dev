@@ -130,15 +130,16 @@ def main():
         except Exception:
             manifest = {}
 
-    # 1. Wisdom
-    if WISDOM_PATH.exists():
-        with open(WISDOM_PATH, "r", encoding="utf-8") as f:
-            manifest["wisdom"] = json.load(f)
-
-    # 2. Philosophy
+    # 1. Philosophy DNA (Authoritative RW Collection)
     if PHILOSOPHY_PATH.exists():
         with open(PHILOSOPHY_PATH, "r", encoding="utf-8") as f:
             manifest["philosophy"] = json.load(f)
+    elif WISDOM_PATH.exists():
+        with open(WISDOM_PATH, "r", encoding="utf-8") as f:
+            manifest["philosophy"] = json.load(f)
+
+    # Legacy wisdom key points to philosophy collection
+    manifest["wisdom"] = manifest.get("philosophy", [])
 
     # 3. Discovery / Timeline
     if TIMELINE_PATH.exists():

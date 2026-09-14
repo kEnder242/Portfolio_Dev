@@ -199,15 +199,16 @@ def ensure_symlink():
 
 
 def build_page():
-    if not DATA_PATH.exists():
-        print(f"Error: {DATA_PATH} not found.")
+    source_path = PHILOSOPHY_PATH if PHILOSOPHY_PATH.exists() else DATA_PATH
+    if not source_path.exists():
+        print(f"Error: {source_path} not found.")
         return
 
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
-        wisdom_cards = json.load(f)
+    with open(source_path, "r", encoding="utf-8") as f:
+        philosophy_cards = json.load(f)
 
     buckets = load_buckets()
-    cards, schema = load_cards(wisdom_cards)
+    cards, schema = load_cards(philosophy_cards)
     cards_html = render_cards(cards, buckets, is_rw=True)
 
     manifest = {}
@@ -578,9 +579,8 @@ def build_page():
             <div class="dna-selector-bar">
                 <label for="dna-select"><strong>DNA COLLECTION:</strong></label>
                 <select id="dna-select" class="dna-select">
-                    <option value="wisdom" selected>Wisdom DNA (RW)</option>
+                    <option value="philosophy" selected>Philosophy DNA [PHL] (RW)</option>
                     <option value="discovery">Innovations Timeline [DISC] (RW)</option>
-                    <option value="philosophy">Philosophy DNA (RW)</option>
                     <option value="feature">Feature DNA (RO)</option>
                     <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
                     <option value="sprint">Sprint DNA (RO)</option>
@@ -589,8 +589,8 @@ def build_page():
             </div>
 
             <div class="disclaimer-box" style="margin-bottom: 20px;">
-                <span style="color: var(--accent-color); font-weight: bold;">[WIS-001 SCHEMA & IN-PLACE STUDIO]</span>
-                Wisdom cards pair an <strong>immutable origin</strong> (a verbatim, non-editable source quote) with a
+                <span style="color: var(--accent-color); font-weight: bold;">[PHL-001 SCHEMA & IN-PLACE STUDIO]</span>
+                Philosophy cards pair an <strong>immutable origin</strong> (a verbatim, non-editable source quote) with a
                 <strong>live synthesis</strong> (narrative context, takeaways, lab anchors, and tags). Each card can be
                 unlocked, edited, bucket-categorized, and saved individually with atomic REST persistence on port 8765.
             </div>
@@ -612,7 +612,7 @@ def build_page():
         // [FEAT-559 / FEAT-568 / FEAT-569] In-Place Wisdom Studio & Single-Card Save Engine
         (function () {{
             'use strict';
-            var currentCollection = 'wisdom';
+            var currentCollection = 'philosophy';
             var isReadOnly = false;
             var BUCKETS = {json.dumps(buckets)};
 
@@ -626,7 +626,7 @@ def build_page():
 
             function setCollection(col) {{
                 currentCollection = col;
-                isReadOnly = (col === 'feature' || col === 'behavioral' || col === 'sprint' || col === 'philosophy');
+                isReadOnly = (col === 'feature' || col === 'behavioral' || col === 'sprint');
                 document.body.classList.toggle('dna-ro', isReadOnly);
 
                 var badge = document.getElementById('dna-badge');
@@ -863,10 +863,10 @@ def build_page():
 
                 var saveUrl = (currentCollection === 'discovery') ?
                     'http://127.0.0.1:8765/timeline/save_card' :
-                    'http://127.0.0.1:8765/wisdom/save_card';
+                    (currentCollection === 'philosophy' ? 'http://127.0.0.1:8765/philosophy/save_card' : 'http://127.0.0.1:8765/wisdom/save_card');
                 var fallbackUrl = (currentCollection === 'discovery') ?
                     '/timeline/save_card' :
-                    '/wisdom/save_card';
+                    (currentCollection === 'philosophy' ? '/philosophy/save_card' : '/wisdom/save_card');
 
                 function doFetch(url) {{
                     return fetch(url, {{
