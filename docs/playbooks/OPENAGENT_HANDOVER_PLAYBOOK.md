@@ -122,9 +122,17 @@ When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:409
 
 ## 5. Safety Gates & Troubleshooting Ledger
 
+> [!IMPORTANT]
+> **MANDATORY PRE-EXECUTION & PRE-REPAIR DELEGATION AUDIT (BKM-049 / FEAT-477):**  
+> Before authorizing, diagnosing, or executing any fix-repair step in the Tri-Loop, the orchestrating agent MUST perform a live ledger audit across three anchors:
+> 1. **Active Playbook Invariants:** Review Sections 1–4 of this document (Topology, Tool Ballast [BKM-051], Metal Headroom [BKM-047], Category Registry).
+> 2. **Latest Retrospective Ledger:** Inspect [`DELEGATION_RETROSPECTIVE.md`](file:///home/jallred/Dev_Lab/DELEGATION_RETROSPECTIVE.md) (synthesized via `delegate.py --retrospective`) for recent sprint patterns.
+> 3. **Live Runtime Failure Trace:** Inspect [`HomeLabAI/logs/delegation_failures.log`](file:///home/jallred/Dev_Lab/HomeLabAI/logs/delegation_failures.log) for raw upstream provider errors (e.g. argument mismatches, 429/500 ladders, socket drops).
+
 ```
   ┌────────────────────────────────────────────────────────────┐
   │ 1. Ground & Delegate (Antigravity / Gemini - AGY)          │
+  │    - Mandatory Pre-Audit: Playbook + Failure Ledger        │
   │    - Master Plan entry in SPRINT_PLAN_SPR_XX_X.md          │
   │    - Dispatch via delegate.py to port 4097 (Sisyphus)      │
   └─────────────────────────────┬──────────────────────────────┘
@@ -134,7 +142,7 @@ When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:409
   │ 2. Execute & Verify (Sisyphus / Safe-Patch)                │
   │    - Code changes written via clara-dna_safe_patch         │
   │    - Pytest / verification scripts executed in-session     │
-  │    - Workers prohibited from git commit                     │
+  │    - Workers prohibited from git commit                    │
   └─────────────────────────────┬──────────────────────────────┘
                                 │
                                 ▼
