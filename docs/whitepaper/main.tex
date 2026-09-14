@@ -44,13 +44,25 @@ This paper presents the JITC (Just-In-Time Context) Meta-Framework, an architect
 \originquote{saving memories-> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence.}
 \hfill --- \textit{PHL-007}
 
-Modern foundation models boast context windows spanning hundreds of thousands to millions of tokens. However, empirical systems engineering reveals a severe divergence between theoretical context capacity and factual reasoning precision: as context payloads balloon, attention mechanisms suffer from quadratic computational overhead and severe 'lost in the middle' dilution. Crucial engineering invariants, historic post-mortems, and edge-case constraints are easily washed out when buried in massive undifferentiated prompt dumps. \cite{PHL001} \cite{PHL007}
+\noindent\originmark
+\originquote{The dual-channel memory architecture replacing monolithic context scaling with runtime dynamic anchor injection, floating up only the exact 2-3 required vectors milliseconds before inference.}
+\hfill --- \textit{DISC-004}
+
+Modern foundation models boast context windows spanning hundreds of thousands to millions of tokens. However, empirical systems engineering reveals a severe divergence between theoretical context capacity and factual reasoning precision: as context payloads balloon, attention mechanisms suffer from quadratic computational overhead and severe 'lost in the middle' dilution. Crucial engineering invariants, historic post-mortems, and edge-case constraints are easily washed out when buried in massive undifferentiated prompt dumps. \cite{PHL001} \cite{PHL007} \cite{DISC004} \cite{ARXIV230703172}
 
 \noindent\originmark
-\originquote{LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.}
-\hfill --- \textit{PHL-002}
+\originquote{Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.}
+\hfill --- \textit{PHL-005}
 
-In practice, model reliability can be quantified as an inverse function of prompt bloat. Trust is preserved not by token maximization, but through 'Token Golf'—the disciplined minimization of input token payloads while maximizing prompt fidelity. Rather than requiring an agent to memorize the entire dictionary during every inference turn, robust systems treat the filesystem and vector database as an external associative memory, floating up only the exact two or three anchors required milliseconds before generation. \cite{PHL002} \cite{FEAT526}
+\noindent\originmark
+\originquote{BKM-051: Subagent MCP Tool Scoping \& Context Ballast Protocol}
+\hfill --- \textit{BKM-051}
+
+\noindent\originmark
+\originquote{Treating prompt tokens as scarce golf strokes; minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp and subagent prompts capped strictly under 1,500 tokens.}
+\hfill --- \textit{DISC-005}
+
+In practice, model reliability can be quantified as an inverse function of prompt bloat. Trust is preserved not by token maximization, but through 'Token Golf'—the disciplined minimization of input token payloads while maximizing prompt fidelity. Rather than requiring an agent to memorize the entire dictionary during every inference turn, robust systems treat the filesystem and vector database as an external associative memory, floating up only the exact two or three anchors required milliseconds before generation. \cite{PHL005} \cite{BKM051} \cite{FEAT526} \cite{DISC005}
 
 
 \section{The JITC Meta-Framework: Dual-Channel Memory Architecture}
@@ -59,23 +71,43 @@ In practice, model reliability can be quantified as an inverse function of promp
 \hfill --- \textit{PHL-001}
 
 \noindent\originmark
+\originquote{LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.}
+\hfill --- \textit{PHL-002}
+
+\noindent\originmark
 \originquote{Aligns triage with natural engineer dialogue and prevents feedback from falling into conversational banter.}
 \hfill --- \textit{FEAT-546}
 
-The Just-In-Time Context (JITC) Meta-Framework resolves attention dilution by bifurcating memory into two strictly decoupled layers: (1) an immutable Human Sovereign Anchor containing raw, unedited historical observations, voice notes, and engineering journals, and (2) an evolving Machine Synthesis Scaffolding where automated workers iteratively refine narrative framing, tags, and codebase anchors. Machine agents are mathematically prevented from modifying or hallucinating within the origin layer. \cite{PHL001} \cite{FEAT546}
+\noindent\originmark
+\originquote{Multi-tier retrieval bypassing massive 200KB+ markdown file reads via sub-100ms vector queries on ChromaDB port 8001 and persistent SQLite ICM session memory.}
+\hfill --- \textit{DISC-003}
 
+The Just-In-Time Context (JITC) Meta-Framework resolves attention dilution by bifurcating memory into two strictly decoupled layers: (1) an immutable Human Sovereign Anchor containing raw, unedited historical observations, voice notes, and engineering journals, and (2) an evolving Machine Synthesis Scaffolding where automated workers iteratively refine narrative framing, tags, and codebase anchors. Machine agents are mathematically prevented from modifying or hallucinating within the origin layer. \cite{PHL001} \cite{PHL002} \cite{BKM046} \cite{FEAT546} \cite{DISC003}
+
+\noindent\originmark
+\originquote{Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense.}
+\hfill --- \textit{PHL-008}
+
+\noindent\originmark
+\originquote{I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'}
+\hfill --- \textit{PHL-009}
+
+\noindent\originmark
+\originquote{BKM-049: Tri-Loop Story Delegation \& Diagnostic Protocol}
+\hfill --- \textit{BKM-049}
+
+\noindent\originmark
+\originquote{Autonomous worker subagents reflect candidly upon task completion on how the task was handed over, sending closed-loop backpressure to dispatcher prompts to self-heal instruction drift.}
+\hfill --- \textit{DISC-008}
+
+A system operating without backpressure quickly devolves into a walled garden of self-reinforcing hallucinations. Drawing from high-volume customer service and datacenter operations, JITC embeds bidirectional backpressure directly into agent handovers. By mandating a 'Handover Reflection' at the completion of every delegated story, subagents stream ground-truth execution friction back into the orchestrator's knowledge graph, enabling continuous self-correction. \cite{PHL008} \cite{PHL009} \cite{BKM049} \cite{FEAT522} \cite{DISC008}
+
+
+\section{Theoretical Grounding \& Academic Prior Art}
 \noindent\originmark
 \originquote{Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -> tagging -> wisdom -> hook/trigger -> intuitive behavior.}
 \hfill --- \textit{PHL-003}
 
-\noindent\originmark
-\originquote{Provides an automated backpressure feedback channel for system friction, bad queries, and script constraints without blocking live UI response streaming.}
-\hfill --- \textit{FEAT-444}
-
-A system operating without backpressure quickly devolves into a walled garden of self-reinforcing hallucinations. Drawing from high-volume customer service and datacenter operations, JITC embeds bidirectional backpressure directly into agent handovers. By mandating a 'Handover Reflection' at the completion of every delegated story, subagents stream ground-truth execution friction back into the orchestrator's knowledge graph, enabling continuous self-correction. \cite{PHL003} \cite{FEAT444}
-
-
-\section{Theoretical Grounding \& Academic Prior Art}
 \noindent\originmark
 \originquote{Hypothetical Document Embeddings.}
 \hfill --- \textit{ARXIV:2212.10496}
@@ -88,7 +120,11 @@ A system operating without backpressure quickly devolves into a walled garden of
 \originquote{Parametric Context Generation for Dense Retrieval.}
 \hfill --- \textit{ARXIV:2209.10063}
 
-The theoretical foundation of JITC synthesizes key breakthroughs in dense retrieval and test-time reasoning. We build upon Hypothetical Document Embeddings (HyDE, Gao et al. 2022) by generating speculative preambles during streaming triage to guide vector traversal. In accordance with Query2Doc (Wang et al. 2023) and GenRead (Yu et al. 2022), local resident models produce pseudo-document expansions that convert terse, acronym-dense engineering queries into semantically rich retrieval queries across archival ChromaDB collections. \cite{ARXIV221210496} \cite{ARXIV230307678} \cite{ARXIV220910063}
+The theoretical foundation of JITC synthesizes key breakthroughs in dense retrieval and test-time reasoning. We build upon Hypothetical Document Embeddings (HyDE, Gao et al. 2022) by generating speculative preambles during streaming triage to guide vector traversal. In accordance with Query2Doc (Wang et al. 2023) and GenRead (Yu et al. 2022), local resident models produce pseudo-document expansions that convert terse, acronym-dense engineering queries into semantically rich retrieval queries across archival ChromaDB collections. \cite{PHL003} \cite{ARXIV221210496} \cite{ARXIV230307678} \cite{ARXIV220910063}
+
+\noindent\originmark
+\originquote{Establish a high-efficiency, token-optimized delegation workflow between the Strategic Orchestrator (**Antigravity / Gemini**) and the tactical developer swarm (**OpenAgent**).}
+\hfill --- \textit{BKM-034}
 
 \noindent\originmark
 \originquote{Learning to Retrieve, Generate, and Critique via Reflection.}
@@ -102,45 +138,92 @@ The theoretical foundation of JITC synthesizes key breakthroughs in dense retrie
 \originquote{Agentic Swarm Blueprint \& Socket Activation Proxy.}
 \hfill --- \textit{ARXIV:2402.05120}
 
-To maintain epistemological rigor without human bottlenecking, the JITC pipeline integrates Self-RAG reflection tokens (Asai et al. 2023) to score retrieval relevance, supported by dual-agent Context Builder and Report Writer patterns (FS-Researcher, 2026). Autonomous delegation across heterogeneous compute tiers follows formal swarm orchestration protocols (Swarm Delegation, 2024), enforcing socket-activated, token-scoped execution boundaries across local and cloud environments. \cite{ARXIV231011511} \cite{ARXIV260201566} \cite{ARXIV240205120}
+To maintain epistemological rigor without human bottlenecking, the JITC pipeline integrates Self-RAG reflection tokens (Asai et al. 2023) to score retrieval relevance, supported by dual-agent Context Builder and Report Writer patterns (FS-Researcher, 2026). Autonomous delegation across heterogeneous compute tiers follows formal swarm orchestration protocols (Swarm Delegation, 2024), enforcing socket-activated, token-scoped execution boundaries across local and cloud environments. \cite{BKM034} \cite{ARXIV231011511} \cite{ARXIV260201566} \cite{ARXIV240205120}
 
 
 \section{Engineering Discipline in the Latent Space}
+\noindent\originmark
+\originquote{What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance.}
+\hfill --- \textit{PHL-020}
+
 \noindent\originmark
 \originquote{Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time.}
 \hfill --- \textit{PHL-006}
 
 \noindent\originmark
-\originquote{Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.}
-\hfill --- \textit{PHL-005}
-
-Stochastic generative agents require the exact same structural governance that keeps human engineering organizations aligned: strict sprint cadences, explicit acceptance contracts, post-mortem retrospectives, static linting, and automated unit tests. Applying hard engineering guardrails to latent-space outputs elevates the human engineer from a line-by-line typist to an overarching Systems Architect and Product Manager, converting mental ideation into verifiable execution harnesses. \cite{PHL006} \cite{PHL005}
+\originquote{Prevent 'Loss of Intent' during context-window shifts or session restores.
+1.  **Task Verbosity**: Tasks must NOT be one-liners. They must include the 'Why' (Rationale), the 'How' (Mechanism), and the 'Proof' (Verification). Include verbatim snippets/reports from discussions to anchor the task.
+2.  **Historical Trace**: Sprints must document the forensic anchors (logs, code fragments) that justify the change.
+3.  **Absolute Append**: Do NOT re-write, overwrite, or summarize existing phases of an active sprint plan to 'save space.' New requirements or findings MUST be appended as new phases at the end of the document.
+4.  **No Summarization**: Do not slim down technical requirements for brevity. Detail is the only protection against agentic regression. Detail-rich reporting is the standard for intent preservation.
+5.  **The Pre-Lock Forensic Gap Audit (Doc vs. Discussion Review)**:
+    Before requesting user Greenlight or finalizing any Sprint Plan, the orchestrator MUST perform a forensic comparison between the conversational design session and the draft markdown document across 5 mandatory verification gates:
+    * 🔍 **Localized Root Causes**: Does every individual story contain a "Why It Broke \& Root Cause" callout box? (Subagents dispatched via `delegate.py` see only their story in isolation; root cause context prevents blind patching).
+    * 📌 **Buried Code Pointers**: Are exact filenames and line numbers cited for existing/reusable utilities (e.g., test probes, socket checkers, helper classes) to prevent reinventing the wheel?
+    * 🧪 **Literal Test Batteries**: Are concrete test input strings, phrases, and assertions printed verbatim in the story specification (never summarized as "test edge cases")?
+    * 🏛️ **Persona \& Prompt Pillars**: Are shared bedrock environment prompts, interest levels, and turn-stage tags explicitly anchored in the prompt requirements?
+    * 📡 **Telemetry \& Routing Contracts**: Are exact WebSocket packet types, channel names, and UI console targets defined?}
+\hfill --- \textit{BKM-020}
 
 \noindent\originmark
-\originquote{Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification. Concepts are pre-compiled - needs nightly refinement and consolidation.}
-\hfill --- \textit{PHL-004}
+\originquote{Automated pipeline that clears caches and prepares the `www\_deploy` directory for public hosting.}
+\hfill --- \textit{FEAT-064}
+
+Stochastic generative agents require the exact same structural governance that keeps human engineering organizations aligned: strict sprint cadences, explicit acceptance contracts, post-mortem retrospectives, static linting, and automated unit tests. Applying hard engineering guardrails to latent-space outputs elevates the human engineer from a line-by-line typist to an overarching Systems Architect and Product Manager, converting mental ideation into verifiable execution harnesses. \cite{PHL020} \cite{PHL006} \cite{BKM020} \cite{FEAT064}
 
 \noindent\originmark
-\originquote{Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense.}
-\hfill --- \textit{PHL-008}
+\originquote{Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically.}
+\hfill --- \textit{PHL-014}
 
-Unchecked AI code generation introduces 'Velocity Whiplash,' creating technical debt at rates that easily overwhelm human working memory. To counter this, JITC enforces a 'Read Like a Robot' methodology—serializing cognitive complexity through structured lists, atomic pull-request diffs, and ruthless pruning of speculative scaffolding. Software longevity depends on compositional simplicity rather than monumental frameworks. \cite{PHL004} \cite{PHL008}
+\noindent\originmark
+\originquote{'Reading Like a Robot': A systematic approach to debugging logs and stack traces by refusing to skip 'noisy' or unrecognized lines, ensuring complete context is captured.}
+\hfill --- \textit{PHL-015}
+
+\noindent\originmark
+\originquote{Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load).}
+\hfill --- \textit{PHL-023}
+
+\noindent\originmark
+\originquote{Ensure lint-verified, regression-free code edits.}
+\hfill --- \textit{BKM-011}
+
+\noindent\originmark
+\originquote{Prevent the Gemini CLI watchdog from killing active processes during long-running tasks or interactive traps.}
+\hfill --- \textit{BKM-013}
+
+Unchecked AI code generation introduces 'Velocity Whiplash,' creating technical debt at rates that easily overwhelm human working memory. To counter this, JITC enforces a 'Read Like a Robot' methodology—serializing cognitive complexity through structured lists, atomic pull-request diffs, and ruthless pruning of speculative scaffolding. Software longevity depends on compositional simplicity rather than monumental frameworks. \cite{PHL014} \cite{PHL015} \cite{PHL023} \cite{BKM011} \cite{BKM013}
 
 
 \section{Lab Implementations \& Heterogeneous Silicon Architecture}
 \noindent\originmark
+\originquote{Bridging Firmware to People: Enabling debugging software isn't just about exposing data; it's about building a translation layer. It is the process of smoothing out the accessibility of raw hardware features so datacenter operators can actually utilize them efficiently.}
+\hfill --- \textit{PHL-024}
+
+\noindent\originmark
+\originquote{Class 1 Assumption: A cautionary concept regarding the danger of coding for a static environment (like a virtual desktop), which leads to fragile architecture and technical debt when layers are 'paved over.'}
+\hfill --- \textit{PHL-025}
+
+\noindent\originmark
 \originquote{Transition from turn-based handovers to real-time, buffered token streaming between nodes.}
 \hfill --- \textit{FEAT-233}
+
+\noindent\originmark
+\originquote{Immediate persona feedback during engine ignition. If the engine is still warming, Pinky provides a hardcoded Semantic Handshake instead of crashing or providing reflex-only output.}
+\hfill --- \textit{FEAT-368}
 
 \noindent\originmark
 \originquote{Prevents 60-second connection timeout hangs and eliminates multi-second speculative delays during remote node outages.}
 \hfill --- \textit{FEAT-486}
 
 \noindent\originmark
-\originquote{Immediate persona feedback during engine ignition. If the engine is still warming, Pinky provides a hardcoded Semantic Handshake instead of crashing or providing reflex-only output.}
-\hfill --- \textit{FEAT-368}
+\originquote{Physical and logical decoupling of heavy code execution (Atlas RTX 4090) and high-parameter reasoning synthesis (Junior M5 Air Qwen 27B) over a private zero-trust network.}
+\hfill --- \textit{DISC-007}
 
-The JITC architecture is realized in the Federated Lab across heterogeneous silicon hosts: an RTX 2080 Ti running localized vLLM (Llama-3.2-3B) and an Apple Silicon M5 Air running oMLX (Qwen-27B). Through the Non-Blocking Waterfall Cascade (FEAT-233) and Live Vocality Probes (FEAT-486, FEAT-368), conversational persona triage streams to the operator in under 800ms while deep analytical synthesis completes asynchronously across the sovereign cluster. \cite{FEAT233} \cite{FEAT486} \cite{FEAT368}
+The JITC architecture is realized in the Federated Lab across heterogeneous silicon hosts: an RTX 2080 Ti running localized vLLM (Llama-3.2-3B) and an Apple Silicon M5 Air running oMLX (Qwen-27B). Through the Non-Blocking Waterfall Cascade (FEAT-233) and Live Vocality Probes (FEAT-486, FEAT-368), conversational persona triage streams to the operator in under 800ms while deep analytical synthesis completes asynchronously across the sovereign cluster. \cite{PHL024} \cite{PHL025} \cite{FEAT233} \cite{FEAT368} \cite{FEAT486} \cite{DISC007}
+
+\noindent\originmark
+\originquote{saving memories-> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence.}
+\hfill --- \textit{PHL-007}
 
 \noindent\originmark
 \originquote{Eliminates concurrent write collisions between human operators and autonomous agents while providing clean git diff tracking for evolving manuscripts.}
@@ -158,15 +241,27 @@ The JITC architecture is realized in the Federated Lab across heterogeneous sili
 \originquote{Enables surgical, cascade LLM wordsmithing that adapts to altered structural bone associations without disrupting adjacent unedited paragraphs.}
 \hfill --- \textit{FEAT-584}
 
-The manuscript production layer incorporates discrete paper datasets (FEAT-581), dynamic multi-collection citation resolvers (FEAT-582), interactive visual thought organizers (FEAT-583), and three-tier revision carousels (FEAT-584). Citation chips in the writer studio resolve directly into verified codebase anchors and arXiv LaTeX bibliographies, producing mathematically grounded publications directly from working repository state. \cite{FEAT581} \cite{FEAT582} \cite{FEAT583} \cite{FEAT584}
+\noindent\originmark
+\originquote{Workspace-wide transition from fragile OS-level symlinks to explicit canonical manifest routing for LaTeX whitepaper publishing, eliminating cross-platform artifact resolution failure.}
+\hfill --- \textit{DISC-009}
+
+The manuscript production layer incorporates discrete paper datasets (FEAT-581), dynamic multi-collection citation resolvers (FEAT-582), interactive visual thought organizers (FEAT-583), and three-tier revision carousels (FEAT-584). Citation chips in the writer studio resolve directly into verified codebase anchors and arXiv LaTeX bibliographies, producing mathematically grounded publications directly from working repository state. \cite{PHL007} \cite{FEAT581} \cite{FEAT582} \cite{FEAT583} \cite{FEAT584} \cite{DISC009}
 
 
 \section{Language as the Transmission Vehicle for Thought}
 \noindent\originmark
-\originquote{saving memories-> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence.}
-\hfill --- \textit{PHL-007}
+\originquote{Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'}
+\hfill --- \textit{PHL-017}
 
-Debates regarding artificial general intelligence often become ensnared in metaphysical arguments over machine consciousness. The JITC framework sidesteps these ambiguities by recognizing language as humanity's most powerful invention—a high-density vehicle for serializing, preserving, and executing structured thought across time and silicon substrate. When grounded in verifiable provenance, natural language becomes an undeniable control plane for complex systems. \cite{PHL007}
+\noindent\originmark
+\originquote{Captured Insight: The mechanics of trapping 'lightning in a bottle.' The workflow of moving raw shower thoughts from Google Keep into a synthesized, actionable reality via AI processing.}
+\hfill --- \textit{PHL-018}
+
+\noindent\originmark
+\originquote{Implements the "Pointers, Not Copies" invariant, allowing manuscripts to dynamically reference evolving lab DNA without content duplication.}
+\hfill --- \textit{FEAT-582}
+
+Debates regarding artificial general intelligence often become ensnared in metaphysical arguments over machine consciousness. The JITC framework sidesteps these ambiguities by recognizing language as humanity's most powerful invention—a high-density vehicle for serializing, preserving, and executing structured thought across time and silicon substrate. When grounded in verifiable provenance, natural language becomes an undeniable control plane for complex systems. \cite{PHL017} \cite{PHL018} \cite{FEAT582}
 
 
 \section{Conclusion \& Future Horizons}
@@ -175,14 +270,26 @@ Debates regarding artificial general intelligence often become ensnared in metap
 \hfill --- \textit{PHL-001}
 
 \noindent\originmark
-\originquote{Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -> tagging -> wisdom -> hook/trigger -> intuitive behavior.}
-\hfill --- \textit{PHL-003}
+\originquote{Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification. Concepts are pre-compiled - needs nightly refinement and consolidation.}
+\hfill --- \textit{PHL-004}
 
 \noindent\originmark
-\originquote{Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time.}
-\hfill --- \textit{PHL-006}
+\originquote{Using Unit tests to keep development grounded. Integration tests \& live data is god. Co-pilot feedback loop - make it easy to give feedback, talk to development through logs.}
+\hfill --- \textit{PHL-010}
 
-By anchoring autonomous agents in the dual-channel JITC Meta-Framework, engineering organizations can harness the velocity of generative models while completely eliminating hallucinations and attention collapse. Through immutable provenance, strict token budgeting, bidirectional backpressure, and automated schema gates, eighteen years of engineering insight transition from passive archives into living, self-verifying software architectures. \cite{PHL001} \cite{PHL003} \cite{PHL006} \cite{FEAT585}
+\noindent\originmark
+\originquote{Maintain continuous lab liveness and ensure physical daemon processes and silicon endpoints match active sprint code before task certification.}
+\hfill --- \textit{BKM-024}
+
+\noindent\originmark
+\originquote{Enforces the "LIVE IS GOD" mandate certifying production silicon health.}
+\hfill --- \textit{FEAT-501}
+
+\noindent\originmark
+\originquote{Automated verification execution with 3-fix-retry ladder escalating across local silicon, cloud swarm models, and human AGY takeover with pre-retry hardware/log diagnostics.}
+\hfill --- \textit{DISC-010}
+
+By anchoring autonomous agents in the dual-channel JITC Meta-Framework, engineering organizations can harness the velocity of generative models while completely eliminating hallucinations and attention collapse. Through immutable provenance, strict token budgeting, bidirectional backpressure, and automated schema gates, eighteen years of engineering insight transition from passive archives into living, self-verifying software architectures. \cite{PHL001} \cite{PHL004} \cite{PHL010} \cite{BKM024} \cite{FEAT501} \cite{FEAT585} \cite{DISC010}
 
 
 \bibliographystyle{plainnat}

@@ -127,7 +127,7 @@ Based on operator design directives and the Sprint 77 closeout:
 ### 🟣 Phase 3: Poly-Domain Citation Bundles, Interactive Tag DnD & Live Revision Carousel
 
 #### 🧬 Story 78.10: Poly-Domain Citation Bundles in JITC Manuscript (`[FEAT-582]`, `[FEAT-585]`)
-* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Assigned Owner:** `[AGY:PRIMARY]` *(Status: COMPLETED & CERTIFIED)*
 * **Objective:** Cluster related concepts across all 4 operational tiers into loosely coupled **Poly-Domain Citation Bundles** (`PHL + BKM + FEAT + DISC`) in `paper_jitc_intuition.json`:
   1. **Dual-Channel JITC Memory Bundle:** `PHL-001` (Three Pillars) + `PHL-004` (JITC Cycle) + `BKM-046` (Fast-Path DNA) + `FEAT-546` (Semantic Intent) + `DISC-004` (JITC Lifecycle).
   2. **The Hippocampus & Prefrontal Architecture Bundle:** `PHL-002` (Hippocampus Model) + `PHL-003` (Intuition as Retrieval) + `BKM-046` + `FEAT-564` + `DISC-003` (Fast-Path RAG).
@@ -140,7 +140,7 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/scripts/build_writer.py`
 
 #### 🧬 Story 78.11: Cross-Paragraph SortableJS Citation Drag-and-Drop & Reactive Dirty State (`[FEAT-583]`)
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Status: COMPLETED & VERIFIED)*
 * **Objective:** Enable interactive, bug-free drag-and-drop of citation chips across paragraph containers and sections in `writer.html`.
 * **Implementation:**
   - Attach `SortableJS` instance with shared `group: 'citations'` across all `.citation-chips-container` elements.
@@ -152,7 +152,7 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/field_notes/writer.html`
 
 #### 🧬 Story 78.12: 3-Tier Revision History `< >` Carousel & In-Place Restoration (`[FEAT-584]`)
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:CLOUD]` *(Status: COMPLETED & VERIFIED)*
 * **Objective:** Equip every paragraph in `writer.html` and the Single-Card Review Inspector with a 3-tier revision carousel.
 * **UI Controls & Schema:**
   - Paragraph schema tracks `revisions: [{ "version": 1, "text": "...", "timestamp": "...", "model": "..." }]` (capped at 3 items).
@@ -163,7 +163,7 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/papers/paper_jitc_intuition.json`
 
 #### 🧬 Story 78.13: In-Browser Re-Synthesis Engine & Atomic Foyer REST Persistence (`[FEAT-581]`, `[FEAT-584]`)
-* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Assigned Owner:** `[AGY:PRIMARY]` *(Status: COMPLETED & CERTIFIED)*
 * **Objective:** Close the authoring loop with live in-browser paragraph re-synthesis and direct disk save.
 * **Implementation:**
   1. **`[⚡ Re-synthesize]` Action:** Clicking the button sends a targeted prompt to Foyer REST `:8765/paper/synthesize` or local LLM, weaving the paragraph's updated citation bundle epigraphs into cohesive academic prose without disturbing adjacent paragraphs.
@@ -172,4 +172,5 @@ Based on operator design directives and the Sprint 77 closeout:
   - `Portfolio_Dev/field_notes/writer.html`
   - `HomeLabAI/src/v5/foyer/router.py`
   - `Portfolio_Dev/scripts/build_writer.py`
+
 

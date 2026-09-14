@@ -50,22 +50,24 @@
       "created_at": "2026-03-01T12:00:00Z"
     },
     "synthesis": {
-      "title": "Token Golf over Token Maxing & Trust Ceilings",
-      "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
+      "title": "Trust Quantified as Context Precision",
+      "narrative_context": "Model reliability decays exponentially as context size increases, making 'token maxing' a critical failure mode. This axiom mandates 'token golf'\u2014minimizing input payloads to preserve attentional fidelity\u2014thereby defining trust strictly by the model's effective memory scope rather than its theoretical window.",
       "lab_anchors": [
         "HomeLabAI/docs/Protocols.md:BKM-051",
-        "FEAT-526"
+        "FEAT-526",
+        "HomeLabAI/src/tests/delegate.py"
       ],
-      "review_notes": "Explains why worker subagent prompts must be strictly capped under 1,500 tokens.",
-      "last_refined_by": "AGY",
-      "refinement_version": 1
+      "review_notes": "Grounds the strict 1,500-token cap for worker subagent prompts to prevent attention dilution.",
+      "last_refined_by": "M5_AIR",
+      "refinement_version": 2
     },
     "metadata": {
       "tags": [
         "token-golf",
-        "trust-metrics",
-        "prompt-budget",
-        "subagent-scoping"
+        "context-window",
+        "trust-ceiling",
+        "prompt-engineering",
+        "attention-mechanism"
       ],
       "explicit_links": [
         "WIS-001",
