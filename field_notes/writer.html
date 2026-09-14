@@ -110,9 +110,49 @@
             display: inline-block;
         }
 
-        .studio-sys-console {
+        .studio-sys-console-wrap {
             background: #000;
             border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+        }
+        .sys-console-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3px 14px;
+            background: #0d1117;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            font-size: 0.7rem;
+            font-family: var(--font-stack);
+            color: var(--sub-color);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .sys-console-bar:hover {
+            background: #161b22;
+        }
+        .btn-toggle-console {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--sub-color);
+            font-size: 0.68rem;
+            font-family: var(--font-stack);
+            cursor: pointer;
+            padding: 1px 6px;
+            border-radius: 3px;
+            transition: all 0.15s;
+        }
+        .btn-toggle-console:hover {
+            color: #fff;
+            border-color: var(--border-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .studio-sys-console {
+            background: #000;
             padding: 6px 15px;
             font-family: var(--font-stack);
             font-size: 0.75rem;
@@ -120,13 +160,79 @@
             height: 65px;
             overflow-y: auto;
             flex-shrink: 0;
-            z-index: 90;
+        }
+        .studio-sys-console-wrap.collapsed .studio-sys-console {
+            display: none;
+        }
+        .studio-sys-console-wrap.collapsed .sys-console-bar {
+            border-bottom: none;
         }
         .studio-sys-console div {
             line-height: 1.4;
             white-space: pre-wrap;
             word-break: break-word;
         }
+
+        /* [FEAT-591] Waterline Popover Card Overlay */
+        .palette-card-popover {
+            position: absolute;
+            top: 50px;
+            left: 12px;
+            right: 12px;
+            background: #161b22;
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+            padding: 14px;
+            z-index: 100;
+            animation: popIn 0.15s ease-out;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .popover-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .popover-close {
+            background: transparent;
+            border: none;
+            color: var(--sub-color);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .popover-close:hover { color: #fff; }
+        /* [FEAT-591] Waterline popover chip rows & section labels */
+        .popover-section-label {
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--sub-color);
+            margin: 8px 0 4px;
+        }
+        .popover-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .dna-chip .chip-add {
+            cursor: pointer;
+            opacity: 0.75;
+            margin-left: 2px;
+            font-weight: 700;
+        }
+        .dna-chip .chip-add:hover { opacity: 1; color: #3fb950; }
+
 
         .paper-selector-wrap {
             display: flex;
@@ -11464,6 +11570,42 @@ window.__CITATION_INDEX__ = {
     "status": "DEFERRED (PROPOSED)",
     "author": "Federated Lab"
   },
+  "FEAT-590": {
+    "id": "FEAT-590",
+    "collection": "feature",
+    "title": "Sovereign Prose-First Layout & Unified Hover Toolbox",
+    "origin_text": "Ensures human prose remains the sovereign primary artifact on the canvas, while reducing cognitive friction by providing single-click access to co-pilot tools directly on hover.",
+    "origin_source": "FeatureTracker.md (FEAT-590)",
+    "narrative": "Refines the wordsmithing manuscript experience in `writer.html`:\n1. Sets default workspace view to `\ud83c\udf0a Writing View` on initial load.\n2. Inverts paragraph DOM sequence to position human author prose on top, with supporting citation epigraphs and anchors positioned underneath as footnotes.\n3. Unifies floating gutter pills and inline banner buttons into a consolidated `.toolbox-hover-pill` (`[\u270d\ufe0f Wordsmith]`, `[\ud83d\udd0d Discover]`, `[\u21a9\ufe0f Discard]`).\n4. Wires single-click auto-open for the Wordsmithing Drawer (`#wordsmithing-drawer`), pre-loading consistency analysis, paragraph LLM synthesis, and citation attachment without multi-step friction.\n5. Fixes citation inspector invocation bindings.\n\n`Portfolio_Dev/field_notes/writer.html`, DOM sequence inversion, consolidated `.toolbox-hover-pill`, and wordsmithing drawer auto-open controller.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Sovereign Prose-First Layout & Unified Hover Toolbox."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "proposed"
+    ],
+    "status": "PROPOSED",
+    "author": "Federated Lab"
+  },
+  "FEAT-591": {
+    "id": "FEAT-591",
+    "collection": "feature",
+    "title": "Deep Water-Level DNA Palette & Collapsible Console Stream",
+    "origin_text": "Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.",
+    "origin_source": "FeatureTracker.md (FEAT-591)",
+    "narrative": "Expands the Water-Level DNA Palette and system diagnostics:\n1. Enhances Foyer `POST /paper/discover_citations` to compile a deep candidate pool of ~20 related anchors (combining ChromaDB cosine similarity, bone collection co-members, and contextual discoveries).\n2. Embeds an interactive Waterline Divider (`#palette-waterline`) that pops up an elevated inspection card (`#palette-card-popover`) directly over the sidebar palette on click.\n3. Supports single-click `[+]` surface and `[\u2716]` submerge actions alongside cross-waterline micro-dragging.\n4. Adds a collapsible toggle to `#sys-console` allowing the operator to minimize the console to a 28px status bar (`\ud83d\udfe2 Ready \u00b7 0 Errors`) with `localStorage` persistence.\n\n`Portfolio_Dev/field_notes/writer.html`, `HomeLabAI/src/v5/foyer/router.py`, ChromaDB vector retrieval, and collapsible console controller.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Deep Water-Level DNA Palette & Collapsible Console Stream."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "proposed"
+    ],
+    "status": "PROPOSED",
+    "author": "Federated Lab"
+  },
   "BKM-001": {
     "id": "BKM-001",
     "collection": "behavioral",
@@ -15022,6 +15164,16 @@ window.__WRITER_QUOTES__ = [
     "title": "Public Paper Publishing Pipeline & Read-Only Showcase"
   },
   {
+    "text": "Ensures human prose remains the sovereign primary artifact on the canvas, while reducing cognitive friction by providing single-click access to co-pilot tools directly on hover.",
+    "source": "FEAT-590",
+    "title": "Sovereign Prose-First Layout & Unified Hover Toolbox"
+  },
+  {
+    "text": "Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.",
+    "source": "FEAT-591",
+    "title": "Deep Water-Level DNA Palette & Collapsible Console Stream"
+  },
+  {
     "text": "Restore the Agent's technical context after a session break or crash.",
     "source": "BKM-001",
     "title": "The Cold-Start Protocol (Agent Orientation)"
@@ -15260,7 +15412,7 @@ window.__WRITER_QUOTES__ = [
         <!-- Top Studio Header -->
         <header class="studio-header">
             <div class="header-left">
-                <span class="studio-title-badge">WRITER STUDIO v79.0</span>
+                <span class="studio-title-badge">WRITER STUDIO v81.0</span>
                 
                 <div class="paper-selector-wrap">
                     <select id="paper-select" class="paper-select" title="Select Paper Dataset"></select>
@@ -15274,10 +15426,10 @@ window.__WRITER_QUOTES__ = [
 
             <!-- Mode Switcher Tabs -->
             <div class="mode-tabs">
-                <button id="tab-btn-tree" class="mode-tab-btn active" data-tab="tree">
+                <button id="tab-btn-tree" class="mode-tab-btn" data-tab="tree">
                     <span>🌲</span> Tree View
                 </button>
-                <button id="tab-btn-write" class="mode-tab-btn" data-tab="write">
+                <button id="tab-btn-write" class="mode-tab-btn active" data-tab="write">
                     <span>🌊</span> Writing View
                 </button>
             </div>
@@ -15295,7 +15447,7 @@ window.__WRITER_QUOTES__ = [
         <div class="studio-viewport">
 
         <!-- 🌲 PANEL 1: TREE OUTLINER & PALETTE -->
-        <section id="tree-view-panel" class="studio-panel active">
+        <section id="tree-view-panel" class="studio-panel">
             <!-- Left: AST Outliner Canvas -->
             <div class="outliner-canvas">
                 <div id="tree-root-card" class="tree-root-card">
@@ -15317,8 +15469,9 @@ window.__WRITER_QUOTES__ = [
                 </div>
             </div>
 
-            <!-- Right: Context-Aware DNA Palette Drawer (FEAT-588) -->
-            <aside id="dna-palette-drawer" class="palette-drawer">
+            <!-- Right: Context-Aware DNA Palette Drawer (FEAT-588 / FEAT-591) -->
+            <aside id="dna-palette-drawer" class="palette-drawer" style="position:relative;">
+                <div id="palette-card-popover" class="palette-card-popover" style="display:none;"></div>
                 <div class="palette-header">
                     <div class="palette-title">
                         <span>🧬 DNA Palette</span>
@@ -15347,8 +15500,8 @@ window.__WRITER_QUOTES__ = [
                     <div id="palette-attached-chips" class="palette-attached-list"></div>
                 </div>
 
-                <!-- [FEAT-588] The Waterline Divider -->
-                <div id="palette-waterline" class="palette-waterline" title="Drag citations across the waterline to attach or submerge">
+                <!-- [FEAT-588 / FEAT-591] The Waterline Divider -->
+                <div id="palette-waterline" class="palette-waterline" title="Click to pop up card overview, or drag citations across the waterline">
                     <span class="waterline-text">🌊 WATER LEVEL</span>
                     <span id="palette-waterline-stats" class="waterline-stats">0 attached · 0 suggestions</span>
                 </div>
@@ -15365,7 +15518,7 @@ window.__WRITER_QUOTES__ = [
         </section>
 
         <!-- 🌊 PANEL 2: WRITING VIEW & REVIEW DRAWER -->
-        <section id="write-view-panel" class="studio-panel">
+        <section id="write-view-panel" class="studio-panel active">
             <!-- Center: Sovereign Human Prose Canvas -->
             <div class="manuscript-container">
                 <div class="manuscript-paper">
@@ -15379,10 +15532,10 @@ window.__WRITER_QUOTES__ = [
                 </div>
             </div>
 
-            <!-- Right: Clean Review Drawer -->
+            <!-- Right: Wordsmithing Drawer -->
             <aside id="review-drawer" class="review-drawer">
                 <div class="review-header">
-                    <div class="review-title">✨ Review & Clean Drawer</div>
+                    <div class="review-title">✍️ Wordsmithing Drawer</div>
                     <button id="btn-close-review" class="review-close">✖</button>
                 </div>
                 <div class="review-body">
@@ -15413,9 +15566,15 @@ window.__WRITER_QUOTES__ = [
 
         </div>
 
-        <!-- Sys Console Footer (FEAT-417) -->
-        <div id="sys-console" class="studio-sys-console">
-            <div>[INIT] Mounting Writer Studio v79.0...</div>
+        <!-- Sys Console Footer (FEAT-417 / FEAT-591) -->
+        <div id="sys-console-container" class="studio-sys-console-wrap">
+            <div id="sys-console-bar" class="sys-console-bar" title="Click to toggle console minimize/expand">
+                <span class="sys-console-title">🟢 Sys Console <span id="sys-console-summary" class="console-summary">· Ready</span></span>
+                <button id="btn-toggle-console" class="btn-toggle-console" title="Minimize / Expand Console">▼ Minimize</button>
+            </div>
+            <div id="sys-console" class="studio-sys-console">
+                <div>[INIT] Mounting Writer Studio v81.0...</div>
+            </div>
         </div>
 
     </main>
@@ -15469,7 +15628,7 @@ window.__WRITER_QUOTES__ = [
                 activePaper: window.__ACTIVE_PAPER__ || null,
                 manifest: window.__PAPERS_MANIFEST__ || { papers: [] },
                 citationIndex: window.__CITATION_INDEX__ || {},
-                activeTab: 'tree',
+                activeTab: 'write',
                 activeDomainFilter: 'ALL',
                 paletteSearchQuery: '',
                 dirtyParagraphs: new Set(),
@@ -15481,14 +15640,17 @@ window.__WRITER_QUOTES__ = [
 
             window.__STUDIO_STATE__ = STATE;
 
-            // --- Sys Console Logger (FEAT-417) ---
+            // --- Sys Console Logger & Collapsible Footer (FEAT-417 / FEAT-591) ---
+            var _consoleErrorCount = 0;
             function logSysConsole(msg, type) {
                 var consoleRow = document.getElementById('sys-console');
+                var summaryEl = document.getElementById('sys-console-summary');
                 if (!consoleRow) return;
                 var time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 var div = document.createElement('div');
                 if (type === 'error') {
                     div.style.color = '#ff3b30';
+                    _consoleErrorCount++;
                 } else if (type === 'success') {
                     div.style.color = '#3fb950';
                 } else if (type === 'warn') {
@@ -15499,6 +15661,39 @@ window.__WRITER_QUOTES__ = [
                 div.textContent = '[' + time + '] ' + msg;
                 consoleRow.appendChild(div);
                 consoleRow.scrollTop = consoleRow.scrollHeight;
+
+                if (summaryEl) {
+                    if (_consoleErrorCount > 0) {
+                        summaryEl.textContent = '· ' + _consoleErrorCount + ' error(s) flagged';
+                        summaryEl.style.color = '#ff3b30';
+                    } else {
+                        summaryEl.textContent = '· ' + msg.substring(0, 45) + (msg.length > 45 ? '…' : '');
+                        summaryEl.style.color = 'var(--sub-color)';
+                    }
+                }
+            }
+
+            function initConsoleToggle() {
+                var container = document.getElementById('sys-console-container');
+                var bar = document.getElementById('sys-console-bar');
+                var btn = document.getElementById('btn-toggle-console');
+                if (!container || !bar || !btn) return;
+
+                var isCollapsed = localStorage.getItem('writer_console_collapsed') === 'true';
+                if (isCollapsed) {
+                    container.classList.add('collapsed');
+                    btn.textContent = '▲ Expand';
+                }
+
+                function toggleCollapse(e) {
+                    if (e) e.stopPropagation();
+                    var collapsed = container.classList.toggle('collapsed');
+                    btn.textContent = collapsed ? '▲ Expand' : '▼ Minimize';
+                    localStorage.setItem('writer_console_collapsed', collapsed ? 'true' : 'false');
+                }
+
+                bar.addEventListener('click', toggleCollapse);
+                btn.addEventListener('click', toggleCollapse);
             }
 
             // Universal Sentry Hook (FEAT-223)
@@ -15658,6 +15853,9 @@ window.__WRITER_QUOTES__ = [
 
                 if (countEl) countEl.textContent = filtered.length + ' below';
                 if (waterCountEl) waterCountEl.textContent = attachedIds.length + ' above · ' + filtered.length + ' below';
+                // [FEAT-591] Live waterline stats: attached (above) vs suggestions (below)
+                var waterStatsEl = document.getElementById('palette-waterline-stats');
+                if (waterStatsEl) waterStatsEl.textContent = attachedIds.length + ' attached · ' + filtered.length + ' suggestions';
 
                 // [FEAT-588] Above-water zone: citations attached to the active context node
                 renderAttachedZone(attachedList, ctx, attachedIds);
@@ -15770,6 +15968,9 @@ window.__WRITER_QUOTES__ = [
                 }
                 STATE.activeContext = { tier: tier, id: id };
                 renderPalette();
+                // [FEAT-591] Keep a visible waterline popover in sync with the new active context
+                var ctxPop = document.getElementById('palette-card-popover');
+                if (ctxPop && ctxPop.style.display !== 'none') renderPalettePopover();
                 applyContextFocus();
                 logSysConsole('[FEAT-588] Active context → ' + tier + ':' + id, 'info');
             }
@@ -15879,6 +16080,131 @@ window.__WRITER_QUOTES__ = [
                 showToast('🌊 ' + citeId + ' submerged from ' + ctx.tier + ':' + ctx.id, 'success');
             }
 
+            // [FEAT-591] Render the waterline popover card overlay (active context, attached, discoveries)
+            function renderPalettePopover() {
+                var pop = document.getElementById('palette-card-popover');
+                if (!pop) return;
+
+                var ctx = getActiveContextNode();
+                var attachedIds = (ctx && ctx.node) ? listAllTierCitations(ctx.node) : [];
+                var discovered = [];
+                if (ctx && ctx.node && Array.isArray(ctx.node._discovered_candidates)) {
+                    discovered = ctx.node._discovered_candidates.filter(function(c) {
+                        return c && attachedIds.indexOf(c.id) === -1;
+                    });
+                }
+
+                pop.innerHTML = '';
+
+                var header = document.createElement('div');
+                header.className = 'popover-header';
+                header.innerHTML = '<span>🌊 Waterline Overview</span>';
+                var closeBtn = document.createElement('button');
+                closeBtn.className = 'popover-close';
+                closeBtn.textContent = '✖';
+                closeBtn.title = 'Close popover';
+                header.appendChild(closeBtn);
+                pop.appendChild(header);
+
+                // Active context info
+                var ctxLine = document.createElement('div');
+                ctxLine.style.cssText = 'font-size:0.78rem; margin-bottom:8px;';
+                if (ctx) {
+                    ctxLine.innerHTML = 'Active context: <b style="color:var(--accent-color);">' + ctx.tier + ' · ' + ctx.id + '</b>';
+                } else {
+                    ctxLine.innerHTML = '<span style="color:var(--sub-color);">No active context. Select a node in the Tree Outliner or Writing View.</span>';
+                }
+                pop.appendChild(ctxLine);
+
+                // Attached citations row (✖ submerge)
+                var attLabel = document.createElement('div');
+                attLabel.className = 'popover-section-label';
+                attLabel.textContent = '☀️ Attached (' + attachedIds.length + ')';
+                pop.appendChild(attLabel);
+                if (attachedIds.length === 0) {
+                    var attEmpty = document.createElement('div');
+                    attEmpty.className = 'palette-zone-empty';
+                    attEmpty.textContent = 'Nothing attached above the waterline yet.';
+                    pop.appendChild(attEmpty);
+                } else {
+                    var attRow = document.createElement('div');
+                    attRow.className = 'popover-chip-row';
+                    attachedIds.forEach(function(citeId) {
+                        var chip = document.createElement('span');
+                        chip.className = 'dna-chip';
+                        chip.dataset.domain = getDomainForCite(citeId);
+                        chip.title = '✖ Submerge / detach from ' + (ctx ? ctx.tier : '');
+                        var idSpan = document.createElement('span');
+                        idSpan.textContent = citeId;
+                        chip.appendChild(idSpan);
+                        var del = document.createElement('span');
+                        del.className = 'chip-del';
+                        del.textContent = '✖';
+                        del.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            submergeCitationFromContext(citeId);
+                            renderPalettePopover();
+                        });
+                        chip.appendChild(del);
+                        attRow.appendChild(chip);
+                    });
+                    pop.appendChild(attRow);
+                }
+
+                // Discovered candidate row (+ surface)
+                var discLabel = document.createElement('div');
+                discLabel.className = 'popover-section-label';
+                discLabel.textContent = '🌊 Discovered Candidates (' + discovered.length + ')';
+                pop.appendChild(discLabel);
+                if (discovered.length === 0) {
+                    var discEmpty = document.createElement('div');
+                    discEmpty.className = 'palette-zone-empty';
+                    discEmpty.textContent = 'No live discoveries yet. Run 🔍 Discover on a node to surface candidates.';
+                    pop.appendChild(discEmpty);
+                } else {
+                    var discRow = document.createElement('div');
+                    discRow.className = 'popover-chip-row';
+                    discovered.forEach(function(cand) {
+                        var chip = document.createElement('span');
+                        chip.className = 'dna-chip';
+                        chip.dataset.domain = getDomainForCite(cand.id);
+                        chip.title = '+ Surface / attach to ' + (ctx ? ctx.tier : '');
+                        var idSpan = document.createElement('span');
+                        idSpan.textContent = cand.id;
+                        chip.appendChild(idSpan);
+                        var add = document.createElement('span');
+                        add.className = 'chip-add';
+                        add.textContent = '+';
+                        add.title = '+ Surface / attach';
+                        add.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            attachSuggestedToContext(cand.id);
+                            renderPalettePopover();
+                        });
+                        chip.appendChild(add);
+                        discRow.appendChild(chip);
+                    });
+                    pop.appendChild(discRow);
+                }
+
+                closeBtn.addEventListener('click', function() {
+                    togglePalettePopover(false);
+                });
+            }
+
+            // [FEAT-591] Toggle the waterline popover card overlay
+            function togglePalettePopover(forceShow) {
+                var pop = document.getElementById('palette-card-popover');
+                if (!pop) return;
+                var show = (typeof forceShow === 'boolean') ? forceShow : (pop.style.display === 'none');
+                if (show) {
+                    renderPalettePopover();
+                    pop.style.display = 'block';
+                } else {
+                    pop.style.display = 'none';
+                }
+            }
+
             // Micro-drag across the waterline: drag UP to surface, drag DOWN to submerge
             function wirePaletteZoneDrops() {
                 if (STATE.__paletteZoneDropsBound) return;
@@ -15911,6 +16237,12 @@ window.__WRITER_QUOTES__ = [
                         } else if (item.type === 'citation') {
                             showToast('Drop that chip on a tier container (or the waterline from the palette zones).', 'warn');
                         }
+                    });
+
+                    // [FEAT-591] Click the waterline → toggle the card popover overlay
+                    waterline.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        togglePalettePopover();
                     });
                 }
 
@@ -16879,7 +17211,7 @@ window.__WRITER_QUOTES__ = [
                         id: id,
                         text: textBody,
                         existing_citations: nodeData.citations || [],
-                        top_k: 6
+                        top_k: 20
                     })
                 })
                 .then(function(r) { return r.json(); })
@@ -17016,30 +17348,32 @@ window.__WRITER_QUOTES__ = [
                         parWrap.className = 'manuscript-paragraph-wrap' + (par.dirty ? ' dirty' : '');
                         parWrap.dataset.paragraphId = par.id;
 
-                        // [FEAT-588] Paragraph node click → active context
+                        // [FEAT-588 / FEAT-590] Paragraph node click → active context & auto-open Wordsmithing Drawer
                         parWrap.addEventListener('click', function(e) {
                             if (e.target.closest && e.target.closest('button,input,textarea,.manuscript-epigraph')) return;
                             setActiveContext('paragraph', par.id);
                             triggerContextDiscovery('paragraph', par.id, par);
+                            openReviewDrawer(par, sec);
                         });
 
-                        // [FEAT-587] Option C: Floating Hover Action Pill on Paragraph Gutter
+                        // [FEAT-587 / FEAT-590] Unified Toolbox Hover Pill on Paragraph Gutter
                         var parPill = document.createElement('div');
-                        parPill.className = 'hover-action-pill';
-                        var pillHtml = '<button class="hover-pill-btn btn-review-pill" title="Review and wordsmith this paragraph">✨ Review</button>' +
+                        parPill.className = 'hover-action-pill toolbox-hover-pill';
+                        var pillHtml = '<button class="hover-pill-btn btn-wordsmith-pill" title="Wordsmith and review this paragraph">✍️ Wordsmith</button>' +
                                        '<button class="hover-pill-btn btn-disc-pill" title="Discover matching references for this prose">🔍 Discover</button>';
                         if (par.dirty) {
                             pillHtml += '<button class="hover-pill-btn btn-discard-pill" title="Discard pending modifications and restore baseline">↩️ Discard</button>';
                         }
-                        pillHtml += '<button class="hover-pill-btn btn-tb-pill" title="Toggle Paragraph Toolbox">🛠️</button>';
                         parPill.innerHTML = pillHtml;
 
-                        parPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
+                        parPill.querySelector('.btn-wordsmith-pill').addEventListener('click', function(e) {
                             e.stopPropagation();
+                            setActiveContext('paragraph', par.id);
                             openReviewDrawer(par, sec);
                         });
                         parPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
                             e.stopPropagation();
+                            setActiveContext('paragraph', par.id);
                             runDiscoverDirect('paragraph', par.id, par, parWrap);
                         });
                         if (par.dirty) {
@@ -17048,34 +17382,16 @@ window.__WRITER_QUOTES__ = [
                                 discardParagraphChanges(par, sec);
                             });
                         }
-                        parPill.querySelector('.btn-tb-pill').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            toggleTierToolbox('paragraph', par.id, par, parWrap);
-                        });
 
-                        // Dirty Banner with Review, Discard, and Toolbox actions
-                        var banner = document.createElement('div');
-                        banner.className = 'dirty-banner';
-                        banner.innerHTML = 
-                            '<span>⚑ DIRTY — Bone Collections Modified</span>' +
-                            '<div style="display:flex; gap:6px;">' +
-                                '<button class="btn-clean-review">✨ Review / Clean</button>' +
-                                '<button class="tb-btn btn-discard-dirty" style="font-size:0.68rem; padding:2px 6px; color:#ff7b72; border-color:#f85149;">↩️ Discard</button>' +
-                                '<button class="tb-btn btn-par-tb" style="font-size:0.68rem; padding:2px 6px;">🛠️ Toolbox</button>' +
-                            '</div>';
-
-                        banner.querySelector('.btn-clean-review').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            openReviewDrawer(par, sec);
-                        });
-                        banner.querySelector('.btn-discard-dirty').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            discardParagraphChanges(par, sec);
-                        });
-                        banner.querySelector('.btn-par-tb').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            toggleTierToolbox('paragraph', par.id, par, parWrap);
-                        });
+                        // Clean non-intrusive dirty banner
+                        var banner = null;
+                        if (par.dirty) {
+                            banner = document.createElement('div');
+                            banner.className = 'dirty-banner';
+                            banner.style.padding = '3px 8px';
+                            banner.style.marginBottom = '6px';
+                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use ✍️ Wordsmith or ↩️ Discard)</span>';
+                        }
 
                         // Epigraphs for paragraph citations (Clickable for Citation Inspector)
                         var epigraphsWrap = document.createElement('div');
@@ -17091,14 +17407,14 @@ window.__WRITER_QUOTES__ = [
                                 
                                 epi.addEventListener('click', function(e) {
                                     e.stopPropagation();
-                                    openCitationInspector(c);
+                                    openInspector(c);
                                 });
 
                                 epigraphsWrap.appendChild(epi);
                             }
                         });
 
-                        // Prose contenteditable
+                        // Prose contenteditable (Author Human Prose)
                         var prose = document.createElement('div');
                         prose.className = 'prose-editor';
                         prose.contentEditable = 'true';
@@ -17109,10 +17425,11 @@ window.__WRITER_QUOTES__ = [
                             par.text = prose.textContent;
                         });
 
+                        // [FEAT-590] Prose on Top, Supporting Epigraphs Below
                         parWrap.appendChild(parPill);
-                        parWrap.appendChild(banner);
-                        if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
+                        if (banner) parWrap.appendChild(banner);
                         parWrap.appendChild(prose);
+                        if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
                         secWrap.appendChild(parWrap);
                     });
 
@@ -17419,6 +17736,7 @@ window.__WRITER_QUOTES__ = [
                 if ((!STATE.manifest || !STATE.manifest.papers || !STATE.manifest.papers.length) && window.__PAPERS_MANIFEST__) STATE.manifest = window.__PAPERS_MANIFEST__;
                 if ((!STATE.citationIndex || !Object.keys(STATE.citationIndex).length) && window.__CITATION_INDEX__) STATE.citationIndex = window.__CITATION_INDEX__;
 
+                initConsoleToggle();
                 initModeTabs();
                 initPaperSelector();
                 initPaletteEvents();
