@@ -610,6 +610,141 @@
             overflow: hidden;
         }
 
+        /* [FEAT-588] Context-Aware Water-Level DNA Palette & Micro-Surface Controller */
+        .context-focused {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+            border-radius: 8px;
+            box-shadow: 0 0 0 3px rgba(77, 170, 252, 0.12), 0 0 18px rgba(77, 170, 252, 0.28);
+            transition: box-shadow 0.2s, outline-color 0.2s;
+        }
+
+        .palette-header { flex-shrink: 0; }
+
+        /* Above-water (attached citations) zone */
+        .palette-attached-zone {
+            display: flex;
+            flex-direction: column;
+            max-height: 34%;
+            min-height: 74px;
+            padding: 10px 16px 8px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, rgba(63, 185, 80, 0.08), rgba(63, 185, 80, 0.02) 75%), var(--sidebar-bg);
+            border-bottom: 1px dashed var(--bone-border);
+            transition: background 0.2s;
+        }
+        .palette-attached-zone.drag-over {
+            background: rgba(63, 185, 80, 0.14);
+            box-shadow: inset 0 0 0 1px var(--chip-bkm);
+        }
+        .palette-attached-zone .palette-items-list {
+            flex: 0 0 auto;
+            overflow-y: visible;
+            padding: 6px 0 2px;
+            gap: 6px;
+        }
+
+        /* Waterline divider with live count indicator */
+        .palette-waterline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 5px 14px;
+            flex-shrink: 0;
+            font-size: 0.64rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            background: linear-gradient(180deg, rgba(77, 170, 252, 0.05), rgba(77, 170, 252, 0.14));
+            border-top: 1px dashed rgba(77, 170, 252, 0.35);
+            border-bottom: 1px dashed rgba(77, 170, 252, 0.35);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .palette-waterline.drag-across {
+            background: var(--accent-dim);
+            color: #ffffff;
+            box-shadow: 0 0 14px rgba(77, 170, 252, 0.45);
+        }
+        .waterline-hint { opacity: 0.85; }
+        .waterline-count {
+            font-family: var(--font-stack);
+            text-transform: none;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 10px;
+            padding: 1px 8px;
+            font-weight: 600;
+        }
+        .waterline-icon { font-size: 0.8rem; }
+
+        /* Below-water (suggestions & search) zone */
+        .palette-suggested-zone {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .palette-suggested-zone .palette-smart-bubbles {
+            padding: 8px 16px 2px;
+            margin-bottom: 4px;
+        }
+        .palette-suggested-zone .palette-items-list {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .palette-zone-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--sub-color);
+        }
+        .zone-context-id {
+            text-transform: none;
+            font-family: var(--font-stack);
+            font-size: 0.68rem;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .palette-zone-empty {
+            font-size: 0.72rem;
+            color: var(--sub-color);
+            font-style: italic;
+            line-height: 1.45;
+            padding: 2px 2px 4px;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .attach-btn {
+            background: rgba(63, 185, 80, 0.12);
+            border: 1px solid rgba(63, 185, 80, 0.4);
+            color: #7ee787;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 1px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .attach-btn:hover { background: #2ea043; color: #ffffff; }
+
         /* --- WRITING VIEW (MANUSCRIPT & REVIEW DRAWER) --- */
         #write-view-panel {
             display: none;
@@ -766,6 +901,59 @@
             color: var(--heading-color);
         }
 
+        /* [FEAT-587] Option C: Hover Action Gutter & Floating Pill */
+        .hover-action-pill {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(17, 22, 29, 0.95);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            padding: 3px 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
+            transform: translateY(-2px);
+            z-index: 20;
+        }
+
+        .manuscript-paragraph-wrap:hover .hover-action-pill,
+        .paper-title-block:hover .hover-action-pill,
+        .manuscript-section:hover > .sec-header-wrap .hover-action-pill {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .hover-pill-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--sub-color);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .hover-pill-btn:hover {
+            color: #ffffff;
+            border-color: var(--accent-color);
+            background: rgba(77, 170, 252, 0.15);
+        }
+        .hover-pill-btn.btn-review-pill { color: #ffd369; }
+        .hover-pill-btn.btn-review-pill:hover { border-color: var(--amber-glow); background: rgba(210, 153, 34, 0.2); }
+        .hover-pill-btn.btn-discard-pill { color: #ff7b72; }
+        .hover-pill-btn.btn-discard-pill:hover { border-color: #f85149; background: rgba(248, 81, 73, 0.2); }
+
         .manuscript-paragraph-wrap {
             margin-bottom: 18px;
             position: relative;
@@ -813,6 +1001,22 @@
         }
         .btn-clean-review:hover { background: #e5a930; }
 
+        .btn-discard-drawer {
+            background: transparent;
+            border: 1px solid #f85149;
+            color: #ff7b72;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-discard-drawer:hover {
+            background: rgba(248, 81, 73, 0.15);
+            color: #ffffff;
+        }
+
         .prose-editor {
             outline: none;
             font-size: 1rem;
@@ -833,6 +1037,14 @@
             font-style: italic;
             font-size: 0.88rem;
             color: var(--sub-color);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+        }
+        .manuscript-epigraph:hover {
+            background: rgba(210, 153, 34, 0.12);
+            border-left-color: #ffe082;
+            color: var(--text-color);
         }
         .manuscript-epigraph .epigraph-anchor {
             display: block;
@@ -11198,6 +11410,60 @@ window.__CITATION_INDEX__ = {
     "status": "PROPOSED",
     "author": "Federated Lab"
   },
+  "FEAT-587": {
+    "id": "FEAT-587",
+    "collection": "feature",
+    "title": "Unified Hybrid Action Gutter & Reversion Engine",
+    "origin_text": "Preserves the Sovereign Human Author principle by providing an immersive, clean manuscript canvas while keeping high-velocity consistency checks, discovery queries, and safe rollback actions just a hover or click away.",
+    "origin_source": "FeatureTracker.md (FEAT-587)",
+    "narrative": "Implements a distraction-free wordsmithing interface in `writer.html`'s Writing View. Replaces static clutter buttons with a floating, semi-translucent action pill (`.hover-action-pill`) that smoothly fades in on cursor hover (`:hover`) across title blocks, section headers, and paragraph containers. Provides seamless click targets for citation epigraphs and structural badges. Integrates a Two-Tier Discard Engine: (1) Paragraph-level discard (`[\u21a9\ufe0f Discard Changes]`) that clears dirty flags, empties pending citations, and reverts prose drafts to baseline, and (2) Global paper rollback (`[\u21a9\ufe0f Revert to Disk]`) that re-fetches pristine JSON datasets from Foyer.\n\n`Portfolio_Dev/field_notes/writer.html`, CSS hover transitions, review drawer rollback controller, and Foyer `/paper/load` integration.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Unified Hybrid Action Gutter & Reversion Engine."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "proposed"
+    ],
+    "status": "PROPOSED",
+    "author": "Federated Lab"
+  },
+  "FEAT-588": {
+    "id": "FEAT-588",
+    "collection": "feature",
+    "title": "Context-Aware Water-Level DNA Palette & Micro-Surface Controller",
+    "origin_text": "Eliminates cross-screen drag-and-drop fatigue and viewport scrolling friction, allowing the author to rapidly curate, attach, and prune citations with millisecond single-click speed.",
+    "origin_source": "FeatureTracker.md (FEAT-588)",
+    "narrative": "Dynamically binds the right-hand DNA Palette to whichever AST structural node (Paper Root, Section, or Paragraph) is active/focused in the Tree Outliner or Writing View. Structures the Palette into a Dual-Zone \"Water Level\" layout:\n1. Above the Waterline: Currently attached citations and bone collections with single-click `[\u2716]` submerge/detach actions.\n2. The Waterline: Interactive divider displaying real-time attached vs. suggested counts.\n3. Below the Waterline: Real-time suggestions ranked by semantic relevance to the active node's prose (querying ChromaDB Port 8001 / Foyer `/paper/discover_citations`) plus filtered search results, with single-click `[+]` surface/attach actions and micro-drag support across the waterline.\n\n`Portfolio_Dev/field_notes/writer.html`, `STATE.activeContext` binding, and ChromaDB vector query pipeline.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Context-Aware Water-Level DNA Palette & Micro-Surface Controller."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "proposed"
+    ],
+    "status": "PROPOSED",
+    "author": "Federated Lab"
+  },
+  "FEAT-589": {
+    "id": "FEAT-589",
+    "collection": "feature",
+    "title": "Public Paper Publishing Pipeline & Read-Only Showcase",
+    "origin_text": "Preserves the sovereign human author workflow while providing an airlocked public dissemination channel. Citations are 100% baked into the snapshot bundle so external public visitors have complete grounding without querying internal ChromaDB (Port 8001). The pipeline is strictly a one-way street (read-only publication with zero re-import dependency), eliminating citation loss and drift.",
+    "origin_source": "FeatureTracker.md (FEAT-589)",
+    "narrative": "Adds a `[\ud83d\udce2 Publish Paper]` action in `writer.html`. Freezes an immutable snapshot of the active paper dataset (`www_deploy/data/papers/PAPER-001_<revision>.json`), bakes in all referenced citation origin quotes and narratives (decoupling the public reader from local ChromaDB/CLaRa-DNA residency), and compiles a standalone read-only publication viewer at `www_deploy/papers.html`. Supports multiple revision histories per manuscript with diff navigation.\n\n`Portfolio_Dev/scripts/publish_paper.py`, `www_deploy/papers.html`, and Foyer `/paper/publish` endpoint.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Public Paper Publishing Pipeline & Read-Only Showcase."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "deferred (proposed)"
+    ],
+    "status": "DEFERRED (PROPOSED)",
+    "author": "Federated Lab"
+  },
   "BKM-001": {
     "id": "BKM-001",
     "collection": "behavioral",
@@ -14741,6 +15007,21 @@ window.__WRITER_QUOTES__ = [
     "title": "Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox"
   },
   {
+    "text": "Preserves the Sovereign Human Author principle by providing an immersive, clean manuscript canvas while keeping high-velocity consistency checks, discovery queries, and safe rollback actions just a hover or click away.",
+    "source": "FEAT-587",
+    "title": "Unified Hybrid Action Gutter & Reversion Engine"
+  },
+  {
+    "text": "Eliminates cross-screen drag-and-drop fatigue and viewport scrolling friction, allowing the author to rapidly curate, attach, and prune citations with millisecond single-click speed.",
+    "source": "FEAT-588",
+    "title": "Context-Aware Water-Level DNA Palette & Micro-Surface Controller"
+  },
+  {
+    "text": "Preserves the sovereign human author workflow while providing an airlocked public dissemination channel. Citations are 100% baked into the snapshot bundle so external public visitors have complete grounding without querying internal ChromaDB (Port 8001). The pipeline is strictly a one-way street (read-only publication with zero re-import dependency), eliminating citation loss and drift.",
+    "source": "FEAT-589",
+    "title": "Public Paper Publishing Pipeline & Read-Only Showcase"
+  },
+  {
     "text": "Restore the Agent's technical context after a session break or crash.",
     "source": "BKM-001",
     "title": "The Cold-Start Protocol (Agent Orientation)"
@@ -15003,6 +15284,7 @@ window.__WRITER_QUOTES__ = [
 
             <!-- Header Action Controls -->
             <div class="header-actions">
+                <button id="btn-revert-disk" class="action-btn" title="Revert all unsaved changes and reload pristine manuscript from disk">↩️ Revert to Disk</button>
                 <button id="btn-archive" class="action-btn" title="Archive current paper snapshot (Option A)">📦 Archive</button>
                 <button id="btn-validate" class="action-btn" title="Validate schema and citation syntax">🛡️ Validate</button>
                 <button id="btn-save-all" class="action-btn btn-save" title="Save manuscript to disk">💾 Save Paper</button>
@@ -15035,16 +15317,13 @@ window.__WRITER_QUOTES__ = [
                 </div>
             </div>
 
-            <!-- Right: DNA Palette Drawer -->
+            <!-- Right: Context-Aware DNA Palette Drawer (FEAT-588) -->
             <aside id="dna-palette-drawer" class="palette-drawer">
                 <div class="palette-header">
                     <div class="palette-title">
                         <span>🧬 DNA Palette</span>
                         <span id="palette-count" style="font-size:0.75rem; color:var(--sub-color); font-weight:normal;">0 items</span>
                     </div>
-
-                    <!-- Top Smart Bubble Suggestions -->
-                    <div id="palette-smart-bubbles" class="palette-smart-bubbles"></div>
 
                     <!-- Domain Filter Pills -->
                     <div class="palette-domain-pills">
@@ -15059,7 +15338,29 @@ window.__WRITER_QUOTES__ = [
                     <input type="search" id="palette-search" class="palette-search-input" placeholder="Search DNA by keyword or ID…" autocomplete="off">
                 </div>
 
-                <div id="palette-chips-list" class="palette-items-list"></div>
+                <!-- [FEAT-588] Zone A: Above Water (Attached to Active Context) -->
+                <div id="palette-attached-zone" class="palette-zone">
+                    <div class="palette-zone-label">
+                        <span>☀️ Above Water — Attached Citations</span>
+                        <span id="palette-attached-count" class="palette-zone-count">0</span>
+                    </div>
+                    <div id="palette-attached-chips" class="palette-attached-list"></div>
+                </div>
+
+                <!-- [FEAT-588] The Waterline Divider -->
+                <div id="palette-waterline" class="palette-waterline" title="Drag citations across the waterline to attach or submerge">
+                    <span class="waterline-text">🌊 WATER LEVEL</span>
+                    <span id="palette-waterline-stats" class="waterline-stats">0 attached · 0 suggestions</span>
+                </div>
+
+                <!-- [FEAT-588] Zone B: Below Water (Suggestions & Search Pool) -->
+                <div id="palette-suggested-zone" class="palette-zone palette-zone-bottom">
+                    <div class="palette-zone-label">
+                        <span>🌊 Below Water — Suggestions &amp; Search</span>
+                    </div>
+                    <div id="palette-smart-bubbles" class="palette-smart-bubbles"></div>
+                    <div id="palette-chips-list" class="palette-items-list"></div>
+                </div>
             </aside>
         </section>
 
@@ -15102,7 +15403,10 @@ window.__WRITER_QUOTES__ = [
                 </div>
                 <div class="review-footer">
                     <button id="btn-synthesize-silicon" class="btn-synthesize">✨ Query Silicon Engine (/paper/synthesize)</button>
-                    <button id="btn-kick-manuscript" class="btn-kick">🚀 Kick to Manuscript</button>
+                    <div style="display:flex; gap:8px;">
+                        <button id="btn-discard-draft" class="btn-discard-drawer" style="flex:1;">↩️ Discard Draft</button>
+                        <button id="btn-kick-manuscript" class="btn-kick" style="flex:2;">🚀 Kick to Manuscript</button>
+                    </div>
                 </div>
             </aside>
         </section>
@@ -15170,6 +15474,8 @@ window.__WRITER_QUOTES__ = [
                 paletteSearchQuery: '',
                 dirtyParagraphs: new Set(),
                 activeReviewParagraphId: null,
+                // [FEAT-588] Active context node binding ({ tier: 'paper'|'section'|'paragraph', id })
+                activeContext: null,
                 draggedItem: null // { type: 'citation'|'bone', id, inBone, sourceTier, sourceId, sourceBoneId }
             };
 
@@ -15321,6 +15627,16 @@ window.__WRITER_QUOTES__ = [
                 if (!list) return;
 
                 list.innerHTML = '';
+                var attachedList = document.getElementById('palette-attached-list');
+                var waterCountEl = document.getElementById('palette-attached-count');
+                var ctxLabel = document.getElementById('palette-attached-context-label');
+                if (attachedList) attachedList.innerHTML = '';
+
+                // [FEAT-588] Resolve active context & split the palette into above/below water
+                var ctx = getActiveContextNode();
+                var attachedIds = (ctx && ctx.node) ? listAllTierCitations(ctx.node) : [];
+                if (ctxLabel) ctxLabel.textContent = ctx ? (ctx.tier + ' · ' + ctx.id) : 'no context';
+
                 var query = STATE.paletteSearchQuery.toLowerCase();
                 var domain = STATE.activeDomainFilter;
 
@@ -15328,10 +15644,11 @@ window.__WRITER_QUOTES__ = [
                     return STATE.citationIndex[k];
                 });
 
-                // Filter entries
+                // Filter entries (below-water suggestions exclude citations already attached above the line)
                 var filtered = entries.filter(function(item) {
                     var dom = getDomainForCite(item.id);
                     if (domain !== 'ALL' && dom !== domain) return false;
+                    if (attachedIds.indexOf(item.id) !== -1) return false;
                     if (query) {
                         var hay = (item.id + ' ' + (item.title || '') + ' ' + (item.narrative || '') + ' ' + (item.origin_text || '')).toLowerCase();
                         return hay.indexOf(query) !== -1;
@@ -15339,7 +15656,11 @@ window.__WRITER_QUOTES__ = [
                     return true;
                 });
 
-                if (countEl) countEl.textContent = filtered.length + ' items';
+                if (countEl) countEl.textContent = filtered.length + ' below';
+                if (waterCountEl) waterCountEl.textContent = attachedIds.length + ' above · ' + filtered.length + ' below';
+
+                // [FEAT-588] Above-water zone: citations attached to the active context node
+                renderAttachedZone(attachedList, ctx, attachedIds);
 
                 // Smart recommendation bubbles
                 if (bubblesEl && bubblesEl.children.length === 0) {
@@ -15354,11 +15675,18 @@ window.__WRITER_QUOTES__ = [
                             openInspector(recId);
                         });
                         bBtn.addEventListener('dragstart', function(e) {
-                            STATE.draggedItem = { type: 'citation', id: recId, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null };
+                            STATE.draggedItem = { type: 'citation', id: recId, inBone: false, zone: 'suggested', sourceTier: 'palette', sourceId: null, sourceBoneId: null };
                             e.dataTransfer.setData('text/plain', recId);
                         });
                         bubblesEl.appendChild(bBtn);
                     });
+                }
+
+                if (filtered.length === 0) {
+                    var emptyHint = document.createElement('div');
+                    emptyHint.className = 'palette-zone-empty';
+                    emptyHint.textContent = 'No suggested citations below the line. Adjust filters or search terms.';
+                    list.appendChild(emptyHint);
                 }
 
                 filtered.slice(0, 100).forEach(function(item) {
@@ -15374,12 +15702,25 @@ window.__WRITER_QUOTES__ = [
                             '<span style="font-size:0.68rem; color:var(--accent-color);">' + getDomainForCite(item.id) + '</span>' +
                         '</div>' +
                         '<div style="font-size:0.8rem; color:var(--text-color); margin-bottom:2px;">' + (item.title || item.id) + '</div>' +
-                        '<div class="palette-card-desc">' + (item.origin_text || item.narrative || '') + '</div>';
+                        '<div class="palette-card-desc">' + (item.origin_text || item.narrative || '') + '</div>' +
+                        '<div class="card-actions">' +
+                            '<button class="attach-btn" title="Surface / attach to the active context node">+ Surface</button>' +
+                            '<span style="font-size:0.6rem; color:var(--sub-color);">drag ⬆ across the waterline</span>' +
+                        '</div>';
 
                     card.addEventListener('dragstart', function(e) {
-                        STATE.draggedItem = { type: 'citation', id: item.id, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null };
+                        STATE.draggedItem = { type: 'citation', id: item.id, inBone: false, zone: 'suggested', sourceTier: 'palette', sourceId: null, sourceBoneId: null };
                         e.dataTransfer.setData('text/plain', item.id);
                     });
+
+                    // [FEAT-588] [+] Surface / attach button (above-water binding)
+                    var attachBtn = card.querySelector('.attach-btn');
+                    if (attachBtn) {
+                        attachBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            attachSuggestedToContext(item.id);
+                        });
+                    }
 
                     card.addEventListener('click', function() {
                         openInspector(item.id);
@@ -15406,6 +15747,229 @@ window.__WRITER_QUOTES__ = [
                     search.addEventListener('input', function() {
                         STATE.paletteSearchQuery = search.value.trim();
                         renderPalette();
+                    });
+                }
+            }
+
+            // [FEAT-588] ----- Context-Aware Water-Level DNA Palette Controllers -----
+
+            // Resolve { tier, id } into the live paper node data
+            function getActiveContextNode() {
+                var ac = STATE.activeContext;
+                if (!ac || !ac.tier || !ac.id) return null;
+                var node = resolveTierNode(ac.tier, ac.id);
+                if (!node) return null;
+                return { tier: ac.tier, id: ac.id, node: node };
+            }
+
+            // Bind STATE.activeContext = { tier, id } and highlight the node with .context-focused
+            function setActiveContext(tier, id) {
+                if (STATE.activeContext && STATE.activeContext.tier === tier && STATE.activeContext.id === id) {
+                    applyContextFocus();
+                    return;
+                }
+                STATE.activeContext = { tier: tier, id: id };
+                renderPalette();
+                applyContextFocus();
+                logSysConsole('[FEAT-588] Active context → ' + tier + ':' + id, 'info');
+            }
+
+            // Apply / refresh the .context-focused highlight across the ACTIVE panel only
+            function applyContextFocus() {
+                document.querySelectorAll('.context-focused').forEach(function(el) {
+                    el.classList.remove('context-focused');
+                });
+                if (!STATE.activeContext) return;
+                var el = findContextNodeEl(STATE.activeContext.tier, STATE.activeContext.id);
+                if (el) el.classList.add('context-focused');
+            }
+
+            function findContextNodeEl(tier, id) {
+                if (!tier || !id) return null;
+                var treePanel = document.getElementById('tree-view-panel');
+                var treeActive = !!(treePanel && treePanel.classList.contains('active'));
+                if (tier === 'paper') {
+                    return treeActive ? document.getElementById('tree-root-card') : document.querySelector('.paper-title-block');
+                }
+                if (tier === 'section') {
+                    return treeActive
+                        ? document.querySelector('.tree-section-node[data-section-id="' + id + '"]')
+                        : document.querySelector('.manuscript-section[data-section-id="' + id + '"]');
+                }
+                if (tier === 'paragraph') {
+                    return treeActive
+                        ? document.querySelector('.tree-paragraph-node[data-paragraph-id="' + id + '"]')
+                        : document.querySelector('.manuscript-paragraph-wrap[data-paragraph-id="' + id + '"]');
+                }
+                return null;
+            }
+
+            // Renders the ABOVE-WATER zone: citations attached to the active context node
+            function renderAttachedZone(container, ctx, attachedIds) {
+                if (!container) return;
+                if (!ctx) {
+                    container.innerHTML = '<div class="palette-zone-empty">👆 Select a paper / section / paragraph node in the Tree Outliner or Writing View to surface its attached citations above the waterline.</div>';
+                    return;
+                }
+                if (!attachedIds || attachedIds.length === 0) {
+                    container.innerHTML = '<div class="palette-zone-empty">Nothing attached to <b style="color:var(--accent-color);">' + ctx.tier + ' · ' + ctx.id + '</b> yet. Use <b>+ Surface</b> or drag a suggestion up across the waterline.</div>';
+                    return;
+                }
+                attachedIds.forEach(function(citeId) {
+                    var chip = document.createElement('span');
+                    chip.className = 'dna-chip';
+                    chip.draggable = true;
+                    chip.dataset.id = citeId;
+                    chip.dataset.domain = getDomainForCite(citeId);
+                    chip.title = 'Drag down across the waterline to submerge / detach';
+
+                    chip.innerHTML = '<span>' + citeId + '</span><span class="chip-del" title="✖ Submerge / detach from ' + ctx.tier + '">✖</span>';
+
+                    chip.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        openInspector(citeId);
+                    });
+
+                    chip.querySelector('.chip-del').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        submergeCitationFromContext(citeId);
+                    });
+
+                    chip.addEventListener('dragstart', function(e) {
+                        STATE.draggedItem = { type: 'citation', id: citeId, inBone: false, zone: 'attached', sourceTier: ctx.tier, sourceId: ctx.id, sourceBoneId: null };
+                        e.dataTransfer.setData('text/plain', citeId);
+                    });
+
+                    container.appendChild(chip);
+                });
+            }
+
+            // [+] Surface / attach: move a below-water suggestion above the line (reuses tier attach controller)
+            function attachSuggestedToContext(citeId) {
+                var ctx = getActiveContextNode();
+                if (!ctx || !ctx.node) {
+                    showToast('👆 Select a paper / section / paragraph node first to surface citations to.', 'error');
+                    return;
+                }
+                if (listAllTierCitations(ctx.node).indexOf(citeId) !== -1) {
+                    showToast(citeId + ' is already attached above the line to ' + ctx.tier, 'warn');
+                    return;
+                }
+                attachItemToTier({ type: 'citation', id: citeId, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null }, ctx.node, ctx.tier);
+                renderPalette();
+                applyContextFocus();
+            }
+
+            // [✖] Submerge / detach: pull an above-water citation below the line
+            function submergeCitationFromContext(citeId) {
+                var ctx = getActiveContextNode();
+                if (!ctx || !ctx.node) return;
+                removeFromNodeCitations(ctx.node, citeId);
+                (ctx.node.bone_collections || []).forEach(function(bone) {
+                    bone.citations = (bone.citations || []).filter(function(x) { return x !== citeId; });
+                });
+                if (ctx.node.bone_collections) {
+                    ctx.node.bone_collections = ctx.node.bone_collections.filter(function(b) {
+                        return (b.citations || []).length > 0;
+                    });
+                }
+                markTierDirty(ctx.tier, ctx.node);
+                renderTreeOutliner();
+                renderPalette();
+                showToast('🌊 ' + citeId + ' submerged from ' + ctx.tier + ':' + ctx.id, 'success');
+            }
+
+            // Micro-drag across the waterline: drag UP to surface, drag DOWN to submerge
+            function wirePaletteZoneDrops() {
+                if (STATE.__paletteZoneDropsBound) return;
+                STATE.__paletteZoneDropsBound = true;
+
+                var waterline = document.getElementById('palette-waterline');
+                var attachedZone = document.getElementById('palette-attached-zone');
+                var suggestedZone = document.getElementById('palette-suggested-zone');
+
+                // Waterline: commit the crossing based on the source zone
+                if (waterline) {
+                    waterline.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        waterline.classList.add('drag-across');
+                    });
+                    waterline.addEventListener('dragleave', function() {
+                        waterline.classList.remove('drag-across');
+                    });
+                    waterline.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        waterline.classList.remove('drag-across');
+                        var item = getDraggedItem(e);
+                        if (!item || !item.id) return;
+                        if (item.zone === 'suggested') {
+                            attachSuggestedToContext(item.id);          // dragged UP → surface
+                        } else if (item.zone === 'attached') {
+                            submergeCitationFromContext(item.id);        // dragged DOWN → submerge
+                        } else if (item.type === 'citation') {
+                            showToast('Drop that chip on a tier container (or the waterline from the palette zones).', 'warn');
+                        }
+                    });
+                }
+
+                // Above-water zone accepts suggested-zone chips (surface) and tier chips (attach)
+                if (attachedZone && !attachedZone.__paletteBound) {
+                    attachedZone.__paletteBound = true;
+                    attachedZone.addEventListener('dragover', function(e) {
+                        var item = STATE.draggedItem;
+                        if (item && item.zone === 'attached') return; // already above water
+                        e.preventDefault();
+                        e.stopPropagation();
+                        attachedZone.classList.add('drag-over');
+                    });
+                    attachedZone.addEventListener('dragleave', function() {
+                        attachedZone.classList.remove('drag-over');
+                    });
+                    attachedZone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        attachedZone.classList.remove('drag-over');
+                        var item = getDraggedItem(e);
+                        if (!item || !item.id || item.zone === 'attached') return;
+                        if (item.zone === 'suggested') {
+                            attachSuggestedToContext(item.id);
+                            return;
+                        }
+                        var ctx = getActiveContextNode();
+                        if (!ctx || !ctx.node) {
+                            showToast('👆 Select a paper / section / paragraph node first.', 'error');
+                            return;
+                        }
+                        attachItemToTier(item, ctx.node, ctx.tier);
+                        renderPalette();
+                        applyContextFocus();
+                    });
+                }
+
+                // Below-water zone accepts attached chips (submerge → drag DOWN across the line)
+                if (suggestedZone && !suggestedZone.__paletteBound) {
+                    suggestedZone.__paletteBound = true;
+                    suggestedZone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        suggestedZone.classList.add('drag-over');
+                    });
+                    suggestedZone.addEventListener('dragleave', function() {
+                        suggestedZone.classList.remove('drag-over');
+                    });
+                    suggestedZone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        suggestedZone.classList.remove('drag-over');
+                        var item = getDraggedItem(e);
+                        if (!item || !item.id || item.zone === 'suggested') return;
+                        if (item.zone === 'attached') {
+                            submergeCitationFromContext(item.id);
+                        } else if (item.type === 'citation') {
+                            showToast('Drop that chip on the waterline or a tier container to move it.', 'warn');
+                        }
                     });
                 }
             }
@@ -15445,6 +16009,16 @@ window.__WRITER_QUOTES__ = [
                 var subEl = document.getElementById('tree-paper-subtitle');
                 if (titleEl) titleEl.textContent = p.title || 'Untitled Paper';
                 if (subEl) subEl.textContent = p.subtitle || '';
+
+                // [FEAT-588] Paper root click → active context
+                var rootCard = document.getElementById('tree-root-card');
+                if (rootCard && !rootCard._contextBound) {
+                    rootCard._contextBound = true;
+                    rootCard.addEventListener('click', function(e) {
+                        if (e.target.closest && e.target.closest('button,input')) return;
+                        setActiveContext('paper', p.id);
+                    });
+                }
 
                 // Paper level bones
                 var paperBonesContainer = document.getElementById('paper-tier-bones');
@@ -15522,6 +16096,13 @@ window.__WRITER_QUOTES__ = [
                         parDiv.innerHTML = parMeta;
                         parDiv.appendChild(preview);
                         parDiv.appendChild(parBonesBox);
+
+                        // [FEAT-588] Paragraph node click → active context
+                        parDiv.addEventListener('click', function(e) {
+                            if (e.target.closest && e.target.closest('button,input')) return;
+                            setActiveContext('paragraph', par.id);
+                        });
+
                         parList.appendChild(parDiv);
                     });
 
@@ -15559,12 +16140,21 @@ window.__WRITER_QUOTES__ = [
                     var secHeaderNode = secNode.querySelector('.tree-node-header');
                     if (secHeaderNode) wireHeaderDrop(secHeaderNode, sec, 'section');
 
+                    // [FEAT-588] Section node click → active context (ignore clicks originating in paragraph nodes / controls)
+                    secNode.addEventListener('click', function(e) {
+                        if (e.target.closest && e.target.closest('.tree-paragraph-node,button,input')) return;
+                        setActiveContext('section', sec.id);
+                    });
+
                     secContainer.appendChild(secNode);
                 });
 
                 // [STORY-794] Paper Root header is a drop target (paper-level bones)
                 var rootHeader = document.querySelector('.tree-root-header');
                 if (rootHeader) wireHeaderDrop(rootHeader, p, 'paper');
+
+                // [FEAT-588] Restore context highlight after re-render
+                applyContextFocus();
             }
 
             // Helper to render bones and citations in dropzone
@@ -16241,6 +16831,71 @@ window.__WRITER_QUOTES__ = [
             }
 
             // --- Writing View Renderer ---
+            // [FEAT-587] Two-Tier Discard & Reversion Engine
+            function discardParagraphChanges(par, sec) {
+                if (!par) return;
+                par.dirty = false;
+                par.pending_citations = [];
+                if (par._saved_baseline_text !== undefined) {
+                    par.text = par._saved_baseline_text;
+                }
+                STATE.dirtyParagraphs.delete(par.id);
+                var drawer = document.getElementById('review-drawer');
+                if (drawer && STATE.activeReviewParagraphId === par.id) {
+                    drawer.classList.remove('open');
+                }
+                logSysConsole('[DISCARD] Reverted pending changes for ' + par.id, 'warn');
+                showToast('↩️ Discarded pending changes for ' + par.id, 'success');
+                renderWritingView();
+                renderTreeOutliner();
+                renderPalette();
+            }
+
+            // [FEAT-587] Direct Helper to Trigger Consistency Review on a Node
+            function runConsistencyReviewDirect(tier, id, nodeData, targetContainer) {
+                toggleTierToolbox(tier, id, nodeData, targetContainer);
+            }
+
+            // [FEAT-587] Direct Helper to Trigger JITC Discovery on a Node
+            function runDiscoverDirect(tier, id, nodeData, targetContainer) {
+                toggleTierToolbox(tier, id, nodeData, targetContainer);
+            }
+
+            // [FEAT-586 / FEAT-588] Dynamic ChromaDB Live Discovery on Active Context Switch
+            function triggerContextDiscovery(tier, id, nodeData) {
+                if (!nodeData) return;
+                var textBody = nodeData.text || nodeData.cached_words || '';
+                if (tier === 'section') {
+                    textBody = (nodeData.paragraphs || []).map(function(p) { return p.text || ''; }).join('\n');
+                }
+                if (!textBody || textBody.length < 15) return;
+
+                fetch('/paper/discover_citations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paper_id: (STATE.activePaper && STATE.activePaper.id) ? STATE.activePaper.id : 'PAPER-001',
+                        tier: tier,
+                        id: id,
+                        text: textBody,
+                        existing_citations: nodeData.citations || [],
+                        top_k: 6
+                    })
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(res) {
+                    if (res.status === 'success' && res.candidates && res.candidates.length > 0) {
+                        logSysConsole('[DISCOVER] ChromaDB Port 8001 returned ' + res.candidates.length + ' live suggestions for ' + tier + ':' + id, 'info');
+                        nodeData._discovered_candidates = res.candidates;
+                        renderPalette();
+                    }
+                })
+                .catch(function(err) {
+                    // Standalone silent fallback
+                });
+            }
+
+            // --- Writing View Renderer (Option C Hybrid Gutter & Hover Triggers) ---
             function renderWritingView() {
                 var p = STATE.activePaper;
                 if (!p) return;
@@ -16253,16 +16908,46 @@ window.__WRITER_QUOTES__ = [
                 if (mAuth) mAuth.textContent = p.author || 'Jason Allred';
 
                 var titleBlock = document.querySelector('.paper-title-block');
-                if (titleBlock && !titleBlock._toolboxBound) {
-                    titleBlock._toolboxBound = true;
-                    var tbBtn = document.createElement('button');
-                    tbBtn.className = 'tb-btn btn-review';
-                    tbBtn.style.marginTop = '8px';
-                    tbBtn.textContent = '🛠️ Paper Root Toolbox';
-                    tbBtn.addEventListener('click', function() {
+                if (titleBlock) {
+                    titleBlock.style.position = 'relative';
+
+                    // Remove any old static buttons
+                    var oldStaticBtn = titleBlock.querySelector('.tb-btn.btn-review');
+                    if (oldStaticBtn) oldStaticBtn.remove();
+
+                    // [FEAT-587] Option C: Floating Hover Action Pill on Paper Root
+                    var oldPill = titleBlock.querySelector('.hover-action-pill');
+                    if (oldPill) oldPill.remove();
+
+                    var rootPill = document.createElement('div');
+                    rootPill.className = 'hover-action-pill';
+                    rootPill.innerHTML = 
+                        '<button class="hover-pill-btn btn-review-pill" title="Review whole-paper consistency">✨ Review</button>' +
+                        '<button class="hover-pill-btn" title="Discover paper-level references">🔍 Discover</button>' +
+                        '<button class="hover-pill-btn" title="Toggle Root Toolbox">🛠️</button>';
+
+                    rootPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        runConsistencyReviewDirect('paper', p.id, p, titleBlock);
+                    });
+                    rootPill.querySelectorAll('.hover-pill-btn')[1].addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        runDiscoverDirect('paper', p.id, p, titleBlock);
+                    });
+                    rootPill.querySelectorAll('.hover-pill-btn')[2].addEventListener('click', function(e) {
+                        e.stopPropagation();
                         toggleTierToolbox('paper', p.id, p, titleBlock);
                     });
-                    titleBlock.appendChild(tbBtn);
+
+                    titleBlock.appendChild(rootPill);
+
+                    if (!titleBlock._contextBound) {
+                        titleBlock._contextBound = true;
+                        titleBlock.addEventListener('click', function(e) {
+                            if (e.target.closest && e.target.closest('button,input,textarea')) return;
+                            setActiveContext('paper', p.id);
+                        });
+                    }
                 }
 
                 var secContainer = document.getElementById('manuscript-sections-container');
@@ -16272,64 +16957,143 @@ window.__WRITER_QUOTES__ = [
                 (p.sections || []).forEach(function(sec) {
                     var secWrap = document.createElement('div');
                     secWrap.className = 'manuscript-section';
+                    secWrap.dataset.sectionId = sec.id;
+
+                    // [FEAT-588] Section node click → active context
+                    secWrap.addEventListener('click', function(e) {
+                        if (e.target.closest && e.target.closest('.manuscript-paragraph-wrap,button,input,textarea')) return;
+                        setActiveContext('section', sec.id);
+                        triggerContextDiscovery('section', sec.id, sec);
+                    });
 
                     var secHeaderWrap = document.createElement('div');
+                    secHeaderWrap.className = 'sec-header-wrap';
                     secHeaderWrap.style.display = 'flex';
                     secHeaderWrap.style.alignItems = 'center';
                     secHeaderWrap.style.justifyContent = 'space-between';
                     secHeaderWrap.style.borderBottom = '1px solid var(--border-color)';
                     secHeaderWrap.style.paddingBottom = '6px';
                     secHeaderWrap.style.marginBottom = '16px';
+                    secHeaderWrap.style.position = 'relative';
 
                     var h2 = document.createElement('h2');
                     h2.style.margin = '0';
                     h2.style.border = 'none';
                     h2.textContent = sec.heading || sec.id;
 
-                    var secTbBtn = document.createElement('button');
-                    secTbBtn.className = 'tb-btn btn-review';
-                    secTbBtn.textContent = '🛠️ Section Toolbox';
-                    secTbBtn.addEventListener('click', function() {
+                    // [FEAT-587] Option C: Floating Hover Action Pill on Section Header
+                    var secPill = document.createElement('div');
+                    secPill.className = 'hover-action-pill';
+                    secPill.innerHTML = 
+                        '<button class="hover-pill-btn btn-review-pill" title="Review section consistency">✨ Review</button>' +
+                        '<button class="hover-pill-btn" title="Discover section references">🔍 Discover</button>' +
+                        '<button class="hover-pill-btn" title="Toggle Section Toolbox">🛠️</button>';
+
+                    secPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        runConsistencyReviewDirect('section', sec.id, sec, secWrap);
+                    });
+                    secPill.querySelectorAll('.hover-pill-btn')[1].addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        runDiscoverDirect('section', sec.id, sec, secWrap);
+                    });
+                    secPill.querySelectorAll('.hover-pill-btn')[2].addEventListener('click', function(e) {
+                        e.stopPropagation();
                         toggleTierToolbox('section', sec.id, sec, secWrap);
                     });
 
                     secHeaderWrap.appendChild(h2);
-                    secHeaderWrap.appendChild(secTbBtn);
+                    secHeaderWrap.appendChild(secPill);
                     secWrap.appendChild(secHeaderWrap);
 
                     (sec.paragraphs || []).forEach(function(par) {
+                        // Initialize baseline text cache for clean revert
+                        if (par._saved_baseline_text === undefined && par.text) {
+                            par._saved_baseline_text = par.text;
+                        }
+
                         var parWrap = document.createElement('div');
                         parWrap.className = 'manuscript-paragraph-wrap' + (par.dirty ? ' dirty' : '');
                         parWrap.dataset.paragraphId = par.id;
 
-                        // Dirty Banner with Review & Toolbox actions
+                        // [FEAT-588] Paragraph node click → active context
+                        parWrap.addEventListener('click', function(e) {
+                            if (e.target.closest && e.target.closest('button,input,textarea,.manuscript-epigraph')) return;
+                            setActiveContext('paragraph', par.id);
+                            triggerContextDiscovery('paragraph', par.id, par);
+                        });
+
+                        // [FEAT-587] Option C: Floating Hover Action Pill on Paragraph Gutter
+                        var parPill = document.createElement('div');
+                        parPill.className = 'hover-action-pill';
+                        var pillHtml = '<button class="hover-pill-btn btn-review-pill" title="Review and wordsmith this paragraph">✨ Review</button>' +
+                                       '<button class="hover-pill-btn btn-disc-pill" title="Discover matching references for this prose">🔍 Discover</button>';
+                        if (par.dirty) {
+                            pillHtml += '<button class="hover-pill-btn btn-discard-pill" title="Discard pending modifications and restore baseline">↩️ Discard</button>';
+                        }
+                        pillHtml += '<button class="hover-pill-btn btn-tb-pill" title="Toggle Paragraph Toolbox">🛠️</button>';
+                        parPill.innerHTML = pillHtml;
+
+                        parPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            openReviewDrawer(par, sec);
+                        });
+                        parPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            runDiscoverDirect('paragraph', par.id, par, parWrap);
+                        });
+                        if (par.dirty) {
+                            parPill.querySelector('.btn-discard-pill').addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                discardParagraphChanges(par, sec);
+                            });
+                        }
+                        parPill.querySelector('.btn-tb-pill').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            toggleTierToolbox('paragraph', par.id, par, parWrap);
+                        });
+
+                        // Dirty Banner with Review, Discard, and Toolbox actions
                         var banner = document.createElement('div');
                         banner.className = 'dirty-banner';
                         banner.innerHTML = 
                             '<span>⚑ DIRTY — Bone Collections Modified</span>' +
                             '<div style="display:flex; gap:6px;">' +
                                 '<button class="btn-clean-review">✨ Review / Clean</button>' +
+                                '<button class="tb-btn btn-discard-dirty" style="font-size:0.68rem; padding:2px 6px; color:#ff7b72; border-color:#f85149;">↩️ Discard</button>' +
                                 '<button class="tb-btn btn-par-tb" style="font-size:0.68rem; padding:2px 6px;">🛠️ Toolbox</button>' +
                             '</div>';
 
-                        banner.querySelector('.btn-clean-review').addEventListener('click', function() {
+                        banner.querySelector('.btn-clean-review').addEventListener('click', function(e) {
+                            e.stopPropagation();
                             openReviewDrawer(par, sec);
                         });
-
-                        banner.querySelector('.btn-par-tb').addEventListener('click', function() {
+                        banner.querySelector('.btn-discard-dirty').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            discardParagraphChanges(par, sec);
+                        });
+                        banner.querySelector('.btn-par-tb').addEventListener('click', function(e) {
+                            e.stopPropagation();
                             toggleTierToolbox('paragraph', par.id, par, parWrap);
                         });
 
-                        // Epigraphs for paragraph citations
+                        // Epigraphs for paragraph citations (Clickable for Citation Inspector)
                         var epigraphsWrap = document.createElement('div');
                         (par.citations || []).forEach(function(c) {
                             var citeData = STATE.citationIndex[c];
                             if (citeData && citeData.origin_text) {
                                 var epi = document.createElement('div');
                                 epi.className = 'manuscript-epigraph';
+                                epi.title = 'Click to inspect citation provenance for ' + c;
                                 epi.innerHTML = 
                                     '“' + citeData.origin_text + '”' +
                                     '<span class="epigraph-anchor">--- ' + c + ' (' + (citeData.title || '') + ')</span>';
+                                
+                                epi.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    openCitationInspector(c);
+                                });
+
                                 epigraphsWrap.appendChild(epi);
                             }
                         });
@@ -16345,31 +17109,18 @@ window.__WRITER_QUOTES__ = [
                             par.text = prose.textContent;
                         });
 
-                        // Clicking non-dirty paragraph also shows subtle toolbox trigger
-                        var parBottomBar = document.createElement('div');
-                        parBottomBar.style.display = 'flex';
-                        parBottomBar.style.justifyContent = 'flex-end';
-                        parBottomBar.style.marginTop = '6px';
-                        var parTbTrigger = document.createElement('button');
-                        parTbTrigger.className = 'tb-btn';
-                        parTbTrigger.style.fontSize = '0.65rem';
-                        parTbTrigger.style.padding = '1px 5px';
-                        parTbTrigger.style.opacity = '0.6';
-                        parTbTrigger.textContent = '🛠️ ' + par.id + ' Toolbox';
-                        parTbTrigger.addEventListener('click', function() {
-                            toggleTierToolbox('paragraph', par.id, par, parWrap);
-                        });
-                        parBottomBar.appendChild(parTbTrigger);
-
+                        parWrap.appendChild(parPill);
                         parWrap.appendChild(banner);
                         if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
                         parWrap.appendChild(prose);
-                        parWrap.appendChild(parBottomBar);
                         secWrap.appendChild(parWrap);
                     });
 
                     secContainer.appendChild(secWrap);
                 });
+
+                // [FEAT-588] Restore context highlight after re-render
+                applyContextFocus();
             }
 
             // --- Clean Review Drawer Logic ---
@@ -16417,6 +17168,18 @@ window.__WRITER_QUOTES__ = [
                     closeBtn.addEventListener('click', function() {
                         var drawer = document.getElementById('review-drawer');
                         if (drawer) drawer.classList.remove('open');
+                    });
+                }
+
+                var discardDraftBtn = document.getElementById('btn-discard-draft');
+                if (discardDraftBtn) {
+                    discardDraftBtn.addEventListener('click', function() {
+                        var parId = STATE.activeReviewParagraphId;
+                        if (!parId) return;
+                        var par = findParagraph(parId);
+                        if (par) {
+                            discardParagraphChanges(par, null);
+                        }
                     });
                 }
 
@@ -16488,11 +17251,33 @@ window.__WRITER_QUOTES__ = [
                 return null;
             }
 
-            // --- Top Level Action Handlers (Save, Validate, Archive, Rename) ---
+            // --- Top Level Action Handlers (Save, Revert, Validate, Archive, Rename) ---
             function initActionHandlers() {
                 var saveBtn = document.getElementById('btn-save-all');
                 if (saveBtn) {
                     saveBtn.addEventListener('click', savePaperDirect);
+                }
+
+                // [FEAT-587] Global Revert to Disk Handler
+                var revertBtn = document.getElementById('btn-revert-disk');
+                if (revertBtn) {
+                    revertBtn.addEventListener('click', function() {
+                        var targetFile = (STATE.activePaper && STATE.activePaper.file) ? STATE.activePaper.file : 'paper_jitc_intuition.json';
+                        fetch('/paper/load?file=' + encodeURIComponent(targetFile))
+                            .then(function(r) { return r.json(); })
+                            .then(function(res) {
+                                if (res.status === 'success' && res.paper) {
+                                    STATE.activePaper = res.paper;
+                                    STATE.dirtyParagraphs.clear();
+                                    renderAllViews();
+                                    logSysConsole('[DISCARD] Reverted entire manuscript to disk baseline (' + targetFile + ')', 'warn');
+                                    showToast('↩️ Reverted manuscript to saved disk state', 'success');
+                                }
+                            })
+                            .catch(function(err) {
+                                showToast('Revert failed: ' + err, 'error');
+                            });
+                    });
                 }
 
                 // [STORY-794] Paper Root affordance: create an empty editable Bone Collection
@@ -16637,6 +17422,7 @@ window.__WRITER_QUOTES__ = [
                 initModeTabs();
                 initPaperSelector();
                 initPaletteEvents();
+                wirePaletteZoneDrops();
                 initInspectorEvents();
                 initReviewDrawerEvents();
                 initActionHandlers();

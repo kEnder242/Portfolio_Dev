@@ -3051,3 +3051,11 @@
 3. Below the Waterline: Real-time suggestions ranked by semantic relevance to the active node's prose (querying ChromaDB Port 8001 / Foyer `/paper/discover_citations`) plus filtered search results, with single-click `[+]` surface/attach actions and micro-drag support across the waterline.
 **Rationale:** Eliminates cross-screen drag-and-drop fatigue and viewport scrolling friction, allowing the author to rapidly curate, attach, and prune citations with millisecond single-click speed.
 **Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `STATE.activeContext` binding, and ChromaDB vector query pipeline.
+
+## [FEAT-589] Public Paper Publishing Pipeline & Read-Only Showcase
+**Sprint:** SPR-81.0
+**Status:** DEFERRED (PROPOSED)
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Public Paper Publishing Pipeline & Read-Only Showcase.
+**Logic:** Adds a `[📢 Publish Paper]` action in `writer.html`. Freezes an immutable snapshot of the active paper dataset (`www_deploy/data/papers/PAPER-001_<revision>.json`), bakes in all referenced citation origin quotes and narratives (decoupling the public reader from local ChromaDB/CLaRa-DNA residency), and compiles a standalone read-only publication viewer at `www_deploy/papers.html`. Supports multiple revision histories per manuscript with diff navigation.
+**Rationale:** Preserves the sovereign human author workflow while providing an airlocked public dissemination channel. Citations are 100% baked into the snapshot bundle so external public visitors have complete grounding without querying internal ChromaDB (Port 8001). The pipeline is strictly a one-way street (read-only publication with zero re-import dependency), eliminating citation loss and drift.
+**Mechanism:** `Portfolio_Dev/scripts/publish_paper.py`, `www_deploy/papers.html`, and Foyer `/paper/publish` endpoint.
