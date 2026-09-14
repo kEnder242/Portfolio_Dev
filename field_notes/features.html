@@ -15601,6 +15601,56 @@
                             <span class="impact-badge impact-stable">PROPOSED</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-589">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-589</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Public Paper Publishing Pipeline & Read-Only Showcase
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(PROPOSED)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-81.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Adds a <code>[📢 Publish Paper]</code> action in <code>writer.html</code>. Freezes an immutable snapshot of the active paper dataset (<code>www_deploy/data/papers/PAPER-001_&lt;revision&gt;.json</code>), bakes in all referenced citation origin quotes and narratives (decoupling the public reader from local ChromaDB/CLaRa-DNA residency), and compiles a standalone read-only publication viewer at <code>www_deploy/papers.html</code>. Supports multiple revision histories per manuscript with diff navigation.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Preserves the sovereign human author workflow while providing an airlocked public dissemination channel. Citations are 100% baked into the snapshot bundle so external public visitors have complete grounding without querying internal ChromaDB (Port 8001). The pipeline is strictly a one-way street (read-only publication with zero re-import dependency), eliminating citation loss and drift.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/scripts/publish_paper.py</code>, <code>www_deploy/papers.html</code>, and Foyer <code>/paper/publish</code> endpoint.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">DEFERRED</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
