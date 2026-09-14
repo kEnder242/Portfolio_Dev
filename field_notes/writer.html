@@ -619,6 +619,99 @@
             margin-bottom: 16px;
         }
 
+        /* [FEAT-586] Multi-Tier Contextual Action Bar & Alignment Toolbox */
+        .tier-toolbox {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 8px 0 12px 0;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: fadeInToolbox 0.2s ease-in-out;
+        }
+        @keyframes fadeInToolbox {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .toolbox-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .toolbox-tier-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            background: rgba(77, 170, 252, 0.12);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-stack);
+        }
+        .toolbox-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .tb-btn {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tb-btn:hover { border-color: var(--accent-color); color: #fff; background: var(--bone-bg); }
+        .tb-btn.btn-review { border-color: var(--amber-glow); color: #ffd369; }
+        .tb-btn.btn-review:hover { background: rgba(210, 153, 34, 0.2); }
+        .tb-btn.btn-discover { border-color: #58a6ff; color: #79c0ff; }
+        .tb-btn.btn-discover:hover { background: rgba(88, 166, 255, 0.15); }
+        .tb-btn.btn-prune { border-color: #f85149; color: #ff7b72; }
+        .tb-btn.btn-prune:hover { background: rgba(248, 81, 73, 0.15); }
+        .toolbox-results {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .discovery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .discovery-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.72rem;
+        }
+        .discovery-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+
         .manuscript-paragraph-wrap {
             margin-bottom: 18px;
             position: relative;
@@ -1873,6 +1966,254 @@
                 showToast('Moved bone collection ' + bone.id + ' to ' + targetTier, 'success');
             }
 
+            // --- Multi-Tier Contextual Action Bar & Alignment Toolbox (FEAT-586) ---
+            function listAllTierCitations(nodeData) {
+                if (!nodeData) return [];
+                var cites = listUnique(nodeData.citations || []);
+                (nodeData.bone_collections || []).forEach(function(b) {
+                    (b.citations || []).forEach(function(c) {
+                        if (cites.indexOf(c) === -1) cites.push(c);
+                    });
+                });
+                return cites;
+            }
+
+            function getTierProseText(tier, nodeData) {
+                if (!nodeData) return '';
+                if (tier === 'paragraph') {
+                    return (nodeData.text || nodeData.cached_words || '').trim();
+                } else if (tier === 'section') {
+                    return (nodeData.paragraphs || []).map(function(p) { return p.text || p.cached_words || ''; }).join('\n\n').trim();
+                } else if (tier === 'paper') {
+                    return (nodeData.sections || []).map(function(s) {
+                        return (s.paragraphs || []).map(function(p) { return p.text || p.cached_words || ''; }).join('\n\n');
+                    }).join('\n\n').trim();
+                }
+                return '';
+            }
+
+            function toggleTierToolbox(tier, nodeId, nodeData, mountEl) {
+                var existing = mountEl.querySelector('.tier-toolbox');
+                if (existing) {
+                    existing.remove();
+                    return;
+                }
+
+                var tb = document.createElement('div');
+                tb.className = 'tier-toolbox';
+
+                var tbHeader = document.createElement('div');
+                tbHeader.className = 'toolbox-header';
+                tbHeader.innerHTML = 
+                    '<div style="display:flex; align-items:center; gap:6px;">' +
+                        '<span class="toolbox-tier-badge">🛠️ ' + tier.toUpperCase() + ' TOOLBOX: ' + nodeId + '</span>' +
+                    '</div>' +
+                    '<div class="toolbox-actions">' +
+                        '<button class="tb-btn btn-review" title="Audit whether attached citations are grounded in prose">✨ Review Consistency</button>' +
+                        '<button class="tb-btn btn-discover" title="Semantic search for unattached citations matching prose">🔍 Discover References</button>' +
+                        '<button class="tb-btn btn-prune" style="display:none;" title="Prune ungrounded citations">✂️ Prune Inconsistent</button>' +
+                        (tier === 'paragraph' ? '<button class="tb-btn btn-clean" title="Open Wordsmithing Drawer">✨ Clean Wordsmithing</button>' : '') +
+                        '<button class="tb-btn btn-close-tb" title="Close Toolbox">✖</button>' +
+                    '</div>';
+
+                var resultsBox = document.createElement('div');
+                resultsBox.className = 'toolbox-results';
+                resultsBox.style.display = 'none';
+
+                tb.appendChild(tbHeader);
+                tb.appendChild(resultsBox);
+                mountEl.insertBefore(tb, mountEl.firstChild.nextSibling || mountEl.firstChild);
+
+                var pruneBtn = tbHeader.querySelector('.btn-prune');
+                var lastUngrounded = [];
+
+                tbHeader.querySelector('.btn-close-tb').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    tb.remove();
+                });
+
+                if (tier === 'paragraph') {
+                    var cleanBtn = tbHeader.querySelector('.btn-clean');
+                    if (cleanBtn) {
+                        cleanBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var sec = null;
+                            (STATE.activePaper.sections || []).forEach(function(s) {
+                                (s.paragraphs || []).forEach(function(p) { if (p.id === nodeId) sec = s; });
+                            });
+                            openReviewDrawer(nodeData, sec || { id: 'SEC-001', heading: 'Section' });
+                        });
+                    }
+                }
+
+                // Consistency Review
+                tbHeader.querySelector('.btn-review').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    resultsBox.style.display = 'flex';
+                    resultsBox.innerHTML = '<div style="color:var(--accent-color);">⏳ Auditing prose grounding against attached citations via Sovereign Engine...</div>';
+
+                    var proseText = getTierProseText(tier, nodeData);
+                    var allCites = listAllTierCitations(nodeData);
+
+                    fetch('/paper/review_consistency', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            paper_id: STATE.activePaper.id,
+                            tier: tier,
+                            id: nodeId,
+                            text: proseText,
+                            citations: allCites
+                        })
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(res) {
+                        if (res.status === 'success') {
+                            resultsBox.innerHTML = '';
+                            if (res.consistent) {
+                                resultsBox.innerHTML = '<div style="color:#7ee787; font-weight:600;">✅ All ' + res.grounded.length + ' attached citation(s) are actively grounded in the current prose.</div>';
+                                if (pruneBtn) pruneBtn.style.display = 'none';
+                            } else {
+                                lastUngrounded = res.ungrounded || [];
+                                var warnDiv = document.createElement('div');
+                                warnDiv.style.color = '#ffd369';
+                                warnDiv.style.fontWeight = '600';
+                                warnDiv.textContent = '⚠️ ' + lastUngrounded.length + ' attached citation(s) lack keyword/thematic grounding in prose:';
+                                resultsBox.appendChild(warnDiv);
+
+                                var chipWrap = document.createElement('div');
+                                chipWrap.style.display = 'flex';
+                                chipWrap.style.flexWrap = 'wrap';
+                                chipWrap.style.gap = '4px';
+                                chipWrap.style.marginTop = '4px';
+
+                                lastUngrounded.forEach(function(uc) {
+                                    var cChip = document.createElement('span');
+                                    cChip.className = 'dna-chip';
+                                    cChip.style.borderLeft = '3px solid #f85149';
+                                    cChip.textContent = uc;
+                                    chipWrap.appendChild(cChip);
+                                });
+                                resultsBox.appendChild(chipWrap);
+
+                                (res.notes || []).forEach(function(nt) {
+                                    var nDiv = document.createElement('div');
+                                    nDiv.style.fontSize = '0.72rem';
+                                    nDiv.style.color = 'var(--sub-color)';
+                                    nDiv.textContent = '• ' + nt;
+                                    resultsBox.appendChild(nDiv);
+                                });
+
+                                if (pruneBtn) pruneBtn.style.display = 'inline-flex';
+                                markTierDirty(tier, nodeData);
+                                showToast('Consistency check: ' + lastUngrounded.length + ' ungrounded citation(s) flagged.', 'error');
+                            }
+                        }
+                    })
+                    .catch(function(err) {
+                        resultsBox.innerHTML = '<div style="color:#ff7b72;">Error running consistency review: ' + err + '</div>';
+                    });
+                });
+
+                // Prune Inconsistent
+                pruneBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (!lastUngrounded || lastUngrounded.length === 0) return;
+                    lastUngrounded.forEach(function(uc) {
+                        removeFromNodeCitations(nodeData, uc);
+                        (nodeData.bone_collections || []).forEach(function(bone) {
+                            bone.citations = (bone.citations || []).filter(function(x) { return x !== uc; });
+                        });
+                    });
+                    // dissolve empty bones
+                    if (nodeData.bone_collections) {
+                        nodeData.bone_collections = nodeData.bone_collections.filter(function(b) {
+                            return (b.citations || []).length > 0;
+                        });
+                    }
+                    markTierDirty(tier, nodeData);
+                    pruneBtn.style.display = 'none';
+                    resultsBox.innerHTML = '<div style="color:#7ee787; font-weight:600;">✂️ Pruned ' + lastUngrounded.length + ' ungrounded citation(s) from ' + tier + '.</div>';
+                    showToast('Pruned ungrounded citations from ' + tier, 'success');
+                    renderWritingView();
+                });
+
+                // Citation Discovery
+                tbHeader.querySelector('.btn-discover').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    resultsBox.style.display = 'flex';
+                    resultsBox.innerHTML = '<div style="color:var(--accent-color);">⏳ Running JITC Semantic Discovery across ChromaDB and DNA Manifest...</div>';
+
+                    var proseText = getTierProseText(tier, nodeData);
+                    var allCites = listAllTierCitations(nodeData);
+
+                    fetch('/paper/discover_citations', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            paper_id: STATE.activePaper.id,
+                            tier: tier,
+                            id: nodeId,
+                            text: proseText,
+                            existing_citations: allCites,
+                            top_k: 6
+                        })
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(res) {
+                        if (res.status === 'success') {
+                            resultsBox.innerHTML = '';
+                            if (!res.candidates || res.candidates.length === 0) {
+                                resultsBox.innerHTML = '<div style="color:var(--sub-color);">No unattached candidate citations discovered matching current prose.</div>';
+                                return;
+                            }
+
+                            var titleDiv = document.createElement('div');
+                            titleDiv.style.fontWeight = '600';
+                            titleDiv.style.color = '#79c0ff';
+                            titleDiv.textContent = '🔍 Discovered ' + res.candidates.length + ' candidate citations matching prose:';
+                            resultsBox.appendChild(titleDiv);
+
+                            var grid = document.createElement('div');
+                            grid.className = 'discovery-grid';
+
+                            res.candidates.forEach(function(cand) {
+                                var card = document.createElement('div');
+                                card.className = 'discovery-card';
+                                card.innerHTML = 
+                                    '<div class="discovery-card-header">' +
+                                        '<span>' + cand.id + '</span>' +
+                                        '<span style="color:var(--accent-color); font-size:0.68rem;">Score: ' + cand.score + '</span>' +
+                                    '</div>' +
+                                    '<div style="font-size:0.75rem; color:var(--text-color);">' + (cand.title || cand.id) + '</div>' +
+                                    '<div style="font-size:0.7rem; color:var(--sub-color); line-height:1.3;">' + (cand.origin_text || '') + '</div>' +
+                                    '<button class="action-btn btn-attach-cand" style="font-size:0.68rem; padding:2px 6px; margin-top:2px;">+ Attach to ' + tier + '</button>';
+
+                                card.querySelector('.btn-attach-cand').addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    if (!nodeData.citations) nodeData.citations = [];
+                                    if (nodeData.citations.indexOf(cand.id) === -1) {
+                                        nodeData.citations.push(cand.id);
+                                        markTierDirty(tier, nodeData);
+                                        showToast('Attached ' + cand.id + ' to ' + tier, 'success');
+                                        card.querySelector('.btn-attach-cand').textContent = 'Attached ✓';
+                                        card.querySelector('.btn-attach-cand').disabled = true;
+                                        renderWritingView();
+                                    }
+                                });
+
+                                grid.appendChild(card);
+                            });
+
+                            resultsBox.appendChild(grid);
+                        }
+                    })
+                    .catch(function(err) {
+                        resultsBox.innerHTML = '<div style="color:#ff7b72;">Error discovering citations: ' + err + '</div>';
+                    });
+                });
+            }
+
             // --- Writing View Renderer ---
             function renderWritingView() {
                 var p = STATE.activePaper;
@@ -1885,6 +2226,19 @@
                 if (mSub) mSub.textContent = p.subtitle || '';
                 if (mAuth) mAuth.textContent = p.author || 'Jason Allred';
 
+                var titleBlock = document.querySelector('.paper-title-block');
+                if (titleBlock && !titleBlock._toolboxBound) {
+                    titleBlock._toolboxBound = true;
+                    var tbBtn = document.createElement('button');
+                    tbBtn.className = 'tb-btn btn-review';
+                    tbBtn.style.marginTop = '8px';
+                    tbBtn.textContent = '🛠️ Paper Root Toolbox';
+                    tbBtn.addEventListener('click', function() {
+                        toggleTierToolbox('paper', p.id, p, titleBlock);
+                    });
+                    titleBlock.appendChild(tbBtn);
+                }
+
                 var secContainer = document.getElementById('manuscript-sections-container');
                 if (!secContainer) return;
                 secContainer.innerHTML = '';
@@ -1893,24 +2247,51 @@
                     var secWrap = document.createElement('div');
                     secWrap.className = 'manuscript-section';
 
+                    var secHeaderWrap = document.createElement('div');
+                    secHeaderWrap.style.display = 'flex';
+                    secHeaderWrap.style.alignItems = 'center';
+                    secHeaderWrap.style.justifyContent = 'space-between';
+                    secHeaderWrap.style.borderBottom = '1px solid var(--border-color)';
+                    secHeaderWrap.style.paddingBottom = '6px';
+                    secHeaderWrap.style.marginBottom = '16px';
+
                     var h2 = document.createElement('h2');
+                    h2.style.margin = '0';
+                    h2.style.border = 'none';
                     h2.textContent = sec.heading || sec.id;
-                    secWrap.appendChild(h2);
+
+                    var secTbBtn = document.createElement('button');
+                    secTbBtn.className = 'tb-btn btn-review';
+                    secTbBtn.textContent = '🛠️ Section Toolbox';
+                    secTbBtn.addEventListener('click', function() {
+                        toggleTierToolbox('section', sec.id, sec, secWrap);
+                    });
+
+                    secHeaderWrap.appendChild(h2);
+                    secHeaderWrap.appendChild(secTbBtn);
+                    secWrap.appendChild(secHeaderWrap);
 
                     (sec.paragraphs || []).forEach(function(par) {
                         var parWrap = document.createElement('div');
                         parWrap.className = 'manuscript-paragraph-wrap' + (par.dirty ? ' dirty' : '');
                         parWrap.dataset.paragraphId = par.id;
 
-                        // Dirty Banner with Review action
+                        // Dirty Banner with Review & Toolbox actions
                         var banner = document.createElement('div');
                         banner.className = 'dirty-banner';
                         banner.innerHTML = 
                             '<span>⚑ DIRTY — Bone Collections Modified</span>' +
-                            '<button class="btn-clean-review">✨ Review / Clean</button>';
+                            '<div style="display:flex; gap:6px;">' +
+                                '<button class="btn-clean-review">✨ Review / Clean</button>' +
+                                '<button class="tb-btn btn-par-tb" style="font-size:0.68rem; padding:2px 6px;">🛠️ Toolbox</button>' +
+                            '</div>';
 
                         banner.querySelector('.btn-clean-review').addEventListener('click', function() {
                             openReviewDrawer(par, sec);
+                        });
+
+                        banner.querySelector('.btn-par-tb').addEventListener('click', function() {
+                            toggleTierToolbox('paragraph', par.id, par, parWrap);
                         });
 
                         // Epigraphs for paragraph citations
@@ -1938,9 +2319,26 @@
                             par.text = prose.textContent;
                         });
 
+                        // Clicking non-dirty paragraph also shows subtle toolbox trigger
+                        var parBottomBar = document.createElement('div');
+                        parBottomBar.style.display = 'flex';
+                        parBottomBar.style.justifyContent = 'flex-end';
+                        parBottomBar.style.marginTop = '6px';
+                        var parTbTrigger = document.createElement('button');
+                        parTbTrigger.className = 'tb-btn';
+                        parTbTrigger.style.fontSize = '0.65rem';
+                        parTbTrigger.style.padding = '1px 5px';
+                        parTbTrigger.style.opacity = '0.6';
+                        parTbTrigger.textContent = '🛠️ ' + par.id + ' Toolbox';
+                        parTbTrigger.addEventListener('click', function() {
+                            toggleTierToolbox('paragraph', par.id, par, parWrap);
+                        });
+                        parBottomBar.appendChild(parTbTrigger);
+
                         parWrap.appendChild(banner);
                         if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
                         parWrap.appendChild(prose);
+                        parWrap.appendChild(parBottomBar);
                         secWrap.appendChild(parWrap);
                     });
 

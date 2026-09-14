@@ -1,0 +1,272 @@
+{
+  "id": "PAPER-001",
+  "title": "Just in time context retrieval and synthesis",
+  "subtitle": "Applied armchair philosophy",
+  "author": "Jason Allred",
+  "created_at": "2026-09-05T00:00:00Z",
+  "updated_at": "2026-09-14T10:55:00Z",
+  "status": "VERBATIM_HUMAN_ORIGIN",
+  "voice_profile": {
+    "tense": "present",
+    "style": "academic",
+    "tone": "authoritative",
+    "custom_prompt": null
+  },
+  "bone_collections": [
+    {
+      "id": "BONE-001",
+      "name": "JITC Dual-Channel Foundation",
+      "citations": [
+        "PHL-029",
+        "PHL-030",
+        "BKM-046"
+      ],
+      "description": "Global theoretical anchor uniting language as supreme human invention with executable epistemology on silicon."
+    }
+  ],
+  "citations": [
+    "PHL-029",
+    "PHL-030"
+  ],
+  "pending_citations": [
+    "BKM-046",
+    "FEAT-581"
+  ],
+  "sections": [
+    {
+      "id": "SEC-001",
+      "type": "body",
+      "order": 0,
+      "heading": "Section 1 - Introducing the Just in Time Context Loop",
+      "bone_collections": [
+        {
+          "id": "BONE-002",
+          "name": "Cognitive Architecture & Hippocampus Model",
+          "citations": [
+            "PHL-001",
+            "PHL-002",
+            "DISC-004"
+          ],
+          "description": "Hippocampus vector retrieval connected to LLM prefrontal cortex."
+        }
+      ],
+      "citations": [
+        "PHL-001",
+        "PHL-002"
+      ],
+      "pending_citations": [
+        "DISC-004",
+        "BKM-051"
+      ],
+      "paragraphs": [
+        {
+          "id": "PAR-001",
+          "order": 0,
+          "citations": [
+            "PHL-001"
+          ],
+          "pending_citations": [
+            "PHL-002"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration. History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle."
+        },
+        {
+          "id": "PAR-002",
+          "order": 1,
+          "citations": [
+            "PHL-002",
+            "DISC-004"
+          ],
+          "pending_citations": [
+            "FEAT-546"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "“What I have is almost a blog. A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It's more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that."
+        },
+        {
+          "id": "PAR-003",
+          "order": 2,
+          "citations": [
+            "PHL-007"
+          ],
+          "pending_citations": [
+            "ARXIV:2307.03172"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "LLM’s are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG get’s us half way thare."
+        },
+        {
+          "id": "PAR-004",
+          "order": 3,
+          "citations": [
+            "PHL-005"
+          ],
+          "pending_citations": [
+            "FEAT-526"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -> tagging -> wisdom -> hook/trigger -> intuitive behavior"
+        },
+        {
+          "id": "PAR-005",
+          "order": 4,
+          "citations": [
+            "PHL-006",
+            "BKM-046"
+          ],
+          "pending_citations": [
+            "FEAT-568"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots. Saving memories -> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification."
+        }
+      ]
+    },
+    {
+      "id": "SEC-002",
+      "type": "references",
+      "order": 1,
+      "heading": "Section 2 - References & Prior Art",
+      "bone_collections": [
+        {
+          "id": "BONE-003",
+          "name": "Academic Prior Art & Grounding",
+          "citations": [
+            "ARXIV:2305.18290",
+            "ARXIV:2307.03172",
+            "ARXIV:2401.03462"
+          ],
+          "description": "Academic grounding comparing JITC against long-context LLMs and RAG architectures."
+        }
+      ],
+      "citations": [
+        "ARXIV:2305.18290"
+      ],
+      "pending_citations": [
+        "ARXIV:2307.03172",
+        "ARXIV:2401.03462"
+      ],
+      "paragraphs": [
+        {
+          "id": "PAR-006",
+          "order": 0,
+          "citations": [
+            "ARXIV:2305.18290"
+          ],
+          "pending_citations": [
+            "ARXIV:2307.03172"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Humble: Standing on the shoulders and all that, this isn't a deep math insight, it’s just something that works. Something I built with what is around us, a logical step after integrating papers."
+        },
+        {
+          "id": "PAR-007",
+          "order": 1,
+          "citations": [
+            "ARXIV:2401.03462"
+          ],
+          "pending_citations": [
+            "ARXIV:2310.08560"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "List of supporting documents and arxive links - Prior art etc. - Use AGY to find prior art - specifically leverage and note Research.html."
+        },
+        {
+          "id": "PAR-008",
+          "order": 2,
+          "citations": [
+            "PHL-029",
+            "PHL-030"
+          ],
+          "pending_citations": [
+            "BKM-049"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper."
+        }
+      ]
+    },
+    {
+      "id": "SEC-003",
+      "type": "body",
+      "order": 2,
+      "heading": "Section 3 - Implementations & Empirical Lab Architecture",
+      "bone_collections": [
+        {
+          "id": "BONE-004",
+          "name": "Lab Engine & Dispatch Architecture",
+          "citations": [
+            "FEAT-500",
+            "FEAT-526",
+            "FEAT-546",
+            "FEAT-568"
+          ],
+          "description": "Empirical silicon implementations: triage classification, memory hooks, and paper compilers."
+        }
+      ],
+      "citations": [
+        "FEAT-500",
+        "FEAT-526"
+      ],
+      "pending_citations": [
+        "FEAT-546",
+        "FEAT-568"
+      ],
+      "paragraphs": [
+        {
+          "id": "PAR-009",
+          "order": 0,
+          "citations": [
+            "FEAT-500",
+            "FEAT-526"
+          ],
+          "pending_citations": [
+            "FEAT-546"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Demo/Present/Implementation. Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker."
+        },
+        {
+          "id": "PAR-010",
+          "order": 1,
+          "citations": [
+            "FEAT-546",
+            "FEAT-568"
+          ],
+          "pending_citations": [
+            "BKM-044"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Inside the lab: gems, triage Hyde. Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier & hooks grouping. Decoupling triage and classification."
+        },
+        {
+          "id": "PAR-011",
+          "order": 2,
+          "citations": [
+            "FEAT-581",
+            "FEAT-582",
+            "FEAT-583",
+            "FEAT-584"
+          ],
+          "pending_citations": [
+            "FEAT-585"
+          ],
+          "bone_collections": [],
+          "dirty": false,
+          "text": "Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -> paper."
+        }
+      ]
+    }
+  ]
+}

@@ -15419,6 +15419,97 @@
                             <span class="impact-badge impact-stable">PROPOSED</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-585">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-585</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Multi-Tier Paper JSON Schema & Invariant Validator
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-79.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/validate_paper_schema.py" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/scripts/validate_paper_schema.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces schema invariants for hierarchical manuscript datasets (<code>papers/*.json</code>). Supports multi-tier <code>bone_collections</code> and <code>citations</code> attached at Paper Root, Section Nodes, and Paragraph Containers. Validates UUID uniqueness, citation syntax across registered DNA domains (<code>PHL</code>, <code>BKM</code>, <code>FEAT</code>, <code>DISC</code>, <code>ARXIV</code>, <code>GEM</code>, <code>WIS</code>, <code>LAB</code>), and ensures authentic author prose integrity.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides machine-verifiable data structures allowing sovereign agents to inspect and propose structured modifications through automated schema gates without data corruption.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/scripts/validate_paper_schema.py</code>, Foyer REST <code>/paper/validate</code>, and <code>HomeLabAI/src/v5/foyer/router.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-586">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-586</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-79.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Context-sensitive expandable action bar attached across all structural levels (<code>Paper Root</code>, <code>Section Node</code>, and <code>Paragraph Container</code>). Clicking any structural node expands a localized header exposing:
+1. <code>[✨ Review / Consistency Check]</code>: Evaluates prose against attached bone collections/citations. Any citation lacking grounding in the prose is flagged as inconsistent or a prune candidate; ungrounded citations flag the node as <code>dirty</code>.
+2. <code>[🔍 Search References / JITC Discovery]</code>: Analyzes written prose at that structural tier and queries vector memory (ChromaDB <code>philosophy_dna</code>, <code>feature_dna</code>, <code>discovery</code>, <code>sprint_dna</code>, and <code>RESEARCH_SYNTHESIS.md</code>) to bubble up unattached citations/bones that belong there according to the current prose.
+3. Expandable toolbar of level-specific actions (e.g., tier-level synthesis, prune unreferenced bones, bulk attach recommended citations).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Bridges the human wordsmithing workflow with sovereign vector memory, allowing the human author to perform targeted consistency audits and proactive reference discovery at any structural granularity without losing sovereign control.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, Foyer REST <code>/paper/review_consistency</code>, <code>/paper/discover_citations</code>, and AST node header controllers.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
