@@ -13,11 +13,11 @@
 | **78.2** | `[AGY:PRIMARY]` | Cross-Collection Citation Pointer Engine (`[FEAT-582]`) | **COMPLETED & CERTIFIED** | `Portfolio_Dev/scripts/build_writer.py`, LaTeX `main.tex`, `references.bib` |
 | **78.3** | `[AGY:PRIMARY]` | Multi-Paper UI & Review Inspector Panel (`[FEAT-583]`) | **COMPLETED & CERTIFIED** | `writer.html` dropdown, chip click-to-inspect, `citation-inspector` |
 | **78.4** | `[AGY:PRIMARY]` | Foyer REST Paper API Endpoints (`[FEAT-581]`) | **COMPLETED & CERTIFIED** | `HomeLabAI/src/v5/foyer/router.py` (`/paper/list`, `/paper/load`, `/paper/save`) |
-| **78.5** | `[SWARM:CLOUD]` | Structural Tree View & SortableJS DNA Tag Drag-and-Drop (`[FEAT-583]`) | **IN PROGRESS** | `writer.html` DnD tag re-ordering |
-| **78.6** | `[SWARM:CLOUD]` | Cascade Synthesis Reflow & 3-Tier Revision Carousel (`[FEAT-584]`) | **IN PROGRESS** | `writer.html` revision navigator & LLM reflow |
-| **78.7** | `[SWARM:CLOUD]` | Multi-Doc PHL Scraping & Schema Guard (`[FEAT-585]`) | **IN PROGRESS** | Ingestion of 2024 docx, 2024-2026 doc, Intuition paper |
-| **78.8** | `[AGY:PRIMARY]` | Round Table Vocality Restoration & Pre-Warm Handshake (`[FEAT-368]`, `[FEAT-486]`, `[FEAT-233]`) | **IN PROGRESS / INITIAL FIXES APPLIED** | Schema parsing fix + monolithic timeout removal in `router.py` |
-| **78.9** | `[SWARM:CLOUD]` | Live 75-Min 5x5 Timed Gauntlet Certification (`BKM-010`, `BKM-050`, `[FEAT-501]`) | **QUEUED** | `test_perf_5x5_timed.py --intervals 0 5 10 20 40` |
+| **78.5** | `[SWARM:CLOUD]` | Structural Tree View & SortableJS DNA Tag Drag-and-Drop (`[FEAT-583]`) | **COMPLETED & VERIFIED** | `writer.html` DnD tag re-ordering verified |
+| **78.6** | `[AGY:PRIMARY]` | Cascade Synthesis Reflow & 3-Tier Revision Carousel (`[FEAT-584]`) | **COMPLETED & CERTIFIED** | `writer.html` revision navigator toolbar & `[⚡ Re-synthesize]` controls |
+| **78.7** | `[AGY:PRIMARY]` | Multi-Doc PHL Scraping, Schema Guard & Full Synthesis Reflow (`[FEAT-585]`) | **COMPLETED & CERTIFIED** | Ingested `1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0`, created `validate_paper_schema.py`, fully expanded `paper_jitc_intuition.json` across Sections 1-3 with 13 paragraphs |
+| **78.8** | `[AGY:PRIMARY]` | Round Table Vocality Restoration & Pre-Warm Handshake (`[FEAT-368]`, `[FEAT-486]`, `[FEAT-233]`) | **COMPLETED & VERIFIED** | Schema parsing fix + monolithic timeout removal in `router.py`, lab online |
+| **78.9** | `[AGY:PRIMARY]` | Live 75-Min 5x5 Timed Gauntlet Certification (`BKM-010`, `BKM-050`, `[FEAT-501]`) | **QUEUED / READY** | `test_perf_5x5_timed.py --intervals 0 5 10 20 40` |
 
 ---
 
