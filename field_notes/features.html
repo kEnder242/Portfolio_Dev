@@ -15510,6 +15510,97 @@
                             <span class="impact-badge impact-stable">PROPOSED</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-587">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-587</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Unified Hybrid Action Gutter & Reversion Engine
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-80.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a distraction-free wordsmithing interface in <code>writer.html</code>'s Writing View. Replaces static clutter buttons with a floating, semi-translucent action pill (<code>.hover-action-pill</code>) that smoothly fades in on cursor hover (<code>:hover</code>) across title blocks, section headers, and paragraph containers. Provides seamless click targets for citation epigraphs and structural badges. Integrates a Two-Tier Discard Engine: (1) Paragraph-level discard (<code>[↩️ Discard Changes]</code>) that clears dirty flags, empties pending citations, and reverts prose drafts to baseline, and (2) Global paper rollback (<code>[↩️ Revert to Disk]</code>) that re-fetches pristine JSON datasets from Foyer.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Preserves the Sovereign Human Author principle by providing an immersive, clean manuscript canvas while keeping high-velocity consistency checks, discovery queries, and safe rollback actions just a hover or click away.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, CSS hover transitions, review drawer rollback controller, and Foyer <code>/paper/load</code> integration.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-588">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-588</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Context-Aware Water-Level DNA Palette & Micro-Surface Controller
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-80.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Dynamically binds the right-hand DNA Palette to whichever AST structural node (Paper Root, Section, or Paragraph) is active/focused in the Tree Outliner or Writing View. Structures the Palette into a Dual-Zone "Water Level" layout:
+1. Above the Waterline: Currently attached citations and bone collections with single-click <code>[✖]</code> submerge/detach actions.
+2. The Waterline: Interactive divider displaying real-time attached vs. suggested counts.
+3. Below the Waterline: Real-time suggestions ranked by semantic relevance to the active node's prose (querying ChromaDB Port 8001 / Foyer <code>/paper/discover_citations</code>) plus filtered search results, with single-click <code>[+]</code> surface/attach actions and micro-drag support across the waterline.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates cross-screen drag-and-drop fatigue and viewport scrolling friction, allowing the author to rapidly curate, attach, and prune citations with millisecond single-click speed.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, <code>STATE.activeContext</code> binding, and ChromaDB vector query pipeline.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
