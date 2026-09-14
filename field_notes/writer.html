@@ -355,6 +355,41 @@
             gap: 4px;
         }
 
+        /* [STORY-794] Editable bone collection name (inline rename) */
+        .bone-name-input {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            color: #e6edf3;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-family: var(--font-stack);
+            width: 170px;
+            padding: 1px 4px;
+            outline: none;
+        }
+        .bone-name-input:hover { border-color: var(--bone-border); }
+        .bone-name-input:focus { border-color: var(--accent-color); }
+
+        /* [STORY-794] Drag-over affordances for chip / bone / header drop targets */
+        .dna-chip.drop-target {
+            border-color: var(--accent-color);
+            background: rgba(77, 170, 252, 0.25);
+            box-shadow: 0 0 8px rgba(77, 170, 252, 0.4);
+        }
+        .bone-collection-badge.drop-target {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(77, 170, 252, 0.35);
+        }
+        .tree-node-header.drag-over {
+            border-bottom-color: var(--accent-color);
+            box-shadow: inset 0 0 0 1px var(--accent-color);
+        }
+        .tree-root-header.drag-over {
+            border-bottom-color: var(--accent-color);
+            box-shadow: inset 0 0 0 1px var(--accent-color);
+        }
+
         /* DNA Chips */
         .dna-chip {
             display: inline-flex;
@@ -1069,7 +1104,7 @@
                 paletteSearchQuery: '',
                 dirtyParagraphs: new Set(),
                 activeReviewParagraphId: null,
-                draggedItem: null // { type: 'citation'|'bone', id: '...', originTier: '...', originId: '...' }
+                draggedItem: null // { type: 'citation'|'bone', id, inBone, sourceTier, sourceId, sourceBoneId }
             };
 
             window.__STUDIO_STATE__ = STATE;
@@ -1195,8 +1230,13 @@
                         var bBtn = document.createElement('button');
                         bBtn.className = 'bubble-btn';
                         bBtn.textContent = '+ ' + recId;
+                        bBtn.draggable = true;
                         bBtn.addEventListener('click', function() {
                             openInspector(recId);
+                        });
+                        bBtn.addEventListener('dragstart', function(e) {
+                            STATE.draggedItem = { type: 'citation', id: recId, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null };
+                            e.dataTransfer.setData('text/plain', recId);
                         });
                         bubblesEl.appendChild(bBtn);
                     });
@@ -1218,7 +1258,7 @@
                         '<div class="palette-card-desc">' + (item.origin_text || item.narrative || '') + '</div>';
 
                     card.addEventListener('dragstart', function(e) {
-                        STATE.draggedItem = { type: 'citation', id: item.id, originTier: 'palette' };
+                        STATE.draggedItem = { type: 'citation', id: item.id, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null };
                         e.dataTransfer.setData('text/plain', item.id);
                     });
 
@@ -1303,7 +1343,7 @@
                     secNode.className = 'tree-section-node';
                     secNode.dataset.sectionId = sec.id;
 
-                    var isDirty = (sec.paragraphs || []).some(function(par) { return par.dirty; });
+                    var isDirty = sec.dirty === true || (sec.paragraphs || []).some(function(par) { return par.dirty; });
                     if (isDirty) secNode.classList.add('dirty');
 
                     var headerHtml = 
@@ -1396,8 +1436,16 @@
                         });
                     }
 
+                    // [STORY-794] Section headers are drop targets (chapter framing)
+                    var secHeaderNode = secNode.querySelector('.tree-node-header');
+                    if (secHeaderNode) wireHeaderDrop(secHeaderNode, sec, 'section');
+
                     secContainer.appendChild(secNode);
                 });
+
+                // [STORY-794] Paper Root header is a drop target (paper-level bones)
+                var rootHeader = document.querySelector('.tree-root-header');
+                if (rootHeader) wireHeaderDrop(rootHeader, p, 'paper');
             }
 
             // Helper to render bones and citations in dropzone
@@ -1413,21 +1461,45 @@
 
                     var bHeader = document.createElement('div');
                     bHeader.className = 'bone-collection-header';
-                    bHeader.innerHTML = 
-                        '<span>🦴 ' + (bone.name || bone.id) + '</span>' +
+                    bHeader.innerHTML =
+                        '<span style="display:inline-flex; align-items:center; gap:4px;">' +
+                            '<span>🦴</span>' +
+                            '<input type="text" class="bone-name-input" value="' + (bone.name || bone.id) + '" title="Edit bone collection name">' +
+                        '</span>' +
                         '<span class="chip-del" title="Dissolve bone collection">✖</span>';
+
+                    // [STORY-794] Inline rename keeps the collection badge named & editable
+                    var nameInput = bHeader.querySelector('.bone-name-input');
+                    if (nameInput) {
+                        nameInput.addEventListener('change', function() {
+                            var newName = nameInput.value.trim();
+                            if (newName) {
+                                bone.name = newName;
+                                markTierDirty(tier, nodeData);
+                                showToast('Renamed ' + bone.id + ' → ' + newName, 'success');
+                            } else {
+                                nameInput.value = bone.name || bone.id;
+                            }
+                        });
+                    }
 
                     var bChips = document.createElement('div');
                     bChips.className = 'bone-chips-wrap';
 
                     (bone.citations || []).forEach(function(c) {
-                        var chip = createDnaChip(c, true, function() {
-                            // Remove citation from bone collection -> splits to singleton
-                            bone.citations = bone.citations.filter(function(x) { return x !== c; });
-                            if (!nodeData.citations) nodeData.citations = [];
-                            if (nodeData.citations.indexOf(c) === -1) nodeData.citations.push(c);
-                            if (tier === 'paragraph') nodeData.dirty = true;
-                            renderTreeOutliner();
+                        var chip = createDnaChip(c, {
+                            inBone: true,
+                            tier: tier,
+                            nodeId: nodeId,
+                            boneId: bone.id,
+                            onRemove: function() {
+                                // Remove citation from bone collection -> splits to singleton
+                                bone.citations = bone.citations.filter(function(x) { return x !== c; });
+                                if (!nodeData.citations) nodeData.citations = [];
+                                if (nodeData.citations.indexOf(c) === -1) nodeData.citations.push(c);
+                                markTierDirty(tier, nodeData);
+                                renderTreeOutliner();
+                            }
                         });
                         bChips.appendChild(chip);
                     });
@@ -1440,21 +1512,36 @@
                             if (nodeData.citations.indexOf(c) === -1) nodeData.citations.push(c);
                         });
                         nodeData.bone_collections.splice(bIdx, 1);
-                        if (tier === 'paragraph') nodeData.dirty = true;
+                        markTierDirty(tier, nodeData);
                         renderTreeOutliner();
                     });
 
                     bBadge.appendChild(bHeader);
                     bBadge.appendChild(bChips);
+
+                    // [STORY-794] Dragging a whole bone collection moves it between tiers
+                    bBadge.addEventListener('dragstart', function(e) {
+                        STATE.draggedItem = { type: 'bone', id: bone.id, inBone: false, sourceTier: tier, sourceId: nodeId, sourceBoneId: null };
+                        e.dataTransfer.setData('text/plain', bone.id);
+                    });
+
+                    // [STORY-794] Dropping a citation anywhere on the badge merges it into this collection
+                    wireBoneBadgeDrop(bBadge, bone, nodeData, tier);
+
                     container.appendChild(bBadge);
                 });
 
                 // Singleton Citations
                 (nodeData.citations || []).forEach(function(c) {
-                    var chip = createDnaChip(c, false, function() {
-                        nodeData.citations = nodeData.citations.filter(function(x) { return x !== c; });
-                        if (tier === 'paragraph') nodeData.dirty = true;
-                        renderTreeOutliner();
+                    var chip = createDnaChip(c, {
+                        inBone: false,
+                        tier: tier,
+                        nodeId: nodeId,
+                        onRemove: function() {
+                            nodeData.citations = nodeData.citations.filter(function(x) { return x !== c; });
+                            markTierDirty(tier, nodeData);
+                            renderTreeOutliner();
+                        }
                     });
                     container.appendChild(chip);
                 });
@@ -1470,7 +1557,7 @@
                         nodeData.pending_citations = nodeData.pending_citations.filter(function(x) { return x !== c; });
                         if (!nodeData.citations) nodeData.citations = [];
                         nodeData.citations.push(c);
-                        if (tier === 'paragraph') nodeData.dirty = true;
+                        markTierDirty(tier, nodeData);
                         renderTreeOutliner();
                     });
                     container.appendChild(pChip);
@@ -1480,7 +1567,10 @@
                 wireDropzone(container, nodeData, tier);
             }
 
-            function createDnaChip(citeId, inBone, onRemove) {
+            function createDnaChip(citeId, opts) {
+                var opt = opts || {};
+                var onRemove = opt.onRemove || null;
+
                 var chip = document.createElement('span');
                 chip.className = 'dna-chip';
                 chip.draggable = true;
@@ -1493,22 +1583,46 @@
                     openInspector(citeId);
                 });
 
-                chip.querySelector('.chip-del').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (onRemove) onRemove();
-                });
+                if (onRemove) {
+                    chip.querySelector('.chip-del').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        onRemove();
+                    });
+                }
 
                 chip.addEventListener('dragstart', function(e) {
-                    STATE.draggedItem = { type: 'citation', id: citeId, inBone: inBone };
+                    // [STORY-794] Drag payload carries source tier/node/bone so drops MOVE (not copy)
+                    STATE.draggedItem = {
+                        type: 'citation',
+                        id: citeId,
+                        inBone: !!opt.inBone,
+                        sourceTier: opt.tier || 'palette',
+                        sourceId: opt.nodeId || null,
+                        sourceBoneId: opt.boneId || null
+                    };
                     e.dataTransfer.setData('text/plain', citeId);
+                });
+
+                // [STORY-794] Dropping another chip onto this chip merges both into a Bone Collection
+                wireChipDropTargets(chip, citeId, {
+                    tier: opt.tier || null,
+                    nodeId: opt.nodeId || null,
+                    boneId: opt.boneId || null,
+                    inBone: !!opt.inBone
                 });
 
                 return chip;
             }
 
             function wireDropzone(container, nodeData, tier) {
+                // Static containers (e.g. paper-tier-bones) persist across re-renders:
+                // bind listeners exactly once to avoid duplicated drop handling.
+                if (container._wireDropzoneBound) return;
+                container._wireDropzoneBound = true;
+
                 container.addEventListener('dragover', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     container.classList.add('drag-over');
                 });
 
@@ -1518,24 +1632,245 @@
 
                 container.addEventListener('drop', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     container.classList.remove('drag-over');
-                    var item = STATE.draggedItem;
-                    if (!item) {
-                        var citeId = e.dataTransfer.getData('text/plain');
-                        if (citeId) item = { type: 'citation', id: citeId };
-                    }
-                    if (!item || !item.id) return;
+                    attachItemToTier(getDraggedItem(e), nodeData, tier);
+                });
+            }
 
+            // [STORY-794] ----- Multi-Tier Bone Outliner Drag & Drop Helpers -----
+
+            function getDraggedItem(e) {
+                var item = STATE.draggedItem;
+                if (!item) {
+                    // Fallback for external drags: lift the citation id from the data payload
+                    var citeId = e.dataTransfer.getData('text/plain');
+                    if (citeId) item = { type: 'citation', id: citeId, inBone: false, sourceTier: 'palette', sourceId: null, sourceBoneId: null };
+                }
+                return item;
+            }
+
+            function resolveTierNode(tier, nodeId) {
+                if (!tier || !nodeId) return null;
+                if (tier === 'paper') return STATE.activePaper;
+                if (tier === 'section') {
+                    var found = null;
+                    (STATE.activePaper.sections || []).forEach(function(s) { if (s.id === nodeId) found = s; });
+                    return found;
+                }
+                if (tier === 'paragraph') return findParagraph(nodeId);
+                return null;
+            }
+
+            function markTierDirty(tier, nodeData) {
+                // [STORY-794] Altering bones flags the AFFECTED container dirty at any tier
+                if (!nodeData) return;
+                if (tier === 'paragraph' || tier === 'section') {
+                    nodeData.dirty = true;
+                } else if (tier === 'paper') {
+                    if (STATE.activePaper) STATE.activePaper.dirty = true;
+                }
+            }
+
+            function removeFromNodeCitations(node, citeId) {
+                if (!node || !node.citations) return;
+                node.citations = node.citations.filter(function(x) { return x !== citeId; });
+            }
+
+            function removeFromBone(node, boneId, citeId) {
+                if (!node || !node.bone_collections) return;
+                node.bone_collections.forEach(function(bone) {
+                    if (bone.id !== boneId) return;
+                    bone.citations = (bone.citations || []).filter(function(x) { return x !== citeId; });
+                });
+                // Empty collections dissolve automatically back to singletons
+                node.bone_collections = node.bone_collections.filter(function(b) {
+                    return b.id !== boneId || (b.citations || []).length > 0;
+                });
+            }
+
+            function removeCitationFromAnywhere(item) {
+                // Removes a dragged citation from its ORIGIN (bone collection or singleton list)
+                // so drag operations MOVE rather than duplicate. Flags the source container dirty.
+                if (!item || !item.id) return;
+                if (item.inBone && item.sourceBoneId) {
+                    var srcNode = resolveTierNode(item.sourceTier, item.sourceId);
+                    if (srcNode) {
+                        removeFromBone(srcNode, item.sourceBoneId, item.id);
+                        markTierDirty(item.sourceTier, srcNode);
+                    }
+                } else if (item.sourceTier && item.sourceTier !== 'palette' && item.sourceId) {
+                    var srcNode = resolveTierNode(item.sourceTier, item.sourceId);
+                    if (srcNode) {
+                        removeFromNodeCitations(srcNode, item.id);
+                        markTierDirty(item.sourceTier, srcNode);
+                    }
+                }
+            }
+
+            function nextBoneId() {
+                // Bone ids must be unique across the WHOLE paper (validator invariant)
+                var p = STATE.activePaper;
+                var max = 0;
+                function scan(node) {
+                    (node.bone_collections || []).forEach(function(b) {
+                        var m = /^BONE-(\d+)$/.exec(b.id || '');
+                        if (m) max = Math.max(max, parseInt(m[1], 10));
+                    });
+                }
+                if (p) {
+                    scan(p);
+                    (p.sections || []).forEach(function(s) {
+                        scan(s);
+                        (s.paragraphs || []).forEach(scan);
+                    });
+                }
+                return 'BONE-' + String(max + 1).padStart(3, '0');
+            }
+
+            function createBoneCollection(nodeData, tier, citations, name) {
+                if (!nodeData.bone_collections) nodeData.bone_collections = [];
+                var bone = {
+                    id: nextBoneId(),
+                    name: name || 'Untitled Bone Collection',
+                    citations: citations || []
+                };
+                nodeData.bone_collections.push(bone);
+                markTierDirty(tier, nodeData);
+                return bone;
+            }
+
+            function mergeCitationIntoBone(item, tier, node, bone) {
+                if (!item || !item.id) return;
+                if ((bone.citations || []).indexOf(item.id) !== -1) return; // already merged
+                bone.citations.push(item.id);
+                removeCitationFromAnywhere(item);       // move out of source (bone or singleton)
+                removeFromNodeCitations(node, item.id); // drop any duplicate singleton at target
+                markTierDirty(tier, node);
+                renderTreeOutliner();
+                showToast('🦴 Added ' + item.id + ' to ' + (bone.name || bone.id), 'success');
+            }
+
+            // Chip-to-chip merge: dropping chip A onto chip B creates/joins a Bone Collection
+            function wireChipDropTargets(chip, citeId, origin) {
+                chip.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!chip.classList.contains('drop-target')) chip.classList.add('drop-target');
+                });
+                chip.addEventListener('dragleave', function() {
+                    chip.classList.remove('drop-target');
+                });
+                chip.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    chip.classList.remove('drop-target');
+                    var item = getDraggedItem(e);
+                    if (!item || !item.id || item.type !== 'citation') return;
+                    if (item.id === citeId) return; // dropped onto itself
+                    var node = resolveTierNode(origin.tier, origin.nodeId);
+                    if (!node) return;
+
+                    // If the target chip already sits inside a collection, merge into it
+                    var existingBone = null;
+                    (node.bone_collections || []).forEach(function(b) {
+                        if (existingBone) return;
+                        if ((b.citations || []).indexOf(citeId) !== -1) existingBone = b;
+                    });
+                    if (existingBone) {
+                        mergeCitationIntoBone(item, origin.tier, node, existingBone);
+                        return;
+                    }
+
+                    // Otherwise form a NEW collection from target + dragged citations
+                    var bone = createBoneCollection(node, origin.tier, [], citeId + ' + ' + item.id);
+                    bone.citations.push(citeId);
+                    removeFromNodeCitations(node, citeId);
+                    bone.citations.push(item.id);
+                    removeCitationFromAnywhere(item);
+                    renderTreeOutliner();
+                    showToast('🦴 Merged into new Bone Collection ' + bone.id, 'success');
+                });
+            }
+
+            // Dropping a citation anywhere on a bone badge merges it into that collection
+            function wireBoneBadgeDrop(badge, bone, nodeData, tier) {
+                badge.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!badge.classList.contains('drop-target')) badge.classList.add('drop-target');
+                });
+                badge.addEventListener('dragleave', function() {
+                    badge.classList.remove('drop-target');
+                });
+                badge.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    badge.classList.remove('drop-target');
+                    var item = getDraggedItem(e);
+                    if (!item || !item.id) return;
                     if (item.type === 'citation') {
-                        if (!nodeData.citations) nodeData.citations = [];
-                        if (nodeData.citations.indexOf(item.id) === -1) {
-                            nodeData.citations.push(item.id);
-                            if (tier === 'paragraph') nodeData.dirty = true;
-                            showToast('Attached ' + item.id + ' to ' + tier, 'success');
-                            renderTreeOutliner();
-                        }
+                        if ((bone.citations || []).indexOf(item.id) !== -1) return; // already inside
+                        mergeCitationIntoBone(item, tier, nodeData, bone);
+                    } else if (item.type === 'bone') {
+                        if (item.id === bone.id) return; // same collection
+                        moveBoneBetweenTiers(item, nodeData, tier);
                     }
                 });
+            }
+
+            // Tier headers (Paper Root / Section) accept drops for chapter framing
+            function wireHeaderDrop(headerEl, nodeData, tier) {
+                if (headerEl._wireHeaderBound) return;
+                headerEl._wireHeaderBound = true;
+
+                headerEl.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!headerEl.classList.contains('drag-over')) headerEl.classList.add('drag-over');
+                });
+                headerEl.addEventListener('dragleave', function() {
+                    headerEl.classList.remove('drag-over');
+                });
+                headerEl.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    headerEl.classList.remove('drag-over');
+                    attachItemToTier(getDraggedItem(e), nodeData, tier);
+                });
+            }
+
+            // Shared drop resolution for tier containers AND tier headers
+            function attachItemToTier(item, nodeData, tier) {
+                if (!item || !item.id || !nodeData) return;
+                if (item.type === 'citation') {
+                    removeCitationFromAnywhere(item); // split out of source bone / singleton
+                    if (!nodeData.citations) nodeData.citations = [];
+                    if (nodeData.citations.indexOf(item.id) === -1) nodeData.citations.push(item.id);
+                    markTierDirty(tier, nodeData);
+                    showToast('Attached ' + item.id + ' to ' + tier, 'success');
+                    renderTreeOutliner();
+                } else if (item.type === 'bone') {
+                    moveBoneBetweenTiers(item, nodeData, tier);
+                    renderTreeOutliner();
+                }
+            }
+
+            // Moves an entire Bone Collection from its source tier into a target container
+            function moveBoneBetweenTiers(item, targetNode, targetTier) {
+                var srcNode = resolveTierNode(item.sourceTier, item.sourceId);
+                if (!srcNode) return;
+                var bone = null;
+                (srcNode.bone_collections || []).forEach(function(b) { if (b.id === item.id) bone = b; });
+                if (!bone) return;
+                var alreadyAtTarget = (targetNode.bone_collections || []).some(function(b) { return b.id === bone.id; });
+                if (alreadyAtTarget) return;
+                srcNode.bone_collections = srcNode.bone_collections.filter(function(b) { return b.id !== bone.id; });
+                if (!targetNode.bone_collections) targetNode.bone_collections = [];
+                targetNode.bone_collections.push(bone);
+                markTierDirty(item.sourceTier, srcNode);
+                markTierDirty(targetTier, targetNode);
+                showToast('Moved bone collection ' + bone.id + ' to ' + targetTier, 'success');
             }
 
             // --- Writing View Renderer ---
@@ -1629,7 +1964,7 @@
                     chipsBox.innerHTML = '';
                     var allCites = listAllParagraphCitations(par);
                     allCites.forEach(function(c) {
-                        var chip = createDnaChip(c, false, null);
+                        var chip = createDnaChip(c, {});
                         chipsBox.appendChild(chip);
                     });
                 }
@@ -1734,6 +2069,17 @@
                 var saveBtn = document.getElementById('btn-save-all');
                 if (saveBtn) {
                     saveBtn.addEventListener('click', savePaperDirect);
+                }
+
+                // [STORY-794] Paper Root affordance: create an empty editable Bone Collection
+                var addBoneBtn = document.getElementById('btn-add-paper-bone');
+                if (addBoneBtn) {
+                    addBoneBtn.addEventListener('click', function() {
+                        if (!STATE.activePaper) return;
+                        var bone = createBoneCollection(STATE.activePaper, 'paper', [], 'Untitled Bone Collection');
+                        showToast('🦴 Created ' + bone.id + ' at Paper Root', 'success');
+                        renderTreeOutliner();
+                    });
                 }
 
                 var valBtn = document.getElementById('btn-validate');
@@ -11973,6 +12319,42 @@ window.__CITATION_INDEX__ = {
     "status": "PROPOSED",
     "author": "Federated Lab"
   },
+  "FEAT-585": {
+    "id": "FEAT-585",
+    "collection": "feature",
+    "title": "Multi-Tier Paper JSON Schema & Invariant Validator",
+    "origin_text": "Provides machine-verifiable data structures allowing sovereign agents to inspect and propose structured modifications through automated schema gates without data corruption.",
+    "origin_source": "FeatureTracker.md (FEAT-585)",
+    "narrative": "Enforces schema invariants for hierarchical manuscript datasets (`papers/*.json`). Supports multi-tier `bone_collections` and `citations` attached at Paper Root, Section Nodes, and Paragraph Containers. Validates UUID uniqueness, citation syntax across registered DNA domains (`PHL`, `BKM`, `FEAT`, `DISC`, `ARXIV`, `GEM`, `WIS`, `LAB`), and ensures authentic author prose integrity.\n\n`Portfolio_Dev/scripts/validate_paper_schema.py`, Foyer REST `/paper/validate`, and `HomeLabAI/src/v5/foyer/router.py`.",
+    "lab_anchors": [
+      "[Portfolio_Dev/scripts/validate_paper_schema.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/validate_paper_schema.py) \u2014 Multi-Tier Paper JSON Schema & Invariant Validator."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "author": "Federated Lab"
+  },
+  "FEAT-586": {
+    "id": "FEAT-586",
+    "collection": "feature",
+    "title": "Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox",
+    "origin_text": "Bridges the human wordsmithing workflow with sovereign vector memory, allowing the human author to perform targeted consistency audits and proactive reference discovery at any structural granularity without losing sovereign control.",
+    "origin_source": "FeatureTracker.md (FEAT-586)",
+    "narrative": "Context-sensitive expandable action bar attached across all structural levels (`Paper Root`, `Section Node`, and `Paragraph Container`). Clicking any structural node expands a localized header exposing:\n1. `[\u2728 Review / Consistency Check]`: Evaluates prose against attached bone collections/citations. Any citation lacking grounding in the prose is flagged as inconsistent or a prune candidate; ungrounded citations flag the node as `dirty`.\n2. `[\ud83d\udd0d Search References / JITC Discovery]`: Analyzes written prose at that structural tier and queries vector memory (ChromaDB `philosophy_dna`, `feature_dna`, `discovery`, `sprint_dna`, and `RESEARCH_SYNTHESIS.md`) to bubble up unattached citations/bones that belong there according to the current prose.\n3. Expandable toolbar of level-specific actions (e.g., tier-level synthesis, prune unreferenced bones, bulk attach recommended citations).\n\n`Portfolio_Dev/field_notes/writer.html`, Foyer REST `/paper/review_consistency`, `/paper/discover_citations`, and AST node header controllers.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "proposed"
+    ],
+    "status": "PROPOSED",
+    "author": "Federated Lab"
+  },
   "BKM-001": {
     "id": "BKM-001",
     "collection": "behavioral",
@@ -15504,6 +15886,16 @@ window.__WRITER_QUOTES__ = [
     "text": "Enables surgical, cascade LLM wordsmithing that adapts to altered structural bone associations without disrupting adjacent unedited paragraphs.",
     "source": "FEAT-584",
     "title": "Synthesis Reflow & 3-Tier Revision Carousel"
+  },
+  {
+    "text": "Provides machine-verifiable data structures allowing sovereign agents to inspect and propose structured modifications through automated schema gates without data corruption.",
+    "source": "FEAT-585",
+    "title": "Multi-Tier Paper JSON Schema & Invariant Validator"
+  },
+  {
+    "text": "Bridges the human wordsmithing workflow with sovereign vector memory, allowing the human author to perform targeted consistency audits and proactive reference discovery at any structural granularity without losing sovereign control.",
+    "source": "FEAT-586",
+    "title": "Multi-Tier Contextual Action Bar & Prose-DNA Alignment Toolbox"
   },
   {
     "text": "Restore the Agent's technical context after a session break or crash.",
