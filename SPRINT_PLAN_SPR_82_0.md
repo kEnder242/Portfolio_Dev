@@ -85,17 +85,21 @@ In Sprints 78–81, Writer Studio (`writer.html`) established a decoupled AST ar
 - **Objective:** Enhance ChromaDB sync and DNA query routers to support dynamic `paper_dna_<slug>` collections with collection-isolated indexing and cross-collection hybrid queries.
 - **Deliverable:** Dynamic ChromaDB collection lifecycle in `HomeLabAI/src/curator/sync_sprint_dna.py` and `router.py`.
 
-#### 📋 Story 82.3: Target Objective Vectorizer & Relevance Scorer
-- **Assigned Owner:** `[SWARM:LOCAL]`
-- **Objective:** Implement `POST /paper/evaluate_objective` which accepts a target job description or prompt, embeds it, and computes similarity scores against document paragraphs and global Wisdom DNA.
-- **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + embedding scorer.
+#### 📋 Story 82.3: Target Objective & JD Matching Engine (Joint Deep Design & Implementation)
+- **Assigned Owner:** `[AGY:PRIMARY]` (Joint Interactive Design Phase) $\rightarrow$ `[SWARM:LOCAL]` (Execution)
+- **High-Level Concept:**
+  - **Objective Ingestion:** Parse target Job Descriptions (JDs), RFPs, or academic CFPs into semantic requirement vectors (skills, domain experience, architectural pillars, scale attributes).
+  - **Combinatorial Match & Scored Alignment:** Compare requirement vectors against both document-local bullet AST nodes (0.0–1.0 score) and federated Wisdom/Feature DNA anchors (`FEAT`, `BKM`, `WIS`).
+  - **Anti-Embellishment Auto-Pruning:** Rather than generating new text, the engine produces ranked suggestions: keep/promote high-scoring bullets, auto-prune/flag irrelevant accomplishments ("Below Water"), and weave relevant repo evidence chips.
+- **Mandatory Pre-Execution Gate:** Deep schema and scoring design (weighting algorithms, similarity thresholds, AST annotation formats) is reserved as an **interactive joint design session** between User and Primary Agent (`[AGY:PRIMARY]`) prior to any autonomous heads-down dispatch.
+- **Deliverable:** Architecture specification in design studio + `HomeLabAI/src/v5/foyer/router.py` endpoint (`POST /paper/evaluate_objective`).
 
 #### 📋 Story 82.4: Objective Curation & Anti-Embellishment UI in `writer.html`
 - **Assigned Owner:** `[SWARM:LOCAL]`
-- **Objective:** Add `[Target Objective]` drawer in `writer.html` showing:
-  - Input box for Job Description / Requirement Brief.
+- **Objective:** Add `[Target Objective / JD]` curation drawer in `writer.html` showing:
+  - Input drawer for Job Description / Requirement Brief.
   - Interactive per-bullet relevance badges (e.g., `92% Match`, `34% Match - Prune Recommended`).
-  - Action buttons: `[Auto-Prune Low Matches]`, `[Sort by Alignment]`, `[Accept / Dismiss]`.
+  - Action controls: `[Auto-Prune Low Matches]`, `[Sort by Alignment]`, `[Accept / Dismiss]`.
   - Evidence chip injector pulling relevant `FEAT` and `BKM` anchors into bullet tooltips.
 - **Deliverable:** `Portfolio_Dev/field_notes/writer.html` + `Portfolio_Dev/field_notes/style.css`.
 
