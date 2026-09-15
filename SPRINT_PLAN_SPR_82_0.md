@@ -102,9 +102,11 @@ It combines two foundational breakthroughs:
 - **Deliverable:** `Portfolio_Dev/field_notes/writer.html` + `Portfolio_Dev/field_notes/style.css`.
 
 #### 📋 Story 82.5: Deterministic AST-to-LaTeX & Web Document Compiler
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:PRIMARY]`
 - **Objective:** Upgrade `build_writer.py` to compile AST documents to pristine LaTeX, PDF, and static HTML entirely from cached `bone_collections`, requiring zero live database connectivity.
-- **Deliverable:** `Portfolio_Dev/field_notes/build_writer.py`.
+- **Verification:** Verified `python3 Portfolio_Dev/field_notes/build_writer.py --compile-all` successfully generates clean `paper.tex`, `references.bib`, and `index.html` from `paper_jitc_intuition.json` with 40 resolved citations.
+- **Deliverable:** `Portfolio_Dev/field_notes/build_writer.py` (commit `f4cab42`).
 
 ---
 
