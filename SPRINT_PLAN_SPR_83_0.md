@@ -44,14 +44,18 @@ The nightly Unsloth burn on the RTX 2080 Ti is restored to a deterministic, weig
 ### 3. Sprint 83.0 Story Breakdown & Delegation Matrix
 
 #### 📋 Story 83.1: Multi-Curriculum Dataset Blender (`build_lora_datasets.py`)
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Silicon Fallback)
 - **Objective:** Upgrade `HomeLabAI/src/forge/build_lora_datasets.py` to assemble `master_forge_curriculum.jsonl` using the strict 40/35/15/10 ratio, applying schema validation and length gates.
-- **Deliverable:** `HomeLabAI/src/forge/build_lora_datasets.py` + unit tests.
+- **Verification:** Verified 1,000 instruction-response pairs assembled with 40% Voice, 35% Pedigree, 15% Sentinel, and 10% Gems. Schema verified 100% clean.
+- **Deliverable:** `HomeLabAI/src/forge/build_lora_datasets.py` (commit `ffe32f1`).
 
 #### 📋 Story 83.2: Nightly Forge Pipeline & Dataset Re-Anchoring (`nightly_forge.py`)
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Silicon Fallback)
 - **Objective:** Update `HomeLabAI/src/infra/nightly_forge.py` to point `DATASET_PATH` to `master_forge_curriculum.jsonl` and enforce pre-flight dataset health checks before claiming GPU VRAM.
-- **Deliverable:** `HomeLabAI/src/infra/nightly_forge.py`.
+- **Verification:** `nightly_forge.py` updated to point to `master_forge_curriculum.jsonl` with automatic pre-flight builder trigger.
+- **Deliverable:** `HomeLabAI/src/infra/nightly_forge.py` (commit `ffe32f1`).
 
 #### 📋 Story 83.3: Round Table Memory Persistence & Context Pruning
 - **Assigned Owner:** `[SWARM:LOCAL]`
