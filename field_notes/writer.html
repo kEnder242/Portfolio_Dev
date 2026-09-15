@@ -15716,21 +15716,42 @@ window.__WRITER_QUOTES__ = [
                 logSysConsole(errMsg, 'error');
             };
 
+            // Canonical API Base URL resolver (FEAT-588 / FEAT-591)
+            function getApiBaseUrl() {
+                var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                if (window.location.port === '8765') return '';
+                if (isLocal || window.location.protocol === 'file:' || !window.location.hostname) return 'http://127.0.0.1:8765';
+                return window.location.origin;
+            }
+
+            function fetchJson(endpoint, options) {
+                var url = endpoint.startsWith('http') ? endpoint : (getApiBaseUrl() + endpoint);
+                return fetch(url, options).then(function(r) {
+                    if (!r.ok) {
+                        throw new Error('HTTP ' + r.status + ' (' + r.statusText + ')');
+                    }
+                    var ct = (r.headers && r.headers.get) ? r.headers.get('content-type') : '';
+                    if (ct && ct.indexOf('application/json') === -1 && ct.indexOf('text/plain') === -1) {
+                        throw new Error('Non-JSON response received (' + ct + ')');
+                    }
+                    return r.json();
+                });
+            }
+
             function checkFoyerStatus() {
                 var pill = document.getElementById('foyer-status-pill');
                 if (!pill) return;
                 var label = pill.querySelector('.status-label');
-                fetch('/paper/validate', {
+                fetchJson('/paper/validate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ paper: STATE.activePaper || {} })
                 })
-                .then(function(r) { return r.json(); })
                 .then(function(res) {
-                    if (res.status === 'valid' || res.status === 'invalid') {
+                    if (res.status === 'valid' || res.status === 'invalid' || res.valid !== undefined) {
                         pill.className = 'server-status-pill online';
                         if (label) label.textContent = 'FOYER REST :8765 ONLINE';
-                        logSysConsole('[FOYER] Connected to Foyer REST server (:8765) — Validation: ' + res.status, 'success');
+                        logSysConsole('[FOYER] Connected to Foyer REST server (:8765) — Validation: ' + (res.status || (res.valid ? 'valid' : 'invalid')), 'success');
                     } else {
                         pill.className = 'server-status-pill offline';
                         if (label) label.textContent = 'FOYER OFFLINE (STANDALONE)';
@@ -15807,8 +15828,7 @@ window.__WRITER_QUOTES__ = [
 
                 sel.addEventListener('change', function() {
                     var targetFile = sel.value;
-                    fetch('/paper/load?file=' + encodeURIComponent(targetFile))
-                        .then(function(r) { return r.json(); })
+                    fetchJson('/paper/load?file=' + encodeURIComponent(targetFile))
                         .then(function(res) {
                             if (res.status === 'success' && res.paper) {
                                 STATE.activePaper = res.paper;
@@ -15817,7 +15837,7 @@ window.__WRITER_QUOTES__ = [
                             }
                         })
                         .catch(function(err) {
-                            showToast('Failed to load paper: ' + err, 'error');
+                            showToast('Failed to load paper: ' + err.message, 'error');
                         });
                 });
             }
@@ -16985,7 +17005,7 @@ window.__WRITER_QUOTES__ = [
                 var textBody = getTierProseText(tier, nodeData);
                 if (!textBody || textBody.length < 15) return;
 
-                fetch('/paper/discover_citations', {
+                fetchJson('/paper/discover_citations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -16997,7 +17017,6 @@ window.__WRITER_QUOTES__ = [
                         top_k: 20
                     })
                 })
-                .then(function(r) { return r.json(); })
                 .then(function(res) {
                     if (res.status === 'success' && res.candidates && res.candidates.length > 0) {
                         logSysConsole('[DISCOVER] ChromaDB Port 8001 returned ' + res.candidates.length + ' live suggestions for ' + tier + ':' + id, 'info');
@@ -17265,7 +17284,7 @@ window.__WRITER_QUOTES__ = [
                         if (!par) return;
 
                         showToast('Querying Sovereign Silicon (/paper/synthesize)...', '');
-                        fetch('/paper/synthesize', {
+                        fetchJson('/paper/synthesize', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -17275,7 +17294,6 @@ window.__WRITER_QUOTES__ = [
                                 current_text: par.text || par.cached_words || ''
                             })
                         })
-                        .then(function(r) { return r.json(); })
                         .then(function(res) {
                             if (res.status === 'success' && res.synthesized_text) {
                                 var ta = document.getElementById('review-prose-textarea');
@@ -17284,7 +17302,7 @@ window.__WRITER_QUOTES__ = [
                             }
                         })
                         .catch(function(err) {
-                            showToast('Synthesis failed: ' + err, 'error');
+                            showToast('Synthesis failed: ' + err.message, 'error');
                         });
                     });
                 }
@@ -17352,8 +17370,7 @@ window.__WRITER_QUOTES__ = [
                 if (revertBtn) {
                     revertBtn.addEventListener('click', function() {
                         var targetFile = (STATE.activePaper && STATE.activePaper.file) ? STATE.activePaper.file : 'paper_jitc_intuition.json';
-                        fetch('/paper/load?file=' + encodeURIComponent(targetFile))
-                            .then(function(r) { return r.json(); })
+                        fetchJson('/paper/load?file=' + encodeURIComponent(targetFile))
                             .then(function(res) {
                                 if (res.status === 'success' && res.paper) {
                                     STATE.activePaper = res.paper;
@@ -17364,7 +17381,7 @@ window.__WRITER_QUOTES__ = [
                                 }
                             })
                             .catch(function(err) {
-                                showToast('Revert failed: ' + err, 'error');
+                                showToast('Revert failed: ' + err.message, 'error');
                             });
                     });
                 }
@@ -17383,12 +17400,11 @@ window.__WRITER_QUOTES__ = [
                 var valBtn = document.getElementById('btn-validate');
                 if (valBtn) {
                     valBtn.addEventListener('click', function() {
-                        fetch('/paper/validate', {
+                        fetchJson('/paper/validate', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ paper: STATE.activePaper })
                         })
-                        .then(function(r) { return r.json(); })
                         .then(function(res) {
                             if (res.valid) {
                                 showToast('🛡️ Schema & Citation Validation PASSED!', 'success');
@@ -17397,7 +17413,7 @@ window.__WRITER_QUOTES__ = [
                             }
                         })
                         .catch(function(err) {
-                            showToast('Validation request error: ' + err, 'error');
+                            showToast('Validation request error: ' + err.message, 'error');
                         });
                     });
                 }
@@ -17405,12 +17421,11 @@ window.__WRITER_QUOTES__ = [
                 var archBtn = document.getElementById('btn-archive');
                 if (archBtn) {
                     archBtn.addEventListener('click', function() {
-                        fetch('/paper/archive', {
+                        fetchJson('/paper/archive', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ paper_id: STATE.activePaper.id })
                         })
-                        .then(function(r) { return r.json(); })
                         .then(function(res) {
                             if (res.status === 'success') {
                                 showToast('📦 Archived snapshot: ' + res.archive_file + ' (git commit ' + res.git_commit + ')', 'success');
@@ -17419,7 +17434,7 @@ window.__WRITER_QUOTES__ = [
                             }
                         })
                         .catch(function(err) {
-                            showToast('Archive request error: ' + err, 'error');
+                            showToast('Archive request error: ' + err.message, 'error');
                         });
                     });
                 }
@@ -17456,12 +17471,11 @@ window.__WRITER_QUOTES__ = [
                                 new_file: renameFilename.value.trim()
                             };
 
-                            fetch('/paper/rename', {
+                            fetchJson('/paper/rename', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
                             })
-                            .then(function(r) { return r.json(); })
                             .then(function(res) {
                                 if (res.status === 'success') {
                                     STATE.activePaper.title = res.title;
@@ -17474,7 +17488,7 @@ window.__WRITER_QUOTES__ = [
                                 }
                             })
                             .catch(function(err) {
-                                showToast('Rename request error: ' + err, 'error');
+                                showToast('Rename request error: ' + err.message, 'error');
                             });
                         });
                     }
@@ -17483,12 +17497,11 @@ window.__WRITER_QUOTES__ = [
 
             function savePaperDirect() {
                 if (!STATE.activePaper) return;
-                fetch('/paper/save', {
+                fetchJson('/paper/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ paper: STATE.activePaper })
                 })
-                .then(function(r) { return r.json(); })
                 .then(function(res) {
                     if (res.status === 'success') {
                         showToast('💾 Saved paper dataset to disk!', 'success');
@@ -17497,7 +17510,7 @@ window.__WRITER_QUOTES__ = [
                     }
                 })
                 .catch(function(err) {
-                    showToast('Save error: ' + err, 'error');
+                    showToast('Save error: ' + err.message, 'error');
                 });
             }
 
