@@ -15547,12 +15547,12 @@ window.__WRITER_QUOTES__ = [
             <!-- Right: Wordsmithing Drawer -->
             <aside id="review-drawer" class="review-drawer">
                 <div class="review-header">
-                    <div class="review-title">✍️ Wordsmithing Drawer</div>
+                    <div class="review-title">✍️ Wordsmithing Studio</div>
                     <button id="btn-close-review" class="review-close">✖</button>
                 </div>
                 <div class="review-body">
                     <div>
-                        <div class="review-label">Target Paragraph</div>
+                        <div class="review-label">Target Context</div>
                         <div id="review-target-id" style="font-family:var(--font-stack); font-size:0.8rem; color:var(--accent-color);">PAR-001</div>
                     </div>
 
@@ -15563,14 +15563,17 @@ window.__WRITER_QUOTES__ = [
 
                     <div>
                         <div class="review-label">Prose Wordsmithing Studio</div>
-                        <textarea id="review-prose-textarea" class="review-textarea" placeholder="Edit clean suggestion prose before kicking into manuscript…"></textarea>
+                        <textarea id="review-prose-textarea" class="review-textarea" placeholder="Edit clean suggestion prose before saving to manuscript…"></textarea>
                     </div>
                 </div>
                 <div class="review-footer">
-                    <button id="btn-synthesize-silicon" class="btn-synthesize">✨ Query Silicon Engine (/paper/synthesize)</button>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <button id="btn-synthesize-silicon" class="btn-synthesize" style="flex:1;" title="Generate draft prose using attached citations via Silicon engine">✨ Generate</button>
+                        <button id="btn-discover-drawer" class="btn-synthesize" style="flex:1; border-color:rgba(77, 170, 252, 0.4); color:var(--accent-color);" title="Discover matching citations (stub)">🔍 Discover</button>
+                    </div>
                     <div style="display:flex; gap:8px;">
-                        <button id="btn-discard-draft" class="btn-discard-drawer" style="flex:1;">↩️ Discard Draft</button>
-                        <button id="btn-kick-manuscript" class="btn-kick" style="flex:2;">🚀 Kick to Manuscript</button>
+                        <button id="btn-discard-draft" class="btn-discard-drawer" style="flex:1;" title="Discard pending modifications and restore baseline">↩️ Discard</button>
+                        <button id="btn-kick-manuscript" class="btn-kick" style="flex:1;" title="Save draft prose to manuscript">💾 Save</button>
                     </div>
                 </div>
             </aside>
@@ -16432,10 +16435,11 @@ window.__WRITER_QUOTES__ = [
                         parDiv.appendChild(preview);
                         parDiv.appendChild(parBonesBox);
 
-                        // [FEAT-588] Paragraph node click → active context
+                        // [FEAT-588] Paragraph node click → active context & open wordsmithing drawer
                         parDiv.addEventListener('click', function(e) {
                             if (e.target.closest && e.target.closest('button,input')) return;
                             setActiveContext('paragraph', par.id);
+                            openReviewDrawer(par, sec);
                         });
 
                         parList.appendChild(parDiv);
@@ -16475,18 +16479,29 @@ window.__WRITER_QUOTES__ = [
                     var secHeaderNode = secNode.querySelector('.tree-node-header');
                     if (secHeaderNode) wireHeaderDrop(secHeaderNode, sec, 'section');
 
-                    // [FEAT-588] Section node click → active context (ignore clicks originating in paragraph nodes / controls)
+                    // [FEAT-588] Section node click → active context & open drawer
                     secNode.addEventListener('click', function(e) {
                         if (e.target.closest && e.target.closest('.tree-paragraph-node,button,input')) return;
                         setActiveContext('section', sec.id);
+                        openReviewDrawerForTier('section', sec);
                     });
 
                     secContainer.appendChild(secNode);
                 });
 
-                // [STORY-794] Paper Root header is a drop target (paper-level bones)
+                // [STORY-794] Paper Root header is a drop target & click opens drawer
                 var rootHeader = document.querySelector('.tree-root-header');
-                if (rootHeader) wireHeaderDrop(rootHeader, p, 'paper');
+                if (rootHeader) {
+                    wireHeaderDrop(rootHeader, p, 'paper');
+                    if (!rootHeader._clickBound) {
+                        rootHeader._clickBound = true;
+                        rootHeader.addEventListener('click', function(e) {
+                            if (e.target.closest && e.target.closest('button,input')) return;
+                            setActiveContext('paper', p.id);
+                            openReviewDrawerForTier('paper', p);
+                        });
+                    }
+                }
 
                 // [FEAT-588] Restore context highlight after re-render
                 applyContextFocus();
@@ -16995,7 +17010,7 @@ window.__WRITER_QUOTES__ = [
                 });
             }
 
-            // --- Writing View Renderer (Option C Direct Hover Actions) ---
+            // --- Writing View Renderer ---
             function renderWritingView() {
                 var p = STATE.activePaper;
                 if (!p) return;
@@ -17011,39 +17026,18 @@ window.__WRITER_QUOTES__ = [
                 if (titleBlock) {
                     titleBlock.style.position = 'relative';
 
-                    // Remove any old static buttons
+                    // Remove any old static buttons/pills
                     var oldStaticBtn = titleBlock.querySelector('.tb-btn.btn-review');
                     if (oldStaticBtn) oldStaticBtn.remove();
-
-                    // [FEAT-587 / FEAT-590] Direct Hover Action Pill on Paper Root
                     var oldPill = titleBlock.querySelector('.hover-action-pill');
                     if (oldPill) oldPill.remove();
-
-                    var rootPill = document.createElement('div');
-                    rootPill.className = 'hover-action-pill toolbox-hover-pill';
-                    rootPill.innerHTML = 
-                        '<button class="hover-pill-btn btn-review-pill" title="Review whole-paper consistency">✨ Review</button>' +
-                        '<button class="hover-pill-btn btn-disc-pill" title="Discover paper-level references in DNA Palette">🔍 Discover</button>';
-
-                    rootPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        setActiveContext('paper', p.id);
-                        openReviewDrawerForTier('paper', p);
-                    });
-                    rootPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        setActiveContext('paper', p.id);
-                        triggerContextDiscovery('paper', p.id, p);
-                        showToast('🔍 Discovered paper-level citations in DNA Palette', 'info');
-                    });
-
-                    titleBlock.appendChild(rootPill);
 
                     if (!titleBlock._contextBound) {
                         titleBlock._contextBound = true;
                         titleBlock.addEventListener('click', function(e) {
                             if (e.target.closest && e.target.closest('button,input,textarea')) return;
                             setActiveContext('paper', p.id);
+                            openReviewDrawerForTier('paper', p);
                         });
                     }
                 }
@@ -17057,11 +17051,11 @@ window.__WRITER_QUOTES__ = [
                     secWrap.className = 'manuscript-section';
                     secWrap.dataset.sectionId = sec.id;
 
-                    // [FEAT-588] Section node click → active context
+                    // Section node click → active context & open Wordsmithing Drawer
                     secWrap.addEventListener('click', function(e) {
                         if (e.target.closest && e.target.closest('.manuscript-paragraph-wrap,button,input,textarea')) return;
                         setActiveContext('section', sec.id);
-                        triggerContextDiscovery('section', sec.id, sec);
+                        openReviewDrawerForTier('section', sec);
                     });
 
                     var secHeaderWrap = document.createElement('div');
@@ -17079,27 +17073,7 @@ window.__WRITER_QUOTES__ = [
                     h2.style.border = 'none';
                     h2.textContent = sec.heading || sec.id;
 
-                    // [FEAT-587 / FEAT-590] Direct Hover Action Pill on Section Header
-                    var secPill = document.createElement('div');
-                    secPill.className = 'hover-action-pill toolbox-hover-pill';
-                    secPill.innerHTML = 
-                        '<button class="hover-pill-btn btn-review-pill" title="Review section consistency">✨ Review</button>' +
-                        '<button class="hover-pill-btn btn-disc-pill" title="Discover section references in DNA Palette">🔍 Discover</button>';
-
-                    secPill.querySelector('.btn-review-pill').addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        setActiveContext('section', sec.id);
-                        openReviewDrawerForTier('section', sec);
-                    });
-                    secPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        setActiveContext('section', sec.id);
-                        triggerContextDiscovery('section', sec.id, sec);
-                        showToast('🔍 Discovered section citations in DNA Palette', 'info');
-                    });
-
                     secHeaderWrap.appendChild(h2);
-                    secHeaderWrap.appendChild(secPill);
                     secWrap.appendChild(secHeaderWrap);
 
                     (sec.paragraphs || []).forEach(function(par) {
@@ -17112,41 +17086,12 @@ window.__WRITER_QUOTES__ = [
                         parWrap.className = 'manuscript-paragraph-wrap' + (par.dirty ? ' dirty' : '');
                         parWrap.dataset.paragraphId = par.id;
 
-                        // [FEAT-588 / FEAT-590] Paragraph node click → active context & auto-open Wordsmithing Drawer
+                        // Paragraph node click → active context & auto-open Wordsmithing Drawer
                         parWrap.addEventListener('click', function(e) {
                             if (e.target.closest && e.target.closest('button,input,textarea,.manuscript-epigraph')) return;
                             setActiveContext('paragraph', par.id);
-                            triggerContextDiscovery('paragraph', par.id, par);
                             openReviewDrawer(par, sec);
                         });
-
-                        // [FEAT-587 / FEAT-590] Unified Direct Hover Pill on Paragraph Gutter
-                        var parPill = document.createElement('div');
-                        parPill.className = 'hover-action-pill toolbox-hover-pill';
-                        var pillHtml = '<button class="hover-pill-btn btn-wordsmith-pill" title="Wordsmith and review this paragraph">✍️ Wordsmith</button>' +
-                                       '<button class="hover-pill-btn btn-disc-pill" title="Discover matching references in DNA Palette">🔍 Discover</button>';
-                        if (par.dirty) {
-                            pillHtml += '<button class="hover-pill-btn btn-discard-pill" title="Discard pending modifications and restore baseline">↩️ Discard</button>';
-                        }
-                        parPill.innerHTML = pillHtml;
-
-                        parPill.querySelector('.btn-wordsmith-pill').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            setActiveContext('paragraph', par.id);
-                            openReviewDrawer(par, sec);
-                        });
-                        parPill.querySelector('.btn-disc-pill').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            setActiveContext('paragraph', par.id);
-                            triggerContextDiscovery('paragraph', par.id, par);
-                            showToast('🔍 Discovered paragraph citations in DNA Palette', 'info');
-                        });
-                        if (par.dirty) {
-                            parPill.querySelector('.btn-discard-pill').addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                discardParagraphChanges(par, sec);
-                            });
-                        }
 
                         // Clean non-intrusive dirty banner
                         var banner = null;
@@ -17155,7 +17100,7 @@ window.__WRITER_QUOTES__ = [
                             banner.className = 'dirty-banner';
                             banner.style.padding = '3px 8px';
                             banner.style.marginBottom = '6px';
-                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use ✍️ Wordsmith or ↩️ Discard)</span>';
+                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use Wordsmithing Studio to Save or Discard)</span>';
                         }
 
                         // Epigraphs for paragraph citations (Clickable for Citation Inspector)
@@ -17188,10 +17133,13 @@ window.__WRITER_QUOTES__ = [
 
                         prose.addEventListener('input', function() {
                             par.text = prose.textContent;
+                            if (par.text !== par._saved_baseline_text) {
+                                par.dirty = true;
+                                parWrap.classList.add('dirty');
+                            }
                         });
 
-                        // [FEAT-590] Prose on Top, Supporting Epigraphs Below
-                        parWrap.appendChild(parPill);
+                        // Prose on Top, Supporting Epigraphs Below
                         if (banner) parWrap.appendChild(banner);
                         parWrap.appendChild(prose);
                         if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
@@ -17201,7 +17149,7 @@ window.__WRITER_QUOTES__ = [
                     secContainer.appendChild(secWrap);
                 });
 
-                // [FEAT-588] Restore context highlight after re-render
+                // Restore context highlight after re-render
                 applyContextFocus();
             }
 
@@ -17308,7 +17256,10 @@ window.__WRITER_QUOTES__ = [
                 if (synthBtn) {
                     synthBtn.addEventListener('click', function() {
                         var parId = STATE.activeReviewParagraphId;
-                        if (!parId) return;
+                        if (!parId) {
+                            showToast('Select a paragraph to generate synthesis', 'warn');
+                            return;
+                        }
 
                         var par = findParagraph(parId);
                         if (!par) return;
@@ -17329,7 +17280,7 @@ window.__WRITER_QUOTES__ = [
                             if (res.status === 'success' && res.synthesized_text) {
                                 var ta = document.getElementById('review-prose-textarea');
                                 if (ta) ta.value = res.synthesized_text;
-                                showToast('Synthesis received! Review and click Kick.', 'success');
+                                showToast('✨ Generated synthesis! Click Save to apply to manuscript.', 'success');
                             }
                         })
                         .catch(function(err) {
@@ -17338,24 +17289,41 @@ window.__WRITER_QUOTES__ = [
                     });
                 }
 
+                var discBtn = document.getElementById('btn-discover-drawer');
+                if (discBtn) {
+                    discBtn.addEventListener('click', function() {
+                        var ctx = getActiveContextNode();
+                        if (ctx) triggerContextDiscovery(ctx.tier, ctx.id, ctx.node);
+                        showToast('🔍 Citation discovery stubbed — full citation list explorer in progress', 'info');
+                    });
+                }
+
                 var kickBtn = document.getElementById('btn-kick-manuscript');
                 if (kickBtn) {
                     kickBtn.addEventListener('click', function() {
                         var parId = STATE.activeReviewParagraphId;
-                        if (!parId) return;
-                        var par = findParagraph(parId);
-                        if (!par) return;
-
+                        var ctx = getActiveContextNode();
                         var ta = document.getElementById('review-prose-textarea');
-                        if (ta) {
-                            par.text = ta.value.trim();
-                            par.dirty = false;
-                            showToast('🚀 Kicked to manuscript!', 'success');
-                            var drawer = document.getElementById('review-drawer');
-                            if (drawer) drawer.classList.remove('open');
-                            renderWritingView();
-                            savePaperDirect();
+                        if (!ta) return;
+                        var newText = ta.value.trim();
+
+                        if (parId) {
+                            var par = findParagraph(parId);
+                            if (par) {
+                                par.text = newText;
+                                par.dirty = false;
+                                showToast('💾 Saved to manuscript!', 'success');
+                            }
+                        } else if (ctx && ctx.tier === 'section') {
+                            showToast('💾 Section review noted', 'success');
+                        } else if (ctx && ctx.tier === 'paper') {
+                            showToast('💾 Paper review noted', 'success');
                         }
+                        var drawer = document.getElementById('review-drawer');
+                        if (drawer) drawer.classList.remove('open');
+                        renderWritingView();
+                        renderTreeOutliner();
+                        savePaperDirect();
                     });
                 }
             }
