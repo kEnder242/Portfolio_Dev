@@ -122,6 +122,76 @@ def deploy_to_airlock(snapshots=False):
     except Exception:
         pass
 
+def lint_javascript():
+    """[FEAT-064 / FEAT-223] Hard syntax verification for all JS files and HTML inline <script> blocks."""
+    print("--- LINTING JAVASCRIPT SYNTAX (NODE.JS) ---")
+    node_bin = shutil.which("node")
+    if not node_bin:
+        print("⚠️ Warning: Node.js binary not found in PATH; skipping JS syntax lint.")
+        return
+
+    errors = []
+    # 1. Lint standalone JS source files
+    js_files = set(f for f in SOURCE_FILES if f.endswith(".js"))
+    for root, _, files in os.walk(BASE_DIR):
+        for f in files:
+            if f.endswith(".js") and not f.endswith(".min.js"):
+                rel = os.path.relpath(os.path.join(root, f), BASE_DIR)
+                js_files.add(rel)
+
+    for js_rel in sorted(js_files):
+        fpath = os.path.join(BASE_DIR, js_rel)
+        if not os.path.exists(fpath):
+            continue
+        res = subprocess.run([node_bin, "--check", fpath], capture_output=True, text=True)
+        if res.returncode != 0:
+            err = res.stderr.strip() or res.stdout.strip()
+            errors.append(f"❌ SyntaxError in '{js_rel}':\n{err}")
+
+    # 2. Lint inline <script> blocks in HTML files
+    script_re = re.compile(r'<script\b(?![^>]*\bsrc=)([^>]*)>(.*?)</script>', re.DOTALL | re.IGNORECASE)
+    type_attr_re = re.compile(r'type=["\']([^"\']+)["\']', re.IGNORECASE)
+
+    for html_name in HTML_FILES:
+        hpath = os.path.join(BASE_DIR, html_name)
+        if not os.path.exists(hpath):
+            continue
+        with open(hpath, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+
+        for match in script_re.finditer(content):
+            attrs, script_body = match.group(1), match.group(2)
+            # Skip non-javascript scripts (e.g. JSON-LD, templates)
+            type_match = type_attr_re.search(attrs)
+            if type_match:
+                stype = type_match.group(1).lower().strip()
+                if stype not in ["text/javascript", "module", "application/javascript", ""]:
+                    continue
+            if not script_body.strip():
+                continue
+
+            line_offset = content[:match.start(2)].count('\n') + 1
+            check_script = "const vm = require('vm'); const code = require('fs').readFileSync(0, 'utf-8'); try { new vm.Script(code, { filename: process.argv[1], lineOffset: parseInt(process.argv[2], 10) - 1 }); } catch (e) { console.error(e.stack || e.message); process.exit(1); }"
+            res = subprocess.run(
+                [node_bin, "-e", check_script, html_name, str(line_offset)],
+                input=script_body,
+                text=True,
+                capture_output=True
+            )
+            if res.returncode != 0:
+                err = res.stderr.strip() or res.stdout.strip()
+                errors.append(f"❌ SyntaxError in '{html_name}' around line {line_offset}:\n{err}")
+
+    if errors:
+        print(f"❌ JS SYNTAX LINT FAILED ({len(errors)} error(s) detected):")
+        for err in errors:
+            print("--------------------------------------------------")
+            print(err)
+        print("--------------------------------------------------")
+        sys.exit(1)
+    else:
+        print("✅ JavaScript syntax lint passed (all JS files and HTML inline scripts clean).")
+
 def main(args):
     print("=== FIELD NOTES BUILD SYSTEM v2.3 (Trailers Enabled) ===")
     
@@ -168,6 +238,12 @@ def main(args):
     except Exception as e:
         print(f"❌ Critical Error in export_public_benchmarks.py: {e}")
         sys.exit(1)
+
+    # JavaScript Syntax Lint Gate
+    if not getattr(args, "no_js_lint", False):
+        lint_javascript()
+    else:
+        print("--- SKIPPING JAVASCRIPT SYNTAX LINT (--no-js-lint) ---")
         
     # [SPR-55] Hard-gate: verify FeatureTracker.md **Code:** links resolve (skip with --no-verify)
     if not args.no_verify:
@@ -243,6 +319,7 @@ if __name__ == "__main__":
     parser.add_argument("--trailers", action="store_true", help="Generate cinematic widescreen previews")
     parser.add_argument("--benchmark", action="store_true", help="Run live model inference benchmarks (bench_models.py)")
     parser.add_argument("--no-verify", action="store_true", help="Skip FeatureTracker.md Code-link verification hard gate")
+    parser.add_argument("--no-js-lint", action="store_true", help="Skip JavaScript syntax validation gate")
     args = parser.parse_args()
     main(args)
 

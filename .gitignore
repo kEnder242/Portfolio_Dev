@@ -27,7 +27,6 @@ field_notes/data_contaminated_backup/
 field_notes/benchmarks_cache.json
 venv/
 env/
-*.egg-info/
-Portfolio_Dev/
 outputs/
+build/
 
