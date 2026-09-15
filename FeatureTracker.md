@@ -2870,12 +2870,16 @@
 **Rationale:** Eliminates synthetic multipliers and conversational noise, delivering authentic physical benchmarks of multi-actor deliberation dynamics.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
 
-## [FEAT-537] Universal Common Hash Key & Stale Bytecode Handshake Guard
-**Sprint:** SPR-71.0
+## [FEAT-537] Universal Common Hash Key & Attendant-Native Rolling Reset Engine
+**Sprint:** SPR-71.0 / SPR-81.0
 **Status:** ACTIVE
-**Logic:** Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. `build_site.py` generates an untracked build artifact `field_notes/data/git_anchor.json` containing the current git commit. `intercom_v2.js` dynamically fetches `git_anchor.json` to populate the `client_commit` handshake parameter, cleanly separating asset cache-busting (`intercom_v2.js?v=<md5>`) from git bytecode locks. Foyer Router pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close) and UI halts reconnection upon stale rejection.
-**Rationale:** Closes the "Uptime Preservation Trap" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.
-**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/git_anchor.json`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`, `HomeLabAI/src/tests/test_live_playwright_gitlock.py`.
+**Code:** [HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py) — Universal Common Hash Key & Attendant-Native Rolling Reset Engine.
+**Logic:** Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. Post-commit hooks in `HomeLabAI` and `Portfolio_Dev` evaluate modified files against risk tiers, writing a 30-minute rolling quiet-window countdown to `field_notes/data/pending_reset.json`. Foyer Router (`router.py`) internally evaluates `pending_reset.json` inside its 60-second maintenance loop (`scheduled_tasks_loop`). When `now >= timer_expiry_ts` and `pending_action != "NONE"`:
+1. `SOFT_RELOAD` (node/resident logic changes): Hot-reloads resident subprocesses in-memory via `ResidentManager.boot_all()`, preserving vLLM GPU caches and HTTP/WS socket listeners.
+2. `DEEP_RESET` (core router/infra/config changes): Gracefully drains connections, flushes state, and executes an in-place process re-execution (`os.execv`) under `lab-attendant.service`.
+Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close) when dirty or stale.
+**Rationale:** Closes the "Uptime Preservation Trap" permanently without circular commit churn or detached watchdog scripts. Eliminates zombie dirty states by embedding the rolling reset evaluator directly inside the 24/7 resident Attendant service.
+**Mechanism:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/infra/git_reset_hook.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/pending_reset.json`, `Portfolio_Dev/field_notes/data/git_anchor.json`.
 
 ## [FEAT-538] Ephemeral Triage Filter & Session De-Duplication
 **Sprint:** SPR-71.0
