@@ -1,111 +1,114 @@
 # 🗺️ SPRINT PLAN: SPR-82.0
-## Generic Scoped Document Ingestion, Objective-Driven AST Combinatorial Studio & Anti-Embellishment Synthesis
+## Generic Scoped Document Ingestion, Decoupled Two-Tier AST Palette & Anti-Embellishment Combinatorial Studio
 
-> **Status:** PROPOSED / BRAINSTORMING ARCHITECTURE  
-> **Session Anchor:** 2026-09-15 10:25 PDT  
-> **Primary References:** [[BKM-024]], [[BKM-049]], [[FEAT-581]], [[FEAT-582]], [[FEAT-585]], [[FEAT-588]]  
+> **Status:** PROPOSED / ARCHITECTURAL BLUEPRINT  
+> **Session Anchor:** 2026-09-15 12:00 PDT  
+> **Primary References:** [[BKM-024]], [[BKM-049]], [[BKM-055]], [[PHL-031]], [[WIS-010]], [[FEAT-581]], [[FEAT-582]], [[FEAT-585]], [[FEAT-588]]  
 
 ---
 
 ### 1. Executive Summary & Vision
 
-In Sprints 78–81, Writer Studio (`writer.html`) established a decoupled AST architecture for technical manuscripts, featuring:
-- **Two-tier outliner & writing view** with atomic section/paragraph JSON schemas.
-- **DNA Palette with Waterline semantics** ("Above Water" attached citations vs. "Below Water" suggested pool).
-- **Cross-collection citation weaving** (`PHL`, `WIS`, `FEAT`, `DISC`, `ArXiv`) compiling directly to LaTeX and Web views.
+Sprint 82.0 is the **unified, single AST sprint** that elevates Writer Studio (`writer.html`) from a single-manuscript editor into a generic, objective-driven document synthesizer and anti-embellishment career studio.
 
-**Sprint 82.0 expands Writer Studio from a single-manuscript editor into a generic, objective-driven document synthesizer**:
-1. **Generic Document Ingestion (`[Import / Open]`):** Parse arbitrary structured text, Markdown, or JSON (including master CVs, research drafts, and technical briefs) into atomic, citation-anchored AST nodes and a dedicated paper-scoped ChromaDB collection (`paper_dna_<slug>`).
-2. **Objective / Target Spec Parsing (`[Parse Job Description / Objective]`):** Ingest target requirements (e.g., a Staff AI SRE job description or academic CFP) to calculate dense semantic similarity vectors against both document-local nodes and the federated Wisdom DNA pool.
-3. **The Anti-Embellishment Combinatorial Studio (`[Flag / Accept / Reject / Refine]`):**
-   - **The Problem:** LLM-assisted resume generation fabricates buzzwords, hallucinates accomplishments, and creates generic corporate slop.
-   - **The Solution:** The model is strictly constrained to **combinatorial selection and ranking** of verbatim human bullet points and real engineering citations.
-   - **The Workflow:** The system suggests:
-     - **Auto-Pruning:** Dropping low-relevance bullets ("Below Water").
-     - **Evidence Anchoring:** Attaching real lab features (`FEAT-213`, `FEAT-452`, `BKM-010`) to corroborate experience bullets.
-     - **Relevance Reordering:** Sequencing bullet points by mathematical alignment with the target role.
+It combines two foundational breakthroughs:
+1. **Functional Decoupling (The Anti-Embellishment Engine):** Traditional AI resume builders hallucinate buzzwords. Here, machine intelligence is strictly constrained to **combinatorial selection, relevance scoring, and auto-pruning** of verbatim human bullet points and tangible engineering citations (`FEAT`, `BKM`, `WIS`).
+2. **Data Decoupling (The Self-Contained Two-Tier AST):** Opening sections, editing, and compiling LaTeX operate with **0ms latency and 100% offline portability** by embedding discovered candidate pools (`_candidate_pool[]`) and active citations (`bone_collection[]`) directly within the document AST, decoupling the studio from live database query loops.
 
 ---
 
-### 2. Forensic Review of Legacy Resume Assets
-
-| Asset | Location | Evaluation & Practicality |
-| :--- | :--- | :--- |
-| **`index_resume_to_rag.py`** | [`HomeLabAI/src/forge/index_resume_to_rag.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/forge/index_resume_to_rag.py) | **Deprecated / Inflexible:** Monolithic 1,000-char regex chunker. Splits text arbitrarily across sentence boundaries and destroys atomic bullet identity. *Verdict: Do not revive script; replace with atomic AST parser.* |
-| **`cv_3x3_summary.json`** | [`Portfolio_Dev/field_notes/data/cv_3x3_summary.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/cv_3x3_summary.json) | **Useful Seed Archetype:** Well-distilled 3-pillar focal points (*System Validation*, *Platform Telemetry*, *Distributed AI Infra*). *Verdict: Retain as pre-curated candidate themes/pillars.* |
-| **Work Stories & Catches** | [`Portfolio_Dev/field_notes/stories.html`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/stories.html) | **High-Value Raw DNA:** Contains rich, factual narrative history (RAKP CVE catches, VISA signal-tracing, platform telemetry automation). *Verdict: Ingestible directly into the master `career_ledger`.* |
-
----
-
-### 3. Architectural Blueprint & Data Flow
+### 2. Architectural Blueprint & The Tri-Phase Lifecycle
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ 1. Raw Document Ingestion ([Import / Open])                 │
-│    • Ingests raw_resume.md / draft_paper.txt / cv.json      │
-│    • Decomposes into atomic paragraph / bullet AST nodes    │
-│    • Creates/Updates scoped collection: `paper_dna_<slug>`  │
+│ 1. DISCOVER (ChromaDB Vector Lookup)                        │
+│    • Ingests raw document via POST /paper/import            │
+│    • Creates scoped collection: `paper_dna_<slug>`          │
+│    • Queries global collections: PHL, WIS, FEAT, DISC       │
+│    • Deposits discovered IDs into tier `_candidate_pool[]`   │
 └──────────────────────────────┬──────────────────────────────┘
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 2. Target Objective Ingestion ([Parse Job Description / CFP])│
-│    • Extracts core skills, domains, and requirement vectors │
+│ 2. CURATE (Interactive Waterline & Objective Curation)      │
+│    • Ingests Target Objective / Job Description (JD)        │
+│    • Evaluates semantic alignment per bullet (0.0 – 1.0)    │
+│    • Auto-Prunes low-match bullets below the Waterline      │
+│    • Promotes approved bones into `bone_collection[]`       │
 └──────────────────────────────┬──────────────────────────────┘
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 3. Dual-Layer Semantic Scoring Engine                       │
-│    A. Scoped Document DNA: Scores local bullets (0.0 – 1.0) │
-│    B. Global Wisdom DNA: Finds relevant FEAT/BKM/WIS anchors │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│ 4. Writer Studio Interactive Curation Canvas (`writer.html`)│
-│    • Visual Relevance Heatmap per bullet                    │
-│    • Auto-Prune Recommendations (Flag low-scoring bullets)  │
-│    • Suggested Evidence Chips from Lab Wisdom DNA           │
-│    • Clean Decision Bar: [Accept All] [Reject] [Refine]     │
-│    • Verbatim Human Prose Guaranteed (Zero Generative Slop) │
+│ 3. GENERATE (Deterministic AST Assembly)                    │
+│    • Compiles LaTeX, PDF, or HTML directly from AST bones   │
+│    • 100% offline, reproducible, zero generative slop       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 4. Sprint 82.0 Story Breakdown (High-Level Proposals)
+### 3. Hierarchical AST Caching Schema (Document, Section, Paragraph)
 
-#### 📋 Story 82.1: Generic Document-to-AST Ingestion Engine (`/paper/import`)
+```json
+{
+  "title": "Staff Infrastructure & AI Platforms Resume",
+  "bone_collection": ["FEAT-181", "BKM-010", "WIS-042"],
+  "_candidate_pool": ["FEAT-213", "BKM-024"],
+  "sections": [
+    {
+      "id": "sec-01",
+      "heading": "Distributed AI Infrastructure",
+      "bone_collection": ["FEAT-452", "WIS-108"],
+      "_candidate_pool": ["FEAT-450", "FEAT-451"],
+      "paragraphs": [
+        {
+          "id": "p-01",
+          "text": "Architected multi-model vLLM & Ollama fallback mesh...",
+          "citations": ["FEAT-452"],
+          "_candidate_pool": ["BKM-044", "FEAT-136"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### 4. Sprint 82.0 Story Breakdown & Delegation Matrix
+
+#### 📋 Story 82.1: Generic Document Ingestion & Two-Tier AST Schema (`/paper/import`)
 - **Assigned Owner:** `[SWARM:LOCAL]`
-- **Objective:** Build backend endpoint `POST /paper/import` that takes raw text, Markdown, or JSON and parses it into compliant AST schema (`structure[]`, `sections[]`, `paragraphs[]` with atomic bullet IDs).
-- **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + `Portfolio_Dev/scripts/parse_document_to_ast.py`.
+- **Objective:** Build backend endpoint `POST /paper/import` that parses raw text, Markdown, or JSON into the canonical two-tier AST schema with `bone_collection[]` and `_candidate_pool[]` keys at Root, Section, and Bullet levels.
+- **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + `Portfolio_Dev/scripts/parse_document_to_ast.py` + `validate_paper_schema.py`.
 
 #### 📋 Story 82.2: Paper-Scoped ChromaDB DNA Collections
 - **Assigned Owner:** `[SWARM:LOCAL]`
 - **Objective:** Enhance ChromaDB sync and DNA query routers to support dynamic `paper_dna_<slug>` collections with collection-isolated indexing and cross-collection hybrid queries.
 - **Deliverable:** Dynamic ChromaDB collection lifecycle in `HomeLabAI/src/curator/sync_sprint_dna.py` and `router.py`.
 
-#### 📋 Story 82.3: Target Objective & JD Matching Engine (Joint Deep Design & Implementation)
-- **Assigned Owner:** `[AGY:PRIMARY]` (Joint Interactive Design Phase) $\rightarrow$ `[SWARM:LOCAL]` (Execution)
-- **High-Level Concept:**
-  - **Objective Ingestion:** Parse target Job Descriptions (JDs), RFPs, or academic CFPs into semantic requirement vectors (skills, domain experience, architectural pillars, scale attributes).
-  - **Combinatorial Match & Scored Alignment:** Compare requirement vectors against both document-local bullet AST nodes (0.0–1.0 score) and federated Wisdom/Feature DNA anchors (`FEAT`, `BKM`, `WIS`).
-  - **Anti-Embellishment Auto-Pruning:** Rather than generating new text, the engine produces ranked suggestions: keep/promote high-scoring bullets, auto-prune/flag irrelevant accomplishments ("Below Water"), and weave relevant repo evidence chips.
-- **Mandatory Pre-Execution Gate:** Deep schema and scoring design (weighting algorithms, similarity thresholds, AST annotation formats) is reserved as an **interactive joint design session** between User and Primary Agent (`[AGY:PRIMARY]`) prior to any autonomous heads-down dispatch.
+#### 📋 Story 82.3: Target Objective & JD Matching Engine (Joint Deep Design & Execution)
+- **Assigned Owner:** `[AGY:PRIMARY]` (Joint Interactive Design) $\rightarrow$ `[SWARM:LOCAL]` (Execution)
+- **Objective:** Build objective matching endpoint `POST /paper/evaluate_objective` that extracts semantic requirement vectors from a Job Description / CFP and calculates alignment scores against local AST bullets and Wisdom DNA.
 - **Deliverable:** Architecture specification in design studio + `HomeLabAI/src/v5/foyer/router.py` endpoint (`POST /paper/evaluate_objective`).
 
 #### 📋 Story 82.4: Objective Curation & Anti-Embellishment UI in `writer.html`
 - **Assigned Owner:** `[SWARM:LOCAL]`
-- **Objective:** Add `[Target Objective / JD]` curation drawer in `writer.html` showing:
+- **Objective:** Add `[Target Objective / JD]` curation drawer and two-tier palette waterline in `writer.html` showing:
   - Input drawer for Job Description / Requirement Brief.
-  - Interactive per-bullet relevance badges (e.g., `92% Match`, `34% Match - Prune Recommended`).
+  - Interactive per-bullet relevance badges (e.g., `92% Match [KEEP]`, `34% Match [PRUNE]`).
   - Action controls: `[Auto-Prune Low Matches]`, `[Sort by Alignment]`, `[Accept / Dismiss]`.
-  - Evidence chip injector pulling relevant `FEAT` and `BKM` anchors into bullet tooltips.
+  - Zero-latency client-side drag-and-drop across the Waterline.
 - **Deliverable:** `Portfolio_Dev/field_notes/writer.html` + `Portfolio_Dev/field_notes/style.css`.
+
+#### 📋 Story 82.5: Deterministic AST-to-LaTeX & Web Document Compiler
+- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Objective:** Upgrade `build_writer.py` to compile AST documents to pristine LaTeX, PDF, and static HTML entirely from cached `bone_collections`, requiring zero live database connectivity.
+- **Deliverable:** `Portfolio_Dev/field_notes/build_writer.py`.
 
 ---
 
 ### 5. Architectural Guardrails & Invariant Laws
-1. **Zero Generative Embellishment:** The synthesis engine must only rank, filter, and organize verbatim human text. It must never fabricate experience or hallucinate achievements.
-2. **Deterministic Provenance:** Every bullet and suggested evidence link must point to a tangible file, story, or feature ID in the repository.
-3. **AST Schema Strictness:** All imported documents must validate against `validate_paper_schema.py` before saving to disk.
+1. **Zero Generative Embellishment (PHL-031):** The synthesis engine must only rank, filter, and organize verbatim human text. It must never fabricate experience or hallucinate achievements.
+2. **Deterministic Portability (BKM-055):** Document editing and compilation must never stall or fail due to offline environments or unreachable database ports.
+3. **AST Strictness:** All imported documents must validate against `validate_paper_schema.py` before saving to disk.
