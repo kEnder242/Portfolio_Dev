@@ -42,6 +42,12 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 - `4097` = `codex serve` REST API (system-level service, always running). Used for session creation and message dispatch.
 - `4096` = Web UI proxy (user-level, socket-activated, idle-stops after 5min). Required for browser access at `http://192.168.1.238:4096/`.
 
+### 2.4 Unconditional Zombie Session Nuke & Single-Tenant Lifecycle ([BKM-034])
+- **The Orphanage Failure Mode:** When `delegate.py` timed out or exited during offline silicon intervals, the background OpenCode daemon (`:4097`) retained in-flight child subagent sessions (`Sisyphus-Junior`, `explore`). These orphaned workers continued background polling loops against Node KENDER and Node Brain, keeping Ollama VRAM timers alive indefinitely.
+- **The Sovereign Single-Tenant Nuke Policy:** Because the Federated Lab is a single-tenant environment, `delegate.py` enforces an unconditional total nuke across port 4097:
+  1. **Pre-Flight Sweep:** Before creating any new dispatch session, `delegate.py` queries `GET /session` and issues `POST /session/<id>/abort` to all active sessions on the server.
+  2. **Termination & Exit Nuke:** On any script exit, `SIGINT`, `SIGTERM`, error, or timeout, `_cleanup_active_session()` triggers `_nuke_all_sessions()`, ensuring all parent and child subagents are terminated immediately.
+
 ---
 
 ## 3. Context & Token Optimization
