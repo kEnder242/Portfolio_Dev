@@ -65,9 +65,11 @@ The nightly Unsloth burn on the RTX 2080 Ti is restored to a deterministic, weig
 - **Deliverable:** `HomeLabAI/src/memory/blackboard_ledger.py` (commit `3649bf2`).
 
 #### 📋 Story 83.4: LoRA Fidelity & Pedigree Evaluation Suite
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:PRIMARY]`
 - **Objective:** Build an automated post-training evaluation suite that queries the newly forged adapter on canonical prompts (BKM recall, User Voice phrasing, Triage vibe check) and asserts coherence before hot-reloading into production vLLM.
-- **Deliverable:** `HomeLabAI/src/tests/test_forge_fidelity.py`.
+- **Verification:** Verified `test_forge_fidelity.py` (3 tests passed in 0.21s: master curriculum 40/35/15/10 distribution, aligned model pass at 100% fidelity, and degraded model rejection).
+- **Deliverable:** `HomeLabAI/src/tests/test_forge_fidelity.py` (commit `e2956f4`).
 
 ---
 
