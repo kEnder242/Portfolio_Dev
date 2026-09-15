@@ -374,5 +374,45 @@
       "status": "APPROVED",
       "bucket_id": "bucket_1_jitc"
     }
+  },
+  {
+    "id": "WIS-010",
+    "theme": "Systems Architecture & Invariant Records",
+    "paper_order": 31,
+    "origin": {
+      "author": "jallred",
+      "text": "Going back and forth between sprint 82 and 83, did we find in two separate instances that 'decoupling' was a strategic winner? Like wow. Talk about serendipity.",
+      "source": "Architectural Alignment Dialogue (Sprint 82/83 Review)",
+      "immutable": true,
+      "created_at": "2026-09-15T11:40:00Z"
+    },
+    "synthesis": {
+      "title": "The Dual Decoupling Architecture: Anti-Embellishment & Self-Contained ASTs",
+      "narrative_context": "Architectural coupling consistently generates fragility across disparate subsystems. In Sprint 82, decoupling the AI model from generative prose authoring into pure combinatorial selection/ranking eliminated resume hallucinations. In Sprint 83, decoupling interactive document editing and LaTeX builds from live vector database queries via embedded AST bone caching eliminated UI latency and brittle offline builds. Decoupling proves that static artifacts of record must be self-contained rather than tethered to live runtime state.",
+      "lab_anchors": [
+        "Portfolio_Dev/field_notes/writer.html",
+        "HomeLabAI/docs/Protocols.md:BKM-055",
+        "Portfolio_Dev/field_notes/data/philosophy_data.json:PHL-031"
+      ],
+      "review_notes": "Synthesizes the dual-decoupling breakthrough across document synthesis and AST caching.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1
+    },
+    "metadata": {
+      "tags": [
+        "decoupling",
+        "dual-decoupling",
+        "anti-embellishment",
+        "self-contained-ast",
+        "architectural-serendipity"
+      ],
+      "explicit_links": [
+        "PHL-031",
+        "WIS-001",
+        "WIS-002"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_5_infra"
+    }
   }
 ]
