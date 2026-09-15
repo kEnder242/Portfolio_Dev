@@ -44,30 +44,30 @@
 
         /* Top Studio Header */
         .studio-header {
-            height: 58px;
+            height: 48px;
             background-color: var(--sidebar-bg);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 14px;
             flex-shrink: 0;
-            gap: 15px;
+            gap: 10px;
             z-index: 100;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .studio-title-badge {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             background: var(--code-bg);
             border: 1px solid var(--border-color);
             color: var(--accent-color);
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             font-family: var(--font-stack);
             font-weight: 600;
@@ -237,39 +237,41 @@
         .paper-selector-wrap {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .paper-select {
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.85rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
             outline: none;
             cursor: pointer;
+            max-width: 260px;
         }
         .paper-select:focus { border-color: var(--accent-color); }
 
-        .btn-rename {
-            background: transparent;
+        .btn-rename, .btn-new-paper {
+            background: var(--code-bg);
             border: 1px solid var(--border-color);
             color: var(--sub-color);
             padding: 4px 8px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
-        .btn-rename:hover { color: var(--text-color); border-color: var(--accent-color); }
+        .btn-rename:hover, .btn-new-paper:hover { color: var(--text-color); border-color: var(--accent-color); }
 
         /* Mode Tabs Switcher */
         .mode-tabs {
             display: flex;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 4px;
             padding: 2px;
             gap: 2px;
         }
@@ -278,15 +280,15 @@
             background: transparent;
             border: none;
             color: var(--sub-color);
-            padding: 6px 14px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            font-size: 0.75rem;
             font-weight: 500;
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
         .mode-tab-btn:hover { color: var(--text-color); }
         .mode-tab-btn.active {
@@ -298,21 +300,22 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
         .action-btn {
             background: var(--code-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            gap: 4px;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
         .action-btn:hover {
             border-color: var(--accent-color);
@@ -323,6 +326,7 @@
             border-color: #2ea043;
             color: #ffffff;
             font-weight: 600;
+            padding: 4px 12px;
         }
         .action-btn.btn-save:hover { background: #2ea043; }
 
@@ -11168,11 +11172,13 @@ window.__CITATION_INDEX__ = {
   "FEAT-537": {
     "id": "FEAT-537",
     "collection": "feature",
-    "title": "Universal Common Hash Key & Stale Bytecode Handshake Guard",
-    "origin_text": "Closes the \"Uptime Preservation Trap\" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.",
+    "title": "Universal Common Hash Key & Attendant-Native Rolling Reset Engine",
+    "origin_text": "Closes the \"Uptime Preservation Trap\" permanently without circular commit churn or detached watchdog scripts. Eliminates zombie dirty states by embedding the rolling reset evaluator directly inside the 24/7 resident Attendant service.",
     "origin_source": "FeatureTracker.md (FEAT-537)",
-    "narrative": "Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. `build_site.py` generates an untracked build artifact `field_notes/data/git_anchor.json` containing the current git commit. `intercom_v2.js` dynamically fetches `git_anchor.json` to populate the `client_commit` handshake parameter, cleanly separating asset cache-busting (`intercom_v2.js?v=<md5>`) from git bytecode locks. Foyer Router pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close) and UI halts reconnection upon stale rejection.\n\n`HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/git_anchor.json`, `HomeLabAI/src/tests/test_live_sprint71_stability.py`, `HomeLabAI/src/tests/test_live_playwright_gitlock.py`.",
-    "lab_anchors": [],
+    "narrative": "Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. Post-commit hooks in `HomeLabAI` and `Portfolio_Dev` evaluate modified files against risk tiers, writing a 30-minute rolling quiet-window countdown to `field_notes/data/pending_reset.json`. Foyer Router (`router.py`) internally evaluates `pending_reset.json` inside its 60-second maintenance loop (`scheduled_tasks_loop`). When `now >= timer_expiry_ts` and `pending_action != \"NONE\"`:\n1. `SOFT_RELOAD` (node/resident logic changes): Hot-reloads resident subprocesses in-memory via `ResidentManager.boot_all()`, preserving vLLM GPU caches and HTTP/WS socket listeners.\n2. `DEEP_RESET` (core router/infra/config changes): Gracefully drains connections, flushes state, and executes an in-place process re-execution (`os.execv`) under `lab-attendant.service`.\nFoyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Conflict) and WebSocket handshake frame `client_commit` (rejects with WS 1008 Close) when dirty or stale.\n\n`HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/infra/git_reset_hook.py`, `Portfolio_Dev/field_notes/intercom_v2.js`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/field_notes/data/pending_reset.json`, `Portfolio_Dev/field_notes/data/git_anchor.json`.",
+    "lab_anchors": [
+      "[HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py) \u2014 Universal Common Hash Key & Attendant-Native Rolling Reset Engine."
+    ],
     "tags": [
       "feature",
       "code-anchor",
@@ -15052,9 +15058,9 @@ window.__WRITER_QUOTES__ = [
     "title": "Round Table Delta-T Telemetry & Blackboard Drawer UI"
   },
   {
-    "text": "Closes the \"Uptime Preservation Trap\" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.",
+    "text": "Closes the \"Uptime Preservation Trap\" permanently without circular commit churn or detached watchdog scripts. Eliminates zombie dirty states by embedding the rolling reset evaluator directly inside the 24/7 resident Attendant service.",
     "source": "FEAT-537",
-    "title": "Universal Common Hash Key & Stale Bytecode Handshake Guard"
+    "title": "Universal Common Hash Key & Attendant-Native Rolling Reset Engine"
   },
   {
     "text": "Prevents UI clutter and false perception of duplicate triage execution upon browser reconnections.",
@@ -15425,34 +15431,31 @@ window.__WRITER_QUOTES__ = [
         <!-- Top Studio Header -->
         <header class="studio-header">
             <div class="header-left">
-                <span class="studio-title-badge">WRITER STUDIO v81.0</span>
+                <span class="studio-title-badge">WRITER</span>
                 
                 <div class="paper-selector-wrap">
                     <select id="paper-select" class="paper-select" title="Select Paper Dataset"></select>
-                    <button id="btn-rename-modal" class="btn-rename" title="Rename Paper Representation">✏️ Rename</button>
+                    <button id="btn-new-paper-modal" class="btn-new-paper" title="Create New Paper">+ New</button>
+                    <button id="btn-rename-modal" class="btn-rename" title="Rename Paper Representation">Rename</button>
                 </div>
 
                 <div class="server-status-pill" id="foyer-status-pill">
-                    <span class="status-dot"></span> <span class="status-label">CHECKING FOYER...</span>
+                    <span class="status-dot"></span> <span class="status-label">FOYER...</span>
                 </div>
             </div>
 
             <!-- Mode Switcher Tabs -->
             <div class="mode-tabs">
-                <button id="tab-btn-tree" class="mode-tab-btn" data-tab="tree">
-                    <span>🌲</span> Tree View
-                </button>
-                <button id="tab-btn-write" class="mode-tab-btn active" data-tab="write">
-                    <span>🌊</span> Writing View
-                </button>
+                <button id="tab-btn-tree" class="mode-tab-btn" data-tab="tree">Tree View</button>
+                <button id="tab-btn-write" class="mode-tab-btn active" data-tab="write">Writing View</button>
             </div>
 
             <!-- Header Action Controls -->
             <div class="header-actions">
-                <button id="btn-revert-disk" class="action-btn" title="Revert all unsaved changes and reload pristine manuscript from disk">↩️ Revert to Disk</button>
-                <button id="btn-archive" class="action-btn" title="Archive current paper snapshot (Option A)">📦 Archive</button>
-                <button id="btn-validate" class="action-btn" title="Validate schema and citation syntax">🛡️ Validate</button>
-                <button id="btn-save-all" class="action-btn btn-save" title="Save manuscript to disk">💾 Save Paper</button>
+                <button id="btn-revert-disk" class="action-btn" title="Revert all unsaved changes and reload pristine manuscript from disk">Revert</button>
+                <button id="btn-archive" class="action-btn" title="Archive current paper snapshot">Archive</button>
+                <button id="btn-validate" class="action-btn" title="Validate schema and citation syntax">Validate</button>
+                <button id="btn-save-all" class="action-btn btn-save" title="Save manuscript to disk">💾 Save</button>
             </div>
         </header>
 
@@ -15609,7 +15612,7 @@ window.__WRITER_QUOTES__ = [
     <!-- Rename Modal -->
     <div id="rename-modal-overlay" class="modal-overlay">
         <div class="modal-card">
-            <div class="modal-title">✏️ Rename Paper Dataset</div>
+            <div class="modal-title">Rename Paper Dataset</div>
             <div class="modal-field">
                 <label for="rename-title">Paper Title</label>
                 <input type="text" id="rename-title" class="modal-input">
@@ -15625,6 +15628,33 @@ window.__WRITER_QUOTES__ = [
             <div class="modal-actions">
                 <button id="btn-cancel-rename" class="action-btn">Cancel</button>
                 <button id="btn-confirm-rename" class="action-btn btn-save">Confirm Rename</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Paper Modal -->
+    <div id="new-paper-modal-overlay" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-title">+ Create New Paper Dataset</div>
+            <div class="modal-field">
+                <label for="new-paper-title">Paper Title</label>
+                <input type="text" id="new-paper-title" class="modal-input" placeholder="e.g. Asymmetric Speculative Verification in Silicon">
+            </div>
+            <div class="modal-field">
+                <label for="new-paper-subtitle">Paper Subtitle</label>
+                <input type="text" id="new-paper-subtitle" class="modal-input" placeholder="e.g. Applied Multi-Model Architecture & Telemetry">
+            </div>
+            <div class="modal-field">
+                <label for="new-paper-filename">JSON File Representation</label>
+                <input type="text" id="new-paper-filename" class="modal-input" placeholder="paper_speculative_verification.json">
+            </div>
+            <div class="modal-field">
+                <label for="new-paper-author">Author</label>
+                <input type="text" id="new-paper-author" class="modal-input" value="Jason Allred">
+            </div>
+            <div class="modal-actions">
+                <button id="btn-cancel-new-paper" class="action-btn">Cancel</button>
+                <button id="btn-confirm-new-paper" class="action-btn btn-save">Create Paper</button>
             </div>
         </div>
     </div>
@@ -17489,6 +17519,130 @@ window.__WRITER_QUOTES__ = [
                             })
                             .catch(function(err) {
                                 showToast('Rename request error: ' + err.message, 'error');
+                            });
+                // New Paper Modal Wiring
+                var newPaperModalBtn = document.getElementById('btn-new-paper-modal');
+                var newPaperOverlay = document.getElementById('new-paper-modal-overlay');
+                var newPaperTitle = document.getElementById('new-paper-title');
+                var newPaperSubtitle = document.getElementById('new-paper-subtitle');
+                var newPaperFilename = document.getElementById('new-paper-filename');
+                var newPaperAuthor = document.getElementById('new-paper-author');
+                var cancelNewPaper = document.getElementById('btn-cancel-new-paper');
+                var confirmNewPaper = document.getElementById('btn-confirm-new-paper');
+
+                if (newPaperModalBtn && newPaperOverlay) {
+                    newPaperModalBtn.addEventListener('click', function() {
+                        if (newPaperTitle) newPaperTitle.value = '';
+                        if (newPaperSubtitle) newPaperSubtitle.value = '';
+                        if (newPaperFilename) newPaperFilename.value = '';
+                        if (newPaperAuthor) newPaperAuthor.value = 'Jason Allred';
+                        newPaperOverlay.classList.add('open');
+                    });
+
+                    if (newPaperTitle && newPaperFilename) {
+                        newPaperTitle.addEventListener('input', function() {
+                            var slug = newPaperTitle.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+                            if (slug) {
+                                newPaperFilename.value = 'paper_' + slug + '.json';
+                            }
+                        });
+                    }
+
+                    if (cancelNewPaper) {
+                        cancelNewPaper.addEventListener('click', function() {
+                            newPaperOverlay.classList.remove('open');
+                        });
+                    }
+
+                    if (confirmNewPaper) {
+                        confirmNewPaper.addEventListener('click', function() {
+                            var title = newPaperTitle ? newPaperTitle.value.trim() : '';
+                            var subtitle = newPaperSubtitle ? newPaperSubtitle.value.trim() : '';
+                            var filename = newPaperFilename ? newPaperFilename.value.trim() : '';
+                            var author = newPaperAuthor ? newPaperAuthor.value.trim() : 'Jason Allred';
+
+                            if (!title) {
+                                showToast('Please enter a paper title', 'error');
+                                return;
+                            }
+                            if (!filename) {
+                                var slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+                                filename = 'paper_' + slug + '.json';
+                            }
+                            if (!filename.endsWith('.json')) filename += '.json';
+
+                            var papersCount = (STATE.manifest && STATE.manifest.papers) ? STATE.manifest.papers.length : 1;
+                            var paperId = 'PAPER-' + String(papersCount + 1).padStart(3, '0');
+                            var paperSlug = filename.replace(/^paper_/, '').replace(/\.json$/, '');
+
+                            var newPaperData = {
+                                id: paperId,
+                                slug: paperSlug,
+                                title: title,
+                                subtitle: subtitle,
+                                file: filename,
+                                author: author,
+                                date: new Date().toISOString().split('T')[0],
+                                status: 'DRAFT',
+                                created_at: new Date().toISOString(),
+                                updated_at: new Date().toISOString(),
+                                bone_collections: [],
+                                citations: [],
+                                structure: [
+                                    { section_id: 'SEC-001', name: 'Section 1: Introduction & Theoretical Foundations' }
+                                ],
+                                sections: [
+                                    {
+                                        id: 'SEC-001',
+                                        title: '1. Introduction & Theoretical Foundations',
+                                        bone_collections: [],
+                                        citations: [],
+                                        paragraphs: [
+                                            {
+                                                id: 'SEC-001-P1',
+                                                raw_text: 'Initial foundational thesis and conceptual outline.',
+                                                wordsmith_text: '',
+                                                bone_collections: [],
+                                                citations: [],
+                                                synthesis_rationale: 'Initial framing'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            };
+
+                            fetchJson('/paper/save', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ paper: newPaperData, file: filename })
+                            })
+                            .then(function(res) {
+                                if (res.status === 'success') {
+                                    if (!STATE.manifest.papers) STATE.manifest.papers = [];
+                                    STATE.manifest.papers.push({
+                                        id: paperId,
+                                        slug: paperSlug,
+                                        title: title,
+                                        subtitle: subtitle,
+                                        file: filename,
+                                        author: author,
+                                        date: newPaperData.date,
+                                        status: 'DRAFT',
+                                        created_at: newPaperData.created_at,
+                                        updated_at: newPaperData.updated_at,
+                                        structure: newPaperData.structure
+                                    });
+                                    STATE.activePaper = newPaperData;
+                                    initPaperSelector();
+                                    newPaperOverlay.classList.remove('open');
+                                    renderAllViews();
+                                    showToast('Created paper: ' + title, 'success');
+                                } else {
+                                    showToast('Create failed: ' + (res.message || 'Error'), 'error');
+                                }
+                            })
+                            .catch(function(err) {
+                                showToast('Create request error: ' + err.message, 'error');
                             });
                         });
                     }
