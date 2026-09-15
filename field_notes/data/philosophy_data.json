@@ -1061,5 +1061,44 @@
       "status": "APPROVED",
       "bucket_id": "bucket_5_infra"
     }
+  },
+  {
+    "id": "PHL-031",
+    "theme": "Systems Architecture & Invariant Records",
+    "paper_order": 31,
+    "origin": {
+      "author": "jallred",
+      "text": "Runtime execution is volatile, noisy, and ephemeral; artifacts of record must remain decoupled, immutable, and self-contained. The AI must judge and connect, not fabricate; the AST must carry its own bones, not tether to live databases.",
+      "source": "Decoupled Architecture Synthesis (Sprint 82/83 Review)",
+      "immutable": true,
+      "created_at": "2026-09-15T11:40:00Z"
+    },
+    "synthesis": {
+      "title": "The Decoupled Determinism Tenet (Artifacts of Record vs. Ephemeral Runtime)",
+      "narrative_context": "Systems degrade when static artifacts of record depend on live, ephemeral runtime execution. True architectural robustness requires two core decouplings: (1) Functional Decoupling: constraining generative models to combinatorial judgment, ranking, and evidence attachment rather than hallucinating text; (2) Data Decoupling: embedding discovered bone collections and candidate pools directly into self-contained ASTs, enabling zero-latency rendering and 100% offline-reproducible builds without live database tethering.",
+      "lab_anchors": [
+        "Portfolio_Dev/field_notes/writer.html",
+        "BKM-055",
+        "WIS-010"
+      ],
+      "review_notes": "The dual-decoupling foundation for the anti-embellishment synthesizer and self-contained document ASTs.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1
+    },
+    "metadata": {
+      "tags": [
+        "decoupling",
+        "deterministic-ast",
+        "anti-embellishment",
+        "artifacts-of-record",
+        "offline-portability"
+      ],
+      "explicit_links": [
+        "PHL-001",
+        "PHL-030"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_5_infra"
+    }
   }
 ]
