@@ -58,9 +58,11 @@ The nightly Unsloth burn on the RTX 2080 Ti is restored to a deterministic, weig
 - **Deliverable:** `HomeLabAI/src/infra/nightly_forge.py` (commit `ffe32f1`).
 
 #### 📋 Story 83.3: Round Table Memory Persistence & Context Pruning
-- **Assigned Owner:** `[SWARM:LOCAL]`
-- **Objective:** Implement structured persistence and pruning for the blackboard ledger (`journal_ledger.jsonl`), ensuring resident models have a bounded context window (recent N turns) while archiving older turns into long-term ChromaDB recall.
-- **Deliverable:** `HomeLabAI/src/memory/blackboard_ledger.py` + `HomeLabAI/src/nodes/cognitive_hub.py`.
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Local Timeout Fallback)
+- **Objective:** Implement structured persistence and pruning for the blackboard ledger (`blackboard_ledger.py`), ensuring resident models have a bounded context window (recent N turns) while archiving older turns into long-term ChromaDB recall.
+- **Verification:** Verified `BlackboardLedger` bounded context pruning (keeps latest N turns, archives older entries), formatted prompt injection, and standalone `append_round_table_delta`.
+- **Deliverable:** `HomeLabAI/src/memory/blackboard_ledger.py` (commit `3649bf2`).
 
 #### 📋 Story 83.4: LoRA Fidelity & Pedigree Evaluation Suite
 - **Assigned Owner:** `[SWARM:LOCAL]`
