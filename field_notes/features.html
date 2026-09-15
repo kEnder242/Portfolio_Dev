@@ -14640,31 +14640,40 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Universal Common Hash Key & Stale Bytecode Handshake Guard
+                                    Universal Common Hash Key & Attendant-Native Rolling Reset Engine
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-71.0</p>
+                    <p>SPR-71.0 / SPR-81.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. <code>build_site.py</code> generates an untracked build artifact <code>field_notes/data/git_anchor.json</code> containing the current git commit. <code>intercom_v2.js</code> dynamically fetches <code>git_anchor.json</code> to populate the <code>client_commit</code> handshake parameter, cleanly separating asset cache-busting (<code>intercom_v2.js?v=&lt;md5&gt;</code>) from git bytecode locks. Foyer Router pre-checks <code>X-Client-Commit</code> header (rejects with HTTP 409 Conflict) and WebSocket handshake frame <code>client_commit</code> (rejects with WS 1008 Close) and UI halts reconnection upon stale rejection.</p>
+                    <p>Enforces bidirectional commit hash matching across all WebSocket handshakes while breaking circular build commit loops. Post-commit hooks in <code>HomeLabAI</code> and <code>Portfolio_Dev</code> evaluate modified files against risk tiers, writing a 30-minute rolling quiet-window countdown to <code>field_notes/data/pending_reset.json</code>. Foyer Router (<code>router.py</code>) internally evaluates <code>pending_reset.json</code> inside its 60-second maintenance loop (<code>scheduled_tasks_loop</code>). When <code>now &gt;= timer_expiry_ts</code> and <code>pending_action != "NONE"</code>:
+1. <code>SOFT_RELOAD</code> (node/resident logic changes): Hot-reloads resident subprocesses in-memory via <code>ResidentManager.boot_all()</code>, preserving vLLM GPU caches and HTTP/WS socket listeners.
+2. <code>DEEP_RESET</code> (core router/infra/config changes): Gracefully drains connections, flushes state, and executes an in-place process re-execution (<code>os.execv</code>) under <code>lab-attendant.service</code>.
+Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with HTTP 409 Conflict) and WebSocket handshake frame <code>client_commit</code> (rejects with WS 1008 Close) when dirty or stale.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Closes the "Uptime Preservation Trap" permanently without circular commit churn, ensuring live browser UIs and test harnesses reject communication with an outdated daemon.</p>
+                    <p>Closes the "Uptime Preservation Trap" permanently without circular commit churn or detached watchdog scripts. Eliminates zombie dirty states by embedding the rolling reset evaluator directly inside the 24/7 resident Attendant service.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>Portfolio_Dev/field_notes/build_site.py</code>, <code>Portfolio_Dev/field_notes/data/git_anchor.json</code>, <code>HomeLabAI/src/tests/test_live_sprint71_stability.py</code>, <code>HomeLabAI/src/tests/test_live_playwright_gitlock.py</code>.</p>
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/infra/git_reset_hook.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>Portfolio_Dev/field_notes/build_site.py</code>, <code>Portfolio_Dev/field_notes/data/pending_reset.json</code>, <code>Portfolio_Dev/field_notes/data/git_anchor.json</code>.</p>
                 </div>
             </div>     </div>
                             </details>

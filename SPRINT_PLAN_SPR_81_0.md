@@ -67,3 +67,26 @@ Sprint 81 delivers key ergonomic refinements to make `writer.html` a world-class
   1. Verify `validate_paper_schema.py` passes 100% on `paper_jitc_intuition.json`.
   2. Run `scripts/build_writer.py` and `field_notes/build_site.py` with 0 code drift.
   3. Generate `docs/sprints/active/SPRINT_LOG_SPR_81.md` and commit locally.
+
+---
+
+### **Story 81.6: Attendant-Native 30-Minute Rolling Reset Engine**
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Feature Anchor:** **FEAT-537**
+* **Deliverables:**
+  1. Move the 30-minute quiet-window reset evaluator directly into `FoyerRouter.scheduled_tasks_loop` in `HomeLabAI/src/v5/foyer/router.py`.
+  2. Implement native execution upon timer expiry (`now >= expiry_ts` and `pending_action != "NONE"`):
+     - `SOFT_RELOAD`: Hot-reload resident nodes in-memory (`await self.residents.boot_all()`).
+     - `DEEP_RESET`: Gracefully flush state and re-execute process in-place via `os.execv` (or clean restart).
+  3. Cleanly clear `pending_reset.json` after execution.
+  4. Update `HomeLabAI/src/infra/git_reset_hook.py` to remove stale supervisor invocation references.
+
+---
+
+### **Story 81.7: FeatureTracker FEAT-537 Documentation Alignment**
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Feature Anchor:** **FEAT-537**
+* **Deliverables:**
+  1. Update `FEAT-537` in `Portfolio_Dev/FeatureTracker.md` to document the Attendant-native rolling reset engine, git hook dirty queueing, and tiered soft/deep reset execution.
+  2. Validate `verify_feature_links.py` and `build_site.py` pass cleanly.
+
