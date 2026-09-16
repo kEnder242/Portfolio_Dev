@@ -381,24 +381,209 @@ details[open] summary::before {
     padding-left: 15px;
 }
 
-/* Print Overrides */
-@media print {
-    body {
-        display: block !important;
-        height: auto !important;
-        overflow: visible !important;
-        background: #fff !important;
-        color: #000 !important;
-    }
-    nav, #sidebar, #menu-toggle, #sys-console, #crosstalk-bar {
-        display: none !important;
-    }
-    main {
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
-        height: auto !important;
-        width: 100% !important;
-    }
+/* [SPR-82.4] Target Objective & Anti-Embellishment Curation Studio */
+.match-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-stack);
+    margin-right: 8px;
+    user-select: none;
+    vertical-align: middle;
+    transition: all 0.2s ease;
 }
+.match-badge.keep {
+    background: rgba(46, 160, 67, 0.18);
+    border: 1px solid #2ea043;
+    color: #3fb950;
+}
+.match-badge.review {
+    background: rgba(210, 153, 34, 0.18);
+    border: 1px solid #bb8009;
+    color: #d29922;
+}
+.match-badge.prune {
+    background: rgba(248, 81, 73, 0.18);
+    border: 1px solid #da3633;
+    color: #f85149;
+}
+
+.objective-drawer {
+    position: absolute;
+    top: 48px;
+    right: -400px;
+    width: 380px;
+    height: calc(100vh - 48px - 65px);
+    background: #161b22;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 95;
+    transition: right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.6);
+}
+.objective-drawer.open {
+    right: 0;
+}
+.objective-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: #0d1117;
+    flex-shrink: 0;
+}
+.objective-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.objective-close {
+    background: transparent;
+    border: none;
+    color: var(--sub-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+}
+.objective-close:hover { color: #fff; }
+.objective-body {
+    padding: 14px 16px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.objective-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.objective-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--sub-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.objective-textarea {
+    width: 100%;
+    height: 120px;
+    background: #0d1117;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    padding: 8px 10px;
+    font-family: var(--font-stack);
+    font-size: 0.78rem;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+.objective-textarea:focus { border-color: var(--accent-color); }
+.objective-slider {
+    width: 100%;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+.objective-val-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: var(--font-stack);
+    background: rgba(77, 170, 252, 0.12);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(77, 170, 252, 0.3);
+}
+.objective-stats-box {
+    background: #0d1117;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-family: var(--font-stack);
+}
+.obj-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-demote-bullet, .btn-promote-bullet {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--sub-color);
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    margin-left: 6px;
+}
+.btn-demote-bullet:hover {
+    color: #f85149;
+    border-color: #da3633;
+    background: rgba(248, 81, 73, 0.1);
+}
+.btn-promote-bullet:hover {
+    color: #3fb950;
+    border-color: #2ea043;
+    background: rgba(46, 160, 67, 0.1);
+}
+
+.candidate-pool-wrap {
+    margin-top: 14px;
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+}
+.candidate-pool-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--sub-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+.candidate-pool-header:hover {
+    color: var(--text-color);
+}
+.candidate-bullet-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: #0d1117;
+    border: 1px solid rgba(48, 54, 61, 0.6);
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    color: #8b949e;
+    gap: 8px;
+}
+.candidate-bullet-item:last-child {
+    margin-bottom: 0;
+}
+
 

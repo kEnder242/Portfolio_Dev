@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Writer Studio | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=826dbad3">
+    <link rel="stylesheet" href="style.css?v=312b4371">
     <style>
         /* [FEAT-581 / FEAT-583 / FEAT-584] Decoupled Thought Organizer & Wordsmithing Studio */
         :root {
@@ -15452,6 +15452,7 @@ window.__WRITER_QUOTES__ = [
 
             <!-- Header Action Controls -->
             <div class="header-actions">
+                <button id="btn-toggle-objective" class="action-btn" style="border-color:rgba(77, 170, 252, 0.4); color:var(--accent-color);" title="Target Objective & JD Alignment Studio">🎯 Objective</button>
                 <button id="btn-revert-disk" class="action-btn" title="Revert all unsaved changes and reload pristine manuscript from disk">Revert</button>
                 <button id="btn-archive" class="action-btn" title="Archive current paper snapshot">Archive</button>
                 <button id="btn-validate" class="action-btn" title="Validate schema and citation syntax">Validate</button>
@@ -15577,6 +15578,46 @@ window.__WRITER_QUOTES__ = [
                     <div style="display:flex; gap:8px;">
                         <button id="btn-discard-draft" class="btn-discard-drawer" style="flex:1;" title="Discard pending modifications and restore baseline">↩️ Discard</button>
                         <button id="btn-kick-manuscript" class="btn-kick" style="flex:1;" title="Save draft prose to manuscript">💾 Save</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 🎯 Target Objective & Anti-Embellishment Curation Drawer (Story 82.4) -->
+            <aside id="objective-drawer" class="objective-drawer">
+                <div class="objective-header">
+                    <div class="objective-title">🎯 Target Objective &amp; Alignment Studio</div>
+                    <button id="btn-close-objective" class="objective-close">✖</button>
+                </div>
+                <div class="objective-body">
+                    <div class="objective-field">
+                        <label class="objective-label" for="objective-jd-text">Target Job Description / CFP / Objective Brief</label>
+                        <textarea id="objective-jd-text" class="objective-textarea" placeholder="Paste target Job Description, CFP requirements, or career role description here…"></textarea>
+                    </div>
+                    <div class="objective-field">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <label class="objective-label" for="objective-threshold-slider">Alignment Waterline Threshold</label>
+                            <span id="objective-threshold-val" class="objective-val-badge">70%</span>
+                        </div>
+                        <input type="range" id="objective-threshold-slider" min="0.40" max="0.95" step="0.05" value="0.70" class="objective-slider">
+                    </div>
+                    <div class="objective-actions">
+                        <button id="btn-evaluate-objective" class="action-btn btn-evaluate" style="width:100%; justify-content:center; padding:8px 12px; font-weight:600; background:#1f6feb; border-color:#388bfd; color:#fff;">
+                            ⚡ Evaluate Semantic Alignment
+                        </button>
+                    </div>
+                    <div id="objective-stats" class="objective-stats-box" style="display:none;">
+                        <div class="obj-stat-row"><span>Evaluated Bullets:</span> <strong id="stat-total-bullets">0</strong></div>
+                        <div class="obj-stat-row"><span style="color:#3fb950;">Keep (≥ Threshold):</span> <strong id="stat-keep-bullets">0</strong></div>
+                        <div class="obj-stat-row"><span style="color:#d29922;">Review:</span> <strong id="stat-review-bullets">0</strong></div>
+                        <div class="obj-stat-row"><span style="color:#f85149;">Prune (< Threshold):</span> <strong id="stat-prune-bullets">0</strong></div>
+                    </div>
+                    <div class="objective-curate-actions" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+                        <button id="btn-auto-prune" class="action-btn" style="width:100%; justify-content:center; border-color:var(--amber-border); color:var(--amber-glow);" title="Demote low-match bullets below threshold to Candidate Pool">
+                            ✂️ Auto-Prune Low Matches (<span id="btn-prune-threshold-label">70%</span>)
+                        </button>
+                        <button id="btn-sort-alignment" class="action-btn" style="width:100%; justify-content:center;" title="Sort active bullets descending by alignment match score">
+                            🔼 Sort Sections by Alignment
+                        </button>
                     </div>
                 </div>
             </aside>
@@ -16465,10 +16506,19 @@ window.__WRITER_QUOTES__ = [
                         parDiv.className = 'tree-paragraph-node' + (par.dirty ? ' dirty' : '');
                         parDiv.dataset.paragraphId = par.id;
 
+                        var badgeHtml = '';
+                        var score = (par.alignment_score !== undefined) ? par.alignment_score : par.match_score;
+                        if (score !== undefined && score !== null) {
+                            var thresh = (STATE.objectiveThreshold !== undefined) ? STATE.objectiveThreshold : 0.70;
+                            var pct = Math.round(score * 100);
+                            var badgeType = (score >= thresh) ? 'keep' : (score >= thresh - 0.15 ? 'review' : 'prune');
+                            badgeHtml = '<span class="match-badge ' + badgeType + '" style="margin-left:8px;">' + pct + '% [' + badgeType.toUpperCase() + ']</span>';
+                        }
+
                         var parMeta = 
-                            '<div class="par-meta-line">' +
-                                '<span>📑 ' + par.id + '</span>' +
-                                (par.dirty ? '<span style="color:var(--amber-glow); font-weight:bold;">⚑ DIRTY</span>' : '') +
+                            '<div class="par-meta-line" style="display:flex; justify-content:space-between; align-items:center;">' +
+                                '<div style="display:flex; align-items:center;"><span>📑 ' + par.id + '</span>' + badgeHtml + '</div>' +
+                                '<div>' + (par.dirty ? '<span style="color:var(--amber-glow); font-weight:bold;">⚑ DIRTY</span>' : '') + '</div>' +
                             '</div>';
 
                         var preview = document.createElement('div');
@@ -16496,6 +16546,35 @@ window.__WRITER_QUOTES__ = [
                     });
 
                     bodyDiv.appendChild(parList);
+
+                    // Candidate pool in Tree Outliner
+                    var candPool = sec._candidate_pool || [];
+                    if (candPool.length > 0) {
+                        var poolWrap = document.createElement('div');
+                        poolWrap.className = 'candidate-pool-wrap';
+                        var poolHeader = document.createElement('div');
+                        poolHeader.className = 'candidate-pool-header';
+                        poolHeader.innerHTML = '<span>🌊 Candidate Pool (' + candPool.length + ' Pruned / Staged)</span>';
+                        poolWrap.appendChild(poolHeader);
+
+                        candPool.forEach(function(cand) {
+                            var candItem = document.createElement('div');
+                            candItem.className = 'candidate-bullet-item';
+                            var candText = document.createElement('span');
+                            candText.textContent = cand.text || cand.raw_text || (typeof cand === 'string' ? cand : '—');
+                            var promoteBtn = document.createElement('button');
+                            promoteBtn.className = 'btn-promote-bullet';
+                            promoteBtn.textContent = '☀️ Surface';
+                            promoteBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                promoteCandidateToActive(cand, sec);
+                            });
+                            candItem.appendChild(candText);
+                            candItem.appendChild(promoteBtn);
+                            poolWrap.appendChild(candItem);
+                        });
+                        bodyDiv.appendChild(poolWrap);
+                    }
 
                     secNode.innerHTML = headerHtml;
                     secNode.appendChild(bodyDiv);
@@ -17188,12 +17267,75 @@ window.__WRITER_QUOTES__ = [
                             }
                         });
 
+                        // [SPR-82.4] Relevance Match Badge and Demote affordance
+                        var score = (par.alignment_score !== undefined) ? par.alignment_score : par.match_score;
+                        if (score !== undefined && score !== null) {
+                            var thresh = (STATE.objectiveThreshold !== undefined) ? STATE.objectiveThreshold : 0.70;
+                            var pct = Math.round(score * 100);
+                            var badgeType = (score >= thresh) ? 'keep' : (score >= thresh - 0.15 ? 'review' : 'prune');
+                            
+                            var metaLine = document.createElement('div');
+                            metaLine.style.display = 'flex';
+                            metaLine.style.justifyContent = 'space-between';
+                            metaLine.style.alignItems = 'center';
+                            metaLine.style.marginBottom = '6px';
+                            
+                            var badgeSpan = document.createElement('span');
+                            badgeSpan.className = 'match-badge ' + badgeType;
+                            badgeSpan.textContent = pct + '% [' + badgeType.toUpperCase() + ']';
+                            badgeSpan.title = 'Semantic match against target objective: ' + pct + '%';
+                            
+                            var demoteBtn = document.createElement('button');
+                            demoteBtn.className = 'btn-demote-bullet';
+                            demoteBtn.title = 'Demote bullet to candidate pool below waterline';
+                            demoteBtn.textContent = '🌊 Demote';
+                            demoteBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                demoteParagraphToCandidatePool(par, sec);
+                            });
+                            
+                            metaLine.appendChild(badgeSpan);
+                            metaLine.appendChild(demoteBtn);
+                            parWrap.appendChild(metaLine);
+                        }
+
                         // Prose on Top, Supporting Epigraphs Below
                         if (banner) parWrap.appendChild(banner);
                         parWrap.appendChild(prose);
                         if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
                         secWrap.appendChild(parWrap);
                     });
+
+                    // [SPR-82.4] Candidate Pool in Writing View
+                    var candPool = sec._candidate_pool || [];
+                    if (candPool.length > 0) {
+                        var poolWrap = document.createElement('div');
+                        poolWrap.className = 'candidate-pool-wrap';
+                        var poolHeader = document.createElement('div');
+                        poolHeader.className = 'candidate-pool-header';
+                        poolHeader.innerHTML = '<span>🌊 Candidate Pool (' + candPool.length + ' Pruned / Staged)</span>';
+                        poolWrap.appendChild(poolHeader);
+
+                        candPool.forEach(function(cand) {
+                            var candItem = document.createElement('div');
+                            candItem.className = 'candidate-bullet-item';
+                            var candText = document.createElement('span');
+                            candText.textContent = cand.text || cand.raw_text || (typeof cand === 'string' ? cand : '—');
+                            candText.style.flex = '1';
+                            
+                            var promoteBtn = document.createElement('button');
+                            promoteBtn.className = 'btn-promote-bullet';
+                            promoteBtn.textContent = '☀️ Surface';
+                            promoteBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                promoteCandidateToActive(cand, sec);
+                            });
+                            candItem.appendChild(candText);
+                            candItem.appendChild(promoteBtn);
+                            poolWrap.appendChild(candItem);
+                        });
+                        secWrap.appendChild(poolWrap);
+                    }
 
                     secContainer.appendChild(secWrap);
                 });
@@ -17653,6 +17795,217 @@ window.__WRITER_QUOTES__ = [
                 }
             }
 
+            // --- [SPR-82.4] Candidate Pool & Waterline Actions ---
+            function demoteParagraphToCandidatePool(par, sec) {
+                if (!par || !sec) return;
+                if (!sec._candidate_pool) sec._candidate_pool = [];
+                sec._candidate_pool.push({
+                    id: par.id,
+                    text: par.text || par.cached_words || '',
+                    citations: par.citations || [],
+                    bone_collections: par.bone_collections || [],
+                    alignment_score: par.alignment_score
+                });
+                sec.paragraphs = (sec.paragraphs || []).filter(function(p) { return p.id !== par.id; });
+                showToast('🌊 Demoted ' + par.id + ' to Section Candidate Pool', 'info');
+                renderWritingView();
+                renderTreeOutliner();
+                savePaperDirect();
+            }
+
+            function promoteCandidateToActive(cand, sec) {
+                if (!cand || !sec) return;
+                sec._candidate_pool = (sec._candidate_pool || []).filter(function(c) {
+                    return (c.id !== cand.id) && (c.text !== cand.text);
+                });
+                if (!sec.paragraphs) sec.paragraphs = [];
+                sec.paragraphs.push({
+                    id: cand.id || ('PAR-' + String(sec.paragraphs.length + 1).padStart(3, '0')),
+                    text: cand.text || cand.raw_text || (typeof cand === 'string' ? cand : ''),
+                    citations: cand.citations || [],
+                    bone_collections: cand.bone_collections || [],
+                    alignment_score: cand.alignment_score,
+                    dirty: true
+                });
+                showToast('☀️ Surfaced bullet to active paragraphs', 'success');
+                renderWritingView();
+                renderTreeOutliner();
+                savePaperDirect();
+            }
+
+            function autoPruneMatches() {
+                var p = STATE.activePaper;
+                if (!p || !p.sections) return;
+                var thresh = (STATE.objectiveThreshold !== undefined) ? STATE.objectiveThreshold : 0.70;
+                var pruneCount = 0;
+
+                p.sections.forEach(function(sec) {
+                    var kept = [];
+                    if (!sec._candidate_pool) sec._candidate_pool = [];
+                    (sec.paragraphs || []).forEach(function(par) {
+                        var score = (par.alignment_score !== undefined) ? par.alignment_score : par.match_score;
+                        if (score !== undefined && score !== null && score < thresh) {
+                            sec._candidate_pool.push({
+                                id: par.id,
+                                text: par.text || par.cached_words || '',
+                                citations: par.citations || [],
+                                bone_collections: par.bone_collections || [],
+                                alignment_score: par.alignment_score
+                            });
+                            pruneCount++;
+                        } else {
+                            kept.push(par);
+                        }
+                    });
+                    sec.paragraphs = kept;
+                });
+
+                showToast('✂️ Auto-pruned ' + pruneCount + ' low-match bullet(s) (< ' + Math.round(thresh * 100) + '%) to Candidate Pool', 'success');
+                renderWritingView();
+                renderTreeOutliner();
+                savePaperDirect();
+            }
+
+            function sortSectionBulletsByAlignment() {
+                var p = STATE.activePaper;
+                if (!p || !p.sections) return;
+                p.sections.forEach(function(sec) {
+                    if (sec.paragraphs) {
+                        sec.paragraphs.sort(function(a, b) {
+                            var sa = (a.alignment_score !== undefined) ? a.alignment_score : (a.match_score || 0);
+                            var sb = (b.alignment_score !== undefined) ? b.alignment_score : (b.match_score || 0);
+                            return sb - sa;
+                        });
+                    }
+                });
+                showToast('🔼 Sorted active bullets in all sections by alignment match score', 'info');
+                renderWritingView();
+                renderTreeOutliner();
+                savePaperDirect();
+            }
+
+            function evaluateObjective() {
+                var ta = document.getElementById('objective-jd-text');
+                var text = ta ? ta.value.trim() : '';
+                if (!text) {
+                    showToast('Please paste target Job Description or Objective Brief', 'warn');
+                    return;
+                }
+
+                var slider = document.getElementById('objective-threshold-slider');
+                var thresh = slider ? parseFloat(slider.value) : 0.70;
+                STATE.objectiveThreshold = thresh;
+
+                var slug = (STATE.activePaper && (STATE.activePaper.slug || STATE.activePaper.id)) ? (STATE.activePaper.slug || STATE.activePaper.id) : 'default';
+                showToast('⚡ Evaluating objective semantic alignment...', 'info');
+
+                fetchJson('/paper/evaluate_objective', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        objective: text,
+                        slug: slug,
+                        ast: STATE.activePaper,
+                        threshold: thresh
+                    })
+                })
+                .then(function(res) {
+                    if (res.status === 'success' || res.evaluated_ast || res.results) {
+                        if (res.evaluated_ast) {
+                            STATE.activePaper = res.evaluated_ast;
+                        } else if (res.results) {
+                            // Map score results back to AST paragraphs
+                            var scoreMap = {};
+                            res.results.forEach(function(r) { scoreMap[r.id] = r.score; });
+                            (STATE.activePaper.sections || []).forEach(function(sec) {
+                                (sec.paragraphs || []).forEach(function(par) {
+                                    if (scoreMap[par.id] !== undefined) par.alignment_score = scoreMap[par.id];
+                                });
+                            });
+                        }
+
+                        // Calculate statistics
+                        var total = 0, keep = 0, review = 0, prune = 0;
+                        (STATE.activePaper.sections || []).forEach(function(sec) {
+                            (sec.paragraphs || []).forEach(function(par) {
+                                total++;
+                                var score = (par.alignment_score !== undefined) ? par.alignment_score : par.match_score;
+                                if (score !== undefined && score !== null) {
+                                    if (score >= thresh) keep++;
+                                    else if (score >= thresh - 0.15) review++;
+                                    else prune++;
+                                }
+                            });
+                        });
+
+                        var statsBox = document.getElementById('objective-stats');
+                        if (statsBox) {
+                            statsBox.style.display = 'flex';
+                            var tEl = document.getElementById('stat-total-bullets');
+                            var kEl = document.getElementById('stat-keep-bullets');
+                            var rEl = document.getElementById('stat-review-bullets');
+                            var pEl = document.getElementById('stat-prune-bullets');
+                            if (tEl) tEl.textContent = total;
+                            if (kEl) kEl.textContent = keep;
+                            if (rEl) rEl.textContent = review;
+                            if (pEl) pEl.textContent = prune;
+                        }
+
+                        renderWritingView();
+                        renderTreeOutliner();
+                        showToast('🎯 Objective alignment scored (' + keep + ' KEEP, ' + review + ' REVIEW, ' + prune + ' PRUNE)', 'success');
+                    } else {
+                        showToast('Evaluation error: ' + (res.message || 'Unknown error'), 'error');
+                    }
+                })
+                .catch(function(err) {
+                    showToast('Evaluation request failed: ' + err.message, 'error');
+                });
+            }
+
+            function initObjectiveDrawerEvents() {
+                var toggleBtn = document.getElementById('btn-toggle-objective');
+                var drawer = document.getElementById('objective-drawer');
+                var closeBtn = document.getElementById('btn-close-objective');
+                var slider = document.getElementById('objective-threshold-slider');
+                var valBadge = document.getElementById('objective-threshold-val');
+                var pruneLabel = document.getElementById('btn-prune-threshold-label');
+                var evalBtn = document.getElementById('btn-evaluate-objective');
+                var pruneBtn = document.getElementById('btn-auto-prune');
+                var sortBtn = document.getElementById('btn-sort-alignment');
+
+                if (toggleBtn && drawer) {
+                    toggleBtn.addEventListener('click', function() {
+                        drawer.classList.toggle('open');
+                    });
+                }
+                if (closeBtn && drawer) {
+                    closeBtn.addEventListener('click', function() {
+                        drawer.classList.remove('open');
+                    });
+                }
+                if (slider) {
+                    slider.addEventListener('input', function() {
+                        var val = parseFloat(slider.value);
+                        var pct = Math.round(val * 100) + '%';
+                        if (valBadge) valBadge.textContent = pct;
+                        if (pruneLabel) pruneLabel.textContent = pct;
+                        STATE.objectiveThreshold = val;
+                        renderWritingView();
+                        renderTreeOutliner();
+                    });
+                }
+                if (evalBtn) {
+                    evalBtn.addEventListener('click', evaluateObjective);
+                }
+                if (pruneBtn) {
+                    pruneBtn.addEventListener('click', autoPruneMatches);
+                }
+                if (sortBtn) {
+                    sortBtn.addEventListener('click', sortSectionBulletsByAlignment);
+                }
+            }
+
             function savePaperDirect() {
                 if (!STATE.activePaper) return;
                 fetchJson('/paper/save', {
@@ -17686,6 +18039,7 @@ window.__WRITER_QUOTES__ = [
                 wirePaletteZoneDrops();
                 initInspectorEvents();
                 initReviewDrawerEvents();
+                initObjectiveDrawerEvents();
                 initActionHandlers();
                 renderAllViews();
                 checkFoyerStatus();
