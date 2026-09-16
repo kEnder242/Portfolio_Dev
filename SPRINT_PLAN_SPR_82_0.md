@@ -85,9 +85,11 @@ It combines two foundational breakthroughs:
 - **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + `Portfolio_Dev/scripts/parse_document_to_ast.py` + `HomeLabAI/src/v5/foyer/validate_paper_schema.py` (commit `862a233` & `711e654`).
 
 #### 📋 Story 82.2: Paper-Scoped ChromaDB DNA Collections
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[SWARM:CLOUD]` $\rightarrow$ `[AGY:PRIMARY]` (Tri-Loop Handover & Certification)
 - **Objective:** Enhance ChromaDB sync and DNA query routers to support dynamic `paper_dna_<slug>` collections with collection-isolated indexing and cross-collection hybrid queries.
-- **Deliverable:** Dynamic ChromaDB collection lifecycle in `HomeLabAI/src/curator/sync_sprint_dna.py` and `router.py`.
+- **Verification:** Verified `pytest HomeLabAI/src/tests/test_paper_dna.py` (24 passed, 0 failed; 62 combined paper tests passing).
+- **Deliverable:** `HomeLabAI/src/curator/sync_paper_dna.py` + `HomeLabAI/src/v5/foyer/router.py` + `HomeLabAI/src/tests/test_paper_dna.py` (commit `dcafcab`).
 
 #### 📋 Story 82.3: Target Objective & JD Matching Engine (Joint Deep Design & Execution)
 - **Assigned Owner:** `[AGY:PRIMARY]` (Joint Interactive Design) $\rightarrow$ `[SWARM:LOCAL]` (Execution)
