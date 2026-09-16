@@ -52,11 +52,11 @@ SEATS_CONFIG = {
         "port": 8000,
         "type": "openai",
         "power_watts": 18.0,
-        "vram_gb": 16.8,
-        "architecture": "24GB Unified Memory (16.8GB Allocated)",
-        "role": "Deep Architectural Reasoning & Planner",
-        "context_window": "32k (32,768)",
-        "cost_per_1m": 0.012,
+        "vram_gb": 5.5,
+        "architecture": "24GB Unified Memory (5.5GB Resident)",
+        "role": "Fast Scaffolding & Surgical Patcher",
+        "context_window": "65k (65,536)",
+        "cost_per_1m": 0.008,
         "reasoning_ratio": 0.85
     },
     "kender_4090": {

@@ -376,6 +376,47 @@
     }
   },
   {
+    "id": "WIS-009",
+    "theme": "Software Engineering Philosophy & Creative Process",
+    "paper_order": 31,
+    "origin": {
+      "author": "jallred",
+      "text": "How do you develop code? Ideas and vision are critical to refine a design, so this is actually best answered as a creative process question - with passive and active methods: Passive: Refine shower thoughts into (plutonium weapon grade) ideas - connect different domains - brings out mulling over thoughts. Active: Take your time to respond methodically. Stimulates focused ideas.",
+      "source": "Interview Philosophy Dialogue (Sprint 83)",
+      "immutable": true,
+      "created_at": "2026-09-16T11:25:00Z"
+    },
+    "synthesis": {
+      "title": "The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution",
+      "narrative_context": "Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background—distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.",
+      "lab_anchors": [
+        "Portfolio_Dev/field_notes/career_notes.html",
+        "HomeLabAI/docs/Protocols.md:BKM-005",
+        "WIS-001"
+      ],
+      "review_notes": "Bedrock axiom for interview readiness, architectural ideation, and code craft.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1
+    },
+    "metadata": {
+      "tags": [
+        "creative-process",
+        "software-development",
+        "passive-synthesis",
+        "active-execution",
+        "cross-domain",
+        "architecture-philosophy"
+      ],
+      "explicit_links": [
+        "WIS-001",
+        "WIS-002",
+        "WIS-010"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_4_leadership"
+    }
+  },
+  {
     "id": "WIS-010",
     "theme": "Systems Architecture & Invariant Records",
     "paper_order": 31,
