@@ -103,7 +103,7 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 | :--- | :--- | :--- | :--- | :--- |
 | **Sisyphus (Lead)** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
 | **Atlas / Prometheus** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8002 Proxy $\rightarrow$ Port 8000: `mlx-community--Qwen3.8-27B-4bit`) | 32K | Surgical patching (`sisyphus-junior`) & local reasoning | Windows 4090 (`qwen3-14b-16k:latest`) |
+| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8000 oMLX: `mlx-community--Qwen3.5-9B-4bit`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`qwen3-14b-16k:latest`) |
 | **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `qwen3-14b-16k:latest`) | 16K pinned | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
 | **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
 
@@ -241,7 +241,8 @@ The **Agent Cascade** solves this by establishing a turn-by-turn daisy-chain of 
 | :--- | :--- | :--- | :--- | :--- |
 | **Atlas** (Lead Conductor) | KENDER 4090 | `read`, `task` | `edit`, `write`, `safe_patch`, `question`, `icm_*` | Ingest sprint plan, sequence tasks |
 | **Librarian** (Scout) | KENDER 4090 | `read`, `grep`, `glob` | `write`, `edit`, `bash`, `task`, `icm_*` | Discover import paths and incumbent code |
-| **Sisyphus-Junior** (Patcher)| M5 Air (:8002) | `clara-dna_safe_patch`, `write` | `bash`, `edit`, `icm_*`, `task`, `question` | Apply surgical code edits (<2k tokens) |
+| **Sisyphus-Junior** (Patcher)| M5 Air (:8000) | `clara-dna_safe_patch` | `bash`, `edit`, `write`, `icm_*`, `task`, `question` | Apply surgical code edits via exact AST diffs (<2k tokens) |
+| **Hephaestus** (Scaffolder)| M5 Air (:8000) | `write`, `clara-dna_safe_patch`, `read` | `bash`, `edit`, `icm_*`, `task`, `question` | Greenfield module creation & full-file scaffolding |
 | **Momus / Argus** (Verifier) | KENDER 4090 | `bash`, `read` | `write`, `edit`, `safe_patch`, `task`, `icm_*` | Run pytest / ruff check, parse tracebacks |
 
 ---
@@ -258,3 +259,6 @@ This ledger records live operational calibration fixes, tool adjustments, and ha
 | 2026-09-13 (Spr 78.4) | Ollama Stream Deadlock | `"interleaved": { "field": "reasoning_content" }` caused stream stalls | Removed interleaved setting from `opencode.json` Ollama provider block |
 | 2026-09-13 (Spr 78.4) | Silicon Port Routing | Direct `:8000` calls to M5 Air risked Metal wired memory overflow | Enforced Port 8002 Headroom Compression Proxy in all `opencode.json` M5 MLX definitions |
 | 2026-09-13 (Spr 78.4) | Diagnostic Gate | Fix-repair steps skipped playbook guidance leading to config thrashing | Added mandatory Playbook Audit Step 4 to `BKM-049` protocol |
+| 2026-09-16 (Spr 82.4) | Silicon Engine Upgrade | Qwen3.8-27B was high-latency (~18 tok/s) and constrained Metal VRAM | Swapped M5 resident model to `mlx-community--Qwen3.5-9B-4bit` (50–65 tok/s, 5.5GB VRAM, 65k context) |
+| 2026-09-16 (Spr 82.4) | Greenfield File Creation | Smaller models with unrestricted `write` clobber incumbent files; `write: deny` blocked greenfield files | Enforced strict role separation: `sisyphus-junior` denied `write` (pure `safe_patch`); `hephaestus` bound to M5 Air with `write: allow` for new files |
+
