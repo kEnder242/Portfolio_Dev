@@ -1,80 +1,38 @@
-# 🗺️ SPRINT PLAN: SPR-83.0
-## Technical Deep-Dive & Strategic Architecture: Multi-Curriculum LoRA Curation, Round Table Memory & Nightly Forge Pipeline
+# 📋 Sprint Plan: [SPR-83.0] The Cognitive Resonance & Reverse DNA (RDNA) Sprint
 
-> **Status:** PROPOSED / ARCHITECTURAL BLUEPRINT  
-> **Session Anchor:** 2026-09-15 12:00 PDT  
-> **Primary References:** [[BKM-024]], [[BKM-049]], [[PHL-031]], [[WIS-010]], [[FEAT-160]], [[FEAT-204]], [[FEAT-213]], [[FEAT-246]], [[FEAT-452]]  
-
----
-
-### 1. Executive Summary & Forensic Context
-
-Sprint 83.0 focuses entirely on **Neural Pedigree Curation, Nightly Forge Restoration, and Round Table Memory Hygiene**. 
-
-A forensic audit of the training pipeline revealed that on August 9, 2026 (`commit 881fcd58`), `nightly_forge.py` was hardcoded to train exclusively on `journal_ledger.jsonl` (the live runtime conversational scratchpad). Over several weeks, the nightly burns ceased training on the three curated foundation datasets and began fine-tuning on live conversational artifacts, unparsed bracket tokens, and raw critic loops.
-
-Sprint 83.0 re-establishes the foundational training curriculum, repairs the automated nightly forge pipeline, enforces multi-curriculum dataset blending ratios, and implements round-table memory lifecycle controls.
+> **Sprint Type:** Live Collaborative Sprint & Architectural Alignment  
+> **Status:** COMPLETED & CERTIFIED  
+> **Date:** 2026-09-16  
+> **Assigned Lead:** AGY + Sovereign Sovereign (Pair Programming)  
 
 ---
 
-### 2. Tri-Curriculum Foundation Architecture
-
-The nightly Unsloth burn on the RTX 2080 Ti is restored to a deterministic, weighted blend across the 3 core foundations + distilled gems:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│ master_forge_curriculum.jsonl (Unified Training Curriculum)            │
-├────────────────────────────────────────────────────────────────────────┤
-│ • 40% User Voice & Directives: cli_voice_training.jsonl [FEAT-204]     │
-│   (Multi-year Gemini CLI prompt logs + engineer notes & cadence)       │
-├────────────────────────────────────────────────────────────────────────┤
-│ • 35% Engineering Pedigree & BKMs: lab_history_training.jsonl [FEAT-160]│
-│   (18 years of catches, architectural post-mortems, and BKM laws)      │
-├────────────────────────────────────────────────────────────────────────┤
-│ • 15% Situational Awareness & Vibe Schema: lab_sentinel.jsonl [FEAT-246]│
-│   (Triage classification, vibe vectors, and dynamic tool pruning)      │
-├────────────────────────────────────────────────────────────────────────┤
-│ • 10% Curated Rank 4 Pearls (Airlocked Distillation Gate)              │
-│   (Deduplicated, high-coherence round-table gems from distill_gems.py) │
-└────────────────────────────────────────────────────────────────────────┘
-```
+## 🎯 Sprint Objective
+Establish the **Reverse DNA (RDNA)** Question Bank engine, align federated hardware seats around resident **Qwen 3.5-9B on M5 Air**, ingest the **Dual-Engine Creative Coding Philosophy (`PHL-032`)**, harmonize the **Philosophy DNA source of truth (`philosophy_data.json`)**, and unify the **Vector Pre-Triage Probe**.
 
 ---
 
-### 3. Sprint 83.0 Story Breakdown & Delegation Matrix
+## 🗺️ Story Breakdown
 
-#### 📋 Story 83.1: Multi-Curriculum Dataset Blender (`build_lora_datasets.py`)
-- **Status:** ✅ COMPLETE
-- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Silicon Fallback)
-- **Objective:** Upgrade `HomeLabAI/src/forge/build_lora_datasets.py` to assemble `master_forge_curriculum.jsonl` using the strict 40/35/15/10 ratio, applying schema validation and length gates.
-- **Verification:** Verified 1,000 instruction-response pairs assembled with 40% Voice, 35% Pedigree, 15% Sentinel, and 10% Gems. Schema verified 100% clean.
-- **Deliverable:** `HomeLabAI/src/forge/build_lora_datasets.py` (commit `ffe32f1`).
-
-#### 📋 Story 83.2: Nightly Forge Pipeline & Dataset Re-Anchoring (`nightly_forge.py`)
-- **Status:** ✅ COMPLETE
-- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Silicon Fallback)
-- **Objective:** Update `HomeLabAI/src/infra/nightly_forge.py` to point `DATASET_PATH` to `master_forge_curriculum.jsonl` and enforce pre-flight dataset health checks before claiming GPU VRAM.
-- **Verification:** `nightly_forge.py` updated to point to `master_forge_curriculum.jsonl` with automatic pre-flight builder trigger.
-- **Deliverable:** `HomeLabAI/src/infra/nightly_forge.py` (commit `ffe32f1`).
-
-#### 📋 Story 83.3: Round Table Memory Persistence & Context Pruning
-- **Status:** ✅ COMPLETE
-- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:TAKEOVER]` (Local Timeout Fallback)
-- **Objective:** Implement structured persistence and pruning for the blackboard ledger (`blackboard_ledger.py`), ensuring resident models have a bounded context window (recent N turns) while archiving older turns into long-term ChromaDB recall.
-- **Verification:** Verified `BlackboardLedger` bounded context pruning (keeps latest N turns, archives older entries), formatted prompt injection, and standalone `append_round_table_delta`.
-- **Deliverable:** `HomeLabAI/src/memory/blackboard_ledger.py` (commit `3649bf2`).
-
-#### 📋 Story 83.4: LoRA Fidelity & Pedigree Evaluation Suite
-- **Status:** ✅ COMPLETE
-- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[AGY:PRIMARY]`
-- **Objective:** Build an automated post-training evaluation suite that queries the newly forged adapter on canonical prompts (BKM recall, User Voice phrasing, Triage vibe check) and asserts coherence before hot-reloading into production vLLM.
-- **Verification:** Verified `test_forge_fidelity.py` (3 tests passed in 0.21s: master curriculum 40/35/15/10 distribution, aligned model pass at 100% fidelity, and degraded model rejection).
-- **Deliverable:** `HomeLabAI/src/tests/test_forge_fidelity.py` (commit `e2956f4`).
+| Story | Title | Owner | Status | Deliverables |
+| :--- | :--- | :--- | :--- | :--- |
+| **83.1** | Hardware-Grouped Silicon Alignment & Lab Config Audit | `[AGY:PRIMARY]` | ✅ COMPLETED | `infrastructure.json` audit, harmonized M5_AIR port 8000 and KENDER default model |
+| **83.2** | Philosophy DNA Ingestion (`PHL-032`: Creative Coding Process) | `[AGY:PRIMARY]` | ✅ COMPLETED | `philosophy_data.json` entry (`PHL-032`), `sync_chroma_dna.py` execution to `philosophy_dna` (30+ cards) |
+| **83.3** | Reverse DNA (RDNA) Architecture & Collection Sync | `[AGY:PRIMARY]` | ✅ COMPLETED | `rdna_questions.json`, ChromaDB `rdna` collection, 26 question variants mapped to `PHL-xxx` |
+| **83.4** | Unified Vector Pre-Triage RDNA & Philosophy Integration | `[AGY:PRIMARY]` | ✅ COMPLETED | `vector_pre_triage.py` updated with `rdna` and `philosophy_dna`, 3/3 pytests passing |
+| **83.5** | Silicon Benchmark Suite Refresh | `[AGY:PRIMARY]` | ✅ COMPLETED | `bench_models.py` profile updated for M5 Air Qwen3.5-9B, live sweep & static build certified |
 
 ---
 
-### 4. Delegation & Architectural Guardrails
+## 📌 Backlog Queue (Sprint 84.0)
+* **Sprint 84.0:** Active Resume Builder & AST Studio Refinement using Jason's Google Keep notes and career highlights.
 
-1. **BKM-049 Tri-Loop Protocol:** All stories in Sprint 83.0 are assigned to `[SWARM:LOCAL]`. Local diagnostic retries (max 3) must be exhausted before cloud escalation.
-2. **Pedigree Invariant (PHL-031 / BKM-055):** Never feed raw unfiltered chat logs into neural weights. Training data must remain decoupled from live runtime state.
-3. **Hardware Safety (FEAT-452):** Hardware pacing (5s settling delay) and 165W power limit clamping remain strictly enforced during all Unsloth training runs.
+---
+
+## 📝 Live Conversation & Decision Log
+
+* **2026-09-16 11:35:** Sprint 83 initialized in live collaborative mode.
+* **Hardware Alignment:** Formally codified that model unification is grouped by physical silicon seat (`M5_AIR` = Qwen 3.5-9B, `KENDER` = Qwen 3-14B, `LOCAL` = Llama 3.2-3B AWQ).
+* **RDNA Formulation:** Established "HyDE is RDNA" paradigm. Indexing question-space enables direct cosine matching for interview questions and conversational triage without intermediate hallucinations.
+* **Philosophy vs Wisdom Clarification:** Audited the archive and confirmed `philosophy_data.json` (`PHL-001` through `PHL-032`) is our 32-card canonical source of truth, retiring the interim wisdom placeholder.
+* **RDNA Question Testing:** Verified that interview queries like *"Can you describe your code development workflow and how you brainstorm?"* match `RDNA-001` at ~0.39 distance, resolving directly to `PHL-032` (*The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution*).

@@ -11,11 +11,13 @@ DB_PATH = os.path.expanduser("~/AcmeLab/chroma_db")
 COLLECTION_DNA = "behavioral_dna"
 COLLECTION_FEATURE = "feature_dna"
 COLLECTION_PHILOSOPHY = "philosophy_dna"
+COLLECTION_RDNA = "rdna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
-WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/wisdom_data.json")
+PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/philosophy_data.json")
+RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/rdna_questions.json")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
@@ -207,18 +209,18 @@ def get_chroma_client():
         return chromadb.PersistentClient(path=DB_PATH)
 
 
-def parse_wisdom(filepath):
-    """Parses wisdom_data.json for WIS-xxx wisdom and philosophy cards."""
+def parse_philosophy(filepath):
+    """Parses philosophy_data.json for PHL-xxx narrative philosophy cards."""
     if not os.path.exists(filepath):
-        logging.warning(f"wisdom_data.json not found at {filepath}")
+        logging.warning(f"philosophy_data.json not found at {filepath}")
         return []
     import json
     with open(filepath, "r", encoding="utf-8") as f:
         cards = json.load(f)
     
-    wisdom_items = []
+    philosophy_items = []
     for c in cards:
-        wid = c.get("id", "WIS-UNK")
+        pid = c.get("id", "PHL-UNK")
         theme = c.get("theme", "Philosophy")
         origin_text = c.get("origin", {}).get("text", "")
         origin_src = c.get("origin", {}).get("source", "")
@@ -227,7 +229,7 @@ def parse_wisdom(filepath):
         tags = c.get("metadata", {}).get("tags", [])
         
         doc_content = (
-            f"ID: {wid}\n"
+            f"ID: {pid}\n"
             f"Theme: {theme}\n"
             f"Title: {synth_title}\n"
             f"Origin Quote: \"{origin_text}\"\n\n"
@@ -235,19 +237,97 @@ def parse_wisdom(filepath):
             f"Tags: {', '.join(tags)}"
         )
         
-        wisdom_items.append({
-            "id": wid,
+        philosophy_items.append({
+            "id": pid,
             "document": doc_content,
             "metadata": {
-                "wisdom_id": wid,
+                "philosophy_id": pid,
                 "theme": theme,
                 "title": synth_title,
                 "tags": ",".join(tags),
-                "source": "wisdom_data.json",
-                "type": "WISDOM"
+                "source": "philosophy_data.json",
+                "type": "PHILOSOPHY"
             }
         })
-    return wisdom_items
+    return philosophy_items
+
+
+def parse_rdna(filepath):
+    """Parses rdna_questions.json for Reverse DNA (RDNA) questions and variants."""
+    if not os.path.exists(filepath):
+        logging.warning(f"rdna_questions.json not found at {filepath}")
+        return []
+    import json
+    with open(filepath, "r", encoding="utf-8") as f:
+        questions = json.load(f)
+    
+    rdna_items = []
+    for q in questions:
+        qid = q.get("id", "RDNA-UNK")
+        primary_q = q.get("question", "")
+        intent_cat = q.get("intent_category", "general")
+        variants = q.get("question_variants", [])
+        target_dna = q.get("target_dna", {})
+        target_col = target_dna.get("collection", "philosophy_dna")
+        target_id = target_dna.get("id", "")
+        target_title = target_dna.get("title", "")
+        confidence_floor = q.get("confidence_floor", 0.75)
+        tags = q.get("metadata", {}).get("tags", [])
+        
+        # Primary question anchor
+        doc_primary = (
+            f"Question: {primary_q}\n"
+            f"Intent: {intent_cat}\n"
+            f"Target DNA: [{target_col}] {target_id} - {target_title}\n"
+            f"Tags: {', '.join(tags)}"
+        )
+        rdna_items.append({
+            "id": f"{qid}_primary",
+            "document": doc_primary,
+            "metadata": {
+                "rdna_id": qid,
+                "variant_type": "primary",
+                "question_text": primary_q,
+                "intent_category": intent_cat,
+                "target_collection": target_col,
+                "target_dna_id": target_id,
+                "target_dna_title": target_title,
+                "confidence_floor": float(confidence_floor),
+                "tags": ",".join(tags),
+                "source": "rdna_questions.json",
+                "type": "RDNA"
+            }
+        })
+        
+        # Ingest each variant as an individual searchable anchor
+        for idx, var in enumerate(variants):
+            doc_var = (
+                f"Question Variant: {var}\n"
+                f"Canonical Question: {primary_q}\n"
+                f"Intent: {intent_cat}\n"
+                f"Target DNA: [{target_col}] {target_id} - {target_title}\n"
+                f"Tags: {', '.join(tags)}"
+            )
+            rdna_items.append({
+                "id": f"{qid}_v{idx+1}",
+                "document": doc_var,
+                "metadata": {
+                    "rdna_id": qid,
+                    "variant_type": "synonym",
+                    "question_text": var,
+                    "canonical_question": primary_q,
+                    "intent_category": intent_cat,
+                    "target_collection": target_col,
+                    "target_dna_id": target_id,
+                    "target_dna_title": target_title,
+                    "confidence_floor": float(confidence_floor),
+                    "tags": ",".join(tags),
+                    "source": "rdna_questions.json",
+                    "type": "RDNA"
+                }
+            })
+            
+    return rdna_items
 
 
 def sync():
@@ -334,21 +414,46 @@ def sync():
         collection_dna.add(ids=ids, documents=documents, metadatas=metadatas)
         logging.info("LAB_INFRASTRUCTURE.md sync complete.")
 
-    # 4. Sync philosophy_dna from wisdom_data.json
-    logging.info("Parsing wisdom_data.json...")
-    wisdom_items = parse_wisdom(WISDOM_DATA_PATH)
-    if wisdom_items:
+    # 4. Sync philosophy_dna from philosophy_data.json
+    logging.info("Parsing philosophy_data.json...")
+    philosophy_items = parse_philosophy(PHILOSOPHY_DATA_PATH)
+    if philosophy_items:
         collection_phl = get_safe_collection(client, COLLECTION_PHILOSOPHY, ef)
-        logging.info("Clearing existing wisdom_data.json entries from philosophy_dna...")
+        logging.info("Clearing existing entries from philosophy_dna...")
         try:
-            collection_phl.delete(where={"source": "wisdom_data.json"})
+            collection_phl.delete(where={"source": "philosophy_data.json"})
         except Exception as e:
             logging.warning(f"Could not clear philosophy_dna entries: {e}")
 
-        ids = [w["id"] for w in wisdom_items]
-        documents = [w["document"] for w in wisdom_items]
-        metadatas = [w["metadata"] for w in wisdom_items]
+        ids = [p["id"] for p in philosophy_items]
+        documents = [p["document"] for p in philosophy_items]
+        metadatas = [p["metadata"] for p in philosophy_items]
 
-        logging.info(f"Uploading {len(ids)} Wisdom & Philosophy entries to philosophy_dna...")
+        logging.info(f"Uploading {len(ids)} Philosophy entries to philosophy_dna...")
         collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
         logging.info("philosophy_dna sync complete.")
+
+    # 5. Sync rdna from rdna_questions.json
+    logging.info("Parsing rdna_questions.json...")
+    rdna_items = parse_rdna(RDNA_QUESTIONS_PATH)
+    if rdna_items:
+        collection_rdna = get_safe_collection(client, COLLECTION_RDNA, ef)
+        logging.info("Clearing existing rdna_questions.json entries from rdna...")
+        try:
+            collection_rdna.delete(where={"source": "rdna_questions.json"})
+        except Exception as e:
+            logging.warning(f"Could not clear rdna entries: {e}")
+
+        ids = [r["id"] for r in rdna_items]
+        documents = [r["document"] for r in rdna_items]
+        metadatas = [r["metadata"] for r in rdna_items]
+
+        logging.info(f"Uploading {len(ids)} Reverse DNA (RDNA) question entries to rdna...")
+        collection_rdna.add(ids=ids, documents=documents, metadatas=metadatas)
+        logging.info("rdna collection sync complete.")
+
+
+if __name__ == "__main__":
+    sync()
+
+
