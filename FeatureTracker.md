@@ -3089,3 +3089,18 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.
 **Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `HomeLabAI/src/v5/foyer/router.py`, ChromaDB vector retrieval, and collapsible console controller.
 
+## [FEAT-552] Structured Delegation Execution Ledger (`data/delegation_ledger.jsonl`)
+**Sprint:** SPR-82.0 / SPR-83.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py) — Structured Delegation Execution Ledger & CLI Inspector.
+**Logic:** Automatically records every swarm delegation attempt into a machine-readable JSONL ledger (`HomeLabAI/data/delegation_ledger.jsonl`). Captures session IDs, target stories, providers, models, duration, token metrics (input/output/reasoning/cache), finish statuses, and deep diagnostic message traces on failures. Provides a clean ASCII table view via `python3 delegate.py --ledger`.
+**Rationale:** Eliminates telemetry blindness across multi-attempt delegation loops, providing persistent auditability and forensic traceability for Tri-Loop governance.
+**Mechanism:** `_log_delegation_ledger` and `--ledger` CLI action in `delegate.py`.
+
+## [FEAT-554] Automated JavaScript AST / Syntax Verification Gate in `build_site.py`
+**Sprint:** SPR-82.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/build_site.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/build_site.py) — Automated JavaScript Syntax Linter.
+**Logic:** Integrates Node.js `vm.Script` syntax verification directly into the static site compiler (`build_site.py`). Extracts and validates all standalone `.js` scripts as well as all inline `<script>` tags across HTML pages before deployment. Automatically halts site builds on JavaScript syntax errors (e.g., missing parentheses, trailing commas, invalid tokens).
+**Rationale:** Prevents frontend script regressions and parsing breaks from silently reaching deployment.
+**Mechanism:** `lint_javascript()` in `Portfolio_Dev/field_notes/build_site.py` invoking Node.js `vm.Script`.
