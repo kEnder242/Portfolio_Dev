@@ -457,5 +457,48 @@
       "CRITIQUE: Pinky's response accurately summarizes the PECISTRESSOR validation scar and verifies node sync. The brain's reflection provides a clear analysis of th"
     ],
     "consensus_1liner": "Pinky's response accurately summarizes the PECISTRESSOR validation scar and verifies node sync. The brain's reflection provides a clear analysis of the issue, highlighting the impact on system perform"
+  },
+  {
+    "turn": 5,
+    "timestamp": 1789510209,
+    "time_str": "15:10:09",
+    "topic": "TOPIC_TEST",
+    "scope": "TURN",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 0.1,
+      "pinky_stance": 0.5,
+      "brain_arch": 1.0,
+      "oracle": 1.5,
+      "pinky_judgment": 2.0
+    },
+    "deltas_elapsed_s": {
+      "triage": 0.1,
+      "pinky_stance": 0.4,
+      "brain_arch": 0.5,
+      "oracle": 0.5,
+      "pinky_judgment": 0.5
+    },
+    "cumulative": {
+      "triage": 0.1,
+      "pinky_stance": 0.5,
+      "brain_arch": 1.0,
+      "oracle": 1.5,
+      "pinky_judgment": 2.0
+    },
+    "deltas": {
+      "triage": 0.1,
+      "pinky_stance": 0.4,
+      "brain_arch": 0.5,
+      "oracle": 0.5,
+      "pinky_judgment": 0.5
+    },
+    "total_elapsed_s": 2.0,
+    "total_s": 2.0,
+    "distillation_bullets": [
+      "test bullet"
+    ],
+    "consensus_1liner": "test consensus"
   }
 ]
