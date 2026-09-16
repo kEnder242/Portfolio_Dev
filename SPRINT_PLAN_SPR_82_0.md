@@ -78,9 +78,11 @@ It combines two foundational breakthroughs:
 ### 4. Sprint 82.0 Story Breakdown & Delegation Matrix
 
 #### 📋 Story 82.1: Generic Document Ingestion & Two-Tier AST Schema (`/paper/import`)
-- **Assigned Owner:** `[SWARM:LOCAL]`
+- **Status:** ✅ COMPLETE
+- **Assigned Owner:** `[SWARM:LOCAL]` $\rightarrow$ `[SWARM:CLOUD]` (Tri-Loop Handover)
 - **Objective:** Build backend endpoint `POST /paper/import` that parses raw text, Markdown, or JSON into the canonical two-tier AST schema with `bone_collection[]` and `_candidate_pool[]` keys at Root, Section, and Bullet levels.
-- **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + `Portfolio_Dev/scripts/parse_document_to_ast.py` + `validate_paper_schema.py`.
+- **Verification:** Verified `pytest HomeLabAI/src/tests/test_paper_import.py` (38 passed, 0 failed).
+- **Deliverable:** `HomeLabAI/src/v5/foyer/router.py` + `Portfolio_Dev/scripts/parse_document_to_ast.py` + `HomeLabAI/src/v5/foyer/validate_paper_schema.py` (commit `862a233` & `711e654`).
 
 #### 📋 Story 82.2: Paper-Scoped ChromaDB DNA Collections
 - **Assigned Owner:** `[SWARM:LOCAL]`
