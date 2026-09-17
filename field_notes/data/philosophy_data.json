@@ -1141,5 +1141,90 @@
       "status": "APPROVED",
       "bucket_id": "bucket_4_leadership"
     }
+  },
+  {
+    "id": "PHL-033",
+    "theme": "Human-AI Interface & Co-Pilot Architecture",
+    "paper_order": 33,
+    "origin": {
+      "author": "jallred",
+      "text": "Human in the loop is ALSO flagging DNA for review in the forge... flag co-pilot moments when a human disagrees or explicitly gives feedback. The human sovereign remains the voice; the agent is the hands.",
+      "source": "DNA Forge Co-Pilot Dialogue (Sprint 83)",
+      "immutable": true,
+      "created_at": "2026-09-17T11:05:00Z"
+    },
+    "synthesis": {
+      "title": "The Sovereign Human-in-the-Loop: Disagreement Trapping & Active Knowledge Re-Forging",
+      "narrative_context": "Autonomous agents degrade into self-reinforcing hallucination loops when isolated from human correction. The Sovereign Human-in-the-Loop architecture treats human friction, disagreement, and explicit feedback not as execution failures, but as the highest-fidelity evolutionary signal in the system. Disagreements in chat are trapped as active re-forging candidates, ensuring that knowledge bases continuously evolve under human stewardship rather than unanchored autonomous drift.",
+      "lab_anchors": [
+        "Portfolio_Dev/field_notes/dna_forge.html",
+        "HomeLabAI/docs/Protocols.md:BKM-049",
+        "PHL-005",
+        "FEAT-582"
+      ],
+      "review_notes": "Grounds the active human-in-the-loop review drawer and co-pilot disagreement capture in the DNA Forge.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1
+    },
+    "metadata": {
+      "tags": [
+        "human-in-the-loop",
+        "co-pilot",
+        "disagreement-trapping",
+        "re-forging",
+        "sovereign-human",
+        "active-feedback"
+      ],
+      "explicit_links": [
+        "PHL-005",
+        "PHL-032",
+        "WIS-002",
+        "WIS-003"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_4_leadership"
+    }
+  },
+  {
+    "id": "PHL-034",
+    "theme": "Federated DNA Architecture & Schema Foundations",
+    "paper_order": 34,
+    "origin": {
+      "author": "jallred",
+      "text": "Every distilled idea in the lab is a first-class DNA citizen living at the same level. Domains (FEAT, BKM, PHL, GEM, WIS, VIBE, DISC, SPRINT) are peer-level buckets, not a hierarchy. Ideas share a polymorphic schema and flow laterally across domains as they mature.",
+      "source": "Federated DNA Architecture Consensus (Sprint 83)",
+      "immutable": true,
+      "created_at": "2026-09-17T14:10:00Z"
+    },
+    "synthesis": {
+      "title": "First-Class DNA Citizens & Polymorphic Idea Representation",
+      "narrative_context": "In a federated cognitive lab, all distilled knowledge artifacts exist as equal, peer-level first-class citizens regardless of whether they represent operational directives (BKM), empirical scars (WIS), or ontological axioms (PHL). Knowledge objects share a common polymorphic base schema (id, domain, title, summary, content, tags, explicit_links, metadata), enabling zero-loss horizontal re-bucketing and automated cross-domain link preservation across vector stores.",
+      "lab_anchors": [
+        "HomeLabAI/docs/Protocols.md:BKM-060",
+        "Portfolio_Dev/field_notes/dna_forge.html",
+        "FEAT-582",
+        "FEAT-585"
+      ],
+      "review_notes": "Establishes the foundational principle that DNA domains are horizontal containers rather than vertical hierarchies.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1
+    },
+    "metadata": {
+      "tags": [
+        "dna-taxonomy",
+        "polymorphic-schema",
+        "first-class-citizen",
+        "horizontal-rebucketing",
+        "knowledge-architecture"
+      ],
+      "explicit_links": [
+        "PHL-001",
+        "PHL-003",
+        "PHL-033",
+        "BKM-060"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_1_jitc"
+    }
   }
 ]

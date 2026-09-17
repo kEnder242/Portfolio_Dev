@@ -15789,10 +15789,12 @@ window.__WRITER_QUOTES__ = [
 
             // Canonical API Base URL resolver (FEAT-588 / FEAT-591)
             function getApiBaseUrl() {
-                var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (window.location.port === '8765') return '';
-                if (isLocal || window.location.protocol === 'file:' || !window.location.hostname) return 'http://127.0.0.1:8765';
-                return window.location.origin;
+                var host = window.location.hostname;
+                if (!host || host === 'localhost' || host === '127.0.0.1' || window.location.protocol === 'file:') {
+                    return 'http://127.0.0.1:8765';
+                }
+                return window.location.protocol + '//' + host + ':8765';
             }
 
             function fetchJson(endpoint, options) {
@@ -15849,10 +15851,16 @@ window.__WRITER_QUOTES__ = [
 
             function getDomainForCite(cite) {
                 if (!cite) return 'MISC';
-                if (cite.startsWith('PHL-') || cite.startsWith('WIS-')) return 'PHL';
+                if (cite.startsWith('PHL-')) return 'PHL';
+                if (cite.startsWith('WIS-')) return 'WIS';
                 if (cite.startsWith('BKM-') || cite.startsWith('PROTO-')) return 'BKM';
                 if (cite.startsWith('FEAT-') || cite.startsWith('LAB-')) return 'FEAT';
+                if (cite.startsWith('GEM-')) return 'GEM';
+                if (cite.startsWith('VIBE-')) return 'VIBE';
                 if (cite.startsWith('DISC-')) return 'DISC';
+                if (cite.startsWith('SPR-') || cite.startsWith('SPRINT-')) return 'SPR';
+                if (cite.startsWith('RDNA-')) return 'RDNA';
+                if (cite.startsWith('ART-')) return 'ART';
                 if (cite.startsWith('ARXIV') || cite.startsWith('arXiv') || cite.startsWith('doi')) return 'ARXIV';
                 return 'MISC';
             }
