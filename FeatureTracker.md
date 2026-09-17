@@ -3104,3 +3104,47 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Logic:** Integrates Node.js `vm.Script` syntax verification directly into the static site compiler (`build_site.py`). Extracts and validates all standalone `.js` scripts as well as all inline `<script>` tags across HTML pages before deployment. Automatically halts site builds on JavaScript syntax errors (e.g., missing parentheses, trailing commas, invalid tokens).
 **Rationale:** Prevents frontend script regressions and parsing breaks from silently reaching deployment.
 **Mechanism:** `lint_javascript()` in `Portfolio_Dev/field_notes/build_site.py` invoking Node.js `vm.Script`.
+
+## [FEAT-582] DNA Forge: Active Knowledge Synthesis, Refinement, & Human-in-the-Loop Studio
+**Sprint:** SPR-83.0
+## [FEAT-582] DNA Forge Studio (Wisdom & Philosophy Consolidation)
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/wisdom.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/wisdom.html) — DNA Studio Interface.
+**Logic:** Consolidates `wisdom.html` and `philosophy.html` into a unified `dna_forge.html` interface with dedicated tabs for Philosophy (`PHL`), Wisdom & War Stories (`WIS`), and Question Banks (`RDNA`). Implements active card cohesiveness scoring, surfaces weak/fractured entries into a `[Needs Human Polish]` queue, and provides interactive review/promotion gates.
+**Rationale:** Transitions knowledge management from passive vector lookups to an active, self-healing knowledge foundry.
+**Mechanism:** `Portfolio_Dev/field_notes/dna_forge.html`, `Portfolio_Dev/field_notes/dna_forge_build.py`, and `Portfolio_Dev/field_notes/data/philosophy_data.json`.
+
+## [FEAT-583] Reverse DNA (RDNA) Question Bank & HyDE Offload Engine
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/data/rdna_questions.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/rdna_questions.json) — RDNA Question Bank.
+**Logic:** Indexes canonical interview and triage question-space embeddings into ChromaDB `rdna`. When an incoming query matches an RDNA entry with high confidence (< 0.45 distance), bypasses runtime LLM HyDE generation completely and injects pre-compiled target DNA anchors (`explicit_links`) directly into the triage stream.
+**Rationale:** Eliminates LLM latency and hallucination risks during context retrieval by mapping question variants directly to ground-truth wisdom cards.
+**Mechanism:** `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/src/logic/vector_pre_triage.py`, ChromaDB `rdna` collection.
+
+## [FEAT-584] Unified Intent-Triage & Parallel CPU/Silicon Pre-Reflection Pipeline
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/logic/speculative_triage.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/speculative_triage.py) — Unified Intent-Triage Engine.
+**Logic:** Runs a sub-15ms CPU FastEmbed vector probe across all DNA stores in parallel with Deep Thought's (M5 Air) single 150-token pre-reflection pass. Utilizes the remote non-vLLM silicon to generate a fast conversational opening quip that fills conversational air-time while local vLLM prepares heavy reasoning/intent synthesis. Blends user intent classification, persona routing (`addressed_to`, `vibe`), domain assignment, and RDNA question matching into a unified pre-reflection payload.
+**Rationale:** Cuts conversational triage latency by 50% while preventing semantic misalignment across disconnected classification stages.
+**Mechanism:** `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/nodes/cognitive_hub.py`.
+
+## [FEAT-585] Automated DNA Horizontal Re-Bucketing & Lateral Migration Engine
+**Sprint:** SPR-83.0 / SPR-84.0
+**Status:** PROPOSED
+**Code:** [Portfolio_Dev/field_notes/refine_wisdom.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/refine_wisdom.py) — DNA Re-Bucketing Engine.
+**Logic:** Analyzes vector density, retrieval frequency, and cross-domain utility of existing DNA cards during nightly curation. Automatically flags heuristic Wisdom cards (`WIS-xxx`) or Discoveries (`DISC-xxx`) for lateral migration to operational Mandates (`BKM-xxx`) or universal Philosophy axioms (`PHL-xxx`) when cross-domain transfer applicability exceeds 0.85. Proposes structured re-bucketing candidates in the DNA Forge UI with bidirectional `explicit_links` and origin provenance preserved.
+**Rationale:** Implements living knowledge evolution where empirical war-story lessons organically mature sideways into foundational system axioms without hierarchical bias.
+**Mechanism:** `refine_dna_forge.py`, `Portfolio_Dev/field_notes/dna_forge.html`, `BKM-060`.
+
+## [FEAT-586] Dynamic Configurable Triage Engine Preference & Asymmetric Head-Start Gate
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/logic/speculative_triage.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/speculative_triage.py) — Dynamic Speculative Triage Preference Gate.
+**Logic:** Adds `preferred_triage_engine` (`M5_AIR` vs `LOCAL_VLLM`) as a declarative configuration parameter in `config/infrastructure.json`. Dynamically grants the 2x head-start window (`2 * t_warmed`) to whichever engine is set as preferred, allowing the operator to dynamically test local silicon vs remote high-reasoning triage without code modifications.
+**Rationale:** Gives the lab operator complete control over triage latency versus reasoning depth without code refactoring.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/logic/speculative_triage.py`.
+
+
