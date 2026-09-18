@@ -134,35 +134,105 @@ def main():
     if PHILOSOPHY_PATH.exists():
         with open(PHILOSOPHY_PATH, "r", encoding="utf-8") as f:
             manifest["philosophy"] = json.load(f)
-    elif WISDOM_PATH.exists():
-        with open(WISDOM_PATH, "r", encoding="utf-8") as f:
-            manifest["philosophy"] = json.load(f)
 
-    # Legacy wisdom key points to philosophy collection
-    manifest["wisdom"] = manifest.get("philosophy", [])
+    # 2. Wisdom Cards (Authoritative RW Collection from War Stories)
+    if WISDOM_PATH.exists():
+        with open(WISDOM_PATH, "r", encoding="utf-8") as f:
+            manifest["wisdom"] = json.load(f)
+    elif "philosophy" in manifest:
+        manifest["wisdom"] = manifest["philosophy"]
 
     # 3. Discovery / Timeline
     if TIMELINE_PATH.exists():
         with open(TIMELINE_PATH, "r", encoding="utf-8") as f:
             manifest["discovery"] = json.load(f)
 
-    # 4. Features (Full extraction)
+    # 4. Features (Full extraction from FeatureTracker.md)
     feat_cards = parse_features()
     manifest["feature"] = feat_cards
 
-    # 5. Behavioral BKMs (Full extraction)
+    # 5. Behavioral BKMs (Full extraction from Protocols.md)
     bkm_cards = parse_protocols()
     manifest["behavioral"] = bkm_cards
+
+    # 6. Reverse DNA (RDNA) Questions
+    rdna_path = BASE_DIR / "data" / "rdna_questions.json"
+    if rdna_path.exists():
+        try:
+            with open(rdna_path, "r", encoding="utf-8") as f:
+                raw_rdna = json.load(f)
+                rdna_cards = []
+                for item in raw_rdna:
+                    rid = item.get("id", "RDNA-???")
+                    target = item.get("target_dna", {})
+                    variants = item.get("question_variants", [])
+                    var_str = "\n".join([f"- {v}" for v in variants])
+                    rdna_cards.append({
+                        "id": rid,
+                        "title": item.get("question", rid),
+                        "origin": {
+                            "author": "Reverse DNA Engine",
+                            "text": f"Canonical: {item.get('question')}\n\nVariants:\n{var_str}",
+                            "source": "rdna_questions.json",
+                            "immutable": False
+                        },
+                        "synthesis": {
+                            "narrative_context": f"Maps to {target.get('id', 'DNA')} ({target.get('title', '')}) in {target.get('collection', 'philosophy_dna')} with confidence floor {item.get('confidence_floor', 0.75)}.",
+                            "lab_anchors": [target.get("id", "")] if target.get("id") else [],
+                            "review_notes": f"Category: {item.get('intent_category', 'general')}",
+                            "refinement_version": 1
+                        },
+                        "metadata": {
+                            "tags": item.get("metadata", {}).get("tags", ["rdna", "resonant-question"]),
+                            "status": "ACTIVE",
+                            "bucket_id": "bucket_rdna"
+                        }
+                    })
+                manifest["rdna"] = rdna_cards
+        except Exception as e:
+            print(f"Warning loading RDNA: {e}")
+
+    # 7. Sprints extraction
+    sprint_cards = []
+    for sdir in [SPRINTS_DIR / "active", SPRINTS_DIR / "archive"]:
+        if sdir.exists():
+            for sfile in sorted(sdir.glob("*.md")):
+                try:
+                    s_text = sfile.read_text(encoding="utf-8")
+                    first_line = s_text.splitlines()[0] if s_text.splitlines() else sfile.stem
+                    s_title = re.sub(r'^[#\s]+', '', first_line).strip()
+                    sprint_cards.append({
+                        "id": sfile.stem,
+                        "title": s_title or sfile.stem,
+                        "origin": {
+                            "author": "Federated Lab",
+                            "text": s_text[:500] + "...",
+                            "source": f"docs/sprints/{sdir.name}/{sfile.name}",
+                            "immutable": True
+                        },
+                        "synthesis": {
+                            "narrative_context": s_text[:1000],
+                            "lab_anchors": [f"docs/sprints/{sdir.name}/{sfile.name}"],
+                            "review_notes": f"Sprint document {sfile.stem}",
+                            "refinement_version": 1
+                        },
+                        "metadata": {
+                            "tags": ["sprint", "planning", sdir.name],
+                            "status": "ARCHIVED" if sdir.name == "archive" else "ACTIVE",
+                            "bucket_id": "bucket_sprints"
+                        }
+                    })
+                except Exception:
+                    pass
+    if sprint_cards:
+        manifest["sprint"] = sprint_cards
 
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     print(f"✅ Synced dna_manifest.json:")
-    print(f"   - Wisdom cards:      {len(manifest.get('wisdom', []))}")
-    print(f"   - Philosophy cards:  {len(manifest.get('philosophy', []))}")
-    print(f"   - Feature DNA:       {len(manifest.get('feature', []))} (from FeatureTracker.md)")
-    print(f"   - Behavioral BKMs:   {len(manifest.get('behavioral', []))} (from Protocols.md)")
-    print(f"   - Discovery events:  {len(manifest.get('discovery', []))}")
+    for k, v in manifest.items():
+        print(f"   - {k.capitalize()} cards: {len(v)}")
 
 if __name__ == "__main__":
     main()
