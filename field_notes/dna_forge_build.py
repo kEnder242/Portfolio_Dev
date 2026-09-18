@@ -479,7 +479,8 @@ def build_page():
             <div class="dna-selector-bar">
                 <label for="dna-select"><strong>DNA COLLECTION:</strong></label>
                 <select id="dna-select" class="dna-select">
-                    <option value="philosophy" selected>Philosophy DNA [PHL] (RW)</option>
+                    <option value="all" selected>ALL Collections (Universal Browse &amp; Search)</option>
+                    <option value="philosophy">Philosophy DNA [PHL] (RW)</option>
                     <option value="wisdom">War Stories &amp; Wisdom [WIS] (RW)</option>
                     <option value="rdna">Reverse DNA Questions [RDNA] (RW)</option>
                     <option value="discovery">Innovations Timeline [DISC] (RW)</option>
@@ -487,8 +488,8 @@ def build_page():
                     <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
                     <option value="sprint">Sprint DNA [SPRINT] (RO)</option>
                 </select>
-                <span id="dna-badge" class="dna-badge rw">[READ-WRITE STUDIO]</span>
-                <input type="text" id="dnaSearchInput" class="search-filter-input" placeholder="🔍 Search DNA cards &amp; tags...">
+                <span id="dna-badge" class="dna-badge rw">[ALL COLLECTIONS]</span>
+                <input type="text" id="dnaSearchInput" class="search-filter-input" placeholder="🔍 Search across ALL DNA (620+ cards)...">
             </div>
 
             <div class="disclaimer-box" style="margin-bottom: 20px;">
@@ -498,7 +499,7 @@ def build_page():
             </div>
 
             <div class="studio-toolbar" id="studio-toolbar">
-                <button class="studio-btn add-card" id="studio-add-card">+ New Card</button>
+                <button class="studio-btn add-card" id="studio-add-card" style="display:none;">+ New Card</button>
                 <button class="studio-btn export" id="studio-export">Export JSON</button>
                 <span id="studio-toolbar-status"></span>
             </div>
@@ -514,7 +515,7 @@ def build_page():
     <script>
         (function () {{
             'use strict';
-            var currentCollection = 'philosophy';
+            var currentCollection = 'all';
             var isReadOnly = false;
             var BUCKETS = {json.dumps(buckets)};
 
@@ -534,7 +535,10 @@ def build_page():
                 var badge = document.getElementById('dna-badge');
                 var addBtn = document.getElementById('studio-add-card');
                 if (badge) {{
-                    if (isReadOnly) {{
+                    if (col === 'all') {{
+                        badge.className = 'dna-badge rw';
+                        badge.textContent = '[ALL COLLECTIONS]';
+                    }} else if (isReadOnly) {{
                         badge.className = 'dna-badge ro';
                         badge.textContent = '[READ-ONLY SYSTEM DNA]';
                     }} else {{
@@ -543,11 +547,23 @@ def build_page():
                     }}
                 }}
                 if (addBtn) {{
-                    addBtn.style.display = isReadOnly ? 'none' : 'inline-block';
+                    addBtn.style.display = (isReadOnly || col === 'all') ? 'none' : 'inline-block';
                 }}
 
                 var manifest = window.__DNA_MANIFEST__ || {{}};
-                var cards = manifest[col] || [];
+                var cards = [];
+                if (col === 'all') {{
+                    ['philosophy', 'wisdom', 'rdna', 'discovery', 'feature', 'behavioral', 'sprint'].forEach(function (k) {{
+                        var list = manifest[k] || [];
+                        list.forEach(function (item) {{
+                            var copy = Object.assign({{}}, item);
+                            copy._sourceCollection = k;
+                            cards.push(copy);
+                        }});
+                    }});
+                }} else {{
+                    cards = manifest[col] || [];
+                }}
                 renderCollectionCards(cards);
             }}
 
@@ -573,10 +589,11 @@ def build_page():
                 var container = document.getElementById('wisdom-container');
                 if (!container) return;
                 var html = '';
-                var is_rw = !isReadOnly;
                 cards.forEach(function (c, idx) {{
+                    var sourceCol = c._sourceCollection || currentCollection;
+                    var cardIsRw = (sourceCol === 'philosophy' || sourceCol === 'wisdom' || sourceCol === 'rdna' || sourceCol === 'discovery');
                     var cid = c.id || ('CARD-' + (idx + 1));
-                    var theme = c.theme || c.type || currentCollection.toUpperCase();
+                    var theme = c.theme || c.type || sourceCol.toUpperCase();
                     var bucket_id = (c.metadata && c.metadata.bucket_id) || c.bucket_id || '';
                     var origin = c.origin || {{}};
                     var synthesis = c.synthesis || {{}};
@@ -591,7 +608,7 @@ def build_page():
                     var anchorsHtml = anchors.length ? '<div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors">' +
                         anchors.map(function (a) {{ return '<code>' + escapeHtml(a) + '</code>'; }}).join(' ') + '</div></div>' : '';
 
-                    var actionsHtml = is_rw ?
+                    var actionsHtml = cardIsRw ?
                         '<div class="card-actions">' +
                             '<button class="card-btn-edit" title="Unlock and edit this card in-place">🔓 Edit</button>' +
                             '<button class="card-btn-save" style="display:none;" title="Save changes atomically to disk and ChromaDB">💾 Save</button>' +
