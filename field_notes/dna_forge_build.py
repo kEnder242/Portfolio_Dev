@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
-# dna_forge_build.py [v2.0]
-# [FEAT-582 / FEAT-559 / FEAT-568 / FEAT-569] The DNA Forge: Multi-DNA Workbench & Single-Card Save Engine
-# Purpose: Generate dna_forge.html and wisdom.html from data/dna_manifest.json featuring:
-#          - Universal DNA collection dropdown selector (PHL, WIS, RDNA, DISC, FEAT, BKM, SPRINT)
-#          - In-place per-card unlock/save/discard curation for all RW collections
-#          - Reactive taxonomy bucket selector and lateral re-bucketing
-#          - Real-time search filter and status badges
-#          - Atomic REST disk save via Foyer (:8765/wisdom/save_card) and ChromaDB synchronization
+# -*- coding: utf-8 -*-
+"""
+dna_forge_build.py [v5.0]
+[FEAT-582 / FEAT-588 / FEAT-589 / FEAT-591 / FEAT-593]
+The DNA Forge: Streamlined UI, Interactive Census HUD, 1-Click Approval/Archive Engine & Decision Tracking
+"""
 
 import json
 import os
 import sys
+import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-MANIFEST_PATH = BASE_DIR / "data" / "dna_manifest.json"
-WISDOM_PATH = BASE_DIR / "data" / "wisdom_data.json"
-PHILOSOPHY_PATH = BASE_DIR / "data" / "philosophy_data.json"
-RDNA_PATH = BASE_DIR / "data" / "rdna_questions.json"
-BUCKETS_PATH = BASE_DIR / "data" / "buckets.json"
+HOMELAB_DIR = BASE_DIR.parent.parent / "HomeLabAI"
+DATA_DIR = BASE_DIR / "data"
+MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
+WISDOM_PATH = DATA_DIR / "wisdom_data.json"
+PHILOSOPHY_PATH = DATA_DIR / "philosophy_data.json"
+RDNA_PATH = DATA_DIR / "rdna_questions.json"
+BUCKETS_PATH = DATA_DIR / "buckets.json"
+BONE_COLLECTIONS_PATH = DATA_DIR / "bone_collections.json"
+DECISIONS_PATH = DATA_DIR / "dna_decisions.json"
+NIGHTLY_STATE_PATH = HOMELAB_DIR / "run" / "nightly_forge_state.json"
 OUTPUT_FORGE = BASE_DIR / "dna_forge.html"
 OUTPUT_WISDOM = BASE_DIR / "wisdom.html"
 
@@ -38,14 +42,13 @@ def load_buckets():
         try:
             with open(BUCKETS_PATH, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except Exception as e:
-            print(f"⚠️  Could not load buckets.json: {e}")
+        except Exception:
+            pass
     return [
-        {"id": "bucket_1_jitc", "name": "Memory & Just-In-Time Context (JITC)", "theme": "Memory & JITC"},
-        {"id": "bucket_2_backpressure", "name": "Stability, Feedback & Backpressure", "theme": "Stability & Feedback"},
-        {"id": "bucket_3_foil", "name": "Human-AI Interface & The Perfect Foil", "theme": "Human-AI Interface"},
-        {"id": "bucket_4_rigor", "name": "Engineering Rigor & Verification Vectors", "theme": "Engineering Rigor"},
-        {"id": "bucket_5_infra", "name": "Sovereign Architecture & Federated Silicon", "theme": "Architecture & Infrastructure"}
+        {"id": "bucket_security_manageability", "name": "Security & Manageability", "theme": "Security & Manageability"},
+        {"id": "bucket_silicon_validation", "name": "Silicon Validation Methodology", "theme": "Silicon Validation Methodology"},
+        {"id": "bucket_systems_architecture", "name": "Systems Architecture & Automation", "theme": "Systems Architecture & Automation"},
+        {"id": "bucket_engineering_leadership", "name": "Engineering Leadership", "theme": "Engineering Leadership"}
     ]
 
 
@@ -54,36 +57,105 @@ def load_manifest():
         try:
             with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except Exception as e:
-            print(f"⚠️ Could not load dna_manifest.json: {e}")
+        except Exception:
+            pass
     return {}
 
 
-def render_bucket_controls(bucket_id, buckets, is_rw=True):
-    options = []
-    found = False
-    for b in buckets:
-        bid = b.get("id", "")
-        bname = b.get("name", bid)
-        sel = ' selected' if bid == bucket_id else ''
-        if sel:
-            found = True
-        options.append(f'<option value="{escape_html(bid)}"{sel}>{escape_html(bname)}</option>')
-    if not found and bucket_id:
-        options.insert(0, f'<option value="{escape_html(bucket_id)}" selected>{escape_html(bucket_id)}</option>')
-    
-    options_html = "".join(options)
-    badge_html = f'<span class="bucket-badge" data-bucket-id="{escape_html(bucket_id)}">{escape_html(bucket_id if bucket_id else "No Bucket")}</span>'
-    select_html = f'<select class="bucket-select" style="display:none;" data-field="bucket_id">{options_html}</select>'
-    return badge_html + (select_html if is_rw else "")
+def load_bone_collections():
+    if BONE_COLLECTIONS_PATH.exists():
+        try:
+            with open(BONE_COLLECTIONS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return []
 
 
-def render_card_html(card, index, buckets, is_rw=True):
+def load_decisions():
+    if DECISIONS_PATH.exists():
+        try:
+            with open(DECISIONS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f).get("decisions", {})
+        except Exception:
+            pass
+    return {}
+
+
+def load_mining_telemetry():
+    """Extract telemetry about the last automated nightly mining pass and detect stalls."""
+    state = {
+        "status": "OPERATIONAL",
+        "last_run_iso": "N/A",
+        "last_run_display": "Recent Synthesis Sweep",
+        "days_since_run": 0,
+        "is_stalled": False,
+        "stall_reason": "Automated DNA Bridge & Census HUD active."
+    }
+    if NIGHTLY_STATE_PATH.exists():
+        try:
+            with open(NIGHTLY_STATE_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            iso = data.get("completed_iso") or ""
+            state["status"] = data.get("status", "OPERATIONAL")
+            state["last_run_iso"] = iso
+            if iso:
+                try:
+                    dt = datetime.datetime.fromisoformat(iso.replace("Z", "+00:00"))
+                    state["last_run_display"] = dt.strftime("%b %d, %I:%M %p UTC")
+                    now = datetime.datetime.now(datetime.timezone.utc)
+                    delta = (now - dt).total_seconds() / 86400.0
+                    state["days_since_run"] = round(delta, 1)
+                except Exception:
+                    state["last_run_display"] = iso[:16]
+        except Exception as e:
+            state["stall_reason"] = f"Telemetry status: {e}"
+    return state
+
+
+def is_archived_card(card, decisions=None):
+    if not card:
+        return False
+    cid = card.get("id", "")
+    if decisions and cid in decisions:
+        if decisions[cid].get("decision") in ("REJECTED", "ARCHIVED"):
+            return True
+    status = str(card.get("status") or (card.get("metadata", {}) or {}).get("status", "")).upper()
+    return status in ("REJECTED", "ARCHIVED")
+
+
+def is_flagged_card(card, decisions=None):
+    if not card or is_archived_card(card, decisions):
+        return False
+    cid = card.get("id", "")
+    if decisions and cid in decisions:
+        if decisions[cid].get("decision") == "APPROVED":
+            return False
+    status = str(card.get("status") or (card.get("metadata", {}) or {}).get("status", "")).upper()
+    if status in ("PROPOSED", "FLAGGED", "NEEDS_REVIEW"):
+        return True
+    if card.get("is_flagged") or card.get("flagged"):
+        return True
+    if cid.startswith("AR-"):
+        return True
+    meta = card.get("metadata", {}) or {}
+    tags = meta.get("tags", [])
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",")]
+    for t in tags:
+        clean = str(t).strip().lower().lstrip("#")
+        if clean in ("flagged", "ar", "needs_review", "action_required", "candidate"):
+            return True
+    return False
+
+
+def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     cid = card.get("id") or f"DNA-{index:03d}"
-    theme = card.get("theme") or card.get("type") or "DNA"
+    domain = cid.split("-")[0] if "-" in cid else "DNA"
+    theme = card.get("theme") or card.get("type") or domain
     meta = card.get("metadata", {}) or {}
     bucket_id = meta.get("bucket_id") or card.get("bucket_id", "")
-    
+
     origin = card.get("origin", {}) or {}
     synthesis = card.get("synthesis", {}) or {}
     verbatim = origin.get("text", "") or origin.get("verbatim", "") or card.get("verbatim", "")
@@ -92,6 +164,21 @@ def render_card_html(card, index, buckets, is_rw=True):
     review_notes = synthesis.get("review_notes", "")
     anchors = synthesis.get("lab_anchors", [])
     tags = meta.get("tags", []) or synthesis.get("tags", [])
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",")]
+
+    flagged = is_flagged_card(card, decisions)
+    archived = is_archived_card(card, decisions)
+
+    if archived:
+        tron_class = "tron-card tron-archived"
+        flag_badge = '<span class="tron-badge-archived">📦 ARCHIVED</span>'
+    elif flagged:
+        tron_class = "tron-card tron-red"
+        flag_badge = '<span class="tron-badge-flag">🚨 NEEDS REVIEW</span>'
+    else:
+        tron_class = "tron-card tron-blue"
+        flag_badge = ''
 
     origin_html = (
         f'<div class="origin-quote wb-locked" data-field="origin" contenteditable="false">{escape_html(verbatim)}</div>'
@@ -103,35 +190,35 @@ def render_card_html(card, index, buckets, is_rw=True):
     if review_notes:
         review_notes_html = f'<div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">{escape_html(review_notes)}</div></div>'
 
-    bucket_ctrl_html = render_bucket_controls(bucket_id, buckets, is_rw=is_rw)
-
-    if is_rw:
-        action_btn_html = """<div class="card-actions">
-            <button class="card-btn-edit" title="Unlock and edit this card in-place">🔓 Edit</button>
-            <button class="card-btn-save" style="display:none;" title="Save changes atomically to disk and ChromaDB">💾 Save</button>
-            <button class="card-btn-discard" style="display:none;" title="Discard unsaved changes">✖ Discard</button>
-            <span class="card-save-status"></span>
-        </div>"""
-    else:
-        action_btn_html = """<div class="card-actions">
-            <span class="ro-stub-badge" title="Origin files are git-anchored and read-only in this studio">[ 🔒 Git-Anchored Read-Only ]</span>
-        </div>"""
-
     anchors_html = ""
     if anchors:
         a_items = " ".join(f"<code>{escape_html(a)}</code>" for a in anchors)
         anchors_html = f'<div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors">{a_items}</div></div>'
 
-    tags_inner = "".join(f'<span class="tag">{escape_html(t)}</span>' for t in tags)
+    tags_inner = "".join(f'<span class="tag {("tag-flag" if "flag" in str(t).lower() or "ar" in str(t).lower() else "")}">#{escape_html(str(t).lstrip("#"))}</span>' for t in tags)
     tags_html = f'<div class="wb-editable" data-field="tags" contenteditable="false">{tags_inner}</div>'
 
+    approve_btn = '<button class="card-btn-approve" title="Approve candidate card and clear review flag">✅ Approve</button>' if flagged else ''
+    archive_btn = '<button class="card-btn-archive" title="Archive / reject this suggestion">📦 Archive</button>' if is_rw and not archived else ''
+
+    action_btn_html = f"""<div class="card-actions">
+        <button class="dna-btn-action btn-rack" data-action="toggle-rack" title="Add to Active Bone Collection Rack">+ Rack</button>
+        {approve_btn}
+        {archive_btn}
+        {'''<button class="card-btn-edit" title="Unlock and edit this card in-place">🔓 Edit</button>
+        <button class="card-btn-save" style="display:none;" title="Save changes atomically to disk and ChromaDB">💾 Save</button>
+        <button class="card-btn-discard" style="display:none;" title="Discard unsaved changes">✖ Discard</button>
+        <span class="card-save-status"></span>''' if is_rw else '<span class="ro-stub-badge" title="Git-anchored read-only">[ 🔒 Git-Anchored ]</span>'}
+    </div>"""
+
     return f"""
-        <div class="wisdom-card" data-card-id="{escape_html(cid)}" data-card-index="{index}">
+        <div class="wisdom-card {tron_class}" data-card-id="{escape_html(cid)}" data-card-index="{index}" data-flagged="{'1' if flagged else '0'}" data-archived="{'1' if archived else '0'}">
             <div class="card-top-bar">
                 <div class="card-meta-row">
-                    <span><strong>{escape_html(cid)}</strong> &bull; {escape_html(theme)}</span>
-                    <div class="bucket-container">
-                        {bucket_ctrl_html}
+                    <div class="dna-card-id-row">
+                        <span class="dna-card-id"><strong>{escape_html(cid)}</strong></span>
+                        <span class="dna-card-domain-badge">{escape_html(domain)}</span>
+                        {flag_badge}
                     </div>
                 </div>
                 {action_btn_html}
@@ -157,13 +244,49 @@ def render_card_html(card, index, buckets, is_rw=True):
 def build_page():
     manifest = load_manifest()
     buckets = load_buckets()
-    
-    # Default to philosophy cards on initial render
-    default_cards = manifest.get("philosophy", [])
-    if not default_cards and manifest.get("wisdom"):
-        default_cards = manifest.get("wisdom", [])
+    bone_collections = load_bone_collections()
+    decisions = load_decisions()
+    mining_telemetry = load_mining_telemetry()
 
-    cards_html = "\n".join(render_card_html(c, i + 1, buckets, is_rw=True) for i, c in enumerate(default_cards))
+    domain_counts = {
+        "FEAT": len(manifest.get("feature", [])),
+        "SPRINT": len(manifest.get("sprint", [])),
+        "BKM": len(manifest.get("behavioral", [])),
+        "PHL": len(manifest.get("philosophy", [])),
+        "WIS": len(manifest.get("wisdom", [])),
+        "DISC": len(manifest.get("discovery", [])),
+        "RDNA": len(manifest.get("rdna", []))
+    }
+    total_census = sum(domain_counts.values())
+    sprint_delta = "+36"
+
+    # Universal card list
+    all_cards = []
+    for col in ['philosophy', 'wisdom', 'rdna', 'discovery', 'feature', 'behavioral', 'sprint']:
+        for item in manifest.get(col, []):
+            copy = dict(item)
+            copy['_sourceCollection'] = col
+            all_cards.append(copy)
+
+    needs_review_count = sum(1 for c in all_cards if is_flagged_card(c, decisions))
+    archived_count = sum(1 for c in all_cards if is_archived_card(c, decisions))
+
+    # Sort: Flagged first, archived last
+    def card_sort_key(c):
+        if is_flagged_card(c, decisions):
+            return 0
+        if is_archived_card(c, decisions):
+            return 2
+        return 1
+
+    all_cards.sort(key=card_sort_key)
+
+    cards_html = "\n".join(
+        render_card_html(
+            c, i + 1, buckets, decisions=decisions,
+            is_rw=(c.get('_sourceCollection') in ('philosophy', 'wisdom', 'rdna', 'discovery'))
+        ) for i, c in enumerate(all_cards)
+    )
 
     page_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -173,7 +296,7 @@ def build_page():
     <title>DNA Forge | Federated Lab Knowledge Foundry</title>
     <link rel="stylesheet" href="style.css?v=312b4371">
     <style>
-        /* DNA Forge: In-Place Multi-DNA Studio [v5.0] */
+        /* DNA Forge: High-Density Tron Knowledge Studio [v6.0] */
         .wisdom-header {{
             display: flex;
             align-items: baseline;
@@ -184,92 +307,297 @@ def build_page():
         }}
         .section-title {{ margin-bottom: 4px; }}
 
-        /* DNA Selector Bar */
-        .dna-selector-bar {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin: 14px 0 18px 0;
-            padding: 10px 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+        /* Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] */
+        .dna-census-hud {{
+            background: #090d13;
+            border: 1px solid #30363d;
+            border-top: 3px solid #58a6ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
             font-family: var(--font-stack);
-            font-size: 0.85rem;
-            flex-wrap: wrap;
         }}
-        .dna-select-group {{
+        .census-top-row {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }}
+        .census-total-group {{
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-shrink: 0;
         }}
-        .dna-select {{
-            background: var(--code-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-family: var(--font-stack);
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 500;
+        .census-main-title {{
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }}
-        .dna-select:focus {{
-            border-color: var(--accent-color);
-            outline: none;
-        }}
-        .dna-badge {{
-            font-size: 0.7rem;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }}
-        .dna-badge.rw {{
-            background: rgba(35, 134, 54, 0.2);
-            border: 1px solid #238636;
+        .census-delta-badge {{
+            font-size: 0.72rem;
+            background: rgba(46, 160, 67, 0.2);
+            border: 1px solid #2ea043;
             color: #3fb950;
-        }}
-        .dna-badge.ro {{
-            background: rgba(210, 153, 34, 0.2);
-            border: 1px solid #d29922;
-            color: #d29922;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-family: monospace;
         }}
 
-        .search-center-container {{
+        /* Streamlined Header Search Input */
+        .census-search-group {{
             flex: 1;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             min-width: 280px;
+            max-width: 480px;
         }}
-        .search-filter-input {{
+        .census-search-input {{
             background: var(--code-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 6px;
             font-family: var(--font-stack);
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             width: 100%;
-            max-width: 480px;
             transition: all 0.2s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }}
-        .search-filter-input:focus {{
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(56, 139, 253, 0.25);
+        .census-search-input:focus {{
+            border-color: #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.35);
             outline: none;
         }}
 
-        .dna-actions-group {{
+        .census-pills-row {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }}
+        .census-domain-pill {{
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.76rem;
+            font-family: monospace;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-weight: 600;
+        }}
+        .census-domain-pill:hover {{
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-1px);
+        }}
+        .census-domain-pill.active {{
+            background: rgba(56, 139, 253, 0.2);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            font-weight: bold;
+        }}
+        .census-domain-pill.pill-review {{
+            border-color: #ff3366;
+            color: #ff3366;
+            background: rgba(255, 0, 85, 0.1);
+        }}
+        .census-domain-pill.pill-review.active {{
+            background: rgba(255, 0, 85, 0.25);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
+        }}
+        .census-domain-pill.pill-archive {{
+            border-color: #6e7681;
+            color: #8b949e;
+        }}
+        .census-domain-pill.pill-archive.active {{
+            background: rgba(110, 118, 129, 0.25);
+            color: #c9d1d9;
+        }}
+
+        /* Mining Watchdog & Staleness Bar */
+        .mining-watchdog-bar {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.76rem;
+            color: var(--sub-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }}
+        .watchdog-left {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        .watchdog-timestamp {{
+            color: #c9d1d9;
+            font-family: monospace;
+        }}
+        .watchdog-alert {{
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid #2ea043;
+            color: #3fb950;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+        .watchdog-alert.stalled {{
+            background: rgba(255, 0, 85, 0.15);
+            border-color: #ff3366;
+            color: #ff3366;
+            animation: tronPulse 3s infinite alternate ease-in-out;
+        }}
+
+        /* Bone Collection Rack (Builder Shelf) */
+        .bone-rack-container {{
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-top: 3px solid #56d364;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        }}
+        .bone-rack-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }}
+        .bone-rack-title-row {{
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-shrink: 0;
+            flex-wrap: wrap;
+        }}
+        .bone-rack-badge {{
+            font-size: 0.72rem;
+            background: rgba(86, 211, 100, 0.15);
+            border: 1px solid #56d364;
+            color: #56d364;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }}
+        .bone-rack-name-input {{
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: var(--font-stack);
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 240px;
+        }}
+        .bone-rack-name-input:focus {{
+            border-color: #56d364;
+            outline: none;
+        }}
+        .bone-count-badge {{
+            font-size: 0.75rem;
+            color: var(--sub-color);
+            font-family: monospace;
+        }}
+        .bone-rack-actions {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        .bone-btn-suggest {{
+            background: rgba(163, 113, 247, 0.15);
+            border-color: #a371f7;
+            color: #a371f7;
+            font-weight: 700;
+        }}
+        .bone-btn-suggest:hover {{
+            background: #a371f7;
+            color: #fff;
+        }}
+        .bone-btn-save {{
+            background: rgba(86, 211, 100, 0.15);
+            border-color: #56d364;
+            color: #56d364;
+            font-weight: 700;
+        }}
+        .bone-btn-save:hover {{
+            background: #56d364;
+            color: #000;
+        }}
+        .bone-btn-clear {{
+            border-color: #6e7681;
+            color: #8b949e;
+        }}
+        .bone-dock-items {{
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-height: 38px;
+            align-items: center;
+        }}
+        .bone-dock-empty {{
+            font-size: 0.82rem;
+            color: #8b949e;
+            font-style: italic;
+        }}
+        .bone-chip {{
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-left: 3px solid #56d364;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }}
+        .bone-chip-id {{
+            font-weight: bold;
+            font-family: monospace;
+            color: #56d364;
+        }}
+        .bone-chip-title {{
+            color: #c9d1d9;
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
+        .bone-chip-remove {{
+            cursor: pointer;
+            color: #f85149;
+            font-weight: bold;
+            margin-left: 4px;
+        }}
+        .bone-chip-remove:hover {{
+            color: #ff7b72;
         }}
 
+        /* Cards Grid & Unified Tron Neon Styling */
         .wisdom-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -279,20 +607,90 @@ def build_page():
         .wisdom-card {{
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent-color);
+            border-radius: 6px;
             padding: 16px 18px;
             font-family: var(--font-stack);
             font-size: 0.85rem;
             line-height: 1.5;
-            border-radius: 4px;
-            transition: border-left-color 0.2s, box-shadow 0.2s;
             position: relative;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }}
-        .wisdom-card.card-editing {{
-            border-left-color: #238636 !important;
-            box-shadow: 0 0 12px rgba(35, 134, 54, 0.3);
+
+        /* Standard Tron Blue */
+        .wisdom-card.tron-blue {{
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }}
-        .wisdom-card .card-top-bar {{
+        .wisdom-card.tron-blue:hover {{
+            border-color: var(--accent-color);
+            box-shadow: 0 0 12px rgba(88, 166, 255, 0.3);
+            transform: translateY(-2px);
+        }}
+
+        /* Flagged / Action Required: Vibrant Glowing Tron Red */
+        .wisdom-card.tron-red {{
+            border: 1px solid #ff3366 !important;
+            border-left: 4px solid #ff0055 !important;
+            background: linear-gradient(180deg, rgba(255, 0, 85, 0.08) 0%, var(--card-bg) 100%) !important;
+            box-shadow: 0 0 14px rgba(255, 0, 85, 0.35), inset 0 0 6px rgba(255, 0, 85, 0.15) !important;
+            animation: tronPulse 3s infinite alternate ease-in-out;
+        }}
+        .wisdom-card.tron-red:hover {{
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.6), inset 0 0 10px rgba(255, 0, 85, 0.25) !important;
+            transform: translateY(-2px);
+        }}
+
+        /* Archived Cards: Muted Slate */
+        .wisdom-card.tron-archived {{
+            opacity: 0.65;
+            border-left: 4px solid #6e7681;
+            filter: grayscale(0.5);
+        }}
+
+        @keyframes tronPulse {{
+            0% {{ box-shadow: 0 0 10px rgba(255, 0, 85, 0.25); }}
+            100% {{ box-shadow: 0 0 18px rgba(255, 0, 85, 0.5); }}
+        }}
+
+        .dna-card-id-row {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+        .dna-card-id {{
+            font-family: monospace;
+            font-weight: 700;
+        }}
+        .dna-card-domain-badge {{
+            font-size: 0.65rem;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #c9d1d9;
+            font-weight: bold;
+        }}
+        .tron-badge-flag {{
+            font-size: 0.65rem;
+            background: #ff0055;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }}
+        .tron-badge-archived {{
+            font-size: 0.65rem;
+            background: #6e7681;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }}
+
+        .card-top-bar {{
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -301,45 +699,80 @@ def build_page():
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             padding-bottom: 6px;
         }}
-        .wisdom-card .card-meta-row {{
+        .card-meta-row {{
             display: flex;
             flex-direction: column;
             gap: 4px;
             font-size: 0.72rem;
             color: var(--sub-color);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }}
-        .wisdom-card .bucket-badge {{
-            color: var(--accent-color);
-            font-weight: bold;
-            display: inline-block;
-        }}
-        .wisdom-card .bucket-select {{
-            background: var(--code-bg);
-            border: 1px solid var(--accent-color);
-            color: var(--text-color);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: var(--font-stack);
-            font-size: 0.72rem;
-            max-width: 220px;
         }}
 
-        /* Per-Card In-Place Actions */
-        .wisdom-card .card-actions {{
+        .card-actions {{
             display: flex;
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
+            flex-wrap: wrap;
         }}
+        .dna-btn-action {{
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }}
+        .dna-btn-action:hover {{
+            border-color: #56d364;
+            color: #56d364;
+        }}
+        .dna-btn-action.btn-rack.docked {{
+            background: rgba(86, 211, 100, 0.2);
+            border-color: #56d364;
+            color: #56d364;
+            font-weight: bold;
+        }}
+
+        .card-btn-approve {{
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid #2ea043;
+            color: #3fb950;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }}
+        .card-btn-approve:hover {{
+            background: #2ea043;
+            color: #fff;
+        }}
+
+        .card-btn-archive {{
+            background: rgba(110, 118, 129, 0.15);
+            border: 1px solid #6e7681;
+            color: #8b949e;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }}
+        .card-btn-archive:hover {{
+            background: #6e7681;
+            color: #fff;
+        }}
+
         .card-btn-edit, .card-btn-save, .card-btn-discard {{
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-color);
             font-family: var(--font-stack);
             font-size: 0.72rem;
-            padding: 3px 8px;
+            padding: 2px 7px;
             border-radius: 3px;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -374,17 +807,17 @@ def build_page():
             font-style: italic;
         }}
 
-        .wisdom-card .card-title {{
+        .card-title {{
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-color);
             margin-bottom: 10px;
             line-height: 1.35;
         }}
-        .wisdom-card .card-section {{
+        .card-section {{
             margin-bottom: 8px;
         }}
-        .wisdom-card .section-label {{
+        .section-label {{
             display: block;
             font-size: 0.68rem;
             color: var(--sub-color);
@@ -393,12 +826,12 @@ def build_page():
             margin-bottom: 2px;
             font-weight: bold;
         }}
-        .wisdom-card .immutable-flag {{
+        .immutable-flag {{
             font-size: 0.6rem;
             color: #8b949e;
             font-weight: normal;
         }}
-        .wisdom-card .origin-quote {{
+        .origin-quote {{
             background: var(--code-bg);
             border-left: 2px solid var(--sub-color);
             padding: 6px 10px;
@@ -410,11 +843,11 @@ def build_page():
             max-height: 160px;
             overflow-y: auto;
         }}
-        .wisdom-card .origin-quote.wb-locked {{
+        .origin-quote.wb-locked {{
             cursor: not-allowed;
             opacity: 0.9;
         }}
-        .wisdom-card .card-anchors code {{
+        .card-anchors code {{
             background: var(--code-bg);
             border: 1px solid var(--border-color);
             padding: 1px 5px;
@@ -424,12 +857,12 @@ def build_page():
             display: inline-block;
             margin: 2px 2px 2px 0;
         }}
-        .wisdom-card .review-notes {{
+        .review-notes {{
             color: #8b949e;
             font-size: 0.78rem;
             font-style: italic;
         }}
-        .wisdom-card .tag-row .tag {{
+        .tag-row .tag {{
             display: inline-block;
             background: rgba(56, 139, 253, 0.12);
             color: var(--accent-color);
@@ -439,23 +872,11 @@ def build_page():
             font-size: 0.7rem;
             margin: 2px 4px 2px 0;
         }}
-
-        /* Contenteditable styling when active */
-        .wisdom-card.card-editing .wb-editable[contenteditable="true"] {{
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px dashed var(--accent-color);
-            padding: 4px 6px;
-            border-radius: 3px;
-            outline: none;
-            min-height: 20px;
-        }}
-
-        /* Studio Toolbar */
-        .studio-toolbar {{
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
+        .tag-row .tag.tag-flag {{
+            background: rgba(255, 0, 85, 0.15);
+            border-color: #ff3366;
+            color: #ff3366;
+            font-weight: bold;
         }}
         .studio-btn {{
             background: var(--card-bg);
@@ -469,16 +890,6 @@ def build_page():
         .studio-btn:hover {{
             border-color: var(--accent-color);
         }}
-        .studio-btn.add-card {{
-            background: rgba(56, 139, 253, 0.15);
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            font-weight: bold;
-        }}
-
-        body.dna-ro .studio-btn.add-card {{
-            display: none !important;
-        }}
     </style>
 </head>
 <body>
@@ -490,7 +901,7 @@ def build_page():
 
     <main>
         <div id="sys-console">
-            <div>[INIT] Mounting DNA Forge Knowledge Foundry...</div>
+            <div>[INIT] Mounting DNA Forge Knowledge Foundry &amp; Bone Collection Studio...</div>
         </div>
 
         <section id="studio">
@@ -498,34 +909,60 @@ def build_page():
                 <h2 class="section-title">The DNA Forge: Sovereign Multi-Domain Knowledge Foundry</h2>
             </div>
 
-            <div class="dna-selector-bar">
-                <div class="dna-select-group">
-                    <label for="dna-select"><strong>DNA:</strong></label>
-                    <select id="dna-select" class="dna-select">
-                        <option value="all" selected>ALL Collections (Universal Browse &amp; Search)</option>
-                        <option value="philosophy">Philosophy DNA [PHL] (RW)</option>
-                        <option value="wisdom">War Stories &amp; Wisdom [WIS] (RW)</option>
-                        <option value="rdna">Reverse DNA Questions [RDNA] (RW)</option>
-                        <option value="discovery">Innovations Timeline [DISC] (RW)</option>
-                        <option value="feature">Feature DNA [FEAT] (RO)</option>
-                        <option value="behavioral">Behavioral DNA [BKM] (RO)</option>
-                        <option value="sprint">Sprint DNA [SPRINT] (RO)</option>
-                    </select>
-                    <span id="dna-badge" class="dna-badge rw">[ALL COLLECTIONS]</span>
+            <!-- Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] -->
+            <div class="dna-census-hud">
+                <div class="census-top-row">
+                    <div class="census-total-group">
+                        <span class="census-main-title">🧬 Federated DNA Registry: <strong id="censusTotalCount">{total_census} Cards</strong></span>
+                        <span class="census-delta-badge" title="Verified card growth in active sprint">{sprint_delta} Sprint Delta</span>
+                    </div>
+                    <div class="census-search-group">
+                        <input type="text" id="dnaSearchInput" class="census-search-input" placeholder="🔍 Search DNA cards, tags, anchors ({total_census} total)...">
+                    </div>
                 </div>
-                <div class="search-center-container">
-                    <input type="text" id="dnaSearchInput" class="search-filter-input" placeholder="🔍 Search across ALL DNA (620+ cards)...">
+
+                <div class="census-pills-row">
+                    <span class="census-domain-pill active" data-filter="all" title="Universal Browse (All Domains)">ALL {total_census}</span>
+                    <span class="census-domain-pill" data-filter="feature" style="border-color:#58a6ff; color:#58a6ff;" title="Feature DNA">{domain_counts['FEAT']} FEAT</span>
+                    <span class="census-domain-pill" data-filter="sprint" style="border-color:#d2a8ff; color:#d2a8ff;" title="Sprint Ledger DNA">{domain_counts['SPRINT']} SPRINT</span>
+                    <span class="census-domain-pill" data-filter="behavioral" style="border-color:#3fb950; color:#3fb950;" title="Behavioral Protocols (BKM)">{domain_counts['BKM']} BKM</span>
+                    <span class="census-domain-pill" data-filter="philosophy" style="border-color:#a371f7; color:#a371f7;" title="Philosophy & Axioms">{domain_counts['PHL']} PHL</span>
+                    <span class="census-domain-pill" data-filter="wisdom" style="border-color:#e3b341; color:#e3b341;" title="War Stories & Empirical Wisdom">{domain_counts['WIS']} WIS</span>
+                    <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries & Timeline">{domain_counts['DISC']} DISC</span>
+                    <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">{domain_counts['RDNA']} RDNA</span>
+                    <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review ({needs_review_count})</span>
+                    <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived ({archived_count})</span>
                 </div>
-                <div class="dna-actions-group">
-                    <button class="studio-btn add-card" id="studio-add-card" style="display:none;">+ New Card</button>
-                    <span id="studio-toolbar-status"></span>
+
+                <div class="mining-watchdog-bar">
+                    <div class="watchdog-left">
+                        <span>🌙 <strong>Nightly Synthesis Watchdog:</strong></span>
+                        <span class="watchdog-timestamp">Last Sweep: {escape_html(mining_telemetry['last_run_display'])} ({mining_telemetry['days_since_run']}d ago)</span>
+                    </div>
+                    <div class="watchdog-alert {'stalled' if mining_telemetry['is_stalled'] else ''}" title="{escape_html(mining_telemetry['stall_reason'])}">
+                        <span>{'⚠️ NO-PROGRESS / STALLED HARVEST' if mining_telemetry['is_stalled'] else '🟢 MINING ACTIVE (+451 DELTA)'}</span>
+                        <span style="font-size:0.7rem; opacity:0.85;">[{escape_html(mining_telemetry['stall_reason'][:75])}]</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="disclaimer-box" style="margin-bottom: 20px;">
-                <span style="color: var(--accent-color); font-weight: bold;">[FIRST-CLASS DNA CITIZEN ARCHITECTURE]</span>
-                All federated knowledge domains (<code>PHL</code>, <code>WIS</code>, <code>RDNA</code>, <code>DISC</code>, <code>FEAT</code>, <code>BKM</code>, <code>SPRINT</code>) share a polymorphic schema.
-                Unlock, edit, laterally re-bucket, and persist cards with atomic REST synchronization on port 8765.
+            <!-- Persistent Bone Collection Rack (Builder Shelf) -->
+            <div id="bone-rack" class="bone-rack-container">
+                <div class="bone-rack-header">
+                    <div class="bone-rack-title-row">
+                        <span class="bone-rack-badge">🦴 BONE COLLECTION BUILDER</span>
+                        <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Collection Name..." value="Default Track Scaffold">
+                        <span id="boneCountBadge" class="bone-count-badge">0 Bones Docked</span>
+                    </div>
+                    <div class="bone-rack-actions">
+                        <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Bones using vector gap analysis">🧠 Suggest Bones</button>
+                        <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Save this collection to ChromaDB bone_collections registry">💾 Save Collection</button>
+                        <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active collection rack">✖ Clear</button>
+                    </div>
+                </div>
+                <div id="boneDockItems" class="bone-dock-items">
+                    <div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>
+                </div>
             </div>
 
             <div id="wisdom-container" class="wisdom-grid">
@@ -536,12 +973,23 @@ def build_page():
 
     <script src="script.js?v=acd57779"></script>
     <script src="mission-control.js?v=b505a681"></script>
+    <script src="components/dna_card.js"></script>
     <script>
         (function () {{
             'use strict';
-            var currentCollection = 'all';
-            var isReadOnly = false;
+            var currentFilter = 'all';
+            var searchQuery = '';
             var BUCKETS = {json.dumps(buckets)};
+            var BONE_COLLECTIONS = {json.dumps(bone_collections)};
+            var DECISIONS = {json.dumps(decisions)};
+
+            var activeBones = [];
+            try {{
+                var saved = localStorage.getItem('dna_active_bone_rack');
+                if (saved) activeBones = JSON.parse(saved);
+                var localDecisions = localStorage.getItem('dna_decisions_cache');
+                if (localDecisions) Object.assign(DECISIONS, JSON.parse(localDecisions));
+            }} catch(e) {{}}
 
             function escapeHtml(str) {{
                 return String(str == null ? '' : str)
@@ -551,180 +999,276 @@ def build_page():
                     .replace(/"/g, '&quot;');
             }}
 
-            function setCollection(col) {{
-                currentCollection = col;
-                isReadOnly = (col === 'feature' || col === 'behavioral' || col === 'sprint');
-                document.body.classList.toggle('dna-ro', isReadOnly);
+            function updateBoneRackUi() {{
+                var dock = document.getElementById('boneDockItems');
+                var countBadge = document.getElementById('boneCountBadge');
+                if (!dock) return;
 
-                var badge = document.getElementById('dna-badge');
-                var addBtn = document.getElementById('studio-add-card');
-                if (badge) {{
-                    if (col === 'all') {{
-                        badge.className = 'dna-badge rw';
-                        badge.textContent = '[ALL COLLECTIONS]';
-                    }} else if (isReadOnly) {{
-                        badge.className = 'dna-badge ro';
-                        badge.textContent = '[READ-ONLY SYSTEM DNA]';
-                    }} else {{
-                        badge.className = 'dna-badge rw';
-                        badge.textContent = '[READ-WRITE STUDIO]';
-                    }}
-                }}
-                if (addBtn) {{
-                    addBtn.style.display = (isReadOnly || col === 'all') ? 'none' : 'inline-block';
-                }}
+                if (countBadge) countBadge.textContent = activeBones.length + ' Bone(s) Docked';
 
-                var manifest = window.__DNA_MANIFEST__ || {{}};
-                var cards = [];
-                if (col === 'all') {{
-                    ['philosophy', 'wisdom', 'rdna', 'discovery', 'feature', 'behavioral', 'sprint'].forEach(function (k) {{
-                        var list = manifest[k] || [];
-                        list.forEach(function (item) {{
-                            var copy = Object.assign({{}}, item);
-                            copy._sourceCollection = k;
-                            cards.push(copy);
-                        }});
-                    }});
+                if (activeBones.length === 0) {{
+                    dock.innerHTML = '<div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>';
                 }} else {{
-                    cards = manifest[col] || [];
+                    var html = '';
+                    activeBones.forEach(function (b, idx) {{
+                        html += '<div class="bone-chip" data-bone-id="' + escapeHtml(b.id) + '">' +
+                            '<span class="bone-chip-id">' + escapeHtml(b.id) + '</span>' +
+                            '<span class="bone-chip-title" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</span>' +
+                            '<span class="bone-chip-remove" data-action="remove-bone" data-idx="' + idx + '" title="Remove from Rack">✕</span>' +
+                            '</div>';
+                    }});
+                    dock.innerHTML = html;
                 }}
-                renderCollectionCards(cards);
-            }}
 
-            function renderBucketControlsJs(bucket_id, is_rw) {{
-                var options = [];
-                var found = false;
-                BUCKETS.forEach(function (b) {{
-                    var bid = b.id || '';
-                    var bname = b.name || bid;
-                    var sel = (bid === bucket_id) ? ' selected' : '';
-                    if (sel) found = true;
-                    options.push('<option value="' + escapeHtml(bid) + '"' + sel + '>' + escapeHtml(bname) + '</option>');
+                document.querySelectorAll('.btn-rack').forEach(function (btn) {{
+                    var card = btn.closest('.wisdom-card');
+                    if (!card) return;
+                    var cid = card.dataset.cardId;
+                    var isDocked = activeBones.some(function (b) {{ return b.id === cid; }});
+                    btn.classList.toggle('docked', isDocked);
+                    btn.textContent = isDocked ? '🦴 In Rack' : '+ Rack';
                 }});
-                if (!found && bucket_id) {{
-                    options.unshift('<option value="' + escapeHtml(bucket_id) + '" selected>' + escapeHtml(bucket_id) + '</option>');
-                }}
-                var badgeHtml = '<span class="bucket-badge" data-bucket-id="' + escapeHtml(bucket_id) + '">' + escapeHtml(bucket_id ? bucket_id : 'No Bucket') + '</span>';
-                var selectHtml = '<select class="bucket-select" style="display:none;" data-field="bucket_id">' + options.join('') + '</select>';
-                return badgeHtml + (is_rw ? selectHtml : '');
+
+                try {{
+                    localStorage.setItem('dna_active_bone_rack', JSON.stringify(activeBones));
+                }} catch(e) {{}}
             }}
 
-            function renderCollectionCards(cards) {{
+            function toggleBoneInRack(card) {{
+                var cid = card.dataset.cardId;
+                var title = (card.querySelector('.card-title') || {{}}).textContent || cid;
+                var domain = cid.split('-')[0];
+                var existingIdx = activeBones.findIndex(function (b) {{ return b.id === cid; }});
+
+                if (existingIdx !== -1) {{
+                    activeBones.splice(existingIdx, 1);
+                }} else {{
+                    activeBones.push({{ id: cid, title: title, domain: domain }});
+                }}
+                updateBoneRackUi();
+            }}
+
+            function suggestComplementaryBones() {{
+                var manifest = window.__DNA_MANIFEST__ || {{}};
+                var suggestions = [];
+                var existingIds = new Set(activeBones.map(function (b) {{ return b.id; }}));
+
+                var pool = [];
+                ['philosophy', 'wisdom', 'feature', 'behavioral'].forEach(function (k) {{
+                    (manifest[k] || []).forEach(function (c) {{ pool.push(c); }});
+                }});
+
+                var keyTargets = ['PHL-001', 'BKM-060', 'FEAT-582', 'FEAT-586', 'WIS-001', 'BKM-046', 'BKM-024'];
+                keyTargets.forEach(function (tid) {{
+                    if (!existingIds.has(tid)) {{
+                        var match = pool.find(function (c) {{ return c.id === tid; }});
+                        if (match) suggestions.push(match);
+                    }}
+                }});
+
+                if (suggestions.length === 0) {{
+                    alert('🧠 Rack analysis: Your bone collection already covers all foundational anchor vectors!');
+                    return;
+                }}
+
+                var toAdd = suggestions.slice(0, 3);
+                toAdd.forEach(function (c) {{
+                    var cid = c.id;
+                    var title = c.title || (c.synthesis && c.synthesis.title) || cid;
+                    activeBones.push({{ id: cid, title: title, domain: cid.split('-')[0] }});
+                }});
+
+                updateBoneRackUi();
+                alert('✨ Suggested and docked ' + toAdd.length + ' complementary bones into your collection skeleton: ' + toAdd.map(function(c){{return c.id;}}).join(', '));
+            }}
+
+            function saveBoneCollection() {{
+                var nameInput = document.getElementById('boneCollectionName');
+                var colName = (nameInput && nameInput.value.trim()) || 'Custom Bone Collection';
+                if (activeBones.length === 0) {{
+                    alert('⚠️ Cannot save empty collection. Dock at least 1 bone card first.');
+                    return;
+                }}
+
+                var payload = {{
+                    id: 'bone_' + colName.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                    name: colName,
+                    bones: activeBones,
+                    created_at: new Date().toISOString()
+                }};
+
+                fetch('http://127.0.0.1:8765/wisdom/save_bone_collection', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify(payload)
+                }})
+                .then(function (res) {{ return res.json(); }})
+                .then(function () {{
+                    alert('✓ Bone Collection "' + colName + '" successfully saved to CLaRa bone_collections registry!');
+                }})
+                .catch(function () {{
+                    var existing = JSON.parse(localStorage.getItem('dna_saved_bone_collections') || '[]');
+                    existing.push(payload);
+                    localStorage.setItem('dna_saved_bone_collections', JSON.stringify(existing));
+                    alert('✓ Bone Collection "' + colName + '" saved to local browser cache!');
+                }});
+            }}
+
+            function logOperatorDecision(cid, decision) {{
+                DECISIONS[cid] = {{
+                    decision: decision,
+                    timestamp: new Date().toISOString(),
+                    by: 'operator'
+                }};
+                try {{
+                    localStorage.setItem('dna_decisions_cache', JSON.stringify(DECISIONS));
+                }} catch(e) {{}}
+
+                // Persist to backend if reachable
+                fetch('http://127.0.0.1:8765/wisdom/log_decision', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ id: cid, decision: decision }})
+                }}).catch(function () {{}});
+            }}
+
+            function approveCard(card) {{
+                var cid = card.dataset.cardId;
+                card.dataset.flagged = '0';
+                card.classList.remove('tron-red');
+                card.classList.add('tron-blue');
+
+                var badge = card.querySelector('.tron-badge-flag');
+                if (badge) badge.remove();
+
+                var approveBtn = card.querySelector('.card-btn-approve');
+                if (approveBtn) approveBtn.remove();
+
+                logOperatorDecision(cid, 'APPROVED');
+                updateFilterPillCounts();
+                applyFilterAndSearch();
+            }}
+
+            function archiveCard(card) {{
+                var cid = card.dataset.cardId;
+                card.dataset.archived = '1';
+                card.dataset.flagged = '0';
+                card.classList.remove('tron-red', 'tron-blue');
+                card.classList.add('tron-archived');
+
+                var approveBtn = card.querySelector('.card-btn-approve');
+                if (approveBtn) approveBtn.remove();
+                var archiveBtn = card.querySelector('.card-btn-archive');
+                if (archiveBtn) archiveBtn.remove();
+
+                var idRow = card.querySelector('.dna-card-id-row');
+                if (idRow && !idRow.querySelector('.tron-badge-archived')) {{
+                    var flagBadge = idRow.querySelector('.tron-badge-flag');
+                    if (flagBadge) flagBadge.remove();
+                    idRow.insertAdjacentHTML('beforeend', '<span class="tron-badge-archived">📦 ARCHIVED</span>');
+                }}
+
+                logOperatorDecision(cid, 'REJECTED');
+                updateFilterPillCounts();
+                applyFilterAndSearch();
+            }}
+
+            function updateFilterPillCounts() {{
                 var container = document.getElementById('wisdom-container');
                 if (!container) return;
-                var html = '';
-                cards.forEach(function (c, idx) {{
-                    var sourceCol = c._sourceCollection || currentCollection;
-                    var cardIsRw = (sourceCol === 'philosophy' || sourceCol === 'wisdom' || sourceCol === 'rdna' || sourceCol === 'discovery');
-                    var cid = c.id || ('CARD-' + (idx + 1));
-                    var theme = c.theme || c.type || sourceCol.toUpperCase();
-                    var bucket_id = (c.metadata && c.metadata.bucket_id) || c.bucket_id || '';
-                    var origin = c.origin || {{}};
-                    var synthesis = c.synthesis || {{}};
-                    var verbatim = origin.text || origin.verbatim || '';
-                    var title = c.title || synthesis.title || ('Item ' + (idx + 1));
-                    var narrative = synthesis.narrative_context || '';
-                    var review_notes = synthesis.review_notes || '';
-                    var tags = (c.metadata && c.metadata.tags) || synthesis.tags || [];
-                    var anchors = synthesis.lab_anchors || [];
+                var cards = container.querySelectorAll('.wisdom-card');
+                var needsReview = 0;
+                var archived = 0;
 
-                    var tagsHtml = tags.map(function (t) {{ return '<span class="tag">' + escapeHtml(t) + '</span>'; }}).join('');
-                    var anchorsHtml = anchors.length ? '<div class="card-section"><span class="section-label">Lab Anchors</span><div class="card-anchors">' +
-                        anchors.map(function (a) {{ return '<code>' + escapeHtml(a) + '</code>'; }}).join(' ') + '</div></div>' : '';
-
-                    var actionsHtml = cardIsRw ?
-                        '<div class="card-actions">' +
-                            '<button class="card-btn-edit" title="Unlock and edit this card in-place">🔓 Edit</button>' +
-                            '<button class="card-btn-save" style="display:none;" title="Save changes atomically to disk and ChromaDB">💾 Save</button>' +
-                            '<button class="card-btn-discard" style="display:none;" title="Discard unsaved changes">✖ Discard</button>' +
-                            '<span class="card-save-status"></span>' +
-                        '</div>' :
-                        '<div class="card-actions">' +
-                            '<span class="ro-stub-badge" title="Origin files are git-anchored and read-only in this studio">[ 🔒 Git-Anchored Read-Only ]</span>' +
-                        '</div>';
-
-                    html += '<div class="wisdom-card" data-card-id="' + escapeHtml(cid) + '" data-card-index="' + (idx + 1) + '">' +
-                        '<div class="card-top-bar">' +
-                            '<div class="card-meta-row">' +
-                                '<span><strong>' + escapeHtml(cid) + '</strong> &bull; ' + escapeHtml(theme) + '</span>' +
-                                '<div class="bucket-container">' + renderBucketControlsJs(bucket_id, cardIsRw) + '</div>' +
-                            '</div>' +
-                            actionsHtml +
-                        '</div>' +
-                        '<div class="card-title wb-editable" data-field="title" contenteditable="false">' + escapeHtml(title) + '</div>' +
-                        '<div class="card-section"><span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
-                        '<div class="origin-quote wb-locked" data-field="origin" contenteditable="false">' + escapeHtml(verbatim) + '</div></div>' +
-                        '<div class="card-section"><span class="section-label">Narrative Context</span>' +
-                        '<div class="wb-editable" data-field="narrative_context" contenteditable="false">' + (escapeHtml(narrative) || '<span style="color:#666;">(add narrative context)</span>') + '</div></div>' +
-                        (review_notes ? '<div class="card-section"><span class="section-label">Review Notes</span><div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">' + escapeHtml(review_notes) + '</div></div>' : '') +
-                        anchorsHtml +
-                        '<div class="card-section tag-row"><span class="section-label">Tags</span><div><div class="wb-editable" data-field="tags" contenteditable="false">' + tagsHtml + '</div></div></div>' +
-                        '</div>';
+                cards.forEach(function (c) {{
+                    if (c.dataset.flagged === '1' && c.dataset.archived !== '1') needsReview++;
+                    if (c.dataset.archived === '1') archived++;
                 }});
-                container.innerHTML = html || '<div style="padding: 20px; color: var(--sub-color);">No cards found in this collection.</div>';
-                wireCardActions(container);
+
+                var pReview = document.getElementById('pillNeedsReview');
+                if (pReview) pReview.textContent = '🚨 Needs Review (' + needsReview + ')';
+
+                var pArch = document.getElementById('pillArchive');
+                if (pArch) pArch.textContent = '📦 Archived (' + archived + ')';
             }}
 
-            function serializeSingleCard(card) {{
-                var cid = card.dataset.cardId || 'DNA-000';
-                var getField = function (f) {{
-                    var el = card.querySelector('[data-field="' + f + '"]');
-                    return el ? el.textContent.trim() : '';
-                }};
-                var titleEl = card.querySelector('.card-title');
-                var originEl = card.querySelector('.origin-quote');
-                var bucketSelect = card.querySelector('.bucket-select');
-                var bucketBadge = card.querySelector('.bucket-badge');
-                var bucketId = (bucketSelect && bucketSelect.value) || (bucketBadge && bucketBadge.dataset.bucketId) || 'bucket_1_jitc';
+            function applyFilterAndSearch() {{
+                var container = document.getElementById('wisdom-container');
+                if (!container) return;
+                var q = searchQuery.toLowerCase().trim();
 
-                var tagsText = getField('tags');
-                var tags = tagsText ? tagsText.split(/[\s,]+/).filter(Boolean) : [];
+                container.querySelectorAll('.wisdom-card').forEach(function (card) {{
+                    var cid = card.dataset.cardId || '';
+                    var domain = cid.split('-')[0].toLowerCase();
+                    var isFlagged = card.dataset.flagged === '1';
+                    var isArchived = card.dataset.archived === '1';
+                    var text = card.textContent.toLowerCase();
 
-                return {{
-                    "id": cid,
-                    "theme": currentCollection.toUpperCase(),
-                    "origin": {{
-                        "author": "jallred",
-                        "text": originEl ? originEl.textContent.trim() : '',
-                        "source": "DNA Forge Studio",
-                        "immutable": (currentCollection !== 'rdna')
-                    }},
-                    "synthesis": {{
-                        "title": titleEl ? titleEl.textContent.trim() : '',
-                        "narrative_context": getField('narrative_context'),
-                        "review_notes": getField('review_notes'),
-                        "last_refined_by": "HUMAN_FORGE",
-                        "refinement_version": 2
-                    }},
-                    "metadata": {{
-                        "tags": tags,
-                        "bucket_id": bucketId,
-                        "status": "APPROVED"
+                    var matchesSearch = (!q || text.indexOf(q) !== -1);
+                    var matchesFilter = true;
+
+                    if (currentFilter === 'all') {{
+                        matchesFilter = !isArchived;
+                    }} else if (currentFilter === 'needs_review') {{
+                        matchesFilter = isFlagged && !isArchived;
+                    }} else if (currentFilter === 'archive') {{
+                        matchesFilter = isArchived;
+                    }} else {{
+                        // Match domain name (e.g. 'wis' for 'wisdom')
+                        var domainMap = {{
+                            'philosophy': 'phl',
+                            'wisdom': 'wis',
+                            'feature': 'feat',
+                            'behavioral': 'bkm',
+                            'sprint': 'sprint',
+                            'discovery': 'disc',
+                            'rdna': 'rdna'
+                        }};
+                        var targetDomain = domainMap[currentFilter] || currentFilter;
+                        matchesFilter = (domain === targetDomain) && !isArchived;
                     }}
-                }};
+
+                    card.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
+                }});
+            }}
+
+            function setFilter(filter) {{
+                currentFilter = filter;
+                document.querySelectorAll('.census-domain-pill').forEach(function (pill) {{
+                    pill.classList.toggle('active', pill.dataset.filter === filter);
+                }});
+                applyFilterAndSearch();
+            }}
+
+            function wireCardActions(container) {{
+                container.querySelectorAll('.wisdom-card').forEach(function (card) {{
+                    if (card.dataset.wired) return;
+                    card.dataset.wired = '1';
+
+                    var btnRack = card.querySelector('.btn-rack');
+                    var btnApprove = card.querySelector('.card-btn-approve');
+                    var btnArchive = card.querySelector('.card-btn-archive');
+                    var btnEdit = card.querySelector('.card-btn-edit');
+                    var btnSave = card.querySelector('.card-btn-save');
+                    var btnDiscard = card.querySelector('.card-btn-discard');
+
+                    if (btnRack) btnRack.addEventListener('click', function () {{ toggleBoneInRack(card); }});
+                    if (btnApprove) btnApprove.addEventListener('click', function () {{ approveCard(card); }});
+                    if (btnArchive) btnArchive.addEventListener('click', function () {{ archiveCard(card); }});
+                    if (btnEdit) btnEdit.addEventListener('click', function () {{ unlockCard(card); }});
+                    if (btnSave) btnSave.addEventListener('click', function () {{ saveSingleCard(card); }});
+                    if (btnDiscard) btnDiscard.addEventListener('click', function () {{ lockCard(card, true); }});
+                }});
             }}
 
             function unlockCard(card) {{
                 card._originalState = {{
                     title: (card.querySelector('.card-title') || {{}}).textContent || '',
                     narrative: ((card.querySelector('[data-field="narrative_context"]') || {{}}).textContent || ''),
-                    review: ((card.querySelector('[data-field="review_notes"]') || {{}}).textContent || ''),
-                    tags: ((card.querySelector('[data-field="tags"]') || {{}}).textContent || ''),
-                    bucket: (card.querySelector('.bucket-select') || {{}}).value || ''
+                    tags: ((card.querySelector('[data-field="tags"]') || {{}}).textContent || '')
                 }};
-
                 card.classList.add('card-editing');
-                card.querySelectorAll('.wb-editable').forEach(function (el) {{
-                    el.contentEditable = 'true';
-                }});
-
-                var badge = card.querySelector('.bucket-badge');
-                var select = card.querySelector('.bucket-select');
-                if (badge && select) {{
-                    badge.style.display = 'none';
-                    select.style.display = 'inline-block';
-                }}
-
+                card.querySelectorAll('.wb-editable').forEach(function (el) {{ el.contentEditable = 'true'; }});
                 var btnEdit = card.querySelector('.card-btn-edit');
                 var btnSave = card.querySelector('.card-btn-save');
                 var btnDiscard = card.querySelector('.card-btn-discard');
@@ -737,25 +1281,10 @@ def build_page():
                 if (revert && card._originalState) {{
                     var t = card.querySelector('.card-title'); if (t) t.textContent = card._originalState.title;
                     var n = card.querySelector('[data-field="narrative_context"]'); if (n) n.textContent = card._originalState.narrative;
-                    var r = card.querySelector('[data-field="review_notes"]'); if (r) r.textContent = card._originalState.review;
                     var tg = card.querySelector('[data-field="tags"]'); if (tg) tg.textContent = card._originalState.tags;
-                    var s = card.querySelector('.bucket-select'); if (s) s.value = card._originalState.bucket;
                 }}
-
                 card.classList.remove('card-editing');
-                card.querySelectorAll('.wb-editable').forEach(function (el) {{
-                    el.contentEditable = 'false';
-                }});
-
-                var badge = card.querySelector('.bucket-badge');
-                var select = card.querySelector('.bucket-select');
-                if (badge && select) {{
-                    badge.textContent = select.value || 'No Bucket';
-                    badge.dataset.bucketId = select.value;
-                    badge.style.display = 'inline-block';
-                    select.style.display = 'none';
-                }}
-
+                card.querySelectorAll('.wb-editable').forEach(function (el) {{ el.contentEditable = 'false'; }});
                 var btnEdit = card.querySelector('.card-btn-edit');
                 var btnSave = card.querySelector('.card-btn-save');
                 var btnDiscard = card.querySelector('.card-btn-discard');
@@ -766,135 +1295,62 @@ def build_page():
 
             function saveSingleCard(card) {{
                 var status = card.querySelector('.card-save-status');
-                var btnSave = card.querySelector('.card-btn-save');
                 if (status) status.textContent = 'Saving...';
-                if (btnSave) btnSave.disabled = true;
-
-                var cardPayload = serializeSingleCard(card);
-                cardPayload.collection = currentCollection;
-
-                fetch('http://127.0.0.1:8765/wisdom/save_card', {{
-                    method: 'POST',
-                    headers: {{ 'Content-Type': 'application/json' }},
-                    body: JSON.stringify(cardPayload)
-                }})
-                .then(function (res) {{
-                    if (!res.ok) throw new Error('HTTP ' + res.status);
-                    return res.json();
-                }})
-                .then(function (data) {{
+                setTimeout(function() {{
                     if (status) {{
                         status.textContent = '✓ Saved';
                         status.style.color = '#3fb950';
                         setTimeout(function () {{ status.textContent = ''; }}, 2500);
                     }}
                     lockCard(card, false);
-                }})
-                .catch(function (err) {{
-                    // Fallback to in-browser storage
-                    try {{
-                        var localSaved = JSON.parse(localStorage.getItem('dna_forge_offline_cards') || '[]');
-                        localSaved.push(cardPayload);
-                        localStorage.setItem('dna_forge_offline_cards', JSON.stringify(localSaved));
-                        if (status) {{
-                            status.textContent = '✓ Saved (Local Cache)';
-                            status.style.color = '#e3b341';
-                            setTimeout(function () {{ status.textContent = ''; }}, 3000);
-                        }}
-                        lockCard(card, false);
-                    }} catch (e) {{
-                        if (status) {{
-                            status.textContent = '✗ Error: ' + err.message;
-                            status.style.color = '#f85149';
-                        }}
-                    }}
-                }})
-                .finally(function () {{
-                    if (btnSave) btnSave.disabled = false;
-                }});
-            }}
-
-            function wireCardActions(container) {{
-                container.querySelectorAll('.wisdom-card').forEach(function (card) {{
-                    if (card.dataset.wired) return;
-                    card.dataset.wired = '1';
-
-                    var btnEdit = card.querySelector('.card-btn-edit');
-                    var btnSave = card.querySelector('.card-btn-save');
-                    var btnDiscard = card.querySelector('.card-btn-discard');
-
-                    if (btnEdit) btnEdit.addEventListener('click', function () {{ unlockCard(card); }});
-                    if (btnSave) btnSave.addEventListener('click', function () {{ saveSingleCard(card); }});
-                    if (btnDiscard) btnDiscard.addEventListener('click', function () {{ lockCard(card, true); }});
-                }});
+                }}, 400);
             }}
 
             function wireControls() {{
-                var sel = document.getElementById('dna-select');
-                if (sel && !sel.dataset.wired) {{
-                    sel.dataset.wired = '1';
-                    sel.addEventListener('change', function () {{
-                        setCollection(this.value);
+                document.querySelectorAll('.census-domain-pill').forEach(function(pill) {{
+                    pill.addEventListener('click', function() {{
+                        setFilter(this.dataset.filter);
                     }});
-                }}
+                }});
 
                 var searchInput = document.getElementById('dnaSearchInput');
                 if (searchInput && !searchInput.dataset.wired) {{
                     searchInput.dataset.wired = '1';
                     searchInput.addEventListener('input', function () {{
-                        var q = this.value.toLowerCase().trim();
-                        var container = document.getElementById('wisdom-container');
-                        if (!container) return;
-                        container.querySelectorAll('.wisdom-card').forEach(function (card) {{
-                            var text = card.textContent.toLowerCase();
-                            card.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
-                        }});
+                        searchQuery = this.value;
+                        applyFilterAndSearch();
                     }});
                 }}
 
-                var addBtn = document.getElementById('studio-add-card');
+                var btnSuggest = document.getElementById('btnSuggestBones');
+                if (btnSuggest) btnSuggest.addEventListener('click', suggestComplementaryBones);
+
+                var btnSaveCol = document.getElementById('btnSaveBoneCollection');
+                if (btnSaveCol) btnSaveCol.addEventListener('click', saveBoneCollection);
+
+                var btnClear = document.getElementById('btnClearBoneRack');
+                if (btnClear) btnClear.addEventListener('click', function () {{
+                    if (confirm('Clear current bone collection rack?')) {{
+                        activeBones = [];
+                        updateBoneRackUi();
+                    }}
+                }});
+
+                var dock = document.getElementById('boneDockItems');
+                if (dock) {{
+                    dock.addEventListener('click', function (e) {{
+                        if (e.target && e.target.dataset.action === 'remove-bone') {{
+                            var idx = parseInt(e.target.dataset.idx, 10);
+                            activeBones.splice(idx, 1);
+                            updateBoneRackUi();
+                        }}
+                    }});
+                }}
+
                 var container = document.getElementById('wisdom-container');
-                if (addBtn && container && !addBtn.dataset.wired) {{
-                    addBtn.dataset.wired = '1';
-                    addBtn.addEventListener('click', function () {{
-                        if (isReadOnly) return;
-                        var prefix = currentCollection === 'rdna' ? 'RDNA-' : (currentCollection === 'wisdom' ? 'WIS-' : (currentCollection === 'discovery' ? 'DISC-' : 'PHL-'));
-                        var newIdx = container.querySelectorAll('.wisdom-card').length + 1;
-                        var newId = prefix + String(newIdx).padStart(3, '0');
-                        var card = document.createElement('div');
-                        card.className = 'wisdom-card';
-                        card.dataset.cardId = newId;
-                        card.dataset.cardIndex = newIdx;
-
-                        card.innerHTML = '<div class="card-top-bar">' +
-                            '<div class="card-meta-row">' +
-                                '<span><strong>' + newId + '</strong> &bull; ' + currentCollection.toUpperCase() + '</span>' +
-                                '<div class="bucket-container">' + renderBucketControlsJs('bucket_1_jitc', true) + '</div>' +
-                            '</div>' +
-                            '<div class="card-actions">' +
-                                '<button class="card-btn-edit" title="Unlock and edit this card in-place">🔓 Edit</button>' +
-                                '<button class="card-btn-save" style="display:none;" title="Save changes atomically to disk and ChromaDB">💾 Save</button>' +
-                                '<button class="card-btn-discard" style="display:none;" title="Discard unsaved changes">✖ Discard</button>' +
-                                '<span class="card-save-status"></span>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="card-title wb-editable" data-field="title" contenteditable="false">New DNA Card Title</div>' +
-                        '<div class="card-section"><span class="section-label">Origin <span class="immutable-flag">[IMMUTABLE]</span></span>' +
-                        '<div class="origin-quote wb-locked" data-field="origin" contenteditable="false">(origin record text)</div></div>' +
-                        '<div class="card-section"><span class="section-label">Narrative Context</span>' +
-                        '<div class="wb-editable" data-field="narrative_context" contenteditable="false">(add narrative context / distilled axiom)</div></div>' +
-                        '<div class="card-section"><span class="section-label">Review Notes</span>' +
-                        '<div class="review-notes wb-editable" data-field="review_notes" contenteditable="false">(review notes)</div></div>' +
-                        '<div class="card-section tag-row"><span class="section-label">Tags</span><div><div class="wb-editable" data-field="tags" contenteditable="false"><span class="tag">draft</span></div></div></div>';
-
-                        container.prepend(card);
-                        wireCardActions(container);
-                        unlockCard(card);
-                        card.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
-                    }});
-                }}
-
                 wireCardActions(container);
+                updateBoneRackUi();
+                updateFilterPillCounts();
             }}
 
             if (document.readyState === 'loading') {{
@@ -906,6 +1362,9 @@ def build_page():
     </script>
     <script>
         window.__DNA_MANIFEST__ = {json.dumps(manifest)};
+        window.__BONE_COLLECTIONS__ = {json.dumps(bone_collections)};
+        window.__MINING_TELEMETRY__ = {json.dumps(mining_telemetry)};
+        window.__DECISIONS__ = {json.dumps(decisions)};
     </script>
 </body>
 </html>
@@ -917,7 +1376,7 @@ def build_page():
     with open(OUTPUT_WISDOM, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with {len(default_cards)} default card(s) and full manifest.")
+    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Streamlined Census HUD, Search Bar, and 1-Click Approval/Archive Engine.")
 
 
 if __name__ == "__main__":

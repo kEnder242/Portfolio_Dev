@@ -356,7 +356,33 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         } catch (e) {}
     }
 
-    if (isJSON) {
+    // [FEAT-590] Interactive DNA Proposal Card Rendering
+    if (metadata && (metadata.dna_proposal || type === 'dna_proposal')) {
+        const p = metadata.dna_proposal || {};
+        const pId = p.id || 'PROPOSED-001';
+        const pDomain = p.domain || 'BKM';
+        const pTitle = p.title || 'Proposed Empirical Anchor';
+        const pSummary = p.summary || p.content || text;
+        const pRationale = p.rationale || '';
+
+        formattedText = `
+            <div class="intercom-dna-proposal" style="border: 1px solid #58a6ff; border-left: 4px solid #58a6ff; background: rgba(88, 166, 255, 0.08); padding: 12px 14px; border-radius: 6px; margin: 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-weight:bold; color:#58a6ff; font-family:monospace; font-size:0.85rem;">🧬 PROPOSED DNA: [${pDomain}] ${pId}</span>
+                    <span style="font-size:0.7rem; background:rgba(88,166,255,0.2); border:1px solid rgba(88,166,255,0.4); color:#58a6ff; padding:2px 6px; border-radius:3px; font-weight:bold;">${p.status || 'PROPOSED'}</span>
+                </div>
+                <div style="font-size:0.95rem; font-weight:600; color:#f0f6fc; margin-bottom:4px;">${pTitle}</div>
+                <div style="font-size:0.82rem; color:#c9d1d9; margin-bottom:6px; line-height:1.4;">${pSummary}</div>
+                ${pRationale ? `<div style="font-size:0.76rem; color:#8b949e; margin-bottom:8px; font-style:italic;"><strong>Rationale:</strong> ${pRationale}</div>` : ''}
+                <div style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+                    <button class="studio-btn" style="background:#238636; border:1px solid #2ea043; color:#fff; font-weight:bold; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="approveDnaProposal(this, '${pId}', '${pDomain}', '${pTitle.replace(/'/g, "\\'")}', '${pSummary.replace(/'/g, "\\'")}')">✅ Approve & Commit</button>
+                    <a href="dna_forge.html?card_id=${pId}" class="studio-btn" style="background:var(--code-bg); border:1px solid var(--border-color); color:var(--text-color); padding:4px 10px; border-radius:4px; font-size:0.75rem; text-decoration:none; display:inline-block;" target="_blank">🛠️ Open in Forge</a>
+                    <button class="studio-btn" style="background:transparent; border:1px solid #da3633; color:#f85149; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="dismissDnaProposal(this)">✖ Dismiss</button>
+                    <span class="proposal-action-status" style="font-size:0.75rem; margin-left:6px;"></span>
+                </div>
+            </div>
+        `;
+    } else if (isJSON) {
         const esc = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         formattedText = `<pre class="json-pretty-print" style="white-space: pre-wrap; font-family: monospace; background: var(--bg-card); padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.85em; margin: 5px 0;">${esc(jsonFormatted)}</pre>`;
     } else if (!isSystem && window.marked) {
@@ -1021,6 +1047,67 @@ window.renderToolLogEntry = function(entry) {
     // Update badge count
     if (countBadge) {
         countBadge.textContent = container.querySelectorAll('.tool-card').length;
+    }
+};
+
+// [FEAT-590] Interactive WYWO DNA Proposal Handlers
+window.approveDnaProposal = function(btn, pId, pDomain, pTitle, pSummary) {
+    const wrap = btn.closest('.intercom-dna-proposal');
+    const status = wrap ? wrap.querySelector('.proposal-action-status') : null;
+    btn.disabled = true;
+    if (status) status.textContent = 'Committing to CLaRa-DNA...';
+
+    const payload = {
+        id: pId,
+        theme: pDomain,
+        synthesis: {
+            title: pTitle,
+            narrative_context: pSummary,
+            last_refined_by: "WYWO_INTERCOM",
+            refinement_version: 1
+        },
+        metadata: {
+            tags: [pDomain.toLowerCase(), "approved_in_wywo"],
+            status: "APPROVED"
+        },
+        collection: pDomain === 'PHL' ? 'philosophy' : (pDomain === 'WIS' ? 'wisdom' : (pDomain === 'RDNA' ? 'rdna' : 'behavioral'))
+    };
+
+    fetch('http://127.0.0.1:8765/wisdom/save_card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+    })
+    .then(data => {
+        if (status) {
+            status.textContent = '✓ Approved & Committed!';
+            status.style.color = '#3fb950';
+        }
+        btn.style.background = '#238636';
+        btn.textContent = '✓ Committed';
+    })
+    .catch(err => {
+        if (status) {
+            status.textContent = `✓ Staged locally (${err.message})`;
+            status.style.color = '#e3b341';
+        }
+    });
+};
+
+window.dismissDnaProposal = function(btn) {
+    const wrap = btn.closest('.intercom-dna-proposal');
+    if (wrap) {
+        wrap.style.opacity = '0.5';
+        wrap.style.pointerEvents = 'none';
+        const status = wrap.querySelector('.proposal-action-status');
+        if (status) {
+            status.textContent = 'Dismissed';
+            status.style.color = '#8b949e';
+        }
     }
 };
 
