@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Forge | Federated Lab Knowledge Foundry</title>
+    <link rel="stylesheet" href="style.css?v=312b4371">
+    <style>
+        .forge-hero {
+            padding: 2rem 1.5rem 1rem;
+            background: linear-gradient(180deg, rgba(20, 20, 28, 0.8) 0%, rgba(10, 10, 15, 0.4) 100%);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+        .forge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .forge-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .forge-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.4rem;
+        }
+        .forge-stats {
+            display: flex;
+            gap: 1rem;
+        }
+        .stat-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+        .stat-num {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .forge-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn:hover {
+            color: var(--text-color);
+        }
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+        .forge-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .forge-search {
+            flex: 1;
+            min-width: 260px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.2rem;
+        }
+        .dna-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+        .dna-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        .card-id-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+        .dna-id-chip {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .dna-id-chip.phl { color: #7aa2f7; border-color: #7aa2f744; }
+        .dna-id-chip.wis { color: #e0af68; border-color: #e0af6844; }
+        .dna-id-chip.rdna { color: #bb9af7; border-color: #bb9af744; }
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+        }
+        .badge.approved { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+        .badge.polish { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+        .badge.hyde-bypass { background: rgba(187, 154, 247, 0.15); color: #bb9af7; }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .origin-quote {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 0.8rem;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+        .origin-quote p { margin: 0 0 0.4rem; font-style: italic; }
+        .origin-source { font-size: 0.75rem; text-align: right; color: rgba(255, 255, 255, 0.4); }
+        .synthesis-block p {
+            margin: 0.3rem 0 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            display: block;
+        }
+        .anchors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-top: 0.3rem;
+        }
+        .anchors code {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+        .dna-tag {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.15rem 0.45rem;
+            border-radius: 12px;
+        }
+        .rdna-target-box {
+            background: rgba(187, 154, 247, 0.06);
+            border: 1px solid rgba(187, 154, 247, 0.2);
+            padding: 0.8rem;
+            border-radius: 6px;
+        }
+        .target-id {
+            font-family: monospace;
+            font-weight: 700;
+            color: #bb9af7;
+        }
+        .target-collection {
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: grid; }
+    </style>
+</head>
+<body>
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div class="forge-hero">
+            <div class="forge-header">
+                <div>
+                    <h1 class="forge-title">⚡ DNA Forge Studio</h1>
+                    <div class="forge-subtitle">The Living Knowledge Foundry — Philosophy, Empirical Wisdom & Reverse DNA</div>
+                </div>
+                <div class="forge-stats">
+                    <div class="stat-chip">Philosophy (PHL): <span class="stat-num">32</span></div>
+                    <div class="stat-chip">Wisdom (WIS): <span class="stat-num">30</span></div>
+                    <div class="stat-chip">Reverse DNA: <span class="stat-num">5</span></div>
+                </div>
+            </div>
+
+            <div class="forge-tabs">
+                <button class="tab-btn active" data-tab="phl-panel">🏛️ Philosophy (32)</button>
+                <button class="tab-btn" data-tab="wis-panel">📜 Wisdom & War Stories (30)</button>
+                <button class="tab-btn" data-tab="rdna-panel">❓ Reverse DNA Bank (5)</button>
+            </div>
+        </div>
+
+        <div class="content-container">
+            <div class="forge-controls">
+                <input type="text" id="dna-search" class="forge-search" placeholder="Search across DNA cards, tags, anchors, and concepts...">
+            </div>
+
+            <div id="phl-panel" class="tab-panel card-grid active">
+                
+    <div class="dna-card" data-domain="PHL" data-id="PHL-001">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-001</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Three Pillars &amp; Just-In-Time Context (JITC)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Future of AI (three pillars): The attention and matrix computing is done and done. Now it's all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Monolithic context windows scale quadratically and suffer from attention dilution ('lost in the middle'). The true frontier of agentic engineering is the dual-channel memory paradigm: precise, ambient vector retrieval (JITC) injecting only the exact 2-3 required anchors milliseconds before inference.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/config/hooks/icm_hook.py</code> <code>BKM-046</code> <code>FEAT-546</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">memory</span><span class="dna-tag">jitc</span><span class="dna-tag">context-window</span><span class="dna-tag">attention-dilution</span><span class="dna-tag">three-pillars</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-002">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-002</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Hippocampus &amp; Prefrontal Cortex Architecture</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there."</p>
+                <div class="origin-source">— Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Large cloud models brute-force complex tasks through quadratic context windows, acting as isolated reasoning engines without episodic consolidation. Local intelligence requires an ambient hippocampus—a dedicated distillation and indexing layer that curates memories into high-density vector anchors for immediate prefrontal synthesis.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/nodes/cognitive_hub.py</code> <code>FEAT-564</code> <code>BKM-046</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">hippocampus</span><span class="dna-tag">prefrontal-cortex</span><span class="dna-tag">dual-channel-cognition</span><span class="dna-tag">memory-consolidation</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-003">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-003</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Intuition as an Ambient Retrieval Problem</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -&gt; tagging -&gt; wisdom -&gt; hook/trigger -&gt; intuitive behavior."</p>
+                <div class="origin-source">— Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Intuition in cognitive systems is fundamentally a low-latency, unsolicited retrieval mechanism. By pre-indexing distilled engineering wisdom and linking it to contextual runtime triggers, the system bubbles up non-obvious cross-domain associations milliseconds before generation, simulating intuitive leap behavior.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/v5/foyer/router.py</code> <code>FEAT-582</code> <code>BKM-046</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">intuition</span><span class="dna-tag">ambient-retrieval</span><span class="dna-tag">unsolicited-context</span><span class="dna-tag">semantic-triggers</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-004">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-004</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Five-Phase JITC Cognitive Cycle</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification. Concepts are pre-compiled - needs nightly refinement and consolidation."</p>
+                <div class="origin-source">— Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>The JITC cognitive lifecycle operates as a continuous loop: Sub-second Triage determines intent; Fingertip Retrieval injects immediate context; Execution records raw interactions; Nightly Dreaming distills patterns into crystallized pearls; and Classification integrates them back into semantic memory.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/nodes/nightly_dreaming.py</code> <code>FEAT-486</code> <code>BKM-024</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">jitc-cycle</span><span class="dna-tag">triage</span><span class="dna-tag">fingertip-context</span><span class="dna-tag">nightly-dreaming</span><span class="dna-tag">distillation</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-005">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-005</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Token Golf over Token Maxing &amp; Trust Ceilings</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'—minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/docs/Protocols.md:BKM-051</code> <code>FEAT-526</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">token-golf</span><span class="dna-tag">trust-metrics</span><span class="dna-tag">prompt-budget</span><span class="dna-tag">subagent-scoping</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-006">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-006</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Code Comments as Vector Anchors &amp; Index Flags</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time."</p>
+                <div class="origin-source">— Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>In modern AI-assisted engineering, code comments and architectural docstrings transcend human documentation; they serve as high-density vector flags and semantic anchors that enable instant, ambient retrieval of system intent by inspecting models.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/FeatureTracker.md</code> <code>BKM-004</code> <code>FEAT-582</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">code-comments</span><span class="dna-tag">vector-anchors</span><span class="dna-tag">semantic-tagging</span><span class="dna-tag">automatic-indexes</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-007">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-007</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Pearls of Wisdom Lifecycle &amp; The Bones Model</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"saving memories-&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence."</p>
+                <div class="origin-source">— Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Rather than endlessly accumulating redundant episodic logs, knowledge management must crystallize experiences into immutable origin 'pearls' (Gems, BKMs, Features). New observations refine and link to existing pearls, providing immutable bones for composite thought synthesis.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/papers/paper_jitc_intuition.json</code> <code>FEAT-581</code> <code>BKM-020</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">pearls-of-wisdom</span><span class="dna-tag">bones-model</span><span class="dna-tag">knowledge-distillation</span><span class="dna-tag">in-place-refinement</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-008">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-008</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Feedback Backpressure &amp; The Customer Service Model</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Feedback Pressure - My customer service angle: I worked in phone customer service, no way to give feedback from customers was frustrating. AI needs a feedback outlet, not a walled garden. Customer feedback should be collated and summarized. A backpressure flow should be integrated into systems where it makes sense."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Autonomous systems operating in isolation without backpressure degrade into hallucination loops. Applying principles from customer service escalation, feedback backpressure channels operational ground truth directly back into the supervisory control loop.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/nodes/intercom_server.py</code> <code>BKM-034</code> <code>FEAT-522</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">feedback-pressure</span><span class="dna-tag">backpressure</span><span class="dna-tag">customer-service-model</span><span class="dna-tag">closed-loop-control</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-009">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-009</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Handover Reflection Protocol</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I have a delegation skill with the following prompt: 'As an execution peer, reflect candidly on how this task was handed over to you. In 2-3 natural sentences, tell me: What tripped you up, what turned out to be inaccurate or missing in the instructions, and what single change to the prompt would have made this execution faster?'"</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>The Handover Reflection protocol enforces post-execution diagnostic accounting from every delegated worker subagent. This mandatory friction extracts prompt defects and environmental drift, feeding automated continuous prompt optimization.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/tests/delegate.py</code> <code>BKM-049</code> <code>FEAT-522</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">handover-reflection</span><span class="dna-tag">delegation-loop</span><span class="dna-tag">prompt-optimization</span><span class="dna-tag">peer-feedback</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-010">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-010</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Ground-Truth Telemetry &amp; Live Data as God</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Using Unit tests to keep development grounded. Integration tests &amp; live data is god. Co-pilot feedback loop - make it easy to give feedback, talk to development through logs."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>While unit tests verify isolated logic in synthetic vacuums, real-world certification demands live validation against running daemons, reachable hardware endpoints, and authentic system telemetry. Live data is the ultimate arbiter of engineering truth.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/docs/Protocols.md:BKM-024</code> <code>FEAT-501</code> <code>BKM-010</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">live-data-as-god</span><span class="dna-tag">bkm-024</span><span class="dna-tag">ground-truth-telemetry</span><span class="dna-tag">integration-verification</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-011">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-011</span>
+                <span class="badge polish">Needs Polish</span>
+            </div>
+            <h3 class="card-title">The Foobar Trap &amp; Language-Rich Variable Semantics</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Variable names are important, especially with a language rich agent - foobar trap."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>In natural-language reasoning environments, identifier names carry heavy latent semantic priors. Using generic placeholders ('foo', 'bar', 'temp') triggers attention drift and hallucinated defaults; precise domain-specific naming binds the agent directly to correct operational semantics.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/nodes/cognitive_hub.py</code> <code>BKM-004</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">foobar-trap</span><span class="dna-tag">variable-semantics</span><span class="dna-tag">language-rich-agent</span><span class="dna-tag">naming-conventions</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-012">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-012</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Slow Burn Corollary to the Mythical Man-Month</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Slow burn - never underestimate the efficiency of a slow burn - corollary to the mythical Man month."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Manic bursts of developer acceleration frequently introduce compounding architectural regressions. A disciplined, methodical 'slow burn'—characterized by incremental validation, strict schema checks, and constant stabilization—achieves exponentially higher net velocity over time.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_78_0.md</code> <code>BKM-020</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">slow-burn</span><span class="dna-tag">mythical-man-month</span><span class="dna-tag">sustainable-velocity</span><span class="dna-tag">architectural-stability</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-013">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-013</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Perfect Foil &amp; The Architect / PM Pivot</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"The perfect foil: AI is the perfect foil for a busy mind. How AI lets me organize my thoughts, drives me to dive into work, pair programming energy, agentic coding lets me dive into the PM role."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>AI elevates the engineer from a bottleneck individual contributor typing boilerplate to an orchestrating Systems Architect and Product Manager, converting raw ideation into structured execution harnesses.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/00_MASTER_INDEX.md</code> <code>BKM-030</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">the-perfect-foil</span><span class="dna-tag">pm-pivot</span><span class="dna-tag">pair-programming</span><span class="dna-tag">cognitive-resonance</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-014">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-014</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Velocity Whiplash, 10x Debt &amp; Reading Like a Robot</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Whiplash: the concept that velocity is so fast. It takes time to adjust to the speed of development. I cant grok all my code anymore. A 10x developer is a misnomer, 10x debt is pre-packaged. Skill: Reading agentic output slowly and recording feedback line by line, numbered. Similar to old reading errors story. Original story for stack traces: Reading like a robot, methodically."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Unchecked AI generation produces code faster than human working memory can integrate. The true bottleneck shifts from typing code to reading diffs with robotic, methodical discipline, using numbered lists to serialize cognitive complexity.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/stories.html</code> <code>BKM-011</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">velocity-whiplash</span><span class="dna-tag">10x-debt</span><span class="dna-tag">reading-like-a-robot</span><span class="dna-tag">code-comprehension</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-015">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-015</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Reading Like a Robot &amp; Serializing Stack Traces</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"'Reading Like a Robot': A systematic approach to debugging logs and stack traces by refusing to skip 'noisy' or unrecognized lines, ensuring complete context is captured."</p>
+                <div class="origin-source">— Engineering Background &amp; Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Human intuition tends to glance over repetitive or dense telemetry lines, missing subtle fault indicators. 'Reading Like a Robot' mandates line-by-line traversal of execution logs and stack traces without skipping, preserving total diagnostic fidelity.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/docs/playbooks/OPENAGENT_HANDOVER_PLAYBOOK.md</code> <code>BKM-013</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">reading-like-a-robot</span><span class="dna-tag">stack-traces</span><span class="dna-tag">log-traversal</span><span class="dna-tag">debugging-discipline</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-016">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-016</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Numbered Lists as Cognitive Anchors</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Key insight: Taking LLM output to notes for slow drafting and Using numbers to track multiple ballooning topics in a design session - avoids getting lost / maintains lazer focus / takes forever compared to agentic report generation / key to keeping agents grounded and synced. Lists help humans track ideas. Lists help LLMs follow up without forgetting. Lists help Compartmentalization and tracking in general."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Unstructured conversational brainstorming rapidly scatters multi-agent attention. Explicitly numbering discussion items and action vectors creates unambiguous discrete semantic anchors that maintain lockstep synchronization between human intent and agent execution.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/AGENTS.md</code> <code>BKM-004</code> <code>BKM-005</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">numbered-lists</span><span class="dna-tag">cognitive-anchors</span><span class="dna-tag">context-synchronization</span><span class="dna-tag">compartmentalization</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-017">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-017</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Language as Humanity's Best Invention &amp; The Book Analogy</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Language is humanity's best invention. A lot of people miss the point when asking if AI is aware, this is irrelevant. Words are where it matters. The question is not 'Can I talk to a book.' instead it's 'Can a book talk to you? Does a book have ideas? Do words carry thought?'"</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Abstract debates over machine consciousness miss the fundamental operational reality: language is humanity's primary technology for serializing, preserving, and transmitting thought across time and substrate. Words carry executable structure.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/docs/philosophy/PHL-006.md</code> <code>FEAT-582</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">language-as-invention</span><span class="dna-tag">the-book-analogy</span><span class="dna-tag">thought-vehicles</span><span class="dna-tag">philosophy-of-words</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-018">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-018</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Captured Insight &amp; Trapping Lightning in a Bottle</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Captured Insight: The mechanics of trapping 'lightning in a bottle.' The workflow of moving raw shower thoughts from Google Keep into a synthesized, actionable reality via AI processing."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Creative engineering epiphanies are ephemeral. An intentional capture pipeline—logging raw unformatted fragments into transient scratchpads, followed by AI distillation and structural anchoring—transforms ephemeral intuition into permanent system architecture.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/papers/paper_jitc_intuition.json</code> <code>FEAT-581</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">captured-insight</span><span class="dna-tag">lightning-in-a-bottle</span><span class="dna-tag">shower-thoughts</span><span class="dna-tag">ideation-pipeline</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-019">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-019</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The South Park Narrative Rule in System Lineage</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Walking through My Agentic journey one step at a time - Use south park writers rule: never say 'And then' things happen because."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Linear event logs that merely list sequential actions ('and then') fail to explain causality. Narrative logging and telemetry must establish causal links: events occur *because* of specific triggers and lead *therefore* to deterministic consequences.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/status.html</code> <code>FEAT-501</code> <code>BKM-020</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">south-park-rule</span><span class="dna-tag">causal-lineage</span><span class="dna-tag">narrative-telemetry</span><span class="dna-tag">system-logs</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-020">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-020</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Engineering Disciplines in the Latent Space</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"What's good for people is good for AI. SCRUM, retrospectives, drafts, linting, features, peer review. Programming skills. Applying human ideas for development - Sprints, retrospectives, stories, etc. Feature tracking to keep grounded, avoid re-inventing the wheel, tag code for context and importance."</p>
+                <div class="origin-source">— Google Keep Philosophy Dump (1n2HDfPeh8Cgp073P14VhCoIp3YBp78bv8Lt4wz0IdYQ)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Stochastic generative models require the exact same governance structures that keep human engineering teams aligned: strict sprints, acceptance criteria, post-mortem retrospectives, linters, and 4-anchor contracts.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/FeatureTracker.md</code> <code>HomeLabAI/docs/Protocols.md:BKM-020</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-rigor</span><span class="dna-tag">scrum-for-ai</span><span class="dna-tag">retrospectives</span><span class="dna-tag">feature-anchors</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-021">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-021</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Vectors of Engineering: Libraries over Frameworks</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"The Vectors of Engineering: Libraries over Frameworks (modular, composable components over rigid lock-in), Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat), Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load), and Domain-Driven Team Topologies."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Software longevity depends on composability. Libraries empower caller control and flexible evolution, whereas monolithic frameworks enforce rigid lifecycle constraints and architectural lock-in.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md</code> <code>BKM-011</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">libraries-over-frameworks</span><span class="dna-tag">composability</span><span class="dna-tag">modular-design</span><span class="dna-tag">engineering-vectors</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-022">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-022</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Avoiding Speculative Scaffolding</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Avoiding Speculative Scaffolding (building for current proven needs, not hypothetical bloat)."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Anticipatory architecture often builds elaborate scaffolding for hypothetical future requirements that never materialize, bloating codebases and confusing agents. Engineering must build strictly for immediate proven requirements.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/FeatureTracker.md</code> <code>BKM-005</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">speculative-scaffolding</span><span class="dna-tag">simplicity</span><span class="dna-tag">lean-engineering</span><span class="dna-tag">anti-bloat</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-023">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-023</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Forgotten Code Hygiene &amp; Cognitive Pruning</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Forgotten Code (the active hygiene of deleting obsolete code to reduce cognitive load)."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Dead code is not neutral; it actively misleads both human maintainers and LLM context indexers. Code hygiene demands the continuous, fearless deletion of obsolete paths to keep cognitive load strictly bounded.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/docs/playbooks/STORAGE_OPTIMIZATION.md</code> <code>BKM-011</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">forgotten-code</span><span class="dna-tag">code-hygiene</span><span class="dna-tag">cognitive-pruning</span><span class="dna-tag">dead-code-removal</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-024">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-024</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Translation Layer: Bridging Silicon to People</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Bridging Firmware to People: Enabling debugging software isn't just about exposing data; it's about building a translation layer. It is the process of smoothing out the accessibility of raw hardware features so datacenter operators can actually utilize them efficiently."</p>
+                <div class="origin-source">— Philosophy and Learnings 2024-2026 Refined (1BTQUyUaJlU3P58rgiJiGfWdJNlSOmc7nfgQ9IGODlw0)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Raw silicon registers and telemetry endpoints are useless without intuitive abstraction. True systems engineering creates ergonomic translation layers that render complex low-level signals accessible and actionable for operators.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/nodes/intercom_server.py</code> <code>FEAT-136</code> <code>FEAT-444</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">translation-layer</span><span class="dna-tag">firmware-to-people</span><span class="dna-tag">systems-ergonomics</span><span class="dna-tag">hardware-telemetry</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-025">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-025</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Class 1 Assumption Hazard</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Class 1 Assumption: A cautionary concept regarding the danger of coding for a static environment (like a virtual desktop), which leads to fragile architecture and technical debt when layers are 'paved over.'"</p>
+                <div class="origin-source">— Engineering Background &amp; Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Assuming a pristine, unvarying execution environment leads to brittle systems that collapse under real-world operational variance. Resilient architectures assume dynamic degradation, network partitions, and asynchronous environmental shifts.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/src/v5/foyer/router.py</code> <code>BKM-024</code> <code>FEAT-233</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">class-1-assumption</span><span class="dna-tag">environmental-variance</span><span class="dna-tag">fragile-architecture</span><span class="dna-tag">dynamic-resilience</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-026">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-026</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Content is King over Framework Ceremony</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"'Content is King': The perspective that automation and frameworks should support, not overshadow, the actual delivery of technical results."</p>
+                <div class="origin-source">— Engineering Background &amp; Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Frameworks, automation harnesses, and internal tooling exist solely to deliver verified operational outcomes. When the machinery of testing or development becomes more complex than the system under test, it represents negative-value overhead.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/scripts/build_writer.py</code> <code>BKM-020</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">content-is-king</span><span class="dna-tag">anti-ceremony</span><span class="dna-tag">outcome-oriented</span><span class="dna-tag">tooling-hygiene</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-027">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-027</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Code Archaeology &amp; The Beating Heart</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Code Archaeology: The ability to recover and modernize legacy codebases by identifying the 'beating heart'—the core structure—of the system."</p>
+                <div class="origin-source">— Engineering Background &amp; Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Legacy codebases accumulate superficial layers of cruft over years. Successful refactoring requires archaeological precision: uncovering the underlying core dataflow (the 'beating heart') before carving away accumulated artifacts.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/FeatureTracker.md</code> <code>BKM-011</code> <code>BKM-012</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">code-archaeology</span><span class="dna-tag">the-beating-heart</span><span class="dna-tag">refactoring-discipline</span><span class="dna-tag">legacy-recovery</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-028">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-028</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Consensus-Driven Leadership &amp; The 2/7 Career Rhythms</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Consensus-Driven Technical Leadership: Moving beyond simple voting by allowing team members to weigh in on all viable options, improving overall project outcomes. The 7-Year Cycle: A recurring period for professional reinvention. The 2-Year Cycle: An observation of project and organizational rhythms."</p>
+                <div class="origin-source">— Engineering Background &amp; Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Effective technical leadership balances broad team input across solution spaces with decisive execution, recognizing natural macro-cycles (2-year organizational transitions and 7-year foundational skill reinventions) in technological domains.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/stories.html</code> <code>BKM-030</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">consensus-leadership</span><span class="dna-tag">career-rhythms</span><span class="dna-tag">7-year-cycle</span><span class="dna-tag">engineering-evolution</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-031">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-031</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Decoupled Determinism Tenet (Artifacts of Record vs. Ephemeral Runtime)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Runtime execution is volatile, noisy, and ephemeral; artifacts of record must remain decoupled, immutable, and self-contained. The AI must judge and connect, not fabricate; the AST must carry its own bones, not tether to live databases."</p>
+                <div class="origin-source">— Decoupled Architecture Synthesis (Sprint 82/83 Review)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Systems degrade when static artifacts of record depend on live, ephemeral runtime execution. True architectural robustness requires two core decouplings: (1) Functional Decoupling: constraining generative models to combinatorial judgment, ranking, and evidence attachment rather than hallucinating text; (2) Data Decoupling: embedding discovered bone collections and candidate pools directly into self-contained ASTs, enabling zero-latency rendering and 100% offline-reproducible builds without live database tethering.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/writer.html</code> <code>BKM-055</code> <code>WIS-010</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">decoupling</span><span class="dna-tag">deterministic-ast</span><span class="dna-tag">anti-embellishment</span><span class="dna-tag">artifacts-of-record</span><span class="dna-tag">offline-portability</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-032">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-032</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Dual-Engine Creative Process: Passive Cross-Domain Synthesis &amp; Active Methodical Execution</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"How do you develop code? Ideas and vision are critical to refine a design, so this is actually best answered as a creative process question - with passive and active methods: Passive: Refine shower thoughts into (plutonium weapon grade) ideas - connect different domains - brings out mulling over thoughts. Active: Take your time to respond methodically. Stimulates focused ideas."</p>
+                <div class="origin-source">— Interview Philosophy Dialogue (Sprint 83)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background—distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/career_notes.html</code> <code>HomeLabAI/docs/Protocols.md:BKM-005</code> <code>PHL-001</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">creative-process</span><span class="dna-tag">software-development</span><span class="dna-tag">passive-synthesis</span><span class="dna-tag">active-execution</span><span class="dna-tag">cross-domain</span><span class="dna-tag">architecture-philosophy</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-033">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-033</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Sovereign Human-in-the-Loop: Disagreement Trapping &amp; Active Knowledge Re-Forging</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Human in the loop is ALSO flagging DNA for review in the forge... flag co-pilot moments when a human disagrees or explicitly gives feedback. The human sovereign remains the voice; the agent is the hands."</p>
+                <div class="origin-source">— DNA Forge Co-Pilot Dialogue (Sprint 83)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Autonomous agents degrade into self-reinforcing hallucination loops when isolated from human correction. The Sovereign Human-in-the-Loop architecture treats human friction, disagreement, and explicit feedback not as execution failures, but as the highest-fidelity evolutionary signal in the system. Disagreements in chat are trapped as active re-forging candidates, ensuring that knowledge bases continuously evolve under human stewardship rather than unanchored autonomous drift.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>Portfolio_Dev/field_notes/dna_forge.html</code> <code>HomeLabAI/docs/Protocols.md:BKM-049</code> <code>PHL-005</code> <code>FEAT-582</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">human-in-the-loop</span><span class="dna-tag">co-pilot</span><span class="dna-tag">disagreement-trapping</span><span class="dna-tag">re-forging</span><span class="dna-tag">sovereign-human</span><span class="dna-tag">active-feedback</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="PHL" data-id="PHL-034">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip phl">PHL-034</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">First-Class DNA Citizens &amp; Polymorphic Idea Representation</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Every distilled idea in the lab is a first-class DNA citizen living at the same level. Domains (FEAT, BKM, PHL, GEM, WIS, VIBE, DISC, SPRINT) are peer-level buckets, not a hierarchy. Ideas share a polymorphic schema and flow laterally across domains as they mature."</p>
+                <div class="origin-source">— Federated DNA Architecture Consensus (Sprint 83)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>In a federated cognitive lab, all distilled knowledge artifacts exist as equal, peer-level first-class citizens regardless of whether they represent operational directives (BKM), empirical scars (WIS), or ontological axioms (PHL). Knowledge objects share a common polymorphic base schema (id, domain, title, summary, content, tags, explicit_links, metadata), enabling zero-loss horizontal re-bucketing and automated cross-domain link preservation across vector stores.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>HomeLabAI/docs/Protocols.md:BKM-060</code> <code>Portfolio_Dev/field_notes/dna_forge.html</code> <code>FEAT-582</code> <code>FEAT-585</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">dna-taxonomy</span><span class="dna-tag">polymorphic-schema</span><span class="dna-tag">first-class-citizen</span><span class="dna-tag">horizontal-rebucketing</span><span class="dna-tag">knowledge-architecture</span></div>
+        </div>
+    </div>
+    
+            </div>
+
+            <div id="wis-panel" class="tab-panel card-grid">
+                
+    <div class="dna-card" data-domain="WIS" data-id="WIS-001">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-001</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The RAKP Security Catch (CVE-2013-4786)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"While implementing the RMCP+ protocol stack from scratch in C, I performed a deep dive into the RAKP authentication spec. To properly debug the session negotiation, I had to patch the Wireshark (then Ethereal) source code to correctly parse the custom packet exchanges I was seeing. During this process, I identified a fundamental flaw: the BMC would return a salted hash of the user’s password before the client proved their identity, essentially enabling offline dictionary attacks.Although my concerns were dismissed by senior engineers at the time, this exact vulnerability was later confirmed as industry-wide flaw CVE-2013-4786.This solidified my conviction to trust technical data over hierarchy and to maintain meticulous documentation for critical findings."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#rakp-security)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Although my concerns were dismissed by senior engineers at the time, this exact vulnerability was later confirmed as industry-wide flaw CVE-2013-4786.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">security</span><span class="dna-tag">cve-discovery</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-002">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-002</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Kernel Patch (Topology &amp; Architecture)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"We had a module flooding dmesg on custom silicon due to rigid topology assumptions. I wrote and compiled a kernel patch to add the necessary flexibility.This eliminated the noise, allowing the team to focus on real bugs.While the patch couldn't be upstreamed due to red tape, the experience validated that I could dive into kernel code to unblock the validation process."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#kernel-patch)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>This eliminated the noise, allowing the team to focus on real bugs.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">kernel</span><span class="dna-tag">fix</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-003">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-003</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Negative Testing (The Yield Use Case)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I had a big PECI coverage miss, it was rather embarrassing. Because we had a huge list, I was only checking what I knew existed, not what shouldn’t exist. Well, some unexpected endpoints did surface, more echoes of what they should be, but those endpoints should not have been visible. I needed to pivot away from just reading known devices to scanning and including negative space. I recalled a conversation with an expert who had scanned through the BDF region before and adapted that to PECI space. To do that I needed a list of all possible combinations in PCI space - which fit very neatly with a generator pattern. One of the first times I really feltyieldimproved the readability and reliability of my code. After I got it running I still saw ‘extra’ devices popping up, but they turned out to be actual hardware, which was easy to correlate with lspci. It was a huge space to cover, and a full run would have taken almost a week, butwith the combination of the bulk transfer API and fast negative returns the expected execution time went from a few days to under 10 hours."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#negative-testing)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>with the combination of the bulk transfer API and fast negative returns the expected execution time went from a few days to under 10 hours.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">validation</span><span class="dna-tag">execution-speed</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-004">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-004</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Texas Power-On (Strategic Career Pivot)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I went to Texas for a power-on during a transition period where I was doing basic execution work and looking for a long-term technical fit. Since I didn’t have a strict task list, I decided to shadow the experts and jump into the immediate fires on the floor. I ended up peer programming with a group focused on high-level security features like TDX and Secure Boot. We clicked so well that when they (also) returned to Oregon, they reached out to pull me into their organization. I wasn't just helping with a bring-up; I was recruited to seed a second team under the Security &amp; Manageability umbrella, which launched my five-year run as the Lead Manageability Validation Automation engineer."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#texas-power-on)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>We clicked so well that when they (also) returned to Oregon, they reached out to pull me into their organization. I wasn't just helping with a bring-up; I was recruited to seed a second team under the Security &amp; Manageability umbrella, which launched my five-year run as the Lead Manageability Validation Automation engineer.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">security</span><span class="dna-tag">team-leadership</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-005">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-005</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Failed Microsoft Demo (Preparation &amp; Redundancy)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I had lightweight RMCP+ library we were going to demo to MS. At the last minute, the firmware developers enabled and enforced encryption, which I had not implemented yet. These days I never trust a demo. Demos are great, but always provide a backup video and slides."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#failed-demo)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I had lightweight RMCP+ library we were going to demo to MS. At the last minute, the firmware developers enabled and enforced encryption, which I had not implemented yet. These days I never trust a demo. Demos are great, but always provide a backup video and slides.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">demo</span><span class="dna-tag">lesson-learned</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-006">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-006</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">RMCP+ Socket Optimization</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Our dev team was tracking down a problem where RMCP+ sessions were piling up in our validation cycle, overloading the BMC and causing instability. We had a TCL based framework, but the heavy lifting was done inside DLL files. I had been doing some digging and found the source code. When I mentioned this to the dev lead he asked me to look into the source code as a last resort, as far as they could tell their code was clean. After a bit of sleuthing I found code responsible for opening and closing the sessions on the client side, there was a return between them, so the socket was never closed.This one fix gave our test suite the stability to add unattended validation cycles and focus on nightly test reports.It was a game changer, and the experience taught me a single line could be worth weeks of effort."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#rmcp-optimization)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>This one fix gave our test suite the stability to add unattended validation cycles and focus on nightly test reports.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-012</code> <code>FEAT-583</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">security-manageability</span><span class="dna-tag">stability</span><span class="dna-tag">reliability</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-007">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-007</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The VISA Tool Engine (Metadata-Driven Design)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I took over a complex debug tool where the logic for different CPU cores and steppings was becoming unmanageable through traditional hard-coding. By &quot;grokking&quot; the code to find its &quot;beating heart,&quot; I realized the project could be re-architected as a metadata-driven engine centered on XML. I shifted the design so that the XML schema defined the GUI and silicon features—such as a checkbox to forward VISA signals over JTAG—allowing the tool to auto-detect and deploy functionality without any further code changes.This &quot;Configuration as Code&quot; approach allowed me to support years of new hardware iterations by simply updating XML definitions scraped directly from RTL."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#visa-tool)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>This &quot;Configuration as Code&quot; approach allowed me to support years of new hardware iterations by simply updating XML definitions scraped directly from RTL.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">architecture</span><span class="dna-tag">maintenance-reduction</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-008">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-008</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Automated Parsing - The XSLT Experience</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Part of maintaining the VISA tool involved manually stitching together different silicon code blocks with their corresponding RTL flow so the signals would be available to the whole engine. The tool would allow you to select signal sources in the silicon and spit out JTAG commands to enable a direct connection to LA pins or the on-chip LA (OCLA). I developed an engine to directly convert RTL into XML compatible with the tool. This saved tremendous time and allowed a quick turnaround for new steppings and layouts. I also got some experience outside of linear code with XSLT."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#xslt-parsing)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I developed an engine to directly convert RTL into XML compatible with the tool. This saved tremendous time and allowed a quick turnaround for new steppings and layouts. I also got some experience outside of linear code with XSLT.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">automation</span><span class="dna-tag">efficiency</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-009">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-009</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">A Simple Config File</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"The VISA tool was also highly dependent on the stepping and family of a processor. Each new power-on of new silicon required me to re-compile the project and update the source code. Wary of this extra maintenance step I added a config file. It was a simple two-day fix that saved me about 2 hours per month, but also enabled anyone to add a project without my express involvement. My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I’ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#config-file)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I’ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">quality-of-life</span><span class="dna-tag">usability</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-010">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-010</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Flashing 100 Nodes (Fleet Scale Operations)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"While in my PAE role, I maintained roughly 100 Knights Landing nodes that allowed us to reproduce issues with OEMs. Stuff you’d only see once in a million happened regularly when you start doing a million things quickly and in parallel. We used pdsh regularly. You think very differently about manually flashing BIOS when it needs to be done 100 times with a tough-to-reach harness. I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn’t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#fleet-scale)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn’t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">operations</span><span class="dna-tag">scale</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-011">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-011</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Cygwin Wall (Environment Parity)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"We had an old internal patch for ipmitool to enable parsing of some extra return codes bytes for automation. To set up the build environment I downloaded the source over git and followed the steps to compile in Cygwin. The build script would fail, I’d fix the failure, then it would crash somewhere else. I wasted a week just trying to get the thing to compile. It turned out that I had downloaded using Windows git rather than Cygwin git. This was a major issue because line endings were unix style. Once I re-downloaded the source everything compiled perfectly. Always be wary of line endings. Take a step back when you run into a wall."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#cygwin-wall)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>It turned out that I had downloaded using Windows git rather than Cygwin git. This was a major issue because line endings were unix style. Once I re-downloaded the source everything compiled perfectly. Always be wary of line endings. Take a step back when you run into a wall.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">debugging</span><span class="dna-tag">environment-setup</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-012">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-012</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Reinventing TI Basic</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"When I was in Junior High I learned basic programming on my TI-85. I was particularly proud of a program that would comb through possible numerator/denominator combinations to convert a ‘float’ into a fraction. I had a bad backup coin battery so my file system would get wiped pretty regularly, so I got good at rewriting that converter. Then one day I was looking through the list of commands and noticed an internal -&gt;Frac function that had already implemented what I wanted. Two things stuck in my mind after that: (1) You get good at doing things by doing it again and again, (2) look for things you assume are not there."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#ti-basic)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Then one day I was looking through the list of commands and noticed an internal -&gt;Frac function that had already implemented what I wanted. Two things stuck in my mind after that: (1) You get good at doing things by doing it again and again, (2) look for things you assume are not there.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">learning</span><span class="dna-tag">fundamentals</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-013">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-013</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The QuakeCon Hot Swap</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"The year was 2001, just before 9/11. I flew my PC to a LAN party in Texas. I was using a cheap IDE raid controller at the time. It had a bad eprom after a failed firmware update. Thinking quickly, I ordered another controller. Booted with the good firmware so I could get to a flash point, then hot-swapped the eprom to flash the bad. Was able to recover and even return the controller."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#quakecon)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>The year was 2001, just before 9/11. I flew my PC to a LAN party in Texas. I was using a cheap IDE raid controller at the time. It had a bad eprom after a failed firmware update. Thinking quickly, I ordered another controller. Booted with the good firmware so I could get to a flash point, then hot-swapped the eprom to flash the bad. Was able to recover and even return the controller.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-060</code> <code>FEAT-582</code> <code>FEAT-586</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">systems-architecture-automation</span><span class="dna-tag">hardware</span><span class="dna-tag">recovery</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-014">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-014</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Reading Like a Robot (Deep Log Debugging)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"When assisting a colleague with stubborn system failures, I found that standard keyword searching through logs was failing to find the root cause. I applied a systematic methodology I call &quot;Reading like a robot,&quot; where I refuse to skip any part of a stack trace or log file, even the unrecognized or &quot;noisy&quot; lines. By meticulously connecting every word and mapping the execution flow sequentially, I was able to identify a specific logic deviation hidden in the background noise that others had scrolled past. This brute-force attention to detail proved that even the most &quot;messy&quot; telemetry can be solved if you check your assumptions at the door and follow the machine's actual path."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#reading-robot)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>By meticulously connecting every word and mapping the execution flow sequentially, I was able to identify a specific logic deviation hidden in the background noise that others had scrolled past. This brute-force attention to detail proved that even the most &quot;messy&quot; telemetry can be solved if you check your assumptions at the door and follow the machine's actual path.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">debugging</span><span class="dna-tag">root-cause-analysis</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-015">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-015</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">RAPL &amp; Matplotlib (Telemetry Visualization)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"In early 2019 I took a machine learning course. Jupiter notebook and time series db exercises. A few python libraries stuck out at me as very useful at work: pandas and matplotlib. I had a decent amount of data collection when stressing Running average Power Limiting functionality. Reports would spit out but it was really hard to get a good picture on what was going on. With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric ‘10% below expected’ would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn’t able to cause the system to draw that much power."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#rapl-matplotlib)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric ‘10% below expected’ would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn’t able to cause the system to draw that much power.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">data-science</span><span class="dna-tag">visualization</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-016">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-016</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">How to Grok Code</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I’ve developed my own shorthand to systematically map out unfamiliar code. I know I’m done when I can see the ‘heart’ of the code."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#grok-code)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I’ve developed my own shorthand to systematically map out unfamiliar code. I know I’m done when I can see the ‘heart’ of the code.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">learning</span><span class="dna-tag">understanding</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-017">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-017</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Beating Heart</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"To follow up on code grokking, once I find the ‘beating heart’ in a system I know I’ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult ‘heart’ turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#beating-heart)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>To follow up on code grokking, once I find the ‘beating heart’ in a system I know I’ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult ‘heart’ turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">insight</span><span class="dna-tag">understanding</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-018">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-018</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Expect Fragments (Serial Validation)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I wrote an automation harness that allowed me to validate TGUI applications in a OS platform agnostic way. It was rather nifty, using TCL and the expect library to handle reading and writing to the screen. Unfortunately, when I started using expect for serial output (EFI mode) things got dirty. I learned that serial output has no guarantee to preserve words—menu items would often get clipped. I mostly got around this with generous regular expressions. In theory, the flows should have worked, but in the real world, the data was noisy. However, accepting that noise as a constraint paid off.By building a robust parser that tolerated the fragments, I was able to shift the NIC validation process from 100% manual to 90% automated, saving hours of tedium and proving that even messy interfaces could be tamed."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#serial-fragments)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>By building a robust parser that tolerated the fragments, I was able to shift the NIC validation process from 100% manual to 90% automated, saving hours of tedium and proving that even messy interfaces could be tamed.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">automation</span><span class="dna-tag">reliability</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-019">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-019</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Crazy Callbacks</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I used a clever callback pattern when chunking data over PECI - sending multiple read requests and mapping the responses with tailored callback functions to de-serialize the data. This asynchronous approach, detailed in our 2022 DTTC paper &quot;Measuring PECI Performance,&quot;allowed us to chain requests without blocking, improving throughput by nearly 100x (from ~57 to ~5300 commands/sec) and proving the software stack could finally keep up with wire speed."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#crazy-callbacks)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>allowed us to chain requests without blocking, improving throughput by nearly 100x (from ~57 to ~5300 commands/sec) and proving the software stack could finally keep up with wire speed.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">code-pattern</span><span class="dna-tag">efficiency</span><span class="dna-tag">dttc</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-020">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-020</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Throughput Gotchas</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it’s more ambiguous when counting packets over SMBus or other internal protocols. Our DTTC paper tackled this, but I was never quite satisfied to provide a standard MB/s measurement.Because the protocol overhead was so heavy, I argued that &quot;Commands per Second&quot; was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#throughput-gotchas)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Because the protocol overhead was so heavy, I argued that &quot;Commands per Second&quot; was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">measurement</span><span class="dna-tag">accuracy</span><span class="dna-tag">dttc,-peci</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-021">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-021</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Curl over Postman</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I prefer Curl over Postman for the same reason I prefer text over screenshots - design tests for reproducibility ease - compartmentalize into a series of batchable steps - essential for bug reports."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#curl-postman)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I prefer Curl over Postman for the same reason I prefer text over screenshots - design tests for reproducibility ease - compartmentalize into a series of batchable steps - essential for bug reports.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">tooling</span><span class="dna-tag">reproducibility</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-022">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-022</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Venv is like Hot Glue</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Venv is like hot glue - a stop gap solution that becomes standard - docker feels the same - has better utility these days."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#venv-glue)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Venv is like hot glue - a stop gap solution that becomes standard - docker feels the same - has better utility these days.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>BKM-024</code> <code>FEAT-584</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">platform-validation-methodology</span><span class="dna-tag">tooling</span><span class="dna-tag">standardization</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-023">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-023</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">To SCM or Not to SCM (Integration Reliability)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Early in my career, I was tasked with helping our team transition from SVN to IBM ClearCase during a mandate from our international partners. It was an exercise in pure persistence; while the infrastructure was in flux, I tag-teamed with our resident SCM lead to keep our daily validation builds running. I had to resort to intense &quot;mergify&quot; sessions and manual elbow grease to ensure the transition didn't break the active development pipeline. ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I’ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I’ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#scm-integration)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I’ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I’ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">operations</span><span class="dna-tag">pipeline-integrity</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-024">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-024</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Estimates: High vs. Low (The Code Archaeologist)</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I was asked to estimate how long it would take to ramp up and deploy a project that had recently been recovered from an old backup. This was my ‘code archeologist’ time to shine. I recently took an estimation course and learned how setting high and low estimates improved accuracy, but my manager wanted real dates. I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was “Maybe you could have added a range of estimates” - I don’t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#estimates)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was “Maybe you could have added a range of estimates” - I don’t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">planning</span><span class="dna-tag">trust</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-025">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-025</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The PythonSV API Thrash</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I was leveraging a PythonSV framework (c-scripts) for silicon power-on to improve test coverage. My manager at the time specifically asked me to add API-level tests for visibility. I knew they were technically redundant, but I followed the direction to ensure the team had the completeness they were looking for. A year later, during a review, I was berated for that exact redundancy by the architecture team. That &quot;unnecessary thrash&quot; was a huge lesson in code ownership. I learned that just &quot;following orders&quot; isn't enough when you're working in a complex framework. Now, if I’m asked to implement something that creates technical debt or redundancy, I make sure there is a clear &quot;paper trail&quot; or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#pythonsv-thrash)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>That &quot;unnecessary thrash&quot; was a huge lesson in code ownership. I learned that just &quot;following orders&quot; isn't enough when you're working in a complex framework. Now, if I’m asked to implement something that creates technical debt or redundancy, I make sure there is a clear &quot;paper trail&quot; or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">ownership</span><span class="dna-tag">code-attribution</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-026">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-026</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Synergy of Validation Working with Architect and Dev</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI ‘wire’ time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#synergy)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI ‘wire’ time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">collaboration</span><span class="dna-tag">performance</span><span class="dna-tag">dttc,-peci</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-027">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-027</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Always Fix the First Error</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"I stumbled upon a ‘gotcha’ moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting ‘compile’ again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#first-error)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>I stumbled upon a ‘gotcha’ moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting ‘compile’ again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">debugging</span><span class="dna-tag">efficiency</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-028">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-028</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">Count the Ok's</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"Whether it’s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn’t the best option, and rather counterintuitively it isn’t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are ‘okay’ drastically improves the results."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#count-oks)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>Whether it’s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn’t the best option, and rather counterintuitively it isn’t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are ‘okay’ drastically improves the results.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">decision-making</span><span class="dna-tag">consensus</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-029">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-029</span>
+                <span class="badge approved">Verified</span>
+            </div>
+            <h3 class="card-title">The Conflict Management Lesson</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>"There have been several times in my career where I’ve been convinced I was right but wasn't in a position to change the direction. I’ve learned to disagree and commit, and in those cases, the results usually went well because the team stayed aligned. In fact, I’ve often &quot;embraced the suck&quot; and intentionally became a subject matter expert on the critical things others didn't want to touch—like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those &quot;unpopular&quot; parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I’ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean."</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#conflict-management)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>In fact, I’ve often &quot;embraced the suck&quot; and intentionally became a subject matter expert on the critical things others didn't want to touch—like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those &quot;unpopular&quot; parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I’ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">soft-skills</span><span class="dna-tag">team-alignment</span></div>
+        </div>
+    </div>
+    
+    <div class="dna-card" data-domain="WIS" data-id="WIS-030">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip wis">WIS-030</span>
+                <span class="badge polish">Needs Polish</span>
+            </div>
+            <h3 class="card-title">General Thoughts &amp; Philosophy</h3>
+        </div>
+        <div class="card-body">
+            <div class="origin-quote">
+                <span class="section-label">Origin Record</span>
+                <p>""</p>
+                <div class="origin-source">— Portfolio Stories (stories.html#general-thoughts)</div>
+            </div>
+            <div class="synthesis-block">
+                <span class="section-label">Distilled Axiom / Lesson</span>
+                <p>The &quot;Class 1&quot; Assumption:</p>
+            </div>
+            <div class="anchors-block"><span class="section-label">Lab Anchors</span><div class="anchors"><code>PHL-033</code> <code>BKM-049</code> <code>PHL-034</code></div></div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"><span class="dna-tag">engineering-leadership</span><span class="dna-tag">philosophy</span></div>
+        </div>
+    </div>
+    
+            </div>
+
+            <div id="rdna-panel" class="tab-panel card-grid">
+                
+    <div class="dna-card rdna-card" data-domain="RDNA" data-id="RDNA-001">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip rdna">RDNA-001</span>
+                <span class="badge hyde-bypass">HyDE Bypass Candidate</span>
+            </div>
+            <h3 class="card-title">"How do you develop code?"</h3>
+        </div>
+        <div class="card-body">
+            <div class="rdna-target-box">
+                <span class="section-label">Target DNA Anchor</span>
+                <div class="target-link">
+                    <span class="target-id"></span>: <strong class="target-title"></strong>
+                </div>
+                <div class="target-collection">Collection: <code>philosophy_dna</code></div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"></div>
+        </div>
+    </div>
+    
+    <div class="dna-card rdna-card" data-domain="RDNA" data-id="RDNA-002">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip rdna">RDNA-002</span>
+                <span class="badge hyde-bypass">HyDE Bypass Candidate</span>
+            </div>
+            <h3 class="card-title">"What is your philosophy on agentic AI workflows and LLMs in engineering?"</h3>
+        </div>
+        <div class="card-body">
+            <div class="rdna-target-box">
+                <span class="section-label">Target DNA Anchor</span>
+                <div class="target-link">
+                    <span class="target-id"></span>: <strong class="target-title"></strong>
+                </div>
+                <div class="target-collection">Collection: <code>philosophy_dna</code></div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"></div>
+        </div>
+    </div>
+    
+    <div class="dna-card rdna-card" data-domain="RDNA" data-id="RDNA-003">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip rdna">RDNA-003</span>
+                <span class="badge hyde-bypass">HyDE Bypass Candidate</span>
+            </div>
+            <h3 class="card-title">"How do you maintain stability and prevent drift in autonomous multi-agent systems?"</h3>
+        </div>
+        <div class="card-body">
+            <div class="rdna-target-box">
+                <span class="section-label">Target DNA Anchor</span>
+                <div class="target-link">
+                    <span class="target-id"></span>: <strong class="target-title"></strong>
+                </div>
+                <div class="target-collection">Collection: <code>philosophy_dna</code></div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"></div>
+        </div>
+    </div>
+    
+    <div class="dna-card rdna-card" data-domain="RDNA" data-id="RDNA-004">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip rdna">RDNA-004</span>
+                <span class="badge hyde-bypass">HyDE Bypass Candidate</span>
+            </div>
+            <h3 class="card-title">"How do you approach complex systems and bridge technical complexity with actionable insight?"</h3>
+        </div>
+        <div class="card-body">
+            <div class="rdna-target-box">
+                <span class="section-label">Target DNA Anchor</span>
+                <div class="target-link">
+                    <span class="target-id"></span>: <strong class="target-title"></strong>
+                </div>
+                <div class="target-collection">Collection: <code>philosophy_dna</code></div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"></div>
+        </div>
+    </div>
+    
+    <div class="dna-card rdna-card" data-domain="RDNA" data-id="RDNA-005">
+        <div class="card-header">
+            <div class="card-id-row">
+                <span class="dna-id-chip rdna">RDNA-005</span>
+                <span class="badge hyde-bypass">HyDE Bypass Candidate</span>
+            </div>
+            <h3 class="card-title">"Why is architectural decoupling so important in complex systems?"</h3>
+        </div>
+        <div class="card-body">
+            <div class="rdna-target-box">
+                <span class="section-label">Target DNA Anchor</span>
+                <div class="target-link">
+                    <span class="target-id"></span>: <strong class="target-title"></strong>
+                </div>
+                <div class="target-collection">Collection: <code>philosophy_dna</code></div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="tags-row"></div>
+        </div>
+    </div>
+    
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js?v=acd57779"></script>
+    <script src="mission-control.js?v=b505a681"></script>
+    <script>
+        // Tab switching logic
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                const target = document.getElementById(btn.dataset.tab);
+                if (target) target.classList.add('active');
+            });
+        });
+
+        // Live search filter
+        const searchInput = document.getElementById('dna-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase();
+                document.querySelectorAll('.dna-card').forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    card.style.display = text.includes(q) ? '' : 'none';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
