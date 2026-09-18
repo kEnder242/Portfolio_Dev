@@ -3169,6 +3169,18 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Tightens vertical screen space, improves cognitive ergonomics, and establishes a definitive human-in-the-loop triage lifecycle.
 **Mechanism:** `Portfolio_Dev/field_notes/dna_forge_build.py`, `Portfolio_Dev/field_notes/data/dna_decisions.json`, `Portfolio_Dev/field_notes/dna_forge.html`.
 
+## [FEAT-594] Synthesis Lens Crafting & Automated Paper Grading Engine
+**Sprint:** SPR-84.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/foyer/paper_service.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/foyer/paper_service.py) — Synthesis Lens Crafting & Automated Paper Grading Engine.
+**Logic:** Ingests unstructured guidance or Job Descriptions via `/paper/craft_lens` and compiles structured JSON rubrics (`rubric_rules: [...]`). Executes chunk-by-chunk LLM evaluation via `/paper/grade_paper` against active paper ASTs, attaching actionable `review_flags` with concrete replacement proposals. Spawns staged candidate revision forks (`PAPER-001_<rev_id>.json`) viewable in the `writer.html` version dropdown.
+**Rationale:** Bridges high-level editorial and recruiting rubrics with surgical paragraph-level writing, enabling automated tailoring for specific job requisitions.
+**Mechanism:** Foyer REST API, FastEmbed vector scoring, discrete JSON revision snapshots, `data/paper_decisions.json`.
 
-
-
+## [FEAT-595] Round-Trip Resume AST Decomposer & Google Docs Rich Formatter
+**Sprint:** SPR-84.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/scripts/decompose_resume.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/decompose_resume.py) — Round-Trip Resume AST Decomposer & Google Docs Rich Formatter.
+**Logic:** Decomposes resumes into structured JSON AST (`PAPER-RESUME_v1.json`) and polymorphic `RESUME-xxx` DNA cards (implementing the Subtractive CV model). Extracts ATS layout metadata into `style_resume_v1.json`. Re-exports structured papers back to Google Docs via a two-stage `docs.create` + `docs.formatText` formatting engine that enforces ATS single-column margins, bold lead-in power verbs, and clean section headers.
+**Rationale:** Unifies career knowledge management into the federated DNA architecture, allowing one master CV superset to generate tailored Google Docs/PDFs on demand.
+**Mechanism:** Python AST parser, Google Workspace MCP API, CLaRa ChromaDB resume collection.
