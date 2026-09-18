@@ -23,6 +23,7 @@ HTML_FILES = [
     "benchmarks.html",
     "public_benchmarks.html",
     "wisdom.html",
+    "dna_forge.html",
     "writer.html"
 ]
 TRAILERS_DIR = os.path.join(BASE_DIR, "assets/trailers")
@@ -222,9 +223,9 @@ def main(args):
         sys.exit(1)
 
     try:
-        subprocess.run([sys.executable, os.path.join(BASE_DIR, "wisdom_build.py")], check=True)
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "dna_forge_build.py")], check=True)
     except Exception as e:
-        print(f"❌ Critical Error in wisdom_build.py: {e}")
+        print(f"❌ Critical Error in dna_forge_build.py: {e}")
         sys.exit(1)
 
     try:
