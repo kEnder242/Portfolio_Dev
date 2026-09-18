@@ -623,7 +623,7 @@ def build_page():
                         '<div class="card-top-bar">' +
                             '<div class="card-meta-row">' +
                                 '<span><strong>' + escapeHtml(cid) + '</strong> &bull; ' + escapeHtml(theme) + '</span>' +
-                                '<div class="bucket-container">' + renderBucketControlsJs(bucket_id, is_rw) + '</div>' +
+                                '<div class="bucket-container">' + renderBucketControlsJs(bucket_id, cardIsRw) + '</div>' +
                             '</div>' +
                             actionsHtml +
                         '</div>' +
