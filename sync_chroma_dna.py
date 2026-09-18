@@ -11,13 +11,16 @@ DB_PATH = os.path.expanduser("~/AcmeLab/chroma_db")
 COLLECTION_DNA = "behavioral_dna"
 COLLECTION_FEATURE = "feature_dna"
 COLLECTION_PHILOSOPHY = "philosophy_dna"
+COLLECTION_WISDOM = "wisdom_dna"
 COLLECTION_RDNA = "rdna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
 PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/philosophy_data.json")
+WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/wisdom_data.json")
 RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/rdna_questions.json")
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
@@ -252,7 +255,51 @@ def parse_philosophy(filepath):
     return philosophy_items
 
 
+def parse_wisdom(filepath):
+    """Parses wisdom_data.json for WIS-xxx empirical validation war stories and findings."""
+    if not os.path.exists(filepath):
+        logging.warning(f"wisdom_data.json not found at {filepath}")
+        return []
+    import json
+    with open(filepath, "r", encoding="utf-8") as f:
+        cards = json.load(f)
+
+    wisdom_items = []
+    for c in cards:
+        wid = c.get("id", "WIS-UNK")
+        theme = c.get("theme", "Validation")
+        origin_text = c.get("origin", {}).get("text", "")
+        origin_src = c.get("origin", {}).get("source", "")
+        synth_title = c.get("synthesis", {}).get("title", "")
+        synth_context = c.get("synthesis", {}).get("narrative_context", "")
+        tags = c.get("metadata", {}).get("tags", [])
+
+        doc_content = (
+            f"ID: {wid}\n"
+            f"Theme: {theme}\n"
+            f"Title: {synth_title}\n"
+            f"Origin Quote: \"{origin_text}\"\n\n"
+            f"Synthesis: {synth_context}\n"
+            f"Tags: {', '.join(tags)}"
+        )
+
+        wisdom_items.append({
+            "id": wid,
+            "document": doc_content,
+            "metadata": {
+                "wisdom_id": wid,
+                "theme": theme,
+                "title": synth_title,
+                "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
+                "source": "wisdom_data.json",
+                "type": "WISDOM"
+            }
+        })
+    return wisdom_items
+
+
 def parse_rdna(filepath):
+
     """Parses rdna_questions.json for Reverse DNA (RDNA) questions and variants."""
     if not os.path.exists(filepath):
         logging.warning(f"rdna_questions.json not found at {filepath}")
@@ -433,6 +480,25 @@ def sync():
         collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
         logging.info("philosophy_dna sync complete.")
 
+    # 4b. Sync wisdom_dna from wisdom_data.json
+    logging.info("Parsing wisdom_data.json...")
+    wisdom_items = parse_wisdom(WISDOM_DATA_PATH)
+    if wisdom_items:
+        collection_wis = get_safe_collection(client, COLLECTION_WISDOM, ef)
+        logging.info("Clearing existing entries from wisdom_dna...")
+        try:
+            collection_wis.delete(where={"source": "wisdom_data.json"})
+        except Exception as e:
+            logging.warning(f"Could not clear wisdom_dna entries: {e}")
+
+        ids = [w["id"] for w in wisdom_items]
+        documents = [w["document"] for w in wisdom_items]
+        metadatas = [w["metadata"] for w in wisdom_items]
+
+        logging.info(f"Uploading {len(ids)} Wisdom entries to wisdom_dna...")
+        collection_wis.add(ids=ids, documents=documents, metadatas=metadatas)
+        logging.info("wisdom_dna sync complete.")
+
     # 5. Sync rdna from rdna_questions.json
     logging.info("Parsing rdna_questions.json...")
     rdna_items = parse_rdna(RDNA_QUESTIONS_PATH)
@@ -455,5 +521,6 @@ def sync():
 
 if __name__ == "__main__":
     sync()
+
 
 

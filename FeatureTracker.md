@@ -3147,4 +3147,28 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Gives the lab operator complete control over triage latency versus reasoning depth without code refactoring.
 **Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/logic/speculative_triage.py`.
 
+## [FEAT-592] Historical Journal to DNA Manifest Ingestion Bridge (`journal_to_dna_bridge.py`)
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/journal_to_dna_bridge.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/journal_to_dna_bridge.py) — Historical Journal to Polymorphic DNA Ingestion Bridge.
+**Logic:** Scans `data/journal_ledger.jsonl` and yearly gem archives for Rank 4 and Rank 5 validation findings and tool artifacts. Bridges historical synthesis by parsing findings into the polymorphic 8-domain DNA schema (`id`, `domain`, `title`, `summary`, `content`, `tags`, `explicit_links`, `metadata`). Generates staged candidate `[WIS]` and `[DISC]` cards in `data/wisdom_data.json` and updates `data/dna_manifest.json`, triggering real-time DNA Census HUD recalculation and CLaRa ChromaDB vector updates.
+**Rationale:** Closes the architectural gap between raw historical note distillation (`mass_scan.py`) and the polymorphic DNA Forge (`FEAT-582`), ensuring new gems autonomously flow into active lab memory without manual re-entry.
+**Mechanism:** `Portfolio_Dev/field_notes/journal_to_dna_bridge.py`, `Portfolio_Dev/field_notes/dna_forge_build.py`, `HomeLabAI/src/forge/nightly_forge.py`.
+
+## [FEAT-593] DNA Forge Streamlined UI, Interactive Census HUD, & 1-Click Approval/Archival Engine
+**Sprint:** SPR-83.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/dna_forge_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py) — DNA Forge Streamlined UI & Approval/Archival Controller.
+**Logic:** Streamlines the DNA Forge (`dna_forge.html`) layout and knowledge triage flow:
+1. Embeds an integrated live search bar directly into the top row of the Census HUD banner and eliminates the redundant domain `<select>` dropdown.
+2. Expands Census HUD filter pills to include dedicated `[🚨 Needs Review (N)]` (red override) and `[📦 Archived (N)]` (archive view) toggles.
+3. Implements 1-click `[✅ Approve]` and `[📦 Archive]` action buttons on cards:
+   - `[✅ Approve]`: Validates candidate/AR cards, certifies `status = "APPROVED"`, clears red flags, and logs operator approval.
+   - `[📦 Archive]`: Rejects/archives cards with internal state `status = "REJECTED"`, removes them from active views, and records the decision.
+4. Tracks human decisions persistently in `data/dna_decisions.json` so automated ingestion pipelines never re-surface or re-flag rejected/approved cards.
+**Rationale:** Tightens vertical screen space, improves cognitive ergonomics, and establishes a definitive human-in-the-loop triage lifecycle.
+**Mechanism:** `Portfolio_Dev/field_notes/dna_forge_build.py`, `Portfolio_Dev/field_notes/data/dna_decisions.json`, `Portfolio_Dev/field_notes/dna_forge.html`.
+
+
+
 

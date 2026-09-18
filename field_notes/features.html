@@ -16085,6 +16085,100 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-592">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-592</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Historical Journal to DNA Manifest Ingestion Bridge (`journal_to_dna_bridge.py`)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-83.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/journal_to_dna_bridge.py" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/journal_to_dna_bridge.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Scans <code>data/journal_ledger.jsonl</code> and yearly gem archives for Rank 4 and Rank 5 validation findings and tool artifacts. Bridges historical synthesis by parsing findings into the polymorphic 8-domain DNA schema (<code>id</code>, <code>domain</code>, <code>title</code>, <code>summary</code>, <code>content</code>, <code>tags</code>, <code>explicit_links</code>, <code>metadata</code>). Generates staged candidate <code>[WIS]</code> and <code>[DISC]</code> cards in <code>data/wisdom_data.json</code> and updates <code>data/dna_manifest.json</code>, triggering real-time DNA Census HUD recalculation and CLaRa ChromaDB vector updates.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Closes the architectural gap between raw historical note distillation (<code>mass_scan.py</code>) and the polymorphic DNA Forge (<code>FEAT-582</code>), ensuring new gems autonomously flow into active lab memory without manual re-entry.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/journal_to_dna_bridge.py</code>, <code>Portfolio_Dev/field_notes/dna_forge_build.py</code>, <code>HomeLabAI/src/forge/nightly_forge.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-593">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-593</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    DNA Forge Streamlined UI, Interactive Census HUD, & 1-Click Approval/Archival Engine
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-83.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/dna_forge_build.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Streamlines the DNA Forge (<code>dna_forge.html</code>) layout and knowledge triage flow:
+1. Embeds an integrated live search bar directly into the top row of the Census HUD banner and eliminates the redundant domain <code>&lt;select&gt;</code> dropdown.
+2. Expands Census HUD filter pills to include dedicated <code>[🚨 Needs Review (N)]</code> (red override) and <code>[📦 Archived (N)]</code> (archive view) toggles.
+3. Implements 1-click <code>[✅ Approve]</code> and <code>[📦 Archive]</code> action buttons on cards:
+   - <code>[✅ Approve]</code>: Validates candidate/AR cards, certifies <code>status = "APPROVED"</code>, clears red flags, and logs operator approval.
+   - <code>[📦 Archive]</code>: Rejects/archives cards with internal state <code>status = "REJECTED"</code>, removes them from active views, and records the decision.
+4. Tracks human decisions persistently in <code>data/dna_decisions.json</code> so automated ingestion pipelines never re-surface or re-flag rejected/approved cards.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Tightens vertical screen space, improves cognitive ergonomics, and establishes a definitive human-in-the-loop triage lifecycle.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/dna_forge_build.py</code>, <code>Portfolio_Dev/field_notes/data/dna_decisions.json</code>, <code>Portfolio_Dev/field_notes/dna_forge.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
