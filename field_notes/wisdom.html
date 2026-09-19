@@ -26630,12 +26630,35 @@ With the breakthrough of the **Unified 3B Base**, we now have the VRAM headroom 
                 })
                 .catch(function() {
                     // Heuristic Client Fallback
-                    var paragraphs = rawText.split(/\n\s*\n/).map(function(p){return p.trim();}).filter(Boolean);
-                    var chunks = paragraphs.map(function(p, i) {
-                        var dom = (p.toLowerCase().indexOf('rule') !== -1 || p.toLowerCase().indexOf('bkm') !== -1) ? 'BKM' :
-                                  (p.toLowerCase().indexOf('axiom') !== -1 || p.toLowerCase().indexOf('phl') !== -1) ? 'PHL' :
-                                  (p.toLowerCase().indexOf('feat') !== -1) ? 'FEAT' : 'WIS';
-                        var firstL = p.split('\n')[0].replace(/^[#\-\s]+/, '').slice(0, 50);
+                    var cleanText = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+                    var inferredTitle = title ? String(title).trim() : '';
+                    if (!inferredTitle) {
+                        var matchTitle = cleanText.match(/^(?:#+\s*|\*\*\s*)([^\n]+)/);
+                        if (matchTitle) {
+                            inferredTitle = matchTitle[1].replace(/\*\*$/, '').trim();
+                        }
+                    }
+
+                    var rawParagraphs = cleanText.split(/\n\s*\n+/).map(function(p){ return p.trim(); }).filter(Boolean);
+                    if (rawParagraphs.length <= 1) {
+                        rawParagraphs = cleanText.split(/\n+(?=(?:#+|[A-Za-z0-9_\-\s]+:|[-*•]\s+))/).map(function(p){ return p.trim(); }).filter(Boolean);
+                    }
+
+                    // If first paragraph is purely the header line and we have subsequent paragraphs, extract title and advance
+                    if (rawParagraphs.length > 1 && /^#+\s+[^\n]+$/.test(rawParagraphs[0])) {
+                        if (!inferredTitle) inferredTitle = rawParagraphs[0].replace(/^#+\s*/, '').trim();
+                        rawParagraphs.shift();
+                    }
+
+                    var chunks = rawParagraphs.map(function(p, i) {
+                        var pLower = p.toLowerCase();
+                        var dom = (pLower.indexOf('rule') !== -1 || pLower.indexOf('bkm') !== -1 || pLower.indexOf('mandate') !== -1) ? 'BKM' :
+                                  (pLower.indexOf('axiom') !== -1 || pLower.indexOf('phl') !== -1 || pLower.indexOf('philosophy') !== -1) ? 'PHL' :
+                                  (pLower.indexOf('feat') !== -1 || pLower.indexOf('feature') !== -1) ? 'FEAT' :
+                                  (pLower.indexOf('rdna') !== -1 || pLower.indexOf('reverse') !== -1) ? 'RDNA' :
+                                  (pLower.indexOf('disc') !== -1 || pLower.indexOf('discipline') !== -1) ? 'DISC' : 'WIS';
+                        var lines = p.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+                        var firstL = (lines[0] || '').replace(/^[#\-\*\•\s]+/, '').replace(/^(?:Rule|Axiom|Philosophy|Guideline|Principle|Feature):\s*/i, '').slice(0, 60);
                         return {
                             chunk_id: 'CHUNK-' + (i + 1),
                             proposed_domain: dom,
@@ -26644,21 +26667,21 @@ With the breakthrough of the **Unified 3B Base**, we now have the VRAM headroom 
                             origin_verbatim: p,
                             suggested_tags: [dom.toLowerCase(), 'draft'],
                             mutations: [
-                                { id: 'mut_active', lens: 'Active Voice', text: 'Enforces ' + firstL.toLowerCase() + ' with high rigor.' }
+                                { id: 'mut_active', lens: 'Active Voice', text: 'Enforces ' + (firstL.toLowerCase() || 'rigorous execution') + ' with high operational discipline.' }
                             ]
                         };
                     });
 
                     var fallbackData = {
-                        title: title || (rawText.split('\n')[0].slice(0, 40) || 'Synthesis Note'),
+                        title: inferredTitle || 'Synthesis Note',
                         summary: 'Decomposed ' + chunks.length + ' chunks (client heuristic fallback).',
                         chunks: chunks,
                         suggested_bone_collection: {
-                            name: 'Track: ' + (title || 'Synthesis Note'),
+                            name: 'Track: ' + (inferredTitle || 'Synthesis Note'),
                             bones: chunks.map(function(c){ return { id: c.chunk_id, title: c.title, domain: c.proposed_domain }; })
                         }
                     };
-                    if (statusBadge) statusBadge.textContent = '✓ Decomposed (local heuristic fallback)';
+                    if (statusBadge) statusBadge.textContent = '✓ Decomposed ' + chunks.length + ' chunks (local heuristic fallback)';
                     activeDecomposition = fallbackData;
                     renderDecompositionSandbox(fallbackData);
                 });
@@ -27256,7 +27279,7 @@ With the breakthrough of the **Unified 3B Base**, we now have the VRAM headroom 
                 var insTags = document.getElementById('insCardTags');
                 if (insTags) {
                     insTags.innerHTML = tags.map(function(t){
-                        return '<span class="tag">#' + escapeHtml(String(t).trim().lstrip('#')) + '</span>';
+                        return '<span class="tag">#' + escapeHtml(String(t).trim().replace(/^#+/, '')) + '</span>';
                     }).join(' ') || '<em style="color:#8b949e">No tags</em>';
                 }
 
