@@ -106,21 +106,36 @@ def compile_paper_to_formatted_doc(paper_path: Path, style_path: Path):
                 period = node.get("period", "")
                 append_text(f"- {deg} – {inst} ({period})\n")
             append_text("\n")
+            
+        else:
+            # Generic paper sections with paragraphs and citations
+            for par in sec.get("paragraphs", []):
+                p_text = par.get("text", "")
+                if p_text:
+                    append_text(p_text + "\n\n")
+                    # If citations exist, add sub-anchor
+                    cites = par.get("citations", [])
+                    if cites:
+                        append_text(f"  [Anchors: {', '.join(cites)}]\n\n", "italic")
 
     full_text = "".join(text_buffer)
+    doc_title = paper.get("title") or f"{author} Document"
     return {
-        "title": f"{author} Resume - Sept2026",
+        "title": doc_title,
         "full_text": full_text,
         "format_ranges": format_ranges
     }
 
 
 def main():
-    paper_path = PAPERS_DIR / "PAPER-RESUME_v1.json"
+    import sys
+    target = sys.argv[1] if len(sys.argv) > 1 else "PAPER-RESUME_v1.json"
+    paper_path = PAPERS_DIR / target
     style_path = PAPERS_DIR / "style_resume_v1.json"
     
     doc_payload = compile_paper_to_formatted_doc(paper_path, style_path)
-    output_path = PAPERS_DIR / "export_payload_resume_v1.json"
+    stem = paper_path.stem
+    output_path = PAPERS_DIR / f"export_payload_{stem}.json"
     output_path.write_text(json.dumps(doc_payload, indent=2), encoding="utf-8")
     
     print(f"✅ Compiled Document Payload -> {output_path}")
@@ -130,3 +145,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
