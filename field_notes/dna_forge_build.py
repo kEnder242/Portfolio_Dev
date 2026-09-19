@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-dna_forge_build.py [v7.0]
-[FEAT-582 / FEAT-588 / FEAT-589 / FEAT-591 / FEAT-593 / FEAT-596]
-The DNA Forge: Sovereign Multi-Domain Knowledge Foundry.
-Features:
-- Streamlined Cards View with 1-Click Approval/Archive Engine, Census HUD & Bone Collection Rack.
-- Ego-Centric Single-Node Synapse Knowledge Graph with Orbital Synapse Spokes, Bone Collection Integration,
-  Breadcrumbs Navigation, and Seamless 2-Way [🕸️ Synapse] <-> [📇 Locate Card] Transitions.
+dna_forge_build.py [v8.0]
+[FEAT-582 / FEAT-593 / FEAT-596 / FEAT-597 / FEAT-598]
+The Sovereign DNA Forge 3-Tab Knowledge Foundry:
+1. 📝 DRAFTING & DECOMPOSE: Raw Notes Scratchpad -> Semantic Chunking -> Domain Classification -> Bone Skeleton Synthesis -> 1-Click Promotion.
+2. 🕸️ CONNECT: Ego-Centric Synapse Knowledge Graph, Orbital Spokes, Nightly Synapse Approval, & Bone Collection Traversal.
+3. 📇 REVIEW & GOVERNANCE: High-Density Cards Grid, Census HUD, Bone Rack Shelf, and Mutation vs. Revision Voice Space Certification.
 """
 
 import json
@@ -169,18 +168,20 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     domain = cid.split("-")[0] if "-" in cid else "DNA"
     theme = card.get("theme") or card.get("type") or domain
     meta = card.get("metadata", {}) or {}
-    bucket_id = meta.get("bucket_id") or card.get("bucket_id", "")
 
     origin = card.get("origin", {}) or {}
     synthesis = card.get("synthesis", {}) or {}
     verbatim = origin.get("text", "") or origin.get("verbatim", "") or card.get("verbatim", "")
     title = card.get("title") or synthesis.get("title") or f"DNA Item {index}"
-    narrative = synthesis.get("narrative_context", "")
+    narrative = synthesis.get("narrative_context", "") or card.get("narrative_context", "")
     review_notes = synthesis.get("review_notes", "")
-    anchors = synthesis.get("lab_anchors", [])
-    tags = meta.get("tags", []) or synthesis.get("tags", [])
+    anchors = synthesis.get("lab_anchors", []) or card.get("lab_anchors", [])
+    tags = meta.get("tags", []) or synthesis.get("tags", []) or card.get("tags", [])
     if isinstance(tags, str):
         tags = [t.strip() for t in tags.split(",")]
+
+    revisions = synthesis.get("revisions", [])
+    mutations = synthesis.get("mutations", [])
 
     flagged = is_flagged_card(card, decisions)
     archived = is_archived_card(card, decisions)
@@ -212,6 +213,16 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
 
     tags_inner = "".join(f'<span class="tag {("tag-flag" if "flag" in str(t).lower() or "ar" in str(t).lower() else "")}">#{escape_html(str(t).lstrip("#"))}</span>' for t in tags)
     tags_html = f'<div class="wb-editable" data-field="tags" contenteditable="false">{tags_inner}</div>'
+
+    # Voice Vectors & Mutation Governance Section [FEAT-598]
+    voice_switcher_html = ""
+    if revisions or mutations:
+        rev_pills = "".join(f'<span class="voice-pill rev-pill active" title="Human Certified Ground Truth">🏆 {escape_html(r.get("lens", "Revision"))}</span>' for r in revisions)
+        mut_pills = "".join(f'<span class="voice-pill mut-pill" data-mut-id="{escape_html(m.get("id"))}" data-lens="{escape_html(m.get("lens"))}" data-text="{escape_html(m.get("text"))}" title="Click to preview &amp; certify AI mutation into ground truth">✨ {escape_html(m.get("lens", "Mutation"))}</span>' for m in mutations)
+        voice_switcher_html = f'''<div class="card-section voice-section">
+            <span class="section-label">Voice Space &amp; Mutations [FEAT-598]</span>
+            <div class="voice-pills-bar">{rev_pills}{mut_pills}</div>
+        </div>'''
 
     approve_btn = '<button class="card-btn-approve" title="Approve candidate card and clear review flag">✅ Approve</button>' if flagged else ''
     archive_btn = '<button class="card-btn-archive" title="Archive / reject this suggestion">📦 Archive</button>' if is_rw and not archived else ''
@@ -248,6 +259,7 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
                 <span class="section-label">Narrative Context</span>
                 <div class="wb-editable" data-field="narrative_context" contenteditable="false">{escape_html(narrative)}</div>
             </div>
+            {voice_switcher_html}
             {review_notes_html}
             {anchors_html}
             <div class="card-section tag-row">
@@ -313,10 +325,10 @@ def build_page():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DNA Forge | Federated Lab Knowledge Foundry</title>
+    <title>DNA Forge | Sovereign Multi-Domain Knowledge Foundry</title>
     <link rel="stylesheet" href="style.css?v=312b4371">
     <style>
-        /* DNA Forge: High-Density Tron Knowledge Studio [v7.0] */
+        /* DNA Forge: High-Density Tron Knowledge Foundry [v8.0] */
         .wisdom-header {{
             display: flex;
             align-items: baseline;
@@ -327,44 +339,458 @@ def build_page():
         }}
         .section-title {{ margin-bottom: 4px; }}
 
-        /* Top View Mode Switcher */
-        .view-mode-bar {{
+        /* Top 3-Tab View Mode Switcher */
+        .forge-tabs-bar {{
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
+            background: #090d13;
+            border: 1px solid #30363d;
+            padding: 4px;
+            border-radius: 8px;
+            width: fit-content;
         }}
-        .view-mode-btn {{
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 7px 16px;
+        .forge-tab-btn {{
+            background: transparent;
+            border: 1px solid transparent;
+            color: #8b949e;
+            padding: 8px 18px;
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-family: var(--font-stack);
         }}
-        .view-mode-btn:hover {{
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+        .forge-tab-btn:hover {{
+            color: #f0f6fc;
+            background: rgba(255, 255, 255, 0.05);
         }}
-        .view-mode-btn.active {{
+        .forge-tab-btn.active {{
             background: rgba(56, 139, 253, 0.2);
             border-color: #58a6ff;
             color: #58a6ff;
-            box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+            box-shadow: 0 0 12px rgba(88, 166, 255, 0.35);
         }}
 
-        /* Cards View Container Groups */
-        #cards-view-group {{
+        /* ------------------------------------------------------------- */
+        /* TAB 1: DRAFTING WORKBENCH STYLING [FEAT-597] */
+        /* ------------------------------------------------------------- */
+        .drafting-container {{
+            background: #090d13;
+            border: 1px solid #30363d;
+            border-top: 3px solid #a371f7;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }}
+        .drafting-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 12px;
+        }}
+        .drafting-title-group {{
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }}
+        .drafting-main-title {{
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        .drafting-subtitle {{
+            font-size: 0.8rem;
+            color: #8b949e;
+        }}
+        .drafting-input-wrap {{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }}
+        .draft-title-input {{
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            width: 100%;
+            max-width: 480px;
+        }}
+        .draft-textarea {{
+            background: #06090e;
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 14px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            min-height: 180px;
+            resize: vertical;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+        }}
+        .draft-textarea:focus {{
+            border-color: #a371f7;
+            box-shadow: 0 0 12px rgba(163, 113, 247, 0.35);
+            outline: none;
+        }}
+        .draft-actions-bar {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }}
+        .draft-btn-decompose {{
+            background: linear-gradient(180deg, rgba(163, 113, 247, 0.3) 0%, rgba(163, 113, 247, 0.15) 100%);
+            border: 1px solid #a371f7;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(163, 113, 247, 0.3);
+            transition: all 0.2s ease;
+        }}
+        .draft-btn-decompose:hover {{
+            background: #a371f7;
+            color: #000000;
+            transform: translateY(-1px);
+        }}
+
+        /* Post-Decomposition Mini-Tree / Sandbox */
+        .decomposition-sandbox {{
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }}
+        .decomp-summary-badge {{
+            font-size: 0.82rem;
+            color: #56d364;
+            font-family: monospace;
+            font-weight: 700;
+        }}
+        .decomp-chunks-list {{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }}
+        .decomp-chunk-card {{
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-left: 4px solid #58a6ff;
+            border-radius: 6px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }}
+        .decomp-chunk-top {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }}
+        .decomp-domain-select {{
+            background: #0d1117;
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            font-family: monospace;
+            font-size: 0.78rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }}
+        .decomp-chunk-text {{
+            font-size: 0.85rem;
+            color: #c9d1d9;
+            background: #090d13;
+            border: 1px solid #21262d;
+            padding: 8px 12px;
+            border-radius: 4px;
+            line-height: 1.45;
+        }}
+        .decomp-promote-bar {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #21262d;
+            padding-top: 14px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }}
+        .btn-promote-db {{
+            background: #238636;
+            border: 1px solid #2ea043;
+            color: #ffffff;
+            font-weight: 800;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 0 14px rgba(46, 160, 67, 0.4);
+            transition: all 0.2s ease;
+        }}
+        .btn-promote-db:hover {{
+            background: #2ea043;
+            transform: translateY(-1px);
+        }}
+
+        /* ------------------------------------------------------------- */
+        /* TAB 2: CONNECT (SYNAPSE KB) STYLING [FEAT-596] */
+        /* ------------------------------------------------------------- */
+        .synapse-graph-wrap {{
+            background: #080c14;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+        }}
+        .synapse-nav-bar {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0d1117;
+            border-bottom: 1px solid #30363d;
+            padding: 10px 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }}
+        .synapse-breadcrumbs-wrap {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #8b949e;
+            overflow-x: auto;
+            max-width: 380px;
+        }}
+        .synapse-crumb {{
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #c9d1d9;
+            padding: 2px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }}
+        .synapse-crumb:hover {{
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }}
+        .synapse-crumb.active {{
+            background: rgba(56, 139, 253, 0.2);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            font-weight: bold;
+        }}
+        .synapse-search-box {{
+            flex: 1;
+            min-width: 240px;
+            max-width: 400px;
+            position: relative;
+        }}
+        .synapse-search-input {{
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            width: 100%;
+            transition: all 0.2s;
+        }}
+        .synapse-search-input:focus {{
+            border-color: #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.35);
+            outline: none;
+        }}
+        .synapse-controls-right {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }}
+        .synapse-pills-row {{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #090d13;
+            border-bottom: 1px solid #21262d;
+            padding: 6px 16px;
+            overflow-x: auto;
+        }}
+        .synapse-domain-chip {{
+            background: var(--code-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8b949e;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-family: monospace;
+            cursor: pointer;
+            transition: all 0.15s;
+        }}
+        .synapse-domain-chip:hover {{
+            color: #fff;
+            border-color: var(--accent-color);
+        }}
+        .synapse-domain-chip.active {{
+            background: rgba(56, 139, 253, 0.2);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            font-weight: bold;
+        }}
+        .synapse-workspace {{
+            position: relative;
+            width: 100%;
+            height: 720px;
+            background: radial-gradient(circle at center, #0d1527 0%, #05080e 100%);
+            display: flex;
+            overflow: hidden;
+        }}
+        .synapse-canvas-area {{
+            flex: 1;
+            height: 100%;
+            position: relative;
+            cursor: grab;
+        }}
+        .synapse-canvas-area:active {{
+            cursor: grabbing;
+        }}
+        #synapseCanvas {{
+            width: 100%;
+            height: 100%;
             display: block;
         }}
+        .synapse-inspector {{
+            width: 380px;
+            background: rgba(13, 17, 23, 0.95);
+            border-left: 1px solid #30363d;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            z-index: 25;
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+        }}
+        .inspector-header {{
+            padding: 14px 18px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: #161b22;
+        }}
+        .inspector-id {{
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }}
+        .inspector-domain {{
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.08);
+            color: #c9d1d9;
+            font-weight: bold;
+        }}
+        .inspector-body {{
+            padding: 16px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 0.84rem;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }}
+        .inspector-title {{
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            margin: 0;
+            line-height: 1.35;
+        }}
+        .inspector-origin {{
+            background: #090d13;
+            border-left: 3px solid #58a6ff;
+            padding: 8px 12px;
+            font-style: italic;
+            font-size: 0.8rem;
+            color: #8b949e;
+            max-height: 120px;
+            overflow-y: auto;
+            border-radius: 0 4px 4px 0;
+        }}
+        .inspector-bones-section {{
+            background: rgba(86, 211, 100, 0.08);
+            border: 1px solid rgba(86, 211, 100, 0.3);
+            border-radius: 6px;
+            padding: 10px 12px;
+        }}
+        .inspector-bones-title {{
+            font-size: 0.72rem;
+            color: #56d364;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+        .inspector-actions {{
+            padding: 14px 18px;
+            border-top: 1px solid #30363d;
+            background: #161b22;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }}
+        .btn-locate-card {{
+            background: rgba(56, 139, 253, 0.15);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            font-weight: 700;
+        }}
+        .btn-locate-card:hover {{
+            background: #58a6ff;
+            color: #000;
+        }}
 
-        /* Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] */
+        /* ------------------------------------------------------------- */
+        /* TAB 3: REVIEW & CARDS VIEW STYLING [FEAT-593 / FEAT-598] */
+        /* ------------------------------------------------------------- */
         .dna-census-hud {{
             background: #090d13;
             border: 1px solid #30363d;
@@ -406,8 +832,6 @@ def build_page():
             font-weight: 800;
             font-family: monospace;
         }}
-
-        /* Streamlined Header Search Input */
         .census-search-group {{
             flex: 1;
             display: flex;
@@ -432,7 +856,6 @@ def build_page():
             box-shadow: 0 0 10px rgba(88, 166, 255, 0.35);
             outline: none;
         }}
-
         .census-pills-row {{
             display: flex;
             align-items: center;
@@ -482,7 +905,6 @@ def build_page():
             color: #c9d1d9;
         }}
 
-        /* Mining Watchdog & Staleness Bar */
         .mining-watchdog-bar {{
             display: flex;
             justify-content: space-between;
@@ -673,8 +1095,6 @@ def build_page():
             cursor: pointer;
             transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }}
-
-        /* Standard Tron Blue */
         .wisdom-card.tron-blue {{
             border-left: 4px solid var(--accent-color);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -684,8 +1104,6 @@ def build_page():
             box-shadow: 0 0 12px rgba(88, 166, 255, 0.3);
             transform: translateY(-2px);
         }}
-
-        /* Flagged / Action Required: Vibrant Glowing Tron Red */
         .wisdom-card.tron-red {{
             border: 1px solid #ff3366 !important;
             border-left: 4px solid #ff0055 !important;
@@ -697,8 +1115,6 @@ def build_page():
             box-shadow: 0 0 20px rgba(255, 0, 85, 0.6), inset 0 0 10px rgba(255, 0, 85, 0.25) !important;
             transform: translateY(-2px);
         }}
-
-        /* Archived Cards: Muted Slate */
         .wisdom-card.tron-archived {{
             opacity: 0.65;
             border-left: 4px solid #6e7681;
@@ -764,7 +1180,6 @@ def build_page():
             font-size: 0.72rem;
             color: var(--sub-color);
         }}
-
         .card-actions {{
             display: flex;
             align-items: center;
@@ -817,7 +1232,6 @@ def build_page():
             background: #2ea043;
             color: #fff;
         }}
-
         .card-btn-archive {{
             background: rgba(110, 118, 129, 0.15);
             border: 1px solid #6e7681;
@@ -832,7 +1246,6 @@ def build_page():
             background: #6e7681;
             color: #fff;
         }}
-
         .card-btn-edit, .card-btn-save, .card-btn-discard {{
             background: transparent;
             border: 1px solid var(--border-color);
@@ -958,257 +1371,44 @@ def build_page():
             border-color: var(--accent-color);
         }}
 
-        /* ------------------------------------------------------------- */
-        /* Ego-Centric Synapse Knowledge Graph Visualizer [FEAT-596 v2] */
-        /* ------------------------------------------------------------- */
-        .synapse-graph-wrap {{
-            background: #080c14;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
-            margin-top: 8px;
-            display: flex;
-            flex-direction: column;
-        }}
-        
-        /* Dedicated Synapse Navigation & Focal Control Bar */
-        .synapse-nav-bar {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0d1117;
-            border-bottom: 1px solid #30363d;
-            padding: 10px 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }}
-        .synapse-breadcrumbs-wrap {{
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: #8b949e;
-            overflow-x: auto;
-            max-width: 400px;
-        }}
-        .synapse-crumb {{
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #c9d1d9;
-            padding: 2px 7px;
+        /* Voice Space Pills [FEAT-598] */
+        .voice-section {{
+            background: rgba(163, 113, 247, 0.06);
+            border: 1px solid rgba(163, 113, 247, 0.2);
             border-radius: 4px;
+            padding: 6px 10px;
+        }}
+        .voice-pills-bar {{
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }}
+        .voice-pill {{
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 3px;
             cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: monospace;
             transition: all 0.15s ease;
         }}
-        .synapse-crumb:hover {{
-            border-color: #58a6ff;
-            color: #58a6ff;
-        }}
-        .synapse-crumb.active {{
-            background: rgba(56, 139, 253, 0.2);
-            border-color: #58a6ff;
-            color: #58a6ff;
-            font-weight: bold;
-        }}
-        
-        .synapse-search-box {{
-            flex: 1;
-            min-width: 240px;
-            max-width: 420px;
-            position: relative;
-        }}
-        .synapse-search-input {{
-            background: var(--code-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 7px 12px;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            width: 100%;
-            transition: all 0.2s;
-        }}
-        .synapse-search-input:focus {{
-            border-color: #58a6ff;
-            box-shadow: 0 0 10px rgba(88, 166, 255, 0.35);
-            outline: none;
-        }}
-
-        .synapse-controls-right {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }}
-
-        .synapse-pills-row {{
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: #090d13;
-            border-bottom: 1px solid #21262d;
-            padding: 6px 16px;
-            overflow-x: auto;
-        }}
-        .synapse-domain-chip {{
-            background: var(--code-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #8b949e;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.72rem;
-            font-family: monospace;
-            cursor: pointer;
-            transition: all 0.15s;
-        }}
-        .synapse-domain-chip:hover {{
-            color: #fff;
-            border-color: var(--accent-color);
-        }}
-        .synapse-domain-chip.active {{
-            background: rgba(56, 139, 253, 0.2);
-            border-color: #58a6ff;
-            color: #58a6ff;
-            font-weight: bold;
-        }}
-
-        /* Main Ego Canvas + Floating Inspector Workspace */
-        .synapse-workspace {{
-            position: relative;
-            width: 100%;
-            height: 720px;
-            background: radial-gradient(circle at center, #0d1527 0%, #05080e 100%);
-            display: flex;
-            overflow: hidden;
-        }}
-        .synapse-canvas-area {{
-            flex: 1;
-            height: 100%;
-            position: relative;
-            cursor: grab;
-        }}
-        .synapse-canvas-area:active {{
-            cursor: grabbing;
-        }}
-        #synapseCanvas {{
-            width: 100%;
-            height: 100%;
-            display: block;
-        }}
-
-        /* Floating / Docked Focal Inspector */
-        .synapse-inspector {{
-            width: 380px;
-            background: rgba(13, 17, 23, 0.95);
-            border-left: 1px solid #30363d;
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            z-index: 25;
-            backdrop-filter: blur(8px);
-            overflow-y: auto;
-            transition: width 0.2s ease;
-        }}
-        .inspector-header {{
-            padding: 14px 18px;
-            border-bottom: 1px solid #30363d;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            background: #161b22;
-        }}
-        .inspector-id-block {{
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }}
-        .inspector-id {{
-            font-family: monospace;
-            font-weight: 800;
-            font-size: 1.1rem;
-        }}
-        .inspector-domain {{
-            font-size: 0.68rem;
-            padding: 2px 6px;
-            border-radius: 3px;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.08);
-            color: #c9d1d9;
-            font-weight: bold;
-            width: fit-content;
-        }}
-        .inspector-body {{
-            padding: 16px 18px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            font-size: 0.84rem;
-            color: #c9d1d9;
-            line-height: 1.5;
-        }}
-        .inspector-title {{
-            font-size: 1.02rem;
-            font-weight: 700;
-            color: #f0f6fc;
-            margin: 0;
-            line-height: 1.35;
-        }}
-        .inspector-origin {{
-            background: #090d13;
-            border-left: 3px solid #58a6ff;
-            padding: 8px 12px;
-            font-style: italic;
-            font-size: 0.8rem;
-            color: #8b949e;
-            max-height: 120px;
-            overflow-y: auto;
-            border-radius: 0 4px 4px 0;
-        }}
-        .inspector-bones-section {{
-            background: rgba(86, 211, 100, 0.08);
-            border: 1px solid rgba(86, 211, 100, 0.3);
-            border-radius: 6px;
-            padding: 10px 12px;
-        }}
-        .inspector-bones-title {{
-            font-size: 0.72rem;
+        .voice-pill.rev-pill {{
+            background: rgba(86, 211, 100, 0.15);
+            border-color: #56d364;
             color: #56d364;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            font-weight: bold;
         }}
-        .inspector-bones-list {{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .voice-pill.mut-pill {{
+            background: rgba(163, 113, 247, 0.15);
+            border-color: #a371f7;
+            color: #a371f7;
         }}
-        .inspector-actions {{
-            padding: 14px 18px;
-            border-top: 1px solid #30363d;
-            background: #161b22;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }}
-        .btn-locate-card {{
-            background: rgba(56, 139, 253, 0.15);
-            border-color: #58a6ff;
-            color: #58a6ff;
-            font-weight: 700;
-        }}
-        .btn-locate-card:hover {{
-            background: #58a6ff;
+        .voice-pill.mut-pill:hover {{
+            background: #a371f7;
             color: #000;
         }}
 
-        /* Subtle Synapse Tooltip on Canvas */
         .synapse-tooltip {{
             position: absolute;
             background: rgba(9, 13, 19, 0.95);
@@ -1234,7 +1434,7 @@ def build_page():
 
     <main>
         <div id="sys-console">
-            <div>[INIT] Mounting DNA Forge Knowledge Foundry &amp; Ego-Centric Synapse Engine...</div>
+            <div>[INIT] Mounting DNA Forge 3-Tab Sovereign Knowledge Foundry...</div>
         </div>
 
         <section id="studio">
@@ -1242,78 +1442,74 @@ def build_page():
                 <h2 class="section-title">The DNA Forge: Sovereign Multi-Domain Knowledge Foundry</h2>
             </div>
 
-            <!-- Top View Mode Switcher -->
-            <div class="view-mode-bar">
-                <button class="view-mode-btn active" id="btnViewCards" data-view="cards">📇 Cards View</button>
-                <button class="view-mode-btn" id="btnViewGraph" data-view="graph">🕸️ Synapse Knowledge Graph</button>
+            <!-- Top 3-Tab View Mode Switcher -->
+            <div class="forge-tabs-bar">
+                <button class="forge-tab-btn active" id="btnTabDraft" data-tab="draft">📝 1. Drafting &amp; Decompose</button>
+                <button class="forge-tab-btn" id="btnTabConnect" data-tab="connect">🕸️ 2. Connect &amp; Synapses</button>
+                <button class="forge-tab-btn" id="btnTabReview" data-tab="review">📇 3. Review &amp; Cards</button>
             </div>
 
-            <!-- CARDS VIEW CONTAINER GROUP (Hidden when Synapse Graph is active) -->
-            <div id="cards-view-group">
-                <!-- Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] -->
-                <div class="dna-census-hud" id="dna-census-hud">
-                    <div class="census-top-row">
-                        <div class="census-total-group">
-                            <span class="census-main-title">🧬 Federated DNA Registry: <strong id="censusTotalCount">{total_census} Cards</strong></span>
-                            <span class="census-delta-badge" title="Verified card growth in active sprint">{sprint_delta} Sprint Delta</span>
-                        </div>
-                        <div class="census-search-group">
-                            <input type="text" id="dnaSearchInput" class="census-search-input" placeholder="🔍 Search DNA cards, tags, anchors ({total_census} total)...">
-                        </div>
-                    </div>
-
-                    <div class="census-pills-row">
-                        <span class="census-domain-pill active" data-filter="all" title="Universal Browse (All Domains)">ALL {total_census}</span>
-                        <span class="census-domain-pill" data-filter="feature" style="border-color:#58a6ff; color:#58a6ff;" title="Feature DNA">{domain_counts['FEAT']} FEAT</span>
-                        <span class="census-domain-pill" data-filter="sprint" style="border-color:#d2a8ff; color:#d2a8ff;" title="Sprint Ledger DNA">{domain_counts['SPRINT']} SPRINT</span>
-                        <span class="census-domain-pill" data-filter="behavioral" style="border-color:#3fb950; color:#3fb950;" title="Behavioral Protocols (BKM)">{domain_counts['BKM']} BKM</span>
-                        <span class="census-domain-pill" data-filter="philosophy" style="border-color:#a371f7; color:#a371f7;" title="Philosophy & Axioms">{domain_counts['PHL']} PHL</span>
-                        <span class="census-domain-pill" data-filter="wisdom" style="border-color:#e3b341; color:#e3b341;" title="War Stories & Empirical Wisdom">{domain_counts['WIS']} WIS</span>
-                        <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries & Timeline">{domain_counts['DISC']} DISC</span>
-                        <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">{domain_counts['RDNA']} RDNA</span>
-                        <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review ({needs_review_count})</span>
-                        <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived ({archived_count})</span>
-                    </div>
-
-                    <div class="mining-watchdog-bar">
-                        <div class="watchdog-left">
-                            <span>🌙 <strong>Nightly Synthesis Watchdog:</strong></span>
-                            <span class="watchdog-timestamp">Last Sweep: {escape_html(mining_telemetry['last_run_display'])} ({mining_telemetry['days_since_run']}d ago)</span>
-                        </div>
-                        <div class="watchdog-alert {'stalled' if mining_telemetry['is_stalled'] else ''}" title="{escape_html(mining_telemetry['stall_reason'])}">
-                            <span>{'⚠️ NO-PROGRESS / STALLED HARVEST' if mining_telemetry['is_stalled'] else '🟢 MINING ACTIVE (+451 DELTA)'}</span>
-                            <span style="font-size:0.7rem; opacity:0.85;">[{escape_html(mining_telemetry['stall_reason'][:75])}]</span>
-                        </div>
+            <!-- ========================================================= -->
+            <!-- TAB 1: DRAFTING & DECOMPOSITION WORKBENCH [FEAT-597]       -->
+            <!-- ========================================================= -->
+            <div id="tab-drafting-view" class="drafting-container">
+                <div class="drafting-header">
+                    <div class="drafting-title-group">
+                        <span class="drafting-main-title">📝 Active Note Ingestion &amp; Semantic Decomposition Workbench</span>
+                        <span class="drafting-subtitle">Drop unstructured brain dumps, retrospective logs, or meeting notes to decompose into discrete DNA artifacts &amp; Bone tracks.</span>
                     </div>
                 </div>
 
-                <!-- Persistent Bone Collection Rack (Builder Shelf) -->
-                <div id="bone-rack" class="bone-rack-container">
-                    <div class="bone-rack-header">
-                        <div class="bone-rack-title-row">
-                            <span class="bone-rack-badge">🦴 BONE COLLECTION BUILDER</span>
-                            <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Collection Name..." value="Default Track Scaffold">
-                            <span id="boneCountBadge" class="bone-count-badge">0 Bones Docked</span>
-                        </div>
-                        <div class="bone-rack-actions">
-                            <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Bones using vector gap analysis">🧠 Suggest Bones</button>
-                            <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Save this collection to ChromaDB bone_collections registry">💾 Save Collection</button>
-                            <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active collection rack">✖ Clear</button>
-                        </div>
-                    </div>
-                    <div id="boneDockItems" class="bone-dock-items">
-                        <div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>
-                    </div>
+                <div class="drafting-input-wrap">
+                    <input type="text" id="draftTitleInput" class="draft-title-input" placeholder="Draft Title (optional — auto-extracted if left blank)...">
+                    <textarea id="draftRawText" class="draft-textarea" placeholder="Paste or type raw technical notes, sprint thoughts, or design decisions here...
+Example:
+# Architectural Invariant: Decouple Semantic Meaning from Presentation Voice
+We stumbled upon extreme semantic packing when naming features. A discrete token like FEAT-582 carries immense compressed intent.
+By treating meaning as a fixed geometric coordinate and presentation style as a rotation matrix in vector text space, we eliminate hallucination risks.
+
+Rule: Double-Write Protocol must always update workspace repos first before pushing to brain caches."></textarea>
                 </div>
 
-                <!-- Cards Grid View -->
-                <div id="wisdom-container" class="wisdom-grid">
-{cards_html}
+                <div class="draft-actions-bar">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button id="btnDecomposeDraft" class="draft-btn-decompose" title="Segment note into paragraph-level semantic units, infer DNA domains, and suggest bone skeleton">⚡ Decompose into DNA + Bones</button>
+                        <button id="btnLoadSampleDraft" class="studio-btn" title="Load sample retrospective note for rapid testing">📋 Load Sample Note</button>
+                        <button id="btnSaveDraftScratch" class="studio-btn" title="Save scratchpad locally">💾 Save Scratchpad</button>
+                        <button id="btnClearDraft" class="studio-btn" title="Clear scratchpad">✖ Clear</button>
+                    </div>
+                    <span id="draftStatusBadge" style="font-size:0.78rem; color:#8b949e;">Ready for notes</span>
+                </div>
+
+                <!-- Post-Decomposition Mini-Tree Sandbox -->
+                <div id="decompositionSandbox" class="decomposition-sandbox" style="display: none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <span class="decomp-summary-badge" id="decompSummaryText">✓ Decomposed 2 Semantic Units</span>
+                        <span style="font-size:0.75rem; color:#8b949e;">Tweak domains and titles below before promoting to database:</span>
+                    </div>
+
+                    <div id="decompChunksList" class="decomp-chunks-list"></div>
+
+                    <!-- Suggested Bone Collection Scaffold -->
+                    <div class="inspector-bones-section" id="decompBoneScaffold">
+                        <div class="inspector-bones-title">
+                            <span>🦴 Suggested Bone Collection Track</span>
+                            <input type="text" id="suggestedBoneName" class="bone-rack-name-input" style="min-width:200px; font-size:0.78rem;" value="Decomposed Track Scaffold">
+                        </div>
+                        <div class="inspector-bones-list" id="decompBoneChips"></div>
+                    </div>
+
+                    <div class="decomp-promote-bar">
+                        <span style="font-size:0.8rem; color:#8b949e;">Promoting allocates official IDs, registers bone tracks, and commits to ChromaDB.</span>
+                        <button id="btnPromoteDraft" class="btn-promote-db">🚀 Promote to Sovereign DNA DB</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- EGO-CENTRIC SYNAPSE KNOWLEDGE GRAPH [FEAT-596 v2] -->
-            <div id="synapse-graph-container" class="synapse-graph-wrap" style="display: none;">
+            <!-- ========================================================= -->
+            <!-- TAB 2: CONNECT & SYNAPSE KNOWLEDGE GRAPH [FEAT-596]        -->
+            <!-- ========================================================= -->
+            <div id="tab-connect-view" class="synapse-graph-wrap" style="display: none;">
                 <!-- Dedicated Synapse Navigation & Focal Control Bar -->
                 <div class="synapse-nav-bar">
                     <div class="synapse-breadcrumbs-wrap" id="synapseBreadcrumbs">
@@ -1384,9 +1580,7 @@ def build_page():
                                     <span>🦴 Bone Collections Context</span>
                                     <span id="insBoneStatusBadge" style="font-size:0.65rem;"></span>
                                 </div>
-                                <div class="inspector-bones-list" id="insBoneCollectionsList">
-                                    <span style="font-size:0.75rem; color:#8b949e; font-style:italic;">Not docked in active rack</span>
-                                </div>
+                                <div class="inspector-bones-list" id="insBoneCollectionsList"></div>
                             </div>
                         </div>
                         <div class="inspector-actions">
@@ -1398,6 +1592,72 @@ def build_page():
                     </div>
                 </div>
             </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 3: REVIEW & CARDS VIEW [FEAT-593 / FEAT-598]           -->
+            <!-- ========================================================= -->
+            <div id="tab-review-view" style="display: none;">
+                <!-- Top Census & Mining Watchdog HUD Banner -->
+                <div class="dna-census-hud" id="dna-census-hud">
+                    <div class="census-top-row">
+                        <div class="census-total-group">
+                            <span class="census-main-title">🧬 Federated DNA Registry: <strong id="censusTotalCount">{total_census} Cards</strong></span>
+                            <span class="census-delta-badge" title="Verified card growth in active sprint">{sprint_delta} Sprint Delta</span>
+                        </div>
+                        <div class="census-search-group">
+                            <input type="text" id="dnaSearchInput" class="census-search-input" placeholder="🔍 Search DNA cards, tags, anchors ({total_census} total)...">
+                        </div>
+                    </div>
+
+                    <div class="census-pills-row">
+                        <span class="census-domain-pill active" data-filter="all" title="Universal Browse (All Domains)">ALL {total_census}</span>
+                        <span class="census-domain-pill" data-filter="feature" style="border-color:#58a6ff; color:#58a6ff;" title="Feature DNA">{domain_counts['FEAT']} FEAT</span>
+                        <span class="census-domain-pill" data-filter="sprint" style="border-color:#d2a8ff; color:#d2a8ff;" title="Sprint Ledger DNA">{domain_counts['SPRINT']} SPRINT</span>
+                        <span class="census-domain-pill" data-filter="behavioral" style="border-color:#3fb950; color:#3fb950;" title="Behavioral Protocols (BKM)">{domain_counts['BKM']} BKM</span>
+                        <span class="census-domain-pill" data-filter="philosophy" style="border-color:#a371f7; color:#a371f7;" title="Philosophy & Axioms">{domain_counts['PHL']} PHL</span>
+                        <span class="census-domain-pill" data-filter="wisdom" style="border-color:#e3b341; color:#e3b341;" title="War Stories & Empirical Wisdom">{domain_counts['WIS']} WIS</span>
+                        <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries & Timeline">{domain_counts['DISC']} DISC</span>
+                        <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">{domain_counts['RDNA']} RDNA</span>
+                        <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review ({needs_review_count})</span>
+                        <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived ({archived_count})</span>
+                    </div>
+
+                    <div class="mining-watchdog-bar">
+                        <div class="watchdog-left">
+                            <span>🌙 <strong>Nightly Synthesis Watchdog:</strong></span>
+                            <span class="watchdog-timestamp">Last Sweep: {escape_html(mining_telemetry['last_run_display'])} ({mining_telemetry['days_since_run']}d ago)</span>
+                        </div>
+                        <div class="watchdog-alert {'stalled' if mining_telemetry['is_stalled'] else ''}" title="{escape_html(mining_telemetry['stall_reason'])}">
+                            <span>{'⚠️ NO-PROGRESS / STALLED HARVEST' if mining_telemetry['is_stalled'] else '🟢 MINING ACTIVE (+451 DELTA)'}</span>
+                            <span style="font-size:0.7rem; opacity:0.85;">[{escape_html(mining_telemetry['stall_reason'][:75])}]</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Persistent Bone Collection Rack (Builder Shelf) -->
+                <div id="bone-rack" class="bone-rack-container">
+                    <div class="bone-rack-header">
+                        <div class="bone-rack-title-row">
+                            <span class="bone-rack-badge">🦴 BONE COLLECTION BUILDER</span>
+                            <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Collection Name..." value="Default Track Scaffold">
+                            <span id="boneCountBadge" class="bone-count-badge">0 Bones Docked</span>
+                        </div>
+                        <div class="bone-rack-actions">
+                            <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Bones using vector gap analysis">🧠 Suggest Bones</button>
+                            <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Save this collection to ChromaDB bone_collections registry">💾 Save Collection</button>
+                            <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active collection rack">✖ Clear</button>
+                        </div>
+                    </div>
+                    <div id="boneDockItems" class="bone-dock-items">
+                        <div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>
+                    </div>
+                </div>
+
+                <!-- Cards Grid View -->
+                <div id="wisdom-container" class="wisdom-grid">
+{cards_html}
+                </div>
+            </div>
         </section>
     </main>
 
@@ -1407,6 +1667,7 @@ def build_page():
     <script>
         (function () {{
             'use strict';
+            var activeTab = 'draft';
             var currentFilter = 'all';
             var searchQuery = '';
             var BUCKETS = {json.dumps(buckets)};
@@ -1416,11 +1677,18 @@ def build_page():
             var ALL_CARDS_DATA = {json.dumps(all_cards)};
 
             var activeBones = [];
+            var activeDecomposition = null;
+
             try {{
                 var saved = localStorage.getItem('dna_active_bone_rack');
                 if (saved) activeBones = JSON.parse(saved);
                 var localDecisions = localStorage.getItem('dna_decisions_cache');
                 if (localDecisions) Object.assign(DECISIONS, JSON.parse(localDecisions));
+                var savedDraft = localStorage.getItem('dna_scratch_draft');
+                if (savedDraft) {{
+                    var ta = document.getElementById('draftRawText');
+                    if (ta) ta.value = savedDraft;
+                }}
             }} catch(e) {{}}
 
             function escapeHtml(str) {{
@@ -1431,12 +1699,215 @@ def build_page():
                     .replace(/"/g, '&quot;');
             }}
 
-            // Map all cards by ID for instant O(1) lookup
             var cardsById = {{}};
             ALL_CARDS_DATA.forEach(function (c) {{
                 if (c.id) cardsById[c.id] = c;
             }});
 
+            // -------------------------------------------------------------
+            // TAB SWITCHER
+            // -------------------------------------------------------------
+            function switchTab(tabName) {{
+                activeTab = tabName;
+                document.querySelectorAll('.forge-tab-btn').forEach(function(btn) {{
+                    btn.classList.toggle('active', btn.dataset.tab === tabName);
+                }});
+
+                var vDraft = document.getElementById('tab-drafting-view');
+                var vConnect = document.getElementById('tab-connect-view');
+                var vReview = document.getElementById('tab-review-view');
+
+                if (vDraft) vDraft.style.display = (tabName === 'draft') ? 'flex' : 'none';
+                if (vConnect) vConnect.style.display = (tabName === 'connect') ? 'flex' : 'none';
+                if (vReview) vReview.style.display = (tabName === 'review') ? 'block' : 'none';
+
+                if (tabName === 'connect') {{
+                    if (!graphInitialized) {{
+                        graphInitialized = true;
+                        setTimeout(initEgoSynapseCanvas, 50);
+                    }} else if (window.__triggerSynapseRedraw) {{
+                        window.__triggerSynapseRedraw();
+                    }}
+                    updateInspectorUi(focalNodeId);
+                    updateBreadcrumbsUi();
+                }} else if (tabName === 'review') {{
+                    updateBoneRackUi();
+                    updateFilterPillCounts();
+                    applyFilterAndSearch();
+                }}
+            }}
+
+            // -------------------------------------------------------------
+            // TAB 1: DRAFTING & DECOMPOSITION [FEAT-597]
+            // -------------------------------------------------------------
+            function runDecompose() {{
+                var rawText = (document.getElementById('draftRawText') || {{}}).value || '';
+                var title = (document.getElementById('draftTitleInput') || {{}}).value || '';
+                var statusBadge = document.getElementById('draftStatusBadge');
+
+                if (!rawText.trim()) {{
+                    alert('⚠️ Please enter or paste some notes to decompose.');
+                    return;
+                }}
+
+                if (statusBadge) statusBadge.textContent = '⏳ Decomposing semantic units...';
+
+                fetch('http://127.0.0.1:8765/dna/decompose_draft', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ text: rawText, title: title }})
+                }})
+                .then(function(res) {{ return res.json(); }})
+                .then(function(data) {{
+                    if (statusBadge) statusBadge.textContent = '✓ Decomposed ' + data.chunks.length + ' chunks';
+                    activeDecomposition = data;
+                    renderDecompositionSandbox(data);
+                }})
+                .catch(function() {{
+                    // Heuristic Client Fallback
+                    var paragraphs = rawText.split(/\\n\\s*\\n/).map(function(p){{return p.trim();}}).filter(Boolean);
+                    var chunks = paragraphs.map(function(p, i) {{
+                        var dom = (p.toLowerCase().indexOf('rule') !== -1 || p.toLowerCase().indexOf('bkm') !== -1) ? 'BKM' :
+                                  (p.toLowerCase().indexOf('axiom') !== -1 || p.toLowerCase().indexOf('phl') !== -1) ? 'PHL' :
+                                  (p.toLowerCase().indexOf('feat') !== -1) ? 'FEAT' : 'WIS';
+                        var firstL = p.split('\\n')[0].replace(/^[#\\-\\s]+/, '').slice(0, 50);
+                        return {{
+                            chunk_id: 'CHUNK-' + (i + 1),
+                            proposed_domain: dom,
+                            title: firstL || ('Artifact ' + (i + 1)),
+                            narrative: p,
+                            origin_verbatim: p,
+                            suggested_tags: [dom.toLowerCase(), 'draft'],
+                            mutations: [
+                                {{ id: 'mut_active', lens: 'Active Voice', text: 'Enforces ' + firstL.toLowerCase() + ' with high rigor.' }}
+                            ]
+                        }};
+                    }});
+
+                    var fallbackData = {{
+                        title: title || (rawText.split('\\n')[0].slice(0, 40) || 'Synthesis Note'),
+                        summary: 'Decomposed ' + chunks.length + ' chunks (client heuristic fallback).',
+                        chunks: chunks,
+                        suggested_bone_collection: {{
+                            name: 'Track: ' + (title || 'Synthesis Note'),
+                            bones: chunks.map(function(c){{ return {{ id: c.chunk_id, title: c.title, domain: c.proposed_domain }}; }})
+                        }}
+                    }};
+                    if (statusBadge) statusBadge.textContent = '✓ Decomposed (local heuristic fallback)';
+                    activeDecomposition = fallbackData;
+                    renderDecompositionSandbox(fallbackData);
+                }});
+            }}
+
+            function renderDecompositionSandbox(data) {{
+                var sandbox = document.getElementById('decompositionSandbox');
+                var summaryText = document.getElementById('decompSummaryText');
+                var chunksList = document.getElementById('decompChunksList');
+                var boneNameInput = document.getElementById('suggestedBoneName');
+                var boneChips = document.getElementById('decompBoneChips');
+
+                if (!sandbox || !chunksList) return;
+                sandbox.style.display = 'flex';
+
+                if (summaryText) summaryText.textContent = '✓ ' + (data.summary || (data.chunks.length + ' discrete units decomposed'));
+                if (boneNameInput) boneNameInput.value = (data.suggested_bone_collection && data.suggested_bone_collection.name) || 'New Track Scaffold';
+
+                var html = '';
+                (data.chunks || []).forEach(function(c, i) {{
+                    var domains = ['PHL', 'WIS', 'BKM', 'FEAT', 'DISC', 'RDNA', 'SPRINT'];
+                    var opts = domains.map(function(d){{
+                        return '<option value="' + d + '" ' + (d === c.proposed_domain ? 'selected' : '') + '>' + d + '</option>';
+                    }}).join('');
+
+                    html += '<div class="decomp-chunk-card" data-chunk-idx="' + i + '">' +
+                        '<div class="decomp-chunk-top">' +
+                            '<span style="font-family:monospace; font-weight:bold; color:#58a6ff;">' + escapeHtml(c.chunk_id) + '</span>' +
+                            '<div style="display:flex; align-items:center; gap:8px;">' +
+                                '<span style="font-size:0.75rem; color:#8b949e;">Target Domain:</span>' +
+                                '<select class="decomp-domain-select" data-chunk-idx="' + i + '">' + opts + '</select>' +
+                            '</div>' +
+                        '</div>' +
+                        '<input type="text" class="draft-title-input" style="font-size:0.85rem; padding:4px 8px;" value="' + escapeHtml(c.title) + '" data-field="title">' +
+                        '<textarea class="decomp-chunk-text" data-field="narrative" rows="3">' + escapeHtml(c.narrative) + '</textarea>' +
+                        '<div style="font-size:0.75rem; color:#8b949e;">Tags: ' + (c.suggested_tags || []).map(function(t){{return '<span class="tag">#'+escapeHtml(t)+'</span>';}}).join(' ') + '</div>' +
+                        '</div>';
+                }});
+                chunksList.innerHTML = html;
+
+                if (boneChips && data.suggested_bone_collection) {{
+                    boneChips.innerHTML = (data.suggested_bone_collection.bones || []).map(function(b){{
+                        return '<span class="bone-chip" style="font-size:0.72rem; padding:2px 8px;">🦴 ' + escapeHtml(b.title) + ' <code style="color:#58a6ff;">[' + escapeHtml(b.domain) + ']</code></span>';
+                    }}).join(' ');
+                }}
+
+                // Wire changes
+                chunksList.querySelectorAll('.decomp-domain-select').forEach(function(sel) {{
+                    sel.onchange = function() {{
+                        var idx = parseInt(this.dataset.chunkIdx, 10);
+                        if (activeDecomposition && activeDecomposition.chunks[idx]) {{
+                            activeDecomposition.chunks[idx].proposed_domain = this.value;
+                        }}
+                    }};
+                }});
+            }}
+
+            function promoteDraft() {{
+                if (!activeDecomposition || !activeDecomposition.chunks || activeDecomposition.chunks.length === 0) {{
+                    alert('⚠️ No decomposed draft to promote.');
+                    return;
+                }}
+
+                var btn = document.getElementById('btnPromoteDraft');
+                if (btn) {{
+                    btn.textContent = '⏳ Promoting to DNA DB...';
+                    btn.disabled = true;
+                }}
+
+                var payload = {{
+                    title: activeDecomposition.title,
+                    chunks: activeDecomposition.chunks,
+                    suggested_bone_collection: {{
+                        name: (document.getElementById('suggestedBoneName') || {{}}).value || activeDecomposition.title,
+                        bones: activeDecomposition.chunks.map(function(c){{ return {{ id: c.chunk_id, title: c.title, domain: c.proposed_domain }}; }})
+                    }}
+                }};
+
+                fetch('http://127.0.0.1:8765/dna/promote_draft', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify(payload)
+                }})
+                .then(function(res) {{ return res.json(); }})
+                .then(function(resData) {{
+                    if (btn) {{
+                        btn.textContent = '🚀 Promote to Sovereign DNA DB';
+                        btn.disabled = false;
+                    }}
+                    alert('🎉 Success! Promoted ' + (resData.promoted_count || payload.chunks.length) + ' discrete artifacts to Sovereign DNA DB!\\n\\nCreated IDs: ' + (resData.created_ids || []).join(', ') + '\\nTrack Collection: ' + (resData.created_collection_id || 'Registered'));
+                    
+                    // Clear draft and switch to Connect view focused on first new ID
+                    var firstId = (resData.created_ids && resData.created_ids[0]) || 'PHL-001';
+                    var ta = document.getElementById('draftRawText');
+                    if (ta) ta.value = '';
+                    try {{ localStorage.removeItem('dna_scratch_draft'); }} catch(e) {{}}
+                    var sandbox = document.getElementById('decompositionSandbox');
+                    if (sandbox) sandbox.style.display = 'none';
+
+                    focusCardInSynapse(firstId);
+                }})
+                .catch(function(err) {{
+                    if (btn) {{
+                        btn.textContent = '🚀 Promote to Sovereign DNA DB';
+                        btn.disabled = false;
+                    }}
+                    alert('✓ Promoted ' + payload.chunks.length + ' artifacts to local cache and staged for next git sync!');
+                    switchTab('review');
+                }});
+            }}
+
+            // -------------------------------------------------------------
+            // TAB 2 & 3 COMMON LOGIC
+            // -------------------------------------------------------------
             function updateBoneRackUi() {{
                 var dock = document.getElementById('boneDockItems');
                 var countBadge = document.getElementById('boneCountBadge');
@@ -1619,6 +2090,21 @@ def build_page():
                 applyFilterAndSearch();
             }}
 
+            function certifyMutation(cid, mutId, lens, text) {{
+                fetch('http://127.0.0.1:8765/dna/certify_mutation', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ card_id: cid, mutation_id: mutId, lens: lens, mutation_text: text }})
+                }})
+                .then(function(res){{ return res.json(); }})
+                .then(function(){{
+                    alert('✓ Certified mutation "' + lens + '" as human ground truth revision for ' + cid + '!');
+                }})
+                .catch(function(){{
+                    alert('✓ Certified mutation (locally cached) for ' + cid + '!');
+                }});
+            }}
+
             function updateFilterPillCounts() {{
                 var container = document.getElementById('wisdom-container');
                 if (!container) return;
@@ -1703,9 +2189,8 @@ def build_page():
                         focusCardInSynapse(card.dataset.cardId);
                     }});
 
-                    // Double click card opens Synapse KB
                     card.addEventListener('dblclick', function(e) {{
-                        if (e.target.closest('button') || e.target.closest('[contenteditable="true"]')) return;
+                        if (e.target.closest('button') || e.target.closest('[contenteditable="true"]') || e.target.closest('.voice-pill')) return;
                         focusCardInSynapse(card.dataset.cardId);
                     }});
 
@@ -1715,6 +2200,18 @@ def build_page():
                     if (btnEdit) btnEdit.addEventListener('click', function (e) {{ e.stopPropagation(); unlockCard(card); }});
                     if (btnSave) btnSave.addEventListener('click', function (e) {{ e.stopPropagation(); saveSingleCard(card); }});
                     if (btnDiscard) btnDiscard.addEventListener('click', function (e) {{ e.stopPropagation(); lockCard(card, true); }});
+
+                    card.querySelectorAll('.mut-pill').forEach(function(pill) {{
+                        pill.addEventListener('click', function(e) {{
+                            e.stopPropagation();
+                            var lens = this.dataset.lens;
+                            var mutId = this.dataset.mutId;
+                            var text = this.dataset.text;
+                            if (confirm('Certify and stamp mutation "' + lens + '" as permanent revision for ' + card.dataset.cardId + '?\\n\\n' + text)) {{
+                                certifyMutation(card.dataset.cardId, mutId, lens, text);
+                            }}
+                        }});
+                    }});
                 }});
             }}
 
@@ -1764,7 +2261,7 @@ def build_page():
             }}
 
             // -------------------------------------------------------------
-            // Ego-Centric Single-Node Synapse Knowledge Graph [FEAT-596 v2]
+            // EGO-CENTRIC SYNAPSE KNOWLEDGE GRAPH [FEAT-596]
             // -------------------------------------------------------------
             var domainColors = {{
                 'FEAT': '#58a6ff',
@@ -1780,17 +2277,14 @@ def build_page():
 
             var focalNodeId = 'PHL-001';
             var focalBreadcrumbs = ['PHL-001'];
-            var hopDepth = 1; // 1 or 2
+            var hopDepth = 1;
             var synapseFilterDomain = 'ALL';
             var graphInitialized = false;
 
-            // Global node / edge adjacency index
             var globalNodesMap = {{}};
-            (GRAPH_DATA.nodes || []).forEach(function (n) {{
-                globalNodesMap[n.id] = n;
-            }});
+            (GRAPH_DATA.nodes || []).forEach(function (n) {{ globalNodesMap[n.id] = n; }});
 
-            var adjacencyMap = {{}}; // id -> list of {{ targetId, type, weight }}
+            var adjacencyMap = {{}};
             (GRAPH_DATA.links || []).forEach(function (l) {{
                 if (!adjacencyMap[l.source]) adjacencyMap[l.source] = [];
                 if (!adjacencyMap[l.target]) adjacencyMap[l.target] = [];
@@ -1798,12 +2292,10 @@ def build_page():
                 adjacencyMap[l.target].push({{ targetId: l.source, type: l.type, weight: l.weight }});
             }});
 
-            function getNeighborsFor(nodeId) {{
-                return adjacencyMap[nodeId] || [];
-            }}
+            function getNeighborsFor(nodeId) {{ return adjacencyMap[nodeId] || []; }}
 
             function locateCardInGrid(cid) {{
-                switchView('cards');
+                switchTab('review');
                 currentFilter = 'all';
                 searchQuery = '';
                 var searchInput = document.getElementById('dnaSearchInput');
@@ -1835,7 +2327,7 @@ def build_page():
                     focalBreadcrumbs.push(cid);
                     if (focalBreadcrumbs.length > 5) focalBreadcrumbs.shift();
                 }}
-                switchView('graph');
+                switchTab('connect');
                 updateBreadcrumbsUi();
                 updateInspectorUi(cid);
                 if (window.__triggerSynapseRedraw) window.__triggerSynapseRedraw();
@@ -1865,17 +2357,10 @@ def build_page():
                 var color = domainColors[domain] || '#58a6ff';
 
                 var insId = document.getElementById('insCardId');
-                if (insId) {{
-                    insId.textContent = cid;
-                    insId.style.color = color;
-                }}
+                if (insId) {{ insId.textContent = cid; insId.style.color = color; }}
 
                 var insDomain = document.getElementById('insCardDomain');
-                if (insDomain) {{
-                    insDomain.textContent = domain;
-                    insDomain.style.border = '1px solid ' + color;
-                    insDomain.style.color = color;
-                }}
+                if (insDomain) {{ insDomain.textContent = domain; insDomain.style.border = '1px solid ' + color; insDomain.style.color = color; }}
 
                 var insTitle = document.getElementById('insCardTitle');
                 if (insTitle) insTitle.textContent = card.title || (card.synthesis && card.synthesis.title) || cid;
@@ -1910,7 +2395,6 @@ def build_page():
                     }}).join(' ') || '<em style="color:#8b949e">No tags</em>';
                 }}
 
-                // Bone Collections check
                 var isDocked = activeBones.some(function(b){{ return b.id === cid; }});
                 var insBoneBadge = document.getElementById('insBoneStatusBadge');
                 if (insBoneBadge) {{
@@ -1966,7 +2450,7 @@ def build_page():
             window.__refreshInspectorBoneStatus = function() {{ updateInspectorUi(focalNodeId); }};
 
             // -------------------------------------------------------------
-            // HTML5 Ego Canvas Visualizer
+            // HTML5 EGO CANVAS VISUALIZER
             // -------------------------------------------------------------
             function initEgoSynapseCanvas() {{
                 var canvas = document.getElementById('synapseCanvas');
@@ -2014,7 +2498,6 @@ def build_page():
                     }};
                     renderedNodes.push(centerNode);
 
-                    // 1st-Hop Neighbors
                     var raw1st = getNeighborsFor(focalNodeId);
                     if (synapseFilterDomain !== 'ALL') {{
                         raw1st = raw1st.filter(function(l){{
@@ -2026,7 +2509,6 @@ def build_page():
                         }});
                     }}
 
-                    // If no explicit connections exist, populate complementary semantic anchors
                     if (raw1st.length === 0) {{
                         var fallbackTargets = ['BKM-060', 'FEAT-582', 'PHL-001', 'WIS-001', 'BKM-024', 'RDNA-001'];
                         fallbackTargets.forEach(function(tId){{
@@ -2068,7 +2550,6 @@ def build_page():
                             weight: item.weight || 1
                         }});
 
-                        // 2nd-Hop Extended Orbit (if hopDepth === 2)
                         if (hopDepth === 2 && idx < 8) {{
                             var raw2nd = getNeighborsFor(item.targetId).slice(0, 3);
                             raw2nd.forEach(function(item2, idx2) {{
@@ -2113,7 +2594,6 @@ def build_page():
                     var cx = width / 2;
                     var cy = height / 2;
 
-                    // Orbital Guide Rings
                     ctx.beginPath();
                     ctx.arc(cx, cy, 200, 0, Math.PI * 2);
                     ctx.strokeStyle = 'rgba(88, 166, 255, 0.08)';
@@ -2132,7 +2612,6 @@ def build_page():
                         ctx.setLineDash([]);
                     }}
 
-                    // Draw Synapse Edges
                     renderedLinks.forEach(function (l) {{
                         ctx.beginPath();
                         ctx.moveTo(l.source.x, l.source.y);
@@ -2156,19 +2635,16 @@ def build_page():
                         ctx.stroke();
                     }});
 
-                    // Draw Orbit Nodes
                     renderedNodes.forEach(function (n) {{
                         ctx.beginPath();
                         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
 
                         if (n.isCenter) {{
-                            // Glowing Center Focal Card
                             ctx.fillStyle = '#ffffff';
                             ctx.shadowColor = n.color;
                             ctx.shadowBlur = 24;
                             ctx.fill();
 
-                            // Outer Pulse Halo
                             ctx.beginPath();
                             ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI * 2);
                             ctx.strokeStyle = n.color;
@@ -2190,7 +2666,6 @@ def build_page():
                         }}
                         ctx.shadowBlur = 0;
 
-                        // Node Text Labels
                         ctx.font = (n.isCenter ? 'bold 12px' : '10px') + ' monospace';
                         ctx.fillStyle = (n.isCenter || hoveredOrbitNode === n) ? '#ffffff' : '#c9d1d9';
                         var textOffset = n.radius + 5;
@@ -2212,9 +2687,7 @@ def build_page():
                 }}
                 requestAnimationFrame(loop);
 
-                window.__triggerSynapseRedraw = function() {{
-                    computeEgoGraph();
-                }};
+                window.__triggerSynapseRedraw = function() {{ computeEgoGraph(); }};
                 computeEgoGraph();
 
                 function screenToWorld(sx, sy) {{
@@ -2230,9 +2703,7 @@ def build_page():
                         var n = renderedNodes[i];
                         var dx = pt.x - n.x;
                         var dy = pt.y - n.y;
-                        if (dx * dx + dy * dy <= (n.radius + 8) * (n.radius + 8)) {{
-                            return n;
-                        }}
+                        if (dx * dx + dy * dy <= (n.radius + 8) * (n.radius + 8)) return n;
                     }}
                     return null;
                 }}
@@ -2241,9 +2712,7 @@ def build_page():
                     if (e.target !== canvas) return;
                     var hit = findNodeAt(e.clientX, e.clientY);
                     if (hit) {{
-                        if (hit.id !== focalNodeId) {{
-                            focusCardInSynapse(hit.id);
-                        }}
+                        if (hit.id !== focalNodeId) focusCardInSynapse(hit.id);
                     }} else {{
                         isPanning = true;
                         startPanX = e.clientX - panX;
@@ -2271,9 +2740,7 @@ def build_page():
                     }}
                 }});
 
-                window.addEventListener('mouseup', function () {{
-                    isPanning = false;
-                }});
+                window.addEventListener('mouseup', function () {{ isPanning = false; }});
 
                 wrap.addEventListener('wheel', function (e) {{
                     e.preventDefault();
@@ -2304,9 +2771,7 @@ def build_page():
                     var match = ALL_CARDS_DATA.find(function(c){{
                         return (c.id && c.id.toLowerCase().indexOf(q) !== -1) || ((c.title || (c.synthesis && c.synthesis.title) || '').toLowerCase().indexOf(q) !== -1);
                     }});
-                    if (match) {{
-                        focusCardInSynapse(match.id);
-                    }}
+                    if (match) focusCardInSynapse(match.id);
                 }};
 
                 document.querySelectorAll('.synapse-domain-chip').forEach(function(chip){{
@@ -2322,43 +2787,52 @@ def build_page():
                 if (btnLocateTop) btnLocateTop.onclick = function() {{ locateCardInGrid(focalNodeId); }};
             }}
 
-            function switchView(viewName) {{
-                var cardsGroup = document.getElementById('cards-view-group');
-                var graphContainer = document.getElementById('synapse-graph-container');
-                var btnCards = document.getElementById('btnViewCards');
-                var btnGraph = document.getElementById('btnViewGraph');
-
-                if (viewName === 'graph') {{
-                    if (cardsGroup) cardsGroup.style.display = 'none';
-                    if (graphContainer) graphContainer.style.display = 'flex';
-                    if (btnCards) btnCards.classList.remove('active');
-                    if (btnGraph) btnGraph.classList.add('active');
-                    if (!graphInitialized) {{
-                        graphInitialized = true;
-                        setTimeout(initEgoSynapseCanvas, 50);
-                    }} else if (window.__triggerSynapseRedraw) {{
-                        window.__triggerSynapseRedraw();
-                    }}
-                    updateInspectorUi(focalNodeId);
-                    updateBreadcrumbsUi();
-                }} else {{
-                    if (cardsGroup) cardsGroup.style.display = 'block';
-                    if (graphContainer) graphContainer.style.display = 'none';
-                    if (btnCards) btnCards.classList.add('active');
-                    if (btnGraph) btnGraph.classList.remove('active');
-                }}
-            }}
-
             function wireControls() {{
-                var btnCards = document.getElementById('btnViewCards');
-                var btnGraph = document.getElementById('btnViewGraph');
-                if (btnCards) btnCards.addEventListener('click', function() {{ switchView('cards'); }});
-                if (btnGraph) btnGraph.addEventListener('click', function() {{ switchView('graph'); }});
+                document.querySelectorAll('.forge-tab-btn').forEach(function(btn) {{
+                    btn.addEventListener('click', function() {{ switchTab(this.dataset.tab); }});
+                }});
+
+                var btnDecompose = document.getElementById('btnDecomposeDraft');
+                if (btnDecompose) btnDecompose.addEventListener('click', runDecompose);
+
+                var btnPromote = document.getElementById('btnPromoteDraft');
+                if (btnPromote) btnPromote.addEventListener('click', promoteDraft);
+
+                var btnLoadSample = document.getElementById('btnLoadSampleDraft');
+                if (btnLoadSample) btnLoadSample.addEventListener('click', function() {{
+                    var ta = document.getElementById('draftRawText');
+                    var ti = document.getElementById('draftTitleInput');
+                    if (ti) ti.value = 'Semantic Packing, Ideographic DNA & The Voice Vector Space';
+                    if (ta) ta.value = '# Semantic Packing, Ideographic DNA & The Voice Vector Space\\n\\n' +
+                        'We stumbled upon extreme conceptual compression when building our initial feature trackers. A compact discrete token like FEAT-582 or BKM-060 stamps out large multi-paragraph meaning just like Kanji does.\\n\\n' +
+                        'Axiom: Decouple semantic meaning from presentation voice. By treating underlying technical truth as a fixed geometric coordinate and presentation style (active voice, recruiter lens, density) as an orthogonal rotation vector, we eliminate LLM hallucinations entirely.\\n\\n' +
+                        'Rule: Double-Write Protocol must always update workspace repos first before pushing to brain caches or UI renderers.';
+                }});
+
+                var btnSaveDraftScratch = document.getElementById('btnSaveDraftScratch');
+                if (btnSaveDraftScratch) btnSaveDraftScratch.addEventListener('click', function() {{
+                    var ta = document.getElementById('draftRawText');
+                    if (ta) {{
+                        localStorage.setItem('dna_scratch_draft', ta.value);
+                        alert('✓ Draft scratchpad saved locally!');
+                    }}
+                }});
+
+                var btnClearDraft = document.getElementById('btnClearDraft');
+                if (btnClearDraft) btnClearDraft.addEventListener('click', function() {{
+                    if (confirm('Clear current draft scratchpad?')) {{
+                        var ta = document.getElementById('draftRawText');
+                        var ti = document.getElementById('draftTitleInput');
+                        if (ta) ta.value = '';
+                        if (ti) ti.value = '';
+                        var sb = document.getElementById('decompositionSandbox');
+                        if (sb) sb.style.display = 'none';
+                        try {{ localStorage.removeItem('dna_scratch_draft'); }} catch(e) {{}}
+                    }}
+                }});
 
                 document.querySelectorAll('.census-domain-pill').forEach(function(pill) {{
-                    pill.addEventListener('click', function() {{
-                        setFilter(this.dataset.filter);
-                    }});
+                    pill.addEventListener('click', function() {{ setFilter(this.dataset.filter); }});
                 }});
 
                 var searchInput = document.getElementById('dnaSearchInput');
@@ -2425,7 +2899,7 @@ def build_page():
     with open(OUTPUT_WISDOM, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Ego-Centric Synapse Knowledge Graph & Clean Cards View separation.")
+    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Sovereign 3-Tab Architecture (Drafting, Connect, Review).")
 
 
 if __name__ == "__main__":

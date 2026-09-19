@@ -3193,3 +3193,20 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Provides visual topological navigation across fragmented lab wisdom and features while decoupling underlying semantic meaning from presentation voice.
 **Mechanism:** `scripts/generate_connections_graph.py`, `field_notes/data/dna_connections_graph.json`, `field_notes/dna_forge_build.py`, `field_notes/writer.html`.
 
+## [FEAT-597] Active Note Decomposition & Draft Promotion Pipeline
+**Sprint:** SPR-85.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/curator/draft_decomposer.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/draft_decomposer.py) — Active Note Decomposition & Draft Promotion Pipeline.
+**Logic:** Establishes the Tab 1 Drafting Workbench in `dna_forge.html`. Ingests unstructured technical notes and retrospective thoughts via `/dna/decompose_draft`, segmenting content into paragraph-level semantic units, classifying target DNA domains (`BKM`, `WIS`, `FEAT`, `PHL`, `DISC`, `RDNA`), and synthesizing a suggested Bone Collection skeleton. Provides an interactive post-decomposition mini-tree sandbox for adjusting domains and titles before 1-click promotion to ChromaDB via `/dna/promote_draft`.
+**Rationale:** Transforms knowledge ingestion from a static import modal into an active, iterative drafting workbench that bridges raw brainstorms to structured sovereign DNA.
+**Mechanism:** `curator/draft_decomposer.py`, Foyer REST endpoints `/dna/decompose_draft` & `/dna/promote_draft`, `field_notes/dna_forge_build.py`.
+
+## [FEAT-598] Vector Space Mutation & Revision Governance Engine
+**Sprint:** SPR-85.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/dna_forge_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py) — Vector Space Mutation & Revision Governance Engine.
+**Logic:** Governs the distinction between machine **Mutations** (AI proposals across voice/lens text vector spaces) and human **Revisions** (certified ground truth variants). Embeds inline mutation pills directly into cards in `dna_forge.html` (`/dna/certify_mutation`), allowing 1-click human certification of voice variations into permanent card metadata while preserving immutable origins.
+**Rationale:** Eliminates hallucination risks by treating underlying technical truth as a fixed immutable coordinate and stylistic tone as a rotation in vector space.
+**Mechanism:** `dna_forge_build.py`, `dna_manifest.json` schema (`revisions` vs `mutations`), Foyer REST endpoint `/dna/certify_mutation`.
+
+
