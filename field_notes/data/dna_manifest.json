@@ -18053,5 +18053,21 @@
         "node_id": "node_exp_val_03"
       }
     }
+  ],
+  "papers": [
+    {
+      "id": "PAPER-RESUME",
+      "title": "Jason Allred - Technical Resume & CV",
+      "subtitle": "Principal Infrastructure Architect & Pre-Silicon Validation",
+      "author": "Jason Allred",
+      "file": "PAPER-RESUME_v1.json"
+    },
+    {
+      "id": "PAPER-002_SEMANTIC_PACKING",
+      "title": "\ud83e\uddec Semantic Packing, Ideographic DNA & The Voice Vector Space",
+      "subtitle": "Applied Armchair Philosophy & Mathematical Decoupling",
+      "author": "Jason Allred & AGY",
+      "file": "PAPER-002_SEMANTIC_PACKING.json"
+    }
   ]
 }

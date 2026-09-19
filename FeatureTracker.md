@@ -3172,7 +3172,7 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 ## [FEAT-594] Synthesis Lens Crafting & Automated Paper Grading Engine
 **Sprint:** SPR-84.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/src/foyer/paper_service.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/foyer/paper_service.py) — Synthesis Lens Crafting & Automated Paper Grading Engine.
+**Code:** [HomeLabAI/src/curator/lens_service.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/lens_service.py) — Synthesis Lens Crafting & Automated Paper Grading Engine.
 **Logic:** Ingests unstructured guidance or Job Descriptions via `/paper/craft_lens` and compiles structured JSON rubrics (`rubric_rules: [...]`). Executes chunk-by-chunk LLM evaluation via `/paper/grade_paper` against active paper ASTs, attaching actionable `review_flags` with concrete replacement proposals. Spawns staged candidate revision forks (`PAPER-001_<rev_id>.json`) viewable in the `writer.html` version dropdown.
 **Rationale:** Bridges high-level editorial and recruiting rubrics with surgical paragraph-level writing, enabling automated tailoring for specific job requisitions.
 **Mechanism:** Foyer REST API, FastEmbed vector scoring, discrete JSON revision snapshots, `data/paper_decisions.json`.
@@ -3184,3 +3184,12 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Logic:** Decomposes resumes into structured JSON AST (`PAPER-RESUME_v1.json`) and polymorphic `RESUME-xxx` DNA cards (implementing the Subtractive CV model). Extracts ATS layout metadata into `style_resume_v1.json`. Re-exports structured papers back to Google Docs via a two-stage `docs.create` + `docs.formatText` formatting engine that enforces ATS single-column margins, bold lead-in power verbs, and clean section headers.
 **Rationale:** Unifies career knowledge management into the federated DNA architecture, allowing one master CV superset to generate tailored Google Docs/PDFs on demand.
 **Mechanism:** Python AST parser, Google Workspace MCP API, CLaRa ChromaDB resume collection.
+
+## [FEAT-596] DNA Synapse Graph & Dynamic Voice Vector Switcher
+**Sprint:** SPR-85.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/scripts/generate_connections_graph.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/generate_connections_graph.py) — DNA Synapse Graph & Dynamic Voice Vector Switcher.
+**Logic:** Generates multi-domain connection graphs across all 8 DNA domains (`PHL`, `WIS`, `FEAT`, `BKM`, `SPRINT`, `DISC`, `RDNA`, `ART`, `RESUME`) connecting cards via explicit links, anchor tags, and semantic tag clusters. Visualizes the graph in `dna_forge.html` via a high-performance 2D force-directed canvas simulation with domain color encoding, hover tooltips, neighbor highlighting, and bone rack docking. Powers the live multi-axis Voice Vector switcher (`writer.html`) to rotate prose across stylistic dimensions.
+**Rationale:** Provides visual topological navigation across fragmented lab wisdom and features while decoupling underlying semantic meaning from presentation voice.
+**Mechanism:** `scripts/generate_connections_graph.py`, `field_notes/data/dna_connections_graph.json`, `field_notes/dna_forge_build.py`, `field_notes/writer.html`.
+

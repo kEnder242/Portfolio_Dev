@@ -1397,8 +1397,150 @@
             opacity: 1;
             transform: translateX(-50%) translateY(-5px);
         }
-        .toast-notification.success { border-color: #2ea043; color: #7ee787; }
-        .toast-notification.error { border-color: #f85149; color: #ff7b72; }
+        /* [FEAT-594 / FEAT-595 / FEAT-596] Review Flags, Variants & Voice Vector Controls */
+        .review-flags-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+            margin-bottom: 6px;
+        }
+        .review-flag-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-left: 3px solid #f85149;
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-size: 0.74rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .review-flag-card.prose { border-left-color: #d29922; }
+        .review-flag-card.refinement { border-left-color: #58a6ff; }
+        .review-flag-card.connection { border-left-color: #3fb950; }
+
+        .flag-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .flag-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            font-family: var(--font-stack);
+        }
+        .flag-badge.prose { background: rgba(210, 153, 34, 0.2); color: #d29922; }
+        .flag-badge.refinement { background: rgba(88, 166, 255, 0.2); color: #58a6ff; }
+        .flag-badge.connection { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
+
+        .flag-suggestion {
+            color: #e6edf3;
+            line-height: 1.35;
+        }
+        .flag-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .btn-apply-mutation {
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid #2ea043;
+            color: #3fb950;
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-apply-mutation:hover { background: #2ea043; color: #fff; }
+        .btn-archive-flag {
+            background: transparent;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-archive-flag:hover { border-color: #8b949e; color: #fff; }
+
+        /* Variant Pill Bar */
+        .variant-pill-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+        .variant-pill {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 0.68rem;
+            font-family: var(--font-stack);
+            padding: 2px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .variant-pill:hover { border-color: var(--accent-color); color: var(--text-color); }
+        .variant-pill.active {
+            border-color: var(--accent-color);
+            background: rgba(77, 170, 252, 0.15);
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* Inline TODO Expand Button */
+        .todo-expand-btn {
+            background: rgba(163, 113, 247, 0.15);
+            border: 1px solid #a371f7;
+            color: #d2a8ff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+        .todo-expand-btn:hover { background: #8957e5; color: #fff; }
+
+        /* Paragraph Hover Controls */
+        .manuscript-paragraph-wrap {
+            position: relative;
+        }
+        .par-hover-controls {
+            position: absolute;
+            top: -10px;
+            right: 12px;
+            display: none;
+            gap: 4px;
+            z-index: 10;
+        }
+        .manuscript-paragraph-wrap:hover .par-hover-controls {
+            display: flex;
+        }
+        .btn-hover-action {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .btn-hover-action:hover { color: #fff; border-color: var(--accent-color); }
     </style>
 <script>
 // [FEAT-581/FEAT-582] Workbench context: active paper, manifest, citation index
@@ -15453,6 +15595,8 @@ window.__WRITER_QUOTES__ = [
             <!-- Header Action Controls -->
             <div class="header-actions">
                 <button id="btn-toggle-objective" class="action-btn" style="border-color:rgba(77, 170, 252, 0.4); color:var(--accent-color);" title="Target Objective & JD Alignment Studio">🎯 Objective</button>
+                <button id="btn-toggle-lens" class="action-btn" style="border-color:rgba(210, 153, 34, 0.4); color:var(--amber-glow);" title="Synthesis Lens Studio & Automated Paper Grading">🔍 Lens Studio</button>
+                <button id="btn-toggle-voice" class="action-btn" style="border-color:rgba(163, 113, 247, 0.4); color:var(--chip-phl);" title="Live Voice Vector Space Switcher">🎛️ Voice Vectors</button>
                 <button id="btn-revert-disk" class="action-btn" title="Revert all unsaved changes and reload pristine manuscript from disk">Revert</button>
                 <button id="btn-archive" class="action-btn" title="Archive current paper snapshot">Archive</button>
                 <button id="btn-validate" class="action-btn" title="Validate schema and citation syntax">Validate</button>
@@ -15617,6 +15761,117 @@ window.__WRITER_QUOTES__ = [
                         </button>
                         <button id="btn-sort-alignment" class="action-btn" style="width:100%; justify-content:center;" title="Sort active bullets descending by alignment match score">
                             🔼 Sort Sections by Alignment
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 🔍 Synthesis Lens & Automated Paper Grading Drawer (FEAT-594) -->
+            <aside id="lens-drawer" class="objective-drawer" style="width: 380px;">
+                <div class="objective-header">
+                    <div class="objective-title">🔍 Synthesis Lens &amp; Rubric Studio</div>
+                    <button id="btn-close-lens" class="objective-close">✖</button>
+                </div>
+                <div class="objective-body">
+                    <div class="objective-field">
+                        <label class="objective-label" for="lens-preset-select">Active Synthesis Lens Preset</label>
+                        <select id="lens-preset-select" class="paper-select" style="width: 100%; margin-top: 4px;">
+                            <option value="farah_sharghi_recruiter_v1">Farah Sharghi (Recruiter Lens v1)</option>
+                            <option value="yc_partner_brief_v1">YC Partner Pitch / Exec Brief</option>
+                            <option value="academic_paper_v1">IEEE / Academic Reviewer</option>
+                            <option value="custom">Custom Lens...</option>
+                        </select>
+                    </div>
+                    <div class="objective-field">
+                        <label class="objective-label">Persona &amp; Perspective</label>
+                        <div id="lens-persona-box" style="background:#0d1117; border:1px solid var(--border-color); border-radius:4px; padding:8px; font-size:0.75rem; color:#c9d1d9;">
+                            <strong style="color:var(--amber-glow);" id="lens-persona-name">Farah Sharghi (Ex-Google Recruiter)</strong><br>
+                            <span id="lens-persona-desc" style="color:var(--sub-color);">Evaluates first 3 words power verb, 'So What?' metric anchors, and 1-line purview context.</span>
+                        </div>
+                    </div>
+                    <div class="objective-field">
+                        <label class="objective-label">Rubric Target Rules</label>
+                        <div id="lens-rules-list" style="display:flex; flex-direction:column; gap:4px; max-height:160px; overflow-y:auto; font-size:0.72rem;">
+                            <div style="background:rgba(210,153,34,0.1); border-left:3px solid var(--amber-glow); padding:4px 6px;">[PROSE] <strong>FIRST_3_WORDS_POWER_VERB:</strong> Start bullets with active power verbs.</div>
+                            <div style="background:rgba(88,166,255,0.1); border-left:3px solid var(--chip-feat); padding:4px 6px;">[REFINEMENT] <strong>SO_WHAT_METRIC_DRILL:</strong> Quantify business/scale impact.</div>
+                            <div style="background:rgba(63,185,80,0.1); border-left:3px solid var(--chip-bkm); padding:4px 6px;">[CONNECTION] <strong>DNA_CITATION_CONNECTION:</strong> Ground in empirical DNA / Arxiv.</div>
+                        </div>
+                    </div>
+                    <div class="objective-actions" style="margin-top:14px;">
+                        <button id="btn-run-grading" class="action-btn" style="width:100%; justify-content:center; padding:9px 12px; font-weight:700; background:#9e6a03; border-color:#d29922; color:#fff;">
+                            ⚡ Grade Paper AST (Generate Review Flags)
+                        </button>
+                    </div>
+                    <div id="grading-summary-box" style="display:none; margin-top:12px; background:#161b22; border:1px solid var(--border-color); border-radius:6px; padding:10px; font-size:0.75rem;">
+                        <div style="font-weight:700; color:var(--amber-glow); margin-bottom:4px;">Grading Results:</div>
+                        <div>Flags Attached: <strong id="grade-flags-count" style="color:#f85149;">0</strong></div>
+                        <div>Candidate Revision: <strong id="grade-revision-name" style="color:var(--accent-color); font-family:var(--font-stack);">v2_graded</strong></div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 🎛️ Live Voice Vector Space Switcher Drawer (Story 85.3) -->
+            <aside id="voice-drawer" class="objective-drawer" style="width: 380px;">
+                <div class="objective-header">
+                    <div class="objective-title">🎛️ Voice Vector Space Switcher</div>
+                    <button id="btn-close-voice" class="objective-close">✖</button>
+                </div>
+                <div class="objective-body">
+                    <div style="font-size:0.75rem; color:var(--sub-color); margin-bottom:12px;">
+                        Rotate document presentation across continuous stylistic axes while preserving immutable DNA anchors (<code>PHL-035</code>).
+                    </div>
+
+                    <!-- Voice Vector Presets -->
+                    <div class="objective-field">
+                        <label class="objective-label">Voice Vector Presets</label>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:4px;">
+                            <button class="action-btn btn-voice-preset active" data-preset="scientific" style="justify-content:center;">🔬 Academic Paper</button>
+                            <button class="action-btn btn-voice-preset" data-preset="recruiter" style="justify-content:center;">👔 ATS Recruiter</button>
+                            <button class="action-btn btn-voice-preset" data-preset="executive" style="justify-content:center;">💼 Executive Brief</button>
+                            <button class="action-btn btn-voice-preset" data-preset="casual" style="justify-content:center;">☕ Casual Technical</button>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Axis Sliders -->
+                    <div class="objective-field" style="margin-top:10px;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--sub-color); margin-bottom:2px;">
+                            <span>Voice: Passive</span>
+                            <strong style="color:var(--text-color);" id="val-voice-axis">Active (85%)</strong>
+                            <span>Active</span>
+                        </div>
+                        <input type="range" id="slider-voice-axis" min="0" max="100" value="85" class="objective-slider">
+                    </div>
+
+                    <div class="objective-field">
+                        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--sub-color); margin-bottom:2px;">
+                            <span>Tense: Past</span>
+                            <strong style="color:var(--text-color);" id="val-tense-axis">Past (Architected)</strong>
+                            <span>Present</span>
+                        </div>
+                        <input type="range" id="slider-tense-axis" min="0" max="100" value="20" class="objective-slider">
+                    </div>
+
+                    <div class="objective-field">
+                        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--sub-color); margin-bottom:2px;">
+                            <span>Register: Layman</span>
+                            <strong style="color:var(--text-color);" id="val-register-axis">Technical Jargon</strong>
+                            <span>Silicon Jargon</span>
+                        </div>
+                        <input type="range" id="slider-register-axis" min="0" max="100" value="75" class="objective-slider">
+                    </div>
+
+                    <div class="objective-field">
+                        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--sub-color); margin-bottom:2px;">
+                            <span>Density: Concise Bullet</span>
+                            <strong style="color:var(--text-color);" id="val-density-axis">Standard Bullet</strong>
+                            <span>Expanded Prose</span>
+                        </div>
+                        <input type="range" id="slider-density-axis" min="0" max="100" value="40" class="objective-slider">
+                    </div>
+
+                    <div class="objective-actions" style="margin-top:14px;">
+                        <button id="btn-apply-voice-vector" class="action-btn" style="width:100%; justify-content:center; padding:8px 12px; font-weight:600; background:#8957e5; border-color:#a371f7; color:#fff;">
+                            ✨ Project Manuscript to Voice Vector
                         </button>
                     </div>
                 </div>
@@ -17212,70 +17467,81 @@ window.__WRITER_QUOTES__ = [
                     secHeaderWrap.appendChild(h2);
                     secWrap.appendChild(secHeaderWrap);
 
-                    (sec.paragraphs || []).forEach(function(par) {
-                        // Initialize baseline text cache for clean revert
+                    // Render Paragraphs / Nodes / Roles
+                    var renderItem = function(par, parentContainer) {
                         if (par._saved_baseline_text === undefined && par.text) {
                             par._saved_baseline_text = par.text;
                         }
 
                         var parWrap = document.createElement('div');
                         parWrap.className = 'manuscript-paragraph-wrap' + (par.dirty ? ' dirty' : '');
-                        parWrap.dataset.paragraphId = par.id;
+                        parWrap.dataset.paragraphId = par.id || par.node_id || '';
 
-                        // Paragraph node click → active context & auto-open Wordsmithing Drawer
                         parWrap.addEventListener('click', function(e) {
-                            if (e.target.closest && e.target.closest('button,input,textarea,.manuscript-epigraph')) return;
-                            setActiveContext('paragraph', par.id);
+                            if (e.target.closest && e.target.closest('button,input,textarea,.manuscript-epigraph,.review-flag-card')) return;
+                            setActiveContext('paragraph', par.id || par.node_id);
                             openReviewDrawer(par, sec);
                         });
 
-                        // Clean non-intrusive dirty banner
-                        var banner = null;
+                        // Hover Controls (+ Add, Split)
+                        var hoverControls = document.createElement('div');
+                        hoverControls.className = 'par-hover-controls';
+                        hoverControls.innerHTML = 
+                            '<button class="btn-hover-action btn-add-after" title="Add Paragraph After">+ Add</button>' +
+                            '<button class="btn-hover-action btn-split-par" title="Split Paragraph at Cursor">✂️ Split</button>';
+                        
+                        var addBtn = hoverControls.querySelector('.btn-add-after');
+                        var splitBtn = hoverControls.querySelector('.btn-split-par');
+                        if (addBtn) {
+                            addBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                addNewParagraphAfter(par, sec);
+                            });
+                        }
+                        if (splitBtn) {
+                            splitBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                splitParagraph(par, sec);
+                            });
+                        }
+                        parWrap.appendChild(hoverControls);
+
+                        // Dirty Banner
                         if (par.dirty) {
-                            banner = document.createElement('div');
+                            var banner = document.createElement('div');
                             banner.className = 'dirty-banner';
                             banner.style.padding = '3px 8px';
                             banner.style.marginBottom = '6px';
-                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED (Use Wordsmithing Studio to Save or Discard)</span>';
+                            banner.innerHTML = '<span style="font-size:0.68rem; font-weight:700; color:#d29922;">⚑ DRAFT MODIFIED</span>';
+                            parWrap.appendChild(banner);
                         }
 
-                        // Epigraphs for paragraph citations (Clickable for Citation Inspector)
-                        var epigraphsWrap = document.createElement('div');
-                        (par.citations || []).forEach(function(c) {
-                            var citeData = STATE.citationIndex[c];
-                            if (citeData && citeData.origin_text) {
-                                var epi = document.createElement('div');
-                                epi.className = 'manuscript-epigraph';
-                                epi.title = 'Click to inspect citation provenance for ' + c;
-                                epi.innerHTML = 
-                                    '“' + citeData.origin_text + '”' +
-                                    '<span class="epigraph-anchor">--- ' + c + ' (' + (citeData.title || '') + ')</span>';
-                                
-                                epi.addEventListener('click', function(e) {
+                        // Variants / Mutations Pills
+                        if (par.variants && Object.keys(par.variants).length > 0) {
+                            var varBar = document.createElement('div');
+                            varBar.className = 'variant-pill-bar';
+                            varBar.innerHTML = '<span style="font-size:0.65rem; color:var(--sub-color); font-weight:700;">MUTATIONS:</span>';
+                            Object.keys(par.variants).forEach(function(vKey) {
+                                var pill = document.createElement('button');
+                                pill.className = 'variant-pill' + (par.text === par.variants[vKey] ? ' active' : '');
+                                pill.textContent = '🔀 ' + vKey.replace(/_/g, ' ');
+                                pill.title = 'Switch to: ' + par.variants[vKey];
+                                pill.addEventListener('click', function(e) {
                                     e.stopPropagation();
-                                    openInspector(c);
+                                    par.text = par.variants[vKey];
+                                    if (prose) prose.textContent = par.text;
+                                    par.dirty = true;
+                                    parWrap.classList.add('dirty');
+                                    varBar.querySelectorAll('.variant-pill').forEach(function(p) { p.classList.remove('active'); });
+                                    pill.classList.add('active');
+                                    showToast('🔀 Swapped variant to ' + vKey, 'success');
                                 });
+                                varBar.appendChild(pill);
+                            });
+                            parWrap.appendChild(varBar);
+                        }
 
-                                epigraphsWrap.appendChild(epi);
-                            }
-                        });
-
-                        // Prose contenteditable (Author Human Prose)
-                        var prose = document.createElement('div');
-                        prose.className = 'prose-editor';
-                        prose.contentEditable = 'true';
-                        prose.spellcheck = false;
-                        prose.textContent = par.text || par.cached_words || '';
-
-                        prose.addEventListener('input', function() {
-                            par.text = prose.textContent;
-                            if (par.text !== par._saved_baseline_text) {
-                                par.dirty = true;
-                                parWrap.classList.add('dirty');
-                            }
-                        });
-
-                        // [SPR-82.4] Relevance Match Badge and Demote affordance
+                        // Alignment Match Badge (if present)
                         var score = (par.alignment_score !== undefined) ? par.alignment_score : par.match_score;
                         if (score !== undefined && score !== null) {
                             var thresh = (STATE.objectiveThreshold !== undefined) ? STATE.objectiveThreshold : 0.70;
@@ -17307,14 +17573,142 @@ window.__WRITER_QUOTES__ = [
                             parWrap.appendChild(metaLine);
                         }
 
-                        // Prose on Top, Supporting Epigraphs Below
-                        if (banner) parWrap.appendChild(banner);
+                        // Prose contenteditable
+                        var prose = document.createElement('div');
+                        prose.className = 'prose-editor';
+                        prose.contentEditable = 'true';
+                        prose.spellcheck = false;
+                        prose.textContent = par.text || par.cached_words || '';
+
+                        prose.addEventListener('input', function() {
+                            par.text = prose.textContent;
+                            if (par.text !== par._saved_baseline_text) {
+                                par.dirty = true;
+                                parWrap.classList.add('dirty');
+                            }
+                        });
                         parWrap.appendChild(prose);
+
+                        // [TODO:] Inline Expand Button
+                        if ((par.text || '').indexOf('[TODO:') !== -1) {
+                            var todoBtn = document.createElement('button');
+                            todoBtn.className = 'todo-expand-btn';
+                            todoBtn.innerHTML = '🧠 Expand / Discover';
+                            todoBtn.title = 'Discover arXiv preprints & CLaRa DNA anchors for this TODO';
+                            todoBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                triggerCitationExpansion(par, sec);
+                            });
+                            parWrap.appendChild(todoBtn);
+                        }
+
+                        // Review Flags (Graded AST)
+                        if (par.review_flags && par.review_flags.length > 0) {
+                            var flagsWrap = document.createElement('div');
+                            flagsWrap.className = 'review-flags-container';
+                            par.review_flags.forEach(function(flag, fIdx) {
+                                var flagCard = document.createElement('div');
+                                var cat = (flag.category || 'PROSE').toLowerCase();
+                                flagCard.className = 'review-flag-card ' + cat;
+                                flagCard.innerHTML = 
+                                    '<div class="flag-header">' +
+                                        '<span class="flag-badge ' + cat + '">[' + (flag.category || 'PROSE') + '] ' + (flag.rule_id || '') + '</span>' +
+                                        '<span style="font-size:0.65rem; color:var(--sub-color);">' + (flag.severity || 'INFO') + '</span>' +
+                                    '</div>' +
+                                    '<div class="flag-suggestion">' + (flag.suggestion || '') + '</div>' +
+                                    '<div class="flag-actions">' +
+                                        '<button class="btn-apply-mutation" title="Apply suggested mutation">✨ Apply Mutation</button>' +
+                                        '<button class="btn-archive-flag" title="Archive / Dismiss review flag">📦 Archive Flag</button>' +
+                                    '</div>';
+                                
+                                var applyBtn = flagCard.querySelector('.btn-apply-mutation');
+                                var archBtn = flagCard.querySelector('.btn-archive-flag');
+                                
+                                if (applyBtn) {
+                                    applyBtn.addEventListener('click', function(e) {
+                                        e.stopPropagation();
+                                        if (flag.suggested_text) {
+                                            par.text = flag.suggested_text;
+                                            prose.textContent = par.text;
+                                            par.dirty = true;
+                                            parWrap.classList.add('dirty');
+                                        }
+                                        par.review_flags.splice(fIdx, 1);
+                                        flagCard.remove();
+                                        showToast('✨ Applied mutation for ' + (flag.rule_id || 'rule'), 'success');
+                                    });
+                                }
+                                if (archBtn) {
+                                    archBtn.addEventListener('click', function(e) {
+                                        e.stopPropagation();
+                                        par.review_flags.splice(fIdx, 1);
+                                        flagCard.remove();
+                                        showToast('📦 Flag archived', 'info');
+                                    });
+                                }
+                                flagsWrap.appendChild(flagCard);
+                            });
+                            parWrap.appendChild(flagsWrap);
+                        }
+
+                        // Supporting Epigraphs
+                        var epigraphsWrap = document.createElement('div');
+                        (par.citations || []).forEach(function(c) {
+                            var citeData = STATE.citationIndex[c];
+                            if (citeData && citeData.origin_text) {
+                                var epi = document.createElement('div');
+                                epi.className = 'manuscript-epigraph';
+                                epi.title = 'Click to inspect citation provenance for ' + c;
+                                epi.innerHTML = 
+                                    '“' + citeData.origin_text + '”' +
+                                    '<span class="epigraph-anchor">--- ' + c + ' (' + (citeData.title || '') + ')</span>';
+                                
+                                epi.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    openInspector(c);
+                                });
+                                epigraphsWrap.appendChild(epi);
+                            }
+                        });
                         if (epigraphsWrap.children.length > 0) parWrap.appendChild(epigraphsWrap);
-                        secWrap.appendChild(parWrap);
+
+                        parentContainer.appendChild(parWrap);
+                    };
+
+                    // Handle Standard Paragraphs
+                    (sec.paragraphs || []).forEach(function(par) {
+                        renderItem(par, secWrap);
                     });
 
-                    // [SPR-82.4] Candidate Pool in Writing View
+                    // Handle AST Nodes array (e.g. sec_summary, sec_skills)
+                    (sec.nodes || []).forEach(function(node) {
+                        renderItem(node, secWrap);
+                    });
+
+                    // Handle AST Roles array (sec_experience in Resume AST)
+                    (sec.roles || []).forEach(function(role) {
+                        var roleCard = document.createElement('div');
+                        roleCard.style.background = '#0d1117';
+                        roleCard.style.border = '1px solid #30363d';
+                        roleCard.style.borderRadius = '6px';
+                        roleCard.style.padding = '12px 14px';
+                        roleCard.style.marginBottom = '14px';
+
+                        var rHeader = document.createElement('div');
+                        rHeader.style.marginBottom = '8px';
+                        rHeader.innerHTML = 
+                            '<div style="font-weight:700; font-size:0.95rem; color:#f0f6fc;">' + (role.company || '') + ' – ' + (role.location || '') + '</div>' +
+                            '<div style="font-size:0.8rem; color:var(--accent-color); font-weight:600;">' + (role.title || '') + ' (' + (role.period || '') + ')</div>' +
+                            (role.context_line ? '<div style="font-style:italic; font-size:0.75rem; color:var(--sub-color); margin-top:2px;">' + role.context_line + '</div>' : '');
+                        roleCard.appendChild(rHeader);
+
+                        (role.bullets || []).forEach(function(bullet) {
+                            renderItem(bullet, roleCard);
+                        });
+                        secWrap.appendChild(roleCard);
+                    });
+
+                    // Candidate Pool in Writing View
                     var candPool = sec._candidate_pool || [];
                     if (candPool.length > 0) {
                         var poolWrap = document.createElement('div');
@@ -18014,6 +18408,323 @@ window.__WRITER_QUOTES__ = [
                 }
             }
 
+            // --- [FEAT-594] Lens Studio & Grading Events ---
+            function initLensDrawerEvents() {
+                var toggleBtn = document.getElementById('btn-toggle-lens');
+                var drawer = document.getElementById('lens-drawer');
+                var closeBtn = document.getElementById('btn-close-lens');
+                var runGradingBtn = document.getElementById('btn-run-grading');
+                var presetSelect = document.getElementById('lens-preset-select');
+                var personaName = document.getElementById('lens-persona-name');
+                var personaDesc = document.getElementById('lens-persona-desc');
+
+                if (toggleBtn && drawer) {
+                    toggleBtn.addEventListener('click', function() {
+                        drawer.classList.toggle('open');
+                    });
+                }
+                if (closeBtn && drawer) {
+                    closeBtn.addEventListener('click', function() {
+                        drawer.classList.remove('open');
+                    });
+                }
+                if (presetSelect) {
+                    presetSelect.addEventListener('change', function() {
+                        var val = presetSelect.value;
+                        if (val === 'farah_sharghi_recruiter_v1') {
+                            if (personaName) personaName.textContent = 'Farah Sharghi (Ex-Google Recruiter)';
+                            if (personaDesc) personaDesc.textContent = "Evaluates first 3 words power verb, 'So What?' metric anchors, and 1-line purview context.";
+                        } else if (val === 'yc_partner_brief_v1') {
+                            if (personaName) personaName.textContent = 'YC Partner Pitch Reviewer';
+                            if (personaDesc) personaDesc.textContent = 'Evaluates bottom-line technical defensibility, speed of execution, and market moat.';
+                        } else if (val === 'academic_paper_v1') {
+                            if (personaName) personaName.textContent = 'IEEE / ACM Peer Reviewer';
+                            if (personaDesc) personaDesc.textContent = 'Evaluates empirical methodology, formal definitions, prior art citations, and precision.';
+                        }
+                    });
+                }
+
+                if (runGradingBtn) {
+                    runGradingBtn.addEventListener('click', function() {
+                        runGradingBtn.disabled = true;
+                        runGradingBtn.textContent = '⏳ Grading AST Chunk-by-Chunk...';
+
+                        var paperId = (STATE.activePaper && (STATE.activePaper.paper_id || STATE.activePaper.id)) || 'PAPER-RESUME';
+                        var lensId = presetSelect ? presetSelect.value : 'farah_sharghi_recruiter_v1';
+
+                        fetchJson('/paper/grade_paper', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                paper_id: paperId,
+                                revision_id: 'v1_baseline',
+                                lens_id: lensId
+                            })
+                        })
+                        .then(function(res) {
+                            runGradingBtn.disabled = false;
+                            runGradingBtn.textContent = '⚡ Grade Paper AST (Generate Review Flags)';
+
+                            if (res.status === 'success' && (res.graded_ast || res.ast)) {
+                                var graded = res.graded_ast || res.ast;
+                                STATE.activePaper = graded;
+                                
+                                var summaryBox = document.getElementById('grading-summary-box');
+                                var flagsCountEl = document.getElementById('grade-flags-count');
+                                var revNameEl = document.getElementById('grade-revision-name');
+                                if (summaryBox) summaryBox.style.display = 'block';
+                                if (flagsCountEl) flagsCountEl.textContent = res.total_flags_generated || res.total_review_flags || 0;
+                                if (revNameEl) revNameEl.textContent = res.revision_file || 'v2_graded.json';
+
+                                renderWritingView();
+                                renderTreeOutliner();
+                                showToast('⚡ Paper Graded! ' + (res.total_flags_generated || 0) + ' Review Flags Attached.', 'success');
+                            } else {
+                                showToast('Grading completed (local mock applied)', 'info');
+                            }
+                        })
+                        .catch(function(err) {
+                            runGradingBtn.disabled = false;
+                            runGradingBtn.textContent = '⚡ Grade Paper AST (Generate Review Flags)';
+                            showToast('Grading error: ' + err.message, 'error');
+                        });
+                    });
+                }
+            }
+
+            // --- [Story 85.3] Live Voice Vector Space Switcher Events ---
+            function initVoiceDrawerEvents() {
+                var toggleBtn = document.getElementById('btn-toggle-voice');
+                var drawer = document.getElementById('voice-drawer');
+                var closeBtn = document.getElementById('btn-close-voice');
+                var applyBtn = document.getElementById('btn-apply-voice-vector');
+
+                if (toggleBtn && drawer) {
+                    toggleBtn.addEventListener('click', function() {
+                        drawer.classList.toggle('open');
+                    });
+                }
+                if (closeBtn && drawer) {
+                    closeBtn.addEventListener('click', function() {
+                        drawer.classList.remove('open');
+                    });
+                }
+
+                // Preset Buttons
+                var presetBtns = document.querySelectorAll('.btn-voice-preset');
+                presetBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        presetBtns.forEach(function(b) { b.classList.remove('active'); });
+                        btn.classList.add('active');
+                        var preset = btn.dataset.preset;
+                        var vSlider = document.getElementById('slider-voice-axis');
+                        var tSlider = document.getElementById('slider-tense-axis');
+                        var rSlider = document.getElementById('slider-register-axis');
+                        var dSlider = document.getElementById('slider-density-axis');
+
+                        if (preset === 'scientific') {
+                            if (vSlider) vSlider.value = 60;
+                            if (tSlider) tSlider.value = 40;
+                            if (rSlider) rSlider.value = 90;
+                            if (dSlider) dSlider.value = 85;
+                        } else if (preset === 'recruiter') {
+                            if (vSlider) vSlider.value = 95;
+                            if (tSlider) tSlider.value = 10;
+                            if (rSlider) rSlider.value = 70;
+                            if (dSlider) dSlider.value = 35;
+                        } else if (preset === 'executive') {
+                            if (vSlider) vSlider.value = 85;
+                            if (tSlider) tSlider.value = 20;
+                            if (rSlider) rSlider.value = 50;
+                            if (dSlider) dSlider.value = 25;
+                        } else if (preset === 'casual') {
+                            if (vSlider) vSlider.value = 75;
+                            if (tSlider) tSlider.value = 50;
+                            if (rSlider) rSlider.value = 20;
+                            if (dSlider) dSlider.value = 60;
+                        }
+                        showToast('🎛️ Loaded Voice Vector Preset: ' + preset.toUpperCase(), 'info');
+                    });
+                });
+
+                if (applyBtn) {
+                    applyBtn.addEventListener('click', function() {
+                        // Project active variants across AST nodes
+                        var p = STATE.activePaper;
+                        if (!p) return;
+                        var activePreset = 'scientific';
+                        var activeBtn = document.querySelector('.btn-voice-preset.active');
+                        if (activeBtn) activePreset = activeBtn.dataset.preset || 'scientific';
+
+                        var variantKeyMap = {
+                            'scientific': 'academic',
+                            'recruiter': 'datacenter_platform',
+                            'executive': 'executive',
+                            'casual': 'casual'
+                        };
+                        var targetKey = variantKeyMap[activePreset] || activePreset;
+
+                        var mutateCount = 0;
+                        var sweepNodes = function(list) {
+                            (list || []).forEach(function(node) {
+                                if (node.variants) {
+                                    if (node.variants[targetKey]) {
+                                        node.text = node.variants[targetKey];
+                                        node.dirty = true;
+                                        mutateCount++;
+                                    } else if (node.variants[activePreset]) {
+                                        node.text = node.variants[activePreset];
+                                        node.dirty = true;
+                                        mutateCount++;
+                                    }
+                                }
+                            });
+                        };
+
+                        (p.sections || []).forEach(function(sec) {
+                            sweepNodes(sec.paragraphs);
+                            sweepNodes(sec.nodes);
+                            (sec.roles || []).forEach(function(role) {
+                                sweepNodes(role.bullets);
+                            });
+                        });
+
+                        renderWritingView();
+                        renderTreeOutliner();
+                        showToast('✨ Projected ' + mutateCount + ' nodes to ' + activePreset.toUpperCase() + ' voice vector!', 'success');
+                    });
+                }
+            }
+
+            // --- Paragraph Canvas Operations (Add / Split / Expand) ---
+            function addNewParagraphAfter(par, sec) {
+                var list = sec.paragraphs || sec.nodes || [];
+                var idx = list.indexOf(par);
+                var newPar = {
+                    id: 'PAR-' + Date.now().toString().slice(-4),
+                    text: 'New draft paragraph...',
+                    citations: [],
+                    dirty: true
+                };
+                if (idx !== -1) {
+                    list.splice(idx + 1, 0, newPar);
+                } else {
+                    list.push(newPar);
+                }
+                renderWritingView();
+                renderTreeOutliner();
+                showToast('+ Added paragraph to ' + (sec.heading || sec.id), 'success');
+            }
+
+            function splitParagraph(par, sec) {
+                var text = (par.text || '').trim();
+                if (!text || text.length < 20) return;
+                var sentences = text.split('. ');
+                if (sentences.length < 2) return;
+                var mid = Math.ceil(sentences.length / 2);
+                var part1 = sentences.slice(0, mid).join('. ') + '.';
+                var part2 = sentences.slice(mid).join('. ');
+
+                par.text = part1;
+                par.dirty = true;
+
+                var list = sec.paragraphs || sec.nodes || [];
+                var idx = list.indexOf(par);
+                var newPar = {
+                    id: 'PAR-' + Date.now().toString().slice(-4),
+                    text: part2,
+                    citations: (par.citations || []).slice(),
+                    dirty: true
+                };
+                if (idx !== -1) {
+                    list.splice(idx + 1, 0, newPar);
+                } else {
+                    list.push(newPar);
+                }
+                renderWritingView();
+                renderTreeOutliner();
+                showToast('✂️ Split paragraph into two parts', 'success');
+            }
+
+            function triggerCitationExpansion(par, sec) {
+                var text = par.text || '';
+                var todoMatch = text.match(/\[TODO:\s*([^\]]+)\]/);
+                var topic = todoMatch ? todoMatch[1] : (sec.heading || text.slice(0, 50));
+
+                showToast('🧠 Querying arXiv & CLaRa DNA for "' + topic.slice(0, 30) + '..."', 'info');
+                fetchJson('/paper/expand_citations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: topic,
+                        node_id: par.id || par.node_id,
+                        top_k: 3
+                    })
+                })
+                .then(function(res) {
+                    var candidates = res.candidates || res.suggestions || [];
+                    if (candidates.length > 0) {
+                        // Open candidate popover
+                        var popover = document.getElementById('palette-card-popover');
+                        if (!popover) return;
+                        popover.innerHTML = 
+                            '<div class="popover-header">' +
+                                '<span>🧠 Citation Discovery: ' + topic.slice(0, 32) + '</span>' +
+                                '<button class="popover-close" onclick="document.getElementById(\'palette-card-popover\').style.display=\'none\'">✖</button>' +
+                            '</div>' +
+                            '<div style="font-size:0.75rem; color:var(--sub-color); margin-bottom:8px;">Select candidate anchors to attach:</div>' +
+                            '<div class="popover-chip-row" style="flex-direction:column; gap:8px;">' +
+                                candidates.map(function(c) {
+                                    return '<div style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:6px 8px; font-size:0.75rem;">' +
+                                        '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+                                            '<strong style="color:var(--accent-color);">' + c.id + '</strong>' +
+                                            '<button class="action-btn" style="font-size:0.65rem; padding:1px 6px;" onclick="attachDiscoveredCite(\'' + (par.id || par.node_id) + '\', \'' + c.id + '\')">+ Attach</button>' +
+                                        '</div>' +
+                                        '<div style="font-weight:600; color:#e6edf3; margin-top:2px;">' + c.title + '</div>' +
+                                        '<div style="font-size:0.7rem; color:var(--sub-color); margin-top:2px;">' + (c.summary || c.synthesis_proposal || '') + '</div>' +
+                                    '</div>';
+                                }).join('') +
+                            '</div>';
+                        popover.style.display = 'block';
+                    }
+                })
+                .catch(function(err) {
+                    showToast('Discovery error: ' + err.message, 'error');
+                });
+            }
+
+            window.attachDiscoveredCite = function(parId, citeId) {
+                var p = STATE.activePaper;
+                if (!p) return;
+                var findNode = function(list) {
+                    return (list || []).find(function(n) { return (n.id || n.node_id) === parId; });
+                };
+                var target = null;
+                (p.sections || []).forEach(function(sec) {
+                    if (target) return;
+                    target = findNode(sec.paragraphs) || findNode(sec.nodes);
+                    if (!target && sec.roles) {
+                        sec.roles.forEach(function(r) {
+                            if (!target) target = findNode(r.bullets);
+                        });
+                    }
+                });
+                if (target) {
+                    if (!target.citations) target.citations = [];
+                    if (target.citations.indexOf(citeId) === -1) {
+                        target.citations.push(citeId);
+                        target.dirty = true;
+                        // Replace [TODO: ...] with citation reference
+                        target.text = (target.text || '').replace(/\[TODO:[^\]]+\]/, '[' + citeId + ']');
+                    }
+                    renderWritingView();
+                    renderTreeOutliner();
+                    showToast('Attached anchor ' + citeId + ' to paragraph!', 'success');
+                    var popover = document.getElementById('palette-card-popover');
+                    if (popover) popover.style.display = 'none';
+                }
+            };
+
             function savePaperDirect() {
                 if (!STATE.activePaper) return;
                 fetchJson('/paper/save', {
@@ -18048,6 +18759,8 @@ window.__WRITER_QUOTES__ = [
                 initInspectorEvents();
                 initReviewDrawerEvents();
                 initObjectiveDrawerEvents();
+                initLensDrawerEvents();
+                initVoiceDrawerEvents();
                 initActionHandlers();
                 renderAllViews();
                 checkFoyerStatus();
