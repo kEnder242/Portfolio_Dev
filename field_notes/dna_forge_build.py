@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-dna_forge_build.py [v5.0]
-[FEAT-582 / FEAT-588 / FEAT-589 / FEAT-591 / FEAT-593]
-The DNA Forge: Streamlined UI, Interactive Census HUD, 1-Click Approval/Archive Engine & Decision Tracking
+dna_forge_build.py [v6.0]
+[FEAT-582 / FEAT-588 / FEAT-589 / FEAT-591 / FEAT-593 / FEAT-596]
+The DNA Forge: Streamlined UI, Interactive Census HUD, 1-Click Approval/Archive Engine,
+Bone Collection Rack, and Interactive 2D Synapse Knowledge Graph Visualizer.
 """
 
 import json
@@ -22,6 +23,7 @@ RDNA_PATH = DATA_DIR / "rdna_questions.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
 BONE_COLLECTIONS_PATH = DATA_DIR / "bone_collections.json"
 DECISIONS_PATH = DATA_DIR / "dna_decisions.json"
+CONNECTIONS_GRAPH_PATH = DATA_DIR / "dna_connections_graph.json"
 NIGHTLY_STATE_PATH = HOMELAB_DIR / "run" / "nightly_forge_state.json"
 OUTPUT_FORGE = BASE_DIR / "dna_forge.html"
 OUTPUT_WISDOM = BASE_DIR / "wisdom.html"
@@ -80,6 +82,16 @@ def load_decisions():
         except Exception:
             pass
     return {}
+
+
+def load_connections_graph():
+    if CONNECTIONS_GRAPH_PATH.exists():
+        try:
+            with open(CONNECTIONS_GRAPH_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"nodes": [], "links": []}
 
 
 def load_mining_telemetry():
@@ -247,6 +259,7 @@ def build_page():
     bone_collections = load_bone_collections()
     decisions = load_decisions()
     mining_telemetry = load_mining_telemetry()
+    connections_graph = load_connections_graph()
 
     domain_counts = {
         "FEAT": len(manifest.get("feature", [])),
@@ -288,6 +301,9 @@ def build_page():
         ) for i, c in enumerate(all_cards)
     )
 
+    total_nodes = len(connections_graph.get("nodes", []))
+    total_links = len(connections_graph.get("links", []))
+
     page_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -306,6 +322,38 @@ def build_page():
             margin-bottom: 8px;
         }}
         .section-title {{ margin-bottom: 4px; }}
+
+        /* View Mode Switcher */
+        .view-mode-bar {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }}
+        .view-mode-btn {{
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+        .view-mode-btn:hover {{
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }}
+        .view-mode-btn.active {{
+            background: rgba(56, 139, 253, 0.2);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }}
 
         /* Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] */
         .dna-census-hud {{
@@ -890,6 +938,170 @@ def build_page():
         .studio-btn:hover {{
             border-color: var(--accent-color);
         }}
+
+        /* Synapse Knowledge Graph Visualizer [FEAT-596] */
+        .synapse-graph-wrap {{
+            background: #080c14;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            margin-top: 16px;
+        }}
+        .graph-toolbar {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0d1117;
+            border-bottom: 1px solid #30363d;
+            padding: 10px 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }}
+        .graph-toolbar-left {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }}
+        .graph-title {{
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #f0f6fc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+        .graph-stats-badge {{
+            font-size: 0.72rem;
+            background: rgba(56, 139, 253, 0.15);
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }}
+        .graph-toolbar-right {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        .graph-search-input {{
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            min-width: 180px;
+        }}
+        .graph-search-input:focus {{
+            border-color: #58a6ff;
+            outline: none;
+        }}
+        .graph-btn {{
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }}
+        .graph-btn:hover {{
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }}
+        .graph-canvas-container {{
+            position: relative;
+            width: 100%;
+            height: 680px;
+            background: radial-gradient(circle at center, #0e1626 0%, #06090e 100%);
+            cursor: grab;
+        }}
+        .graph-canvas-container:active {{
+            cursor: grabbing;
+        }}
+        #synapseCanvas {{
+            width: 100%;
+            height: 100%;
+            display: block;
+        }}
+        .graph-tooltip {{
+            position: absolute;
+            background: rgba(13, 17, 23, 0.95);
+            border: 1px solid #58a6ff;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            color: #c9d1d9;
+            pointer-events: none;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+            z-index: 20;
+            max-width: 260px;
+            line-height: 1.4;
+        }}
+        .graph-drawer {{
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 320px;
+            background: rgba(13, 17, 23, 0.96);
+            border-left: 1px solid #30363d;
+            box-shadow: -4px 0 16px rgba(0, 0, 0, 0.6);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 30;
+            overflow-y: auto;
+        }}
+        .drawer-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }}
+        .drawer-id {{
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #58a6ff;
+        }}
+        .drawer-close {{
+            background: transparent;
+            border: none;
+            color: #8b949e;
+            font-size: 1rem;
+            cursor: pointer;
+        }}
+        .drawer-close:hover {{
+            color: #f85149;
+        }}
+        .drawer-title {{
+            margin: 0;
+            font-size: 0.95rem;
+            color: #f0f6fc;
+            line-height: 1.35;
+        }}
+        .drawer-body {{
+            font-size: 0.8rem;
+            color: #c9d1d9;
+            line-height: 1.5;
+            flex: 1;
+        }}
+        .drawer-actions {{
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 10px;
+        }}
     </style>
 </head>
 <body>
@@ -901,12 +1113,18 @@ def build_page():
 
     <main>
         <div id="sys-console">
-            <div>[INIT] Mounting DNA Forge Knowledge Foundry &amp; Bone Collection Studio...</div>
+            <div>[INIT] Mounting DNA Forge Knowledge Foundry &amp; Synapse Graph Engine...</div>
         </div>
 
         <section id="studio">
             <div class="wisdom-header">
                 <h2 class="section-title">The DNA Forge: Sovereign Multi-Domain Knowledge Foundry</h2>
+            </div>
+
+            <!-- View Mode Switcher -->
+            <div class="view-mode-bar">
+                <button class="view-mode-btn active" id="btnViewCards" data-view="cards">📇 Cards View</button>
+                <button class="view-mode-btn" id="btnViewGraph" data-view="graph">🕸️ Synapse Knowledge Graph ({total_nodes} nodes, {total_links} links)</button>
             </div>
 
             <!-- Top Census & Mining Watchdog HUD Banner [FEAT-591 / FEAT-593] -->
@@ -965,6 +1183,37 @@ def build_page():
                 </div>
             </div>
 
+            <!-- Interactive 2D Synapse Knowledge Graph Visualizer [FEAT-596] -->
+            <div id="synapse-graph-container" class="synapse-graph-wrap" style="display: none;">
+                <div class="graph-toolbar">
+                    <div class="graph-toolbar-left">
+                        <span class="graph-title">🕸️ DNA Synapse Graph</span>
+                        <span class="graph-stats-badge" id="graphStatsBadge">{total_nodes} Nodes • {total_links} Synapses</span>
+                    </div>
+                    <div class="graph-toolbar-right">
+                        <input type="text" id="graphSearchInput" class="graph-search-input" placeholder="🎯 Search &amp; focus node...">
+                        <button id="btnTogglePhysics" class="graph-btn" title="Toggle simulation physics">⏸ Pause</button>
+                        <button id="btnZoomIn" class="graph-btn" title="Zoom in">+</button>
+                        <button id="btnZoomOut" class="graph-btn" title="Zoom out">-</button>
+                        <button id="btnResetView" class="graph-btn" title="Reset zoom and center">↺ Center</button>
+                    </div>
+                </div>
+                <div class="graph-canvas-container" id="graphCanvasWrap">
+                    <canvas id="synapseCanvas"></canvas>
+                    <div id="graphTooltip" class="graph-tooltip" style="display: none;"></div>
+                    <div id="graphDrawer" class="graph-drawer" style="display: none;">
+                        <div class="drawer-header">
+                            <span class="drawer-id" id="drawerCardId">DNA-001</span>
+                            <button class="drawer-close" id="btnDrawerClose">✕</button>
+                        </div>
+                        <h4 class="drawer-title" id="drawerCardTitle">Title</h4>
+                        <div class="drawer-body" id="drawerCardBody"></div>
+                        <div class="drawer-actions" id="drawerCardActions"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards Grid View -->
             <div id="wisdom-container" class="wisdom-grid">
 {cards_html}
             </div>
@@ -982,6 +1231,7 @@ def build_page():
             var BUCKETS = {json.dumps(buckets)};
             var BONE_COLLECTIONS = {json.dumps(bone_collections)};
             var DECISIONS = {json.dumps(decisions)};
+            var GRAPH_DATA = {json.dumps(connections_graph)};
 
             var activeBones = [];
             try {{
@@ -1124,7 +1374,6 @@ def build_page():
                     localStorage.setItem('dna_decisions_cache', JSON.stringify(DECISIONS));
                 }} catch(e) {{}}
 
-                // Persist to backend if reachable
                 fetch('http://127.0.0.1:8765/wisdom/log_decision', {{
                     method: 'POST',
                     headers: {{ 'Content-Type': 'application/json' }},
@@ -1214,7 +1463,6 @@ def build_page():
                     }} else if (currentFilter === 'archive') {{
                         matchesFilter = isArchived;
                     }} else {{
-                        // Match domain name (e.g. 'wis' for 'wisdom')
                         var domainMap = {{
                             'philosophy': 'phl',
                             'wisdom': 'wis',
@@ -1306,7 +1554,392 @@ def build_page():
                 }}, 400);
             }}
 
+            // -------------------------------------------------------------
+            // 2D Force-Directed Synapse Canvas Visualizer [FEAT-596]
+            // -------------------------------------------------------------
+            var graphSimulation = null;
+            var domainColors = {{
+                'FEAT': '#58a6ff',
+                'SPRINT': '#d2a8ff',
+                'BKM': '#3fb950',
+                'PHL': '#a371f7',
+                'WIS': '#e3b341',
+                'DISC': '#f0883e',
+                'RDNA': '#56d364',
+                'RESUME': '#f85149',
+                'ART': '#ff7b72'
+            }};
+
+            function initSynapseGraph() {{
+                var canvas = document.getElementById('synapseCanvas');
+                var wrap = document.getElementById('graphCanvasWrap');
+                var tooltip = document.getElementById('graphTooltip');
+                var drawer = document.getElementById('graphDrawer');
+                if (!canvas || !wrap || !GRAPH_DATA.nodes) return;
+
+                var ctx = canvas.getContext('2d');
+                var width = wrap.clientWidth || 900;
+                var height = wrap.clientHeight || 680;
+                var dpr = window.devicePixelRatio || 1;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.scale(dpr, dpr);
+
+                var nodes = GRAPH_DATA.nodes.map(function (n, i) {{
+                    var angle = (i / GRAPH_DATA.nodes.length) * Math.PI * 2;
+                    var radius = 200 + (i % 5) * 40;
+                    return {{
+                        id: n.id,
+                        title: n.title || n.id,
+                        domain: n.domain || n.id.split('-')[0],
+                        tags: n.tags || [],
+                        x: width / 2 + Math.cos(angle) * radius + (Math.random() - 0.5) * 40,
+                        y: height / 2 + Math.sin(angle) * radius + (Math.random() - 0.5) * 40,
+                        vx: 0,
+                        vy: 0,
+                        radius: Math.min(10, Math.max(4, 3 + (n.val || 1))),
+                        color: domainColors[n.domain] || '#8b949e'
+                    }};
+                }});
+
+                var nodeMap = {{}};
+                nodes.forEach(function (n) {{ nodeMap[n.id] = n; }});
+
+                var links = (GRAPH_DATA.links || []).map(function (l) {{
+                    return {{
+                        source: nodeMap[l.source],
+                        target: nodeMap[l.target],
+                        type: l.type || 'synapse',
+                        weight: l.weight || 1
+                    }};
+                }}).filter(function (l) {{ return l.source && l.target; }});
+
+                var zoom = 1.0;
+                var panX = 0;
+                var panY = 0;
+                var isPanning = false;
+                var startPanX = 0;
+                var startPanY = 0;
+                var draggedNode = null;
+                var hoveredNode = null;
+                var selectedNode = null;
+                var isPhysicsRunning = true;
+
+                function getNeighbors(node) {{
+                    var set = new Set();
+                    if (!node) return set;
+                    links.forEach(function (l) {{
+                        if (l.source === node) set.add(l.target);
+                        if (l.target === node) set.add(l.source);
+                    }});
+                    return set;
+                }}
+
+                function stepPhysics() {{
+                    if (!isPhysicsRunning) return;
+                    var alpha = 0.05;
+                    var cx = width / 2;
+                    var cy = height / 2;
+
+                    // Centering & Damping
+                    nodes.forEach(function (n) {{
+                        if (n === draggedNode) return;
+                        var dx = cx - n.x;
+                        var dy = cy - n.y;
+                        n.vx += dx * 0.0003;
+                        n.vy += dy * 0.0003;
+                        n.vx *= 0.88;
+                        n.vy *= 0.88;
+                        n.x += n.vx;
+                        n.y += n.vy;
+                    }});
+
+                    // Node Repulsion (sample grid approximation)
+                    for (var i = 0; i < nodes.length; i++) {{
+                        var n1 = nodes[i];
+                        for (var j = i + 1; j < Math.min(nodes.length, i + 35); j++) {{
+                            var n2 = nodes[j];
+                            var dx = n2.x - n1.x;
+                            var dy = n2.y - n1.y;
+                            var distSq = dx * dx + dy * dy || 1;
+                            if (distSq < 15000) {{
+                                var force = 180 / distSq;
+                                var fx = (dx / Math.sqrt(distSq)) * force;
+                                var fy = (dy / Math.sqrt(distSq)) * force;
+                                if (n1 !== draggedNode) {{ n1.vx -= fx; n1.vy -= fy; }}
+                                if (n2 !== draggedNode) {{ n2.vx += fx; n2.vy += fy; }}
+                            }}
+                        }}
+                    }}
+
+                    // Link Attraction
+                    links.forEach(function (l) {{
+                        var n1 = l.source;
+                        var n2 = l.target;
+                        var dx = n2.x - n1.x;
+                        var dy = n2.y - n1.y;
+                        var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                        var targetDist = 55;
+                        var force = (dist - targetDist) * 0.008 * (l.weight || 1);
+                        var fx = (dx / dist) * force;
+                        var fy = (dy / dist) * force;
+                        if (n1 !== draggedNode) {{ n1.vx += fx; n1.vy += fy; }}
+                        if (n2 !== draggedNode) {{ n2.vx -= fx; n2.vy -= fy; }}
+                    }});
+                }}
+
+                function draw() {{
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.save();
+                    ctx.translate(panX, panY);
+                    ctx.scale(zoom, zoom);
+
+                    var activeNeighbors = selectedNode ? getNeighbors(selectedNode) : (hoveredNode ? getNeighbors(hoveredNode) : null);
+                    var focalNode = selectedNode || hoveredNode;
+
+                    // Draw Links
+                    links.forEach(function (l) {{
+                        var isHighlighted = focalNode && (l.source === focalNode || l.target === focalNode);
+                        var isDimmed = focalNode && !isHighlighted;
+
+                        ctx.beginPath();
+                        ctx.moveTo(l.source.x, l.source.y);
+                        ctx.lineTo(l.target.x, l.target.y);
+                        if (isHighlighted) {{
+                            ctx.strokeStyle = '#58a6ff';
+                            ctx.lineWidth = 2.0;
+                        }} else if (isDimmed) {{
+                            ctx.strokeStyle = 'rgba(48, 54, 61, 0.2)';
+                            ctx.lineWidth = 0.5;
+                        }} else {{
+                            ctx.strokeStyle = 'rgba(56, 139, 253, 0.18)';
+                            ctx.lineWidth = 0.8;
+                        }}
+                        ctx.stroke();
+                    }});
+
+                    // Draw Nodes
+                    nodes.forEach(function (n) {{
+                        var isFocal = (n === focalNode);
+                        var isNeighbor = activeNeighbors && activeNeighbors.has(n);
+                        var isDimmed = focalNode && !isFocal && !isNeighbor;
+
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, (isFocal ? n.radius * 1.6 : (isNeighbor ? n.radius * 1.25 : n.radius)), 0, Math.PI * 2);
+
+                        if (isFocal) {{
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = n.color;
+                            ctx.shadowBlur = 16;
+                        }} else if (isNeighbor) {{
+                            ctx.fillStyle = n.color;
+                            ctx.shadowColor = n.color;
+                            ctx.shadowBlur = 10;
+                        }} else if (isDimmed) {{
+                            ctx.fillStyle = 'rgba(110, 118, 129, 0.3)';
+                            ctx.shadowBlur = 0;
+                        }} else {{
+                            ctx.fillStyle = n.color;
+                            ctx.shadowBlur = 0;
+                        }}
+                        ctx.fill();
+
+                        // Label
+                        if (isFocal || isNeighbor || zoom > 1.8) {{
+                            ctx.font = (isFocal ? 'bold 11px' : '9px') + ' monospace';
+                            ctx.fillStyle = isFocal ? '#ffffff' : (isDimmed ? 'rgba(139, 148, 158, 0.4)' : '#c9d1d9');
+                            ctx.fillText(n.id, n.x + n.radius + 3, n.y + 3);
+                        }}
+                    }});
+
+                    ctx.restore();
+                }}
+
+                function loop() {{
+                    stepPhysics();
+                    draw();
+                    requestAnimationFrame(loop);
+                }}
+                requestAnimationFrame(loop);
+
+                function screenToWorld(sx, sy) {{
+                    var rect = canvas.getBoundingClientRect();
+                    var x = (sx - rect.left - panX) / zoom;
+                    var y = (sy - rect.top - panY) / zoom;
+                    return {{ x: x, y: y }};
+                }}
+
+                function findNodeAt(sx, sy) {{
+                    var pt = screenToWorld(sx, sy);
+                    for (var i = nodes.length - 1; i >= 0; i--) {{
+                        var n = nodes[i];
+                        var dx = pt.x - n.x;
+                        var dy = pt.y - n.y;
+                        if (dx * dx + dy * dy <= (n.radius + 6) * (n.radius + 6)) {{
+                            return n;
+                        }}
+                    }}
+                    return null;
+                }}
+
+                wrap.addEventListener('mousedown', function (e) {{
+                    if (e.target !== canvas) return;
+                    var hit = findNodeAt(e.clientX, e.clientY);
+                    if (hit) {{
+                        draggedNode = hit;
+                        selectedNode = hit;
+                        openNodeDrawer(hit);
+                    }} else {{
+                        isPanning = true;
+                        startPanX = e.clientX - panX;
+                        startPanY = e.clientY - panY;
+                    }}
+                }});
+
+                window.addEventListener('mousemove', function (e) {{
+                    if (draggedNode) {{
+                        var pt = screenToWorld(e.clientX, e.clientY);
+                        draggedNode.x = pt.x;
+                        draggedNode.y = pt.y;
+                        draggedNode.vx = 0;
+                        draggedNode.vy = 0;
+                    }} else if (isPanning) {{
+                        panX = e.clientX - startPanX;
+                        panY = e.clientY - startPanY;
+                    }} else {{
+                        var hit = findNodeAt(e.clientX, e.clientY);
+                        hoveredNode = hit;
+                        if (hit) {{
+                            var rect = wrap.getBoundingClientRect();
+                            tooltip.style.display = 'block';
+                            tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+                            tooltip.style.top = (e.clientY - rect.top + 10) + 'px';
+                            tooltip.innerHTML = '<strong style="color:' + hit.color + '">[' + escapeHtml(hit.id) + ']</strong> ' +
+                                escapeHtml(hit.title) + '<br><span style="color:#8b949e; font-size:0.7rem;">Domain: ' + hit.domain + ' • ' + (hit.tags || []).slice(0, 3).map(function(t){{return '#'+t;}}).join(' ') + '</span>';
+                        }} else {{
+                            tooltip.style.display = 'none';
+                        }}
+                    }}
+                }});
+
+                window.addEventListener('mouseup', function () {{
+                    draggedNode = null;
+                    isPanning = false;
+                }});
+
+                wrap.addEventListener('wheel', function (e) {{
+                    e.preventDefault();
+                    var delta = e.deltaY < 0 ? 1.15 : 0.88;
+                    var newZoom = Math.min(4.0, Math.max(0.3, zoom * delta));
+                    var rect = wrap.getBoundingClientRect();
+                    var mx = e.clientX - rect.left;
+                    var my = e.clientY - rect.top;
+                    panX = mx - (mx - panX) * (newZoom / zoom);
+                    panY = my - (my - panY) * (newZoom / zoom);
+                    zoom = newZoom;
+                }});
+
+                function openNodeDrawer(node) {{
+                    drawer.style.display = 'flex';
+                    document.getElementById('drawerCardId').textContent = node.id;
+                    document.getElementById('drawerCardId').style.color = node.color;
+                    document.getElementById('drawerCardTitle').textContent = node.title;
+
+                    var nbs = Array.from(getNeighbors(node)).map(function(nb){{ return '<code>'+nb.id+'</code>'; }}).join(' ');
+                    document.getElementById('drawerCardBody').innerHTML =
+                        '<div><strong>Domain:</strong> ' + escapeHtml(node.domain) + '</div>' +
+                        '<div style="margin-top:6px;"><strong>Tags:</strong> ' + (node.tags || []).map(function(t){{return '<span class="tag">#'+escapeHtml(t)+'</span>';}}).join(' ') + '</div>' +
+                        '<div style="margin-top:8px;"><strong>Connected Synapses (' + getNeighbors(node).size + '):</strong><br>' + (nbs || '<em style="color:#8b949e">No explicit synapses</em>') + '</div>';
+
+                    var isDocked = activeBones.some(function(b){{ return b.id === node.id; }});
+                    document.getElementById('drawerCardActions').innerHTML =
+                        '<button class="studio-btn ' + (isDocked ? 'bone-btn-save' : '') + '" id="btnDrawerRack">' + (isDocked ? '🦴 In Rack' : '+ Add to Rack') + '</button>' +
+                        '<button class="studio-btn" id="btnDrawerJump">🔍 Locate Card</button>';
+
+                    var bRack = document.getElementById('btnDrawerRack');
+                    if (bRack) bRack.onclick = function() {{
+                        var idx = activeBones.findIndex(function(b){{ return b.id === node.id; }});
+                        if (idx !== -1) {{
+                            activeBones.splice(idx, 1);
+                        }} else {{
+                            activeBones.push({{ id: node.id, title: node.title, domain: node.domain }});
+                        }}
+                        updateBoneRackUi();
+                        openNodeDrawer(node);
+                    }};
+
+                    var bJump = document.getElementById('btnDrawerJump');
+                    if (bJump) bJump.onclick = function() {{
+                        switchView('cards');
+                        var card = document.querySelector('[data-card-id="' + node.id + '"]');
+                        if (card) {{
+                            card.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+                            card.style.outline = '3px solid #58a6ff';
+                            setTimeout(function() {{ card.style.outline = ''; }}, 2500);
+                        }}
+                    }};
+                }}
+
+                var btnClose = document.getElementById('btnDrawerClose');
+                if (btnClose) btnClose.onclick = function() {{ drawer.style.display = 'none'; selectedNode = null; }};
+
+                var btnZoomIn = document.getElementById('btnZoomIn');
+                if (btnZoomIn) btnZoomIn.onclick = function() {{ zoom = Math.min(4.0, zoom * 1.25); }};
+                var btnZoomOut = document.getElementById('btnZoomOut');
+                if (btnZoomOut) btnZoomOut.onclick = function() {{ zoom = Math.max(0.3, zoom * 0.8); }};
+                var btnReset = document.getElementById('btnResetView');
+                if (btnReset) btnReset.onclick = function() {{ zoom = 1.0; panX = 0; panY = 0; }};
+                var btnTogglePhysics = document.getElementById('btnTogglePhysics');
+                if (btnTogglePhysics) btnTogglePhysics.onclick = function() {{
+                    isPhysicsRunning = !isPhysicsRunning;
+                    this.textContent = isPhysicsRunning ? '⏸ Pause' : '▶ Play';
+                }};
+
+                var gSearch = document.getElementById('graphSearchInput');
+                if (gSearch) gSearch.oninput = function() {{
+                    var q = this.value.toLowerCase().trim();
+                    if (!q) return;
+                    var match = nodes.find(function(n){{
+                        return n.id.toLowerCase().indexOf(q) !== -1 || n.title.toLowerCase().indexOf(q) !== -1;
+                    }});
+                    if (match) {{
+                        selectedNode = match;
+                        openNodeDrawer(match);
+                        panX = width / 2 - match.x * zoom;
+                        panY = height / 2 - match.y * zoom;
+                    }}
+                }};
+            }}
+
+            function switchView(viewName) {{
+                var cardsContainer = document.getElementById('wisdom-container');
+                var graphContainer = document.getElementById('synapse-graph-container');
+                var btnCards = document.getElementById('btnViewCards');
+                var btnGraph = document.getElementById('btnViewGraph');
+
+                if (viewName === 'graph') {{
+                    if (cardsContainer) cardsContainer.style.display = 'none';
+                    if (graphContainer) graphContainer.style.display = 'block';
+                    if (btnCards) btnCards.classList.remove('active');
+                    if (btnGraph) btnGraph.classList.add('active');
+                    if (!graphSimulation) {{
+                        graphSimulation = true;
+                        setTimeout(initSynapseGraph, 50);
+                    }}
+                }} else {{
+                    if (cardsContainer) cardsContainer.style.display = 'grid';
+                    if (graphContainer) graphContainer.style.display = 'none';
+                    if (btnCards) btnCards.classList.add('active');
+                    if (btnGraph) btnGraph.classList.remove('active');
+                }}
+            }}
+
             function wireControls() {{
+                var btnCards = document.getElementById('btnViewCards');
+                var btnGraph = document.getElementById('btnViewGraph');
+                if (btnCards) btnCards.addEventListener('click', function() {{ switchView('cards'); }});
+                if (btnGraph) btnGraph.addEventListener('click', function() {{ switchView('graph'); }});
+
                 document.querySelectorAll('.census-domain-pill').forEach(function(pill) {{
                     pill.addEventListener('click', function() {{
                         setFilter(this.dataset.filter);
@@ -1365,6 +1998,7 @@ def build_page():
         window.__BONE_COLLECTIONS__ = {json.dumps(bone_collections)};
         window.__MINING_TELEMETRY__ = {json.dumps(mining_telemetry)};
         window.__DECISIONS__ = {json.dumps(decisions)};
+        window.__SYNAPSE_GRAPH__ = {json.dumps(connections_graph)};
     </script>
 </body>
 </html>
@@ -1376,7 +2010,7 @@ def build_page():
     with open(OUTPUT_WISDOM, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Streamlined Census HUD, Search Bar, and 1-Click Approval/Archive Engine.")
+    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Streamlined Census HUD, Search Bar, 1-Click Approval/Archive Engine, and Synapse Knowledge Graph Visualizer.")
 
 
 if __name__ == "__main__":
