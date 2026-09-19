@@ -2343,12 +2343,23 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                 }}, 100);
             }}
 
+            function stepBackSynapse() {{
+                if (focalBreadcrumbs.length > 1) {{
+                    focalBreadcrumbs.pop();
+                    var prev = focalBreadcrumbs[focalBreadcrumbs.length - 1];
+                    focalNodeId = prev;
+                    updateBreadcrumbsUi();
+                    updateInspectorUi(prev);
+                    if (window.__triggerSynapseRedraw) window.__triggerSynapseRedraw();
+                }}
+            }}
+
             function focusCardInSynapse(cid) {{
                 if (!cid) return;
                 focalNodeId = cid;
                 if (focalBreadcrumbs[focalBreadcrumbs.length - 1] !== cid) {{
                     focalBreadcrumbs.push(cid);
-                    if (focalBreadcrumbs.length > 5) focalBreadcrumbs.shift();
+                    if (focalBreadcrumbs.length > 12) focalBreadcrumbs.shift();
                 }}
                 switchTab('connect');
                 updateBreadcrumbsUi();
@@ -2359,13 +2370,26 @@ Rule: Double-Write Protocol must always update workspace repos first before push
             function updateBreadcrumbsUi() {{
                 var wrap = document.getElementById('synapseBreadcrumbs');
                 if (!wrap) return;
-                var html = '<span style="color:#8b949e;">Focal Trail:</span> ';
-                focalBreadcrumbs.forEach(function(b, idx) {{
-                    var isLast = (idx === focalBreadcrumbs.length - 1);
-                    html += '<span class="synapse-crumb ' + (isLast ? 'active' : '') + '" data-cid="' + escapeHtml(b) + '">' + escapeHtml(b) + '</span>';
-                    if (!isLast) html += ' <span style="color:#30363d;">›</span> ';
+                var canStepBack = focalBreadcrumbs.length > 1;
+                var prevId = canStepBack ? focalBreadcrumbs[focalBreadcrumbs.length - 2] : '';
+                
+                var trail3 = focalBreadcrumbs.slice(-3);
+                var html = '';
+                if (canStepBack) {{
+                    html += '<button id="btnSynapseBack" class="studio-btn" style="padding:2px 8px; font-size:0.75rem; border-color:#58a6ff; color:#58a6ff;" title="Step backward to ' + escapeHtml(prevId) + '">◀ Back to ' + escapeHtml(prevId) + '</button> ';
+                }}
+                html += '<span style="color:#8b949e; margin-left:4px;">Flow Trail:</span> ';
+                trail3.forEach(function(b, idx) {{
+                    var isLast = (idx === trail3.length - 1);
+                    var stepNum = (trail3.length === 3 ? idx + 1 : (trail3.length === 2 ? idx + 2 : 3));
+                    var label = (isLast ? '🟢 [3 • Active: ' : (stepNum === 2 ? '🟡 [2 • Prev: ' : '🟣 [1 • Origin: ')) + escapeHtml(b) + ']';
+                    html += '<span class="synapse-crumb ' + (isLast ? 'active' : '') + '" data-cid="' + escapeHtml(b) + '">' + label + '</span>';
+                    if (!isLast) html += ' <span style="color:#58a6ff; font-weight:bold;">➔</span> ';
                 }});
                 wrap.innerHTML = html;
+
+                var btnBack = document.getElementById('btnSynapseBack');
+                if (btnBack) btnBack.addEventListener('click', stepBackSynapse);
 
                 wrap.querySelectorAll('.synapse-crumb').forEach(function(crumb) {{
                     crumb.addEventListener('click', function() {{
@@ -2473,7 +2497,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
             window.__refreshInspectorBoneStatus = function() {{ updateInspectorUi(focalNodeId); }};
 
             // -------------------------------------------------------------
-            // HTML5 EGO CANVAS VISUALIZER
+            // HTML5 EGO CANVAS VISUALIZER (TRI-NODE FLOW TRAIL & SPHERE VIEW)
             // -------------------------------------------------------------
             function initEgoSynapseCanvas() {{
                 var canvas = document.getElementById('synapseCanvas');
@@ -2490,6 +2514,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                 ctx.scale(dpr, dpr);
 
                 var orbitalAngle = 0;
+                var trailDashOffset = 0;
                 var zoom = 1.0;
                 var panX = 0;
                 var panY = 0;
@@ -2504,107 +2529,213 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     renderedNodes = [];
                     renderedLinks = [];
 
-                    var focal = globalNodesMap[focalNodeId] || cardsById[focalNodeId] || {{ id: focalNodeId, title: focalNodeId, domain: focalNodeId.split('-')[0] }};
-                    var focalDomain = (focal.domain || focalNodeId.split('-')[0]).toUpperCase();
+                    var cx = width / 2;
+                    var cy = height / 2;
+                    var sphereR = 260; // Celestial sphere boundary radius
 
-                    var centerNode = {{
-                        id: focalNodeId,
-                        title: focal.title || focalNodeId,
-                        domain: focalDomain,
+                    var trail = focalBreadcrumbs.slice(-3); // [N1 (origin), N2 (prev), N3 (active)]
+                    var n3_id = trail[trail.length - 1] || focalNodeId;
+                    var n2_id = trail.length >= 2 ? trail[trail.length - 2] : null;
+                    var n1_id = trail.length >= 3 ? trail[trail.length - 3] : null;
+
+                    // --- 1. Position Trail Nodes ---
+                    var f3Data = globalNodesMap[n3_id] || cardsById[n3_id] || {{ id: n3_id, title: n3_id, domain: n3_id.split('-')[0] }};
+                    var f3Dom = (f3Data.domain || n3_id.split('-')[0]).toUpperCase();
+                    var node3 = {{
+                        id: n3_id,
+                        title: f3Data.title || n3_id,
+                        domain: f3Dom,
                         isCenter: true,
-                        x: width / 2,
-                        y: height / 2,
-                        targetX: width / 2,
-                        targetY: height / 2,
+                        isTrail: true,
+                        trailStep: 3,
+                        x: cx,
+                        y: cy,
+                        targetX: cx,
+                        targetY: cy,
                         radius: 22,
-                        color: domainColors[focalDomain] || '#58a6ff'
+                        color: domainColors[f3Dom] || '#58a6ff'
                     }};
-                    renderedNodes.push(centerNode);
+                    renderedNodes.push(node3);
 
-                    var raw1st = getNeighborsFor(focalNodeId);
-                    if (synapseFilterDomain !== 'ALL') {{
-                        raw1st = raw1st.filter(function(l){{
-                            if (synapseFilterDomain === 'BONES') {{
-                                return activeBones.some(function(b){{ return b.id === l.targetId; }});
-                            }}
-                            var d = (l.targetId.split('-')[0] || '').toUpperCase();
-                            return d === synapseFilterDomain;
-                        }});
-                    }}
-
-                    if (raw1st.length === 0) {{
-                        var fallbackTargets = ['BKM-060', 'FEAT-582', 'PHL-001', 'WIS-001', 'BKM-024', 'RDNA-001'];
-                        fallbackTargets.forEach(function(tId){{
-                            if (tId !== focalNodeId && (globalNodesMap[tId] || cardsById[tId])) {{
-                                raw1st.push({{ targetId: tId, type: 'SEMANTIC_SIMILARITY', weight: 0.8 }});
-                            }}
-                        }});
-                    }}
-
-                    var count1st = raw1st.length;
-                    var radius1st = Math.min(260, Math.max(160, 140 + count1st * 10));
-
-                    raw1st.forEach(function(item, idx) {{
-                        var angle = (idx / count1st) * Math.PI * 2 + orbitalAngle;
-                        var nData = globalNodesMap[item.targetId] || cardsById[item.targetId] || {{ id: item.targetId, title: item.targetId, domain: item.targetId.split('-')[0] }};
-                        var dName = (nData.domain || item.targetId.split('-')[0]).toUpperCase();
-                        var isDocked = activeBones.some(function(b){{ return b.id === item.targetId; }});
-
-                        var satNode = {{
-                            id: item.targetId,
-                            title: nData.title || item.targetId,
-                            domain: dName,
+                    var node2 = null;
+                    if (n2_id && n2_id !== n3_id) {{
+                        var f2Data = globalNodesMap[n2_id] || cardsById[n2_id] || {{ id: n2_id, title: n2_id, domain: n2_id.split('-')[0] }};
+                        var f2Dom = (f2Data.domain || n2_id.split('-')[0]).toUpperCase();
+                        node2 = {{
+                            id: n2_id,
+                            title: f2Data.title || n2_id,
+                            domain: f2Dom,
                             isCenter: false,
-                            hop: 1,
-                            isDocked: isDocked,
-                            x: width / 2 + Math.cos(angle) * radius1st,
-                            y: height / 2 + Math.sin(angle) * radius1st,
-                            targetX: width / 2 + Math.cos(angle) * radius1st,
-                            targetY: height / 2 + Math.sin(angle) * radius1st,
-                            radius: isDocked ? 14 : 10,
-                            color: domainColors[dName] || '#8b949e',
-                            linkType: item.type
+                            isTrail: true,
+                            trailStep: 2,
+                            x: cx - 125,
+                            y: cy - 65,
+                            targetX: cx - 125,
+                            targetY: cy - 65,
+                            radius: 17,
+                            color: domainColors[f2Dom] || '#e3b341'
                         }};
-                        renderedNodes.push(satNode);
+                        renderedNodes.push(node2);
+                    }}
+
+                    var node1 = null;
+                    if (n1_id && n1_id !== n2_id && n1_id !== n3_id) {{
+                        var f1Data = globalNodesMap[n1_id] || cardsById[n1_id] || {{ id: n1_id, title: n1_id, domain: n1_id.split('-')[0] }};
+                        var f1Dom = (f1Data.domain || n1_id.split('-')[0]).toUpperCase();
+                        node1 = {{
+                            id: n1_id,
+                            title: f1Data.title || n1_id,
+                            domain: f1Dom,
+                            isCenter: false,
+                            isTrail: true,
+                            trailStep: 1,
+                            x: cx - 195,
+                            y: cy + 75,
+                            targetX: cx - 195,
+                            targetY: cy + 75,
+                            radius: 14,
+                            color: domainColors[f1Dom] || '#a371f7'
+                        }};
+                        renderedNodes.push(node1);
+                    }}
+
+                    // --- 2. Add Trail Spine Links ---
+                    if (node1 && node2) {{
                         renderedLinks.push({{
-                            source: centerNode,
-                            target: satNode,
-                            type: item.type || 'SYNAPSE',
-                            weight: item.weight || 1
+                            source: node1,
+                            target: node2,
+                            type: 'TRAIL_FLOW',
+                            isTrailSpine: true,
+                            weight: 2.0
                         }});
+                    }}
+                    if (node2 && node3) {{
+                        renderedLinks.push({{
+                            source: node2,
+                            target: node3,
+                            type: 'TRAIL_FLOW',
+                            isTrailSpine: true,
+                            weight: 2.5
+                        }});
+                    }}
 
-                        if (hopDepth === 2 && idx < 8) {{
-                            var raw2nd = getNeighborsFor(item.targetId).slice(0, 3);
-                            raw2nd.forEach(function(item2, idx2) {{
-                                if (item2.targetId === focalNodeId || raw1st.some(function(r){{ return r.targetId === item2.targetId; }})) return;
-                                var subAngle = angle + ((idx2 - 1) * 0.4);
-                                var radius2nd = radius1st + 90;
-                                var nData2 = globalNodesMap[item2.targetId] || cardsById[item2.targetId] || {{ id: item2.targetId, title: item2.targetId, domain: item2.targetId.split('-')[0] }};
-                                var dName2 = (nData2.domain || item2.targetId.split('-')[0]).toUpperCase();
-
-                                var subNode = {{
-                                    id: item2.targetId,
-                                    title: nData2.title || item2.targetId,
-                                    domain: dName2,
-                                    isCenter: false,
-                                    hop: 2,
-                                    x: width / 2 + Math.cos(subAngle) * radius2nd,
-                                    y: height / 2 + Math.sin(subAngle) * radius2nd,
-                                    targetX: width / 2 + Math.cos(subAngle) * radius2nd,
-                                    targetY: height / 2 + Math.sin(subAngle) * radius2nd,
-                                    radius: 6,
-                                    color: domainColors[dName2] || '#6e7681',
-                                    linkType: item2.type
-                                }};
-                                renderedNodes.push(subNode);
-                                renderedLinks.push({{
-                                    source: satNode,
-                                    target: subNode,
-                                    type: item2.type || 'EXTENDED',
-                                    weight: 0.5
-                                }});
+                    // --- 3. Direct Triad Closure between N1 & N3 ---
+                    if (node1 && node3) {{
+                        var direct13 = getNeighborsFor(n1_id).find(function(l){{ return l.targetId === n3_id; }});
+                        if (direct13) {{
+                            renderedLinks.push({{
+                                source: node1,
+                                target: node3,
+                                type: 'TRIAD_CLOSURE',
+                                isTriadBridge: true,
+                                weight: 2.0
                             }});
                         }}
+                    }}
+
+                    // --- 4. Gather Neighbors & Shared Inter-Relational Bridges ---
+                    var trailIds = [n3_id, n2_id, n1_id].filter(Boolean);
+                    var candidateMap = {{}};
+
+                    trailIds.forEach(function(tId) {{
+                        var neigh = getNeighborsFor(tId);
+                        neigh.forEach(function(item) {{
+                            var candId = item.targetId;
+                            if (trailIds.indexOf(candId) !== -1) return;
+
+                            if (synapseFilterDomain !== 'ALL') {{
+                                if (synapseFilterDomain === 'BONES') {{
+                                    if (!activeBones.some(function(b){{ return b.id === candId; }})) return;
+                                }} else {{
+                                    var d = (candId.split('-')[0] || '').toUpperCase();
+                                    if (d !== synapseFilterDomain) return;
+                                }}
+                            }}
+
+                            if (!candidateMap[candId]) {{
+                                candidateMap[candId] = {{
+                                    id: candId,
+                                    linksToTrail: [],
+                                    isDocked: activeBones.some(function(b){{ return b.id === candId; }})
+                                }};
+                            }}
+                            if (candidateMap[candId].linksToTrail.indexOf(tId) === -1) {{
+                                candidateMap[candId].linksToTrail.push(tId);
+                            }}
+                        }});
+                    }});
+
+                    // Sort candidates by importance:
+                    // 1. Shared bridges (connected to >= 2 trail nodes)
+                    // 2. Docked bones
+                    // 3. Connected to active center N3
+                    var candidateList = Object.values(candidateMap);
+                    candidateList.sort(function(a, b) {{
+                        var scoreA = (a.linksToTrail.length * 10) + (a.isDocked ? 5 : 0) + (a.linksToTrail.indexOf(n3_id) !== -1 ? 3 : 0);
+                        var scoreB = (b.linksToTrail.length * 10) + (b.isDocked ? 5 : 0) + (b.linksToTrail.indexOf(n3_id) !== -1 ? 3 : 0);
+                        return scoreB - scoreA;
+                    }});
+
+                    // 20-Node Visible Trimming Threshold
+                    var maxSatellites = Math.max(0, 20 - renderedNodes.length);
+                    var visibleSatellites = candidateList.slice(0, maxSatellites);
+
+                    // --- 5. Spherical Fisheye Placement ---
+                    var satCount = visibleSatellites.length;
+                    visibleSatellites.forEach(function(cand, idx) {{
+                        var isSharedBridge = cand.linksToTrail.length >= 2;
+                        var isConnectedToN3 = cand.linksToTrail.indexOf(n3_id) !== -1;
+
+                        var baseAngle = (idx / (satCount || 1)) * Math.PI * 2 + orbitalAngle;
+                        // Avoid direct overlapping with the trail arc (roughly angle 2.6 to 3.8 rad)
+                        if (baseAngle > 2.5 && baseAngle < 3.9) {{
+                            baseAngle += 0.45;
+                        }}
+
+                        var rRaw = isSharedBridge ? 135 : (isConnectedToN3 ? 190 : 255);
+                        // Spherical non-linear compression
+                        var rFisheye = sphereR * Math.tanh(rRaw / (sphereR * 0.82));
+
+                        var px = cx + Math.cos(baseAngle) * rFisheye;
+                        var py = cy + Math.sin(baseAngle) * rFisheye;
+
+                        var nData = globalNodesMap[cand.id] || cardsById[cand.id] || {{ id: cand.id, title: cand.id, domain: cand.id.split('-')[0] }};
+                        var dName = (nData.domain || cand.id.split('-')[0]).toUpperCase();
+
+                        var edgeRatio = rFisheye / sphereR;
+                        var nodeRad = isSharedBridge ? 13 : (cand.isDocked ? 12 : (edgeRatio > 0.85 ? 7 : 9.5));
+
+                        var satNode = {{
+                            id: cand.id,
+                            title: nData.title || cand.id,
+                            domain: dName,
+                            isCenter: false,
+                            isTrail: false,
+                            isSharedBridge: isSharedBridge,
+                            linksToTrail: cand.linksToTrail,
+                            isDocked: cand.isDocked,
+                            edgeRatio: edgeRatio,
+                            x: px,
+                            y: py,
+                            targetX: px,
+                            targetY: py,
+                            radius: nodeRad,
+                            color: domainColors[dName] || '#8b949e'
+                        }};
+                        renderedNodes.push(satNode);
+
+                        cand.linksToTrail.forEach(function(tId) {{
+                            var srcNode = renderedNodes.find(function(rn){{ return rn.id === tId; }});
+                            if (srcNode) {{
+                                renderedLinks.push({{
+                                    source: srcNode,
+                                    target: satNode,
+                                    type: isSharedBridge ? 'SHARED_BRIDGE' : 'SYNAPSE',
+                                    isSharedBridge: isSharedBridge,
+                                    weight: isSharedBridge ? 1.8 : 1.0
+                                }});
+                            }}
+                        }});
                     }});
                 }}
 
@@ -2616,48 +2747,90 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                     var cx = width / 2;
                     var cy = height / 2;
+                    var sphereR = 260;
+
+                    // --- Celestial Horizon Sphere Background ---
+                    var grad = ctx.createRadialGradient(cx, cy, sphereR * 0.2, cx, cy, sphereR);
+                    grad.addColorStop(0, 'rgba(88, 166, 255, 0.02)');
+                    grad.addColorStop(0.75, 'rgba(88, 166, 255, 0.05)');
+                    grad.addColorStop(1.0, 'rgba(88, 166, 255, 0.16)');
 
                     ctx.beginPath();
-                    ctx.arc(cx, cy, 200, 0, Math.PI * 2);
-                    ctx.strokeStyle = 'rgba(88, 166, 255, 0.08)';
-                    ctx.lineWidth = 1;
+                    ctx.arc(cx, cy, sphereR, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(88, 166, 255, 0.35)';
+                    ctx.lineWidth = 1.5;
                     ctx.setLineDash([4, 6]);
                     ctx.stroke();
                     ctx.setLineDash([]);
 
-                    if (hopDepth === 2) {{
-                        ctx.beginPath();
-                        ctx.arc(cx, cy, 290, 0, Math.PI * 2);
-                        ctx.strokeStyle = 'rgba(163, 113, 247, 0.06)';
-                        ctx.lineWidth = 1;
-                        ctx.setLineDash([2, 8]);
-                        ctx.stroke();
-                        ctx.setLineDash([]);
-                    }}
+                    // Mid Orbit Latitude Grid
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, 150, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(88, 166, 255, 0.08)';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([2, 8]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
 
+                    // --- Render Links ---
                     renderedLinks.forEach(function (l) {{
                         ctx.beginPath();
                         ctx.moveTo(l.source.x, l.source.y);
-                        ctx.lineTo(l.target.x, l.target.y);
+
+                        if (l.isTriadBridge) {{
+                            // Curved arc for Triad closure
+                            var mx = (l.source.x + l.target.x) / 2 + 30;
+                            var my = (l.source.y + l.target.y) / 2 - 40;
+                            ctx.quadraticCurveTo(mx, my, l.target.x, l.target.y);
+                        }} else {{
+                            ctx.lineTo(l.target.x, l.target.y);
+                        }}
 
                         var isHovered = (hoveredOrbitNode && (l.source === hoveredOrbitNode || l.target === hoveredOrbitNode));
 
                         if (isHovered) {{
                             ctx.strokeStyle = '#58a6ff';
-                            ctx.lineWidth = 2.5;
-                        }} else if (l.target.hop === 2) {{
-                            ctx.strokeStyle = 'rgba(110, 118, 129, 0.25)';
-                            ctx.lineWidth = 0.8;
+                            ctx.lineWidth = 2.8;
+                            ctx.stroke();
+                        }} else if (l.isTrailSpine) {{
+                            // Golden glowing flow trail
+                            ctx.strokeStyle = '#e3b341';
+                            ctx.lineWidth = 3.2;
+                            ctx.shadowColor = '#e3b341';
+                            ctx.shadowBlur = 10;
+                            ctx.setLineDash([8, 6]);
+                            ctx.lineDashOffset = -trailDashOffset;
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+                            ctx.shadowBlur = 0;
+                        }} else if (l.isTriadBridge) {{
+                            // Purple glowing triad closure bridge
+                            ctx.strokeStyle = '#a371f7';
+                            ctx.lineWidth = 2.4;
+                            ctx.shadowColor = '#a371f7';
+                            ctx.shadowBlur = 8;
+                            ctx.setLineDash([5, 5]);
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+                            ctx.shadowBlur = 0;
+                        }} else if (l.isSharedBridge) {{
+                            ctx.strokeStyle = 'rgba(56, 211, 100, 0.65)';
+                            ctx.lineWidth = 1.8;
+                            ctx.stroke();
                         }} else if (l.target.isDocked) {{
                             ctx.strokeStyle = 'rgba(86, 211, 100, 0.45)';
-                            ctx.lineWidth = 1.6;
+                            ctx.lineWidth = 1.5;
+                            ctx.stroke();
                         }} else {{
-                            ctx.strokeStyle = 'rgba(88, 166, 255, 0.25)';
-                            ctx.lineWidth = 1.2;
+                            ctx.strokeStyle = 'rgba(88, 166, 255, 0.22)';
+                            ctx.lineWidth = 1.0;
+                            ctx.stroke();
                         }}
-                        ctx.stroke();
                     }});
 
+                    // --- Render Nodes ---
                     renderedNodes.forEach(function (n) {{
                         ctx.beginPath();
                         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
@@ -2665,39 +2838,74 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         if (n.isCenter) {{
                             ctx.fillStyle = '#ffffff';
                             ctx.shadowColor = n.color;
-                            ctx.shadowBlur = 24;
+                            ctx.shadowBlur = 26;
                             ctx.fill();
 
                             ctx.beginPath();
                             ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI * 2);
                             ctx.strokeStyle = n.color;
-                            ctx.lineWidth = 2.5;
+                            ctx.lineWidth = 3.0;
+                            ctx.stroke();
+                        }} else if (n.isTrail) {{
+                            ctx.fillStyle = n.color;
+                            ctx.shadowColor = n.color;
+                            ctx.shadowBlur = 16;
+                            ctx.fill();
+
+                            ctx.beginPath();
+                            ctx.arc(n.x, n.y, n.radius + 4, 0, Math.PI * 2);
+                            ctx.strokeStyle = (n.trailStep === 2) ? '#e3b341' : '#a371f7';
+                            ctx.lineWidth = 2.2;
                             ctx.stroke();
                         }} else {{
                             ctx.fillStyle = n.color;
                             ctx.shadowColor = n.color;
-                            ctx.shadowBlur = (hoveredOrbitNode === n) ? 16 : (n.isDocked ? 12 : 4);
+                            ctx.shadowBlur = (hoveredOrbitNode === n) ? 16 : (n.isSharedBridge ? 12 : (n.isDocked ? 10 : 3));
                             ctx.fill();
 
-                            if (n.isDocked) {{
+                            if (n.isSharedBridge) {{
                                 ctx.beginPath();
                                 ctx.arc(n.x, n.y, n.radius + 3, 0, Math.PI * 2);
                                 ctx.strokeStyle = '#56d364';
-                                ctx.lineWidth = 1.5;
+                                ctx.lineWidth = 1.8;
+                                ctx.stroke();
+                            }} else if (n.isDocked) {{
+                                ctx.beginPath();
+                                ctx.arc(n.x, n.y, n.radius + 2, 0, Math.PI * 2);
+                                ctx.strokeStyle = '#56d364';
+                                ctx.lineWidth = 1.2;
                                 ctx.stroke();
                             }}
                         }}
                         ctx.shadowBlur = 0;
 
-                        ctx.font = (n.isCenter ? 'bold 12px' : '10px') + ' monospace';
-                        ctx.fillStyle = (n.isCenter || hoveredOrbitNode === n) ? '#ffffff' : '#c9d1d9';
+                        // Step Badge on Trail Nodes
+                        if (n.isTrail) {{
+                            ctx.font = 'bold 9px monospace';
+                            ctx.fillStyle = (n.trailStep === 3) ? '#000000' : '#ffffff';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('[' + n.trailStep + ']', n.x, n.y);
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'alphabetic';
+                        }}
+
+                        // Text Labels
+                        ctx.font = (n.isCenter ? 'bold 12px' : (n.isTrail ? 'bold 11px' : '10px')) + ' monospace';
+                        ctx.fillStyle = (n.isCenter || n.isTrail || hoveredOrbitNode === n) ? '#ffffff' : (n.edgeRatio > 0.85 ? '#8b949e' : '#c9d1d9');
                         var textOffset = n.radius + 5;
-                        ctx.fillText(n.id, n.x + textOffset, n.y + 3);
+                        var labelText = n.id;
+                        if (n.isSharedBridge) labelText += ' 🌉';
+                        ctx.fillText(labelText, n.x + textOffset, n.y + 3);
 
                         if (n.isCenter) {{
                             ctx.font = '10px sans-serif';
                             ctx.fillStyle = '#8b949e';
-                            ctx.fillText(n.title.slice(0, 32), n.x + textOffset, n.y + 16);
+                            ctx.fillText(n.title.slice(0, 30), n.x + textOffset, n.y + 16);
+                        }} else if (n.isTrail && n.trailStep === 2) {{
+                            ctx.font = '9px sans-serif';
+                            ctx.fillStyle = '#e3b341';
+                            ctx.fillText('◀ Previous Step', n.x + textOffset, n.y + 14);
                         }}
                     }});
 
@@ -2705,6 +2913,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                 }}
 
                 function loop() {{
+                    trailDashOffset = (trailDashOffset + 0.35) % 28;
                     draw();
                     requestAnimationFrame(loop);
                 }}
@@ -2755,8 +2964,17 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             tooltip.style.display = 'block';
                             tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
                             tooltip.style.top = (e.clientY - rect.top + 10) + 'px';
+                            
+                            var roleTag = hit.isCenter ? '🟢 [3 • Active Focal Node]' :
+                                          (hit.trailStep === 2 ? '🟡 [2 • Previous Step (Click to step back)]' :
+                                          (hit.trailStep === 1 ? '🟣 [1 • Origin Step]' :
+                                          (hit.isSharedBridge ? '🌉 [Shared Bridge: links ' + (hit.linksToTrail || []).join(' & ') + ']' : '')));
+
                             tooltip.innerHTML = '<strong style="color:' + hit.color + '">[' + escapeHtml(hit.id) + ']</strong> ' +
-                                escapeHtml(hit.title) + '<br><span style="color:#8b949e; font-size:0.7rem;">Domain: ' + hit.domain + (hit.isDocked ? ' • 🦴 Docked in Rack' : '') + '</span><br><span style="color:#58a6ff; font-size:0.68rem;">👉 Click to set as focal center</span>';
+                                escapeHtml(hit.title) + '<br>' +
+                                (roleTag ? '<span style="color:#58a6ff; font-weight:bold; font-size:0.72rem;">' + escapeHtml(roleTag) + '</span><br>' : '') +
+                                '<span style="color:#8b949e; font-size:0.7rem;">Domain: ' + hit.domain + (hit.isDocked ? ' • 🦴 Docked in Rack' : '') + '</span><br>' +
+                                '<span style="color:#58a6ff; font-size:0.68rem;">👉 Click to set as active focus</span>';
                         }} else {{
                             tooltip.style.display = 'none';
                         }}
