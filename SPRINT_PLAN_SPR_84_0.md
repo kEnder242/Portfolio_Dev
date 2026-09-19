@@ -400,17 +400,24 @@ When an author reviews flags in `writer.html`, human approvals and dismissals ar
   3. Enable 1-click external link opening and hover preview tooltips.
 * **Verification (`BKM-024`):** Verify badges appear in sidebar tree and links resolve correctly.
 
-### Story 84.11: Comprehensive Test Suite, Server Restart & Live Certification (`BKM-024`)
-* **Assigned Owner:** `[AGY:PRIMARY]`
-* **Dispatch Mode:** Local In-Session
-* **Target Files:** `HomeLabAI/tests/test_paper_engine.py`, `Portfolio_Dev/tests/test_resume_ast.py`
-* **Tasks:**
-  1. Write unit tests for resume parsing, AST serialization, and style schema validation.
-  2. Write unit tests for `/paper/craft_lens`, `/paper/grade_paper`, and `/paper/expand_citations`.
-  3. Execute live daemon restart: `systemctl --user restart homelab-foyer.service` (or restart Foyer test server).
-  4. Perform live endpoint probes against running Foyer daemon (ports 8000/8088/8765) and reachable endpoints.
-  5. Execute full pytest suite (`HomeLabAI/.venv/bin/pytest`) and verify 100% pass rate.
-* **Verification (`BKM-024`):** Certified test run output and active daemon response logs.
+### 🔮 Sprint 85+ Long-Horizon Backlog & Ideographic DNA Vector Space
+
+### 1. `[FEAT-596]` The DNA Forge 2D Connections Web (Neural Synapse View)
+* **Goal:** Implement an interactive SVG/D3 force-directed knowledge graph in `dna_forge.html`.
+* **Behavior:** Selecting any DNA card highlights its 1st-degree `explicit_links` and renders subtle dashed lines to top-3 semantic neighbors (via ChromaDB cosine distance). Allows the operator to click-traverse from an operational BKM $\rightarrow$ underlying Philosophy $\rightarrow$ related Feature $\rightarrow$ resume bullet point.
+
+### 2. Multi-Tier Recommendation System (`PROSE`, `REFINEMENT`, `CONNECTION`)
+* **Goal:** Formalize Review Flags into 3 distinct recommendation classes in `writer.html` / `paper_service.py`:
+  1. `[✍️ Prose Recommendation]`: Power verbs, passive-to-active transformations, eye-fatigue fixes.
+  2. `[📊 Refinement Recommendation]`: Metric injections, "So What?" operational impact, subtractive cuts.
+  3. `[🔗 Connection Recommendation]`: Auto-suggesting related DNA cards (`[WIS-012]`) and arXiv preprint bones.
+
+### 3. Voice Vector Space & Dynamic Register Refactoring Engine
+* **Goal:** A meta-language for rapid paper and resume refactoring. Decouple semantic meaning (DNA noun/verb cores) from stylistic voice vectors ($\vec{v}_{\text{style}} = [\text{Voice}, \text{Tense}, \text{Register}, \text{Density}]$).
+* **Interactive Demo:** Rapid voice toggle in `writer.html` allowing an author to switch a document between *Scientific Prose*, *Casual Tech Essay*, *Executive Brief*, and *ATS Recruiter Bullets* with zero loss of underlying semantic citations.
+
+### 4. Canonical Definition: DNA = Domain-Named Artifacts
+* **Codification:** Formally define DNA across `PHL-034` and `BKM-060` as **Domain-Named Artifacts** (encapsulating our 8 discrete polymorphic domains: `PHL`, `WIS`, `FEAT`, `BKM`, `SPRINT`, `DISC`, `RDNA`, `ART`, `RESUME`).
 
 ---
 
