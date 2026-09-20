@@ -15902,8 +15902,14 @@ window.__WRITER_QUOTES__ = [
         </div>
         <div style="font-size:0.7rem; color:var(--sub-color); font-weight:700;">ORIGIN PROVENANCE (IMMUTABLE)</div>
         <div id="ci-quote" class="ci-quote-box"></div>
-        <div style="font-size:0.7rem; color:var(--sub-color); font-weight:700;">SYNTHESIS & THEORETICAL LOGIC</div>
-        <div id="ci-narrative" class="ci-narrative"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+            <div style="font-size:0.7rem; color:var(--sub-color); font-weight:700;">SYNTHESIS &amp; THEORETICAL LOGIC</div>
+            <span id="ci-save-status" style="font-size:0.75rem; font-weight:600;"></span>
+        </div>
+        <div id="ci-narrative" class="ci-narrative" contenteditable="true" style="border:1px dashed var(--border); border-radius:4px; padding:6px; min-height:60px; outline:none; font-family:inherit; font-size:0.85rem;" title="Edit narrative in-place and save back to DNA DB"></div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+            <button id="btn-save-dna-card" class="action-btn btn-save" style="font-size:0.75rem; padding:4px 10px;">💾 Save to DNA DB</button>
+        </div>
     </div>
 
     <!-- Rename Modal -->
@@ -16668,12 +16674,18 @@ window.__WRITER_QUOTES__ = [
             }
 
             // --- Citation Inspector ---
+            var _activeInspectorCiteId = null;
+
             function openInspector(citeId) {
                 var insp = document.getElementById('citation-inspector');
                 var title = document.getElementById('ci-title');
                 var quote = document.getElementById('ci-quote');
                 var narr = document.getElementById('ci-narrative');
+                var status = document.getElementById('ci-save-status');
                 if (!insp) return;
+
+                _activeInspectorCiteId = citeId;
+                if (status) status.textContent = '';
 
                 var data = STATE.citationIndex[citeId] || { id: citeId, title: citeId, origin_text: 'No provenance recorded.', narrative: '' };
                 if (title) title.textContent = '[' + citeId + '] ' + (data.title || citeId);
@@ -16689,6 +16701,63 @@ window.__WRITER_QUOTES__ = [
                     closeBtn.addEventListener('click', function() {
                         var insp = document.getElementById('citation-inspector');
                         if (insp) insp.classList.remove('open');
+                    });
+                }
+
+                var saveBtn = document.getElementById('btn-save-dna-card');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        if (!_activeInspectorCiteId) return;
+                        var cid = _activeInspectorCiteId;
+                        var narrEl = document.getElementById('ci-narrative');
+                        var status = document.getElementById('ci-save-status');
+                        var newText = narrEl ? narrEl.textContent.trim() : '';
+                        var orig = STATE.citationIndex[cid] || {};
+                        var domain = cid.split('-')[0].toLowerCase();
+                        var collection = (domain === 'phl') ? 'philosophy_dna' : ((domain === 'disc' || domain === 'tl') ? 'discovery' : 'wisdom_dna');
+
+                        if (status) { status.textContent = 'Saving...'; status.style.color = '#58a6ff'; }
+
+                        var cardPayload = {
+                            id: cid,
+                            domain: domain.toUpperCase(),
+                            title: orig.title || cid,
+                            synthesis: {
+                                title: orig.title || cid,
+                                narrative_context: newText
+                            },
+                            origin: {
+                                text: orig.origin_text || orig.verbatim || ''
+                            },
+                            metadata: {
+                                tags: orig.tags || [],
+                                updated_at: new Date().toISOString()
+                            }
+                        };
+
+                        fetch('http://127.0.0.1:8765/wisdom/save_card', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ card: cardPayload, collection: collection })
+                        })
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            if (STATE.citationIndex[cid]) {
+                                STATE.citationIndex[cid].narrative = newText;
+                            }
+                            if (status) {
+                                status.textContent = '✓ Saved (File + DB)';
+                                status.style.color = '#3fb950';
+                                setTimeout(function() { if (status) status.textContent = ''; }, 3000);
+                            }
+                            logConsole('Saved updated DNA synthesis for [' + cid + '] to disk & ChromaDB (' + collection + ')');
+                        })
+                        .catch(function(err) {
+                            if (status) {
+                                status.textContent = '❌ Save failed: ' + err;
+                                status.style.color = '#f85149';
+                            }
+                        });
                     });
                 }
             }

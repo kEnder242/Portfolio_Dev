@@ -217,7 +217,7 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     # Voice Vectors & Mutation Governance Section [FEAT-598]
     voice_switcher_html = ""
     if revisions or mutations:
-        rev_pills = "".join(f'<span class="voice-pill rev-pill active" title="Human Certified Ground Truth">🏆 {escape_html(r.get("lens", "Revision"))}</span>' for r in revisions)
+        rev_pills = "".join(f'<span class="voice-pill rev-pill active" data-rev-id="{escape_html(r.get("id",""))}" data-lens="{escape_html(r.get("lens","Revision"))}" data-text="{escape_html(r.get("text",""))}" data-timestamp="{escape_html(r.get("timestamp",""))}" title="Click to preview/select this human-certified revision">🏆 {escape_html(r.get("lens", "Revision"))}</span>' for r in revisions)
         mut_pills = "".join(f'<span class="voice-pill mut-pill" data-mut-id="{escape_html(m.get("id"))}" data-lens="{escape_html(m.get("lens"))}" data-text="{escape_html(m.get("text"))}" title="Click to preview &amp; certify AI mutation into ground truth">✨ {escape_html(m.get("lens", "Mutation"))}</span>' for m in mutations)
         voice_switcher_html = f'''<div class="card-section voice-section">
             <span class="section-label">Voice Space &amp; Mutations [FEAT-598]</span>
@@ -2185,6 +2185,26 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     if (btnSave) btnSave.addEventListener('click', function (e) {{ e.stopPropagation(); saveSingleCard(card); }});
                     if (btnDiscard) btnDiscard.addEventListener('click', function (e) {{ e.stopPropagation(); lockCard(card, true); }});
 
+                    card.querySelectorAll('.rev-pill').forEach(function(pill) {{
+                        pill.addEventListener('click', function(e) {{
+                            e.stopPropagation();
+                            var lens = this.dataset.lens || 'Revision';
+                            var text = this.dataset.text || '';
+                            var revId = this.dataset.revId || '';
+                            var ts = this.dataset.timestamp || '';
+                            if (!text) return;
+                            if (confirm('🏆 Revision: ' + lens + ' (' + revId + ')\\nTimestamp: ' + ts + '\\n\\n' + text + '\\n\\nProject this revision into the active card narrative?')) {{
+                                var narrEl = card.querySelector('[data-field="narrative_context"]');
+                                if (narrEl) {{
+                                    narrEl.textContent = text;
+                                    card.querySelectorAll('.rev-pill').forEach(function(p) {{ p.classList.remove('active'); }});
+                                    pill.classList.add('active');
+                                    unlockCard(card);
+                                }}
+                            }}
+                        }});
+                    }});
+
                     card.querySelectorAll('.mut-pill').forEach(function(pill) {{
                         pill.addEventListener('click', function(e) {{
                             e.stopPropagation();
@@ -2233,15 +2253,54 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
             function saveSingleCard(card) {{
                 var status = card.querySelector('.card-save-status');
-                if (status) status.textContent = 'Saving...';
-                setTimeout(function() {{
+                if (status) {{ status.textContent = 'Saving...'; status.style.color = '#58a6ff'; }}
+                
+                var cid = card.dataset.cardId || '';
+                var domain = cid.split('-')[0].toLowerCase();
+                var title = (card.querySelector('.card-title') || {{}}).textContent || '';
+                var narrative = (card.querySelector('[data-field="narrative_context"]') || {{}}).textContent || '';
+                var reviewNotes = (card.querySelector('[data-field="review_notes"]') || {{}}).textContent || '';
+                var tagEls = card.querySelectorAll('[data-field="tags"] .tag');
+                var tags = [];
+                tagEls.forEach(function(t) {{ tags.push(t.textContent.replace('#', '').trim()); }});
+
+                var collection = (domain === 'phl') ? 'philosophy_dna' : ((domain === 'disc' || domain === 'tl') ? 'discovery' : 'wisdom_dna');
+                
+                var cardPayload = {{
+                    id: cid,
+                    domain: domain.toUpperCase(),
+                    title: title.trim(),
+                    synthesis: {{
+                        title: title.trim(),
+                        narrative_context: narrative.trim(),
+                        review_notes: reviewNotes.trim()
+                    }},
+                    metadata: {{
+                        tags: tags,
+                        updated_at: new Date().toISOString()
+                    }}
+                }};
+
+                fetch('http://127.0.0.1:8765/wisdom/save_card', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ card: cardPayload, collection: collection }})
+                }})
+                .then(function(res) {{ return res.json(); }})
+                .then(function(data) {{
                     if (status) {{
-                        status.textContent = '✓ Saved';
+                        status.textContent = '✓ Saved (File + ChromaDB)';
                         status.style.color = '#3fb950';
-                        setTimeout(function () {{ status.textContent = ''; }}, 2500);
+                        setTimeout(function () {{ status.textContent = ''; }}, 3000);
                     }}
                     lockCard(card, false);
-                }}, 400);
+                }})
+                .catch(function(err) {{
+                    if (status) {{
+                        status.textContent = '❌ Save Error: ' + err;
+                        status.style.color = '#f85149';
+                    }}
+                }});
             }}
 
             // -------------------------------------------------------------
