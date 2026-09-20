@@ -17,9 +17,9 @@ COLLECTION_RDNA = "rdna"
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
-PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/philosophy_data.json")
-WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/wisdom_data.json")
-RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/rdna_questions.json")
+PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json")
+WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/wisdom_data.json")
+RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/rdna_questions.json")
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")

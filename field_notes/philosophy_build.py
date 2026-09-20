@@ -7,8 +7,8 @@ import json
 import os
 import sys
 
-DATA_FILE = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/wisdom_data.json")
-OUT_JSON = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/philosophy_data.json")
+DATA_FILE = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/wisdom_data.json")
+OUT_JSON = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json")
 
 def build():
     if not os.path.exists(DATA_FILE):
