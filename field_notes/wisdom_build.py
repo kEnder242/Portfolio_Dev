@@ -12,14 +12,15 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR / "data" / "wisdom_data.json"
-PHILOSOPHY_PATH = BASE_DIR / "data" / "philosophy_data.json"
+DNA_DIR = BASE_DIR.parent / "dna"
+DATA_PATH = DNA_DIR / "wisdom_data.json"
+PHILOSOPHY_PATH = DNA_DIR / "philosophy_data.json"
 BUCKETS_PATH = BASE_DIR / "data" / "buckets.json"
 MANIFEST_PATH = BASE_DIR / "data" / "dna_manifest.json"
 SPRINT_DATA_PATH = BASE_DIR / "data" / "sprint_data.json"
-TIMELINE_DATA_PATH = BASE_DIR / "data" / "timeline_data.json"
+TIMELINE_DATA_PATH = DNA_DIR / "timeline_data.json"
 OUTPUT_HTML = BASE_DIR / "wisdom.html"
-REL_SOURCE = "Portfolio_Dev/field_notes/data/wisdom_data.json"
+REL_SOURCE = "Portfolio_Dev/dna/wisdom_data.json"
 
 
 def escape_html(text):
