@@ -5,7 +5,7 @@
     "paper_order": 1,
     "origin": {
       "author": "jallred",
-      "text": "While implementing the RMCP+ protocol stack from scratch in C, I performed a deep dive into the RAKP authentication spec. To properly debug the session negotiation, I had to patch the Wireshark (then Ethereal) source code to correctly parse the custom packet exchanges I was seeing. During this process, I identified a fundamental flaw: the BMC would return a salted hash of the user’s password before the client proved their identity, essentially enabling offline dictionary attacks.Although my concerns were dismissed by senior engineers at the time, this exact vulnerability was later confirmed as industry-wide flaw CVE-2013-4786.This solidified my conviction to trust technical data over hierarchy and to maintain meticulous documentation for critical findings.",
+      "text": "While implementing the RMCP+ protocol stack from scratch in C, I performed a deep dive into the RAKP authentication spec. To properly debug the session negotiation, I had to patch the Wireshark (then Ethereal) source code to correctly parse the custom packet exchanges I was seeing. During this process, I identified a fundamental flaw: the BMC would return a salted hash of the user\u2019s password before the client proved their identity, essentially enabling offline dictionary attacks.Although my concerns were dismissed by senior engineers at the time, this exact vulnerability was later confirmed as industry-wide flaw CVE-2013-4786.This solidified my conviction to trust technical data over hierarchy and to maintain meticulous documentation for critical findings.",
       "source": "Portfolio Stories (stories.html#rakp-security)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -89,7 +89,7 @@
     "paper_order": 3,
     "origin": {
       "author": "jallred",
-      "text": "I had a big PECI coverage miss, it was rather embarrassing. Because we had a huge list, I was only checking what I knew existed, not what shouldn’t exist. Well, some unexpected endpoints did surface, more echoes of what they should be, but those endpoints should not have been visible. I needed to pivot away from just reading known devices to scanning and including negative space. I recalled a conversation with an expert who had scanned through the BDF region before and adapted that to PECI space. To do that I needed a list of all possible combinations in PCI space - which fit very neatly with a generator pattern. One of the first times I really feltyieldimproved the readability and reliability of my code. After I got it running I still saw ‘extra’ devices popping up, but they turned out to be actual hardware, which was easy to correlate with lspci. It was a huge space to cover, and a full run would have taken almost a week, butwith the combination of the bulk transfer API and fast negative returns the expected execution time went from a few days to under 10 hours.",
+      "text": "I had a big PECI coverage miss, it was rather embarrassing. Because we had a huge list, I was only checking what I knew existed, not what shouldn\u2019t exist. Well, some unexpected endpoints did surface, more echoes of what they should be, but those endpoints should not have been visible. I needed to pivot away from just reading known devices to scanning and including negative space. I recalled a conversation with an expert who had scanned through the BDF region before and adapted that to PECI space. To do that I needed a list of all possible combinations in PCI space - which fit very neatly with a generator pattern. One of the first times I really feltyieldimproved the readability and reliability of my code. After I got it running I still saw \u2018extra\u2019 devices popping up, but they turned out to be actual hardware, which was easy to correlate with lspci. It was a huge space to cover, and a full run would have taken almost a week, butwith the combination of the bulk transfer API and fast negative returns the expected execution time went from a few days to under 10 hours.",
       "source": "Portfolio Stories (stories.html#negative-testing)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -131,7 +131,7 @@
     "paper_order": 4,
     "origin": {
       "author": "jallred",
-      "text": "I went to Texas for a power-on during a transition period where I was doing basic execution work and looking for a long-term technical fit. Since I didn’t have a strict task list, I decided to shadow the experts and jump into the immediate fires on the floor. I ended up peer programming with a group focused on high-level security features like TDX and Secure Boot. We clicked so well that when they (also) returned to Oregon, they reached out to pull me into their organization. I wasn't just helping with a bring-up; I was recruited to seed a second team under the Security & Manageability umbrella, which launched my five-year run as the Lead Manageability Validation Automation engineer.",
+      "text": "I went to Texas for a power-on during a transition period where I was doing basic execution work and looking for a long-term technical fit. Since I didn\u2019t have a strict task list, I decided to shadow the experts and jump into the immediate fires on the floor. I ended up peer programming with a group focused on high-level security features like TDX and Secure Boot. We clicked so well that when they (also) returned to Oregon, they reached out to pull me into their organization. I wasn't just helping with a bring-up; I was recruited to seed a second team under the Security & Manageability umbrella, which launched my five-year run as the Lead Manageability Validation Automation engineer.",
       "source": "Portfolio Stories (stories.html#texas-power-on)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -257,7 +257,7 @@
     "paper_order": 7,
     "origin": {
       "author": "jallred",
-      "text": "I took over a complex debug tool where the logic for different CPU cores and steppings was becoming unmanageable through traditional hard-coding. By \"grokking\" the code to find its \"beating heart,\" I realized the project could be re-architected as a metadata-driven engine centered on XML. I shifted the design so that the XML schema defined the GUI and silicon features—such as a checkbox to forward VISA signals over JTAG—allowing the tool to auto-detect and deploy functionality without any further code changes.This \"Configuration as Code\" approach allowed me to support years of new hardware iterations by simply updating XML definitions scraped directly from RTL.",
+      "text": "I took over a complex debug tool where the logic for different CPU cores and steppings was becoming unmanageable through traditional hard-coding. By \"grokking\" the code to find its \"beating heart,\" I realized the project could be re-architected as a metadata-driven engine centered on XML. I shifted the design so that the XML schema defined the GUI and silicon features\u2014such as a checkbox to forward VISA signals over JTAG\u2014allowing the tool to auto-detect and deploy functionality without any further code changes.This \"Configuration as Code\" approach allowed me to support years of new hardware iterations by simply updating XML definitions scraped directly from RTL.",
       "source": "Portfolio Stories (stories.html#visa-tool)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -345,14 +345,14 @@
     "paper_order": 9,
     "origin": {
       "author": "jallred",
-      "text": "The VISA tool was also highly dependent on the stepping and family of a processor. Each new power-on of new silicon required me to re-compile the project and update the source code. Wary of this extra maintenance step I added a config file. It was a simple two-day fix that saved me about 2 hours per month, but also enabled anyone to add a project without my express involvement. My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I’ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.",
+      "text": "The VISA tool was also highly dependent on the stepping and family of a processor. Each new power-on of new silicon required me to re-compile the project and update the source code. Wary of this extra maintenance step I added a config file. It was a simple two-day fix that saved me about 2 hours per month, but also enabled anyone to add a project without my express involvement. My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I\u2019ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.",
       "source": "Portfolio Stories (stories.html#config-file)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "A Simple Config File",
-      "narrative_context": "My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I’ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.",
+      "narrative_context": "My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I\u2019ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.",
       "lab_anchors": [
         "BKM-060",
         "FEAT-582",
@@ -389,14 +389,14 @@
     "paper_order": 10,
     "origin": {
       "author": "jallred",
-      "text": "While in my PAE role, I maintained roughly 100 Knights Landing nodes that allowed us to reproduce issues with OEMs. Stuff you’d only see once in a million happened regularly when you start doing a million things quickly and in parallel. We used pdsh regularly. You think very differently about manually flashing BIOS when it needs to be done 100 times with a tough-to-reach harness. I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn’t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
+      "text": "While in my PAE role, I maintained roughly 100 Knights Landing nodes that allowed us to reproduce issues with OEMs. Stuff you\u2019d only see once in a million happened regularly when you start doing a million things quickly and in parallel. We used pdsh regularly. You think very differently about manually flashing BIOS when it needs to be done 100 times with a tough-to-reach harness. I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn\u2019t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
       "source": "Portfolio Stories (stories.html#fleet-scale)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "Flashing 100 Nodes (Fleet Scale Operations)",
-      "narrative_context": "I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn’t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
+      "narrative_context": "I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn\u2019t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
       "lab_anchors": [
         "BKM-060",
         "FEAT-582",
@@ -433,7 +433,7 @@
     "paper_order": 11,
     "origin": {
       "author": "jallred",
-      "text": "We had an old internal patch for ipmitool to enable parsing of some extra return codes bytes for automation. To set up the build environment I downloaded the source over git and followed the steps to compile in Cygwin. The build script would fail, I’d fix the failure, then it would crash somewhere else. I wasted a week just trying to get the thing to compile. It turned out that I had downloaded using Windows git rather than Cygwin git. This was a major issue because line endings were unix style. Once I re-downloaded the source everything compiled perfectly. Always be wary of line endings. Take a step back when you run into a wall.",
+      "text": "We had an old internal patch for ipmitool to enable parsing of some extra return codes bytes for automation. To set up the build environment I downloaded the source over git and followed the steps to compile in Cygwin. The build script would fail, I\u2019d fix the failure, then it would crash somewhere else. I wasted a week just trying to get the thing to compile. It turned out that I had downloaded using Windows git rather than Cygwin git. This was a major issue because line endings were unix style. Once I re-downloaded the source everything compiled perfectly. Always be wary of line endings. Take a step back when you run into a wall.",
       "source": "Portfolio Stories (stories.html#cygwin-wall)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -477,7 +477,7 @@
     "paper_order": 12,
     "origin": {
       "author": "jallred",
-      "text": "When I was in Junior High I learned basic programming on my TI-85. I was particularly proud of a program that would comb through possible numerator/denominator combinations to convert a ‘float’ into a fraction. I had a bad backup coin battery so my file system would get wiped pretty regularly, so I got good at rewriting that converter. Then one day I was looking through the list of commands and noticed an internal ->Frac function that had already implemented what I wanted. Two things stuck in my mind after that: (1) You get good at doing things by doing it again and again, (2) look for things you assume are not there.",
+      "text": "When I was in Junior High I learned basic programming on my TI-85. I was particularly proud of a program that would comb through possible numerator/denominator combinations to convert a \u2018float\u2019 into a fraction. I had a bad backup coin battery so my file system would get wiped pretty regularly, so I got good at rewriting that converter. Then one day I was looking through the list of commands and noticed an internal ->Frac function that had already implemented what I wanted. Two things stuck in my mind after that: (1) You get good at doing things by doing it again and again, (2) look for things you assume are not there.",
       "source": "Portfolio Stories (stories.html#ti-basic)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -607,14 +607,14 @@
     "paper_order": 15,
     "origin": {
       "author": "jallred",
-      "text": "In early 2019 I took a machine learning course. Jupiter notebook and time series db exercises. A few python libraries stuck out at me as very useful at work: pandas and matplotlib. I had a decent amount of data collection when stressing Running average Power Limiting functionality. Reports would spit out but it was really hard to get a good picture on what was going on. With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric ‘10% below expected’ would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn’t able to cause the system to draw that much power.",
+      "text": "In early 2019 I took a machine learning course. Jupiter notebook and time series db exercises. A few python libraries stuck out at me as very useful at work: pandas and matplotlib. I had a decent amount of data collection when stressing Running average Power Limiting functionality. Reports would spit out but it was really hard to get a good picture on what was going on. With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric \u201810% below expected\u2019 would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn\u2019t able to cause the system to draw that much power.",
       "source": "Portfolio Stories (stories.html#rapl-matplotlib)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "RAPL & Matplotlib (Telemetry Visualization)",
-      "narrative_context": "With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric ‘10% below expected’ would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn’t able to cause the system to draw that much power.",
+      "narrative_context": "With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric \u201810% below expected\u2019 would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn\u2019t able to cause the system to draw that much power.",
       "lab_anchors": [
         "BKM-024",
         "FEAT-584"
@@ -649,14 +649,14 @@
     "paper_order": 16,
     "origin": {
       "author": "jallred",
-      "text": "A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I’ve developed my own shorthand to systematically map out unfamiliar code. I know I’m done when I can see the ‘heart’ of the code.",
+      "text": "A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I\u2019ve developed my own shorthand to systematically map out unfamiliar code. I know I\u2019m done when I can see the \u2018heart\u2019 of the code.",
       "source": "Portfolio Stories (stories.html#grok-code)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "How to Grok Code",
-      "narrative_context": "A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I’ve developed my own shorthand to systematically map out unfamiliar code. I know I’m done when I can see the ‘heart’ of the code.",
+      "narrative_context": "A senior dev was mentoring two of us while looking through a rather large code base. She took out some paper and wrote down how the program was structured in a kind of shorthand. By the time we were finished we had a map and a clear understanding of the flow. Since then I\u2019ve developed my own shorthand to systematically map out unfamiliar code. I know I\u2019m done when I can see the \u2018heart\u2019 of the code.",
       "lab_anchors": [
         "BKM-024",
         "FEAT-584"
@@ -691,14 +691,14 @@
     "paper_order": 17,
     "origin": {
       "author": "jallred",
-      "text": "To follow up on code grokking, once I find the ‘beating heart’ in a system I know I’ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult ‘heart’ turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process.",
+      "text": "To follow up on code grokking, once I find the \u2018beating heart\u2019 in a system I know I\u2019ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult \u2018heart\u2019 turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process.",
       "source": "Portfolio Stories (stories.html#beating-heart)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "The Beating Heart",
-      "narrative_context": "To follow up on code grokking, once I find the ‘beating heart’ in a system I know I’ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult ‘heart’ turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process.",
+      "narrative_context": "To follow up on code grokking, once I find the \u2018beating heart\u2019 in a system I know I\u2019ve found the perspective of the original developer and everything becomes clear. Some of these are straightforward, a loop handling events, a main function that does the heavy work. One particularly difficult \u2018heart\u2019 turned out to be outside the code entirely, the main logic was all contained inside an XML file that described RTL pathways to the LA pins. It was a rather elegant solution but a pain to debug until I understood the process.",
       "lab_anchors": [
         "BKM-024",
         "FEAT-584"
@@ -733,7 +733,7 @@
     "paper_order": 18,
     "origin": {
       "author": "jallred",
-      "text": "I wrote an automation harness that allowed me to validate TGUI applications in a OS platform agnostic way. It was rather nifty, using TCL and the expect library to handle reading and writing to the screen. Unfortunately, when I started using expect for serial output (EFI mode) things got dirty. I learned that serial output has no guarantee to preserve words—menu items would often get clipped. I mostly got around this with generous regular expressions. In theory, the flows should have worked, but in the real world, the data was noisy. However, accepting that noise as a constraint paid off.By building a robust parser that tolerated the fragments, I was able to shift the NIC validation process from 100% manual to 90% automated, saving hours of tedium and proving that even messy interfaces could be tamed.",
+      "text": "I wrote an automation harness that allowed me to validate TGUI applications in a OS platform agnostic way. It was rather nifty, using TCL and the expect library to handle reading and writing to the screen. Unfortunately, when I started using expect for serial output (EFI mode) things got dirty. I learned that serial output has no guarantee to preserve words\u2014menu items would often get clipped. I mostly got around this with generous regular expressions. In theory, the flows should have worked, but in the real world, the data was noisy. However, accepting that noise as a constraint paid off.By building a robust parser that tolerated the fragments, I was able to shift the NIC validation process from 100% manual to 90% automated, saving hours of tedium and proving that even messy interfaces could be tamed.",
       "source": "Portfolio Stories (stories.html#serial-fragments)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -818,7 +818,7 @@
     "paper_order": 20,
     "origin": {
       "author": "jallred",
-      "text": "Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it’s more ambiguous when counting packets over SMBus or other internal protocols. Our DTTC paper tackled this, but I was never quite satisfied to provide a standard MB/s measurement.Because the protocol overhead was so heavy, I argued that \"Commands per Second\" was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see.",
+      "text": "Measuring throughput is a tricky question, especially when data is encapsulated at several levels. This is pretty standard over IP but it\u2019s more ambiguous when counting packets over SMBus or other internal protocols. Our DTTC paper tackled this, but I was never quite satisfied to provide a standard MB/s measurement.Because the protocol overhead was so heavy, I argued that \"Commands per Second\" was the only honest metric, even if it wasn't the big megabyte number stakeholders wanted to see.",
       "source": "Portfolio Stories (stories.html#throughput-gotchas)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
@@ -945,14 +945,14 @@
     "paper_order": 23,
     "origin": {
       "author": "jallred",
-      "text": "Early in my career, I was tasked with helping our team transition from SVN to IBM ClearCase during a mandate from our international partners. It was an exercise in pure persistence; while the infrastructure was in flux, I tag-teamed with our resident SCM lead to keep our daily validation builds running. I had to resort to intense \"mergify\" sessions and manual elbow grease to ensure the transition didn't break the active development pipeline. ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I’ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I’ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt.",
+      "text": "Early in my career, I was tasked with helping our team transition from SVN to IBM ClearCase during a mandate from our international partners. It was an exercise in pure persistence; while the infrastructure was in flux, I tag-teamed with our resident SCM lead to keep our daily validation builds running. I had to resort to intense \"mergify\" sessions and manual elbow grease to ensure the transition didn't break the active development pipeline. ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I\u2019ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I\u2019ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt.",
       "source": "Portfolio Stories (stories.html#scm-integration)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "To SCM or Not to SCM (Integration Reliability)",
-      "narrative_context": "ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I’ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I’ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt.",
+      "narrative_context": "ClearCase has a unique way of mixing software recipes, and I handled several emergency integration sessions to maintain code integrity. While I\u2019ve always enjoyed a good diff, those sessions taught me that the best work is the work you avoid through proper architecture. Since then, I\u2019ve been extremely careful about identifying and preventing the ways teams unintentionally fork code and create technical debt.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -989,14 +989,14 @@
     "paper_order": 24,
     "origin": {
       "author": "jallred",
-      "text": "I was asked to estimate how long it would take to ramp up and deploy a project that had recently been recovered from an old backup. This was my ‘code archeologist’ time to shine. I recently took an estimation course and learned how setting high and low estimates improved accuracy, but my manager wanted real dates. I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was “Maybe you could have added a range of estimates” - I don’t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet.",
+      "text": "I was asked to estimate how long it would take to ramp up and deploy a project that had recently been recovered from an old backup. This was my \u2018code archeologist\u2019 time to shine. I recently took an estimation course and learned how setting high and low estimates improved accuracy, but my manager wanted real dates. I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was \u201cMaybe you could have added a range of estimates\u201d - I don\u2019t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet.",
       "source": "Portfolio Stories (stories.html#estimates)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "Estimates: High vs. Low (The Code Archaeologist)",
-      "narrative_context": "I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was “Maybe you could have added a range of estimates” - I don’t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet.",
+      "narrative_context": "I began execution over several months, with the estimate plan driving me and my contractor while my manager was on sabbatical, we hit our milestones well, and saved the complicated unknowns for last. It was a very smooth execution. On completion and review, I asked for feedback. The only thing I got was \u201cMaybe you could have added a range of estimates\u201d - I don\u2019t expect managers or people to be consistent, but it was a big trust building time when I casually reminded him I was tracking high and low estimates off the side of the spreadsheet.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -1033,14 +1033,14 @@
     "paper_order": 25,
     "origin": {
       "author": "jallred",
-      "text": "I was leveraging a PythonSV framework (c-scripts) for silicon power-on to improve test coverage. My manager at the time specifically asked me to add API-level tests for visibility. I knew they were technically redundant, but I followed the direction to ensure the team had the completeness they were looking for. A year later, during a review, I was berated for that exact redundancy by the architecture team. That \"unnecessary thrash\" was a huge lesson in code ownership. I learned that just \"following orders\" isn't enough when you're working in a complex framework. Now, if I’m asked to implement something that creates technical debt or redundancy, I make sure there is a clear \"paper trail\" or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost.",
+      "text": "I was leveraging a PythonSV framework (c-scripts) for silicon power-on to improve test coverage. My manager at the time specifically asked me to add API-level tests for visibility. I knew they were technically redundant, but I followed the direction to ensure the team had the completeness they were looking for. A year later, during a review, I was berated for that exact redundancy by the architecture team. That \"unnecessary thrash\" was a huge lesson in code ownership. I learned that just \"following orders\" isn't enough when you're working in a complex framework. Now, if I\u2019m asked to implement something that creates technical debt or redundancy, I make sure there is a clear \"paper trail\" or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost.",
       "source": "Portfolio Stories (stories.html#pythonsv-thrash)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "The PythonSV API Thrash",
-      "narrative_context": "That \"unnecessary thrash\" was a huge lesson in code ownership. I learned that just \"following orders\" isn't enough when you're working in a complex framework. Now, if I’m asked to implement something that creates technical debt or redundancy, I make sure there is a clear \"paper trail\" or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost.",
+      "narrative_context": "That \"unnecessary thrash\" was a huge lesson in code ownership. I learned that just \"following orders\" isn't enough when you're working in a complex framework. Now, if I\u2019m asked to implement something that creates technical debt or redundancy, I make sure there is a clear \"paper trail\" or attribution in the code itself. I give proper credit to the source and document why the decision was made, so when the architecture is reviewed a year later, the context isn't lost.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -1077,14 +1077,14 @@
     "paper_order": 26,
     "origin": {
       "author": "jallred",
-      "text": "I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI ‘wire’ time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.",
+      "text": "I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI \u2018wire\u2019 time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.",
       "source": "Portfolio Stories (stories.html#synergy)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "Synergy of Validation Working with Architect and Dev",
-      "narrative_context": "I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI ‘wire’ time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.",
+      "narrative_context": "I really enjoyed working closely as validation developer with a BMC developer and Architect - We met daily in an informal SCRUM like context. Architect would describe the focus, and we would push back on feasibility and worth. We got a lot of performance out of PECI, creating a bulk transfer API with hooks to prove we were moving at line speed - Restful API extensions to directly compare LAN overhead with PECI \u2018wire\u2019 time (DMA was considerably faster than wire) - this resulted in a DTTC paper on measuring the performance of PECI.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -1122,14 +1122,14 @@
     "paper_order": 27,
     "origin": {
       "author": "jallred",
-      "text": "I stumbled upon a ‘gotcha’ moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting ‘compile’ again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error.",
+      "text": "I stumbled upon a \u2018gotcha\u2019 moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting \u2018compile\u2019 again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error.",
       "source": "Portfolio Stories (stories.html#first-error)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "Always Fix the First Error",
-      "narrative_context": "I stumbled upon a ‘gotcha’ moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting ‘compile’ again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error.",
+      "narrative_context": "I stumbled upon a \u2018gotcha\u2019 moment very early into learning how to code in school. Everyone gets their first missing semicolon sometime. When compilation errors started piling up, I naively and dutifully started fixing every error before hitting \u2018compile\u2019 again. It was infuriating and stressful. I had no idea what was going on, why were there so many errors. That is, until I noticed compilation errors had a waterfall effect. One missing semicolon can mess up the interpretation of the reset of the file. The opposite of reading a stack trace: always fix the first compilation error.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -1166,14 +1166,14 @@
     "paper_order": 28,
     "origin": {
       "author": "jallred",
-      "text": "Whether it’s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn’t the best option, and rather counterintuitively it isn’t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are ‘okay’ drastically improves the results.",
+      "text": "Whether it\u2019s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn\u2019t the best option, and rather counterintuitively it isn\u2019t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are \u2018okay\u2019 drastically improves the results.",
       "source": "Portfolio Stories (stories.html#count-oks)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "Count the Ok's",
-      "narrative_context": "Whether it’s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn’t the best option, and rather counterintuitively it isn’t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are ‘okay’ drastically improves the results.",
+      "narrative_context": "Whether it\u2019s deciding what restaurant to go to or voting on the best way to execute a plan, voting isn\u2019t the best option, and rather counterintuitively it isn\u2019t the fairest either. Important decisions should be made carefully, and allowing people to weigh in on all the options that are \u2018okay\u2019 drastically improves the results.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -1210,14 +1210,14 @@
     "paper_order": 29,
     "origin": {
       "author": "jallred",
-      "text": "There have been several times in my career where I’ve been convinced I was right but wasn't in a position to change the direction. I’ve learned to disagree and commit, and in those cases, the results usually went well because the team stayed aligned. In fact, I’ve often \"embraced the suck\" and intentionally became a subject matter expert on the critical things others didn't want to touch—like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those \"unpopular\" parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I’ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.",
+      "text": "There have been several times in my career where I\u2019ve been convinced I was right but wasn't in a position to change the direction. I\u2019ve learned to disagree and commit, and in those cases, the results usually went well because the team stayed aligned. In fact, I\u2019ve often \"embraced the suck\" and intentionally became a subject matter expert on the critical things others didn't want to touch\u2014like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those \"unpopular\" parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I\u2019ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.",
       "source": "Portfolio Stories (stories.html#conflict-management)",
       "immutable": true,
       "created_at": "2026-09-17T17:00:00Z"
     },
     "synthesis": {
       "title": "The Conflict Management Lesson",
-      "narrative_context": "In fact, I’ve often \"embraced the suck\" and intentionally became a subject matter expert on the critical things others didn't want to touch—like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those \"unpopular\" parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I’ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.",
+      "narrative_context": "In fact, I\u2019ve often \"embraced the suck\" and intentionally became a subject matter expert on the critical things others didn't want to touch\u2014like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those \"unpopular\" parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I\u2019ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.",
       "lab_anchors": [
         "PHL-033",
         "BKM-049",
@@ -8822,15 +8822,15 @@
     "paper_order": 206,
     "origin": {
       "author": "jallred",
-      "text": "avgpowercmp module identifies discrepancies in average power readings within ±5% range.",
+      "text": "avgpowercmp module identifies discrepancies in average power readings within \u00b15% range.",
       "source": "Historical Journal Ledger (2019-10-22)",
       "evidence": "Line 664: INFO, montana.FAI.nodeManager.avgpowercmp,**In +- 5% Avg Range - Pass!!",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.388382+00:00"
     },
     "synthesis": {
-      "title": "avgpowercmp module identifies discrepancies in average power readings within ±5%",
-      "narrative_context": "avgpowercmp module identifies discrepancies in average power readings within ±5% range.",
+      "title": "avgpowercmp module identifies discrepancies in average power readings within \u00b15%",
+      "narrative_context": "avgpowercmp module identifies discrepancies in average power readings within \u00b15% range.",
       "lab_anchors": [
         "FEAT-592",
         "BKM-060"
@@ -8865,15 +8865,15 @@
     "paper_order": 207,
     "origin": {
       "author": "jallred",
-      "text": "avgpowercmp module reports 'Fail!!' when actual value exceeds ±5% range.",
+      "text": "avgpowercmp module reports 'Fail!!' when actual value exceeds \u00b15% range.",
       "source": "Historical Journal Ledger (2019-10-22)",
       "evidence": "Line 2357: INFO, montana.FAI.nodeManager.avgpowercmp,**Above +5% Avg Range - Fail!!",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.388712+00:00"
     },
     "synthesis": {
-      "title": "avgpowercmp module reports 'Fail!!' when actual value exceeds ±5% range",
-      "narrative_context": "avgpowercmp module reports 'Fail!!' when actual value exceeds ±5% range.",
+      "title": "avgpowercmp module reports 'Fail!!' when actual value exceeds \u00b15% range",
+      "narrative_context": "avgpowercmp module reports 'Fail!!' when actual value exceeds \u00b15% range.",
       "lab_anchors": [
         "FEAT-592",
         "BKM-060"
@@ -15616,15 +15616,15 @@
     "paper_order": 364,
     "origin": {
       "author": "jallred",
-      "text": "Intel® Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineering Tool in Jason's technical portfolio. Purpose: Portfolio demonstrating complex systems leadership and delivery expertise.",
+      "text": "Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineering Tool in Jason's technical portfolio. Purpose: Portfolio demonstrating complex systems leadership and delivery expertise.",
       "source": "Historical Journal Ledger (Historical)",
       "evidence": "Historical validation telemetry log.",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.410703+00:00"
     },
     "synthesis": {
-      "title": "Intel® Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineerin",
-      "narrative_context": "Intel® Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineering Tool in Jason's technical portfolio. Purpose: Portfolio demonstrating complex systems leadership and delivery expertise.",
+      "title": "Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineerin",
+      "narrative_context": "Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineering Tool in Jason's technical portfolio. Purpose: Portfolio demonstrating complex systems leadership and delivery expertise.",
       "lab_anchors": [
         "FEAT-592",
         "BKM-060"
@@ -15659,15 +15659,15 @@
     "paper_order": 365,
     "origin": {
       "author": "jallred",
-      "text": "For Engineering Tool, Jason developed Intel® Intelligent Power Node Manager 4.0 External Interface.pdf. Synopsis: Portfolio demonstrating complex systems leadership and delivery expertise.",
+      "text": "For Engineering Tool, Jason developed Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf. Synopsis: Portfolio demonstrating complex systems leadership and delivery expertise.",
       "source": "Historical Journal Ledger (Historical)",
       "evidence": "Historical validation telemetry log.",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.410804+00:00"
     },
     "synthesis": {
-      "title": "For Engineering Tool, Jason developed Intel® Intelligent Power Node Manager 4.0 ",
-      "narrative_context": "For Engineering Tool, Jason developed Intel® Intelligent Power Node Manager 4.0 External Interface.pdf. Synopsis: Portfolio demonstrating complex systems leadership and delivery expertise.",
+      "title": "For Engineering Tool, Jason developed Intel\u00ae Intelligent Power Node Manager 4.0 ",
+      "narrative_context": "For Engineering Tool, Jason developed Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf. Synopsis: Portfolio demonstrating complex systems leadership and delivery expertise.",
       "lab_anchors": [
         "FEAT-592",
         "BKM-060"
@@ -20682,6 +20682,89 @@
       "status": "APPROVED",
       "bucket_id": "bucket_silicon_validation",
       "rank": 5
+    }
+  },
+  {
+    "id": "RDNA-001",
+    "title": "Dual-Engine Creative Process Query",
+    "question": "How does the dual-engine process work?",
+    "synthesis": {
+      "title": "Dual-Engine Creative Process Query",
+      "narrative_context": "Test live save verification of RDNA routing."
+    },
+    "metadata": {
+      "tags": [
+        "test",
+        "rdna"
+      ]
+    }
+  },
+  {
+    "id": "WIS-482",
+    "theme": "Systems Architecture & Automation",
+    "paper_order": 482,
+    "origin": {
+      "author": "jallred",
+      "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn’t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it’s possible to consume thousands of tokens just to answer a simple question. At some point it’s necessary to save the work that was done and start a fresh new session.",
+      "source": "Engineering Notes (notes_2026_09_22.md)",
+      "immutable": true,
+      "created_at": "2026-09-22T13:00:00Z"
+    },
+    "synthesis": {
+      "title": "The KV Cache Horizon & Agentic Mania",
+      "narrative_context": "Long context degradation causes agent manic behavior where passive directives are forgotten. Operational trust is strictly bounded by KV cache longevity; snapshotting state to fresh sessions is superior to context bloat.",
+      "lab_anchors": [
+        "BKM-004",
+        "FEAT-600",
+        "PHL-036"
+      ],
+      "review_notes": "Ingested from empirical field note on agentic mania.",
+      "last_refined_by": "AGY",
+      "refinement_version": 2,
+      "mutations": [
+        {
+          "id": "mut_active",
+          "lens": "Active Voice",
+          "text": "We mitigate agentic mania by enforcing bounded KV cache lifecycles and offloading state to discrete DNA cards before context saturation."
+        },
+        {
+          "id": "mut_executive",
+          "lens": "Executive / STAR",
+          "text": "Engineered strict KV cache rollover protocols, eliminating model hallucination and saving thousands of tokens per query across complex coding workflows."
+        }
+      ],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts.",
+          "certified_at": "2026-09-22T13:00:00Z"
+        },
+        {
+          "version": 2,
+          "lens": "Author Polished",
+          "text": "Long context degradation causes agentic mania where passive directives are forgotten. Operational trust is strictly bounded by KV cache longevity; snapshotting state to fresh sessions is superior to context bloat.",
+          "certified_at": "2026-09-22T13:10:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "systems-architecture",
+        "agentic-behavior",
+        "kv-cache",
+        "context-management"
+      ],
+      "explicit_links": [
+        "BKM-004",
+        "FEAT-600",
+        "PHL-036"
+      ],
+      "aliases": [
+        "agentic-mania"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
     }
   }
 ]

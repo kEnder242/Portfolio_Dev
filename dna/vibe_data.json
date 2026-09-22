@@ -1,0 +1,66 @@
+[
+  {
+    "id": "VIBE-001",
+    "theme": "Systems Architecture & Automation",
+    "paper_order": 1,
+    "origin": {
+      "author": "jallred",
+      "text": "DNA is an idea, not a 1:1 sentence mapping. Revisions are codified alternate readings of the same idea with different presentations. Bones are the transitory scratchpad between raw original text and the database, and the spine provides the narrative order.",
+      "source": "Engineering Brainstorm (notes_jitc_intuition.md)",
+      "immutable": true,
+      "created_at": "2026-09-22T13:00:00Z"
+    },
+    "synthesis": {
+      "title": "The Granularity Triad: DNA Ideas, Certified Revisions, and Narrative Spines",
+      "narrative_context": "Decouples atomic semantic meaning from narrative sequence. An idea is an invariant concept with multiple certified revisions, while a spine provides the linear sequential structure.",
+      "lab_anchors": [
+        "BKM-060",
+        "FEAT-601",
+        "FEAT-602"
+      ],
+      "review_notes": "Inaugural VIBE card formalizing the mental model of knowledge granularity.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [
+        {
+          "id": "mut_active",
+          "lens": "Active Voice",
+          "text": "We decouple semantic concepts from presentation: ideas hold invariant meaning, revisions capture alternate readings, and spines sequence the narrative."
+        },
+        {
+          "id": "mut_executive",
+          "lens": "Executive / STAR",
+          "text": "Eliminated knowledge duplication by separating semantic units from presentation lenses, allowing unified data reuse across documentation and resumes."
+        }
+      ],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "DNA is an idea, not a 1:1 sentence mapping. Revisions are codified alternate readings of the same idea with different presentations. Bones are the transitory scratchpad between raw original text and the database, and the spine provides the narrative order.",
+          "certified_at": "2026-09-22T13:00:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "granularity",
+        "dna-architecture",
+        "bone-collections",
+        "spines"
+      ],
+      "explicit_links": [
+        "BKM-060",
+        "FEAT-601",
+        "FEAT-602",
+        "FEAT-603"
+      ],
+      "aliases": [
+        "granularity-triad"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
+  }
+]

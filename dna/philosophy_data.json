@@ -1379,5 +1379,63 @@
       "status": "APPROVED",
       "bucket_id": "bucket_1_jitc"
     }
+  },
+  {
+    "id": "PHL-037",
+    "theme": "Systems Architecture & Automation",
+    "paper_order": 37,
+    "origin": {
+      "author": "jallred",
+      "text": "Cloud models can use cache as a database, but local models don’t have that luxury or capacity. With local models the context problem turns into a data retrieval problem. We have already solved data retrieval years ago. Modern tools like ClaraDB, grep, RAG, Infinite Context Memory, and Claude memory blend the solutions that worked for humans into something that LLM Agents can use. When buying more memory is not practical, I propose a move to the extreme other end by shrinking context. How far can we focus the context to only relevant information to answer those simple questions? What can we do with small models and limited kv cache on desktop hardware that normally need God tier cloud power to answer?",
+      "source": "Engineering Notes (notes_2026_09_22.md)",
+      "immutable": true,
+      "created_at": "2026-09-22T13:00:00Z"
+    },
+    "synthesis": {
+      "title": "The Inversion Principle: Context Bloat vs. Deterministic Retrieval",
+      "narrative_context": "Cloud models brute-force memory with massive KV caches; local silicon inverts the paradigm by converting context expansion into deterministic data retrieval. Decouples reasoning from raw memory capacity.",
+      "lab_anchors": [
+        "BKM-046",
+        "FEAT-600",
+        "PHL-001"
+      ],
+      "review_notes": "Axiom governing local silicon efficiency and JITC design.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [
+        {
+          "id": "mut_callout",
+          "lens": "First Principle",
+          "text": "Invert the memory problem: small models on desktop hardware achieve cloud-grade precision by shrinking context to only what is retrieved just in time."
+        }
+      ],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Cloud models can use cache as a database, but local models don't have that luxury. With local models the context problem turns into a data retrieval problem. Invert the problem: do not stretch the context window, optimize deterministic retrieval.",
+          "certified_at": "2026-09-22T13:00:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "philosophy",
+        "inversion-principle",
+        "data-retrieval",
+        "jitc",
+        "local-models"
+      ],
+      "explicit_links": [
+        "PHL-001",
+        "FEAT-600",
+        "BKM-046"
+      ],
+      "aliases": [
+        "inversion-principle"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

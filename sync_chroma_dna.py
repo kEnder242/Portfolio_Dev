@@ -12,6 +12,7 @@ COLLECTION_FEATURE = "feature_dna"
 COLLECTION_PHILOSOPHY = "philosophy_dna"
 COLLECTION_WISDOM = "wisdom_dna"
 COLLECTION_RDNA = "rdna"
+COLLECTION_VIBE = "vibe_dna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
@@ -19,6 +20,7 @@ INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRU
 PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json")
 WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/wisdom_data.json")
 RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/rdna_questions.json")
+VIBE_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/vibe_data.json")
 
 # [STORY-8614] SHA256 checksum cache for the idempotency guard (Finding 17 of
 # SPRINT_86_DEEP_DIVE_DEFICIENCY_REPORT.md). Maps each source file path to the
@@ -103,6 +105,7 @@ SYNC_SOURCES = [
     (COLLECTION_PHILOSOPHY, "philosophy_data.json", PHILOSOPHY_DATA_PATH),
     (COLLECTION_WISDOM, "wisdom_data.json", WISDOM_DATA_PATH),
     (COLLECTION_RDNA, "rdna_questions.json", RDNA_QUESTIONS_PATH),
+    (COLLECTION_VIBE, "vibe_data.json", VIBE_DATA_PATH),
 ]
 
 
@@ -459,6 +462,48 @@ def parse_rdna(filepath):
     return rdna_items
 
 
+def parse_vibe(filepath):
+    """Parses vibe_data.json for VIBE-xxx operational heuristics and cognitive intuition."""
+    if not os.path.exists(filepath):
+        logging.warning(f"vibe_data.json not found at {filepath}")
+        return []
+    import json
+    with open(filepath, "r", encoding="utf-8") as f:
+        cards = json.load(f)
+
+    vibe_items = []
+    for c in cards:
+        vid = c.get("id", "VIBE-UNK")
+        theme = c.get("theme", "Systems Architecture")
+        origin_text = c.get("origin", {}).get("text", "")
+        synth_title = c.get("synthesis", {}).get("title", "")
+        synth_context = c.get("synthesis", {}).get("narrative_context", "")
+        tags = c.get("metadata", {}).get("tags", [])
+
+        doc_content = (
+            f"ID: {vid}\n"
+            f"Theme: {theme}\n"
+            f"Title: {synth_title}\n"
+            f"Origin Quote: \"{origin_text}\"\n\n"
+            f"Synthesis: {synth_context}\n"
+            f"Tags: {', '.join(tags)}"
+        )
+
+        vibe_items.append({
+            "id": vid,
+            "document": doc_content,
+            "metadata": {
+                "vibe_id": vid,
+                "theme": theme,
+                "title": synth_title,
+                "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
+                "source": "vibe_data.json",
+                "type": "VIBE"
+            }
+        })
+    return vibe_items
+
+
 def sync(force: bool = False, dry_run: bool = False):
     """Sync DNA source files into ChromaDB.
 
@@ -658,6 +703,29 @@ def sync(force: bool = False, dry_run: bool = False):
             collection_rdna.add(ids=ids, documents=documents, metadatas=metadatas)
             checksums[RDNA_QUESTIONS_PATH] = _sha256_file(RDNA_QUESTIONS_PATH)
             logging.info("rdna collection sync complete.")
+
+    # 6. Sync vibe_dna from vibe_data.json
+    if not to_sync[VIBE_DATA_PATH]:
+        logging.info("[IDEMPOTENCY] Skipping vibe_dna: vibe_data.json checksum unchanged.")
+    else:
+        logging.info("Parsing vibe_data.json...")
+        vibe_items = parse_vibe(VIBE_DATA_PATH)
+        if vibe_items:
+            collection_vibe = get_safe_collection(client, COLLECTION_VIBE, ef)
+            logging.info("Clearing existing vibe_data.json entries from vibe_dna...")
+            try:
+                collection_vibe.delete(where={"source": "vibe_data.json"})
+            except Exception as e:
+                logging.warning(f"Could not clear vibe_dna entries: {e}")
+
+            ids = [v["id"] for v in vibe_items]
+            documents = [v["document"] for v in vibe_items]
+            metadatas = [v["metadata"] for v in vibe_items]
+
+            logging.info(f"Uploading {len(ids)} Vibe entries to vibe_dna...")
+            collection_vibe.add(ids=ids, documents=documents, metadatas=metadatas)
+            checksums[VIBE_DATA_PATH] = _sha256_file(VIBE_DATA_PATH)
+            logging.info("vibe_dna sync complete.")
 
     save_checksums(checksums)
 

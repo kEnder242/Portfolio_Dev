@@ -24,6 +24,7 @@ DNA_DIR = PORTFOLIO_DEV_DIR / "dna"
 MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
 WISDOM_PATH = DNA_DIR / "wisdom_data.json"
 PHILOSOPHY_PATH = DNA_DIR / "philosophy_data.json"
+VIBE_PATH = DNA_DIR / "vibe_data.json"
 RDNA_PATH = DNA_DIR / "rdna_questions.json"
 TIMELINE_PATH = DNA_DIR / "timeline_data.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
@@ -83,6 +84,13 @@ def load_manifest():
                 manifest["philosophy"] = json.load(f)
         except Exception as e:
             print(f"Warning loading {PHILOSOPHY_PATH}: {e}")
+
+    if VIBE_PATH.exists():
+        try:
+            with open(VIBE_PATH, "r", encoding="utf-8") as f:
+                manifest["vibe"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {VIBE_PATH}: {e}")
 
     if RDNA_PATH.exists():
         try:
