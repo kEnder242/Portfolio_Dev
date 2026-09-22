@@ -21,11 +21,11 @@ LAB_ROOT = REPO_ROOT.parent
 BONES_DIR = REPO_ROOT / "field_notes" / "data" / "bones"
 DNA_DIR = REPO_ROOT / "dna"
 
-# Regex matching DNA Macro citations in markdown comments or raw blocks:
+# Regex matching DNA Macro citations in markdown comments, inline anchors, or trailing tags:
 # Examples:
+#   "I walked the dog" [PHL-231] R1 style=Heading
+#   It was a crisp morning [WIS-102:R1]
 #   <!-- [WIS-482:R2 style=paragraph lens=Active] -->
-#   <!-- [FEAT-600:R1 style=bullet] -->
-#   <!-- [PHL-037:M1 style=callout] -->
 #   [WIS-482:R1]
 MACRO_COMMENT_PATTERN = re.compile(
     r"<!--\s*\[(?P<id>[A-Z0-9_-]+)(?::(?P<rev>[A-Z0-9_]+))?(?P<attrs_in>[^\]]*)\](?P<attrs_out>[^>]*)-->",
@@ -33,8 +33,8 @@ MACRO_COMMENT_PATTERN = re.compile(
 )
 
 MACRO_INLINE_PATTERN = re.compile(
-    r"^\[(?P<id>[A-Z0-9_-]+)(?::(?P<rev>[A-Z0-9_]+))?(?P<attrs_in>[^\]]*)\](?P<attrs_out>.*)$",
-    re.MULTILINE
+    r"\[(?P<id>[A-Z]{3,4}-\d{3})(?::(?P<rev>[R|M]\d+))?(?P<attrs_in>[^\]]*)\](?P<attrs_out>[^\n]*)",
+    re.IGNORECASE
 )
 
 
@@ -45,6 +45,17 @@ class DNAMacro:
         self.style = style.lower()
         self.lens = lens
         self.extra_attrs = extra_attrs or {}
+
+    def to_citation_tag(self) -> str:
+        attrs = []
+        if self.style and self.style != "paragraph":
+            attrs.append(f"style={self.style}")
+        if self.lens:
+            attrs.append(f"lens={self.lens}")
+        for k, v in sorted(self.extra_attrs.items()):
+            attrs.append(f"{k}={v}")
+        attr_str = " " + " ".join(attrs) if attrs else ""
+        return f"[{self.card_id}] {self.revision}{attr_str}".strip()
 
     def to_macro_comment(self) -> str:
         attrs = [f"style={self.style}"]
@@ -82,8 +93,12 @@ def parse_macro_string(macro_str: str) -> Optional[DNAMacro]:
     extra_attrs = {}
 
     for token in raw_attrs.strip().split():
-        if "=" in token:
-            k, v = token.split("=", 1)
+        if token.upper().startswith(("R", "M")) and token[1:].isdigit():
+            rev = token.upper()
+            continue
+        if "=" in token or ":" in token:
+            sep = "=" if "=" in token else ":"
+            k, v = token.split(sep, 1)
             k = k.strip().lower()
             v = v.strip().strip('"').strip("'")
             if k == "style":
@@ -99,7 +114,9 @@ def parse_macro_string(macro_str: str) -> Optional[DNAMacro]:
 def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
     """
     Parse a full markdown document into an ordered list of vertebrae chunks.
-    Each chunk contains the optional DNAMacro and the associated human-readable text.
+    Supports both:
+    1. Words-first inline citations: "I walked the dog" [PHL-231] R1 style=Heading
+    2. Block-comment macros: <!-- [WIS-482:R2] --> \n Text...
     """
     lines = markdown_text.splitlines()
     chunks = []
@@ -107,9 +124,9 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
     current_text_lines = []
 
     for line in lines:
-        match = MACRO_COMMENT_PATTERN.search(line)
-        if match:
-            # If we already had an active block, flush it
+        # Check comment macro first
+        comment_match = MACRO_COMMENT_PATTERN.search(line)
+        if comment_match:
             if current_macro or current_text_lines:
                 raw_body = "\n".join(current_text_lines).strip()
                 if raw_body or current_macro:
@@ -118,7 +135,35 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
                         "text": raw_body
                     })
                 current_text_lines = []
-            current_macro = parse_macro_string(match.group(0))
+            current_macro = parse_macro_string(comment_match.group(0))
+            continue
+
+        # Check words-first inline citation: Prose... [DNA-xxx] R1
+        inline_match = MACRO_INLINE_PATTERN.search(line)
+        if inline_match:
+            # If we had preceding text lines, flush them
+            if current_macro or current_text_lines:
+                raw_body = "\n".join(current_text_lines).strip()
+                if raw_body or current_macro:
+                    chunks.append({
+                        "macro": current_macro.to_dict() if current_macro else None,
+                        "text": raw_body
+                    })
+                current_text_lines = []
+
+            # Extract preceding prose on this line
+            line_prose = line[:inline_match.start()].strip()
+            # Clean outer quotes if any
+            if line_prose.startswith('"') and line_prose.endswith('"') and len(line_prose) > 1:
+                line_prose = line_prose[1:-1].strip()
+
+            inline_macro = parse_macro_string(line[inline_match.start():])
+            chunks.append({
+                "macro": inline_macro.to_dict() if inline_macro else None,
+                "text": line_prose
+            })
+            current_macro = None
+            current_text_lines = []
         else:
             current_text_lines.append(line)
 
@@ -131,6 +176,7 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
             })
 
     return chunks
+
 
 
 def load_bone_collection(collection_name_or_file: str) -> Optional[Dict[str, Any]]:

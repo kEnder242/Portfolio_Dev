@@ -3257,6 +3257,16 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.
 **Mechanism:** `Portfolio_Dev/dna/vibe_data.json`, `sync_chroma_dna.py`, ChromaDB collection `vibe_dna`.
 
+## [FEAT-606] Words-First Prose Editor & Inline DNA Citation Anchors
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Words-First Prose Editor & Inline DNA Citation Anchors.
+**Logic:** Refactors the authoring experience to prioritize natural human prose first. Plain text sits directly in the editor stream with trailing interactive citation tags (`[ID] Rn style=Heading`). Provides inline pill badges for in-place lens swapping and a selection citation inserter.
+**Rationale:** Eliminates token escaping friction and allows standard Markdown rendering without obscuring text in container attributes.
+**Mechanism:** `writer.html`, `dna_macro_compiler.py`, Foyer `/paper/*` REST endpoints.
+
+
+
 
 
 
