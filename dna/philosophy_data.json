@@ -1437,5 +1437,59 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "PHL-038",
+    "theme": "Systems Architecture & Operational Rigor",
+    "paper_order": 38,
+    "origin": {
+      "author": "jallred",
+      "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+      "source": "Silicon Manageability, Framework Archaeology & Multi-Engine Triage",
+      "immutable": true,
+      "created_at": "2026-09-22T15:18:00Z"
+    },
+    "synthesis": {
+      "title": "The Rug Bump Law (Conservation of System Complexity)",
+      "narrative_context": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+      "lab_anchors": [
+        "Philosophy and Learnings (Frameworks vs Content)",
+        "FEAT-586 (Triage Waffle Point & Deterministic Routing)"
+      ],
+      "review_notes": "Axiom governing system abstractions, translation layers, and complexity conservation.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+          "certified_at": "2026-09-22T15:18:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "philosophy",
+        "rug-bump-law",
+        "conservation-of-complexity",
+        "systems-architecture",
+        "abstraction-limits",
+        "operational-rigor"
+      ],
+      "explicit_links": [
+        "PHL-024",
+        "PHL-025",
+        "FEAT-586"
+      ],
+      "aliases": [
+        "rug-bump-law",
+        "conservation-of-complexity"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
+
