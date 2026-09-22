@@ -20,7 +20,9 @@
       ],
       "review_notes": "Grounds the architectural motivation for ChromaDB port 8001 and ICM fast-path hooks.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -44,14 +46,14 @@
     "paper_order": 2,
     "origin": {
       "author": "jallred",
-      "text": "LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don\u2019t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.",
+      "text": "LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.",
       "source": "Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)",
       "immutable": true,
       "created_at": "2026-09-05T12:00:00Z"
     },
     "synthesis": {
       "title": "The Hippocampus & Prefrontal Cortex Architecture",
-      "narrative_context": "Large cloud models brute-force complex tasks through quadratic context windows, acting as isolated reasoning engines without episodic consolidation. Local intelligence requires an ambient hippocampus\u2014a dedicated distillation and indexing layer that curates memories into high-density vector anchors for immediate prefrontal synthesis.",
+      "narrative_context": "Large cloud models brute-force complex tasks through quadratic context windows, acting as isolated reasoning engines without episodic consolidation. Local intelligence requires an ambient hippocampus—a dedicated distillation and indexing layer that curates memories into high-density vector anchors for immediate prefrontal synthesis.",
       "lab_anchors": [
         "HomeLabAI/src/nodes/cognitive_hub.py",
         "FEAT-564",
@@ -59,7 +61,9 @@
       ],
       "review_notes": "Establishes the anatomical model separating local LLM inference (prefrontal) from ChromaDB memory curation (hippocampus).",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -98,7 +102,9 @@
       ],
       "review_notes": "Grounds the theoretical thesis for paper_jitc_intuition.json.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -137,7 +143,9 @@
       ],
       "review_notes": "The primary cyclical diagram and functional architecture in the JITC whitepaper.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -169,14 +177,16 @@
     },
     "synthesis": {
       "title": "Token Golf over Token Maxing & Trust Ceilings",
-      "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
+      "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'—minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
       "lab_anchors": [
         "HomeLabAI/docs/Protocols.md:BKM-051",
         "FEAT-526"
       ],
       "review_notes": "Explains why worker subagent prompts must be strictly capped under 1,500 tokens.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -214,7 +224,9 @@
       ],
       "review_notes": "Directly links FeatureTracker and code docstrings to latent context retrieval.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -253,7 +265,9 @@
       ],
       "review_notes": "Underpins the 'Bones' model in Writer Studio where citations form the structural skeleton.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -292,7 +306,9 @@
       ],
       "review_notes": "Foundational motivation for real-time triage and user backpressure channels.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -330,7 +346,9 @@
       ],
       "review_notes": "Implemented directly in delegate.py [HANDOVER REFLECTION] block.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -368,7 +386,9 @@
       ],
       "review_notes": "Canonical operational law: BKM-024 Live Validation Mandate.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -406,7 +426,9 @@
       ],
       "review_notes": "Mandate to eliminate lazy naming conventions in agentic codebases.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -436,14 +458,16 @@
     },
     "synthesis": {
       "title": "The Slow Burn Corollary to the Mythical Man-Month",
-      "narrative_context": "Manic bursts of developer acceleration frequently introduce compounding architectural regressions. A disciplined, methodical 'slow burn'\u2014characterized by incremental validation, strict schema checks, and constant stabilization\u2014achieves exponentially higher net velocity over time.",
+      "narrative_context": "Manic bursts of developer acceleration frequently introduce compounding architectural regressions. A disciplined, methodical 'slow burn'—characterized by incremental validation, strict schema checks, and constant stabilization—achieves exponentially higher net velocity over time.",
       "lab_anchors": [
         "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_78_0.md",
         "BKM-020"
       ],
       "review_notes": "Balances high agentic velocity with disciplined, compound architectural stability.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -480,7 +504,9 @@
       ],
       "review_notes": "Captures the transformation in human engineering roles under agentic orchestration.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -517,7 +543,9 @@
       ],
       "review_notes": "Addresses the cognitive fatigue and governance required in agentic pair programming.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -555,7 +583,9 @@
       ],
       "review_notes": "Canonical debugging practice transferred from server platform validation to agentic telemetry analysis.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -594,7 +624,9 @@
       ],
       "review_notes": "The basis for numbered instructions in all lab sprint plans and BKM-004 QQ protocols.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -632,7 +664,9 @@
       ],
       "review_notes": "Establishes the linguistic foundation for LLM prompt engineering as formal interface design.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -662,14 +696,16 @@
     },
     "synthesis": {
       "title": "Captured Insight & Trapping Lightning in a Bottle",
-      "narrative_context": "Creative engineering epiphanies are ephemeral. An intentional capture pipeline\u2014logging raw unformatted fragments into transient scratchpads, followed by AI distillation and structural anchoring\u2014transforms ephemeral intuition into permanent system architecture.",
+      "narrative_context": "Creative engineering epiphanies are ephemeral. An intentional capture pipeline—logging raw unformatted fragments into transient scratchpads, followed by AI distillation and structural anchoring—transforms ephemeral intuition into permanent system architecture.",
       "lab_anchors": [
         "Portfolio_Dev/papers/paper_jitc_intuition.json",
         "FEAT-581"
       ],
       "review_notes": "The primary pipeline bridging mobile human scratchpads to the Writer Studio and LaTeX pipeline.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -707,7 +743,9 @@
       ],
       "review_notes": "Mandate for causal lineage in all sprint logs and status ledger timelines.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -744,7 +782,9 @@
       ],
       "review_notes": "The foundation for treating markdown sprints as executable instruction sets.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -782,7 +822,9 @@
       ],
       "review_notes": "Directly applied in designing lightweight REST microservices over monolithic frameworks.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -820,7 +862,9 @@
       ],
       "review_notes": "Rule BKM-005: Prohibit unrequested speculative infrastructure in sprint tasks.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -857,7 +901,9 @@
       ],
       "review_notes": "Underpins repository pruning sprints and dead feature retirement protocols.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -895,7 +941,9 @@
       ],
       "review_notes": "Translates bare-metal telemetry (PECI, NVML, BMC) into high-level dashboard ergonomics.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -933,7 +981,9 @@
       ],
       "review_notes": "The foundation for non-blocking asynchronous fallback in model routing.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -970,7 +1020,9 @@
       ],
       "review_notes": "Keeps tooling focused strictly on shipping papers, features, and verified code.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -993,7 +1045,7 @@
     "paper_order": 27,
     "origin": {
       "author": "jallred",
-      "text": "Code Archaeology: The ability to recover and modernize legacy codebases by identifying the 'beating heart'\u2014the core structure\u2014of the system.",
+      "text": "Code Archaeology: The ability to recover and modernize legacy codebases by identifying the 'beating heart'—the core structure—of the system.",
       "source": "Engineering Background & Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)",
       "immutable": true,
       "created_at": "2024-05-01T12:00:00Z"
@@ -1008,7 +1060,9 @@
       ],
       "review_notes": "Applied during sprint housekeeping passes to unearth and register forgotten features.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1045,7 +1099,9 @@
       ],
       "review_notes": "Engineering leadership philosophy for sustained technical evolution.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1083,7 +1139,9 @@
       ],
       "review_notes": "The dual-decoupling foundation for the anti-embellishment synthesizer and self-contained document ASTs.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1114,7 +1172,7 @@
     },
     "synthesis": {
       "title": "The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution",
-      "narrative_context": "Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background\u2014distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.",
+      "narrative_context": "Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background—distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.",
       "lab_anchors": [
         "Portfolio_Dev/field_notes/career_notes.html",
         "HomeLabAI/docs/Protocols.md:BKM-005",
@@ -1122,7 +1180,9 @@
       ],
       "review_notes": "Bedrock axiom for interview readiness, architectural ideation, and software craft.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1164,7 +1224,9 @@
       ],
       "review_notes": "Grounds the active human-in-the-loop review drawer and co-pilot disagreement capture in the DNA Forge.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1207,7 +1269,9 @@
       ],
       "review_notes": "Establishes the foundational principle that DNA domains are horizontal containers rather than vertical hierarchies.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1249,7 +1313,9 @@
       ],
       "review_notes": "Formalizes the fourth decoupling pillar of the Federated Lab (Presentation vs Meaning).",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1275,14 +1341,14 @@
     "paper_order": 36,
     "origin": {
       "author": "jallred",
-      "text": "The 'Think in Chinese' story is a token saver. Our Wisdom/DNA service does this too! OpenAI's reasoning model sometimes thinks in Chinese \u2014 because Chinese characters encode more semantic density per token. That's exactly what our compressed DNA vector embeddings do: pack maximum meaning into minimum token budget.",
+      "text": "The 'Think in Chinese' story is a token saver. Our Wisdom/DNA service does this too! OpenAI's reasoning model sometimes thinks in Chinese — because Chinese characters encode more semantic density per token. That's exactly what our compressed DNA vector embeddings do: pack maximum meaning into minimum token budget.",
       "source": "https://techcrunch.com/2025/01/14/openais-ai-reasoning-model-thinks-in-chinese-sometimes-and-no-one-really-knows-why/",
       "immutable": true,
       "created_at": "2026-09-20T09:30:00Z"
     },
     "synthesis": {
       "title": "The Dense Token Hypothesis (Think in Chinese)",
-      "narrative_context": "When OpenAI's o1 reasoning model 'thinks in Chinese' during chain-of-thought, it is not a bug \u2014 it is emergent token golf. Chinese logographs encode richer semantic payload per token than alphabetic scripts, so the model naturally gravitates toward denser internal representations when optimizing its reasoning budget. This mirrors our own Federated Lab architecture: CLaRa-DNA compresses empirical wisdom into dense vector embeddings (384-dim MiniLM), and the JITC hook injects only the 2-3 most relevant anchors at inference time \u2014 achieving the same principle of maximum semantic density per token spent.",
+      "narrative_context": "When OpenAI's o1 reasoning model 'thinks in Chinese' during chain-of-thought, it is not a bug — it is emergent token golf. Chinese logographs encode richer semantic payload per token than alphabetic scripts, so the model naturally gravitates toward denser internal representations when optimizing its reasoning budget. This mirrors our own Federated Lab architecture: CLaRa-DNA compresses empirical wisdom into dense vector embeddings (384-dim MiniLM), and the JITC hook injects only the 2-3 most relevant anchors at inference time — achieving the same principle of maximum semantic density per token spent.",
       "lab_anchors": [
         "HomeLabAI/config/hooks/icm_hook.py",
         "BKM-046",
@@ -1291,7 +1357,9 @@
       ],
       "review_notes": "Connects external AI research (OpenAI o1 Chinese reasoning) to our own dense-embedding JITC architecture. Complements PHL-005 (Token Golf).",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
