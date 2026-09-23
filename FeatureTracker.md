@@ -3209,4 +3209,54 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Eliminates hallucination risks by treating underlying technical truth as a fixed immutable coordinate and stylistic tone as a rotation in vector space.
 **Mechanism:** `dna_forge_build.py`, `dna_manifest.json` schema (`revisions` vs `mutations`), Foyer REST endpoint `/dna/certify_mutation`.
 
+## [FEAT-600] Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture
+**Sprint:** SPR-86.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/memory/icm_hook.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/memory/icm_hook.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
+**Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.
+**Rationale:** Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.
+**Mechanism:** `icm_hook.py`, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).
+
+## [FEAT-601] Bones as the Transitory Scratchpad Between Raw Original Text and Database
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/data/bone_collections.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/bone_collections.json) — 1:1 Source Bone Collection Scratchpad Architecture.
+**Logic:** Establishes a strict 1:1 companion mapping between raw source files (`stories.html`, `notes.md`, Google Docs) and their corresponding `*_bones.json` collection files. Acts as the intermediary scratchpad holding document sequence, local certified revisions ($R1 \dots Rn$), and proposed mutations ($M1 \dots Mn$) without mutating raw origin sources.
+**Rationale:** Bridges raw documents to the central DNA DB while preserving narrative order and provenance.
+**Mechanism:** `bone_collections.json`, `curator/draft_decomposer.py`.
+
+## [FEAT-602] Self-Contained DNA Markdown Grammar
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/scripts/build_writer.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/build_writer.py) — Self-Contained DNA Macro Citation & Markdown Grammar.
+**Logic:** Defines the inline DNA markdown macro grammar (`<!-- [ID:Rn style=type lens=name] -->`). Allows papers to be stored as clean, human-readable Markdown files that do not require an active database connection to read, while enabling background LLM consistency checking and LaTeX compilation passes.
+**Rationale:** Decouples human prose from heavy JSON AST schemas and eliminates database lockouts.
+**Mechanism:** Markdown macro parser, `build_writer.py`, `docs/whitepaper/main.tex`.
+
+## [FEAT-603] Composable Paper Projection & Dynamic Lens Re-Projector
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Composable Paper Projection & Dynamic Lens Re-Projector.
+**Logic:** Enables composable papers to draw bones across multiple independent source bone collections into a unified composite spine. Supports live dynamic re-projection through configurable stylistic Lenses (e.g. Academic, Executive STAR, Job Description) by rotating bone representations without altering underlying technical truth.
+**Rationale:** Allows one master knowledge base to generate infinite tailored document projections on demand.
+**Mechanism:** `writer.html`, Foyer `/paper/*` REST endpoints, `curator/objective_evaluator.py`.
+
+## [FEAT-604] File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/tests/test_dna_roundtrip_consistency.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_dna_roundtrip_consistency.py) — File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix.
+**Logic:** Enforces the zero-loss mathematical invariant: $\Delta(\text{Original Source}, \text{Reconstruct}(\text{Bone Collection}, R_1)) = 0$. Provides automated shakedowns testing round-trip transformations between raw files, bone collections, ChromaDB, and DNA revisions.
+**Rationale:** Guarantees absolute data integrity and prevents lossy decomposition drift.
+**Mechanism:** Pytest shakedown suite, `curator/draft_decomposer.py`.
+
+## [FEAT-605] Sovereign VIBE Ledger & Dynamic Schema Ingestion
+**Sprint:** SPR-87.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/dna/vibe_data.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/vibe_data.json) — Sovereign VIBE Ledger & Dynamic Schema Ingestion.
+**Logic:** Fully operationalizes the `VIBE` domain from `BKM-060` by establishing `Portfolio_Dev/dna/vibe_data.json` and ChromaDB `vibe_dna` collection. Houses intuitive mental models, operational heuristics, and semantic feel anchors (inaugurated by `[VIBE-001]` The Granularity Triad).
+**Rationale:** Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.
+**Mechanism:** `Portfolio_Dev/dna/vibe_data.json`, `sync_chroma_dna.py`, ChromaDB collection `vibe_dna`.
+
+
+
 
