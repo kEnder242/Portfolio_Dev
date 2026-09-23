@@ -18,6 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent
 PORTFOLIO_DIR = BASE_DIR.parent
 PAPERS_DIR = PORTFOLIO_DIR / "papers"
 DATA_DIR = BASE_DIR / "data"
+DNA_DIR = PORTFOLIO_DIR / "dna"
 BUILD_OUTPUT_DIR = PORTFOLIO_DIR / "build" / "papers"
 
 
@@ -26,7 +27,7 @@ def load_dna_catalog():
     catalog = {}
 
     # 1. Philosophy DNA
-    phl_path = DATA_DIR / "philosophy_data.json"
+    phl_path = DNA_DIR / "philosophy_data.json"
     if phl_path.exists():
         try:
             with open(phl_path, "r") as f:
@@ -48,7 +49,7 @@ def load_dna_catalog():
             print(f"⚠️ Warning reading philosophy_data.json: {e}")
 
     # 2. Wisdom DNA
-    wis_path = DATA_DIR / "wisdom_data.json"
+    wis_path = DNA_DIR / "wisdom_data.json"
     if wis_path.exists():
         try:
             with open(wis_path, "r") as f:

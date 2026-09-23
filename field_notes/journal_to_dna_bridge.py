@@ -21,8 +21,9 @@ from pathlib import Path
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
+DNA_DIR = BASE_DIR.parent / "dna"
 LEDGER_PATH = DATA_DIR / "journal_ledger.jsonl"
-WISDOM_DATA_PATH = DATA_DIR / "wisdom_data.json"
+WISDOM_DATA_PATH = DNA_DIR / "wisdom_data.json"
 MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
 DNA_BUILD_SCRIPT = BASE_DIR / "dna_forge_build.py"
 CHROMA_SYNC_SCRIPT = BASE_DIR.parent / "sync_chroma_dna.py"
