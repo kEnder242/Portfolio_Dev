@@ -1,31 +1,17 @@
 [
   {
     "id": "RDNA-001",
-    "question": "How do you develop code?",
-    "intent_category": "interview_philosophy",
-    "question_variants": [
-      "What is your creative process for engineering and software design?",
-      "How do you approach turning ideas into working code?",
-      "Can you describe your code development workflow?",
-      "How do you brainstorm and implement software solutions?",
-      "What is your philosophy on creative design versus methodical implementation?"
-    ],
-    "target_dna": {
-      "collection": "philosophy_dna",
-      "id": "PHL-032",
-      "title": "The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution"
+    "title": "Dual-Engine Creative Process Query",
+    "question": "How does the dual-engine process work?",
+    "synthesis": {
+      "title": "Dual-Engine Creative Process Query",
+      "narrative_context": "Test live save verification of RDNA routing."
     },
-    "confidence_floor": 0.75,
     "metadata": {
       "tags": [
-        "interview-prep",
-        "creative-process",
-        "software-development",
-        "cross-domain",
-        "passive-synthesis",
-        "active-execution"
-      ],
-      "created_at": "2026-09-16T11:25:00Z"
+        "test",
+        "rdna"
+      ]
     }
   },
   {
@@ -133,6 +119,33 @@
         "self-contained-ast"
       ],
       "created_at": "2026-09-16T11:25:00Z"
+    }
+  },
+  {
+    "id": "RDNA-027",
+    "question": "When does long context window bloat cause agent manic drift, and how do we snapshot state into DNA cards?",
+    "intent_category": "systems_architecture",
+    "question_variants": [
+      "Why do agents forget passive directives over long conversations?",
+      "How do we prevent agentic mania in large coding sessions?",
+      "What is the KV cache horizon for coding agents?",
+      "How do we convert context window bloat into deterministic data retrieval?"
+    ],
+    "target_dna": {
+      "collection": "wisdom_dna",
+      "id": "WIS-482",
+      "title": "The KV Cache Horizon & Agentic Mania"
+    },
+    "confidence_floor": 0.75,
+    "metadata": {
+      "tags": [
+        "agentic-mania",
+        "kv-cache",
+        "context-bloat",
+        "jitc",
+        "session-rollover"
+      ],
+      "created_at": "2026-09-22T13:00:00Z"
     }
   }
 ]

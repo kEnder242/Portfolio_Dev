@@ -19,7 +19,9 @@
       ],
       "review_notes": "Ingested from empirical field note #rakp-security.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -59,7 +61,9 @@
       ],
       "review_notes": "Ingested from empirical field note #kernel-patch.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -99,7 +103,9 @@
       ],
       "review_notes": "Ingested from empirical field note #negative-testing.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -139,7 +145,9 @@
       ],
       "review_notes": "Ingested from empirical field note #texas-power-on.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -179,7 +187,9 @@
       ],
       "review_notes": "Ingested from empirical field note #failed-demo.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -219,7 +229,9 @@
       ],
       "review_notes": "Ingested from empirical field note #rmcp-optimization.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -260,7 +272,9 @@
       ],
       "review_notes": "Ingested from empirical field note #visa-tool.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -302,7 +316,9 @@
       ],
       "review_notes": "Ingested from empirical field note #xslt-parsing.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -344,7 +360,9 @@
       ],
       "review_notes": "Ingested from empirical field note #config-file.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -386,7 +404,9 @@
       ],
       "review_notes": "Ingested from empirical field note #fleet-scale.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -428,7 +448,9 @@
       ],
       "review_notes": "Ingested from empirical field note #cygwin-wall.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -470,7 +492,9 @@
       ],
       "review_notes": "Ingested from empirical field note #ti-basic.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -512,7 +536,9 @@
       ],
       "review_notes": "Ingested from empirical field note #quakecon.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -553,7 +579,9 @@
       ],
       "review_notes": "Ingested from empirical field note #reading-robot.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -593,7 +621,9 @@
       ],
       "review_notes": "Ingested from empirical field note #rapl-matplotlib.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -633,7 +663,9 @@
       ],
       "review_notes": "Ingested from empirical field note #grok-code.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -673,7 +705,9 @@
       ],
       "review_notes": "Ingested from empirical field note #beating-heart.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -713,7 +747,9 @@
       ],
       "review_notes": "Ingested from empirical field note #serial-fragments.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -753,7 +789,9 @@
       ],
       "review_notes": "Ingested from empirical field note #crazy-callbacks.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -794,7 +832,9 @@
       ],
       "review_notes": "Ingested from empirical field note #throughput-gotchas.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -835,7 +875,9 @@
       ],
       "review_notes": "Ingested from empirical field note #curl-postman.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -875,7 +917,9 @@
       ],
       "review_notes": "Ingested from empirical field note #venv-glue.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -916,7 +960,9 @@
       ],
       "review_notes": "Ingested from empirical field note #scm-integration.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -958,7 +1004,9 @@
       ],
       "review_notes": "Ingested from empirical field note #estimates.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1000,7 +1048,9 @@
       ],
       "review_notes": "Ingested from empirical field note #pythonsv-thrash.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1042,7 +1092,9 @@
       ],
       "review_notes": "Ingested from empirical field note #synergy.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1085,7 +1137,9 @@
       ],
       "review_notes": "Ingested from empirical field note #first-error.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1127,7 +1181,9 @@
       ],
       "review_notes": "Ingested from empirical field note #count-oks.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1169,7 +1225,9 @@
       ],
       "review_notes": "Ingested from empirical field note #conflict-management.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1211,7 +1269,9 @@
       ],
       "review_notes": "Ingested from empirical field note #general-thoughts.",
       "last_refined_by": "AGY",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1252,7 +1312,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1293,7 +1355,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1334,7 +1398,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1375,7 +1441,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1416,7 +1484,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1457,7 +1527,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1498,7 +1570,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1539,7 +1613,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1580,7 +1656,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1621,7 +1699,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1662,7 +1742,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1703,7 +1785,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1744,7 +1828,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1785,7 +1871,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1826,7 +1914,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1867,7 +1957,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1908,7 +2000,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1949,7 +2043,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -1990,7 +2086,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2031,7 +2129,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2072,7 +2172,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2113,7 +2215,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2154,7 +2258,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2195,7 +2301,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2236,7 +2344,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2277,7 +2387,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2318,7 +2430,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2359,7 +2473,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2400,7 +2516,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2441,7 +2559,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2482,7 +2602,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2523,7 +2645,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2564,7 +2688,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2605,7 +2731,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2646,7 +2774,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2687,7 +2817,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2728,7 +2860,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2769,7 +2903,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2810,7 +2946,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2851,7 +2989,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2892,7 +3032,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2933,7 +3075,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -2974,7 +3118,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3015,7 +3161,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3056,7 +3204,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3097,7 +3247,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3138,7 +3290,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3179,7 +3333,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3220,7 +3376,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3261,7 +3419,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3302,7 +3462,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3343,7 +3505,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3384,7 +3548,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3425,7 +3591,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3466,7 +3634,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3507,7 +3677,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3548,7 +3720,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3589,7 +3763,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3630,7 +3806,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3671,7 +3849,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3712,7 +3892,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3753,7 +3935,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3794,7 +3978,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3835,7 +4021,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3876,7 +4064,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3917,7 +4107,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3958,7 +4150,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -3999,7 +4193,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4040,7 +4236,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4081,7 +4279,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4122,7 +4322,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4163,7 +4365,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4204,7 +4408,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4245,7 +4451,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4286,7 +4494,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4327,7 +4537,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4368,7 +4580,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4409,7 +4623,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4450,7 +4666,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4491,7 +4709,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4532,7 +4752,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4573,7 +4795,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4614,7 +4838,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4655,7 +4881,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4696,7 +4924,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4737,7 +4967,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4778,7 +5010,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4819,7 +5053,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4860,7 +5096,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4901,7 +5139,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4942,7 +5182,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -4983,7 +5225,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5024,7 +5268,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5065,7 +5311,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5106,7 +5354,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5147,7 +5397,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5188,7 +5440,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5229,7 +5483,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5270,7 +5526,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5311,7 +5569,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5352,7 +5612,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5393,7 +5655,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5434,7 +5698,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5475,7 +5741,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5516,7 +5784,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5557,7 +5827,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5598,7 +5870,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5639,7 +5913,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5680,7 +5956,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5721,7 +5999,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5762,7 +6042,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5803,7 +6085,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5844,7 +6128,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5885,7 +6171,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5926,7 +6214,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -5967,7 +6257,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6008,7 +6300,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6049,7 +6343,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6090,7 +6386,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6131,7 +6429,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6172,7 +6472,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6213,7 +6515,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6254,7 +6558,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6295,7 +6601,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6336,7 +6644,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6377,7 +6687,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6418,7 +6730,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6459,7 +6773,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6500,7 +6816,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6541,7 +6859,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6582,7 +6902,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6623,7 +6945,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6664,7 +6988,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6705,7 +7031,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6746,7 +7074,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6787,7 +7117,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6828,7 +7160,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6869,7 +7203,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6910,7 +7246,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6951,7 +7289,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -6992,7 +7332,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7033,7 +7375,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7074,7 +7418,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7115,7 +7461,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7156,7 +7504,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7197,7 +7547,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7238,7 +7590,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7279,7 +7633,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7320,7 +7676,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7361,7 +7719,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7402,7 +7762,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7443,7 +7805,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7484,7 +7848,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7525,7 +7891,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7566,7 +7934,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7607,7 +7977,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7648,7 +8020,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7689,7 +8063,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7730,7 +8106,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7771,7 +8149,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7812,7 +8192,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7853,7 +8235,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7894,7 +8278,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7935,7 +8321,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -7976,7 +8364,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8017,7 +8407,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8058,7 +8450,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8099,7 +8493,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8140,7 +8536,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8181,7 +8579,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8222,7 +8622,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8263,7 +8665,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8304,7 +8708,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8345,7 +8751,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8386,7 +8794,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8427,7 +8837,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8468,7 +8880,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8509,7 +8923,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8550,7 +8966,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8591,7 +9009,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8632,7 +9052,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8673,7 +9095,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8714,7 +9138,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8755,7 +9181,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8796,7 +9224,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8837,7 +9267,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8878,7 +9310,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8919,7 +9353,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -8960,7 +9396,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9001,7 +9439,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9042,7 +9482,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9083,7 +9525,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9124,7 +9568,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9165,7 +9611,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9206,7 +9654,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9247,7 +9697,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9288,7 +9740,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9329,7 +9783,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9370,7 +9826,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9411,7 +9869,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9452,7 +9912,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9493,7 +9955,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9534,7 +9998,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9575,7 +10041,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9616,7 +10084,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9657,7 +10127,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9698,7 +10170,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9739,7 +10213,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9780,7 +10256,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9821,7 +10299,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9862,7 +10342,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9903,7 +10385,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9944,7 +10428,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -9985,7 +10471,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10026,7 +10514,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10067,7 +10557,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10108,7 +10600,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10149,7 +10643,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10190,7 +10686,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10231,7 +10729,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10272,7 +10772,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10313,7 +10815,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10354,7 +10858,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10395,7 +10901,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10436,7 +10944,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10477,7 +10987,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10518,7 +11030,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10559,7 +11073,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10600,7 +11116,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10641,7 +11159,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10682,7 +11202,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10723,7 +11245,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10764,7 +11288,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10805,7 +11331,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10846,7 +11374,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10887,7 +11417,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10928,7 +11460,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -10969,7 +11503,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11010,7 +11546,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11051,7 +11589,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11092,7 +11632,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11133,7 +11675,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11174,7 +11718,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11215,7 +11761,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11256,7 +11804,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11297,7 +11847,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11338,7 +11890,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11379,7 +11933,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11420,7 +11976,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11461,7 +12019,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11502,7 +12062,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11543,7 +12105,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11584,7 +12148,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11625,7 +12191,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11666,7 +12234,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11707,7 +12277,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11748,7 +12320,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11789,7 +12363,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11830,7 +12406,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11871,7 +12449,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11912,7 +12492,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11953,7 +12535,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -11994,7 +12578,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12035,7 +12621,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12076,7 +12664,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12117,7 +12707,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12158,7 +12750,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12199,7 +12793,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12240,7 +12836,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12281,7 +12879,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12322,7 +12922,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12363,7 +12965,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12404,7 +13008,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12445,7 +13051,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12486,7 +13094,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12527,7 +13137,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12568,7 +13180,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12609,7 +13223,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12650,7 +13266,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12691,7 +13309,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12732,7 +13352,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12773,7 +13395,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12814,7 +13438,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12855,7 +13481,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12896,7 +13524,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12937,7 +13567,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -12978,7 +13610,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13019,7 +13653,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13060,7 +13696,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13101,7 +13739,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13142,7 +13782,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13183,7 +13825,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13224,7 +13868,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13265,7 +13911,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13306,7 +13954,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13347,7 +13997,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13388,7 +14040,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13429,7 +14083,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13470,7 +14126,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13511,7 +14169,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13552,7 +14212,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13593,7 +14255,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13634,7 +14298,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13675,7 +14341,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13716,7 +14384,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13757,7 +14427,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13798,7 +14470,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13839,7 +14513,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13880,7 +14556,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13921,7 +14599,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -13962,7 +14642,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14003,7 +14685,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14044,7 +14728,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14085,7 +14771,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14126,7 +14814,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14167,7 +14857,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14208,7 +14900,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14249,7 +14943,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14290,7 +14986,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14331,7 +15029,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14372,7 +15072,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14413,7 +15115,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14454,7 +15158,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14495,7 +15201,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14536,7 +15244,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14577,7 +15287,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14618,7 +15330,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14659,7 +15373,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14700,7 +15416,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14741,7 +15459,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14782,7 +15502,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14823,7 +15545,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14864,7 +15588,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14905,7 +15631,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14946,7 +15674,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -14987,7 +15717,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15028,7 +15760,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15069,7 +15803,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15110,7 +15846,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15151,7 +15889,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15192,7 +15932,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15233,7 +15975,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15274,7 +16018,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15315,7 +16061,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15356,7 +16104,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15397,7 +16147,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15438,7 +16190,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15479,7 +16233,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15520,7 +16276,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15561,7 +16319,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15602,7 +16362,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15643,7 +16405,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15684,7 +16448,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15725,7 +16491,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15766,7 +16534,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15807,7 +16577,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15848,7 +16620,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15889,7 +16663,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15930,7 +16706,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -15971,7 +16749,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16012,7 +16792,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16053,7 +16835,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16094,7 +16878,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16135,7 +16921,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16176,7 +16964,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16217,7 +17007,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16258,7 +17050,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16299,7 +17093,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16340,7 +17136,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16381,7 +17179,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16422,7 +17222,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16463,7 +17265,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16504,7 +17308,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16545,7 +17351,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16586,7 +17394,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16627,7 +17437,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16668,7 +17480,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16709,7 +17523,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16750,7 +17566,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16791,7 +17609,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16832,7 +17652,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16873,7 +17695,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16914,7 +17738,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16955,7 +17781,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -16996,7 +17824,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17037,7 +17867,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17078,7 +17910,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17119,7 +17953,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17160,7 +17996,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17201,7 +18039,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17242,7 +18082,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17283,7 +18125,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17324,7 +18168,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17365,7 +18211,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17406,7 +18254,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17447,7 +18297,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17488,7 +18340,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17529,7 +18383,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17570,7 +18426,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17611,7 +18469,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17652,7 +18512,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17693,7 +18555,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17734,7 +18598,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17775,7 +18641,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17816,7 +18684,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17857,7 +18727,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17898,7 +18770,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17939,7 +18813,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -17980,7 +18856,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18021,7 +18899,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18062,7 +18942,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18103,7 +18985,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18144,7 +19028,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18185,7 +19071,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18226,7 +19114,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18267,7 +19157,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18308,7 +19200,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18349,7 +19243,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18390,7 +19286,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18431,7 +19329,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18472,7 +19372,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18513,7 +19415,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18554,7 +19458,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18595,7 +19501,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18636,7 +19544,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18677,7 +19587,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18718,7 +19630,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18759,7 +19673,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18800,7 +19716,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18841,7 +19759,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18882,7 +19802,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18923,7 +19845,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -18964,7 +19888,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19005,7 +19931,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19046,7 +19974,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19087,7 +20017,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19128,7 +20060,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19169,7 +20103,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19210,7 +20146,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19251,7 +20189,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19292,7 +20232,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19333,7 +20275,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19374,7 +20318,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19415,7 +20361,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19456,7 +20404,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 4).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19497,7 +20447,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19538,7 +20490,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19579,7 +20533,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19620,7 +20576,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19661,7 +20619,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19702,7 +20662,9 @@
       ],
       "review_notes": "Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank 5).",
       "last_refined_by": "AGY_BRIDGE",
-      "refinement_version": 1
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
     },
     "metadata": {
       "tags": [
@@ -19720,6 +20682,89 @@
       "status": "APPROVED",
       "bucket_id": "bucket_silicon_validation",
       "rank": 5
+    }
+  },
+  {
+    "id": "RDNA-001",
+    "title": "Dual-Engine Creative Process Query",
+    "question": "How does the dual-engine process work?",
+    "synthesis": {
+      "title": "Dual-Engine Creative Process Query",
+      "narrative_context": "Test live save verification of RDNA routing."
+    },
+    "metadata": {
+      "tags": [
+        "test",
+        "rdna"
+      ]
+    }
+  },
+  {
+    "id": "WIS-482",
+    "theme": "Systems Architecture & Automation",
+    "paper_order": 482,
+    "origin": {
+      "author": "jallred",
+      "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn’t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it’s possible to consume thousands of tokens just to answer a simple question. At some point it’s necessary to save the work that was done and start a fresh new session.",
+      "source": "Engineering Notes (notes_2026_09_22.md)",
+      "immutable": true,
+      "created_at": "2026-09-22T13:00:00Z"
+    },
+    "synthesis": {
+      "title": "The KV Cache Horizon & Agentic Mania",
+      "narrative_context": "Long context degradation causes agent manic behavior where passive directives are forgotten. Operational trust is strictly bounded by KV cache longevity; snapshotting state to fresh sessions is superior to context bloat.",
+      "lab_anchors": [
+        "BKM-004",
+        "FEAT-600",
+        "PHL-036"
+      ],
+      "review_notes": "Ingested from empirical field note on agentic mania.",
+      "last_refined_by": "AGY",
+      "refinement_version": 2,
+      "mutations": [
+        {
+          "id": "mut_active",
+          "lens": "Active Voice",
+          "text": "We mitigate agentic mania by enforcing bounded KV cache lifecycles and offloading state to discrete DNA cards before context saturation."
+        },
+        {
+          "id": "mut_executive",
+          "lens": "Executive / STAR",
+          "text": "Engineered strict KV cache rollover protocols, eliminating model hallucination and saving thousands of tokens per query across complex coding workflows."
+        }
+      ],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts.",
+          "certified_at": "2026-09-22T13:00:00Z"
+        },
+        {
+          "version": 2,
+          "lens": "Author Polished",
+          "text": "Long context degradation causes agentic mania where passive directives are forgotten. Operational trust is strictly bounded by KV cache longevity; snapshotting state to fresh sessions is superior to context bloat.",
+          "certified_at": "2026-09-22T13:10:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "systems-architecture",
+        "agentic-behavior",
+        "kv-cache",
+        "context-management"
+      ],
+      "explicit_links": [
+        "BKM-004",
+        "FEAT-600",
+        "PHL-036"
+      ],
+      "aliases": [
+        "agentic-mania"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
     }
   }
 ]

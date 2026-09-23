@@ -157,6 +157,9 @@ def load_features_from_tracker():
             "lab_anchors": [code_ref] if code_ref else [],
             "tags": ["feature", "code-anchor", status.lower()],
             "status": status,
+            # [SPR-86 Story 8613] Uniform contract: FEAT anchors carry no revisions/mutations
+            "revisions": [],
+            "mutations": [],
             "author": "Federated Lab"
         }
     return feat_map
@@ -180,6 +183,10 @@ def build_citation_index(dna_manifest, arxiv_registry):
                 "origin_source": origin.get("source", "Lab Journal"),
                 "narrative": synthesis.get("narrative_context", ""),
                 "tags": card.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+                # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
+                # so the writer Citation Inspector can render pills and project text.
+                "revisions": synthesis.get("revisions", []),
+                "mutations": synthesis.get("mutations", []),
                 "author": origin.get("author", "Jason Allred")
             }
             index[cid] = entry
@@ -204,6 +211,9 @@ def build_citation_index(dna_manifest, arxiv_registry):
             "origin_source": origin.get("source", "Innovations Timeline"),
             "narrative": synthesis.get("narrative_context", ""),
             "tags": disc.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+            # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
+            "revisions": synthesis.get("revisions", []),
+            "mutations": synthesis.get("mutations", []),
             "author": "Jason Allred"
         }
 
@@ -218,6 +228,9 @@ def build_citation_index(dna_manifest, arxiv_registry):
             "narrative": item["logic"],
             "tags": ["prior-art", "academic"],
             "author": "Academic Literature",
+            # [SPR-86 Story 8613] Uniform contract: non-DNA anchors carry no revisions/mutations
+            "revisions": [],
+            "mutations": [],
             "arxiv": item["arxiv"]
         }
 
@@ -239,6 +252,9 @@ def build_citation_index(dna_manifest, arxiv_registry):
             "origin_source": origin.get("source", "HomeLabAI/docs/Protocols.md"),
             "narrative": synthesis.get("narrative_context", ""),
             "tags": bkm.get("metadata", {}).get("tags", []) or ["protocol", "bkm"],
+            # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
+            "revisions": synthesis.get("revisions", []),
+            "mutations": synthesis.get("mutations", []),
             "author": "Federated Lab"
         }
 

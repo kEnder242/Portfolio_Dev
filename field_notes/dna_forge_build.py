@@ -16,12 +16,17 @@ import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-HOMELAB_DIR = BASE_DIR.parent.parent / "HomeLabAI"
+PORTFOLIO_DEV_DIR = BASE_DIR.parent
+HOMELAB_DIR = PORTFOLIO_DEV_DIR.parent / "HomeLabAI"
 DATA_DIR = BASE_DIR / "data"
+DNA_DIR = PORTFOLIO_DEV_DIR / "dna"
+
 MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
-WISDOM_PATH = DATA_DIR / "wisdom_data.json"
-PHILOSOPHY_PATH = DATA_DIR / "philosophy_data.json"
-RDNA_PATH = DATA_DIR / "rdna_questions.json"
+WISDOM_PATH = DNA_DIR / "wisdom_data.json"
+PHILOSOPHY_PATH = DNA_DIR / "philosophy_data.json"
+VIBE_PATH = DNA_DIR / "vibe_data.json"
+RDNA_PATH = DNA_DIR / "rdna_questions.json"
+TIMELINE_PATH = DNA_DIR / "timeline_data.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
 BONE_COLLECTIONS_PATH = DATA_DIR / "bone_collections.json"
 DECISIONS_PATH = DATA_DIR / "dna_decisions.json"
@@ -57,13 +62,51 @@ def load_buckets():
 
 
 def load_manifest():
+    manifest = {}
     if MANIFEST_PATH.exists():
         try:
             with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                manifest = json.load(f)
         except Exception:
-            pass
-    return {}
+            manifest = {}
+
+    # Authoritative sovereign DNA domains loaded directly from Portfolio_Dev/dna/
+    if WISDOM_PATH.exists():
+        try:
+            with open(WISDOM_PATH, "r", encoding="utf-8") as f:
+                manifest["wisdom"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {WISDOM_PATH}: {e}")
+
+    if PHILOSOPHY_PATH.exists():
+        try:
+            with open(PHILOSOPHY_PATH, "r", encoding="utf-8") as f:
+                manifest["philosophy"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {PHILOSOPHY_PATH}: {e}")
+
+    if VIBE_PATH.exists():
+        try:
+            with open(VIBE_PATH, "r", encoding="utf-8") as f:
+                manifest["vibe"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {VIBE_PATH}: {e}")
+
+    if RDNA_PATH.exists():
+        try:
+            with open(RDNA_PATH, "r", encoding="utf-8") as f:
+                manifest["rdna"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {RDNA_PATH}: {e}")
+
+    if TIMELINE_PATH.exists():
+        try:
+            with open(TIMELINE_PATH, "r", encoding="utf-8") as f:
+                manifest["discovery"] = json.load(f)
+        except Exception as e:
+            print(f"Warning loading {TIMELINE_PATH}: {e}")
+
+    return manifest
 
 
 def load_bone_collections():
@@ -217,7 +260,7 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     # Voice Vectors & Mutation Governance Section [FEAT-598]
     voice_switcher_html = ""
     if revisions or mutations:
-        rev_pills = "".join(f'<span class="voice-pill rev-pill active" title="Human Certified Ground Truth">🏆 {escape_html(r.get("lens", "Revision"))}</span>' for r in revisions)
+        rev_pills = "".join(f'<span class="voice-pill rev-pill active" data-rev-id="{escape_html(r.get("id",""))}" data-rev-num="{idx+1}" data-lens="{escape_html(r.get("lens","Revision"))}" data-text="{escape_html(r.get("text",""))}" data-timestamp="{escape_html(r.get("timestamp",""))}" title="Click to preview/select this human-certified revision">🏆 v{idx+1} {escape_html(r.get("lens", "Revision"))}</span>' for idx, r in enumerate(revisions))
         mut_pills = "".join(f'<span class="voice-pill mut-pill" data-mut-id="{escape_html(m.get("id"))}" data-lens="{escape_html(m.get("lens"))}" data-text="{escape_html(m.get("text"))}" title="Click to preview &amp; certify AI mutation into ground truth">✨ {escape_html(m.get("lens", "Mutation"))}</span>' for m in mutations)
         voice_switcher_html = f'''<div class="card-section voice-section">
             <span class="section-label">Voice Space &amp; Mutations [FEAT-598]</span>
@@ -2075,16 +2118,54 @@ Rule: Double-Write Protocol must always update workspace repos first before push
             }}
 
             function certifyMutation(cid, mutId, lens, text) {{
+                var card = document.querySelector('.wisdom-card[data-card-id="' + cid + '"]');
                 fetch('http://127.0.0.1:8765/dna/certify_mutation', {{
                     method: 'POST',
                     headers: {{ 'Content-Type': 'application/json' }},
                     body: JSON.stringify({{ card_id: cid, mutation_id: mutId, lens: lens, mutation_text: text }})
                 }})
                 .then(function(res){{ return res.json(); }})
-                .then(function(){{
+                .then(function(data){{
+                    if (card) {{
+                        var mutPill = card.querySelector('.mut-pill[data-mut-id="' + mutId + '"]');
+                        if (mutPill) {{
+                            var pillsBar = mutPill.parentElement;
+                            var existingRevs = pillsBar.querySelectorAll('.rev-pill').length;
+                            var revNum = existingRevs + 1;
+                            var revPill = document.createElement('span');
+                            revPill.className = 'voice-pill rev-pill active';
+                            revPill.setAttribute('data-rev-id', data.rev_id || ('rev_' + cid + '_' + revNum + '_' + mutId));
+                            revPill.setAttribute('data-rev-num', revNum);
+                            revPill.setAttribute('data-lens', lens);
+                            revPill.setAttribute('data-text', text);
+                            revPill.setAttribute('data-timestamp', new Date().toISOString());
+                            revPill.title = 'Click to preview/select this human-certified revision';
+                            revPill.textContent = '🏆 v' + revNum + ' ' + lens;
+                            pillsBar.insertBefore(revPill, mutPill);
+                            mutPill.remove();
+                        }}
+                    }}
                     alert('✓ Certified mutation "' + lens + '" as human ground truth revision for ' + cid + '!');
                 }})
                 .catch(function(){{
+                    if (card) {{
+                        var mutPill = card.querySelector('.mut-pill[data-mut-id="' + mutId + '"]');
+                        if (mutPill) {{
+                            var pillsBar = mutPill.parentElement;
+                            var existingRevs = pillsBar.querySelectorAll('.rev-pill').length;
+                            var revNum = existingRevs + 1;
+                            var revPill = document.createElement('span');
+                            revPill.className = 'voice-pill rev-pill active';
+                            revPill.setAttribute('data-rev-num', revNum);
+                            revPill.setAttribute('data-lens', lens);
+                            revPill.setAttribute('data-text', text);
+                            revPill.setAttribute('data-timestamp', new Date().toISOString());
+                            revPill.title = 'Click to preview/select this human-certified revision';
+                            revPill.textContent = '🏆 v' + revNum + ' ' + lens;
+                            pillsBar.insertBefore(revPill, mutPill);
+                            mutPill.remove();
+                        }}
+                    }}
                     alert('✓ Certified mutation (locally cached) for ' + cid + '!');
                 }});
             }}
@@ -2185,6 +2266,26 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     if (btnSave) btnSave.addEventListener('click', function (e) {{ e.stopPropagation(); saveSingleCard(card); }});
                     if (btnDiscard) btnDiscard.addEventListener('click', function (e) {{ e.stopPropagation(); lockCard(card, true); }});
 
+                    card.querySelectorAll('.rev-pill').forEach(function(pill) {{
+                        pill.addEventListener('click', function(e) {{
+                            e.stopPropagation();
+                            var lens = this.dataset.lens || 'Revision';
+                            var text = this.dataset.text || '';
+                            var revId = this.dataset.revId || '';
+                            var ts = this.dataset.timestamp || '';
+                            if (!text) return;
+                            if (confirm('🏆 Revision: ' + lens + ' (' + revId + ')\\nTimestamp: ' + ts + '\\n\\n' + text + '\\n\\nProject this revision into the active card narrative?')) {{
+                                var narrEl = card.querySelector('[data-field="narrative_context"]');
+                                if (narrEl) {{
+                                    narrEl.textContent = text;
+                                    card.querySelectorAll('.rev-pill').forEach(function(p) {{ p.classList.remove('active'); }});
+                                    pill.classList.add('active');
+                                    unlockCard(card);
+                                }}
+                            }}
+                        }});
+                    }});
+
                     card.querySelectorAll('.mut-pill').forEach(function(pill) {{
                         pill.addEventListener('click', function(e) {{
                             e.stopPropagation();
@@ -2233,15 +2334,54 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
             function saveSingleCard(card) {{
                 var status = card.querySelector('.card-save-status');
-                if (status) status.textContent = 'Saving...';
-                setTimeout(function() {{
+                if (status) {{ status.textContent = 'Saving...'; status.style.color = '#58a6ff'; }}
+                
+                var cid = card.dataset.cardId || '';
+                var domain = cid.split('-')[0].toLowerCase();
+                var title = (card.querySelector('.card-title') || {{}}).textContent || '';
+                var narrative = (card.querySelector('[data-field="narrative_context"]') || {{}}).textContent || '';
+                var reviewNotes = (card.querySelector('[data-field="review_notes"]') || {{}}).textContent || '';
+                var tagEls = card.querySelectorAll('[data-field="tags"] .tag');
+                var tags = [];
+                tagEls.forEach(function(t) {{ tags.push(t.textContent.replace('#', '').trim()); }});
+
+                var collection = (domain === 'phl') ? 'philosophy_dna' : ((domain === 'disc' || domain === 'tl') ? 'discovery' : 'wisdom_dna');
+                
+                var cardPayload = {{
+                    id: cid,
+                    domain: domain.toUpperCase(),
+                    title: title.trim(),
+                    synthesis: {{
+                        title: title.trim(),
+                        narrative_context: narrative.trim(),
+                        review_notes: reviewNotes.trim()
+                    }},
+                    metadata: {{
+                        tags: tags,
+                        updated_at: new Date().toISOString()
+                    }}
+                }};
+
+                fetch('http://127.0.0.1:8765/wisdom/save_card', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ card: cardPayload, collection: collection }})
+                }})
+                .then(function(res) {{ return res.json(); }})
+                .then(function(data) {{
                     if (status) {{
-                        status.textContent = '✓ Saved';
+                        status.textContent = '✓ Saved (File + ChromaDB)';
                         status.style.color = '#3fb950';
-                        setTimeout(function () {{ status.textContent = ''; }}, 2500);
+                        setTimeout(function () {{ status.textContent = ''; }}, 3000);
                     }}
                     lockCard(card, false);
-                }}, 400);
+                }})
+                .catch(function(err) {{
+                    if (status) {{
+                        status.textContent = '❌ Save Error: ' + err;
+                        status.style.color = '#f85149';
+                    }}
+                }});
             }}
 
             // -------------------------------------------------------------
