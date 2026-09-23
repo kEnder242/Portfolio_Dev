@@ -432,6 +432,10 @@ def main():
         years = ['DOCS', '2024', '2023', '2022', '2021', '2020', '2019']
         for idx, year in enumerate(years):
             if check_lock(lock_path) or os.path.exists(maint_lock): break
+            now = datetime.datetime.now()
+            if 5 <= now.hour < 22:
+                logging.info(f"Step 3: 05:00 AM maintenance cutoff reached ({now.strftime('%H:%M:%S')}). Gracefully yielding artifact scan.")
+                break
             while not vram_guard(): 
                 update_status("WAITING", "VRAM Cooling...")
                 time.sleep(60)
@@ -457,6 +461,10 @@ def main():
 
             while queue:
                 if check_lock(lock_path) or os.path.exists(maint_lock): break
+                now = datetime.datetime.now()
+                if 5 <= now.hour < 22:
+                    logging.info(f"Step 4: 05:00 AM maintenance cutoff reached ({now.strftime('%H:%M:%S')}). Gracefully yielding note queue.")
+                    break
                 
                 while not vram_guard(): 
                     update_status("WAITING", "VRAM Cooling...")
