@@ -55,27 +55,28 @@ Every original source document (e.g. `stories.html`, a Google Doc, an engineerin
 
 ---
 
-### 2.3 DNA Meta-Language & Macro Syntax
+### 2.3 Words-First Prose & Citation Anchor Syntax
 
-Papers are saved as standard, clean Markdown documents containing human-readable text and compact **DNA Citation Macros**. No database connection is required to read a paper.
+Papers are saved as standard, clean Markdown documents containing **natural human prose first**, accompanied by compact **DNA Citation Anchors**. No database connection is required to read, edit, or render a paper.
 
-#### Markdown Macro Syntax:
+#### Words-First Prose & Citation Syntax:
 ```markdown
-<!-- [WIS-482:R2 style=paragraph] -->
-Long context degradation causes agents to enter manic phases; operational trust is strictly bounded by KV cache longevity.
+# Dog Paper
 
-<!-- [FEAT-600:R1 style=paragraph] -->
-What local models do have is offline access to personal data, inverting context bloat into deterministic data retrieval.
+"I walked the dog" [PHL-231] R1 style=Heading
 
-<!-- [PHL-036:M1 lens=Executive style=callout] -->
-> Invert the memory problem: do not stretch the context window, optimize the retrieval index.
+It was a crisp morning with cold fog rolling over the grass. [WIS-102] R1
+
+> "Invert the memory problem: do not stretch the context window, optimize the retrieval index." [PHL-037] M1 lens=Executive style=callout
 ```
 
 #### Syntax Breakdown:
-- `[ID:Rn]`: Card ID and active certified revision pointer (e.g. `[WIS-482:R2]`).
-- `lens=<name>`: (Optional) Dynamic lens override for that specific vertebra.
-- `style=<type>`: Formatting intention (`paragraph`, `bullet`, `callout`, `epigraph`).
-- Plain text follows immediately after the macro, ensuring 100% human and tool readability offline.
+- **Prose First:** The natural language words exist directly in the markdown stream. Words are never hidden or escaped inside container attributes like `text="..."`.
+- **`[ID]` / `[ID:Rn]`:** The DNA card identifier and active certified revision pointer (e.g. `[PHL-231] R1` or `[PHL-231:R1]`).
+- **`lens=<name>`:** (Optional) Dynamic lens transform for that specific vertebra.
+- **`style=<type>`:** (Optional) Formatting intention (`Heading`, `paragraph`, `bullet`, `callout`, `epigraph`).
+- **Standard Markdown Rendering:** Any standard markdown viewer displays the document naturally. The citation tag acts as an inline provenance anchor and lens-switching handle.
+
 
 ---
 

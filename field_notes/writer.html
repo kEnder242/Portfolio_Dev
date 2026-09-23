@@ -233,8 +233,52 @@
         }
         .dna-chip .chip-add:hover { opacity: 1; color: #3fb950; }
 
+        /* [FEAT-606] Words-First Inline DNA Citation Anchors & Pill Badges */
+        .dna-inline-anchor-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.68rem;
+            font-family: var(--font-stack);
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(88, 166, 255, 0.12);
+            border: 1px solid rgba(88, 166, 255, 0.35);
+            color: #58a6ff;
+            cursor: pointer;
+            vertical-align: middle;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+        .dna-inline-anchor-pill:hover {
+            background: rgba(88, 166, 255, 0.25);
+            border-color: #58a6ff;
+            transform: translateY(-1px);
+        }
+        .dna-inline-anchor-pill.chip-phl {
+            background: rgba(163, 113, 247, 0.12);
+            border-color: rgba(163, 113, 247, 0.35);
+            color: #a371f7;
+        }
+        .dna-inline-anchor-pill.chip-wis {
+            background: rgba(210, 153, 34, 0.12);
+            border-color: rgba(210, 153, 34, 0.35);
+            color: #d29922;
+        }
+        .dna-inline-anchor-pill.chip-bkm {
+            background: rgba(63, 185, 80, 0.12);
+            border-color: rgba(63, 185, 80, 0.35);
+            color: #3fb950;
+        }
+        .dna-inline-anchor-pill.chip-vibe {
+            background: rgba(247, 120, 186, 0.12);
+            border-color: rgba(247, 120, 186, 0.35);
+            color: #f778ba;
+        }
 
         .paper-selector-wrap {
+
             display: flex;
             align-items: center;
             gap: 6px;
@@ -3025,6 +3069,21 @@ window.__CITATION_INDEX__ = {
     "revisions": [],
     "mutations": [],
     "author": "jallred"
+  },
+  "RDNA-001": {
+    "id": "RDNA-001",
+    "collection": "wisdom",
+    "title": "Dual-Engine Creative Process Query",
+    "origin_text": "",
+    "origin_source": "Lab Journal",
+    "narrative": "Test live save verification of RDNA routing.",
+    "tags": [
+      "test",
+      "rdna"
+    ],
+    "revisions": [],
+    "mutations": [],
+    "author": "Jason Allred"
   },
   "DISC-001": {
     "id": "DISC-001",
@@ -13304,6 +13363,146 @@ window.__CITATION_INDEX__ = {
     "mutations": [],
     "author": "Federated Lab"
   },
+  "FEAT-600": {
+    "id": "FEAT-600",
+    "collection": "feature",
+    "title": "Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture",
+    "origin_text": "Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.",
+    "origin_source": "FeatureTracker.md (FEAT-600)",
+    "narrative": "Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.\n\n`icm_hook.py`, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).",
+    "lab_anchors": [
+      "[HomeLabAI/src/memory/icm_hook.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/memory/icm_hook.py) \u2014 Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-601": {
+    "id": "FEAT-601",
+    "collection": "feature",
+    "title": "Bones as the Transitory Scratchpad Between Raw Original Text and Database",
+    "origin_text": "Bridges raw documents to the central DNA DB while preserving narrative order and provenance.",
+    "origin_source": "FeatureTracker.md (FEAT-601)",
+    "narrative": "Establishes a strict 1:1 companion mapping between raw source files (`stories.html`, `notes.md`, Google Docs) and their corresponding `*_bones.json` collection files. Acts as the intermediary scratchpad holding document sequence, local certified revisions ($R1 \\dots Rn$), and proposed mutations ($M1 \\dots Mn$) without mutating raw origin sources.\n\n`bone_collections.json`, `curator/draft_decomposer.py`.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/data/bone_collections.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/bone_collections.json) \u2014 1:1 Source Bone Collection Scratchpad Architecture."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-602": {
+    "id": "FEAT-602",
+    "collection": "feature",
+    "title": "Self-Contained DNA Markdown Grammar",
+    "origin_text": "Decouples human prose from heavy JSON AST schemas and eliminates database lockouts.",
+    "origin_source": "FeatureTracker.md (FEAT-602)",
+    "narrative": "Defines the inline DNA markdown macro grammar (`<!-- [ID:Rn style=type lens=name] -->`). Allows papers to be stored as clean, human-readable Markdown files that do not require an active database connection to read, while enabling background LLM consistency checking and LaTeX compilation passes.\n\nMarkdown macro parser, `build_writer.py`, `docs/whitepaper/main.tex`.",
+    "lab_anchors": [
+      "[Portfolio_Dev/scripts/build_writer.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/build_writer.py) \u2014 Self-Contained DNA Macro Citation & Markdown Grammar."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-603": {
+    "id": "FEAT-603",
+    "collection": "feature",
+    "title": "Composable Paper Projection & Dynamic Lens Re-Projector",
+    "origin_text": "Allows one master knowledge base to generate infinite tailored document projections on demand.",
+    "origin_source": "FeatureTracker.md (FEAT-603)",
+    "narrative": "Enables composable papers to draw bones across multiple independent source bone collections into a unified composite spine. Supports live dynamic re-projection through configurable stylistic Lenses (e.g. Academic, Executive STAR, Job Description) by rotating bone representations without altering underlying technical truth.\n\n`writer.html`, Foyer `/paper/*` REST endpoints, `curator/objective_evaluator.py`.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Composable Paper Projection & Dynamic Lens Re-Projector."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-604": {
+    "id": "FEAT-604",
+    "collection": "feature",
+    "title": "File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix",
+    "origin_text": "Guarantees absolute data integrity and prevents lossy decomposition drift.",
+    "origin_source": "FeatureTracker.md (FEAT-604)",
+    "narrative": "Enforces the zero-loss mathematical invariant: $\\Delta(\\text{Original Source}, \\text{Reconstruct}(\\text{Bone Collection}, R_1)) = 0$. Provides automated shakedowns testing round-trip transformations between raw files, bone collections, ChromaDB, and DNA revisions.\n\nPytest shakedown suite, `curator/draft_decomposer.py`.",
+    "lab_anchors": [
+      "[HomeLabAI/src/tests/test_dna_roundtrip_consistency.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_dna_roundtrip_consistency.py) \u2014 File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-605": {
+    "id": "FEAT-605",
+    "collection": "feature",
+    "title": "Sovereign VIBE Ledger & Dynamic Schema Ingestion",
+    "origin_text": "Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.",
+    "origin_source": "FeatureTracker.md (FEAT-605)",
+    "narrative": "Fully operationalizes the `VIBE` domain from `BKM-060` by establishing `Portfolio_Dev/dna/vibe_data.json` and ChromaDB `vibe_dna` collection. Houses intuitive mental models, operational heuristics, and semantic feel anchors (inaugurated by `[VIBE-001]` The Granularity Triad).\n\n`Portfolio_Dev/dna/vibe_data.json`, `sync_chroma_dna.py`, ChromaDB collection `vibe_dna`.",
+    "lab_anchors": [
+      "[Portfolio_Dev/dna/vibe_data.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/vibe_data.json) \u2014 Sovereign VIBE Ledger & Dynamic Schema Ingestion."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
+  "FEAT-606": {
+    "id": "FEAT-606",
+    "collection": "feature",
+    "title": "Words-First Prose Editor & Inline DNA Citation Anchors",
+    "origin_text": "Eliminates token escaping friction and allows standard Markdown rendering without obscuring text in container attributes.",
+    "origin_source": "FeatureTracker.md (FEAT-606)",
+    "narrative": "Refactors the authoring experience to prioritize natural human prose first. Plain text sits directly in the editor stream with trailing interactive citation tags (`[ID] Rn style=Heading`). Provides inline pill badges for in-place lens swapping and a selection citation inserter.\n\n`writer.html`, `dna_macro_compiler.py`, Foyer `/paper/*` REST endpoints.",
+    "lab_anchors": [
+      "[Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) \u2014 Words-First Prose Editor & Inline DNA Citation Anchors."
+    ],
+    "tags": [
+      "feature",
+      "code-anchor",
+      "active"
+    ],
+    "status": "ACTIVE",
+    "revisions": [],
+    "mutations": [],
+    "author": "Federated Lab"
+  },
   "BKM-001": {
     "id": "BKM-001",
     "collection": "behavioral",
@@ -17121,6 +17320,41 @@ window.__WRITER_QUOTES__ = [
     "title": "Vector Space Mutation & Revision Governance Engine"
   },
   {
+    "text": "Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.",
+    "source": "FEAT-600",
+    "title": "Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture"
+  },
+  {
+    "text": "Bridges raw documents to the central DNA DB while preserving narrative order and provenance.",
+    "source": "FEAT-601",
+    "title": "Bones as the Transitory Scratchpad Between Raw Original Text and Database"
+  },
+  {
+    "text": "Decouples human prose from heavy JSON AST schemas and eliminates database lockouts.",
+    "source": "FEAT-602",
+    "title": "Self-Contained DNA Markdown Grammar"
+  },
+  {
+    "text": "Allows one master knowledge base to generate infinite tailored document projections on demand.",
+    "source": "FEAT-603",
+    "title": "Composable Paper Projection & Dynamic Lens Re-Projector"
+  },
+  {
+    "text": "Guarantees absolute data integrity and prevents lossy decomposition drift.",
+    "source": "FEAT-604",
+    "title": "File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix"
+  },
+  {
+    "text": "Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.",
+    "source": "FEAT-605",
+    "title": "Sovereign VIBE Ledger & Dynamic Schema Ingestion"
+  },
+  {
+    "text": "Eliminates token escaping friction and allows standard Markdown rendering without obscuring text in container attributes.",
+    "source": "FEAT-606",
+    "title": "Words-First Prose Editor & Inline DNA Citation Anchors"
+  },
+  {
     "text": "Restore the Agent's technical context after a session break or crash.",
     "source": "BKM-001",
     "title": "The Cold-Start Protocol (Agent Orientation)"
@@ -19534,6 +19768,38 @@ window.__WRITER_QUOTES__ = [
                             }
                         });
                         parWrap.appendChild(prose);
+
+                        // [FEAT-606] Words-First Inline DNA Citation Anchor Pills
+                        var activeCites = par.citations || [];
+                        if (par.active_dna_id && activeCites.indexOf(par.active_dna_id) === -1) {
+                            activeCites.push(par.active_dna_id);
+                        }
+                        if (activeCites.length > 0) {
+                            var inlinePillsWrap = document.createElement('div');
+                            inlinePillsWrap.className = 'dna-inline-anchors-bar';
+                            inlinePillsWrap.style.marginTop = '6px';
+                            inlinePillsWrap.style.display = 'flex';
+                            inlinePillsWrap.style.flexWrap = 'wrap';
+                            inlinePillsWrap.style.gap = '6px';
+
+                            activeCites.forEach(function(citeId) {
+                                var pill = document.createElement('span');
+                                var domainClass = 'chip-' + (citeId.split('-')[0] || '').toLowerCase();
+                                var revLabel = par.active_revision || 'R1';
+                                var lensLabel = par.active_lens ? (' lens=' + par.active_lens) : '';
+                                pill.className = 'dna-inline-anchor-pill ' + domainClass;
+                                pill.textContent = '[' + citeId + '] ' + revLabel + lensLabel;
+                                pill.title = 'Click to inspect citation provenance or swap lens for ' + citeId;
+                                pill.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    setActiveContext('paragraph', par.id || par.node_id);
+                                    openInspector(citeId);
+                                });
+                                inlinePillsWrap.appendChild(pill);
+                            });
+                            parWrap.appendChild(inlinePillsWrap);
+                        }
+
 
                         // [TODO:] Inline Expand Button
                         if ((par.text || '').indexOf('[TODO:') !== -1) {
