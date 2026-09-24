@@ -3118,7 +3118,7 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 ## [FEAT-583] Reverse DNA (RDNA) Question Bank & HyDE Offload Engine
 **Sprint:** SPR-83.0
 **Status:** ACTIVE
-**Code:** [Portfolio_Dev/field_notes/data/rdna_questions.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/rdna_questions.json) — RDNA Question Bank.
+**Code:** [Portfolio_Dev/dna/rdna_questions.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/rdna_questions.json) — RDNA Question Bank.
 **Logic:** Indexes canonical interview and triage question-space embeddings into ChromaDB `rdna`. When an incoming query matches an RDNA entry with high confidence (< 0.45 distance), bypasses runtime LLM HyDE generation completely and injects pre-compiled target DNA anchors (`explicit_links`) directly into the triage stream.
 **Rationale:** Eliminates LLM latency and hallucination risks during context retrieval by mapping question variants directly to ground-truth wisdom cards.
 **Mechanism:** `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/src/logic/vector_pre_triage.py`, ChromaDB `rdna` collection.
@@ -3212,7 +3212,7 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 ## [FEAT-600] Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture
 **Sprint:** SPR-86.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/src/memory/icm_hook.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/memory/icm_hook.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
+**Code:** [HomeLabAI/config/hooks/icm_hook.py](https://github.com/kEnder242/HomeLabAI/blob/main/config/hooks/icm_hook.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
 **Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.
 **Rationale:** Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.
 **Mechanism:** `icm_hook.py`, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).

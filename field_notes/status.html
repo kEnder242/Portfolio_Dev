@@ -181,6 +181,8 @@
             <div>[INIT] Uplink established. Monitoring telemetry...</div>
         </div>
 
+        <div id="discrepancy-sentry-banner" style="display:none; margin-bottom: 20px; padding: 12px 16px; background: rgba(248, 81, 73, 0.15); border: 1px solid #f85149; border-radius: 6px; color: #ff7b72; font-family: monospace; font-size: 0.85rem; line-height: 1.4;"></div>
+
         <section id="vitals">
             <h2 class="section-title">Live Lab Vitals</h2>
             <div class="vitals-grid">
@@ -1016,6 +1018,22 @@
                         vram.textContent = data.vitals.vram;
                         if (ram) ram.textContent = data.vitals.ram;
                     }
+
+                    // [FEAT-607 / Story 88.6] Green-Lie Discrepancy Sentry
+                    fetch('data/daily_accountability_digest.json?t=' + Date.now())
+                        .then(r => r.ok ? r.json() : null)
+                        .then(digest => {
+                            if (!digest) return;
+                            const sentryBanner = document.getElementById('discrepancy-sentry-banner');
+                            if (digest.discrepancies && digest.discrepancies.length > 0) {
+                                if (sentryBanner) {
+                                    sentryBanner.style.display = 'block';
+                                    sentryBanner.innerHTML = `🚨 <strong>DISCREPANCY SENTRY [GREEN LIE DETECTED]:</strong> ${digest.discrepancies.join(' • ')}`;
+                                }
+                            } else if (sentryBanner) {
+                                sentryBanner.style.display = 'none';
+                            }
+                        }).catch(e => {});
                 })
                 .catch(err => console.error("Status poll failed", err));
         }
@@ -1363,6 +1381,49 @@
             term.innerHTML = "<span style='color:var(--accent-color)'>[ACCESSING EVIDENCE...]</span>";
             
             try {
+                // [FEAT-607 / Story 88.5] Nightly Accountability Digest Expansion
+                if (alert.message && (alert.message.includes('ACCOUNTABILITY DIGEST') || alert.source === 'accountability')) {
+                    try {
+                        const rDigest = await fetch('data/daily_accountability_digest.json?t=' + Date.now());
+                        if (rDigest.ok) {
+                            const digest = await rDigest.json();
+                            const statusColor = digest.overall_status === 'PASS' ? '#28a745' : (digest.overall_status === 'DEGRADED' ? '#ffcc00' : '#ff3b30');
+                            const checkRows = (digest.checks || []).map(c => `
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #161b22;">
+                                    <span>${c.passed ? '<span style="color:#28a745;">✔</span>' : '<span style="color:#ff3b30;">✖</span>'} <strong style="color:#c9d1d9;">${c.name}</strong></span>
+                                    <span style="color:${c.passed ? '#3fb950' : '#f85149'};font-size:0.7rem;">${c.detail}</span>
+                                </div>
+                            `).join('');
+
+                            const discHtml = (digest.discrepancies || []).length > 0 ? `
+                                <div style="margin-top:6px;background:rgba(248,81,73,0.1);border:1px solid #f85149;border-radius:4px;padding:6px 8px;">
+                                    <div style="color:#f85149;font-weight:bold;font-size:0.7rem;">⚠ DETECTED DISCREPANCIES (GREEN LIE SENTRY):</div>
+                                    <ul style="margin:2px 0 0 16px;padding:0;color:#f85149;font-size:0.68rem;">
+                                        ${digest.discrepancies.map(d => `<li>${d}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : '';
+
+                            term.innerHTML = `
+                                <div style="font-family:monospace;font-size:0.75rem;padding:8px 12px;background:#0d1117;border:1px solid #30363d;border-radius:6px;margin-top:4px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:4px;margin-bottom:6px;">
+                                        <span style="color:var(--accent-color);font-weight:bold;">📋 DAILY NIGHTLY ACCOUNTABILITY DIGEST [FEAT-607]</span>
+                                        <span style="color:${statusColor};font-weight:bold;border:1px solid ${statusColor};padding:1px 6px;border-radius:3px;font-size:0.7rem;">${digest.overall_status} (${digest.passed_checks}/${digest.total_checks} PASSED)</span>
+                                    </div>
+                                    <div style="margin-bottom:6px;color:#8b949e;font-size:0.7rem;">Evaluation Date: ${digest.date} • Timestamp: ${digest.timestamp}</div>
+                                    <div style="display:flex;flex-direction:column;gap:2px;">
+                                        ${checkRows}
+                                    </div>
+                                    ${discHtml}
+                                </div>
+                            `;
+                            return;
+                        }
+                    } catch (dErr) {
+                        logger.warn("Digest load failed", dErr);
+                    }
+                }
+
                 // Check if it is a RAG evaluation or Human Coaching log
                 if (alert.is_rag_eval) {
                     const entry = alert.rag_data;

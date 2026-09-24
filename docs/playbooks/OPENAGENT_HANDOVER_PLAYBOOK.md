@@ -101,10 +101,10 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 
 | Role | Hardware / Binding | Context Limit | Primary Purpose | Fallback Route |
 | :--- | :--- | :--- | :--- | :--- |
-| **Sisyphus (Lead)** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **Atlas / Prometheus** | OpenCode Free (`opencode/deepseek-v4-flash-free`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8000 oMLX: `mlx-community--Qwen3.5-9B-4bit`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`qwen3-14b-16k:latest`) |
-| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `qwen3-14b-16k:latest`) | 16K pinned | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
+| **Sisyphus (Lead)** | OpenCode Free (`opencode/big-pickle`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
+| **Atlas / Prometheus** | OpenCode Free (`opencode/big-pickle`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
+| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8000 oMLX: `mlx-community--Qwen3.5-9B-4bit`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`qwen3:14b`) |
+| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `qwen3:14b`) | 64K | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
 | **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
 
 ### 4.3 Dynamic Category Taxonomy (Web GUI vs. Headless Dispatch)
@@ -113,12 +113,13 @@ When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:409
 
 | Category | Typical Subagent Tasks | Primary Model Binding | Fallback Chain |
 | :--- | :--- | :--- | :--- |
-| **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `openrouter/nvidia/nemotron-3-super-120b-a12b:free` | Groq 70B $\rightarrow$ Cohere $\rightarrow$ M5 MLX |
-| **`deep`** | Complex local implementation, heavy coding | `groq/llama-3.3-70b-versatile` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ Windows 4090 |
-| **`writing`** | Documentation, docstrings, summaries, sprint logs | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Nemotron $\rightarrow$ Windows 4090 |
+| **`coder`** | Surgical leaf patches, code editing | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Free $\rightarrow$ Cohere North $\rightarrow$ 4090 |
+| **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ M5 MLX |
+| **`deep`** | Complex local implementation, heavy coding | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ Windows 4090 |
+| **`writing`** | Documentation, docstrings, summaries, sprint logs | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Free $\rightarrow$ Windows 4090 |
 | **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | Windows 4090 |
-| **`unspecified-high`** | General high-complexity fallback | `groq/llama-3.3-70b-versatile` | OpenRouter Nemotron $\rightarrow$ Cohere $\rightarrow$ 4090 |
-| **`unspecified-low`** | Verification and diagnostic helper tasks | `my-windows-4090/qwen3-14b-16k:latest` | M5 MLX |
+| **`unspecified-high`** | General high-complexity fallback | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ 4090 |
+| **`unspecified-low`** | Verification and diagnostic helper tasks | `my-windows-4090/qwen3:14b` | M5 MLX |
 
 ### 4.4 The Layer 3 Terminal Execution Law ([BKM-049])
 - **Terminal Execution Tier:** Layer 3 leaf workers (`sisyphus-junior`, `daedalus`, `hephaestus`, `momus`, `librarian`) represent the final execution tier of the swarm hierarchy.
@@ -267,4 +268,5 @@ This ledger records live operational calibration fixes, tool adjustments, and ha
 | 2026-09-23 (Spr 88.0) | Top-Level Silicon Routing & Concurrency | `delegate.py` in `execute` mode bypassed KENDER 4090 and routed top-level session to M5 Air (MLX), causing single-concurrency recursive deadlock when M5 Air attempted nested subdelegation; stale 27B model references confused routing | Fixed `delegate.py` `local_only` top-level session to ALWAYS route to KENDER 4090 Atlas (`my-windows-4090`); scrubbed all stale 27B strings to reflect unified 9B MLX resident; aligned Atlas prompt to use strict category routing (`category="coder"` for Junior on M5 Air; `category="unspecified-low"` for Kender Momus/Librarian). |
 | 2026-09-23 (Spr 88.0) | Anti-Pattern Elimination & Junior Lockdown | Hardcoded model dictionaries in `delegate.py` shadowed central configs; calling `sisyphus` instead of `sisyphus-junior` allowed tool roaming to ChromaDB; unguided patches caused structural AST nesting errors | Eliminated hardcoded model dictionaries in `delegate.py` (authoritative config delegated to `infrastructure.json` + `oh-my-openagent.json`); bound local execution explicitly to `sisyphus-junior` (strict tool jail); established mandatory 4-anchor spoon-feeding contract for `[SWARM:LOCAL]` stories. Certified via canary test. |
 | 2026-09-23 (Spr 88.2) | Model Standardization & Local Delegation Fallback | `qwen3-14b-16k:latest` was hardcoded as a fallback in `delegate.py` and `infrastructure.json` had `"architect"` instead of `"reasoner"`, causing HTTP 500 Unknown Model error on Kender Ollama after tag consolidation to standard `qwen3:14b` (64k context). | Standardized all configs, `delegate.py`, and playbook references to generic `qwen3:14b`, unified `local_bicameral` reasoner/architect alias lookup, and verified clean dispatch to KENDER. |
+| 2026-09-23 (Spr 88.2) | Cloud Topology Convergence & Model Decoupling | Groq 70B deprecation (403 Forbidden) and hardcoded fallback dictionaries inside `delegate.py` shadowed central configs, creating phantom model references; `big-pickle` silent-200 empty-part traps prevented clean cascades. | Decoupled `delegate.py` by eliminating all embedded model dicts (enforcing authoritative dynamic resolution from `infrastructure.json`), converged cloud categories onto `openrouter/free` meta-router with Cohere `command-a-plus-05-2026` as resilient 256k backstop. |
 
