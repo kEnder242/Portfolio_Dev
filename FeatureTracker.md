@@ -3210,12 +3210,12 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Mechanism:** `dna_forge_build.py`, `dna_manifest.json` schema (`revisions` vs `mutations`), Foyer REST endpoint `/dna/certify_mutation`.
 
 ## [FEAT-600] Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture
-**Sprint:** SPR-86.0
+**Sprint:** SPR-86.0 / SPR-88.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/config/hooks/icm_hook.py](https://github.com/kEnder242/HomeLabAI/blob/main/config/hooks/icm_hook.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
-**Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.
-**Rationale:** Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.
-**Mechanism:** `icm_hook.py`, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).
+**Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
+**Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB in resident daemon memory prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in <1ms.
+**Rationale:** Solves agent manic degradation over long contexts while eliminating Python subprocess startup latency via a sub-5ms `curl` micro-bridge (`ambient_hook.sh`) to resident Foyer/CLaRa daemons.
+**Mechanism:** `ambient_recall.py`, `ambient_hook.sh`, Foyer REST endpoint `/ambient_recall` (:8765), CLaRa ChromaDB (:8001).
 
 ## [FEAT-601] Bones as the Transitory Scratchpad Between Raw Original Text and Database
 **Sprint:** SPR-87.0
