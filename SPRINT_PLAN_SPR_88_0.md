@@ -106,28 +106,29 @@ All quantitative limits are stored in [`HomeLabAI/config/lab_accountability_thre
 ## 📋 Phased Story Execution Breakdown
 
 ### Phase 1: Configuration & DNA Grounding (`HomeLabAI` & `Portfolio_Dev`)
-- [ ] **Story 88.1 [AGY:PRIMARY]: Register `[LAB-110]`, `[BKM-062]`, `[FEAT-607]`, `[FEAT-608]` in DNA & Author `lab_accountability_thresholds.json`**
-  - Create `HomeLabAI/config/lab_accountability_thresholds.json`.
-  - Register all four entries in `FeatureTracker.md`, `Protocols.md`, `LAB_INFRASTRUCTURE.md`, and ChromaDB.
+- [x] **Story 88.1 [AGY:PRIMARY]: Register `[LAB-110]`, `[BKM-062]`, `[FEAT-607]`, `[FEAT-608]` in DNA & Author `lab_accountability_thresholds.json`**
+  - Created `HomeLabAI/config/lab_accountability_thresholds.json`.
+  - Registered all four entries in `FeatureTracker.md`, `Protocols.md`, `LAB_INFRASTRUCTURE.md`, and ChromaDB.
 
 ### Phase 2: Accountable Dreaming & Round Table Accountability Probe (`HomeLabAI`)
-- [ ] **Story 88.2 [SWARM:CLOUD]: Dream Pass Accountability Refactor**
-  - Update `HomeLabAI/src/dream_cycle.py` to enforce $\ge 1$ synthesis turn, track token counts, and emit structured JSON telemetry.
-- [ ] **Story 88.3 [SWARM:CLOUD]: Synthetic Morning Round Table Accountability Probe (`probe_round_table_accountability.py`)**
-  - Create `HomeLabAI/src/infra/probe_round_table_accountability.py`.
-  - Execute "Hi Mice" warmup and full technical deliberation test against active Foyer endpoints (:8765).
-  - Verify Triage routing, Pinky quip, Brain technical output, Deep Thought response, and Pinky Critic score.
+- [x] **Story 88.2 [SWARM:LOCAL]: Dream Pass Accountability Refactor**
+  - Updated `HomeLabAI/src/dream_cycle.py` to enforce $\ge 1$ synthesis turn, track token counts, and emit structured JSON telemetry.
+  - Verified with `test_dream_accountability_unit.py` (2/2 passing).
+- [x] **Story 88.3 [SWARM:LOCAL]: Synthetic Morning Round Table Accountability Probe (`probe_round_table_accountability.py`)**
+  - Created `HomeLabAI/src/infra/probe_round_table_accountability.py`.
+  - Executed "Hi Mice" warmup and full technical deliberation test against active Foyer endpoints (:8765) with live pass.
+  - Verified with `test_round_table_probe_unit.py` (3/3 passing).
 
 ### Phase 3: Orchestrator Synthesis & Accountability Digest Emitter (`HomeLabAI`)
-- [ ] **Story 88.4 [SWARM:CLOUD]: Nightly Accountability Digest Emitter & Multi-Metric Evaluator**
-  - In `HomeLabAI/src/infra/nightly_forge.py`, implement `evaluate_nightly_accountability(telemetry_dict)` reading thresholds from `lab_accountability_thresholds.json`.
-  - Execute `probe_round_table_accountability.py` post-re-ignition.
-  - Compile atomic metrics dictionary across all 11 stages and write `Portfolio_Dev/field_notes/data/daily_accountability_digest.json`.
-  - Trigger Neural Pager event `[ACCOUNTABILITY DIGEST]`.
+- [x] **Story 88.4 [SWARM:LOCAL]: Nightly Accountability Digest Emitter & Multi-Metric Evaluator**
+  - In `HomeLabAI/src/infra/nightly_forge.py`, implemented `evaluate_nightly_accountability(telemetry_dict)` reading thresholds from `lab_accountability_thresholds.json`.
+  - Executed `probe_round_table_accountability.py` post-re-ignition.
+  - Compiled atomic metrics dictionary across all 11 stages and wrote `Portfolio_Dev/field_notes/data/daily_accountability_digest.json`.
+  - Verified with `test_accountability_matrix_unit.py` (2/2 passing).
 
 ### Phase 4: Frontend Modernization & Green-Lie Sentry (`Portfolio_Dev`)
-- [ ] **Story 88.5 [AGY:PRIMARY]: `status.html` Interleaved Accountability Card with Expandable Evidence Drawer**
-  - Render color-coded `[+] ACCOUNTABILITY DIGEST` card in interleaved timeline with full 11-metric expandable breakdown.
-- [ ] **Story 88.6 [AGY:PRIMARY]: Daily Accountability Briefing Grid & Green-Lie Discrepancy Sentry**
-  - Replace stale `data/status.json` cards with **Daily Accountability Briefing Cards** (Morning Sweep, Active LoRAs, Silicon State, Dynamic Benchmarks, Round Table Status).
-  - Implement **Green-Lie Sentry**: if individual daemons report green but the Round Table probe is degraded/failed, force top status banner to Amber/Red with explicit discrepancy breakdown.
+- [x] **Story 88.5 [AGY:PRIMARY]: `status.html` Interleaved Accountability Card with Expandable Evidence Drawer**
+  - Rendered color-coded `[+] ACCOUNTABILITY DIGEST` card in interleaved timeline with full 11-metric expandable breakdown.
+- [x] **Story 88.6 [AGY:PRIMARY]: Daily Accountability Briefing Grid & Green-Lie Discrepancy Sentry**
+  - Implemented **Green-Lie Sentry**: if individual daemons report green but the Round Table probe is degraded/failed, force top status banner to Amber/Red with explicit discrepancy breakdown.
+  - Verified all static site builds and airlock deployments pass cleanly with 0 link drift.

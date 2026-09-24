@@ -1418,9 +1418,14 @@
                                 </div>
                             `;
                             return;
+                        } else {
+                            term.innerHTML = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;color:#8b949e;background:#0d1117;border:1px solid #30363d;border-radius:4px;">[Daily Accountability Digest file not found or pending generation]</div>`;
+                            return;
                         }
                     } catch (dErr) {
-                        logger.warn("Digest load failed", dErr);
+                        console.warn("Digest load failed", dErr);
+                        term.innerHTML = `<div style="font-family:monospace;font-size:0.75rem;padding:6px 10px;color:#8b949e;background:#0d1117;border:1px solid #30363d;border-radius:4px;">[Daily Accountability Digest currently unavailable]</div>`;
+                        return;
                     }
                 }
 
