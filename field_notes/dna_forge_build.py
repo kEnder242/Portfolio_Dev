@@ -2717,10 +2717,9 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         var isGrandchild = (!isTrail && !isDirect && !!grandchildSet[cid]);
 
                         var nodeColor = isGrandchild ? '#484f58' : (domainColors[dName] || '#8b949e');
-                        var isCard = !isGrandchild;
-                        var cardW = isFocal ? 174 : (isTrail ? 144 : (isDirect ? 122 : 0));
-                        var cardH = isFocal ? 52 : (isTrail ? 44 : (isDirect ? 36 : 0));
-                        var nodeRadius = isFocal ? 14 : (isTrail ? 11 : (isDirect ? 9 : 5.5));
+                        var cardW = isFocal ? 260 : (isTrail ? 200 : (isDirect ? 160 : 100));
+                        var cardH = isFocal ? 84 : (isTrail ? 64 : (isDirect ? 52 : 30));
+                        var nodeRadius = isFocal ? 16 : (isTrail ? 13 : (isDirect ? 10 : 6));
 
                         // Extract narrative excerpt and tags for Mini-HUD
                         var narrative = (nData.synthesis && nData.synthesis.narrative_context) || (nData.origin && nData.origin.text) || '';
@@ -2729,7 +2728,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                         if (!activeNodeMap[cid]) {{
                             var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
-                            var spawnDist = isGrandchild ? (130 + Math.random() * 60) : (75 + Math.random() * 60);
+                            var spawnDist = isGrandchild ? (220 + Math.random() * 80) : (130 + Math.random() * 80);
                             activeNodeMap[cid] = {{
                                 id: cid,
                                 title: nData.title || (nData.synthesis && nData.synthesis.title) || cid,
@@ -2751,7 +2750,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                                 radius: nodeRadius,
                                 color: nodeColor,
                                 alpha: 0.0,
-                                targetAlpha: isGrandchild ? 0.45 : 1.0,
+                                targetAlpha: isGrandchild ? 0.65 : 1.0,
                                 noiseSeed: Math.random() * 100
                             }};
                         }} else {{
@@ -2764,7 +2763,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             n.cardWidth = cardW;
                             n.cardHeight = cardH;
                             n.radius = nodeRadius;
-                            n.targetAlpha = isGrandchild ? 0.45 : 1.0;
+                            n.targetAlpha = isGrandchild ? 0.65 : 1.0;
                             n.title = nData.title || (nData.synthesis && nData.synthesis.title) || cid;
                             n.narrative = narrative;
                             n.tags = tags;
@@ -2825,15 +2824,15 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                     nodes = Object.values(activeNodeMap);
 
-                    // 2. Multi-body Coulomb Repulsion
-                    var kRep = 2600 * simEnergy;
+                    // 2. Multi-body Coulomb Repulsion (Spacious & Breathable)
+                    var kRep = 5600 * simEnergy;
                     for (var i = 0; i < nodes.length; i++) {{
                         var n1 = nodes[i];
                         for (var j = i + 1; j < nodes.length; j++) {{
                             var n2 = nodes[j];
                             var dx = n2.x - n1.x;
                             var dy = n2.y - n1.y;
-                            var distSq = dx * dx + dy * dy + 600;
+                            var distSq = dx * dx + dy * dy + 900;
                             var dist = Math.sqrt(distSq);
                             var force = kRep / distSq;
                             var fx = (dx / dist) * force;
@@ -2845,9 +2844,9 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         }}
                     }}
 
-                    // 3. Spring Link Attraction
-                    var restDist = 155;
-                    var kSpring = 0.035 * simEnergy;
+                    // 3. Spring Link Attraction (Expansive Rest Distance)
+                    var restDist = 260;
+                    var kSpring = 0.03 * simEnergy;
                     activeLinks.forEach(function(l) {{
                         if (!activeNodeMap[l.source.id] || !activeNodeMap[l.target.id]) return;
                         var dx = l.target.x - l.source.x;
@@ -2862,15 +2861,15 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         l.target.vy -= fy;
                     }});
 
-                    // 4. Center Gravity Well & Critical Damping
+                    // 4. Center Gravity Well & Critical Damping (Soft Gravity so nodes don't shrink)
                     nodes.forEach(function(n) {{
                         var cDx = cx - n.x;
                         var cDy = cy - n.y;
                         var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
-                        n.vx += (cDx / cDist) * (cDist * 0.002 * simEnergy);
-                        n.vy += (cDy / cDist) * (cDist * 0.002 * simEnergy);
+                        n.vx += (cDx / cDist) * (cDist * 0.0006 * simEnergy);
+                        n.vy += (cDy / cDist) * (cDist * 0.0006 * simEnergy);
 
-                        // High damping for crisp, stationary settling
+                        // Damping for crisp, stationary settling
                         n.vx *= 0.78;
                         n.vy *= 0.78;
 
@@ -2878,6 +2877,22 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         n.x += n.vx;
                         n.y += n.vy;
                     }});
+                }}
+
+                function getBoxIntersection(cx, cy, w, h, targetX, targetY) {{
+                    if (!w || !h) return {{ x: cx, y: cy }};
+                    var dx = targetX - cx;
+                    var dy = targetY - cy;
+                    if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return {{ x: cx, y: cy }};
+                    var halfW = w / 2;
+                    var halfH = h / 2;
+                    var scaleX = halfW / (Math.abs(dx) || 0.001);
+                    var scaleY = halfH / (Math.abs(dy) || 0.001);
+                    var scale = Math.min(scaleX, scaleY);
+                    return {{
+                        x: cx + dx * scale,
+                        y: cy + dy * scale
+                    }};
                 }}
 
                 function drawRoundedRect(c, x, y, w, h, r) {{
@@ -2900,50 +2915,61 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     ctx.translate(panX, panY);
                     ctx.scale(zoom, zoom);
 
-                    // --- Render 3-Length Trail Faint Gradient Beam [Item 3] ---
+                    // --- Render 3-Length Trail Faint Gradient Beam ---
                     var trailNodes = (typeof focalBreadcrumbs !== 'undefined' ? focalBreadcrumbs.slice(-3) : [focalNodeId])
                         .map(function(id){{ return activeNodeMap[id]; }})
                         .filter(Boolean);
 
                     if (trailNodes.length >= 2) {{
                         ctx.beginPath();
-                        ctx.moveTo(trailNodes[0].x, trailNodes[0].y);
+                        var pStart = getBoxIntersection(trailNodes[0].x, trailNodes[0].y, trailNodes[0].cardWidth, trailNodes[0].cardHeight, trailNodes[1].x, trailNodes[1].y);
+                        ctx.moveTo(pStart.x, pStart.y);
                         for (var tIdx = 1; tIdx < trailNodes.length; tIdx++) {{
-                            ctx.lineTo(trailNodes[tIdx].x, trailNodes[tIdx].y);
+                            var pNext = getBoxIntersection(trailNodes[tIdx].x, trailNodes[tIdx].y, trailNodes[tIdx].cardWidth, trailNodes[tIdx].cardHeight, trailNodes[tIdx - 1].x, trailNodes[tIdx - 1].y);
+                            ctx.lineTo(pNext.x, pNext.y);
                         }}
-                        ctx.strokeStyle = 'rgba(163, 113, 247, 0.45)';
-                        ctx.lineWidth = 2.5;
+                        ctx.strokeStyle = 'rgba(163, 113, 247, 0.55)';
+                        ctx.lineWidth = 3.0;
                         ctx.shadowColor = '#a371f7';
-                        ctx.shadowBlur = 8;
+                        ctx.shadowBlur = 10;
                         ctx.stroke();
                         ctx.shadowBlur = 0;
                     }}
 
-                    // --- Render Uniform Hairline Synaptic Threads ---
+                    // --- Render Perimeter-Connected Synaptic Threads ---
                     activeLinks.forEach(function (l) {{
                         if (l.source.alpha < 0.02 || l.target.alpha < 0.02) return;
                         var isHovered = (hoveredOrbitNode && (l.source === hoveredOrbitNode || l.target === hoveredOrbitNode));
-                        var baseAlpha = l.isGrandchild ? 0.08 : 0.22;
+                        var baseAlpha = l.isGrandchild ? 0.15 : 0.35;
                         var linkAlpha = baseAlpha * Math.min(l.source.alpha, l.target.alpha);
 
+                        // Compute clean perimeter boundary anchor points
+                        var p1 = getBoxIntersection(l.source.x, l.source.y, l.source.cardWidth, l.source.cardHeight, l.target.x, l.target.y);
+                        var p2 = getBoxIntersection(l.target.x, l.target.y, l.target.cardWidth, l.target.cardHeight, l.source.x, l.source.y);
+
                         ctx.beginPath();
-                        ctx.moveTo(l.source.x, l.source.y);
-                        ctx.lineTo(l.target.x, l.target.y);
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
 
                         if (isHovered) {{
-                            ctx.strokeStyle = 'rgba(88, 166, 255, 0.85)';
-                            ctx.lineWidth = 1.6;
+                            ctx.strokeStyle = 'rgba(88, 166, 255, 0.95)';
+                            ctx.lineWidth = 2.0;
+                            ctx.shadowColor = '#58a6ff';
+                            ctx.shadowBlur = 8;
                         }} else if (l.isGrandchild) {{
                             ctx.strokeStyle = 'rgba(139, 148, 158, ' + linkAlpha.toFixed(3) + ')';
-                            ctx.lineWidth = 0.6;
+                            ctx.lineWidth = 0.8;
+                            ctx.shadowBlur = 0;
                         }} else {{
                             ctx.strokeStyle = 'rgba(88, 166, 255, ' + linkAlpha.toFixed(3) + ')';
-                            ctx.lineWidth = 0.8;
+                            ctx.lineWidth = 1.2;
+                            ctx.shadowBlur = 0;
                         }}
                         ctx.stroke();
+                        ctx.shadowBlur = 0;
                     }});
 
-                    // --- Render Context-Sized Canvas Cards & Constellation Nodes [Item 5] ---
+                    // --- Render Large Context-Rich Canvas Cards ---
                     var nodes = Object.values(activeNodeMap);
                     nodes.forEach(function (n) {{
                         if (n.alpha < 0.01) return;
@@ -2951,71 +2977,101 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         ctx.globalAlpha = n.alpha;
 
                         if (n.cardWidth > 0 && n.cardHeight > 0) {{
-                            // Card Bounds
                             var cardX = n.x - n.cardWidth / 2;
                             var cardY = n.y - n.cardHeight / 2;
-                            var radius = n.isCenter ? 8 : (n.isTrail ? 6 : 5);
+                            var radius = n.isCenter ? 8 : (n.isTrail ? 7 : (n.isDirect ? 6 : 4));
 
                             // Background Fill
                             drawRoundedRect(ctx, cardX, cardY, n.cardWidth, n.cardHeight, radius);
-                            ctx.fillStyle = n.isCenter ? 'rgba(9, 13, 22, 0.96)' : 'rgba(13, 17, 23, 0.92)';
+                            ctx.fillStyle = n.isCenter ? 'rgba(9, 13, 22, 0.98)' : 'rgba(13, 17, 23, 0.94)';
                             if (n.isCenter) {{
                                 ctx.shadowColor = '#58a6ff';
-                                ctx.shadowBlur = isHovered ? 16 : 10;
+                                ctx.shadowBlur = isHovered ? 20 : 12;
                             }} else if (isHovered) {{
                                 ctx.shadowColor = n.color;
-                                ctx.shadowBlur = 12;
+                                ctx.shadowBlur = 14;
                             }} else {{
                                 ctx.shadowBlur = 0;
                             }}
                             ctx.fill();
 
                             // Border
-                            ctx.lineWidth = n.isCenter ? 2.0 : (isHovered ? 1.5 : 1.0);
+                            ctx.lineWidth = n.isCenter ? 2.2 : (isHovered ? 1.8 : 1.2);
                             ctx.strokeStyle = n.isCenter ? '#ffffff' : (isHovered ? '#ffffff' : n.color);
                             ctx.stroke();
                             ctx.shadowBlur = 0;
 
-                            // Domain Pill (Top Left)
-                            var pillW = 34;
-                            var pillH = n.isCenter ? 14 : 12;
-                            var pillX = cardX + 6;
-                            var pillY = cardY + 6;
-                            drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 3);
-                            ctx.fillStyle = n.color;
-                            ctx.globalAlpha = n.alpha * 0.25;
-                            ctx.fill();
-                            ctx.globalAlpha = n.alpha;
-                            ctx.fillStyle = n.color;
-                            ctx.font = 'bold 9px "JetBrains Mono", monospace';
-                            ctx.textAlign = 'center';
-                            ctx.fillText(n.domain, pillX + pillW / 2, pillY + pillH - 3);
+                            if (n.isGrandchild) {{
+                                // Mini Grandchild Card: Compact format
+                                var pillW = 32;
+                                var pillH = 16;
+                                var pillX = cardX + 5;
+                                var pillY = cardY + 7;
+                                drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 3);
+                                ctx.fillStyle = n.color;
+                                ctx.globalAlpha = n.alpha * 0.2;
+                                ctx.fill();
+                                ctx.globalAlpha = n.alpha;
+                                ctx.fillStyle = '#8b949e';
+                                ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(n.domain, pillX + pillW / 2, pillY + pillH - 4);
 
-                            // Card ID (Top Row)
-                            ctx.fillStyle = n.isCenter ? '#ffffff' : '#e6edf3';
-                            ctx.font = 'bold ' + (n.isCenter ? '11px' : '10px') + ' "JetBrains Mono", monospace';
-                            ctx.textAlign = 'left';
-                            ctx.fillText(n.id, pillX + pillW + 6, pillY + pillH - 2);
+                                ctx.fillStyle = '#c9d1d9';
+                                ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+                                ctx.textAlign = 'left';
+                                ctx.fillText(n.id, pillX + pillW + 5, pillY + pillH - 3);
 
-                            // Title Snippet (Bottom Row)
-                            ctx.fillStyle = '#8b949e';
-                            ctx.font = (n.isCenter ? '10px' : '9px') + ' sans-serif';
-                            var maxChars = n.isCenter ? 24 : (n.isTrail ? 20 : 16);
-                            var rawTitle = (n.title || n.id);
-                            var titleSnippet = rawTitle.length > maxChars ? rawTitle.substring(0, maxChars) + '…' : rawTitle;
-                            ctx.fillText(titleSnippet, cardX + 8, cardY + n.cardHeight - 8);
+                            }} else {{
+                                // Full / Medium Rich Card (Focal, Trail, Direct)
+                                var pillW = n.isCenter ? 44 : 36;
+                                var pillH = n.isCenter ? 18 : 15;
+                                var pillX = cardX + 8;
+                                var pillY = cardY + 8;
+                                drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 4);
+                                ctx.fillStyle = n.color;
+                                ctx.globalAlpha = n.alpha * 0.25;
+                                ctx.fill();
+                                ctx.globalAlpha = n.alpha;
+                                ctx.fillStyle = n.color;
+                                ctx.font = 'bold ' + (n.isCenter ? '10px' : '9px') + ' "JetBrains Mono", monospace';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(n.domain, pillX + pillW / 2, pillY + pillH - 4);
 
-                        }} else {{
-                            // 2-Hop Grandchild: Subtle metallic grey dot
-                            ctx.beginPath();
-                            ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-                            ctx.fillStyle = isHovered ? '#8b949e' : '#484f58';
-                            ctx.fill();
+                                // Card ID (Header Row)
+                                ctx.fillStyle = n.isCenter ? '#ffffff' : '#f0f6fc';
+                                ctx.font = 'bold ' + (n.isCenter ? '12px' : '10.5px') + ' "JetBrains Mono", monospace';
+                                ctx.textAlign = 'left';
+                                ctx.fillText(n.id, pillX + pillW + 8, pillY + pillH - 3);
 
-                            if (isHovered) {{
-                                ctx.strokeStyle = '#ffffff';
-                                ctx.lineWidth = 1.2;
-                                ctx.stroke();
+                                // Links Count Badge (Top Right)
+                                if (n.linksCount > 0) {{
+                                    ctx.fillStyle = '#8b949e';
+                                    ctx.font = '9px "JetBrains Mono", monospace';
+                                    ctx.textAlign = 'right';
+                                    ctx.fillText('🔗 ' + n.linksCount, cardX + n.cardWidth - 8, pillY + pillH - 4);
+                                }}
+
+                                // Title Text (Mid Row)
+                                ctx.fillStyle = n.isCenter ? '#ffffff' : '#e6edf3';
+                                ctx.font = 'bold ' + (n.isCenter ? '11.5px' : '10px') + ' -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                                ctx.textAlign = 'left';
+                                var maxTitleChars = n.isCenter ? 32 : (n.isTrail ? 24 : 18);
+                                var rawTitle = (n.title || n.id);
+                                var titleSnippet = rawTitle.length > maxTitleChars ? rawTitle.substring(0, maxTitleChars) + '…' : rawTitle;
+                                ctx.fillText(titleSnippet, cardX + 8, pillY + pillH + (n.isCenter ? 18 : 14));
+
+                                // Narrative Excerpt (Bottom Row for Focal & Trail)
+                                if (n.isCenter || n.isTrail) {{
+                                    ctx.fillStyle = '#8b949e';
+                                    ctx.font = (n.isCenter ? '10px' : '9px') + ' sans-serif';
+                                    var rawNarrative = (n.narrative || '');
+                                    var maxNarrChars = n.isCenter ? 40 : 28;
+                                    var narrSnippet = rawNarrative.length > maxNarrChars ? rawNarrative.substring(0, maxNarrChars) + '…' : rawNarrative;
+                                    if (narrSnippet) {{
+                                        ctx.fillText(narrSnippet, cardX + 8, cardY + n.cardHeight - 9);
+                                    }}
+                                }}
                             }}
                         }}
                         ctx.globalAlpha = 1.0;
@@ -3048,8 +3104,8 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         var n = nodes[i];
                         if (n.alpha < 0.15) continue;
                         if (n.cardWidth > 0 && n.cardHeight > 0) {{
-                            var halfW = n.cardWidth / 2 + 4;
-                            var halfH = n.cardHeight / 2 + 4;
+                            var halfW = n.cardWidth / 2 + 6;
+                            var halfH = n.cardHeight / 2 + 6;
                             if (pt.x >= n.x - halfW && pt.x <= n.x + halfW &&
                                 pt.y >= n.y - halfH && pt.y <= n.y + halfH) {{
                                 return n;
@@ -3057,7 +3113,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         }} else {{
                             var dx = pt.x - n.x;
                             var dy = pt.y - n.y;
-                            if (dx * dx + dy * dy <= (n.radius + 8) * (n.radius + 8)) return n;
+                            if (dx * dx + dy * dy <= (n.radius + 10) * (n.radius + 10)) return n;
                         }}
                     }}
                     return null;
@@ -3086,22 +3142,27 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         if (hit) {{
                             var rect = wrap.getBoundingClientRect();
                             tooltip.style.display = 'block';
-                            tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+                            tooltip.style.left = Math.min(rect.width - 390, Math.max(10, e.clientX - rect.left + 15)) + 'px';
                             tooltip.style.top = (e.clientY - rect.top + 10) + 'px';
+                            tooltip.style.maxWidth = '380px';
                             
-                            // Mini-HUD Hover Format [Item 5]
-                            var snippet = (hit.narrative || '').slice(0, 110);
-                            if (snippet.length >= 110) snippet += '...';
-                            var tagsList = (hit.tags || []).slice(0, 3).map(function(t){{ return '#' + t; }}).join(' ');
-                            var relationLabel = hit.isCenter ? '🌟 Focal Anchor' : (hit.isTrail ? 'Trail Node' : (hit.isGrandchild ? 'Grandchild (2-Hop)' : 'Direct Connection'));
+                            // Super-Rich Mini-HUD Hover Format [Items 3, 5]
+                            var snippet = (hit.narrative || '').slice(0, 240);
+                            if (snippet.length >= 240) snippet += '...';
+                            var tagsList = (hit.tags || []).slice(0, 4).map(function(t){{ return '#' + t; }}).join(' ');
+                            var relationLabel = hit.isCenter ? '🌟 Focal Center Anchor' : (hit.isTrail ? 'Navigational Trail Node' : (hit.isGrandchild ? 'Grandchild (2-Hop Secondary)' : 'Direct 1-Hop Neighbor'));
 
                             tooltip.innerHTML = 
-                                '<div style="font-weight:700; font-size:0.86rem; color:' + hit.color + '; margin-bottom:2px;">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.title) + '</div>' +
-                                '<div style="color:#8b949e; font-size:0.72rem; margin-bottom:4px;">Domain: ' + hit.domain + ' • ' + relationLabel + (hit.isDocked ? ' • 🦴 Docked' : '') + '</div>' +
-                                (snippet ? '<div style="color:#c9d1d9; font-size:0.75rem; line-height:1.35; margin-bottom:5px; background:rgba(0,0,0,0.3); padding:4px 6px; border-radius:4px;">' + escapeHtml(snippet) + '</div>' : '') +
-                                '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; color:#8b949e; border-top:1px solid #21262d; padding-top:3px;">' +
-                                    '<span>🔗 ' + (hit.linksCount || 0) + ' links ' + (tagsList ? '• ' + escapeHtml(tagsList) : '') + '</span>' +
-                                    '<span style="color:#58a6ff;">👉 Click to focus</span>' +
+                                '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                                    '<span style="font-weight:700; font-size:0.92rem; color:' + hit.color + ';">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.domain) + '</span>' +
+                                    '<span style="font-size:0.68rem; background:rgba(255,255,255,0.1); padding:1px 6px; border-radius:3px; color:#8b949e;">' + (hit.linksCount || 0) + ' links</span>' +
+                                '</div>' +
+                                '<div style="font-weight:600; font-size:0.84rem; color:#f0f6fc; margin-bottom:4px;">' + escapeHtml(hit.title) + '</div>' +
+                                '<div style="color:#8b949e; font-size:0.72rem; margin-bottom:6px;">Relation: ' + relationLabel + (hit.isDocked ? ' • 🦴 Docked in Rack' : '') + '</div>' +
+                                (snippet ? '<div style="color:#c9d1d9; font-size:0.75rem; line-height:1.4; margin-bottom:6px; background:rgba(0,0,0,0.4); border:1px solid #21262d; padding:6px 8px; border-radius:4px;">' + escapeHtml(snippet) + '</div>' : '') +
+                                '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#8b949e; border-top:1px solid #21262d; padding-top:4px;">' +
+                                    '<span style="color:#58a6ff;">' + (tagsList ? escapeHtml(tagsList) : '') + '</span>' +
+                                    '<span style="color:#3fb950; font-weight:bold;">👉 Click card to focus</span>' +
                                 '</div>';
                         }} else {{
                             tooltip.style.display = 'none';
