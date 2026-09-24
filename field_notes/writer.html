@@ -17671,7 +17671,7 @@ window.__WRITER_QUOTES__ = [
                 </div>
             </div>
 
-            <!-- Right: Context-Aware DNA Palette Drawer (FEAT-588 / FEAT-591) -->
+            <!-- Right: Context-Aware DNA Palette Drawer (FEAT-588 / FEAT-591 / FEAT-601) -->
             <aside id="dna-palette-drawer" class="palette-drawer" style="position:relative;">
                 <div id="palette-card-popover" class="palette-card-popover" style="display:none;"></div>
                 <div class="palette-header">
@@ -17680,40 +17680,57 @@ window.__WRITER_QUOTES__ = [
                         <span id="palette-count" style="font-size:0.75rem; color:var(--sub-color); font-weight:normal;">0 items</span>
                     </div>
 
+                    <!-- Palette Mode Switcher (Waterline vs Tree View) [Item 10] -->
+                    <div class="palette-tab-bar" style="display: flex; gap: 4px; margin: 6px 0; border-bottom: 1px solid #30363d; padding-bottom: 6px;">
+                        <button id="btn-ptab-waterline" class="palette-tab-btn active" data-ptab="waterline" style="flex:1; padding: 4px 6px; font-size: 0.72rem; font-weight: 700; background: #21262d; border: 1px solid #58a6ff; color: #58a6ff; border-radius: 4px; cursor: pointer;">🌊 Waterline Pool</button>
+                        <button id="btn-ptab-tree" class="palette-tab-btn" data-ptab="tree" style="flex:1; padding: 4px 6px; font-size: 0.72rem; font-weight: 700; background: transparent; border: 1px solid #30363d; color: #8b949e; border-radius: 4px; cursor: pointer;">🌳 DNA Tree / Collections</button>
+                    </div>
+
                     <!-- Domain Filter Pills -->
-                    <div class="palette-domain-pills">
+                    <div id="palette-filter-row" class="palette-domain-pills">
                         <button class="domain-pill active" data-domain="ALL">All</button>
                         <button class="domain-pill" data-domain="PHL">PHL</button>
                         <button class="domain-pill" data-domain="BKM">BKM</button>
                         <button class="domain-pill" data-domain="FEAT">FEAT</button>
+                        <button class="domain-pill" data-domain="WIS">WIS</button>
                         <button class="domain-pill" data-domain="DISC">DISC</button>
-                        <button class="domain-pill" data-domain="ARXIV">ArXiv</button>
+                        <button class="domain-pill" data-domain="RDNA">RDNA</button>
+                        <button class="domain-pill" data-domain="SPRINT">SPRINT</button>
+                        <button class="domain-pill" data-domain="GEMS">GEMS</button>
                     </div>
 
                     <input type="search" id="palette-search" class="palette-search-input" placeholder="Search DNA by keyword or ID…" autocomplete="off">
                 </div>
 
-                <!-- [FEAT-588] Zone A: Above Water (Attached to Active Context) -->
-                <div id="palette-attached-zone" class="palette-zone palette-attached-zone">
-                    <div class="palette-zone-label">
-                        <span>☀️ Above Water — Attached Citations</span>
-                        <span id="palette-attached-count" class="palette-zone-count">0</span>
+                <!-- Mode 1: Waterline View (Above/Below Water) -->
+                <div id="palette-waterline-view-wrap">
+                    <!-- [FEAT-588] Zone A: Above Water (Attached to Active Context) -->
+                    <div id="palette-attached-zone" class="palette-zone palette-attached-zone">
+                        <div class="palette-zone-label">
+                            <span>☀️ Above Water — Attached Citations</span>
+                            <span id="palette-attached-count" class="palette-zone-count">0</span>
+                        </div>
+                        <div id="palette-attached-list" class="palette-items-list" style="padding: 6px 0; gap: 8px;"></div>
                     </div>
-                    <div id="palette-attached-list" class="palette-items-list" style="padding: 6px 0; gap: 8px;"></div>
+
+                    <!-- [FEAT-588 / FEAT-591] The Waterline Divider -->
+                    <div id="palette-waterline" class="palette-waterline" title="Click to pop up card overview, or drag citations across the waterline">
+                        <span class="waterline-text">🌊 WATER LEVEL</span>
+                        <span id="palette-waterline-stats" class="waterline-stats">0 attached · 0 suggestions</span>
+                    </div>
+
+                    <!-- [FEAT-588] Zone B: Below Water (Suggestions & Search Pool) -->
+                    <div id="palette-suggested-zone" class="palette-zone palette-suggested-zone">
+                        <div class="palette-zone-label">
+                            <span>🌊 Below Water — Suggestions &amp; Search</span>
+                        </div>
+                        <div id="palette-chips-list" class="palette-items-list"></div>
+                    </div>
                 </div>
 
-                <!-- [FEAT-588 / FEAT-591] The Waterline Divider -->
-                <div id="palette-waterline" class="palette-waterline" title="Click to pop up card overview, or drag citations across the waterline">
-                    <span class="waterline-text">🌊 WATER LEVEL</span>
-                    <span id="palette-waterline-stats" class="waterline-stats">0 attached · 0 suggestions</span>
-                </div>
-
-                <!-- [FEAT-588] Zone B: Below Water (Suggestions & Search Pool) -->
-                <div id="palette-suggested-zone" class="palette-zone palette-suggested-zone">
-                    <div class="palette-zone-label">
-                        <span>🌊 Below Water — Suggestions &amp; Search</span>
-                    </div>
-                    <div id="palette-chips-list" class="palette-items-list"></div>
+                <!-- Mode 2: Collapsible Domain Tree View [Item 10] -->
+                <div id="palette-tree-view-wrap" style="display: none; padding: 8px; overflow-y: auto; max-height: calc(100vh - 220px);">
+                    <div id="palette-domain-tree" class="palette-domain-tree" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
             </aside>
         </section>
@@ -18328,8 +18345,46 @@ window.__WRITER_QUOTES__ = [
                 });
             }
 
-            // --- DNA Palette Filter & Search Wiring ---
+            // --- DNA Palette Filter & Search Wiring [Item 10] ---
             function initPaletteEvents() {
+                var btnWaterline = document.getElementById('btn-ptab-waterline');
+                var btnTree = document.getElementById('btn-ptab-tree');
+                var wrapWaterline = document.getElementById('palette-waterline-view-wrap');
+                var wrapTree = document.getElementById('palette-tree-view-wrap');
+
+                if (btnWaterline && btnTree) {
+                    btnWaterline.addEventListener('click', function() {
+                        btnWaterline.classList.add('active');
+                        btnWaterline.style.background = '#21262d';
+                        btnWaterline.style.borderColor = '#58a6ff';
+                        btnWaterline.style.color = '#58a6ff';
+
+                        btnTree.classList.remove('active');
+                        btnTree.style.background = 'transparent';
+                        btnTree.style.borderColor = '#30363d';
+                        btnTree.style.color = '#8b949e';
+
+                        if (wrapWaterline) wrapWaterline.style.display = 'block';
+                        if (wrapTree) wrapTree.style.display = 'none';
+                    });
+
+                    btnTree.addEventListener('click', function() {
+                        btnTree.classList.add('active');
+                        btnTree.style.background = '#21262d';
+                        btnTree.style.borderColor = '#58a6ff';
+                        btnTree.style.color = '#58a6ff';
+
+                        btnWaterline.classList.remove('active');
+                        btnWaterline.style.background = 'transparent';
+                        btnWaterline.style.borderColor = '#30363d';
+                        btnWaterline.style.color = '#8b949e';
+
+                        if (wrapWaterline) wrapWaterline.style.display = 'none';
+                        if (wrapTree) wrapTree.style.display = 'block';
+                        renderPaletteTree();
+                    });
+                }
+
                 var pills = document.querySelectorAll('.domain-pill');
                 pills.forEach(function(p) {
                     p.addEventListener('click', function() {
@@ -18337,6 +18392,7 @@ window.__WRITER_QUOTES__ = [
                         p.classList.add('active');
                         STATE.activeDomainFilter = p.dataset.domain;
                         renderPalette();
+                        renderPaletteTree();
                     });
                 });
 
@@ -18345,8 +18401,111 @@ window.__WRITER_QUOTES__ = [
                     search.addEventListener('input', function() {
                         STATE.paletteSearchQuery = search.value.trim();
                         renderPalette();
+                        renderPaletteTree();
                     });
                 }
+            }
+
+            function renderPaletteTree() {
+                var treeContainer = document.getElementById('palette-domain-tree');
+                if (!treeContainer) return;
+                treeContainer.innerHTML = '';
+
+                var domains = ['PHL', 'BKM', 'FEAT', 'WIS', 'DISC', 'RDNA', 'SPRINT', 'GEMS'];
+                var domainColors = {
+                    'PHL': '#a371f7', 'BKM': '#3fb950', 'FEAT': '#58a6ff',
+                    'WIS': '#e3b341', 'DISC': '#f0883e', 'RDNA': '#56d364',
+                    'SPRINT': '#d2a8ff', 'GEMS': '#ec4899'
+                };
+
+                var entries = Object.keys(STATE.citationIndex).map(function(k) { return STATE.citationIndex[k]; });
+                var query = (STATE.paletteSearchQuery || '').toLowerCase();
+                var activeDom = STATE.activeDomainFilter || 'ALL';
+
+                domains.forEach(function(dom) {
+                    if (activeDom !== 'ALL' && activeDom !== dom) return;
+
+                    var domItems = entries.filter(function(item) {
+                        var d = getDomainForCite(item.id);
+                        if (d !== dom) return false;
+                        if (query) {
+                            var hay = (item.id + ' ' + (item.title || '') + ' ' + (item.narrative || '')).toLowerCase();
+                            return hay.indexOf(query) !== -1;
+                        }
+                        return true;
+                    });
+
+                    if (domItems.length === 0 && query) return;
+
+                    var dColor = domainColors[dom] || '#8b949e';
+                    var details = document.createElement('details');
+                    details.style.border = '1px solid #30363d';
+                    details.style.borderRadius = '6px';
+                    details.style.background = '#0d1117';
+                    details.style.padding = '4px 8px';
+                    if (domItems.length > 0 && domItems.length <= 15) details.setAttribute('open', '');
+
+                    var summary = document.createElement('summary');
+                    summary.style.cursor = 'pointer';
+                    summary.style.fontSize = '0.78rem';
+                    summary.style.fontWeight = 'bold';
+                    summary.style.color = dColor;
+                    summary.style.display = 'flex';
+                    summary.style.alignItems = 'center';
+                    summary.style.justifyContent = 'space-between';
+                    summary.innerHTML = '<span>📁 ' + dom + ' Domain</span><span style="font-size:0.7rem; opacity:0.8;">' + domItems.length + ' cards</span>';
+                    details.appendChild(summary);
+
+                    var listDiv = document.createElement('div');
+                    listDiv.style.display = 'flex';
+                    listDiv.style.flexDirection = 'column';
+                    listDiv.style.gap = '4px';
+                    listDiv.style.marginTop = '6px';
+                    listDiv.style.paddingLeft = '6px';
+
+                    domItems.slice(0, 30).forEach(function(item) {
+                        var itemRow = document.createElement('div');
+                        itemRow.style.display = 'flex';
+                        itemRow.style.alignItems = 'center';
+                        itemRow.style.justifyContent = 'space-between';
+                        itemRow.style.background = '#161b22';
+                        itemRow.style.border = '1px solid #21262d';
+                        itemRow.style.borderRadius = '4px';
+                        itemRow.style.padding = '3px 6px';
+                        itemRow.style.fontSize = '0.72rem';
+                        itemRow.style.cursor = 'grab';
+                        itemRow.draggable = true;
+
+                        var titleSnippet = (item.title || item.id);
+                        if (titleSnippet.length > 20) titleSnippet = titleSnippet.substring(0, 20) + '…';
+
+                        itemRow.innerHTML = '<span style="font-family:monospace; font-weight:bold; color:#f0f6fc;">' + item.id + '</span>' +
+                                            '<span style="color:#8b949e; margin-left:4px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="' + (item.title || '') + '">' + titleSnippet + '</span>' +
+                                            '<button class="tree-insert-btn" style="background:#238636; color:#fff; border:none; border-radius:3px; padding:1px 5px; font-size:0.65rem; cursor:pointer;" title="Insert citation at active cursor / context">+ Insert</button>';
+
+                        itemRow.addEventListener('dragstart', function(e) {
+                            STATE.draggedItem = { type: 'citation', id: item.id, inBone: false, zone: 'tree', sourceTier: 'palette', sourceId: null, sourceBoneId: null };
+                            e.dataTransfer.setData('text/plain', item.id);
+                        });
+
+                        var insertBtn = itemRow.querySelector('.tree-insert-btn');
+                        if (insertBtn) {
+                            insertBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                attachSuggestedToContext(item.id);
+                            });
+                        }
+
+                        itemRow.addEventListener('click', function() {
+                            openInspector(item.id);
+                        });
+
+                        listDiv.appendChild(itemRow);
+                    });
+
+                    details.appendChild(listDiv);
+                    treeContainer.appendChild(details);
+                });
             }
 
             // [FEAT-588] ----- Context-Aware Water-Level DNA Palette Controllers -----
