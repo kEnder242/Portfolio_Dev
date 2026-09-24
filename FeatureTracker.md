@@ -3257,13 +3257,29 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.
 **Mechanism:** `Portfolio_Dev/dna/vibe_data.json`, `sync_chroma_dna.py`, ChromaDB collection `vibe_dna`.
 
-## [FEAT-606] Words-First Prose Editor & Inline DNA Citation Anchors
-**Sprint:** SPR-87.0
+## [FEAT-607] Nightly Accountability Digest & Dashboard Integration
+**Sprint:** SPR-88.0
 **Status:** ACTIVE
-**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Words-First Prose Editor & Inline DNA Citation Anchors.
-**Logic:** Refactors the authoring experience to prioritize natural human prose first. Plain text sits directly in the editor stream with trailing interactive citation tags (`[ID] Rn style=Heading`). Provides inline pill badges for in-place lens swapping and a selection citation inserter.
-**Rationale:** Eliminates token escaping friction and allows standard Markdown rendering without obscuring text in container attributes.
-**Mechanism:** `writer.html`, `dna_macro_compiler.py`, Foyer `/paper/*` REST endpoints.
+**Code:** [HomeLabAI/src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py) — Nightly Accountability Digest & Dashboard Integration.
+**Logic:** Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across all 11 nightly maintenance stages against `lab_accountability_thresholds.json`, writes atomic `daily_accountability_digest.json`, and emits an expandable `[+] ACCOUNTABILITY DIGEST` card to `status.html`.
+**Rationale:** Eliminates silent passes and zero-work exits during overnight batch sweeps.
+**Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `daily_accountability_digest.json`, `status.html`.
+
+## [FEAT-608] Synthetic Morning Round Table Accountability Probe Suite
+**Sprint:** SPR-88.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/infra/probe_round_table_accountability.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py) — Synthetic Morning Round Table Accountability Probe Suite.
+**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and Pinky Coherence Critic scoring).
+**Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks.
+**Mechanism:** `probe_round_table_accountability.py`, Foyer `/inject` and `/status` REST endpoints.
+
+## [LAB-110] The Operational Accountability Standard & Quantifiable Invariants
+**Sprint:** SPR-88.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/config/lab_accountability_thresholds.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/lab_accountability_thresholds.json) — The Operational Accountability Standard & Quantifiable Invariants.
+**Logic:** Codifies strict non-zero unit invariants across all lab maintenance workflows. Enforces that every background job (LoRA training, dreaming, scrubbing, benchmarking) must prove non-zero units of real work before being granted a `GREEN` verdict.
+**Rationale:** Prevents the "Green Lie" where individual services report online while end-to-end multi-resident cognition is broken.
+**Mechanism:** `lab_accountability_thresholds.json`, `evaluate_nightly_accountability()`, `BKM-062`.
 
 
 

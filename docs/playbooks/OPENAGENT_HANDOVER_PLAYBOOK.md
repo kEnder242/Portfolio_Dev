@@ -14,7 +14,7 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | **Sisyphus (Ultraworker & Autonomous Engineer)** | Primary Direct Autonomous Implementer for `delegate.py` story dispatches; directly executes safe_patch/bash | Dispatched via `delegate.py` (default) |
 | **Atlas (Plan Executor & Swarm Conductor)** | Swarm orchestrator for multi-subagent task cascades (Windows 4090 / M5 Air) | Dispatched via `delegate.py --agent atlas` |
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
-| **Primary Local Ground Worker (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `qwen3-14b-16k:latest`) for fast 88 tok/s code editing with 11.7 GB resident VRAM | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
+| **Primary Local Ground Worker (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `qwen3:14b`) for fast 88 tok/s code editing with 64k context | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
 | **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `mlx-community--Qwen3.8-27B-4bit`) for bounded surgical patching & architectural triage | Subagent target for surgical edits (`sisyphus-junior`) |
 | **Cloud Fallback Tier** | OpenRouter Free -> OpenCode Free -> Cohere/Mistral (Non-Google) | Automatic runtime fallback |
 
@@ -68,7 +68,7 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 ### 3.4 Local Silicon Token Overhead & Metal Memory Ceilings (Port 8002 Proxy)
 - **The Physical Memory Constraint (24GB Apple Silicon):** Running `Qwen3.8-27B` (15.5 GB resident weights) without KV compression risks breaching macOS Metal's 24.46 GB wired allocation cap (`iogpu.wired_limit_mb`).
 - **Mandatory Port 8002 Headroom Proxy:** All M5 Air inference requests MUST target `http://192.168.1.46:8002/v1` (never raw `:8000`) to dynamically compress KV cache and protect Metal prefill limits.
-- **Context Pinning on Kender 4090:** Windows 4090 uses `qwen3-14b-16k:latest` with pinned `num_ctx 16384` in Ollama Modelfile, reserving 14.8 GB VRAM for zero-thrash KV caching at 88 tok/s.
+- **Context Configuration on Kender 4090:** Windows 4090 uses `qwen3:14b` with pinned 64k context in Ollama (`num_ctx 65536`), reserving VRAM for zero-thrash KV caching at 88 tok/s.
 
 ### 3.5 Subagent Tool Scoping & The ICM Ballast Tax ([BKM-051])
 - **The 24.5k Token Ghost:** OpenCode automatically injects all registered MCP tool schemas into every subagent prompt, inflating baseline context to 24.5k tokens before reading code.
@@ -113,13 +113,17 @@ When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:409
 
 | Category | Typical Subagent Tasks | Primary Model Binding | Fallback Chain |
 | :--- | :--- | :--- | :--- |
-| **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **`deep`** | Complex local implementation, heavy coding | `my-m5-mlx/mlx-community--Qwen3.8-27B-4bit` | DeepSeek $\rightarrow$ OpenRouter Free $\rightarrow$ 4090 $\rightarrow$ Cohere |
-| **`writing`** | Documentation, docstrings, summaries, sprint logs | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX |
-| **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Qwen 3.6 Plus |
-| **`quick`** | Trivial lookups, file checks, regex queries | `opencode/longcat-2.0-free` | OpenRouter Free $\rightarrow$ DeepSeek $\rightarrow$ 4090 |
-| **`unspecified-high`** | General high-complexity fallback | `opencode/deepseek-v4-flash-free` | OpenRouter Free $\rightarrow$ Cohere |
-| **`unspecified-low`** | General low-complexity fallback | `opencode/longcat-2.0-free` | DeepSeek $\rightarrow$ OpenRouter Free $\rightarrow$ 4090 |
+| **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `openrouter/nvidia/nemotron-3-super-120b-a12b:free` | Groq 70B $\rightarrow$ Cohere $\rightarrow$ M5 MLX |
+| **`deep`** | Complex local implementation, heavy coding | `groq/llama-3.3-70b-versatile` | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ Windows 4090 |
+| **`writing`** | Documentation, docstrings, summaries, sprint logs | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Nemotron $\rightarrow$ Windows 4090 |
+| **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | Windows 4090 |
+| **`unspecified-high`** | General high-complexity fallback | `groq/llama-3.3-70b-versatile` | OpenRouter Nemotron $\rightarrow$ Cohere $\rightarrow$ 4090 |
+| **`unspecified-low`** | Verification and diagnostic helper tasks | `my-windows-4090/qwen3-14b-16k:latest` | M5 MLX |
+
+### 4.4 The Layer 3 Terminal Execution Law ([BKM-049])
+- **Terminal Execution Tier:** Layer 3 leaf workers (`sisyphus-junior`, `daedalus`, `hephaestus`, `momus`, `librarian`) represent the final execution tier of the swarm hierarchy.
+- **Strict `task: deny` Tool Invariant:** All Layer 3 worker definitions in `oh-my-openagent.json` MUST enforce `"task": "deny"`. Layer 3 workers are strictly forbidden from spawning additional subagents or recursing down further delegation loops.
+- **Direct Action Obligation:** Leaf workers receive bounded, spoon-fed 4-anchor instructions from Layer 2 (Atlas) and must apply atomic file edits directly via `clara-dna_safe_patch` and `write` without re-delegating.
 
 > [!WARNING]
 > If a category (such as `writing` or `unspecified-low`) is omitted from `oh-my-openagent.json`, `oh-my-openagent` falls back to its upstream hardcoded default (often Claude Opus or OpenRouter paid tier). This bypasses the free ladder and triggers immediate provider authorization or rate-limit failures. All 7 categories must remain explicitly mapped in `oh-my-openagent.json`.
@@ -260,5 +264,7 @@ This ledger records live operational calibration fixes, tool adjustments, and ha
 | 2026-09-13 (Spr 78.4) | Silicon Port Routing | Direct `:8000` calls to M5 Air risked Metal wired memory overflow | Enforced Port 8002 Headroom Compression Proxy in all `opencode.json` M5 MLX definitions |
 | 2026-09-13 (Spr 78.4) | Diagnostic Gate | Fix-repair steps skipped playbook guidance leading to config thrashing | Added mandatory Playbook Audit Step 4 to `BKM-049` protocol |
 | 2026-09-16 (Spr 82.4) | Silicon Engine Upgrade | Qwen3.8-27B was high-latency (~18 tok/s) and constrained Metal VRAM | Swapped M5 resident model to `mlx-community--Qwen3.5-9B-4bit` (50–65 tok/s, 5.5GB VRAM, 65k context) |
-| 2026-09-16 (Spr 82.4) | Greenfield File Creation | Smaller models with unrestricted `write` clobber incumbent files; `write: deny` blocked greenfield files | Enforced strict role separation: `sisyphus-junior` denied `write` (pure `safe_patch`); `hephaestus` bound to M5 Air with `write: allow` for new files |
+| 2026-09-23 (Spr 88.0) | Top-Level Silicon Routing & Concurrency | `delegate.py` in `execute` mode bypassed KENDER 4090 and routed top-level session to M5 Air (MLX), causing single-concurrency recursive deadlock when M5 Air attempted nested subdelegation; stale 27B model references confused routing | Fixed `delegate.py` `local_only` top-level session to ALWAYS route to KENDER 4090 Atlas (`my-windows-4090`); scrubbed all stale 27B strings to reflect unified 9B MLX resident; aligned Atlas prompt to use strict category routing (`category="coder"` for Junior on M5 Air; `category="unspecified-low"` for Kender Momus/Librarian). |
+| 2026-09-23 (Spr 88.0) | Anti-Pattern Elimination & Junior Lockdown | Hardcoded model dictionaries in `delegate.py` shadowed central configs; calling `sisyphus` instead of `sisyphus-junior` allowed tool roaming to ChromaDB; unguided patches caused structural AST nesting errors | Eliminated hardcoded model dictionaries in `delegate.py` (authoritative config delegated to `infrastructure.json` + `oh-my-openagent.json`); bound local execution explicitly to `sisyphus-junior` (strict tool jail); established mandatory 4-anchor spoon-feeding contract for `[SWARM:LOCAL]` stories. Certified via canary test. |
+| 2026-09-23 (Spr 88.2) | Model Standardization & Local Delegation Fallback | `qwen3-14b-16k:latest` was hardcoded as a fallback in `delegate.py` and `infrastructure.json` had `"architect"` instead of `"reasoner"`, causing HTTP 500 Unknown Model error on Kender Ollama after tag consolidation to standard `qwen3:14b` (64k context). | Standardized all configs, `delegate.py`, and playbook references to generic `qwen3:14b`, unified `local_bicameral` reasoner/architect alias lookup, and verified clean dispatch to KENDER. |
 
