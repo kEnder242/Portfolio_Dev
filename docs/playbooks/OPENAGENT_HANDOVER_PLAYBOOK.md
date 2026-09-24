@@ -82,8 +82,7 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
     "question": "deny"
   }
   ```
-  This collapses worker prompt overhead from 24.5k down to **$< 1,500$ tokens**, reducing local silicon prefill time from 90s to 2s.
-- **Ambient Memory Exemption:** Programmatic dispatches via `delegate.py` include delegation marker headers, allowing `icm_hook.py` to bypass ambient memory search injection and eliminate duplicate context tokens.
+- **Resident Ambient Memory Micro-Bridge (FEAT-600 / LAB-019):** Programmatic dispatches via `delegate.py` query the resident `/ambient_recall` endpoint on Foyer (:8765) in <5ms, dynamically prepending relevant BKM protocols and FEAT anchors into Tier 2 dispatch payloads for cloud workers, while bypassing local-only leaf workers to preserve M5 Air / RTX 4090 prefill headroom.
 
 ---
 
