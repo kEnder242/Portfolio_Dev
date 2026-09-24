@@ -12,7 +12,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-TIMELINE_DATA_PATH = DATA_DIR / "timeline_data.json"
+DNA_DIR = BASE_DIR.parent / "dna"
+TIMELINE_DATA_PATH = DNA_DIR / "timeline_data.json" if (DNA_DIR / "timeline_data.json").exists() else DATA_DIR / "timeline_data.json"
 OUTLIERS_DATA_PATH = DATA_DIR / "timeline_outliers.json"
 BUCKETS_DATA_PATH = DATA_DIR / "buckets.json"
 OUTPUT_HTML = BASE_DIR / "timeline.html"
