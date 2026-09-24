@@ -16399,6 +16399,402 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-600">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-600</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-86.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/memory/icm_hook.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/memory/icm_hook.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Executes the 4-phase cognitive lifecycle (Triage -&gt; Injection -&gt; Save -&gt; Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>icm_hook.py</code>, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-601">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-601</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Bones as the Transitory Scratchpad Between Raw Original Text and Database
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-87.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/bone_collections.json" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/data/bone_collections.json</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a strict 1:1 companion mapping between raw source files (<code>stories.html</code>, <code>notes.md</code>, Google Docs) and their corresponding <code>*_bones.json</code> collection files. Acts as the intermediary scratchpad holding document sequence, local certified revisions ($R1 \dots Rn$), and proposed mutations ($M1 \dots Mn$) without mutating raw origin sources.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Bridges raw documents to the central DNA DB while preserving narrative order and provenance.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>bone_collections.json</code>, <code>curator/draft_decomposer.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-602">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-602</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Self-Contained DNA Markdown Grammar
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-87.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/build_writer.py" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/scripts/build_writer.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Defines the inline DNA markdown macro grammar (<code>&lt;!-- [ID:Rn style=type lens=name] --&gt;</code>). Allows papers to be stored as clean, human-readable Markdown files that do not require an active database connection to read, while enabling background LLM consistency checking and LaTeX compilation passes.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decouples human prose from heavy JSON AST schemas and eliminates database lockouts.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Markdown macro parser, <code>build_writer.py</code>, <code>docs/whitepaper/main.tex</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-603">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-603</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Composable Paper Projection & Dynamic Lens Re-Projector
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-87.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enables composable papers to draw bones across multiple independent source bone collections into a unified composite spine. Supports live dynamic re-projection through configurable stylistic Lenses (e.g. Academic, Executive STAR, Job Description) by rotating bone representations without altering underlying technical truth.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Allows one master knowledge base to generate infinite tailored document projections on demand.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>writer.html</code>, Foyer <code>/paper/*</code> REST endpoints, <code>curator/objective_evaluator.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-604">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-604</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    File-to-DB Round-Trip Consistency & Bi-Directional Invariant Matrix
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-87.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_dna_roundtrip_consistency.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/tests/test_dna_roundtrip_consistency.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces the zero-loss mathematical invariant: $\Delta(\text{Original Source}, \text{Reconstruct}(\text{Bone Collection}, R_1)) = 0$. Provides automated shakedowns testing round-trip transformations between raw files, bone collections, ChromaDB, and DNA revisions.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees absolute data integrity and prevents lossy decomposition drift.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Pytest shakedown suite, <code>curator/draft_decomposer.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-605">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-605</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Sovereign VIBE Ledger & Dynamic Schema Ingestion
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-87.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/vibe_data.json" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna/vibe_data.json</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Fully operationalizes the <code>VIBE</code> domain from <code>BKM-060</code> by establishing <code>Portfolio_Dev/dna/vibe_data.json</code> and ChromaDB <code>vibe_dna</code> collection. Houses intuitive mental models, operational heuristics, and semantic feel anchors (inaugurated by <code>[VIBE-001]</code> The Granularity Triad).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Preserves human operational intuition and cognitive metaphors alongside formal theorems and protocols.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/dna/vibe_data.json</code>, <code>sync_chroma_dna.py</code>, ChromaDB collection <code>vibe_dna</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-607">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-607</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Nightly Accountability Digest & Dashboard Integration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-88.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/nightly_forge.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across all 11 nightly maintenance stages against <code>lab_accountability_thresholds.json</code>, writes atomic <code>daily_accountability_digest.json</code>, and emits an expandable <code>[+] ACCOUNTABILITY DIGEST</code> card to <code>status.html</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates silent passes and zero-work exits during overnight batch sweeps.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>nightly_forge.py</code> (<code>evaluate_nightly_accountability</code>), <code>daily_accountability_digest.json</code>, <code>status.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-608">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-608</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Synthetic Morning Round Table Accountability Probe Suite
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-88.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/probe_round_table_accountability.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and Pinky Coherence Critic scoring).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>probe_round_table_accountability.py</code>, Foyer <code>/inject</code> and <code>/status</code> REST endpoints.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-110">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-110</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    The Operational Accountability Standard & Quantifiable Invariants
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-88.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/config/lab_accountability_thresholds.json" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/config/lab_accountability_thresholds.json</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Codifies strict non-zero unit invariants across all lab maintenance workflows. Enforces that every background job (LoRA training, dreaming, scrubbing, benchmarking) must prove non-zero units of real work before being granted a <code>GREEN</code> verdict.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents the "Green Lie" where individual services report online while end-to-end multi-resident cognition is broken.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>lab_accountability_thresholds.json</code>, <code>evaluate_nightly_accountability()</code>, <code>BKM-062</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
