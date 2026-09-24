@@ -5,7 +5,6 @@
 # Output: Updates Portfolio_Dev/field_notes/data/wisdom_data.json and pending_review.json
 
 import argparse
-import glob
 import json
 import logging
 import os

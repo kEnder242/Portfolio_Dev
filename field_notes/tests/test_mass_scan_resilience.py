@@ -13,8 +13,6 @@ from mass_scan import (
     check_lock,
     atomic_write_text,
     wait_for_roundtable_lock,
-    lock_pid_alive,
-    MASS_SCAN_PID_FILE,
 )
 
 

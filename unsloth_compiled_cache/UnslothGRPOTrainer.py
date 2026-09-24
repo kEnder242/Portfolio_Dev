@@ -22,29 +22,19 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from torch import Tensor
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from unsloth_zoo.temporary_patches.common import torch_compile
-from typing import Any, List, Optional, Tuple, Union, Dict, Set, Callable
-from trl.trainer.grpo_trainer import (Any, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, BaseTrainer, DataLoader, Dataset, FSDP, GRPOConfig, GRPOTrainer, GenerationConfig, GuidedDecodingParams, IterableDataset, LLM, LigerFusedLinearGRPOLoss, Optional, Path, PeftConfig, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RepeatSampler, RewardFunc, Sampler, SamplingParams, SyncRefModelCallback, TrainerCallback, Union, VLLMClient, _ForwardRedirection, apply_chat_template, broadcast_object_list, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, gather, gather_object, identity, inspect, is_conversational, is_datasets_available, is_flash_attn_2_available, is_liger_kernel_available, is_peft_model, is_rich_available, is_vllm_available, logger, logging, maybe_apply_chat_template, nanmax, nanmin, nanstd, nn, nullcontext, os, pad, partial, prepare_deepspeed, prepare_fsdp, prepare_multimodal_messages, print_prompt_completions_sample, profiling_context, profiling_decorator, seed_worker, selective_log_softmax, set_seed, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, textwrap, torch, transformers, unsplit_pixel_values_by_grid, unwrap_model_for_generation, wandb, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GRPOConfig, GRPOTrainer, GenerationConfig, IterableDataset, LLM, LigerFusedLinearGRPOLoss, Optional, PeftConfig, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RewardFunc, SyncRefModelCallback, TrainerCallback, Union, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_liger_kernel_available, is_peft_model, is_vllm_available, logger, nn, os, pad, prepare_deepspeed, prepare_fsdp, set_seed, torch, transformers, wandb, Any, LLM, Union, gather, gather_object, is_conversational, logging, nanmax, nanmin, nanstd, os, pad, torch, FSDP, GuidedDecodingParams, LLM, Optional, SamplingParams, apply_chat_template, broadcast_object_list, gather, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, nullcontext, os, pad, prepare_multimodal_messages, profiling_context, torch, transformers, unwrap_model_for_generation, os, pad, selective_log_softmax, torch, transformers, Any, Union, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, torch, unsplit_pixel_values_by_grid, Optional, PreTrainedModel, logger, os, torch, FSDP, LLM, nn, os, FSDP, nn, torch, GRPOTrainer, gather, nanmax, nanmin, os, pad, torch)
+from typing import Any, Optional, Union
+from trl.trainer.grpo_trainer import (BaseTrainer, DataLoader, Path, RepeatSampler, Sampler, _ForwardRedirection, is_datasets_available, is_rich_available, partial, print_prompt_completions_sample, seed_worker, textwrap, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GRPOConfig, GenerationConfig, IterableDataset, LigerFusedLinearGRPOLoss, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, RewardFunc, SyncRefModelCallback, TrainerCallback, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_liger_kernel_available, is_peft_model, is_vllm_available, prepare_deepspeed, prepare_fsdp, set_seed, wandb, is_conversational, logging, nanstd, GuidedDecodingParams, SamplingParams, apply_chat_template, broadcast_object_list, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, nullcontext, prepare_multimodal_messages, profiling_context, unwrap_model_for_generation, transformers, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, unsplit_pixel_values_by_grid, PreTrainedModel, logger, FSDP, gather, nanmax, nanmin, os, pad)
 
 
-import os
 import math
-import logging
 from typing import *
 from dataclasses import dataclass, field
 from packaging.version import Version
-import torch
 import numpy as np
-from contextlib import nullcontext
-from torch.nn import functional as F
-import inspect
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
 from transformers.training_args import ParallelMode
-from unsloth_zoo.device_type import DEVICE_TYPE, device_synchronize
+from unsloth_zoo.device_type import device_synchronize
 
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
@@ -431,7 +421,7 @@ def grpo_compute_loss(
         loss_i = -torch.min(loss_1, loss_2)
     elif loss_type == "sapo":
         if get_sapo_token_loss is None:
-            raise Exception(f"sapo is only available in TRL 0.26.0+")
+            raise Exception("sapo is only available in TRL 0.26.0+")
         loss_i = torch.empty_like(coef_1)
         positive_advantages_mask = advantages.repeat([1, coef_1.shape[1]]) > 0
         #since we have n_chunks some tensors may error if they dont have elements in them
@@ -1124,7 +1114,7 @@ def grpo_compute_loss_slow(
         loss_i = -torch.min(loss_1, loss_2)
     elif loss_type == "sapo":
         if get_sapo_token_loss is None:
-            raise Exception(f"sapo is only available in TRL 0.26.0+")
+            raise Exception("sapo is only available in TRL 0.26.0+")
         loss_i = torch.empty_like(coef_1)
         positive_advantages_mask = advantages.repeat([1, coef_1.shape[1]]) > 0
         #since we have n_chunks some tensors may error if they dont have elements in them
@@ -1890,8 +1880,8 @@ class UnslothGRPOConfig(GRPOConfig):
                 self.unsloth_grpo_mini_batch = unsloth_grpo_mini_batch
             else:
                 raise ValueError(
-                    f"Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
-                    f"which is self.per_device_train_batch_size * gradient_accumulation_steps."
+                    "Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
+                    "which is self.per_device_train_batch_size * gradient_accumulation_steps."
                 )
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         
@@ -4243,7 +4233,7 @@ if hasattr(logger, "addFilter"):
     import logging
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
-        def filter(self, x): return not (self.text in x.getMessage())
+        def filter(self, x): return self.text not in x.getMessage()
     pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

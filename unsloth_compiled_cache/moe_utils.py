@@ -20,7 +20,6 @@ import shutil
 import sys
 import importlib.util
 from typing import Optional, Tuple
-from torch.autograd import Function
 
 # Get compile location
 UNSLOTH_COMPILE_LOCATION = os.environ.get(

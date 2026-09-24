@@ -10,8 +10,6 @@ The Sovereign DNA Forge 3-Tab Knowledge Foundry:
 """
 
 import json
-import os
-import sys
 import datetime
 from pathlib import Path
 
@@ -2992,7 +2990,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     if (!text) return 0;
                     c.fillStyle = color;
                     c.font = font;
-                    var words = text.split(/\s+/);
+                    var words = text.split(/\\s+/);
                     var line = '';
                     var lineCount = 0;
                     var curY = y;

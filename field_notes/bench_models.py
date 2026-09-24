@@ -5,8 +5,6 @@ import sys
 import json
 import time
 import requests
-import subprocess
-import threading
 try:
     from prometheus_client import Gauge, start_http_server
     PROMETHEUS_AVAILABLE = True
