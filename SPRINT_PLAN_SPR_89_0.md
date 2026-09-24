@@ -128,8 +128,30 @@
 
 ---
 
-## 🧭 Next Heads-Down Implementation Stories (Post-Alignment)
-1. **Story 89.1 [SWARM:LOCAL]:** Dynamic AST Re-Drafting Engine (`FEAT-601`) with Multi-Domain Reverse Decomposer.
-2. **Story 89.2 [SWARM:LOCAL]:** Nightly Forge Consolidation & WebSocket Accountability Broadcast.
-3. **Story 89.3 [SWARM:LOCAL]:** Synthetic Morning Deliberation Probe & WYWO Idle Timer Isolation.
-4. **Story 89.4 [SWARM:LOCAL]:** Full 75-minute 5x5 Endurance Run (`BKM-010`) with Live Silicon Certification (`BKM-024`).
+## 🚀 Sprint 89 Stories & Execution Plan
+
+### Story 89.1 [SWARM:LOCAL]: Dynamic AST Re-Drafting Engine (`FEAT-601`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target Files:** `Portfolio_Dev/field_notes/journal_to_dna_bridge.py`, `Portfolio_Dev/field_notes/build_writer.py`
+* **Details:** Implement reverse note-to-DNA chunk matcher in `journal_to_dna_bridge.py` and `build_writer.py`. When loading decomposed note text into writer drafting buffer, scan existing DNA embeddings from `philosophy_data.json`, `wisdom_data.json`, `rdna_questions.json`, `timeline_data.json`. For chunks with >= 85% similarity, suggest explicit citation links or mutations rather than creating duplicate DNA cards.
+* **Verification:** `HomeLabAI/.venv/bin/python3 Portfolio_Dev/field_notes/build_writer.py`
+
+### Story 89.2 [SWARM:LOCAL]: Nightly Forge Log Consolidation & WebSocket Digest (`FEAT-214` / `FEAT-602`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target Files:** `HomeLabAI/src/infra/nightly_forge.py`
+* **Details:** Redirect granular step traces to `HomeLabAI/run/nightly_forge.log`. Consolidate primary `server.log` output to emit strictly one high-level formatted milestone card per phase. At conclusion of nightly synthesis, broadcast formatted accountability summary card to Foyer WebSocket / Intercom stream (`POST /broadcast` or pager relay).
+* **Verification:** `HomeLabAI/.venv/bin/python3 -c "import py_compile; py_compile.compile('HomeLabAI/src/infra/nightly_forge.py', doraise=True)"`
+
+### Story 89.3 [SWARM:LOCAL]: Morning Probe Deliberation & WYWO Policy (`FEAT-525` / `FEAT-603`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target Files:** `HomeLabAI/src/curator/dream_cycle.py`, `HomeLabAI/src/curator/ambient_recall.py`
+* **Details:** Chain refined topic from Step 5 subconscious dreaming (`dream_cycle.py`) into morning round table probe query. Mark synthetic probe turns as `source: "SYNTHETIC_PROBE"` to ensure automated maintenance runs do not reset operator WYWO idle timer.
+* **Verification:** `HomeLabAI/.venv/bin/python3 -c "import py_compile; py_compile.compile('HomeLabAI/src/curator/dream_cycle.py', doraise=True)"`
+
+### Story 89.4 [AGY:PRIMARY]: Live System Certification & Site Rebuild (`BKM-024`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Details:** Rebuild static site via `Portfolio_Dev/field_notes/build_site.py`, verify all 414 feature links, test live daemon endpoints (`:8765`, `:8001`, `:4097`), and sync to public airlock (`www_deploy`).
+
+### Story 89.5 [AGY:PRIMARY]: BKM-061 Adversarial Oracle Review & Final Sprint Lock
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Details:** Run adversarial oracle review on Sprint 89 deliverables, certify zero regressions, update sprint ledger, and push commits across all submodules and root repository.
