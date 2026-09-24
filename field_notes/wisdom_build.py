@@ -8,7 +8,6 @@
 # Schema: Wisdom cards pair an immutable origin (verbatim) with live synthesis. See WIS-001.
 
 import json
-import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent

@@ -4,9 +4,7 @@ import time
 import json
 import re
 import subprocess
-import requests
 import logging
-import random
 import glob
 import argparse
 import signal

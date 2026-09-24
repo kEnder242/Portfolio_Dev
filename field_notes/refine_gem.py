@@ -92,7 +92,6 @@ def get_embedding_function():
 
 def deduplicate_gems():
     import glob
-    import numpy as np
 
     logging.info("Running Semantic De-duplication check [Goal 6]...")
 
@@ -270,7 +269,7 @@ def main():
             with open(file_path, 'w') as f:
                 json.dump(full_data, f, indent=2)
             
-            logging.info(f"✨ Refinement Success! Gem upgraded to Rank 4.")
+            logging.info("✨ Refinement Success! Gem upgraded to Rank 4.")
             update_status("REFINE", f"Upgraded gem: {event.get('summary')[:30]}", 1)
         else:
             logging.warning("Brain provided invalid JSON for refinement.")

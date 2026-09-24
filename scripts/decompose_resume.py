@@ -8,8 +8,6 @@ Parses raw text resume into:
 4. Synchronizes data/dna_manifest.json.
 """
 
-import os
-import re
 import json
 from pathlib import Path
 

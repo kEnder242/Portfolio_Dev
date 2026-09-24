@@ -6,9 +6,7 @@
 # Output:  Portfolio_Dev/docs/whitepaper/main.tex, references.bib, and writer.html hydration.
 
 import json
-import os
 import re
-import sys
 import textwrap
 from pathlib import Path
 
@@ -302,8 +300,8 @@ def build_references_bib(paper, citation_index):
             lines.append(f"  author = {{{latex_escape(author)}}},")
             if arxiv:
                 lines.append(f"  eprint = {{{latex_escape(arxiv)}}},")
-                lines.append(f"  archivePrefix = {{arXiv}},")
-            lines.append(f"  year = {{2026}},")
+                lines.append("  archivePrefix = {arXiv},")
+            lines.append("  year = {2026},")
             if tags:
                 lines.append(f"  keywords = {{{latex_escape(', '.join(tags))}}},")
             lines.append(f"  note = {{Anchor {latex_escape(key)}}}")
@@ -513,7 +511,7 @@ def main():
     # Hydrate HTML
     hydrate_writer_html(paper, manifest, citation_index)
 
-    print(f"\n--- Cross-Collection Compiler Summary ---")
+    print("\n--- Cross-Collection Compiler Summary ---")
     print(f"  Paper:       {paper.get('title')}")
     print(f"  Sections:    {len(paper.get('sections', []))}")
     print(f"  Citations:   {len(citation_index)} indexed")

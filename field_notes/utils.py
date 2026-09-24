@@ -4,7 +4,6 @@ import time
 import glob
 import subprocess
 import requests
-import sys
 import logging
 
 logger = logging.getLogger(__name__)

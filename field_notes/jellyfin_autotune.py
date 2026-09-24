@@ -9,7 +9,6 @@ and tunes Jellyfin encoding.xml for zero-crash, dual-GPU media transcoding.
 """
 
 import os
-import sys
 import subprocess
 import xml.etree.ElementTree as ET
 import logging

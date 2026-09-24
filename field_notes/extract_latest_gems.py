@@ -6,7 +6,6 @@ the top Rank 4/5 technical gems, commands, and evidence into latest_synthesis_ge
 """
 
 import json
-import os
 import re
 from pathlib import Path
 

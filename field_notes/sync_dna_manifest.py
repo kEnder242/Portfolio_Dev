@@ -11,7 +11,6 @@ Populates Portfolio_Dev/field_notes/data/dna_manifest.json with:
 """
 
 import json
-import os
 import re
 from pathlib import Path
 
@@ -230,7 +229,7 @@ def main():
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
-    print(f"✅ Synced dna_manifest.json:")
+    print("✅ Synced dna_manifest.json:")
     for k, v in manifest.items():
         print(f"   - {k.capitalize()} cards: {len(v)}")
 

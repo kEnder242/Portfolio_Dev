@@ -92,7 +92,7 @@ def notify_gatekeeper(summary, source, severity, emergency=False, dry_run=False)
     if emergency:
         routing_key = secrets.get("PAGERDUTY_ROUTING_KEY")
         if routing_key:
-            print(f"EMERGENCY: Triggering PagerDuty backup...")
+            print("EMERGENCY: Triggering PagerDuty backup...")
             url = "https://events.pagerduty.com/v2/enqueue"
             payload = {
                 "routing_key": routing_key,
