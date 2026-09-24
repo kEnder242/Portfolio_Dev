@@ -87,3 +87,28 @@ Under **BKM-061 Multi-Tier Swarm Audit & Adversarial Oracle Protocol**, two inde
 | `test_dream_accountability_unit.py` | **2/2 PASS** | Verified stream synthesis & zero-work guard |
 | `build_site.py` & Airlock Sync | **PASS (0 drift)** | 414/414 code links verified, all sync scripts clean |
 | Live Foyer Daemon (:8765) | **OPERATIONAL** | Boot commit matches HEAD, REST endpoints responsive |
+
+---
+
+## 🧬 4. Ambient Memory Hook Architectural Overhaul (`LAB-019` / `BKM-063` Candidate)
+
+### Problem Retrospective & Root Cause
+1. **The Overactive Subprocess Trap:** In Antigravity's lifecycle, `PreInvocation` triggers before *every individual model call* (both initial user prompts and all intermediate tool planning steps within a single turn). In multi-step turns, this spawned `python3 icm_hook.py` 10–15+ times, incurring repeated ~300ms Python interpreter startup costs, redundant FastEmbed/ChromaDB queries, and token context bloat.
+2. **Context Perception & Loop Feedback:** Repeated injection of identical `ephemeralMessage` grounding blocks across tool iterations caused agentic "praise" loops and cognitive clutter.
+
+### Proposed Architecture: The CLaRa Micro-Bridge
+```
+[User Prompt]
+      │
+      ▼
+┌─────────────────┐       curl -s (1ms)        ┌─────────────────────────────┐
+│ AGY PreInvocation│ ─────────────────────────► │ CLaRa-DNA Daemon (:8001)   │
+│ Hook Handler    │ ◄───────────────────────── │ (Warm Memory, FastEmbed,    │
+└─────────────────┘       JSON response        │  ChromaDB, Turn-State RAM)  │
+                                               └─────────────────────────────┘
+```
+
+1. **Daemon Residency (CLaRa-DNA / Port 8001):** Migrate vector embeddings, ChromaDB queries, and memory retrieval into the resident CLaRa FastMCP service. Eliminates cold starts completely.
+2. **Lean Shell Micro-Bridge:** Replace heavy Python CLI execution with a near-instant `curl` / compiled lightweight client in `hooks.json`.
+3. **Turn-Boundary Gating (1 Fire Per User Turn):** Inspect incoming transcript payload. Only execute vector recall if the prior transcript event was `USER_INPUT`. If the prior event was a tool execution, return `{"injectSteps": []}` in <1ms without hitting vector stores.
+4. **Transparent Response Breadcrumb:** Standardize a mandatory single-line response header (`> 🧬 **Anchors**: [BKM-xxx] [FEAT-yyy] (3 hits, 4ms)`) to give the operator and agent unambiguous, zero-fuss visibility into hook status.
