@@ -1,11 +1,9 @@
-import requests
 import json
 import os
 import glob
 import re
 import hashlib
 import sys
-import random
 
 # Add current directory to path to allow sibling import
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))

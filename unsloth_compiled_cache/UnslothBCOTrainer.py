@@ -22,29 +22,19 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from torch import Tensor
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from unsloth_zoo.temporary_patches.common import torch_compile
-from typing import Any, List, Optional, Tuple, Union, Dict, Set, Callable
-from trl.trainer.bco_trainer import (Any, AutoModelForCausalLM, BCOConfig, BCOTrainer, BaseImageProcessor, BaseTrainer, CLF_NAME, Callable, DPODataCollatorWithPadding, DataCollator, DataLoader, Dataset, EvalLoopOutput, F, FeatureExtractionMixin, Literal, LogisticRegression, Optional, PartialState, Path, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RUNNING_NAME, RunningMoments, SequentialSampler, TrainerCallback, TrainingArguments, Union, _process_tokens, _tokenize, autocast, contextmanager, create_reference_model, defaultdict, disable_dropout_in_model, has_length, inspect, is_comet_available, is_joblib_available, is_peft_available, is_sklearn_available, is_wandb_available, itemgetter, joblib, log_table_to_comet_experiment, logger, logging, maybe_apply_chat_template, maybe_extract_prompt, maybe_unpair_preference_dataset, nn, np, nullcontext, os, pad_to_length, pd, peft_module_casting_to_bf16, prepare_deepspeed, prepare_model_for_kbit_training, random, selective_log_softmax, textwrap, torch, tqdm, wandb, warnings, AutoModelForCausalLM, BCOConfig, BCOTrainer, BaseImageProcessor, Callable, DPODataCollatorWithPadding, DataCollator, Dataset, EvalLoopOutput, F, FeatureExtractionMixin, LogisticRegression, Optional, PartialState, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, TrainerCallback, TrainingArguments, Union, autocast, create_reference_model, defaultdict, disable_dropout_in_model, inspect, is_comet_available, is_joblib_available, is_peft_available, is_sklearn_available, is_wandb_available, joblib, logger, maybe_apply_chat_template, maybe_extract_prompt, maybe_unpair_preference_dataset, nn, np, os, peft_module_casting_to_bf16, prepare_deepspeed, prepare_model_for_kbit_training, torch, wandb, warnings, F, Optional, PeftModel, PreTrainedModel, is_peft_available, logger, os, torch)
+from typing import Any, Optional, Union, Callable
+from trl.trainer.bco_trainer import (BaseTrainer, CLF_NAME, DataLoader, Literal, Path, RUNNING_NAME, SequentialSampler, _process_tokens, _tokenize, contextmanager, has_length, itemgetter, log_table_to_comet_experiment, logging, nullcontext, pad_to_length, pd, random, selective_log_softmax, textwrap, tqdm, AutoModelForCausalLM, BCOConfig, BaseImageProcessor, DPODataCollatorWithPadding, DataCollator, Dataset, EvalLoopOutput, FeatureExtractionMixin, LogisticRegression, PartialState, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, TrainerCallback, TrainingArguments, autocast, create_reference_model, defaultdict, disable_dropout_in_model, inspect, is_comet_available, is_joblib_available, is_sklearn_available, is_wandb_available, joblib, maybe_apply_chat_template, maybe_extract_prompt, maybe_unpair_preference_dataset, np, peft_module_casting_to_bf16, prepare_deepspeed, prepare_model_for_kbit_training, wandb, warnings, PeftModel, PreTrainedModel, is_peft_available, logger, os)
 
 
-import os
 import math
-import logging
 from typing import *
 from dataclasses import dataclass, field
 from packaging.version import Version
-import torch
-import numpy as np
-from contextlib import nullcontext
-from torch.nn import functional as F
-import inspect
 from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
 from transformers.training_args import ParallelMode
-from unsloth_zoo.device_type import DEVICE_TYPE, device_synchronize
 
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
@@ -732,8 +722,8 @@ class UnslothBCOConfig(BCOConfig):
                 self.unsloth_grpo_mini_batch = unsloth_grpo_mini_batch
             else:
                 raise ValueError(
-                    f"Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
-                    f"which is self.per_device_train_batch_size * gradient_accumulation_steps."
+                    "Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
+                    "which is self.per_device_train_batch_size * gradient_accumulation_steps."
                 )
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
@@ -2198,7 +2188,7 @@ if hasattr(logger, "addFilter"):
     import logging
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
-        def filter(self, x): return not (self.text in x.getMessage())
+        def filter(self, x): return self.text not in x.getMessage()
     pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

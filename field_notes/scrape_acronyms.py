@@ -13,7 +13,7 @@ def read_file(path):
     try:
         with open(path, 'r', encoding='utf-8', errors='ignore') as f:
             return f.read()
-    except Exception as e:
+    except Exception:
         return ""
 
 def ask_pinky(chunk):
@@ -48,7 +48,7 @@ def ask_pinky(chunk):
         if match:
             return json.loads(match.group(0))
         return []
-    except Exception as e:
+    except Exception:
         return []
 
 def main():

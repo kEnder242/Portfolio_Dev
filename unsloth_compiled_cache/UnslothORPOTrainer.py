@@ -22,29 +22,19 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from torch import Tensor
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from unsloth_zoo.temporary_patches.common import torch_compile
-from typing import Any, List, Optional, Tuple, Union, Dict, Set, Callable
-from trl.trainer.orpo_trainer import (Any, AutoModelForCausalLM, BaseImageProcessor, BaseTrainer, Callable, DPODataCollatorWithPadding, DataCollator, DataLoader, Dataset, EvalLoopOutput, F, FeatureExtractionMixin, Literal, ORPOConfig, ORPOTrainer, Optional, PartialState, Path, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, TrainerCallback, Union, add_bos_token_if_needed, add_eos_token_if_needed, autocast, defaultdict, disable_dropout_in_model, inspect, is_comet_available, is_peft_available, is_torch_fx_proxy, is_torch_xla_available, is_wandb_available, log_table_to_comet_experiment, logger, logging, maybe_apply_chat_template, maybe_extract_prompt, nn, np, nullcontext, os, pad_to_length, pd, peft_module_casting_to_bf16, prepare_model_for_kbit_training, random, selective_log_softmax, textwrap, torch, wandb, warnings, AutoModelForCausalLM, BaseImageProcessor, Callable, DPODataCollatorWithPadding, DataCollator, Dataset, EvalLoopOutput, F, FeatureExtractionMixin, ORPOConfig, ORPOTrainer, Optional, PartialState, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, TrainerCallback, Union, autocast, defaultdict, disable_dropout_in_model, inspect, is_comet_available, is_peft_available, is_wandb_available, logger, maybe_apply_chat_template, maybe_extract_prompt, nn, np, os, peft_module_casting_to_bf16, prepare_model_for_kbit_training, torch, wandb, warnings, F, Optional, PeftModel, PreTrainedModel, is_peft_available, logger, os, torch)
+from typing import Any, Optional, Union, Callable
+from trl.trainer.orpo_trainer import (BaseTrainer, DataLoader, Literal, Path, add_bos_token_if_needed, add_eos_token_if_needed, is_torch_fx_proxy, is_torch_xla_available, log_table_to_comet_experiment, logging, nullcontext, pad_to_length, pd, random, selective_log_softmax, textwrap, AutoModelForCausalLM, BaseImageProcessor, DPODataCollatorWithPadding, DataCollator, Dataset, EvalLoopOutput, FeatureExtractionMixin, ORPOConfig, PartialState, PreTrainedTokenizerBase, ProcessorMixin, TrainerCallback, autocast, defaultdict, disable_dropout_in_model, inspect, is_comet_available, is_wandb_available, maybe_apply_chat_template, maybe_extract_prompt, np, peft_module_casting_to_bf16, prepare_model_for_kbit_training, wandb, warnings, PeftModel, PreTrainedModel, is_peft_available, logger, os)
 
 
-import os
 import math
-import logging
 from typing import *
 from dataclasses import dataclass, field
 from packaging.version import Version
-import torch
-import numpy as np
-from contextlib import nullcontext
-from torch.nn import functional as F
-import inspect
 from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
 from transformers.training_args import ParallelMode
-from unsloth_zoo.device_type import DEVICE_TYPE, device_synchronize
 
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
@@ -710,8 +700,8 @@ class UnslothORPOConfig(ORPOConfig):
                 self.unsloth_grpo_mini_batch = unsloth_grpo_mini_batch
             else:
                 raise ValueError(
-                    f"Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
-                    f"which is self.per_device_train_batch_size * gradient_accumulation_steps."
+                    "Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
+                    "which is self.per_device_train_batch_size * gradient_accumulation_steps."
                 )
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
@@ -1902,7 +1892,7 @@ if hasattr(logger, "addFilter"):
     import logging
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
-        def filter(self, x): return not (self.text in x.getMessage())
+        def filter(self, x): return self.text not in x.getMessage()
     pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

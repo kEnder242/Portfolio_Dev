@@ -5,9 +5,6 @@
 # timeline_outliers.json, and buckets.json.
 
 import json
-import os
-import sys
-from datetime import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent

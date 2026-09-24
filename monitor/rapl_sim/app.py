@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # Start Prometheus Server on Port 8000
     start_http_server(8000)
     print("RAPL Sim Exporter running on :8000")
-    print(f"Monitoring: /host/sys/class/thermal/thermal_zone0/temp")
+    print("Monitoring: /host/sys/class/thermal/thermal_zone0/temp")
 
     while True:
         # 1. Acquire Real Data

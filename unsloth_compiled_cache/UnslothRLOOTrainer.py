@@ -22,29 +22,18 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from torch import Tensor
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from unsloth_zoo.temporary_patches.common import torch_compile
-from typing import Any, List, Optional, Tuple, Union, Dict, Set, Callable
-from trl.trainer.rloo_trainer import (Any, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, BaseTrainer, DataLoader, Dataset, FSDP, GenerationConfig, GuidedDecodingParams, IterableDataset, LLM, Optional, Path, PeftConfig, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RLOOConfig, RLOOTrainer, RepeatSampler, RewardFunc, Sampler, SamplingParams, SyncRefModelCallback, TrainerCallback, Union, VLLMClient, apply_chat_template, broadcast_object_list, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, entropy_from_logits, gather, gather_object, identity, inspect, is_conversational, is_datasets_available, is_flash_attn_2_available, is_peft_model, is_rich_available, is_vllm_available, logger, logging, maybe_apply_chat_template, nanmax, nanmin, nanstd, nn, nullcontext, os, pad, partial, prepare_deepspeed, prepare_fsdp, prepare_multimodal_messages, print_prompt_completions_sample, profiling_context, profiling_decorator, seed_worker, selective_log_softmax, set_seed, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, textwrap, torch, transformers, unsplit_pixel_values_by_grid, unwrap_model_for_generation, wandb, warnings, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GenerationConfig, IterableDataset, LLM, Optional, PeftConfig, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RLOOConfig, RLOOTrainer, RewardFunc, SyncRefModelCallback, TrainerCallback, Union, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_peft_model, is_vllm_available, logger, nn, os, pad, prepare_deepspeed, prepare_fsdp, set_seed, torch, transformers, wandb, warnings, FSDP, GuidedDecodingParams, LLM, Optional, SamplingParams, apply_chat_template, broadcast_object_list, gather, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, nullcontext, os, pad, prepare_multimodal_messages, profiling_context, torch, transformers, unwrap_model_for_generation, FSDP, LLM, gather, is_peft_model, nn, nullcontext, os, profiling_decorator, Any, Union, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, torch, unsplit_pixel_values_by_grid, Optional, PreTrainedModel, logger, os, torch, FSDP, LLM, nn, os, FSDP, nn, torch)
+from typing import Any, Optional, Union
+from trl.trainer.rloo_trainer import (BaseTrainer, DataLoader, Path, RepeatSampler, Sampler, entropy_from_logits, is_conversational, is_datasets_available, is_rich_available, logging, nanmax, nanmin, nanstd, partial, print_prompt_completions_sample, seed_worker, selective_log_softmax, textwrap, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GenerationConfig, IterableDataset, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, RLOOConfig, RewardFunc, SyncRefModelCallback, TrainerCallback, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_vllm_available, prepare_deepspeed, prepare_fsdp, set_seed, wandb, warnings, GuidedDecodingParams, SamplingParams, apply_chat_template, broadcast_object_list, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, pad, prepare_multimodal_messages, profiling_context, transformers, unwrap_model_for_generation, gather, is_peft_model, nullcontext, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, unsplit_pixel_values_by_grid, PreTrainedModel, logger, os, FSDP)
 
 
-import os
 import math
-import logging
 from typing import *
 from dataclasses import dataclass, field
 from packaging.version import Version
-import torch
-import numpy as np
-from contextlib import nullcontext
-from torch.nn import functional as F
-import inspect
 from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
 from transformers.training_args import ParallelMode
-from unsloth_zoo.device_type import DEVICE_TYPE, device_synchronize
 
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
@@ -1082,8 +1071,8 @@ class UnslothRLOOConfig(RLOOConfig):
                 self.unsloth_grpo_mini_batch = unsloth_grpo_mini_batch
             else:
                 raise ValueError(
-                    f"Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
-                    f"which is self.per_device_train_batch_size * gradient_accumulation_steps."
+                    "Unsloth GRPO mini batch size needs to be less than or equal to the effective generation batch size, "
+                    "which is self.per_device_train_batch_size * gradient_accumulation_steps."
                 )
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         
@@ -2846,7 +2835,7 @@ if hasattr(logger, "addFilter"):
     import logging
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
-        def filter(self, x): return not (self.text in x.getMessage())
+        def filter(self, x): return self.text not in x.getMessage()
     pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

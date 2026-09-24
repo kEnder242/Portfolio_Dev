@@ -1,8 +1,6 @@
 import os
 import json
-import glob
 import sys
-import hashlib
 import re
 
 # Add current directory to path

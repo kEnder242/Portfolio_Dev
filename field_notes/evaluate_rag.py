@@ -27,7 +27,6 @@ LEDGER_PATH = os.path.join(HOME, "Dev_Lab", "Portfolio_Dev", "field_notes", "dat
 sys.path.insert(0, LAB_SRC)
 
 from nodes.archive_node import get_context
-from nodes.lab_dna_router import get_collection_priorities, filter_candidate_context
 
 # --- [FEAT-454] Local Deterministic Scoring (replaces KENDER) ---
 # KENDER Ollama config retained for --mode live fallback only

@@ -3,9 +3,7 @@ import glob
 import re
 import json
 import hashlib
-import sys
 import psutil
-import time
 
 from utils import RAW_NOTES_DIR, DATA_DIR
 from infra.status_model import StatusModel

@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import re
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +11,7 @@ ENGINE = get_engine(mode="LOCAL")
 FILE_PATH = "raw_notes/notes_2024_PIAV.txt"
 
 def debug_chunk():
-    print(f"--- DEBUGGING 2024 ---")
+    print("--- DEBUGGING 2024 ---")
     
     # 1. Read File
     try:

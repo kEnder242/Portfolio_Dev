@@ -10,7 +10,6 @@ Purpose: Scans data/journal_ledger.jsonl and historical gem archives for Rank 4/
 import os
 import sys
 import json
-import time
 import re
 import hashlib
 import datetime

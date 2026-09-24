@@ -9,11 +9,10 @@ Parses, serializes, and compiles Markdown papers with embedded DNA macros.
 Guarantees papers are readable offline in any markdown viewer without requiring ChromaDB.
 """
 
-import os
 import re
 import json
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -280,5 +279,4 @@ def compile_paper_to_markdown(bone_collections: List[Dict[str, Any]], lens: Opti
 
 
 if __name__ == "__main__":
-    import sys
     print("[dna_macro_compiler] Ready. Self-contained DNA Macro Citation Engine initialized.")

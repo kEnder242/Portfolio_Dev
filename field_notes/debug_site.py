@@ -42,7 +42,7 @@ def main():
             
         js_match = re.search(r'themes.json\?t=', html)
         if js_match:
-            print(f"   -> JS Cache Buster: Present")
+            print("   -> JS Cache Buster: Present")
         else:
             print("   -> [WARN] No JS cache buster found.")
 

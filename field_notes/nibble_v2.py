@@ -3,13 +3,10 @@ import os
 import sys
 import re
 import time
-import glob
-import requests
 import hashlib
 import logging
 import difflib
 import psutil
-import threading
 
 # Add current directory and HomeLabAI/src to path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +17,7 @@ for p in [BASE_DIR, HOMELAB_SRC]:
         sys.path.append(p)
 
 from ai_engine_v2 import get_engine_v2
-from utils import update_status, get_system_load, ROUND_TABLE_LOCK, can_burn, DATA_DIR
+from utils import update_status, can_burn, DATA_DIR
 from infra.status_model import StatusModel
 
 # Config
@@ -263,7 +260,7 @@ def main():
 
         # --- POLITENESS CHECK ---
         while should_yield():
-            update_status("YIELD", f"Nibbler Yielding (Lock/Load)", filename=task['id'])
+            update_status("YIELD", "Nibbler Yielding (Lock/Load)", filename=task['id'])
             time.sleep(10)
 
         log(f"Nibbling: {task['id']} ({task['bucket']})")

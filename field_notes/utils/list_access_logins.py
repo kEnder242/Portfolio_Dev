@@ -246,12 +246,12 @@ def main():
         return
 
     print("=" * 85)
-    print(f"🔒 jason-lab.dev Unique User Logins & Zero Trust Access Audit")
+    print("🔒 jason-lab.dev Unique User Logins & Zero Trust Access Audit")
     print(f"Cloudflare Account ID: {CF_ACCOUNT_ID} | Zone: {CF_ZONE_ID}")
     if token:
-        print(f"Auth Status: Authenticated via Bearer API Token (Cloudflare REST Connected)")
+        print("Auth Status: Authenticated via Bearer API Token (Cloudflare REST Connected)")
     else:
-        print(f"Auth Status: Unauthenticated / Local Ledger Traces Only")
+        print("Auth Status: Unauthenticated / Local Ledger Traces Only")
     print("=" * 85)
     if not local_logins:
         print("No user logins detected.")
