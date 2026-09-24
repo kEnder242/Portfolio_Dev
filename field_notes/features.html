@@ -16410,31 +16410,31 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-86.0</p>
+                    <p>SPR-86.0 / SPR-88.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/config/hooks/icm_hook.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/config/hooks/icm_hook.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/curator/ambient_recall.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Executes the 4-phase cognitive lifecycle (Triage -&gt; Injection -&gt; Save -&gt; Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards.</p>
+                    <p>Executes the 4-phase cognitive lifecycle (Triage -&gt; Injection -&gt; Save -&gt; Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB in resident daemon memory prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in &lt;1ms.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Solves agent manic degradation over long contexts by maintaining a lean invariant baseline prompt and grounding context on-demand.</p>
+                    <p>Solves agent manic degradation over long contexts while eliminating Python subprocess startup latency via a sub-5ms <code>curl</code> micro-bridge (<code>ambient_hook.sh</code>) to resident Foyer/CLaRa daemons.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>icm_hook.py</code>, FastEmbed vector probes, CLaRa ChromaDB (Port 8001).</p>
+                    <p><code>ambient_recall.py</code>, <code>ambient_hook.sh</code>, Foyer REST endpoint <code>/ambient_recall</code> (:8765), CLaRa ChromaDB (:8001).</p>
                 </div>
             </div>     </div>
                             </details>
