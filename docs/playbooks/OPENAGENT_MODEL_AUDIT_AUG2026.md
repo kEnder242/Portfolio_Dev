@@ -36,7 +36,7 @@ Audited directly against OpenCode's active registry cache (`~/.cache/opencode/mo
 | **Federated MLX** | `my-m5-air/gemma-4-26b-a4b-it-mlx` | **LOCAL** | **✅ REACHABLE (<1.5s)** | Secondary Local Ground Worker |
 | **Federated 4090**| `my-windows-4090/qwen2.5-coder:14b` | **LOCAL** | **✅ REACHABLE (<1.0s direct)** | Primary Coding Ground Worker |
 | **Federated 4090**| `my-windows-4090/qwen3:14b` | **LOCAL** | **✅ REACHABLE (<1.0s direct)** | Primary Reasoning Ground Worker |
-| **Cohere** | `cohere/command-a-plus-05-2026` | **REGISTRY** | **✅ REACHABLE (API Key)** | Primary Critic / Diff Reviewer (`Momus`) |
+| **Cohere** | `cohere/command-a-plus-05-2026` | **REGISTRY** | **✅ REACHABLE (API Key)** | Critic / Diff Reviewer (`Momus`) & Adversarial Oracle (`oracle` alias) |
 
 ---
 
@@ -61,7 +61,8 @@ Reviewed against our persistent BKM protocols and scars:
    * *The Golden Rule:* **Never collapse the swarm to a single provider.** Always maintain a 3-tier ladder:
      * **Tier 1 (Cloud Primary):** `opencode/hy3-free`
      * **Tier 2 (Local Silicon):** `my-m5-mlx/mlx-community/Qwen3.8-27B-4bit` & `my-windows-4090/qwen2.5-coder:14b`
-     * **Tier 3 (Cloud Fallback):** `openrouter/openrouter/free` & `cohere/command-a-plus-05-2026`
+     * **Tier 3 (Cloud Fallback):** `openrouter/openrouter/free` & `opencode/big-pickle`
+   * **Oracle Alias (BKM-061):** `openrouter/free` → `cohere/command-a-plus-05-2026` (adversarial review only; NOT in general rotation)
 
 ---
 
@@ -76,7 +77,7 @@ Reviewed against our persistent BKM protocols and scars:
 | **prometheus** (Strategic Architect) | `opencode/big-pickle` | **`opencode/hy3-free`** | High context reasoning. |
 | **sisyphus-junior** (Ground Worker) | `my-m5-mlx/.../Qwen3.8-27B` | **`my-m5-mlx/mlx-community/Qwen3.8-27B-4bit`** | Sub-second local execution on Apple Silicon (0.39s). Fallback: Kender `qwen2.5-coder:14b`. |
 | **hephaestus** (Fast Triage / Fixes) | `my-m5-mlx/.../Qwen3.8-27B` | **`my-m5-mlx/mlx-community/Qwen3.8-27B-4bit`** | Fast local tool invocation with zero API quota. |
-| **momus** (Diff / Linter Critic) | `cohere/command-a-plus-05-2026` | **`cohere/command-a-plus-05-2026`** | Proven high-precision pre-commit auditor. |
+| **momus** (Diff / Linter Critic) | `cohere/command-a-plus-05-2026` | **`cohere/command-a-plus-05-2026`** | Proven high-precision pre-commit auditor. Also serves as Tier-2 Oracle (BKM-061). |
 
 ### Category Routing (`task()` Decomposition)
 
@@ -87,7 +88,7 @@ Reviewed against our persistent BKM protocols and scars:
 | `unspecified-high` | `openrouter/deepseek/deepseek-chat:free` | `opencode/hy3-free` |
 | `visual-engineering` | `openrouter/deepseek/deepseek-chat:free` | `opencode/hy3-free` |
 | `quick` | `opencode/x-preview-f-free` *(DEPRECATED)* | **`my-m5-mlx/mlx-community/Qwen3.8-27B-4bit`** *(0.39s local)* |
-| `writing` | `openrouter/deepseek/deepseek-chat:free` | `cohere/command-a-plus-05-2026` |
+| `writing` | `openrouter/deepseek/deepseek-chat:free` | `openrouter/free` *(cohere removed — oracle-only per Sprint 88)* |
 | `unspecified-low` | `opencode/x-preview-f-free` *(DEPRECATED)* | **`opencode/hy3-free`** |
 
 ---
