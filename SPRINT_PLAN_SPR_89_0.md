@@ -126,6 +126,15 @@
 ### 20) GEMS in Forge [Item 20]
 * **Status:** Implemented. Updated `load_manifest()` in `dna_forge_build.py` to load `latest_synthesis_gems.json` into `manifest["gems"]`. Added `💎 GEMS` filter chip to Synapse nav bar and Review Census HUD. All synthesized gems now render as interactive cards and graph nodes.
 
+### 21) Tiered Progressive-Disclosure Synapse Visual Model & 1-Hop Hover Promotion Engine (`FEAT-603`) [Item 21]
+* **Status:** Implemented & Certified.
+* **Architecture (`FEAT-603`):**
+  1. **Tier 0 (Focal Center Node):** Generous Full Card ($380\times 175\text{px}$) rendering Domain badge, ID, `[IMMUTABLE]` status, links count, multi-line wrapped Title, Origin verbatim snippet, full multi-line Narrative context, and Context Anchor / Tag chips. Hover tooltip is disabled (as all information is visible directly on canvas).
+  2. **Tier 1 (3-Tail Trail Nodes):** Medium-Full Card ($300\times 110\text{px}$) rendering Title, Description, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
+  3. **Tier 2 (1-Hop Children Nodes):** Medium Card ($240\times 80\text{px}$) rendering Title and Description. Hover promotes view up 1 hop to Tail Node format.
+  4. **Tier 3 (2-Hop Grandchildren Nodes):** Pure Glowing Dots ($r=6\text{px}$, NO canvas boxes). Hover promotes view up 1 hop to Children Node format (Title + Description).
+
+
 ---
 
 ## 🚀 Sprint 89 Stories & Execution Plan
