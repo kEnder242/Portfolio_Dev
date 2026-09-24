@@ -452,11 +452,13 @@ function renderBlackboardLedger(data) {
     container.innerHTML = '';
     const liveRecords = window.cachedLiveRecords || [];
 
-    data.forEach((turn, idx) => {
+    // [Item 11] Render latest turn first (reverse chronological)
+    const reversedData = Array.isArray(data) ? data.slice().reverse() : [];
+    reversedData.forEach((turn, idx) => {
         const details = document.createElement('details');
         details.className = 'feature-details';
         details.id = `turn-${turn.turn}`;
-        if (idx === 0) details.setAttribute('open', ''); // open latest by default
+        if (idx === 0) details.setAttribute('open', ''); // open newest turn by default
 
         const checkpoints = turn.checkpoints_elapsed_s || turn.cumulative || {};
         const deltas = turn.deltas_elapsed_s || turn.deltas || {};

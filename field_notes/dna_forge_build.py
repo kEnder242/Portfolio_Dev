@@ -27,6 +27,8 @@ PHILOSOPHY_PATH = DNA_DIR / "philosophy_data.json"
 VIBE_PATH = DNA_DIR / "vibe_data.json"
 RDNA_PATH = DNA_DIR / "rdna_questions.json"
 TIMELINE_PATH = DNA_DIR / "timeline_data.json"
+SPRINT_PATH = DATA_DIR / "sprint_data.json"
+GEMS_PATH = DATA_DIR / "latest_synthesis_gems.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
 BONE_COLLECTIONS_PATH = DATA_DIR / "bone_collections.json"
 DECISIONS_PATH = DATA_DIR / "dna_decisions.json"
@@ -105,6 +107,46 @@ def load_manifest():
                 manifest["discovery"] = json.load(f)
         except Exception as e:
             print(f"Warning loading {TIMELINE_PATH}: {e}")
+
+    if SPRINT_PATH.exists():
+        try:
+            with open(SPRINT_PATH, "r", encoding="utf-8") as f:
+                s_raw = json.load(f)
+                manifest["sprint"] = s_raw if isinstance(s_raw, list) else list(s_raw.values())
+        except Exception as e:
+            print(f"Warning loading {SPRINT_PATH}: {e}")
+
+    if GEMS_PATH.exists():
+        try:
+            with open(GEMS_PATH, "r", encoding="utf-8") as f:
+                g_raw = json.load(f)
+                raw_gems = g_raw.get("gems", []) if isinstance(g_raw, dict) else g_raw
+                formatted_gems = []
+                for g in raw_gems:
+                    gid = g.get("id", "GEM-???")
+                    tag_list = g.get("tags", ["synthesis", "gem"])
+                    formatted_gems.append({
+                        "id": gid,
+                        "title": f"Synthesis Gem ({gid})",
+                        "origin": {
+                            "verbatim": g.get("evidence", "") or g.get("summary", ""),
+                            "author": "Synthesizer",
+                            "created_at": g.get("date", "2024")
+                        },
+                        "synthesis": {
+                            "title": f"Synthesis Gem ({gid})",
+                            "narrative_context": g.get("summary", ""),
+                            "tags": tag_list,
+                            "lab_anchors": [g.get("source_file", "")]
+                        },
+                        "metadata": {
+                            "tags": tag_list,
+                            "date": g.get("date", "")
+                        }
+                    })
+                manifest["gems"] = formatted_gems
+        except Exception as e:
+            print(f"Warning loading {GEMS_PATH}: {e}")
 
     return manifest
 
@@ -327,14 +369,15 @@ def build_page():
         "PHL": len(manifest.get("philosophy", [])),
         "WIS": len(manifest.get("wisdom", [])),
         "DISC": len(manifest.get("discovery", [])),
-        "RDNA": len(manifest.get("rdna", []))
+        "RDNA": len(manifest.get("rdna", [])),
+        "GEMS": len(manifest.get("gems", []))
     }
     total_census = sum(domain_counts.values())
     sprint_delta = "+36"
 
     # Universal card list
     all_cards = []
-    for col in ['philosophy', 'wisdom', 'rdna', 'discovery', 'feature', 'behavioral', 'sprint']:
+    for col in ['philosophy', 'wisdom', 'rdna', 'discovery', 'feature', 'behavioral', 'sprint', 'gems']:
         for item in manifest.get(col, []):
             copy = dict(item)
             copy['_sourceCollection'] = col
@@ -1487,15 +1530,15 @@ def build_page():
 
             <!-- Top 3-Tab View Mode Switcher -->
             <div class="forge-tabs-bar">
-                <button class="forge-tab-btn active" id="btnTabDraft" data-tab="draft">📝 1. Drafting &amp; Decompose</button>
+                <button class="forge-tab-btn" id="btnTabDraft" data-tab="draft">📝 1. Drafting &amp; Decompose</button>
                 <button class="forge-tab-btn" id="btnTabConnect" data-tab="connect">🕸️ 2. Connect &amp; Synapses</button>
-                <button class="forge-tab-btn" id="btnTabReview" data-tab="review">📇 3. Review &amp; Cards</button>
+                <button class="forge-tab-btn active" id="btnTabReview" data-tab="review">📇 3. Review &amp; Cards</button>
             </div>
 
             <!-- ========================================================= -->
             <!-- TAB 1: DRAFTING & DECOMPOSITION WORKBENCH [FEAT-597]       -->
             <!-- ========================================================= -->
-            <div id="tab-drafting-view" class="drafting-container">
+            <div id="tab-drafting-view" class="drafting-container" style="display: none;">
                 <div class="drafting-header">
                     <div class="drafting-title-group">
                         <span class="drafting-main-title">📝 Active Note Ingestion &amp; Semantic Decomposition Workbench</span>
@@ -1581,6 +1624,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     <span class="synapse-domain-chip" data-domain="DISC" style="border-color:#f0883e; color:#f0883e;">DISC</span>
                     <span class="synapse-domain-chip" data-domain="RDNA" style="border-color:#56d364; color:#56d364;">RDNA</span>
                     <span class="synapse-domain-chip" data-domain="SPRINT" style="border-color:#d2a8ff; color:#d2a8ff;">SPRINT</span>
+                    <span class="synapse-domain-chip" data-domain="GEMS" style="border-color:#ec4899; color:#ec4899;">💎 GEMS</span>
                     <span class="synapse-domain-chip" data-domain="BONES" style="border-color:#56d364; color:#56d364;">🦴 RACK BONES</span>
                 </div>
 
@@ -1639,7 +1683,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
             <!-- ========================================================= -->
             <!-- TAB 3: REVIEW & CARDS VIEW [FEAT-593 / FEAT-598]           -->
             <!-- ========================================================= -->
-            <div id="tab-review-view" style="display: none;">
+            <div id="tab-review-view">
                 <!-- Top Census & Mining Watchdog HUD Banner -->
                 <div class="dna-census-hud" id="dna-census-hud">
                     <div class="census-top-row">
@@ -1661,6 +1705,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         <span class="census-domain-pill" data-filter="wisdom" style="border-color:#e3b341; color:#e3b341;" title="War Stories & Empirical Wisdom">{domain_counts['WIS']} WIS</span>
                         <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries & Timeline">{domain_counts['DISC']} DISC</span>
                         <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">{domain_counts['RDNA']} RDNA</span>
+                        <span class="census-domain-pill" data-filter="gems" style="border-color:#ec4899; color:#ec4899;" title="Synthesized Gems">{domain_counts['GEMS']} GEMS</span>
                         <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review ({needs_review_count})</span>
                         <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived ({archived_count})</span>
                     </div>
@@ -2602,11 +2647,13 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                 // Persistent particle memory for smooth organic morphing
                 var activeNodeMap = {{}}; // id -> nodeObject
-                var activeLinks = [];     // array of {{ source, target, weight }}
+                var activeLinks = [];     // array of {{ source, target, weight, isGrandchild }}
+                var simEnergy = 1.0;      // Simulation energy cooling
 
                 function computeConstellation() {{
                     var cx = width / 2;
                     var cy = height / 2;
+                    simEnergy = 1.0; // Re-ignite physics settling energy
 
                     // 1. Gather active 3-node history trail
                     var trail = (typeof focalBreadcrumbs !== 'undefined' && focalBreadcrumbs.length > 0)
@@ -2615,10 +2662,13 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     if (trail.indexOf(focalNodeId) === -1) trail.push(focalNodeId);
                     trail = trail.slice(-3);
 
-                    // 2. Gather candidate neighbor nodes for all trail nodes
-                    var clusterSet = {{}};
+                    // 2. Multi-tier Depth: Gather 1-hop direct children and 2-hop grandchildren
+                    var trailSet = {{}};
+                    var directSet = {{}};
+                    var grandchildSet = {{}};
+
                     trail.forEach(function(tId) {{
-                        clusterSet[tId] = true;
+                        trailSet[tId] = true;
                         var neigh = getNeighborsFor(tId);
                         if (synapseFilterDomain !== 'ALL') {{
                             neigh = neigh.filter(function(l) {{
@@ -2629,20 +2679,29 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                                 return d === synapseFilterDomain;
                             }});
                         }}
-                        neigh.slice(0, 10).forEach(function(item) {{
-                            clusterSet[item.targetId] = true;
+                        neigh.slice(0, 8).forEach(function(item) {{
+                            directSet[item.targetId] = true;
                         }});
                     }});
 
-                    // Fallback if sparse
-                    var clusterIds = Object.keys(clusterSet);
+                    // Expand 2-hop grandchildren (children of direct children)
+                    Object.keys(directSet).forEach(function(dId) {{
+                        var gNeigh = getNeighborsFor(dId);
+                        gNeigh.slice(0, 4).forEach(function(gItem) {{
+                            if (!trailSet[gItem.targetId] && !directSet[gItem.targetId]) {{
+                                grandchildSet[gItem.targetId] = true;
+                            }}
+                        }});
+                    }});
+
+                    var clusterIds = Object.keys(trailSet).concat(Object.keys(directSet)).concat(Object.keys(grandchildSet));
                     if (clusterIds.length <= 1) {{
                         ['BKM-060', 'FEAT-582', 'PHL-001', 'WIS-001', 'BKM-024', 'RDNA-001'].forEach(function(tId) {{
                             if (tId !== focalNodeId && (globalNodesMap[tId] || cardsById[tId])) {{
-                                clusterSet[tId] = true;
+                                directSet[tId] = true;
                             }}
                         }});
-                        clusterIds = Object.keys(clusterSet);
+                        clusterIds = Object.keys(trailSet).concat(Object.keys(directSet));
                     }}
 
                     // 3. Update particle lifecycle (Morphing)
@@ -2654,37 +2713,63 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         var isDocked = activeBones.some(function(b){{ return b.id === cid; }});
                         var isFocal = (cid === focalNodeId);
                         var isTrail = (trail.indexOf(cid) !== -1);
+                        var isDirect = (!isTrail && !!directSet[cid]);
+                        var isGrandchild = (!isTrail && !isDirect && !!grandchildSet[cid]);
+
+                        var nodeColor = isGrandchild ? '#484f58' : (domainColors[dName] || '#8b949e');
+                        var isCard = !isGrandchild;
+                        var cardW = isFocal ? 174 : (isTrail ? 144 : (isDirect ? 122 : 0));
+                        var cardH = isFocal ? 52 : (isTrail ? 44 : (isDirect ? 36 : 0));
+                        var nodeRadius = isFocal ? 14 : (isTrail ? 11 : (isDirect ? 9 : 5.5));
+
+                        // Extract narrative excerpt and tags for Mini-HUD
+                        var narrative = (nData.synthesis && nData.synthesis.narrative_context) || (nData.origin && nData.origin.text) || '';
+                        var tags = (nData.metadata && nData.metadata.tags) || [];
+                        var links = (nData.metadata && nData.metadata.explicit_links) || [];
 
                         if (!activeNodeMap[cid]) {{
-                            // Spawn new node gently near center with organic angle
                             var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
-                            var spawnDist = 60 + Math.random() * 80;
+                            var spawnDist = isGrandchild ? (130 + Math.random() * 60) : (75 + Math.random() * 60);
                             activeNodeMap[cid] = {{
                                 id: cid,
                                 title: nData.title || (nData.synthesis && nData.synthesis.title) || cid,
+                                narrative: narrative,
+                                tags: tags,
+                                linksCount: links.length,
                                 domain: dName,
                                 isCenter: isFocal,
                                 isTrail: isTrail,
+                                isDirect: isDirect,
+                                isGrandchild: isGrandchild,
                                 isDocked: isDocked,
+                                cardWidth: cardW,
+                                cardHeight: cardH,
                                 x: cx + Math.cos(spawnAngle) * spawnDist,
                                 y: cy + Math.sin(spawnAngle) * spawnDist,
-                                vx: (Math.random() - 0.5) * 0.8,
-                                vy: (Math.random() - 0.5) * 0.8,
-                                radius: isDocked ? 7.5 : 6,
-                                color: domainColors[dName] || '#8b949e',
+                                vx: 0,
+                                vy: 0,
+                                radius: nodeRadius,
+                                color: nodeColor,
                                 alpha: 0.0,
-                                targetAlpha: 1.0,
+                                targetAlpha: isGrandchild ? 0.45 : 1.0,
                                 noiseSeed: Math.random() * 100
                             }};
                         }} else {{
-                            // Update existing node
                             var n = activeNodeMap[cid];
                             n.isCenter = isFocal;
                             n.isTrail = isTrail;
+                            n.isDirect = isDirect;
+                            n.isGrandchild = isGrandchild;
                             n.isDocked = isDocked;
-                            n.targetAlpha = 1.0;
+                            n.cardWidth = cardW;
+                            n.cardHeight = cardH;
+                            n.radius = nodeRadius;
+                            n.targetAlpha = isGrandchild ? 0.45 : 1.0;
                             n.title = nData.title || (nData.synthesis && nData.synthesis.title) || cid;
-                            n.color = domainColors[dName] || '#8b949e';
+                            n.narrative = narrative;
+                            n.tags = tags;
+                            n.linksCount = links.length;
+                            n.color = nodeColor;
                         }}
                     }});
 
@@ -2710,6 +2795,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                                 activeLinks.push({{
                                     source: src,
                                     target: tgt,
+                                    isGrandchild: (src.isGrandchild || tgt.isGrandchild),
                                     weight: edge.weight || 1
                                 }});
                             }}
@@ -2727,23 +2813,27 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     // 1. Alpha dissolve & cleanup
                     for (var i = nodes.length - 1; i >= 0; i--) {{
                         var n = nodes[i];
-                        n.alpha += (n.targetAlpha - n.alpha) * 0.08;
+                        n.alpha += (n.targetAlpha - n.alpha) * 0.12;
                         if (n.alpha < 0.01 && n.targetAlpha === 0.0) {{
                             delete activeNodeMap[n.id];
                         }}
                     }}
 
+                    // Starscape Cooling: Halt physics calculation once system settles
+                    if (simEnergy < 0.005) return;
+                    simEnergy *= 0.94; // Exponential alpha cooling
+
                     nodes = Object.values(activeNodeMap);
 
                     // 2. Multi-body Coulomb Repulsion
-                    var kRep = 1800;
+                    var kRep = 2600 * simEnergy;
                     for (var i = 0; i < nodes.length; i++) {{
                         var n1 = nodes[i];
                         for (var j = i + 1; j < nodes.length; j++) {{
                             var n2 = nodes[j];
                             var dx = n2.x - n1.x;
                             var dy = n2.y - n1.y;
-                            var distSq = dx * dx + dy * dy + 400;
+                            var distSq = dx * dx + dy * dy + 600;
                             var dist = Math.sqrt(distSq);
                             var force = kRep / distSq;
                             var fx = (dx / dist) * force;
@@ -2756,8 +2846,8 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     }}
 
                     // 3. Spring Link Attraction
-                    var restDist = 110;
-                    var kSpring = 0.045;
+                    var restDist = 155;
+                    var kSpring = 0.035 * simEnergy;
                     activeLinks.forEach(function(l) {{
                         if (!activeNodeMap[l.source.id] || !activeNodeMap[l.target.id]) return;
                         var dx = l.target.x - l.source.x;
@@ -2772,26 +2862,36 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         l.target.vy -= fy;
                     }});
 
-                    // 4. Center Gravity Well & Subtle Brownian Fluid Drift
+                    // 4. Center Gravity Well & Critical Damping
                     nodes.forEach(function(n) {{
                         var cDx = cx - n.x;
                         var cDy = cy - n.y;
                         var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
-                        n.vx += (cDx / cDist) * (cDist * 0.002);
-                        n.vy += (cDy / cDist) * (cDist * 0.002);
+                        n.vx += (cDx / cDist) * (cDist * 0.002 * simEnergy);
+                        n.vy += (cDy / cDist) * (cDist * 0.002 * simEnergy);
 
-                        // Gentle fluid drift
-                        n.vx += Math.cos(simTime * 0.4 + n.noiseSeed) * 0.04;
-                        n.vy += Math.sin(simTime * 0.4 + n.noiseSeed) * 0.04;
-
-                        // Damping / Friction
-                        n.vx *= 0.88;
-                        n.vy *= 0.88;
+                        // High damping for crisp, stationary settling
+                        n.vx *= 0.78;
+                        n.vy *= 0.78;
 
                         // Position Integration
                         n.x += n.vx;
                         n.y += n.vy;
                     }});
+                }}
+
+                function drawRoundedRect(c, x, y, w, h, r) {{
+                    c.beginPath();
+                    c.moveTo(x + r, y);
+                    c.lineTo(x + w - r, y);
+                    c.arcTo(x + w, y, x + w, y + r, r);
+                    c.lineTo(x + w, y + h - r);
+                    c.arcTo(x + w, y + h, x + w - r, y + h, r);
+                    c.lineTo(x + r, y + h);
+                    c.arcTo(x, y + h, x, y + h - r, r);
+                    c.lineTo(x, y + r);
+                    c.arcTo(x, y, x + r, y, r);
+                    c.closePath();
                 }}
 
                 function draw() {{
@@ -2800,11 +2900,31 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     ctx.translate(panX, panY);
                     ctx.scale(zoom, zoom);
 
+                    // --- Render 3-Length Trail Faint Gradient Beam [Item 3] ---
+                    var trailNodes = (typeof focalBreadcrumbs !== 'undefined' ? focalBreadcrumbs.slice(-3) : [focalNodeId])
+                        .map(function(id){{ return activeNodeMap[id]; }})
+                        .filter(Boolean);
+
+                    if (trailNodes.length >= 2) {{
+                        ctx.beginPath();
+                        ctx.moveTo(trailNodes[0].x, trailNodes[0].y);
+                        for (var tIdx = 1; tIdx < trailNodes.length; tIdx++) {{
+                            ctx.lineTo(trailNodes[tIdx].x, trailNodes[tIdx].y);
+                        }}
+                        ctx.strokeStyle = 'rgba(163, 113, 247, 0.45)';
+                        ctx.lineWidth = 2.5;
+                        ctx.shadowColor = '#a371f7';
+                        ctx.shadowBlur = 8;
+                        ctx.stroke();
+                        ctx.shadowBlur = 0;
+                    }}
+
                     // --- Render Uniform Hairline Synaptic Threads ---
                     activeLinks.forEach(function (l) {{
                         if (l.source.alpha < 0.02 || l.target.alpha < 0.02) return;
-                        var linkAlpha = 0.22 * Math.min(l.source.alpha, l.target.alpha);
                         var isHovered = (hoveredOrbitNode && (l.source === hoveredOrbitNode || l.target === hoveredOrbitNode));
+                        var baseAlpha = l.isGrandchild ? 0.08 : 0.22;
+                        var linkAlpha = baseAlpha * Math.min(l.source.alpha, l.target.alpha);
 
                         ctx.beginPath();
                         ctx.moveTo(l.source.x, l.source.y);
@@ -2813,6 +2933,9 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         if (isHovered) {{
                             ctx.strokeStyle = 'rgba(88, 166, 255, 0.85)';
                             ctx.lineWidth = 1.6;
+                        }} else if (l.isGrandchild) {{
+                            ctx.strokeStyle = 'rgba(139, 148, 158, ' + linkAlpha.toFixed(3) + ')';
+                            ctx.lineWidth = 0.6;
                         }} else {{
                             ctx.strokeStyle = 'rgba(88, 166, 255, ' + linkAlpha.toFixed(3) + ')';
                             ctx.lineWidth = 0.8;
@@ -2820,28 +2943,80 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         ctx.stroke();
                     }});
 
-                    // --- Render Pure Uniform Constellation Nodes ---
+                    // --- Render Context-Sized Canvas Cards & Constellation Nodes [Item 5] ---
                     var nodes = Object.values(activeNodeMap);
                     nodes.forEach(function (n) {{
                         if (n.alpha < 0.01) return;
                         var isHovered = (hoveredOrbitNode === n);
-
-                        ctx.beginPath();
-                        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-                        ctx.fillStyle = n.color;
                         ctx.globalAlpha = n.alpha;
 
-                        ctx.shadowColor = n.color;
-                        ctx.shadowBlur = isHovered ? 14 : 6;
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
+                        if (n.cardWidth > 0 && n.cardHeight > 0) {{
+                            // Card Bounds
+                            var cardX = n.x - n.cardWidth / 2;
+                            var cardY = n.y - n.cardHeight / 2;
+                            var radius = n.isCenter ? 8 : (n.isTrail ? 6 : 5);
 
-                        if (isHovered) {{
-                            ctx.beginPath();
-                            ctx.arc(n.x, n.y, n.radius + 3, 0, Math.PI * 2);
-                            ctx.strokeStyle = '#ffffff';
-                            ctx.lineWidth = 1.5;
+                            // Background Fill
+                            drawRoundedRect(ctx, cardX, cardY, n.cardWidth, n.cardHeight, radius);
+                            ctx.fillStyle = n.isCenter ? 'rgba(9, 13, 22, 0.96)' : 'rgba(13, 17, 23, 0.92)';
+                            if (n.isCenter) {{
+                                ctx.shadowColor = '#58a6ff';
+                                ctx.shadowBlur = isHovered ? 16 : 10;
+                            }} else if (isHovered) {{
+                                ctx.shadowColor = n.color;
+                                ctx.shadowBlur = 12;
+                            }} else {{
+                                ctx.shadowBlur = 0;
+                            }}
+                            ctx.fill();
+
+                            // Border
+                            ctx.lineWidth = n.isCenter ? 2.0 : (isHovered ? 1.5 : 1.0);
+                            ctx.strokeStyle = n.isCenter ? '#ffffff' : (isHovered ? '#ffffff' : n.color);
                             ctx.stroke();
+                            ctx.shadowBlur = 0;
+
+                            // Domain Pill (Top Left)
+                            var pillW = 34;
+                            var pillH = n.isCenter ? 14 : 12;
+                            var pillX = cardX + 6;
+                            var pillY = cardY + 6;
+                            drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 3);
+                            ctx.fillStyle = n.color;
+                            ctx.globalAlpha = n.alpha * 0.25;
+                            ctx.fill();
+                            ctx.globalAlpha = n.alpha;
+                            ctx.fillStyle = n.color;
+                            ctx.font = 'bold 9px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(n.domain, pillX + pillW / 2, pillY + pillH - 3);
+
+                            // Card ID (Top Row)
+                            ctx.fillStyle = n.isCenter ? '#ffffff' : '#e6edf3';
+                            ctx.font = 'bold ' + (n.isCenter ? '11px' : '10px') + ' "JetBrains Mono", monospace';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(n.id, pillX + pillW + 6, pillY + pillH - 2);
+
+                            // Title Snippet (Bottom Row)
+                            ctx.fillStyle = '#8b949e';
+                            ctx.font = (n.isCenter ? '10px' : '9px') + ' sans-serif';
+                            var maxChars = n.isCenter ? 24 : (n.isTrail ? 20 : 16);
+                            var rawTitle = (n.title || n.id);
+                            var titleSnippet = rawTitle.length > maxChars ? rawTitle.substring(0, maxChars) + '…' : rawTitle;
+                            ctx.fillText(titleSnippet, cardX + 8, cardY + n.cardHeight - 8);
+
+                        }} else {{
+                            // 2-Hop Grandchild: Subtle metallic grey dot
+                            ctx.beginPath();
+                            ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+                            ctx.fillStyle = isHovered ? '#8b949e' : '#484f58';
+                            ctx.fill();
+
+                            if (isHovered) {{
+                                ctx.strokeStyle = '#ffffff';
+                                ctx.lineWidth = 1.2;
+                                ctx.stroke();
+                            }}
                         }}
                         ctx.globalAlpha = 1.0;
                     }});
@@ -2871,10 +3046,19 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     var nodes = Object.values(activeNodeMap);
                     for (var i = nodes.length - 1; i >= 0; i--) {{
                         var n = nodes[i];
-                        if (n.alpha < 0.2) continue;
-                        var dx = pt.x - n.x;
-                        var dy = pt.y - n.y;
-                        if (dx * dx + dy * dy <= (n.radius + 10) * (n.radius + 10)) return n;
+                        if (n.alpha < 0.15) continue;
+                        if (n.cardWidth > 0 && n.cardHeight > 0) {{
+                            var halfW = n.cardWidth / 2 + 4;
+                            var halfH = n.cardHeight / 2 + 4;
+                            if (pt.x >= n.x - halfW && pt.x <= n.x + halfW &&
+                                pt.y >= n.y - halfH && pt.y <= n.y + halfH) {{
+                                return n;
+                            }}
+                        }} else {{
+                            var dx = pt.x - n.x;
+                            var dy = pt.y - n.y;
+                            if (dx * dx + dy * dy <= (n.radius + 8) * (n.radius + 8)) return n;
+                        }}
                     }}
                     return null;
                 }}
@@ -2895,6 +3079,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     if (isPanning) {{
                         panX = e.clientX - startPanX;
                         panY = e.clientY - startPanY;
+                        simEnergy = Math.max(simEnergy, 0.1);
                     }} else {{
                         var hit = findNodeAt(e.clientX, e.clientY);
                         hoveredOrbitNode = hit;
@@ -2903,8 +3088,21 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             tooltip.style.display = 'block';
                             tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
                             tooltip.style.top = (e.clientY - rect.top + 10) + 'px';
-                            tooltip.innerHTML = '<strong style="color:' + hit.color + '">[' + escapeHtml(hit.id) + ']</strong> ' +
-                                escapeHtml(hit.title) + '<br><span style="color:#8b949e; font-size:0.7rem;">Domain: ' + hit.domain + (hit.isDocked ? ' • 🦴 Docked in Rack' : '') + '</span><br><span style="color:#58a6ff; font-size:0.68rem;">👉 Click to set as focal center</span>';
+                            
+                            // Mini-HUD Hover Format [Item 5]
+                            var snippet = (hit.narrative || '').slice(0, 110);
+                            if (snippet.length >= 110) snippet += '...';
+                            var tagsList = (hit.tags || []).slice(0, 3).map(function(t){{ return '#' + t; }}).join(' ');
+                            var relationLabel = hit.isCenter ? '🌟 Focal Anchor' : (hit.isTrail ? 'Trail Node' : (hit.isGrandchild ? 'Grandchild (2-Hop)' : 'Direct Connection'));
+
+                            tooltip.innerHTML = 
+                                '<div style="font-weight:700; font-size:0.86rem; color:' + hit.color + '; margin-bottom:2px;">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.title) + '</div>' +
+                                '<div style="color:#8b949e; font-size:0.72rem; margin-bottom:4px;">Domain: ' + hit.domain + ' • ' + relationLabel + (hit.isDocked ? ' • 🦴 Docked' : '') + '</div>' +
+                                (snippet ? '<div style="color:#c9d1d9; font-size:0.75rem; line-height:1.35; margin-bottom:5px; background:rgba(0,0,0,0.3); padding:4px 6px; border-radius:4px;">' + escapeHtml(snippet) + '</div>' : '') +
+                                '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; color:#8b949e; border-top:1px solid #21262d; padding-top:3px;">' +
+                                    '<span>🔗 ' + (hit.linksCount || 0) + ' links ' + (tagsList ? '• ' + escapeHtml(tagsList) : '') + '</span>' +
+                                    '<span style="color:#58a6ff;">👉 Click to focus</span>' +
+                                '</div>';
                         }} else {{
                             tooltip.style.display = 'none';
                         }}
@@ -2923,6 +3121,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     panX = mx - (mx - panX) * (newZoom / zoom);
                     panY = my - (my - panY) * (newZoom / zoom);
                     zoom = newZoom;
+                    simEnergy = Math.max(simEnergy, 0.15);
                 }});
 
                 var btnReset = document.getElementById('btnSynapseReset');
