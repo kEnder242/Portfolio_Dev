@@ -163,4 +163,33 @@
 
 ### Story 89.5 [AGY:PRIMARY]: BKM-061 Adversarial Oracle Review & Final Sprint Lock
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Details:** Run adversarial oracle review on Sprint 89 deliverables, certify zero regressions, update sprint ledger, and push commits across all submodules and root repository.
+* **Details:** Run adversarial oracle review on Sprint 89 deliverables, certify zero regressions, update sprint ledger, and commit strictly locally across all submodules and root repository.
+
+---
+
+## 🧶 Loose Ends & Ambiguities Registry (Backlog & Clarifications)
+
+* **Loose End 1 [TASK: AMBIGUOUS / DEFERRED]: Paragraph-Level AST Notation in Writer Studio**
+  * *Context:* Dialogue explored representing manuscript paragraphs via custom Markdown syntax (e.g. `[[DNA:ID]]` tags vs margin badges).
+  * *Ambiguity Flag:* `[AMBIGUOUS]` — Exact syntax formatting and visual margin interaction must be aligned with operator workflow preferences before modifying writer storage parser.
+  * *Status:* Retained in Backlog; no destructive file schema changes until operator feedback.
+
+* **Loose End 2 [TASK: BACKLOG]: Semantic Edge Pruning Affordance & Dream-Assisted Trimming**
+  * *Context:* Pruning low-weight or stale connections via a sidebar affordance or dreaming pass ($d > 0.65$).
+  * *Ambiguity Flag:* `[BACKLOG]` — Operator indicated no immediate pruning need; topic is preserved for future sprints.
+  * *Status:* Queued for future graph curation sprint.
+
+* **Loose End 3 [TASK: FUTURE EXTENSION]: Non-Compatible DNA Source Ingestion & GEMS Taxonomy Expansion**
+  * *Context:* 4 foundational DNA buckets + SPRINT + `💎 GEMS` are fully operational. Additional non-standard sources (Google Docs, legacy Keep notes) require bespoke parser scrapers.
+  * *Ambiguity Flag:* `[DEFERRED]` — Non-compatible source compatibility matrix documented in `FEAT-601`.
+  * *Status:* Ready for dedicated ingestion pipeline when new data sources are introduced.
+
+* **Loose End 4 [TASK: AMBIGUOUS]: Mobile Synapse Dynamic Pressure & Collapsible Layout**
+  * *Context:* Mobile responsiveness for giant canvas cards (dynamic pressure / collapsible HUDs).
+  * *Ambiguity Flag:* `[AMBIGUOUS]` — Desktop 1440p/4K is primary focus; mobile dynamic pressure physics deferred until mobile UI requirements are specified.
+  * *Status:* Deferred.
+
+* **Loose End 5 [TASK: CODE CLEANUP]: Single-Pass Ambient Hook & Item Regex Parser**
+  * *Context:* Unify item splitting regex between `ambient_hook.sh` and internal agent reasoning parser to prevent redundant regex passes.
+  * *Status:* Queued for ambient memory micro-bridge optimization.
+
