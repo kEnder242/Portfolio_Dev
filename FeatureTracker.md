@@ -3273,13 +3273,18 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks.
 **Mechanism:** `probe_round_table_accountability.py`, Foyer `/inject` and `/status` REST endpoints.
 
-## [LAB-110] The Operational Accountability Standard & Quantifiable Invariants
-**Sprint:** SPR-88.0
+## [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine
+**Sprint:** SPR-89.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/config/lab_accountability_thresholds.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/lab_accountability_thresholds.json) — The Operational Accountability Standard & Quantifiable Invariants.
-**Logic:** Codifies strict non-zero unit invariants across all lab maintenance workflows. Enforces that every background job (LoRA training, dreaming, scrubbing, benchmarking) must prove non-zero units of real work before being granted a `GREEN` verdict.
-**Rationale:** Prevents the "Green Lie" where individual services report online while end-to-end multi-resident cognition is broken.
-**Mechanism:** `lab_accountability_thresholds.json`, `evaluate_nightly_accountability()`, `BKM-062`.
+**Code:** [Portfolio_Dev/field_notes/dna_forge_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py) — Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine.
+**Logic:** Implements a tiered, multi-density visual information architecture for the Synapse Knowledge Graph:
+  1. **Tier 0 (Focal Center Node):** Generous Full Card ($380\times 175\text{px}$) rendering Domain badge, ID, `[IMMUTABLE]` status, links count, multi-line wrapped Title, Origin verbatim snippet, full multi-line Narrative context, and Context Anchor / Tag chips. Hover tooltip is disabled (as all information is visible directly on canvas).
+  2. **Tier 1 (3-Tail Trail Nodes):** Medium-Full Card ($300\times 110\text{px}$) rendering Title, Description, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
+  3. **Tier 2 (1-Hop Children Nodes):** Medium Card ($240\times 80\text{px}$) rendering Title and Description. Hover promotes view up 1 hop to Tail Node format.
+  4. **Tier 3 (2-Hop Grandchildren Nodes):** Pure Glowing Dots ($r=6\text{px}$, no canvas boxes). Hover promotes view up 1 hop to Children Node format (Title + Description).
+**Rationale:** Prevents visual clutter from secondary and tertiary graph nodes while guaranteeing immediate progressive disclosure and rich multi-line semantic reading on primary cards.
+**Mechanism:** `dna_forge_build.py` (`activeNodeMap`, `drawWrappedText`, `getBoxIntersection`, canvas render loop, and mousemove tooltip handler).
+
 
 
 
