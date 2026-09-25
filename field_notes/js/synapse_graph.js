@@ -169,6 +169,17 @@
                 clusterIds = Object.keys(trailSet).concat(Object.keys(directSet));
             }
 
+            // Peninsula Escape [FEAT-619]: If cluster is isolated (<= 4 nodes), inject global anchor gateway hubs
+            var globalHubs = ['PHL-001', 'BKM-001', 'FEAT-582', 'WIS-001'];
+            if (clusterIds.length <= 4) {
+                globalHubs.forEach(function(ghId) {
+                    if (clusterIds.indexOf(ghId) === -1 && ghId !== focalNodeId) {
+                        grandchildSet[ghId] = true;
+                        clusterIds.push(ghId);
+                    }
+                });
+            }
+
             // 3. Update particle lifecycle (Morphing & Pressure-Based Scaling [FEAT-603 / FEAT-613])
             var targetSet = {};
             var pressure = getCanvasPressure();
@@ -1097,14 +1108,46 @@
             };
         }
 
+        var DOMAIN_ROOTS = {
+            'PHL': 'PHL-001',
+            'BKM': 'BKM-001',
+            'FEAT': 'FEAT-582',
+            'WIS': 'WIS-001',
+            'DISC': 'DISC-001',
+            'RDNA': 'RDNA-001',
+            'SPRINT': 'SPRINT_LOG_SPR_88',
+            'GEMS': 'PHL-007'
+        };
+
         document.querySelectorAll('.synapse-domain-chip').forEach(function(chip) {
             chip.addEventListener('click', function() {
                 document.querySelectorAll('.synapse-domain-chip').forEach(function(c) { c.classList.remove('active'); });
                 chip.classList.add('active');
                 synapseFilterDomain = chip.dataset.domain;
+                if (synapseFilterDomain !== 'ALL' && synapseFilterDomain !== 'BONES') {
+                    var dRoot = DOMAIN_ROOTS[synapseFilterDomain];
+                    var direct = getNeighborsFor(window.__focalNodeId || 'PHL-001');
+                    var cardsMap = getCardsMap();
+                    var hasNeighborInDomain = direct.some(function(n) {
+                        var card = cardsMap[n.targetId];
+                        var d = (card && card.domain) || n.targetId.split('-')[0];
+                        return d.toUpperCase() === synapseFilterDomain;
+                    });
+                    if (!hasNeighborInDomain && dRoot && window.focusCardInSynapse) {
+                        window.focusCardInSynapse(dRoot);
+                        return;
+                    }
+                }
                 computeConstellation();
             });
         });
+
+        var btnHome = document.getElementById('btnSynapseHome');
+        if (btnHome) {
+            btnHome.onclick = function() {
+                if (window.focusCardInSynapse) window.focusCardInSynapse('PHL-001');
+            };
+        }
 
         var btnLocateTop = document.getElementById('btnSynapseLocateTop');
         if (btnLocateTop) btnLocateTop.onclick = function() {
