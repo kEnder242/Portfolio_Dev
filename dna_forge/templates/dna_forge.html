@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Forge | Sovereign Multi-Domain Knowledge Foundry</title>
+    <link rel="stylesheet" href="style.css?v=312b4371">
+    <link rel="stylesheet" href="css/dna_forge.css">
+</head>
+<body class="telemetry-dashboard">
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="site-title">Federated Lab</h1>
+            <p class="site-subtitle">Autonomous AI Systems</p>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">Mission Control</a>
+            <a href="stories.html" class="nav-item">Field Stories</a>
+            <a href="timeline.html" class="nav-item">Novel Ideas Timeline</a>
+            <a href="files.html" class="nav-item">Artifact Ledger</a>
+            <a href="status.html" class="nav-item">Lab Attendant</a>
+            <a href="research.html" class="nav-item">Research Ledger</a>
+            <a href="protocols.html" class="nav-item">Standard Protocols</a>
+            <a href="features.html" class="nav-item">Feature Tracker</a>
+            <a href="intercom.html" class="nav-item">Intercom stream</a>
+            <a href="benchmarks.html" class="nav-item">Benchmarks</a>
+            <a href="public_benchmarks.html" class="nav-item">Public Showcase</a>
+            <a href="wisdom.html" class="nav-item active">DNA Forge</a>
+            <a href="writer.html" class="nav-item">Writer Studio</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <section class="section">
+            <div class="wisdom-header">
+                <div>
+                    <h2 class="section-title">🧬 DNA Forge: Knowledge Foundry</h2>
+                    <p class="section-subtitle">Sovereign 3-Tab Architecture: Drafting Workbench, Synapse Knowledge Graph, and Census Review.</p>
+                </div>
+
+                <!-- Top 3-Tab Switcher Bar -->
+                <div class="forge-tabs-bar">
+                    <button class="forge-tab-btn" data-tab="draft" id="tabBtnDraft">
+                        <span>📝 Drafting &amp; Decompose</span>
+                    </button>
+                    <button class="forge-tab-btn" data-tab="connect" id="tabBtnConnect">
+                        <span>🕸️ Connect &amp; Synapse Graph</span>
+                    </button>
+                    <button class="forge-tab-btn active" data-tab="review" id="tabBtnReview">
+                        <span>📇 Review &amp; Cards (<span id="tabReviewCount">__TOTAL_CENSUS__</span>)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 1: DRAFTING & DECOMPOSITION [FEAT-597]                -->
+            <!-- ========================================================= -->
+            <div id="tab-drafting-view" class="drafting-container" style="display: none;">
+                <div class="drafting-header">
+                    <div class="drafting-title-group">
+                        <span class="drafting-main-title">⚡ Decompose Scratch Notes into Atomic DNA Units</span>
+                        <span class="drafting-subtitle">Paste stream-of-consciousness field notes or meeting transcripts. Local vLLM parses paragraphs into candidate cards.</span>
+                    </div>
+                </div>
+
+                <div class="drafting-input-wrap">
+                    <input type="text" id="draftTitleInput" class="draft-title-input" placeholder="Draft Note Title (e.g. Memory Feedback &amp; JITC Architecture)...">
+                    <textarea id="draftRawText" class="draft-textarea" placeholder="Paste raw notes, journal entries, or transcripts here...
+
+Example:
+# Architectural Invariant: Decouple Semantic Meaning from Presentation Voice
+We stumbled upon extreme semantic packing when naming features. A discrete token like FEAT-582 carries immense compressed intent.
+By treating meaning as a fixed geometric coordinate and presentation style as a rotation matrix in vector text space, we eliminate hallucination risks.
+
+Rule: Double-Write Protocol must always update workspace repos first before pushing to brain caches."></textarea>
+                </div>
+
+                <div class="draft-actions-bar">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button id="btnDecomposeDraft" class="draft-btn-decompose" title="Segment note into paragraph-level semantic units, infer DNA domains, and suggest bone skeleton">⚡ Decompose into DNA + Bones</button>
+                        <button id="btnLoadSampleDraft" class="studio-btn" title="Load sample retrospective note for rapid testing">📋 Load Sample Note</button>
+                        <button id="btnSaveDraftScratch" class="studio-btn" title="Save scratchpad locally">💾 Save Scratchpad</button>
+                        <button id="btnClearDraft" class="studio-btn" title="Clear scratchpad">✖ Clear</button>
+                    </div>
+                    <span id="draftStatusBadge" style="font-size:0.78rem; color:#8b949e;">Ready for notes</span>
+                </div>
+
+                <!-- Post-Decomposition Mini-Tree Sandbox -->
+                <div id="decompositionSandbox" class="decomposition-sandbox" style="display: none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <span class="decomp-summary-badge" id="decompSummaryText">✓ Decomposed 2 Semantic Units</span>
+                        <span style="font-size:0.75rem; color:#8b949e;">Tweak domains and titles below before promoting to database:</span>
+                    </div>
+
+                    <div id="decompChunksList" class="decomp-chunks-list"></div>
+
+                    <!-- Suggested Bone Collection Scaffold -->
+                    <div class="inspector-bones-section" id="decompBoneScaffold">
+                        <div class="inspector-bones-title">
+                            <span>🦴 Suggested Bone Collection Track</span>
+                            <input type="text" id="suggestedBoneName" class="bone-rack-name-input" style="min-width:200px; font-size:0.78rem;" value="Decomposed Track Scaffold">
+                        </div>
+                        <div class="inspector-bones-list" id="decompBoneChips"></div>
+                    </div>
+
+                    <div class="decomp-promote-bar">
+                        <span style="font-size:0.8rem; color:#8b949e;">Promoting allocates official IDs, registers bone tracks, and commits to ChromaDB.</span>
+                        <button id="btnPromoteDraft" class="btn-promote-db">🚀 Promote to Sovereign DNA DB</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 2: CONNECT & SYNAPSE KNOWLEDGE GRAPH [FEAT-596]        -->
+            <!-- ========================================================= -->
+            <div id="tab-connect-view" class="synapse-graph-wrap" style="display: none;">
+                <!-- Dedicated Synapse Navigation & Focal Control Bar -->
+                <div class="synapse-nav-bar">
+                    <div class="synapse-breadcrumbs-wrap" id="synapseBreadcrumbs">
+                        <span>Focal Trail:</span>
+                        <span class="synapse-crumb active" id="currentCrumb">PHL-001</span>
+                    </div>
+
+                    <div class="synapse-search-box">
+                        <input type="text" id="synapseSearchInput" class="synapse-search-input" placeholder="🎯 Search &amp; focus any DNA card (e.g. BKM-060, FEAT-582)...">
+                    </div>
+
+                    <div class="synapse-controls-right">
+                        <button id="btnSynapseLocateTop" class="studio-btn btn-locate-card" title="Locate and highlight active focal card in Cards View">📇 Locate in Cards View</button>
+                        <button id="btnSynapseDepth" class="studio-btn" title="Toggle 1-Hop vs 2-Hop Network Depth">Hop Depth: 1-Hop</button>
+                        <button id="btnSynapseReset" class="studio-btn" title="Recenter orbital canvas">↺ Center</button>
+                    </div>
+                </div>
+
+                <!-- Quick Domain Jump Pills -->
+                <div class="synapse-pills-row">
+                    <span class="synapse-domain-chip active" data-domain="ALL">ALL DOMAINS</span>
+                    <span class="synapse-domain-chip" data-domain="PHL" style="border-color:#a371f7; color:#a371f7;">PHL</span>
+                    <span class="synapse-domain-chip" data-domain="BKM" style="border-color:#3fb950; color:#3fb950;">BKM</span>
+                    <span class="synapse-domain-chip" data-domain="FEAT" style="border-color:#58a6ff; color:#58a6ff;">FEAT</span>
+                    <span class="synapse-domain-chip" data-domain="WIS" style="border-color:#e3b341; color:#e3b341;">WIS</span>
+                    <span class="synapse-domain-chip" data-domain="DISC" style="border-color:#f0883e; color:#f0883e;">DISC</span>
+                    <span class="synapse-domain-chip" data-domain="RDNA" style="border-color:#56d364; color:#56d364;">RDNA</span>
+                    <span class="synapse-domain-chip" data-domain="SPRINT" style="border-color:#d2a8ff; color:#d2a8ff;">SPRINT</span>
+                    <span class="synapse-domain-chip" data-domain="GEMS" style="border-color:#ec4899; color:#ec4899;">💎 GEMS</span>
+                    <span class="synapse-domain-chip" data-domain="BONES" style="border-color:#56d364; color:#56d364;">🦴 RACK BONES</span>
+                </div>
+
+                <!-- Main Synapse Canvas + Focal Inspector Workspace -->
+                <div class="synapse-workspace" id="synapseWorkspace">
+                    <div class="synapse-canvas-area" id="synapseCanvasWrap">
+                        <canvas id="synapseCanvas"></canvas>
+                        <div id="synapseTooltip" class="synapse-tooltip" style="display: none;"></div>
+                    </div>
+
+                    <!-- Floating Chevron Drawer Tab -->
+                    <button id="btnSynapseDrawerTab" class="synapse-drawer-tab" title="Toggle Inspector Drawer">◀◀ INSPECTOR</button>
+
+                    <!-- Right-Hand Focal Card Inspector -->
+                    <div class="synapse-inspector" id="synapseInspector">
+                        <div class="inspector-header">
+                            <div class="inspector-id-block">
+                                <span class="inspector-id" id="insCardId">PHL-001</span>
+                                <span class="inspector-domain" id="insCardDomain">PHILOSOPHY</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button id="btnCloseInspector" class="studio-btn" style="padding:2px 8px; font-size:0.75rem; border-color:#30363d;" title="Close Inspector Drawer">✕</button>
+                            </div>
+                        </div>
+                        <div class="inspector-body">
+                            <h3 class="inspector-title" id="insCardTitle">Title Loading...</h3>
+                            <div>
+                                <span class="section-label">Origin [IMMUTABLE]</span>
+                                <div class="inspector-origin" id="insCardOrigin"></div>
+                            </div>
+                            <div>
+                                <span class="section-label">Narrative Context</span>
+                                <div id="insCardNarrative"></div>
+                            </div>
+                            <div id="insAnchorsSection" style="display:none;">
+                                <span class="section-label">Lab Anchors</span>
+                                <div id="insCardAnchors" class="card-anchors"></div>
+                            </div>
+                            <div>
+                                <span class="section-label">Tags</span>
+                                <div id="insCardTags"></div>
+                            </div>
+                            <div class="inspector-bones-section">
+                                <div class="inspector-bones-title">
+                                    <span>🦴 Bone Collections Context</span>
+                                    <span id="insBoneStatusBadge" style="font-size:0.65rem;"></span>
+                                </div>
+                                <div class="inspector-bones-list" id="insBoneCollectionsList"></div>
+                            </div>
+                        </div>
+                        <div class="inspector-actions">
+                            <button id="btnInsLocate" class="studio-btn btn-locate-card">📇 Locate in Cards View</button>
+                            <button id="btnInsRack" class="studio-btn bone-btn-save">+ Add to Rack</button>
+                            <button id="btnInsApprove" class="card-btn-approve" style="display:none;">✅ Approve</button>
+                            <button id="btnInsArchive" class="card-btn-archive">📦 Archive</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 3: REVIEW & CARDS VIEW [FEAT-593 / FEAT-598]           -->
+            <!-- ========================================================= -->
+            <div id="tab-review-view">
+                <!-- Top Census & Mining Watchdog HUD Banner -->
+                <div class="dna-census-hud" id="dna-census-hud">
+                    <div class="census-top-row">
+                        <div class="census-total-group">
+                            <span class="census-main-title">🧬 Federated DNA Registry: <strong id="censusTotalCount">__TOTAL_CENSUS__ Cards</strong></span>
+                            <span class="census-delta-badge" title="Verified card growth in active sprint">__SPRINT_DELTA__ Sprint Delta</span>
+                        </div>
+                        <div class="census-search-group">
+                            <input type="text" id="dnaSearchInput" class="census-search-input" placeholder="🔍 Search DNA cards, tags, anchors (__TOTAL_CENSUS__ total)...">
+                        </div>
+                    </div>
+
+                    <div class="census-pills-row">
+                        <span class="census-domain-pill active" data-filter="all" title="Universal Browse (All Domains)">ALL __TOTAL_CENSUS__</span>
+                        <span class="census-domain-pill" data-filter="feature" style="border-color:#58a6ff; color:#58a6ff;" title="Feature DNA">__FEAT_COUNT__ FEAT</span>
+                        <span class="census-domain-pill" data-filter="sprint" style="border-color:#d2a8ff; color:#d2a8ff;" title="Sprint Ledger DNA">__SPRINT_COUNT__ SPRINT</span>
+                        <span class="census-domain-pill" data-filter="behavioral" style="border-color:#3fb950; color:#3fb950;" title="Behavioral Protocols (BKM)">__BKM_COUNT__ BKM</span>
+                        <span class="census-domain-pill" data-filter="philosophy" style="border-color:#a371f7; color:#a371f7;" title="Philosophy &amp; Axioms">__PHL_COUNT__ PHL</span>
+                        <span class="census-domain-pill" data-filter="wisdom" style="border-color:#e3b341; color:#e3b341;" title="War Stories &amp; Empirical Wisdom">__WIS_COUNT__ WIS</span>
+                        <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries &amp; Timeline">__DISC_COUNT__ DISC</span>
+                        <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">__RDNA_COUNT__ RDNA</span>
+                        <span class="census-domain-pill" data-filter="gems" style="border-color:#ec4899; color:#ec4899;" title="Synthesized Gems">__GEMS_COUNT__ GEMS</span>
+                        <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review (__NEEDS_REVIEW__)</span>
+                        <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived (__ARCHIVED_COUNT__)</span>
+                    </div>
+
+                    <div class="mining-watchdog-bar">
+                        <div class="watchdog-left">
+                            <span>🌙 <strong>Nightly Synthesis Watchdog:</strong></span>
+                            <span class="watchdog-timestamp">Last Sweep: __LAST_RUN_DISPLAY__ (__DAYS_AGO__d ago)</span>
+                        </div>
+                        <div class="watchdog-alert __STALLED_CLASS__" title="__STALL_REASON__">
+                            <span>__STALL_STATUS_TEXT__</span>
+                            <span style="font-size:0.7rem; opacity:0.85;">[__STALL_REASON_SNIPPET__]</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Persistent Bone Collection Rack (Builder Shelf) -->
+                <div id="bone-rack" class="bone-rack-container">
+                    <div class="bone-rack-header">
+                        <div class="bone-rack-title-row">
+                            <span class="bone-rack-badge">🦴 BONE COLLECTION BUILDER</span>
+                            <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Collection Name..." value="Default Track Scaffold">
+                            <span id="boneCountBadge" class="bone-count-badge">0 Bones Docked</span>
+                        </div>
+                        <div class="bone-rack-actions">
+                            <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Bones using vector gap analysis">🧠 Suggest Bones</button>
+                            <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Save this collection to ChromaDB bone_collections registry">💾 Save Collection</button>
+                            <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active collection rack">✖ Clear</button>
+                        </div>
+                    </div>
+                    <div id="boneDockItems" class="bone-dock-items">
+                        <div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>
+                    </div>
+                </div>
+
+                <!-- Cards Grid View -->
+                <div id="wisdom-container" class="wisdom-grid">
+__CARDS_HTML__
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js?v=acd57779"></script>
+    <script src="mission-control.js?v=b505a681"></script>
+    <script src="components/dna_card.js"></script>
+    <script src="js/dna_forge.js"></script>
+    <script src="js/synapse_graph.js"></script>
+    <script>
+        window.__DNA_MANIFEST__ = __MANIFEST_JSON__;
+        window.__BONE_COLLECTIONS__ = __BONE_COLLECTIONS_JSON__;
+        window.__MINING_TELEMETRY__ = __MINING_TELEMETRY_JSON__;
+        window.__DECISIONS__ = __DECISIONS_JSON__;
+        window.__SYNAPSE_GRAPH__ = __SYNAPSE_GRAPH_JSON__;
+    </script>
+</body>
+</html>
