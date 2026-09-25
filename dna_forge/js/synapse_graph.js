@@ -57,7 +57,7 @@
         var startPanX = 0;
         var startPanY = 0;
         var hoveredOrbitNode = null;
-        var hopDepth = 1;
+        var hopDepth = 2;
         var synapseFilterDomain = 'ALL';
 
         // Persistent particle memory for smooth organic morphing
@@ -495,14 +495,33 @@
                 if (spine.isDot) return { x: node.x, y: node.y };
                 var dx = targetPt.x - anchor.x;
                 var dy = targetPt.y - anchor.y;
-                if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return anchor;
+                if (Math.abs(dx) < 0.0001 && Math.abs(dy) < 0.0001) return anchor;
 
-                var scaleX = spine.halfW / (Math.abs(dx) || 0.001);
-                var scaleY = spine.halfH / (Math.abs(dy) || 0.001);
-                var scale = Math.min(scaleX, scaleY, 1.0);
+                var left = node.x - spine.halfW;
+                var right = node.x + spine.halfW;
+                var top = node.y - spine.halfH;
+                var bottom = node.y + spine.halfH;
+
+                var tx = Infinity;
+                var ty = Infinity;
+
+                if (dx > 0) {
+                    tx = (right - anchor.x) / dx;
+                } else if (dx < 0) {
+                    tx = (left - anchor.x) / dx;
+                }
+
+                if (dy > 0) {
+                    ty = (bottom - anchor.y) / dy;
+                } else if (dy < 0) {
+                    ty = (top - anchor.y) / dy;
+                }
+
+                var t = Math.min(tx, ty);
+                if (!isFinite(t) || t <= 0) return anchor;
                 return {
-                    x: anchor.x + dx * scale,
-                    y: anchor.y + dy * scale
+                    x: anchor.x + dx * t,
+                    y: anchor.y + dy * t
                 };
             }
 
@@ -528,8 +547,11 @@
 
         function drawWrappedText(c, text, x, y, maxWidth, lineHeight, maxLines, color, font) {
             if (!text) return 0;
+            c.save();
             c.fillStyle = color;
             c.font = font;
+            c.textAlign = 'left';
+            c.textBaseline = 'top';
             var words = text.split(/\s+/);
             var line = '';
             var lineCount = 0;
@@ -545,6 +567,7 @@
                             truncated = truncated.slice(0, -1);
                         }
                         c.fillText(truncated + '…', x, curY);
+                        c.restore();
                         return lineCount;
                     }
                     c.fillText(line, x, curY);
@@ -558,6 +581,7 @@
                 c.fillText(line, x, curY);
                 lineCount++;
             }
+            c.restore();
             return lineCount;
         }
 
