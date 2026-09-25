@@ -7,6 +7,8 @@
     'use strict';
 
     var domainColors = {
+        'INS': '#a371f7',
+        'INSPIRATION': '#a371f7',
         'PHL': '#a371f7',
         'PHILOSOPHY': '#a371f7',
         'BKM': '#3fb950',
