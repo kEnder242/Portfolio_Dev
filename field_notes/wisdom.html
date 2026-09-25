@@ -134,59 +134,11 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     <span class="synapse-domain-chip" data-domain="BONES" style="border-color:#56d364; color:#56d364;">🦴 RACK BONES</span>
                 </div>
 
-                <!-- Main Synapse Canvas + Focal Inspector Workspace -->
+                <!-- Main Synapse Canvas Workspace (100% Full-Bleed Canvas [FEAT-612]) -->
                 <div class="synapse-workspace" id="synapseWorkspace">
                     <div class="synapse-canvas-area" id="synapseCanvasWrap">
                         <canvas id="synapseCanvas"></canvas>
                         <div id="synapseTooltip" class="synapse-tooltip" style="display: none;"></div>
-                    </div>
-
-                    <!-- Floating Chevron Drawer Tab -->
-                    <button id="btnSynapseDrawerTab" class="synapse-drawer-tab" title="Toggle Inspector Drawer">◀◀ INSPECTOR</button>
-
-                    <!-- Right-Hand Focal Card Inspector -->
-                    <div class="synapse-inspector" id="synapseInspector">
-                        <div class="inspector-header">
-                            <div class="inspector-id-block">
-                                <span class="inspector-id" id="insCardId">PHL-001</span>
-                                <span class="inspector-domain" id="insCardDomain">PHILOSOPHY</span>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <button id="btnCloseInspector" class="studio-btn" style="padding:2px 8px; font-size:0.75rem; border-color:#30363d;" title="Close Inspector Drawer">✕</button>
-                            </div>
-                        </div>
-                        <div class="inspector-body">
-                            <h3 class="inspector-title" id="insCardTitle">Title Loading...</h3>
-                            <div>
-                                <span class="section-label">Origin [IMMUTABLE]</span>
-                                <div class="inspector-origin" id="insCardOrigin"></div>
-                            </div>
-                            <div>
-                                <span class="section-label">Narrative Context</span>
-                                <div id="insCardNarrative"></div>
-                            </div>
-                            <div id="insAnchorsSection" style="display:none;">
-                                <span class="section-label">Lab Anchors</span>
-                                <div id="insCardAnchors" class="card-anchors"></div>
-                            </div>
-                            <div>
-                                <span class="section-label">Tags</span>
-                                <div id="insCardTags"></div>
-                            </div>
-                            <div class="inspector-bones-section">
-                                <div class="inspector-bones-title">
-                                    <span>🦴 Bone Collections Context</span>
-                                    <span id="insBoneStatusBadge" style="font-size:0.65rem;"></span>
-                                </div>
-                                <div class="inspector-bones-list" id="insBoneCollectionsList"></div>
-                            </div>
-                        </div>
-                        <div class="inspector-actions">
-                            <button id="btnInsLocate" class="studio-btn btn-locate-card">📇 Locate in Cards View</button>
-                            <button id="btnInsRack" class="studio-btn bone-btn-save">+ Add to Rack</button>
-                            <button id="btnInsApprove" class="card-btn-approve" style="display:none;">✅ Approve</button>
-                            <button id="btnInsArchive" class="card-btn-archive">📦 Archive</button>
-                        </div>
                     </div>
                 </div>
             </div>
