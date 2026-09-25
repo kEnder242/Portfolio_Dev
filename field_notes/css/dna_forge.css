@@ -656,42 +656,205 @@
             gap: 16px;
             margin-top: 16px;
         }
-        .wisdom-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+        .dna-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
             padding: 16px 18px;
             font-family: var(--font-stack);
             font-size: 0.85rem;
             line-height: 1.5;
             position: relative;
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
-        .wisdom-card.tron-blue {
-            border-left: 4px solid var(--accent-color);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        .wisdom-card.tron-blue:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 12px rgba(88, 166, 255, 0.3);
+        .dna-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
         }
-        .wisdom-card.tron-red {
+
+        /* Domain Border Colors */
+        .dna-card.phl, .dna-card.philosophy { border-left: 4px solid #a371f7; }
+        .dna-card.phl:hover, .dna-card.philosophy:hover { border-color: #a371f7; box-shadow: 0 0 14px rgba(163, 113, 247, 0.35); }
+
+        .dna-card.bkm, .dna-card.behavioral { border-left: 4px solid #3fb950; }
+        .dna-card.bkm:hover, .dna-card.behavioral:hover { border-color: #3fb950; box-shadow: 0 0 14px rgba(63, 185, 80, 0.35); }
+
+        .dna-card.feat, .dna-card.feature { border-left: 4px solid #58a6ff; }
+        .dna-card.feat:hover, .dna-card.feature:hover { border-color: #58a6ff; box-shadow: 0 0 14px rgba(88, 166, 255, 0.35); }
+
+        .dna-card.wis, .dna-card.wisdom { border-left: 4px solid #e3b341; }
+        .dna-card.wis:hover, .dna-card.wisdom:hover { border-color: #e3b341; box-shadow: 0 0 14px rgba(227, 179, 65, 0.35); }
+
+        .dna-card.disc, .dna-card.discovery { border-left: 4px solid #f0883e; }
+        .dna-card.disc:hover, .dna-card.discovery:hover { border-color: #f0883e; box-shadow: 0 0 14px rgba(240, 136, 62, 0.35); }
+
+        .dna-card.rdna { border-left: 4px solid #56d364; }
+        .dna-card.rdna:hover { border-color: #56d364; box-shadow: 0 0 14px rgba(86, 211, 100, 0.35); }
+
+        .dna-card.sprint { border-left: 4px solid #d2a8ff; }
+        .dna-card.sprint:hover { border-color: #d2a8ff; box-shadow: 0 0 14px rgba(210, 168, 255, 0.35); }
+
+        .dna-card.gems { border-left: 4px solid #ec4899; }
+        .dna-card.gems:hover { border-color: #ec4899; box-shadow: 0 0 14px rgba(236, 72, 153, 0.35); }
+
+        .dna-card.resume { border-left: 4px solid #79c0ff; }
+        .dna-card.resume:hover { border-color: #79c0ff; box-shadow: 0 0 14px rgba(121, 192, 255, 0.35); }
+
+        .dna-card.flagged {
             border: 1px solid #ff3366 !important;
             border-left: 4px solid #ff0055 !important;
-            background: linear-gradient(180deg, rgba(255, 0, 85, 0.08) 0%, var(--card-bg) 100%) !important;
+            background: linear-gradient(180deg, rgba(255, 0, 85, 0.08) 0%, #0d1117 100%) !important;
             box-shadow: 0 0 14px rgba(255, 0, 85, 0.35), inset 0 0 6px rgba(255, 0, 85, 0.15) !important;
             animation: tronPulse 3s infinite alternate ease-in-out;
         }
-        .wisdom-card.tron-red:hover {
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.6), inset 0 0 10px rgba(255, 0, 85, 0.25) !important;
-            transform: translateY(-2px);
-        }
-        .wisdom-card.tron-archived {
-            opacity: 0.65;
+
+        .dna-card.archived {
+            opacity: 0.6;
             border-left: 4px solid #6e7681;
             filter: grayscale(0.5);
+        }
+
+        /* Card Anatomy Internals */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .card-id-block {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .domain-pill {
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #c9d1d9;
+        }
+        .domain-pill.phl, .domain-pill.philosophy { background: rgba(163, 113, 247, 0.15); border-color: #a371f7; color: #a371f7; }
+        .domain-pill.bkm, .domain-pill.behavioral { background: rgba(63, 185, 80, 0.15); border-color: #3fb950; color: #3fb950; }
+        .domain-pill.feat, .domain-pill.feature { background: rgba(88, 166, 255, 0.15); border-color: #58a6ff; color: #58a6ff; }
+        .domain-pill.wis, .domain-pill.wisdom { background: rgba(227, 179, 65, 0.15); border-color: #e3b341; color: #e3b341; }
+        .domain-pill.disc, .domain-pill.discovery { background: rgba(240, 136, 62, 0.15); border-color: #f0883e; color: #f0883e; }
+        .domain-pill.rdna { background: rgba(86, 211, 100, 0.15); border-color: #56d364; color: #56d364; }
+        .domain-pill.sprint { background: rgba(210, 168, 255, 0.15); border-color: #d2a8ff; color: #d2a8ff; }
+        .domain-pill.gems { background: rgba(236, 72, 153, 0.15); border-color: #ec4899; color: #ec4899; }
+        .domain-pill.resume { background: rgba(121, 192, 255, 0.15); border-color: #79c0ff; color: #79c0ff; }
+
+        .card-id {
+            font-family: monospace;
+            font-weight: 700;
+            color: #f0f6fc;
+            font-size: 0.9rem;
+        }
+        .card-actions-quick {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-card-rack, .btn-card-synapse {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: var(--font-stack);
+        }
+        .btn-card-rack:hover {
+            border-color: #56d364;
+            color: #56d364;
+            background: rgba(86, 211, 100, 0.1);
+        }
+        .btn-card-synapse:hover {
+            border-color: #58a6ff;
+            color: #58a6ff;
+            background: rgba(88, 166, 255, 0.1);
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            margin: 0;
+            line-height: 1.35;
+        }
+        .card-origin-block {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 2px solid #58a6ff;
+            padding: 6px 10px;
+            border-radius: 0 4px 4px 0;
+            margin: 2px 0;
+        }
+        .card-origin-text {
+            margin: 0;
+            font-style: italic;
+            color: #c9d1d9;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .card-narrative {
+            color: #8b949e;
+            font-size: 0.82rem;
+            line-height: 1.45;
+        }
+        .card-narrative p {
+            margin: 0;
+            white-space: pre-line;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .card-anchors {
+            font-size: 0.75rem;
+            color: var(--sub-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+        .card-anchors code {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.72rem;
+            color: #58a6ff;
+        }
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 2px;
+        }
+        .card-tags .tag {
+            background: rgba(56, 139, 253, 0.1);
+            color: #58a6ff;
+            border: 1px solid rgba(56, 139, 253, 0.25);
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-size: 0.7rem;
+            font-family: monospace;
         }
 
         @keyframes tronPulse {

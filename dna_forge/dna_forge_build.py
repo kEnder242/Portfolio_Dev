@@ -59,20 +59,24 @@ def load_manifest():
         except Exception as e:
             print(f"Warning loading {MANIFEST_PATH}: {e}")
 
-    # Fallback to direct dna files if needed
+    # Always load ground-truth philosophy and wisdom data if available
     phi_path = DNA_DIR / "philosophy_data.json"
-    if not manifest["philosophy"] and phi_path.exists():
+    if phi_path.exists():
         try:
             with open(phi_path, "r", encoding="utf-8") as f:
-                manifest["philosophy"] = json.load(f)
+                phi_list = json.load(f)
+                if phi_list and isinstance(phi_list, list):
+                    manifest["philosophy"] = [c for c in phi_list if str(c.get("id", "")).startswith("PHL-")]
         except Exception:
             pass
 
     wis_path = DNA_DIR / "wisdom_data.json"
-    if not manifest["wisdom"] and wis_path.exists():
+    if wis_path.exists():
         try:
             with open(wis_path, "r", encoding="utf-8") as f:
-                manifest["wisdom"] = json.load(f)
+                wis_list = json.load(f)
+                if wis_list and isinstance(wis_list, list):
+                    manifest["wisdom"] = [c for c in wis_list if str(c.get("id", "")).startswith("WIS-")]
         except Exception:
             pass
 
@@ -222,12 +226,13 @@ def is_flagged_card(card, decisions=None):
 
 def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     cid = card.get("id") or f"DNA-{index:03d}"
-    domain = (card.get("domain") or card.get("_sourceCollection") or cid.split("-")[0]).upper()
+    prefix = cid.split("-")[0].upper()
+    domain = (card.get("domain") or prefix).upper()
     is_archived = is_archived_card(card, decisions)
     is_flagged = is_flagged_card(card, decisions)
 
     # Title
-    title = card.get("title") or (card.get("synthesis", {}) or {}).get("title") or (card.get("theme")) or cid
+    title = card.get("title") or (card.get("synthesis", {}) or {}).get("title") or card.get("theme") or cid
 
     # Origin / Verbatim
     origin_obj = card.get("origin") or {}
@@ -324,9 +329,17 @@ def build_page():
     total_census = sum(domain_counts.values())
     sprint_delta = "+451"
 
+    seen_ids = set()
     all_cards = []
     for col, items in manifest.items():
+        if not isinstance(items, list):
+            continue
         for item in items:
+            cid = item.get("id")
+            if cid and cid in seen_ids:
+                continue
+            if cid:
+                seen_ids.add(cid)
             copy = dict(item)
             copy['_sourceCollection'] = col
             all_cards.append(copy)
