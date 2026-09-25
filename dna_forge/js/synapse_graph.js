@@ -1,0 +1,948 @@
+// =============================================================
+// SYNAPSE KNOWLEDGE GRAPH ENGINE [FEAT-596 / FEAT-603]
+// Tiered Progressive-Disclosure Dynamic Constellation Canvas
+// =============================================================
+
+(function() {
+    'use strict';
+
+    var domainColors = {
+        'PHL': '#a371f7',
+        'PHILOSOPHY': '#a371f7',
+        'BKM': '#3fb950',
+        'BEHAVIORAL': '#3fb950',
+        'FEAT': '#58a6ff',
+        'FEATURE': '#58a6ff',
+        'WIS': '#e3b341',
+        'WISDOM': '#e3b341',
+        'DISC': '#f0883e',
+        'DISCOVERY': '#f0883e',
+        'RDNA': '#56d364',
+        'SPRINT': '#d2a8ff',
+        'GEMS': '#ec4899',
+        'BONES': '#56d364'
+    };
+
+    function escapeHtml(str) {
+        return String(str == null ? '' : str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    // -------------------------------------------------------------
+    // HTML5 EGO CANVAS VISUALIZER (PURE MINIMAL BREATHING CONSTELLATION)
+    // -------------------------------------------------------------
+    function initEgoSynapseCanvas() {
+        var canvas = document.getElementById('synapseCanvas');
+        var wrap = document.getElementById('synapseCanvasWrap');
+        var workspace = document.getElementById('synapseWorkspace');
+        var tooltip = document.getElementById('synapseTooltip');
+        var inspectorEl = document.getElementById('synapseInspector');
+        var btnDrawerTab = document.getElementById('btnSynapseDrawerTab');
+        var btnCloseIns = document.getElementById('btnCloseInspector');
+        if (!canvas || !wrap) return;
+
+        var ctx = canvas.getContext('2d');
+        var width = wrap.clientWidth || 800;
+        var height = wrap.clientHeight || 720;
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.scale(dpr, dpr);
+
+        var simTime = 0;
+        var zoom = 1.0;
+        var panX = 0;
+        var panY = 0;
+        var isPanning = false;
+        var startPanX = 0;
+        var startPanY = 0;
+        var hoveredOrbitNode = null;
+        var hopDepth = 1;
+        var synapseFilterDomain = 'ALL';
+
+        // Persistent particle memory for smooth organic morphing
+        var activeNodeMap = {}; // id -> nodeObject
+        var activeLinks = [];   // array of { source, target, weight, isGrandchild }
+        var simEnergy = 1.0;    // Simulation energy cooling
+
+        // Global node maps from manifest
+        var globalNodesMap = {};
+        if (window.__SYNAPSE_GRAPH__ && window.__SYNAPSE_GRAPH__.nodes) {
+            window.__SYNAPSE_GRAPH__.nodes.forEach(function(n) {
+                globalNodesMap[n.id] = n;
+            });
+        }
+        var cardsById = {};
+        if (window.__DNA_MANIFEST__) {
+            Object.keys(window.__DNA_MANIFEST__).forEach(function(k) {
+                var items = window.__DNA_MANIFEST__[k] || [];
+                if (Array.isArray(items)) {
+                    items.forEach(function(c) {
+                        if (c.id) cardsById[c.id] = c;
+                    });
+                }
+            });
+        }
+
+        function getNeighborsFor(cid) {
+            var res = [];
+            if (!window.__SYNAPSE_GRAPH__ || !window.__SYNAPSE_GRAPH__.links) return res;
+            window.__SYNAPSE_GRAPH__.links.forEach(function(l) {
+                var sId = typeof l.source === 'object' ? l.source.id : l.source;
+                var tId = typeof l.target === 'object' ? l.target.id : l.target;
+                if (sId === cid && tId !== cid) res.push({ targetId: tId, weight: l.weight || 1 });
+                else if (tId === cid && sId !== cid) res.push({ targetId: sId, weight: l.weight || 1 });
+            });
+            return res;
+        }
+
+        function computeConstellation() {
+            var cx = width / 2;
+            var cy = height / 2;
+            simEnergy = Math.max(simEnergy, 0.65); // Re-energize simulation on cluster change
+
+            var focalNodeId = window.__focalNodeId || 'PHL-001';
+            var focalBreadcrumbs = window.__focalBreadcrumbs || [focalNodeId];
+
+            // 1. Traverse 1-Hop and 2-Hop Ego Network
+            var directNeighbors = getNeighborsFor(focalNodeId);
+            var directSet = {};
+            directNeighbors.forEach(function(n) { directSet[n.targetId] = true; });
+
+            var grandchildSet = {};
+            if (hopDepth >= 2) {
+                directNeighbors.forEach(function(n) {
+                    var gNeigh = getNeighborsFor(n.targetId);
+                    gNeigh.forEach(function(gn) {
+                        if (gn.targetId !== focalNodeId && !directSet[gn.targetId]) {
+                            grandchildSet[gn.targetId] = true;
+                        }
+                    });
+                });
+            }
+
+            // 2. Compute Active Cluster
+            var clusterIds = [];
+            var trail = focalBreadcrumbs.slice(-3);
+            var trailSet = {};
+            trail.forEach(function(id) { trailSet[id] = true; });
+
+            if (synapseFilterDomain === 'ALL') {
+                clusterIds = Object.keys(trailSet)
+                    .concat(Object.keys(directSet))
+                    .concat(Object.keys(grandchildSet));
+            } else if (synapseFilterDomain === 'BONES') {
+                var activeBones = window.__activeBones || [];
+                clusterIds = activeBones.map(function(b) { return b.id; });
+                if (clusterIds.indexOf(focalNodeId) === -1) clusterIds.unshift(focalNodeId);
+            } else {
+                // Filter direct neighbors by selected domain
+                Object.keys(directSet).forEach(function(cid) {
+                    var nData = cardsById[cid] || globalNodesMap[cid];
+                    var dName = ((nData && nData.domain) || cid.split('-')[0]).toUpperCase();
+                    if (dName !== synapseFilterDomain) {
+                        delete directSet[cid];
+                    }
+                });
+                clusterIds = Object.keys(trailSet).concat(Object.keys(directSet));
+            }
+
+            // 3. Update particle lifecycle (Morphing)
+            var targetSet = {};
+            var isMobile = (width < 768 || window.innerWidth < 768);
+
+            clusterIds.forEach(function(cid, idx) {
+                targetSet[cid] = true;
+                // Merge card data (with origin & synthesis) over graph stub
+                var nData = Object.assign({}, globalNodesMap[cid] || {}, cardsById[cid] || { id: cid, title: cid, domain: cid.split('-')[0] });
+                var dName = (nData.domain || cid.split('-')[0]).toUpperCase();
+                var isDocked = (window.__activeBones || []).some(function(b) { return b.id === cid; });
+                var isFocal = (cid === focalNodeId);
+                var isTrail = (trail.indexOf(cid) !== -1);
+                var isDirect = (!isTrail && !!directSet[cid]);
+                var isGrandchild = (!isTrail && !isDirect && !!grandchildSet[cid]);
+
+                // [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Anatomy
+                var origin = (nData.origin && (nData.origin.text || nData.origin.verbatim)) || nData.verbatim || '';
+                var narrative = (nData.synthesis && nData.synthesis.narrative_context) || nData.narrative_context || nData.summary || '';
+                var anchors = (nData.synthesis && nData.synthesis.lab_anchors) || nData.lab_anchors || [];
+                var tags = (nData.metadata && nData.metadata.tags) || (nData.synthesis && nData.synthesis.tags) || nData.tags || [];
+                if (typeof tags === 'string') tags = tags.split(',');
+                var links = (nData.metadata && nData.metadata.explicit_links) || [];
+
+                var nodeColor = isGrandchild ? '#6e7681' : (domainColors[dName] || '#8b949e');
+                
+                // Card dimensions with responsive mobile level downgrade
+                var cardW = isFocal ? (isMobile ? 220 : 280) : (isTrail ? (isMobile ? 160 : 230) : (isDirect ? (isMobile ? 0 : 190) : 0));
+                var cardH = isFocal ? (isMobile ? 260 : 360) : (isTrail ? (isMobile ? 140 : 240) : (isDirect ? (isMobile ? 0 : 150) : 0));
+                var isDirectDot = isDirect && isMobile;
+                var nodeRadius = isFocal ? 22 : (isTrail ? 15 : (isDirect ? (isMobile ? 7 : 11) : 5));
+
+                if (!activeNodeMap[cid]) {
+                    var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
+                    var spawnDist = isGrandchild ? (380 + Math.random() * 80) : (isTrail ? 230 : (290 + Math.random() * 60));
+                    activeNodeMap[cid] = {
+                        id: cid,
+                        title: nData.title || (nData.synthesis && nData.synthesis.title) || cid,
+                        origin: origin,
+                        narrative: narrative,
+                        anchors: anchors,
+                        tags: tags,
+                        linksCount: links.length,
+                        domain: dName,
+                        isCenter: isFocal,
+                        isTrail: isTrail,
+                        isDirect: isDirect,
+                        isGrandchild: isGrandchild,
+                        isDirectDot: isDirectDot,
+                        isDocked: isDocked,
+                        cardWidth: cardW,
+                        cardHeight: cardH,
+                        x: isFocal ? cx : (cx + Math.cos(spawnAngle) * spawnDist),
+                        y: isFocal ? cy : (cy + Math.sin(spawnAngle) * spawnDist),
+                        vx: 0,
+                        vy: 0,
+                        radius: nodeRadius,
+                        color: nodeColor,
+                        alpha: 0.0,
+                        targetAlpha: isGrandchild ? 0.75 : 1.0,
+                        noiseSeed: Math.random() * 100
+                    };
+                } else {
+                    var n = activeNodeMap[cid];
+                    n.isCenter = isFocal;
+                    n.isTrail = isTrail;
+                    n.isDirect = isDirect;
+                    n.isGrandchild = isGrandchild;
+                    n.isDirectDot = isDirectDot;
+                    n.isDocked = isDocked;
+                    n.cardWidth = cardW;
+                    n.cardHeight = cardH;
+                    n.radius = nodeRadius;
+                    n.targetAlpha = isGrandchild ? 0.75 : 1.0;
+                    n.title = nData.title || (nData.synthesis && nData.synthesis.title) || cid;
+                    n.origin = origin;
+                    n.narrative = narrative;
+                    n.anchors = anchors;
+                    n.tags = tags;
+                    n.linksCount = links.length;
+                    n.color = nodeColor;
+                }
+            });
+
+            // Fade out departing nodes
+            Object.keys(activeNodeMap).forEach(function(cid) {
+                if (!targetSet[cid]) {
+                    activeNodeMap[cid].targetAlpha = 0.0;
+                }
+            });
+
+            // 4. Compute Interconnected Synaptic Threads
+            activeLinks = [];
+            var activeNodesList = Object.values(activeNodeMap);
+            for (var i = 0; i < activeNodesList.length; i++) {
+                var src = activeNodesList[i];
+                if (src.targetAlpha <= 0.0) continue;
+                var srcNeigh = getNeighborsFor(src.id);
+                for (var j = i + 1; j < activeNodesList.length; j++) {
+                    var tgt = activeNodesList[j];
+                    if (tgt.targetAlpha <= 0.0) continue;
+                    var edge = srcNeigh.find(function(l) { return l.targetId === tgt.id; });
+                    if (edge) {
+                        activeLinks.push({
+                            source: src,
+                            target: tgt,
+                            isGrandchild: (src.isGrandchild || tgt.isGrandchild),
+                            weight: edge.weight || 1
+                        });
+                    }
+                }
+            }
+        }
+
+        // Global alias for compatibility
+        window.computeEgoGraph = computeConstellation;
+        window.computeConstellation = computeConstellation;
+
+        function stepPhysics() {
+            var cx = width / 2;
+            var cy = height / 2;
+            simTime += 0.02;
+
+            var nodes = Object.values(activeNodeMap);
+
+            // 1. Alpha dissolve & cleanup
+            for (var i = nodes.length - 1; i >= 0; i--) {
+                var n = nodes[i];
+                n.alpha += (n.targetAlpha - n.alpha) * 0.12;
+                if (n.alpha < 0.01 && n.targetAlpha === 0.0) {
+                    delete activeNodeMap[n.id];
+                }
+            }
+
+            // Starscape Cooling: Keep focal node centered even when sleeping
+            if (simEnergy < 0.005) {
+                nodes.forEach(function(n) {
+                    if (n.isCenter) { n.x = cx; n.y = cy; }
+                });
+                return;
+            }
+            simEnergy *= 0.95; // Smooth exponential alpha cooling
+
+            nodes = Object.values(activeNodeMap);
+
+            // Effective card radius
+            nodes.forEach(function(n) {
+                n.effectiveRadius = (n.cardWidth > 0 && n.cardHeight > 0)
+                    ? Math.hypot(n.cardWidth / 2, n.cardHeight / 2)
+                    : (n.radius || 8);
+            });
+
+            // 2. Center Anchoring for Focal Node & Orbital Target Gravity for Outer Nodes
+            nodes.forEach(function(n) {
+                if (n.isCenter) {
+                    // Pinned dead-center in the viewport
+                    n.x += (cx - n.x) * 0.35;
+                    n.y += (cy - n.y) * 0.35;
+                    n.vx = 0;
+                    n.vy = 0;
+                    return;
+                }
+
+                // Orbital Harmonic Spring towards (cx, cy)
+                var cDx = n.x - cx;
+                var cDy = n.y - cy;
+                var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
+                var targetOrbit = n.isTrail ? 240 : (n.isDirect ? 350 : 480);
+                var orbitDelta = cDist - targetOrbit;
+                n.vx -= (cDx / cDist) * orbitDelta * 0.022 * simEnergy;
+                n.vy -= (cDy / cDist) * orbitDelta * 0.022 * simEnergy;
+            });
+
+            // 3. Multi-body Coulomb Repulsion between orbiting peers
+            for (var i = 0; i < nodes.length; i++) {
+                var n1 = nodes[i];
+                if (n1.isCenter) continue;
+                for (var j = i + 1; j < nodes.length; j++) {
+                    var n2 = nodes[j];
+                    if (n2.isCenter) continue;
+                    var dx = n2.x - n1.x;
+                    var dy = n2.y - n1.y;
+                    var distSq = dx * dx + dy * dy + 300;
+                    var dist = Math.sqrt(distSq) || 1;
+                    var minSep = (n1.effectiveRadius + n2.effectiveRadius + 24);
+                    var repForce = (8000 * simEnergy) / distSq;
+                    if (dist < minSep) {
+                        repForce += (minSep - dist) * 0.05 * simEnergy;
+                    }
+                    var fx = (dx / dist) * repForce;
+                    var fy = (dy / dist) * repForce;
+                    n1.vx -= fx;
+                    n1.vy -= fy;
+                    n2.vx += fx;
+                    n2.vy += fy;
+                }
+            }
+
+            // 4. Spring Link Tension along Synaptic Threads
+            var kSpring = 0.028 * simEnergy;
+            activeLinks.forEach(function(l) {
+                if (!activeNodeMap[l.source.id] || !activeNodeMap[l.target.id]) return;
+                var src = l.source;
+                var tgt = l.target;
+                var dx = tgt.x - src.x;
+                var dy = tgt.y - src.y;
+                var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                var restDist = (src.effectiveRadius + tgt.effectiveRadius + 60);
+                if (l.isGrandchild) restDist = Math.min(restDist, 180);
+
+                var force = (dist - restDist) * kSpring;
+                var fx = (dx / dist) * force;
+                var fy = (dy / dist) * force;
+                if (!src.isCenter) { src.vx += fx; src.vy += fy; }
+                if (!tgt.isCenter) { tgt.vx -= fx; tgt.vy -= fy; }
+            });
+
+            // 5. Critical Damping & Position Integration
+            nodes.forEach(function(n) {
+                if (n.isCenter) return;
+                n.vx *= 0.80;
+                n.vy *= 0.80;
+                n.x += n.vx;
+                n.y += n.vy;
+
+                // Gentle organic Brownian breathing
+                n.x += Math.sin(simTime + n.noiseSeed) * 0.18;
+                n.y += Math.cos(simTime + n.noiseSeed * 1.3) * 0.18;
+            });
+        }
+
+        // --- [FEAT-603] Vertical Medial Axial Line-Segment Spine Approximation for Box-to-Box Connections ---
+        function getCardAxialSpine(node) {
+            if (!node.cardWidth || !node.cardHeight) {
+                return { p1: { x: node.x, y: node.y }, p2: { x: node.x, y: node.y }, halfW: 0, halfH: 0, isDot: true };
+            }
+            var halfW = node.cardWidth / 2;
+            var halfH = node.cardHeight / 2;
+            // Dominant vertical axis for portrait cards (taller than wide)
+            var spineInset = Math.min(halfH * 0.72, halfH - 18);
+            return {
+                p1: { x: node.x, y: node.y - spineInset },
+                p2: { x: node.x, y: node.y + spineInset },
+                halfW: halfW,
+                halfH: halfH,
+                isDot: false
+            };
+        }
+
+        function closestPointOnSegment(p, a, b) {
+            var abx = b.x - a.x;
+            var aby = b.y - a.y;
+            var abLenSq = abx * abx + aby * aby;
+            if (abLenSq < 0.0001) return { x: a.x, y: a.y };
+            var apx = p.x - a.x;
+            var apy = p.y - a.y;
+            var t = Math.max(0, Math.min(1, (apx * abx + apy * aby) / abLenSq));
+            return { x: a.x + t * abx, y: a.y + t * aby };
+        }
+
+        function getOptimalConnectionAnchors(srcNode, tgtNode) {
+            var sSpine = getCardAxialSpine(srcNode);
+            var tSpine = getCardAxialSpine(tgtNode);
+
+            var pSrc = { x: srcNode.x, y: srcNode.y };
+            var pTgt = { x: tgtNode.x, y: tgtNode.y };
+
+            if (!sSpine.isDot && !tSpine.isDot) {
+                var midTgt = { x: (tSpine.p1.x + tSpine.p2.x) / 2, y: (tSpine.p1.y + tSpine.p2.y) / 2 };
+                pSrc = closestPointOnSegment(midTgt, sSpine.p1, sSpine.p2);
+                pTgt = closestPointOnSegment(pSrc, tSpine.p1, tSpine.p2);
+                pSrc = closestPointOnSegment(pTgt, sSpine.p1, sSpine.p2);
+            } else if (!sSpine.isDot && tSpine.isDot) {
+                pSrc = closestPointOnSegment(pTgt, sSpine.p1, sSpine.p2);
+            } else if (sSpine.isDot && !tSpine.isDot) {
+                pTgt = closestPointOnSegment(pSrc, tSpine.p1, tSpine.p2);
+            }
+
+            function projectToPerimeter(node, spine, anchor, targetPt) {
+                if (spine.isDot) return { x: node.x, y: node.y };
+                var dx = targetPt.x - anchor.x;
+                var dy = targetPt.y - anchor.y;
+                if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return anchor;
+
+                var scaleX = spine.halfW / (Math.abs(dx) || 0.001);
+                var scaleY = spine.halfH / (Math.abs(dy) || 0.001);
+                var scale = Math.min(scaleX, scaleY, 1.0);
+                return {
+                    x: anchor.x + dx * scale,
+                    y: anchor.y + dy * scale
+                };
+            }
+
+            return {
+                srcAnchor: projectToPerimeter(srcNode, sSpine, pSrc, pTgt),
+                tgtAnchor: projectToPerimeter(tgtNode, tSpine, pTgt, pSrc)
+            };
+        }
+
+        function drawRoundedRect(c, x, y, w, h, r) {
+            c.beginPath();
+            c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y);
+            c.arcTo(x + w, y, x + w, y + r, r);
+            c.lineTo(x + w, y + h - r);
+            c.arcTo(x + w, y + h, x + w - r, y + h, r);
+            c.lineTo(x + r, y + h);
+            c.arcTo(x, y + h, x, y + h - r, r);
+            c.lineTo(x, y + r);
+            c.arcTo(x, y, x + r, y, r);
+            c.closePath();
+        }
+
+        function drawWrappedText(c, text, x, y, maxWidth, lineHeight, maxLines, color, font) {
+            if (!text) return 0;
+            c.fillStyle = color;
+            c.font = font;
+            var words = text.split(/\s+/);
+            var line = '';
+            var lineCount = 0;
+            var curY = y;
+            for (var i = 0; i < words.length; i++) {
+                var testLine = line + (line ? ' ' : '') + words[i];
+                var metrics = c.measureText(testLine);
+                if (metrics.width > maxWidth && line) {
+                    lineCount++;
+                    if (lineCount >= maxLines) {
+                        var truncated = line;
+                        while (truncated && c.measureText(truncated + '…').width > maxWidth) {
+                            truncated = truncated.slice(0, -1);
+                        }
+                        c.fillText(truncated + '…', x, curY);
+                        return lineCount;
+                    }
+                    c.fillText(line, x, curY);
+                    line = words[i];
+                    curY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            if (line && lineCount < maxLines) {
+                c.fillText(line, x, curY);
+                lineCount++;
+            }
+            return lineCount;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(panX, panY);
+            ctx.scale(zoom, zoom);
+
+            var focalBreadcrumbs = window.__focalBreadcrumbs || [window.__focalNodeId || 'PHL-001'];
+            var trailNodes = focalBreadcrumbs.slice(-3)
+                .map(function(id) { return activeNodeMap[id]; })
+                .filter(Boolean);
+
+            if (trailNodes.length >= 2) {
+                ctx.beginPath();
+                var anchors0 = getOptimalConnectionAnchors(trailNodes[0], trailNodes[1]);
+                ctx.moveTo(anchors0.srcAnchor.x, anchors0.srcAnchor.y);
+                for (var tIdx = 1; tIdx < trailNodes.length; tIdx++) {
+                    var anchorsT = getOptimalConnectionAnchors(trailNodes[tIdx - 1], trailNodes[tIdx]);
+                    ctx.lineTo(anchorsT.tgtAnchor.x, anchorsT.tgtAnchor.y);
+                }
+                ctx.strokeStyle = 'rgba(163, 113, 247, 0.55)';
+                ctx.lineWidth = 3.2;
+                ctx.shadowColor = '#a371f7';
+                ctx.shadowBlur = 12;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+
+            // --- Render Perimeter-Connected Synaptic Threads ---
+            activeLinks.forEach(function(l) {
+                if (l.source.alpha < 0.02 || l.target.alpha < 0.02) return;
+                var isHovered = (hoveredOrbitNode && (l.source === hoveredOrbitNode || l.target === hoveredOrbitNode));
+                var baseAlpha = l.isGrandchild ? 0.25 : 0.45;
+                var linkAlpha = baseAlpha * Math.min(l.source.alpha, l.target.alpha);
+
+                var anchors = getOptimalConnectionAnchors(l.source, l.target);
+
+                ctx.beginPath();
+                ctx.moveTo(anchors.srcAnchor.x, anchors.srcAnchor.y);
+                ctx.lineTo(anchors.tgtAnchor.x, anchors.tgtAnchor.y);
+
+                if (isHovered) {
+                    ctx.strokeStyle = 'rgba(88, 166, 255, 0.95)';
+                    ctx.lineWidth = 2.4;
+                    ctx.shadowColor = '#58a6ff';
+                    ctx.shadowBlur = 8;
+                } else if (l.isGrandchild) {
+                    ctx.strokeStyle = 'rgba(110, 118, 129, ' + linkAlpha.toFixed(3) + ')';
+                    ctx.lineWidth = 1.0;
+                    ctx.shadowBlur = 0;
+                } else {
+                    ctx.strokeStyle = 'rgba(88, 166, 255, ' + linkAlpha.toFixed(3) + ')';
+                    ctx.lineWidth = 1.5;
+                    ctx.shadowBlur = 0;
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            });
+
+            // --- Tiered Canvas Card Anatomy & Rendering (Layer Sorted) ---
+            var nodes = Object.values(activeNodeMap);
+            nodes.sort(function(a, b) {
+                function getLayer(n) {
+                    if (n.isCenter) return 100; // Center card ALWAYS on top
+                    if (hoveredOrbitNode === n) return 90; // Hovered card elevated
+                    if (n.isTrail) return 50;
+                    if (n.isDirect && !n.isDirectDot) return 30;
+                    if (n.isDirectDot) return 20;
+                    return 10; // Grandchildren in background
+                }
+                return getLayer(a) - getLayer(b);
+            });
+
+            nodes.forEach(function(n) {
+                if (n.alpha < 0.01) return;
+                var isHovered = (hoveredOrbitNode === n);
+                ctx.globalAlpha = n.alpha;
+
+                if (n.isGrandchild || n.isDirectDot) {
+                    // Tier 3 or Mobile 1-Hop: Glowing dots
+                    var dotColor = n.isGrandchild ? (isHovered ? '#ffffff' : '#6e7681') : (n.color || '#58a6ff');
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, isHovered ? (n.radius + 2) : n.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = dotColor;
+                    if (isHovered) {
+                        ctx.shadowColor = n.color || '#58a6ff';
+                        ctx.shadowBlur = 12;
+                    } else {
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    if (isHovered) {
+                        ctx.fillStyle = '#f0f6fc';
+                        ctx.font = 'bold 10px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'left';
+                        ctx.fillText(n.id, n.x + 12, n.y + 3);
+                    }
+
+                } else if (n.cardWidth > 0 && n.cardHeight > 0) {
+                    var cardX = n.x - n.cardWidth / 2;
+                    var cardY = n.y - n.cardHeight / 2;
+                    var radius = n.isCenter ? 10 : (n.isTrail ? 8 : 7);
+
+                    // 1. Background Fill
+                    drawRoundedRect(ctx, cardX, cardY, n.cardWidth, n.cardHeight, radius);
+                    ctx.fillStyle = n.isCenter ? 'rgba(9, 13, 22, 0.98)' : 'rgba(13, 17, 23, 0.96)';
+                    if (n.isCenter) {
+                        ctx.shadowColor = '#58a6ff';
+                        ctx.shadowBlur = isHovered ? 28 : 18;
+                    } else if (isHovered) {
+                        ctx.shadowColor = n.color;
+                        ctx.shadowBlur = 16;
+                    } else {
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.fill();
+
+                    // 2. Card Border
+                    ctx.lineWidth = n.isCenter ? 2.5 : (isHovered ? 2.0 : 1.4);
+                    ctx.strokeStyle = n.isCenter ? '#ffffff' : (isHovered ? '#ffffff' : n.color);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+
+                    // 3. Top Header Bar
+                    var pillW = n.isCenter ? 50 : (n.isTrail ? 42 : 36);
+                    var pillH = n.isCenter ? 20 : (n.isTrail ? 18 : 16);
+                    var pillX = cardX + 12;
+                    var pillY = cardY + 12;
+                    drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 4);
+                    ctx.fillStyle = n.color;
+                    ctx.globalAlpha = n.alpha * 0.25;
+                    ctx.fill();
+                    ctx.globalAlpha = n.alpha;
+                    ctx.fillStyle = n.color;
+                    ctx.font = 'bold ' + (n.isCenter ? '11px' : '9.5px') + ' "JetBrains Mono", monospace';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(n.domain, pillX + pillW / 2, pillY + pillH - 4);
+
+                    // Card ID
+                    ctx.fillStyle = n.isCenter ? '#ffffff' : '#f0f6fc';
+                    ctx.font = 'bold ' + (n.isCenter ? '13px' : '11.5px') + ' "JetBrains Mono", monospace';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(n.id, pillX + pillW + 8, pillY + pillH - 4);
+
+                    // Links Count Badge
+                    if (n.linksCount > 0) {
+                        ctx.fillStyle = '#8b949e';
+                        ctx.font = '10px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'right';
+                        ctx.fillText('🔗 ' + n.linksCount, cardX + n.cardWidth - 12, pillY + pillH - 4);
+                    }
+
+                    // 4. Title Rendering (High-Contrast Bold)
+                    var titleY = pillY + pillH + (n.isCenter ? 18 : 14);
+                    var maxTitleLines = n.isCenter ? 3 : (n.isTrail ? 2 : 1);
+                    var titleFont = 'bold ' + (n.isCenter ? '13px' : (n.isTrail ? '11.5px' : '11px')) + ' -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    var titleLinesDrawn = drawWrappedText(ctx, n.title || n.id, cardX + 12, titleY, n.cardWidth - 24, (n.isCenter ? 17 : 14), maxTitleLines, '#ffffff', titleFont);
+
+                    // 5. Tier-Specific Body Content
+                    if (n.isCenter) {
+                        // Tier 0: Center FULL Vertical Portrait Card
+                        var curBlockY = titleY + (titleLinesDrawn * 17) + 6;
+
+                        if (n.origin) {
+                            var origSnippet = '❝ ' + n.origin.slice(0, 160) + (n.origin.length > 160 ? '...' : '') + ' ❞';
+                            var originLines = drawWrappedText(ctx, origSnippet, cardX + 12, curBlockY, n.cardWidth - 24, 14, 4, '#c9d1d9', 'italic 10.5px sans-serif');
+                            curBlockY += (originLines * 14) + 8;
+                        }
+
+                        if (n.narrative) {
+                            var narrLines = drawWrappedText(ctx, n.narrative, cardX + 12, curBlockY, n.cardWidth - 24, 14, 5, '#8b949e', '11px sans-serif');
+                        }
+
+                        // Bottom Anchors & Tags Rows
+                        var metaY = cardY + n.cardHeight - 12;
+                        var tagsText = (n.tags || []).slice(0, 3).map(function(t) { return '#' + t; }).join(' ');
+                        if (tagsText) {
+                            ctx.fillStyle = '#58a6ff';
+                            ctx.font = '9.5px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(tagsText, cardX + 12, metaY);
+                        }
+                        if (n.anchors && n.anchors.length > 0) {
+                            ctx.fillStyle = '#3fb950';
+                            ctx.font = '9.5px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'right';
+                            ctx.fillText(n.anchors.slice(0, 2).map(function(a) { return '[' + a + ']'; }).join(' '), cardX + n.cardWidth - 12, metaY);
+                        }
+
+                    } else if (n.isTrail) {
+                        // Tier 1: Trail Node (Name + Description + Context Anchors)
+                        var narrY = titleY + (titleLinesDrawn * 14) + 6;
+                        var narrLines = drawWrappedText(ctx, n.narrative || '', cardX + 12, narrY, n.cardWidth - 24, 13, 4, '#8b949e', '10px sans-serif');
+
+                        var metaY = cardY + n.cardHeight - 10;
+                        if (n.anchors && n.anchors.length > 0) {
+                            ctx.fillStyle = '#58a6ff';
+                            ctx.font = '9px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('⚓ ' + n.anchors.slice(0, 2).join(', '), cardX + 12, metaY);
+                        }
+
+                    } else if (n.isDirect) {
+                        // Tier 2: Children Node (Name + Description)
+                        var narrY = titleY + (titleLinesDrawn * 14) + 4;
+                        drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 12, 3, '#8b949e', '9.5px sans-serif');
+                    }
+                }
+                ctx.globalAlpha = 1.0;
+            });
+
+            ctx.restore();
+        }
+
+        function loop() {
+            stepPhysics();
+            draw();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+
+        window.__triggerSynapseRedraw = function() { computeConstellation(); };
+        computeConstellation();
+
+        function screenToWorld(sx, sy) {
+            var rect = canvas.getBoundingClientRect();
+            var x = (sx - rect.left - panX) / zoom;
+            var y = (sy - rect.top - panY) / zoom;
+            return { x: x, y: y };
+        }
+
+        function findNodeAt(sx, sy) {
+            var pt = screenToWorld(sx, sy);
+            var nodes = Object.values(activeNodeMap);
+            for (var i = nodes.length - 1; i >= 0; i--) {
+                var n = nodes[i];
+                if (n.alpha < 0.15) continue;
+                if (n.cardWidth > 0 && n.cardHeight > 0) {
+                    var halfW = n.cardWidth / 2 + 6;
+                    var halfH = n.cardHeight / 2 + 6;
+                    if (pt.x >= n.x - halfW && pt.x <= n.x + halfW &&
+                        pt.y >= n.y - halfH && pt.y <= n.y + halfH) {
+                        return n;
+                    }
+                } else {
+                    var dx = pt.x - n.x;
+                    var dy = pt.y - n.y;
+                    if (dx * dx + dy * dy <= (n.radius + 10) * (n.radius + 10)) return n;
+                }
+            }
+            return null;
+        }
+
+        wrap.addEventListener('mousedown', function(e) {
+            if (e.target !== canvas) return;
+            var hit = findNodeAt(e.clientX, e.clientY);
+            if (hit) {
+                if (hit.id !== window.__focalNodeId) {
+                    if (window.focusCardInSynapse) window.focusCardInSynapse(hit.id);
+                }
+            } else {
+                isPanning = true;
+                startPanX = e.clientX - panX;
+                startPanY = e.clientY - panY;
+            }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (isPanning) {
+                panX = e.clientX - startPanX;
+                panY = e.clientY - startPanY;
+                simEnergy = Math.max(simEnergy, 0.1);
+            } else {
+                var hit = findNodeAt(e.clientX, e.clientY);
+                hoveredOrbitNode = hit;
+
+                if (hit && !hit.isCenter) {
+                    var rect = wrap.getBoundingClientRect();
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = Math.min(rect.width - 400, Math.max(10, e.clientX - rect.left + 15)) + 'px';
+                    tooltip.style.top = (e.clientY - rect.top + 10) + 'px';
+                    tooltip.style.maxWidth = hit.isTrail ? '390px' : (hit.isDirect ? '340px' : '280px');
+                    
+                    var tagsList = (hit.tags || []).slice(0, 5).map(function(t) { return '#' + t; }).join(' ');
+                    var anchorsList = (hit.anchors || []).map(function(a) { return '<code>' + escapeHtml(a) + '</code>'; }).join(' ');
+                    var origBlock = hit.origin ? '<div style="color:#c9d1d9; font-style:italic; font-size:0.75rem; margin-bottom:6px; background:rgba(0,0,0,0.3); border-left:2px solid ' + hit.color + '; padding:4px 8px; border-radius:0 3px 3px 0;">❝ ' + escapeHtml(hit.origin) + ' ❞</div>' : '';
+                    var narrBlock = hit.narrative ? '<div style="color:#c9d1d9; font-size:0.76rem; line-height:1.4; margin-bottom:6px; background:rgba(0,0,0,0.4); border:1px solid #21262d; padding:6px 8px; border-radius:4px;">' + escapeHtml(hit.narrative) + '</div>' : '';
+
+                    if (hit.isTrail) {
+                        tooltip.innerHTML = 
+                            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                                '<span style="font-weight:700; font-size:0.92rem; color:' + hit.color + ';">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.domain) + '</span>' +
+                                '<span style="font-size:0.68rem; background:rgba(255,255,255,0.1); padding:1px 6px; border-radius:3px; color:#8b949e;">' + (hit.linksCount || 0) + ' links</span>' +
+                            '</div>' +
+                            '<div style="font-weight:700; font-size:0.88rem; color:#f0f6fc; margin-bottom:4px;">' + escapeHtml(hit.title) + '</div>' +
+                            '<div style="color:#8b949e; font-size:0.7rem; margin-bottom:6px;">🌟 Promoted View: Trail History Node' + (hit.isDocked ? ' • 🦴 Docked' : '') + '</div>' +
+                            origBlock +
+                            narrBlock +
+                            (anchorsList ? '<div style="margin-bottom:6px; font-size:0.72rem;">Anchors: ' + anchorsList + '</div>' : '') +
+                            '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#8b949e; border-top:1px solid #21262d; padding-top:4px;">' +
+                                '<span style="color:#58a6ff;">' + (tagsList ? escapeHtml(tagsList) : '') + '</span>' +
+                                '<span style="color:#3fb950; font-weight:bold;">👉 Click to focus</span>' +
+                            '</div>';
+
+                    } else if (hit.isDirect) {
+                        tooltip.innerHTML = 
+                            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                                '<span style="font-weight:700; font-size:0.9rem; color:' + hit.color + ';">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.domain) + '</span>' +
+                                '<span style="font-size:0.68rem; background:rgba(255,255,255,0.1); padding:1px 6px; border-radius:3px; color:#8b949e;">' + (hit.linksCount || 0) + ' links</span>' +
+                            '</div>' +
+                            '<div style="font-weight:600; font-size:0.84rem; color:#f0f6fc; margin-bottom:4px;">' + escapeHtml(hit.title) + '</div>' +
+                            '<div style="color:#8b949e; font-size:0.7rem; margin-bottom:6px;">🔗 1-Hop Neighbor (Promoted Description &amp; Context)</div>' +
+                            origBlock +
+                            narrBlock +
+                            (anchorsList ? '<div style="margin-bottom:6px; font-size:0.72rem;">Anchors: ' + anchorsList + '</div>' : '') +
+                            '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#8b949e; border-top:1px solid #21262d; padding-top:4px;">' +
+                                '<span style="color:#58a6ff;">' + (tagsList ? escapeHtml(tagsList) : '') + '</span>' +
+                                '<span style="color:#3fb950; font-weight:bold;">👉 Click to focus</span>' +
+                            '</div>';
+
+                    } else if (hit.isGrandchild) {
+                        var narrSnippet = (hit.narrative || '').slice(0, 160);
+                        if (narrSnippet.length >= 160) narrSnippet += '...';
+                        
+                        tooltip.innerHTML = 
+                            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                                '<span style="font-weight:700; font-size:0.86rem; color:' + hit.color + ';">[' + escapeHtml(hit.id) + '] ' + escapeHtml(hit.domain) + '</span>' +
+                                '<span style="font-size:0.68rem; color:#8b949e;">Grandchild Dot</span>' +
+                            '</div>' +
+                            '<div style="font-weight:600; font-size:0.82rem; color:#f0f6fc; margin-bottom:4px;">' + escapeHtml(hit.title) + '</div>' +
+                            (narrSnippet ? '<div style="color:#c9d1d9; font-size:0.74rem; line-height:1.35; margin-bottom:4px; background:rgba(0,0,0,0.3); padding:4px 6px; border-radius:3px;">' + escapeHtml(narrSnippet) + '</div>' : '') +
+                            '<div style="text-align:right; font-size:0.68rem; color:#3fb950; font-weight:bold; border-top:1px solid #21262d; padding-top:3px;">👉 Click to focus</div>';
+                    }
+
+                } else {
+                    tooltip.style.display = 'none';
+                }
+            }
+        });
+
+        window.addEventListener('mouseup', function() { isPanning = false; });
+
+        wrap.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            var delta = e.deltaY < 0 ? 1.15 : 0.88;
+            var newZoom = Math.min(3.0, Math.max(0.5, zoom * delta));
+            var rect = wrap.getBoundingClientRect();
+            var mx = e.clientX - rect.left;
+            var my = e.clientY - rect.top;
+            panX = mx - (mx - panX) * (newZoom / zoom);
+            panY = my - (my - panY) * (newZoom / zoom);
+            zoom = newZoom;
+            simEnergy = Math.max(simEnergy, 0.15);
+        });
+
+        function resizeCanvas() {
+            width = wrap.clientWidth || 800;
+            height = wrap.clientHeight || 720;
+            dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+            simEnergy = Math.max(simEnergy, 0.4);
+            computeConstellation();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function setInspectorCollapsed(collapsed) {
+            if (!inspectorEl) return;
+            inspectorEl.classList.toggle('collapsed', collapsed);
+            if (workspace) workspace.classList.toggle('inspector-collapsed', collapsed);
+            if (btnDrawerTab) {
+                btnDrawerTab.innerHTML = collapsed ? '◀◀ INSPECTOR' : '▶▶ CLOSE';
+                btnDrawerTab.title = collapsed ? 'Open Inspector Drawer' : 'Close Inspector Drawer';
+            }
+            try { localStorage.setItem('synapse_inspector_collapsed', collapsed ? '1' : '0'); } catch(e) {}
+            setTimeout(resizeCanvas, 240);
+        }
+
+        if (btnDrawerTab) {
+            btnDrawerTab.onclick = function() {
+                var isCol = inspectorEl && inspectorEl.classList.contains('collapsed');
+                setInspectorCollapsed(!isCol);
+            };
+        }
+        if (btnCloseIns) {
+            btnCloseIns.onclick = function() {
+                setInspectorCollapsed(true);
+            };
+        }
+
+        // Auto-collapse on small screens
+        try {
+            var savedPref = localStorage.getItem('synapse_inspector_collapsed');
+            if (savedPref === '1' || (savedPref === null && window.innerWidth < 1050)) {
+                setInspectorCollapsed(true);
+            }
+        } catch(e) {}
+
+        window.__resetSynapseView = function() {
+            zoom = 1.0;
+            panX = 0;
+            panY = 0;
+            simEnergy = Math.max(simEnergy, 0.5);
+            computeConstellation();
+        };
+
+        var btnReset = document.getElementById('btnSynapseReset');
+        if (btnReset) btnReset.onclick = function() {
+            window.__resetSynapseView();
+        };
+
+        var btnDepth = document.getElementById('btnSynapseDepth');
+        if (btnDepth) btnDepth.onclick = function() {
+            hopDepth = (hopDepth === 1) ? 2 : 1;
+            this.textContent = 'Hop Depth: ' + hopDepth + '-Hop';
+            computeConstellation();
+        };
+
+        var sSearch = document.getElementById('synapseSearchInput');
+        if (sSearch) sSearch.oninput = function() {
+            var q = this.value.toLowerCase().trim();
+            if (!q) return;
+            var allCards = Object.values(cardsById);
+            var match = allCards.find(function(c) {
+                return (c.id && c.id.toLowerCase().indexOf(q) !== -1) || ((c.title || (c.synthesis && c.synthesis.title) || '').toLowerCase().indexOf(q) !== -1);
+            });
+            if (match && window.focusCardInSynapse) window.focusCardInSynapse(match.id);
+        };
+
+        document.querySelectorAll('.synapse-domain-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.synapse-domain-chip').forEach(function(c) { c.classList.remove('active'); });
+                chip.classList.add('active');
+                synapseFilterDomain = chip.dataset.domain;
+                computeConstellation();
+            });
+        });
+
+        var btnLocateTop = document.getElementById('btnSynapseLocateTop');
+        if (btnLocateTop) btnLocateTop.onclick = function() {
+            if (window.locateCardInGrid) window.locateCardInGrid(window.__focalNodeId || 'PHL-001');
+        };
+    }
+
+    window.initEgoSynapseCanvas = initEgoSynapseCanvas;
+})();
