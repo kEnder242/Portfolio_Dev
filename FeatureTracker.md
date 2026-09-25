@@ -3276,14 +3276,42 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 ## [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine
 **Sprint:** SPR-89.0
 **Status:** ACTIVE
-**Code:** [Portfolio_Dev/field_notes/dna_forge_build.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py) — Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine.
+**Code:** [Portfolio_Dev/dna_forge/js/synapse_graph.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js) — Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine.
 **Logic:** Implements a tiered, multi-density visual information architecture for the Synapse Knowledge Graph:
-  1. **Tier 0 (Focal Center Node):** Generous Full Card ($380\times 175\text{px}$) rendering Domain badge, ID, `[IMMUTABLE]` status, links count, multi-line wrapped Title, Origin verbatim snippet, full multi-line Narrative context, and Context Anchor / Tag chips. Hover tooltip is disabled (as all information is visible directly on canvas).
-  2. **Tier 1 (3-Tail Trail Nodes):** Medium-Full Card ($300\times 110\text{px}$) rendering Title, Description, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
-  3. **Tier 2 (1-Hop Children Nodes):** Medium Card ($240\times 80\text{px}$) rendering Title and Description. Hover promotes view up 1 hop to Tail Node format.
-  4. **Tier 3 (2-Hop Grandchildren Nodes):** Pure Glowing Dots ($r=6\text{px}$, no canvas boxes). Hover promotes view up 1 hop to Children Node format (Title + Description).
+  1. **Tier 0 (Focal Center Node):** Full Vertical Card ($260\times 340\text{px}$) rendering Domain badge, ID, verbatim Origin quote block, full multi-line Narrative context, inline interactive action controls, and dedicated horizontal Tag & Anchor tracks. Hover tooltip is disabled as all information is rendered directly on canvas. Always pinned on top Z-index.
+  2. **Tier 1 (3-Tail Trail Nodes):** Intermediate Card ($220\times 110\text{px}$) rendering Title, Narrative excerpt, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
+  3. **Tier 2 (1-Hop Children Nodes):** Compact Card ($160\times 60\text{px}$) rendering Title and Domain Badge. Hover promotes view up 1 hop to Tail Node format.
+  4. **Tier 3 (2-Hop Grandchildren Nodes):** Pure Glowing Dots / Stars ($r=6\text{px}$, zero canvas box clutter). Hover promotes view up 1 hop to Children Node format (Title + Description).
 **Rationale:** Prevents visual clutter from secondary and tertiary graph nodes while guaranteeing immediate progressive disclosure and rich multi-line semantic reading on primary cards.
-**Mechanism:** `dna_forge_build.py` (`activeNodeMap`, `drawWrappedText`, `getBoxIntersection`, canvas render loop, and mousemove tooltip handler).
+**Mechanism:** `dna_forge/js/synapse_graph.js` (`renderNodeCard`, `drawWrappedText`, canvas render loop, and mousemove tooltip handler).
+
+## [FEAT-609] Longest-Axis Line Approximation & Edge Egress Link Geometry
+**Sprint:** SPR-89.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/dna_forge/js/synapse_graph.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js) — Longest-Axis Line Approximation & Edge Egress Link Geometry.
+**Logic:** Replaces epicenter connection lines and 4-plane polygon clipping with an axial line segment approximation along the longest axis of node rectangles (vertical medial axis for portrait cards, horizontal medial axis for landscape cards). Computes the closest-approach vectors between source and target segments to produce clean, natural link egress directly from card perimeter boundaries.
+**Rationale:** Eliminates the cheap visual artifact of links emerging from card centers while dramatically simplifying link geometry calculations and maintaining high 60fps canvas performance.
+**Mechanism:** `dna_forge/js/synapse_graph.js` (`getAxialConnectionAnchors`, `drawCurvedLink`).
+
+## [FEAT-612] Canvas-Native Center Card Action Engine (Inspector Tray Absorption)
+**Sprint:** SPR-89.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/dna_forge/js/synapse_graph.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js) — Canvas-Native Center Card Action Engine (Inspector Tray Absorption).
+**Logic:** Absorbs all inspector tray functions directly into the primary center node card on the canvas:
+  1. Inline interactive deep-links: `[📝 Draft/Edit]` and `[📇 Review Grid]` jump directly to corresponding DNA Forge workbenches.
+  2. Direct link degree and domain badge filters on card face.
+  3. Connection pruning affordance triggered directly on edge / node interaction.
+**Rationale:** Eliminates unnecessary side panels/trays, maximizing canvas viewing area to 100% full bleed.
+**Mechanism:** `dna_forge/js/synapse_graph.js`, `dna_forge/templates/dna_forge.html`.
+
+## [FEAT-613] Adaptive Distance & Viewport Pressure Promotion/Demotion Engine
+**Sprint:** SPR-89.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/dna_forge/js/synapse_graph.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js) — Adaptive Distance & Viewport Pressure Promotion/Demotion Engine.
+**Logic:** Dynamically computes spatial real-estate pressure based on viewport dimensions and canvas zoom level. When canvas space is constrained (e.g. mobile viewports $< 900\text{px}$ or zoomed-out state), the visual hierarchy automatically shifts down one full tier (Center becomes compact badge, Tails become children cards, Children become glowing star dots, Grandchildren become subtle dust stars), while strictly preserving interactive tap/click actions and link anchors on the focal card.
+**Rationale:** Ensures consistent, legible data exploration across all device form factors and graph densities without breaking interactive capabilities.
+**Mechanism:** `dna_forge/js/synapse_graph.js` (`calculateCanvasPressure`, `applyAdaptiveTierScaling`).
+
 
 
 
