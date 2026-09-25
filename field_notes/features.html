@@ -16768,17 +16768,17 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/dna_forge_build.py" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/dna_forge_build.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna_forge/js/synapse_graph.js</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Implements a tiered, multi-density visual information architecture for the Synapse Knowledge Graph:
-  1. <strong>Tier 0 (Focal Center Node):</strong> Generous Full Card ($380\times 175\text{px}$) rendering Domain badge, ID, <code>[IMMUTABLE]</code> status, links count, multi-line wrapped Title, Origin verbatim snippet, full multi-line Narrative context, and Context Anchor / Tag chips. Hover tooltip is disabled (as all information is visible directly on canvas).
-  2. <strong>Tier 1 (3-Tail Trail Nodes):</strong> Medium-Full Card ($300\times 110\text{px}$) rendering Title, Description, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
-  3. <strong>Tier 2 (1-Hop Children Nodes):</strong> Medium Card ($240\times 80\text{px}$) rendering Title and Description. Hover promotes view up 1 hop to Tail Node format.
-  4. <strong>Tier 3 (2-Hop Grandchildren Nodes):</strong> Pure Glowing Dots ($r=6\text{px}$, no canvas boxes). Hover promotes view up 1 hop to Children Node format (Title + Description).</p>
+  1. <strong>Tier 0 (Focal Center Node):</strong> Full Vertical Card ($260\times 340\text{px}$) rendering Domain badge, ID, verbatim Origin quote block, full multi-line Narrative context, inline interactive action controls, and dedicated horizontal Tag &amp; Anchor tracks. Hover tooltip is disabled as all information is rendered directly on canvas. Always pinned on top Z-index.
+  2. <strong>Tier 1 (3-Tail Trail Nodes):</strong> Intermediate Card ($220\times 110\text{px}$) rendering Title, Narrative excerpt, and Context Anchors. Hover promotes view up 1 hop to Full Card format.
+  3. <strong>Tier 2 (1-Hop Children Nodes):</strong> Compact Card ($160\times 60\text{px}$) rendering Title and Domain Badge. Hover promotes view up 1 hop to Tail Node format.
+  4. <strong>Tier 3 (2-Hop Grandchildren Nodes):</strong> Pure Glowing Dots / Stars ($r=6\text{px}$, zero canvas box clutter). Hover promotes view up 1 hop to Children Node format (Title + Description).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -16790,7 +16790,142 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>dna_forge_build.py</code> (<code>activeNodeMap</code>, <code>drawWrappedText</code>, <code>getBoxIntersection</code>, canvas render loop, and mousemove tooltip handler).</p>
+                    <p><code>dna_forge/js/synapse_graph.js</code> (<code>renderNodeCard</code>, <code>drawWrappedText</code>, canvas render loop, and mousemove tooltip handler).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-609">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-609</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Longest-Axis Line Approximation & Edge Egress Link Geometry
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-89.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna_forge/js/synapse_graph.js</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces epicenter connection lines and 4-plane polygon clipping with an axial line segment approximation along the longest axis of node rectangles (vertical medial axis for portrait cards, horizontal medial axis for landscape cards). Computes the closest-approach vectors between source and target segments to produce clean, natural link egress directly from card perimeter boundaries.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates the cheap visual artifact of links emerging from card centers while dramatically simplifying link geometry calculations and maintaining high 60fps canvas performance.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>dna_forge/js/synapse_graph.js</code> (<code>getAxialConnectionAnchors</code>, <code>drawCurvedLink</code>).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-612">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-612</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Canvas-Native Center Card Action Engine (Inspector Tray Absorption)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-89.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna_forge/js/synapse_graph.js</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Absorbs all inspector tray functions directly into the primary center node card on the canvas:
+  1. Inline interactive deep-links: <code>[📝 Draft/Edit]</code> and <code>[📇 Review Grid]</code> jump directly to corresponding DNA Forge workbenches.
+  2. Direct link degree and domain badge filters on card face.
+  3. Connection pruning affordance triggered directly on edge / node interaction.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates unnecessary side panels/trays, maximizing canvas viewing area to 100% full bleed.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>dna_forge/js/synapse_graph.js</code>, <code>dna_forge/templates/dna_forge.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-613">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-613</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Adaptive Distance & Viewport Pressure Promotion/Demotion Engine
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-89.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna_forge/js/synapse_graph.js" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna_forge/js/synapse_graph.js</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Dynamically computes spatial real-estate pressure based on viewport dimensions and canvas zoom level. When canvas space is constrained (e.g. mobile viewports $&lt; 900\text{px}$ or zoomed-out state), the visual hierarchy automatically shifts down one full tier (Center becomes compact badge, Tails become children cards, Children become glowing star dots, Grandchildren become subtle dust stars), while strictly preserving interactive tap/click actions and link anchors on the focal card.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ensures consistent, legible data exploration across all device form factors and graph densities without breaking interactive capabilities.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>dna_forge/js/synapse_graph.js</code> (<code>calculateCanvasPressure</code>, <code>applyAdaptiveTierScaling</code>).</p>
                 </div>
             </div>     </div>
                             </details>

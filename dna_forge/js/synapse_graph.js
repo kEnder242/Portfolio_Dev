@@ -39,9 +39,6 @@
         var wrap = document.getElementById('synapseCanvasWrap');
         var workspace = document.getElementById('synapseWorkspace');
         var tooltip = document.getElementById('synapseTooltip');
-        var inspectorEl = document.getElementById('synapseInspector');
-        var btnDrawerTab = document.getElementById('btnSynapseDrawerTab');
-        var btnCloseIns = document.getElementById('btnCloseInspector');
         if (!canvas || !wrap) return;
 
         var ctx = canvas.getContext('2d');
@@ -67,6 +64,21 @@
         var activeNodeMap = {}; // id -> nodeObject
         var activeLinks = [];   // array of { source, target, weight, isGrandchild }
         var simEnergy = 1.0;    // Simulation energy cooling
+
+        // Canvas-Native Interactive Action Hitboxes [FEAT-612]
+        var interactiveButtons = []; // array of { id, action, x, y, w, h, node }
+
+        // [FEAT-613] Compute Dynamic Spatial Real-Estate Pressure
+        function getCanvasPressure() {
+            var effW = width * zoom;
+            var effH = height * zoom;
+            if (effW < 750 || effH < 600 || zoom < 0.75) {
+                return 'high';   // Constrained real-estate (bump all tiers down)
+            } else if (effW < 1100 || effH < 750 || zoom < 0.9) {
+                return 'medium'; // Moderate space
+            }
+            return 'normal';     // Ample 1440p / 4K canvas space
+        }
 
         function getGlobalNodes() {
             var map = {};
@@ -157,9 +169,9 @@
                 clusterIds = Object.keys(trailSet).concat(Object.keys(directSet));
             }
 
-            // 3. Update particle lifecycle (Morphing)
+            // 3. Update particle lifecycle (Morphing & Pressure-Based Scaling [FEAT-603 / FEAT-613])
             var targetSet = {};
-            var isTight = (width < 900 || window.innerWidth < 1000);
+            var pressure = getCanvasPressure();
 
             clusterIds.forEach(function(cid, idx) {
                 targetSet[cid] = true;
@@ -168,9 +180,9 @@
                 var dName = (nData.domain || cid.split('-')[0]).toUpperCase();
                 var isDocked = (window.__activeBones || []).some(function(b) { return b.id === cid; });
                 var isFocal = (cid === focalNodeId);
-                var isTrail = (trail.indexOf(cid) !== -1);
-                var isDirect = (!isTrail && !!directSet[cid]);
-                var isGrandchild = (!isTrail && !isDirect && !!grandchildSet[cid]);
+                var isTrail = (!isFocal && trail.indexOf(cid) !== -1);
+                var isDirect = (!isFocal && !isTrail && !!directSet[cid]);
+                var isGrandchild = (!isFocal && !isTrail && !isDirect && !!grandchildSet[cid]);
 
                 // [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Anatomy
                 var origin = (nData.origin && (nData.origin.text || nData.origin.verbatim)) || nData.verbatim || '';
@@ -182,15 +194,51 @@
 
                 var nodeColor = isGrandchild ? '#6e7681' : (domainColors[dName] || '#8b949e');
                 
-                // Responsive size downgrade when space is tight
-                var cardW = isFocal ? (isTight ? 210 : 280) : (isTrail ? (isTight ? 150 : 230) : (isDirect ? (isTight ? 0 : 190) : 0));
-                var cardH = isFocal ? (isTight ? 250 : 360) : (isTrail ? (isTight ? 120 : 240) : (isDirect ? (isTight ? 0 : 150) : 0));
-                var isDirectDot = isDirect && isTight;
-                var nodeRadius = isFocal ? (isTight ? 16 : 22) : (isTrail ? (isTight ? 11 : 15) : (isDirect ? (isTight ? 6 : 11) : 4));
+                // Adaptive Tier Dimensions under Spatial Pressure [FEAT-613]
+                var cardW = 0;
+                var cardH = 0;
+                var nodeRadius = 5;
+                var isDotNode = false;
+
+                if (isFocal) {
+                    if (pressure === 'high') {
+                        cardW = 210;
+                        cardH = 260;
+                    } else if (pressure === 'medium') {
+                        cardW = 240;
+                        cardH = 310;
+                    } else {
+                        // Full Vertical Card (taller than wide [FEAT-603])
+                        cardW = 260;
+                        cardH = 340;
+                    }
+                    nodeRadius = 20;
+                } else if (isTrail) {
+                    if (pressure === 'high') {
+                        cardW = 160;
+                        cardH = 80;
+                    } else {
+                        cardW = 220;
+                        cardH = 110;
+                    }
+                    nodeRadius = 14;
+                } else if (isDirect) {
+                    if (pressure === 'high') {
+                        isDotNode = true;
+                        nodeRadius = 8;
+                    } else {
+                        cardW = 160;
+                        cardH = 64;
+                        nodeRadius = 10;
+                    }
+                } else if (isGrandchild) {
+                    isDotNode = true;
+                    nodeRadius = (pressure === 'high') ? 4 : 5.5;
+                }
 
                 if (!activeNodeMap[cid]) {
                     var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
-                    var spawnDist = isGrandchild ? (380 + Math.random() * 80) : (isTrail ? 230 : (290 + Math.random() * 60));
+                    var spawnDist = isGrandchild ? (420 + Math.random() * 80) : (isTrail ? 240 : (320 + Math.random() * 60));
                     activeNodeMap[cid] = {
                         id: cid,
                         title: nData.title || (nData.synthesis && nData.synthesis.title) || cid,
@@ -204,7 +252,7 @@
                         isTrail: isTrail,
                         isDirect: isDirect,
                         isGrandchild: isGrandchild,
-                        isDirectDot: isDirectDot,
+                        isDotNode: isDotNode,
                         isDocked: isDocked,
                         cardWidth: cardW,
                         cardHeight: cardH,
@@ -215,7 +263,7 @@
                         radius: nodeRadius,
                         color: nodeColor,
                         alpha: 0.0,
-                        targetAlpha: isGrandchild ? 0.75 : 1.0,
+                        targetAlpha: isGrandchild ? 0.70 : 1.0,
                         noiseSeed: Math.random() * 100
                     };
                 } else {
@@ -224,12 +272,12 @@
                     n.isTrail = isTrail;
                     n.isDirect = isDirect;
                     n.isGrandchild = isGrandchild;
-                    n.isDirectDot = isDirectDot;
+                    n.isDotNode = isDotNode;
                     n.isDocked = isDocked;
                     n.cardWidth = cardW;
                     n.cardHeight = cardH;
                     n.radius = nodeRadius;
-                    n.targetAlpha = isGrandchild ? 0.75 : 1.0;
+                    n.targetAlpha = isGrandchild ? 0.70 : 1.0;
                     n.title = nData.title || (nData.synthesis && nData.synthesis.title) || cid;
                     n.origin = origin;
                     n.narrative = narrative;
@@ -384,21 +432,34 @@
             });
         }
 
-        // --- [FEAT-603] Vertical Medial Axial Line-Segment Spine Approximation ---
+        // --- [FEAT-609] Longest-Axis Line Approximation & Edge Egress Link Geometry ---
         function getCardAxialSpine(node) {
-            if (!node.cardWidth || !node.cardHeight) {
+            if (node.isDotNode || !node.cardWidth || !node.cardHeight) {
                 return { p1: { x: node.x, y: node.y }, p2: { x: node.x, y: node.y }, halfW: 0, halfH: 0, isDot: true };
             }
             var halfW = node.cardWidth / 2;
             var halfH = node.cardHeight / 2;
-            var spineInset = Math.min(halfH * 0.72, halfH - 18);
-            return {
-                p1: { x: node.x, y: node.y - spineInset },
-                p2: { x: node.x, y: node.y + spineInset },
-                halfW: halfW,
-                halfH: halfH,
-                isDot: false
-            };
+            var isVertical = halfH >= halfW;
+
+            if (isVertical) {
+                var spineInsetY = Math.min(halfH * 0.75, halfH - 16);
+                return {
+                    p1: { x: node.x, y: node.y - spineInsetY },
+                    p2: { x: node.x, y: node.y + spineInsetY },
+                    halfW: halfW,
+                    halfH: halfH,
+                    isDot: false
+                };
+            } else {
+                var spineInsetX = Math.min(halfW * 0.75, halfW - 16);
+                return {
+                    p1: { x: node.x - spineInsetX, y: node.y },
+                    p2: { x: node.x + spineInsetX, y: node.y },
+                    halfW: halfW,
+                    halfH: halfH,
+                    isDot: false
+                };
+            }
         }
 
         function closestPointOnSegment(p, a, b) {
@@ -676,7 +737,7 @@
                         }
 
                         // Bottom Tags Row (Dedicated Row 1)
-                        var tagsRowY = cardY + n.cardHeight - 24;
+                        var tagsRowY = cardY + n.cardHeight - 52;
                         var tagsText = (n.tags || []).slice(0, 3).map(function(t) { return '#' + t; }).join(' ');
                         if (tagsText) {
                             ctx.fillStyle = '#58a6ff';
@@ -686,7 +747,7 @@
                         }
 
                         // Bottom Anchors Row (Dedicated Row 2 - NEVER overlapping Tags!)
-                        var anchorsRowY = cardY + n.cardHeight - 10;
+                        var anchorsRowY = cardY + n.cardHeight - 38;
                         if (n.anchors && n.anchors.length > 0) {
                             ctx.fillStyle = '#3fb950';
                             ctx.font = '9px "JetBrains Mono", monospace';
@@ -694,6 +755,53 @@
                             var anchorsText = '⚓ ' + n.anchors.slice(0, 2).map(function(a) { return '[' + a + ']'; }).join(' ');
                             ctx.fillText(anchorsText, cardX + 12, anchorsRowY);
                         }
+
+                        // [FEAT-612] Canvas-Native Interactive Action Buttons Row
+                        var btnRowY = cardY + n.cardHeight - 26;
+                        var btnW = (n.cardWidth - 32) / 3;
+                        var btnH = 20;
+
+                        // Button 1: [📇 Locate in Review]
+                        var b1X = cardX + 12;
+                        drawRoundedRect(ctx, b1X, btnRowY, btnW, btnH, 4);
+                        ctx.fillStyle = 'rgba(56, 139, 253, 0.2)';
+                        ctx.fill();
+                        ctx.strokeStyle = '#58a6ff';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                        ctx.fillStyle = '#58a6ff';
+                        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('📇 CARDS', b1X + btnW / 2, btnRowY + 13);
+                        interactiveButtons.push({ id: n.id, action: 'locate_grid', x: b1X, y: btnRowY, w: btnW, h: btnH, node: n });
+
+                        // Button 2: [🦴 +Rack]
+                        var b2X = b1X + btnW + 4;
+                        drawRoundedRect(ctx, b2X, btnRowY, btnW, btnH, 4);
+                        ctx.fillStyle = n.isDocked ? 'rgba(86, 211, 100, 0.3)' : 'rgba(86, 211, 100, 0.15)';
+                        ctx.fill();
+                        ctx.strokeStyle = '#56d364';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                        ctx.fillStyle = '#56d364';
+                        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(n.isDocked ? '🦴 DOCKED' : '+ RACK', b2X + btnW / 2, btnRowY + 13);
+                        interactiveButtons.push({ id: n.id, action: 'toggle_rack', x: b2X, y: btnRowY, w: btnW, h: btnH, node: n });
+
+                        // Button 3: [📝 Edit/Draft]
+                        var b3X = b2X + btnW + 4;
+                        drawRoundedRect(ctx, b3X, btnRowY, btnW, btnH, 4);
+                        ctx.fillStyle = 'rgba(163, 113, 247, 0.2)';
+                        ctx.fill();
+                        ctx.strokeStyle = '#a371f7';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                        ctx.fillStyle = '#a371f7';
+                        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('📝 DRAFT', b3X + btnW / 2, btnRowY + 13);
+                        interactiveButtons.push({ id: n.id, action: 'open_draft', x: b3X, y: btnRowY, w: btnW, h: btnH, node: n });
 
                     } else if (n.isTrail) {
                         // Tier 1: Trail Node
@@ -760,8 +868,35 @@
             return null;
         }
 
+        function findInteractiveButtonAt(worldPt) {
+            for (var i = interactiveButtons.length - 1; i >= 0; i--) {
+                var btn = interactiveButtons[i];
+                if (worldPt.x >= btn.x && worldPt.x <= btn.x + btn.w &&
+                    worldPt.y >= btn.y && worldPt.y <= btn.y + btn.h) {
+                    return btn;
+                }
+            }
+            return null;
+        }
+
         wrap.addEventListener('mousedown', function(e) {
             if (e.target !== canvas) return;
+            var worldPt = screenToWorld(e.clientX, e.clientY);
+            var clickedBtn = findInteractiveButtonAt(worldPt);
+
+            if (clickedBtn) {
+                // [FEAT-612] Direct On-Canvas Interactive Actions
+                if (clickedBtn.action === 'locate_grid') {
+                    if (window.locateCardInGrid) window.locateCardInGrid(clickedBtn.id);
+                } else if (clickedBtn.action === 'toggle_rack') {
+                    if (window.toggleBoneInRack) window.toggleBoneInRack(clickedBtn.id);
+                    computeConstellation();
+                } else if (clickedBtn.action === 'open_draft') {
+                    if (window.loadCardIntoDraft) window.loadCardIntoDraft(clickedBtn.id);
+                }
+                return;
+            }
+
             var hit = findNodeAt(e.clientX, e.clientY);
             if (hit) {
                 if (hit.id !== window.__focalNodeId) {
@@ -780,6 +915,16 @@
                 panY = e.clientY - startPanY;
                 simEnergy = Math.max(simEnergy, 0.1);
             } else {
+                var worldPt = screenToWorld(e.clientX, e.clientY);
+                var btnHit = findInteractiveButtonAt(worldPt);
+                if (btnHit) {
+                    canvas.style.cursor = 'pointer';
+                    tooltip.style.display = 'none';
+                    return;
+                } else {
+                    canvas.style.cursor = 'default';
+                }
+
                 var hit = findNodeAt(e.clientX, e.clientY);
                 hoveredOrbitNode = hit;
 
@@ -874,38 +1019,6 @@
             computeConstellation();
         }
         window.addEventListener('resize', resizeCanvas);
-
-        function setInspectorCollapsed(collapsed) {
-            if (!inspectorEl) return;
-            inspectorEl.classList.toggle('collapsed', collapsed);
-            if (workspace) workspace.classList.toggle('inspector-collapsed', collapsed);
-            if (btnDrawerTab) {
-                btnDrawerTab.innerHTML = collapsed ? '◀◀ INSPECTOR' : '▶▶ CLOSE';
-                btnDrawerTab.title = collapsed ? 'Open Inspector Drawer' : 'Close Inspector Drawer';
-            }
-            try { localStorage.setItem('synapse_inspector_collapsed', collapsed ? '1' : '0'); } catch(e) {}
-            setTimeout(resizeCanvas, 240);
-        }
-
-        if (btnDrawerTab) {
-            btnDrawerTab.onclick = function() {
-                var isCol = inspectorEl && inspectorEl.classList.contains('collapsed');
-                setInspectorCollapsed(!isCol);
-            };
-        }
-        if (btnCloseIns) {
-            btnCloseIns.onclick = function() {
-                setInspectorCollapsed(true);
-            };
-        }
-
-        // Auto-collapse on small screens
-        try {
-            var savedPref = localStorage.getItem('synapse_inspector_collapsed');
-            if (savedPref === '1' || (savedPref === null && window.innerWidth < 1050)) {
-                setInspectorCollapsed(true);
-            }
-        } catch(e) {}
 
         window.__resetSynapseView = function() {
             zoom = 1.0;
