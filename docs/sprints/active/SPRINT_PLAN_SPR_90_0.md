@@ -30,6 +30,14 @@
 
 ## 🔬 Story Breakdown, Delegation & Oracle Audit Matrix
 
+### Story 90.0: Oracle Pre-Execution Architectural Review (`[ORACLE:REVIEW]`)
+- **Assigned Owner:** `[ORACLE:REVIEW]` (Dispatch via `delegate.py --port 4097 --model local-unified-base`)
+- **Scope & Objectives**:
+  1. Evaluate Sprint 90 architectural plan against `NO HUMAN DOCS` and `BKM-049`.
+  2. Critique the Applied Writer's Review Panel design, AST/regex source mutation flow, and `PHL` $\to$ `INS` polymorphic aliasing.
+  3. Emit actionable recommendations and risk-reduction flags before primary/swarm implementation.
+- **Validation**: Oracle audit summary logged in sprint ledger.
+
 ### Story 90.1: Unified Projection Toolbar & Review Panel (`[FEAT-614]`, `[FEAT-617]`)
 - **Assigned Owner:** `[SWARM:LOCAL]` (Dispatch via `delegate.py --port 4097 --model local-unified-base`)
 - **Diagnostic Retry Budget:** 3 attempts (`BKM-049`) before cloud fallback
