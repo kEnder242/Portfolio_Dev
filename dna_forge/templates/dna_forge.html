@@ -7,31 +7,19 @@
     <link rel="stylesheet" href="style.css?v=312b4371">
     <link rel="stylesheet" href="css/dna_forge.css">
 </head>
-<body class="telemetry-dashboard">
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h1 class="site-title">Federated Lab</h1>
-            <p class="site-subtitle">Autonomous AI Systems</p>
-        </div>
-        <nav class="nav-menu">
-            <a href="index.html" class="nav-item">Mission Control</a>
-            <a href="stories.html" class="nav-item">Field Stories</a>
-            <a href="timeline.html" class="nav-item">Novel Ideas Timeline</a>
-            <a href="files.html" class="nav-item">Artifact Ledger</a>
-            <a href="status.html" class="nav-item">Lab Attendant</a>
-            <a href="research.html" class="nav-item">Research Ledger</a>
-            <a href="protocols.html" class="nav-item">Standard Protocols</a>
-            <a href="features.html" class="nav-item">Feature Tracker</a>
-            <a href="intercom.html" class="nav-item">Intercom stream</a>
-            <a href="benchmarks.html" class="nav-item">Benchmarks</a>
-            <a href="public_benchmarks.html" class="nav-item">Public Showcase</a>
-            <a href="wisdom.html" class="nav-item active">DNA Forge</a>
-            <a href="writer.html" class="nav-item">Writer Studio</a>
-        </nav>
-    </aside>
+<body>
+    <button id="menu-toggle">☰ MENU</button>
 
-    <main class="main-content">
-        <section class="section">
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div id="sys-console">
+            <div>[INIT] Mounting DNA Forge Knowledge Foundry...</div>
+        </div>
+
+        <section id="dna-forge-section">
             <div class="wisdom-header">
                 <div>
                     <h2 class="section-title">🧬 DNA Forge: Knowledge Foundry</h2>
@@ -275,8 +263,7 @@ __CARDS_HTML__
     <script src="script.js?v=acd57779"></script>
     <script src="mission-control.js?v=b505a681"></script>
     <script src="components/dna_card.js"></script>
-    <script src="js/dna_forge.js"></script>
-    <script src="js/synapse_graph.js"></script>
+    <!-- CRITICAL: Manifest data MUST load before client controller engines -->
     <script>
         window.__DNA_MANIFEST__ = __MANIFEST_JSON__;
         window.__BONE_COLLECTIONS__ = __BONE_COLLECTIONS_JSON__;
@@ -284,5 +271,7 @@ __CARDS_HTML__
         window.__DECISIONS__ = __DECISIONS_JSON__;
         window.__SYNAPSE_GRAPH__ = __SYNAPSE_GRAPH_JSON__;
     </script>
+    <script src="js/dna_forge.js"></script>
+    <script src="js/synapse_graph.js"></script>
 </body>
 </html>
