@@ -359,8 +359,8 @@
             // 2. Center Anchoring for Focal Node & Orbital Target Gravity for Outer Nodes
             nodes.forEach(function(n) {
                 if (n.isCenter) {
-                    n.x += (cx - n.x) * 0.35;
-                    n.y += (cy - n.y) * 0.35;
+                    n.x += (cx - n.x) * 0.12;
+                    n.y += (cy - n.y) * 0.12;
                     n.vx = 0;
                     n.vy = 0;
                     return;
@@ -371,8 +371,8 @@
                 var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
                 var targetOrbit = n.isTrail ? 240 : (n.isDirect ? 350 : 480);
                 var orbitDelta = cDist - targetOrbit;
-                n.vx -= (cDx / cDist) * orbitDelta * 0.022 * simEnergy;
-                n.vy -= (cDy / cDist) * orbitDelta * 0.022 * simEnergy;
+                n.vx -= (cDx / cDist) * orbitDelta * 0.012 * simEnergy;
+                n.vy -= (cDy / cDist) * orbitDelta * 0.012 * simEnergy;
             });
 
             // 3. Multi-body Coulomb Repulsion between orbiting peers
@@ -387,9 +387,9 @@
                     var distSq = dx * dx + dy * dy + 300;
                     var dist = Math.sqrt(distSq) || 1;
                     var minSep = (n1.effectiveRadius + n2.effectiveRadius + 24);
-                    var repForce = (8000 * simEnergy) / distSq;
+                    var repForce = (6000 * simEnergy) / distSq;
                     if (dist < minSep) {
-                        repForce += (minSep - dist) * 0.05 * simEnergy;
+                        repForce += (minSep - dist) * 0.03 * simEnergy;
                     }
                     var fx = (dx / dist) * repForce;
                     var fy = (dy / dist) * repForce;
@@ -401,7 +401,7 @@
             }
 
             // 4. Spring Link Tension along Synaptic Threads
-            var kSpring = 0.028 * simEnergy;
+            var kSpring = 0.014 * simEnergy;
             activeLinks.forEach(function(l) {
                 if (!activeNodeMap[l.source.id] || !activeNodeMap[l.target.id]) return;
                 var src = l.source;
@@ -422,13 +422,13 @@
             // 5. Critical Damping & Position Integration
             nodes.forEach(function(n) {
                 if (n.isCenter) return;
-                n.vx *= 0.80;
-                n.vy *= 0.80;
+                n.vx *= 0.88;
+                n.vy *= 0.88;
                 n.x += n.vx;
                 n.y += n.vy;
 
-                n.x += Math.sin(simTime + n.noiseSeed) * 0.18;
-                n.y += Math.cos(simTime + n.noiseSeed * 1.3) * 0.18;
+                n.x += Math.sin(simTime + n.noiseSeed) * 0.12;
+                n.y += Math.cos(simTime + n.noiseSeed * 1.3) * 0.12;
             });
         }
 
@@ -1065,16 +1065,37 @@
         };
 
         var sSearch = document.getElementById('synapseSearchInput');
-        if (sSearch) sSearch.oninput = function() {
-            var q = this.value.toLowerCase().trim();
-            if (!q) return;
-            var cardsMap = getCardsMap();
-            var allCards = Object.values(cardsMap);
-            var match = allCards.find(function(c) {
-                return (c.id && c.id.toLowerCase().indexOf(q) !== -1) || ((c.title || (c.synthesis && c.synthesis.title) || '').toLowerCase().indexOf(q) !== -1);
-            });
-            if (match && window.focusCardInSynapse) window.focusCardInSynapse(match.id);
-        };
+        if (sSearch) {
+            sSearch.oninput = function() {
+                var q = this.value.toLowerCase().trim();
+                if (!q) {
+                    synapseFilterDomain = 'ALL';
+                    document.querySelectorAll('.synapse-domain-chip').forEach(function(c) {
+                        if (c.dataset.domain === 'ALL') c.classList.add('active');
+                        else c.classList.remove('active');
+                    });
+                    computeConstellation();
+                    return;
+                }
+                var cardsMap = getCardsMap();
+                var allCards = Object.values(cardsMap);
+                var match = allCards.find(function(c) {
+                    return (c.id && c.id.toLowerCase().indexOf(q) !== -1) || ((c.title || (c.synthesis && c.synthesis.title) || '').toLowerCase().indexOf(q) !== -1);
+                });
+                if (match && window.focusCardInSynapse) window.focusCardInSynapse(match.id);
+            };
+            sSearch.onkeydown = function(e) {
+                if (e.key === 'Escape') {
+                    this.value = '';
+                    synapseFilterDomain = 'ALL';
+                    document.querySelectorAll('.synapse-domain-chip').forEach(function(c) {
+                        if (c.dataset.domain === 'ALL') c.classList.add('active');
+                        else c.classList.remove('active');
+                    });
+                    computeConstellation();
+                }
+            };
+        }
 
         document.querySelectorAll('.synapse-domain-chip').forEach(function(chip) {
             chip.addEventListener('click', function() {
