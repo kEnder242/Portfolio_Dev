@@ -217,3 +217,10 @@
   * *Ambiguity Flag:* `[UNAMBIGUOUS / PROTOCOL]` — Grounded in invariant operational laws: 100% local git operations, absolute remote push prohibition.
   * *Status:* Added to protocol optimization backlog.
 
+* **Loose End 8 [TASK: CODE CLEANUP / MODULARITY]: Relocate Non-Work-Notes Build & Engine Scripts from `field_notes/`**
+  * *Context:* DNA Forge has been successfully extracted and modularized into `Portfolio_Dev/dna_forge/` (`dna_forge_build.py`, `templates/`, `js/`, `css/`). Multiple standalone compilers and utility scripts still reside inside `Portfolio_Dev/field_notes/` (e.g. `build_writer.py`, `timeline_build.py`, `protocols_build.py`, `research_build.py`, `bench_models.py`, `verify_feature_links.py`, `jellyfin_autotune.py`, `mass_scan.py`).
+  * *Directive:* Catalog and migrate all non-work-notes build tools, scrapers, and analysis engines into dedicated modular subdirectories outside of `field_notes/`.
+  * *Ambiguity Flag:* `[UNAMBIGUOUS / MODULARITY]` — Clear refactoring directive.
+  * *Status:* Codified in Backlog for future infrastructure sprint.
+
+
