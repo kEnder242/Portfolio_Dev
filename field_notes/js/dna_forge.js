@@ -6,6 +6,24 @@
 (function () {
     'use strict';
 
+    var domainColors = window.DOMAIN_COLORS || {
+        'PHL': '#a371f7',
+        'PHILOSOPHY': '#a371f7',
+        'BKM': '#3fb950',
+        'BEHAVIORAL': '#3fb950',
+        'FEAT': '#58a6ff',
+        'FEATURE': '#58a6ff',
+        'WIS': '#e3b341',
+        'WISDOM': '#e3b341',
+        'DISC': '#f0883e',
+        'DISCOVERY': '#f0883e',
+        'RDNA': '#56d364',
+        'SPRINT': '#d2a8ff',
+        'GEMS': '#ec4899',
+        'BONES': '#56d364'
+    };
+    window.DOMAIN_COLORS = domainColors;
+
     var activeTab = 'review';
     var currentFilter = 'all';
     var searchQuery = '';
