@@ -68,23 +68,29 @@
         var activeLinks = [];   // array of { source, target, weight, isGrandchild }
         var simEnergy = 1.0;    // Simulation energy cooling
 
-        // Global node maps from manifest
-        var globalNodesMap = {};
-        if (window.__SYNAPSE_GRAPH__ && window.__SYNAPSE_GRAPH__.nodes) {
-            window.__SYNAPSE_GRAPH__.nodes.forEach(function(n) {
-                globalNodesMap[n.id] = n;
-            });
+        function getGlobalNodes() {
+            var map = {};
+            if (window.__SYNAPSE_GRAPH__ && window.__SYNAPSE_GRAPH__.nodes) {
+                window.__SYNAPSE_GRAPH__.nodes.forEach(function(n) {
+                    map[n.id] = n;
+                });
+            }
+            return map;
         }
-        var cardsById = {};
-        if (window.__DNA_MANIFEST__) {
-            Object.keys(window.__DNA_MANIFEST__).forEach(function(k) {
-                var items = window.__DNA_MANIFEST__[k] || [];
-                if (Array.isArray(items)) {
-                    items.forEach(function(c) {
-                        if (c.id) cardsById[c.id] = c;
-                    });
-                }
-            });
+
+        function getCardsMap() {
+            var map = {};
+            if (window.__DNA_MANIFEST__) {
+                Object.keys(window.__DNA_MANIFEST__).forEach(function(k) {
+                    var items = window.__DNA_MANIFEST__[k] || [];
+                    if (Array.isArray(items)) {
+                        items.forEach(function(c) {
+                            if (c.id) map[c.id] = c;
+                        });
+                    }
+                });
+            }
+            return map;
         }
 
         function getNeighborsFor(cid) {
@@ -102,10 +108,12 @@
         function computeConstellation() {
             var cx = width / 2;
             var cy = height / 2;
-            simEnergy = Math.max(simEnergy, 0.65); // Re-energize simulation on cluster change
+            simEnergy = Math.max(simEnergy, 0.65);
 
             var focalNodeId = window.__focalNodeId || 'PHL-001';
             var focalBreadcrumbs = window.__focalBreadcrumbs || [focalNodeId];
+            var globalNodesMap = getGlobalNodes();
+            var cardsById = getCardsMap();
 
             // 1. Traverse 1-Hop and 2-Hop Ego Network
             var directNeighbors = getNeighborsFor(focalNodeId);
@@ -139,7 +147,6 @@
                 clusterIds = activeBones.map(function(b) { return b.id; });
                 if (clusterIds.indexOf(focalNodeId) === -1) clusterIds.unshift(focalNodeId);
             } else {
-                // Filter direct neighbors by selected domain
                 Object.keys(directSet).forEach(function(cid) {
                     var nData = cardsById[cid] || globalNodesMap[cid];
                     var dName = ((nData && nData.domain) || cid.split('-')[0]).toUpperCase();
@@ -152,7 +159,7 @@
 
             // 3. Update particle lifecycle (Morphing)
             var targetSet = {};
-            var isMobile = (width < 768 || window.innerWidth < 768);
+            var isTight = (width < 900 || window.innerWidth < 1000);
 
             clusterIds.forEach(function(cid, idx) {
                 targetSet[cid] = true;
@@ -175,11 +182,11 @@
 
                 var nodeColor = isGrandchild ? '#6e7681' : (domainColors[dName] || '#8b949e');
                 
-                // Card dimensions with responsive mobile level downgrade
-                var cardW = isFocal ? (isMobile ? 220 : 280) : (isTrail ? (isMobile ? 160 : 230) : (isDirect ? (isMobile ? 0 : 190) : 0));
-                var cardH = isFocal ? (isMobile ? 260 : 360) : (isTrail ? (isMobile ? 140 : 240) : (isDirect ? (isMobile ? 0 : 150) : 0));
-                var isDirectDot = isDirect && isMobile;
-                var nodeRadius = isFocal ? 22 : (isTrail ? 15 : (isDirect ? (isMobile ? 7 : 11) : 5));
+                // Responsive size downgrade when space is tight
+                var cardW = isFocal ? (isTight ? 210 : 280) : (isTrail ? (isTight ? 150 : 230) : (isDirect ? (isTight ? 0 : 190) : 0));
+                var cardH = isFocal ? (isTight ? 250 : 360) : (isTrail ? (isTight ? 120 : 240) : (isDirect ? (isTight ? 0 : 150) : 0));
+                var isDirectDot = isDirect && isTight;
+                var nodeRadius = isFocal ? (isTight ? 16 : 22) : (isTrail ? (isTight ? 11 : 15) : (isDirect ? (isTight ? 6 : 11) : 4));
 
                 if (!activeNodeMap[cid]) {
                     var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
@@ -283,14 +290,14 @@
                 }
             }
 
-            // Starscape Cooling: Keep focal node centered even when sleeping
+            // Starscape Cooling: Keep focal node centered
             if (simEnergy < 0.005) {
                 nodes.forEach(function(n) {
                     if (n.isCenter) { n.x = cx; n.y = cy; }
                 });
                 return;
             }
-            simEnergy *= 0.95; // Smooth exponential alpha cooling
+            simEnergy *= 0.95;
 
             nodes = Object.values(activeNodeMap);
 
@@ -304,7 +311,6 @@
             // 2. Center Anchoring for Focal Node & Orbital Target Gravity for Outer Nodes
             nodes.forEach(function(n) {
                 if (n.isCenter) {
-                    // Pinned dead-center in the viewport
                     n.x += (cx - n.x) * 0.35;
                     n.y += (cy - n.y) * 0.35;
                     n.vx = 0;
@@ -312,7 +318,6 @@
                     return;
                 }
 
-                // Orbital Harmonic Spring towards (cx, cy)
                 var cDx = n.x - cx;
                 var cDy = n.y - cy;
                 var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
@@ -374,20 +379,18 @@
                 n.x += n.vx;
                 n.y += n.vy;
 
-                // Gentle organic Brownian breathing
                 n.x += Math.sin(simTime + n.noiseSeed) * 0.18;
                 n.y += Math.cos(simTime + n.noiseSeed * 1.3) * 0.18;
             });
         }
 
-        // --- [FEAT-603] Vertical Medial Axial Line-Segment Spine Approximation for Box-to-Box Connections ---
+        // --- [FEAT-603] Vertical Medial Axial Line-Segment Spine Approximation ---
         function getCardAxialSpine(node) {
             if (!node.cardWidth || !node.cardHeight) {
                 return { p1: { x: node.x, y: node.y }, p2: { x: node.x, y: node.y }, halfW: 0, halfH: 0, isDot: true };
             }
             var halfW = node.cardWidth / 2;
             var halfH = node.cardHeight / 2;
-            // Dominant vertical axis for portrait cards (taller than wide)
             var spineInset = Math.min(halfH * 0.72, halfH - 18);
             return {
                 p1: { x: node.x, y: node.y - spineInset },
@@ -652,58 +655,64 @@
 
                     // 4. Title Rendering (High-Contrast Bold)
                     var titleY = pillY + pillH + (n.isCenter ? 18 : 14);
-                    var maxTitleLines = n.isCenter ? 3 : (n.isTrail ? 2 : 1);
+                    var maxTitleLines = n.isCenter ? (n.cardHeight < 300 ? 2 : 3) : (n.isTrail ? 2 : 1);
                     var titleFont = 'bold ' + (n.isCenter ? '13px' : (n.isTrail ? '11.5px' : '11px')) + ' -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                    var titleLinesDrawn = drawWrappedText(ctx, n.title || n.id, cardX + 12, titleY, n.cardWidth - 24, (n.isCenter ? 17 : 14), maxTitleLines, '#ffffff', titleFont);
+                    var titleLinesDrawn = drawWrappedText(ctx, n.title || n.id, cardX + 12, titleY, n.cardWidth - 24, (n.isCenter ? 16 : 14), maxTitleLines, '#ffffff', titleFont);
 
                     // 5. Tier-Specific Body Content
                     if (n.isCenter) {
-                        // Tier 0: Center FULL Vertical Portrait Card
-                        var curBlockY = titleY + (titleLinesDrawn * 17) + 6;
+                        var curBlockY = titleY + (titleLinesDrawn * 16) + 6;
 
                         if (n.origin) {
-                            var origSnippet = '❝ ' + n.origin.slice(0, 160) + (n.origin.length > 160 ? '...' : '') + ' ❞';
-                            var originLines = drawWrappedText(ctx, origSnippet, cardX + 12, curBlockY, n.cardWidth - 24, 14, 4, '#c9d1d9', 'italic 10.5px sans-serif');
-                            curBlockY += (originLines * 14) + 8;
+                            var origSnippet = '❝ ' + n.origin.slice(0, 140) + (n.origin.length > 140 ? '...' : '') + ' ❞';
+                            var maxOrigLines = (n.cardHeight < 300 ? 2 : 3);
+                            var originLines = drawWrappedText(ctx, origSnippet, cardX + 12, curBlockY, n.cardWidth - 24, 13, maxOrigLines, '#c9d1d9', 'italic 10px sans-serif');
+                            curBlockY += (originLines * 13) + 6;
                         }
 
                         if (n.narrative) {
-                            var narrLines = drawWrappedText(ctx, n.narrative, cardX + 12, curBlockY, n.cardWidth - 24, 14, 5, '#8b949e', '11px sans-serif');
+                            var maxNarrLines = (n.cardHeight < 300 ? 2 : 4);
+                            drawWrappedText(ctx, n.narrative, cardX + 12, curBlockY, n.cardWidth - 24, 13, maxNarrLines, '#8b949e', '10.5px sans-serif');
                         }
 
-                        // Bottom Anchors & Tags Rows
-                        var metaY = cardY + n.cardHeight - 12;
+                        // Bottom Tags Row (Dedicated Row 1)
+                        var tagsRowY = cardY + n.cardHeight - 24;
                         var tagsText = (n.tags || []).slice(0, 3).map(function(t) { return '#' + t; }).join(' ');
                         if (tagsText) {
                             ctx.fillStyle = '#58a6ff';
-                            ctx.font = '9.5px "JetBrains Mono", monospace';
+                            ctx.font = '9px "JetBrains Mono", monospace';
                             ctx.textAlign = 'left';
-                            ctx.fillText(tagsText, cardX + 12, metaY);
+                            ctx.fillText(tagsText, cardX + 12, tagsRowY);
                         }
+
+                        // Bottom Anchors Row (Dedicated Row 2 - NEVER overlapping Tags!)
+                        var anchorsRowY = cardY + n.cardHeight - 10;
                         if (n.anchors && n.anchors.length > 0) {
                             ctx.fillStyle = '#3fb950';
-                            ctx.font = '9.5px "JetBrains Mono", monospace';
-                            ctx.textAlign = 'right';
-                            ctx.fillText(n.anchors.slice(0, 2).map(function(a) { return '[' + a + ']'; }).join(' '), cardX + n.cardWidth - 12, metaY);
+                            ctx.font = '9px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'left';
+                            var anchorsText = '⚓ ' + n.anchors.slice(0, 2).map(function(a) { return '[' + a + ']'; }).join(' ');
+                            ctx.fillText(anchorsText, cardX + 12, anchorsRowY);
                         }
 
                     } else if (n.isTrail) {
-                        // Tier 1: Trail Node (Name + Description + Context Anchors)
-                        var narrY = titleY + (titleLinesDrawn * 14) + 6;
-                        var narrLines = drawWrappedText(ctx, n.narrative || '', cardX + 12, narrY, n.cardWidth - 24, 13, 4, '#8b949e', '10px sans-serif');
+                        // Tier 1: Trail Node
+                        var narrY = titleY + (titleLinesDrawn * 14) + 4;
+                        var maxNarrLines = (n.cardHeight < 200 ? 2 : 3);
+                        drawWrappedText(ctx, n.narrative || '', cardX + 12, narrY, n.cardWidth - 24, 12, maxNarrLines, '#8b949e', '9.5px sans-serif');
 
-                        var metaY = cardY + n.cardHeight - 10;
+                        var metaY = cardY + n.cardHeight - 8;
                         if (n.anchors && n.anchors.length > 0) {
                             ctx.fillStyle = '#58a6ff';
-                            ctx.font = '9px "JetBrains Mono", monospace';
+                            ctx.font = '8.5px "JetBrains Mono", monospace';
                             ctx.textAlign = 'left';
                             ctx.fillText('⚓ ' + n.anchors.slice(0, 2).join(', '), cardX + 12, metaY);
                         }
 
                     } else if (n.isDirect) {
-                        // Tier 2: Children Node (Name + Description)
+                        // Tier 2: Children Node
                         var narrY = titleY + (titleLinesDrawn * 14) + 4;
-                        drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 12, 3, '#8b949e', '9.5px sans-serif');
+                        drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 12, 2, '#8b949e', '9px sans-serif');
                     }
                 }
                 ctx.globalAlpha = 1.0;
@@ -922,7 +931,8 @@
         if (sSearch) sSearch.oninput = function() {
             var q = this.value.toLowerCase().trim();
             if (!q) return;
-            var allCards = Object.values(cardsById);
+            var cardsMap = getCardsMap();
+            var allCards = Object.values(cardsMap);
             var match = allCards.find(function(c) {
                 return (c.id && c.id.toLowerCase().indexOf(q) !== -1) || ((c.title || (c.synthesis && c.synthesis.title) || '').toLowerCase().indexOf(q) !== -1);
             });
