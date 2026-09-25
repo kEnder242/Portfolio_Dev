@@ -639,6 +639,27 @@
         });
     }
 
+    // [FEAT-612] Load DNA Card into Drafting Workbench
+    function loadCardIntoDraft(cid) {
+        if (!cid) return;
+        var card = cardsById[cid] || (GRAPH_DATA.nodes && GRAPH_DATA.nodes.find(function(n){ return n.id === cid; }));
+        if (!card) return;
+        switchTab('draft');
+        var ti = document.getElementById('draftTitleInput');
+        var ta = document.getElementById('draftRawText');
+        var title = card.title || (card.synthesis && card.synthesis.title) || cid;
+        var originText = (card.origin && (card.origin.text || card.origin.verbatim)) || card.verbatim || '';
+        var narrativeText = (card.synthesis && card.synthesis.narrative_context) || card.narrative_context || card.summary || '';
+        
+        if (ti) ti.value = 'Edit: ' + title;
+        if (ta) {
+            ta.value = '# ' + title + ' [' + cid + ']\n\n' +
+                (originText ? ('## Origin [IMMUTABLE]\n' + originText + '\n\n') : '') +
+                (narrativeText ? ('## Narrative Context\n' + narrativeText + '\n') : '');
+        }
+    }
+    window.loadCardIntoDraft = loadCardIntoDraft;
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             wireControls();
