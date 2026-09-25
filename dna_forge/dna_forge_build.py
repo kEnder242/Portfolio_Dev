@@ -59,14 +59,23 @@ def load_manifest():
         except Exception as e:
             print(f"Warning loading {MANIFEST_PATH}: {e}")
 
-    # Always load ground-truth philosophy and wisdom data if available
+    # Always load ground-truth inspiration/philosophy and wisdom data if available
+    ins_path = DNA_DIR / "inspiration_data.json"
     phi_path = DNA_DIR / "philosophy_data.json"
-    if phi_path.exists():
+    if ins_path.exists():
+        try:
+            with open(ins_path, "r", encoding="utf-8") as f:
+                ins_list = json.load(f)
+                if ins_list and isinstance(ins_list, list):
+                    manifest["philosophy"] = [c for c in ins_list if str(c.get("id", "")).startswith("INS-") or str(c.get("id", "")).startswith("PHL-")]
+        except Exception:
+            pass
+    elif phi_path.exists():
         try:
             with open(phi_path, "r", encoding="utf-8") as f:
                 phi_list = json.load(f)
                 if phi_list and isinstance(phi_list, list):
-                    manifest["philosophy"] = [c for c in phi_list if str(c.get("id", "")).startswith("PHL-")]
+                    manifest["philosophy"] = [c for c in phi_list if str(c.get("id", "")).startswith("PHL-") or str(c.get("id", "")).startswith("INS-")]
         except Exception:
             pass
 
@@ -316,11 +325,13 @@ def build_page():
 
     buckets = ["WISDOM", "PHILOSOPHY", "FEATURE", "BEHAVIORAL", "SPRINT", "DISCOVERY", "RDNA", "RESUME", "GEMS"]
 
+    ins_phl_count = len(manifest.get("philosophy", []))
     domain_counts = {
         "FEAT": len(manifest.get("feature", [])),
         "SPRINT": len(manifest.get("sprint", [])),
         "BKM": len(manifest.get("behavioral", [])),
-        "PHL": len(manifest.get("philosophy", [])),
+        "INS": ins_phl_count,
+        "PHL": ins_phl_count,
         "WIS": len(manifest.get("wisdom", [])),
         "DISC": len(manifest.get("discovery", [])),
         "RDNA": len(manifest.get("rdna", [])),
@@ -385,6 +396,7 @@ def build_page():
     page_html = page_html.replace("__FEAT_COUNT__", str(domain_counts['FEAT']))
     page_html = page_html.replace("__SPRINT_COUNT__", str(domain_counts['SPRINT']))
     page_html = page_html.replace("__BKM_COUNT__", str(domain_counts['BKM']))
+    page_html = page_html.replace("__INS_COUNT__", str(domain_counts['INS']))
     page_html = page_html.replace("__PHL_COUNT__", str(domain_counts['PHL']))
     page_html = page_html.replace("__WIS_COUNT__", str(domain_counts['WIS']))
     page_html = page_html.replace("__DISC_COUNT__", str(domain_counts['DISC']))
