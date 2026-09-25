@@ -9,7 +9,15 @@ import sys
 
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SOURCE_FILES = ["style.css", "script.js", "intercom_v2.js", "mission-control.js"]
+SOURCE_FILES = [
+    "style.css",
+    "script.js",
+    "intercom_v2.js",
+    "mission-control.js",
+    "css/dna_forge.css",
+    "js/dna_forge.js",
+    "js/synapse_graph.js"
+]
 HTML_FILES = [
     "index.html",
     "stories.html", 
@@ -89,6 +97,25 @@ def deploy_to_airlock(snapshots=False):
         env = os.environ.copy()
         if snapshots:
             env["ENABLE_SNAPSHOTS"] = "1"
+
+        # Sync static CSS and JS bundles to public airlock
+        for sub_dir in ["css", "js"]:
+            src_sub = os.path.join(BASE_DIR, sub_dir)
+            dst_sub = os.path.join(www_dir, sub_dir)
+            if os.path.exists(src_sub):
+                os.makedirs(dst_sub, exist_ok=True)
+                for item in os.listdir(src_sub):
+                    s = os.path.join(src_sub, item)
+                    d = os.path.join(dst_sub, item)
+                    if os.path.isfile(s) and (not os.path.exists(d) or os.path.getmtime(s) > os.path.getmtime(d)):
+                        shutil.copy2(s, d)
+
+        # Sync standalone compiled HTML pages to public airlock
+        for html_name in ["dna_forge.html", "wisdom.html"]:
+            s_html = os.path.join(BASE_DIR, html_name)
+            d_html = os.path.join(www_dir, html_name)
+            if os.path.exists(s_html) and (not os.path.exists(d_html) or os.path.getmtime(s_html) > os.path.getmtime(d_html)):
+                shutil.copy2(s_html, d_html)
 
         # [FEAT-461] Intelligent Sync: Run sync scripts only when internal source is newer than airlock target
         sync_map = {
