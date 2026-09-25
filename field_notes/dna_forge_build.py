@@ -785,6 +785,16 @@ def build_page():
             z-index: 25;
             backdrop-filter: blur(8px);
             overflow-y: auto;
+            transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease;
+        }}
+        .synapse-inspector.collapsed {{
+            width: 0 !important;
+            min-width: 0 !important;
+            padding: 0 !important;
+            border-left: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            overflow: hidden !important;
         }}
         .inspector-header {{
             padding: 14px 18px;
@@ -1608,6 +1618,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     <div class="synapse-controls-right">
                         <button id="btnSynapseLocateTop" class="studio-btn btn-locate-card" title="Locate and highlight active focal card in Cards View">📇 Locate in Cards View</button>
                         <button id="btnSynapseDepth" class="studio-btn" title="Toggle 1-Hop vs 2-Hop Network Depth">Hop Depth: 1-Hop</button>
+                        <button id="btnToggleInspector" class="studio-btn" title="Toggle Docked Inspector Sidebar">📋 Inspector</button>
                         <button id="btnSynapseReset" class="studio-btn" title="Recenter orbital canvas">↺ Center</button>
                     </div>
                 </div>
@@ -1640,7 +1651,9 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                                 <span class="inspector-id" id="insCardId">PHL-001</span>
                                 <span class="inspector-domain" id="insCardDomain">PHILOSOPHY</span>
                             </div>
-                            <div id="insBadgeRow"></div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button id="btnCloseInspector" class="studio-btn" style="padding:2px 8px; font-size:0.75rem; border-color:#30363d;" title="Close / Undock Inspector">✕</button>
+                            </div>
                         </div>
                         <div class="inspector-body">
                             <h3 class="inspector-title" id="insCardTitle">Title Loading...</h3>
@@ -2497,6 +2510,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                 switchTab('connect');
                 updateBreadcrumbsUi();
                 updateInspectorUi(cid);
+                if (window.__resetSynapseView) window.__resetSynapseView();
                 if (window.__triggerSynapseRedraw) window.__triggerSynapseRedraw();
             }}
 
@@ -2714,7 +2728,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         var isDirect = (!isTrail && !!directSet[cid]);
                         var isGrandchild = (!isTrail && !isDirect && !!grandchildSet[cid]);
 
-                        // [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Anatomy
+                        // [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Anatomy (Vertical Portrait Cards)
                         var origin = (nData.origin && (nData.origin.text || nData.origin.verbatim)) || nData.verbatim || '';
                         var narrative = (nData.synthesis && nData.synthesis.narrative_context) || nData.narrative_context || nData.summary || '';
                         var anchors = (nData.synthesis && nData.synthesis.lab_anchors) || nData.lab_anchors || [];
@@ -2723,14 +2737,14 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         var links = (nData.metadata && nData.metadata.explicit_links) || [];
 
                         var nodeColor = isGrandchild ? '#6e7681' : (domainColors[dName] || '#8b949e');
-                        // Center = 380x175 (Full Card), Trail = 300x110 (Name/Desc/Context), Direct = 240x80 (Name/Desc), Grandchild = 0x0 (Pure Dot)
-                        var cardW = isFocal ? 380 : (isTrail ? 300 : (isDirect ? 240 : 0));
-                        var cardH = isFocal ? 175 : (isTrail ? 110 : (isDirect ? 80 : 0));
-                        var nodeRadius = isFocal ? 20 : (isTrail ? 14 : (isDirect ? 10 : 6));
+                        // Center = 280x360 (Taller than wide Full Card), Trail = 230x240, Direct = 190x150, Grandchild = 0x0 (Pure Dot)
+                        var cardW = isFocal ? 280 : (isTrail ? 230 : (isDirect ? 190 : 0));
+                        var cardH = isFocal ? 360 : (isTrail ? 240 : (isDirect ? 150 : 0));
+                        var nodeRadius = isFocal ? 22 : (isTrail ? 15 : (isDirect ? 11 : 6));
 
                         if (!activeNodeMap[cid]) {{
                             var spawnAngle = (idx / (clusterIds.length || 1)) * Math.PI * 2;
-                            var spawnDist = isGrandchild ? (280 + Math.random() * 80) : (180 + Math.random() * 80);
+                            var spawnDist = isGrandchild ? (380 + Math.random() * 80) : (isTrail ? 230 : (290 + Math.random() * 60));
                             activeNodeMap[cid] = {{
                                 id: cid,
                                 title: nData.title || (nData.synthesis && nData.synthesis.title) || cid,
@@ -2747,8 +2761,8 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                                 isDocked: isDocked,
                                 cardWidth: cardW,
                                 cardHeight: cardH,
-                                x: cx + Math.cos(spawnAngle) * spawnDist,
-                                y: cy + Math.sin(spawnAngle) * spawnDist,
+                                x: isFocal ? cx : (cx + Math.cos(spawnAngle) * spawnDist),
+                                y: isFocal ? cy : (cy + Math.sin(spawnAngle) * spawnDist),
                                 vx: 0,
                                 vy: 0,
                                 radius: nodeRadius,
@@ -2798,10 +2812,10 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             var edge = srcNeigh.find(function(l){{ return l.targetId === tgt.id; }});
                             if (edge) {{
                                 activeLinks.push({{
-                                    source: src,
-                                    target: tgt,
-                                    isGrandchild: (src.isGrandchild || tgt.isGrandchild),
-                                    weight: edge.weight || 1
+                                     source: src,
+                                     target: tgt,
+                                     isGrandchild: (src.isGrandchild || tgt.isGrandchild),
+                                     weight: edge.weight || 1
                                 }});
                             }}
                         }}
@@ -2824,37 +2838,64 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         }}
                     }}
 
-                    // Starscape Cooling: Halt physics calculation once system settles
-                    if (simEnergy < 0.005) return;
-                    simEnergy *= 0.94; // Exponential alpha cooling
+                    // Starscape Cooling: Halt heavy physics calculation once system settles
+                    if (simEnergy < 0.005) {{
+                        // Keep focal node precisely centered even in sleep
+                        nodes.forEach(function(n) {{
+                            if (n.isCenter) {{ n.x = cx; n.y = cy; }}
+                        }});
+                        return;
+                    }}
+                    simEnergy *= 0.95; // Smooth exponential alpha cooling
 
                     nodes = Object.values(activeNodeMap);
 
-                    // 2. Multi-body Coulomb Repulsion (Dynamic Card Envelope-Aware Spacing)
+                    // Effective card radius
                     nodes.forEach(function(n) {{
                         n.effectiveRadius = (n.cardWidth > 0 && n.cardHeight > 0)
                             ? Math.hypot(n.cardWidth / 2, n.cardHeight / 2)
                             : (n.radius || 8);
                     }});
 
-                    var kRepBase = 12000 * simEnergy;
+                    // 2. Center Anchoring for Focal Node & Orbital Target Gravity for Outer Nodes
+                    nodes.forEach(function(n) {{
+                        if (n.isCenter) {{
+                            // Pinned dead-center in the viewport
+                            n.x += (cx - n.x) * 0.35;
+                            n.y += (cy - n.y) * 0.35;
+                            n.vx = 0;
+                            n.vy = 0;
+                            return;
+                        }}
+
+                        // Orbital Harmonic Spring towards (cx, cy)
+                        var cDx = n.x - cx;
+                        var cDy = n.y - cy;
+                        var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
+                        var targetOrbit = n.isTrail ? 240 : (n.isDirect ? 350 : 480);
+                        var orbitDelta = cDist - targetOrbit;
+                        n.vx -= (cDx / cDist) * orbitDelta * 0.022 * simEnergy;
+                        n.vy -= (cDy / cDist) * orbitDelta * 0.022 * simEnergy;
+                    }});
+
+                    // 3. Multi-body Coulomb Repulsion between orbiting peers
                     for (var i = 0; i < nodes.length; i++) {{
                         var n1 = nodes[i];
+                        if (n1.isCenter) continue;
                         for (var j = i + 1; j < nodes.length; j++) {{
                             var n2 = nodes[j];
+                            if (n2.isCenter) continue;
                             var dx = n2.x - n1.x;
                             var dy = n2.y - n1.y;
-                            var minSep = (n1.effectiveRadius + n2.effectiveRadius + 40);
-                            var distSq = dx * dx + dy * dy + 400;
+                            var distSq = dx * dx + dy * dy + 300;
                             var dist = Math.sqrt(distSq) || 1;
-                            
-                            // Boost repulsion force when large card envelopes overlap
-                            var force = (kRepBase / distSq);
+                            var minSep = (n1.effectiveRadius + n2.effectiveRadius + 24);
+                            var repForce = (8000 * simEnergy) / distSq;
                             if (dist < minSep) {{
-                                force += (minSep - dist) * 0.08 * simEnergy;
+                                repForce += (minSep - dist) * 0.05 * simEnergy;
                             }}
-                            var fx = (dx / dist) * force;
-                            var fy = (dy / dist) * force;
+                            var fx = (dx / dist) * repForce;
+                            var fy = (dy / dist) * repForce;
                             n1.vx -= fx;
                             n1.vy -= fy;
                             n2.vx += fx;
@@ -2862,57 +2903,51 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         }}
                     }}
 
-                    // 3. Spring Link Attraction (Dynamic Envelope Spacing by Card Size)
-                    var kSpring = 0.032 * simEnergy;
+                    // 4. Spring Link Tension along Synaptic Threads
+                    var kSpring = 0.028 * simEnergy;
                     activeLinks.forEach(function(l) {{
                         if (!activeNodeMap[l.source.id] || !activeNodeMap[l.target.id]) return;
-                        var dx = l.target.x - l.source.x;
-                        var dy = l.target.y - l.source.y;
+                        var src = l.source;
+                        var tgt = l.target;
+                        var dx = tgt.x - src.x;
+                        var dy = tgt.y - src.y;
                         var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-                        
-                        // Dynamic rest distance based on sum of card extents + breathing margin
-                        var dynamicRestDist = (l.source.effectiveRadius + l.target.effectiveRadius + 90);
-                        if (l.isGrandchild) dynamicRestDist = Math.min(dynamicRestDist, 180);
+                        var restDist = (src.effectiveRadius + tgt.effectiveRadius + 60);
+                        if (l.isGrandchild) restDist = Math.min(restDist, 180);
 
-                        var force = (dist - dynamicRestDist) * kSpring;
+                        var force = (dist - restDist) * kSpring;
                         var fx = (dx / dist) * force;
                         var fy = (dy / dist) * force;
-                        l.source.vx += fx;
-                        l.source.vy += fy;
-                        l.target.vx -= fx;
-                        l.target.vy -= fy;
+                        if (!src.isCenter) {{ src.vx += fx; src.vy += fy; }}
+                        if (!tgt.isCenter) {{ tgt.vx -= fx; tgt.vy -= fy; }}
                     }});
 
-                    // 4. Center Gravity Well & Critical Damping (Feather-light gravity)
+                    // 5. Critical Damping & Position Integration
                     nodes.forEach(function(n) {{
-                        var cDx = cx - n.x;
-                        var cDy = cy - n.y;
-                        var cDist = Math.sqrt(cDx * cDx + cDy * cDy) || 1;
-                        n.vx += (cDx / cDist) * (cDist * 0.00035 * simEnergy);
-                        n.vy += (cDy / cDist) * (cDist * 0.00035 * simEnergy);
-
-                        // Damping for crisp, stationary settling
-                        n.vx *= 0.76;
-                        n.vy *= 0.76;
-
-                        // Position Integration
+                        if (n.isCenter) return;
+                        n.vx *= 0.80;
+                        n.vy *= 0.80;
                         n.x += n.vx;
                         n.y += n.vy;
+
+                        // Gentle organic Brownian breathing
+                        n.x += Math.sin(simTime + n.noiseSeed) * 0.18;
+                        n.y += Math.cos(simTime + n.noiseSeed * 1.3) * 0.18;
                     }});
                 }}
 
-                // --- [FEAT-603] Axial Line-Segment Spine Approximation for Box-to-Box Connections ---
+                // --- [FEAT-603] Vertical Medial Axial Line-Segment Spine Approximation for Box-to-Box Connections ---
                 function getCardAxialSpine(node) {{
                     if (!node.cardWidth || !node.cardHeight) {{
-                        return {{ p1: {{ x: node.x, y: node.y }}, p2: {{ x: node.x, y: node.y }}, isDot: true }};
+                        return {{ p1: {{ x: node.x, y: node.y }}, p2: {{ x: node.x, y: node.y }}, halfW: 0, halfH: 0, isDot: true }};
                     }}
-                    // Shrunk line along dominant horizontal axis (inset by half-height)
                     var halfW = node.cardWidth / 2;
                     var halfH = node.cardHeight / 2;
-                    var spineInset = Math.min(halfW * 0.75, halfW - 12);
+                    // Dominant vertical axis for portrait cards (taller than wide)
+                    var spineInset = Math.min(halfH * 0.72, halfH - 18);
                     return {{
-                        p1: {{ x: node.x - spineInset, y: node.y }},
-                        p2: {{ x: node.x + spineInset, y: node.y }},
+                        p1: {{ x: node.x, y: node.y - spineInset }},
+                        p2: {{ x: node.x, y: node.y + spineInset }},
                         halfW: halfW,
                         halfH: halfH,
                         isDot: false
@@ -2934,12 +2969,10 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     var sSpine = getCardAxialSpine(srcNode);
                     var tSpine = getCardAxialSpine(tgtNode);
 
-                    // Find closest points between the two axial spines (iterative 2-pass projection)
                     var pSrc = {{ x: srcNode.x, y: srcNode.y }};
                     var pTgt = {{ x: tgtNode.x, y: tgtNode.y }};
 
                     if (!sSpine.isDot && !tSpine.isDot) {{
-                        // Line-to-line approximation
                         var midTgt = {{ x: (tSpine.p1.x + tSpine.p2.x) / 2, y: (tSpine.p1.y + tSpine.p2.y) / 2 }};
                         pSrc = closestPointOnSegment(midTgt, sSpine.p1, sSpine.p2);
                         pTgt = closestPointOnSegment(pSrc, tSpine.p1, tSpine.p2);
@@ -2950,7 +2983,6 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         pTgt = closestPointOnSegment(pSrc, tSpine.p1, tSpine.p2);
                     }}
 
-                    // Project from spine anchor point to outer card border
                     function projectToPerimeter(node, spine, anchor, targetPt) {{
                         if (spine.isDot) return {{ x: node.x, y: node.y }};
                         var dx = targetPt.x - anchor.x;
@@ -3080,8 +3112,19 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         ctx.shadowBlur = 0;
                     }});
 
-                    // --- [FEAT-603] Tiered Canvas Card Anatomy & Rendering ---
+                    // --- [FEAT-603] Tiered Canvas Card Anatomy & Rendering (Layer Sorted) ---
                     var nodes = Object.values(activeNodeMap);
+                    nodes.sort(function(a, b) {{
+                        function getLayer(n) {{
+                            if (n.isCenter) return 100; // Focal center card ALWAYS on top
+                            if (hoveredOrbitNode === n) return 90; // Hovered node elevated
+                            if (n.isTrail) return 50;
+                            if (n.isDirect) return 30;
+                            return 10; // Grandchildren dots in background
+                        }}
+                        return getLayer(a) - getLayer(b);
+                    }});
+
                     nodes.forEach(function (n) {{
                         if (n.alpha < 0.01) return;
                         var isHovered = (hoveredOrbitNode === n);
@@ -3119,7 +3162,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             ctx.fillStyle = n.isCenter ? 'rgba(9, 13, 22, 0.98)' : 'rgba(13, 17, 23, 0.96)';
                             if (n.isCenter) {{
                                 ctx.shadowColor = '#58a6ff';
-                                ctx.shadowBlur = isHovered ? 26 : 16;
+                                ctx.shadowBlur = isHovered ? 28 : 18;
                             }} else if (isHovered) {{
                                 ctx.shadowColor = n.color;
                                 ctx.shadowBlur = 16;
@@ -3135,10 +3178,10 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             ctx.shadowBlur = 0;
 
                             // 3. Top Header Bar
-                            var pillW = n.isCenter ? 48 : (n.isTrail ? 40 : 36);
+                            var pillW = n.isCenter ? 50 : (n.isTrail ? 42 : 36);
                             var pillH = n.isCenter ? 20 : (n.isTrail ? 18 : 16);
-                            var pillX = cardX + 10;
-                            var pillY = cardY + 10;
+                            var pillX = cardX + 12;
+                            var pillY = cardY + 12;
                             drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 4);
                             ctx.fillStyle = n.color;
                             ctx.globalAlpha = n.alpha * 0.25;
@@ -3155,72 +3198,68 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                             ctx.textAlign = 'left';
                             ctx.fillText(n.id, pillX + pillW + 8, pillY + pillH - 4);
 
-                            // Origin / Immutable Pill (Center only)
-                            if (n.isCenter) {{
-                                ctx.fillStyle = '#8b949e';
-                                ctx.font = '9.5px "JetBrains Mono", monospace';
-                                ctx.fillText('[IMMUTABLE]', pillX + pillW + 80, pillY + pillH - 4);
-                            }}
-
                             // Links Count Badge (Top Right)
                             if (n.linksCount > 0) {{
                                 ctx.fillStyle = '#8b949e';
                                 ctx.font = '10px "JetBrains Mono", monospace';
                                 ctx.textAlign = 'right';
-                                ctx.fillText('🔗 ' + n.linksCount + ' links', cardX + n.cardWidth - 10, pillY + pillH - 4);
+                                ctx.fillText('🔗 ' + n.linksCount, cardX + n.cardWidth - 12, pillY + pillH - 4);
                             }}
 
                             // 4. Title Rendering (High-Contrast Bold)
-                            var titleY = pillY + pillH + (n.isCenter ? 17 : 14);
-                            var maxTitleLines = n.isCenter ? 2 : (n.isTrail ? 2 : 1);
+                            var titleY = pillY + pillH + (n.isCenter ? 18 : 14);
+                            var maxTitleLines = n.isCenter ? 3 : (n.isTrail ? 2 : 1);
                             var titleFont = 'bold ' + (n.isCenter ? '13px' : (n.isTrail ? '11.5px' : '11px')) + ' -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                            var titleLinesDrawn = drawWrappedText(ctx, n.title || n.id, cardX + 10, titleY, n.cardWidth - 20, (n.isCenter ? 16 : 14), maxTitleLines, '#ffffff', titleFont);
+                            var titleLinesDrawn = drawWrappedText(ctx, n.title || n.id, cardX + 12, titleY, n.cardWidth - 24, (n.isCenter ? 17 : 14), maxTitleLines, '#ffffff', titleFont);
 
                             // 5. Tier-Specific Body Content
                             if (n.isCenter) {{
-                                // Tier 0: Center FULL Card (Origin + Narrative Context + Context Anchors + Tags)
-                                var originY = titleY + (titleLinesDrawn * 16) + 3;
-                                var originLines = 0;
-                                if (n.origin) {{
-                                    var origSnippet = '❝ ' + n.origin.slice(0, 110) + (n.origin.length > 110 ? '...' : '') + ' ❞';
-                                    originLines = drawWrappedText(ctx, origSnippet, cardX + 10, originY, n.cardWidth - 20, 13, 2, '#c9d1d9', 'italic 10px sans-serif');
-                                }}
-                                var narrY = originY + (originLines * 13) + (originLines ? 4 : 0);
-                                var narrLines = drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 13, 3, '#8b949e', '10.5px sans-serif');
+                                // Tier 0: Center FULL Vertical Portrait Card
+                                var curBlockY = titleY + (titleLinesDrawn * 17) + 6;
 
-                                // Context Anchors / Tags Row at bottom
-                                var metaY = cardY + n.cardHeight - 10;
-                                var tagsText = (n.tags || []).slice(0, 4).map(function(t){{ return '#' + t; }}).join(' ');
+                                if (n.origin) {{
+                                    var origSnippet = '❝ ' + n.origin.slice(0, 140) + (n.origin.length > 140 ? '...' : '') + ' ❞';
+                                    var originLines = drawWrappedText(ctx, origSnippet, cardX + 12, curBlockY, n.cardWidth - 24, 14, 3, '#c9d1d9', 'italic 10.5px sans-serif');
+                                    curBlockY += (originLines * 14) + 8;
+                                }}
+
+                                if (n.narrative) {{
+                                    var narrLines = drawWrappedText(ctx, n.narrative, cardX + 12, curBlockY, n.cardWidth - 24, 14, 5, '#8b949e', '11px sans-serif');
+                                }}
+
+                                // Bottom Anchors & Tags Rows
+                                var metaY = cardY + n.cardHeight - 12;
+                                var tagsText = (n.tags || []).slice(0, 3).map(function(t){{ return '#' + t; }}).join(' ');
                                 if (tagsText) {{
                                     ctx.fillStyle = '#58a6ff';
                                     ctx.font = '9.5px "JetBrains Mono", monospace';
                                     ctx.textAlign = 'left';
-                                    ctx.fillText(tagsText, cardX + 10, metaY);
+                                    ctx.fillText(tagsText, cardX + 12, metaY);
                                 }}
                                 if (n.anchors && n.anchors.length > 0) {{
                                     ctx.fillStyle = '#3fb950';
                                     ctx.font = '9.5px "JetBrains Mono", monospace';
                                     ctx.textAlign = 'right';
-                                    ctx.fillText(n.anchors.slice(0, 2).map(function(a){{ return '[' + a + ']'; }}).join(' '), cardX + n.cardWidth - 10, metaY);
+                                    ctx.fillText(n.anchors.slice(0, 2).map(function(a){{ return '[' + a + ']'; }}).join(' '), cardX + n.cardWidth - 12, metaY);
                                 }}
 
                             }} else if (n.isTrail) {{
                                 // Tier 1: Trail Node (Name + Description + Context Anchors)
-                                var narrY = titleY + (titleLinesDrawn * 14) + 4;
-                                var narrLines = drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 13, 2, '#8b949e', '10px sans-serif');
+                                var narrY = titleY + (titleLinesDrawn * 14) + 6;
+                                var narrLines = drawWrappedText(ctx, n.narrative || '', cardX + 12, narrY, n.cardWidth - 24, 13, 4, '#8b949e', '10px sans-serif');
 
-                                var metaY = cardY + n.cardHeight - 8;
+                                var metaY = cardY + n.cardHeight - 10;
                                 if (n.anchors && n.anchors.length > 0) {{
                                     ctx.fillStyle = '#58a6ff';
                                     ctx.font = '9px "JetBrains Mono", monospace';
                                     ctx.textAlign = 'left';
-                                    ctx.fillText('⚓ ' + n.anchors.slice(0, 2).join(', '), cardX + 10, metaY);
+                                    ctx.fillText('⚓ ' + n.anchors.slice(0, 2).join(', '), cardX + 12, metaY);
                                 }}
 
                             }} else if (n.isDirect) {{
                                 // Tier 2: Children Node (Name + Description)
-                                var narrY = titleY + (titleLinesDrawn * 14) + 3;
-                                drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 12, 2, '#8b949e', '9.5px sans-serif');
+                                var narrY = titleY + (titleLinesDrawn * 14) + 4;
+                                drawWrappedText(ctx, n.narrative || '', cardX + 10, narrY, n.cardWidth - 20, 12, 3, '#8b949e', '9.5px sans-serif');
                             }}
                         }}
                         ctx.globalAlpha = 1.0;
@@ -3378,8 +3417,62 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     simEnergy = Math.max(simEnergy, 0.15);
                 }});
 
+                function resizeCanvas() {{
+                    width = wrap.clientWidth || 800;
+                    height = wrap.clientHeight || 720;
+                    dpr = window.devicePixelRatio || 1;
+                    canvas.width = width * dpr;
+                    canvas.height = height * dpr;
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    ctx.scale(dpr, dpr);
+                    simEnergy = Math.max(simEnergy, 0.4);
+                }}
+                window.addEventListener('resize', resizeCanvas);
+
+                var inspectorEl = document.getElementById('synapseInspector');
+                var btnToggleIns = document.getElementById('btnToggleInspector');
+                var btnCloseIns = document.getElementById('btnCloseInspector');
+
+                function setInspectorCollapsed(collapsed) {{
+                    if (!inspectorEl) return;
+                    inspectorEl.classList.toggle('collapsed', collapsed);
+                    if (btnToggleIns) {{
+                        btnToggleIns.textContent = collapsed ? '📋 Show Inspector' : '📋 Inspector';
+                        btnToggleIns.classList.toggle('active', !collapsed);
+                    }}
+                    try {{ localStorage.setItem('synapse_inspector_collapsed', collapsed ? '1' : '0'); }} catch(e) {{}}
+                    setTimeout(resizeCanvas, 240);
+                }}
+
+                if (btnToggleIns) {{
+                    btnToggleIns.onclick = function() {{
+                        var isCol = inspectorEl && inspectorEl.classList.contains('collapsed');
+                        setInspectorCollapsed(!isCol);
+                    }};
+                }}
+                if (btnCloseIns) {{
+                    btnCloseIns.onclick = function() {{
+                        setInspectorCollapsed(true);
+                    }};
+                }}
+
+                try {{
+                    if (localStorage.getItem('synapse_inspector_collapsed') === '1') {{
+                        setInspectorCollapsed(true);
+                    }}
+                }} catch(e) {{}}
+
+                window.__resetSynapseView = function() {{
+                    zoom = 1.0;
+                    panX = 0;
+                    panY = 0;
+                    simEnergy = Math.max(simEnergy, 0.4);
+                }};
+
                 var btnReset = document.getElementById('btnSynapseReset');
-                if (btnReset) btnReset.onclick = function() {{ zoom = 1.0; panX = 0; panY = 0; }};
+                if (btnReset) btnReset.onclick = function() {{
+                    window.__resetSynapseView();
+                }};
 
                 var btnDepth = document.getElementById('btnSynapseDepth');
                 if (btnDepth) btnDepth.onclick = function() {{
