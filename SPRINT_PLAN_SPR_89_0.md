@@ -165,7 +165,7 @@
 * **Status:** ✅ **COMPLETED & VERIFIED**
 * **Details:** Rebuilt static site via `Portfolio_Dev/field_notes/build_site.py`. Verified all 414/414 feature links (0 drift), 0 Python/JS syntax warnings. Live silicon daemons verified: Foyer `:8765` (ONLINE 5.0.0-foyer), ChromaDB `:8001` (Active v2 heartbeat), OpenCode `:4097` (Healthy 1.18.18). Public airlock (`www_deploy`) fully synced.
 
-### Story 89.5 [AGY:PRIMARY]: BKM-061 Adversarial Oracle Review & Final Sprint Lock
+### Story 89.5 [AGY:PRIMARY]: BKM-061 Adversarial Oracle Review & Initial Phase Certification
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Status:** ✅ **COMPLETED & CERTIFIED**
 * **Oracle 1 (Invariants, Math, & State Consistency):**
@@ -176,6 +176,43 @@
   - Git Push Prohibition (`BKM-040` / `BKM-009`): 100% strictly enforced. All commits and stages remain strictly local. Zero remote pushes initiated.
   - Link Integrity: 414/414 verified code links across static documentation.
   - Daemon Health: 0 socket leaks, all 3 background daemons operational.
+
+---
+
+## 🚀 SPRINT 89.0 - PHASE 2: DNA Forge Modular Scaling & Canvas-Native Inspector Engine
+
+### Story 89.6 [AGY:PRIMARY]: Clean Modular 1:1 Baseline & Invariant Site Shell
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target Files:** `Portfolio_Dev/dna_forge/`, `Portfolio_Dev/field_notes/dna_forge_build.py`
+* **Status:** ⏳ **IN PROGRESS**
+* **Details:** Establish 1:1 modular architecture in `Portfolio_Dev/dna_forge/` (`templates/dna_forge.html`, `css/dna_forge.css`, `js/dna_forge.js`, `js/synapse_graph.js`, `dna_forge_build.py`). Enforce standard site shell `<mission-control></mission-control>`, `#menu-toggle`, and `#sys-console` with zero regression.
+* **Verification:** Compile site, verify Node.js syntax lint passes.
+
+### Story 89.7 [AGY:PRIMARY]: FEAT-609 Longest-Axis Line Approximation & Edge Egress Link Geometry
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target Files:** `Portfolio_Dev/dna_forge/js/synapse_graph.js`
+* **Status:** ⏳ **PENDING**
+* **Details:** Replace center-to-center link lines with medial axial line segment calculations. Links naturally emerge from card borders with smooth Bezier curves.
+* **Verification:** Visual review on canvas; verify 0 center clipping artifacts.
+
+### Story 89.8 [AGY:PRIMARY]: FEAT-612 Canvas-Native Center Card Action Engine (Absorb Inspector Tray)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target Files:** `Portfolio_Dev/dna_forge/templates/dna_forge.html`, `Portfolio_Dev/dna_forge/js/synapse_graph.js`, `Portfolio_Dev/dna_forge/css/dna_forge.css`
+* **Status:** ⏳ **PENDING**
+* **Details:** Remove the right-side inspector tray completely, granting 100% full-bleed canvas space. Absorb all inspector functions (verbatim origin quote, narrative context, deep-link navigation to Draft/Review, prune actions, and tag filters) directly onto the interactive face of the primary center card.
+* **Verification:** Test on-canvas click actions and cross-tab workbench transitions.
+
+### Story 89.9 [AGY:PRIMARY]: FEAT-603 & FEAT-613 Adaptive Viewport Pressure & 1-Hop Hover Promotion Engine
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target Files:** `Portfolio_Dev/dna_forge/js/synapse_graph.js`
+* **Status:** ⏳ **PENDING**
+* **Details:** Implement dynamic canvas pressure calculation based on viewport width and zoom level. Scale node tiers down under pressure (Center -> compact badge, Tails -> children cards, Children -> glowing stars, Grandchildren -> background stars) while strictly preserving interactive click affordances on the center card. Implement 1-hop promotion on hover/tap across all tiers.
+* **Verification:** Test resize behavior from 4K down to mobile 375px; verify 1-hop promotion on hover.
+
+### Story 89.10 [AGY:PRIMARY]: BKM-061 Adversarial Oracle Review, DNA Ambient Sync, & Phase 2 Lock
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** ⏳ **PENDING**
+* **Details:** Execute dual adversarial oracle audit on Phase 2 deliverables, verify git pre-commit hook triggers automatic ChromaDB sync, verify ambient hook recall contains new FEATs, and stage local git commit.
 
 ---
 
@@ -196,10 +233,9 @@
   * *Ambiguity Flag:* `[DEFERRED]` — Non-compatible source compatibility matrix documented in `FEAT-601`.
   * *Status:* Ready for dedicated ingestion pipeline when new data sources are introduced.
 
-* **Loose End 4 [TASK: AMBIGUOUS]: Mobile Synapse Dynamic Pressure & Collapsible Layout**
-  * *Context:* Mobile responsiveness for giant canvas cards (dynamic pressure / collapsible HUDs).
-  * *Ambiguity Flag:* `[AMBIGUOUS]` — Desktop 1440p/4K is primary focus; mobile dynamic pressure physics deferred until mobile UI requirements are specified.
-  * *Status:* Deferred.
+* **Loose End 4 [TASK: RESOLVED IN PHASE 2]: Mobile Synapse Dynamic Pressure & Collapsible Layout**
+  * *Context:* Mobile responsiveness for canvas cards and dynamic pressure.
+  * *Status:* Promoted to active implementation under `FEAT-613` (Story 89.9).
 
 * **Loose End 5 [TASK: CODE CLEANUP]: Single-Pass Ambient Hook & Item Regex Parser**
   * *Context:* Unify item splitting regex between `ambient_hook.sh` and internal agent reasoning parser to prevent redundant regex passes.
@@ -222,5 +258,6 @@
   * *Directive:* Catalog and migrate all non-work-notes build tools, scrapers, and analysis engines into dedicated modular subdirectories outside of `field_notes/`.
   * *Ambiguity Flag:* `[UNAMBIGUOUS / MODULARITY]` — Clear refactoring directive.
   * *Status:* Codified in Backlog for future infrastructure sprint.
+
 
 
