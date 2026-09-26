@@ -3259,19 +3259,19 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 
 ## [FEAT-607] Nightly Accountability Digest & Dashboard Integration
 **Sprint:** SPR-88.0
-**Status:** ACTIVE (DECOUPLED VIA [FEAT-619])
+**Status:** ACTIVE (DECOUPLED VIA [FEAT-619] / TELEMETRY INDEXED VIA [BKM-067])
 **Code:** [HomeLabAI/src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py) — Nightly Accountability Digest & Dashboard Integration.
-**Logic:** Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across nightly maintenance stages against `lab_accountability_thresholds.json` and emits an expandable `[+] ACCOUNTABILITY DIGEST` card to `status.html`. Operates in concert with `[FEAT-619]` / `[BKM-066]`, where out-of-band morning verification is decoupled from internal batch execution to ensure silent batch crashes or early exits are independently detected and graded.
+**Logic:** Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across nightly maintenance stages against `lab_accountability_thresholds.json` and emits an expandable `[+] ACCOUNTABILITY DIGEST` card to `status.html`. Operates in concert with `[FEAT-619]` / `[BKM-066]`, where out-of-band morning verification is decoupled from internal batch execution to ensure silent batch crashes or early exits are independently detected and graded. Integrates with `[BKM-067]` for explicit `log_target` pointers in `foyer_stage_ledger.jsonl`.
 **Rationale:** Eliminates silent passes and zero-work exits during overnight batch sweeps.
-**Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `daily_accountability_digest.json`, `status.html`.
+**Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `daily_accountability_digest.json`, `status.html`, `foyer_stage_ledger.jsonl`.
 
 ## [FEAT-608] Synthetic Morning Round Table Accountability Probe Suite
 **Sprint:** SPR-88.0
 **Status:** ACTIVE
 **Code:** [HomeLabAI/src/infra/probe_round_table_accountability.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py) — Synthetic Morning Round Table Accountability Probe Suite.
-**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and Pinky Coherence Critic scoring).
+**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and Pinky Coherence Critic scoring). Indexed via `[BKM-067]` and extracted via `HomeLabAI/src/infra/read_roundtable_turn.py`.
 **Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks.
-**Mechanism:** `probe_round_table_accountability.py`, Foyer `/inject` and `/status` REST endpoints.
+**Mechanism:** `probe_round_table_accountability.py`, `read_roundtable_turn.py`, Foyer `/inject` and `/status` REST endpoints.
 
 ## [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine
 **Sprint:** SPR-89.0
