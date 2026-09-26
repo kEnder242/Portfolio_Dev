@@ -62,5 +62,109 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "VIBE-008",
+    "theme": "Knowledge Metabolism & Continuous Pruning",
+    "paper_order": 8,
+    "origin": {
+      "author": "jallred",
+      "text": "Knowledge repositories without continuous pruning degenerate into noisy data graveyards. A living memory metabolism requires active feedback pressure, semantic density culling, and the regular retirement of stale assumptions to sustain emergent intelligence.",
+      "source": "Sprint 90 Architectural Synthesis & Conversational Ledger",
+      "immutable": true,
+      "created_at": "2026-09-25T15:00:00Z"
+    },
+    "synthesis": {
+      "title": "Living Metabolism & Continuous Pruning",
+      "narrative_context": "Knowledge stores require continuous feedback and metabolic culling. Without active pruning, context windows saturate with noisy or outdated assumptions.",
+      "lab_anchors": [
+        "BKM-060",
+        "FEAT-616",
+        "INS-039"
+      ],
+      "review_notes": "VIBE card establishing living knowledge metabolism.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Knowledge repositories without continuous pruning degenerate into noisy data graveyards. A living memory metabolism requires active feedback pressure.",
+          "certified_at": "2026-09-25T15:00:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "living-metabolism",
+        "continuous-pruning",
+        "knowledge-curation",
+        "entropy-reduction"
+      ],
+      "explicit_links": [
+        "VIBE-001",
+        "INS-039",
+        "BKM-060"
+      ],
+      "aliases": [
+        "living-metabolism"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
+  },
+  {
+    "id": "VIBE-009",
+    "theme": "Feedback Loops as Complexity Engines",
+    "paper_order": 9,
+    "origin": {
+      "author": "jallred",
+      "text": "Loops birth complexity. The simplest non-linear equation, like the Logistic Map, generates infinite fractal depth from trivial feedback. In systems architecture and agent swarms, complexity is not built by adding code\u2014it emerges spontaneously when outputs are looped back as inputs with back-pressure.",
+      "source": "Sprint 90 Architectural Synthesis & Conversational Ledger",
+      "immutable": true,
+      "created_at": "2026-09-25T15:00:00Z"
+    },
+    "synthesis": {
+      "title": "Feedback Loops as Complexity Engines",
+      "narrative_context": "Complex behavior arises from tight iterative feedback loops rather than complicated monolithic designs. Small functions with recursive feedback generate high-order emergent capabilities.",
+      "lab_anchors": [
+        "INS-039",
+        "VIBE-008",
+        "BKM-060"
+      ],
+      "review_notes": "VIBE card establishing feedback loops as complexity drivers.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Loops birth complexity. In systems architecture and agent swarms, complexity emerges spontaneously when outputs are looped back as inputs with back-pressure.",
+          "certified_at": "2026-09-25T15:00:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "feedback-loops",
+        "complexity-engines",
+        "logistic-map",
+        "emergent-systems"
+      ],
+      "explicit_links": [
+        "INS-039",
+        "VIBE-008",
+        "BKM-060"
+      ],
+      "aliases": [
+        "feedback-loops-complexity"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

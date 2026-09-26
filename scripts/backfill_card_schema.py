@@ -88,7 +88,9 @@ def main():
 
         if modified > 0:
             size_after = atomic_write_json(path, cards)
-            action = f"PATCHED ({modified} cards mutated, {size_before}B -> {size_after}B)"
+            action = (
+                f"PATCHED ({modified} cards mutated, {size_before}B -> {size_after}B)"
+            )
         else:
             action = "UNCHANGED (idempotent re-run)"
 
@@ -96,13 +98,21 @@ def main():
             f"[{path.name}] total={len(cards)} modified={modified} "
             f"mutations={with_mutations}/{len(cards)} revisions={with_revisions}/{len(cards)} -> {action}"
         )
-        if len(cards) != expected or with_mutations != len(cards) or with_revisions != len(cards):
+        if (
+            len(cards) != expected
+            or with_mutations != len(cards)
+            or with_revisions != len(cards)
+        ):
             failures.append(filename)
 
     if failures:
-        print(f"\n[FAIL] Verification failed for: {', '.join(failures)}", file=sys.stderr)
+        print(
+            f"\n[FAIL] Verification failed for: {', '.join(failures)}", file=sys.stderr
+        )
         return 1
-    print(f"\n[OK] All {len(TARGET_FILES)} files verified: every card carries mutations[] and revisions[].")
+    print(
+        f"\n[OK] All {len(TARGET_FILES)} files verified: every card carries mutations[] and revisions[]."
+    )
     return 0
 
 

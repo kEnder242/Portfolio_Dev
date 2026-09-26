@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+import logging
 import os
 import re
-import logging
+
 import chromadb
 from chromadb.utils import embedding_functions
 
@@ -16,10 +17,16 @@ COLLECTION_VIBE = "vibe_dna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
-INFRASTRUCTURE_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md")
-PHILOSOPHY_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json")
+INFRASTRUCTURE_PATH = os.path.expanduser(
+    "~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md"
+)
+PHILOSOPHY_DATA_PATH = os.path.expanduser(
+    "~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json"
+)
 WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/wisdom_data.json")
-RDNA_QUESTIONS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/rdna_questions.json")
+RDNA_QUESTIONS_PATH = os.path.expanduser(
+    "~/Dev_Lab/Portfolio_Dev/dna/rdna_questions.json"
+)
 VIBE_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/vibe_data.json")
 
 # [STORY-8614] SHA256 checksum cache for the idempotency guard (Finding 17 of
@@ -28,7 +35,9 @@ VIBE_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/vibe_data.json"
 CHECKSUMS_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/.sync_checksums.json")
 
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 
 def parse_infrastructure(filepath):
@@ -47,30 +56,36 @@ def parse_infrastructure(filepath):
     for i, match in enumerate(matches):
         name = match.group(2).strip()
         start_idx = match.end()
-        end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
+        end_idx = matches[i + 1].start() if i + 1 < len(matches) else len(content)
         block_content = content[start_idx:end_idx].strip()
-        if not block_content: continue
+        if not block_content:
+            continue
 
         import hashlib
+
         unique_id = f"INFRA_{hashlib.md5(name.encode('utf-8', errors='ignore')).hexdigest()[:8]}"
 
-        infra_items.append({
-            "id": unique_id,
-            "document": f"INFRASTRUCTURE SECTION: {name}\n\n{block_content}",
-            "metadata": {
-                "name": name,
-                "type": "INFRA",
-                "source": "LAB_INFRASTRUCTURE.md"
+        infra_items.append(
+            {
+                "id": unique_id,
+                "document": f"INFRASTRUCTURE SECTION: {name}\n\n{block_content}",
+                "metadata": {
+                    "name": name,
+                    "type": "INFRA",
+                    "source": "LAB_INFRASTRUCTURE.md",
+                },
             }
-        })
+        )
 
     return infra_items
+
 
 def get_safe_collection(client, name, ef):
     try:
         return client.get_or_create_collection(name=name, embedding_function=ef)
     except Exception:
         return client.get_or_create_collection(name=name)
+
 
 # [DNA-AUDIT] Noise filter: statuses that are intentionally retired/superseded.
 # Items matching these prefixes are silently skipped during sync and reported
@@ -80,6 +95,7 @@ DNA_NOISE_STATUSES = {
     "ARCHIVED",
     "CONSOLIDATED",
 }
+
 
 def _is_noise_status(status: str) -> bool:
     """Return True if the status matches a known noise/retired prefix."""
@@ -112,6 +128,7 @@ SYNC_SOURCES = [
 def _sha256_file(filepath: str) -> str | None:
     """Return the SHA256 hex digest of a file, or None if it cannot be read."""
     import hashlib
+
     try:
         digest = hashlib.sha256()
         with open(filepath, "rb") as f:
@@ -126,6 +143,7 @@ def _sha256_file(filepath: str) -> str | None:
 def load_checksums(path: str = CHECKSUMS_PATH) -> dict:
     """Load the checksum cache; returns {} when missing or corrupt."""
     import json
+
     if not os.path.exists(path):
         return {}
     try:
@@ -140,6 +158,7 @@ def load_checksums(path: str = CHECKSUMS_PATH) -> dict:
 def save_checksums(checksums: dict, path: str = CHECKSUMS_PATH) -> None:
     """Atomically persist the checksum cache (.tmp + os.replace)."""
     import json
+
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         tmp_path = path + ".tmp"
@@ -178,65 +197,81 @@ def parse_feature_tracker(filepath):
         content = f.read()
 
     # Regex to match headers like:
-# [FEAT-400] ROLE TOKEN (Multi‑LoRA Persona Switch)
+    # [FEAT-400] ROLE TOKEN (Multi‑LoRA Persona Switch)
     # ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
     # ### [VIBE-012] Hemispheric Independence
     pattern = re.compile(r"^(#{2,4})\s+\[((?:FEAT|VIBE)-\d+)\]\s+(.*?)$", re.MULTILINE)
-    
+
     matches = list(pattern.finditer(content))
     features = []
-    
+
     for i, match in enumerate(matches):
         feat_id = match.group(2)
         name = match.group(3).strip()
         start_idx = match.end()
-        end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
-        
+        end_idx = matches[i + 1].start() if i + 1 < len(matches) else len(content)
+
         block_content = content[start_idx:end_idx].strip()
-        
+
         # Extract status
-        status_match = re.search(r"^\*\*Status:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE)
+        status_match = re.search(
+            r"^\*\*Status:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE
+        )
         status = status_match.group(1).strip() if status_match else "UNKNOWN"
-        
+
         # [DNA-AUDIT] Skip noise statuses — retired/superseded items don't belong
         # in the live retrieval index. Caller collects these for skip report.
         if _is_noise_status(status):
-            features.append({
-                "_skipped": True,
-                "id": feat_id,
-                "name": name,
-                "status": status,
-                "reason": "NOISE_STATUS",
-            })
+            features.append(
+                {
+                    "_skipped": True,
+                    "id": feat_id,
+                    "name": name,
+                    "status": status,
+                    "reason": "NOISE_STATUS",
+                }
+            )
             continue
 
         # Extract mechanism
-        mechanism_match = re.search(r"^\*\*Mechanism:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE)
+        mechanism_match = re.search(
+            r"^\*\*Mechanism:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE
+        )
         mechanism = mechanism_match.group(1).strip() if mechanism_match else "UNKNOWN"
-        
+
         # Extract verification
-        verification_match = re.search(r"^\*\*Verification:\*\*\s*(.*?)$", block_content, re.MULTILINE | re.IGNORECASE)
-        verification = verification_match.group(1).strip() if verification_match else "UNKNOWN"
-        
+        verification_match = re.search(
+            r"^\*\*Verification:\*\*\s*(.*?)$",
+            block_content,
+            re.MULTILINE | re.IGNORECASE,
+        )
+        verification = (
+            verification_match.group(1).strip() if verification_match else "UNKNOWN"
+        )
+
         # Clean clean content for doc representation
         doc_content = f"ID: {feat_id}\nName: {name}\nStatus: {status}\nMechanism: {mechanism}\nVerification: {verification}\n\n{block_content}"
-        
+
         import hashlib
+
         unique_id = f"{feat_id}_{hashlib.md5(name.encode('utf-8', errors='ignore')).hexdigest()[:8]}"
-        
-        features.append({
-            "id": unique_id,
-            "document": doc_content,
-            "metadata": {
-                "feature_id": feat_id,
-                "name": name,
-                "status": status,
-                "type": "FEAT" if "FEAT" in feat_id else "VIBE",
-                "source": "FeatureTracker.md"
+
+        features.append(
+            {
+                "id": unique_id,
+                "document": doc_content,
+                "metadata": {
+                    "feature_id": feat_id,
+                    "name": name,
+                    "status": status,
+                    "type": "FEAT" if "FEAT" in feat_id else "VIBE",
+                    "source": "FeatureTracker.md",
+                },
             }
-        })
-        
+        )
+
     return features
+
 
 def parse_protocols(filepath):
     """
@@ -252,36 +287,42 @@ def parse_protocols(filepath):
     # Regex to match headers like:
     # ## BKM-001: The Cold-Start Protocol (Agent Orientation)
     # ### [BKM-015.1] The Law of Semantic Indirection (The Bones)
-    pattern = re.compile(r"^(#{2,4})\s+(?:\[?(BKM-\d+(?:\.\d+)?)\]?:?)\s+(.*?)$", re.MULTILINE)
-    
+    pattern = re.compile(
+        r"^(#{2,4})\s+(?:\[?(BKM-\d+(?:\.\d+)?)\]?:?)\s+(.*?)$", re.MULTILINE
+    )
+
     matches = list(pattern.finditer(content))
     protocols = []
-    
+
     for i, match in enumerate(matches):
         bkm_id = match.group(2)
         name = match.group(3).strip()
         start_idx = match.end()
-        end_idx = matches[i+1].start() if i + 1 < len(matches) else len(content)
-        
+        end_idx = matches[i + 1].start() if i + 1 < len(matches) else len(content)
+
         block_content = content[start_idx:end_idx].strip()
-        
+
         doc_content = f"ID: {bkm_id}\nName: {name}\n\n{block_content}"
-        
+
         import hashlib
+
         unique_id = f"{bkm_id}_{hashlib.md5(name.encode('utf-8', errors='ignore')).hexdigest()[:8]}"
-        
-        protocols.append({
-            "id": unique_id,
-            "document": doc_content,
-            "metadata": {
-                "bkm_id": bkm_id,
-                "name": name,
-                "type": "BKM",
-                "source": "Protocols.md"
+
+        protocols.append(
+            {
+                "id": unique_id,
+                "document": doc_content,
+                "metadata": {
+                    "bkm_id": bkm_id,
+                    "name": name,
+                    "type": "BKM",
+                    "source": "Protocols.md",
+                },
             }
-        })
-        
+        )
+
     return protocols
+
 
 def get_chroma_client():
     """Initialize ChromaDB client with HttpClient fallback."""
@@ -293,7 +334,9 @@ def get_chroma_client():
         logging.info(f"HttpClient heartbeat successful: {heartbeat}")
         return client
     except Exception as e:
-        logging.warning(f"HttpClient connection failed: {e}. Falling back to PersistentClient.")
+        logging.warning(
+            f"HttpClient connection failed: {e}. Falling back to PersistentClient."
+        )
         return chromadb.PersistentClient(path=DB_PATH)
 
 
@@ -303,9 +346,10 @@ def parse_philosophy(filepath):
         logging.warning(f"philosophy_data.json not found at {filepath}")
         return []
     import json
+
     with open(filepath, "r", encoding="utf-8") as f:
         cards = json.load(f)
-    
+
     philosophy_items = []
     for c in cards:
         pid = c.get("id", "PHL-UNK")
@@ -315,28 +359,30 @@ def parse_philosophy(filepath):
         synth_title = c.get("synthesis", {}).get("title", "")
         synth_context = c.get("synthesis", {}).get("narrative_context", "")
         tags = c.get("metadata", {}).get("tags", [])
-        
+
         doc_content = (
             f"ID: {pid}\n"
             f"Theme: {theme}\n"
             f"Title: {synth_title}\n"
-            f"Origin Quote: \"{origin_text}\"\n\n"
+            f'Origin Quote: "{origin_text}"\n\n'
             f"Synthesis: {synth_context}\n"
             f"Tags: {', '.join(tags)}"
         )
-        
-        philosophy_items.append({
-            "id": pid,
-            "document": doc_content,
-            "metadata": {
-                "philosophy_id": pid,
-                "theme": theme,
-                "title": synth_title,
-                "tags": ",".join(tags),
-                "source": "philosophy_data.json",
-                "type": "PHILOSOPHY"
+
+        philosophy_items.append(
+            {
+                "id": pid,
+                "document": doc_content,
+                "metadata": {
+                    "philosophy_id": pid,
+                    "theme": theme,
+                    "title": synth_title,
+                    "tags": ",".join(tags),
+                    "source": "philosophy_data.json",
+                    "type": "PHILOSOPHY",
+                },
             }
-        })
+        )
     return philosophy_items
 
 
@@ -346,6 +392,7 @@ def parse_wisdom(filepath):
         logging.warning(f"wisdom_data.json not found at {filepath}")
         return []
     import json
+
     with open(filepath, "r", encoding="utf-8") as f:
         cards = json.load(f)
 
@@ -363,36 +410,38 @@ def parse_wisdom(filepath):
             f"ID: {wid}\n"
             f"Theme: {theme}\n"
             f"Title: {synth_title}\n"
-            f"Origin Quote: \"{origin_text}\"\n\n"
+            f'Origin Quote: "{origin_text}"\n\n'
             f"Synthesis: {synth_context}\n"
             f"Tags: {', '.join(tags)}"
         )
 
-        wisdom_items.append({
-            "id": wid,
-            "document": doc_content,
-            "metadata": {
-                "wisdom_id": wid,
-                "theme": theme,
-                "title": synth_title,
-                "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
-                "source": "wisdom_data.json",
-                "type": "WISDOM"
+        wisdom_items.append(
+            {
+                "id": wid,
+                "document": doc_content,
+                "metadata": {
+                    "wisdom_id": wid,
+                    "theme": theme,
+                    "title": synth_title,
+                    "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
+                    "source": "wisdom_data.json",
+                    "type": "WISDOM",
+                },
             }
-        })
+        )
     return wisdom_items
 
 
 def parse_rdna(filepath):
-
     """Parses rdna_questions.json for Reverse DNA (RDNA) questions and variants."""
     if not os.path.exists(filepath):
         logging.warning(f"rdna_questions.json not found at {filepath}")
         return []
     import json
+
     with open(filepath, "r", encoding="utf-8") as f:
         questions = json.load(f)
-    
+
     rdna_items = []
     for q in questions:
         qid = q.get("id", "RDNA-UNK")
@@ -405,7 +454,7 @@ def parse_rdna(filepath):
         target_title = target_dna.get("title", "")
         confidence_floor = q.get("confidence_floor", 0.75)
         tags = q.get("metadata", {}).get("tags", [])
-        
+
         # Primary question anchor
         doc_primary = (
             f"Question: {primary_q}\n"
@@ -413,24 +462,26 @@ def parse_rdna(filepath):
             f"Target DNA: [{target_col}] {target_id} - {target_title}\n"
             f"Tags: {', '.join(tags)}"
         )
-        rdna_items.append({
-            "id": f"{qid}_primary",
-            "document": doc_primary,
-            "metadata": {
-                "rdna_id": qid,
-                "variant_type": "primary",
-                "question_text": primary_q,
-                "intent_category": intent_cat,
-                "target_collection": target_col,
-                "target_dna_id": target_id,
-                "target_dna_title": target_title,
-                "confidence_floor": float(confidence_floor),
-                "tags": ",".join(tags),
-                "source": "rdna_questions.json",
-                "type": "RDNA"
+        rdna_items.append(
+            {
+                "id": f"{qid}_primary",
+                "document": doc_primary,
+                "metadata": {
+                    "rdna_id": qid,
+                    "variant_type": "primary",
+                    "question_text": primary_q,
+                    "intent_category": intent_cat,
+                    "target_collection": target_col,
+                    "target_dna_id": target_id,
+                    "target_dna_title": target_title,
+                    "confidence_floor": float(confidence_floor),
+                    "tags": ",".join(tags),
+                    "source": "rdna_questions.json",
+                    "type": "RDNA",
+                },
             }
-        })
-        
+        )
+
         # Ingest each variant as an individual searchable anchor
         for idx, var in enumerate(variants):
             doc_var = (
@@ -440,25 +491,27 @@ def parse_rdna(filepath):
                 f"Target DNA: [{target_col}] {target_id} - {target_title}\n"
                 f"Tags: {', '.join(tags)}"
             )
-            rdna_items.append({
-                "id": f"{qid}_v{idx+1}",
-                "document": doc_var,
-                "metadata": {
-                    "rdna_id": qid,
-                    "variant_type": "synonym",
-                    "question_text": var,
-                    "canonical_question": primary_q,
-                    "intent_category": intent_cat,
-                    "target_collection": target_col,
-                    "target_dna_id": target_id,
-                    "target_dna_title": target_title,
-                    "confidence_floor": float(confidence_floor),
-                    "tags": ",".join(tags),
-                    "source": "rdna_questions.json",
-                    "type": "RDNA"
+            rdna_items.append(
+                {
+                    "id": f"{qid}_v{idx+1}",
+                    "document": doc_var,
+                    "metadata": {
+                        "rdna_id": qid,
+                        "variant_type": "synonym",
+                        "question_text": var,
+                        "canonical_question": primary_q,
+                        "intent_category": intent_cat,
+                        "target_collection": target_col,
+                        "target_dna_id": target_id,
+                        "target_dna_title": target_title,
+                        "confidence_floor": float(confidence_floor),
+                        "tags": ",".join(tags),
+                        "source": "rdna_questions.json",
+                        "type": "RDNA",
+                    },
                 }
-            })
-            
+            )
+
     return rdna_items
 
 
@@ -468,6 +521,7 @@ def parse_vibe(filepath):
         logging.warning(f"vibe_data.json not found at {filepath}")
         return []
     import json
+
     with open(filepath, "r", encoding="utf-8") as f:
         cards = json.load(f)
 
@@ -484,23 +538,25 @@ def parse_vibe(filepath):
             f"ID: {vid}\n"
             f"Theme: {theme}\n"
             f"Title: {synth_title}\n"
-            f"Origin Quote: \"{origin_text}\"\n\n"
+            f'Origin Quote: "{origin_text}"\n\n'
             f"Synthesis: {synth_context}\n"
             f"Tags: {', '.join(tags)}"
         )
 
-        vibe_items.append({
-            "id": vid,
-            "document": doc_content,
-            "metadata": {
-                "vibe_id": vid,
-                "theme": theme,
-                "title": synth_title,
-                "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
-                "source": "vibe_data.json",
-                "type": "VIBE"
+        vibe_items.append(
+            {
+                "id": vid,
+                "document": doc_content,
+                "metadata": {
+                    "vibe_id": vid,
+                    "theme": theme,
+                    "title": synth_title,
+                    "tags": ",".join(tags) if isinstance(tags, list) else str(tags),
+                    "source": "vibe_data.json",
+                    "type": "VIBE",
+                },
             }
-        })
+        )
     return vibe_items
 
 
@@ -527,29 +583,39 @@ def sync(force: bool = False, dry_run: bool = False):
                 would_sync += 1
                 logging.info("[DRY-RUN] WOULD-SYNC %-22s <- %s", _collection, label)
             else:
-                logging.info("[DRY-RUN] SKIP       %-22s <- %s (checksum unchanged)",
-                             _collection, label)
-        logging.info("[DRY-RUN] %d of %d sources would be synced. "
-                     "No modifications made (ChromaDB and cache untouched).",
-                     would_sync, len(SYNC_SOURCES))
+                logging.info(
+                    "[DRY-RUN] SKIP       %-22s <- %s (checksum unchanged)",
+                    _collection,
+                    label,
+                )
+        logging.info(
+            "[DRY-RUN] %d of %d sources would be synced. "
+            "No modifications made (ChromaDB and cache untouched).",
+            would_sync,
+            len(SYNC_SOURCES),
+        )
         return
 
     # Everything unchanged and not forced: exit without connecting to ChromaDB.
     if not force and not any(to_sync.values()):
-        logging.info("[IDEMPOTENCY] All source checksums unchanged; nothing to sync. "
-                     "Use --force for a full rebuild.")
+        logging.info(
+            "[IDEMPOTENCY] All source checksums unchanged; nothing to sync. "
+            "Use --force for a full rebuild."
+        )
         return
 
     logging.info(f"Connecting to ChromaDB at {DB_PATH}...")
     client = get_chroma_client()
-    
+
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
-    
+
     # 1. Sync feature_dna
     if not to_sync[FEATURE_TRACKER_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping feature_dna: FeatureTracker.md checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping feature_dna: FeatureTracker.md checksum unchanged."
+        )
     else:
         logging.info("Parsing FeatureTracker.md...")
         features_raw = parse_feature_tracker(FEATURE_TRACKER_PATH)
@@ -560,17 +626,27 @@ def sync(force: bool = False, dry_run: bool = False):
 
         # Emit skip report on every rebuild so stale/pending items are surfaced
         if skipped:
-            logging.info("[DNA-SKIP-REPORT] %d feature entries skipped (noise filter: %s):",
-                         len(skipped), sorted(DNA_NOISE_STATUSES))
+            logging.info(
+                "[DNA-SKIP-REPORT] %d feature entries skipped (noise filter: %s):",
+                len(skipped),
+                sorted(DNA_NOISE_STATUSES),
+            )
             for s in sorted(skipped, key=lambda x: x["id"]):
-                logging.info("  SKIP [%s] %-60s | %s (reason: %s)",
-                             s["id"], s["name"][:60], s["status"], s["reason"])
+                logging.info(
+                    "  SKIP [%s] %-60s | %s (reason: %s)",
+                    s["id"],
+                    s["name"][:60],
+                    s["status"],
+                    s["reason"],
+                )
         else:
             logging.info("[DNA-SKIP-REPORT] No entries skipped by noise filter.")
 
         if features:
             collection_feat = get_safe_collection(client, COLLECTION_FEATURE, ef)
-            logging.info("Clearing existing FeatureTracker.md entries from feature_dna...")
+            logging.info(
+                "Clearing existing FeatureTracker.md entries from feature_dna..."
+            )
             try:
                 collection_feat.delete(where={"source": "FeatureTracker.md"})
             except Exception as e:
@@ -589,13 +665,17 @@ def sync(force: bool = False, dry_run: bool = False):
 
     # 2. Sync behavioral_dna
     if not to_sync[PROTOCOLS_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping behavioral_dna/Protocols: Protocols.md checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping behavioral_dna/Protocols: Protocols.md checksum unchanged."
+        )
     else:
         logging.info("Parsing Protocols.md...")
         protocols = parse_protocols(PROTOCOLS_PATH)
         if protocols:
             collection_dna = get_safe_collection(client, COLLECTION_DNA, ef)
-            logging.info("Clearing existing Protocols.md entries from behavioral_dna...")
+            logging.info(
+                "Clearing existing Protocols.md entries from behavioral_dna..."
+            )
             try:
                 collection_dna.delete(where={"source": "Protocols.md"})
             except Exception as e:
@@ -614,13 +694,17 @@ def sync(force: bool = False, dry_run: bool = False):
 
     # 3. Sync LAB_INFRASTRUCTURE.md into behavioral_dna
     if not to_sync[INFRASTRUCTURE_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping behavioral_dna/Infrastructure: LAB_INFRASTRUCTURE.md checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping behavioral_dna/Infrastructure: LAB_INFRASTRUCTURE.md checksum unchanged."
+        )
     else:
         logging.info("Parsing LAB_INFRASTRUCTURE.md...")
         infra_items = parse_infrastructure(INFRASTRUCTURE_PATH)
         if infra_items:
             collection_dna = get_safe_collection(client, COLLECTION_DNA, ef)
-            logging.info("Clearing existing LAB_INFRASTRUCTURE.md entries from behavioral_dna...")
+            logging.info(
+                "Clearing existing LAB_INFRASTRUCTURE.md entries from behavioral_dna..."
+            )
             try:
                 collection_dna.delete(where={"source": "LAB_INFRASTRUCTURE.md"})
             except Exception as e:
@@ -630,14 +714,18 @@ def sync(force: bool = False, dry_run: bool = False):
             documents = [i["document"] for i in infra_items]
             metadatas = [i["metadata"] for i in infra_items]
 
-            logging.info(f"Uploading {len(ids)} Infrastructure entries to behavioral_dna...")
+            logging.info(
+                f"Uploading {len(ids)} Infrastructure entries to behavioral_dna..."
+            )
             collection_dna.add(ids=ids, documents=documents, metadatas=metadatas)
             checksums[INFRASTRUCTURE_PATH] = _sha256_file(INFRASTRUCTURE_PATH)
             logging.info("LAB_INFRASTRUCTURE.md sync complete.")
 
     # 4. Sync philosophy_dna from philosophy_data.json
     if not to_sync[PHILOSOPHY_DATA_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping philosophy_dna: philosophy_data.json checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping philosophy_dna: philosophy_data.json checksum unchanged."
+        )
     else:
         logging.info("Parsing philosophy_data.json...")
         philosophy_items = parse_philosophy(PHILOSOPHY_DATA_PATH)
@@ -653,14 +741,18 @@ def sync(force: bool = False, dry_run: bool = False):
             documents = [p["document"] for p in philosophy_items]
             metadatas = [p["metadata"] for p in philosophy_items]
 
-            logging.info(f"Uploading {len(ids)} Philosophy entries to philosophy_dna...")
+            logging.info(
+                f"Uploading {len(ids)} Philosophy entries to philosophy_dna..."
+            )
             collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
             checksums[PHILOSOPHY_DATA_PATH] = _sha256_file(PHILOSOPHY_DATA_PATH)
             logging.info("philosophy_dna sync complete.")
 
     # 4b. Sync wisdom_dna from wisdom_data.json
     if not to_sync[WISDOM_DATA_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping wisdom_dna: wisdom_data.json checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping wisdom_dna: wisdom_data.json checksum unchanged."
+        )
     else:
         logging.info("Parsing wisdom_data.json...")
         wisdom_items = parse_wisdom(WISDOM_DATA_PATH)
@@ -683,7 +775,9 @@ def sync(force: bool = False, dry_run: bool = False):
 
     # 5. Sync rdna from rdna_questions.json
     if not to_sync[RDNA_QUESTIONS_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping rdna: rdna_questions.json checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping rdna: rdna_questions.json checksum unchanged."
+        )
     else:
         logging.info("Parsing rdna_questions.json...")
         rdna_items = parse_rdna(RDNA_QUESTIONS_PATH)
@@ -699,14 +793,18 @@ def sync(force: bool = False, dry_run: bool = False):
             documents = [r["document"] for r in rdna_items]
             metadatas = [r["metadata"] for r in rdna_items]
 
-            logging.info(f"Uploading {len(ids)} Reverse DNA (RDNA) question entries to rdna...")
+            logging.info(
+                f"Uploading {len(ids)} Reverse DNA (RDNA) question entries to rdna..."
+            )
             collection_rdna.add(ids=ids, documents=documents, metadatas=metadatas)
             checksums[RDNA_QUESTIONS_PATH] = _sha256_file(RDNA_QUESTIONS_PATH)
             logging.info("rdna collection sync complete.")
 
     # 6. Sync vibe_dna from vibe_data.json
     if not to_sync[VIBE_DATA_PATH]:
-        logging.info("[IDEMPOTENCY] Skipping vibe_dna: vibe_data.json checksum unchanged.")
+        logging.info(
+            "[IDEMPOTENCY] Skipping vibe_dna: vibe_data.json checksum unchanged."
+        )
     else:
         logging.info("Parsing vibe_data.json...")
         vibe_items = parse_vibe(VIBE_DATA_PATH)
@@ -732,20 +830,21 @@ def sync(force: bool = False, dry_run: bool = False):
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(
         description="Sync DNA source files (FeatureTracker.md, Protocols.md, "
-                    "LAB_INFRASTRUCTURE.md, philosophy/wisdom/rdna JSON) into ChromaDB."
+        "LAB_INFRASTRUCTURE.md, philosophy/wisdom/rdna JSON) into ChromaDB."
     )
     parser.add_argument(
-        "--force", action="store_true",
+        "--force",
+        action="store_true",
         help="Clear and re-upload every collection, ignoring the checksum cache.",
     )
     parser.add_argument(
-        "--dry-run", action="store_true",
+        "--dry-run",
+        action="store_true",
         help="Log which collections would be synced, then exit without modifying "
-             "ChromaDB or the checksum cache.",
+        "ChromaDB or the checksum cache.",
     )
     args = parser.parse_args()
     sync(force=args.force, dry_run=args.dry_run)
-
-

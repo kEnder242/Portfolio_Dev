@@ -27,7 +27,7 @@ import argparse
 import json
 import re
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Citation token detectors (DISCOVER phase) — one combined regex preserves
@@ -52,13 +52,13 @@ DEFAULT_TITLE = "Untitled Document"
 PRE_HEADING_SECTION = "Preamble"
 
 
-def detect_citations(text: str) -> List[str]:
+def detect_citations(text: str) -> list[str]:
     """Discover citation tokens in document text (deduplicated, first-seen order).
 
     A single left-to-right scan preserves document order; trailing sentence
     punctuation ('.', ',', ';', ...) is stripped from each discovered token.
     """
-    found: List[str] = []
+    found: list[str] = []
     seen = set()
     for match in _ALL_TOKEN.finditer(text or ""):
         token = match.group(0).rstrip(".,;:!?)]}\"'")
@@ -70,7 +70,7 @@ def detect_citations(text: str) -> List[str]:
     return found
 
 
-def _merge_unique(pool: List[str], discovered: List[str]) -> List[str]:
+def _merge_unique(pool: list[str], discovered: list[str]) -> list[str]:
     """Append discovered tokens to an existing pool, preserving order, no duplicates."""
     out = list(pool)
     seen = set(out)
@@ -94,8 +94,8 @@ def _entry(
     text: str,
     bullet_type: str,
     counter: int,
-    explicit_citations: Optional[List[str]] = None,
-) -> tuple[Dict[str, Any], int]:
+    explicit_citations: list[str] | None = None,
+) -> tuple[dict[str, Any], int]:
     counter += 1
     return (
         {
@@ -110,14 +110,14 @@ def _entry(
     )
 
 
-def _emit_entries(lines: List[str]) -> List[Dict[str, str]]:
+def _emit_entries(lines: list[str]) -> list[dict[str, str]]:
     """Group raw section lines into bullet entries and paragraph blocks.
 
     - A line starting with '-', '*', '+' or '1.' opens a bullet entry; indented or
       plain continuation lines join it until the next bullet, blank, or heading.
     - Any other non-blank run becomes a paragraph entry.
     """
-    entries: List[Dict[str, str]] = []
+    entries: list[dict[str, str]] = []
     i, n = 0, len(lines)
     while i < n:
         stripped = lines[i].strip()
@@ -155,15 +155,19 @@ def _emit_entries(lines: List[str]) -> List[Dict[str, str]]:
     return entries
 
 
-def _entries_to_paragraphs(entries: List[Dict[str, str]], par_counter: int) -> tuple[List[Dict[str, Any]], int]:
-    pars: List[Dict[str, Any]] = []
+def _entries_to_paragraphs(
+    entries: list[dict[str, str]], par_counter: int
+) -> tuple[list[dict[str, Any]], int]:
+    pars: list[dict[str, Any]] = []
     for raw in entries:
         entry, par_counter = _entry(raw["text"], raw["bullet_type"], par_counter)
         pars.append(entry)
     return pars, par_counter
 
 
-def parse_markdown(text: str, title: Optional[str] = None, slug: Optional[str] = None) -> Dict[str, Any]:
+def parse_markdown(
+    text: str, title: str | None = None, slug: str | None = None
+) -> dict[str, Any]:
     """Parse Markdown into the two-tier AST.
 
     A first-level `# Heading` in the document is consumed as the document title
@@ -173,17 +177,19 @@ def parse_markdown(text: str, title: Optional[str] = None, slug: Optional[str] =
     canonical single-level `sections[]` collection).
     """
     doc_title = None  # self-describing H1 wins; explicit title is the fallback
-    sections: List[Dict[str, Any]] = []
+    sections: list[dict[str, Any]] = []
     sec_counter, par_counter = 0, 0
-    cur_sec: Optional[Dict[str, Any]] = None
-    cur_lines: List[str] = []
+    cur_sec: dict[str, Any] | None = None
+    cur_lines: list[str] = []
 
     def close_section() -> None:
         nonlocal cur_sec, cur_lines, par_counter
         if cur_sec is None:
             cur_lines = []
             return
-        cur_sec["paragraphs"], par_counter = _entries_to_paragraphs(_emit_entries(cur_lines), par_counter)
+        cur_sec["paragraphs"], par_counter = _entries_to_paragraphs(
+            _emit_entries(cur_lines), par_counter
+        )
         sections.append(cur_sec)
         cur_sec = None
         cur_lines = []
@@ -232,7 +238,9 @@ def parse_markdown(text: str, title: Optional[str] = None, slug: Optional[str] =
     }
 
 
-def parse_plain_text(text: str, title: Optional[str] = None, slug: Optional[str] = None) -> Dict[str, Any]:
+def parse_plain_text(
+    text: str, title: str | None = None, slug: str | None = None
+) -> dict[str, Any]:
     """Parse plain text into the two-tier AST (single "Overview" section).
 
     Bullet lines ('-', '*', '+', '1.') become bullet entries; blank-line separated
@@ -257,15 +265,22 @@ def parse_plain_text(text: str, title: Optional[str] = None, slug: Optional[str]
     }
 
 
-def _normalize_canonical_ast(data: Dict[str, Any], title: Optional[str] = None, slug: Optional[str] = None) -> Dict[str, Any]:
+def _normalize_canonical_ast(
+    data: dict[str, Any], title: str | None = None, slug: str | None = None
+) -> dict[str, Any]:
     """Pass an already-canonical AST through the intake pipeline.
 
     Explicit `citations` and existing pool/bone entries are preserved; new citation
     tokens discovered in text (Phase 1 DISCOVER) are merged into `_candidate_pool[]`.
     """
-    doc_title = (title or "").strip() or str(data.get("title") or "").strip() or (slug or "").strip() or DEFAULT_TITLE
+    doc_title = (
+        (title or "").strip()
+        or str(data.get("title") or "").strip()
+        or (slug or "").strip()
+        or DEFAULT_TITLE
+    )
     root_pool = [str(c) for c in (data.get("_candidate_pool") or [])]
-    sections: List[Dict[str, Any]] = []
+    sections: list[dict[str, Any]] = []
     sec_counter, par_counter = 0, 0
     for sec in data.get("sections") or []:
         if not isinstance(sec, dict):
@@ -275,7 +290,7 @@ def _normalize_canonical_ast(data: Dict[str, Any], title: Optional[str] = None, 
         heading = str(sec.get("heading") or "").strip() or f"Section {sec_counter:02d}"
         heading_hits = detect_citations(heading)
         root_pool = _merge_unique(root_pool, heading_hits)
-        pars: List[Dict[str, Any]] = []
+        pars: list[dict[str, Any]] = []
         for par in sec.get("paragraphs") or []:
             if not isinstance(par, dict):
                 raise ValueError("JSON document: every paragraph must be an object")
@@ -286,27 +301,36 @@ def _normalize_canonical_ast(data: Dict[str, Any], title: Optional[str] = None, 
             explicit = [str(c) for c in (par.get("citations") or [])]
             bullet_type = par.get("bullet_type")
             if bullet_type not in ("bullet", "paragraph"):
-                bullet_type = "bullet" if _LEADING_BULLET_RE.match(text) else "paragraph"
-            pars.append({
-                "id": str(par.get("id") or f"p-{par_counter:02d}"),
-                "bullet_type": bullet_type,
-                "text": text,
-                "citations": explicit,
-                "bone_collection": [str(b) for b in (par.get("bone_collection") or [])],
+                bullet_type = (
+                    "bullet" if _LEADING_BULLET_RE.match(text) else "paragraph"
+                )
+            pars.append(
+                {
+                    "id": str(par.get("id") or f"p-{par_counter:02d}"),
+                    "bullet_type": bullet_type,
+                    "text": text,
+                    "citations": explicit,
+                    "bone_collection": [
+                        str(b) for b in (par.get("bone_collection") or [])
+                    ],
+                    "_candidate_pool": _merge_unique(
+                        [str(c) for c in (par.get("_candidate_pool") or [])],
+                        detect_citations(text),
+                    ),
+                }
+            )
+        sections.append(
+            {
+                "id": sec_id,
+                "heading": heading,
+                "level": sec.get("level", 0),
+                "bone_collection": [str(b) for b in (sec.get("bone_collection") or [])],
                 "_candidate_pool": _merge_unique(
-                    [str(c) for c in (par.get("_candidate_pool") or [])], detect_citations(text)
+                    [str(c) for c in (sec.get("_candidate_pool") or [])], heading_hits
                 ),
-            })
-        sections.append({
-            "id": sec_id,
-            "heading": heading,
-            "level": sec.get("level", 0),
-            "bone_collection": [str(b) for b in (sec.get("bone_collection") or [])],
-            "_candidate_pool": _merge_unique(
-                [str(c) for c in (sec.get("_candidate_pool") or [])], heading_hits
-            ),
-            "paragraphs": pars,
-        })
+                "paragraphs": pars,
+            }
+        )
     return {
         "title": doc_title,
         "bone_collection": [str(b) for b in (data.get("bone_collection") or [])],
@@ -315,7 +339,7 @@ def _normalize_canonical_ast(data: Dict[str, Any], title: Optional[str] = None, 
     }
 
 
-def _append_json_value(pars: List[Dict[str, Any]], value: Any, par_counter: int) -> int:
+def _append_json_value(pars: list[dict[str, Any]], value: Any, par_counter: int) -> int:
     """Render a generic JSON value into paragraph entries (str -> paragraph, list -> bullets)."""
     if isinstance(value, str):
         if value.strip():
@@ -339,21 +363,28 @@ def _append_json_value(pars: List[Dict[str, Any]], value: Any, par_counter: int)
     return par_counter
 
 
-def _convert_generic_json(data: Dict[str, Any], title: Optional[str] = None, slug: Optional[str] = None) -> Dict[str, Any]:
+def _convert_generic_json(
+    data: dict[str, Any], title: str | None = None, slug: str | None = None
+) -> dict[str, Any]:
     """Convert an arbitrary JSON object into the two-tier AST.
 
     Every top-level key (except `title`) becomes a section: string values -> paragraph
     entries, list values -> bullet entries, nested objects -> flattened child entries.
     """
-    doc_title = (title or "").strip() or str(data.get("title") or "").strip() or (slug or "").strip() or DEFAULT_TITLE
-    sections: List[Dict[str, Any]] = []
+    doc_title = (
+        (title or "").strip()
+        or str(data.get("title") or "").strip()
+        or (slug or "").strip()
+        or DEFAULT_TITLE
+    )
+    sections: list[dict[str, Any]] = []
     sec_counter, par_counter = 0, 0
     for key, value in data.items():
         if key == "title":
             continue
         sec_counter += 1
         heading = str(key).strip() or f"Section {sec_counter:02d}"
-        section: Dict[str, Any] = {
+        section: dict[str, Any] = {
             "id": f"sec-{sec_counter:02d}",
             "heading": heading,
             "level": 1,
@@ -363,7 +394,9 @@ def _convert_generic_json(data: Dict[str, Any], title: Optional[str] = None, slu
         }
         if isinstance(value, dict):
             for sub_value in value.values():
-                par_counter = _append_json_value(section["paragraphs"], sub_value, par_counter)
+                par_counter = _append_json_value(
+                    section["paragraphs"], sub_value, par_counter
+                )
         else:
             par_counter = _append_json_value(section["paragraphs"], value, par_counter)
         sections.append(section)
@@ -375,7 +408,9 @@ def _convert_generic_json(data: Dict[str, Any], title: Optional[str] = None, slu
     }
 
 
-def parse_json_document(content: Any, title: Optional[str] = None, slug: Optional[str] = None) -> Dict[str, Any]:
+def parse_json_document(
+    content: Any, title: str | None = None, slug: str | None = None
+) -> dict[str, Any]:
     """Parse a JSON document (string or already-parsed dict) into the two-tier AST.
 
     Canonical ASTs (containing `sections`) are normalized in place; arbitrary JSON
@@ -393,10 +428,10 @@ def parse_json_document(content: Any, title: Optional[str] = None, slug: Optiona
 
 def parse_document(
     content: Any,
-    title: Optional[str] = None,
-    slug: Optional[str] = None,
-    source_format: Optional[str] = None,
-) -> Dict[str, Any]:
+    title: str | None = None,
+    slug: str | None = None,
+    source_format: str | None = None,
+) -> dict[str, Any]:
     """Parse raw Markdown, plain text, or JSON document content into the canonical two-tier AST.
 
     Format resolution order: explicit `source_format` hint > JSON detection (content is a
@@ -431,15 +466,21 @@ def parse_document(
         if _HEADING_MARKER_RE.search(stripped):
             return parse_markdown(content, title=title, slug=slug)
         return parse_plain_text(content, title=title, slug=slug)
-    raise ValueError("Document content must be a string (Markdown/plain text/JSON) or a parsed JSON object")
+    raise ValueError(
+        "Document content must be a string (Markdown/plain text/JSON) or a parsed JSON object"
+    )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Parse a raw document into the canonical two-tier AST (JSON to stdout).")
+    parser = argparse.ArgumentParser(
+        description="Parse a raw document into the canonical two-tier AST (JSON to stdout)."
+    )
     parser.add_argument("file", nargs="?", help="input file (stdin if omitted)")
     parser.add_argument("--title", default=None, help="explicit document title")
     parser.add_argument("--slug", default=None, help="document slug (fallback title)")
-    parser.add_argument("--format", default=None, help="source format hint: markdown|text|json")
+    parser.add_argument(
+        "--format", default=None, help="source format hint: markdown|text|json"
+    )
     args = parser.parse_args()
 
     if args.file:
@@ -447,7 +488,9 @@ def main() -> None:
             content = fh.read()
     else:
         content = sys.stdin.read()
-    ast = parse_document(content, title=args.title, slug=args.slug, source_format=args.format)
+    ast = parse_document(
+        content, title=args.title, slug=args.slug, source_format=args.format
+    )
     print(json.dumps(ast, indent=2, ensure_ascii=False))
 
 

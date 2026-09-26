@@ -21,12 +21,15 @@ PHILOSOPHY_DATA_PATH = DATA_DIR / "philosophy_data.json"
 PENDING_REVIEW_PATH = DATA_DIR / "pending_review.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
 
-logging.basicConfig(level=logging.INFO, format="[REFINE-WISDOM] %(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="[REFINE-WISDOM] %(asctime)s [%(levelname)s] %(message)s"
+)
 logger = logging.getLogger("refine_wisdom")
 
 
 def cosine_similarity(a, b):
     import numpy as np
+
     norm_a = np.linalg.norm(a)
     norm_b = np.linalg.norm(b)
     if norm_a == 0 or norm_b == 0:
@@ -39,6 +42,7 @@ def get_chroma_card_embeddings() -> dict:
     embeddings = {}
     try:
         import chromadb
+
         client = chromadb.HttpClient(host="127.0.0.1", port=8001)
         client.heartbeat()
         coll = client.get_collection("philosophy_dna")
@@ -47,7 +51,9 @@ def get_chroma_card_embeddings() -> dict:
             for cid, emb in zip(res["ids"], res["embeddings"]):
                 base_id = cid.split("_")[0]
                 embeddings[base_id] = emb
-        logger.info(f"Loaded {len(embeddings)} precomputed card embedding(s) from ChromaDB.")
+        logger.info(
+            f"Loaded {len(embeddings)} precomputed card embedding(s) from ChromaDB."
+        )
     except Exception as e:
         logger.warning(f"ChromaDB precomputed embedding fetch failed: {e}")
     return embeddings
@@ -57,6 +63,7 @@ def compute_lightweight_vector(text: str, dim: int = 128) -> list:
     """Zero-torch deterministic word-token frequency vector for fallback similarity."""
     import math
     import re
+
     vec = [0.0] * dim
     words = re.findall(r"\w+", text.lower())
     if not words:
@@ -72,7 +79,9 @@ def compute_lightweight_vector(text: str, dim: int = 128) -> list:
 
 def run_deduplication(threshold: float = 0.82) -> list:
     """[FEAT-563] Detect duplicate thoughts across wisdom & philosophy cards without destructive merges."""
-    logger.info("Running Semantic Deduplication Pass across wisdom collections (zero-torch host guard)...")
+    logger.info(
+        "Running Semantic Deduplication Pass across wisdom collections (zero-torch host guard)..."
+    )
     chroma_embs = get_chroma_card_embeddings()
 
     cards = []
@@ -103,7 +112,11 @@ def run_deduplication(threshold: float = 0.82) -> list:
         if cid and cid in chroma_embs:
             vectors.append(("chroma", chroma_embs[cid]))
         else:
-            orig = c.get("origin", {}).get("text") or c.get("origin", {}).get("verbatim") or ""
+            orig = (
+                c.get("origin", {}).get("text")
+                or c.get("origin", {}).get("verbatim")
+                or ""
+            )
             narr = c.get("synthesis", {}).get("narrative_context") or ""
             txt = f"{orig}\n{narr}".strip()
             vectors.append(("hash", compute_lightweight_vector(txt)))
@@ -121,26 +134,39 @@ def run_deduplication(threshold: float = 0.82) -> list:
                 sim = cosine_similarity(vec_a, vec_b)
             else:
                 # Recalculate with lightweight vector for cross-comparison if types differ
-                orig_a = cards[i].get("origin", {}).get("text") or cards[i].get("origin", {}).get("verbatim") or ""
-                orig_b = cards[j].get("origin", {}).get("text") or cards[j].get("origin", {}).get("verbatim") or ""
-                sim = cosine_similarity(compute_lightweight_vector(orig_a), compute_lightweight_vector(orig_b))
+                orig_a = (
+                    cards[i].get("origin", {}).get("text")
+                    or cards[i].get("origin", {}).get("verbatim")
+                    or ""
+                )
+                orig_b = (
+                    cards[j].get("origin", {}).get("text")
+                    or cards[j].get("origin", {}).get("verbatim")
+                    or ""
+                )
+                sim = cosine_similarity(
+                    compute_lightweight_vector(orig_a),
+                    compute_lightweight_vector(orig_b),
+                )
             if sim >= threshold:
                 pair_report = {
                     "card_a": {
                         "id": cards[i].get("id"),
                         "title": cards[i].get("synthesis", {}).get("title"),
-                        "source": cards[i].get("_source_file")
+                        "source": cards[i].get("_source_file"),
                     },
                     "card_b": {
                         "id": cards[j].get("id"),
                         "title": cards[j].get("synthesis", {}).get("title"),
-                        "source": cards[j].get("_source_file")
+                        "source": cards[j].get("_source_file"),
                     },
                     "similarity": round(sim, 4),
-                    "flagged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                    "flagged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 }
                 flagged_pairs.append(pair_report)
-                logger.info(f"🔎 Duplicate Candidate (sim={sim:.3f}): [{cards[i].get('id')}] '{cards[i].get('title', '')[:30]}' <-> [{cards[j].get('id')}] '{cards[j].get('title', '')[:30]}'")
+                logger.info(
+                    f"🔎 Duplicate Candidate (sim={sim:.3f}): [{cards[i].get('id')}] '{cards[i].get('title', '')[:30]}' <-> [{cards[j].get('id')}] '{cards[j].get('title', '')[:30]}'"
+                )
 
     # Save to pending_review.json
     review_data = {}
@@ -158,11 +184,17 @@ def run_deduplication(threshold: float = 0.82) -> list:
     with open(tmp_path, "w") as f:
         json.dump(review_data, f, indent=2)
     os.replace(tmp_path, PENDING_REVIEW_PATH)
-    logger.info(f"💾 Recorded {len(flagged_pairs)} duplicate candidate(s) in {PENDING_REVIEW_PATH.name}")
+    logger.info(
+        f"💾 Recorded {len(flagged_pairs)} duplicate candidate(s) in {PENDING_REVIEW_PATH.name}"
+    )
     return flagged_pairs
 
 
-def call_m5_air_qwen(prompt: str, system_msg: str = "You are the Senior Federated Lab Wisdom Architect.", timeout: int = 35) -> str:
+def call_m5_air_qwen(
+    prompt: str,
+    system_msg: str = "You are the Senior Federated Lab Wisdom Architect.",
+    timeout: int = 35,
+) -> str:
     """Dispatches a low-temperature completion to local M5 Air Qwen 27B."""
     url = "http://192.168.1.46:8000/v1/chat/completions"
     payload = {
@@ -171,11 +203,13 @@ def call_m5_air_qwen(prompt: str, system_msg: str = "You are the Senior Federate
         "max_tokens": 800,
         "messages": [
             {"role": "system", "content": system_msg},
-            {"role": "user", "content": prompt}
-        ]
+            {"role": "user", "content": prompt},
+        ],
     }
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(
+        url, data=data, headers={"Content-Type": "application/json"}
+    )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         res_json = json.loads(resp.read().decode("utf-8"))
         choices = res_json.get("choices", [])
@@ -227,19 +261,23 @@ Respond ONLY with a valid JSON object matching this schema:
     logger.info(f"Dispatched refinement request for [{cid}] to M5 Air Qwen 27B...")
     try:
         raw_resp = call_m5_air_qwen(prompt)
-        match = re.search(r'\{.*\}', raw_resp, re.DOTALL)
+        match = re.search(r"\{.*\}", raw_resp, re.DOTALL)
         if not match:
             logger.warning(f"Failed to parse JSON response from M5 Air for {cid}.")
             return False
 
         parsed = json.loads(match.group(0))
         new_title = parsed.get("title", synthesis.get("title"))
-        new_narrative = parsed.get("narrative_context", synthesis.get("narrative_context"))
+        new_narrative = parsed.get(
+            "narrative_context", synthesis.get("narrative_context")
+        )
         new_anchors = parsed.get("lab_anchors", synthesis.get("lab_anchors", []))
         new_review = parsed.get("review_notes", synthesis.get("review_notes", ""))
         new_tags = parsed.get("tags", card.get("metadata", {}).get("tags", []))
 
-        logger.info(f"✨ Refined [{cid}] '{new_title}':\n   Context: {new_narrative[:80]}...\n   Anchors: {new_anchors}")
+        logger.info(
+            f"✨ Refined [{cid}] '{new_title}':\n   Context: {new_narrative[:80]}...\n   Anchors: {new_anchors}"
+        )
 
         if dry_run:
             logger.info(f"[DRY-RUN] Would update {cid} without writing to disk.")
@@ -252,7 +290,9 @@ Respond ONLY with a valid JSON object matching this schema:
         card["synthesis"]["lab_anchors"] = new_anchors
         card["synthesis"]["review_notes"] = new_review
         card["synthesis"]["last_refined_by"] = "M5_AIR"
-        card["synthesis"]["refinement_version"] = card["synthesis"].get("refinement_version", 1) + 1
+        card["synthesis"]["refinement_version"] = (
+            card["synthesis"].get("refinement_version", 1) + 1
+        )
 
         card.setdefault("metadata", {})
         card["metadata"]["tags"] = new_tags
@@ -263,11 +303,25 @@ Respond ONLY with a valid JSON object matching this schema:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Automated Wisdom Synthesis Refiner & Deduplication Pass")
-    parser.add_argument("--dedup-only", action="store_true", help="Run semantic deduplication check only")
-    parser.add_argument("--all", action="store_true", help="Refine all unrefined cards (refinement_version < 2)")
+    parser = argparse.ArgumentParser(
+        description="Automated Wisdom Synthesis Refiner & Deduplication Pass"
+    )
+    parser.add_argument(
+        "--dedup-only",
+        action="store_true",
+        help="Run semantic deduplication check only",
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Refine all unrefined cards (refinement_version < 2)",
+    )
     parser.add_argument("--id", help="Refine a specific card by ID (e.g. WIS-001)")
-    parser.add_argument("--dry-run", action="store_true", help="Simulate refinement without saving to disk")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Simulate refinement without saving to disk",
+    )
     args = parser.parse_args()
 
     # Step 1: Semantic Deduplication Pass
@@ -299,9 +353,13 @@ def main():
             modified_count += 1
     else:
         # Candidate search: unrefined cards (refinement_version < 2)
-        candidates = [c for c in cards if c.get("synthesis", {}).get("refinement_version", 1) < 2]
+        candidates = [
+            c for c in cards if c.get("synthesis", {}).get("refinement_version", 1) < 2
+        ]
         if not candidates:
-            logger.info("All cards have reached refinement_version >= 2. Full polish certified.")
+            logger.info(
+                "All cards have reached refinement_version >= 2. Full polish certified."
+            )
             return
 
         to_refine = candidates if args.all else [candidates[0]]
@@ -314,14 +372,22 @@ def main():
         with open(tmp_file, "w") as f:
             json.dump(cards, f, indent=2)
         os.replace(tmp_file, WISDOM_DATA_PATH)
-        logger.info(f"💾 Atomically saved {modified_count} refined card(s) to {WISDOM_DATA_PATH.name}")
+        logger.info(
+            f"💾 Atomically saved {modified_count} refined card(s) to {WISDOM_DATA_PATH.name}"
+        )
 
         # Trigger rebuild of wisdom.html
         build_script = BASE_DIR / "wisdom_build.py"
         if build_script.exists():
             try:
                 import subprocess
-                res = subprocess.run([sys.executable, str(build_script)], capture_output=True, text=True, timeout=10)
+
+                res = subprocess.run(
+                    [sys.executable, str(build_script)],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                )
                 logger.info(f"Rebuilt wisdom.html: {res.stdout.strip()}")
             except Exception as be:
                 logger.warning(f"Could not run wisdom_build.py: {be}")
