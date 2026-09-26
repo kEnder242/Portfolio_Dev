@@ -3259,11 +3259,11 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 
 ## [FEAT-607] Nightly Accountability Digest & Dashboard Integration
 **Sprint:** SPR-88.0
-**Status:** ACTIVE
+**Status:** ACTIVE (DECOUPLED VIA [FEAT-619])
 **Code:** [HomeLabAI/src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py) — Nightly Accountability Digest & Dashboard Integration.
-**Logic:** Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across all 11 nightly maintenance stages against `lab_accountability_thresholds.json`, writes atomic `daily_accountability_digest.json`, and emits an expandable `[+] ACCOUNTABILITY DIGEST` card to `status.html`.
+**Logic:** Replaces superficial process exit codes with a multi-stage quantifiable health evaluation. Compiles metrics across nightly maintenance stages against `lab_accountability_thresholds.json` and emits an expandable `[+] ACCOUNTABILITY DIGEST` card to `status.html`. Operates in concert with `[FEAT-619]` / `[BKM-066]`, where out-of-band morning verification is decoupled from internal batch execution to ensure silent batch crashes or early exits are independently detected and graded.
 **Rationale:** Eliminates silent passes and zero-work exits during overnight batch sweeps.
-**Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `daily_accountability_digest.json`, `status.html`.
+**Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `daily_accountability_digest.json`, `status.html`.
 
 ## [FEAT-608] Synthetic Morning Round Table Accountability Probe Suite
 **Sprint:** SPR-88.0
