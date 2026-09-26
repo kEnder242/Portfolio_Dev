@@ -29,3 +29,14 @@
   - Eliminated fallback `0.50` in probe.
 * **23:53**: Live probe executed across active silicon endpoints: **Circuit Latency: 28.19s**, **Critic Score: 0.99 (VERIFIED_PASS)**, **Foyer State: OPERATIONAL**.
 * **23:54**: Standalone accountability watchdog executed live, authoritatively updating `daily_accountability_digest.json`.
+
+---
+
+## 🔁 Architectural Feedback Loop & DNA Synchronization (`BKM-068`)
+* **Incident / Forensic Finding**: Ambient recall hook regressed due to coupling with Foyer (`:8765`) and an unvetted `subprocess.run(["icm", "recall"])` CLI shortcut.
+* **Remediation**:
+  1. Restored pure CLaRa-DNA architecture via `ambient_hook_claradb.py` connecting **ONLY** to resident ChromaDB (`:8001`) and local SQLite (`memories.db`), reducing latency to $<25\text{ ms}$ with zero Foyer coupling.
+  2. Canonized **`BKM-068: Feature Tracker & DNA Synchronization Mandate`** in `HomeLabAI/docs/Protocols.md` and Rule 7 of `AGENTS.md`.
+  3. Established continuous **JITC Design Conflict Comparator**: In the micro-moment of reading or updating DNA records, active code is audited against human bedrock specifications (`[FEAT-xxx]`, `[LAB-xxx]`, `[BKM-xxx]`). Unvetted agent drift is remediated immediately; human design evolution is bubbled up for collaborative alignment.
+* **Ledger Provenance**: Indexed into Persistent Memory (ICM topic `architectural-feedback-loop`) and ChromaDB `behavioral_dna`.
+
