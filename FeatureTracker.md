@@ -3266,12 +3266,12 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `daily_accountability_digest.json`, `status.html`, `foyer_stage_ledger.jsonl`.
 
 ## [FEAT-608] Synthetic Morning Round Table Accountability Probe Suite
-**Sprint:** SPR-88.0
+**Sprint:** SPR-88.0 / SPR-92.0
 **Status:** ACTIVE
 **Code:** [HomeLabAI/src/infra/probe_round_table_accountability.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py) — Synthetic Morning Round Table Accountability Probe Suite.
-**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and Pinky Coherence Critic scoring). Indexed via `[BKM-067]` and extracted via `HomeLabAI/src/infra/read_roundtable_turn.py`.
-**Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks.
-**Mechanism:** `probe_round_table_accountability.py`, `read_roundtable_turn.py`, Foyer `/inject` and `/status` REST endpoints.
+**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and MLX Judge Coherence Critic scoring). Grounded in physical truth: directly awaits stage completions in `foyer_stage_ledger.jsonl` and authoritative judge scores from `judge_backpressure.jsonl` (zero fabricated fallback scores). Indexed via `[BKM-062]`, `[BKM-067]` and extracted via `HomeLabAI/src/infra/read_roundtable_turn.py`.
+**Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks and eliminating synthetic green lies.
+**Mechanism:** `probe_round_table_accountability.py`, `read_roundtable_turn.py`, `mlx_judge_node.py`, Foyer `/inject` and `/status` REST endpoints.
 
 ## [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine
 **Sprint:** SPR-89.0
