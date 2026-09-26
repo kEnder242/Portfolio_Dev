@@ -22,25 +22,59 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-import torch.nn as nn
-from typing import Any, Optional, Union, Callable
-from trl.trainer.reward_trainer import (BaseTrainer, PartialState, Path, dataclass, is_conversational, logging, remove_none_values, AutoModelForSequenceClassification, AutoTokenizer, DataCollator, DataCollatorForPreference, Dataset, EvalPrediction, IterableDataset, PeftConfig, PreTrainedTokenizerBase, RewardConfig, TrainerCallback, clone_chat_template, contextlib, defaultdict, disable_dropout_in_model, get_act_offloading_ctx_manager, suppress_from_pretrained_warning, transformers, PreTrainedModel, logger, os)
-
-
-import math
-from typing import *
-from dataclasses import field
-from packaging.version import Version
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
-from transformers.training_args import ParallelMode
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import math
+from collections.abc import Callable
+from dataclasses import field
 from types import MethodType
+from typing import *
+from typing import Any, Optional
+
+import torch
+from packaging.version import Version
+from torch import nn
+from transformers import (
+    DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling,
+)
+from transformers import DataCollatorForSeq2Seq
+from transformers.training_args import ParallelMode
+from trl.trainer.reward_trainer import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    BaseTrainer,
+    DataCollator,
+    DataCollatorForPreference,
+    Dataset,
+    EvalPrediction,
+    IterableDataset,
+    PartialState,
+    Path,
+    PeftConfig,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    RewardConfig,
+    TrainerCallback,
+    clone_chat_template,
+    contextlib,
+    dataclass,
+    defaultdict,
+    disable_dropout_in_model,
+    get_act_offloading_ctx_manager,
+    is_conversational,
+    logger,
+    logging,
+    os,
+    remove_none_values,
+    suppress_from_pretrained_warning,
+    transformers,
+)
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -74,7 +108,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
     "epilogue_fusion"   : True,
@@ -144,7 +177,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -366,23 +398,23 @@ class UnslothRewardConfig(RewardConfig):
             Whether to offload the activations to the CPU.
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
-    max_seq_length : Optional[int] = field(
+    max_seq_length : int | None = field(
         default = None,
         metadata = {'help': 'Maximum sequence length to truncate to.'},
     )
@@ -714,7 +746,6 @@ class UnslothRewardConfig(RewardConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
 
-pass
 
 class _UnslothRewardTrainer(BaseTrainer):
     """"""
@@ -725,17 +756,17 @@ class _UnslothRewardTrainer(BaseTrainer):
 
     def __init__(
         self,
-        model: Union[str, PreTrainedModel],
-        args: Optional[RewardConfig] = None,
-        data_collator: Optional[DataCollator] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, dict[str, Dataset]]] = None,
-        processing_class: Optional[PreTrainedTokenizerBase] = None,
-        compute_metrics: Optional[Callable[[EvalPrediction], dict]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
-        optimizers: tuple[Optional[torch.optim.Optimizer], Optional[torch.optim.lr_scheduler.LambdaLR]] = (None, None),
-        optimizer_cls_and_kwargs: Optional[tuple[type[torch.optim.Optimizer], dict[str, Any]]] = None,
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        model: str | PreTrainedModel,
+        args: RewardConfig | None = None,
+        data_collator: DataCollator | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | dict[str, Dataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | None = None,
+        compute_metrics: Callable[[EvalPrediction], dict] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
+        optimizers: tuple[torch.optim.Optimizer | None, torch.optim.lr_scheduler.LambdaLR | None] = (None, None),
+        optimizer_cls_and_kwargs: tuple[type[torch.optim.Optimizer], dict[str, Any]] | None = None,
+        preprocess_logits_for_metrics: Callable[[torch.Tensor, torch.Tensor], torch.Tensor] | None = None,
         peft_config: Optional["PeftConfig"] = None,
     ):
         # Args
@@ -902,11 +933,11 @@ class _UnslothRewardTrainer(BaseTrainer):
 
     def _prepare_dataset(
         self,
-        dataset: Union[Dataset, IterableDataset],
+        dataset: Dataset | IterableDataset,
         processing_class: PreTrainedTokenizerBase,
         args: RewardConfig,
         dataset_name: str,
-    ) -> Union[Dataset, IterableDataset]:
+    ) -> Dataset | IterableDataset:
         # Tabular backends like Arrow/Parquet insert `None` for mismatched keys in nested structures. Clean them from
         # sampled data.
         if isinstance(dataset, Dataset):  # IterableDataset does not support `with_transform`
@@ -994,9 +1025,9 @@ class _UnslothRewardTrainer(BaseTrainer):
     def compute_loss(
         self,
         model: nn.Module,
-        inputs: dict[str, Union[torch.Tensor, Any]],
+        inputs: dict[str, torch.Tensor | Any],
         return_outputs: bool = False,
-        num_items_in_batch: Optional[torch.Tensor] = None,
+        num_items_in_batch: torch.Tensor | None = None,
     ):
         """
         Compute training loss and additionally compute token accuracies
@@ -1046,7 +1077,7 @@ class _UnslothRewardTrainer(BaseTrainer):
         with self.maybe_activation_offload_context:
             return super().training_step(*args, **kwargs)
 
-    def log(self, logs: dict[str, float], start_time: Optional[float] = None) -> None:
+    def log(self, logs: dict[str, float], start_time: float | None = None) -> None:
         mode = "train" if self.model.training else "eval"
         metrics = {key: sum(val) / len(val) for key, val in self._metrics[mode].items()}  # average the metrics
 
@@ -1332,7 +1363,6 @@ class UnslothRewardTrainer(_UnslothRewardTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -1340,18 +1370,14 @@ class UnslothRewardTrainer(_UnslothRewardTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
 
 
 if hasattr(logger, "addFilter"):
@@ -1359,6 +1385,5 @@ if hasattr(logger, "addFilter"):
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
         def filter(self, x): return self.text not in x.getMessage()
-    pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

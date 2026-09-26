@@ -22,7 +22,9 @@ MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
 DECISIONS_PATH = DATA_DIR / "dna_decisions.json"
 BONE_COLLECTIONS_PATH = DATA_DIR / "bone_collections.json"
 CONNECTIONS_GRAPH_PATH = DATA_DIR / "dna_connections_graph.json"
-NIGHTLY_STATE_PATH = PORTFOLIO_DEV_DIR.parent / "HomeLabAI/run/nightly_synthesis_state.json"
+NIGHTLY_STATE_PATH = (
+    PORTFOLIO_DEV_DIR.parent / "HomeLabAI/run/nightly_synthesis_state.json"
+)
 SPRINT_DATA_PATH = PORTFOLIO_DEV_DIR.parent / "Portfolio_Dev/dna/sprint_data.json"
 GEMS_PATH = DATA_DIR / "latest_synthesis_gems.json"
 
@@ -49,7 +51,7 @@ def load_manifest():
         "rdna": [],
         "resume": [],
         "papers": [],
-        "gems": []
+        "gems": [],
     }
     if MANIFEST_PATH.exists():
         try:
@@ -67,7 +69,12 @@ def load_manifest():
             with open(ins_path, "r", encoding="utf-8") as f:
                 ins_list = json.load(f)
                 if ins_list and isinstance(ins_list, list):
-                    manifest["philosophy"] = [c for c in ins_list if str(c.get("id", "")).startswith("INS-") or str(c.get("id", "")).startswith("PHL-")]
+                    manifest["philosophy"] = [
+                        c
+                        for c in ins_list
+                        if str(c.get("id", "")).startswith("INS-")
+                        or str(c.get("id", "")).startswith("PHL-")
+                    ]
         except Exception:
             pass
     elif phi_path.exists():
@@ -75,7 +82,12 @@ def load_manifest():
             with open(phi_path, "r", encoding="utf-8") as f:
                 phi_list = json.load(f)
                 if phi_list and isinstance(phi_list, list):
-                    manifest["philosophy"] = [c for c in phi_list if str(c.get("id", "")).startswith("PHL-") or str(c.get("id", "")).startswith("INS-")]
+                    manifest["philosophy"] = [
+                        c
+                        for c in phi_list
+                        if str(c.get("id", "")).startswith("PHL-")
+                        or str(c.get("id", "")).startswith("INS-")
+                    ]
         except Exception:
             pass
 
@@ -85,7 +97,9 @@ def load_manifest():
             with open(wis_path, "r", encoding="utf-8") as f:
                 wis_list = json.load(f)
                 if wis_list and isinstance(wis_list, list):
-                    manifest["wisdom"] = [c for c in wis_list if str(c.get("id", "")).startswith("WIS-")]
+                    manifest["wisdom"] = [
+                        c for c in wis_list if str(c.get("id", "")).startswith("WIS-")
+                    ]
         except Exception:
             pass
 
@@ -102,34 +116,44 @@ def load_manifest():
         try:
             with open(GEMS_PATH, "r", encoding="utf-8") as f:
                 raw_gems = json.load(f)
-                gems_list = raw_gems.get("gems", []) if isinstance(raw_gems, dict) else (raw_gems if isinstance(raw_gems, list) else [])
+                gems_list = (
+                    raw_gems.get("gems", [])
+                    if isinstance(raw_gems, dict)
+                    else (raw_gems if isinstance(raw_gems, list) else [])
+                )
                 formatted_gems = []
                 for g in gems_list:
                     if not isinstance(g, dict):
                         continue
                     cid = g.get("id") or f"GEM-{len(formatted_gems)+1:03d}"
                     tags_raw = g.get("tags", [])
-                    tag_list = tags_raw if isinstance(tags_raw, list) else [t.strip() for t in str(tags_raw).split(",") if t.strip()]
-                    formatted_gems.append({
-                        "id": cid,
-                        "domain": "gems",
-                        "title": g.get("title") or cid,
-                        "origin": {
-                            "text": g.get("verbatim") or g.get("synthesis", {}).get("narrative_context", ""),
-                            "author": "Synthesized Gems Engine",
-                            "source": "latest_synthesis_gems.json",
-                            "immutable": True
-                        },
-                        "synthesis": {
-                            "narrative_context": g.get("narrative_context") or g.get("summary") or "",
-                            "lab_anchors": g.get("lab_anchors", []),
-                            "tags": tag_list
-                        },
-                        "metadata": {
-                            "tags": tag_list,
-                            "date": g.get("date", "")
+                    tag_list = (
+                        tags_raw
+                        if isinstance(tags_raw, list)
+                        else [t.strip() for t in str(tags_raw).split(",") if t.strip()]
+                    )
+                    formatted_gems.append(
+                        {
+                            "id": cid,
+                            "domain": "gems",
+                            "title": g.get("title") or cid,
+                            "origin": {
+                                "text": g.get("verbatim")
+                                or g.get("synthesis", {}).get("narrative_context", ""),
+                                "author": "Synthesized Gems Engine",
+                                "source": "latest_synthesis_gems.json",
+                                "immutable": True,
+                            },
+                            "synthesis": {
+                                "narrative_context": g.get("narrative_context")
+                                or g.get("summary")
+                                or "",
+                                "lab_anchors": g.get("lab_anchors", []),
+                                "tags": tag_list,
+                            },
+                            "metadata": {"tags": tag_list, "date": g.get("date", "")},
                         }
-                    })
+                    )
                 manifest["gems"] = formatted_gems
         except Exception as e:
             print(f"Warning loading {GEMS_PATH}: {e}")
@@ -174,7 +198,7 @@ def load_mining_telemetry():
         "last_run_display": "Recent Synthesis Sweep",
         "days_since_run": 0,
         "is_stalled": False,
-        "stall_reason": "Automated DNA Bridge & Census HUD active."
+        "stall_reason": "Automated DNA Bridge & Census HUD active.",
     }
     if NIGHTLY_STATE_PATH.exists():
         try:
@@ -204,7 +228,9 @@ def is_archived_card(card, decisions=None):
     if decisions and cid in decisions:
         if decisions[cid].get("decision") in ("REJECTED", "ARCHIVED"):
             return True
-    status = str(card.get("status") or (card.get("metadata", {}) or {}).get("status", "")).upper()
+    status = str(
+        card.get("status") or (card.get("metadata", {}) or {}).get("status", "")
+    ).upper()
     return status in ("REJECTED", "ARCHIVED")
 
 
@@ -215,7 +241,9 @@ def is_flagged_card(card, decisions=None):
     if decisions and cid in decisions:
         if decisions[cid].get("decision") == "APPROVED":
             return False
-    status = str(card.get("status") or (card.get("metadata", {}) or {}).get("status", "")).upper()
+    status = str(
+        card.get("status") or (card.get("metadata", {}) or {}).get("status", "")
+    ).upper()
     if status in ("PROPOSED", "FLAGGED", "NEEDS_REVIEW"):
         return True
     if card.get("is_flagged") or card.get("flagged"):
@@ -241,7 +269,12 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
     is_flagged = is_flagged_card(card, decisions)
 
     # Title
-    title = card.get("title") or (card.get("synthesis", {}) or {}).get("title") or card.get("theme") or cid
+    title = (
+        card.get("title")
+        or (card.get("synthesis", {}) or {}).get("title")
+        or card.get("theme")
+        or cid
+    )
 
     # Origin / Verbatim
     origin_obj = card.get("origin") or {}
@@ -256,7 +289,13 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
 
     # Synthesis Narrative
     synth_obj = card.get("synthesis") or {}
-    narrative = synth_obj.get("narrative_context") or card.get("narrative_context") or card.get("summary") or card.get("content") or ""
+    narrative = (
+        synth_obj.get("narrative_context")
+        or card.get("narrative_context")
+        or card.get("summary")
+        or card.get("content")
+        or ""
+    )
     lab_anchors = synth_obj.get("lab_anchors") or card.get("lab_anchors") or []
 
     # Metadata / Tags
@@ -272,12 +311,17 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
 
     anchors_html = ""
     if lab_anchors:
-        anchors_chips = "".join(f"<code>{escape_html(a)}</code>" for a in lab_anchors[:4])
+        anchors_chips = "".join(
+            f"<code>{escape_html(a)}</code>" for a in lab_anchors[:4]
+        )
         anchors_html = f'<div class="card-anchors"><span class="section-label">Anchors:</span> {anchors_chips}</div>'
 
     tags_html = ""
     if tags:
-        tags_chips = " ".join(f'<span class="tag">#{escape_html(str(t).lstrip("#"))}</span>' for t in tags[:6])
+        tags_chips = " ".join(
+            f'<span class="tag">#{escape_html(str(t).lstrip("#"))}</span>'
+            for t in tags[:6]
+        )
         tags_html = f'<div class="card-tags">{tags_chips}</div>'
 
     origin_block = ""
@@ -323,7 +367,17 @@ def build_page():
     connections_graph = load_connections_graph()
     mining_telemetry = load_mining_telemetry()
 
-    buckets = ["WISDOM", "PHILOSOPHY", "FEATURE", "BEHAVIORAL", "SPRINT", "DISCOVERY", "RDNA", "RESUME", "GEMS"]
+    buckets = [
+        "WISDOM",
+        "PHILOSOPHY",
+        "FEATURE",
+        "BEHAVIORAL",
+        "SPRINT",
+        "DISCOVERY",
+        "RDNA",
+        "RESUME",
+        "GEMS",
+    ]
 
     ins_phl_count = len(manifest.get("philosophy", []))
     domain_counts = {
@@ -335,7 +389,7 @@ def build_page():
         "WIS": len(manifest.get("wisdom", [])),
         "DISC": len(manifest.get("discovery", [])),
         "RDNA": len(manifest.get("rdna", [])),
-        "GEMS": len(manifest.get("gems", []))
+        "GEMS": len(manifest.get("gems", [])),
     }
     total_census = sum(domain_counts.values())
     sprint_delta = "+451"
@@ -352,7 +406,7 @@ def build_page():
             if cid:
                 seen_ids.add(cid)
             copy = dict(item)
-            copy['_sourceCollection'] = col
+            copy["_sourceCollection"] = col
             all_cards.append(copy)
 
     needs_review_count = sum(1 for c in all_cards if is_flagged_card(c, decisions))
@@ -369,54 +423,81 @@ def build_page():
 
     cards_html = "\n".join(
         render_card_html(
-            c, i + 1, buckets, decisions=decisions,
-            is_rw=(c.get('_sourceCollection') in ('philosophy', 'wisdom', 'rdna', 'discovery'))
-        ) for i, c in enumerate(all_cards)
+            c,
+            i + 1,
+            buckets,
+            decisions=decisions,
+            is_rw=(
+                c.get("_sourceCollection")
+                in ("philosophy", "wisdom", "rdna", "discovery")
+            ),
+        )
+        for i, c in enumerate(all_cards)
     )
 
     # Sync static CSS and JS to field_notes
     os.makedirs(FIELD_NOTES_DIR / "css", exist_ok=True)
     os.makedirs(FIELD_NOTES_DIR / "js", exist_ok=True)
-    shutil.copy2(DNA_FORGE_DIR / "css/dna_forge.css", FIELD_NOTES_DIR / "css/dna_forge.css")
+    shutil.copy2(
+        DNA_FORGE_DIR / "css/dna_forge.css", FIELD_NOTES_DIR / "css/dna_forge.css"
+    )
     shutil.copy2(DNA_FORGE_DIR / "js/dna_forge.js", FIELD_NOTES_DIR / "js/dna_forge.js")
-    shutil.copy2(DNA_FORGE_DIR / "js/synapse_graph.js", FIELD_NOTES_DIR / "js/synapse_graph.js")
+    shutil.copy2(
+        DNA_FORGE_DIR / "js/synapse_graph.js", FIELD_NOTES_DIR / "js/synapse_graph.js"
+    )
 
     # Read template
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
 
     # Replacements
-    stalled_class = "stalled" if mining_telemetry['is_stalled'] else ""
-    stall_status_text = "⚠️ NO-PROGRESS / STALLED HARVEST" if mining_telemetry['is_stalled'] else "🟢 MINING ACTIVE (+451 DELTA)"
-    stall_reason_snippet = escape_html(mining_telemetry['stall_reason'][:75])
+    stalled_class = "stalled" if mining_telemetry["is_stalled"] else ""
+    stall_status_text = (
+        "⚠️ NO-PROGRESS / STALLED HARVEST"
+        if mining_telemetry["is_stalled"]
+        else "🟢 MINING ACTIVE (+451 DELTA)"
+    )
+    stall_reason_snippet = escape_html(mining_telemetry["stall_reason"][:75])
 
     page_html = template
     page_html = page_html.replace("__TOTAL_CENSUS__", str(total_census))
     page_html = page_html.replace("__SPRINT_DELTA__", sprint_delta)
-    page_html = page_html.replace("__FEAT_COUNT__", str(domain_counts['FEAT']))
-    page_html = page_html.replace("__SPRINT_COUNT__", str(domain_counts['SPRINT']))
-    page_html = page_html.replace("__BKM_COUNT__", str(domain_counts['BKM']))
-    page_html = page_html.replace("__INS_COUNT__", str(domain_counts['INS']))
-    page_html = page_html.replace("__PHL_COUNT__", str(domain_counts['PHL']))
-    page_html = page_html.replace("__WIS_COUNT__", str(domain_counts['WIS']))
-    page_html = page_html.replace("__DISC_COUNT__", str(domain_counts['DISC']))
-    page_html = page_html.replace("__RDNA_COUNT__", str(domain_counts['RDNA']))
-    page_html = page_html.replace("__GEMS_COUNT__", str(domain_counts['GEMS']))
+    page_html = page_html.replace("__FEAT_COUNT__", str(domain_counts["FEAT"]))
+    page_html = page_html.replace("__SPRINT_COUNT__", str(domain_counts["SPRINT"]))
+    page_html = page_html.replace("__BKM_COUNT__", str(domain_counts["BKM"]))
+    page_html = page_html.replace("__INS_COUNT__", str(domain_counts["INS"]))
+    page_html = page_html.replace("__PHL_COUNT__", str(domain_counts["PHL"]))
+    page_html = page_html.replace("__WIS_COUNT__", str(domain_counts["WIS"]))
+    page_html = page_html.replace("__DISC_COUNT__", str(domain_counts["DISC"]))
+    page_html = page_html.replace("__RDNA_COUNT__", str(domain_counts["RDNA"]))
+    page_html = page_html.replace("__GEMS_COUNT__", str(domain_counts["GEMS"]))
     page_html = page_html.replace("__NEEDS_REVIEW__", str(needs_review_count))
     page_html = page_html.replace("__ARCHIVED_COUNT__", str(archived_count))
-    page_html = page_html.replace("__LAST_RUN_DISPLAY__", escape_html(mining_telemetry['last_run_display']))
-    page_html = page_html.replace("__DAYS_AGO__", str(mining_telemetry['days_since_run']))
+    page_html = page_html.replace(
+        "__LAST_RUN_DISPLAY__", escape_html(mining_telemetry["last_run_display"])
+    )
+    page_html = page_html.replace(
+        "__DAYS_AGO__", str(mining_telemetry["days_since_run"])
+    )
     page_html = page_html.replace("__STALLED_CLASS__", stalled_class)
-    page_html = page_html.replace("__STALL_REASON__", escape_html(mining_telemetry['stall_reason']))
+    page_html = page_html.replace(
+        "__STALL_REASON__", escape_html(mining_telemetry["stall_reason"])
+    )
     page_html = page_html.replace("__STALL_STATUS_TEXT__", stall_status_text)
     page_html = page_html.replace("__STALL_REASON_SNIPPET__", stall_reason_snippet)
     page_html = page_html.replace("__CARDS_HTML__", cards_html)
 
     page_html = page_html.replace("__MANIFEST_JSON__", json.dumps(manifest))
-    page_html = page_html.replace("__BONE_COLLECTIONS_JSON__", json.dumps(bone_collections))
-    page_html = page_html.replace("__MINING_TELEMETRY_JSON__", json.dumps(mining_telemetry))
+    page_html = page_html.replace(
+        "__BONE_COLLECTIONS_JSON__", json.dumps(bone_collections)
+    )
+    page_html = page_html.replace(
+        "__MINING_TELEMETRY_JSON__", json.dumps(mining_telemetry)
+    )
     page_html = page_html.replace("__DECISIONS_JSON__", json.dumps(decisions))
-    page_html = page_html.replace("__SYNAPSE_GRAPH_JSON__", json.dumps(connections_graph))
+    page_html = page_html.replace(
+        "__SYNAPSE_GRAPH_JSON__", json.dumps(connections_graph)
+    )
 
     with open(OUTPUT_FORGE, "w", encoding="utf-8") as f:
         f.write(page_html)
@@ -427,7 +508,9 @@ def build_page():
     with open(OUTPUT_LOCAL_FORGE, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    print(f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Modular DNA Forge Architecture.")
+    print(
+        f"✅ Successfully compiled {OUTPUT_FORGE} and {OUTPUT_WISDOM} with Modular DNA Forge Architecture."
+    )
 
 
 if __name__ == "__main__":

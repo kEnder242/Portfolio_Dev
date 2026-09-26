@@ -385,46 +385,54 @@
   },
   {
     "id": "WIS-010",
-    "theme": "Systems Architecture & Automation",
+    "theme": "Cognitive Architecture & Synthetic Deliberation",
     "paper_order": 10,
     "origin": {
       "author": "jallred",
-      "text": "While in my PAE role, I maintained roughly 100 Knights Landing nodes that allowed us to reproduce issues with OEMs. Stuff you\u2019d only see once in a million happened regularly when you start doing a million things quickly and in parallel. We used pdsh regularly. You think very differently about manually flashing BIOS when it needs to be done 100 times with a tough-to-reach harness. I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn\u2019t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
-      "source": "Portfolio Stories (stories.html#fleet-scale)",
+      "text": "The mice (Pinky and Brain) are not chatbots; they are associative vector retrieval probes. Their speculative banter uncovers unexpected non-obvious relations across memory collections, but their intuitive jumps must be vetted and bound through synthetic morning round tables to ensure coherence before execution.",
+      "source": "Sprint 90 Architectural Synthesis & Conversational Ledger",
       "immutable": true,
-      "created_at": "2026-09-17T17:00:00Z"
+      "created_at": "2026-09-25T15:00:00Z"
     },
     "synthesis": {
-      "title": "Flashing 100 Nodes (Fleet Scale Operations)",
-      "narrative_context": "I helped execute and collect data for a heat experiment. We visualized nodes getting hotter at the tops of racks, experimented with the rack doors open. The results of the experiments were somewhat of a moot, the minor heat differences didn\u2019t affect performance. Notably, cables got in the way of airflow, but the connections were mandatory. So many loose connections. Each node had its own personality, and some were very stubborn.",
+      "title": "Associative Mice & Intuition Round Tables",
+      "narrative_context": "Small local leaf nodes serve as fast associative probes bubbling up unexpected lateral connections. Synthetic morning round tables provide the deliberative filter to separate hallucination from genuine insight.",
       "lab_anchors": [
+        "FEAT-608",
         "BKM-060",
-        "FEAT-582",
-        "FEAT-586"
+        "VIBE-001"
       ],
-      "review_notes": "Ingested from empirical field note #fleet-scale.",
+      "review_notes": "Empirical wisdom card formalizing Mice as associative memory probes.",
       "last_refined_by": "AGY",
       "refinement_version": 1,
       "mutations": [],
-      "revisions": []
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "The mice are associative vector retrieval probes. Their speculative banter uncovers unexpected non-obvious relations across memory collections, vetted through synthetic morning round tables.",
+          "certified_at": "2026-09-25T15:00:00Z"
+        }
+      ]
     },
     "metadata": {
       "tags": [
-        "systems-architecture-automation",
-        "operations",
-        "scale"
+        "wisdom",
+        "associative-mice",
+        "intuition-probes",
+        "round-table",
+        "deliberative-filter"
       ],
       "explicit_links": [
+        "FEAT-608",
         "BKM-060",
-        "FEAT-582",
-        "FEAT-586",
-        "PHL-034"
+        "INS-002"
       ],
       "aliases": [
-        "fleet-scale"
+        "associative-mice"
       ],
       "status": "APPROVED",
-      "bucket_id": "bucket_systems_architecture_automation"
+      "bucket_id": "bucket_cognitive_architecture"
     }
   },
   {
@@ -20705,7 +20713,7 @@
     "paper_order": 482,
     "origin": {
       "author": "jallred",
-      "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn’t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it’s possible to consume thousands of tokens just to answer a simple question. At some point it’s necessary to save the work that was done and start a fresh new session.",
+      "text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn\u2019t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it\u2019s possible to consume thousands of tokens just to answer a simple question. At some point it\u2019s necessary to save the work that was done and start a fresh new session.",
       "source": "Engineering Notes (notes_2026_09_22.md)",
       "immutable": true,
       "created_at": "2026-09-22T13:00:00Z"

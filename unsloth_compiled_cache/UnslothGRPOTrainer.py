@@ -22,26 +22,98 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-import torch.nn as nn
-from typing import Any, Optional, Union
-from trl.trainer.grpo_trainer import (BaseTrainer, DataLoader, Path, RepeatSampler, Sampler, _ForwardRedirection, is_datasets_available, is_rich_available, partial, print_prompt_completions_sample, seed_worker, textwrap, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GRPOConfig, GenerationConfig, IterableDataset, LigerFusedLinearGRPOLoss, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, RewardFunc, SyncRefModelCallback, TrainerCallback, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_liger_kernel_available, is_peft_model, is_vllm_available, prepare_deepspeed, prepare_fsdp, set_seed, wandb, is_conversational, logging, nanstd, GuidedDecodingParams, SamplingParams, apply_chat_template, broadcast_object_list, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, nullcontext, prepare_multimodal_messages, profiling_context, unwrap_model_for_generation, transformers, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, unsplit_pixel_values_by_grid, PreTrainedModel, logger, FSDP, gather, nanmax, nanmin, os, pad)
-
-
-import math
-from typing import *
-from dataclasses import dataclass, field
-from packaging.version import Version
-import numpy as np
-from transformers.training_args import ParallelMode
-from unsloth_zoo.device_type import device_synchronize
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import math
+from dataclasses import dataclass, field
 from types import MethodType
+from typing import *
+from typing import Any, Optional
+
+import numpy as np
+import torch
+from packaging.version import Version
+from torch import nn
+from transformers.training_args import ParallelMode
+from trl.trainer.grpo_trainer import (
+    FSDP,
+    AutoConfig,
+    AutoModelForSequenceClassification,
+    AutoProcessor,
+    AutoTokenizer,
+    BaseTrainer,
+    DataLoader,
+    Dataset,
+    GenerationConfig,
+    GRPOConfig,
+    GuidedDecodingParams,
+    IterableDataset,
+    LigerFusedLinearGRPOLoss,
+    Path,
+    PeftConfig,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    ProcessorMixin,
+    RepeatSampler,
+    RewardFunc,
+    Sampler,
+    SamplingParams,
+    SyncRefModelCallback,
+    TrainerCallback,
+    VLLMClient,
+    _ForwardRedirection,
+    apply_chat_template,
+    broadcast_object_list,
+    datasets,
+    defaultdict,
+    deque,
+    disable_dropout_in_model,
+    ensure_master_addr_port,
+    gather,
+    gather_object,
+    identity,
+    inspect,
+    is_conversational,
+    is_datasets_available,
+    is_flash_attn_2_available,
+    is_liger_kernel_available,
+    is_peft_model,
+    is_rich_available,
+    is_vllm_available,
+    logger,
+    logging,
+    maybe_apply_chat_template,
+    nanmax,
+    nanmin,
+    nanstd,
+    nullcontext,
+    os,
+    pad,
+    partial,
+    prepare_deepspeed,
+    prepare_fsdp,
+    prepare_multimodal_messages,
+    print_prompt_completions_sample,
+    profiling_context,
+    profiling_decorator,
+    seed_worker,
+    set_seed,
+    shuffle_sequence_dict,
+    split_pixel_values_by_grid,
+    split_tensor_dict,
+    textwrap,
+    transformers,
+    unsplit_pixel_values_by_grid,
+    unwrap_model_for_generation,
+    wandb,
+)
+from unsloth_zoo.device_type import device_synchronize
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -75,7 +147,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
             "epilogue_fusion"   : True,
@@ -149,7 +220,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -366,7 +436,6 @@ def grpo_compute_loss(
             importance_sampling_ratio = torch.clamp(
                 importance_sampling_ratio, max=vllm_importance_sampling_cap
             )
-    pass
 
     # Must detach - otherwise gradients are not propagated correctly!
     # exp(x - x) == 1
@@ -416,7 +485,6 @@ def grpo_compute_loss(
             loss_1 = torch.clamp(coef_1, max=delta) * advantages
         else:
             loss_1 = coef_1 * advantages
-        pass
         loss_2 = coef_2 * advantages
         loss_i = -torch.min(loss_1, loss_2)
     elif loss_type == "sapo":
@@ -510,7 +578,6 @@ class UnslothEfficientGRPO(torch.autograd.Function):
             scaled_loss = loss * scaling
             # Must add .loss.detach otherwise autograd uses 2x VRAM
             return scaled_loss, (loss.detach(), completion_length, mean_kl, delta, flat_is_ratio, coef_1)
-        pass
 
         device =_new_logps.device
         grad_inputs = torch.empty_like(_new_logps)
@@ -544,7 +611,6 @@ class UnslothEfficientGRPO(torch.autograd.Function):
             accumulated_flat_is_ratio    .append(chunk_flat_is_ratio)
             accumulated_coef_1           .append(chunk_coef_1)
             grad_inputs_j[:] = chunk_grad_input
-        pass
 
         accumulate_chunk = torch.compile(
             accumulate_chunk,
@@ -600,7 +666,6 @@ class UnslothEfficientGRPO(torch.autograd.Function):
                 scaling,
                 grad_inputs_j,
             )
-        pass
 
         grad_inputs                  .div_(n_chunks)
         accumulated_loss             .div_(n_chunks)
@@ -623,13 +688,11 @@ class UnslothEfficientGRPO(torch.autograd.Function):
             accumulated_flat_is_ratio,
             accumulated_coef_1
         )
-    pass
 
     @staticmethod
     def backward(ctx, grad_output, dcompletion_length, dmean_kl, ddelta, ddflat_is_ratio, dcoef_1):
         (grad_input,) = ctx.saved_tensors
         return (grad_input, None, None, None, None, None, None, None, None, None, None, None)
-    pass
 
 def grpo_accumulated_loss(
     trainer,
@@ -674,7 +737,6 @@ def grpo_accumulated_loss(
     if not hasattr(trainer, '_autocast_dtype'):
         trainer._autocast_dtype = torch.float16 if os.environ.get('ACCELERATE_MIXED_PRECISION', 'fp16') == 'fp16' else torch.bfloat16
         if os.environ.get('UNSLOTH_FORCE_FLOAT32', '0') == '1': trainer._autocast_dtype = None
-    pass
     os.environ["UNSLOTH_RETURN_HIDDEN_STATES"] = "1"
 
     lm_head = trainer.model.get_output_embeddings().weight
@@ -746,7 +808,6 @@ def grpo_accumulated_loss(
     for module in unwrapped_model.modules():
         if hasattr(module, "_hf_hook") and hasattr(module._hf_hook, "io_same_decice"):
             module._hf_hook.io_same_decice = False
-    pass
 
     all_logprobs_list = []
 
@@ -1006,7 +1067,6 @@ def grpo_accumulated_loss(
         advantages,
     )
     return loss, completion_length, mean_kl
-    pass
 
 @torch.compile(dynamic = True, fullgraph = True, options = torch_compile_options)
 def grpo_compute_loss_slow(
@@ -1059,7 +1119,6 @@ def grpo_compute_loss_slow(
             importance_sampling_ratio = torch.clamp(
                 importance_sampling_ratio, max=vllm_importance_sampling_cap
             )
-    pass
 
     # Must detach - otherwise gradients are not propagated correctly!
     # exp(x - x) == 1
@@ -1109,7 +1168,6 @@ def grpo_compute_loss_slow(
             loss_1 = torch.clamp(coef_1, max=delta) * advantages
         else:
             loss_1 = coef_1 * advantages
-        pass
         loss_2 = coef_2 * advantages
         loss_i = -torch.min(loss_1, loss_2)
     elif loss_type == "sapo":
@@ -1447,19 +1505,19 @@ class UnslothGRPOConfig(GRPOConfig):
             are logged.
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
@@ -1886,7 +1944,6 @@ class UnslothGRPOConfig(GRPOConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         
 
-pass
 
 class _UnslothGRPOTrainer(BaseTrainer):
     """"""
@@ -1909,15 +1966,15 @@ class _UnslothGRPOTrainer(BaseTrainer):
 
     def __init__(
         self,
-        model: Union[str, PreTrainedModel],
-        reward_funcs: Union[RewardFunc, list[RewardFunc]],
-        args: Optional[GRPOConfig] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, IterableDataset, dict[str, Union[Dataset, IterableDataset]]]] = None,
-        processing_class: Optional[Union[PreTrainedTokenizerBase, ProcessorMixin]] = None,
-        reward_processing_classes: Optional[Union[PreTrainedTokenizerBase, list[PreTrainedTokenizerBase]]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
-        optimizers: tuple[Optional[torch.optim.Optimizer], Optional[torch.optim.lr_scheduler.LambdaLR]] = (None, None),
+        model: str | PreTrainedModel,
+        reward_funcs: RewardFunc | list[RewardFunc],
+        args: GRPOConfig | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | IterableDataset | dict[str, Dataset | IterableDataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | ProcessorMixin | None = None,
+        reward_processing_classes: PreTrainedTokenizerBase | list[PreTrainedTokenizerBase] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
+        optimizers: tuple[torch.optim.Optimizer | None, torch.optim.lr_scheduler.LambdaLR | None] = (None, None),
         peft_config: Optional["PeftConfig"] = None,
     ):
 
@@ -2326,7 +2383,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
 
         return self.accelerator.prepare(DataLoader(train_dataset, **dataloader_params))
 
-    def _get_train_sampler(self, dataset: Optional[Dataset] = None) -> Sampler:
+    def _get_train_sampler(self, dataset: Dataset | None = None) -> Sampler:
         # Returns a sampler that
         # 1. ensures each prompt is repeated across multiple processes. This guarantees that identical prompts are
         #    distributed to different GPUs, allowing rewards to be computed and normalized correctly within each prompt
@@ -2699,7 +2756,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
             #     print("Found high values!")
             # return  logps #  compute logprobs for the input tokens
 
-    def _fix_param_name_to_vllm(self, name, extra_prefixes: Optional[list[str]] = None):
+    def _fix_param_name_to_vllm(self, name, extra_prefixes: list[str] | None = None):
         extra_prefixes = extra_prefixes or []
         prefixes = ["_checkpoint_wrapped_module."] + extra_prefixes
         for prefix in prefixes:
@@ -2731,7 +2788,6 @@ class _UnslothGRPOTrainer(BaseTrainer):
                         self.vllm_client.update_named_param(full_name, param.data)
                     elif self.vllm_mode == "colocate":
 
-                        pass
 
                         pass
 
@@ -2746,7 +2802,6 @@ class _UnslothGRPOTrainer(BaseTrainer):
                 self.vllm_client.update_named_param(name, param)
             elif self.vllm_mode == "colocate":
 
-                pass
 
                 pass
 
@@ -2755,8 +2810,8 @@ class _UnslothGRPOTrainer(BaseTrainer):
 
     @profiling_decorator
     def _prepare_inputs(
-        self, generation_batch: dict[str, Union[torch.Tensor, Any]]
-    ) -> dict[str, Union[torch.Tensor, Any]]:
+        self, generation_batch: dict[str, torch.Tensor | Any]
+    ) -> dict[str, torch.Tensor | Any]:
         # Prepares inputs for model training/evaluation by managing completion generation and batch handling.
         # During training:
         #   - Receives the local generation batch (Per-GPU batch size × steps per generation)
@@ -2846,7 +2901,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
         rewards_per_func = gather(rewards_per_func)
         return rewards_per_func
 
-    def _generate_single_turn(self, prompts: list[str], images: Optional[list]):
+    def _generate_single_turn(self, prompts: list[str], images: list | None):
         device = self.accelerator.device
 
         # If the prompts are conversational and the inputs contain images, we need to convert the prompts from
@@ -3102,7 +3157,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
 
         return prompt_ids, completion_ids, logprobs, forward_kwargs
 
-    def _generate(self, prompts: list[str], images: Optional[list]):
+    def _generate(self, prompts: list[str], images: list | None):
         device = self.accelerator.device
         mode = "train" if self.model.training else "eval"
 
@@ -3141,8 +3196,8 @@ class _UnslothGRPOTrainer(BaseTrainer):
         return prompt_ids, completion_ids, total_completion_tokens, logprobs, forward_kwargs
 
     def _generate_and_score_completions(
-        self, inputs: list[dict[str, Union[torch.Tensor, Any]]]
-    ) -> dict[str, Union[torch.Tensor, Any]]:
+        self, inputs: list[dict[str, torch.Tensor | Any]]
+    ) -> dict[str, torch.Tensor | Any]:
         device = self.accelerator.device
         mode = "train" if self.model.training else "eval"
 
@@ -3891,7 +3946,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
         self._metrics[mode]["clip_ratio/region_mean"].append(gathered_clip_ratio.nanmean().item())
         return loss
 
-    def prediction_step(self, model, inputs, prediction_loss_only, ignore_keys: Optional[list[str]] = None):
+    def prediction_step(self, model, inputs, prediction_loss_only, ignore_keys: list[str] | None = None):
         inputs = self._prepare_inputs(inputs)
         with torch.no_grad():
             with self.compute_loss_context_manager():
@@ -3899,7 +3954,7 @@ class _UnslothGRPOTrainer(BaseTrainer):
             loss = loss.mean().detach()
         return loss, None, None
 
-    def log(self, logs: dict[str, float], start_time: Optional[float] = None) -> None:
+    def log(self, logs: dict[str, float], start_time: float | None = None) -> None:
         mode = "train" if self.model.training else "eval"
         metrics = {key: sum(val) / len(val) for key, val in self._metrics[mode].items()}  # average the metrics
 
@@ -4207,7 +4262,6 @@ class UnslothGRPOTrainer(_UnslothGRPOTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -4215,18 +4269,14 @@ class UnslothGRPOTrainer(_UnslothGRPOTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
 
 
 if hasattr(logger, "addFilter"):
@@ -4234,6 +4284,5 @@ if hasattr(logger, "addFilter"):
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
         def filter(self, x): return self.text not in x.getMessage()
-    pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

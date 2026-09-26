@@ -9,71 +9,82 @@ import os
 import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SOURCE_MD = os.path.abspath(os.path.join(BASE_DIR, "../../HomeLabAI/docs/plans/RESEARCH_SYNTHESIS.md"))
+SOURCE_MD = os.path.abspath(
+    os.path.join(BASE_DIR, "../../HomeLabAI/docs/plans/RESEARCH_SYNTHESIS.md")
+)
 TEMPLATE_HTML = os.path.join(BASE_DIR, "research.html")
 OUTPUT_HTML = os.path.join(BASE_DIR, "research.html")
 REL_SOURCE_MD = "HomeLabAI/docs/plans/RESEARCH_SYNTHESIS.md"
 
+
 def format_git_link(git_link_md):
     # Matches markdown link [text](url)
-    match = re.match(r'\[(.*?)\]\((.*?)\)', git_link_md)
+    match = re.match(r"\[(.*?)\]\((.*?)\)", git_link_md)
     if match:
         text = match.group(1)
         url = match.group(2)
         return f'<a href="{url}" style="color:var(--accent-color); text-decoration:none;">{text}</a>'
     return git_link_md
 
+
 def parse_standard_table(content):
     # Matches tables with the 6-column standard schema
-    header_pattern = r'\| Research Anchor \| ArXiv ID \| Theoretical Logic \| Lab Implementation \[FEAT\] \| (?:Git Link|Git Link / Reason) \| Status \|'
-    table_regex = re.compile(header_pattern + r'\n\| :--- \| :--- \| :--- \| :--- \| :--- \| :--- \|\n(.*?)(?:\n\n|\n$)', re.DOTALL)
-    
+    header_pattern = r"\| Research Anchor \| ArXiv ID \| Theoretical Logic \| Lab Implementation \[FEAT\] \| (?:Git Link|Git Link / Reason) \| Status \|"
+    table_regex = re.compile(
+        header_pattern
+        + r"\n\| :--- \| :--- \| :--- \| :--- \| :--- \| :--- \|\n(.*?)(?:\n\n|\n$)",
+        re.DOTALL,
+    )
+
     all_data = []
     for match in table_regex.finditer(content):
-        rows = match.group(1).strip().split('\n')
+        rows = match.group(1).strip().split("\n")
         for row in rows:
-            cells = [c.strip() for c in row.split('|') if c.strip()]
+            cells = [c.strip() for c in row.split("|") if c.strip()]
             if len(cells) >= 6:
                 # 1. Name
-                name = cells[0].replace('**', '').strip()
-                
+                name = cells[0].replace("**", "").strip()
+
                 # 2. ArXiv ID
                 arxiv_id = cells[1] if cells[1].lower() != "n/a" else None
-                
+
                 # 3. Logic
                 logic = cells[2]
-                
+
                 # 4. Implementation (Strip FEATs)
-                impl = re.sub(r'\[FEAT-.*?\]', '', cells[3]).strip()
-                impl = impl.replace('**', '')
-                
+                impl = re.sub(r"\[FEAT-.*?\]", "", cells[3]).strip()
+                impl = impl.replace("**", "")
+
                 # 5. Git Link
                 git_link = format_git_link(cells[4])
-                
+
                 # 6. Status
-                status = cells[5].replace('**', '')
-                
-                all_data.append({
-                    "name": name,
-                    "arxiv": arxiv_id,
-                    "logic": logic,
-                    "implementation": impl,
-                    "git_link": git_link,
-                    "status": status
-                })
+                status = cells[5].replace("**", "")
+
+                all_data.append(
+                    {
+                        "name": name,
+                        "arxiv": arxiv_id,
+                        "logic": logic,
+                        "implementation": impl,
+                        "git_link": git_link,
+                        "status": status,
+                    }
+                )
     return all_data
+
 
 def generate_html_rows(research_data):
     html_rows = ""
     for item in research_data:
-        anchor_display = item['name']
-        if item['arxiv']:
+        anchor_display = item["name"]
+        if item["arxiv"]:
             anchor_display += f' <a href="https://arxiv.org/abs/{item["arxiv"]}" target="_blank" class="anchor-link" style="font-size: 0.75rem; border-bottom: none; font-weight: normal;">({item["arxiv"]})</a>'
-        
+
         status_class = "impact-stable"
-        if any(x in item['status'] for x in ["Live", "100%", "Active"]):
+        if any(x in item["status"] for x in ["Live", "100%", "Active"]):
             status_class = "impact-live"
-        elif any(x in item['status'] for x in ["Design", "Sprint", "Planned"]):
+        elif any(x in item["status"] for x in ["Design", "Sprint", "Planned"]):
             status_class = "impact-design"
 
         row = f"""                    <tr>
@@ -86,38 +97,57 @@ def generate_html_rows(research_data):
         html_rows += row + "\n"
     return html_rows
 
+
 def main():
     if not os.path.exists(SOURCE_MD):
         print(f"Error: {SOURCE_MD} not found.")
         return
-    with open(SOURCE_MD, 'r') as f: md_content = f.read()
+    with open(SOURCE_MD, "r") as f:
+        md_content = f.read()
 
     research_data = parse_standard_table(md_content)
-    if not research_data: 
+    if not research_data:
         print("Error: No data parsed from standard tables.")
         return
-        
+
     new_rows = generate_html_rows(research_data)
-    with open(TEMPLATE_HTML, 'r') as f: html_content = f.read()
+    with open(TEMPLATE_HTML, "r") as f:
+        html_content = f.read()
 
     source_comment = f"<!-- [SOURCE_OF_TRUTH] Compiled from: {REL_SOURCE_MD}. Do NOT edit research.html directly! -->\n"
     if "<!-- [SOURCE_OF_TRUTH]" not in html_content:
         body_idx = html_content.find("<body>")
         if body_idx != -1:
-            html_content = html_content[:body_idx+6] + "\n" + source_comment + html_content[body_idx+6:]
+            html_content = (
+                html_content[: body_idx + 6]
+                + "\n"
+                + source_comment
+                + html_content[body_idx + 6 :]
+            )
     else:
         # Update existing comment if present
-        html_content = re.sub(r'<!-- \[SOURCE_OF_TRUTH\].*?-->\n', source_comment, html_content)
+        html_content = re.sub(
+            r"<!-- \[SOURCE_OF_TRUTH\].*?-->\n", source_comment, html_content
+        )
 
     start_tag, end_tag = "<tbody>", "</tbody>"
     start_idx = html_content.find(start_tag) + len(start_tag)
     end_idx = html_content.find(end_tag)
-    
-    if start_idx == -1 or end_idx == -1: return
 
-    updated_html = html_content[:start_idx] + "\n" + new_rows + "                    " + html_content[end_idx:]
-    with open(OUTPUT_HTML, 'w') as f: f.write(updated_html)
+    if start_idx == -1 or end_idx == -1:
+        return
+
+    updated_html = (
+        html_content[:start_idx]
+        + "\n"
+        + new_rows
+        + "                    "
+        + html_content[end_idx:]
+    )
+    with open(OUTPUT_HTML, "w") as f:
+        f.write(updated_html)
     print(f"✅ Successfully updated {OUTPUT_HTML} (Standard Schema) from {SOURCE_MD}")
+
 
 if __name__ == "__main__":
     main()

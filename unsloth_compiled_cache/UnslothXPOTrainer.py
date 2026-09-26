@@ -22,28 +22,59 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-from typing import Any, Optional, Union, Callable
-from trl.trainer.xpo_trainer import (BaseImageProcessor, BasePairwiseJudge, Dataset, EvalPrediction, FeatureExtractionMixin, IterableDataset, OnlineDPOTrainer, OptimizerNames, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, SIMPLE_CHAT_TEMPLATE, TrainerCallback, XPOConfig, empty_cache, get_reward, is_conversational, is_peft_available, jinja2, maybe_apply_chat_template, selective_log_softmax, textwrap, truncate_right, unwrap_model_for_generation)
-
-
-import os
-import math
-import logging
-from typing import *
-from dataclasses import dataclass, field
-from packaging.version import Version
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
-from transformers.training_args import ParallelMode
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import logging
+import math
+import os
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from types import MethodType
+from typing import *
+from typing import Any
+
+import torch
+from packaging.version import Version
+from torch import nn
+from torch.nn import functional as F
+from transformers import (
+    DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling,
+)
+from transformers import DataCollatorForSeq2Seq
+from transformers.training_args import ParallelMode
+from trl.trainer.xpo_trainer import (
+    SIMPLE_CHAT_TEMPLATE,
+    BaseImageProcessor,
+    BasePairwiseJudge,
+    Dataset,
+    EvalPrediction,
+    FeatureExtractionMixin,
+    IterableDataset,
+    OnlineDPOTrainer,
+    OptimizerNames,
+    PeftModel,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    ProcessorMixin,
+    TrainerCallback,
+    XPOConfig,
+    empty_cache,
+    get_reward,
+    is_conversational,
+    is_peft_available,
+    jinja2,
+    maybe_apply_chat_template,
+    selective_log_softmax,
+    textwrap,
+    truncate_right,
+    unwrap_model_for_generation,
+)
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -77,7 +108,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
     "epilogue_fusion"   : True,
@@ -147,7 +177,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -328,23 +357,23 @@ class UnslothXPOConfig(XPOConfig):
             and the last alpha is used for the rest of the epochs.
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
-    max_seq_length : Optional[int] = field(
+    max_seq_length : int | None = field(
         default = None,
         metadata = {'help': 'Maximum sequence length to truncate to.'},
     )
@@ -715,7 +744,6 @@ class UnslothXPOConfig(XPOConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
 
-pass
 
 class _UnslothXPOTrainer(OnlineDPOTrainer):
     """"""
@@ -737,25 +765,23 @@ class _UnslothXPOTrainer(OnlineDPOTrainer):
 
     def __init__(
         self,
-        model: Union[PreTrainedModel, nn.Module] = None,
-        ref_model: Union[PreTrainedModel, nn.Module] = None,
-        reward_funcs: Optional[nn.Module] = None,
-        judge: Optional[BasePairwiseJudge] = None,
-        args: Optional[XPOConfig] = None,
-        data_collator: Optional[Callable] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, dict[str, Dataset]]] = None,
-        processing_class: Optional[
-            Union[PreTrainedTokenizerBase, BaseImageProcessor, FeatureExtractionMixin, ProcessorMixin]
-        ] = None,
-        reward_processing_classes: Optional[Union[PreTrainedTokenizerBase, list[PreTrainedTokenizerBase]]] = None,
-        peft_config: Optional[dict] = None,
-        compute_metrics: Optional[Callable[[EvalPrediction], dict]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
+        model: PreTrainedModel | nn.Module = None,
+        ref_model: PreTrainedModel | nn.Module = None,
+        reward_funcs: nn.Module | None = None,
+        judge: BasePairwiseJudge | None = None,
+        args: XPOConfig | None = None,
+        data_collator: Callable | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | dict[str, Dataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | BaseImageProcessor | FeatureExtractionMixin | ProcessorMixin | None = None,
+        reward_processing_classes: PreTrainedTokenizerBase | list[PreTrainedTokenizerBase] | None = None,
+        peft_config: dict | None = None,
+        compute_metrics: Callable[[EvalPrediction], dict] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
         optimizers: tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR] = (None, None),
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        preprocess_logits_for_metrics: Callable[[torch.Tensor, torch.Tensor], torch.Tensor] | None = None,
         # Deprecated parameters
-        reward_model: Optional[Union[PreTrainedModel, nn.Module]] = None,
+        reward_model: PreTrainedModel | nn.Module | None = None,
     ) -> None:
         super().__init__(
             model=model,
@@ -1078,7 +1104,7 @@ class _UnslothXPOTrainer(OnlineDPOTrainer):
         self.stats["beta"].append(self.beta)
 
     def training_step(
-        self, model: nn.Module, inputs: dict[str, Union[torch.Tensor, Any]], num_items_in_batch: Optional[int] = None
+        self, model: nn.Module, inputs: dict[str, torch.Tensor | Any], num_items_in_batch: int | None = None
     ) -> torch.Tensor:
         model.train()
 
@@ -1403,7 +1429,6 @@ class UnslothXPOTrainer(_UnslothXPOTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -1411,15 +1436,11 @@ class UnslothXPOTrainer(_UnslothXPOTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
