@@ -1235,16 +1235,23 @@
         function classifyExpandTier(alert) {
             const source = (alert.source || '').toLowerCase();
             const message = (alert.message || '').toLowerCase();
-            const richSources = ['recruiter', 'massscan', 'benchmark', 'foyer', 'ignition', 'labattendant', 'montana', 'nightly-dialogue', 'privacy-audit'];
+            const richSources = [
+                'recruiter', 'massscan', 'benchmark', 'foyer', 'ignition',
+                'labattendant', 'montana', 'nightly-dialogue', 'privacy-audit',
+                'accountability', 'accountability-watchdog', 'watchdog'
+            ];
             const inlineSources = ['tailscaled', 'cloudflared', 'mctp'];
 
             if (
                 alert.is_rag_eval ||
                 richSources.includes(source) ||
+                source.includes('accountability') ||
                 (message.includes('crash_') && message.includes('.log')) ||
                 message.includes('gem refined') ||
                 message.includes('distilled') ||
-                message.includes('nightly-dialogue')
+                message.includes('nightly-dialogue') ||
+                message.includes('accountability') ||
+                message.includes('digest')
             ) {
                 return 'rich';
             }
@@ -1382,7 +1389,9 @@
             
             try {
                 // [FEAT-607 / Story 88.5] Nightly Accountability Digest Expansion
-                if (alert.message && (alert.message.includes('ACCOUNTABILITY DIGEST') || alert.source === 'accountability')) {
+                const msgUpper = (alert.message || '').toUpperCase();
+                const srcLower = (alert.source || '').toLowerCase();
+                if (msgUpper.includes('ACCOUNTABILITY') || srcLower.includes('accountability') || srcLower.includes('watchdog')) {
                     try {
                         const rDigest = await fetch('data/daily_accountability_digest.json?t=' + Date.now());
                         if (rDigest.ok) {
