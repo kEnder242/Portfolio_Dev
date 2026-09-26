@@ -1,16 +1,18 @@
-import requests
+import glob
 import json
 import logging
 import os
-import glob
 import re
-from ai_engine import OllamaClient, get_engine, CognitiveEngine
+
+import requests
+from ai_engine import CognitiveEngine, OllamaClient, get_engine
 
 # Try to import Liger/Transformers for DMA mode
 try:
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
     from liger_kernel.transformers import apply_liger_kernel_to_llama
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
     HAS_LIGER = True
 except ImportError:
     HAS_LIGER = False
@@ -23,10 +25,12 @@ VLLM_URL = "http://localhost:8088/v1/completions"
 DATA_DIR = "field_notes/data"
 RAW_DIR = "raw_notes"
 
+
 class VLLMClient(OllamaClient):
     """
     OpenAI-compatible client for vLLM server.
     """
+
     def __init__(self, url=VLLM_URL, model="llama-3.2-3b-awq"):
         super().__init__()
         self.url = url
@@ -39,14 +43,14 @@ class VLLMClient(OllamaClient):
             "prompt": full_prompt,
             "max_tokens": options.get("num_predict", 512) if options else 512,
             "temperature": options.get("temperature", 0.1) if options else 0.1,
-            "stream": False
+            "stream": False,
         }
         try:
             # 120s timeout for complex synthesis
             resp = requests.post(self.url, json=payload, timeout=120)
             if resp.status_code == 200:
                 data = resp.json()
-                return data['choices'][0]['text']
+                return data["choices"][0]["text"]
             else:
                 logging.error(f"vLLM Error ({resp.status_code}): {resp.text}")
                 return ""
@@ -54,12 +58,14 @@ class VLLMClient(OllamaClient):
             logging.error(f"vLLM Connection Failed: {e}. Falling back to Ollama.")
             return super().generate(prompt, context, options)
 
+
 class McpClient(OllamaClient):
     """
     [FEAT-330] Connects to the Lab Hub via WebSocket and calls the 'think' tool.
     This ensures unified model usage and central resource coordination.
     Uses the [INTERNAL] tag to prevent UI leakage.
     """
+
     def __init__(self, uri="ws://localhost:8765"):
         super().__init__()
         self.uri = uri
@@ -67,51 +73,61 @@ class McpClient(OllamaClient):
     def generate(self, prompt, context="", options=None):
         import asyncio
         import json
-        import websockets
         import time
+
+        import websockets
 
         target_source = options.get("target_source") if options else None
 
         async def _call():
             try:
                 # Use a high timeout for weights loading/derivation
-                async with websockets.connect(self.uri, open_timeout=10, ping_interval=20) as ws:
+                async with websockets.connect(
+                    self.uri, open_timeout=10, ping_interval=20
+                ) as ws:
                     # Handshake
-                    await ws.send(json.dumps({"type": "handshake", "client": "refine_worker"}))
-                    
+                    await ws.send(
+                        json.dumps({"type": "handshake", "client": "refine_worker"})
+                    )
+
                     # Call Think Tool (via text_input for simplified Hub routing)
                     message = {
                         "type": "text_input",
                         "content": f"[INTERNAL] [REFINE]: {prompt}",
-                        "context": context
+                        "context": context,
                     }
                     await ws.send(json.dumps(message))
-                    
+
                     full_response = ""
                     start_t = time.time()
                     while time.time() - start_t < 180:
                         try:
                             msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
                             data = json.loads(msg)
-                            
+
                             # Filter for actual reasoning tokens
-                            source = str(data.get("brain_source", data.get("source", "System"))).lower()
-                            
+                            source = str(
+                                data.get("brain_source", data.get("source", "System"))
+                            ).lower()
+
                             # DEBUG: Log incoming sources
                             # print(f"DEBUG: WS INGEST from {source}")
 
                             # If target_source is specified, ONLY accept tokens from that source
                             if target_source and target_source.lower() not in source:
                                 continue
-                                
-                            if "brain" in data and source not in ["system", "attendant"]:
+
+                            if "brain" in data and source not in [
+                                "system",
+                                "attendant",
+                            ]:
                                 # print(f"DEBUG: ACCEPTED token from {source}")
                                 full_response += data["brain"]
-                            
+
                             # Final flag from Hub
                             if data.get("final") == True:
                                 break
-                            
+
                             # [FIX] Loop breaker for situation tags
                             if "[SITUATION: EXIT_LIKELY]" in str(data):
                                 break
@@ -129,11 +145,13 @@ class McpClient(OllamaClient):
             logging.error(f"McpBridge failed: {e}")
             return ""
 
+
 class LigerEngine(OllamaClient):
     """
     Direct Model Access (DMA) with Liger-Kernel optimization.
     Provides ~80% VRAM reduction on Turing GPUs.
     """
+
     def __init__(self, model_path=DMA_MODEL_PATH):
         super().__init__()
         self.model_path = model_path
@@ -142,56 +160,67 @@ class LigerEngine(OllamaClient):
         self._initialized = False
 
     def _initialize(self):
-        if self._initialized: return
+        if self._initialized:
+            return
         logging.info(f"Initializing LigerEngine with {self.model_path}...")
         try:
             # Llama 2, 3, 3.1, and 3.2 share the same base architecture in Liger
             apply_liger_kernel_to_llama()
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
             self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_path,
-                torch_dtype=torch.float16,
-                device_map="auto"
+                self.model_path, torch_dtype=torch.float16, device_map="auto"
             )
             self._initialized = True
             logging.info("LigerEngine initialized successfully.")
         except Exception as e:
-            logging.error(f"Failed to initialize LigerEngine: {e}. Falling back to Ollama.")
+            logging.error(
+                f"Failed to initialize LigerEngine: {e}. Falling back to Ollama."
+            )
             self._initialized = False
 
     def generate(self, prompt, context="", options=None):
         if not self._initialized:
             self._initialize()
-        
+
         if not self._initialized:
             return super().generate(prompt, context, options)
 
         full_prompt = f"{context}\n\n{prompt}" if context else prompt
         inputs = self.tokenizer(full_prompt, return_tensors="pt").to(self.model.device)
-        
+
         with torch.no_grad():
             outputs = self.model.generate(
-                **inputs, 
+                **inputs,
                 max_new_tokens=options.get("num_predict", 512) if options else 512,
-                temperature=options.get("temperature", 0.1) if options else 0.1
+                temperature=options.get("temperature", 0.1) if options else 0.1,
             )
-        
+
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
 
 # --- DOCUMENT TIERS (The 'QQ' Mapping) ---
 DOCUMENT_TIERS = {
-    "PHILOSOPHY": ["Philosophy and Learnings 2024.docx", "WWW_STRATEGY.md", "DEV_LAB_STRATEGY.md"],
-    "RESUME": ["Jason Allred Resume - Jan 2026.txt", "Jason Allred Resume - Dec 2025.txt"],
+    "PHILOSOPHY": [
+        "Philosophy and Learnings 2024.docx",
+        "WWW_STRATEGY.md",
+        "DEV_LAB_STRATEGY.md",
+    ],
+    "RESUME": [
+        "Jason Allred Resume - Jan 2026.txt",
+        "Jason Allred Resume - Dec 2025.txt",
+    ],
     "FOCAL": ["11066402 Insights 2019-2024.txt", "Performance review 2008-2018 .txt"],
     "NOTE": ["notes_*.txt", "ras-*.txt"],
-    "ARTIFACT": ["*.py", "*.sh", "*.cpp", "*.pdf", "*.pptx", "*.xlsx"]
+    "ARTIFACT": ["*.py", "*.sh", "*.cpp", "*.pdf", "*.pptx", "*.xlsx"],
 }
+
 
 class ArchiveMemory:
     """
     FS-Researcher / RLM Implementation.
     Treats the file system as durable external memory.
     """
+
     def __init__(self, data_dir=DATA_DIR, raw_dir=RAW_DIR):
         self.data_dir = data_dir
         self.raw_dir = raw_dir
@@ -214,88 +243,100 @@ class ArchiveMemory:
 
     def get_context(self, bucket=None, raw_text=""):
         """
-        Retrieves historical context for a specific bucket (e.g., '2024-01').
-# [FEAT-103] Cynical Ranking Algorithm
-        Implements Agentic-R utility-based re-ranking.
+                Retrieves historical context for a specific bucket (e.g., '2024-01').
+        # [FEAT-103] Cynical Ranking Algorithm
+                Implements Agentic-R utility-based re-ranking.
         """
         context = ""
-        
+
         # 1. Inject Tool Registry Era-Awareness
         context += "\n[TOOL ERA REGISTRY]\n"
         # Only inject tools relevant to the potential context (sample some or all if small)
         for tool, year in self._tool_registry.items():
-            if tool.endswith('.py') or tool.endswith('.sh'):
+            if tool.endswith(".py") or tool.endswith(".sh"):
                 context += f"- {tool}: Released {year}\n"
 
         # 2. Agentic-R: Utility-Based Re-Ranking
         if raw_text:
             context += "\n[RELEVANT HISTORICAL WINS (Utility Ranked)]\n"
             # Extract potential keywords (simple word extraction)
-            keywords = re.findall(r'\b\w{4,}\b', raw_text.lower())
+            keywords = re.findall(r"\b\w{4,}\b", raw_text.lower())
             potential_events = []
-            
+
             # Scan all JSON files in data dir
             json_files = glob.glob(os.path.join(self.data_dir, "*.json"))
             for jf in json_files:
-                if "themes" in jf or "status" in jf or "search_index" in jf: continue
+                if "themes" in jf or "status" in jf or "search_index" in jf:
+                    continue
                 try:
-                    with open(jf, 'r') as f:
+                    with open(jf, "r") as f:
                         data = json.load(f)
                         if isinstance(data, list):
                             for event in data:
                                 # Rank based on keyword hits in summary/evidence/tags
-                                text_to_check = (event.get('summary', '') + " " + 
-                                               event.get('evidence', '') + " " + 
-                                               " ".join(event.get('tags', []))).lower()
+                                text_to_check = (
+                                    event.get("summary", "")
+                                    + " "
+                                    + event.get("evidence", "")
+                                    + " "
+                                    + " ".join(event.get("tags", []))
+                                ).lower()
                                 hits = sum(1 for kw in keywords if kw in text_to_check)
                                 if hits > 0:
                                     potential_events.append((hits, event))
-                except: pass
-            
+                except:
+                    pass
+
             # Sort by hits DESC and take top 3
             potential_events.sort(key=lambda x: x[0], reverse=True)
             seen_summaries = set()
             count = 0
             for _, event in potential_events:
-                if event.get('summary') not in seen_summaries:
+                if event.get("summary") not in seen_summaries:
                     context += f"- {event.get('date')}: {event.get('summary')} (Ref: {event.get('evidence')[:100]}...)\n"
-                    seen_summaries.add(event.get('summary'))
+                    seen_summaries.add(event.get("summary"))
                     count += 1
-                if count >= 3: break
+                if count >= 3:
+                    break
 
         # 3. Chronological Continuity (Previous month)
-        if bucket and '-' in bucket:
+        if bucket and "-" in bucket:
             try:
-                y, m = map(int, bucket.split('-'))
+                y, m = map(int, bucket.split("-"))
                 prev_m = m - 1 if m > 1 else 12
                 prev_y = y if m > 1 else y - 1
                 prev_bucket = f"{prev_y}-{str(prev_m).zfill(2)}"
-                prev_file = os.path.join(self.data_dir, f"{prev_bucket.replace('-', '_')}.json")
+                prev_file = os.path.join(
+                    self.data_dir, f"{prev_bucket.replace('-', '_')}.json"
+                )
                 if os.path.exists(prev_file):
-                    with open(prev_file, 'r') as f:
+                    with open(prev_file, "r") as f:
                         data = json.load(f)
                         if data:
                             # Just take the last 2 entries for context
                             context += f"\n[CHRONOLOGICAL CONTEXT ({prev_bucket})]\n"
                             context += json.dumps(data[-2:], indent=2)
-            except: pass
+            except:
+                pass
 
         # 4. Get Themes
         theme_file = os.path.join(self.data_dir, "themes.json")
         if os.path.exists(theme_file):
-            with open(theme_file, 'r') as f:
+            with open(theme_file, "r") as f:
                 themes = json.load(f)
-                year = bucket.split('-')[0] if bucket else None
+                year = bucket.split("-")[0] if bucket else None
                 if year and year in themes:
                     context += f"\n[STRATEGIC THEME ({year})]\n{themes[year].get('strategic_theme', '')}"
-        
+
         return context
+
 
 class SemanticCondenser:
     """
     Apple CLaRa Implementation.
     Compresses raw text into high-density technical abstracts (16x-128x).
     """
+
     def __init__(self, client):
         self.client = client
 
@@ -314,11 +355,13 @@ class SemanticCondenser:
         """
         return self.client.generate(prompt)
 
+
 class CurriculumEngine(CognitiveEngine):
     """
     TTCS (Test-Time Curriculum Synthesis) Implementation.
     Uses a Synthesize-then-Solve loop to improve reasoning quality.
     """
+
     def __init__(self, backend=None):
         # Prefer DMA/Liger for local reasoning to save VRAM
         if not backend:
@@ -328,7 +371,7 @@ class CurriculumEngine(CognitiveEngine):
                 self.local_backend = OllamaClient()
         else:
             self.local_backend = backend
-            
+
         self.backend = self.local_backend
         self.memory = ArchiveMemory()
         self.condenser = SemanticCondenser(self.backend)
@@ -338,13 +381,13 @@ class CurriculumEngine(CognitiveEngine):
 
     def generate_with_reasoning(self, raw_text, bucket=None):
         logging.info(f"Starting Curriculum Reasoning for {bucket}...")
-        
+
         # 1. FS-Researcher & Agentic-R: Inject History + Utility Ranking
         history = self.memory.get_context(bucket, raw_text)
-        
+
         # 2. CLaRa: Semantic Compression
         abstract = self.condenser.condense(raw_text)
-        
+
         # 3. TTCS Phase 1: Synthesize Anchors
         synth_prompt = f"""
         [GROUNDING: ERA AWARENESS]
@@ -368,7 +411,7 @@ class CurriculumEngine(CognitiveEngine):
         4. Ensure tool associations match the [TOOL ERA REGISTRY].
         """
         anchors = self.backend.generate(synth_prompt)
-        
+
         # 4. TTCS Phase 2: Solve
         solve_prompt = f"""
         [RAW LOGS]
@@ -382,7 +425,7 @@ class CurriculumEngine(CognitiveEngine):
         If there is a conflict (e.g., tool released in 2022 used in a 2019 note), flag it as a [CAUSALITY ERROR] and ignore the tool name.
         """
         solutions = self.backend.generate(solve_prompt)
-        
+
         # 5. Final Consolidation
         final_prompt = f"""
         [ROLE] Expert Technical Archivist.
@@ -411,6 +454,7 @@ class CurriculumEngine(CognitiveEngine):
         ]
         """
         return self.backend.generate(final_prompt)
+
 
 def get_engine_v2(mode="LOCAL"):
     if mode == "VLLM":

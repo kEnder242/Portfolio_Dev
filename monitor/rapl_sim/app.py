@@ -1,7 +1,8 @@
-import time
 import os
+import time
+
 # [FEAT-098] RAPL-Sim Custom Exporter (v3.0)
-from prometheus_client import start_http_server, Gauge
+from prometheus_client import Gauge, start_http_server
 
 # --- Configuration ---
 PL1_LIMIT_WATTS = 65.0
@@ -10,17 +11,24 @@ MAX_TURBO_WATTS = 95.0
 
 # --- Metrics Definition ---
 # Real Telemetry
-M_TEMP_PKG = Gauge('hw_temp_package_celsius', 'Real Package Temperature from Thermal Zone')
-M_CPU_LOAD = Gauge('hw_cpu_load_percent', 'Real System CPU Load %')
-M_GPU_MEM  = Gauge('hw_gpu_mem_used_bytes', 'Real GPU Memory Used in Bytes')
+M_TEMP_PKG = Gauge(
+    "hw_temp_package_celsius", "Real Package Temperature from Thermal Zone"
+)
+M_CPU_LOAD = Gauge("hw_cpu_load_percent", "Real System CPU Load %")
+M_GPU_MEM = Gauge("hw_gpu_mem_used_bytes", "Real GPU Memory Used in Bytes")
 
 # Validation Logic (The "Sim")
-M_PKG_POWER = Gauge('val_package_power_watts', 'Simulated Package Power based on Load/Temp')
-M_PL1_LIMIT = Gauge('val_pl1_limit_watts', 'Active Power Limit (PL1)')
-M_THROTTLE  = Gauge('val_throttling_active', '1 if Simulated Power exceeds Limit', ['reason'])
+M_PKG_POWER = Gauge(
+    "val_package_power_watts", "Simulated Package Power based on Load/Temp"
+)
+M_PL1_LIMIT = Gauge("val_pl1_limit_watts", "Active Power Limit (PL1)")
+M_THROTTLE = Gauge(
+    "val_throttling_active", "1 if Simulated Power exceeds Limit", ["reason"]
+)
+
 
 def get_cpu_load():
-    """ Reads /proc/stat to calculate CPU load % since last read. """
+    """Reads /proc/stat to calculate CPU load % since last read."""
     # Simplified for demo: return a basic load factor (0.0 to 1.0)
     # In a real exporter, we'd calc diff between two timestamps.
     # For now, we use Load Avg (1min) normalized by core count (8 threads)
@@ -28,40 +36,45 @@ def get_cpu_load():
         load1, _, _ = os.getloadavg()
         return min(load1 / 8.0, 1.0) * 100.0
     except:
-        return 10.0 # Fallback
+        return 10.0  # Fallback
+
 
 def get_real_temp():
-    """ Reads thermal_zone0 from the mounted host directory. """
+    """Reads thermal_zone0 from the mounted host directory."""
     try:
         # Docker mount: /host/sys/class/thermal/thermal_zone0/temp
-        with open('/host/sys/class/thermal/thermal_zone0/temp', 'r') as f:
+        with open("/host/sys/class/thermal/thermal_zone0/temp", "r") as f:
             # Value is in millidegrees (27800 = 27.8C)
             return int(f.read().strip()) / 1000.0
     except Exception as e:
         print(f"Error reading temp: {e}")
-        return 35.0 # Fallback
+        return 35.0  # Fallback
+
 
 import subprocess
 
+
 def get_gpu_mem():
-    """ Reads GPU memory using nvidia-smi. """
+    """Reads GPU memory using nvidia-smi."""
     try:
         cmd = "nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits"
-        output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+        output = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
         # Convert MiB to Bytes
         return float(output) * 1024 * 1024
     except:
         return 0.0
 
+
 def calculate_power(load_pct, temp_c):
-    """ The Physics Model: Power = Base + Dynamic(Load) + Leakage(Temp) """
+    """The Physics Model: Power = Base + Dynamic(Load) + Leakage(Temp)"""
     dynamic_power = (load_pct / 100.0) * (MAX_TURBO_WATTS - BASE_POWER_WATTS)
-    leakage_power = (temp_c - 25.0) * 0.1 # 0.1W per degree above ambient
-    
+    leakage_power = (temp_c - 25.0) * 0.1  # 0.1W per degree above ambient
+
     total = BASE_POWER_WATTS + dynamic_power + max(leakage_power, 0)
     return round(total, 2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Start Prometheus Server on Port 8000
     start_http_server(8000)
     print("RAPL Sim Exporter running on :8000")
@@ -79,15 +92,15 @@ if __name__ == '__main__':
 
         # 3. Validation Logic (The Sim)
         sim_power = calculate_power(real_load, real_temp)
-        
+
         # Check Throttling
         if sim_power > PL1_LIMIT_WATTS:
             # Clamp the power to the limit (Simulating FW clamping)
             M_PKG_POWER.set(PL1_LIMIT_WATTS)
-            M_THROTTLE.labels(reason='PL1').set(1)
+            M_THROTTLE.labels(reason="PL1").set(1)
         else:
             M_PKG_POWER.set(sim_power)
-            M_THROTTLE.labels(reason='PL1').set(0)
+            M_THROTTLE.labels(reason="PL1").set(0)
 
         M_PL1_LIMIT.set(PL1_LIMIT_WATTS)
 

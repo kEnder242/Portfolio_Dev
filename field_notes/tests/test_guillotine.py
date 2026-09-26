@@ -1,6 +1,6 @@
-import sys
-import os
 import logging
+import os
+import sys
 
 # Set up logging for test
 logging.basicConfig(level=logging.INFO)
@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.INFO)
 sys.path.append(os.path.abspath("Portfolio_Dev/field_notes"))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from nibble_v2 import scrub_input_buffer
+
 
 def test_guillotine():
     text = """
@@ -29,18 +30,21 @@ Next Year's Technical Strategy
     print("--- RESULT ---")
     print(result)
     print("--- END ---")
-    
+
     # Check if forbidden section is removed
     forbidden_found = "AREAS FOR IMPROVEMENT" in result or "Jason should" in result
     # Check if safe section is present
     safe_found = "Next Year's Technical Strategy" in result
-    
+
     if not forbidden_found and safe_found:
         print("\nOVERALL: PASS")
     else:
         print("\nOVERALL: FAIL")
-        if forbidden_found: print("  - Reason: Forbidden section found.")
-        if not safe_found: print("  - Reason: Safe section missing.")
+        if forbidden_found:
+            print("  - Reason: Forbidden section found.")
+        if not safe_found:
+            print("  - Reason: Safe section missing.")
+
 
 if __name__ == "__main__":
     test_guillotine()

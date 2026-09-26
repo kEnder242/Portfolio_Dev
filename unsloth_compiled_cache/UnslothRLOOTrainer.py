@@ -22,25 +22,100 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-import torch.nn as nn
-from typing import Any, Optional, Union
-from trl.trainer.rloo_trainer import (BaseTrainer, DataLoader, Path, RepeatSampler, Sampler, entropy_from_logits, is_conversational, is_datasets_available, is_rich_available, logging, nanmax, nanmin, nanstd, partial, print_prompt_completions_sample, seed_worker, selective_log_softmax, textwrap, AutoConfig, AutoModelForSequenceClassification, AutoProcessor, AutoTokenizer, Dataset, GenerationConfig, IterableDataset, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, RLOOConfig, RewardFunc, SyncRefModelCallback, TrainerCallback, VLLMClient, datasets, defaultdict, deque, disable_dropout_in_model, ensure_master_addr_port, identity, inspect, is_vllm_available, prepare_deepspeed, prepare_fsdp, set_seed, wandb, warnings, GuidedDecodingParams, SamplingParams, apply_chat_template, broadcast_object_list, gather_object, is_flash_attn_2_available, maybe_apply_chat_template, pad, prepare_multimodal_messages, profiling_context, transformers, unwrap_model_for_generation, gather, is_peft_model, nullcontext, profiling_decorator, shuffle_sequence_dict, split_pixel_values_by_grid, split_tensor_dict, unsplit_pixel_values_by_grid, PreTrainedModel, logger, os, FSDP)
-
-
-import math
-from typing import *
-from dataclasses import dataclass, field
-from packaging.version import Version
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
-from transformers.training_args import ParallelMode
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import math
+from dataclasses import dataclass, field
 from types import MethodType
+from typing import *
+from typing import Any, Optional
+
+import torch
+from packaging.version import Version
+from torch import nn
+from transformers import (
+    DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling,
+)
+from transformers import DataCollatorForSeq2Seq
+from transformers.training_args import ParallelMode
+from trl.trainer.rloo_trainer import (
+    FSDP,
+    AutoConfig,
+    AutoModelForSequenceClassification,
+    AutoProcessor,
+    AutoTokenizer,
+    BaseTrainer,
+    DataLoader,
+    Dataset,
+    GenerationConfig,
+    GuidedDecodingParams,
+    IterableDataset,
+    Path,
+    PeftConfig,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    ProcessorMixin,
+    RepeatSampler,
+    RewardFunc,
+    RLOOConfig,
+    Sampler,
+    SamplingParams,
+    SyncRefModelCallback,
+    TrainerCallback,
+    VLLMClient,
+    apply_chat_template,
+    broadcast_object_list,
+    datasets,
+    defaultdict,
+    deque,
+    disable_dropout_in_model,
+    ensure_master_addr_port,
+    entropy_from_logits,
+    gather,
+    gather_object,
+    identity,
+    inspect,
+    is_conversational,
+    is_datasets_available,
+    is_flash_attn_2_available,
+    is_peft_model,
+    is_rich_available,
+    is_vllm_available,
+    logger,
+    logging,
+    maybe_apply_chat_template,
+    nanmax,
+    nanmin,
+    nanstd,
+    nullcontext,
+    os,
+    pad,
+    partial,
+    prepare_deepspeed,
+    prepare_fsdp,
+    prepare_multimodal_messages,
+    print_prompt_completions_sample,
+    profiling_context,
+    profiling_decorator,
+    seed_worker,
+    selective_log_softmax,
+    set_seed,
+    shuffle_sequence_dict,
+    split_pixel_values_by_grid,
+    split_tensor_dict,
+    textwrap,
+    transformers,
+    unsplit_pixel_values_by_grid,
+    unwrap_model_for_generation,
+    wandb,
+    warnings,
+)
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -74,7 +149,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
     "epilogue_fusion"   : True,
@@ -144,7 +218,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -630,19 +703,19 @@ class UnslothRLOOConfig(RLOOConfig):
             </Deprecated>
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
@@ -1077,7 +1150,6 @@ class UnslothRLOOConfig(RLOOConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         
 
-pass
 
 class _UnslothRLOOTrainer(BaseTrainer):
     """"""
@@ -1103,15 +1175,15 @@ class _UnslothRLOOTrainer(BaseTrainer):
     def __init__(
         self,
         # Note for dev: we can remove the default None when we remove the deprecated model parameter in version 0.25.0
-        model: Union[str, PreTrainedModel] = None,
-        reward_funcs: Union[RewardFunc, list[RewardFunc]] = None,
-        args: Optional[RLOOConfig] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, IterableDataset, dict[str, Union[Dataset, IterableDataset]]]] = None,
-        processing_class: Optional[Union[PreTrainedTokenizerBase, ProcessorMixin]] = None,
-        reward_processing_classes: Optional[Union[PreTrainedTokenizerBase, list[PreTrainedTokenizerBase]]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
-        optimizers: tuple[Optional[torch.optim.Optimizer], Optional[torch.optim.lr_scheduler.LambdaLR]] = (None, None),
+        model: str | PreTrainedModel = None,
+        reward_funcs: RewardFunc | list[RewardFunc] = None,
+        args: RLOOConfig | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | IterableDataset | dict[str, Dataset | IterableDataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | ProcessorMixin | None = None,
+        reward_processing_classes: PreTrainedTokenizerBase | list[PreTrainedTokenizerBase] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
+        optimizers: tuple[torch.optim.Optimizer | None, torch.optim.lr_scheduler.LambdaLR | None] = (None, None),
         peft_config: Optional["PeftConfig"] = None,
         # Deprecated parameters
         config=None,
@@ -1556,7 +1628,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
 
         return self.accelerator.prepare(DataLoader(train_dataset, **dataloader_params))
 
-    def _get_train_sampler(self, dataset: Optional[Dataset] = None) -> Sampler:
+    def _get_train_sampler(self, dataset: Dataset | None = None) -> Sampler:
         # Returns a sampler that
         # 1. ensures each prompt is repeated across multiple processes. This guarantees that identical prompts are
         #    distributed to different GPUs, allowing rewards to be computed and normalized correctly within each prompt
@@ -1615,7 +1687,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
         pixel_attention_mask=None,
         image_sizes=None,
         token_type_ids=None,
-    ) -> dict[str, Optional[torch.Tensor]]:
+    ) -> dict[str, torch.Tensor | None]:
         """Compute log-probs and (optionally) entropies for each token."""
         batch_size = batch_size or input_ids.size(0)  # Chunk inputs into smaller batches to reduce memory peak
         all_logps = []
@@ -1675,7 +1747,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
         entropies = torch.cat(all_entropies, dim=0) if compute_entropy else None
         return logps, entropies
 
-    def _fix_param_name_to_vllm(self, name, extra_prefixes: Optional[list[str]] = None):
+    def _fix_param_name_to_vllm(self, name, extra_prefixes: list[str] | None = None):
         extra_prefixes = extra_prefixes or []
         prefixes = ["_checkpoint_wrapped_module."] + extra_prefixes
         for prefix in prefixes:
@@ -1707,7 +1779,6 @@ class _UnslothRLOOTrainer(BaseTrainer):
                         self.vllm_client.update_named_param(full_name, param.data)
                     elif self.vllm_mode == "colocate":
 
-                        pass
 
                         pass
 
@@ -1722,7 +1793,6 @@ class _UnslothRLOOTrainer(BaseTrainer):
                 self.vllm_client.update_named_param(name, param)
             elif self.vllm_mode == "colocate":
 
-                pass
 
                 pass
 
@@ -1773,7 +1843,6 @@ class _UnslothRLOOTrainer(BaseTrainer):
                             self.vllm_client.update_named_param(name, param.data)
                         elif self.vllm_mode == "colocate":
 
-                            pass
 
                             pass
                 # Unmerge adapters while parameters are still gathered
@@ -1796,7 +1865,6 @@ class _UnslothRLOOTrainer(BaseTrainer):
                             self.vllm_client.update_named_param(name, param.data)
                         elif self.vllm_mode == "colocate":
 
-                            pass
 
                             pass
 
@@ -1808,8 +1876,8 @@ class _UnslothRLOOTrainer(BaseTrainer):
 
     @profiling_decorator
     def _prepare_inputs(
-        self, generation_batch: dict[str, Union[torch.Tensor, Any]]
-    ) -> dict[str, Union[torch.Tensor, Any]]:
+        self, generation_batch: dict[str, torch.Tensor | Any]
+    ) -> dict[str, torch.Tensor | Any]:
         # Prepares inputs for model training/evaluation by managing completion generation and batch handling.
         # During training:
         #   - Receives the local generation batch (Per-GPU batch size × steps per generation)
@@ -1899,7 +1967,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
         rewards_per_func = gather(rewards_per_func)
         return rewards_per_func
 
-    def _generate_single_turn(self, prompts: list[str], images: Optional[list]):
+    def _generate_single_turn(self, prompts: list[str], images: list | None):
         device = self.accelerator.device
 
         # If the prompts are conversational and the inputs contain images, we need to convert the prompts from
@@ -2128,7 +2196,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
 
         return prompt_ids, completion_ids, forward_kwargs
 
-    def _generate(self, prompts: list[str], images: Optional[list]):
+    def _generate(self, prompts: list[str], images: list | None):
         device = self.accelerator.device
         mode = "train" if self.model.training else "eval"
 
@@ -2168,8 +2236,8 @@ class _UnslothRLOOTrainer(BaseTrainer):
         return prompt_ids, completion_ids, forward_kwargs
 
     def _generate_and_score_completions(
-        self, inputs: list[dict[str, Union[torch.Tensor, Any]]]
-    ) -> dict[str, Union[torch.Tensor, Any]]:
+        self, inputs: list[dict[str, torch.Tensor | Any]]
+    ) -> dict[str, torch.Tensor | Any]:
         device = self.accelerator.device
         mode = "train" if self.model.training else "eval"
 
@@ -2421,7 +2489,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
         self._metrics[mode]["clip_ratio/region_mean"].append(gathered_clip_ratio.nanmean().item())
         return loss
 
-    def prediction_step(self, model, inputs, prediction_loss_only, ignore_keys: Optional[list[str]] = None):
+    def prediction_step(self, model, inputs, prediction_loss_only, ignore_keys: list[str] | None = None):
         inputs = self._prepare_inputs(inputs)
         with torch.no_grad():
             with self.compute_loss_context_manager():
@@ -2429,7 +2497,7 @@ class _UnslothRLOOTrainer(BaseTrainer):
             loss = loss.mean().detach()
         return loss, None, None
 
-    def log(self, logs: dict[str, float], start_time: Optional[float] = None) -> None:
+    def log(self, logs: dict[str, float], start_time: float | None = None) -> None:
         mode = "train" if self.model.training else "eval"
         metrics = {key: sum(val) / len(val) for key, val in self._metrics[mode].items()}  # average the metrics
 
@@ -2809,7 +2877,6 @@ class UnslothRLOOTrainer(_UnslothRLOOTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -2817,18 +2884,14 @@ class UnslothRLOOTrainer(_UnslothRLOOTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
 
 
 if hasattr(logger, "addFilter"):
@@ -2836,6 +2899,5 @@ if hasattr(logger, "addFilter"):
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
         def filter(self, x): return self.text not in x.getMessage()
-    pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

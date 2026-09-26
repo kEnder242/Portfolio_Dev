@@ -1,7 +1,8 @@
 import json
 import os
-import sys
 import re
+import sys
+
 from ai_engine import get_engine
 
 # Add current directory to path
@@ -10,30 +11,31 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 ENGINE = get_engine(mode="LOCAL")
 DATA_DIR = "field_notes/data"
 
+
 def clean_file(filename):
     filepath = os.path.join(DATA_DIR, filename)
     if not os.path.exists(filepath):
         print(f"File not found: {filepath}")
         return
 
-    with open(filepath, 'r') as f:
+    with open(filepath, "r") as f:
         data = json.load(f)
 
     if not isinstance(data, list) or len(data) == 0:
         return
 
     print(f"--- Cleaning {filename} ({len(data)} items) ---")
-    
+
     # Group by rough date or keyword similarity
     # For Unknown.json, let's just group everything and ask the model to consolidate
-    
+
     # Process in batches of 10 to avoid token limits
     batch_size = 10
     cleaned_data = []
-    
+
     for i in range(0, len(data), batch_size):
-        batch = data[i:i+batch_size]
-        
+        batch = data[i : i + batch_size]
+
         prompt = f"""
         [TASK]
         Act as a data hygiene expert. Below is a list of technical events extracted from logs.
@@ -54,19 +56,19 @@ def clean_file(filename):
           {{ "date": "...", "summary": "...", "evidence": "...", "sensitivity": "Public", "tags": [] }}
         ]
         """
-        
+
         print(f"   > Processing batch {i//batch_size + 1}...")
         response = ENGINE.generate(prompt)
-        
+
         # Extract JSON list
-        match = re.search(r'\[.*\]', response, re.DOTALL)
+        match = re.search(r"\[.*\]", response, re.DOTALL)
         if match:
             try:
                 cleaned_batch = json.loads(match.group(0))
                 cleaned_data.extend(cleaned_batch)
             except:
                 print("   ! Error parsing JSON response.")
-                cleaned_data.extend(batch) # Keep original if failed
+                cleaned_data.extend(batch)  # Keep original if failed
         else:
             cleaned_data.extend(batch)
 
@@ -74,17 +76,18 @@ def clean_file(filename):
     final_list = []
     seen = set()
     for item in cleaned_data:
-        key = (item.get('date'), item.get('summary'))
+        key = (item.get("date"), item.get("summary"))
         if key not in seen:
             final_list.append(item)
             seen.add(key)
 
     # Atomic write
     temp_file = filepath + ".tmp"
-    with open(temp_file, 'w') as f:
+    with open(temp_file, "w") as f:
         json.dump(final_list, f, indent=2)
     os.replace(temp_file, filepath)
     print(f"--- Done. Reduced to {len(final_list)} items. ---")
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

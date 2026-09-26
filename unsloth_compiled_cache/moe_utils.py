@@ -13,13 +13,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import torch
-import torch.nn.functional as F
+import importlib.util
 import os
 import shutil
 import sys
-import importlib.util
-from typing import Optional, Tuple
+
+import torch
+import torch.nn.functional as F
 
 # Get compile location
 UNSLOTH_COMPILE_LOCATION = os.environ.get(
@@ -228,7 +228,10 @@ def _check_grouped_gemm_available():
     if _GROUPED_GEMM_AVAILABLE is not None: return _GROUPED_GEMM_AVAILABLE
 
     try:
-        from unsloth.kernels.moe.grouped_gemm.interface import grouped_gemm, supports_tma
+        from unsloth.kernels.moe.grouped_gemm.interface import (
+            grouped_gemm,
+            supports_tma,
+        )
         _GROUPED_GEMM_AVAILABLE = True
         _init_triton_allocator()
     except (ImportError, ModuleNotFoundError):
@@ -335,7 +338,7 @@ def _has_lora_adapters(param) -> bool:
 
 def _extract_lora_from_wrapper(
     wrapper, adapter_name: str = "default", experts_module=None
-) -> Optional[Tuple[torch.Tensor, torch.Tensor, float, int]]:
+) -> tuple[torch.Tensor, torch.Tensor, float, int] | None:
     """
     Extract LoRA weights from PEFT ParamWrapper for MoE separated computation.
 
@@ -435,7 +438,7 @@ def _extract_lora_from_wrapper(
 
 def _extract_lora_weights(
     param, adapter_name: str = "default", num_experts: int = None, experts_module=None
-) -> Optional[Tuple[torch.Tensor, torch.Tensor, float]]:
+) -> tuple[torch.Tensor, torch.Tensor, float] | None:
     """
     Extract LoRA A and B weights from PEFT ParamWrapper.
 
@@ -627,7 +630,7 @@ def _is_moe_experts_module(module) -> bool:
     """
     # This Unsloth Zoo code section is licensed under AGPL3
 
-    import torch.nn as nn
+    from torch import nn
 
     # Check for gate_up_proj pattern
     # After PEFT's nn.utils.parametrize wrapping, accessing gate_up_proj
@@ -1085,10 +1088,9 @@ def forward_triton_grouped_gemm(
     # This Unsloth Zoo code section is licensed under AGPL3
 
     # Import grouped GEMM interface
-    from unsloth.kernels.moe.grouped_gemm.interface import grouped_gemm
-
     # Import autotune cache
     from unsloth.kernels.moe.autotune_cache import get_or_autotune_moe_kernels
+    from unsloth.kernels.moe.grouped_gemm.interface import grouped_gemm
 
     # Helper to check TMA support - assumes helper function or just check directly
     # In original: it was a cached closure. Here we can use _supports_tma() directly

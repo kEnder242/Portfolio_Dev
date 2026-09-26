@@ -3,7 +3,6 @@
 [FEAT-582 / FEAT-603] DNA Forge Build System Proxy
 Delegates execution directly to modular build engine at Portfolio_Dev/dna_forge/dna_forge_build.py.
 """
-import os
 import sys
 from pathlib import Path
 
@@ -15,8 +14,12 @@ try:
 except ImportError:
     # Direct execution fallback
     import subprocess
+
     def build_page():
-        subprocess.run([sys.executable, str(DNA_FORGE_DIR / "dna_forge_build.py")], check=True)
+        subprocess.run(
+            [sys.executable, str(DNA_FORGE_DIR / "dna_forge_build.py")], check=True
+        )
+
 
 if __name__ == "__main__":
     build_page()

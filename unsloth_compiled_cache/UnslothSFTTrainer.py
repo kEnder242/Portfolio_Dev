@@ -22,24 +22,59 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-from typing import Any, Optional, Union, Callable
-from trl.trainer.sft_trainer import (BaseTrainer, Path, dataclass, logging, AutoProcessor, DataCollatorForVisionLanguageModeling, EvalPrediction, FLASH_ATTENTION_VARIANTS, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, SFTConfig, TrainerCallback, TrainingArguments, clone_chat_template, contextlib, create_model_from_path, defaultdict, dft_loss, get_act_offloading_ctx_manager, is_conversational, DataCollator, DataCollatorForLanguageModeling, Dataset, IterableDataset, pack_dataset, PreTrainedModel, logger, os)
-
-
-import math
-from typing import *
-from dataclasses import field
-from packaging.version import Version
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
-from transformers.training_args import ParallelMode
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import math
+from collections.abc import Callable
+from dataclasses import field
 from types import MethodType
+from typing import *
+from typing import Any, Optional
+
+import torch
+from packaging.version import Version
+from transformers import (
+    DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling,
+)
+from transformers import DataCollatorForSeq2Seq
+from transformers.training_args import ParallelMode
+from trl.trainer.sft_trainer import (
+    FLASH_ATTENTION_VARIANTS,
+    AutoProcessor,
+    BaseTrainer,
+    DataCollator,
+    DataCollatorForLanguageModeling,
+    DataCollatorForVisionLanguageModeling,
+    Dataset,
+    EvalPrediction,
+    IterableDataset,
+    Path,
+    PeftConfig,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    ProcessorMixin,
+    SFTConfig,
+    TrainerCallback,
+    TrainingArguments,
+    clone_chat_template,
+    contextlib,
+    create_model_from_path,
+    dataclass,
+    defaultdict,
+    dft_loss,
+    get_act_offloading_ctx_manager,
+    is_conversational,
+    logger,
+    logging,
+    os,
+    pack_dataset,
+)
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -73,7 +108,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
     "epilogue_fusion"   : True,
@@ -143,7 +177,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -392,23 +425,23 @@ class UnslothSFTConfig(SFTConfig):
             Whether to offload the activations to the CPU.
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
-    max_seq_length : Optional[int] = field(
+    max_seq_length : int | None = field(
         default = None,
         metadata = {'help': 'Maximum sequence length to truncate to.'},
     )
@@ -754,7 +787,6 @@ class UnslothSFTConfig(SFTConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
 
-pass
 
 class _UnslothSFTTrainer(BaseTrainer):
     """"""
@@ -764,20 +796,20 @@ class _UnslothSFTTrainer(BaseTrainer):
 
     def __init__(
         self,
-        model: Union[str, PreTrainedModel],
-        args: Optional[Union[SFTConfig, TrainingArguments]] = None,
-        data_collator: Optional[DataCollator] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, dict[str, Dataset]]] = None,
-        processing_class: Optional[Union[PreTrainedTokenizerBase, ProcessorMixin]] = None,
-        compute_loss_func: Optional[Callable] = None,
-        compute_metrics: Optional[Callable[[EvalPrediction], dict]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
-        optimizers: tuple[Optional[torch.optim.Optimizer], Optional[torch.optim.lr_scheduler.LambdaLR]] = (None, None),
-        optimizer_cls_and_kwargs: Optional[tuple[type[torch.optim.Optimizer], dict[str, Any]]] = None,
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        model: str | PreTrainedModel,
+        args: SFTConfig | TrainingArguments | None = None,
+        data_collator: DataCollator | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | dict[str, Dataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | ProcessorMixin | None = None,
+        compute_loss_func: Callable | None = None,
+        compute_metrics: Callable[[EvalPrediction], dict] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
+        optimizers: tuple[torch.optim.Optimizer | None, torch.optim.lr_scheduler.LambdaLR | None] = (None, None),
+        optimizer_cls_and_kwargs: tuple[type[torch.optim.Optimizer], dict[str, Any]] | None = None,
+        preprocess_logits_for_metrics: Callable[[torch.Tensor, torch.Tensor], torch.Tensor] | None = None,
         peft_config: Optional["PeftConfig"] = None,
-        formatting_func: Optional[Callable[[dict], str]] = None,
+        formatting_func: Callable[[dict], str] | None = None,
     ):
         # Args
         if args is None:
@@ -884,7 +916,6 @@ class _UnslothSFTTrainer(BaseTrainer):
         self.num_virtual_tokens = 0
 
         if False:
-            pass
             if model.active_adapter in model.peft_config:
                 peft_model_config = model.peft_config[model.active_adapter]
                 self.num_virtual_tokens = getattr(peft_model_config, "num_virtual_tokens", 0)
@@ -1060,13 +1091,13 @@ class _UnslothSFTTrainer(BaseTrainer):
 
     def _prepare_dataset(
         self,
-        dataset: Union[Dataset, IterableDataset],
+        dataset: Dataset | IterableDataset,
         processing_class,
         args,
         packing: bool,
-        formatting_func: Optional[Callable[[dict], str]],
+        formatting_func: Callable[[dict], str] | None,
         dataset_name: str,
-    ) -> Union[Dataset, IterableDataset]:
+    ) -> Dataset | IterableDataset:
         # All Unsloth Zoo code licensed under LGPLv3
         try:
             if isinstance(dataset, ConstantLengthDataset): return dataset
@@ -1127,7 +1158,7 @@ class _UnslothSFTTrainer(BaseTrainer):
             used_column_names.append("token_type_ids")
     
         # Check if already tokenized so skip
-        from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling
+        from transformers import DataCollatorForLanguageModeling, DataCollatorForSeq2Seq
         if "labels" in column_names:
             # Most likely forgot data collator!
             if is_vlm and not hasattr(tokenizer, "pad"):
@@ -1147,7 +1178,6 @@ class _UnslothSFTTrainer(BaseTrainer):
             do_formatting_func = True
             if formatting_func is None:
                 raise RuntimeError("Unsloth: You must specify a `formatting_func`")
-        pass
     
         if do_tokenize:
             # Check double BOS tokens
@@ -1178,7 +1208,6 @@ class _UnslothSFTTrainer(BaseTrainer):
                 if test_text.startswith(bos_token) or bos_token in chat_template:
                     add_special_tokens = False
                     print("Unsloth: We found double BOS tokens - we shall remove one automatically.")
-            pass
     
             # Create tokenize function
             def _tokenize(example):
@@ -1189,7 +1218,6 @@ class _UnslothSFTTrainer(BaseTrainer):
                     return_token_type_ids = _needs_token_type_ids,
                     add_special_tokens = add_special_tokens,
                 )
-            pass
     
             if not isinstance(dataset, IterableDataset):
                 import multiprocessing as _mp
@@ -1219,8 +1247,6 @@ class _UnslothSFTTrainer(BaseTrainer):
             if is_vlm and not hasattr(processing_class, "pad"):
                 data_collator = DataCollatorForLanguageModeling(tokenizer, mlm = False)
                 self.data_collator = data_collator
-            pass
-        pass
         if packing:
             # Try using new packing which works in TRL
             try:
@@ -1239,7 +1265,6 @@ class _UnslothSFTTrainer(BaseTrainer):
                 getattr(args, "packing_strategy", "bfd"),
                 map_kwargs,
             )
-        pass
         return dataset
     
     def _set_signature_columns_if_needed(self):
@@ -1269,7 +1294,7 @@ class _UnslothSFTTrainer(BaseTrainer):
         with self.maybe_activation_offload_context:
             return super().training_step(*args, **kwargs)
 
-    def log(self, logs: dict[str, float], start_time: Optional[float] = None) -> None:
+    def log(self, logs: dict[str, float], start_time: float | None = None) -> None:
         mode = "train" if self.model.training else "eval"
         metrics = {key: sum(val) / len(val) for key, val in self._metrics[mode].items()}  # average the metrics
 
@@ -1510,7 +1535,7 @@ class UnslothSFTTrainer(_UnslothSFTTrainer):
                 elif hasattr(args, 'max_length') and args.max_length is not None:
                     max_length = args.max_length
                     # if we are here, then we are in a weird case where max_length is set but max_seq_length is not set
-                    setattr(model, 'max_seq_length', max_length)
+                    model.max_seq_length = max_length
                 else:
                     print('Unsloth: We did not find `max_seq_length` or `max_length` in the model or args. We will set it to 1024.')
                     args.max_length = 1024
@@ -1559,7 +1584,7 @@ class UnslothSFTTrainer(_UnslothSFTTrainer):
         PatchRLStatistics('sft_trainer', other_metrics)
         IGNORED_TOKENIZER_NAMES = os.environ.get('UNSLOTH_IGNORED_TOKENIZER_NAMES', '').split('\n')
         from unsloth_zoo.tokenizer_utils import fix_untrained_tokens
-        from unsloth_zoo.training_utils  import fix_zero_training_loss
+        from unsloth_zoo.training_utils import fix_zero_training_loss
         if 'tokenizer' not in locals(): tokenizer = processing_class
         fix_untrained_tokens(model, tokenizer, train_dataset, IGNORED_TOKENIZER_NAMES, eps = 1e-16)
         fix_zero_training_loss(model, tokenizer, train_dataset)
@@ -1592,7 +1617,6 @@ class UnslothSFTTrainer(_UnslothSFTTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -1600,18 +1624,14 @@ class UnslothSFTTrainer(_UnslothSFTTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
 
 
 if hasattr(logger, "addFilter"):
@@ -1619,6 +1639,5 @@ if hasattr(logger, "addFilter"):
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
         def filter(self, x): return self.text not in x.getMessage()
-    pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

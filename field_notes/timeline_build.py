@@ -10,7 +10,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 DNA_DIR = BASE_DIR.parent / "dna"
-TIMELINE_DATA_PATH = DNA_DIR / "timeline_data.json" if (DNA_DIR / "timeline_data.json").exists() else DATA_DIR / "timeline_data.json"
+TIMELINE_DATA_PATH = (
+    DNA_DIR / "timeline_data.json"
+    if (DNA_DIR / "timeline_data.json").exists()
+    else DATA_DIR / "timeline_data.json"
+)
 OUTLIERS_DATA_PATH = DATA_DIR / "timeline_outliers.json"
 BUCKETS_DATA_PATH = DATA_DIR / "buckets.json"
 OUTPUT_HTML = BASE_DIR / "timeline.html"
@@ -22,7 +26,7 @@ LANES_CONFIG = [
         "short": "Triage",
         "color": "#388bfd",
         "bg": "rgba(56, 139, 253, 0.15)",
-        "desc": "Informational inquiry gates, QQ protocol, model routing via Foyer, and semantic triage."
+        "desc": "Informational inquiry gates, QQ protocol, model routing via Foyer, and semantic triage.",
     },
     {
         "id": "ambient_hooks",
@@ -30,7 +34,7 @@ LANES_CONFIG = [
         "short": "Ambient Hooks",
         "color": "#2ea043",
         "bg": "rgba(46, 160, 67, 0.15)",
-        "desc": "Background watchdogs, filesystem monitors, git reset hooks, quiescence timers, and AST memory guards."
+        "desc": "Background watchdogs, filesystem monitors, git reset hooks, quiescence timers, and AST memory guards.",
     },
     {
         "id": "llm_kernel",
@@ -38,7 +42,7 @@ LANES_CONFIG = [
         "short": "LLM Kernel",
         "color": "#e3b341",
         "bg": "rgba(227, 179, 65, 0.15)",
-        "desc": "In-LLM cognitive pipeline: runtime context assembly/Token Golf, attention & swarm delegation, and safe reply patching."
+        "desc": "In-LLM cognitive pipeline: runtime context assembly/Token Golf, attention & swarm delegation, and safe reply patching.",
     },
     {
         "id": "distillation",
@@ -46,7 +50,7 @@ LANES_CONFIG = [
         "short": "Distillation",
         "color": "#a371f7",
         "bg": "rgba(163, 113, 247, 0.15)",
-        "desc": "Post-turn synthesis, subconscious dreaming, blackboard gem refinement, and error-to-protocol crystallization."
+        "desc": "Post-turn synthesis, subconscious dreaming, blackboard gem refinement, and error-to-protocol crystallization.",
     },
     {
         "id": "storage",
@@ -54,8 +58,8 @@ LANES_CONFIG = [
         "short": "Memory & Storage",
         "color": "#f85149",
         "bg": "rgba(248, 81, 73, 0.15)",
-        "desc": "ChromaDB vector vaults, persistent ICM SQLite episodic recall, git commit ledger, and zero-torch precomputed caches."
-    }
+        "desc": "ChromaDB vector vaults, persistent ICM SQLite episodic recall, git commit ledger, and zero-torch precomputed caches.",
+    },
 ]
 
 
@@ -1124,7 +1128,9 @@ def build_timeline_html():
     outliers = load_json(OUTLIERS_DATA_PATH, [])
     buckets = load_json(BUCKETS_DATA_PATH, [])
 
-    discoveries.sort(key=lambda x: (x.get("conception_date", ""), x.get("implementation_date", "")))
+    discoveries.sort(
+        key=lambda x: (x.get("conception_date", ""), x.get("implementation_date", ""))
+    )
 
     total_discoveries = len(discoveries)
     mature_count = sum(1 for d in discoveries if d.get("status") == "MATURE")
@@ -1156,7 +1162,9 @@ def build_timeline_html():
 
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"✅ Generated {OUTPUT_HTML.name} ({len(html)} bytes, {total_discoveries} discoveries)")
+    print(
+        f"✅ Generated {OUTPUT_HTML.name} ({len(html)} bytes, {total_discoveries} discoveries)"
+    )
 
 
 if __name__ == "__main__":

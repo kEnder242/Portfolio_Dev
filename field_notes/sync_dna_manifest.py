@@ -26,99 +26,118 @@ TIMELINE_PATH = BASE_DIR / "data" / "timeline_data.json"
 MANIFEST_PATH = BASE_DIR / "data" / "dna_manifest.json"
 SPRINTS_DIR = REPO_ROOT / "docs" / "sprints"
 
+
 def parse_features():
     cards = []
     if not FEATURE_TRACKER_MD.exists():
         return cards
     content = FEATURE_TRACKER_MD.read_text(encoding="utf-8")
-    sections = re.split(r'\n(?=## \[(?:FEAT|LAB)-)', content)
+    sections = re.split(r"\n(?=## \[(?:FEAT|LAB)-)", content)
     for sec in sections:
-        header = re.match(r'## \[((?:FEAT|LAB)-[A-Za-z0-9_\.\-]+)\]\s*(.*)', sec)
+        header = re.match(r"## \[((?:FEAT|LAB)-[A-Za-z0-9_\.\-]+)\]\s*(.*)", sec)
         if not header:
             continue
         fid = header.group(1).strip()
         title = header.group(2).strip()
 
-        status_m = re.search(r'\*\*Status:\*\*\s*(.*)', sec)
+        status_m = re.search(r"\*\*Status:\*\*\s*(.*)", sec)
         status = status_m.group(1).strip() if status_m else "ACTIVE"
 
-        code_m = re.search(r'\*\*Code:\*\*\s*(.*)', sec)
+        code_m = re.search(r"\*\*Code:\*\*\s*(.*)", sec)
         code_ref = code_m.group(1).strip() if code_m else ""
 
-        logic_m = re.search(r'\*\*Logic:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        logic_m = re.search(
+            r"\*\*Logic:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)", sec, re.DOTALL
+        )
         logic = logic_m.group(1).strip() if logic_m else ""
 
-        rationale_m = re.search(r'\*\*Rationale:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        rationale_m = re.search(
+            r"\*\*Rationale:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)",
+            sec,
+            re.DOTALL,
+        )
         rationale = rationale_m.group(1).strip() if rationale_m else ""
 
-        mechanism_m = re.search(r'\*\*Mechanism:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        mechanism_m = re.search(
+            r"\*\*Mechanism:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)",
+            sec,
+            re.DOTALL,
+        )
         mechanism = mechanism_m.group(1).strip() if mechanism_m else ""
 
         origin_text = rationale or logic or f"{fid}: {title}"
-        narrative = f"{logic}\n\n{mechanism}".strip() if (logic or mechanism) else origin_text
+        narrative = (
+            f"{logic}\n\n{mechanism}".strip() if (logic or mechanism) else origin_text
+        )
 
-        cards.append({
-            "id": fid,
-            "title": title or fid,
-            "origin": {
-                "author": "Federated Lab",
-                "text": origin_text,
-                "source": "FeatureTracker.md",
-                "immutable": True
-            },
-            "synthesis": {
-                "narrative_context": narrative,
-                "lab_anchors": [code_ref] if code_ref else [],
-                "review_notes": f"Status: {status}",
-                "refinement_version": 1
-            },
-            "metadata": {
-                "tags": ["feature", "code-anchor", status.lower()],
-                "status": status,
-                "bucket_id": "bucket_5_infra"
+        cards.append(
+            {
+                "id": fid,
+                "title": title or fid,
+                "origin": {
+                    "author": "Federated Lab",
+                    "text": origin_text,
+                    "source": "FeatureTracker.md",
+                    "immutable": True,
+                },
+                "synthesis": {
+                    "narrative_context": narrative,
+                    "lab_anchors": [code_ref] if code_ref else [],
+                    "review_notes": f"Status: {status}",
+                    "refinement_version": 1,
+                },
+                "metadata": {
+                    "tags": ["feature", "code-anchor", status.lower()],
+                    "status": status,
+                    "bucket_id": "bucket_5_infra",
+                },
             }
-        })
+        )
     return cards
+
 
 def parse_protocols():
     cards = []
     if not PROTOCOLS_MD.exists():
         return cards
     content = PROTOCOLS_MD.read_text(encoding="utf-8")
-    sections = re.split(r'\n(?=## BKM-)', content)
+    sections = re.split(r"\n(?=## BKM-)", content)
     for sec in sections:
-        header = re.match(r'## (BKM-[0-9]+(?:\.[0-9]+)?):\s*(.*)', sec)
+        header = re.match(r"## (BKM-[0-9]+(?:\.[0-9]+)?):\s*(.*)", sec)
         if not header:
             continue
         bid = header.group(1).strip()
         title = header.group(2).strip()
 
-        obj_m = re.search(r'\*\*Objective\*\*:\s*(.*?)(?=\n\n|\n\*|\Z)', sec, re.DOTALL)
+        obj_m = re.search(r"\*\*Objective\*\*:\s*(.*?)(?=\n\n|\n\*|\Z)", sec, re.DOTALL)
         obj = obj_m.group(1).strip() if obj_m else ""
 
         origin_text = obj or f"{bid}: {title}"
-        cards.append({
-            "id": bid,
-            "title": title or bid,
-            "origin": {
-                "author": "Federated Lab",
-                "text": origin_text,
-                "source": "HomeLabAI/docs/Protocols.md",
-                "immutable": True
-            },
-            "synthesis": {
-                "narrative_context": sec.strip(),
-                "lab_anchors": ["HomeLabAI/docs/Protocols.md"],
-                "review_notes": f"Operational Protocol {bid}",
-                "refinement_version": 1
-            },
-            "metadata": {
-                "tags": ["bkm", "behavioral-dna", "protocol"],
-                "status": "APPROVED",
-                "bucket_id": "bucket_4_rigor"
+        cards.append(
+            {
+                "id": bid,
+                "title": title or bid,
+                "origin": {
+                    "author": "Federated Lab",
+                    "text": origin_text,
+                    "source": "HomeLabAI/docs/Protocols.md",
+                    "immutable": True,
+                },
+                "synthesis": {
+                    "narrative_context": sec.strip(),
+                    "lab_anchors": ["HomeLabAI/docs/Protocols.md"],
+                    "review_notes": f"Operational Protocol {bid}",
+                    "refinement_version": 1,
+                },
+                "metadata": {
+                    "tags": ["bkm", "behavioral-dna", "protocol"],
+                    "status": "APPROVED",
+                    "bucket_id": "bucket_4_rigor",
+                },
             }
-        })
+        )
     return cards
+
 
 def main():
     manifest = {}
@@ -166,27 +185,33 @@ def main():
                     target = item.get("target_dna", {})
                     variants = item.get("question_variants", [])
                     var_str = "\n".join([f"- {v}" for v in variants])
-                    rdna_cards.append({
-                        "id": rid,
-                        "title": item.get("question", rid),
-                        "origin": {
-                            "author": "Reverse DNA Engine",
-                            "text": f"Canonical: {item.get('question')}\n\nVariants:\n{var_str}",
-                            "source": "rdna_questions.json",
-                            "immutable": False
-                        },
-                        "synthesis": {
-                            "narrative_context": f"Maps to {target.get('id', 'DNA')} ({target.get('title', '')}) in {target.get('collection', 'philosophy_dna')} with confidence floor {item.get('confidence_floor', 0.75)}.",
-                            "lab_anchors": [target.get("id", "")] if target.get("id") else [],
-                            "review_notes": f"Category: {item.get('intent_category', 'general')}",
-                            "refinement_version": 1
-                        },
-                        "metadata": {
-                            "tags": item.get("metadata", {}).get("tags", ["rdna", "resonant-question"]),
-                            "status": "ACTIVE",
-                            "bucket_id": "bucket_rdna"
+                    rdna_cards.append(
+                        {
+                            "id": rid,
+                            "title": item.get("question", rid),
+                            "origin": {
+                                "author": "Reverse DNA Engine",
+                                "text": f"Canonical: {item.get('question')}\n\nVariants:\n{var_str}",
+                                "source": "rdna_questions.json",
+                                "immutable": False,
+                            },
+                            "synthesis": {
+                                "narrative_context": f"Maps to {target.get('id', 'DNA')} ({target.get('title', '')}) in {target.get('collection', 'philosophy_dna')} with confidence floor {item.get('confidence_floor', 0.75)}.",
+                                "lab_anchors": (
+                                    [target.get("id", "")] if target.get("id") else []
+                                ),
+                                "review_notes": f"Category: {item.get('intent_category', 'general')}",
+                                "refinement_version": 1,
+                            },
+                            "metadata": {
+                                "tags": item.get("metadata", {}).get(
+                                    "tags", ["rdna", "resonant-question"]
+                                ),
+                                "status": "ACTIVE",
+                                "bucket_id": "bucket_rdna",
+                            },
                         }
-                    })
+                    )
                 manifest["rdna"] = rdna_cards
         except Exception as e:
             print(f"Warning loading RDNA: {e}")
@@ -198,29 +223,37 @@ def main():
             for sfile in sorted(sdir.glob("*.md")):
                 try:
                     s_text = sfile.read_text(encoding="utf-8")
-                    first_line = s_text.splitlines()[0] if s_text.splitlines() else sfile.stem
-                    s_title = re.sub(r'^[#\s]+', '', first_line).strip()
-                    sprint_cards.append({
-                        "id": sfile.stem,
-                        "title": s_title or sfile.stem,
-                        "origin": {
-                            "author": "Federated Lab",
-                            "text": s_text[:500] + "...",
-                            "source": f"docs/sprints/{sdir.name}/{sfile.name}",
-                            "immutable": True
-                        },
-                        "synthesis": {
-                            "narrative_context": s_text[:1000],
-                            "lab_anchors": [f"docs/sprints/{sdir.name}/{sfile.name}"],
-                            "review_notes": f"Sprint document {sfile.stem}",
-                            "refinement_version": 1
-                        },
-                        "metadata": {
-                            "tags": ["sprint", "planning", sdir.name],
-                            "status": "ARCHIVED" if sdir.name == "archive" else "ACTIVE",
-                            "bucket_id": "bucket_sprints"
+                    first_line = (
+                        s_text.splitlines()[0] if s_text.splitlines() else sfile.stem
+                    )
+                    s_title = re.sub(r"^[#\s]+", "", first_line).strip()
+                    sprint_cards.append(
+                        {
+                            "id": sfile.stem,
+                            "title": s_title or sfile.stem,
+                            "origin": {
+                                "author": "Federated Lab",
+                                "text": s_text[:500] + "...",
+                                "source": f"docs/sprints/{sdir.name}/{sfile.name}",
+                                "immutable": True,
+                            },
+                            "synthesis": {
+                                "narrative_context": s_text[:1000],
+                                "lab_anchors": [
+                                    f"docs/sprints/{sdir.name}/{sfile.name}"
+                                ],
+                                "review_notes": f"Sprint document {sfile.stem}",
+                                "refinement_version": 1,
+                            },
+                            "metadata": {
+                                "tags": ["sprint", "planning", sdir.name],
+                                "status": (
+                                    "ARCHIVED" if sdir.name == "archive" else "ACTIVE"
+                                ),
+                                "bucket_id": "bucket_sprints",
+                            },
                         }
-                    })
+                    )
                 except Exception:
                     pass
     if sprint_cards:
@@ -232,6 +265,7 @@ def main():
     print("✅ Synced dna_manifest.json:")
     for k, v in manifest.items():
         print(f"   - {k.capitalize()} cards: {len(v)}")
+
 
 if __name__ == "__main__":
     main()

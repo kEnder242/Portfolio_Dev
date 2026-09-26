@@ -74,7 +74,9 @@ def main():
             f"- timestamp: {latest.get('iso_timestamp')}",
         ]
     atomic_write(LEDGER_MD, "\n".join(lines) + "\n")
-    print(f"[FEAT-444] Ledger compiled: {ledger['total_evaluations']} evaluations -> {LEDGER_MD}")
+    print(
+        f"[FEAT-444] Ledger compiled: {ledger['total_evaluations']} evaluations -> {LEDGER_MD}"
+    )
 
 
 if __name__ == "__main__":

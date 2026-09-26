@@ -10,13 +10,14 @@ from nibble import extract_json_from_llm
 ENGINE = get_engine(mode="LOCAL")
 FILE_PATH = "raw_notes/notes_2024_PIAV.txt"
 
+
 def debug_chunk():
     print("--- DEBUGGING 2024 ---")
-    
+
     # 1. Read File
     try:
-        with open(FILE_PATH, 'r', encoding='utf-8', errors='ignore') as f:
-            text = f.read(8000) # Read first 8k chars (Header + Q1) 
+        with open(FILE_PATH, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read(8000)  # Read first 8k chars (Header + Q1)
     except Exception as e:
         print(f"Error reading file: {e}")
         return
@@ -39,10 +40,10 @@ def debug_chunk():
     [OUTPUT]
     JSON list: [ {{ "date": "YYYY-MM-DD", "summary": "...", "sensitivity": "Public" }} ]
     """
-    
+
     print("\n[PROMPT SENT TO OLLAMA]")
     print(prompt[:500] + "... (truncated)")
-    
+
     print("\n[WAITING FOR OLLAMA...]")
     try:
         response = ENGINE.generate(prompt)
@@ -52,10 +53,11 @@ def debug_chunk():
 
     print("\n[RAW RESPONSE]")
     print(response)
-    
+
     print("\n[PARSED JSON]")
     data = extract_json_from_llm(response)
     print(json.dumps(data, indent=2))
+
 
 if __name__ == "__main__":
     debug_chunk()

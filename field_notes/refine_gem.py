@@ -1,8 +1,8 @@
 import json
-import os
-import sys
 import logging
+import os
 import random
+import sys
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -12,11 +12,14 @@ from utils import update_status
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-logging.basicConfig(level=logging.INFO, format='[REFINE] %(message)s')
+logging.basicConfig(level=logging.INFO, format="[REFINE] %(message)s")
+
 
 def cosine_similarity(a, b):
     import numpy as np
+
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
 
 def get_embedding_function():
     """Get an embedding function with ChromaDB HttpClient fallback.
@@ -35,8 +38,7 @@ def get_embedding_function():
         from chromadb.utils import embedding_functions
 
         logging.info(
-            "Attempting HttpClient connection for embeddings at "
-            "127.0.0.1:8001..."
+            "Attempting HttpClient connection for embeddings at " "127.0.0.1:8001..."
         )
         client = chromadb.HttpClient(host="127.0.0.1", port=8001)
         heartbeat = client.heartbeat()
@@ -60,6 +62,7 @@ def get_embedding_function():
         class _ChromaDBEmbedder:
             def encode(self, texts):
                 import numpy as np
+
                 return np.array(ef(texts))
 
         return _ChromaDBEmbedder()
@@ -81,8 +84,7 @@ def get_embedding_function():
 
         model = SentenceTransformer("all-MiniLM-L6-v2")
         logging.info(
-            "Final embedding method: local SentenceTransformer "
-            "(all-MiniLM-L6-v2)."
+            "Final embedding method: local SentenceTransformer " "(all-MiniLM-L6-v2)."
         )
         return model
     except Exception as e:
@@ -98,77 +100,95 @@ def deduplicate_gems():
     model = get_embedding_function()
     if model is None:
         return
-        
+
     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
-    ignore = ["themes.json", "status.json", "queue.json", "state.json", "search_index.json", "pager_activity.json", "file_manifest.json", "overrides.json"]
-    
+    ignore = [
+        "themes.json",
+        "status.json",
+        "queue.json",
+        "state.json",
+        "search_index.json",
+        "pager_activity.json",
+        "file_manifest.json",
+        "overrides.json",
+    ]
+
     events_by_date = {}
     for jf in json_files:
-        if os.path.basename(jf) in ignore: continue
+        if os.path.basename(jf) in ignore:
+            continue
         try:
-            with open(jf, 'r') as f:
+            with open(jf, "r") as f:
                 data = json.load(f)
-                if not isinstance(data, list): continue
+                if not isinstance(data, list):
+                    continue
                 for i, event in enumerate(data):
-                    date = event.get('date')
-                    if not date: continue
+                    date = event.get("date")
+                    if not date:
+                        continue
                     if date not in events_by_date:
                         events_by_date[date] = []
-                    events_by_date[date].append({
-                        "file_path": jf,
-                        "index": i,
-                        "event": event
-                    })
-        except: pass
+                    events_by_date[date].append(
+                        {"file_path": jf, "index": i, "event": event}
+                    )
+        except:
+            pass
 
     modified_files = set()
     file_contents = {}
-    
+
     def get_content(path):
         if path not in file_contents:
-            with open(path, 'r') as f:
+            with open(path, "r") as f:
                 file_contents[path] = json.load(f)
         return file_contents[path]
 
     for date, items in events_by_date.items():
-        if len(items) < 2: continue
-        
+        if len(items) < 2:
+            continue
+
         summaries = [it["event"].get("summary", "") for it in items]
         embeddings = model.encode(summaries)
-        
+
         merged_indices = set()
         for i in range(len(items)):
-            if i in merged_indices: continue
+            if i in merged_indices:
+                continue
             for j in range(i + 1, len(items)):
-                if j in merged_indices: continue
-                
+                if j in merged_indices:
+                    continue
+
                 sim = cosine_similarity(embeddings[i], embeddings[j])
                 if sim > 0.85:
-                    logging.info(f"   [MERGE] Found duplicates on {date} (similarity: {sim:.2f})")
+                    logging.info(
+                        f"   [MERGE] Found duplicates on {date} (similarity: {sim:.2f})"
+                    )
                     logging.info(f"     1: {summaries[i][:50]}...")
                     logging.info(f"     2: {summaries[j][:50]}...")
-                    
+
                     event_i = items[i]["event"]
                     event_j = items[j]["event"]
-                    
-                    if len(event_j.get("summary", "")) > len(event_i.get("summary", "")):
+
+                    if len(event_j.get("summary", "")) > len(
+                        event_i.get("summary", "")
+                    ):
                         event_i["summary"] = event_j["summary"]
-                        
+
                     ev_i = event_i.get("evidence", "")
                     ev_j = event_j.get("evidence", "")
                     if ev_j and ev_j not in ev_i:
                         event_i["evidence"] = f"{ev_i}\n\nEvidence 2: {ev_j}".strip()
-                        
+
                     tags_i = set(event_i.get("tags", []))
                     tags_j = set(event_j.get("tags", []))
                     event_i["tags"] = list(tags_i.union(tags_j))
                     event_i["rank"] = 4
-                    
+
                     merged_indices.add(j)
-                    
+
                     content_i = get_content(items[i]["file_path"])
                     content_j = get_content(items[j]["file_path"])
-                    
+
                     content_i[items[i]["index"]] = event_i
                     modified_files.add(items[i]["file_path"])
                     content_j[items[j]["index"]] = None
@@ -178,40 +198,52 @@ def deduplicate_gems():
         content = file_contents[path]
         cleaned_content = [item for item in content if item is not None]
         try:
-            with open(path, 'w') as f:
+            with open(path, "w") as f:
                 json.dump(cleaned_content, f, indent=2)
             logging.info(f"💾 Saved merged changes to {os.path.basename(path)}")
         except Exception as e:
             logging.error(f"Failed to save {path}: {e}")
 
+
 def main():
     logging.info("--- Technical Gem Refinement Loop ---")
-    
+
     # 1. Run Semantic Deduplication (Goal 6)
     try:
         deduplicate_gems()
     except Exception as e:
         logging.error(f"Deduplication check failed: {e}")
-        
+
     # 2. Target the Brain (Hybrid Mode)
-    engine = get_engine_v2(mode="HYBRID") # Pinky Orchestrator + Brain Backend
-    
+    engine = get_engine_v2(mode="HYBRID")  # Pinky Orchestrator + Brain Backend
+
     # 2. Find a low-rank artifact
     import glob
+
     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
-    ignore = ["themes.json", "status.json", "queue.json", "state.json", "search_index.json", "pager_activity.json", "file_manifest.json"]
-    
+    ignore = [
+        "themes.json",
+        "status.json",
+        "queue.json",
+        "state.json",
+        "search_index.json",
+        "pager_activity.json",
+        "file_manifest.json",
+    ]
+
     candidates = []
     for jf in json_files:
-        if os.path.basename(jf) in ignore: continue
+        if os.path.basename(jf) in ignore:
+            continue
         try:
-            with open(jf, 'r') as f:
+            with open(jf, "r") as f:
                 data = json.load(f)
                 if isinstance(data, list):
                     for i, event in enumerate(data):
-                        if event.get('rank', 2) < 4:
+                        if event.get("rank", 2) < 4:
                             candidates.append((jf, i, event))
-        except: pass
+        except:
+            pass
 
     if not candidates:
         logging.info("All gems are currently Rank 4 (Diamond). No refinement needed.")
@@ -250,31 +282,33 @@ def main():
       "tags": ["..."]
     }}
     """
-    
+
     try:
         response = engine.generate(refine_prompt)
         # Extract JSON
         import re
-        match = re.search(r'\{.*\}', response, re.DOTALL)
+
+        match = re.search(r"\{.*\}", response, re.DOTALL)
         if match:
             new_data = json.loads(match.group(0))
-            
+
             # 4. Save back
-            with open(file_path, 'r') as f:
+            with open(file_path, "r") as f:
                 full_data = json.load(f)
-            
+
             # Update fields
             full_data[index].update(new_data)
-            
-            with open(file_path, 'w') as f:
+
+            with open(file_path, "w") as f:
                 json.dump(full_data, f, indent=2)
-            
+
             logging.info("✨ Refinement Success! Gem upgraded to Rank 4.")
             update_status("REFINE", f"Upgraded gem: {event.get('summary')[:30]}", 1)
         else:
             logging.warning("Brain provided invalid JSON for refinement.")
     except Exception as e:
         logging.error(f"Refinement failed: {e}")
+
 
 if __name__ == "__main__":
     main()

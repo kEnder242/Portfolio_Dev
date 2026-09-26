@@ -1,20 +1,23 @@
-import requests
+import glob
 import json
 import os
-import glob
 import re
+
+import requests
 
 # Configuration
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "llama-3.2-3b-awq"
 NOTES_GLOB = "raw_notes/notes_*.txt"
 
+
 def read_file(path):
     try:
-        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
             return f.read()
     except Exception:
         return ""
+
 
 def ask_pinky(chunk):
     prompt = f"""
@@ -32,70 +35,92 @@ def ask_pinky(chunk):
     [OUTPUT]
     Return ONLY a JSON list of strings. Example: ["RTL", "OCLA", "TCL"]
     """
-    
+
     payload = {
         "model": MODEL,
         "prompt": prompt,
         "stream": False,
-        "options": {"temperature": 0.1}
+        "options": {"temperature": 0.1},
     }
     try:
         response = requests.post(OLLAMA_URL, json=payload)
         response.raise_for_status()
-        text = response.json()['response']
+        text = response.json()["response"]
         # Extract JSON list from text
-        match = re.search(r'\[.*\]', text, re.DOTALL)
+        match = re.search(r"\[.*\]", text, re.DOTALL)
         if match:
             return json.loads(match.group(0))
         return []
     except Exception:
         return []
 
+
 def main():
     print("--- Acronym Hunter v1.1 ---")
     files = sorted(glob.glob(NOTES_GLOB))
-    
+
     file_acronyms = {}
-    
+
     for filepath in files:
         filename = os.path.basename(filepath)
         print(f"Scanning {filename}...", end="", flush=True)
         text = read_file(filepath)
-        
+
         acronyms = ask_pinky(text)
         file_acronyms[filename] = acronyms
-        
+
         print(f" Found {len(acronyms)}")
 
     # Filter against a basic stoplist just in case Pinky slipped
 
     # Filter against a basic stoplist just in case Pinky slipped
-    stoplist = {"THE", "AND", "FOR", "BUT", "NOT", "YES", "CAN", "SEE", "USE", "GET", "NEW", "OLD", "NOW", "ONE", "TWO", "BUG", "FIX", "RAN", "RUN"}
-    
+    stoplist = {
+        "THE",
+        "AND",
+        "FOR",
+        "BUT",
+        "NOT",
+        "YES",
+        "CAN",
+        "SEE",
+        "USE",
+        "GET",
+        "NEW",
+        "OLD",
+        "NOW",
+        "ONE",
+        "TWO",
+        "BUG",
+        "FIX",
+        "RAN",
+        "RUN",
+    }
+
     # Invert the map: Acronym -> List of Years
     acronym_map = {}
-    
+
     for filename, acr_list in file_acronyms.items():
         # Extract year
-        year_match = re.search(r'20\d{2}', filename)
+        year_match = re.search(r"20\d{2}", filename)
         year = year_match.group(0) if year_match else "Unknown"
-        
+
         for acr in acr_list:
             clean_acr = acr.upper().strip()
-            if re.match(r'^[A-Z0-9]{2,8}$', clean_acr) and clean_acr not in stoplist:
+            if re.match(r"^[A-Z0-9]{2,8}$", clean_acr) and clean_acr not in stoplist:
                 if clean_acr not in acronym_map:
                     acronym_map[clean_acr] = set()
                 acronym_map[clean_acr].add(year)
 
     # Convert sets to lists for JSON
     final_map = {k: sorted(list(v)) for k, v in acronym_map.items()}
-    
+
     print("\n--- CANDIDATE ACRONYM MAP ---")
     print(json.dumps(final_map, indent=2))
-    
+
     # Save for merge
     with open("field_notes/acronym_map.json", "w") as f:
         json.dump(final_map, f, indent=2)
+
 
 if __name__ == "__main__":
     main()

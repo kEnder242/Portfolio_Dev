@@ -6,31 +6,39 @@ optionally queries the Cloudflare Zero Trust Access API for unique user emails
 and their latest login timestamps on jason-lab.dev.
 """
 
+import argparse
+import base64
+import datetime
+import json
 import os
 import re
-import json
-import base64
-import argparse
-import datetime
-from typing import Dict, Any, Optional
+from typing import Any
 
 CF_ACCOUNT_ID = "c58aa4580ff695cce2f611177d2173a5"
 CF_ZONE_ID = "c560564464f6202dde62e8e67649f79c"
 CERT_PATH = os.path.expanduser("~/.cloudflared/cert.pem")
-DEFAULT_LEDGER = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/journal_ledger.jsonl")
-DEFAULT_QUEUE = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/field_notes/data/foyer_queue.jsonl")
+DEFAULT_LEDGER = os.path.expanduser(
+    "~/Dev_Lab/Portfolio_Dev/field_notes/data/journal_ledger.jsonl"
+)
+DEFAULT_QUEUE = os.path.expanduser(
+    "~/Dev_Lab/Portfolio_Dev/field_notes/data/foyer_queue.jsonl"
+)
 
 EMAIL_REGEX = re.compile(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)")
 EXCLUDED_DOMAINS = ["example.com", "schema.org", "github.com", "git-amr", "gitlab"]
 
-def extract_cert_token() -> Optional[str]:
+
+def extract_cert_token() -> str | None:
     """Extracts the default API token embedded in ~/.cloudflared/cert.pem."""
     if not os.path.exists(CERT_PATH):
         return None
     try:
         with open(CERT_PATH, "r") as f:
             content = f.read()
-        match = re.search(r"-----BEGIN ARGO TUNNEL TOKEN-----\s*([A-Za-z0-9+/=]+)\s*-----END ARGO TUNNEL TOKEN-----", content)
+        match = re.search(
+            r"-----BEGIN ARGO TUNNEL TOKEN-----\s*([A-Za-z0-9+/=]+)\s*-----END ARGO TUNNEL TOKEN-----",
+            content,
+        )
         if match:
             raw_b64 = match.group(1).strip()
             data = json.loads(base64.b64decode(raw_b64).decode("utf-8"))
@@ -39,7 +47,8 @@ def extract_cert_token() -> Optional[str]:
         pass
     return None
 
-def get_api_token(args_token: Optional[str] = None) -> Optional[str]:
+
+def get_api_token(args_token: str | None = None) -> str | None:
     """Retrieves Cloudflare API token from arguments, env, secrets file, or cert."""
     if args_token:
         return args_token
@@ -58,21 +67,23 @@ def get_api_token(args_token: Optional[str] = None) -> Optional[str]:
             pass
     return extract_cert_token()
 
-def query_cloudflare_users_and_logs(api_token: str) -> Dict[str, Any]:
+
+def query_cloudflare_users_and_logs(api_token: str) -> dict[str, Any]:
     """Queries Cloudflare Zero Trust Access Users and Access Request logs."""
     results = {"users": [], "logs": [], "apps": []}
     try:
         import urllib.request
+
         headers = {
             "Authorization": f"Bearer {api_token}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
-        
+
         # 1. Query Zero Trust Users
         try:
             req_users = urllib.request.Request(
                 f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/access/users",
-                headers=headers
+                headers=headers,
             )
             with urllib.request.urlopen(req_users, timeout=10) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
@@ -84,7 +95,7 @@ def query_cloudflare_users_and_logs(api_token: str) -> Dict[str, Any]:
         try:
             req_logs = urllib.request.Request(
                 f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/access/logs/access_requests?limit=100",
-                headers=headers
+                headers=headers,
             )
             with urllib.request.urlopen(req_logs, timeout=10) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
@@ -96,19 +107,20 @@ def query_cloudflare_users_and_logs(api_token: str) -> Dict[str, Any]:
         try:
             req_apps = urllib.request.Request(
                 f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/access/apps",
-                headers=headers
+                headers=headers,
             )
             with urllib.request.urlopen(req_apps, timeout=10) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 results["apps"] = data.get("result", [])
         except Exception:
             pass
-            
+
     except Exception:
         pass
     return results
 
-def scan_local_ledgers() -> Dict[str, Dict[str, Any]]:
+
+def scan_local_ledgers() -> dict[str, dict[str, Any]]:
     """Scans local journal and foyer ledgers for unique user emails and latest timestamps."""
     results = {}
 
@@ -123,17 +135,32 @@ def scan_local_ledgers() -> Dict[str, Dict[str, Any]]:
                     try:
                         entry = json.loads(line)
                         ts = entry.get("ts")
-                        dt = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc) if ts else None
+                        dt = (
+                            datetime.datetime.fromtimestamp(
+                                ts, tz=datetime.timezone.utc
+                            )
+                            if ts
+                            else None
+                        )
                         text = entry.get("dialogue", "")
                         for email in EMAIL_REGEX.findall(text):
                             if any(d in email.lower() for d in EXCLUDED_DOMAINS):
                                 continue
-                            if email not in results or (dt and (results[email]["latest_login"] is None or dt > results[email]["latest_login"])):
+                            if email not in results or (
+                                dt
+                                and (
+                                    results[email]["latest_login"] is None
+                                    or dt > results[email]["latest_login"]
+                                )
+                            ):
                                 results[email] = {
                                     "email": email,
                                     "latest_login": dt,
                                     "source": "journal_ledger.jsonl",
-                                    "occurrences": results.get(email, {}).get("occurrences", 0) + 1
+                                    "occurrences": results.get(email, {}).get(
+                                        "occurrences", 0
+                                    )
+                                    + 1,
                                 }
                             else:
                                 results[email]["occurrences"] += 1
@@ -161,7 +188,7 @@ def scan_local_ledgers() -> Dict[str, Dict[str, Any]]:
                                     "email": email,
                                     "latest_login": None,
                                     "source": "foyer_queue.jsonl",
-                                    "occurrences": 1
+                                    "occurrences": 1,
                                 }
                             else:
                                 results[email]["occurrences"] += 1
@@ -172,9 +199,14 @@ def scan_local_ledgers() -> Dict[str, Dict[str, Any]]:
 
     return results
 
+
 def main():
-    parser = argparse.ArgumentParser(description="List unique logins and access history on jason-lab.dev")
-    parser.add_argument("--api-token", help="Cloudflare API Token with Access Audit read permissions")
+    parser = argparse.ArgumentParser(
+        description="List unique logins and access history on jason-lab.dev"
+    )
+    parser.add_argument(
+        "--api-token", help="Cloudflare API Token with Access Audit read permissions"
+    )
     parser.add_argument("--json", action="store_true", help="Output raw JSON format")
     args = parser.parse_args()
 
@@ -192,7 +224,9 @@ def main():
         dt = None
         if last_login_str:
             try:
-                dt = datetime.datetime.fromisoformat(last_login_str.replace("Z", "+00:00"))
+                dt = datetime.datetime.fromisoformat(
+                    last_login_str.replace("Z", "+00:00")
+                )
             except Exception:
                 pass
         if u_email:
@@ -201,12 +235,17 @@ def main():
                     "email": u_email,
                     "latest_login": dt,
                     "source": "Cloudflare Zero Trust User Registry",
-                    "occurrences": 1
+                    "occurrences": 1,
                 }
             else:
-                if dt and (local_logins[u_email]["latest_login"] is None or dt > local_logins[u_email]["latest_login"]):
+                if dt and (
+                    local_logins[u_email]["latest_login"] is None
+                    or dt > local_logins[u_email]["latest_login"]
+                ):
                     local_logins[u_email]["latest_login"] = dt
-                local_logins[u_email]["source"] = f"{local_logins[u_email]['source']} + CF User Registry"
+                local_logins[u_email][
+                    "source"
+                ] = f"{local_logins[u_email]['source']} + CF User Registry"
 
     # Merge Cloudflare request logs
     for log_item in cf_data.get("logs", []):
@@ -222,10 +261,13 @@ def main():
                     "email": user_email,
                     "latest_login": dt,
                     "source": "Cloudflare Zero Trust Access Logs",
-                    "occurrences": 1
+                    "occurrences": 1,
                 }
             else:
-                if dt and (local_logins[user_email]["latest_login"] is None or dt > local_logins[user_email]["latest_login"]):
+                if dt and (
+                    local_logins[user_email]["latest_login"] is None
+                    or dt > local_logins[user_email]["latest_login"]
+                ):
                     local_logins[user_email]["latest_login"] = dt
                 local_logins[user_email]["occurrences"] += 1
 
@@ -234,13 +276,15 @@ def main():
             "users": {
                 k: {
                     "email": v["email"],
-                    "latest_login": v["latest_login"].isoformat() if v["latest_login"] else None,
+                    "latest_login": (
+                        v["latest_login"].isoformat() if v["latest_login"] else None
+                    ),
                     "source": v["source"],
-                    "occurrences": v["occurrences"]
+                    "occurrences": v["occurrences"],
                 }
                 for k, v in local_logins.items()
             },
-            "apps": cf_data.get("apps", [])
+            "apps": cf_data.get("apps", []),
         }
         print(json.dumps(serializable, indent=2))
         return
@@ -249,7 +293,9 @@ def main():
     print("🔒 jason-lab.dev Unique User Logins & Zero Trust Access Audit")
     print(f"Cloudflare Account ID: {CF_ACCOUNT_ID} | Zone: {CF_ZONE_ID}")
     if token:
-        print("Auth Status: Authenticated via Bearer API Token (Cloudflare REST Connected)")
+        print(
+            "Auth Status: Authenticated via Bearer API Token (Cloudflare REST Connected)"
+        )
     else:
         print("Auth Status: Unauthenticated / Local Ledger Traces Only")
     print("=" * 85)
@@ -257,12 +303,25 @@ def main():
         print("No user logins detected.")
         return
 
-    print(f"{'Email Address':<32} | {'Latest Login (UTC)':<20} | {'Hits':<5} | {'Source'}")
+    print(
+        f"{'Email Address':<32} | {'Latest Login (UTC)':<20} | {'Hits':<5} | {'Source'}"
+    )
     print("-" * 85)
-    for email, data in sorted(local_logins.items(), key=lambda x: str(x[1]["latest_login"] or ""), reverse=True):
-        latest_str = data["latest_login"].strftime("%Y-%m-%d %H:%M:%S") if data["latest_login"] else "Unknown / Historical"
-        print(f"{email:<32} | {latest_str:<20} | {data['occurrences']:<5} | {data['source']}")
+    for email, data in sorted(
+        local_logins.items(),
+        key=lambda x: str(x[1]["latest_login"] or ""),
+        reverse=True,
+    ):
+        latest_str = (
+            data["latest_login"].strftime("%Y-%m-%d %H:%M:%S")
+            if data["latest_login"]
+            else "Unknown / Historical"
+        )
+        print(
+            f"{email:<32} | {latest_str:<20} | {data['occurrences']:<5} | {data['source']}"
+        )
     print("=" * 85)
+
 
 if __name__ == "__main__":
     main()

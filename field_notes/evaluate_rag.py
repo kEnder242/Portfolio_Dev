@@ -20,8 +20,12 @@ from datetime import datetime, timezone
 # --- Path Resolution ---
 HOME = os.path.expanduser("~")
 LAB_SRC = os.path.join(HOME, "Dev_Lab", "HomeLabAI", "src")
-CONFIG_PATH = os.path.join(HOME, "Dev_Lab", "HomeLabAI", "config", "validation_anchors.json")
-LEDGER_PATH = os.path.join(HOME, "Dev_Lab", "Portfolio_Dev", "field_notes", "data", "validation_ledger.jsonl")
+CONFIG_PATH = os.path.join(
+    HOME, "Dev_Lab", "HomeLabAI", "config", "validation_anchors.json"
+)
+LEDGER_PATH = os.path.join(
+    HOME, "Dev_Lab", "Portfolio_Dev", "field_notes", "data", "validation_ledger.jsonl"
+)
 
 # Ensure we can import the ArchiveNode module
 sys.path.insert(0, LAB_SRC)
@@ -48,7 +52,9 @@ def local_scoring(kw_result: dict) -> dict:
     return {
         "relevance": round(recall, 3),
         "coverage": round(coverage, 3),
-        "issues": [] if verdict == "PASS" else [f"Recall {recall:.1%} below 0.75 threshold"],
+        "issues": (
+            [] if verdict == "PASS" else [f"Recall {recall:.1%} below 0.75 threshold"]
+        ),
         "verdict": verdict,
     }
 
@@ -163,12 +169,12 @@ def evaluate_keywords(context_text: str, expected_keywords: list[str]) -> dict:
 
 def append_ledger_atomic(entry: dict) -> None:
     """Append a JSON line to the validation ledger.
-    
+
     Uses standard robust append to commit the line.
     """
     os.makedirs(os.path.dirname(LEDGER_PATH), exist_ok=True)
     line = json.dumps(entry, default=str) + "\n"
-    
+
     with open(LEDGER_PATH, "a") as f:
         f.write(line)
 
@@ -223,7 +229,9 @@ async def evaluate_single_anchor(anchor: dict, mode: str = "vector") -> dict:
     recall = kw_result["keyword_recall"]
     hit_list = [kw for kw, found in kw_result["keyword_results"].items() if found]
     miss_list = [kw for kw, found in kw_result["keyword_results"].items() if not found]
-    print(f"  KEYWORD RECALL: {recall:.2%} ({kw_result['keyword_hits']}/{kw_result['keyword_total']})")
+    print(
+        f"  KEYWORD RECALL: {recall:.2%} ({kw_result['keyword_hits']}/{kw_result['keyword_total']})"
+    )
     if hit_list:
         print(f"  HITS: {hit_list}")
     if miss_list:
@@ -242,7 +250,8 @@ async def evaluate_single_anchor(anchor: dict, mode: str = "vector") -> dict:
 
     # Generate unique run ID and save diagnostic details decoupled
     import hashlib
-    query_hash = hashlib.md5(query.encode('utf-8')).hexdigest()[:8]
+
+    query_hash = hashlib.md5(query.encode("utf-8")).hexdigest()[:8]
     run_id = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{query_hash}"
 
     # Save the detailed diagnostic logs using Atomic File Swap Protocol
@@ -254,11 +263,12 @@ async def evaluate_single_anchor(anchor: dict, mode: str = "vector") -> dict:
         "expected_keywords": expected_keywords,
         "keyword_results": kw_result["keyword_results"],
         "audit_source": audit_source,
-        "audit_result": audit_result
+        "audit_result": audit_result,
     }
 
     # Atomic write to rag_runs directory
     from infra.atomic_io import atomic_write_json
+
     run_file_path = os.path.join(rag_runs_dir, f"{run_id}.json")
     atomic_write_json(run_file_path, run_payload)
     print(f"  Diagnostic log written to {run_file_path}")
@@ -341,10 +351,12 @@ async def main(mode: str = "vector"):
 
     for i, r in enumerate(results, 1):
         print(f"\n  [{i}] {r['query'][:60]}...")
-        print(f"      Domain: {r['domain']}  Collection: {r['target_collection']}  "
-              f"Recall: {r['keyword_recall']:.0%}  "
-              f"Verdict: {r.get('verdict', '?')}  "
-              f"Time: {r['retrieval_time_s']:.1f}s")
+        print(
+            f"      Domain: {r['domain']}  Collection: {r['target_collection']}  "
+            f"Recall: {r['keyword_recall']:.0%}  "
+            f"Verdict: {r.get('verdict', '?')}  "
+            f"Time: {r['retrieval_time_s']:.1f}s"
+        )
 
     print(f"\n{'='*70}")
     print(f"  Results appended to: {LEDGER_PATH}")
@@ -353,12 +365,13 @@ async def main(mode: str = "vector"):
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(description="RAG Evaluation Pipeline")
     parser.add_argument(
         "--mode",
         choices=["vector", "live"],
         default="vector",
-        help="Scoring mode: 'vector' for local deterministic [FEAT-454], 'live' for KENDER LLM (default: vector)"
+        help="Scoring mode: 'vector' for local deterministic [FEAT-454], 'live' for KENDER LLM (default: vector)",
     )
     args = parser.parse_args()
     asyncio.run(main(mode=args.mode))

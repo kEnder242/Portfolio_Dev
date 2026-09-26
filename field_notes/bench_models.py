@@ -1,24 +1,32 @@
 #!/usr/bin/env python3
 # [FEAT-495] Dynamic Auto-Discovery Federated Silicon Benchmark Engine
+import json
 import os
 import sys
-import json
 import time
+
 import requests
+
 try:
     from prometheus_client import Gauge, start_http_server
+
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
+
     class DummyGauge:
         def labels(self, **kwargs):
             return self
+
         def set(self, val):
             pass
+
     def Gauge(*args, **kwargs):
         return DummyGauge()
+
     def start_http_server(port):
         pass
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CACHE_FILE = os.path.join(BASE_DIR, "benchmarks_cache.json")
@@ -28,17 +36,17 @@ PROMPT = "Explain the difference between PCIe GPU memory and Apple Unified Memor
 moe_model_ttft_seconds = Gauge(
     "moe_model_ttft_seconds",
     "Model Time to First Token in seconds",
-    ["model", "seat", "engine"]
+    ["model", "seat", "engine"],
 )
 moe_model_throughput_tokens_per_second = Gauge(
     "moe_model_throughput_tokens_per_second",
     "Model throughput in tokens per second",
-    ["model", "seat", "engine"]
+    ["model", "seat", "engine"],
 )
 moe_model_itl_seconds = Gauge(
     "moe_model_itl_seconds",
     "Model inter-token latency in seconds",
-    ["model", "seat", "engine"]
+    ["model", "seat", "engine"],
 )
 
 # Known Seats & Endpoints
@@ -55,7 +63,7 @@ SEATS_CONFIG = {
         "role": "Fast Scaffolding & Surgical Patcher",
         "context_window": "65k (65,536)",
         "cost_per_1m": 0.008,
-        "reasoning_ratio": 0.85
+        "reasoning_ratio": 0.85,
     },
     "kender_4090": {
         "display_name": "Windows 4090RTX (Port 11434)",
@@ -69,7 +77,7 @@ SEATS_CONFIG = {
         "role": "High-Throughput Interactive Coding",
         "context_window": "32k (32,768)",
         "cost_per_1m": 0.095,
-        "reasoning_ratio": 0.25
+        "reasoning_ratio": 0.25,
     },
     "z87_2080ti": {
         "display_name": "Linux 2080ti (Port 8088)",
@@ -83,7 +91,7 @@ SEATS_CONFIG = {
         "role": "Sensory Foyer & Multi-LoRA Engine",
         "context_window": "8k (8,192)",
         "cost_per_1m": 0.035,
-        "reasoning_ratio": 0.10
+        "reasoning_ratio": 0.10,
     },
     "cloud_swarm": {
         "display_name": "Cloud Dynamic Free Swarm",
@@ -97,8 +105,8 @@ SEATS_CONFIG = {
         "role": "Swarm Fallback & Cross-Review",
         "context_window": "128k (128,000)",
         "cost_per_1m": 0.00,
-        "reasoning_ratio": 0.40
-    }
+        "reasoning_ratio": 0.40,
+    },
 }
 
 # Fallbacks for offline nodes
@@ -109,7 +117,7 @@ FALLBACKS = {
         "warm_ttft_ms": 910.0,
         "throughput": 16.07,
         "itl_ms": 62.2,
-        "status": "offline_fallback"
+        "status": "offline_fallback",
     },
     "kender_4090": {
         "model": "qwen2.5-coder:14b",
@@ -117,7 +125,7 @@ FALLBACKS = {
         "warm_ttft_ms": 280.0,
         "throughput": 48.5,
         "itl_ms": 20.6,
-        "status": "offline_fallback"
+        "status": "offline_fallback",
     },
     "z87_2080ti": {
         "model": "Llama-3.2-3B-AWQ",
@@ -125,7 +133,7 @@ FALLBACKS = {
         "warm_ttft_ms": 180.0,
         "throughput": 42.0,
         "itl_ms": 23.8,
-        "status": "offline_fallback"
+        "status": "offline_fallback",
     },
     "cloud_swarm": {
         "model": "openrouter/free",
@@ -133,20 +141,23 @@ FALLBACKS = {
         "warm_ttft_ms": 450.0,
         "throughput": 35.0,
         "itl_ms": 28.5,
-        "status": "online"
-    }
+        "status": "online",
+    },
 }
+
 
 def is_socket_up(host, port, timeout=0.8):
     import socket
+
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(timeout)
-        ok = (s.connect_ex((host, port)) == 0)
+        ok = s.connect_ex((host, port)) == 0
         s.close()
         return ok
     except Exception:
         return False
+
 
 def discover_and_benchmark_openai_node(seat_id, cfg):
     host, port = cfg["host"], cfg["port"]
@@ -169,7 +180,7 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
         "messages": [{"role": "user", "content": PROMPT}],
         "max_tokens": 60,
         "temperature": 0.1,
-        "stream": True
+        "stream": True,
     }
 
     t0 = time.perf_counter()
@@ -185,10 +196,12 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
                 try:
                     err_data = json.loads(line_str)
                     if "error" in err_data:
-                        raise RuntimeError(f"Engine Error: {err_data.get('error', {}).get('message', line_str)}")
+                        raise RuntimeError(
+                            f"Engine Error: {err_data.get('error', {}).get('message', line_str)}"
+                        )
                 except Exception as ex:
-                    if isinstance(ex, RuntimeError): raise ex
-                    pass
+                    if isinstance(ex, RuntimeError):
+                        raise ex
             if line_str == "data: [DONE]":
                 break
             if line_str.startswith("data: "):
@@ -203,8 +216,8 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
                             ttft = time.perf_counter() - t0
                         tokens += 1
                 except Exception as ex:
-                    if isinstance(ex, RuntimeError): raise ex
-                    pass
+                    if isinstance(ex, RuntimeError):
+                        raise ex
 
     total_time = time.perf_counter() - t0
     gen_time = total_time - (ttft or 0)
@@ -217,8 +230,9 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
         "warm_ttft_ms": (ttft or 1.0) * 1000.0,
         "throughput": throughput,
         "itl_ms": itl_ms,
-        "status": "online"
+        "status": "online",
     }
+
 
 def discover_and_benchmark_ollama_node(seat_id, cfg):
     host, port = cfg["host"], cfg["port"]
@@ -231,7 +245,7 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
     models = resp.json().get("models", [])
     if not models:
         raise ValueError("No models found in Ollama tags")
-    
+
     # Prioritize 14B coder over toy 1.5B models
     tag_names = [m.get("name", "") for m in models]
     if "qwen2.5-coder:14b" in tag_names:
@@ -246,7 +260,7 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
         "model": model_name,
         "prompt": PROMPT,
         "stream": True,
-        "options": {"temperature": 0.1, "num_predict": 60}
+        "options": {"temperature": 0.1, "num_predict": 60},
     }
 
     t0 = time.perf_counter()
@@ -276,13 +290,14 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
         "warm_ttft_ms": (ttft or 0.3) * 1000.0,
         "throughput": throughput,
         "itl_ms": itl_ms,
-        "status": "online"
+        "status": "online",
     }
+
 
 def run_sweep():
     print("=== [FEAT-495] Running Dynamic Federated Benchmark Sweep ===")
     sweep_results = []
-    
+
     for seat_id, cfg in SEATS_CONFIG.items():
         print(f"[*] Probing {cfg['display_name']}...")
         metrics = None
@@ -293,20 +308,32 @@ def run_sweep():
                 metrics = discover_and_benchmark_ollama_node(seat_id, cfg)
             else:
                 metrics = FALLBACKS[seat_id]
-            print(f"   ✔ [ONLINE] Model: {metrics['model']} | TTFT: {metrics['warm_ttft_ms']:.1f}ms | Throughput: {metrics['throughput']:.2f} tok/s")
+            print(
+                f"   ✔ [ONLINE] Model: {metrics['model']} | TTFT: {metrics['warm_ttft_ms']:.1f}ms | Throughput: {metrics['throughput']:.2f} tok/s"
+            )
         except Exception as e:
             print(f"   ✖ [OFFLINE/FALLBACK] Reason: {e}")
             metrics = FALLBACKS[seat_id]
 
         power_w = cfg["power_watts"]
         tp = metrics["throughput"]
-        tokens_per_joule = round(tp / power_w, 3) if (power_w is not None and power_w > 0 and tp > 0) else None
-        
+        tokens_per_joule = (
+            round(tp / power_w, 3)
+            if (power_w is not None and power_w > 0 and tp > 0)
+            else None
+        )
+
         if tokens_per_joule and tokens_per_joule > 0:
             kwh_per_1m = (1000000.0 / tokens_per_joule) / 3600000.0
             electricity_cost_per_1m = round(kwh_per_1m * 0.15, 4)
-            cloud_multiplier = round(3.00 / electricity_cost_per_1m, 1) if electricity_cost_per_1m > 0 else 1.0
-            cloud_savings_pct = round(100.0 - (electricity_cost_per_1m / 3.00 * 100.0), 1)
+            cloud_multiplier = (
+                round(3.00 / electricity_cost_per_1m, 1)
+                if electricity_cost_per_1m > 0
+                else 1.0
+            )
+            cloud_savings_pct = round(
+                100.0 - (electricity_cost_per_1m / 3.00 * 100.0), 1
+            )
         else:
             electricity_cost_per_1m = None
             cloud_multiplier = None
@@ -334,26 +361,33 @@ def run_sweep():
             "cloud_multiplier": cloud_multiplier,
             "cloud_savings_pct": cloud_savings_pct,
             "reasoning_token_ratio": cfg["reasoning_ratio"],
-            "status": metrics["status"]
+            "status": metrics["status"],
         }
         sweep_results.append(item)
 
         # Expose to Prometheus
-        moe_model_ttft_seconds.labels(model=metrics["model"], seat=seat_id, engine=cfg["engine"]).set(metrics["warm_ttft_ms"] / 1000.0)
-        moe_model_throughput_tokens_per_second.labels(model=metrics["model"], seat=seat_id, engine=cfg["engine"]).set(metrics["throughput"])
-        moe_model_itl_seconds.labels(model=metrics["model"], seat=seat_id, engine=cfg["engine"]).set(metrics["itl_ms"] / 1000.0)
+        moe_model_ttft_seconds.labels(
+            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
+        ).set(metrics["warm_ttft_ms"] / 1000.0)
+        moe_model_throughput_tokens_per_second.labels(
+            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
+        ).set(metrics["throughput"])
+        moe_model_itl_seconds.labels(
+            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
+        ).set(metrics["itl_ms"] / 1000.0)
 
     # Save to benchmarks_cache.json atomically
     cache_payload = {
         "timestamp": time.time(),
         "date_str": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "results": sweep_results
+        "results": sweep_results,
     }
     tmp_path = CACHE_FILE + ".tmp"
     with open(tmp_path, "w") as f:
         json.dump(cache_payload, f, indent=2)
     os.replace(tmp_path, CACHE_FILE)
     print(f"✅ Atomically updated {CACHE_FILE} with live sweep results!")
+
 
 def main():
     if "--no-serve" not in sys.argv:
@@ -363,6 +397,7 @@ def main():
         except Exception as e:
             print(f"⚠️ Prometheus port 8011 busy or failed: {e}")
     run_sweep()
+
 
 if __name__ == "__main__":
     main()

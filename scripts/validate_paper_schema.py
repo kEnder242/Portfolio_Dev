@@ -20,9 +20,10 @@ PAPERS_DIR = REPO_ROOT / "papers"
 MANIFEST_FILE = PAPERS_DIR / "manifest.json"
 
 CITATION_PATTERN = re.compile(
-    r'^(PHL|DISC|FEAT|BKM|PROTO|ARXIV|GEM|WIS|LAB)-[A-Za-z0-9_\.\-]+$|^ARXIV:\d+\.\d+$|^arXiv:\d+\.\d+$|^doi:[A-Za-z0-9_\.\-/]+$',
-    re.IGNORECASE
+    r"^(PHL|DISC|FEAT|BKM|PROTO|ARXIV|GEM|WIS|LAB)-[A-Za-z0-9_\.\-]+$|^ARXIV:\d+\.\d+$|^arXiv:\d+\.\d+$|^doi:[A-Za-z0-9_\.\-/]+$",
+    re.IGNORECASE,
 )
+
 
 def validate_bone_collections(b_list, tier_name, node_id, errors, bone_ids):
     """Validate a list of bone collection objects attached to a specific tier."""
@@ -32,27 +33,40 @@ def validate_bone_collections(b_list, tier_name, node_id, errors, bone_ids):
 
     for b_idx, bone in enumerate(b_list):
         if not isinstance(bone, dict):
-            errors.append(f"{tier_name} '{node_id}' bone collection index {b_idx} must be a dict.")
+            errors.append(
+                f"{tier_name} '{node_id}' bone collection index {b_idx} must be a dict."
+            )
             continue
         b_id = bone.get("id")
         b_name = bone.get("name")
         if not b_id:
-            errors.append(f"{tier_name} '{node_id}' bone collection index {b_idx} missing 'id'.")
+            errors.append(
+                f"{tier_name} '{node_id}' bone collection index {b_idx} missing 'id'."
+            )
         elif b_id in bone_ids:
-            errors.append(f"Duplicate bone collection id: '{b_id}' in {tier_name} '{node_id}'.")
+            errors.append(
+                f"Duplicate bone collection id: '{b_id}' in {tier_name} '{node_id}'."
+            )
         else:
             bone_ids.add(b_id)
 
         if not b_name:
-            errors.append(f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' missing 'name'.")
+            errors.append(
+                f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' missing 'name'."
+            )
 
         b_cites = bone.get("citations", [])
         if not isinstance(b_cites, list):
-            errors.append(f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' citations must be a list.")
+            errors.append(
+                f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' citations must be a list."
+            )
         else:
             for c in b_cites:
                 if not CITATION_PATTERN.match(str(c)):
-                    errors.append(f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' invalid citation syntax: '{c}'.")
+                    errors.append(
+                        f"{tier_name} '{node_id}' bone collection '{b_id or b_idx}' invalid citation syntax: '{c}'."
+                    )
+
 
 def validate_citations_list(c_list, tier_name, node_id, errors, field_name="citations"):
     """Validate a list of citation strings."""
@@ -61,7 +75,10 @@ def validate_citations_list(c_list, tier_name, node_id, errors, field_name="cita
         return
     for c in c_list:
         if not CITATION_PATTERN.match(str(c)):
-            errors.append(f"{tier_name} '{node_id}' invalid {field_name} syntax: '{c}'.")
+            errors.append(
+                f"{tier_name} '{node_id}' invalid {field_name} syntax: '{c}'."
+            )
+
 
 def validate_paper_dict(data, source_name="paper"):
     """Validate in-memory paper dict against schema invariants."""
@@ -79,11 +96,17 @@ def validate_paper_dict(data, source_name="paper"):
 
     # Paper-level bone collections & citations
     if "bone_collections" in data:
-        validate_bone_collections(data["bone_collections"], "Paper", paper_id, errors, bone_ids)
+        validate_bone_collections(
+            data["bone_collections"], "Paper", paper_id, errors, bone_ids
+        )
     if "citations" in data:
-        validate_citations_list(data["citations"], "Paper", paper_id, errors, "citations")
+        validate_citations_list(
+            data["citations"], "Paper", paper_id, errors, "citations"
+        )
     if "pending_citations" in data:
-        validate_citations_list(data["pending_citations"], "Paper", paper_id, errors, "pending_citations")
+        validate_citations_list(
+            data["pending_citations"], "Paper", paper_id, errors, "pending_citations"
+        )
 
     sections = data.get("sections", [])
     if not isinstance(sections, list) or len(sections) == 0:
@@ -105,11 +128,17 @@ def validate_paper_dict(data, source_name="paper"):
 
         # Section-level bone collections & citations
         if "bone_collections" in sec:
-            validate_bone_collections(sec["bone_collections"], "Section", s_id, errors, bone_ids)
+            validate_bone_collections(
+                sec["bone_collections"], "Section", s_id, errors, bone_ids
+            )
         if "citations" in sec:
-            validate_citations_list(sec["citations"], "Section", s_id, errors, "citations")
+            validate_citations_list(
+                sec["citations"], "Section", s_id, errors, "citations"
+            )
         if "pending_citations" in sec:
-            validate_citations_list(sec["pending_citations"], "Section", s_id, errors, "pending_citations")
+            validate_citations_list(
+                sec["pending_citations"], "Section", s_id, errors, "pending_citations"
+            )
 
         paragraphs = sec.get("paragraphs", [])
         if not isinstance(paragraphs, list):
@@ -128,19 +157,32 @@ def validate_paper_dict(data, source_name="paper"):
 
             # Paragraph-level bone collections & citations
             if "bone_collections" in par:
-                validate_bone_collections(par["bone_collections"], "Paragraph", p_id, errors, bone_ids)
+                validate_bone_collections(
+                    par["bone_collections"], "Paragraph", p_id, errors, bone_ids
+                )
             if "citations" in par:
-                validate_citations_list(par["citations"], "Paragraph", p_id, errors, "citations")
+                validate_citations_list(
+                    par["citations"], "Paragraph", p_id, errors, "citations"
+                )
             if "pending_citations" in par:
-                validate_citations_list(par["pending_citations"], "Paragraph", p_id, errors, "pending_citations")
+                validate_citations_list(
+                    par["pending_citations"],
+                    "Paragraph",
+                    p_id,
+                    errors,
+                    "pending_citations",
+                )
 
             # Check text presence
             text_body = par.get("cached_words") or par.get("text")
             if text_body is None:
-                errors.append(f"Paragraph '{p_id}' missing text body ('cached_words' or 'text').")
+                errors.append(
+                    f"Paragraph '{p_id}' missing text body ('cached_words' or 'text')."
+                )
 
-    passed = (len(errors) == 0)
+    passed = len(errors) == 0
     return passed, errors
+
 
 def validate_paper(paper_path):
     print(f"[*] Validating {paper_path}...")
@@ -165,9 +207,20 @@ def validate_paper(paper_path):
     else:
         sections = data.get("sections", [])
         par_count = sum(len(s.get("paragraphs", [])) for s in sections)
-        bone_count = len(data.get("bone_collections", [])) + sum(len(s.get("bone_collections", [])) for s in sections) + sum(len(p.get("bone_collections", [])) for s in sections for p in s.get("paragraphs", []))
-        print(f"✅ Schema validation PASSED for {p.name} ({len(sections)} sections, {par_count} paragraphs, {bone_count} bone collections).")
+        bone_count = (
+            len(data.get("bone_collections", []))
+            + sum(len(s.get("bone_collections", [])) for s in sections)
+            + sum(
+                len(p.get("bone_collections", []))
+                for s in sections
+                for p in s.get("paragraphs", [])
+            )
+        )
+        print(
+            f"✅ Schema validation PASSED for {p.name} ({len(sections)} sections, {par_count} paragraphs, {bone_count} bone collections)."
+        )
         return True
+
 
 def main():
     if len(sys.argv) > 1:
@@ -199,6 +252,7 @@ def main():
     if not all_passed:
         sys.exit(1)
     print("\nAll paper schemas verified successfully.")
+
 
 if __name__ == "__main__":
     main()

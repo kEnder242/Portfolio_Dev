@@ -41,11 +41,13 @@ def load_cards(data):
         schema = data.get("schema", {})
         cards = data.get("cards", [])
         if not cards and "origin" in schema:
-            cards = [{
-                "title": schema.get("synthesis", {}).get("title", "Wisdom Card"),
-                "origin": schema.get("origin", {}),
-                "synthesis": schema.get("synthesis", {}),
-            }]
+            cards = [
+                {
+                    "title": schema.get("synthesis", {}).get("title", "Wisdom Card"),
+                    "origin": schema.get("origin", {}),
+                    "synthesis": schema.get("synthesis", {}),
+                }
+            ]
         return cards, schema
     return [], {}
 
@@ -63,7 +65,7 @@ def load_buckets():
         {"id": "bucket_2_backpressure", "name": "Stability, Feedback & Backpressure"},
         {"id": "bucket_3_foil", "name": "Human-AI Interface & The Perfect Foil"},
         {"id": "bucket_4_rigor", "name": "Engineering Rigor & Verification Vectors"},
-        {"id": "bucket_5_infra", "name": "Sovereign Architecture & Federated Silicon"}
+        {"id": "bucket_5_infra", "name": "Sovereign Architecture & Federated Silicon"},
     ]
 
 
@@ -95,13 +97,18 @@ def render_bucket_controls(bucket_id, buckets, is_rw):
     for b in buckets:
         bid = b.get("id", "")
         bname = b.get("name", bid)
-        sel = ' selected' if bid == bucket_id else ''
+        sel = " selected" if bid == bucket_id else ""
         if sel:
             found = True
-        options.append(f'<option value="{escape_html(bid)}"{sel}>{escape_html(bname)}</option>')
+        options.append(
+            f'<option value="{escape_html(bid)}"{sel}>{escape_html(bname)}</option>'
+        )
     if not found and bucket_id:
-        options.insert(0, f'<option value="{escape_html(bucket_id)}" selected>{escape_html(bucket_id)}</option>')
-    
+        options.insert(
+            0,
+            f'<option value="{escape_html(bucket_id)}" selected>{escape_html(bucket_id)}</option>',
+        )
+
     options_html = "".join(options)
     badge_html = f'<span class="bucket-badge" data-bucket-id="{escape_html(bucket_id)}">{escape_html(bucket_id if bucket_id else "No Bucket")}</span>'
     select_html = f'<select class="bucket-select" style="display:none;" data-field="bucket_id">{options_html}</select>'
@@ -113,10 +120,12 @@ def render_card(card, index, buckets, is_rw=True):
     theme = card.get("theme") or "Wisdom"
     meta = card.get("metadata", {}) or {}
     bucket_id = meta.get("bucket_id") or card.get("bucket_id", "")
-    
+
     origin = card.get("origin", {}) or {}
     synthesis = card.get("synthesis", {}) or {}
-    verbatim = origin.get("text", "") or origin.get("verbatim", "") or card.get("verbatim", "")
+    verbatim = (
+        origin.get("text", "") or origin.get("verbatim", "") or card.get("verbatim", "")
+    )
     title = card.get("title") or synthesis.get("title") or f"Wisdom Card {index}"
     narrative = synthesis.get("narrative_context", "")
     review_notes = synthesis.get("review_notes", "")
@@ -180,7 +189,9 @@ def render_card(card, index, buckets, is_rw=True):
 
 
 def render_cards(cards, buckets, is_rw=True):
-    return "\n".join(render_card(card, i + 1, buckets, is_rw=is_rw) for i, card in enumerate(cards))
+    return "\n".join(
+        render_card(card, i + 1, buckets, is_rw=is_rw) for i, card in enumerate(cards)
+    )
 
 
 def ensure_symlink():
@@ -234,31 +245,33 @@ def build_page():
                 cid = item.get("id", "DISC-000")
                 tags = item.get("tags", [])
                 anchors = item.get("code_anchors", [])
-                disc_cards.append({
-                    "id": cid,
-                    "title": item.get("title", cid),
-                    "theme": item.get("lane", "Distillation & Synthesis"),
-                    "origin": {
-                        "author": "jallred",
-                        "text": item.get("summary", ""),
-                        "source": f"{item.get('origin_artifact', 'N/A')} ({item.get('sprint_ref', 'N/A')})",
-                        "immutable": False,
-                        "created_at": item.get("conception_date", "")
-                    },
-                    "synthesis": {
+                disc_cards.append(
+                    {
+                        "id": cid,
                         "title": item.get("title", cid),
-                        "narrative_context": item.get("summary", ""),
-                        "lab_anchors": anchors,
-                        "review_notes": f"Conception: {item.get('conception_date')} | Implemented: {item.get('implementation_date')} | Status: {item.get('status')}",
-                        "last_refined_by": "HUMAN_WORKBENCH",
-                        "refinement_version": 1
-                    },
-                    "metadata": {
-                        "tags": tags,
-                        "status": item.get("status", "MATURE"),
-                        "bucket_id": item.get("bucket_id", "distillation")
+                        "theme": item.get("lane", "Distillation & Synthesis"),
+                        "origin": {
+                            "author": "jallred",
+                            "text": item.get("summary", ""),
+                            "source": f"{item.get('origin_artifact', 'N/A')} ({item.get('sprint_ref', 'N/A')})",
+                            "immutable": False,
+                            "created_at": item.get("conception_date", ""),
+                        },
+                        "synthesis": {
+                            "title": item.get("title", cid),
+                            "narrative_context": item.get("summary", ""),
+                            "lab_anchors": anchors,
+                            "review_notes": f"Conception: {item.get('conception_date')} | Implemented: {item.get('implementation_date')} | Status: {item.get('status')}",
+                            "last_refined_by": "HUMAN_WORKBENCH",
+                            "refinement_version": 1,
+                        },
+                        "metadata": {
+                            "tags": tags,
+                            "status": item.get("status", "MATURE"),
+                            "bucket_id": item.get("bucket_id", "distillation"),
+                        },
                     }
-                })
+                )
             manifest["discovery"] = disc_cards
         except Exception as e:
             print(f"⚠️ Could not load timeline_data.json: {e}")
@@ -1036,7 +1049,9 @@ def build_page():
         f.write(page_html)
 
     ensure_symlink()
-    print(f"✅ Successfully compiled {OUTPUT_HTML} with {len(cards)} card(s) from {DATA_PATH}")
+    print(
+        f"✅ Successfully compiled {OUTPUT_HTML} with {len(cards)} card(s) from {DATA_PATH}"
+    )
 
 
 if __name__ == "__main__":

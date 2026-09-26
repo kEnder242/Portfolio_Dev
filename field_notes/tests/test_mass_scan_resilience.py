@@ -9,9 +9,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import mass_scan
 from mass_scan import (
-    register_pid,
-    check_lock,
     atomic_write_text,
+    check_lock,
+    register_pid,
     wait_for_roundtable_lock,
 )
 

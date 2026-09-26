@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 [FEAT-592] Historical Journal to DNA Manifest Ingestion Bridge (journal_to_dna_bridge.py)
 Purpose: Scans data/journal_ledger.jsonl and historical gem archives for Rank 4/5 entries,
@@ -7,14 +6,14 @@ Purpose: Scans data/journal_ledger.jsonl and historical gem archives for Rank 4/
          into wisdom_data.json and dna_manifest.json without duplicate clobbering.
 """
 
-import os
-import sys
-import json
-import re
-import hashlib
-import datetime
 import argparse
+import datetime
+import hashlib
+import json
 import logging
+import os
+import re
+import sys
 from pathlib import Path
 
 # Paths
@@ -27,7 +26,9 @@ MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
 DNA_BUILD_SCRIPT = BASE_DIR / "dna_forge_build.py"
 CHROMA_SYNC_SCRIPT = BASE_DIR.parent / "sync_chroma_dna.py"
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [JOURNAL->DNA BRIDGE] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [JOURNAL->DNA BRIDGE] %(message)s"
+)
 logger = logging.getLogger("journal_bridge")
 
 
@@ -40,13 +41,43 @@ def get_gem_fingerprint(text: str) -> str:
 def map_theme_and_bucket(text: str, tags: list = None) -> tuple[str, str]:
     """Classifies theme and bucket_id based on keywords."""
     combined = (text + " " + " ".join(tags or [])).lower()
-    if any(k in combined for k in ["security", "rakp", "rmcp", "cve", "auth", "vulnerability", "cert"]):
+    if any(
+        k in combined
+        for k in ["security", "rakp", "rmcp", "cve", "auth", "vulnerability", "cert"]
+    ):
         return "Security & Manageability", "bucket_security_manageability"
-    elif any(k in combined for k in ["peci", "i2c", "ipmi", "sensor", "telemetry", "sideband", "bmc", "hardware"]):
+    elif any(
+        k in combined
+        for k in [
+            "peci",
+            "i2c",
+            "ipmi",
+            "sensor",
+            "telemetry",
+            "sideband",
+            "bmc",
+            "hardware",
+        ]
+    ):
         return "Silicon Validation Methodology", "bucket_silicon_validation"
-    elif any(k in combined for k in ["framework", "automation", "pytest", "script", "library", "tool", "sdk", "api"]):
+    elif any(
+        k in combined
+        for k in [
+            "framework",
+            "automation",
+            "pytest",
+            "script",
+            "library",
+            "tool",
+            "sdk",
+            "api",
+        ]
+    ):
         return "Systems Architecture & Automation", "bucket_systems_architecture"
-    elif any(k in combined for k in ["team", "leadership", "mentorship", "process", "culture", "strategy"]):
+    elif any(
+        k in combined
+        for k in ["team", "leadership", "mentorship", "process", "culture", "strategy"]
+    ):
         return "Engineering Leadership", "bucket_engineering_leadership"
     return "Systems Architecture & Automation", "bucket_systems_architecture"
 
@@ -67,9 +98,17 @@ def extract_title_and_narrative(dialogue: str) -> tuple[str, str, str]:
             evidence = line.replace("Evidence:", "").strip()
 
     # Extract title from finding or trigger
-    clean_finding = re.sub(r"^In \d{4}(-\d{2})*, the milestone was:\s*", "", finding, flags=re.IGNORECASE).strip()
-    title = clean_finding[:80].rstrip(".") if clean_finding else (trigger[:80].rstrip(".") if trigger else "Validation Finding")
-    narrative = clean_finding if clean_finding else (evidence if evidence else dialogue[:200])
+    clean_finding = re.sub(
+        r"^In \d{4}(-\d{2})*, the milestone was:\s*", "", finding, flags=re.IGNORECASE
+    ).strip()
+    title = (
+        clean_finding[:80].rstrip(".")
+        if clean_finding
+        else (trigger[:80].rstrip(".") if trigger else "Validation Finding")
+    )
+    narrative = (
+        clean_finding if clean_finding else (evidence if evidence else dialogue[:200])
+    )
 
     return title, narrative, evidence
 
@@ -123,8 +162,9 @@ def run_bridge(dry_run: bool = False, min_rank: int = 4) -> int:
             if "fingerprint" in dec_info:
                 existing_fps.add(dec_info["fingerprint"])
 
-    logger.info(f"Loaded {len(existing_cards)} existing wisdom cards (Highest ID: WIS-{highest_id_num:03d}, {len(decisions)} tracked decisions).")
-
+    logger.info(
+        f"Loaded {len(existing_cards)} existing wisdom cards (Highest ID: WIS-{highest_id_num:03d}, {len(decisions)} tracked decisions)."
+    )
 
     # 2. Read journal_ledger.jsonl
     newly_harvested = []
@@ -173,34 +213,28 @@ def run_bridge(dry_run: bool = False, min_rank: int = 4) -> int:
                     "source": f"Historical Journal Ledger ({date_str})",
                     "evidence": evidence or "Historical validation telemetry log.",
                     "immutable": False,
-                    "created_at": created_iso
+                    "created_at": created_iso,
                 },
                 "synthesis": {
                     "title": title,
                     "narrative_context": narrative,
-                    "lab_anchors": [
-                        "FEAT-592",
-                        "BKM-060"
-                    ],
+                    "lab_anchors": ["FEAT-592", "BKM-060"],
                     "review_notes": f"Harvested via [FEAT-592] journal_to_dna_bridge from journal_ledger.jsonl (Rank {rank}).",
                     "last_refined_by": "AGY_BRIDGE",
-                    "refinement_version": 1
+                    "refinement_version": 1,
                 },
                 "metadata": {
                     "tags": [
                         bucket_id.replace("bucket_", "").replace("_", "-"),
                         "historical-gem",
-                        f"rank-{rank}"
+                        f"rank-{rank}",
                     ],
-                    "explicit_links": [
-                        "FEAT-592",
-                        "BKM-060"
-                    ],
+                    "explicit_links": ["FEAT-592", "BKM-060"],
                     "aliases": [f"gem_{fp}"],
                     "status": "APPROVED",
                     "bucket_id": bucket_id,
-                    "rank": rank
-                }
+                    "rank": rank,
+                },
             }
 
             existing_fps.add(fp)
@@ -208,14 +242,18 @@ def run_bridge(dry_run: bool = False, min_rank: int = 4) -> int:
             newly_harvested.append(new_card)
             next_seq += 1
 
-    logger.info(f"✨ Bridge Analysis: Identified {len(newly_harvested)} new high-rank candidate DNA cards.")
+    logger.info(
+        f"✨ Bridge Analysis: Identified {len(newly_harvested)} new high-rank candidate DNA cards."
+    )
 
     if not newly_harvested:
         logger.info("No new cards to merge. Wisdom DNA is up to date.")
         return 0
 
     if dry_run:
-        logger.info("[DRY RUN] Would write new cards to wisdom_data.json. Exiting cleanly.")
+        logger.info(
+            "[DRY RUN] Would write new cards to wisdom_data.json. Exiting cleanly."
+        )
         return len(newly_harvested)
 
     # 3. Atomic write to wisdom_data.json
@@ -234,11 +272,19 @@ def run_bridge(dry_run: bool = False, min_rank: int = 4) -> int:
         logger.info("🔨 Triggering dna_forge_build.py to refresh HTML and manifest...")
         try:
             import subprocess
-            res = subprocess.run([py_exec, str(DNA_BUILD_SCRIPT)], capture_output=True, text=True, timeout=60)
+
+            res = subprocess.run(
+                [py_exec, str(DNA_BUILD_SCRIPT)],
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
             if res.returncode == 0:
                 logger.info("✅ dna_forge_build.py completed successfully.")
             else:
-                logger.warning(f"⚠️ dna_forge_build.py returned code {res.returncode}: {res.stderr}")
+                logger.warning(
+                    f"⚠️ dna_forge_build.py returned code {res.returncode}: {res.stderr}"
+                )
         except Exception as e:
             logger.warning(f"⚠️ Error running dna_forge_build.py: {e}")
 
@@ -247,22 +293,40 @@ def run_bridge(dry_run: bool = False, min_rank: int = 4) -> int:
         logger.info("📡 Triggering sync_chroma_dna.py to update vector collections...")
         try:
             import subprocess
-            res = subprocess.run([py_exec, str(CHROMA_SYNC_SCRIPT)], capture_output=True, text=True, timeout=120)
+
+            res = subprocess.run(
+                [py_exec, str(CHROMA_SYNC_SCRIPT)],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
             if res.returncode == 0:
                 logger.info("✅ ChromaDB DNA sync completed successfully.")
             else:
-                logger.warning(f"⚠️ ChromaDB DNA sync returned code {res.returncode}: {res.stderr}")
+                logger.warning(
+                    f"⚠️ ChromaDB DNA sync returned code {res.returncode}: {res.stderr}"
+                )
         except Exception as e:
             logger.warning(f"⚠️ Error running ChromaDB DNA sync: {e}")
 
     return len(newly_harvested)
 
 
-
 def main():
-    parser = argparse.ArgumentParser(description="[FEAT-592] Historical Journal to DNA Ingestion Bridge")
-    parser.add_argument("--dry-run", action="store_true", help="Scan and report candidates without writing files.")
-    parser.add_argument("--min-rank", type=int, default=4, help="Minimum gem rank to ingest (default: 4).")
+    parser = argparse.ArgumentParser(
+        description="[FEAT-592] Historical Journal to DNA Ingestion Bridge"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Scan and report candidates without writing files.",
+    )
+    parser.add_argument(
+        "--min-rank",
+        type=int,
+        default=4,
+        help="Minimum gem rank to ingest (default: 4).",
+    )
     args = parser.parse_args()
 
     count = run_bridge(dry_run=args.dry_run, min_rank=args.min_rank)

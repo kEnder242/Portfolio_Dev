@@ -22,26 +22,88 @@ __UNSLOTH_VERSIONING__
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-from typing import Any, Optional, Union, Callable
-from trl.trainer.online_dpo_trainer import (BaseTrainer, DataLoader, OptimizerNames, Path, SIMPLE_CHAT_TEMPLATE, broadcast_object_list, empty_cache, gather_object, is_flash_attn_2_available, jinja2, logging, maybe_apply_chat_template, profiling_context, seed_worker, textwrap, truncate_right, unwrap_model_for_generation, wraps, AutoModelForCausalLM, AutoModelForSequenceClassification, AutoTokenizer, BasePairwiseJudge, DPODataCollatorWithPadding, DataCollator, Dataset, EvalPrediction, GenerationConfig, GuidedDecodingParams, IterableDataset, MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES, OnlineDPOConfig, PeftConfig, PreTrainedTokenizerBase, ProcessorMixin, RewardFunc, SamplingParams, TrainerCallback, VLLMClient, create_reference_model, disable_dropout_in_model, ensure_master_addr_port, is_vllm_available, pad, prepare_deepspeed, prepare_fsdp, warnings, apply_chat_template, is_conversational, is_peft_model, nullcontext, PreTrainedModel, Trainer, logger, os, FSDP, re)
-
-
-import math
-from typing import *
-from dataclasses import dataclass, field
-from packaging.version import Version
-from transformers import DataCollatorForSeq2Seq, DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling
-from transformers.training_args import ParallelMode
-
 # Wrap trainer with padding to right and enable training mode
 # Also patches W&B since multiple runs must use wandb.finish()
 import functools
+import math
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from types import MethodType
+from typing import *
+from typing import Any, Optional
+
+import torch
+from packaging.version import Version
+from torch import nn
+from torch.nn import functional as F
+from transformers import (
+    DataCollatorForLanguageModeling as TransformersDataCollatorForLanguageModeling,
+)
+from transformers import DataCollatorForSeq2Seq
+from transformers.training_args import ParallelMode
+from trl.trainer.online_dpo_trainer import (
+    FSDP,
+    MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES,
+    SIMPLE_CHAT_TEMPLATE,
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    BasePairwiseJudge,
+    BaseTrainer,
+    DataCollator,
+    DataLoader,
+    Dataset,
+    DPODataCollatorWithPadding,
+    EvalPrediction,
+    GenerationConfig,
+    GuidedDecodingParams,
+    IterableDataset,
+    OnlineDPOConfig,
+    OptimizerNames,
+    Path,
+    PeftConfig,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    ProcessorMixin,
+    RewardFunc,
+    SamplingParams,
+    Trainer,
+    TrainerCallback,
+    VLLMClient,
+    apply_chat_template,
+    broadcast_object_list,
+    create_reference_model,
+    disable_dropout_in_model,
+    empty_cache,
+    ensure_master_addr_port,
+    gather_object,
+    is_conversational,
+    is_flash_attn_2_available,
+    is_peft_model,
+    is_vllm_available,
+    jinja2,
+    logger,
+    logging,
+    maybe_apply_chat_template,
+    nullcontext,
+    os,
+    pad,
+    prepare_deepspeed,
+    prepare_fsdp,
+    profiling_context,
+    re,
+    seed_worker,
+    textwrap,
+    truncate_right,
+    unwrap_model_for_generation,
+    warnings,
+    wraps,
+)
+
 try:
-    from unsloth_zoo.gradient_checkpointing import reset_unsloth_gradient_checkpointing_buffers
+    from unsloth_zoo.gradient_checkpointing import (
+        reset_unsloth_gradient_checkpointing_buffers,
+    )
 except:
     def reset_unsloth_gradient_checkpointing_buffers(): pass
 def prepare_for_training_mode(f):
@@ -75,7 +137,6 @@ def prepare_for_training_mode(f):
             pass
         return output
     return wrapper
-pass
 
 torch_compile_options = {
     "epilogue_fusion"   : True,
@@ -145,7 +206,6 @@ def chunked_selective_log_softmax(logits, index, temperature: float = 1.0):
         logsumexp_values = torch.logsumexp(chunk_logits, dim = -1)
         per_token_logps = selected_logits - logsumexp_values
         all_per_token_logps.append(per_token_logps)
-    pass
     all_per_token_logps = torch.concat(all_per_token_logps)
     all_per_token_logps = all_per_token_logps.reshape((logits.shape[0], logits.shape[1]))
     return all_per_token_logps
@@ -456,23 +516,23 @@ class UnslothOnlineDPOConfig(OnlineDPOConfig):
             string.
     
     """
-    vllm_sampling_params: Optional[Any] = field(
+    vllm_sampling_params: Any | None = field(
         default = None,
         metadata = {'help': 'vLLM SamplingParams'},
     )
-    unsloth_num_chunks : Optional[int] = field(
+    unsloth_num_chunks : int | None = field(
         default = -1,
         metadata = {'help': 'Chunk size to reduce memory usage. -1 is most efficient.'},
     )
-    unsloth_logit_chunk_multiplier : Optional[int] = field(
+    unsloth_logit_chunk_multiplier : int | None = field(
             default = None,
             metadata = {'help': 'Multiplier for chunked logit computations.'},
         )
-    unsloth_grpo_mini_batch : Optional[int] = field(
+    unsloth_grpo_mini_batch : int | None = field(
         default = None,
         metadata = {'help': 'Mini batch size for GRPO hidden state accumulation. Default is None unless user defines it.'},
     )
-    max_seq_length : Optional[int] = field(
+    max_seq_length : int | None = field(
         default = None,
         metadata = {'help': 'Maximum sequence length to truncate to.'},
     )
@@ -843,7 +903,6 @@ class UnslothOnlineDPOConfig(OnlineDPOConfig):
         self.unsloth_logit_chunk_multiplier = unsloth_logit_chunk_multiplier
         self.max_seq_length = max_seq_length
 
-pass
 
 class _UnslothOnlineDPOTrainer(BaseTrainer):
     r""""""
@@ -865,24 +924,24 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
 
     def __init__(
         self,
-        model: Union[PreTrainedModel, nn.Module, str],
-        ref_model: Union[PreTrainedModel, nn.Module, None] = None,
-        reward_funcs: Optional[Union[RewardFunc, list[RewardFunc]]] = None,
-        judge: Optional[BasePairwiseJudge] = None,
-        args: Optional[OnlineDPOConfig] = None,
-        data_collator: Optional[DataCollator] = None,
-        train_dataset: Optional[Union[Dataset, IterableDataset]] = None,
-        eval_dataset: Optional[Union[Dataset, IterableDataset, dict[str, Union[Dataset, IterableDataset]]]] = None,
-        processing_class: Optional[Union[PreTrainedTokenizerBase, ProcessorMixin]] = None,
-        reward_processing_classes: Optional[Union[PreTrainedTokenizerBase, list[PreTrainedTokenizerBase]]] = None,
+        model: PreTrainedModel | nn.Module | str,
+        ref_model: PreTrainedModel | nn.Module | None = None,
+        reward_funcs: RewardFunc | list[RewardFunc] | None = None,
+        judge: BasePairwiseJudge | None = None,
+        args: OnlineDPOConfig | None = None,
+        data_collator: DataCollator | None = None,
+        train_dataset: Dataset | IterableDataset | None = None,
+        eval_dataset: Dataset | IterableDataset | dict[str, Dataset | IterableDataset] | None = None,
+        processing_class: PreTrainedTokenizerBase | ProcessorMixin | None = None,
+        reward_processing_classes: PreTrainedTokenizerBase | list[PreTrainedTokenizerBase] | None = None,
         peft_config: Optional["PeftConfig"] = None,
-        compute_metrics: Optional[Callable[[EvalPrediction], dict]] = None,
-        callbacks: Optional[list[TrainerCallback]] = None,
+        compute_metrics: Callable[[EvalPrediction], dict] | None = None,
+        callbacks: list[TrainerCallback] | None = None,
         optimizers: tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR] = (None, None),
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        preprocess_logits_for_metrics: Callable[[torch.Tensor, torch.Tensor], torch.Tensor] | None = None,
         # Deprecated parameters
-        reward_model: Optional[Union[PreTrainedModel, nn.Module]] = None,
-        reward_processing_class: Optional[PreTrainedTokenizerBase] = None,
+        reward_model: PreTrainedModel | nn.Module | None = None,
+        reward_processing_class: PreTrainedTokenizerBase | None = None,
     ) -> None:
 
         if hasattr(model, 'vllm_engine') and hasattr(args, 'use_vllm'):
@@ -1320,7 +1379,7 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
 
     # Same as Trainer.get_eval_dataloader but skip the "remove_unused_columns".
     @wraps(Trainer.get_eval_dataloader)
-    def get_eval_dataloader(self, eval_dataset: Optional[Union[str, Dataset]] = None) -> DataLoader:
+    def get_eval_dataloader(self, eval_dataset: str | Dataset | None = None) -> DataLoader:
         if eval_dataset is None and self.eval_dataset is None:
             raise ValueError("Trainer: evaluation requires an eval_dataset.")
 
@@ -1424,10 +1483,7 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
         has_images = images is not None
 
         # Update vLLM server weights if needed
-        if hasattr(self, "_last_loaded_step") and self.state.global_step != self._last_loaded_step:
-            self._move_model_to_vllm()
-            self._last_loaded_step = self.state.global_step
-        elif not hasattr(self, "_last_loaded_step"):
+        if hasattr(self, "_last_loaded_step") and self.state.global_step != self._last_loaded_step or not hasattr(self, "_last_loaded_step"):
             self._move_model_to_vllm()
             self._last_loaded_step = self.state.global_step
 
@@ -1568,7 +1624,6 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
                             self.vllm_client.update_named_param(name, param.data)
                         elif self.vllm_mode == "colocate":
 
-                            pass
 
                             pass
                 # Unmerge adapters while parameters are still gathered
@@ -1591,7 +1646,6 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
                             self.vllm_client.update_named_param(name, param.data)
                         elif self.vllm_mode == "colocate":
 
-                            pass
 
                             pass
 
@@ -1626,7 +1680,6 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
                         self.vllm_client.update_named_param(full_name, param.data)
                     elif self.vllm_mode == "colocate":
 
-                        pass
 
                         pass
 
@@ -1641,11 +1694,10 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
                 self.vllm_client.update_named_param(name, param)
             elif self.vllm_mode == "colocate":
 
-                pass
 
                 pass
 
-    def _fix_param_name_to_vllm(self, name, extra_prefixes: Optional[list[str]] = None):
+    def _fix_param_name_to_vllm(self, name, extra_prefixes: list[str] | None = None):
         """Clean parameter names for vLLM compatibility"""
         extra_prefixes = extra_prefixes or []
         prefixes = ["_checkpoint_wrapped_module."] + extra_prefixes
@@ -1654,7 +1706,7 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
         return name
 
     def process_vision_row(
-        self, features: dict[str, Union[list, torch.Tensor]], processing_class=None
+        self, features: dict[str, list | torch.Tensor], processing_class=None
     ) -> dict[str, list[int]]:
         """
         Process a vision row for VLM models (adapted from DPO trainer)
@@ -1916,7 +1968,7 @@ class _UnslothOnlineDPOTrainer(BaseTrainer):
         return logprobs
 
     def training_step(
-        self, model: nn.Module, inputs: dict[str, Union[torch.Tensor, Any]], num_items_in_batch: Optional[int] = None
+        self, model: nn.Module, inputs: dict[str, torch.Tensor | Any], num_items_in_batch: int | None = None
     ) -> torch.Tensor:
         model.train()
 
@@ -2449,7 +2501,6 @@ class UnslothOnlineDPOTrainer(_UnslothOnlineDPOTrainer):
             if hasattr(self, 'neftune_hook_handle'): del self.neftune_hook_handle
         if getattr(args, 'neftune_noise_alpha', None) is not None:
             model.get_input_embeddings().neftune_noise_alpha = self.neftune_noise_alpha
-        pass
         if hasattr(self, 'accelerator'):
             scaler = self.accelerator.scaler
             current_model = model
@@ -2457,18 +2508,14 @@ class UnslothOnlineDPOTrainer(_UnslothOnlineDPOTrainer):
                 current_model.accelerator_scaler = scaler
                 current_model = current_model.model
             current_model.accelerator_scaler = scaler
-        pass
         if hasattr(self, 'train'):
             self.train = MethodType(prepare_for_training_mode(self.__class__.train), self)
-        pass
         if hasattr(self, 'llm') and self.llm is not None and hasattr(self.llm, 'get_tokenizer'):
             _vllm_tok = self.llm.get_tokenizer()
             _pc = getattr(self, 'processing_class', None) or getattr(self, 'tokenizer', None)
             if _vllm_tok is not None and _pc is not None and getattr(_pc, 'chat_template', None) is not None and getattr(_vllm_tok, 'chat_template', None) is None:
                 _vllm_tok.chat_template = _pc.chat_template
-        pass
         
-pass
 
 
 if hasattr(logger, "addFilter"):
@@ -2476,6 +2523,5 @@ if hasattr(logger, "addFilter"):
     class HideLoggingMessage(logging.Filter):
         def __init__(self, text): self.text = text
         def filter(self, x): return self.text not in x.getMessage()
-    pass
     logger.addFilter(HideLoggingMessage("`use_cache=True`"))
 

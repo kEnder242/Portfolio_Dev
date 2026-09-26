@@ -7,6 +7,7 @@ tokens, absolute paths), and writes a public JSON artifact.
 Output: data/public_benchmarks.json
 Zero third-party dependencies. Atomic write (.tmp + replace).
 """
+
 import glob
 import json
 import os
@@ -27,7 +28,9 @@ TELEMETRY_LEDGER = os.path.join(
 LAN_IP_RE = re.compile(r"\b192\.168\.\d{1,3}\.\d{1,3}\b")
 SESSION_TOKEN_RE = re.compile(r"\bses_[A-Za-z0-9]{4,}\b")
 # Absolute path: starts with "/" (POSIX) or a drive letter (Windows, e.g. C:\\)
-ABS_PATH_RE = re.compile(r"(?<![A-Za-z0-9_.-])(?:/[\w~./-]+|(?:[A-Za-z]:[\\/][\w\\/.-]*))")
+ABS_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_.-])(?:/[\w~./-]+|(?:[A-Za-z]:[\\/][\w\\/.-]*))"
+)
 
 LAN_REDACTED = "REDACTED_IP"
 SESSION_REDACTED = "REDACTED_SESSION"

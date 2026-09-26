@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 dna_macro_compiler.py
 [FEAT-602 / FEAT-603 / FEAT-604]
@@ -9,10 +8,10 @@ Parses, serializes, and compiles Markdown papers with embedded DNA macros.
 Guarantees papers are readable offline in any markdown viewer without requiring ChromaDB.
 """
 
-import re
 import json
+import re
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -28,17 +27,24 @@ DNA_DIR = REPO_ROOT / "dna"
 #   [WIS-482:R1]
 MACRO_COMMENT_PATTERN = re.compile(
     r"<!--\s*\[(?P<id>[A-Z0-9_-]+)(?::(?P<rev>[A-Z0-9_]+))?(?P<attrs_in>[^\]]*)\](?P<attrs_out>[^>]*)-->",
-    re.IGNORECASE
+    re.IGNORECASE,
 )
 
 MACRO_INLINE_PATTERN = re.compile(
     r"\[(?P<id>[A-Z]{3,4}-\d{3})(?::(?P<rev>[R|M]\d+))?(?P<attrs_in>[^\]]*)\](?P<attrs_out>[^\n]*)",
-    re.IGNORECASE
+    re.IGNORECASE,
 )
 
 
 class DNAMacro:
-    def __init__(self, card_id: str, revision: str = "R1", style: str = "paragraph", lens: Optional[str] = None, extra_attrs: Optional[Dict[str, str]] = None):
+    def __init__(
+        self,
+        card_id: str,
+        revision: str = "R1",
+        style: str = "paragraph",
+        lens: str | None = None,
+        extra_attrs: dict[str, str] | None = None,
+    ):
         self.card_id = card_id.upper()
         self.revision = revision.upper()
         self.style = style.lower()
@@ -65,17 +71,17 @@ class DNAMacro:
         attr_str = " " + " ".join(attrs) if attrs else ""
         return f"<!-- [{self.card_id}:{self.revision}{attr_str}] -->"
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "id": self.card_id,
             "revision": self.revision,
             "style": self.style,
             "lens": self.lens,
-            "extra_attrs": self.extra_attrs
+            "extra_attrs": self.extra_attrs,
         }
 
 
-def parse_macro_string(macro_str: str) -> Optional[DNAMacro]:
+def parse_macro_string(macro_str: str) -> DNAMacro | None:
     """Parse a single macro comment or inline macro into a DNAMacro object."""
     m = MACRO_COMMENT_PATTERN.search(macro_str)
     if not m:
@@ -107,10 +113,12 @@ def parse_macro_string(macro_str: str) -> Optional[DNAMacro]:
             else:
                 extra_attrs[k] = v
 
-    return DNAMacro(card_id=card_id, revision=rev, style=style, lens=lens, extra_attrs=extra_attrs)
+    return DNAMacro(
+        card_id=card_id, revision=rev, style=style, lens=lens, extra_attrs=extra_attrs
+    )
 
 
-def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
+def parse_markdown_with_dna_macros(markdown_text: str) -> list[dict[str, Any]]:
     """
     Parse a full markdown document into an ordered list of vertebrae chunks.
     Supports both:
@@ -119,7 +127,7 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
     """
     lines = markdown_text.splitlines()
     chunks = []
-    current_macro: Optional[DNAMacro] = None
+    current_macro: DNAMacro | None = None
     current_text_lines = []
 
     for line in lines:
@@ -129,10 +137,12 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
             if current_macro or current_text_lines:
                 raw_body = "\n".join(current_text_lines).strip()
                 if raw_body or current_macro:
-                    chunks.append({
-                        "macro": current_macro.to_dict() if current_macro else None,
-                        "text": raw_body
-                    })
+                    chunks.append(
+                        {
+                            "macro": current_macro.to_dict() if current_macro else None,
+                            "text": raw_body,
+                        }
+                    )
                 current_text_lines = []
             current_macro = parse_macro_string(comment_match.group(0))
             continue
@@ -144,23 +154,31 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
             if current_macro or current_text_lines:
                 raw_body = "\n".join(current_text_lines).strip()
                 if raw_body or current_macro:
-                    chunks.append({
-                        "macro": current_macro.to_dict() if current_macro else None,
-                        "text": raw_body
-                    })
+                    chunks.append(
+                        {
+                            "macro": current_macro.to_dict() if current_macro else None,
+                            "text": raw_body,
+                        }
+                    )
                 current_text_lines = []
 
             # Extract preceding prose on this line
-            line_prose = line[:inline_match.start()].strip()
+            line_prose = line[: inline_match.start()].strip()
             # Clean outer quotes if any
-            if line_prose.startswith('"') and line_prose.endswith('"') and len(line_prose) > 1:
+            if (
+                line_prose.startswith('"')
+                and line_prose.endswith('"')
+                and len(line_prose) > 1
+            ):
                 line_prose = line_prose[1:-1].strip()
 
-            inline_macro = parse_macro_string(line[inline_match.start():])
-            chunks.append({
-                "macro": inline_macro.to_dict() if inline_macro else None,
-                "text": line_prose
-            })
+            inline_macro = parse_macro_string(line[inline_match.start() :])
+            chunks.append(
+                {
+                    "macro": inline_macro.to_dict() if inline_macro else None,
+                    "text": line_prose,
+                }
+            )
             current_macro = None
             current_text_lines = []
         else:
@@ -169,16 +187,17 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> List[Dict[str, Any]]:
     if current_macro or current_text_lines:
         raw_body = "\n".join(current_text_lines).strip()
         if raw_body or current_macro:
-            chunks.append({
-                "macro": current_macro.to_dict() if current_macro else None,
-                "text": raw_body
-            })
+            chunks.append(
+                {
+                    "macro": current_macro.to_dict() if current_macro else None,
+                    "text": raw_body,
+                }
+            )
 
     return chunks
 
 
-
-def load_bone_collection(collection_name_or_file: str) -> Optional[Dict[str, Any]]:
+def load_bone_collection(collection_name_or_file: str) -> dict[str, Any] | None:
     """Load a 1:1 bone collection scratchpad from Portfolio_Dev/field_notes/data/bones/."""
     target = BONES_DIR / collection_name_or_file
     if not target.exists() and not collection_name_or_file.endswith(".json"):
@@ -191,7 +210,10 @@ def load_bone_collection(collection_name_or_file: str) -> Optional[Dict[str, Any
                 with open(legacy, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     for col in data:
-                        if col.get("id") == collection_name_or_file or col.get("name") == collection_name_or_file:
+                        if (
+                            col.get("id") == collection_name_or_file
+                            or col.get("name") == collection_name_or_file
+                        ):
                             return col
             except Exception:
                 pass
@@ -204,7 +226,9 @@ def load_bone_collection(collection_name_or_file: str) -> Optional[Dict[str, Any
         return None
 
 
-def reconstruct_source_from_bones(bone_data: Dict[str, Any], revision_lens: str = "Original Verbatim") -> str:
+def reconstruct_source_from_bones(
+    bone_data: dict[str, Any], revision_lens: str = "Original Verbatim"
+) -> str:
     """
     [FEAT-604 / BKM-024]
     Reconstructs the original source text from a 1:1 Bone Collection.
@@ -235,7 +259,9 @@ def reconstruct_source_from_bones(bone_data: Dict[str, Any], revision_lens: str 
     return "\n\n".join(paragraphs)
 
 
-def compile_paper_to_markdown(bone_collections: List[Dict[str, Any]], lens: Optional[str] = None) -> str:
+def compile_paper_to_markdown(
+    bone_collections: list[dict[str, Any]], lens: str | None = None
+) -> str:
     """
     [FEAT-603]
     Weaves multiple bone collections into a unified composite markdown paper with embedded DNA macros.
@@ -245,21 +271,21 @@ def compile_paper_to_markdown(bone_collections: List[Dict[str, Any]], lens: Opti
     for col in bone_collections:
         col_name = col.get("name", "Document Section")
         rendered_blocks.append(f"## {col_name}\n")
-        
+
         for bone in sorted(col.get("bones", []), key=lambda x: x.get("sequence", 0)):
             card_id = bone.get("id", "DNA-000")
-            
+
             # Select matching mutation or revision for the target lens
             body_text = None
             rev_tag = "R1"
-            
+
             if lens:
                 for mut in bone.get("mutations", []):
                     if mut.get("lens", "").lower() == lens.lower():
                         body_text = mut.get("text", "").strip()
                         rev_tag = mut.get("id", "M1").upper()
                         break
-            
+
             if not body_text:
                 for rev in bone.get("revisions", []):
                     if lens and rev.get("lens", "").lower() == lens.lower():
@@ -279,4 +305,6 @@ def compile_paper_to_markdown(bone_collections: List[Dict[str, Any]], lens: Opti
 
 
 if __name__ == "__main__":
-    print("[dna_macro_compiler] Ready. Self-contained DNA Macro Citation Engine initialized.")
+    print(
+        "[dna_macro_compiler] Ready. Self-contained DNA Macro Citation Engine initialized."
+    )

@@ -13,7 +13,7 @@ from pathlib import Path
 # --- Paths ---
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent  # Portfolio_Dev/
-LAB_ROOT = REPO_ROOT.parent    # Dev_Lab/
+LAB_ROOT = REPO_ROOT.parent  # Dev_Lab/
 PAPERS_DIR = REPO_ROOT / "papers"
 PAPERS_MANIFEST = PAPERS_DIR / "manifest.json"
 DNA_MANIFEST = REPO_ROOT / "field_notes" / "data" / "dna_manifest.json"
@@ -26,6 +26,7 @@ WRITER_HTML = REPO_ROOT / "field_notes" / "writer.html"
 
 
 # --- LaTeX Helpers ---
+
 
 def latex_escape(text):
     """Escape special LaTeX characters in user-authored text."""
@@ -50,6 +51,7 @@ def latex_escape(text):
 
 
 # --- Loaders & Citation Resolvers ---
+
 
 def load_papers_manifest():
     """Load papers manifest indexing all active manuscripts."""
@@ -105,7 +107,7 @@ def load_arxiv_registry():
                 "name": anchor_name,
                 "arxiv": arxiv_id,
                 "logic": logic,
-                "source": "RESEARCH_SYNTHESIS.md"
+                "source": "RESEARCH_SYNTHESIS.md",
             }
             arxiv_map[f"ARXIV:{arxiv_id}"] = arxiv_map[arxiv_id]
             arxiv_map[anchor_name] = arxiv_map[arxiv_id]
@@ -119,31 +121,43 @@ def load_features_from_tracker():
         return feat_map
 
     content = FEATURE_TRACKER_MD.read_text(encoding="utf-8")
-    sections = re.split(r'\n(?=## \[(?:FEAT|LAB)-)', content)
+    sections = re.split(r"\n(?=## \[(?:FEAT|LAB)-)", content)
     for sec in sections:
-        header_match = re.match(r'## \[((?:FEAT|LAB)-[A-Za-z0-9_\.\-]+)\]\s*(.*)', sec)
+        header_match = re.match(r"## \[((?:FEAT|LAB)-[A-Za-z0-9_\.\-]+)\]\s*(.*)", sec)
         if not header_match:
             continue
         fid = header_match.group(1).strip()
         title = header_match.group(2).strip()
 
-        status_match = re.search(r'\*\*Status:\*\*\s*(.*)', sec)
+        status_match = re.search(r"\*\*Status:\*\*\s*(.*)", sec)
         status = status_match.group(1).strip() if status_match else "ACTIVE"
 
-        code_match = re.search(r'\*\*Code:\*\*\s*(.*)', sec)
+        code_match = re.search(r"\*\*Code:\*\*\s*(.*)", sec)
         code_ref = code_match.group(1).strip() if code_match else ""
 
-        logic_match = re.search(r'\*\*Logic:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        logic_match = re.search(
+            r"\*\*Logic:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)", sec, re.DOTALL
+        )
         logic = logic_match.group(1).strip() if logic_match else ""
 
-        rationale_match = re.search(r'\*\*Rationale:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        rationale_match = re.search(
+            r"\*\*Rationale:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)",
+            sec,
+            re.DOTALL,
+        )
         rationale = rationale_match.group(1).strip() if rationale_match else ""
 
-        mechanism_match = re.search(r'\*\*Mechanism:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)', sec, re.DOTALL)
+        mechanism_match = re.search(
+            r"\*\*Mechanism:\*\*\s*(.*?)(?=\n\*\*[A-Za-z]+:\*\*|\n## |\Z)",
+            sec,
+            re.DOTALL,
+        )
         mechanism = mechanism_match.group(1).strip() if mechanism_match else ""
 
         origin_text = rationale or logic or f"{fid}: {title}"
-        narrative = f"{logic}\n\n{mechanism}".strip() if (logic or mechanism) else origin_text
+        narrative = (
+            f"{logic}\n\n{mechanism}".strip() if (logic or mechanism) else origin_text
+        )
 
         feat_map[fid] = {
             "id": fid,
@@ -158,7 +172,7 @@ def load_features_from_tracker():
             # [SPR-86 Story 8613] Uniform contract: FEAT anchors carry no revisions/mutations
             "revisions": [],
             "mutations": [],
-            "author": "Federated Lab"
+            "author": "Federated Lab",
         }
     return feat_map
 
@@ -180,12 +194,13 @@ def build_citation_index(dna_manifest, arxiv_registry):
                 "origin_text": origin.get("text") or origin.get("verbatim", ""),
                 "origin_source": origin.get("source", "Lab Journal"),
                 "narrative": synthesis.get("narrative_context", ""),
-                "tags": card.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+                "tags": card.get("metadata", {}).get("tags", [])
+                or synthesis.get("tags", []),
                 # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
                 # so the writer Citation Inspector can render pills and project text.
                 "revisions": synthesis.get("revisions", []),
                 "mutations": synthesis.get("mutations", []),
-                "author": origin.get("author", "Jason Allred")
+                "author": origin.get("author", "Jason Allred"),
             }
             index[cid] = entry
             # Map WIS-xxx to PHL-xxx and vice-versa for backwards compatibility
@@ -208,11 +223,12 @@ def build_citation_index(dna_manifest, arxiv_registry):
             "origin_text": origin.get("text") or synthesis.get("narrative_context", ""),
             "origin_source": origin.get("source", "Innovations Timeline"),
             "narrative": synthesis.get("narrative_context", ""),
-            "tags": disc.get("metadata", {}).get("tags", []) or synthesis.get("tags", []),
+            "tags": disc.get("metadata", {}).get("tags", [])
+            or synthesis.get("tags", []),
             # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
             "revisions": synthesis.get("revisions", []),
             "mutations": synthesis.get("mutations", []),
-            "author": "Jason Allred"
+            "author": "Jason Allred",
         }
 
     # 3. ArXiv Research Anchors
@@ -229,7 +245,7 @@ def build_citation_index(dna_manifest, arxiv_registry):
             # [SPR-86 Story 8613] Uniform contract: non-DNA anchors carry no revisions/mutations
             "revisions": [],
             "mutations": [],
-            "arxiv": item["arxiv"]
+            "arxiv": item["arxiv"],
         }
 
     # 4. Feature DNA (FEAT-xxx & LAB-xxx from FeatureTracker.md)
@@ -253,13 +269,14 @@ def build_citation_index(dna_manifest, arxiv_registry):
             # [SPR-86 Story 8613] Expose DNA revisions/mutations to the citation index
             "revisions": synthesis.get("revisions", []),
             "mutations": synthesis.get("mutations", []),
-            "author": "Federated Lab"
+            "author": "Federated Lab",
         }
 
     return index
 
 
 # --- LaTeX Generation ---
+
 
 def build_references_bib(paper, citation_index):
     """Generate a references.bib file dynamically for all citations in the paper across all tiers."""
@@ -285,7 +302,7 @@ def build_references_bib(paper, citation_index):
     entries = []
     for key in sorted(used_keys):
         resolved = citation_index.get(key)
-        safe_key = re.sub(r'[^a-zA-Z0-9]', '', key)
+        safe_key = re.sub(r"[^a-zA-Z0-9]", "", key)
         if not safe_key:
             continue
 
@@ -331,10 +348,13 @@ def build_main_tex(paper, citation_index):
         if sec.get("type") == "abstract":
             paragraphs = sec.get("paragraphs", [])
             if paragraphs:
-                abstract_text = paragraphs[0].get("text") or paragraphs[0].get("cached_words", "")
+                abstract_text = paragraphs[0].get("text") or paragraphs[0].get(
+                    "cached_words", ""
+                )
                 break
 
-    preamble = textwrap.dedent(r"""\documentclass[11pt]{article}
+    preamble = textwrap.dedent(
+        r"""\documentclass[11pt]{article}
 
 % arXiv-compatible packages
 \usepackage[utf8]{inputenc}
@@ -358,23 +378,34 @@ def build_main_tex(paper, citation_index):
   \textsc{Origin}\enspace
 }
 
-\title{""" + latex_escape(title) + r"""}
-\author{""" + latex_escape(author) + r"""}
-\date{""" + latex_escape(date) + r"""}
+\title{"""
+        + latex_escape(title)
+        + r"""}
+\author{"""
+        + latex_escape(author)
+        + r"""}
+\date{"""
+        + latex_escape(date)
+        + r"""}
 
 \begin{document}
 \maketitle
-""")
+"""
+    )
 
     if abstract_text:
-        preamble += textwrap.dedent(r"""
+        preamble += textwrap.dedent(
+            r"""
 \begin{abstract}
-""" + latex_escape(abstract_text) + r"""
+"""
+            + latex_escape(abstract_text)
+            + r"""
 \end{abstract}
 
 \tableofcontents
 \newpage
-""")
+"""
+        )
 
     sections_tex = []
     for sec in paper.get("sections", []):
@@ -419,10 +450,10 @@ def build_main_tex(paper, citation_index):
             if text_body:
                 cite_commands = []
                 for cite in citations:
-                    safe_key = re.sub(r'[^a-zA-Z0-9]', '', cite)
+                    safe_key = re.sub(r"[^a-zA-Z0-9]", "", cite)
                     if safe_key:
                         cite_commands.append(f"\\cite{{{safe_key}}}")
-                
+
                 prose = latex_escape(text_body)
                 if cite_commands:
                     prose += f" {' '.join(cite_commands)}"
@@ -430,17 +461,20 @@ def build_main_tex(paper, citation_index):
 
         sections_tex.append("".join(sec_block))
 
-    conclusion = textwrap.dedent(r"""
+    conclusion = textwrap.dedent(
+        r"""
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
-""")
+"""
+    )
 
     return preamble + "\n".join(sections_tex) + conclusion
 
 
 # --- HTML Hydration ---
+
 
 def hydrate_writer_html(paper, manifest, citation_index):
     """Hydrate writer.html with active paper dataset, manifest, and quote picker."""
@@ -454,11 +488,13 @@ def hydrate_writer_html(paper, manifest, citation_index):
     quotes = []
     for key, item in citation_index.items():
         if item.get("origin_text"):
-            quotes.append({
-                "text": item["origin_text"],
-                "source": key,
-                "title": item.get("title", key)
-            })
+            quotes.append(
+                {
+                    "text": item["origin_text"],
+                    "source": key,
+                    "title": item.get("title", key),
+                }
+            )
 
     # Strip existing injected context script blocks (preserve main interactive UI script).
     # The marker is slash-form (e.g. "[FEAT-581/FEAT-582]"), so match any FEAT-\d+
@@ -485,10 +521,13 @@ def hydrate_writer_html(paper, manifest, citation_index):
     else:
         content = content.replace("<body>", "<body>\n" + script_block)
     WRITER_HTML.write_text(content, encoding="utf-8")
-    print(f"✅ Hydrated {WRITER_HTML} with active paper and {len(quotes)} citation anchor(s).")
+    print(
+        f"✅ Hydrated {WRITER_HTML} with active paper and {len(quotes)} citation anchor(s)."
+    )
 
 
 # --- Main Orchestration ---
+
 
 def main():
     paper, manifest = load_active_paper()

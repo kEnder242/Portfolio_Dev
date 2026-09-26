@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just in time context retrieval and synthesis — Multi-View Sovereign Publication</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --text-bright: #f0f6fc;
+            --sub-color: #8b949e;
+            --accent-color: #58a6ff;
+            --green-glow: #3fb950;
+            --amber-glow: #d29922;
+            --font-serif: "Merriweather", "Georgia", "Cambria", serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 32px 16px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: var(--text-bright);
+            font-family: var(--font-serif);
+            margin-bottom: 8px;
+            line-height: 1.25;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--sub-color);
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .meta-bar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: var(--sub-color);
+        }
+        .drift-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(63, 185, 80, 0.15);
+            border: 1px solid var(--green-glow);
+            color: var(--green-glow);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        /* View Switcher Tabs */
+        .view-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .view-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--sub-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .view-tab-btn.active {
+            background: #21262d;
+            color: var(--text-bright);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            border: 1px solid var(--accent-color);
+        }
+        /* View Containers */
+        .view-content {
+            display: none;
+        }
+        .view-content.active {
+            display: block;
+        }
+        /* Formal View Styling */
+        .formal-view {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            background: #12161c;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--text-bright);
+            margin: 28px 0 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+        .formal-p {
+            margin-bottom: 18px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+        .cite-pill {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            background: rgba(88, 166, 255, 0.12);
+            color: var(--accent-color);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            padding: 1px 5px;
+            border-radius: 4px;
+            margin-left: 4px;
+            cursor: help;
+        }
+        /* Executive View Styling */
+        .exec-view {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .exec-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid var(--accent-color);
+        }
+        .exec-heading {
+            font-size: 1.15rem;
+            color: var(--text-bright);
+            margin-bottom: 12px;
+        }
+        .exec-list {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .exec-list li {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .exec-dim {
+            color: var(--sub-color);
+            font-size: 0.88rem;
+        }
+        /* Story Narrative View Styling */
+        .story-view {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .story-chapter {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 28px;
+        }
+        .story-title {
+            font-size: 1.3rem;
+            color: var(--amber-glow);
+            margin-bottom: 16px;
+        }
+        .story-par-block {
+            margin-bottom: 20px;
+        }
+        .story-p {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        .narrative-epigraph {
+            background: rgba(210, 153, 34, 0.08);
+            border-left: 3px solid var(--amber-glow);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .epigraph-anchor {
+            color: var(--amber-glow);
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+        .epigraph-author {
+            display: block;
+            text-align: right;
+            color: var(--sub-color);
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        footer {
+            margin-top: 48px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--sub-color);
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Just in time context retrieval and synthesis</h1>
+            <div class="subtitle">Applied armchair philosophy</div>
+            <div class="meta-bar">
+                <span>✍️ Jason Allred</span>
+                <span>📅 2026-09-05</span>
+                <span class="drift-badge">🛡️ Cross-View Drift: 0.0%</span>
+            </div>
+        </header>
+
+        <!-- View Navigation Tabs -->
+        <nav class="view-switcher">
+            <button class="view-tab-btn active" data-view="formal">🔬 Formal Academic View</button>
+            <button class="view-tab-btn" data-view="executive">💼 Executive Summary</button>
+            <button class="view-tab-btn" data-view="story">📖 Narrative &amp; Origins</button>
+        </nav>
+
+        <!-- View 1: Formal Academic -->
+        <main id="view-formal" class="view-content active">
+            <article class="formal-view">
+                
+        <div class="paper-section">
+            <h2 class="section-title">Section 1 - Introducing the Just in Time Context Loop</h2>
+            <p class="formal-p">Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration. History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle. <span class="cite-pill" title="Future of AI (three pillars): The attention and matrix computing is done and done. Now it&#x27;s all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary.">PHL-001</span></p><p class="formal-p">“What I have is almost a blog. A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It&#x27;s more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that. <span class="cite-pill" title="LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.">PHL-002</span><span class="cite-pill" title="The dual-channel memory architecture replacing monolithic context scaling with runtime dynamic anchor injection, floating up only the exact 2-3 required vectors milliseconds before inference.">DISC-004</span></p><p class="formal-p">LLM’s are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG get’s us half way thare. <span class="cite-pill" title="saving memories-&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence.">PHL-007</span></p><p class="formal-p">Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -&gt; tagging -&gt; wisdom -&gt; hook/trigger -&gt; intuitive behavior <span class="cite-pill" title="Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing.">PHL-005</span></p><p class="formal-p">Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots. Saving memories -&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification. <span class="cite-pill" title="Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time.">PHL-006</span><span class="cite-pill" title="">BKM-046</span></p>
+        </div>
+        
+        <div class="paper-section">
+            <h2 class="section-title">Section 2 - References &amp; Prior Art</h2>
+            <p class="formal-p">Humble: Standing on the shoulders and all that, this isn&#x27;t a deep math insight, it’s just something that works. Something I built with what is around us, a logical step after integrating papers. <span class="cite-pill" title="">ARXIV:2305.18290</span></p><p class="formal-p">List of supporting documents and arxive links - Prior art etc. - Use AGY to find prior art - specifically leverage and note Research.html. <span class="cite-pill" title="">ARXIV:2401.03462</span></p><p class="formal-p">Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper. <span class="cite-pill" title="">PHL-029</span><span class="cite-pill" title="">PHL-030</span></p>
+        </div>
+        
+        <div class="paper-section">
+            <h2 class="section-title">Section 3 - Implementations &amp; Empirical Lab Architecture</h2>
+            <p class="formal-p">Demo/Present/Implementation. Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker. <span class="cite-pill" title="Guarantees zero downtime and resilient multi-seat speculative triage across heterogeneous APIs (oMLX OpenAI vs Ollama).">FEAT-500</span><span class="cite-pill" title="">FEAT-526</span></p><p class="formal-p">Inside the lab: gems, triage Hyde. Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier &amp; hooks grouping. Decoupling triage and classification. <span class="cite-pill" title="Aligns triage with natural engineer dialogue and prevents feedback from falling into conversational banter.">FEAT-546</span><span class="cite-pill" title="Reduces vector synchronization latency to &lt;15ms, prevents accidental clobbering across unedited cards, and eliminates memory-intensive batch vector re-indexing.">FEAT-568</span></p><p class="formal-p">Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -&gt; paper. <span class="cite-pill" title="Eliminates concurrent write collisions between human operators and autonomous agents while providing clean git diff tracking for evolving manuscripts.">FEAT-581</span><span class="cite-pill" title="Transitions knowledge management from passive vector lookups to an active, self-healing knowledge foundry.">FEAT-582</span><span class="cite-pill" title="Eliminates LLM latency and hallucination risks during context retrieval by mapping question variants directly to ground-truth wisdom cards.">FEAT-583</span><span class="cite-pill" title="Cuts conversational triage latency by 50% while preventing semantic misalignment across disconnected classification stages.">FEAT-584</span></p>
+        </div>
+        
+            </article>
+        </main>
+
+        <!-- View 2: Executive Brief -->
+        <main id="view-executive" class="view-content">
+            <div class="exec-view">
+                
+        <div class="exec-card">
+            <h3 class="exec-heading">⚡ Section 1 - Introducing the Just in Time Context Loop</h3>
+            <ul class="exec-list">
+                <li><strong>Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration.</strong> <span class="exec-dim">History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle.</span> <span class="cite-pill">PHL-001</span></li><li><strong>“What I have is almost a blog.</strong> <span class="exec-dim">A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It&#x27;s more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that.</span> <span class="cite-pill">PHL-002</span><span class="cite-pill">DISC-004</span></li><li><strong>LLM’s are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG get’s us half way thare.</strong> <span class="exec-dim"></span> <span class="cite-pill">PHL-007</span></li><li><strong>Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections.</strong> <span class="exec-dim">Knowledge -&gt; tagging -&gt; wisdom -&gt; hook/trigger -&gt; intuitive behavior</span> <span class="cite-pill">PHL-005</span></li><li><strong>Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots.</strong> <span class="exec-dim">Saving memories -&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification.</span> <span class="cite-pill">PHL-006</span><span class="cite-pill">BKM-046</span></li>
+            </ul>
+        </div>
+        
+        <div class="exec-card">
+            <h3 class="exec-heading">⚡ Section 2 - References &amp; Prior Art</h3>
+            <ul class="exec-list">
+                <li><strong>Humble: Standing on the shoulders and all that, this isn&#x27;t a deep math insight, it’s just something that works.</strong> <span class="exec-dim">Something I built with what is around us, a logical step after integrating papers.</span> <span class="cite-pill">ARXIV:2305.18290</span></li><li><strong>List of supporting documents and arxive links - Prior art etc.</strong> <span class="exec-dim">- Use AGY to find prior art - specifically leverage and note Research.html.</span> <span class="cite-pill">ARXIV:2401.03462</span></li><li><strong>Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper.</strong> <span class="exec-dim"></span> <span class="cite-pill">PHL-029</span><span class="cite-pill">PHL-030</span></li>
+            </ul>
+        </div>
+        
+        <div class="exec-card">
+            <h3 class="exec-heading">⚡ Section 3 - Implementations &amp; Empirical Lab Architecture</h3>
+            <ul class="exec-list">
+                <li><strong>Demo/Present/Implementation.</strong> <span class="exec-dim">Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker.</span> <span class="cite-pill">FEAT-500</span><span class="cite-pill">FEAT-526</span></li><li><strong>Inside the lab: gems, triage Hyde.</strong> <span class="exec-dim">Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier &amp; hooks grouping. Decoupling triage and classification.</span> <span class="cite-pill">FEAT-546</span><span class="cite-pill">FEAT-568</span></li><li><strong>Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -&gt; paper.</strong> <span class="exec-dim"></span> <span class="cite-pill">FEAT-581</span><span class="cite-pill">FEAT-582</span><span class="cite-pill">FEAT-583</span><span class="cite-pill">FEAT-584</span></li>
+            </ul>
+        </div>
+        
+            </div>
+        </main>
+
+        <!-- View 3: Story Narrative -->
+        <main id="view-story" class="view-content">
+            <div class="story-view">
+                
+        <div class="story-chapter">
+            <h2 class="story-title">📖 Section 1 - Introducing the Just in Time Context Loop</h2>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 PHL-001</span>:
+                        <em>"Future of AI (three pillars): The attention and matrix computing is done and done. Now it&#x27;s all about memory and feedback. Layering feedback loops and back pressure for self correction, and database distilling and just in time context lookup (JITC) (they combine with matrix computing and attention well). Then feeding that all back into the databases. Long term memory, filtering, floating up what you need instead of memorizing the whole dictionary."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                <p class="story-p">Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration. History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 PHL-002</span>:
+                        <em>"LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 DISC-004</span>:
+                        <em>"The dual-channel memory architecture replacing monolithic context scaling with runtime dynamic anchor injection, floating up only the exact 2-3 required vectors milliseconds before inference."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                <p class="story-p">“What I have is almost a blog. A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It&#x27;s more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 PHL-007</span>:
+                        <em>"saving memories-&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                <p class="story-p">LLM’s are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG get’s us half way thare.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 PHL-005</span>:
+                        <em>"Trust can be quantified as context size. I only trust a model as much as it can remember. Ways to scope around this: Delegation, scoping, levels of design. Token golf not token maxing."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                <p class="story-p">Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -&gt; tagging -&gt; wisdom -&gt; hook/trigger -&gt; intuitive behavior</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 PHL-006</span>:
+                        <em>"Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time."</em>
+                        <span class="epigraph-author">--- jallred</span>
+                    </div>
+                    
+                <p class="story-p">Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots. Saving memories -&gt; dreaming (distillation) -&gt; Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification.</p>
+            </div>
+            
+        </div>
+        
+        <div class="story-chapter">
+            <h2 class="story-title">📖 Section 2 - References &amp; Prior Art</h2>
+            
+            <div class="story-par-block">
+                
+                <p class="story-p">Humble: Standing on the shoulders and all that, this isn&#x27;t a deep math insight, it’s just something that works. Something I built with what is around us, a logical step after integrating papers.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                <p class="story-p">List of supporting documents and arxive links - Prior art etc. - Use AGY to find prior art - specifically leverage and note Research.html.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                <p class="story-p">Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper.</p>
+            </div>
+            
+        </div>
+        
+        <div class="story-chapter">
+            <h2 class="story-title">📖 Section 3 - Implementations &amp; Empirical Lab Architecture</h2>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-500</span>:
+                        <em>"Guarantees zero downtime and resilient multi-seat speculative triage across heterogeneous APIs (oMLX OpenAI vs Ollama)."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                <p class="story-p">Demo/Present/Implementation. Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-546</span>:
+                        <em>"Aligns triage with natural engineer dialogue and prevents feedback from falling into conversational banter."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-568</span>:
+                        <em>"Reduces vector synchronization latency to &lt;15ms, prevents accidental clobbering across unedited cards, and eliminates memory-intensive batch vector re-indexing."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                <p class="story-p">Inside the lab: gems, triage Hyde. Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier &amp; hooks grouping. Decoupling triage and classification.</p>
+            </div>
+            
+            <div class="story-par-block">
+                
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-581</span>:
+                        <em>"Eliminates concurrent write collisions between human operators and autonomous agents while providing clean git diff tracking for evolving manuscripts."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-582</span>:
+                        <em>"Transitions knowledge management from passive vector lookups to an active, self-healing knowledge foundry."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-583</span>:
+                        <em>"Eliminates LLM latency and hallucination risks during context retrieval by mapping question variants directly to ground-truth wisdom cards."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                    <div class="narrative-epigraph">
+                        <span class="epigraph-anchor">📜 FEAT-584</span>:
+                        <em>"Cuts conversational triage latency by 50% while preventing semantic misalignment across disconnected classification stages."</em>
+                        <span class="epigraph-author">--- Federated Lab</span>
+                    </div>
+                    
+                <p class="story-p">Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -&gt; paper.</p>
+            </div>
+            
+        </div>
+        
+            </div>
+        </main>
+
+        <footer>
+            <p>Federated Lab Sovereign Publishing Engine (FEAT-616 • BKM-065 • VIBE-008)</p>
+            <p>100% Offline Static Bundle • Zero Live Runtime Dependencies</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const buttons = document.querySelectorAll('.view-tab-btn');
+            const views = document.querySelectorAll('.view-content');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetView = btn.getAttribute('data-view');
+                    
+                    buttons.forEach(b => b.classList.remove('active'));
+                    views.forEach(v => v.classList.remove('active'));
+
+                    btn.classList.add('active');
+                    const targetEl = document.getElementById('view-' + targetView);
+                    if (targetEl) targetEl.classList.add('active');
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

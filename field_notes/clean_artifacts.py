@@ -1,7 +1,8 @@
-import os
 import glob
+import os
 
 DATA_DIR = "field_notes/data"
+
 
 def clean():
     print("--- Cleaning Artifact Data ---")
@@ -18,6 +19,7 @@ def clean():
             print(f"Error removing {f}: {e}")
 
     print("Cleanup complete.")
+
 
 if __name__ == "__main__":
     clean()

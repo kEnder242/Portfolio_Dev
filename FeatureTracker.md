@@ -3312,10 +3312,42 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Ensures consistent, legible data exploration across all device form factors and graph densities without breaking interactive capabilities.
 **Mechanism:** `dna_forge/js/synapse_graph.js` (`calculateCanvasPressure`, `applyAdaptiveTierScaling`).
 
+## [FEAT-614] The Review Panel: Mutation Recommendations & Phrasing Dialogue
+**Sprint:** SPR-90.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — The Review Panel: Mutation Recommendations & Phrasing Dialogue.
+**Logic:** Provides an interactive right-hand review gutter in the Applied Writer studio. Facilitates multi-turn phrasing refinement, display of streaming machine mutations across stylistic lenses, side-by-side diff previews, and 1-click mutation acceptance directly back into the manuscript AST.
+**Rationale:** Gives authors an active conversational workbench to polish technical prose and evaluate stylistic variations with full provenance.
+**Mechanism:** `writer.html` (`#review-drawer`, `#reviewPanel`), Foyer `/paper/*` endpoints.
 
+## [FEAT-615] Paragraph Hover Controls & Mutation Triggers
+**Sprint:** SPR-90.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Paragraph Hover Controls & Mutation Triggers.
+**Logic:** Anchors contextual mutation review and discussion triggers directly inside the `.par-hover-controls` overlay on paragraph right margins. Allows authors to split, add, or immediately invoke the Review Panel for specific paragraph contexts.
+**Rationale:** Eliminates cumbersome mode switching by attaching authoring actions directly to the paragraph visual bounding box.
+**Mechanism:** `writer.html` (`.par-hover-controls`, `addNewParagraphAfter`, `splitParagraph`).
 
+## [FEAT-616] Offline Multi-View Paper Publishing Engine & Consistency Drift Heuristic
+**Sprint:** SPR-90.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/scripts/publish_paper.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/publish_paper.py) — Offline Multi-View Paper Publishing Engine & Consistency Drift Heuristic.
+**Logic:** Compiles manuscript JSON ASTs into standalone, air-gapped HTML artifacts (`www_deploy/papers.html`). Bakes client-side view projections (Formal Academic, Executive Brief, Story) into the static build with 0ms client-side switching and evaluates semantic drift across views.
+**Rationale:** Delivers publication-ready, self-contained papers for public viewing without requiring a live backend daemon.
+**Mechanism:** `scripts/publish_paper.py`, `www_deploy/papers.html`.
 
+## [FEAT-617] Unified Projection Toolbar (Lens Studio & Voice Vector Integration)
+**Sprint:** SPR-90.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Unified Projection Toolbar.
+**Logic:** Merges Lens Presets (Staff Architect, Executive STAR, Academic Reviewer) and continuous Voice Vector sliders (Formality, Density, Register) into a unified header projection drawer.
+**Rationale:** Unifies document stylistic rotation into a single coherent interface, separating invariant truth from stylistic projection (`PHL-035`).
+**Mechanism:** `writer.html` (`#lens-drawer`, `#voice-drawer`).
 
-
-
-
+## [FEAT-618] Tracked Editorial Dialogue & Multi-Turn Manuscript Discussion
+**Sprint:** SPR-90.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html) — Tracked Editorial Dialogue.
+**Logic:** Plugs conversational ledger history (`BKM-064`) into the manuscript Review Panel, allowing authors to debate revisions with the silicon leaf nodes before committing changes.
+**Rationale:** Preserves intermediate reasoning dialogues behind prose transformations.
+**Mechanism:** `writer.html` (`#review-drawer`).
