@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** July 8, 2026
+**Date:** September 25, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -15,7 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry & Dead PID Audit (`FEAT-619`, `BKM-066`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
+| **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry, Dead PID Audit & Telemetry Wire Indexing (`FEAT-619`, `FEAT-607`, `BKM-066`, `BKM-067`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
 | **spr-90-0-applied-writer** | Phase 19 | Applied Writer Studio, Unified Projection Toolbar, Review Panel Dialogue, Direct AST Backflow & Polymorphic `PHL` $\to$ `INS` (`FEAT-614`–`FEAT-618`, `BKM-064`, `BKM-065`, `INS-036`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_90_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_90_0.md) |
 | **spr-89-0-adaptive-pressure** | Phase 18 | Adaptive Distance & Viewport Pressure Promotion/Demotion Engine for Canvas Synapse Graph (`FEAT-613`) | **COMPLETED & CERTIFIED** |
 | **spr-88-0-accountability-digest** | Phase 18 | Multi-Stage Nightly Accountability Digest, Lab Threshold Sentry & Synthetic Morning Round Table Probe Suite (`FEAT-607`, `FEAT-608`) | **COMPLETED & CERTIFIED** [SPRINT_LOG_SPR_88.md](./docs/sprints/active/SPRINT_LOG_SPR_88.md) |
