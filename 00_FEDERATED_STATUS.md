@@ -15,7 +15,14 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-79-0-thought-organizer** | Phase 17 | Decoupled Thought Organizer & Wordsmithing Studio, Multi-Tier Bone Collections, Review/Clean Flow | **ACTIVE & IN PROGRESS** [SPRINT_PLAN_SPR_79_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_79_0.md) |
+| **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry & Dead PID Audit (`FEAT-619`, `BKM-066`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
+| **spr-90-0-applied-writer** | Phase 19 | Applied Writer Studio, Unified Projection Toolbar, Review Panel Dialogue, Direct AST Backflow & Polymorphic `PHL` $\to$ `INS` (`FEAT-614`–`FEAT-618`, `BKM-064`, `BKM-065`, `INS-036`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_90_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_90_0.md) |
+| **spr-89-0-adaptive-pressure** | Phase 18 | Adaptive Distance & Viewport Pressure Promotion/Demotion Engine for Canvas Synapse Graph (`FEAT-613`) | **COMPLETED & CERTIFIED** |
+| **spr-88-0-accountability-digest** | Phase 18 | Multi-Stage Nightly Accountability Digest, Lab Threshold Sentry & Synthetic Morning Round Table Probe Suite (`FEAT-607`, `FEAT-608`) | **COMPLETED & CERTIFIED** [SPRINT_LOG_SPR_88.md](./docs/sprints/active/SPRINT_LOG_SPR_88.md) |
+| **spr-87-0-vibe-dna-matrix** | Phase 18 | Sovereign VIBE Ledger, Dynamic Schema Ingestion & File-to-DB Round-Trip Consistency Invariant Matrix (`FEAT-605`, `FEAT-606`) | **COMPLETED & CERTIFIED** |
+| **spr-86-0-epistemic-correction** | Phase 18 | Epistemic Self-Correction, Graph Pruning & Disconnected Node Detection (`FEAT-604`) | **COMPLETED & CERTIFIED** |
+| **spr-85-0-synapse-graph** | Phase 18 | Universal Multi-Scale DNA Synapse Graph & Interactive Canvas Visualizer (`FEAT-600`–`FEAT-603`) | **COMPLETED & CERTIFIED** |
+| **spr-79-0-thought-organizer** | Phase 17 | Decoupled Thought Organizer & Wordsmithing Studio, Multi-Tier Bone Collections, Review/Clean Flow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_79_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_79_0.md) |
 | **spr-78-0-writer-studio** | Phase 16 | Multi-Paper Dataset Architecture, Cross-DNA Citation Pointers, Structure-to-Synthesis Reflow | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_78_0.md](./docs/sprints/archive/SPRINT_PLAN_SPR_78_0.md) |
 | **spr-77-0-wisdom-workbench** | Phase 16 | Universal DNA Workbench, Nightly Synthesis Refinement, Semantic Bucketing & `writer.html` | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_77_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_77_0.md) |
 
