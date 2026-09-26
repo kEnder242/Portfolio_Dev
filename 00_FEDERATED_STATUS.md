@@ -15,6 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-92-0-anti-green-lies** | Phase 19 | Ground-Truth Morning Round Table Probe Suite, Anti-Fabrication Judicial Assertion & Daemon State Integrity (`FEAT-608`, `FEAT-619`, `BKM-024`, `BKM-062`, `BKM-066`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_92_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_92_0.md) |
 | **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry, Dead PID Audit & Telemetry Wire Indexing (`FEAT-619`, `FEAT-607`, `BKM-066`, `BKM-067`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
 | **spr-90-0-applied-writer** | Phase 19 | Applied Writer Studio, Unified Projection Toolbar, Review Panel Dialogue, Direct AST Backflow & Polymorphic `PHL` $\to$ `INS` (`FEAT-614`–`FEAT-618`, `BKM-064`, `BKM-065`, `INS-036`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_90_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_90_0.md) |
 | **spr-89-0-adaptive-pressure** | Phase 18 | Adaptive Distance & Viewport Pressure Promotion/Demotion Engine for Canvas Synapse Graph (`FEAT-613`) | **COMPLETED & CERTIFIED** |
