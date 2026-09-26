@@ -17154,6 +17154,58 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-619">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-619</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Standalone Morning Accountability Watchdog & Decoupled Audit Engine
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-91.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/standalone_accountability_watchdog.py" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/standalone_accountability_watchdog.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decoupled out-of-band auditor that executes independently at the end of the nightly maintenance window (06:00 AM) or on demand. Audits 7 critical vectors independently of <code>nightly_forge.py</code> control flow:
+  1. GPU Power Clamp (&lt;= 170W).
+  2. Foyer &amp; vLLM Service Liveness &amp; Hot-Reload.
+  3. Stale Lockfile &amp; Crash Sentry (<code>maintenance.lock</code>, <code>nightly_forge.lock</code>, <code>nightly_lora_training.lock</code>).
+  4. Nightly Forge Execution Liveness &amp; State Age Check.
+  5. LoRA Fine-Tuning Multi-Adapter Pass Verification.
+  6. Subconscious Dreaming Gems Audit.
+  7. Synthetic Morning Round Table Accountability Probe.
+Emits authoritative <code>daily_accountability_digest.json</code> using atomic temporary writes to both <code>Portfolio_Dev/field_notes/data/</code> and <code>www_deploy/data/</code>, with Neural Pager escalation on failure.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Insulates observability from silent execution failures, crashes, deadlocks, and early returns (<code>BKM-066</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>standalone_accountability_watchdog.py</code>, <code>test_standalone_accountability_watchdog.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>

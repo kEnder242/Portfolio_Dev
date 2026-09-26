@@ -3351,3 +3351,20 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Logic:** Plugs conversational ledger history (`BKM-064`) into the manuscript Review Panel, allowing authors to debate revisions with the silicon leaf nodes before committing changes.
 **Rationale:** Preserves intermediate reasoning dialogues behind prose transformations.
 **Mechanism:** `writer.html` (`#review-drawer`).
+
+## [FEAT-619] Standalone Morning Accountability Watchdog & Decoupled Audit Engine
+**Sprint:** SPR-91.0
+**Status:** ACTIVE
+**Code:** [HomeLabAI/src/infra/standalone_accountability_watchdog.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/standalone_accountability_watchdog.py) — Standalone Morning Accountability Watchdog & Decoupled Audit Engine.
+**Logic:** Decoupled out-of-band auditor that executes independently at the end of the nightly maintenance window (06:00 AM) or on demand. Audits 7 critical vectors independently of `nightly_forge.py` control flow:
+  1. GPU Power Clamp (<= 170W).
+  2. Foyer & vLLM Service Liveness & Hot-Reload.
+  3. Stale Lockfile & Crash Sentry (`maintenance.lock`, `nightly_forge.lock`, `nightly_lora_training.lock`).
+  4. Nightly Forge Execution Liveness & State Age Check.
+  5. LoRA Fine-Tuning Multi-Adapter Pass Verification.
+  6. Subconscious Dreaming Gems Audit.
+  7. Synthetic Morning Round Table Accountability Probe.
+Emits authoritative `daily_accountability_digest.json` using atomic temporary writes to both `Portfolio_Dev/field_notes/data/` and `www_deploy/data/`, with Neural Pager escalation on failure.
+**Rationale:** Insulates observability from silent execution failures, crashes, deadlocks, and early returns (`BKM-066`).
+**Mechanism:** `standalone_accountability_watchdog.py`, `test_standalone_accountability_watchdog.py`.
+
