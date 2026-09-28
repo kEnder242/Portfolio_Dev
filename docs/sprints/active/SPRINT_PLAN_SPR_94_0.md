@@ -20,11 +20,11 @@
 
 | Story ID | Title | Assigned Owner | Tool / Runner | Success Criteria |
 | :--- | :--- | :--- | :--- | :--- |
-| **Story 94.4** | Cloud Oracle Adversarial Audit | `[SWARM:CLOUD]` | `delegate.py --mode oracle` | ✅ **COMPLETED** (`ORACLE_REVIEW_SPRINT_94.md`) |
-| **Story 94.6** | Consolidated Projection Engine Backend | `[SWARM:LOCAL]` | `delegate.py --story 946` | Unified `HomeLabAI/src/projection/` package |
-| **Story 94.1** | DNA Manifest Bridge (Vibe & Inspiration) | `[SWARM:LOCAL]` | `delegate.py --story 941` | Manifest populated with VIBE/INSPIRATION titles |
-| **Story 94.2** | Symbolic vs Semantic Detector Budgeting | `[SWARM:LOCAL]` | `delegate.py --story 942` | `UNSAFE_TO_CRAFT` refusal branch + sub-ms filters |
-| **Story 94.3** | Paper AST Schema v2 & Dynamic Scoping | `[SWARM:LOCAL]` | `delegate.py --story 943` | Dynamic `paper_id` scoping in `lens_service.py` |
+| **Story 94.4** | Cloud Oracle Adversarial Audit | `[SWARM:CLOUD]` | `delegate.py --oracle` | ✅ **COMPLETED** (`ORACLE_REVIEW_SPRINT_94.md`) |
+| **Story 94.6** | Consolidated Projection Engine Backend | `[SWARM:LOCAL]` | `delegate.py --story 946 --local` | Unified `HomeLabAI/src/projection/` package |
+| **Story 94.1** | DNA Manifest Bridge (Vibe & Inspiration) | `[SWARM:LOCAL]` | `delegate.py --story 941 --local` | Manifest populated with VIBE/INSPIRATION titles |
+| **Story 94.2** | Symbolic vs Semantic Detector Budgeting | `[SWARM:LOCAL]` | `delegate.py --story 942 --local` | `UNSAFE_TO_CRAFT` refusal branch + sub-ms filters |
+| **Story 94.3** | Paper AST Schema v2 & Dynamic Scoping | `[SWARM:LOCAL]` | `delegate.py --story 943 --local` | Dynamic `paper_id` scoping in `lens_service.py` |
 | **Story 94.5** | Nightly GPU Thermal / Pacing Certification | `[AGY:PRIMARY]` | Native test runner | 100% test pass on final consolidated code |
 
 ---
