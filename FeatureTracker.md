@@ -3398,3 +3398,11 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Upgrades the paper AST envelope to schema v2, enforcing the Lens v2 structure, DAG dependency sorting, and dynamic `paper_id` scoping to prevent cross-paper filename overwrites during grading.
 **Rationale:** Enforces machine-verifiable structural invariants across all published paper ASTs (`FEAT-585`).
 **Mechanism:** `validate_paper_schema.py`, `lens_service.py`.
+
+## [FEAT-624] Ops Execution Engine & Deterministic Action Runner
+**Sprint:** SPR-94.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/ops/ops_runner.py` — Ops Execution Engine.
+**Logic:** Replaces conversational operational advice with deterministic execution primitives modeled on Git CLI behavior. Provides atomic execution handlers for GPU vitals/power-clamping, Foyer daemon lifecycle (wake/quiesce), systemd services, CUDA cache purges, and remote seat switching (M5 Air `:8002`), returning structured telemetry and broadcasting events to `pager_activity.json`.
+**Rationale:** Eliminates advisory latency and empowers agents/orchestrators to directly transition lab state safely and deterministically.
+**Mechanism:** `OpsRunner` and `execute_op()` in `HomeLabAI/src/ops/ops_runner.py`. Verified via `src/tests/test_ops_runner_unit.py`.

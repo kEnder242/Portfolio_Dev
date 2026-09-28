@@ -52,7 +52,29 @@
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Target:** `HomeLabAI/src/infra/nightly_lora_training.py`, `HomeLabAI/src/infra/nightly_forge.py`
 * **Scope:**
-  1. Audit GPU power-clamp and batch pacing in `nightly_lora_training.py` (adjust step limits and enforce persistent 165W clamp across subprocesses to prevent hardware reset trips during sustained backpropagation).
+  1. Audit GPU power-clamp and batch pacing in `nightly_lora_training.py` (enforce persistent 165W clamp and inter-step CUDA cache purging via consolidated `[FEAT-160]`).
   2. Verify clean execution of unit and shakedown tests.
   3. Commit local changes per BKM-009 / BKM-040.
 * **Success Criteria:** 100% test suite passing, clean local git checkpoint.
+
+### Story 94.6: Consolidated Projection Engine Backend Package
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/projection/` (`__init__.py`, `engine.py`, `bones.py`, `lenses.py`, `recommender.py`)
+* **Scope:**
+  1. Create `HomeLabAI/src/projection/` consolidating scattered projection logic:
+     - `engine.py`: Core projection lifecycle (bone extraction, lens binding, AST transforms).
+     - `bones.py`: Generic document & resume AST parser, revision tagging, and diff/reconciliation operators.
+     - `lenses.py`: Lens compiler, rule validator, and symbolic rubric detectors.
+     - `recommender.py`: Job description alignment matrix, key/weak bullet categorization, mutation proposals, and cover letter synthesis.
+  2. Provide unit test suite `HomeLabAI/src/tests/test_projection_engine_unit.py`.
+* **Success Criteria:** Unified Python API callable by both CLI and web endpoints; 100% unit test pass rate.
+
+---
+
+## 🛠️ Delegation & Quality Checklist (BKM-049 / BKM-024)
+- [ ] Every story has explicit assigned owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, `[AGY:PRIMARY]`).
+- [ ] Subagent dispatches use REST `delegate.py` on port 4097 (no interactive CLI attachments).
+- [ ] 3-attempt diagnostic retry gauntlet enforced before escalating local failures to cloud.
+- [ ] Pre-flight AST and syntax validation (`python3 -m py_compile`, `node --check`).
+- [ ] Fast unit tests verify isolated logic; live daemon verification confirms HEAD match.
+- [ ] Double-write and local git checkpoint commits executed cleanly without remote push.
