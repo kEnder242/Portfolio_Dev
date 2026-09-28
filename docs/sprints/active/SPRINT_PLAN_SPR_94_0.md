@@ -4,10 +4,10 @@
 
 ---
 
-## 🎯 Architectural Mandates (BKM-049 / BKM-070 / BKM-024 / BKM-071)
+## 🎯 Architectural Mandates (BKM-049 / BKM-015 / BKM-070 / BKM-024 / BKM-071)
 1. **D-1 RE-ANCHORING LAW (BKM-070):** All projections project from immutable certified bones ($\pi(\mathcal{C})$) in diamond topologies; serial compounding chains are forbidden.
-2. **SYMBOLIC PARTITIONING (WIS-487 / FEAT-622):** Deterministic truth invariants (CP-1, CP-4, CP-5, CP-7) are enforced strictly by sub-millisecond symbolic code; semantic LLM detectors are isolated for asynchronous styling.
-3. **DELEGATION OWNER TAG MANDATE (BKM-049):** Every story declares an assigned owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). Local stories execute via `delegate.py` with 3 diagnostic retries before escalation.
+2. **BKM-015 ANTI-REGEX & STRUCTURAL PARTITIONING (BKM-015 / WIS-487 / FEAT-622):** Deterministic truth invariants (CP-1, CP-7) are enforced strictly by structural AST/schema traversal; semantic criteria (power-verbs, numeric assertion equivalence, style) are evaluated via LLM-judge. Custom regex matching for natural language evaluation is strictly banned.
+3. **TRI-LOOP DELEGATION MANDATE (BKM-049):** Every story declares an assigned owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). Local stories execute via single-shot `delegate.py` dispatches with AGY-driven outer diagnostic loop (up to 3 diagnostic attempts) before cloud escalation. Direct takeover (`[AGY:TAKEOVER]`) is strictly forbidden without prior failed execution attempts.
 4. **DNA DE-DUPLICATION & MERGE LAW (BKM-071):** Vector search ChromaDB `:8001` before adding DNA; merge >85% similar records.
 5. **DOUBLE-WRITE & SYNCHRONIZATION (BKM-068):** Keep `FeatureTracker.md` and ChromaDB `:8001` synchronized with all changes.
 
@@ -60,9 +60,11 @@
 * **Target:** `HomeLabAI/src/projection/lenses.py`
 * **Scope:**
   1. Refactor `craft_lens` to enforce total function compilation: emit valid bound rules with `UNSAFE_TO_CRAFT` refusal branch when input is invalid (`WIS-487`).
-  2. Partition rules into `tier_0_structural` (symbolic: regex, numeric subset CP-5, token containment CP-1) and `tier_1_semantic` (LLM-judge).
+  2. Partition rules strictly into:
+     - `tier_0_structural` (Deterministic AST node traversal: schema integrity, CP-1 token containment, CP-7 section isolation). **ZERO brittle regex matching for natural language / power verbs / numeric diffing (`BKM-015`).**
+     - `tier_1_semantic` (LLM-judge with temperature=0 and JSON schema output for power-verb evaluation, style, and semantic assertion equivalence).
   3. Add `detector_budget` limits to prevent blocking execution loops.
-* **Success Criteria:** `craft_lens` handles edge cases without silent default fallback; unit tests pass.
+* **Success Criteria:** `craft_lens` handles edge cases without silent default fallback; zero regex in semantic rubrics; unit tests pass.
 
 ### Story 94.3: Paper AST Schema v2 & Dynamic Scoping Gate
 * **Assigned Owner:** `[SWARM:LOCAL]`
