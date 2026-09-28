@@ -743,12 +743,12 @@
 **Rationale:** Previous failovers led to unhelpful hallucinations. The Stoic Shadow provides clinical, lead-engineer precision when the primary Sovereign is offline.
 **Mechanism:** Uses local weights to perform technical derivations with a clinical persona when KENDER is offline.
 
-## [FEAT-160] Pedigree Refinement Pipeline
+## [FEAT-160] Pedigree Refinement Pipeline & Hardware-Paced Training
 **Status:** ACTIVE
-**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L18) — Pedigree Refinement Pipeline.
-**Logic:** Automated LoRA "Burn" orchestrator. Physically encodes engineering pedigree into model weights based on Rank 4 "Gems" found in the archive.
-**Rationale:** Encodes the 18-year history into the model's neurons, transforming context searching into intuitive neural recall.
-**Mechanism:** `src/forge/train_expert.py`. Dynamically preloads `libnvJitLink.so.13` for CUDA 13 / SM 7.5 Unsloth LoRA fine-tuning and integrates with `nightly_forge.py` for autonomous nightly weight induction.
+**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L36) — Pedigree Refinement Pipeline & Hardware Pacing.
+**Logic:** Automated LoRA "Burn" orchestrator and thermal pacing controller. Physically encodes engineering pedigree into model weights based on Rank 4 "Gems" found in the archive. Includes `HardwarePacingCallback` (5.0s inter-step delay with CUDA cache purging and VRAM de-fragmentation) and micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts and allow host VRMs, PSU capacitors, GDDR6 memory controllers, and PCIe power rails to settle into baseline P8/P5 idle thermal states.
+**Rationale:** Encodes 18-year history into neural weights while eliminating host di/dt electrical trips and thermal exhaustion during sustained multi-epoch backpropagation.
+**Mechanism:** `train_expert.py` (Unsloth LoRA fine-tuning, dynamic `libnvJitLink.so.13` preloading, `HardwarePacingCallback`, `record_forge_telemetry()`). Consolidated from former FEAT-452.
 
 ## [FEAT-161] Synthetic Character Distillation
 **Status:** ACTIVE
@@ -2425,11 +2425,10 @@
 **Logic:** Enforce 165W power limit on RTX 2080 Ti to eliminate di/dt transient voltage drops that trip host PSU.
 **Mechanism:** `nvidia-smi -pl 165` hardware limit check during pre-flight in `nightly_forge.py`.
 
-## [FEAT-452] Unsloth Gradient Smoothing & Hardware Pacing
-**Status:** ACTIVE
+## [FEAT-452] [CONSOLIDATED] Unsloth Gradient Smoothing & Hardware Pacing
+**Status:** CONSOLIDATED (Consolidated into FEAT-160)
 **Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L36) — Hardware Pacing & Smoothing.
-**Logic:** HardwarePacingCallback (5.0s inter-step delay with CUDA cache purging and VRAM de-fragmentation), micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts and allow GPU VRMs, GDDR6 memory controllers, and PCIe rails to drop to P8/P5 baseline thermal idle state.
-**Mechanism:** `HardwarePacingCallback` in `src/forge/train_expert.py` invoking `torch.cuda.empty_cache()`, `torch.cuda.ipc_collect()`, `gc.collect()`, and `time.sleep(5.0)`. Telemetry recorded via `record_forge_telemetry()`.
+**Logic:** Hardware pacing, inter-step CUDA cache purging, and telemetry logic consolidated directly into [FEAT-160].
 
 ## [FEAT-453] Post-Maintenance Autonomous Morning Re-ignition
 **Status:** DESIGN
