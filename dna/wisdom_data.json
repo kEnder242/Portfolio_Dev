@@ -20774,5 +20774,317 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "WIS-483",
+    "theme": "Mathematics & Projections",
+    "paper_order": 483,
+    "origin": {
+      "author": "jallred",
+      "text": "Truth is invariant; Presentation is a fluid projection. Triage space converges inward to classify intent; Expression space diverges outward to project invariant DNA meaning into diverse stylistic registers.",
+      "source": "Oracle Synthesis SPR-93.4 (PHL-035 / WIS-050)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "Projection as Retraction (Semantic Closure)",
+      "narrative_context": "Stylistic projection is a fiber-preserving retraction onto the invariant semantic manifold Sigma (pi o F_L = pi). Stylistic rotation exists entirely inside the kernel of the anchor projection.",
+      "lab_anchors": [
+        "PHL-035",
+        "FEAT-620",
+        "BKM-070"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "projections",
+        "mathematics",
+        "invariance",
+        "fiber-bundles"
+      ],
+      "explicit_links": [
+        "PHL-035",
+        "FEAT-620",
+        "BKM-070"
+      ],
+      "aliases": [
+        "WIS-050",
+        "projection-as-retraction"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-484",
+    "theme": "Mathematics & Projections",
+    "paper_order": 484,
+    "origin": {
+      "author": "jallred",
+      "text": "Truth invariants must be enforced by symbolic detectors only. A semantic LLM detector makes truth-preservation probabilistic, dissolving the entire foundation of invariant truth.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-051 / CP-1..CP-8)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "The Symbolic Enforcement Partition",
+      "narrative_context": "Hard truth gates (CP-1 Semantic Closure, CP-5 Numeric Literal Integrity, CP-7 Idempotence) must be strictly symbolic (AST, regex, numeric set-diff, Merkle inclusion proofs). Semantic LLM judges are strictly reserved for non-truth stylistic grading.",
+      "lab_anchors": [
+        "FEAT-620",
+        "FEAT-622",
+        "BKM-070"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "symbolic-enforcement",
+        "detectors",
+        "invariants",
+        "truth-gates"
+      ],
+      "explicit_links": [
+        "FEAT-620",
+        "FEAT-622",
+        "BKM-070"
+      ],
+      "aliases": [
+        "WIS-051",
+        "symbolic-enforcement-partition"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-485",
+    "theme": "Mathematics & Projections",
+    "paper_order": 485,
+    "origin": {
+      "author": "jallred",
+      "text": "Every step must take certified origin bones as input, never the previous step surface text. Re-anchor, do not re-generate.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-052 / D-1 Law)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "The Diamond Topology (Bounded Error vs Compounding Drift)",
+      "narrative_context": "In a diamond projection topology, errors are bounded by the worst single step (max lambda_i eta_i) rather than compounding exponentially (sum lambda^k eta_i) across serial chains.",
+      "lab_anchors": [
+        "FEAT-620",
+        "BKM-070",
+        "PHL-035"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "diamond-topology",
+        "re-anchoring",
+        "error-bounds",
+        "composable-projections"
+      ],
+      "explicit_links": [
+        "FEAT-620",
+        "BKM-070",
+        "PHL-035"
+      ],
+      "aliases": [
+        "WIS-052",
+        "diamond-topology"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-486",
+    "theme": "Mathematics & Projections",
+    "paper_order": 486,
+    "origin": {
+      "author": "jallred",
+      "text": "Drift is not substring absence; drift is observational discrepancy under the active rubric set.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-053)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "Drift Is Relative to the Rubric (Rubric-Relative Bisimulation)",
+      "narrative_context": "Defines observational equivalence under rubric set R: P equiv Q iff forall r in R, [[r]](P) == [[r]](Q). Replaces arbitrary substring heuristics with actionable rubric defect rates.",
+      "lab_anchors": [
+        "FEAT-616",
+        "FEAT-620",
+        "FEAT-622"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "drift-metrics",
+        "bisimulation",
+        "rubric-evaluation"
+      ],
+      "explicit_links": [
+        "FEAT-616",
+        "FEAT-620",
+        "FEAT-622"
+      ],
+      "aliases": [
+        "WIS-053",
+        "rubric-relative-drift"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-487",
+    "theme": "Mathematics & Projections",
+    "paper_order": 487,
+    "origin": {
+      "author": "jallred",
+      "text": "A lens compiler must be a total function with an explicit refusal branch when guidance cannot be bound to valid rules.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-054)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "The Refusal Branch (Total Function Rubric Compilation)",
+      "narrative_context": "craft(g) returns R if bound and coverage >= tau, otherwise emits UNSAFE_TO_CRAFT. Eliminates silent emission of generic default rubrics when input guidance is invalid or empty.",
+      "lab_anchors": [
+        "FEAT-594",
+        "FEAT-620",
+        "FEAT-623"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "lens-crafting",
+        "rubric-compilation",
+        "total-functions"
+      ],
+      "explicit_links": [
+        "FEAT-594",
+        "FEAT-620",
+        "FEAT-623"
+      ],
+      "aliases": [
+        "WIS-054",
+        "refusal-branch"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-488",
+    "theme": "Mathematics & Projections",
+    "paper_order": 488,
+    "origin": {
+      "author": "jallred",
+      "text": "Rubric acts on the structural axis; voice acts on the register axis. They must remain strictly orthogonal.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-055)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "Orthogonal Register and Structure",
+      "narrative_context": "Enforces [sigma_R, rho_v] = 0 on the stylistic fiber N(pi). Applying structure then voice must yield the same projection as voice then structure.",
+      "lab_anchors": [
+        "FEAT-596",
+        "FEAT-617",
+        "FEAT-620"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "voice-vectors",
+        "rubrics",
+        "orthogonality",
+        "registers"
+      ],
+      "explicit_links": [
+        "FEAT-596",
+        "FEAT-617",
+        "FEAT-620"
+      ],
+      "aliases": [
+        "WIS-055",
+        "orthogonal-register-structure"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
+  },
+  {
+    "id": "WIS-489",
+    "theme": "Mathematics & Projections",
+    "paper_order": 489,
+    "origin": {
+      "author": "jallred",
+      "text": "Autonomous agents degrade when isolated from human correction. Human friction is the highest-fidelity evolutionary signal in the system.",
+      "source": "Oracle Synthesis SPR-93.4 (WIS-056 / PHL-036)",
+      "immutable": true,
+      "created_at": "2026-09-28T01:30:00Z"
+    },
+    "synthesis": {
+      "title": "A Rubric Without Preference Is a Detector",
+      "narrative_context": "A rubric that only emits defect flags is a detector, not an objective. Paired preference signals recorded in ledgers are required to evaluate and evolve competing lenses over time.",
+      "lab_anchors": [
+        "PHL-036",
+        "BKM-064",
+        "FEAT-620"
+      ],
+      "review_notes": "Synthesized from Cloud Oracle review SPR-93.4.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "preference-learning",
+        "feedback-ledgers",
+        "human-in-the-loop"
+      ],
+      "explicit_links": [
+        "PHL-036",
+        "BKM-064",
+        "FEAT-620"
+      ],
+      "aliases": [
+        "WIS-056",
+        "rubric-preference-gap"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_mathematics_projections"
+    }
   }
 ]
