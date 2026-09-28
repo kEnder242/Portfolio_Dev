@@ -2426,10 +2426,10 @@
 **Mechanism:** `nvidia-smi -pl 165` hardware limit check during pre-flight in `nightly_forge.py`.
 
 ## [FEAT-452] Unsloth Gradient Smoothing & Hardware Pacing
-**Status:** DESIGN
-**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L20) — Hardware Pacing & Smoothing.
-**Logic:** HardwarePacingCallback (50ms inter-step delay), micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts.
-**Mechanism:** Unsloth Trainer argument configuration and callback in `src/forge/train_expert.py`.
+**Status:** ACTIVE
+**Code:** [src/forge/train_expert.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/forge/train_expert.py#L36) — Hardware Pacing & Smoothing.
+**Logic:** HardwarePacingCallback (5.0s inter-step delay with CUDA cache purging and VRAM de-fragmentation), micro-batching (batch_size=1, grad_accum=4, warmup=10, max_seq_length=1536) to pace compute bursts and allow GPU VRMs, GDDR6 memory controllers, and PCIe rails to drop to P8/P5 baseline thermal idle state.
+**Mechanism:** `HardwarePacingCallback` in `src/forge/train_expert.py` invoking `torch.cuda.empty_cache()`, `torch.cuda.ipc_collect()`, `gc.collect()`, and `time.sleep(5.0)`. Telemetry recorded via `record_forge_telemetry()`.
 
 ## [FEAT-453] Post-Maintenance Autonomous Morning Re-ignition
 **Status:** DESIGN
