@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # [FEAT-616 / VIBE-008] Multi-View Offline Paper Publisher & Drift Heuristic Engine
-# Purpose: Compiles paper AST into standalone offline HTML with 3 baked-in projected views
-#          (Formal Academic, Executive Brief, Story Narrative) and verifies cross-view semantic drift.
+# Purpose: Compiles paper ASTs into standalone offline HTML with 3 baked-in projected views
+#          (Formal Academic, Executive Brief, Story Narrative), paper switching, and cross-view drift evaluation.
 # Output:  www_deploy/papers.html (and Portfolio_Dev/field_notes/papers.html) with 0 live API dependencies.
 
 import argparse
 import html
 import json
-import os
-import re
 import sys
 from pathlib import Path
 
@@ -28,7 +26,7 @@ def load_dna_index():
     try:
         manifest = json.loads(DNA_MANIFEST.read_text(encoding="utf-8"))
         lookup = {}
-        for col in ["wisdom", "philosophy", "inspiration", "behavioral", "feature", "discovery"]:
+        for col in ["wisdom", "philosophy", "inspiration", "behavioral", "feature", "discovery", "vibe"]:
             for item in manifest.get(col, []):
                 cid = item.get("id")
                 if cid:
@@ -77,14 +75,13 @@ def calculate_drift(paper, views_content):
     return drift_report
 
 
-def generate_html(paper, dna_index):
-    """Generate self-contained, standalone offline HTML."""
+def build_single_paper_html(paper_id, paper, dna_index):
+    """Builds the HTML section for a single paper."""
     title = html.escape(paper.get("title", "Research Manuscript"))
     subtitle = html.escape(paper.get("subtitle", "Sovereign AI Systems Architecture"))
     author = html.escape(paper.get("author", "Jason Allred"))
     date_str = html.escape(paper.get("created_at", "2026-09-25")[:10])
 
-    # 1. Build Views HTML
     # View A: Formal Academic
     formal_sections = []
     for sec in paper.get("sections", []):
@@ -168,12 +165,73 @@ def generate_html(paper, dna_index):
 
     drift = calculate_drift(paper, raw_views)
 
+    paper_card = f'''
+    <section id="paper-card-{paper_id}" class="paper-card-container" data-paper-id="{paper_id}">
+        <header class="paper-header">
+            <h1 class="paper-main-title">{title}</h1>
+            <div class="subtitle">{subtitle}</div>
+            <div class="meta-bar">
+                <span>✍️ {author}</span>
+                <span>📅 {date_str}</span>
+                <span class="drift-badge">🛡️ Cross-View Drift: {drift["views"]["formal"]["drift_score"]}%</span>
+            </div>
+        </header>
+
+        <!-- View Navigation Tabs -->
+        <nav class="view-switcher" data-paper-target="{paper_id}">
+            <button class="view-tab-btn active" data-view="formal">🔬 Formal Academic View</button>
+            <button class="view-tab-btn" data-view="executive">💼 Executive Summary</button>
+            <button class="view-tab-btn" data-view="story">📖 Narrative &amp; Origins</button>
+        </nav>
+
+        <!-- View 1: Formal Academic -->
+        <div id="view-formal-{paper_id}" class="view-content active">
+            <article class="formal-view">
+                {"".join(formal_sections)}
+            </article>
+        </div>
+
+        <!-- View 2: Executive Brief -->
+        <div id="view-executive-{paper_id}" class="view-content">
+            <div class="exec-view">
+                {"".join(exec_sections)}
+            </div>
+        </div>
+
+        <!-- View 3: Story Narrative -->
+        <div id="view-story-{paper_id}" class="view-content">
+            <div class="story-view">
+                {"".join(story_sections)}
+            </div>
+        </div>
+    </section>
+    '''
+
+    return paper_card, drift
+
+
+def generate_multi_paper_html(papers_dict, dna_index):
+    """Generates the full standalone multi-paper viewer with paper-selector."""
+    paper_options = []
+    paper_cards = []
+    overall_drift = {}
+
+    first_id = list(papers_dict.keys())[0] if papers_dict else "paper_jitc"
+
+    for pid, pdata in papers_dict.items():
+        title = html.escape(pdata.get("title", pid))
+        is_selected = "selected" if pid == first_id else ""
+        paper_options.append(f'<option value="{pid}" {is_selected}>{title}</option>')
+        card_html, drift = build_single_paper_html(pid, pdata, dna_index)
+        paper_cards.append(card_html)
+        overall_drift[pid] = drift
+
     html_page = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title} — Multi-View Sovereign Publication</title>
+    <title>Published Papers &amp; Projections — Federated Lab</title>
     <style>
         :root {{
             --bg-color: #0d1117;
@@ -195,27 +253,82 @@ def generate_html(paper, dna_index):
             color: var(--text-color);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding: 32px 16px;
+            padding: 24px 16px;
         }}
         .container {{
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
         }}
-        header {{
+        .top-nav-bar {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }}
+        .nav-brand {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 0.5px;
+        }}
+        .nav-brand a {{
+            color: var(--text-bright);
+            text-decoration: none;
+        }}
+        .paper-selector-group {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }}
+        .paper-selector-label {{
+            color: var(--sub-color);
+            font-weight: 600;
+        }}
+        .paper-select {{
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            color: var(--text-bright);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }}
+        .paper-select:focus {{
+            border-color: var(--accent-color);
+        }}
+        .paper-card-container {{
+            display: none;
+        }}
+        .paper-card-container.active {{
+            display: block;
+        }}
+        .paper-header {{
             text-align: center;
-            padding-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 24px;
         }}
-        h1 {{
-            font-size: 2.2rem;
+        .paper-main-title {{
+            font-size: 2.1rem;
             color: var(--text-bright);
             font-family: var(--font-serif);
             margin-bottom: 8px;
             line-height: 1.25;
         }}
         .subtitle {{
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--sub-color);
             margin-bottom: 12px;
             font-style: italic;
@@ -226,6 +339,7 @@ def generate_html(paper, dna_index):
             gap: 16px;
             font-size: 0.85rem;
             color: var(--sub-color);
+            flex-wrap: wrap;
         }}
         .drift-badge {{
             display: inline-flex;
@@ -243,19 +357,20 @@ def generate_html(paper, dna_index):
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
             background: var(--card-bg);
             padding: 6px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
+            flex-wrap: wrap;
         }}
         .view-tab-btn {{
             background: transparent;
             border: none;
             color: var(--sub-color);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            padding: 8px 18px;
+            padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -278,26 +393,26 @@ def generate_html(paper, dna_index):
             font-family: var(--font-serif);
             font-size: 1.05rem;
             background: #12161c;
-            padding: 40px;
+            padding: 36px 40px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }}
         .section-title {{
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             color: var(--text-bright);
-            margin: 28px 0 14px 0;
+            margin: 24px 0 12px 0;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 6px;
         }}
         .formal-p {{
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             text-align: justify;
             line-height: 1.8;
         }}
         .cite-pill {{
             font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             background: rgba(88, 166, 255, 0.12);
             color: var(--accent-color);
             border: 1px solid rgba(88, 166, 255, 0.3);
@@ -342,24 +457,24 @@ def generate_html(paper, dna_index):
         .story-view {{
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }}
         .story-chapter {{
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 28px;
+            padding: 24px;
         }}
         .story-title {{
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--amber-glow);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }}
         .story-par-block {{
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }}
         .story-p {{
-            font-size: 1rem;
+            font-size: 0.98rem;
             line-height: 1.7;
         }}
         .narrative-epigraph {{
@@ -369,90 +484,97 @@ def generate_html(paper, dna_index):
             border-radius: 4px;
             margin-bottom: 10px;
             font-size: 0.85rem;
+            color: var(--sub-color);
         }}
         .epigraph-anchor {{
-            color: var(--amber-glow);
-            font-weight: 700;
             font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--amber-glow);
         }}
         .epigraph-author {{
             display: block;
-            text-align: right;
-            color: var(--sub-color);
-            font-size: 0.75rem;
             margin-top: 4px;
+            font-size: 0.78rem;
+            color: var(--sub-color);
         }}
         footer {{
             margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
             text-align: center;
             font-size: 0.8rem;
             color: var(--sub-color);
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
         }}
     </style>
+    <script src="mission-control.js?v=papers" defer></script>
 </head>
 <body>
+    <mission-control></mission-control>
     <div class="container">
-        <header>
-            <h1>{title}</h1>
-            <div class="subtitle">{subtitle}</div>
-            <div class="meta-bar">
-                <span>✍️ {author}</span>
-                <span>📅 {date_str}</span>
-                <span class="drift-badge">🛡️ Cross-View Drift: {drift["views"]["formal"]["drift_score"]}%</span>
+        <!-- Top Navigation Bar with Paper Selector -->
+        <nav class="top-nav-bar">
+            <div class="nav-brand">
+                <span>📚 Sovereign Papers Showcase</span>
             </div>
-        </header>
-
-        <!-- View Navigation Tabs -->
-        <nav class="view-switcher">
-            <button class="view-tab-btn active" data-view="formal">🔬 Formal Academic View</button>
-            <button class="view-tab-btn" data-view="executive">💼 Executive Summary</button>
-            <button class="view-tab-btn" data-view="story">📖 Narrative &amp; Origins</button>
+            <div class="paper-selector-group">
+                <label for="paper-selector" class="paper-selector-label">Active Document:</label>
+                <select id="paper-selector" class="paper-select">
+                    {"".join(paper_options)}
+                </select>
+            </div>
         </nav>
 
-        <!-- View 1: Formal Academic -->
-        <main id="view-formal" class="view-content active">
-            <article class="formal-view">
-                {"".join(formal_sections)}
-            </article>
-        </main>
-
-        <!-- View 2: Executive Brief -->
-        <main id="view-executive" class="view-content">
-            <div class="exec-view">
-                {"".join(exec_sections)}
-            </div>
-        </main>
-
-        <!-- View 3: Story Narrative -->
-        <main id="view-story" class="view-content">
-            <div class="story-view">
-                {"".join(story_sections)}
-            </div>
-        </main>
+        <!-- Paper Cards Container -->
+        <div id="papers-deck">
+            {"".join(paper_cards)}
+        </div>
 
         <footer>
-            <p>Federated Lab Sovereign Publishing Engine (FEAT-616 • BKM-065 • VIBE-008)</p>
+            <p>Federated Lab Sovereign Publishing Engine (FEAT-616 • FEAT-589 • BKM-065 • VIBE-008)</p>
             <p>100% Offline Static Bundle • Zero Live Runtime Dependencies</p>
         </footer>
     </div>
 
     <script>
         (function() {{
-            const buttons = document.querySelectorAll('.view-tab-btn');
-            const views = document.querySelectorAll('.view-content');
+            const paperSelect = document.getElementById('paper-selector');
+            const paperCards = document.querySelectorAll('.paper-card-container');
 
-            buttons.forEach(btn => {{
-                btn.addEventListener('click', () => {{
-                    const targetView = btn.getAttribute('data-view');
-                    
-                    buttons.forEach(b => b.classList.remove('active'));
-                    views.forEach(v => v.classList.remove('active'));
+            function showPaper(pid) {{
+                paperCards.forEach(c => {{
+                    if (c.getAttribute('data-paper-id') === pid) {{
+                        c.classList.add('active');
+                    }} else {{
+                        c.classList.remove('active');
+                    }}
+                }});
+            }}
 
-                    btn.classList.add('active');
-                    const targetEl = document.getElementById('view-' + targetView);
-                    if (targetEl) targetEl.classList.add('active');
+            if (paperSelect) {{
+                paperSelect.addEventListener('change', function() {{
+                    showPaper(this.value);
+                }});
+                showPaper(paperSelect.value);
+            }}
+
+            // View Tabs Switcher per paper card
+            document.querySelectorAll('.view-switcher').forEach(switcher => {{
+                const targetPaperId = switcher.getAttribute('data-paper-target');
+                const buttons = switcher.querySelectorAll('.view-tab-btn');
+                const card = document.getElementById('paper-card-' + targetPaperId);
+                if (!card) return;
+                const views = card.querySelectorAll('.view-content');
+
+                buttons.forEach(btn => {{
+                    btn.addEventListener('click', () => {{
+                        const targetView = btn.getAttribute('data-view');
+                        buttons.forEach(b => b.classList.remove('active'));
+                        views.forEach(v => v.classList.remove('active'));
+
+                        btn.classList.add('active');
+                        const targetEl = document.getElementById('view-' + targetView + '-' + targetPaperId);
+                        if (targetEl) targetEl.classList.add('active');
+                    }});
                 }});
             }});
         }})();
@@ -460,39 +582,67 @@ def generate_html(paper, dna_index):
 </body>
 </html>
 '''
-    return html_page, drift
+    return html_page, overall_drift
+
+
+def find_published_papers():
+    """Locates all available published paper ASTs."""
+    candidates = [
+        (REPO_ROOT / "papers" / "paper_jitc_intuition.json", "paper_jitc"),
+        (REPO_ROOT / "field_notes" / "data" / "papers" / "PAPER-002_SEMANTIC_PACKING.json", "paper_semantic_packing"),
+        (REPO_ROOT / "field_notes" / "data" / "papers" / "PAPER-RESUME_v1.json", "paper_resume_v1"),
+        (REPO_ROOT / "field_notes" / "data" / "papers" / "PAPER-RESUME_v2_farah_sharghi_recruiter_v1.json", "paper_resume_v2")
+    ]
+    papers_dict = {}
+    for ppath, pid in candidates:
+        if ppath.exists():
+            try:
+                data = json.loads(ppath.read_text(encoding="utf-8"))
+                papers_dict[pid] = data
+            except Exception as e:
+                print(f"⚠️ Warning loading paper {ppath}: {e}")
+    return papers_dict
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Multi-View Offline Paper Publisher (FEAT-616)")
-    parser.add_argument("--paper", default=str(REPO_ROOT / "papers" / "paper_jitc_intuition.json"), help="Path to manuscript JSON AST")
+    parser = argparse.ArgumentParser(description="Multi-View Offline Paper Publisher (FEAT-616 / FEAT-589)")
+    parser.add_argument("--paper", help="Path to single manuscript JSON AST (optional)")
     parser.add_argument("--out", default=str(WWW_DEPLOY), help="Path to output HTML")
     args = parser.parse_args()
 
-    paper_path = Path(args.paper)
     out_path = Path(args.out)
-
-    if not paper_path.exists():
-        print(f"❌ Error: Paper file {paper_path} does not exist.")
-        sys.exit(1)
-
-    paper = json.loads(paper_path.read_text(encoding="utf-8"))
     dna_index = load_dna_index()
 
-    html_content, drift = generate_html(paper, dna_index)
+    if args.paper:
+        paper_path = Path(args.paper)
+        if not paper_path.exists():
+            print(f"❌ Error: Paper file {paper_path} does not exist.")
+            sys.exit(1)
+        paper = json.loads(paper_path.read_text(encoding="utf-8"))
+        papers_dict = {paper_path.stem: paper}
+    else:
+        papers_dict = find_published_papers()
+
+    if not papers_dict:
+        print("❌ Error: No paper datasets found.")
+        sys.exit(1)
+
+    html_content, drift = generate_multi_paper_html(papers_dict, dna_index)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html_content, encoding="utf-8")
-    print(f"✅ Published standalone multi-view paper: {out_path}")
+    print(f"✅ Published standalone multi-paper viewer: {out_path}")
 
-    # Also mirror to field_notes/papers.html
+    # Mirror to field_notes/papers.html
     FIELD_NOTES_PAPERS.parent.mkdir(parents=True, exist_ok=True)
     FIELD_NOTES_PAPERS.write_text(html_content, encoding="utf-8")
     print(f"✅ Mirrored to field notes: {FIELD_NOTES_PAPERS}")
 
     print("\n--- Cross-View Drift Summary ---")
-    for vname, vdata in drift.get("views", {}).items():
-        print(f"  • View [{vname.capitalize()}]: Coverage {vdata['coverage_pct']}% | Drift {vdata['drift_score']}%")
+    for pid, pdrift in drift.items():
+        print(f"📄 Paper [{pid}]:")
+        for vname, vdata in pdrift.get("views", {}).items():
+            print(f"  • View [{vname.capitalize()}]: Coverage {vdata['coverage_pct']}% | Drift {vdata['drift_score']}%")
 
 
 if __name__ == "__main__":

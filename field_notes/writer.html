@@ -17981,6 +17981,29 @@ window.__WRITER_QUOTES__ = [
         </header>
 
         <!-- Main Viewport containing Decoupled Panels -->
+        <div class="projection-toolbar">
+            <div class="proj-group">
+                <span class="proj-label">🔍 Synthesis Lens:</span>
+                <select id="toolbar-lens-select" class="proj-select">
+                    <option value="farah_sharghi_recruiter_v1">Farah Sharghi (Recruiter Lens v1)</option>
+                    <option value="yc_partner_brief_v1">YC Partner Pitch / Exec Brief</option>
+                    <option value="academic_paper_v1" selected>IEEE / Academic Reviewer</option>
+                    <option value="staff_architect_v1">Staff AI Architect (Deep Technical)</option>
+                    <option value="custom">Custom Lens...</option>
+                </select>
+            </div>
+            <div class="proj-group">
+                <span class="proj-label">🎛️ Voice Vectors:</span>
+                <button class="proj-pill active" data-voice="academic">🔬 Academic</button>
+                <button class="proj-pill" data-voice="executive">💼 Executive</button>
+                <button class="proj-pill" data-voice="recruiter">👔 Recruiter</button>
+                <button class="proj-pill" data-voice="casual">☕ Casual</button>
+            </div>
+            <div class="proj-group">
+                <button id="btn-toggle-review-panel" class="action-btn" style="border-color:rgba(63,185,80,0.4); color:#3fb950;" title="Toggle Editorial Dialogue & Mutation Review Panel">💬 Review Panel</button>
+            </div>
+        </div>
+
         <div class="studio-viewport">
 
         <!-- 🌲 PANEL 1: TREE OUTLINER & PALETTE -->
@@ -18072,30 +18095,6 @@ window.__WRITER_QUOTES__ = [
 
         <!-- 🌊 PANEL 2: WRITING VIEW & REVIEW DRAWER -->
         <section id="write-view-panel" class="studio-panel active">
-            <!-- [FEAT-617] Top Unified Projection Toolbar -->
-            <div class="projection-toolbar">
-                <div class="proj-group">
-                    <span class="proj-label">🔍 Synthesis Lens:</span>
-                    <select id="toolbar-lens-select" class="proj-select">
-                        <option value="farah_sharghi_recruiter_v1">Farah Sharghi (Recruiter Lens v1)</option>
-                        <option value="yc_partner_brief_v1">YC Partner Pitch / Exec Brief</option>
-                        <option value="academic_paper_v1" selected>IEEE / Academic Reviewer</option>
-                        <option value="staff_architect_v1">Staff AI Architect (Deep Technical)</option>
-                        <option value="custom">Custom Lens...</option>
-                    </select>
-                </div>
-                <div class="proj-group">
-                    <span class="proj-label">🎛️ Voice Vectors:</span>
-                    <button class="proj-pill active" data-voice="academic">🔬 Academic</button>
-                    <button class="proj-pill" data-voice="executive">💼 Executive</button>
-                    <button class="proj-pill" data-voice="recruiter">👔 Recruiter</button>
-                    <button class="proj-pill" data-voice="casual">☕ Casual</button>
-                </div>
-                <div class="proj-group">
-                    <button id="btn-toggle-review-panel" class="action-btn" style="border-color:rgba(63,185,80,0.4); color:#3fb950;" title="Toggle Editorial Dialogue & Mutation Review Panel">💬 Review Panel</button>
-                </div>
-            </div>
-
             <!-- Center: Sovereign Human Prose Canvas -->
             <div class="manuscript-container">
                 <div class="manuscript-paper">
