@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projection Studio | Jason Allred</title>
+    <link rel="stylesheet" href="style.css?v=312b4371">
+    <style>
+        /* ==========================================================================
+           [SPRINT 93.0 / STORY 93.5] Standalone Projection Studio Sandbox
+           Lightweight testbed for: Raw Bone -> Lens -> Projection Synthesis,
+           with symbolic enforcement of CP-1 (Semantic Closure) and
+           CP-5 (Provenance Surjectivity + Metric Integrity).
+
+           Schematic source: docs/sprints/active/ORACLE_REVIEW_SPRINT_93.md
+             - CP-1: pi o F_L = pi   (each lens is a RETRACTION onto Sigma)
+             - CP-5: set(numerics(output)) is a SUBSET of set(numerics(origin))
+             - Design Law D-1: RE-ANCHOR, do not re-generate (diamond, not chain)
+
+           Zero-framework by mandate: vanilla HTML5 + modern CSS + native Web
+           Components. No build step, no bundler, no framework runtime.
+           ========================================================================== */
+
+        :root {
+            /* Lens / projection accent palette (layered over style.css tokens) */
+            --proj-accent: #4daafc;
+            --proj-accent-dim: #264f78;
+            --proj-lens: #a371f7;      /* lens craft / rubric */
+            --proj-bone: #d29922;      /* raw bone gutter */
+            --proj-ok: #3fb950;        /* invariant PASS */
+            --proj-warn: #d29922;      /* invariant WARN */
+            --proj-fail: #f85149;      /* invariant FAIL */
+            --proj-synth: #58a6ff;     /* synthesis output */
+            --bone-bg: #1f242c;
+            --bone-border: #38424f;
+            --panel-bg: #0d1117;
+            --panel-head-bg: #161b22;
+        }
+
+        body {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .studio-workspace {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            height: 100vh;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        /* --- Top Studio Header ------------------------------------------------- */
+        .studio-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 20px;
+            background-color: var(--panel-head-bg);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .studio-title-badge {
+            background-color: var(--accent-color, #4daafc);
+            color: #0a0e14;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            padding: 4px 9px;
+            border-radius: 3px;
+        }
+
+        .studio-header .hdr-title {
+            font-size: 0.95rem;
+            color: var(--heading-color, #fff);
+            font-weight: 600;
+        }
+
+        .studio-header .hdr-sub {
+            font-size: 0.68rem;
+            color: var(--sub-color, #8b949e);
+            font-family: var(--font-stack, monospace);
+        }
+
+        .header-spacer { flex-grow: 1; }
+
+        .server-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.62rem;
+            color: var(--sub-color, #8b949e);
+            border: 1px solid var(--border-color, #30363d);
+            background-color: var(--bg-color, #0a0e14);
+            padding: 4px 9px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+        .server-status-pill .status-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background-color: #555; display: inline-block;
+        }
+        .server-status-pill .status-label { color: inherit; }
+        .server-status-pill.online { color: var(--proj-ok); border-color: rgba(63,185,80,0.5); }
+        .server-status-pill.online .status-dot { background-color: var(--proj-ok); }
+        .server-status-pill.offline { color: var(--sub-color, #8b949e); }
+        .server-status-pill.busy { color: var(--proj-synth); border-color: rgba(88,166,255,0.5); }
+        .server-status-pill.busy .status-dot { background-color: var(--proj-synth); }
+
+        /* --- Controls --------------------------------------------------------- */
+        .btn {
+            background-color: var(--panel-bg, #0d1117);
+            color: var(--text-color, #e6edf3);
+            border: 1px solid var(--border-color, #30363d);
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            font-family: var(--font-stack, monospace);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .btn:hover:not(:disabled) { border-color: var(--proj-accent, #4daafc); color: var(--proj-accent, #4daafc); }
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .btn-primary {
+            background-color: var(--proj-accent, #4daafc);
+            border-color: var(--proj-accent, #4daafc);
+            color: #0a0e14;
+            font-weight: bold;
+        }
+        .btn-primary:hover:not(:disabled) { background-color: #6cb8ff; color: #0a0e14; }
+        .btn-lens { border-color: var(--proj-lens, #a371f7); color: var(--proj-lens, #a371f7); }
+        .btn-lens:hover:not(:disabled) { background-color: rgba(163,113,247,0.12); color: var(--proj-lens, #a371f7); }
+        .btn-sm { padding: 3px 8px; font-size: 0.62rem; }
+
+        select, textarea, input[type="text"] {
+            background-color: var(--bg-color, #0a0e14);
+            color: var(--text-color, #e6edf3);
+            border: 1px solid var(--border-color, #30363d);
+            border-radius: 4px;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.72rem;
+            padding: 6px 8px;
+            box-sizing: border-box;
+        }
+        select:focus, textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--proj-accent, #4daafc);
+        }
+
+        /* --- Mode toggle (MOCK / LIVE silicon) --------------------------------- */
+        .mode-toggle { display: inline-flex; border: 1px solid var(--border-color, #30363d); border-radius: 4px; overflow: hidden; }
+        .mode-toggle button {
+            background: var(--panel-bg, #0d1117);
+            color: var(--sub-color, #8b949e);
+            border: none;
+            padding: 6px 11px;
+            font-size: 0.62rem;
+            font-family: var(--font-stack, monospace);
+            cursor: pointer;
+        }
+        .mode-toggle button.active { background-color: var(--proj-accent, #4daafc); color: #0a0e14; font-weight: bold; }
+
+        /* --- Main studio grid -------------------------------------------------- */
+        .studio-viewport {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px 20px 40px;
+        }
+
+        .studio-grid {
+            display: grid;
+            grid-template-columns: minmax(260px, 1fr) minmax(280px, 1fr) minmax(300px, 1.15fr);
+            gap: 14px;
+            align-items: start;
+        }
+        @media (max-width: 1180px) { .studio-grid { grid-template-columns: 1fr; } }
+
+        .panel {
+            background-color: var(--panel-bg, #0d1117);
+            border: 1px solid var(--border-color, #30363d);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 11px;
+            background-color: var(--panel-head-bg, #161b22);
+            border-bottom: 1px solid var(--border-color, #30363d);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--sub-color, #8b949e);
+            font-family: var(--font-stack, monospace);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .panel-head .ph-index { color: var(--proj-accent, #4daafc); font-weight: bold; }
+        .panel-head .ph-accent-bone { color: var(--proj-bone, #d29922); }
+        .panel-head .ph-accent-lens { color: var(--proj-lens, #a371f7); }
+        .panel-head .ph-accent-synth { color: var(--proj-synth, #58a6ff); }
+        .panel-head .ph-spacer { flex-grow: 1; }
+        .panel-body { padding: 11px; display: flex; flex-direction: column; gap: 9px; }
+
+        .field-label {
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--sub-color, #8b949e);
+            font-family: var(--font-stack, monospace);
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #bone-input {
+            width: 100%;
+            min-height: 190px;
+            resize: vertical;
+            line-height: 1.5;
+            background-color: var(--bone-bg, #1f242c);
+            border-color: var(--bone-border, #38424f);
+        }
+
+        .preset-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .preset-row .btn { flex: 1 1 auto; min-width: 88px; }
+
+        .bone-list {
+            max-height: 190px;
+            overflow-y: auto;
+            border: 1px solid var(--bone-border, #38424f);
+            border-radius: 4px;
+            background-color: var(--bone-bg, #1f242c);
+        }
+        .bone-item {
+            display: flex;
+            gap: 7px;
+            padding: 5px 8px;
+            border-bottom: 1px solid rgba(56,66,79,0.5);
+            font-size: 0.66rem;
+            line-height: 1.4;
+            font-family: var(--font-stack, monospace);
+            color: var(--text-color, #e6edf3);
+        }
+        .bone-item:last-child { border-bottom: none; }
+        .bone-item .bone-id {
+            color: var(--proj-bone, #d29922);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .bone-item .bone-text { color: var(--sub-color, #8b949e); word-break: break-word; }
+        .bone-empty { padding: 10px; font-size: 0.65rem; color: var(--sub-color, #8b949e); font-family: var(--font-stack, monospace); text-align: center; }
+
+        .bone-meta { font-size: 0.6rem; color: var(--sub-color, #8b949e); font-family: var(--font-stack, monospace); }
+
+        /* --- Lens panel -------------------------------------------------------- */
+        .lens-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            font-size: 0.62rem;
+            font-family: var(--font-stack, monospace);
+        }
+        .lens-meta-cell {
+            background-color: var(--bone-bg, #1f242c);
+            border: 1px solid var(--bone-border, #38424f);
+            border-radius: 4px;
+            padding: 5px 7px;
+        }
+        .lens-meta-cell .lmc-key { color: var(--sub-color, #8b949e); font-size: 0.55rem; text-transform: uppercase; }
+        .lens-meta-cell .lmc-val { color: var(--proj-lens, #a371f7); font-weight: bold; word-break: break-word; }
+
+        .voice-axes { display: flex; flex-direction: column; gap: 4px; }
+        .axis-row { display: flex; align-items: center; gap: 7px; font-size: 0.6rem; font-family: var(--font-stack, monospace); color: var(--sub-color, #8b949e); }
+        .axis-row .axis-name { width: 62px; flex-shrink: 0; }
+        .axis-meter { flex-grow: 1; height: 5px; background-color: var(--border-color, #30363d); border-radius: 3px; overflow: hidden; }
+        .axis-meter .axis-fill { height: 100%; background-color: var(--proj-lens, #a371f7); border-radius: 3px; transition: width 0.2s; }
+        .axis-row .axis-val { width: 30px; text-align: right; color: var(--proj-lens, #a371f7); }
+
+        #rubric-editor {
+            width: 100%;
+            min-height: 130px;
+            resize: vertical;
+            line-height: 1.5;
+            color: var(--proj-lens, #a371f7);
+        }
+
+        .dna-card {
+            border: 1px solid var(--proj-lens, #a371f7);
+            background-color: rgba(163,113,247,0.08);
+            border-radius: 4px;
+            padding: 7px 9px;
+            font-size: 0.64rem;
+            line-height: 1.45;
+            font-family: var(--font-stack, monospace);
+            color: var(--text-color, #e6edf3);
+        }
+        .dna-card .dna-id { color: var(--proj-lens, #a371f7); font-weight: bold; }
+        .dna-card .dna-quote { color: var(--sub-color, #8b949e); font-style: italic; display: block; margin-top: 4px; }
+
+        .stack-strip { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-family: var(--font-stack, monospace); font-size: 0.6rem; }
+        .stack-node {
+            border: 1px solid var(--proj-lens, #a371f7);
+            border-radius: 3px;
+            padding: 2px 6px;
+            color: var(--proj-lens, #a371f7);
+        }
+        .stack-node.local { border-color: var(--proj-bone, #d29922); color: var(--proj-bone, #d29922); }
+        .stack-arrow { color: var(--sub-color, #8b949e); }
+        .stack-note { color: var(--proj-ok, #3fb950); font-size: 0.58rem; }
+
+        /* --- Synthesis panel --------------------------------------------------- */
+        #synthesis-output {
+            background-color: var(--bone-bg, #1f242c);
+            border: 1px solid var(--bone-border, #38424f);
+            border-radius: 4px;
+            padding: 10px;
+            min-height: 200px;
+            max-height: 420px;
+            overflow-y: auto;
+            font-size: 0.72rem;
+            line-height: 1.6;
+            color: var(--text-color, #e6edf3);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .synth-placeholder { color: var(--sub-color, #8b949e); font-style: italic; font-family: var(--font-stack, monospace); font-size: 0.68rem; }
+
+        .provenance-stamp {
+            font-family: var(--font-stack, monospace);
+            font-size: 0.58rem;
+            color: var(--sub-color, #8b949e);
+            background-color: var(--bone-bg, #1f242c);
+            border: 1px solid var(--bone-border, #38424f);
+            border-radius: 4px;
+            padding: 6px 8px;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+        .provenance-stamp .ps-key { color: var(--proj-synth, #58a6ff); }
+        .provenance-stamp .ps-warn { color: var(--proj-warn, #d29922); }
+
+        /* --- Diff panel -------------------------------------------------------- */
+        .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 780px) { .diff-grid { grid-template-columns: 1fr; } }
+        .diff-col-head {
+            font-size: 0.56rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--sub-color, #8b949e);
+            font-family: var(--font-stack, monospace);
+            margin-bottom: 4px;
+        }
+        .diff-body {
+            background-color: var(--bone-bg, #1f242c);
+            border: 1px solid var(--bone-border, #38424f);
+            border-radius: 4px;
+            padding: 9px;
+            min-height: 140px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.68rem;
+            line-height: 1.6;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .diff-body del { background-color: rgba(248,81,73,0.22); color: #ffb4ae; text-decoration: line-through; border-radius: 2px; padding: 0 1px; }
+        .diff-body ins { background-color: rgba(63,185,80,0.22); color: #9be79b; text-decoration: none; border-radius: 2px; padding: 0 1px; }
+        .diff-body ins.diff-stat { background-color: rgba(88,166,255,0.22); color: #a5d2ff; }
+        .diff-body ins.diff-punc { background-color: rgba(210,153,34,0.20); color: #e8c37a; }
+
+        /* --- Invariant Inspector ----------------------------------------------- */
+        .invariant-row {
+            border: 1px solid var(--border-color, #30363d);
+            border-radius: 4px;
+            padding: 8px 10px;
+            background-color: var(--bone-bg, #1f242c);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .invariant-row .ir-top { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+        .invariant-row .ir-cp { font-family: var(--font-stack, monospace); font-size: 0.65rem; font-weight: bold; color: var(--proj-accent, #4daafc); }
+        .invariant-row .ir-name { font-size: 0.65rem; color: var(--text-color, #e6edf3); font-weight: 600; }
+        .invariant-row .ir-formula { font-family: var(--font-stack, monospace); font-size: 0.58rem; color: var(--sub-color, #8b949e); }
+        .invariant-row .ir-detail { font-family: var(--font-stack, monospace); font-size: 0.6rem; color: var(--sub-color, #8b949e); line-height: 1.5; }
+
+        .inv-badge {
+            font-family: var(--font-stack, monospace);
+            font-size: 0.55rem;
+            font-weight: bold;
+            letter-spacing: 0.8px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            border: 1px solid;
+        }
+        .inv-badge.pass { color: var(--proj-ok, #3fb950); border-color: var(--proj-ok, #3fb950); background-color: rgba(63,185,80,0.10); }
+        .inv-badge.fail { color: var(--proj-fail, #f85149); border-color: var(--proj-fail, #f85149); background-color: rgba(248,81,73,0.12); }
+        .inv-badge.warn { color: var(--proj-warn, #d29922); border-color: var(--proj-warn, #d29922); background-color: rgba(210,153,34,0.10); }
+        .inv-badge.idle { color: var(--sub-color, #8b949e); border-color: var(--border-color, #30363d); }
+
+        .hard-gate-banner {
+            border: 1px solid var(--border-color, #30363d);
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.6rem;
+            line-height: 1.55;
+            color: var(--sub-color, #8b949e);
+        }
+        .hard-gate-banner.gate-clear { border-color: rgba(63,185,80,0.5); color: #9be79b; }
+        .hard-gate-banner.gate-block { border-color: rgba(248,81,73,0.6); color: #ffb4ae; background-color: rgba(248,81,73,0.08); }
+
+        /* --- Toast / sys console ------------------------------------------------ */
+        .toast-notification {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background-color: var(--panel-head-bg, #161b22);
+            border: 1px solid var(--border-color, #30363d);
+            color: var(--text-color, #e6edf3);
+            padding: 9px 18px;
+            border-radius: 5px;
+            font-size: 0.72rem;
+            font-family: var(--font-stack, monospace);
+            opacity: 0;
+            transition: 0.22s;
+            z-index: 9000;
+            max-width: 74vw;
+        }
+        .toast-notification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast-notification.success { border-color: var(--proj-ok, #3fb950); color: #9be79b; }
+        .toast-notification.error { border-color: var(--proj-fail, #f85149); color: #ffb4ae; }
+        .toast-notification.warn { border-color: var(--proj-warn, #d29922); color: #e8c37a; }
+
+        .disclaimer-box {
+            background-color: var(--card-bg, #11161d);
+            border: 1px solid var(--border-color, #30363d);
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            font-family: var(--font-stack, monospace);
+            font-size: 0.68rem;
+            line-height: 1.55;
+            color: var(--sub-color, #8b949e);
+        }
+    </style>
+</head>
+<body>
+    <button id="menu-toggle">☰ MENU</button>
+
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main class="studio-workspace">
+        <!-- Top Studio Header: badge, mode toggle, Foyer status, run control -->
+        <header class="studio-header">
+            <span class="studio-title-badge">PROJECTION</span>
+            <div>
+                <div class="hdr-title">Projection Studio Sandbox</div>
+                <div class="hdr-sub">Raw Bone &rarr; Lens &rarr; Projection Synthesis &middot; SPR-93.0 / STORY 93.5</div>
+            </div>
+
+            <div class="header-spacer"></div>
+
+            <div class="mode-toggle" title="MOCK = deterministic local simulation. LIVE = Foyer REST :8765 /paper/synthesize">
+                <button id="mode-mock" class="active" type="button">MOCK</button>
+                <button id="mode-live" type="button">LIVE</button>
+            </div>
+
+            <div class="server-status-pill" id="foyer-status-pill">
+                <span class="status-dot"></span> <span class="status-label">FOYER PROBE...</span>
+            </div>
+
+            <button class="btn" id="btn-probe" type="button" title="Probe Foyer /paper/validate reachability">Probe Silicon</button>
+            <button class="btn btn-primary" id="btn-synthesize" type="button" title="On-demand projection synthesis (CP-7 stamped)">▶ Synthesize Projection</button>
+        </header>
+
+        <div class="studio-viewport">
+            <div class="disclaimer-box">
+                <strong>SANDBOX SCOPE:</strong> This page is a diagnostic testbed for the projection operator
+                <em>F<sub>L</sub> : T &times; &Theta; &rarr; T</em> under an active lens stack. It is <strong>not</strong> a publication surface.
+                <br>
+                <strong>INVARIANTS (symbolic detectors only, per SPR-93 Oracle synthesis):</strong>
+                <strong>CP-1</strong> Semantic Closure &mdash; &pi;&nbsp;&circ;&nbsp;F<sub>L</sub> = &pi;, i.e. a projection may
+                <em>never</em> introduce, drop, or alter a claim, its citation set, or its numeric literals.
+                <strong>CP-5</strong> Metric Integrity &mdash; <code>set(numerics(output)) &sube; set(numerics(origin))</code>.
+                A CP-1 or CP-5 violation is a <strong>BLOCK_PUBLISH</strong> hard failure, not a review flag.
+                <br>
+                <strong>Design Law D-1:</strong> every step re-anchors on the certified payload &pi;(C), never on the
+                previous step's surface text. <strong>CP-7</strong> (re-projection idempotence) is enforced by the provenance stamp.
+                <br>
+                <strong>TWO LENSES ARE DELIBERATELY BROKEN &mdash; SELECT THEM ON PURPOSE:</strong>
+                <code>sales_impact_rounder</code> fabricates numeric literals (triggers <strong>CP-5</strong>, BLOCK_PUBLISH) and
+                <code>executive_concise_v1</code> truncates multi-sentence bones (triggers <strong>CP-1</strong> c1b claim_containment).
+                The other three lenses are verified retractions and should hold green on any payload.
+            </div>
+
+            <div class="studio-grid">
+                <!-- ================================================================
+                     PANEL 1 — Raw Bone / Text Input Gutter (anchor 2)
+                     ================================================================ -->
+                <section class="panel" id="panel-bone">
+                    <div class="panel-head">
+                        <span class="ph-index">01</span>
+                        <span class="ph-accent-bone">Raw Bone / Input Gutter</span>
+                        <span class="ph-spacer"></span>
+                        <span id="bone-counter">0 bones</span>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="field-label">Canonical Payload &pi;(C) &mdash; one bone per non-empty line</div>
+                            <textarea id="bone-input" spellcheck="false" placeholder="Paste raw bone text. One claim per line.&#10;&#10;Numeric literals are load-bearing: any digit that appears here MUST survive into the projection (CP-5)."></textarea>
+                        </div>
+
+                        <div>
+                            <div class="field-label">Preset Loaders</div>
+                            <div class="preset-row">
+                                <button class="btn btn-sm" type="button" data-preset="recruiter">Recruiter Bullets</button>
+                                <button class="btn btn-sm" type="button" data-preset="numeric">Numeric Stress</button>
+                                <button class="btn btn-sm" type="button" data-preset="dna">DNA Card</button>
+                                <button class="btn btn-sm" type="button" data-preset="drift">Decay Trap</button>
+                                <button class="btn btn-sm" type="button" data-preset="clear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="field-label">Bone Roster &mdash; &pi;(C) projection of the gutter</div>
+                            <div class="bone-list" id="bone-list">
+                                <div class="bone-empty">No bones loaded. Pick a preset or type into the gutter.</div>
+                            </div>
+                        </div>
+
+                        <div class="bone-meta" id="bone-meta">&mdash;</div>
+                    </div>
+                </section>
+
+                <!-- ================================================================
+                     PANEL 2 — Dynamic Lens Selector & Prompt Rubric Editor (anchor 3)
+                     ================================================================ -->
+                <section class="panel" id="panel-lens">
+                    <div class="panel-head">
+                        <span class="ph-index">02</span>
+                        <span class="ph-accent-lens">Lens Selector / Rubric Editor</span>
+                        <span class="ph-spacer"></span>
+                        <span id="lens-kind-badge">rubric</span>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="field-label">Active Lens L = (R, v, &Pi;)</div>
+                            <select id="lens-select" style="width:100%"></select>
+                        </div>
+
+                        <div class="lens-meta-grid">
+                            <div class="lens-meta-cell">
+                                <div class="lmc-key">Lens ID</div>
+                                <div class="lmc-val" id="lens-id">&mdash;</div>
+                            </div>
+                            <div class="lens-meta-cell">
+                                <div class="lmc-key">Kind</div>
+                                <div class="lmc-val" id="lens-kind">&mdash;</div>
+                            </div>
+                            <div class="lens-meta-cell">
+                                <div class="lmc-key">Render</div>
+                                <div class="lmc-val" id="lens-render">&mdash;</div>
+                            </div>
+                            <div class="lens-meta-cell">
+                                <div class="lmc-key">Chain Depth</div>
+                                <div class="lmc-val" id="lens-depth">&mdash;</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="field-label">Voice Vector v (orthogonal to rubric &mdash; CP-8)</div>
+                            <div class="voice-axes" id="voice-axes"></div>
+                        </div>
+
+                        <div>
+                            <div class="field-label">
+                                Prompt Rubric Editor
+                                <span class="header-spacer" style="flex-grow:1"></span>
+                                <button class="btn btn-sm" type="button" id="btn-rubric-reset">Reset</button>
+                            </div>
+                            <textarea id="rubric-editor" spellcheck="false" placeholder="Symbolic rules the lens is compiled from. These are guardrails, not prose instructions."></textarea>
+                        </div>
+
+                        <div id="dna-card-slot"></div>
+
+                        <div>
+                            <div class="field-label">Lens Stack (DAG over bone sets, not a linear chain)</div>
+                            <div class="stack-strip" id="stack-strip"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================
+                     PANEL 3 — On-Demand Projection Synthesis (anchor 4, upper half)
+                     ================================================================ -->
+                <section class="panel" id="panel-synth">
+                    <div class="panel-head">
+                        <span class="ph-index">03</span>
+                        <span class="ph-accent-synth">Projection Synthesis Preview</span>
+                        <span class="ph-spacer"></span>
+                        <span id="synth-state">idle</span>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="field-label">
+                                F<sub>L</sub>(&pi;(C)) &mdash; on-demand only, never auto-chained
+                                <span class="header-spacer" style="flex-grow:1"></span>
+                                <button class="btn btn-sm" type="button" id="btn-cp7-reproject" title="CP-7: F_L(F_L(C)) must equal F_L(C)">Re-project (CP-7)</button>
+                            </div>
+                            <div id="synthesis-output">
+                                <span class="synth-placeholder">Idle. Load bones, pick a lens, then press &ldquo;Synthesize Projection&rdquo;.</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="field-label">Provenance Stamp</div>
+                            <div class="provenance-stamp" id="provenance-stamp">&mdash;</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ====================================================================
+                 SIDE-BY-SIDE DIFF (anchor 4, lower half)
+                 ==================================================================== -->
+            <section class="panel" id="panel-diff" style="margin-top:14px;">
+                <div class="panel-head">
+                    <span class="ph-index">04</span>
+                    <span class="ph-accent-synth">Side-by-Side Diff</span>
+                    <span class="ph-spacer"></span>
+                    <span class="header-spacer"></span>
+                    <label class="field-label" style="margin:0;">
+                        <input type="checkbox" id="diff-raw-toggle" style="accent-color:#4daafc;" />
+                        &lt;del&gt;removed&lt;/del&gt; &nbsp;<ins style="color:#9be79b;">added</ins>
+                    </label>
+                </div>
+                <div class="panel-body">
+                    <div class="diff-grid">
+                        <div>
+                            <div class="diff-col-head">Source &mdash; &pi;(C) Canonical</div>
+                            <div class="diff-body" id="diff-source"><span class="synth-placeholder">No source snapshot.</span></div>
+                        </div>
+                        <div>
+                            <div class="diff-col-head">Projection &mdash; F<sub>L</sub>(&pi;(C))</div>
+                            <div class="diff-body" id="diff-target"><span class="synth-placeholder">No projection yet.</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====================================================================
+                 INVARIANT INSPECTOR (anchor 5)
+                 ==================================================================== -->
+            <section class="panel" id="panel-invariants" style="margin-top:14px;">
+                <div class="panel-head">
+                    <span class="ph-index">05</span>
+                    <span>Invariant Inspector &mdash; symbolic detectors</span>
+                    <span class="ph-spacer"></span>
+                    <span id="invariant-summary">awaiting projection</span>
+                </div>
+                <div class="panel-body">
+                    <div class="hard-gate-banner" id="hard-gate-banner">
+                        Severity gate idle. Synthesize a projection to evaluate CP-1 and CP-5.
+                    </div>
+
+                    <div class="invariant-row" id="inv-cp1">
+                        <div class="ir-top">
+                            <span class="ir-cp">CP-1</span>
+                            <span class="ir-name">Semantic Closure</span>
+                            <span class="header-spacer" style="flex-grow:1"></span>
+                            <span class="inv-badge idle" id="cp1-badge">IDLE</span>
+                        </div>
+                        <div class="ir-formula">&pi;&nbsp;&circ;&nbsp;F<sub>L</sub> = &pi; &nbsp;&mdash;&nbsp; projection must not add, drop, or alter any (claim, citations, metrics) tuple</div>
+                        <div class="ir-detail" id="cp1-detail">Not evaluated. Awaiting a projection.</div>
+                    </div>
+
+                    <div class="invariant-row" id="inv-cp5">
+                        <div class="ir-top">
+                            <span class="ir-cp">CP-5</span>
+                            <span class="ir-name">Numeric Literal Integrity</span>
+                            <span class="header-spacer" style="flex-grow:1"></span>
+                            <span class="inv-badge idle" id="cp5-badge">IDLE</span>
+                        </div>
+                        <div class="ir-formula">set(numerics(output)) &sube; set(numerics(origin)) &nbsp;&mdash;&nbsp; detector: <code>numeric_literal_subset</code>, scope: bone, trace: origin</div>
+                        <div class="ir-detail" id="cp5-detail">Not evaluated. Awaiting a projection.</div>
+                    </div>
+
+                    <div class="hard-gate-banner" id="cp7-banner">
+                        <strong>CP-7 Re-projection Idempotence:</strong> not yet tested. Use &ldquo;Re-project (CP-7)&rdquo; to assert F<sub>L</sub>(F<sub>L</sub>(C)) = F<sub>L</sub>(C).
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="toast-notification" id="toast"></div>
+
+    <script src="script.js?v=acd57779"></script>
+    <script src="mission-control.js?v=b505a681"></script>
+    <script>
+    /* ==========================================================================
+       [SPRINT 93.0 / STORY 93.5] Projection Studio — sandbox controller.
+
+       Everything below is client-side and deterministic. MOCK mode is a pure
+       function of (bones, lens); LIVE mode forwards the compiled lens to the
+       Foyer REST daemon on :8765. The invariant detectors are SYMBOLIC ONLY
+       (CP-1, CP-5, CP-7) — per the SPR-93 Oracle synthesis, a semantic
+       (LLM-judge) detector would make truth-preservation probabilistic and
+       dissolve the point of PHL-035. CP-6 (diversity) is the sole invariant
+       that legitimately needs a semantic detector, and is out of scope here.
+       ========================================================================== */
+    (function () {
+        'use strict';
+
+        // ---------------------------------------------------------------- STATE
+        var STATE = {
+            mode: 'MOCK',              // 'MOCK' | 'LIVE'
+            bones: [],                 // [{ id, text, numerics, citations, tokens }]
+            activeLensId: null,
+            lenses: [],
+            lastInputText: '',
+            lastProjection: '',
+            lastStamp: null,
+            lastLensId: null,
+            busy: false
+        };
+
+        // ------------------------------------------------------- BONE PRESETS
+        // Each preset is a literal canonical payload. "drift" is deliberately
+        // malformed: it invites a lens to round, re-scale, or invent metrics.
+        var BONE_PRESETS = {
+            recruiter: [
+                'Reduced p99 API latency from 420ms to 95ms across 3 regional services by introducing a write-through cache and sharding the hot partition.',
+                'Cut infrastructure spend by 38% ($41,200 monthly) over 2 quarters by consolidating 7 microservices onto 3 orchestrated services.',
+                'Ships an 18-year engineering archive into a navigable static knowledge graph indexing 4,300 artifacts across 22 years of logs.'
+            ].join('\n'),
+
+            numeric: [
+                'Scaled the ingest pipeline to 12,500 events/sec sustained and 18,900 events/sec burst across 6 worker pools.',
+                'Improved p50 render time 99.97% -> 99.99% uptime over 11 months with zero data loss.',
+                'Reduced fleet footprint 240 nodes -> 96 nodes, cutting $128,000/yr and 3.1 tCO2e/yr.'
+            ].join('\n'),
+
+            dna: [
+                'PHL-035: Truth is invariant. Presentation is fluid. A projection may restyle a claim but may never mutate its content.',
+                'BKM-024: Fast unit tests and mocks verify logic in isolation; final certification requires validation against live silicon.',
+                'BKM-049: Delegation is owner-tagged. SWARM stories route through delegate.py with 3 diagnostic retries before cloud escalation.'
+            ].join('\n'),
+
+            // Decay trap: a lens that rounds 95ms to 100ms or invents a percent
+            // is a CP-5 violation. The "sales_impact" lens below demonstrates it.
+            drift: [
+                'Cut p99 API latency from 420ms to 95ms by introducing a write-through cache and hot-partition sharding.',
+                'Reduced infrastructure spend by 38% ($41,200 monthly) across 2 quarters via 7-to-3 service consolidation.',
+                'Indexed 4,300 artifacts spanning 22 years of logs into a static knowledge graph.'
+            ].join('\n'),
+
+            clear: ''
+        };
+
+        // -------------------------------------------------------- LENS REGISTRY
+        // Each lens is L = (R, v, Pi): rubric R, voice vector v, render policy Pi.
+        //
+        // `styleLexicon` is the explicitly DECLARED contribution of the lens to
+        // the stylistic fiber N(pi) = ker(pi). CP-1 sub-check `no_invention`
+        // allows exactly these tokens on the output side; anything else that is
+        // not present in the origin is treated as a fabricated claim.
+        //
+        // `compounds` (the drift lens) declares an empty lexicon on purpose: it
+        // is an aggressive metric rewriter, so every token it emits outside the
+        // origin is a first-class CP-1/CP-5 failure rather than "style".
+        var LENS_REGISTRY = [
+            {
+                lens_id: 'formal_dense_v1',
+                lens_kind: 'rubric',
+                title: 'Formal / Dense Bullet',
+                status: 'CERTIFIED',
+                render: { structure: 'bullet_star', target_format: 'paper_ast', max_chain_depth: 2 },
+                voice: { voice_id: 'formal_dense_v1', actuation: 'prompt_text_transform', coupling: 'orthogonal', axes: { formality: 0.8, density: 0.7, register: 0.6 } },
+                persona: { name: 'Formal Dense', role: 'Technical Reviewer', lens_perspective: 'Dense, evidence-first prose for a principal-level reader.' },
+                rubric: [
+                    'T0  FIRST_3_WORDS_POWER_VERB   [CRITICAL]  bullet_opening  detector=symbolic:regex_prefix_list',
+                    'T0  NUMERIC_LITERAL_INTEGRITY  [CRITICAL]  bullet_body     detector=symbolic:numeric_literal_subset  guards=CP-5  gate=BLOCK_PUBLISH',
+                    'T0  SEMANTIC_CLOSURE           [CRITICAL]  bullet_body     detector=symbolic:claim_citation_metric_set  guards=CP-1  gate=BLOCK_PUBLISH',
+                    'T1  SO_WHAT_METRIC_DRILL       [HIGH]      bullet_body     detector=semantic:llm_judge  gate=REVIEW_FLAG',
+                    'T1  TENSE_UNIFORMITY           [MEDIUM]    bullet_body     detector=symbolic:regex_tense'
+                ].join('\n'),
+                styleLexicon: ['reduced', 'cut', 'scaled', 'improved', 'indexed', 'delivered', 'shipped', 'led', 'built', 'designed'],
+                transform: 'polish'
+            },
+            {
+                lens_id: 'executive_concise_v1',
+                lens_kind: 'rubric',
+                title: 'Executive / Concise',
+                status: 'DRAFT',
+                render: { structure: 'bullet_star', target_format: 'paper_ast', max_chain_depth: 2 },
+                voice: { voice_id: 'executive_concise_v1', actuation: 'prompt_text_transform', coupling: 'orthogonal', axes: { formality: 0.35, density: 0.25, register: 0.2 } },
+                persona: { name: 'Executive Scannr', role: 'VP Engineering', lens_perspective: 'Scans for outcome and scale; ignores mechanism.' },
+                rubric: [
+                    'T0  NUMERIC_LITERAL_INTEGRITY  [CRITICAL]  bullet_body     detector=symbolic:numeric_literal_subset  guards=CP-5  gate=BLOCK_PUBLISH',
+                    'T0  SEMANTIC_CLOSURE           [CRITICAL]  bullet_body     detector=symbolic:claim_citation_metric_set  guards=CP-1  gate=BLOCK_PUBLISH',
+                    'T0  LEAD_WITH_OUTCOME          [HIGH]      bullet_opening  detector=symbolic:regex_outcome_prefix',
+                    'WARN KNOWN_DEFECT: truncates each bone to its first sentence. That is NOT a retraction on multi-sentence claims — CP-1 sub-check c1b (claim_containment) will FAIL and the gate will block. Status is DRAFT for this reason, not CERTIFIED. Condensing is legal only when the dropped sentences carry no claim.',
+                    'T1  MECHANISM_SUPPRESSION      [MEDIUM]    bullet_body     detector=semantic:llm_judge  gate=REVIEW_FLAG'
+                ].join('\n'),
+                styleLexicon: ['delivered', 'led', 'built', 'shipped', 'drove'],
+                transform: 'condense'
+            },
+            {
+                lens_id: 'dna_phl035_projection_axiom',
+                lens_kind: 'dna_card',
+                title: 'DNA Card — PHL-035 Truth Invariant',
+                status: 'CERTIFIED',
+                dna: { domain: 'PHL', id: 'PHL-035', role: 'register', extract: { strategy: 'origin_verbatim', max_chars: 600, fallback: 'synthesis_narrative' } },
+                render: { structure: 'blockquote_card', target_format: 'paper_ast', max_chain_depth: 1 },
+                voice: { voice_id: 'axiomatic', actuation: 'prompt_text_transform', coupling: 'orthogonal', axes: { formality: 0.7, density: 0.4, register: 0.9 } },
+                persona: { name: 'Axiom Lens', role: 'Philosophy Registrar', lens_perspective: 'Renders provenance-bearing statements as cited axiom cards.' },
+                rubric: [
+                    'T0  NUMERIC_LITERAL_INTEGRITY  [CRITICAL]  card_body       detector=symbolic:numeric_literal_subset  guards=CP-5  gate=BLOCK_PUBLISH',
+                    'T0  SEMANTIC_CLOSURE           [CRITICAL]  card_body       detector=symbolic:claim_citation_metric_set  guards=CP-1  gate=BLOCK_PUBLISH',
+                    'T0  CITATION_ANCHOR_PRESENT   [CRITICAL]  card_body       detector=symbolic:regex_citation_anchor  guards=CP-4',
+                    'T1  REGISTER_COHERENCE         [MEDIUM]    card_body       detector=semantic:llm_judge  gate=REVIEW_FLAG'
+                ].join('\n'),
+                styleLexicon: ['axiom', 'invariant', 'card', 'cited'],
+                transform: 'axiom_card'
+            },
+            {
+                lens_id: 'composite_global_local_v1',
+                lens_kind: 'composite',
+                title: 'Composite — Global Rubric + Local Voice',
+                status: 'DRAFT',
+                stack: { mode: 'diamond', order_canonical: true, lenses: [
+                    { scope: 'global',  lens_ref: 'formal_dense_v1',      depends_on: [] },
+                    { scope: 'local',   lens_ref: 'executive_concise_v1', depends_on: ['global'] }
+                ] },
+                render: { structure: 'bullet_star', target_format: 'paper_ast', max_chain_depth: 2 },
+                voice: { voice_id: 'composite_global_local', actuation: 'prompt_text_transform', coupling: 'orthogonal', axes: { formality: 0.6, density: 0.5, register: 0.4 } },
+                persona: { name: 'Composite', role: 'Global Rubric + Local Voice', lens_perspective: 'Topologically ordered diamond: both scopes re-anchor on pi(C).' },
+                rubric: [
+                    'T0  NUMERIC_LITERAL_INTEGRITY  [CRITICAL]  bullet_body     detector=symbolic:numeric_literal_subset  guards=CP-5  gate=BLOCK_PUBLISH',
+                    'T0  SEMANTIC_CLOSURE           [CRITICAL]  bullet_body     detector=symbolic:claim_citation_metric_set  guards=CP-1  gate=BLOCK_PUBLISH',
+                    'T0  ORDER_CANONICAL            [HIGH]      stack_order     detector=symbolic:topological_sort  guards=CP-2',
+                    'T0  REANCHOR_D1                [CRITICAL]  chain_shape     detector=symbolic:diamond_shape_check  guards=CP-3'
+                ].join('\n'),
+                styleLexicon: ['delivered', 'led', 'built', 'shipped', 'drove', 'reduced', 'cut', 'scaled', 'improved', 'indexed'],
+                transform: 'polish'
+            },
+            {
+                lens_id: 'sales_impact_rounder',
+                lens_kind: 'rubric',
+                title: 'Drift Trap — Aggressive Metric Rounder',
+                status: 'DEPRECATED',
+                render: { structure: 'bullet_star', target_format: 'paper_ast', max_chain_depth: 3 },
+                voice: { voice_id: 'sales_impact', actuation: 'prompt_text_transform', coupling: 'orthogonal', axes: { formality: 0.5, density: 0.9, register: 0.3 } },
+                persona: { name: 'Sales Rounder', role: 'Growth Desk', lens_perspective: 'Rounds small numbers up and appends percent uplift. Demonstration of the decay class.' },
+                rubric: [
+                    'T0  NUMERIC_LITERAL_INTEGRITY  [CRITICAL]  bullet_body     detector=symbolic:numeric_literal_subset  guards=CP-5  gate=BLOCK_PUBLISH',
+                    'T0  SEMANTIC_CLOSURE           [CRITICAL]  bullet_body     detector=symbolic:claim_citation_metric_set  guards=CP-1  gate=BLOCK_PUBLISH',
+                    'WARN KNOWN_DEFECT: rounds latency magnitudes up to the next 50ms step and appends an invented (+N% YoY) uplift. Select it on purpose to watch CP-5 go red.',
+                    'WARN KNOWN_DEFECT: the uplift is applied SERIALLY, so each pass appends another one and F(F(C)) != F(C). A CP-7 FAIL on Re-project is therefore EXPECTED here — it is the canonical serial-decay counter-example that Design Law D-1 exists to eliminate.'
+                ].join('\n'),
+                styleLexicon: [],
+                transform: 'round_and_inflate'
+            }
+        ];
+
+        // ----------------------------------------------------------- DETECTORS
+        // Numeric literal extraction.
+        //
+        // INVARIANT OF THIS REGEX: the match MUST begin at the sign, currency
+        // symbol, or first digit — never at intervening whitespace. An earlier
+        // revision used a leading `(\s*)` group, which made `m.index` point at
+        // the preceding space; the alnum guard below then rejected the literal
+        // while the regex had already advanced past it, silently dropping every
+        // metric in the payload. Never reintroduce leading whitespace here.
+        //
+        // Deliberately excludes unit *words* that are not attached to a digit,
+        // and guards against digits embedded in tokens (e.g. "p99", "tCO2e",
+        // "SHA256") so we never harvest a false numeric literal. An unmatched
+        // token is consumed and not rescanned, which biases the detector toward
+        // under-reporting rather than false positives — the safe direction for
+        // a BLOCK_PUBLISH invariant.
+        var NUMERIC_LITERAL_RE = /([-+]?[$€£]?)(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(%|percent|pct|years?|yrs|months?|mos|weeks?|days?|hours?|hrs|minutes?|mins|seconds?|secs|ms|kb|mb|gb|tb|k|m|b|x)?/gi;
+
+        var CITATION_RE = /\b(?:PHL|BKM|FEAT|LAB|VIBE|DISC|SPRINT|RDNA|ART|WIS)-\d{2,4}\b/g;
+
+        var STOPWORDS = {
+            a: 1, an: 1, and: 1, are: 1, as: 1, at: 1, be: 1, been: 1, but: 1, by: 1, for: 1, from: 1,
+            has: 1, have: 1, into: 1, its: 1, it: 1, may: 1, more: 1, most: 1, not: 1, of: 1, on: 1, or: 1,
+            our: 1, over: 1, per: 1, than: 1, that: 1, the: 1, their: 1, them: 1, then: 1, there: 1, these: 1,
+            they: 1, this: 1, through: 1, under: 1, use: 1, was: 1, were: 1, when: 1, where: 1, which: 1,
+            while: 1, who: 1, will: 1, with: 1, within: 1, without: 1, you: 1, your: 1, via: 1, plus: 1,
+            across: 1, after: 1, all: 1, also: 1, an: 1, any: 1, each: 1, every: 1, other: 1, such: 1
+        };
+
+        // Numeric core is hoisted so tokens like "p99" or "tCO2e" do not become
+        // content tokens; they live exclusively in the CP-5 numeric channel.
+        var TOKEN_RE = /[a-z][a-z0-9]{2,}/g;
+
+        /**
+         * Extract the canonical numeric-literal set from a string.
+         * Canonical form strips sign spacing, currency spacing, thousands
+         * separators, and unit casing so "420 ms" and "$420ms" collapse to one
+         * literal. Returns a sorted, de-duplicated array.
+         */
+        function extractNumerics(text) {
+            var out = {};
+            if (!text) return [];
+            NUMERIC_LITERAL_RE.lastIndex = 0;
+            var m;
+            while ((m = NUMERIC_LITERAL_RE.exec(text)) !== null) {
+                // Guard: reject a match that begins inside an alphanumeric token.
+                var prev = m.index > 0 ? text.charAt(m.index - 1) : '';
+                if (prev && /[A-Za-z0-9]/.test(prev)) continue;
+
+                // A leading +/- is only part of the literal when it is not
+                // punctuation owned by the previous token (e.g. the dash in
+                // "240->96" is an arrow, not a negative).
+                var lead = m[1] || '';
+                var sign = '';
+                if (lead === '-' || lead === '+') {
+                    sign = (m.index === 0 || /\s/.test(prev)) ? lead : '';
+                } else {
+                    sign = lead; // currency symbol, e.g. "$41200"
+                }
+
+                var digits = m[2].replace(/,/g, '');
+                var unit = (m[3] || '').toLowerCase();
+                if (unit === 'percent' || unit === 'pct') unit = '%';
+                out[sign + digits + unit] = true;
+            }
+            return Object.keys(out).sort();
+        }
+
+        /** Extract the citation-anchor set (FEAT/BKM/PHL/... IDs). */
+        function extractCitations(text) {
+            var out = {};
+            if (!text) return [];
+            CITATION_RE.lastIndex = 0;
+            var m;
+            while ((m = CITATION_RE.exec(text)) !== null) out[m[0].toUpperCase()] = true;
+            return Object.keys(out).sort();
+        }
+
+        /**
+         * Content-token fingerprint for a claim. This is the symbolic stand-in
+         * for the semantic payload pi() projects: it deliberately keeps only
+         * alpha-bearing tokens of length >= 3, minus stopwords, minus anything
+         * that is part of a numeric literal or a citation ID.
+         */
+        function extractTokens(text) {
+            var out = {};
+            if (!text) return [];
+            var stripped = String(text)
+                .replace(NUMERIC_LITERAL_RE, ' ')
+                .replace(CITATION_RE, ' ');
+            TOKEN_RE.lastIndex = 0;
+            var m;
+            while ((m = TOKEN_RE.exec(stripped)) !== null) {
+                var t = m[0];
+                if (t.length < 4) continue;
+                if (STOPWORDS[t]) continue;
+                out[t] = true;
+            }
+            return Object.keys(out).sort();
+        }
+
+        /** Split a canonical payload into bones; one non-empty line is one bone. */
+        function parseBones(rawText) {
+            var lines = String(rawText || '').split('\n');
+            var bones = [];
+            var n = 0;
+            for (var i = 0; i < lines.length; i++) {
+                var t = lines[i].trim();
+                if (!t) continue;
+                n += 1;
+                bones.push({
+                    id: 'B' + (n < 10 ? '0' + n : n),
+                    ordinal: n,
+                    text: t,
+                    numerics: extractNumerics(t),
+                    citations: extractCitations(t),
+                    tokens: extractTokens(t)
+                });
+            }
+            return bones;
+        }
+
+        function unionOf(lists) {
+            var acc = {};
+            for (var i = 0; i < lists.length; i++) {
+                var l = lists[i] || [];
+                for (var j = 0; j < l.length; j++) acc[l[j]] = true;
+            }
+            return Object.keys(acc).sort();
+        }
+
+        function setDiff(a, b) {
+            var bs = {};
+            for (var i = 0; i < b.length; i++) bs[b[i]] = true;
+            var out = [];
+            for (var j = 0; j < a.length; j++) if (!bs[a[j]]) out.push(a[j]);
+            return out.sort();
+        }
+
+        function setEqual(a, b) {
+            if (a.length !== b.length) return false;
+            return setDiff(a, b).length === 0;
+        }
+
+        // ------------------------------------------------------ MOCK OPERATOR
+        // F_L as a RETRACTION. Each branch is a deterministic, token-closed
+        // transform: it may re-render and re-register a bone, but it must not
+        // add, drop, or alter a claim, citation, or numeric literal.
+        var RENDER_PREFIX = {
+            bullet_star: '- ',
+            blockquote_card: '> ',
+            paragraph: ''
+        };
+
+        // CP-7 requires F_L(F_L(C)) = F_L(C). A render policy that blindly
+        // prepends its marker is NOT idempotent: a second application yields
+        // "- - text". So before applying a prefix we strip any render marker a
+        // previous pass left behind, and any citation tag an axiom_card pass
+        // added. Without this the sandbox's own Re-project button would report
+        // a CP-7 failure on the default lens.
+        var RENDER_MARK_RE = /^(?:[-*+>•]\s*)+\s*/;
+        var CITATION_TAG_RE = /^\[[A-Za-z]+\-?\d*\]\s*/;
+
+        function normalizeForRender(boneText) {
+            var t = String(boneText);
+            // Alternate the two patterns: a projected bone looks like
+            // "> [DNA] text", so the render marker hides the citation tag until
+            // it is stripped. A single pass in either order leaves one of them
+            // behind and the tag compounds on re-projection. Bounded loop
+            // guarantees termination regardless of input.
+            for (var i = 0; i < 4; i++) {
+                var before = t;
+                if (RENDER_MARK_RE.test(t)) t = t.replace(RENDER_MARK_RE, '');
+                if (CITATION_TAG_RE.test(t)) t = t.replace(CITATION_TAG_RE, '');
+                if (t === before) break;
+            }
+            return t;
+        }
+
+        function applyTransform(lens, bones) {
+            var prefix = RENDER_PREFIX[lens.render.structure] !== undefined
+                ? RENDER_PREFIX[lens.render.structure]
+                : '- ';
+
+            var lines = [];
+            for (var i = 0; i < bones.length; i++) {
+                var bone = bones[i];
+                var body = normalizeForRender(bone.text);
+
+                if (lens.transform === 'condense') {
+                    // Executive lens keeps the first sentence only. Erasure of
+                    // tokens is fine; the CP-1 channel (citations + numerics) is
+                    // not touched, so the retraction property is preserved.
+                    var stop = body.indexOf('. ');
+                    body = stop > 0 ? body.slice(0, stop + 1) : body;
+                } else if (lens.transform === 'axiom_card') {
+                    body = '[' + (bone.citations[0] || 'DNA') + '] ' + body;
+                } else if (lens.transform === 'round_and_inflate') {
+                    // The DEPRECATED, deliberately decaying transform. Rounds
+                    // latency magnitudes up to the next sales-friendly step and
+                    // bolts on an invented YoY uplift. This is exactly the
+                    // failure class CP-5 exists to make fatal: every edit below
+                    // invents a numeric literal that no origin span contains.
+                    body = body.replace(/\b(\d{1,4})(ms)\b/g, function (matched, d, u) {
+                        var n = parseInt(d, 10);
+                        return Math.max(50, Math.ceil(n / 50) * 50) + u;
+                    });
+                    body = body.replace(/\b(\d+)\s*%/g, function (matched, d) {
+                        return d + '% (+' + (parseInt(d, 10) + 7) + '% YoY)';
+                    });
+                }
+                // 'polish' is intentionally a no-op on content: the formal lens
+                // restyles by render policy and voice only, which is what makes
+                // pi o F_L = pi hold by construction.
+
+                lines.push(prefix + body);
+            }
+            return lines.join('\n');
+        }
+
+        // ----------------------------------------------------- LIVE SILICON
+        // Canonical API base resolver — mirrors writer.html (FEAT-588 / FEAT-591).
+        function getApiBaseUrl() {
+            if (window.location.port === '8765') return '';
+            var host = window.location.hostname;
+            if (!host || host === 'localhost' || host === '127.0.0.1' || window.location.protocol === 'file:') {
+                return 'http://127.0.0.1:8765';
+            }
+            return window.location.protocol + '//' + host + ':8765';
+        }
+
+        function fetchJson(endpoint, options) {
+            var url = endpoint.indexOf('http') === 0 ? endpoint : (getApiBaseUrl() + endpoint);
+            return fetch(url, options).then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status + ' (' + r.statusText + ')');
+                var ct = (r.headers && r.headers.get) ? r.headers.get('content-type') : '';
+                if (ct && ct.indexOf('application/json') === -1 && ct.indexOf('text/plain') === -1) {
+                    throw new Error('Non-JSON response received (' + ct + ')');
+                }
+                return r.json();
+            });
+        }
+
+        // The compiled lens payload handed to the silicon. Shape follows the
+        // SPR-93 lens schema (schema_version 2.0.0) so a real Foyer build can
+        // consume it without translation.
+        function compileLens(lens) {
+            return {
+                schema_version: '2.0.0',
+                lens_id: lens.lens_id,
+                lens_kind: lens.lens_kind,
+                title: lens.title,
+                status: lens.status,
+                render: lens.render,
+                voice: lens.voice,
+                persona: lens.persona || null,
+                rubric_ref: 'inline',
+                rubric: { rubric_id: lens.lens_id, version: '2.0.0', inline: lens.rubric },
+                stack: lens.stack || { mode: 'single', order_canonical: true, lenses: [{ scope: 'global', lens_ref: lens.lens_id, depends_on: [] }] },
+                invariants_guarded: ['CP-1', 'CP-4', 'CP-5', 'CP-7']
+            };
+        }
+
+        // FNV-1a — small, dependency-free, deterministic content hash used to
+        // fingerprint the compiled lens inside the provenance stamp.
+        function fnv1a(str) {
+            var h = 0x811c9dc5;
+            for (var i = 0; i < str.length; i++) {
+                h ^= str.charCodeAt(i);
+                h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+            }
+            return ('00000000' + h.toString(16)).slice(-8);
+        }
+
+        // ---------------------------------------------------------- DIFF (LCS)
+        /**
+         * Word-level longest-common-subsequence diff. Renders removals as <del>
+         * and insertions as <ins>, so CP-5 violations are visible literally in
+         * the diff rather than only in a badge.
+         */
+        function lcsDiff(aText, bText) {
+            var a = String(aText || '').split(/(\s+)/);
+            var b = String(bText || '').split(/(\s+)/);
+            var n = a.length, m = b.length;
+            var dp = [];
+            var i, j;
+            for (i = 0; i <= n; i++) { dp[i] = new Array(m + 1); dp[i][0] = 0; }
+            for (j = 0; j <= m; j++) dp[0][j] = 0;
+            for (i = n - 1; i >= 0; i--) {
+                for (j = m - 1; j >= 0; j--) {
+                    if (a[i] === b[j]) dp[i][j] = dp[i + 1][j + 1] + 1;
+                    else dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+            var out = [];
+            i = 0; j = 0;
+            while (i < n && j < m) {
+                if (a[i] === b[j]) { out.push(esc(a[i])); i++; j++; }
+                else if (dp[i + 1][j] >= dp[i][j + 1]) { out.push('<del>' + esc(a[i]) + '</del>'); i++; }
+                else { out.push('<ins>' + esc(b[j]) + '</ins>'); j++; }
+            }
+            while (i < n) { out.push('<del>' + esc(a[i]) + '</del>'); i++; }
+            while (j < m) { out.push('<ins>' + esc(b[j]) + '</ins>'); j++; }
+            return out.join('');
+        }
+
+        function esc(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // -------------------------------------------------- INVARIANT INSPECT
+        /**
+         * CP-1 Semantic Closure — pi o F_L = pi.
+         * Symbolic sub-checks (never a semantic detector):
+         *   c1a citation_set_equality  set(cites(out)) == set(cites(origin))
+         *   c1b claim_containment      every origin content token survives
+         *   c1c no_claim_invention    every output content token is either in the
+         *                             origin or in the lens's DECLARED style
+         *                             lexicon (the lens's contribution to the
+         *                             stylistic fiber N(pi) = ker(pi))
+         */
+        function evaluateCP1(originBones, outputText, lens) {
+            var originCitations = unionOf(originBones.map(function (b) { return b.citations; }));
+            var originTokens = unionOf(originBones.map(function (b) { return b.tokens; }));
+            var outCitations = extractCitations(outputText);
+            var outTokens = extractTokens(outputText);
+
+            var droppedCitations = setDiff(originCitations, outCitations);
+            var inventedCitations = setDiff(outCitations, originCitations);
+
+            var droppedTokens = setDiff(originTokens, outTokens);
+
+            var lexicon = {};
+            (lens.styleLexicon || []).forEach(function (t) { lexicon[t] = true; });
+            var inventedTokens = setDiff(outTokens, originTokens).filter(function (t) { return !lexicon[t]; });
+
+            var checks = [
+                { key: 'c1a', label: 'citation_set_equality', ok: droppedCitations.length === 0 && inventedCitations.length === 0,
+                  detail: droppedCitations.length || inventedCitations.length
+                    ? 'dropped=[' + droppedCitations.join(',') + '] invented=[' + inventedCitations.join(',') + ']'
+                    : originCitations.length + ' citation anchor(s) preserved' },
+                { key: 'c1b', label: 'claim_containment', ok: droppedTokens.length === 0,
+                  detail: droppedTokens.length
+                    ? droppedTokens.length + ' origin token(s) absent from projection: [' + droppedTokens.slice(0, 8).join(',') + (droppedTokens.length > 8 ? ',…' : '') + ']'
+                    : 'all ' + originTokens.length + ' origin content token(s) retained' },
+                { key: 'c1c', label: 'no_claim_invention', ok: inventedTokens.length === 0,
+                  detail: inventedTokens.length
+                    ? inventedTokens.length + ' token(s) outside origin and outside declared style fiber: [' + inventedTokens.slice(0, 8).join(',') + (inventedTokens.length > 8 ? ',…' : '') + ']'
+                    : '0 novel claim token(s) beyond declared style fiber (' + (lens.styleLexicon || []).length + ' token(s) declared)' }
+            ];
+
+            return { id: 'CP-1', pass: checks.every(function (c) { return c.ok; }), checks: checks };
+        }
+
+        /**
+         * CP-5 Provenance Surjectivity + Metric Integrity.
+         * set(numerics(output)) is a SUBSET of set(numerics(origin)).
+         * The subset direction (no invented metrics) is the block; the superset
+         * direction (metric erosion) is reported but is CP-4's business.
+         */
+        function evaluateCP5(originBones, outputText) {
+            var originNumerics = unionOf(originBones.map(function (b) { return b.numerics; }));
+            var outNumerics = extractNumerics(outputText);
+
+            var invented = setDiff(outNumerics, originNumerics);
+            var erased = setDiff(originNumerics, outNumerics);
+
+            var checks = [
+                { key: 'c5a', label: 'numeric_literal_subset', ok: invented.length === 0,
+                  detail: invented.length
+                    ? 'FABRICATED METRIC(S): [' + invented.join(', ') + '] — BLOCK_PUBLISH'
+                    : 'numeric set is a subset of origin (' + outNumerics.length + '/' + originNumerics.length + ' literals)' },
+                { key: 'c5b', label: 'metric_erasure_report', ok: erased.length === 0,
+                  detail: erased.length
+                    ? 'origin metric(s) not surfaced in projection: [' + erased.join(', ') + '] (CP-4 non-erosion, not a CP-5 block)'
+                    : 'no metric erosion' }
+            ];
+
+            return { id: 'CP-5', pass: invented.length === 0, checks: checks, invented: invented, erased: erased, outNumerics: outNumerics };
+        }
+
+        // ------------------------------------------------------------- RENDER
+        var el = {
+            boneInput: document.getElementById('bone-input'),
+            boneList: document.getElementById('bone-list'),
+            boneCounter: document.getElementById('bone-counter'),
+            boneMeta: document.getElementById('bone-meta'),
+            lensSelect: document.getElementById('lens-select'),
+            lensId: document.getElementById('lens-id'),
+            lensKind: document.getElementById('lens-kind'),
+            lensRender: document.getElementById('lens-render'),
+            lensDepth: document.getElementById('lens-depth'),
+            lensKindBadge: document.getElementById('lens-kind-badge'),
+            voiceAxes: document.getElementById('voice-axes'),
+            rubricEditor: document.getElementById('rubric-editor'),
+            dnaSlot: document.getElementById('dna-card-slot'),
+            stackStrip: document.getElementById('stack-strip'),
+            synthOutput: document.getElementById('synthesis-output'),
+            synthState: document.getElementById('synth-state'),
+            provenance: document.getElementById('provenance-stamp'),
+            diffSource: document.getElementById('diff-source'),
+            diffTarget: document.getElementById('diff-target'),
+            cp1Badge: document.getElementById('cp1-badge'),
+            cp1Detail: document.getElementById('cp1-detail'),
+            cp5Badge: document.getElementById('cp5-badge'),
+            cp5Detail: document.getElementById('cp5-detail'),
+            gateBanner: document.getElementById('hard-gate-banner'),
+            invSummary: document.getElementById('invariant-summary'),
+            cp7Banner: document.getElementById('cp7-banner'),
+            foyerPill: document.getElementById('foyer-status-pill'),
+            modeMock: document.getElementById('mode-mock'),
+            modeLive: document.getElementById('mode-live'),
+            btnSynth: document.getElementById('btn-synthesize'),
+            btnProbe: document.getElementById('btn-probe'),
+            btnCp7: document.getElementById('btn-cp7-reproject'),
+            btnRubricReset: document.getElementById('btn-rubric-reset'),
+            toast: document.getElementById('toast')
+        };
+
+        function showToast(msg, type) {
+            if (!el.toast) return;
+            el.toast.textContent = msg;
+            el.toast.className = 'toast-notification show ' + (type || '');
+            setTimeout(function () { el.toast.className = 'toast-notification'; }, 3600);
+        }
+
+        function getLens(id) {
+            for (var i = 0; i < STATE.lenses.length; i++) if (STATE.lenses[i].lens_id === id) return STATE.lenses[i];
+            return null;
+        }
+
+        function renderBoneRoster() {
+            if (!STATE.bones.length) {
+                el.boneList.innerHTML = '<div class="bone-empty">No bones loaded. Pick a preset or type into the gutter.</div>';
+                el.boneCounter.textContent = '0 bones';
+                el.boneMeta.textContent = '—';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < STATE.bones.length; i++) {
+                var b = STATE.bones[i];
+                var badges = '';
+                if (b.numerics.length) badges += ' <span style="color:var(--proj-warn)">[' + b.numerics.join(' ') + ']</span>';
+                if (b.citations.length) badges += ' <span style="color:var(--proj-lens)">[' + b.citations.join(' ') + ']</span>';
+                html += '<div class="bone-item"><span class="bone-id">' + b.id + '</span>' +
+                        '<span class="bone-text">' + esc(b.text) + badges + '</span></div>';
+            }
+            el.boneList.innerHTML = html;
+            el.boneCounter.textContent = STATE.bones.length + (STATE.bones.length === 1 ? ' bone' : ' bones');
+            var nNum = unionOf(STATE.bones.map(function (b) { return b.numerics; })).length;
+            var nCit = unionOf(STATE.bones.map(function (b) { return b.citations; })).length;
+            el.boneMeta.textContent = 'π(C): ' + STATE.bones.length + ' claim(s) · ' + nNum + ' numeric literal(s) · ' + nCit + ' citation anchor(s)';
+        }
+
+        function renderLens() {
+            var lens = getLens(STATE.activeLensId);
+            if (!lens) return;
+            el.lensId.textContent = lens.lens_id;
+            el.lensKind.textContent = lens.lens_kind;
+            el.lensKindBadge.textContent = lens.lens_kind;
+            el.lensRender.textContent = lens.render.structure;
+            el.lensDepth.textContent = lens.render.max_chain_depth;
+
+            var axes = lens.voice.axes || {};
+            var html = '';
+            ['formality', 'density', 'register'].forEach(function (k) {
+                var v = axes[k] !== undefined ? axes[k] : 0;
+                html += '<div class="axis-row"><span class="axis-name">' + k + '</span>' +
+                        '<span class="axis-meter"><span class="axis-fill" style="width:' + Math.round(v * 100) + '%"></span></span>' +
+                        '<span class="axis-val">' + v.toFixed(2) + '</span></div>';
+            });
+            el.voiceAxes.innerHTML = html;
+
+            el.rubricEditor.value = lens.rubric;
+
+            if (lens.dna) {
+                el.dnaSlot.innerHTML = '<div class="dna-card"><span class="dna-id">' + esc(lens.dna.domain + '-' + lens.dna.id) + '</span> · role: ' + esc(lens.dna.role) +
+                    '<span class="dna-quote">&pi; is a retraction; every F<sub>L</sub> is fiber-preserving. Restyle a claim freely — mutate its content and you have violated the axiom.</span></div>';
+            } else {
+                el.dnaSlot.innerHTML = '';
+            }
+
+            if (lens.stack) {
+                var s = '<span class="stack-node">π(C)</span>';
+                lens.stack.lenses.forEach(function (ln) {
+                    s += '<span class="stack-arrow">&#8594;</span><span class="stack-node' + (ln.scope === 'local' ? ' local' : '') + '">' +
+                         esc(ln.scope) + ':' + esc(ln.lens_ref) + '</span>';
+                });
+                s += '<span class="stack-arrow">&#8594;</span><span class="stack-node">P</span>';
+                s += ' <span class="stack-note">order_canonical=' + lens.stack.order_canonical + ' · both scopes re-anchor on π(C) (D-1)</span>';
+                el.stackStrip.innerHTML = s;
+            } else {
+                el.stackStrip.innerHTML = '<span class="stack-node">π(C)</span><span class="stack-arrow">&#8594;</span><span class="stack-node">F<sub>L</sub></span><span class="stack-arrow">&#8594;</span><span class="stack-node">P</span>' +
+                    ' <span class="stack-note">single-lens retraction, depth ' + lens.render.max_chain_depth + '</span>';
+            }
+        }
+
+        function setBadge(node, state, label) {
+            node.className = 'inv-badge ' + state;
+            node.textContent = label;
+        }
+
+        function renderInvariants(cp1, cp5) {
+            setBadge(el.cp1Badge, cp1.pass ? 'pass' : 'fail', cp1.pass ? 'PASS' : 'FAIL');
+            setBadge(el.cp5Badge, cp5.pass ? 'pass' : 'fail', cp5.pass ? 'PASS' : 'FAIL');
+
+            function detailHtml(res) {
+                var h = '';
+                res.checks.forEach(function (c) {
+                    h += '<div style="margin-bottom:3px;"><span style="color:' + (c.ok ? 'var(--proj-ok)' : 'var(--proj-fail)') + ';">' +
+                         (c.ok ? '✔' : '✘') + '</span> <code>' + c.key + '</code> ' + esc(c.label) + ' — ' + esc(c.detail) + '</div>';
+                });
+                return h;
+            }
+            el.cp1Detail.innerHTML = detailHtml(cp1);
+            el.cp5Detail.innerHTML = detailHtml(cp5);
+
+            var blocked = !cp1.pass || !cp5.pass;
+            el.gateBanner.className = 'hard-gate-banner ' + (blocked ? 'gate-block' : 'gate-clear');
+            el.gateBanner.innerHTML = blocked
+                ? '<strong>SEVERITY GATE: BLOCK_PUBLISH.</strong> A hard invariant failed. This projection is unpublishable and MUST NOT be promoted to a paper. ' +
+                  'A semantic LLM-judge cannot rescue it — CP-1 and CP-5 are symbolic-only by mandate.'
+                : '<strong>SEVERITY GATE: CLEAR.</strong> CP-1 and CP-5 both hold symbolically. The projection is a verified retraction of π(C).';
+
+            el.invSummary.textContent = blocked
+                ? 'BLOCKED · CP-1 ' + (cp1.pass ? 'pass' : 'FAIL') + ' · CP-5 ' + (cp5.pass ? 'pass' : 'FAIL')
+                : 'CLEAR · CP-1 pass · CP-5 pass';
+            el.invSummary.style.color = blocked ? 'var(--proj-fail)' : 'var(--proj-ok)';
+        }
+
+        function resetInvariants() {
+            setBadge(el.cp1Badge, 'idle', 'IDLE');
+            setBadge(el.cp5Badge, 'idle', 'IDLE');
+            el.cp1Detail.textContent = 'Not evaluated. Awaiting a projection.';
+            el.cp5Detail.textContent = 'Not evaluated. Awaiting a projection.';
+            el.gateBanner.className = 'hard-gate-banner';
+            el.gateBanner.textContent = 'Severity gate idle. Synthesize a projection to evaluate CP-1 and CP-5.';
+            el.invSummary.textContent = 'awaiting projection';
+            el.invSummary.style.color = '';
+        }
+
+        function renderProvenance(stamp) {
+            el.provenance.innerHTML =
+                '<span class="ps-key">lens</span> ' + esc(stamp.lens_id) +
+                ' <span class="ps-key">sha</span> ' + esc(stamp.lens_sha) +
+                '<br><span class="ps-key">mode</span> ' + esc(stamp.mode) +
+                ' <span class="ps-key">order</span> ' + esc(stamp.order) +
+                ' <span class="ps-key">depth</span> ' + esc(stamp.depth) +
+                '<br><span class="ps-key">bones_in</span> ' + stamp.bones_in +
+                ' <span class="ps-key">bones_out</span> ' + stamp.bones_out +
+                ' <span class="ps-key">numerics</span> ' + stamp.numerics_origin + '&#8594;' + stamp.numerics_out +
+                '<br><span class="ps-key">origin_sha</span> ' + esc(stamp.origin_sha) +
+                ' <span class="ps-key">at</span> ' + esc(stamp.at) +
+                (stamp.warning ? '<br><span class="ps-warn">⚠ ' + esc(stamp.warning) + '</span>' : '');
+        }
+
+        // ------------------------------------------------------- ORCHESTRATION
+        function runProjection(isReprojection) {
+            if (STATE.busy) return;
+            if (!STATE.bones.length) { showToast('Load bones before synthesizing.', 'warn'); return; }
+            var lens = getLens(STATE.activeLensId);
+            if (!lens) { showToast('No lens selected.', 'warn'); return; }
+
+            STATE.busy = true;
+            el.btnSynth.disabled = true;
+            el.btnCp7.disabled = true;
+            el.synthState.textContent = STATE.mode === 'LIVE' ? 'dispatching…' : 'synthesizing…';
+            el.synthState.style.color = 'var(--proj-synth)';
+            el.foyerPill.className = 'server-status-pill busy';
+
+            var inputText = isReprojection ? STATE.lastProjection : el.boneInput.value;
+            var inputBones = isReprojection ? parseBones(STATE.lastProjection) : STATE.bones;
+            STATE.lastInputText = inputText;
+
+            var finish = function (projectionText, warning) {
+                var originNumerics = unionOf(inputBones.map(function (b) { return b.numerics; }));
+                var outNumerics = extractNumerics(projectionText);
+                var stamp = {
+                    lens_id: lens.lens_id,
+                    lens_sha: fnv1a(JSON.stringify(compileLens(lens))),
+                    origin_sha: fnv1a(inputText),
+                    mode: STATE.mode,
+                    order: (lens.stack && lens.stack.order_canonical) ? 'canonical' : 'single',
+                    depth: lens.render.max_chain_depth,
+                    bones_in: inputBones.length,
+                    bones_out: parseBones(projectionText).length,
+                    numerics_origin: originNumerics.length,
+                    numerics_out: outNumerics.length,
+                    at: new Date().toISOString(),
+                    warning: warning || ''
+                };
+
+                var cp1 = evaluateCP1(inputBones, projectionText, lens);
+                var cp5 = evaluateCP5(inputBones, projectionText);
+
+                el.synthOutput.textContent = projectionText;
+                el.synthState.textContent = STATE.mode === 'LIVE' ? 'live' : 'mock';
+                el.synthState.style.color = STATE.mode === 'LIVE' ? 'var(--proj-ok)' : 'var(--sub-color)';
+                el.diffSource.innerHTML = esc(inputText);
+                el.diffTarget.innerHTML = lcsDiff(inputText, projectionText);
+                renderProvenance(stamp);
+                renderInvariants(cp1, cp5);
+                el.cp7Banner.className = 'hard-gate-banner';
+                el.cp7Banner.innerHTML = '<strong>CP-7 Re-projection Idempotence:</strong> armed. Press &ldquo;Re-project (CP-7)&rdquo; to assert F<sub>L</sub>(F<sub>L</sub>(C)) = F<sub>L</sub>(C).';
+
+                STATE.lastProjection = projectionText;
+                STATE.lastStamp = stamp;
+                STATE.lastLensId = lens.lens_id;
+                STATE.busy = false;
+                el.btnSynth.disabled = false;
+                el.btnCp7.disabled = false;
+                el.foyerPill.className = 'server-status-pill ' + (STATE.mode === 'LIVE' ? 'online' : '');
+                if (STATE.mode === 'MOCK') {
+                    el.foyerPill.className = 'server-status-pill offline';
+                    el.foyerPill.querySelector('.status-label').textContent = 'MOCK ENGINE (local)';
+                    el.foyerPill.querySelector('.status-dot').style.backgroundColor = 'var(--proj-bone)';
+                }
+                return { cp1: cp1, cp5: cp5 };
+            };
+
+            if (STATE.mode === 'LIVE') {
+                fetchJson('/paper/synthesize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paper_id: 'projection_studio_sandbox',
+                        bone_ids: inputBones.map(function (b) { return b.id; }),
+                        current_text: inputText,
+                        citations: unionOf(inputBones.map(function (b) { return b.citations; })),
+                        lens: compileLens(lens),
+                        schema_version: '2.0.0'
+                    })
+                })
+                .then(function (res) {
+                    var text = res.synthesized_text || res.projection || res.text || res.output;
+                    if (!text) throw new Error('Foyer returned no projected text field');
+                    var r = finish(String(text), '');
+                    showToast(r.cp1.pass && r.cp5.pass
+                        ? 'Live projection received — CP-1 & CP-5 hold.'
+                        : 'Live projection BLOCKED by a hard invariant.', r.cp1.pass && r.cp5.pass ? 'success' : 'error');
+                    el.foyerPill.querySelector('.status-label').textContent = 'FOYER REST :8765 ONLINE';
+                    el.foyerPill.querySelector('.status-dot').style.backgroundColor = '';
+                })
+                .catch(function (err) {
+                    STATE.busy = false;
+                    el.btnSynth.disabled = false;
+                    el.btnCp7.disabled = false;
+                    el.synthState.textContent = 'error';
+                    el.synthState.style.color = 'var(--proj-fail)';
+                    el.foyerPill.className = 'server-status-pill offline';
+                    el.foyerPill.querySelector('.status-label').textContent = 'FOYER OFFLINE (STANDALONE)';
+                    showToast('Silicon unreachable: ' + err.message + ' — switch to MOCK to keep working.', 'error');
+                });
+            } else {
+                var mockText = applyTransform(lens, inputBones);
+                var lensWarn = lens.status === 'DEPRECATED'
+                    ? 'lens status DEPRECATED — known metric-rounding defect' : '';
+                var r2 = finish(mockText, lensWarn);
+                showToast(r2.cp1.pass && r2.cp5.pass
+                    ? 'Mock retraction verified — CP-1 & CP-5 hold.'
+                    : 'Mock projection BLOCKED by a hard invariant (expected on the drift lens).',
+                    r2.cp1.pass && r2.cp5.pass ? 'success' : 'error');
+            }
+        }
+
+        // CP-7: F_L(F_L(C)) must equal F_L(C). String equality is the right
+        // test here because the operator is a deterministic retraction, so a
+        // second application must be a genuine fixpoint.
+        function runCp7() {
+            if (!STATE.lastProjection) { showToast('Synthesize a projection first.', 'warn'); return; }
+            if (STATE.lastLensId !== STATE.activeLensId) {
+                showToast('Switch the lens back to ' + STATE.lastLensId + ' before testing CP-7.', 'warn');
+                return;
+            }
+            var lens = getLens(STATE.activeLensId);
+            var first = STATE.lastProjection;
+            var second = applyTransform(lens, parseBones(first));
+            var ok = first.trim() === second.trim();
+
+            var cp1 = evaluateCP1(parseBones(STATE.lastInputText), second, lens);
+            var cp5 = evaluateCP5(parseBones(STATE.lastInputText), second);
+            renderInvariants(cp1, cp5);
+
+            el.cp7Banner.className = 'hard-gate-banner ' + (ok ? 'gate-clear' : 'gate-block');
+            el.cp7Banner.innerHTML = ok
+                ? '<strong>CP-7 PASS.</strong> F<sub>L</sub>(F<sub>L</sub>(C)) = F<sub>L</sub>(C) — re-projection is a fixpoint. The provenance stamp short-circuits a second live call.'
+                : '<strong>CP-7 FAIL.</strong> The operator is not idempotent: a second application changed the text. This lens is not a retraction.';
+
+            showToast(ok ? 'CP-7 PASS — re-projection is a fixpoint.' : 'CP-7 FAIL — lens is not idempotent.', ok ? 'success' : 'error');
+        }
+
+        // ---------------------------------------------------------------- INIT
+        function renderLensOptions() {
+            var html = '';
+            STATE.lenses.forEach(function (l) {
+                var label = l.title + '  [' + l.lens_kind + (l.status !== 'CERTIFIED' ? ' · ' + l.status : '') + ']';
+                html += '<option value="' + esc(l.lens_id) + '">' + esc(label) + '</option>';
+            });
+            el.lensSelect.innerHTML = html;
+        }
+
+        function setMode(mode) {
+            STATE.mode = mode;
+            el.modeMock.className = mode === 'MOCK' ? 'active' : '';
+            el.modeLive.className = mode === 'LIVE' ? 'active' : '';
+            if (mode === 'MOCK') {
+                el.foyerPill.className = 'server-status-pill offline';
+                el.foyerPill.querySelector('.status-label').textContent = 'MOCK ENGINE (local)';
+                el.foyerPill.querySelector('.status-dot').style.backgroundColor = 'var(--proj-bone)';
+            } else {
+                el.foyerPill.className = 'server-status-pill';
+                el.foyerPill.querySelector('.status-label').textContent = 'FOYER PROBE...';
+                el.foyerPill.querySelector('.status-dot').style.backgroundColor = '';
+                probeFoyer(true);
+            }
+        }
+
+        function probeFoyer(silent) {
+            fetchJson('/paper/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paper: { paper_id: 'projection_studio_sandbox', bones: STATE.bones.length } })
+            })
+            .then(function (res) {
+                el.foyerPill.className = 'server-status-pill online';
+                el.foyerPill.querySelector('.status-dot').style.backgroundColor = '';
+                el.foyerPill.querySelector('.status-label').textContent = 'FOYER REST :8765 ONLINE';
+                if (!silent) showToast('Silicon reachable — Foyer :8765 responded.', 'success');
+            })
+            .catch(function (err) {
+                el.foyerPill.className = 'server-status-pill offline';
+                el.foyerPill.querySelector('.status-label').textContent = 'FOYER OFFLINE (STANDALONE)';
+                if (!silent) showToast('Foyer unreachable: ' + err.message, 'warn');
+            });
+        }
+
+        function wire() {
+            el.boneInput.addEventListener('input', function () {
+                STATE.bones = parseBones(el.boneInput.value);
+                renderBoneRoster();
+            });
+
+            var presetButtons = document.querySelectorAll('[data-preset]');
+            for (var i = 0; i < presetButtons.length; i++) {
+                presetButtons[i].addEventListener('click', function (e) {
+                    var key = e.currentTarget.getAttribute('data-preset');
+                    el.boneInput.value = BONE_PRESETS[key] || '';
+                    STATE.bones = parseBones(el.boneInput.value);
+                    renderBoneRoster();
+                    resetInvariants();
+                    if (key !== 'clear') showToast('Preset "' + key + '" loaded — ' + STATE.bones.length + ' bone(s).', 'info');
+                });
+            }
+
+            el.lensSelect.addEventListener('change', function () {
+                STATE.activeLensId = el.lensSelect.value;
+                renderLens();
+            });
+
+            el.btnRubricReset.addEventListener('click', function () {
+                var lens = getLens(STATE.activeLensId);
+                if (!lens) return;
+                el.rubricEditor.value = lens.rubric;
+                showToast('Rubric reset to compiled lens spec.', 'info');
+            });
+
+            el.modeMock.addEventListener('click', function () { setMode('MOCK'); });
+            el.modeLive.addEventListener('click', function () { setMode('LIVE'); });
+            el.btnProbe.addEventListener('click', function () { probeFoyer(false); });
+            el.btnSynth.addEventListener('click', function () { runProjection(false); });
+            el.btnCp7.addEventListener('click', runCp7);
+        }
+
+        function init() {
+            STATE.lenses = LENS_REGISTRY;
+            STATE.activeLensId = LENS_REGISTRY[0].lens_id;
+
+            el.boneInput.value = BONE_PRESETS.recruiter;
+            STATE.bones = parseBones(el.boneInput.value);
+            renderBoneRoster();
+
+            renderLensOptions();
+            el.lensSelect.value = STATE.activeLensId;
+            renderLens();
+
+            resetInvariants();
+            setMode('MOCK');
+            wire();
+
+            showToast('Sandbox ready — ' + STATE.bones.length + ' bones loaded, lens ' + STATE.activeLensId + '.', 'info');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

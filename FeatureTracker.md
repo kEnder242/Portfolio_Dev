@@ -3368,3 +3368,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Insulates observability from silent execution failures, crashes, deadlocks, and early returns (`BKM-066`).
 **Mechanism:** `standalone_accountability_watchdog.py`, `test_standalone_accountability_watchdog.py`.
 
+## [FEAT-620] Composable Paper Projections & Standalone Projection Studio Sandbox
+**Sprint:** SPR-93.0
+**Status:** ACTIVE
+**Code:** [Portfolio_Dev/field_notes/projection_studio.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/projection_studio.html) — Composable Paper Projections & Standalone Projection Studio Sandbox.
+**Logic:** Implements the D-1 Re-Anchoring Law ($P = f(B_{\text{canonical}}, L_{\text{local}}, L_{\text{global}})$) for document projections without serial generative decay. Provides a standalone interactive studio (`projection_studio.html`) featuring raw bone parsing, dynamic prompt rubric editing, on-demand LCS word-level diff synthesis, and symbolic verification of CP-1 (Semantic Closure), CP-5 (Numeric Literal Integrity), and CP-7 (Re-projection Idempotence).
+**Rationale:** Decouples projection experimentation from heavy monolithic editor codebases and guarantees mathematical invariants on document transformations.
+**Mechanism:** `projection_studio.html`, `ORACLE_REVIEW_SPRINT_93.md`, `mission-control.js`.
+
+
