@@ -232,6 +232,8 @@ def generate_multi_paper_html(papers_dict, dna_index):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Published Papers &amp; Projections — Federated Lab</title>
+    <link rel="stylesheet" href="style.css?v=312b4371">
+    <script src="mission-control.js?v=b505a681" defer></script>
     <style>
         :root {{
             --bg-color: #0d1117;
@@ -253,10 +255,29 @@ def generate_multi_paper_html(papers_dict, dna_index):
             color: var(--text-color);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding: 24px 16px;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }}
+        #sidebar {{
+            width: 260px;
+            background-color: var(--sidebar-bg, #11161d);
+            border-right: 1px solid var(--border-color, #30363d);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }}
+        main {{
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 24px 32px 60px 32px;
         }}
         .container {{
-            max-width: 960px;
+            max-width: 1000px;
             margin: 0 auto;
         }}
         .top-nav-bar {{
@@ -506,34 +527,40 @@ def generate_multi_paper_html(papers_dict, dna_index):
             color: var(--sub-color);
         }}
     </style>
-    <script src="mission-control.js?v=papers" defer></script>
 </head>
 <body>
-    <mission-control></mission-control>
-    <div class="container">
-        <!-- Top Navigation Bar with Paper Selector -->
-        <nav class="top-nav-bar">
-            <div class="nav-brand">
-                <span>📚 Sovereign Papers Showcase</span>
-            </div>
-            <div class="paper-selector-group">
-                <label for="paper-selector" class="paper-selector-label">Active Document:</label>
-                <select id="paper-selector" class="paper-select">
-                    {"".join(paper_options)}
-                </select>
-            </div>
-        </nav>
+    <button id="menu-toggle">☰ MENU</button>
 
-        <!-- Paper Cards Container -->
-        <div id="papers-deck">
-            {"".join(paper_cards)}
+    <nav id="sidebar">
+        <mission-control></mission-control>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- Top Navigation Bar with Paper Selector -->
+            <header class="top-nav-bar">
+                <div class="nav-brand">
+                    <span>📚 Sovereign Papers Showcase</span>
+                </div>
+                <div class="paper-selector-group">
+                    <label for="paper-selector" class="paper-selector-label">Active Document:</label>
+                    <select id="paper-selector" class="paper-select">
+                        {"".join(paper_options)}
+                    </select>
+                </div>
+            </header>
+
+            <!-- Paper Cards Container -->
+            <div id="papers-deck">
+                {"".join(paper_cards)}
+            </div>
+
+            <footer>
+                <p>Federated Lab Sovereign Publishing Engine (FEAT-616 • FEAT-589 • BKM-065 • VIBE-008)</p>
+                <p>100% Offline Static Bundle • Zero Live Runtime Dependencies</p>
+            </footer>
         </div>
-
-        <footer>
-            <p>Federated Lab Sovereign Publishing Engine (FEAT-616 • FEAT-589 • BKM-065 • VIBE-008)</p>
-            <p>100% Offline Static Bundle • Zero Live Runtime Dependencies</p>
-        </footer>
-    </div>
+    </main>
 
     <script>
         (function() {{

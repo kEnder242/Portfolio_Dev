@@ -2742,12 +2742,14 @@
 2. **Always clamp dataloaders to single-process** (`num_workers = 0`, `pin_memory = False`) to prevent memory space collisions.
 3. **Always enforce kernel hung task watchdog** (`hung_task_panic = 1`) to guarantee unattended recovery within 120 seconds.
 
-## [BKM-049] Hardware Seat Anchoring & Resident Model Preservation
-**Philosophy:** Multi-node federated environments must preserve model residency on resource-constrained silicon (like Apple Silicon Unified Memory) rather than dynamically loading or swapping checkpoints during benchmarking or swarm execution.
+## [BKM-049] Tri-Loop Story Delegation, Diagnostic & Feedback Protocol
+**Parent Anchors:** `[VIBE-009]`, `[BKM-069]`, `[PHL-009]`, `[FEAT-522]`  
+**Philosophy:** Multi-node federated delegation is governed by active, layered feedback loops (`VIBE-009`). Systems achieve resilience not from static prompts or blind retry loops, but from capturing rich diagnostic backpressure—including the subagent's cognitive `[HANDOVER REFLECTION]` (`PHL-009`) and registering them into the Loop Ledger (`BKM-069`).
 **Operational Rules:**
-1. **Report on Resident State:** Always benchmark, query, and dispatch to whatever model is already loaded in memory (`mlx-community--Qwen3.8-27B-4bit` on M5 Air).
-2. **Explicit Confirmation Gate:** Never dynamically swap, load alternate model weights, or trigger model eviction on physical hardware seats without requesting and receiving explicit user confirmation beforehand.
-3. **Prevent RAM Thrashing:** Protects Apple Unified RAM from `HTTP 507 Insufficient Storage` collisions and avoids lengthy cold-load stalls during autonomous sweeps.
+1. **The 3-Loop Diagnostic Mandate:** Enforce up to 3 diagnostic rounds on local silicon before escalating to cloud swarm or primary takeover.
+2. **Cognitive Reflection Extraction:** Automatically extract `[HANDOVER REFLECTION]` from all subagent dispatches, persisting into ICM (`topic: delegation_feedback`) and `delegation_ledger.jsonl`.
+3. **Outer Diagnostic Action Loop:** The orchestrator must synthesize subagent feedback and unit test tracebacks to fix prompt ambiguity or harness mismatches between retry rounds.
+4. **Resident Hardware Anchoring:** Preserve resident model topology (Qwen3.8-27B on Kender RTX 4090, Ternary-Bonsai-2-27B via Headroom :8002 on M5 Air). Protect Apple Unified RAM from cold-load thrashing.
 
 ## [FEAT-493] Centralized Swarm Model Alias Registry
 **Sprint:** SPR-66.0
