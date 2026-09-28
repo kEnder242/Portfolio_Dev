@@ -3376,4 +3376,26 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Decouples projection experimentation from heavy monolithic editor codebases and guarantees mathematical invariants on document transformations.
 **Mechanism:** `projection_studio.html`, `ORACLE_REVIEW_SPRINT_93.md`, `mission-control.js`.
 
+## [FEAT-621] DNA Manifest Bridge for VIBE & INSPIRATION Projection Lenses
+**Sprint:** SPR-94.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/scripts/dna_manifest_bridge.py`, `Portfolio_Dev/field_notes/data/dna_manifest.json` — DNA Manifest Bridge.
+**Logic:** Ingests `dna/vibe_data.json` and inspiration sources directly into `dna_manifest.json` so that VIBE and INSPIRATION cards resolve as first-class transformation lenses and register axes in Writer Studio and Projection Studio.
+**Rationale:** Resolves the data-layer omission where `load_dna_index()` silently ignored vibe collections due to missing manifest arrays.
+**Mechanism:** `dna_manifest_bridge.py`, `dna_manifest.json`.
 
+## [FEAT-622] Symbolic vs Semantic Detector Budgeting & Rubric Engine
+**Sprint:** SPR-94.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/curator/lens_service.py` — Symbolic vs Semantic Detector Budgeting.
+**Logic:** Partitions rubric verification into two discrete tiers: (Tier 0) deterministic sub-millisecond symbolic gates (regex, numeric set-diff, AST token containment) for live UI rendering, and (Tier 1) asynchronous semantic LLM judges for narrative styling and tone scoring.
+**Rationale:** Prevents $O(N)$ LLM inference latency from blocking real-time interactive projection editors (`WIS-051`).
+**Mechanism:** `lens_service.py`, `projection_studio.html`.
+
+## [FEAT-623] Paper AST Schema v2 & Dynamic Scoping Gate
+**Sprint:** SPR-94.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/curator/validate_paper_schema.py`, `HomeLabAI/src/curator/lens_service.py` — Paper AST Schema v2.
+**Logic:** Upgrades the paper AST envelope to schema v2, enforcing the Lens v2 structure, DAG dependency sorting, and dynamic `paper_id` scoping to prevent cross-paper filename overwrites during grading.
+**Rationale:** Enforces machine-verifiable structural invariants across all published paper ASTs (`FEAT-585`).
+**Mechanism:** `validate_paper_schema.py`, `lens_service.py`.
