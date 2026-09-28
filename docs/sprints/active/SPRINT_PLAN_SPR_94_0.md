@@ -6,7 +6,10 @@
 
 ## 🎯 Architectural Mandates (BKM-049 / BKM-015 / BKM-070 / BKM-024 / BKM-071)
 1. **D-1 RE-ANCHORING LAW (BKM-070):** All projections project from immutable certified bones ($\pi(\mathcal{C})$) in diamond topologies; serial compounding chains are forbidden.
-2. **BKM-015 ANTI-REGEX & STRUCTURAL PARTITIONING (BKM-015 / WIS-487 / FEAT-622):** Deterministic truth invariants (CP-1, CP-7) are enforced strictly by structural AST/schema traversal; semantic criteria (power-verbs, numeric assertion equivalence, style) are evaluated via LLM-judge. Custom regex matching for natural language evaluation is strictly banned.
+2. **PARSING & EVALUATION TAXONOMY (BKM-015 / BKM-065 / WIS-487 / FEAT-622):**
+   - **AST & Schema Traversal (Structural Invariants):** Enforce CP-1 code token containment, document node hierarchy, and CP-7 section isolation strictly via deterministic AST / JSON schema traversal.
+   - **LLM-Judge (Semantic Evaluation):** Evaluate natural language quality, power-verb impact, tone, and numeric assertion equivalence ($10M == 10 million) via asynchronous LLM-judge (temperature=0, structured JSON output) to eliminate brittle false-positive failures.
+   - **Targeted Regex (Physical Tokens & File Anchors):** Retain regex strictly for deterministic ASCII token extraction, markdown file headers (`## BKM-xxx` per BKM-065), and URL slugification. Custom regex is barred from natural language semantic grading.
 3. **TRI-LOOP DELEGATION MANDATE (BKM-049):** Every story declares an assigned owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). Local stories execute via single-shot `delegate.py` dispatches with AGY-driven outer diagnostic loop (up to 3 diagnostic attempts) before cloud escalation. Direct takeover (`[AGY:TAKEOVER]`) is strictly forbidden without prior failed execution attempts.
 4. **DNA DE-DUPLICATION & MERGE LAW (BKM-071):** Vector search ChromaDB `:8001` before adding DNA; merge >85% similar records.
 5. **DOUBLE-WRITE & SYNCHRONIZATION (BKM-068):** Keep `FeatureTracker.md` and ChromaDB `:8001` synchronized with all changes.
