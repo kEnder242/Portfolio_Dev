@@ -4,6 +4,24 @@ This playbook serves as the definitive reference guide for task allocation, mode
 
 ---
 
+## 0. Playbook Quick-Diagnostic Index & Routing Table
+
+> [!IMPORTANT]
+> **MANDATORY INTER-RETRY INSPECTION (BKM-049 Step 4):**  
+> Before formulating any diagnostic fix, retry prompt, or swarm escalation, the primary orchestrator (AGY) MUST read this Index table (lines 1–60) to match observed symptoms to authoritative rules.
+
+| # | Playbook Section | Core Invariants & Rules | When to Consult (Diagnostic Symptoms) |
+| :- | :--- | :--- | :--- |
+| **§1** | [Model Allocation & Swarm Topology](#1-model-allocation--swarm-topology) | • Kender 4090: `Qwen3.8-27B`<br>• M5 Air MLX: `Ternary-Bonsai-2-27B`<br>• Cloud Tier: OpenRouter / OpenCode Free / Cohere 256k | Model selection, capacity bounds, local vs cloud routing |
+| **§2** | [Session Lifecycle & Webview Visibility](#2-session-lifecycle--webview-visibility-bkm-034-point-12) | • Port 4097 REST API / Port 4096 Web UI<br>• `edit` is DENIED; `clara-dna_safe_patch` is MANDATORY<br>• Single-tenant zombie session nuke (`BKM-034`) | UI disconnects, 4097 port hangs, agent attempting forbidden `edit` tool |
+| **§3** | [Context & Token Optimization](#3-context--token-optimization) | • Narrow `--dir` sub-project scoping<br>• Anti-Google-Starvation law (No Gemini in OpenAgent)<br>• Port 8002 Headroom Proxy KV compression (`BKM-047`)<br>• Subagent tool denial law (`BKM-051`) | Metal memory overflow (24GB cap), prompt token bloat (>2k tokens), KV cache thrashing |
+| **§4** | [Swarm & Configuration Map](#4-swarm--configuration-map) | • Configuration Symlink Law (`~/.config/opencode/`)<br>• Dynamic Category Taxonomy (7 categories)<br>• Layer 3 Terminal Execution Law (`task: deny`) | Category routing errors, subagents failing to resolve model, nested delegation loops |
+| **§5** | [Safety Gates & Troubleshooting Ledger](#5-safety-gates--troubleshooting-ledger) | • Mandatory Pre-Delegation Audit (`FEAT-477`)<br>• Git Ownership Gate (Workers never commit)<br>• Anti-Looping circuit breaker (`BKM-038`) | Verification failures, loop detection, uncommitted git drift |
+| **§6** | [The Agent Cascade Architecture](#6-the-agent-cascade-architecture-context-isolated-swarms) | • 5-Stage Swarm Cascade (Atlas $\rightarrow$ Librarian $\rightarrow$ Junior $\rightarrow$ Momus $\rightarrow$ AGY)<br>• **Permission Matrix:** Atlas (`task`), Junior (`safe_patch`), Hephaestus (`write`, `safe_patch`) | Subagent tool permission rejections, Atlas attempting writes, Junior attempting bash |
+| **§7** | [Operational Calibration Ledger](#7-operational-fix--calibration-ledger-bkm-049-tri-loop-inter-attempt-log) | • Historical root causes & verified calibrations across sprints | Repeated operational anomalies, historical regressions |
+
+---
+
 ## 1. Model Allocation & Swarm Topology
 
 Tasks are allocated based on engine roles to minimize API costs, prevent rate-limiting, and ensure high-fidelity coding execution:
@@ -14,8 +32,8 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | **Sisyphus (Ultraworker & Autonomous Engineer)** | Primary Direct Autonomous Implementer for `delegate.py` story dispatches; directly executes safe_patch/bash | Dispatched via `delegate.py` (default) |
 | **Atlas (Plan Executor & Swarm Conductor)** | Swarm orchestrator for multi-subagent task cascades (Windows 4090 / M5 Air) | Dispatched via `delegate.py --agent atlas` |
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
-| **Primary Local Ground Worker (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `qwen3:14b`) for fast 88 tok/s code editing with 64k context | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
-| **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `mlx-community--Qwen3.8-27B-4bit`) for bounded surgical patching & architectural triage | Subagent target for surgical edits (`sisyphus-junior`) |
+| **Primary Local Conductor & Verifier (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) for 64k context architecture and verification | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
+| **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) for bounded surgical patching & greenfield | Subagent target for surgical edits (`sisyphus-junior`, `hephaestus`) |
 | **Cloud Fallback Tier** | OpenRouter Free -> OpenCode Free -> Cohere/Mistral (Non-Google) | Automatic runtime fallback |
 
 ---
@@ -102,8 +120,8 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 | :--- | :--- | :--- | :--- | :--- |
 | **Sisyphus (Lead)** | OpenCode Free (`opencode/big-pickle`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
 | **Atlas / Prometheus** | OpenCode Free (`opencode/big-pickle`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8000 oMLX: `mlx-community--Qwen3.5-9B-4bit`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`qwen3:14b`) |
-| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `qwen3:14b`) | 64K | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
+| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8002 Headroom $\rightarrow$ Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`Qwen3.8-27B`) |
+| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) | 64K | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
 | **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
 
 ### 4.3 Dynamic Category Taxonomy (Web GUI vs. Headless Dispatch)
@@ -112,13 +130,13 @@ When driving tasks interactively from the **Web GUI** (`http://192.168.1.238:409
 
 | Category | Typical Subagent Tasks | Primary Model Binding | Fallback Chain |
 | :--- | :--- | :--- | :--- |
-| **`coder`** | Surgical leaf patches, code editing | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Free $\rightarrow$ Cohere North $\rightarrow$ 4090 |
+| **`coder`** | Surgical leaf patches, code editing | `my-m5-mlx/TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` | OpenRouter Free $\rightarrow$ Cohere North $\rightarrow$ 4090 |
 | **`ultrabrain`** | Deep architecture derivation, multi-file refactoring | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ M5 MLX |
 | **`deep`** | Complex local implementation, heavy coding | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ Windows 4090 |
-| **`writing`** | Documentation, docstrings, summaries, sprint logs | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | OpenRouter Free $\rightarrow$ Windows 4090 |
-| **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `my-m5-mlx/mlx-community--Qwen3.5-9B-4bit` | Windows 4090 |
+| **`writing`** | Documentation, docstrings, summaries, sprint logs | `my-m5-mlx/TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` | OpenRouter Free $\rightarrow$ Windows 4090 |
+| **`visual-engineering`** | Frontend HTML/CSS layout, UI rendering | `my-m5-mlx/TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` | Windows 4090 |
 | **`unspecified-high`** | General high-complexity fallback | `openrouter/free` (Meta-Router) | Cohere $\rightarrow$ OpenCode Big-Pickle $\rightarrow$ 4090 |
-| **`unspecified-low`** | Verification and diagnostic helper tasks | `my-windows-4090/qwen3:14b` | M5 MLX |
+| **`unspecified-low`** | Verification and diagnostic helper tasks | `my-windows-4090/hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL` | M5 MLX |
 
 ### 4.4 The Layer 3 Terminal Execution Law ([BKM-049])
 - **Terminal Execution Tier:** Layer 3 leaf workers (`sisyphus-junior`, `daedalus`, `hephaestus`, `momus`, `librarian`) represent the final execution tier of the swarm hierarchy.
