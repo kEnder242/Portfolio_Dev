@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projection Studio | Jason Allred</title>
-    <link rel="stylesheet" href="style.css?v=312b4371">
+    <link rel="stylesheet" href="style.css?v=9855deef">
     <style>
         /* ==========================================================================
            [SPRINT 93.0 / STORY 93.5] Standalone Projection Studio Sandbox
@@ -481,6 +481,14 @@
 
             <div class="header-spacer"></div>
 
+            <!-- [SPRINT 95.0 / STORY 95.5] View arbitration: swap the 93.5
+                 invariant sandbox for the 95.5 single-node proving ground.
+                 Both live in this document; neither destroys the other. -->
+            <div class="pg-view-switch" id="pg-view-switch" title="Switch studio surface">
+                <button type="button" id="pg-view-sandbox" class="active" data-view="sandbox">93.5 Sandbox</button>
+                <button type="button" id="pg-view-ground" data-view="ground">95.5 Proving Ground</button>
+            </div>
+
             <div class="mode-toggle" title="MOCK = deterministic local simulation. LIVE = Foyer REST :8765 /paper/synthesize">
                 <button id="mode-mock" class="active" type="button">MOCK</button>
                 <button id="mode-live" type="button">LIVE</button>
@@ -713,6 +721,167 @@
             </section>
         </div>
     </main>
+
+    <!-- ========================================================================
+         [SPRINT 95.0 / STORY 95.5] SINGLE-NODE PROVING GROUND & REVISION CAROUSEL
+         JITC anchors: FEAT-627 (proving ground), FEAT-584 (revision carousel),
+                       FEAT-617 (lens compatibility), BKM-073 (document spine).
+         Top bar: Paper -> Node -> Active Lens.  Tri-pane: carousel / why / rubric.
+         Pure vanilla. No framework, no bundler, no build step.
+         ======================================================================== -->
+    <section class="pg-shell" id="pg-shell" aria-label="Single-node proving ground">
+        <header class="pg-topbar">
+            <div class="pg-mark">
+                <span class="pg-mark-id">PROVING GROUND</span>
+                <span class="pg-mark-sub">SPR-95.0 / STORY 95.5 &middot; FEAT-627 &middot; FEAT-584 &middot; FEAT-617</span>
+            </div>
+
+            <div class="pg-spacer"></div>
+
+            <div class="pg-field">
+                <label for="pg-paper-select">Paper <code>PAPER-&lt;id&gt;</code></label>
+                <select id="pg-paper-select" title="Spine manifest: data/papers/PAPER-&lt;id&gt;_spine.json"></select>
+            </div>
+
+            <div class="pg-field">
+                <label for="pg-node-select">Node <code>topology</code></label>
+                <select id="pg-node-select" title="Populated from the spine topology"></select>
+            </div>
+
+            <div class="pg-field">
+                <label for="pg-lens-select">Active Lens <code>L</code></label>
+                <select id="pg-lens-select" title="Rubric driving the compatibility indicators"></select>
+            </div>
+
+            <div class="pg-wire" id="pg-wire" title="Data-channel reachability">
+                <span class="dot"></span><span class="pg-wire-label">WIRE&hellip;</span>
+            </div>
+
+            <!-- The 93.5 switch lives inside the 93.5 <main>, which body.pg-mode
+                 hides. Without a reciprocal control here the proving ground
+                 would be a one-way door. -->
+            <div class="pg-view-switch" data-pg-switch title="Return to the 93.5 invariant sandbox">
+                <button type="button" data-view="sandbox" class="active">&#9664; 93.5 Sandbox</button>
+            </div>
+        </header>
+
+        <div class="pg-body">
+            <!-- Provenance / honesty contract. Rendered, not decorative. -->
+            <div class="pg-provenance" id="pg-provenance">
+                <span>&#9432;</span>
+                <div>
+                    <b>Indicator provenance.</b> Scores below are
+                    <b>deterministic symbolic indicators</b>, not authoritative lens grades.
+                    <code>tier_0_structural</code> rules are evaluated here by pure traversal
+                    (BKM-015: ASCII token extraction only, no semantic judgement).
+                    <code>tier_1_semantic</code> rules are <b>consumed verbatim</b> from the
+                    <code>review_flags</code> annotation channel already adjudicated upstream and
+                    committed into the paper JSON &mdash; this page never re-judges prose.
+                    Where a rule is absent from the annotation channel it reports
+                    <code>NOT_ADJUDICATED</code>, which is <em>not</em> a pass.
+                </div>
+            </div>
+
+            <div class="pg-grid">
+                <!-- ============ PANE 1 — Revision Carousel ==================== -->
+                <section class="pg-pane" id="pg-pane-carousel">
+                    <div class="pg-pane-head">
+                        <span class="pgi carrier">01</span>
+                        <span>Revision Carousel</span>
+                        <span class="pgh"></span>
+                        <span id="pg-carousel-caption">&mdash;</span>
+                    </div>
+                    <div class="pg-pane-body">
+                        <div class="pg-carousel" id="pg-carousel"></div>
+
+                        <div>
+                            <div class="pg-diff-col-head">
+                                <span>Selected revision payload</span>
+                            </div>
+                            <div class="pg-node-text" id="pg-node-text">
+                                <span class="pg-empty">Select a node.</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="pg-diff-col-head">
+                                <span>Word / token diff</span>
+                                <span class="pgh"></span>
+                                <span id="pg-diff-caption">&mdash;</span>
+                            </div>
+                            <div class="pg-delta-none" id="pg-delta-note" style="display:none;"></div>
+                            <div class="pg-diff-pair">
+                                <div>
+                                    <div class="pg-diff-col-head" id="pg-diff-head-a">&mdash;</div>
+                                    <div class="pg-diff-body" id="pg-diff-a"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-diff-col-head" id="pg-diff-head-b">&mdash;</div>
+                                    <div class="pg-diff-body" id="pg-diff-b"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ PANE 2 — Insight ============================== -->
+                <section class="pg-pane" id="pg-pane-insight">
+                    <div class="pg-pane-head">
+                        <span class="pgi">02</span>
+                        <span>Reason Why / Inversion</span>
+                        <span class="pgh"></span>
+                        <span id="pg-insight-caption">&mdash;</span>
+                    </div>
+                    <div class="pg-pane-body">
+                        <div class="pg-stats" id="pg-stats"></div>
+
+                        <div>
+                            <div class="pg-diff-col-head"><span>Reason Why &mdash; why this revision scores this way</span></div>
+                            <div class="pg-why" id="pg-why">
+                                <div class="pg-why-h">Awaiting node</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="pg-diff-col-head"><span>Quality Inversion Gate</span></div>
+                            <div class="pg-inversion na" id="pg-inversion">
+                                <div class="pg-inversion-h">Not evaluated</div>
+                                <div>Select a node to walk the revision score ladder.</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="pg-diff-col-head">
+                                <span>Document-scoped DNA</span>
+                                <span class="pgh"></span>
+                                <span id="pg-dna-caption">&mdash;</span>
+                            </div>
+                            <div class="pg-dna-badges" id="pg-dna-badges"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ PANE 3 — Active Lens & Rubric ================= -->
+                <section class="pg-pane" id="pg-pane-rubric">
+                    <div class="pg-pane-head">
+                        <span class="pgi revision">03</span>
+                        <span>Active Lens / Rubric Checklist</span>
+                        <span class="pgh"></span>
+                        <span id="pg-rubric-caption">&mdash;</span>
+                    </div>
+                    <div class="pg-pane-body">
+                        <div class="pg-rubric-meta" id="pg-rubric-meta"></div>
+                        <div class="pg-rubric-persona" id="pg-rubric-persona"></div>
+                        <div class="pg-tier" id="pg-tier-0"></div>
+                        <div class="pg-tier" id="pg-tier-1"></div>
+                        <div class="pg-footnote" id="pg-footnote"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <div class="pg-toast" id="pg-toast"></div>
 
     <div class="toast-notification" id="toast"></div>
 
@@ -1678,6 +1847,1222 @@
             wire();
 
             showToast('Sandbox ready — ' + STATE.bones.length + ' bones loaded, lens ' + STATE.activeLensId + '.', 'info');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+
+    <script>
+    /* ==========================================================================
+       [SPRINT 95.0 / STORY 95.5] SINGLE-NODE PROVING GROUND & REVISION CAROUSEL
+       JITC anchors: FEAT-627, FEAT-584, FEAT-617, BKM-073.
+
+       DESIGN LAW (load-bearing, straight out of ORACLE_REVIEW_SPRINT_95.md §4.2):
+       the Studio verdict is CONDITIONAL with the explicit condition
+       "Must not reimplement lens scoring in JS". This controller honours that
+       split at the tier boundary:
+
+         tier_0_structural -> evaluated HERE, deterministically, by pure
+                              traversal. ASCII token extraction + presence
+                              checks only. BKM-015 sanctions exactly this and
+                              forbids semantic judgement in the same breath.
+         tier_1_semantic   -> CONSUMED verbatim from the `review_flags`
+                              annotation channel that the upstream judge
+                              already committed into the paper JSON. This page
+                              never re-adjudicates prose.
+
+       Two further honesty guards, both traceable to measured findings:
+         - A rule that is absent from the annotation channel reports
+           NOT_ADJUDICATED. It is NOT reported as a pass. (v1 carries no
+           annotation channel at all, so its tier_1 column is legitimately empty.)
+         - A rule emitted without a `tier` discriminator is quarantined into a
+           dedicated TIER-UNDECLARED group and excluded from both tallies,
+           rather than being silently defaulted. Oracle AX-IV measured that
+           silent defaulting collapsed 100% of the deterministic fast-path
+           into tier_1; proposed BKM-074 makes that a hard reject.
+
+       Nothing here invents a score, a diff, or an inversion. Where the corpus
+       is inert (all 42 spine nodes UNCHANGED, identical text_hash across
+       revisions — Oracle AX-II) the UI says so instead of manufacturing motion.
+       ========================================================================== */
+    (function () {
+        'use strict';
+
+        // ------------------------------------------------------------- CONFIG
+        var DATA_BASE = 'data/papers/';
+        var LENS_BASE = 'data/lenses/';
+
+        /* Only real spine manifests are offered. Story default is PAPER-RESUME.
+           A selector entry that 404s is reported inline, never silently dropped. */
+        var PAPER_REGISTRY = [
+            { paper_id: 'RESUME', spine: 'PAPER-RESUME_spine.json', label: 'PAPER-RESUME' }
+        ];
+
+        /* Two derived structural views + the two real compiled lenses on disk.
+           The derived views are FILTERS over real rule vocabularies, not
+           invented rubrics; both say so in their title. No 'ats' rubric exists
+           in data/lenses/, so an ATS view is projected rather than fabricated. */
+        var LENS_REGISTRY = [
+            { lens_id: 'canonical_structural', derived: 'canonical', title: 'Canonical structural floor (tier_0 from lenses.py)' },
+            { lens_id: 'baseline_structural', derived: 'tier_0', source_lens: 'farah_sharghi_recruiter_v1', title: 'Baseline (compiled tier_0 subset)' },
+            { lens_id: 'ats_structural', derived: 'ats', source_lens: 'farah_sharghi_recruiter_v1', title: 'ATS structural view (tier_0 + STRUCTURE)' },
+            { lens_id: 'farah_sharghi_recruiter_v1', file: 'farah_sharghi_recruiter_v1.json', title: 'Farah Sharghi Recruiter Lens' },
+            { lens_id: 'test_recruiter_lens', file: 'test_recruiter_lens.json', title: 'Test Recruiter Lens' }
+        ];
+
+        /* BKM-074 (proposed Tiered Rubric Emission Invariant) exists precisely
+           because craft_lens() omits `tier`: measured on disk, BOTH compiled
+           lenses emit rules with no tier discriminator, which collapses tier_0
+           to empty. To keep the deterministic fast-path reachable — and visible
+           — this is a verbatim transcription of the tier_0_structural half of
+           HomeLabAI/src/projection/lenses.py::_BASE_RULES. It is a REFERENCE
+           VOCABULARY, not a compiled lens, and the UI labels it as such. Each
+           entry pairs with a deterministic detector in TIER0 below. */
+        var CANONICAL_TIER0_RULES = [
+            {
+                rule_id: 'NODE_IDENTITY_INTEGRITY', category: 'STRUCTURE', target: 'document_node',
+                severity: 'CRITICAL', tier: 'tier_0_structural',
+                description: 'Every bone must resolve to a non-empty stable id and heading (CP-1 token containment).'
+            },
+            {
+                rule_id: 'CONTEXT_LINE_PURVIEW', category: 'REFINEMENT', target: 'role_header',
+                severity: 'MEDIUM', tier: 'tier_0_structural',
+                description: 'Include a single 1-line context statement beneath the title and company defining team scale and direct purview before bullets appear.'
+            },
+            {
+                rule_id: 'BULLET_DENSITY_CAP', category: 'STRUCTURE', target: 'section_structure',
+                severity: 'MEDIUM', tier: 'tier_0_structural',
+                description: 'Recent roles: 4-6 bullets max. Older roles: 1-3 bullets max.'
+            },
+            {
+                rule_id: 'DNA_CITATION_CONNECTION', category: 'CONNECTION', target: 'bone_citations',
+                severity: 'INFO', tier: 'tier_0_structural',
+                description: 'Attach corresponding DNA cards or arXiv research anchors where empirical validation occurred.'
+            },
+            {
+                rule_id: 'QUANTIFIED_ANCHOR_PRESENT', category: 'REFINEMENT', target: 'bone_paragraphs',
+                severity: 'MEDIUM', tier: 'tier_0_structural',
+                description: 'Each bone must carry at least one quantified anchor (ASCII digit token).'
+            }
+        ];
+
+        var SEVERITY_WEIGHT = { CRITICAL: 8, HIGH: 4, MEDIUM: 2, LOW: 1, INFO: 0.5 };
+        var POWER_VERBS = [
+            'architected', 'spearheaded', 'engineered', 'directed', 'standardized', 'deployed',
+            'authored', 'audited', 'established', 'restructured', 'mentored', 'optimized',
+            'synthesized', 'profiled', 'developed', 'saved', 'led', 'automated', 'built',
+            'implemented', 'partnered', 'validated', 'drove', 'orchestrated', 'pioneered',
+            'scaled', 'eliminated', 'recovered', 'reimagined', 'launched', 'founded',
+            'migrated', 'hardened', 'accelerated'
+        ];
+        var WEAK_OPENINGS = [
+            'worked on', 'responsible for', 'helped with', 'helped', 'assisted with', 'participated in'
+        ];
+        var ASCII_DIGIT_RE = /[0-9]/;
+        var TOKEN_RE = /[A-Za-z0-9][A-Za-z0-9''\-\.]*/g;
+        var DIFF_CELL_BUDGET = 40000; /* LCS is O(n*m); refuse to melt the tab past this */
+
+        // -------------------------------------------------------------- STATE
+        var PG = {
+            spine: null,
+            paperId: null,
+            versions: [],        /* [{version_id, description, filename, doc}] */
+            lenses: [],
+            activeLensId: null,
+            nodeId: null,
+            revisionId: null,
+            compareId: null,      /* left/right of the diff pair            */
+            dna: [],
+            wire: 'pending'
+        };
+
+        // --------------------------------------------------------- UTILITIES
+        function esc(s) {
+            return String(s === undefined || s === null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        function hasOwn(o, k) {
+            return Object.prototype.hasOwnProperty.call(o, k);
+        }
+        function num(v) { var n = Number(v); return isFinite(n) ? n : 0; }
+        function titleCase(s) { return String(s).replace(/_/g, ' ').toLowerCase().replace(/^\w/, function (c) { return c.toUpperCase(); }); }
+
+        function toast(msg, type) {
+            var t = document.getElementById('pg-toast');
+            if (!t) return;
+            t.textContent = msg;
+            t.className = 'pg-toast show ' + (type || '');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(function () { t.className = 'pg-toast'; }, 3600);
+        }
+
+        function setWire(state, label) {
+            PG.wire = state;
+            var w = document.getElementById('pg-wire');
+            if (!w) return;
+            w.className = 'pg-wire ' + (state === 'ok' ? 'ok' : (state === 'err' ? 'err' : ''));
+            w.querySelector('.pg-wire-label').textContent = label;
+        }
+
+        function getJson(url) {
+            return fetch(url, { cache: 'no-store' }).then(function (r) {
+                if (!r.ok) throw new Error(url + ' -> HTTP ' + r.status);
+                return r.json();
+            });
+        }
+
+        // ------------------------------------------------- TEXT PROJECTION
+        /* Polymorphic containers, discriminator-tagged (Oracle AX: a uniform
+           coordinate model silently addresses nothing). */
+        function projectNodeText(n) {
+            if (!n) return '';
+            if (typeof n.text === 'string' && n.text) return n.text;
+            if (n.variants && n.active_key && typeof n.variants[n.active_key] === 'string') {
+                return n.variants[n.active_key];
+            }
+            /* Education-shaped nodes carry no `text`; project their fields. */
+            var edu = [n.institution, n.degree, n.period].filter(function (x) { return !!x; });
+            if (edu.length) return edu.join(' · ');
+            if (n.category && n.variants) return n.category;
+            return '';
+        }
+
+        function projectRoleText(r) {
+            if (!r) return '';
+            var head = [r.title, r.company].filter(Boolean).join(' @ ');
+            var meta = [r.period, r.location].filter(Boolean).join(' · ');
+            return [head, meta, r.context_line || ''].filter(Boolean).join('\n');
+        }
+
+        /* One pass over a revision document -> node_id keyed truth index.
+           `review_flags: null` means "this record carries no annotation
+           channel", which is semantically different from "flagged and clear". */
+        function buildIndex(doc) {
+            var idx = {};
+            (doc.sections || []).forEach(function (sec) {
+                (sec.nodes || []).forEach(function (n) {
+                    idx[n.node_id] = {
+                        node_id: n.node_id,
+                        container_kind: 'node',
+                        section_id: sec.section_id,
+                        section_heading: sec.heading,
+                        raw: n,
+                        text: projectNodeText(n),
+                        citations: n.citations || [],
+                        review_flags: hasOwn(n, 'review_flags') ? (n.review_flags || []) : null,
+                        child_ids: []
+                    };
+                });
+                (sec.roles || []).forEach(function (r) {
+                    var bulletIds = (r.bullets || []).map(function (b) { return b.node_id; });
+                    idx[r.role_id] = {
+                        node_id: r.role_id,
+                        container_kind: 'role',
+                        section_id: sec.section_id,
+                        section_heading: sec.heading,
+                        raw: r,
+                        text: projectRoleText(r),
+                        citations: [],
+                        review_flags: hasOwn(r, 'review_flags') ? (r.review_flags || []) : null,
+                        child_ids: bulletIds
+                    };
+                    (r.bullets || []).forEach(function (b) {
+                        idx[b.node_id] = {
+                            node_id: b.node_id,
+                            container_kind: 'bullet',
+                            section_id: sec.section_id,
+                            section_heading: sec.heading,
+                            parent_role_id: r.role_id,
+                            raw: b,
+                            text: b.text || '',
+                            citations: b.citations || [],
+                            review_flags: hasOwn(b, 'review_flags') ? (b.review_flags || []) : null,
+                            child_ids: []
+                        };
+                    });
+                });
+            });
+            return idx;
+        }
+
+        // ------------------------------------------------------ RULE RESOLUTION
+        /* D13: farah_sharghi_recruiter_v1.json carries only `rubric_rules`;
+           test_recruiter_lens.json carries BOTH keys. Read whichever exists and
+           surface the dual-truth condition instead of hiding it. */
+        function resolveRules(lens) {
+            var rules = null, via = null, dual = false;
+            if (lens && Array.isArray(lens.rules)) { rules = lens.rules; via = 'rules'; }
+            if (lens && Array.isArray(lens.rubric_rules)) {
+                if (rules) { dual = true; } else { rules = lens.rubric_rules; via = 'rubric_rules'; }
+            }
+            return { rules: rules || [], via: via, dual: dual };
+        }
+
+        /* BKM-074 (proposed): absent `tier` is a validation defect, not a
+           default. Quarantine rather than coerce. */
+        function tierOf(rule) {
+            var t = rule && rule.tier;
+            if (t === 'tier_0_structural' || t === 'tier_1_semantic') return t;
+            return 'TIER_UNDECLARED';
+        }
+
+        function weightOf(rule) {
+            return SEVERITY_WEIGHT[String((rule && rule.severity) || 'MEDIUM').toUpperCase()] || 1;
+        }
+
+        // ------------------------------------------------- TIER_0 DETECTORS
+        /* Deterministic, declarative, side-effect free. Each returns
+           {status, detail}. Nothing here infers meaning from prose. */
+        var TIER0 = {
+            NODE_IDENTITY_INTEGRITY: function (rec, ctx) {
+                var ok = !!(rec && rec.node_id);
+                var inTopo = !!(ctx.topology && hasOwn(ctx.topology, rec.node_id));
+                return {
+                    status: ok && inTopo ? 'PASS' : 'FAIL',
+                    detail: 'node_id="' + (rec.node_id || '') + '" · ' +
+                        (inTopo ? 'present in spine topology' : 'ABSENT from spine topology')
+                };
+            },
+            CONTEXT_LINE_PURVIEW: function (rec) {
+                if (rec.container_kind !== 'role') {
+                    return { status: 'NOT_APPLICABLE', detail: 'target=role_header; selected node is a ' + rec.container_kind };
+                }
+                var line = String((rec.raw && rec.raw.context_line) || '').trim();
+                var words = line ? line.split(/\s+/).length : 0;
+                return {
+                    status: line ? 'PASS' : 'FAIL',
+                    detail: line ? 'context_line present (' + words + ' words)' : 'no context_line under the role header'
+                };
+            },
+            BULLET_DENSITY_CAP: function (rec, ctx) {
+                var roleRec = rec.container_kind === 'role'
+                    ? rec
+                    : (rec.parent_role_id && ctx.index ? ctx.index[rec.parent_role_id] : null);
+                if (!roleRec) return { status: 'NOT_APPLICABLE', detail: 'no owning role container for this node' };
+                var n = (roleRec.child_ids || []).length;
+                var period = String((roleRec.raw && roleRec.raw.period) || '');
+                var recent = /present|current/i.test(period);
+                var cap = recent ? 6 : 3;
+                return {
+                    status: n <= cap ? 'PASS' : 'FAIL',
+                    detail: n + ' bullet(s); cap=' + cap + ' (' + (recent ? 'recent' : 'older') + ' role "' + (period || 'n/a') + '")'
+                };
+            },
+            DNA_CITATION_CONNECTION: function (rec, ctx) {
+                var cites = (rec.citations || []).filter(function (c) { return c; });
+                if (rec.container_kind === 'role') {
+                    var pool = (ctx && ctx.index) || {};
+                    var total = (rec.child_ids || []).reduce(function (acc, id) {
+                        return acc + ((pool[id] || {}).citations || []).length;
+                    }, 0);
+                    return {
+                        status: total > 0 ? 'PASS' : 'FAIL',
+                        detail: total + ' citation anchor(s) across ' + (rec.child_ids || []).length + ' child bullet(s)'
+                    };
+                }
+                return {
+                    status: cites.length ? 'PASS' : 'FAIL',
+                    detail: cites.length ? cites.join(', ') : 'no citation anchor attached to this bone'
+                };
+            },
+            QUANTIFIED_ANCHOR_PRESENT: function (rec) {
+                var t = String(rec.text || '');
+                var m = t.match(/\d[\d,]*(?:\.\d+)?%?/g) || [];
+                return {
+                    status: m.length ? 'PASS' : 'FAIL',
+                    detail: m.length ? 'ASCII numeric anchor(s): ' + m.slice(0, 6).join(' ') : 'no ASCII digit token in the truth text'
+                };
+            }
+        };
+
+        // ------------------------------------------------ TIER_1 ANNOTATION
+        /* Read-only over the adjudicated annotation channel. */
+        function tier1Verdict(rule, rec) {
+            if (!rec) return { status: 'FAIL', detail: 'node absent from this revision' };
+            /* An EMPTY channel is not a clean bill of health. The bytes cannot
+               distinguish "the judge ran and raised nothing" from "this revision
+               was never judged at all" — v1 carries review_flags: [] and would
+               otherwise score a free PASS, manufacturing a quality inversion
+               against a revision that only added flags. Report the ambiguity
+               instead of resolving it in our own favour. */
+            if (!rec.review_flags || !rec.review_flags.length) {
+                return {
+                    status: 'NOT_ADJUDICATED',
+                    detail: rec.review_flags === null
+                        ? 'this revision carries no review_flags annotation channel'
+                        : 'annotation channel present but empty — cannot distinguish "judged clean" from "never judged"'
+                };
+            }
+            var rid = rule.rule_id;
+            var hits = rec.review_flags.filter(function (f) { return f && f.rule_id === rid; });
+            var open = hits.filter(function (f) { return String(f.status || 'OPEN').toUpperCase() !== 'RESOLVED'; });
+            if (open.length) {
+                return {
+                    status: 'FAIL',
+                    detail: open.length + ' open flag(s)',
+                    flags: open
+                };
+            }
+            if (hits.length) return { status: 'PASS', detail: hits.length + ' flag(s), all resolved' };
+            /* The channel is populated but silent on this rule. That IS a real
+               adjudicated pass — the judge saw the node and said nothing. */
+            return { status: 'PASS', detail: 'adjudicated (' + rec.review_flags.length + ' flag(s) on this node), none against this rule' };
+        }
+
+        /* Does this record carry a usable annotation channel? An absent key and
+           an empty array are BOTH unusable, for different reasons. */
+        function annotationChannel(rec) {
+            if (!rec) return 'absent';
+            if (rec.review_flags === null || rec.review_flags === undefined) return 'none';
+            return rec.review_flags.length ? 'populated' : 'empty';
+        }
+        function channelNote(rec) {
+            var c = annotationChannel(rec);
+            if (c === 'none') return 'no annotation channel';
+            if (c === 'empty') return 'empty annotation channel';
+            return 'populated annotation channel';
+        }
+
+        // ---------------------------------------------------------- SCORING
+        /* Weighted satisfaction over EVALUATED rules only. Returns null when
+           nothing was adjudicable — an unmeasurable cell is not a zero. */
+        function scoreNode(rec, lens, ctx) {
+            var rows = evaluateAll(rec, lens, ctx);
+            var earned = 0, total = 0, nEval = 0, nUnadj = 0, nNa = 0;
+            rows.forEach(function (r) {
+                if (r.status === 'PASS' || r.status === 'FAIL') {
+                    total += r.weight; nEval++;
+                    if (r.status === 'PASS') earned += r.weight;
+                } else if (r.status === 'NOT_ADJUDICATED') { nUnadj++; }
+                else { nNa++; }
+            });
+            if (total === 0) return { pct: null, earned: 0, total: 0, evaluated: 0, unadjudicated: nUnadj, na: nNa, rows: rows };
+            return {
+                pct: Math.round((earned / total) * 100),
+                earned: earned, total: total, evaluated: nEval,
+                unadjudicated: nUnadj, na: nNa, rows: rows
+            };
+        }
+
+        function evaluateAll(rec, lens, ctx) {
+            var out = [];
+            lens.rules.forEach(function (rule) {
+                var tier = tierOf(rule);
+                var w = weightOf(rule);
+                if (tier === 'TIER_UNDECLARED') {
+                    out.push({ rule: rule, tier: tier, status: 'QUARANTINED', detail: 'rule emits no tier discriminator; excluded from all tallies', weight: 0, ruleId: rule.rule_id });
+                    return;
+                }
+                if (tier === 'tier_0_structural') {
+                    var det = TIER0[rule.rule_id];
+                    if (!det) {
+                        out.push({ rule: rule, tier: tier, status: 'NOT_APPLICABLE', detail: 'no deterministic detector registered for this rule_id', weight: w, ruleId: rule.rule_id });
+                        return;
+                    }
+                    var v = det(rec, ctx);
+                    out.push({ rule: rule, tier: tier, status: v.status, detail: v.detail, weight: w, ruleId: rule.rule_id });
+                    return;
+                }
+                var t1 = tier1Verdict(rule, rec);
+                out.push({ rule: rule, tier: tier, status: t1.status, detail: t1.detail, flags: t1.flags, weight: w, ruleId: rule.rule_id });
+            });
+            return out;
+        }
+
+        function scoreClass(pct) {
+            if (pct === null || pct === undefined) return 'tier-na';
+            if (pct >= 85) return 'tier-good';
+            if (pct >= 60) return 'tier-mid';
+            return 'tier-low';
+        }
+
+        function scorePill(pct) {
+            if (pct === null || pct === undefined) {
+                return '<span class="pg-score tier-na" title="No rule was adjudicable for this revision under the active lens.">n/a</span>';
+            }
+            return '<span class="pg-score ' + scoreClass(pct) + '" title="Weighted symbolic satisfaction over ' +
+                'deterministically-evaluated and pre-adjudicated rules. Not an authoritative lens grade.">' +
+                '<span class="pg-score-val">' + pct + '%</span> match</span>';
+        }
+
+        // ------------------------------------------------------- WORD DIFF
+        function tokenize(s) { return String(s || '').match(TOKEN_RE) || []; }
+
+        function diffTokens(a, b) {
+            var n = a.length, m = b.length;
+            if (n === 0 && m === 0) return { aHtml: '<span class="pg-empty">(empty)</span>', bHtml: '<span class="pg-empty">(empty)</span>', adds: 0, dels: 0 };
+            if (n * m > DIFF_CELL_BUDGET) {
+                return {
+                    aHtml: '<span class="pg-delta-none">Text too large for token diff; showing raw payloads.</span>' + esc(a.join(' ')),
+                    bHtml: '<span class="pg-delta-none">Text too large for token diff; showing raw payloads.</span>' + esc(b.join(' ')),
+                    adds: 0, dels: 0, capped: true
+                };
+            }
+            /* Classic LCS table. Bounded by DIFF_CELL_BUDGET above. */
+            var dp = [];
+            for (var i = 0; i <= n; i++) { dp.push(new Uint32Array(m + 1)); }
+            for (i = n - 1; i >= 0; i--) {
+                for (var j = m - 1; j >= 0; j--) {
+                    dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+            var ops = [], adds = 0, dels = 0;
+            i = 0; j = 0;
+            while (i < n && j < m) {
+                if (a[i] === b[j]) { ops.push(['=', a[i]]); i++; j++; }
+                else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push(['-', a[i]]); dels++; i++; }
+                else { ops.push(['+', b[j]]); adds++; j++; }
+            }
+            while (i < n) { ops.push(['-', a[i++]]); dels++; }
+            while (j < m) { ops.push(['+', b[j++]]); adds++; }
+
+            function render(seq, keep) {
+                var out = '', run = '', mode = null;
+                function flush() {
+                    if (!run) return;
+                    out += mode === 'd' ? '<del>' + esc(run) + '</del>' : (mode === 'i' ? '<ins>' + esc(run) + '</ins>' : esc(run));
+                    run = '';
+                }
+                seq.forEach(function (op) {
+                    var want = keep === 'both' ? (op[0] === '=' ? null : op[0]) : (op[0] === keep ? op[0] : null);
+                    if (want !== mode) { flush(); mode = want; }
+                    run += op[1] + ' ';
+                });
+                flush();
+                return out.trim();
+            }
+            return { aHtml: render(ops, 'd') || '<span class="pg-empty">(empty)</span>', bHtml: render(ops, 'i') || '<span class="pg-empty">(empty)</span>', adds: adds, dels: dels };
+        }
+
+        // ---------------------------------------------------------- RENDERERS
+        function currentLens() {
+            for (var i = 0; i < PG.lenses.length; i++) if (PG.lenses[i].lens_id === PG.activeLensId) return PG.lenses[i];
+            return null;
+        }
+        function versionById(vid) {
+            for (var i = 0; i < PG.versions.length; i++) if (PG.versions[i].version_id === vid) return PG.versions[i];
+            return null;
+        }
+        function topoNode(nodeId) {
+            return (PG.spine && PG.spine.topology) ? PG.spine.topology[nodeId] : null;
+        }
+        function activeRecord(vid) {
+            var v = versionById(vid);
+            if (!v || !v.index) return null;
+            return v.index[nodeId(vid)] || null;
+        }
+        function nodeId() { return PG.nodeId; }
+
+        function renderCarousel() {
+            var host = document.getElementById('pg-carousel');
+            var cap = document.getElementById('pg-carousel-caption');
+            var lens = currentLens();
+            var ctx = buildCtx();
+            if (!host) return;
+
+            if (!PG.nodeId) {
+                host.innerHTML = '<div class="pg-empty">Select a node to load its revision history.</div>';
+                if (cap) cap.textContent = '—';
+                return;
+            }
+
+            var html = '', missing = 0, withScore = 0, totalRevs = PG.versions.length;
+            PG.versions.forEach(function (v) {
+                var rec = v.index ? v.index[PG.nodeId] : null;
+                var tn = topoNode(PG.nodeId);
+                var tnv = tn && tn.versions ? tn.versions[v.version_id] : null;
+                var op = tnv ? String(tnv.operation || 'UNKNOWN') : 'NO_SPINE_ENTRY';
+                var sc = (rec && lens) ? scoreNode(rec, lens, ctx) : null;
+                if (!rec) missing++;
+                if (sc && sc.pct !== null) withScore++;
+                var isActive = v.version_id === PG.revisionId;
+                var short = rec ? String(rec.text || '(no truth text)').slice(0, 130) : 'Not present in this revision.';
+                html += '<button type="button" class="pg-rev' + (isActive ? ' is-active' : '') + (rec ? '' : ' is-missing') +
+                    '" data-rev="' + esc(v.version_id) + '" title="' + esc(v.description || v.version_id) + '">' +
+                    '<span class="pg-rev-top"><span class="pg-rev-id">' + esc(v.version_id) + '</span>' +
+                    (rec ? '' : '<span class="pg-pill op-DELETE">ABSENT</span>') + '</span>' +
+                    '<span class="pg-rev-desc">' + esc(v.description || '—') + '</span>' +
+                    '<span class="pg-rev-prev">' + esc(short) + '</span>' +
+                    '<span class="pg-rev-foot"><span class="pg-pill op-' + esc(op) + '">' + esc(op) + '</span>' +
+                    (sc ? scorePill(sc.pct) : '') + '</span>' +
+                    '</button>';
+            });
+
+            host.innerHTML = html;
+            Array.prototype.forEach.call(host.querySelectorAll('.pg-rev'), function (b) {
+                b.addEventListener('click', function () {
+                    PG.revisionId = b.getAttribute('data-rev');
+                    renderAll();
+                });
+            });
+            if (cap) {
+                cap.textContent = totalRevs + ' revision(s) · ' + withScore + ' scored · ' + missing + ' absent';
+            }
+        }
+
+        function buildCtx() {
+            var rec = activeRecord(PG.revisionId);
+            return { topology: (PG.spine && PG.spine.topology) || {}, index: (versionById(PG.revisionId) || {}).index || {}, rec: rec };
+        }
+
+        function renderNodeText() {
+            var host = document.getElementById('pg-node-text');
+            if (!host) return;
+            var rec = activeRecord(PG.revisionId);
+            if (!rec) {
+                host.innerHTML = '<span class="pg-empty">Node <code>' + esc(PG.nodeId || '—') +
+                    '</code> is absent from revision <code>' + esc(PG.revisionId || '—') + '</code>.</span>';
+                return;
+            }
+            var meta = [];
+            meta.push('kind=' + rec.container_kind);
+            if (rec.section_id) meta.push('section=' + rec.section_id);
+            if (rec.parent_role_id) meta.push('role=' + rec.parent_role_id);
+            if (rec.child_ids && rec.child_ids.length) meta.push('children=' + rec.child_ids.length);
+            if (rec.citations && rec.citations.length) meta.push('cites=' + rec.citations.join(','));
+            host.className = 'pg-node-text' + (rec.container_kind === 'role' ? ' is-container' : '');
+            host.innerHTML = '<div style="font-size:.53rem;color:#55606d;letter-spacing:.6px;margin-bottom:6px;">' +
+                esc(meta.join(' · ')) + '</div>' + esc(rec.text || '(no truth text)');
+        }
+
+        function renderDiff() {
+            var a = versionById(PG.compareId);
+            var b = versionById(PG.revisionId);
+            var ha = document.getElementById('pg-diff-head-a');
+            var hb = document.getElementById('pg-diff-head-b');
+            var ba = document.getElementById('pg-diff-a');
+            var bb = document.getElementById('pg-diff-b');
+            var cap = document.getElementById('pg-diff-caption');
+            var note = document.getElementById('pg-delta-note');
+            if (!ba || !bb) return;
+
+            if (!a || !b) {
+                ha.textContent = hb.textContent = '—';
+                ba.innerHTML = bb.innerHTML = '<span class="pg-empty">No comparison pair.</span>';
+                return;
+            }
+
+            var ra = a.index ? a.index[PG.nodeId] : null;
+            var rb = b.index ? b.index[PG.nodeId] : null;
+            ha.textContent = 'A · ' + a.version_id;
+            hb.textContent = 'B · ' + b.version_id;
+
+            var tA = ra ? String(ra.text || '') : '';
+            var tB = rb ? String(rb.text || '') : '';
+            var d = diffTokens(tokenize(tA), tokenize(tB));
+
+            if (tA === tB) {
+                /* The truthful case for this corpus: identical truth text. */
+                var tna = PG.nodeId ? topoNode(PG.nodeId) : null;
+                var hA = tna && tna.versions ? (tna.versions[a.version_id] || {}).text_hash : null;
+                var hB = tna && tna.versions ? (tna.versions[b.version_id] || {}).text_hash : null;
+                note.style.display = 'flex';
+                note.innerHTML = '<span>&#9432;</span><div><b>No textual delta.</b> ' + esc(a.version_id) + ' and ' + esc(b.version_id) +
+                    ' carry byte-identical truth text for <code>' + esc(PG.nodeId) + '</code>.' +
+                    (hA && hB && hA === hB ? ' Spine <code>text_hash</code> agrees: <code>' + esc(hA) + '</code>.' : '') +
+                    ' The delta between these revisions lives in the <b>annotation channel</b> (' +
+                    esc((ra ? (ra.review_flags || []).length : 0)) + ' vs ' + esc((rb ? (rb.review_flags || []).length : 0) + ' review_flags)') +
+                    ', shown in the rubric pane &mdash; not in the text.</div>';
+                ba.innerHTML = esc(tA || '(empty)');
+                bb.innerHTML = esc(tB || '(empty)');
+                if (cap) cap.textContent = 'delta = 0 tokens';
+                return;
+            }
+
+            note.style.display = 'none';
+            ba.innerHTML = d.aHtml;
+            bb.innerHTML = d.bHtml;
+            if (cap) cap.textContent = '+' + d.adds + ' / -' + d.dels + ' tokens' + (d.capped ? ' (capped)' : '');
+        }
+
+        function renderStats() {
+            var host = document.getElementById('pg-stats');
+            if (!host) return;
+            var rec = activeRecord(PG.revisionId);
+            var lens = currentLens();
+            if (!rec || !lens) { host.innerHTML = '<div class="pg-empty">No active node.</div>'; return; }
+            var sc = scoreNode(rec, lens, buildCtx());
+            var txt = String(rec.text || '');
+            var words = txt ? txt.split(/\s+/).length : 0;
+            var chars = txt.length;
+            var cites = (rec.citations || []).length;
+            var flags = rec.review_flags === null ? null : rec.review_flags.length;
+            var openFlags = rec.review_flags ? rec.review_flags.filter(function (f) {
+                return String(f.status || 'OPEN').toUpperCase() !== 'RESOLVED';
+            }).length : 0;
+
+            function cell(k, v, cls, title) {
+                return '<div class="pg-stat"' + (title ? ' title="' + esc(title) + '"' : '') + '>' +
+                    '<div class="pg-stat-k">' + esc(k) + '</div>' +
+                    '<div class="pg-stat-v ' + (cls || '') + '">' + esc(v) + '</div></div>';
+            }
+            host.innerHTML =
+                cell('match', sc.pct === null ? 'n/a' : sc.pct + '%', scoreClass(sc.pct).replace('tier-', '') === 'na' ? '' : scoreClass(sc.pct).replace('tier-', ''),
+                    'Weighted symbolic satisfaction over evaluated rules') +
+                cell('words', words, 'info', 'Whitespace-delimited token count of the truth text') +
+                cell('chars', chars, '', 'Character count of the truth text') +
+                cell('digits', (txt.match(/\d/g) || []).length, 'carrier', 'ASCII digits — the CP-5 load-bearing set') +
+                cell('cites', cites, cites ? 'pass' : 'fail', 'Citation anchors on this bone') +
+                cell('flags', flags === null ? 'none' : flags, flags === null ? '' : (openFlags ? 'fail' : 'pass'),
+                    flags === null ? 'This revision carries no review_flags annotation channel' : openFlags + ' open of ' + flags);
+        }
+
+        function renderWhy() {
+            var host = document.getElementById('pg-why');
+            if (!host) return;
+            var rec = activeRecord(PG.revisionId);
+            var lens = currentLens();
+            if (!rec || !lens) {
+                host.innerHTML = '<div class="pg-why-h">Awaiting node</div><div>Select a node and a lens.</div>';
+                return;
+            }
+            var ctx = buildCtx();
+            var sc = scoreNode(rec, lens, ctx);
+            var rows = sc.rows;
+
+            /* Attribution: weight of failures, largest first. This is the actual
+               "reason why", derived from the detector outputs — not a caption. */
+            var losses = rows.filter(function (r) { return r.status === 'FAIL'; })
+                .sort(function (a, b) { return b.weight - a.weight; });
+            var unadj = rows.filter(function (r) { return r.status === 'NOT_ADJUDICATED'; });
+            var quar = rows.filter(function (r) { return r.status === 'QUARANTINED'; });
+
+            var html = '<div class="pg-why-h">Why ' + esc(PG.revisionId) + ' reads ' +
+                (sc.pct === null ? 'unmeasurable' : sc.pct + '%') + ' under ' + esc(lens.lens_id) + '</div>';
+
+            if (!losses.length && !unadj.length && !quar.length) {
+                html += '<div class="pg-why-list"><li><span class="bullet">&#10003;</span><span class="rtext">Every rule this lens declares was evaluated and satisfied.</span></li></div>';
+            } else {
+                html += '<ul class="pg-why-list">';
+                losses.forEach(function (r) {
+                    html += '<li><span class="bullet">&#9660;</span><span class="rid">' + esc(r.ruleId) + '</span>' +
+                        '<span class="rtext">lost ' + r.weight + 'pt &mdash; ' + esc(r.detail) + '</span></li>';
+                });
+                unadj.forEach(function (r) {
+                    html += '<li><span class="bullet">&#9675;</span><span class="rid">' + esc(r.ruleId) + '</span>' +
+                        '<span class="rtext">unmeasurable &mdash; ' + esc(r.detail) + '</span></li>';
+                });
+                quar.forEach(function (r) {
+                    html += '<li><span class="bullet">&#9888;</span><span class="rid">' + esc(r.ruleId) + '</span>' +
+                        '<span class="rtext">excluded from the score &mdash; ' + esc(r.detail) + '</span></li>';
+                });
+                html += '</ul>';
+            }
+
+            /* Corpus-level note: the annotation channel state, stated once. */
+            var chan = annotationChannel(rec);
+            if (chan !== 'populated') {
+                html += '<div style="margin-top:8px;padding-top:7px;border-top:1px dashed #262d38;color:#55606d;">' +
+                    'This revision has an <b>' + esc(chan === 'absent' ? 'absent' : chan) + ' annotation channel</b>' +
+                    (chan === 'empty' ? ' (<code>review_flags: []</code>)' : '') + '. Semantic rules are therefore unmeasurable here, ' +
+                    'not passing &mdash; a score of zero would be a fabricated grade, and a free PASS would manufacture a false inversion.</div>';
+            }
+            host.innerHTML = html;
+        }
+
+        function renderInversion() {
+            var host = document.getElementById('pg-inversion');
+            if (!host) return;
+            var lens = currentLens();
+            if (!PG.nodeId || !lens) {
+                host.className = 'pg-inversion na';
+                host.innerHTML = '<div class="pg-inversion-h">Not evaluated</div><div>Select a node.</div>';
+                return;
+            }
+            var ctx = buildCtx();
+            var ladder = PG.versions.map(function (v) {
+                var rec = v.index ? v.index[PG.nodeId] : null;
+                var sc = rec ? scoreNode(rec, lens, ctx) : null;
+                return { version_id: v.version_id, rec: rec, pct: sc ? sc.pct : null };
+            });
+
+            var measurable = ladder.filter(function (r) { return r.pct !== null; });
+            var anyNa = ladder.some(function (r) { return r.pct === null; });
+
+            if (!measurable.length) {
+                host.className = 'pg-inversion na';
+                host.innerHTML = '<div class="pg-inversion-h">Undecidable</div>' +
+                    '<div>No revision of this node is adjudicable under <code>' + esc(lens.lens_id) +
+                    '</code> &mdash; the lens declares no rule this page can measure. An inversion cannot be asserted from zero data.</div>';
+                return;
+            }
+
+            /* Strict inversion: an EARLIER revision outscores a LATER one. */
+            var bestIdx = -1, best = -1;
+            measurable.forEach(function (r, i) { if (r.pct > best) { best = r.pct; bestIdx = i; } });
+            var inversion = null;
+            for (var i = 1; i < measurable.length; i++) {
+                if (measurable[i - 1].pct > measurable[i].pct) { inversion = { older: measurable[i - 1], newer: measurable[i] }; break; }
+            }
+
+            var rungs = ladder.map(function (r) {
+                var isWin = inversion && r.version_id === inversion.older.version_id;
+                var isLose = inversion && r.version_id === inversion.newer.version_id;
+                return '<span class="rung' + (isWin ? ' is-winner' : '') + (isLose ? ' is-loser' : '') + '">' +
+                    esc(r.version_id) + ' ' + (r.pct === null ? 'n/a' : r.pct + '%') +
+                    (r.rec ? '' : ' [absent]') + '</span>';
+            }).join('<span class="arrow">&rarr;</span>');
+
+            if (inversion) {
+                host.className = 'pg-inversion alert';
+                host.innerHTML = '<div class="pg-inversion-h">&#9888; Quality inversion detected</div>' +
+                    '<div><b>' + esc(inversion.older.version_id) + '</b> outscores the later <b>' + esc(inversion.newer.version_id) +
+                    '</b> under <code>' + esc(lens.lens_id) + '</code> (' + inversion.older.pct + '% &gt; ' + inversion.newer.pct +
+                    '%). Regressing a revision is never automatic promotion &mdash; inspect the rubric pane before advancing.</div>' +
+                    '<div class="ladder">' + rungs + '</div>';
+                return;
+            }
+
+            if (anyNa) {
+                host.className = 'pg-inversion tie';
+                host.innerHTML = '<div class="pg-inversion-h">&#9675; No inversion among measurable revisions &mdash; partially undecidable</div>' +
+                    '<div>Some revisions carry no annotation channel, so a full ladder comparison is impossible. ' +
+                    'No inversion is asserted over the gap.</div><div class="ladder">' + rungs + '</div>';
+                return;
+            }
+
+            /* All measurable and monotonic non-decreasing. Report the tie
+               explicitly when nothing moved — that is the corpus state. */
+            var flat = measurable.length > 1 && measurable.every(function (r) { return r.pct === measurable[0].pct; });
+            host.className = 'pg-inversion ' + (flat ? 'tie' : 'clear');
+            host.innerHTML = '<div class="pg-inversion-h">' + (flat ? '&#9675; No inversion &mdash; revisions are indistinguishable' : '&#10003; No inversion') + '</div>' +
+                '<div>' + (flat
+                    ? 'Every revision of this node scores identically (' + measurable[0].pct + '%) under this lens. The revision ladder is flat: nothing was gained or lost by advancing. Treat this as an inert corpus, not as an endorsement.'
+                    : 'Score is monotonically non-decreasing across the revision ladder under <code>' + esc(lens.lens_id) + '</code>.') +
+                '</div><div class="ladder">' + rungs + '</div>';
+        }
+
+        function renderDna() {
+            var host = document.getElementById('pg-dna-badges');
+            var cap = document.getElementById('pg-dna-caption');
+            if (!host) return;
+            var rec = activeRecord(PG.revisionId);
+            var hits = PG.dna.filter(function (d) {
+                return d.origin_node_id === PG.nodeId || (rec && rec.citations || []).indexOf(d.card_id) >= 0;
+            });
+            if (cap) cap.textContent = hits.length + ' record(s)';
+            if (!hits.length) {
+                host.innerHTML = '<div class="pg-empty">No document DNA is anchored to this node.</div>';
+                return;
+            }
+            host.innerHTML = hits.map(function (d) {
+                var promoted = !!d.promoted_to_global;
+                return '<span class="pg-dna-badge' + (promoted ? ' is-promoted' : '') + '" title="' +
+                    esc(titleCase(d.theme || '') + '\n' + (d.text || '')) + '">' +
+                    '<span class="db-id">' + esc(d.doc_dna_id) + (promoted ? ' &#8593;' : '') + '</span>' +
+                    '<span class="db-title">' + esc(d.title || d.theme || '') + '</span></span>';
+            }).join('');
+        }
+
+        function renderRubric() {
+            var meta = document.getElementById('pg-rubric-meta');
+            var persona = document.getElementById('pg-rubric-persona');
+            var t0 = document.getElementById('pg-tier-0');
+            var t1 = document.getElementById('pg-tier-1');
+            var foot = document.getElementById('pg-footnote');
+            var cap = document.getElementById('pg-rubric-caption');
+            var lens = currentLens();
+            if (!lens) return;
+
+            function cell(k, v) {
+                return '<div class="lens-meta-cell"><div class="lmc-key">' + esc(k) + '</div><div class="lmc-val">' + esc(v) + '</div></div>';
+            }
+            meta.innerHTML =
+                cell('lens_id', lens.lens_id) +
+                cell('rules', lens.rules.length) +
+                cell('source', lens.resolvedVia || 'derived') +
+                cell('tier axis', lens.quarantined ? lens.quarantined + ' undeclared' : 'complete');
+
+            if (lens.persona && (lens.persona.name || lens.persona.role)) {
+                persona.style.display = 'block';
+                persona.innerHTML = '<span class="rp-name">' + esc(lens.persona.name || 'unnamed') + '</span>' +
+                    (lens.persona.role ? '<span class="rp-role"> · ' + esc(lens.persona.role) + '</span>' : '') +
+                    (lens.persona.lens_perspective ? '<div style="margin-top:4px;">' + esc(lens.persona.lens_perspective) + '</div>' : '');
+            } else {
+                persona.style.display = 'block';
+                persona.innerHTML = '<span class="rp-name">' + esc(lens.lens_id) + '</span>' +
+                    '<span class="rp-role"> · persona not declared in the compiled lens</span>' +
+                    (lens.derived ? '<div style="margin-top:4px;">Derived view: ' + esc(lens.derivedNote || lens.derived) + '</div>' : '');
+            }
+
+            var rec = activeRecord(PG.revisionId);
+            var rows = rec ? scoreNode(rec, lens, buildCtx()).rows : [];
+            var buckets = { tier_0_structural: [], tier_1_semantic: [], TIER_UNDECLARED: [] };
+            rows.forEach(function (r) { buckets[r.tier].push(r); });
+
+            function head(cls, name, note, list) {
+                var pass = list.filter(function (r) { return r.status === 'PASS'; }).length;
+                var fail = list.filter(function (r) { return r.status === 'FAIL'; }).length;
+                return '<div class="pg-tier-h ' + cls + '"><span class="tname">' + esc(name) + '</span>' +
+                    '<span>' + esc(note) + '</span><span class="tally">' + pass + ' pass / ' + fail + ' fail</span></div>';
+            }
+
+            function ruleHtml(r) {
+                var st = r.status === 'QUARANTINED' ? 'NOT_APPLICABLE' : r.status;
+                var flags = '';
+                (r.flags || []).forEach(function (f) {
+                    flags += '<span class="rev"><span class="rev-src">' + esc(f.severity || 'MEDIUM') + ' · ' + esc(f.status || 'OPEN') + ':</span> ' +
+                        esc(f.suggestion || '') + '</span>';
+                });
+                return '<div class="pg-rule s-' + st + '">' +
+                    '<span class="verdict">' + esc(st.replace('NOT_', 'NOT ')) + '</span>' +
+                    '<span class="rmain"><span class="rid">' + esc(r.ruleId) + '</span>' +
+                    '<span class="rmeta"><span>' + esc(r.rule.category || '—') + '</span>' +
+                    '<span>target=' + esc(r.rule.target || '—') + '</span>' +
+                    '<span class="sev-' + esc(String(r.rule.severity || 'MEDIUM').toUpperCase()) + '">' + esc(r.rule.severity || 'MEDIUM') + '</span>' +
+                    '<span>' + r.weight + 'pt</span></span>' +
+                    '<span class="rev-src" style="font-size:.53rem;">' + esc(r.detail || '') + '</span>' + flags +
+                    '</span></div>';
+            }
+
+            t0.innerHTML = head('t0', 'tier_0_structural', 'evaluated here, deterministic', buckets.tier_0_structural) +
+                (buckets.tier_0_structural.length
+                    ? buckets.tier_0_structural.map(ruleHtml).join('')
+                    : '<div class="pg-rule s-NOT_APPLICABLE"><span class="verdict">NO RULES</span><span class="rmain">This lens declares no tier_0_structural rules. The deterministic fast-path is empty.</span></div>');
+
+            t1.innerHTML = head('t1', 'tier_1_semantic', 'consumed from review_flags', buckets.tier_1_semantic) +
+                (buckets.tier_1_semantic.length
+                    ? buckets.tier_1_semantic.map(ruleHtml).join('')
+                    : '<div class="pg-rule s-NOT_ADJUDICATED"><span class="verdict">NO RULES</span><span class="rmain">This lens declares no tier_1_semantic rules.</span></div>');
+
+            if (lens.quarantined) {
+                t1.innerHTML += head('', 'tier undeclared', 'quarantined, not scored', buckets.TIER_UNDECLARED) +
+                    buckets.TIER_UNDECLARED.map(ruleHtml).join('');
+            }
+
+            var notes = [];
+            if (lens.quarantined) {
+                notes.push('<b>Axis collapse (' + lens.quarantined + ' rule(s)):</b> these rules ship without a <code>tier</code> discriminator. They are quarantined rather than defaulted, so they score nothing either way. Defaulting them to tier_1 is what silently emptied tier_0 from this corpus.');
+            }
+            if (lens.dual) {
+                notes.push('<b>Dual truth:</b> this lens file carries both <code>rules</code> and <code>rubric_rules</code>. <code>rules</code> was read; the two keys are not proven identical.');
+            }
+            if (lens.resolvedVia === 'rubric_rules') {
+                notes.push('<b>Schema drift:</b> this lens exposes only <code>rubric_rules</code> (no <code>rules</code>).');
+            }
+            if (lens.derived) {
+                notes.push('<b>Derived view:</b> ' + esc(lens.derivedNote) + ' No independent rubric exists on disk for this lens id.');
+            }
+            if (rec && annotationChannel(rec) !== 'populated') {
+                notes.push('<b>' + esc(titleCase(channelNote(rec))) + '</b> on this revision &mdash; every tier_1 verdict is NOT_ADJUDICATED, not PASS.');
+            }
+            foot.innerHTML = notes.length ? notes.join('<br><br>') : '<b>No schema defects observed</b> on this lens.';
+            if (cap) cap.textContent = lens.rules.length + ' rule(s)';
+        }
+
+        function renderAll() {
+            renderCarousel();
+            renderNodeText();
+            renderDiff();
+            renderStats();
+            renderWhy();
+            renderInversion();
+            renderDna();
+            renderRubric();
+        }
+
+        // ------------------------------------------------------------ LOADER
+        function loadPaper(paperId) {
+            var entry = null;
+            PAPER_REGISTRY.forEach(function (p) { if (p.paper_id === paperId) entry = p; });
+            if (!entry) return Promise.reject(new Error('unknown paper ' + paperId));
+
+            setWire('pending', 'LOADING SPINE…');
+            return getJson(DATA_BASE + entry.spine).then(function (spine) {
+                PG.spine = spine;
+                PG.paperId = paperId;
+                PG.dna = spine.document_dna || [];
+
+                /* The spine is the manifest of record: version list, filenames,
+                   topology, DNA, and the CP-1/CP-5 validation report. */
+                var vers = (spine.versions || []).map(function (v) {
+                    return {
+                        version_id: v.version_id,
+                        description: v.description,
+                        filename: v.filename,
+                        parent_version: v.parent_version,
+                        registered_at: v.registered_at,
+                        doc: null, index: null
+                    };
+                });
+                return Promise.all(vers.map(function (v) {
+                    return getJson(DATA_BASE + v.filename).then(function (doc) {
+                        v.doc = doc;
+                        v.index = buildIndex(doc);
+                        v.lens_applied = doc.lens_applied || null;
+                    }).catch(function (e) {
+                        v.load_error = e.message;
+                        v.index = {};
+                    });
+                })).then(function () {
+                    PG.versions = vers;
+                });
+            }).then(function () {
+                populateNodeSelector();
+                if (!PG.nodeId || !topoNode(PG.nodeId)) {
+                    PG.nodeId = firstInterestingNode();
+                }
+                /* Default the selected revision to the newest one that actually
+                   carries this node; fall back to the first entry. */
+                var newest = null;
+                for (var i = PG.versions.length - 1; i >= 0; i--) {
+                    var v = PG.versions[i];
+                    if (v.index && v.index[PG.nodeId]) { newest = v.version_id; break; }
+                }
+                PG.revisionId = newest || (PG.versions[0] && PG.versions[0].version_id) || null;
+                PG.compareId = PG.versions.length > 1 ? PG.versions[0].version_id : PG.revisionId;
+
+                var missing = PG.versions.filter(function (v) { return v.load_error; });
+                if (missing.length) {
+                    setWire('err', missing.length + ' VERSION(S) UNREADABLE');
+                    toast('Unreadable version file: ' + missing[0].filename, 'error');
+                } else {
+                    setWire('ok', PG.versions.length + ' REV · ' +
+                        Object.keys((PG.spine && PG.spine.topology) || {}).length + ' NODES');
+                }
+                renderAll();
+            });
+        }
+
+        function firstInterestingNode() {
+            var topo = (PG.spine && PG.spine.topology) || {};
+            var keys = Object.keys(topo);
+            for (var i = 0; i < keys.length; i++) {
+                if (keys[i].indexOf('_exp_') === 0 || keys[i].indexOf('_bullet') === 0) return keys[i];
+            }
+            return keys[0] || null;
+        }
+
+        function populateNodeSelector() {
+            var sel = document.getElementById('pg-node-select');
+            if (!sel) return;
+            var topo = (PG.spine && PG.spine.topology) || {};
+            var keys = Object.keys(topo);
+            var groups = {};
+            keys.forEach(function (k) {
+                var n = topoNode(k);
+                var versions = (n && n.versions) || {};
+                var first = null;
+                Object.keys(versions).forEach(function (vid) {
+                    if (!first) first = versions[vid];
+                });
+                var role = (first && first.role) || '';
+                var bucket = role || (k.indexOf('node_skill') === 0 ? 'skills'
+                    : k.indexOf('node_edu') === 0 ? 'education'
+                        : k.indexOf('role_') === 0 ? 'role containers'
+                            : 'document');
+                (groups[bucket] = groups[bucket] || []).push(k);
+            });
+            var order = Object.keys(groups).sort();
+            sel.innerHTML = order.map(function (g) {
+                return '<optgroup label="' + esc(g === 'document' ? 'header nodes' : g) + '">' +
+                    groups[g].sort().map(function (k) {
+                        var n = topoNode(k);
+                        return '<option value="' + esc(k) + '">' + esc(k) + '</option>';
+                    }).join('') + '</optgroup>';
+            }).join('');
+            if (PG.nodeId) sel.value = PG.nodeId;
+        }
+
+        // --------------------------------------------------------- LENS LOAD
+        function loadLenses() {
+            var base = null;
+            return getJson(LENS_BASE + 'farah_sharghi_recruiter_v1.json')
+                .then(function (src) { base = src; return loadFile('test_recruiter_lens.json'); })
+                .then(function (test) {
+                    var pool = [base, test].filter(Boolean);
+                    PG.lenses = LENS_REGISTRY.map(function (entry) {
+                        if (entry.derived) return buildDerivedLens(entry, pool);
+                        var raw = null;
+                        pool.forEach(function (p) { if (p && p.lens_id === entry.lens_id) raw = p; });
+                        if (!raw) return null;
+                        var rr = resolveRules(raw);
+                        var q = rr.rules.filter(function (r) { return tierOf(r) === 'TIER_UNDECLARED'; }).length;
+                        return {
+                            lens_id: raw.lens_id,
+                            title: raw.title || raw.lens_id,
+                            persona: raw.persona || null,
+                            rules: rr.rules,
+                            resolvedVia: rr.via,
+                            dual: rr.dual,
+                            quarantined: q
+                        };
+                    }).filter(Boolean);
+                    populateLensSelector();
+                })
+                .catch(function (e) {
+                    setWire('err', 'LENS LOAD FAILED');
+                    toast('Lens registry unavailable: ' + e.message, 'error');
+                });
+
+            function loadFile(f) {
+                return getJson(LENS_BASE + f).catch(function () { return null; });
+            }
+        }
+
+        /* A derived view is a documented FILTER over a real rule vocabulary,
+           never a new rubric. The note travels with it into the UI. */
+        function buildDerivedLens(entry, pool) {
+            var note;
+
+            if (entry.derived === 'canonical') {
+                return {
+                    lens_id: entry.lens_id,
+                    title: entry.title,
+                    persona: null,
+                    rules: CANONICAL_TIER0_RULES.slice(),
+                    resolvedVia: 'lenses.py::_BASE_RULES',
+                    dual: false,
+                    quarantined: 0,
+                    derived: true,
+                    derivedNote: 'Verbatim transcription of the tier_0_structural rules in HomeLabAI/src/projection/lenses.py::_BASE_RULES. ' +
+                        'This exists because the compiled lenses in data/lenses/ emit no `tier` field, so their tier_0 is empty and every ' +
+                        'compiled-lens score would read n/a. Scores here are fully reproducible from the truth text and the spine.'
+                };
+            }
+
+            var src = null;
+            pool.forEach(function (p) { if (p && p.lens_id === entry.source_lens) src = p; });
+            var compiled = src ? resolveRules(src).rules.slice() : [];
+            note = entry.derived === 'tier_0'
+                ? 'tier_0_structural rules only, lifted from the compiled lens ' + entry.source_lens + '. No prose judgement is applied.'
+                : 'tier_0_structural plus category=STRUCTURE rules from ' + entry.source_lens + '. Projected, because no compiled ATS rubric exists in data/lenses/.';
+
+            var filtered = compiled.filter(function (r) {
+                if (entry.derived === 'tier_0') return r.tier === 'tier_0_structural';
+                return r.tier === 'tier_0_structural' || String(r.category || '').toUpperCase() === 'STRUCTURE';
+            });
+
+            if (!filtered.length) {
+                /* The compiled lens declares no tier_0, so fall back to the
+                   canonical reference vocabulary rather than render a hollow
+                   view. Say so — the fallback is visible, never silent. */
+                filtered = entry.derived === 'tier_0'
+                    ? CANONICAL_TIER0_RULES.slice()
+                    : CANONICAL_TIER0_RULES.filter(function (r) { return r.category === 'STRUCTURE'; });
+                note += ' FALLBACK: the compiled lens declares no tier_0 rules (proposed BKM-074 defect), so the canonical ' +
+                    'tier_0 vocabulary from lenses.py is used instead to keep this view measurable.';
+            }
+
+            return {
+                lens_id: entry.lens_id,
+                title: entry.title,
+                persona: src ? src.persona : null,
+                rules: filtered,
+                resolvedVia: 'derived',
+                dual: false,
+                quarantined: 0,
+                derived: true,
+                derivedNote: note
+            };
+        }
+
+        function populateLensSelector() {
+            var sel = document.getElementById('pg-lens-select');
+            if (!sel) return;
+            sel.innerHTML = PG.lenses.map(function (l) {
+                return '<option value="' + esc(l.lens_id) + '">' + esc(l.lens_id) + ' — ' + esc(l.title) + ' (' + l.rules.length + ' rules)</option>';
+            }).join('');
+            /* Default to the canonical structural view: it is the only lens on
+               this page that yields reproducible numbers today, because every
+               compiled lens omits `tier`. The recruiter lens stays one click
+               away and is labelled as fully unadjudicated when selected. */
+            var preferred = 'canonical_structural';
+            PG.activeLensId = PG.lenses.some(function (l) { return l.lens_id === preferred; })
+                ? preferred
+                : (PG.lenses[0] && PG.lenses[0].lens_id);
+            sel.value = PG.activeLensId;
+        }
+
+        // -------------------------------------------------------------- WIRE
+        function wire() {
+            document.getElementById('pg-paper-select').addEventListener('change', function (e) {
+                loadPaper(e.target.value).catch(function (err) {
+                    setWire('err', 'SPINE LOAD FAILED');
+                    toast('Spine load failed: ' + err.message, 'error');
+                });
+            });
+
+            document.getElementById('pg-node-select').addEventListener('change', function (e) {
+                PG.nodeId = e.target.value;
+                var newest = null;
+                for (var i = PG.versions.length - 1; i >= 0; i--) {
+                    var v = PG.versions[i];
+                    if (v.index && v.index[PG.nodeId]) { newest = v.version_id; break; }
+                }
+                PG.revisionId = newest || (PG.versions[0] && PG.versions[0].version_id) || null;
+                renderAll();
+            });
+
+            document.getElementById('pg-lens-select').addEventListener('change', function (e) {
+                PG.activeLensId = e.target.value;
+                renderAll();
+            });
+
+            document.getElementById('pg-paper-select').innerHTML = PAPER_REGISTRY.map(function (p) {
+                return '<option value="' + esc(p.paper_id) + '">' + esc(p.label) + '</option>';
+            }).join('');
+        }
+
+        /* View arbitration with the 93.5 sandbox. */
+        function setView(view) {
+            var isGround = view === 'ground';
+            document.body.classList.toggle('pg-mode', isGround);
+            var shell = document.getElementById('pg-shell');
+            if (shell) shell.classList.toggle('pg-active', isGround);
+            var sb = document.getElementById('pg-view-sandbox');
+            var gp = document.getElementById('pg-view-ground');
+            if (sb) sb.classList.toggle('active', !isGround);
+            if (gp) gp.classList.toggle('active', isGround);
+            if (isGround) renderAll();
+        }
+
+        function init() {
+            if (location.protocol === 'file:') {
+                var p = document.getElementById('pg-provenance');
+                if (p) {
+                    p.className = 'pg-provenance is-blocked';
+                    p.innerHTML = '<span>&#9888;</span><div><b>file:// origin &mdash; the data channel cannot open.</b> ' +
+                        'This page reads <code>data/papers/*.json</code> through <code>fetch()</code>, which browsers refuse on ' +
+                        '<code>file://</code>. Serve the field notes over HTTP first, e.g. ' +
+                        '<code>python3 -m http.server 9001</code> from <code>field_notes/</code>, then reload. ' +
+                        'No amount of client code can work around this &mdash; the restriction is the browser&rsquo;s, not the page&rsquo;s.</div>';
+                }
+                setWire('err', 'file:// BLOCKED');
+            }
+
+            try {
+                wire();
+                /* Delegated at document level so BOTH switchers (the one inside
+                   the 93.5 <main> and the reciprocal one on the proving-ground
+                   top bar) drive the same arbitrator. */
+                document.addEventListener('click', function (e) {
+                    var b = e.target && e.target.closest ? e.target.closest('button[data-view]') : null;
+                    if (!b) return;
+                    e.preventDefault();
+                    setView(b.getAttribute('data-view'));
+                });
+            } catch (err) {
+                /* Missing anchors must not take the 93.5 sandbox down with them. */
+                if (window.console) console.warn('[S95.5] proving-ground wiring skipped:', err);
+            }
+
+            loadLenses()
+                .then(function () {
+                    if (location.protocol === 'file:') return null;
+                    return loadPaper(PAPER_REGISTRY[0].paper_id);
+                })
+                .then(function () { setWire(PG.versions.length ? 'ok' : 'pending', PG.versions.length ? 'READY' : 'NO DATA'); })
+                .catch(function (err) {
+                    setWire('err', 'LOAD FAILED');
+                    toast('Proving ground init failed: ' + err.message, 'error');
+                });
         }
 
         if (document.readyState === 'loading') {
