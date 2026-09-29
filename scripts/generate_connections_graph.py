@@ -20,6 +20,23 @@ def extract_all_cards(manifest: dict) -> list:
     cards = []
     seen_ids = set()
 
+    # If wisdom_data.json exists, ingest genuine WIS cards
+    wisdom_file = BASE_DIR / "dna" / "wisdom_data.json"
+    if wisdom_file.exists():
+        try:
+            with open(wisdom_file, "r", encoding="utf-8") as f:
+                w_items = json.load(f)
+                if isinstance(w_items, list):
+                    for item in w_items:
+                        if isinstance(item, dict):
+                            cid = item.get("id")
+                            if cid and cid not in seen_ids:
+                                seen_ids.add(cid)
+                                item["_resolved_domain"] = "WIS"
+                                cards.append(item)
+        except Exception:
+            pass
+
     for domain_key, items in manifest.items():
         if domain_key in ("papers", "schema_version", "last_updated"):
             continue
@@ -50,8 +67,18 @@ def extract_all_cards(manifest: dict) -> list:
                                 domain = "RESUME"
                             elif cid.startswith("ART-"):
                                 domain = "ART"
+                            elif cid.startswith("VIBE-"):
+                                domain = "VIBE"
+                            elif domain_key == "philosophy":
+                                domain = "PHL"
+                            elif domain_key == "wisdom":
+                                domain = "WIS"
+                            elif domain_key == "feature":
+                                domain = "FEAT"
+                            elif domain_key == "behavioral":
+                                domain = "BKM"
                             else:
-                                domain = domain_key.upper()[:6]
+                                domain = domain_key.upper()
                         item["_resolved_domain"] = domain
                         cards.append(item)
     return cards
