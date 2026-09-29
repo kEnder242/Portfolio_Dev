@@ -139,8 +139,33 @@ Portfolio_Dev/field_notes/data/papers/
 
 ---
 
-### Story 95.3: Single-Node Proving Ground & Revision Carousel
-* **Assigned Owner:** `[SWARM:LOCAL]`
+### Story 95.3: Idle Sensory Quiescence & Socket-Gated Ear Poller
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/v5/foyer/router.py`
+* **JITC Anchors:** `[FEAT-259.2]`, `[LAB-096]`, `[BKM-044]`
+* **Scope:**
+  1. Refactor `ear_poller_loop()` in `HomeLabAI/src/v5/foyer/router.py` to gate strictly on active Intercom WebSocket connections and unmuted audio status.
+  2. Implement `asyncio.Event` listener pattern (`self.intercom_active`) so the poller coroutine suspends completely without spinning every 500ms when `len(self.connected_websockets) == 0`.
+  3. Ensure all queue and sensory drain checks enter deep quiescence during idle disconnected states.
+* **Success Criteria:** Zero background sensory polling during idle disconnected state; CPU and disk read polling drop to 0% idle floor without waking swapped memory pages.
+
+---
+
+### Story 95.4: Thin-Proxy Node Architecture & ML Dependency Purge
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/`
+* **JITC Anchors:** `[FEAT-145.2]`, `[LAB-003]`, `[BKM-040]`
+* **Scope:**
+  1. Purge vestigial `liger_kernel`, `torch`, and `transformers` imports from `BicameralNode.__init__()` in `HomeLabAI/src/nodes/loader.py`.
+  2. Restore the lightweight v3.5/v3.6 thin-proxy baseline where nodes rely strictly on standard `FastMCP`, `aiohttp`, and `json` to route completions over REST to headless engines (vLLM / oMLX / Foyer).
+  3. Move any specialized library dependencies into lazy JIT function-level scopes.
+  4. Retain full persona grounding, tool schemas, and token streaming while isolating failure boundaries.
+* **Success Criteria:** Multi-process heap footprint reduced from ~2.2 GB RAM / 1.8 GB swap down to < 200 MB total (< 30 MB per node); zero duplicate PyTorch module allocations.
+
+---
+
+### Story 95.5: Single-Node Proving Ground & Revision Carousel
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Target:** `Portfolio_Dev/field_notes/projection_studio.html`, `Portfolio_Dev/field_notes/style.css`
 * **JITC Anchors:** `[FEAT-627]`, `[FEAT-584]`, `[FEAT-617]`
 * **Scope:**
@@ -154,7 +179,7 @@ Portfolio_Dev/field_notes/data/papers/
 
 ---
 
-### Story 95.4: Editorial Dialogue Gutter & Synthetic Mutation Blending
+### Story 95.6: Editorial Dialogue Gutter & Synthetic Mutation Blending
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Target:** `HomeLabAI/src/projection/recommender.py`, `HomeLabAI/src/curator/lens_service.py`
 * **JITC Anchors:** `[FEAT-627]`, `[FEAT-618]`, `[BKM-073]`
@@ -168,7 +193,7 @@ Portfolio_Dev/field_notes/data/papers/
 
 ---
 
-### Story 95.5: Offline Job & Target Ingestion CLI
+### Story 95.7: Offline Job & Target Ingestion CLI
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Target:** `HomeLabAI/src/ops/job_ingest.py`, `Portfolio_Dev/field_notes/data/jobs/`
 * **JITC Anchors:** `[FEAT-622]`, `[BKM-070]`, `[WIS-487]`
@@ -182,7 +207,7 @@ Portfolio_Dev/field_notes/data/papers/
 
 ---
 
-### Story 95.6: Document-Scoped DNA Promotion Gate & Sync Pipeline
+### Story 95.8: Document-Scoped DNA Promotion Gate & Sync Pipeline
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Target:** `Portfolio_Dev/scripts/promote_dna.py`, `HomeLabAI/src/projection/bones.py`
 * **JITC Anchors:** `[FEAT-628]`, `[BKM-060]`, `[BKM-071]`
@@ -199,7 +224,7 @@ Portfolio_Dev/field_notes/data/papers/
 
 ---
 
-### Story 95.7: Cloud Oracle Adversarial Audit & Live Certification
+### Story 95.9: Cloud Oracle Adversarial Audit & Live Certification
 * **Assigned Owner:** `[SWARM:CLOUD]` / `[AGY:PRIMARY]`
 * **Target:** `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`
 * **JITC Anchors:** `[BKM-049]`, `[BKM-024]`, `[BKM-068]`
@@ -208,28 +233,4 @@ Portfolio_Dev/field_notes/data/papers/
   2. Run comprehensive test suite across `HomeLabAI` and `Portfolio_Dev`.
   3. Verify live daemon synchronization (`POST http://127.0.0.1:8765/reload_residents`).
 * **Success Criteria:** 100% unit and integration test pass rate, Oracle report saved, and git checkpoint committed.
-
----
-
-### Story 95.8: Idle Sensory Quiescence & Socket-Gated Ear Poller
-* **Assigned Owner:** `[SWARM:LOCAL]`
-* **Target:** `HomeLabAI/src/v5/foyer/router.py`
-* **JITC Anchors:** `[FEAT-259.2]`, `[LAB-096]`, `[BKM-044]`
-* **Scope:**
-  1. Refactor `ear_poller_loop()` to gate strictly on active Intercom client connection and unmuted status.
-  2. Suspend polling coroutines via `asyncio.Event` when active WebSocket connections count drops to zero (`len(self.connected_websockets) == 0`).
-  3. Replace legacy queue/buffer polling loops with event-driven subscriptions to eliminate dormant swap wake-ups and unnecessary CPU spin.
-* **Success Criteria:** Zero background sensory polling during idle disconnected state; CPU and disk read polling drop to 0% idle floor.
-
----
-
-### Story 95.9: Bicameral Node Dependency Decoupling & In-Process Actor Model
-* **Assigned Owner:** `[SWARM:LOCAL]`
-* **Target:** `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/`
-* **JITC Anchors:** `[FEAT-145.2]`, `[LAB-003]`, `[BKM-040]`
-* **Scope:**
-  1. Audit and decouple duplicate ML/PyTorch/Transformers imports in `loader.py`.
-  2. Ensure cognitive formatting and routing nodes (`PINKY`, `THOUGHT`, `BRAIN`) run with lean standard-library footprints without loading GPU/Liger kernels into separate OS process heaps.
-  3. Evaluate transition of node orchestration toward unified in-process async actors with isolated failure boundaries.
-* **Success Criteria:** Multi-process heap memory footprint reduced by >60%; eliminate duplicate module table bloat across agent processes.
 
