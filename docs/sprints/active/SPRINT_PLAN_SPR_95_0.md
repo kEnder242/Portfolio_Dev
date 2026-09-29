@@ -29,7 +29,7 @@
 ## 📋 Story Cards (With Just-In-Time Context)
 
 ### Story 95.1: Document Spine & Bone Node Storage Engine
-* **Assigned Owner:** `[SWARM:LOCAL]` (M5 Air: `Hephaestus` / `Junior`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
 * **Target:** `HomeLabAI/src/projection/bones.py`, `HomeLabAI/src/projection/engine.py`, `HomeLabAI/src/tests/test_spine_engine_unit.py`
 * **JITC Anchors:** `[FEAT-626]`, `[BKM-073]`, `[INS-041]`
 * **Scope:**
@@ -45,7 +45,7 @@
 ---
 
 ### Story 95.2: 3-Resume Corpus Decomposition & Join Engine
-* **Assigned Owner:** `[SWARM:LOCAL]` (Kender 4090: `Atlas` / `Kender`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
 * **Target:** `HomeLabAI/src/curator/decompose_resume.py`, `Portfolio_Dev/field_notes/data/papers/paper_resume/`
 * **JITC Anchors:** `[FEAT-585]`, `[FEAT-626]`, `[WIS-487]`, `[BKM-070]`
 * **Scope:**
@@ -61,7 +61,7 @@
 ---
 
 ### Story 95.3: Single-Node Proving Ground & Revision Carousel
-* **Assigned Owner:** `[SWARM:LOCAL]` (M5 Air: `Hephaestus` / `Junior`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
 * **Target:** `Portfolio_Dev/field_notes/projection_studio.html`, `Portfolio_Dev/field_notes/style.css`
 * **JITC Anchors:** `[FEAT-627]`, `[FEAT-584]`, `[FEAT-617]`
 * **Scope:**
@@ -76,7 +76,7 @@
 ---
 
 ### Story 95.4: Editorial Dialogue Gutter & Synthetic Mutation Blending
-* **Assigned Owner:** `[SWARM:CLOUD]` (Big-Pickle / OpenRouter Free 256k)
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Target:** `HomeLabAI/src/projection/recommender.py`, `HomeLabAI/src/curator/lens_service.py`
 * **JITC Anchors:** `[FEAT-627]`, `[FEAT-618]`, `[BKM-073]`
 * **Scope:**
