@@ -3417,3 +3417,19 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Formalizes the generic cognitive handover contract for local LLM delegation. Cures model exploratory anxiety by explicitly declaring problem completeness, furnishing typed in-memory scaffolds/companion tests inside the dispatch payload, welcoming naive initial attempts, and automatically ingesting worker reflections into ICM persistent memory (`topic: delegation_feedback`) and `loop_ledger.jsonl` for outer-loop guardian repair.
 **Rationale:** Local 27B models wander and stall when bounds are ambiguous. Declaring certainty and psychological safety unlocks single-shot execution with zero exploratory wandering.
 **Mechanism:** In-memory boilerplate synthesis by L2, Turn 1 physical write execution by L3 (`Hephaestus`/`Junior`), reflection parsing in `delegate.py`, and Tri-Loop escalation under `BKM-049`.
+
+## [FEAT-626] Document Spine Topology & Revision Traversal Matrix
+**Sprint:** SPR-95.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/projection/bones.py`, `HomeLabAI/src/projection/engine.py`, `Portfolio_Dev/field_notes/data/papers/`, `Portfolio_Dev/field_notes/data/bones/`
+**Logic:** Decouples document architectural structure from individual node text mutations. Stores the immutable hierarchical sequence of node IDs in `papers/<paper_id>/spine.json`, while managing individual node revision stacks ($v_1 \dots v_n$), HyDE-style voice tags, and DNA links in decoupled atomic records under `bones/<node_id>.json`.
+**Rationale:** Eliminates destructive full-file overwrites and replaces monolithic JSON cloning with deterministic, non-destructive topological traversal.
+**Mechanism:** `SpineManager` and `BoneNode` in `HomeLabAI/src/projection/bones.py`. Verified via AST schema validation.
+
+## [FEAT-627] Single-Node Workbench & Editorial Blend Dialogue
+**Sprint:** SPR-95.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/field_notes/projection_studio.html`, `HomeLabAI/src/projection/recommender.py`
+**Logic:** Transforms Projection Studio into an isolated single-node R&D workbench and dialectic proving ground. Features an interactive node revision carousel, active lens alignment badges with hoverable "Reason Why" explanations, quality inversion warnings, and a conversational editorial dialogue gutter enabling users to request synthetic blends between historical revisions (e.g. blend v2 executive tone with v5 metric drill into approved v6).
+**Rationale:** Allows rapid micro-scale experimentation on prompt mutations and LLM editorial dialectics without the overhead of full-document re-rendering.
+**Mechanism:** Standalone single-node UI sandbox in `projection_studio.html` communicating with `recommender.py` / Foyer REST endpoints.
