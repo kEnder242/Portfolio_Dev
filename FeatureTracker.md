@@ -3418,13 +3418,13 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Local 27B models wander and stall when bounds are ambiguous. Declaring certainty and psychological safety unlocks single-shot execution with zero exploratory wandering.
 **Mechanism:** In-memory boilerplate synthesis by L2, Turn 1 physical write execution by L3 (`Hephaestus`/`Junior`), reflection parsing in `delegate.py`, and Tri-Loop escalation under `BKM-049`.
 
-## [FEAT-626] Document Spine Topology & Revision Traversal Matrix
+## [FEAT-626] Document Spine Topology & Version Manifest
 **Sprint:** SPR-95.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/projection/bones.py`, `HomeLabAI/src/projection/engine.py`, `Portfolio_Dev/field_notes/data/papers/`, `Portfolio_Dev/field_notes/data/bones/`
-**Logic:** Decouples document architectural structure from individual node text mutations. Stores the immutable hierarchical sequence of node IDs in `papers/<paper_id>/spine.json`, while managing individual node revision stacks ($v_1 \dots v_n$), HyDE-style voice tags, and DNA links in decoupled atomic records under `bones/<node_id>.json`.
-**Rationale:** Eliminates destructive full-file overwrites and replaces monolithic JSON cloning with deterministic, non-destructive topological traversal.
-**Mechanism:** `SpineManager` and `BoneNode` in `HomeLabAI/src/projection/bones.py`. Verified via AST schema validation.
+**Code:** `HomeLabAI/src/projection/bones.py`, `Portfolio_Dev/field_notes/data/papers/`
+**Logic:** Decouples document architectural structure and version lineage from raw prose. Maintains `papers/<paper_id>/PAPER-<paper_id>_spine.json` as the single authoritative index for version ancestry (`v1`, `v2`, `v3`), topological node coordinates, and document-scoped DNA archives (`document_dna: []`), while storing each major milestone as a 100% self-contained, human-readable JSON artifact (`PAPER-<paper_id>_<version>.json`).
+**Rationale:** Eliminates destructive full-file overwrites and avoids sparse micro-file explosion, preserving verifiable isolated document snapshots.
+**Mechanism:** `SpineManager` in `HomeLabAI/src/projection/bones.py`. Verified via AST schema validation.
 
 ## [FEAT-627] Single-Node Workbench & Editorial Blend Dialogue
 **Sprint:** SPR-95.0
@@ -3433,3 +3433,11 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Transforms Projection Studio into an isolated single-node R&D workbench and dialectic proving ground. Features an interactive node revision carousel, active lens alignment badges with hoverable "Reason Why" explanations, quality inversion warnings, and a conversational editorial dialogue gutter enabling users to request synthetic blends between historical revisions (e.g. blend v2 executive tone with v5 metric drill into approved v6).
 **Rationale:** Allows rapid micro-scale experimentation on prompt mutations and LLM editorial dialectics without the overhead of full-document re-rendering.
 **Mechanism:** Standalone single-node UI sandbox in `projection_studio.html` communicating with `recommender.py` / Foyer REST endpoints.
+
+## [FEAT-628] Document-Scoped DNA & Horizontal Lab Promotion Engine
+**Sprint:** SPR-95.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/scripts/promote_dna.py`, `HomeLabAI/src/projection/bones.py`
+**Logic:** Establishes a 2-tier scoping boundary for cognitive DNA: document-scoped DNA (`DOC-<paper>-<idx>`) is quarantined inside `PAPER-<paper_id>_spine.json` during drafting, preventing local noise from polluting global vector memory. When an empirical lesson or insight demonstrates broad cross-domain applicability ($\ge 0.85$ utility per `BKM-060`), the graduation gate promotes the record into permanent global lab DNA (`WIS-xxx` or `INS-xxx`) and syncs it to ChromaDB `:8001`.
+**Rationale:** Balances rich local draft annotations with high-precision global semantic retrieval.
+**Mechanism:** `promote_dna.py` CLI and `SpineManager.promote_dna_record()`.
