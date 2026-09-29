@@ -877,6 +877,100 @@
                         <div class="pg-footnote" id="pg-footnote"></div>
                     </div>
                 </section>
+
+                <!-- ============ PANE 4 — Editorial Dialogue Gutter =============
+                     [SPRINT 95.0 / STORY 95.6] FEAT-627 / FEAT-618 / BKM-073.
+                     Full-width row beneath the tri-pane. The server owns every
+                     verdict; this pane renders them and never re-runs a gate. -->
+                <section class="pg-pane" id="pg-pane-gutter" style="grid-column: 1 / -1;">
+                    <div class="pg-pane-head">
+                        <span class="pgi revision">04</span>
+                        <span>Editorial Dialogue Gutter &middot; Synthetic Mutation Blending</span>
+                        <span class="pgh"></span>
+                        <span id="pg-gutter-caption">&mdash;</span>
+                    </div>
+                    <div class="pg-pane-body">
+                        <div class="pg-provenance" id="pg-gutter-honesty" style="margin-bottom:11px;">
+                            <span>&#9432;</span>
+                            <div>
+                                <b>Certification boundary.</b> The candidate is synthesized and adjudicated
+                                <b>server-side</b> by the shared detectors
+                                (<code>curator.validate_paper_schema</code> CP-1 / CP-7 and
+                                <code>curator.annotate_resume_spine</code> CP-5 numeric preservation).
+                                This pane <b>renders</b> verdicts; it never recomputes a gate. A blend is a
+                                <b>candidate only</b> &mdash; nothing enters the lineage until you press
+                                <b>Approve &amp; Stamp</b>, and the server re-validates before it writes.
+                            </div>
+                        </div>
+
+                        <div style="display:grid;grid-template-columns:minmax(260px,1fr) minmax(360px,1.5fr);gap:13px;align-items:start;">
+                            <!-- transcript + controls -->
+                            <div style="display:flex;flex-direction:column;gap:9px;min-width:0;">
+                                <div class="pg-diff-col-head">
+                                    <span>Dialogue</span>
+                                    <span class="pgh"></span>
+                                    <span id="pg-gutter-pair">&mdash;</span>
+                                </div>
+                                <div class="pg-diff-body" id="pg-gutter-log" style="max-height:260px;overflow-y:auto;">
+                                    <span class="pg-empty">Give the judge an instruction, then Blend.</span>
+                                </div>
+                                <form id="pg-gutter-form" style="display:flex;flex-direction:column;gap:7px;">
+                                    <label for="pg-gutter-input" style="font-family:var(--pg-mono,monospace);font-size:.54rem;letter-spacing:1.1px;text-transform:uppercase;color:#55606d;">
+                                        Operator instruction &rarr; blend v<sub>a</sub> &amp; v<sub>b</sub>
+                                    </label>
+                                    <input type="text" id="pg-gutter-input" autocomplete="off"
+                                           placeholder="e.g. Lead with the strongest ownership verb; keep every metric."
+                                           style="background:#0b0f14;color:#dbe4ee;border:1px solid #262d38;border-radius:4px;font-family:var(--pg-mono,monospace);font-size:.68rem;padding:7px 8px;box-sizing:border-box;width:100%;">
+                                    <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
+                                        <select id="pg-gutter-mode" title="union keeps every source segment (CP-certifiable); compact may drop content and will be gated on it"
+                                                style="background:#0b0f14;color:#dbe4ee;border:1px solid #262d38;border-radius:4px;font-family:var(--pg-mono,monospace);font-size:.66rem;padding:6px 7px;">
+                                            <option value="union">union &middot; retain all (certifiable)</option>
+                                            <option value="compact">compact &middot; affinity only</option>
+                                        </select>
+                                        <button type="submit" id="pg-gutter-blend"
+                                                style="background:#1f6feb;color:#fff;border:1px solid #388bfd;border-radius:4px;font-family:var(--pg-mono,monospace);font-size:.66rem;font-weight:700;letter-spacing:.6px;padding:6px 12px;cursor:pointer;">
+                                            BLEND &#9656;
+                                        </button>
+                                        <button type="button" id="pg-gutter-stamp" disabled
+                                                style="background:#238636;color:#fff;border:1px solid #3fb950;border-radius:4px;font-family:var(--pg-mono,monospace);font-size:.66rem;font-weight:700;letter-spacing:.6px;padding:6px 12px;cursor:pointer;opacity:.45;">
+                                            APPROVE &amp; STAMP v<sub>n+1</sub>
+                                        </button>
+                                    </div>
+                                </form>
+                                <details id="pg-gutter-prompt-wrap" style="font-family:var(--pg-mono,monospace);font-size:.58rem;color:#55606d;">
+                                    <summary style="cursor:pointer;">judge contract (structured prompt)</summary>
+                                    <pre id="pg-gutter-prompt" style="white-space:pre-wrap;background:#0b0f14;border:1px solid #262d38;border-radius:4px;padding:7px;max-height:180px;overflow:auto;color:#8b98a5;"></pre>
+                                </details>
+                            </div>
+
+                            <!-- candidate + cp verdict -->
+                            <div style="display:flex;flex-direction:column;gap:9px;min-width:0;">
+                                <div class="pg-diff-col-head">
+                                    <span>Candidate blend</span>
+                                    <span class="pgh"></span>
+                                    <span id="pg-gutter-candidate-caption">&mdash;</span>
+                                </div>
+                                <div class="pg-node-text" id="pg-gutter-candidate">
+                                    <span class="pg-empty">No candidate yet.</span>
+                                </div>
+
+                                <div class="pg-diff-col-head"><span>CP gate verdict &mdash; server-adjudicated</span></div>
+                                <div id="pg-gutter-cp" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                                    <span class="pg-empty">No candidate adjudicated yet.</span>
+                                </div>
+
+                                <div class="pg-diff-col-head">
+                                    <span>Change preview vs active revision</span>
+                                    <span class="pgh"></span>
+                                    <span id="pg-gutter-diff-caption">&mdash;</span>
+                                </div>
+                                <div class="pg-diff-body" id="pg-gutter-diff">
+                                    <span class="pg-empty">Run a blend to preview the delta.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </section>
@@ -1848,6 +1942,315 @@
 
             showToast('Sandbox ready — ' + STATE.bones.length + ' bones loaded, lens ' + STATE.activeLensId + '.', 'info');
         }
+
+        /* ==================================================================
+           [SPRINT 95.0 / STORY 95.6] FEAT-627 / FEAT-618 / BKM-073
+           Editorial Dialogue Gutter & Synthetic Mutation Blending.
+
+           POST /api/node/blend with action='blend' (synthesize + adjudicate) or
+           action='stamp' (certify v_{n+1}). The server synthesizes, validates,
+           and writes; this controller only renders server verdicts and drives
+           the two requests. It deliberately recomputes NO gate (Oracle SPR-95
+           G3: a second gate implementation drifts and shows a green check the
+           server would reject).
+           ================================================================== */
+        var GUT = {
+            log: [],            /* [{ role: 'operator'|'judge'|'gate', text, cls }] */
+            candidate: null,    /* last successful blend response               */
+            busy: false
+        };
+
+        /* Mirrors the 93.5 getApiBaseUrl/fetchJson contract. Those helpers live
+           in a separate closure and are not reachable here, so the base-URL
+           rule is restated rather than reached across scopes. */
+        function gutPost(endpoint, body) {
+            var base = '';
+            if (window.location.port !== '8765') {
+                var host = window.location.hostname;
+                if (!host || host === 'localhost' || host === '127.0.0.1' || window.location.protocol === 'file:') {
+                    base = 'http://127.0.0.1:8765';
+                } else {
+                    base = window.location.protocol + '//' + host + ':8765';
+                }
+            }
+            return fetch(base + endpoint, {
+                method: 'POST',
+                cache: 'no-store',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }).then(function (r) {
+                return r.text().then(function (raw) {
+                    var data = null;
+                    try { data = JSON.parse(raw); } catch (e) { data = null; }
+                    if (!data) throw new Error('HTTP ' + r.status + ' \u2014 non-JSON response');
+                    data.__http = r.status;
+                    return data;
+                });
+            });
+        }
+
+        function gutMsgClass(cls) {
+            if (cls === 'is-pass') return 'color:#3fb950;';
+            if (cls === 'is-fail') return 'color:#f85149;';
+            if (cls === 'is-you') return 'color:#4daafc;';
+            return 'color:#dbe4ee;';
+        }
+
+        function gutRenderLog() {
+            var host = document.getElementById('pg-gutter-log');
+            if (!host) return;
+            if (!GUT.log.length) {
+                host.innerHTML = '<span class="pg-empty">Give the judge an instruction, then Blend. Nothing is written until you stamp.</span>';
+                return;
+            }
+            host.innerHTML = GUT.log.map(function (m) {
+                var who = m.role === 'operator' ? 'YOU' : (m.role === 'gate' ? 'GATE' : 'JUDGE');
+                return '<div style="margin-bottom:7px;">' +
+                    '<div style="font-size:.5rem;letter-spacing:1.1px;color:#55606d;">' + esc(who) + '</div>' +
+                    '<div style="' + gutMsgClass(m.cls) + '">' + esc(m.text) + '</div></div>';
+            }).join('');
+            host.scrollTop = host.scrollHeight;
+        }
+
+        function gutAdd(role, text, cls) {
+            GUT.log.push({ role: role, text: text, cls: cls || '' });
+            if (GUT.log.length > 40) GUT.log.shift();
+            gutRenderLog();
+        }
+
+        /* Display-only multiset highlight. The authoritative counts shown as
+           numbers are the server's; this is presentation, never adjudication. */
+        function gutHighlight(sourceTokens, candidateTokens, wrapTag) {
+            var counts = {};
+            sourceTokens.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
+            return candidateTokens.map(function (t) {
+                if (counts[t]) { counts[t] -= 1; return esc(t); }
+                return '<' + (wrapTag || 'ins') + '>' + esc(t) + '</' + (wrapTag || 'ins') + '>';
+            }).join(' ');
+        }
+
+        function gutRenderCp(cp) {
+            var host = document.getElementById('pg-gutter-cp');
+            if (!host) return;
+            if (!cp) {
+                host.innerHTML = '<span class="pg-empty">No candidate adjudicated yet.</span>';
+                return;
+            }
+            function badge(label, passed) {
+                var bg = passed ? 'rgba(63,185,80,.14)' : 'rgba(248,81,73,.14)';
+                var br = passed ? 'rgba(63,185,80,.5)' : 'rgba(248,81,73,.5)';
+                var fg = passed ? '#3fb950' : '#f85149';
+                return '<span style="background:' + bg + ';border:1px solid ' + br + ';color:' + fg +
+                    ';border-radius:10px;padding:3px 9px;font-family:var(--pg-mono,monospace);font-size:.58rem;font-weight:700;">' +
+                    esc(label) + ' &middot; ' + (passed ? 'PASS' : 'FAIL') + '</span>';
+            }
+            var cp1 = cp.cp1_token_containment || {};
+            var cp5 = cp.cp5_numeric_literals || {};
+            var cp7 = cp.cp7_structural || {};
+            var verdict = String(cp.verdict || 'UNVERIFIED');
+            var vColor = verdict === 'PASS' ? '#3fb950' : (verdict === 'FAIL' ? '#f85149' : '#d29922');
+            var html = badge('CP-1 tokens', !!cp1.passed) + badge('CP-5 numerics', !!cp5.passed) + badge('CP-7 structure', !!cp7.passed) +
+                '<span style="font-family:var(--pg-mono,monospace);font-size:.58rem;font-weight:700;color:' + vColor + ';">VERDICT ' + esc(verdict) + '</span>';
+
+            var details = [];
+            (cp5.violations || []).forEach(function (v) {
+                details.push('CP-5 lost literal(s) at ' + v.node_id + ': ' + (v.lost_literals || []).join(', '));
+            });
+            (cp1.violations || []).forEach(function (v) {
+                details.push('CP-1 lost token(s) at ' + v.node_id + ': ' + (v.lost_tokens || []).slice(0, 12).join(', '));
+            });
+            (cp7.errors || []).forEach(function (e) { details.push('CP-7: ' + e); });
+            if (details.length) {
+                html += '<div style="flex-basis:100%;font-family:var(--pg-mono,monospace);font-size:.56rem;color:#d29922;margin-top:4px;">' +
+                    details.map(esc).join('<br>') + '</div>';
+            }
+            host.innerHTML = html;
+        }
+
+        function gutSetBusy(busy) {
+            var blend = document.getElementById('pg-gutter-blend');
+            var stamp = document.getElementById('pg-gutter-stamp');
+            if (blend) { blend.disabled = busy; blend.style.opacity = busy ? '.45' : '1'; }
+            if (stamp) {
+                stamp.disabled = busy || !(GUT.candidate && GUT.candidate.cp && GUT.candidate.cp.passed);
+                stamp.style.opacity = stamp.disabled ? '.45' : '1';
+            }
+            var cap = document.getElementById('pg-gutter-caption');
+            if (cap) cap.textContent = busy ? 'WORKING\u2026' : (GUT.candidate ? 'CANDIDATE READY' : '\u2014');
+        }
+
+        function gutRenderCandidate() {
+            var hostC = document.getElementById('pg-gutter-candidate');
+            var hostD = document.getElementById('pg-gutter-diff');
+            var cap = document.getElementById('pg-gutter-candidate-caption');
+            var dcap = document.getElementById('pg-gutter-diff-caption');
+            var pair = document.getElementById('pg-gutter-pair');
+            var r = GUT.candidate;
+
+            if (pair) {
+                pair.textContent = (PG.compareId || '\u2014') + ' \u2194 ' + (PG.revisionId || '\u2014');
+            }
+            if (!r) {
+                if (hostC) hostC.innerHTML = '<span class="pg-empty">No candidate yet.</span>';
+                if (hostD) hostD.innerHTML = '<span class="pg-empty">Run a blend to preview the delta.</span>';
+                if (cap) cap.textContent = '\u2014';
+                if (dcap) dcap.textContent = '\u2014';
+                var pw = document.getElementById('pg-gutter-prompt');
+                if (pw) pw.textContent = '';
+                gutRenderCp(null);
+                gutSetBusy(GUT.busy);
+                return;
+            }
+
+            if (cap) cap.textContent = r.v_a + ' + ' + r.v_b + ' \u00b7 ' + (r.synthesis_source || 'deterministic');
+            if (hostC) {
+                hostC.className = 'pg-node-text';
+                hostC.innerHTML =
+                    '<div style="font-size:.53rem;color:#55606d;letter-spacing:.6px;margin-bottom:6px;">' +
+                    esc('mode=' + r.mode + ' \u00b7 segments=' + (r.segments || []).length +
+                        ' \u00b7 guidance=' + (r.guidance_applied ? 'applied' : 'none') +
+                        ' \u00b7 next=' + r.next_version_id) +
+                    '</div>' + esc(r.candidate_text || '(empty)');
+            }
+
+            var srcRec = activeRecord(PG.revisionId);
+            var srcTokens = tokenize(srcRec ? srcRec.text : '');
+            var candTokens = tokenize(r.candidate_text || '');
+            if (hostD) {
+                hostD.innerHTML = gutHighlight(srcTokens, candTokens, 'ins') ||
+                    '<span class="pg-empty">(empty candidate)</span>';
+            }
+            var dv = (r.diff && r.diff.v_b) || {};
+            if (dcap) {
+                dcap.textContent = 'server \u0394 vs ' + r.v_b + ': +' + num(dv.adds) + ' / -' + num(dv.dels) + ' tokens';
+            }
+            var pw = document.getElementById('pg-gutter-prompt');
+            if (pw) pw.textContent = JSON.stringify(r.judge_contract || {}, null, 2);
+            gutRenderCp(r.cp);
+            gutSetBusy(GUT.busy);
+        }
+
+        function renderGutter() { gutRenderLog(); gutRenderCandidate(); }
+
+        function gutBlend() {
+            if (GUT.busy) return;
+            if (!PG.paperId || !PG.nodeId) { toast('Select a paper and a node first.', 'error'); return; }
+            var input = document.getElementById('pg-gutter-input');
+            var instruction = input ? String(input.value || '').trim() : '';
+            if (!instruction) { toast('An operator instruction is required.', 'error'); return; }
+
+            GUT.busy = true;
+            gutSetBusy(true);
+            gutAdd('operator', instruction, 'is-you');
+            gutAdd('judge', 'Synthesizing candidate for ' + PG.nodeId + ' from ' + PG.compareId + ' + ' + PG.revisionId + '\u2026', '');
+
+            var modeSel = document.getElementById('pg-gutter-mode');
+            gutPost('/api/node/blend', {
+                action: 'blend',
+                paper_id: PG.paperId,
+                node_id: PG.nodeId,
+                v_a: PG.compareId,
+                v_b: PG.revisionId,
+                lens_id: PG.activeLensId,
+                human_instruction: instruction,
+                mode: modeSel ? modeSel.value : 'union'
+            }).then(function (data) {
+                if (data.status !== 'success') {
+                    gutAdd('gate', 'Blend refused: ' + (data.error || data.reason || data.status), 'is-fail');
+                    return;
+                }
+                GUT.candidate = data;
+                var passed = !!(data.cp && data.cp.passed);
+                gutAdd('gate',
+                    'Candidate adjudicated \u2014 ' + (data.cp ? data.cp.verdict : 'UNVERIFIED') +
+                    (passed ? '. Stamping will mint ' + data.next_version_id + '.'
+                            : '. The gate refused this candidate; reduce compaction or restate the instruction.'),
+                    passed ? 'is-pass' : 'is-fail');
+            }).catch(function (err) {
+                gutAdd('gate', 'Blend channel error: ' + err.message, 'is-fail');
+                toast('Blend failed: ' + err.message, 'error');
+            }).then(function () {
+                GUT.busy = false;
+                gutRenderCandidate();
+            });
+        }
+
+        function gutStamp() {
+            var r = GUT.candidate;
+            if (!r || !r.cp || !r.cp.passed) { toast('The gate has not passed \u2014 refusing to stamp.', 'error'); return; }
+            if (GUT.busy) return;
+
+            GUT.busy = true;
+            gutSetBusy(true);
+            gutAdd('operator', '[Approve & Stamp ' + (r.next_version_id || 'v_(n+1)') + ']', 'is-you');
+
+            gutPost('/api/node/blend', {
+                action: 'stamp',
+                paper_id: PG.paperId,
+                node_id: PG.nodeId,
+                candidate_text: r.candidate_text,
+                v_a: r.v_a,
+                v_b: r.v_b,
+                parent_version: PG.revisionId,
+                lens_id: PG.activeLensId,
+                human_instruction: r.instruction || ''
+            }).then(function (data) {
+                if (data.status !== 'success') {
+                    gutAdd('gate', 'Stamp rejected: ' + (data.error || data.status), 'is-fail');
+                    return;
+                }
+                gutAdd('gate',
+                    'Certified ' + data.version_id + ' \u2192 ' + data.filename +
+                    ' (text_hash ' + data.text_hash + '). Reloading lineage\u2026', 'is-pass');
+                GUT.candidate = null;
+                gutRenderCandidate();
+                return loadPaper(PG.paperId);
+            }).catch(function (err) {
+                gutAdd('gate', 'Stamp channel error: ' + err.message, 'is-fail');
+                toast('Stamp failed: ' + err.message, 'error');
+            }).then(function () {
+                GUT.busy = false;
+                gutterSetBusyAfterStamp();
+            });
+        }
+
+        function gutterSetBusyAfterStamp() {
+            gutSetBusy(false);
+            var input = document.getElementById('pg-gutter-input');
+            if (input) input.value = '';
+        }
+
+        function wireGutter() {
+            var form = document.getElementById('pg-gutter-form');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    gutBlend();
+                });
+            }
+            var stamp = document.getElementById('pg-gutter-stamp');
+            if (stamp) {
+                stamp.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    gutStamp();
+                });
+            }
+        }
+
+        /* Compose with the 95.5 lifecycle rather than editing it: the gutter
+           re-renders whenever the tri-pane does, and wires once init runs. */
+        var _baseRenderAll = renderAll;
+        renderAll = function () { _baseRenderAll(); renderGutter(); };
+        var _baseInit = init;
+        init = function () {
+            _baseInit();
+            try {
+                wireGutter();
+                renderGutter();
+            } catch (err) {
+                if (window.console) console.warn('[S95.6] gutter wiring skipped:', err);
+            }
+        };
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
