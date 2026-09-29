@@ -1706,5 +1706,62 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-041",
+    "theme": "Systems Architecture & Document Epistemology",
+    "paper_order": 41,
+    "origin": {
+      "author": "jallred",
+      "text": "The spine of a book or paper is its invariant topological coordinate system. While wording, tone, stylistic lenses, and bullet revisions mutate continuously across iterations, the Spine\u2014the ordered sequence of conceptual nodes\u2014remains the unshakeable armature of the manuscript. Decoupling the spine index from node mutation histories transforms document editing from destructive string overwrites into deterministic coordinate traversal.",
+      "source": "Sprint 94/95 Architectural Synthesis & Document Spine Formulation",
+      "immutable": true,
+      "created_at": "2026-09-29T10:45:00Z"
+    },
+    "synthesis": {
+      "title": "The Document Spine (Topological Invariance Across Mutating Lenses)",
+      "narrative_context": "Documents are topological trees of invariant nodes bound by a spine. By decoupling spine.json (ordered sequence of immutable node_ids) from bones/<node_id>.json (version stacks, HyDE voice tags, and DNA pointers), systems can project infinite stylistic lenses without corrupting bedrock document structure.",
+      "lab_anchors": [
+        "FEAT-626 (Document Spine Topology & Revision Traversal Matrix)",
+        "FEAT-627 (Single-Node Workbench & Editorial Blend Dialogue)",
+        "BKM-073 (Spine Traversal & Node Mutation Invariant)",
+        "BKM-070"
+      ],
+      "review_notes": "Foundational Inspiration grounding the Document Spine architecture and Sprint 95 execution.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "The spine is an invariant topological coordinate system. Decoupling spine index from node mutation history enables deterministic coordinate traversal across mutating lenses.",
+          "certified_at": "2026-09-29T10:45:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "document-spine",
+        "topological-invariance",
+        "node-mutations",
+        "lens-projections",
+        "systems-architecture"
+      ],
+      "explicit_links": [
+        "INS-001",
+        "INS-038",
+        "INS-040",
+        "VIBE-008",
+        "VIBE-009"
+      ],
+      "aliases": [
+        "PHL-041",
+        "document-spine-invariant"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
