@@ -208,3 +208,28 @@ Portfolio_Dev/field_notes/data/papers/
   2. Run comprehensive test suite across `HomeLabAI` and `Portfolio_Dev`.
   3. Verify live daemon synchronization (`POST http://127.0.0.1:8765/reload_residents`).
 * **Success Criteria:** 100% unit and integration test pass rate, Oracle report saved, and git checkpoint committed.
+
+---
+
+### Story 95.8: Idle Sensory Quiescence & Socket-Gated Ear Poller
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/v5/foyer/router.py`
+* **JITC Anchors:** `[FEAT-259.2]`, `[LAB-096]`, `[BKM-044]`
+* **Scope:**
+  1. Refactor `ear_poller_loop()` to gate strictly on active Intercom client connection and unmuted status.
+  2. Suspend polling coroutines via `asyncio.Event` when active WebSocket connections count drops to zero (`len(self.connected_websockets) == 0`).
+  3. Replace legacy queue/buffer polling loops with event-driven subscriptions to eliminate dormant swap wake-ups and unnecessary CPU spin.
+* **Success Criteria:** Zero background sensory polling during idle disconnected state; CPU and disk read polling drop to 0% idle floor.
+
+---
+
+### Story 95.9: Bicameral Node Dependency Decoupling & In-Process Actor Model
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/`
+* **JITC Anchors:** `[FEAT-145.2]`, `[LAB-003]`, `[BKM-040]`
+* **Scope:**
+  1. Audit and decouple duplicate ML/PyTorch/Transformers imports in `loader.py`.
+  2. Ensure cognitive formatting and routing nodes (`PINKY`, `THOUGHT`, `BRAIN`) run with lean standard-library footprints without loading GPU/Liger kernels into separate OS process heaps.
+  3. Evaluate transition of node orchestration toward unified in-process async actors with isolated failure boundaries.
+* **Success Criteria:** Multi-process heap memory footprint reduced by >60%; eliminate duplicate module table bloat across agent processes.
+
