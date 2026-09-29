@@ -32,8 +32,8 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | **Sisyphus (Ultraworker & Autonomous Engineer)** | Primary Direct Autonomous Implementer for `delegate.py` story dispatches; directly executes safe_patch/bash | Dispatched via `delegate.py` (default) |
 | **Atlas (Plan Executor & Swarm Conductor)** | Swarm orchestrator for multi-subagent task cascades (Windows 4090 / M5 Air) | Dispatched via `delegate.py --agent atlas` |
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
-| **Primary Local Conductor & Verifier (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) for 64k context architecture and verification | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
-| **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) for bounded surgical patching & greenfield | Subagent target for surgical edits (`sisyphus-junior`, `hephaestus`) |
+| **Primary Local Conductor & Verifier (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) for 128k context architecture and verification | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
+| **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) for 128k context bounded surgical patching & greenfield | Subagent target for surgical edits (`sisyphus-junior`, `hephaestus`) |
 | **Cloud Fallback Tier** | OpenRouter Free -> OpenCode Free -> Cohere/Mistral (Non-Google) | Automatic runtime fallback |
 
 ---
@@ -120,8 +120,8 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 | :--- | :--- | :--- | :--- | :--- |
 | **Sisyphus (Lead)** | OpenCode Free (`opencode/big-pickle`) | 256K | Direct code edits, surgical refactoring | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
 | **Atlas / Prometheus** | OpenCode Free (`opencode/big-pickle`) | 256K | Swarm conduction, architectural planning | OpenRouter Free $\rightarrow$ Cohere $\rightarrow$ M5 MLX $\rightarrow$ 4090 |
-| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8002 Headroom $\rightarrow$ Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) | 65K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`Qwen3.8-27B`) |
-| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) | 64K | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
+| **Mac M5 Air (MLX)** | Node Brain / Mac M5 (Port 8002 Headroom $\rightarrow$ Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) | 128K / 8K out | Surgical patching (`sisyphus-junior`) & greenfield (`hephaestus`) | Windows 4090 (`Qwen3.8-27B`) |
+| **Windows 4090 (Ollama)** | Node KENDER / Windows 4090 (Port 11434: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) | 128K | Conductor (`atlas`), Scout (`librarian`), Verifier (`momus`) | Cloud Free Tier |
 | **Cloud Resiliency Tier** | Cohere (`command-a-plus-05-2026`) | 256K | Complex refactoring, emergency cloud fallback | M5 MLX / Windows 4090 |
 
 ### 4.3 Dynamic Category Taxonomy (Web GUI vs. Headless Dispatch)
