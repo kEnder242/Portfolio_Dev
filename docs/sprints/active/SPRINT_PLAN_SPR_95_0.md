@@ -83,19 +83,32 @@ Portfolio_Dev/field_notes/data/papers/
 
 ## 📊 Delegation Matrix
 
-| Story ID | Title | Assigned Owner | Tool / Runner | Success Criteria |
-| :--- | :--- | :--- | :--- | :--- |
-| **Story 95.1** | Self-Contained Spine Manager & Document DNA Archive | `[SWARM:LOCAL]` | `delegate.py --story 951 --local` | `SpineManager` class supporting version indexing and `document_dna` |
-| **Story 95.2** | Multi-Version Resume AST Citation & Diff Annotation | `[SWARM:LOCAL]` | `delegate.py --story 952 --local` | Annotated `PAPER-RESUME_spine.json` mapping v1/v2/resume_data |
-| **Story 95.3** | Single-Node Proving Ground & Revision Carousel | `[SWARM:LOCAL]` | `delegate.py --story 953 --local` | `projection_studio.html` single-node workbench with lens scoring |
-| **Story 95.4** | Editorial Dialogue Gutter & Synthetic Mutation Blending | `[SWARM:CLOUD]` | `delegate.py --story 954 --cloud` | `/api/node/blend` endpoint returning CP-5 compliant candidate blends |
-| **Story 95.5** | Offline Job & Target Ingestion CLI | `[SWARM:LOCAL]` | `delegate.py --story 955 --local` | Standalone `src/ops/job_ingest.py` scraper and lens compiler |
-| **Story 95.6** | Document-Scoped DNA Promotion Gate & Sync Pipeline | `[SWARM:LOCAL]` | `delegate.py --story 956 --local` | CLI/API promotion from `DOC-<id>-<idx>` to `WIS-xxx` in ChromaDB |
-| **Story 95.7** | Cloud Oracle Adversarial Audit & Live Certification | `[SWARM:CLOUD]` | `delegate.py --oracle` | Full audit report & 100% test pass rate across all new endpoints |
+| Story ID | Title | Assigned Owner | Depends On | Tool / Runner | Success Criteria |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Story 95.0** | Grader Fallback & Tier Tagging Remediation | `[SWARM:LOCAL]` | *None* | `delegate.py --story 950 --local` | Hard error on missing revision & explicit tier tags |
+| **Story 95.1** | Self-Contained Spine Manager & Document DNA Archive | `[SWARM:LOCAL]` | Story 95.0 | `delegate.py --story 951 --local` | `SpineManager` class supporting version indexing and `document_dna` |
+| **Story 95.2** | Multi-Version Resume AST Citation & Diff Annotation | `[SWARM:LOCAL]` | Story 95.1 | `delegate.py --story 952 --local` | Annotated `PAPER-RESUME_spine.json` mapping v1/v2/resume_data |
+| **Story 95.3** | Single-Node Proving Ground & Revision Carousel | `[SWARM:LOCAL]` | Story 95.1 | `delegate.py --story 953 --local` | `projection_studio.html` single-node workbench with lens scoring |
+| **Story 95.4** | Editorial Dialogue Gutter & Synthetic Mutation Blending | `[SWARM:CLOUD]` | Story 95.3 | `delegate.py --story 954 --cloud` | `/api/node/blend` endpoint returning CP-5 compliant candidate blends |
+| **Story 95.5** | Offline Job & Target Ingestion CLI | `[SWARM:LOCAL]` | Story 95.0 | `delegate.py --story 955 --local` | Standalone `src/ops/job_ingest.py` scraper and lens compiler |
+| **Story 95.6** | Document-Scoped DNA Promotion Gate & Sync Pipeline | `[SWARM:LOCAL]` | Story 95.1 | `delegate.py --story 956 --local` | CLI/API promotion from `DOC-<id>-<idx>` to `WIS-xxx` in ChromaDB |
+| **Story 95.7** | Cloud Oracle Adversarial Audit & Live Certification | `[SWARM:CLOUD]` | Stories 95.0–95.6 | `delegate.py --oracle` | Full audit report & 100% test pass rate across all new endpoints |
 
 ---
 
 ## 📋 Story Cards (With Just-In-Time Context)
+
+### Story 95.0: Grader Fallback & Tier Tagging Remediation (Oracle P0)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/curator/lens_service.py`, `HomeLabAI/src/projection/lenses.py`
+* **JITC Anchors:** `[FEAT-622]`, `[WIS-487]`, `[BKM-070]`, `ORACLE_REVIEW_SPRINT_95.md`
+* **Scope:**
+  1. Fix `grade_paper()` in `lens_service.py`: Replace silent fallback to `v1` on `revision_id` mismatch with an explicit `ValueError` or dynamic target revision resolution (Oracle D1).
+  2. Ensure `craft_lens()` in `lenses.py` emits explicit `tier` tags (`tier_0_structural` / `tier_1_semantic`) for all criteria rules (Oracle D2).
+  3. Verify unit tests pass with zero silent fallbacks.
+* **Success Criteria:** `grade_paper` raises hard error on non-existent revisions; all crafted lens rules carry explicit `tier` tags.
+
+---
 
 ### Story 95.1: Self-Contained Spine Manager & Document DNA Archive
 * **Assigned Owner:** `[SWARM:LOCAL]`
