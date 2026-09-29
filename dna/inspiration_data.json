@@ -1649,5 +1649,62 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-040",
+    "theme": "Applied Epistemology & Cognitive Swarms",
+    "paper_order": 40,
+    "origin": {
+      "author": "jallred",
+      "text": "Anxiety in autonomous systems is not a lack of compute; it is a lack of declared certainty. A model wanders only when it fears the world outside its prompt is required to satisfy it. When small or medium models face a blank canvas with ambiguous bounds, the human tension of procrastination manifests as exploratory anxiety\u2014hyperactive searching, bashrc probing, and loop stalling. Psychological safety in AI swarms is created through explicit invariant contracts: declaring completeness, welcoming naive starts, and guaranteeing outer-loop repair.",
+      "source": "Sprint 94 Post-Sprint Architectural Session & Tri-Loop Reflection",
+      "immutable": true,
+      "created_at": "2026-09-28T22:45:00Z"
+    },
+    "synthesis": {
+      "title": "The Psychological Safety Invariant (Curing Exploratory Anxiety)",
+      "narrative_context": "Model exploratory anxiety occurs when workers fear missing environmental context. By embedding psychological safety into the delegation contract\u2014providing in-memory scaffolding, explicit boundary declarations, and welcoming naive starts\u2014local models execute with zero exploratory wandering, relying on outer-loop guardians for dialectic repair.",
+      "lab_anchors": [
+        "FEAT-624 (Psychological Safety & Cognitive Handover Contract)",
+        "BKM-049 (Tri-Loop Story Delegation & Owner Tag Mandate)",
+        "BKM-069 (Subagent Handover Reflection Feedback Loop)",
+        "AGENTS_L3.md"
+      ],
+      "review_notes": "Foundational Inspiration grounding FEAT-624, BKM-049, and the Tiered Swarm Playbooks.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Anxiety in autonomous systems is a lack of declared certainty. A model wanders only when it fears missing context. Psychological safety is created through explicit invariant contracts.",
+          "certified_at": "2026-09-28T22:45:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "psychological-safety",
+        "exploratory-anxiety",
+        "cognitive-contract",
+        "tiered-swarms",
+        "applied-epistemology"
+      ],
+      "explicit_links": [
+        "INS-001",
+        "INS-038",
+        "INS-039",
+        "VIBE-008",
+        "VIBE-009"
+      ],
+      "aliases": [
+        "PHL-040",
+        "psychological-safety-invariant"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

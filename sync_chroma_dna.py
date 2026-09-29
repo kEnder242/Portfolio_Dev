@@ -11,6 +11,7 @@ DB_PATH = os.path.expanduser("~/AcmeLab/chroma_db")
 COLLECTION_DNA = "behavioral_dna"
 COLLECTION_FEATURE = "feature_dna"
 COLLECTION_PHILOSOPHY = "philosophy_dna"
+COLLECTION_INSPIRATION = "inspiration_dna"
 COLLECTION_WISDOM = "wisdom_dna"
 COLLECTION_RDNA = "rdna"
 COLLECTION_VIBE = "vibe_dna"
@@ -20,8 +21,8 @@ PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser(
     "~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md"
 )
-PHILOSOPHY_DATA_PATH = os.path.expanduser(
-    "~/Dev_Lab/Portfolio_Dev/dna/philosophy_data.json"
+INSPIRATION_DATA_PATH = os.path.expanduser(
+    "~/Dev_Lab/Portfolio_Dev/dna/inspiration_data.json"
 )
 WISDOM_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/wisdom_data.json")
 RDNA_QUESTIONS_PATH = os.path.expanduser(
@@ -118,7 +119,7 @@ SYNC_SOURCES = [
     (COLLECTION_FEATURE, "FeatureTracker.md", FEATURE_TRACKER_PATH),
     (COLLECTION_DNA, "Protocols.md", PROTOCOLS_PATH),
     (COLLECTION_DNA, "LAB_INFRASTRUCTURE.md", INFRASTRUCTURE_PATH),
-    (COLLECTION_PHILOSOPHY, "philosophy_data.json", PHILOSOPHY_DATA_PATH),
+    (COLLECTION_INSPIRATION, "inspiration_data.json", INSPIRATION_DATA_PATH),
     (COLLECTION_WISDOM, "wisdom_data.json", WISDOM_DATA_PATH),
     (COLLECTION_RDNA, "rdna_questions.json", RDNA_QUESTIONS_PATH),
     (COLLECTION_VIBE, "vibe_data.json", VIBE_DATA_PATH),
@@ -340,20 +341,20 @@ def get_chroma_client():
         return chromadb.PersistentClient(path=DB_PATH)
 
 
-def parse_philosophy(filepath):
-    """Parses philosophy_data.json for PHL-xxx narrative philosophy cards."""
+def parse_inspiration(filepath):
+    """Parses inspiration_data.json for INS-xxx narrative inspiration and applied philosophy cards."""
     if not os.path.exists(filepath):
-        logging.warning(f"philosophy_data.json not found at {filepath}")
+        logging.warning(f"inspiration_data.json not found at {filepath}")
         return []
     import json
 
     with open(filepath, "r", encoding="utf-8") as f:
         cards = json.load(f)
 
-    philosophy_items = []
+    inspiration_items = []
     for c in cards:
-        pid = c.get("id", "PHL-UNK")
-        theme = c.get("theme", "Philosophy")
+        pid = c.get("id", "INS-UNK")
+        theme = c.get("theme", "Inspiration")
         origin_text = c.get("origin", {}).get("text", "")
         origin_src = c.get("origin", {}).get("source", "")
         synth_title = c.get("synthesis", {}).get("title", "")
@@ -369,21 +370,22 @@ def parse_philosophy(filepath):
             f"Tags: {', '.join(tags)}"
         )
 
-        philosophy_items.append(
+        inspiration_items.append(
             {
                 "id": pid,
                 "document": doc_content,
                 "metadata": {
-                    "philosophy_id": pid,
+                    "inspiration_id": pid,
+                    "philosophy_id": pid,  # alias for backward compat
                     "theme": theme,
                     "title": synth_title,
                     "tags": ",".join(tags),
-                    "source": "philosophy_data.json",
-                    "type": "PHILOSOPHY",
+                    "source": "inspiration_data.json",
+                    "type": "INSPIRATION",
                 },
             }
         )
-    return philosophy_items
+    return inspiration_items
 
 
 def parse_wisdom(filepath):
@@ -721,32 +723,41 @@ def sync(force: bool = False, dry_run: bool = False):
             checksums[INFRASTRUCTURE_PATH] = _sha256_file(INFRASTRUCTURE_PATH)
             logging.info("LAB_INFRASTRUCTURE.md sync complete.")
 
-    # 4. Sync philosophy_dna from philosophy_data.json
-    if not to_sync[PHILOSOPHY_DATA_PATH]:
+    # 4. Sync inspiration_dna from inspiration_data.json
+    if not to_sync[INSPIRATION_DATA_PATH]:
         logging.info(
-            "[IDEMPOTENCY] Skipping philosophy_dna: philosophy_data.json checksum unchanged."
+            "[IDEMPOTENCY] Skipping inspiration_dna: inspiration_data.json checksum unchanged."
         )
     else:
-        logging.info("Parsing philosophy_data.json...")
-        philosophy_items = parse_philosophy(PHILOSOPHY_DATA_PATH)
-        if philosophy_items:
-            collection_phl = get_safe_collection(client, COLLECTION_PHILOSOPHY, ef)
-            logging.info("Clearing existing entries from philosophy_dna...")
+        logging.info("Parsing inspiration_data.json...")
+        inspiration_items = parse_inspiration(INSPIRATION_DATA_PATH)
+        if inspiration_items:
+            collection_ins = get_safe_collection(client, COLLECTION_INSPIRATION, ef)
+            logging.info("Clearing existing entries from inspiration_dna...")
             try:
-                collection_phl.delete(where={"source": "philosophy_data.json"})
+                collection_ins.delete(where={"source": "inspiration_data.json"})
             except Exception as e:
-                logging.warning(f"Could not clear philosophy_dna entries: {e}")
+                logging.warning(f"Could not clear inspiration_dna entries: {e}")
 
-            ids = [p["id"] for p in philosophy_items]
-            documents = [p["document"] for p in philosophy_items]
-            metadatas = [p["metadata"] for p in philosophy_items]
+            ids = [p["id"] for p in inspiration_items]
+            documents = [p["document"] for p in inspiration_items]
+            metadatas = [p["metadata"] for p in inspiration_items]
 
             logging.info(
-                f"Uploading {len(ids)} Philosophy entries to philosophy_dna..."
+                f"Uploading {len(ids)} Inspiration entries to inspiration_dna..."
             )
-            collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
-            checksums[PHILOSOPHY_DATA_PATH] = _sha256_file(PHILOSOPHY_DATA_PATH)
-            logging.info("philosophy_dna sync complete.")
+            collection_ins.add(ids=ids, documents=documents, metadatas=metadatas)
+
+            # Mirror to philosophy_dna for backward compatibility with existing queries
+            try:
+                collection_phl = get_safe_collection(client, COLLECTION_PHILOSOPHY, ef)
+                collection_phl.delete(where={"source": "inspiration_data.json"})
+                collection_phl.add(ids=ids, documents=documents, metadatas=metadatas)
+            except Exception as e:
+                logging.warning(f"Could not mirror to philosophy_dna: {e}")
+
+            checksums[INSPIRATION_DATA_PATH] = _sha256_file(INSPIRATION_DATA_PATH)
+            logging.info("inspiration_dna sync complete.")
 
     # 4b. Sync wisdom_dna from wisdom_data.json
     if not to_sync[WISDOM_DATA_PATH]:

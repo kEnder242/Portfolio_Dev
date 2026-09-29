@@ -55,21 +55,22 @@ DATA_DIR = BASE_DIR / "field_notes" / "data"
 MANIFEST_PATH = DATA_DIR / "dna_manifest.json"
 VIBE_SOURCE_PATH = DNA_DIR / "vibe_data.json"
 INSPIRATION_SOURCE_PATH = DNA_DIR / "inspiration_data.json"
+WISDOM_SOURCE_PATH = DNA_DIR / "wisdom_data.json"
 
 # Domain label assigned to every ingested card.
 VIBE_DOMAIN = "VIBE"
 INSPIRATION_DOMAIN = "INSPIRATION"
+WISDOM_DOMAIN = "WISDOM"
 
 # Manifest key -> (source bone file, domain label) for the bridged collections.
 BRIDGED_SOURCES: Tuple[Tuple[str, Path, str], ...] = (
     ("vibe", VIBE_SOURCE_PATH, VIBE_DOMAIN),
     ("inspiration", INSPIRATION_SOURCE_PATH, INSPIRATION_DOMAIN),
+    ("wisdom", WISDOM_SOURCE_PATH, WISDOM_DOMAIN),
 )
 
 # Manifest keys whose cards are backfilled with descriptive titles.
-# "wisdom" is retained as the legacy alias of the PHL card set and holds
-# separate copies of the same cards, so both keys require the backfill.
-TITLE_BACKFILL_KEYS: Tuple[str, ...] = ("philosophy", "wisdom")
+TITLE_BACKFILL_KEYS: Tuple[str, ...] = ("philosophy",)
 
 # WIS-484: RDNA and RESUME cards are ground truth about the author, not
 # stylistic mutations. They are barred from acting as active lenses.
@@ -214,6 +215,8 @@ def ingest_domain(
     existing = manifest.get(key)
     if not isinstance(existing, list):
         existing = []
+    if key == "wisdom":
+        existing = [c for c in existing if isinstance(c, dict) and str(c.get("id", "")).startswith("WIS-")]
 
     index_by_id: Dict[str, int] = {}
     for position, card in enumerate(existing):

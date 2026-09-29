@@ -3409,3 +3409,11 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Replaces conversational operational advice with deterministic execution primitives modeled on Git CLI behavior. Provides atomic execution handlers for GPU vitals/power-clamping, Foyer daemon lifecycle (wake/quiesce), systemd services, CUDA cache purges, and remote seat switching (M5 Air `:8002`), returning structured telemetry and broadcasting events to `pager_activity.json`.
 **Rationale:** Eliminates advisory latency and empowers agents/orchestrators to directly transition lab state safely and deterministically.
 **Mechanism:** `OpsRunner` and `execute_op()` in `HomeLabAI/src/ops/ops_runner.py`. Verified via `src/tests/test_ops_runner_unit.py`.
+
+## [FEAT-625] Psychological Safety & Cognitive Handover Contract
+**Sprint:** SPR-94.0 / SPR-94.1
+**Status:** ACTIVE
+**Code:** `AGENTS_L1.md`, `AGENTS_L2.md`, `AGENTS_L3.md`, `HomeLabAI/src/tests/delegate.py`, `OPENAGENT_HANDOVER_PLAYBOOK.md`
+**Logic:** Formalizes the generic cognitive handover contract for local LLM delegation. Cures model exploratory anxiety by explicitly declaring problem completeness, furnishing typed in-memory scaffolds/companion tests inside the dispatch payload, welcoming naive initial attempts, and automatically ingesting worker reflections into ICM persistent memory (`topic: delegation_feedback`) and `loop_ledger.jsonl` for outer-loop guardian repair.
+**Rationale:** Local 27B models wander and stall when bounds are ambiguous. Declaring certainty and psychological safety unlocks single-shot execution with zero exploratory wandering.
+**Mechanism:** In-memory boilerplate synthesis by L2, Turn 1 physical write execution by L3 (`Hephaestus`/`Junior`), reflection parsing in `delegate.py`, and Tri-Loop escalation under `BKM-049`.
