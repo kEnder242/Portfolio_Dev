@@ -2750,6 +2750,7 @@
 2. **Cognitive Reflection Extraction:** Automatically extract `[HANDOVER REFLECTION]` from all subagent dispatches, persisting into ICM (`topic: delegation_feedback`) and `delegation_ledger.jsonl`.
 3. **Outer Diagnostic Action Loop:** The orchestrator must synthesize subagent feedback and unit test tracebacks to fix prompt ambiguity or harness mismatches between retry rounds.
 4. **Resident Hardware Anchoring:** Preserve resident model topology (Qwen3.8-27B on Kender RTX 4090, Ternary-Bonsai-2-27B via Headroom :8002 on M5 Air). Protect Apple Unified RAM from cold-load thrashing.
+5. **Playbook Quick-Diagnostic Index Mandate:** The orchestrator MUST audit Section 0 (Quick-Diagnostic Index) of `OPENAGENT_HANDOVER_PLAYBOOK.md` prior to formulating any retry dispatch or tier escalation.
 
 ## [FEAT-493] Centralized Swarm Model Alias Registry
 **Sprint:** SPR-66.0
