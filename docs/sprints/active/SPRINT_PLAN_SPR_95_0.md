@@ -83,6 +83,7 @@ Portfolio_Dev/field_notes/data/papers/
 
 ## 📊 Delegation Matrix
 
+### SPR-95.0 Core Phase: Document Spine & Proving Ground
 | Story ID | Title | Assigned Owner | Depends On | Tool / Runner | Success Criteria |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Story 95.0** | Grader Fallback & Tier Tagging Remediation | `[SWARM:LOCAL]` | *None* | `delegate.py --story 950 --local` | Hard error on missing revision & explicit tier tags |
@@ -93,6 +94,22 @@ Portfolio_Dev/field_notes/data/papers/
 | **Story 95.5** | Offline Job & Target Ingestion CLI | `[SWARM:LOCAL]` | Story 95.0 | `delegate.py --story 955 --local` | Standalone `src/ops/job_ingest.py` scraper and lens compiler |
 | **Story 95.6** | Document-Scoped DNA Promotion Gate & Sync Pipeline | `[SWARM:LOCAL]` | Story 95.1 | `delegate.py --story 956 --local` | CLI/API promotion from `DOC-<id>-<idx>` to `WIS-xxx` in ChromaDB |
 | **Story 95.7** | Cloud Oracle Adversarial Audit & Live Certification | `[SWARM:CLOUD]` | Stories 95.0–95.6 | `delegate.py --oracle` | Full audit report & 100% test pass rate across all new endpoints |
+
+### SPR-95.1 Follow-Up Phase: Live LLM Powerhouse Remediation
+| Story ID | Title | Assigned Owner | Depends On | Tool / Runner | Success Criteria |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Story 95.10** | Live LLM Engine Integration for RevisionBlender & CoverLetter | `[SWARM:CLOUD]` | Story 95.4 | `delegate.py --story 9510 --cloud` | Real LLM tokens generated on vLLM/M5 Air; offline throws explicit ConnectionError |
+| **Story 95.11** | Live LLM Semantic Persona Extraction in Job Ingest | `[SWARM:CLOUD]` | Story 95.5 | `delegate.py --story 9511 --cloud` | Structured LLM extraction of hiring manager tenets into rubric |
+| **Story 95.12** | Live LLM Tier-1 Semantic Rubric Judge in Lens Service | `[SWARM:CLOUD]` | Story 95.0 | `delegate.py --story 9512 --cloud` | Live LLM semantic score (0.0–1.0) and rationale generated per node |
+| **Story 95.13** | Negative & Live Testing Certification (BKM-024 Mandate) | `[AGY:PRIMARY]` | Stories 95.10–95.12 | `pytest src/tests/test_live_llm_powerhouse.py` | Negative test fails cleanly on offline engines; live test passes 100% on silicon |
+
+### SPR-95.2 Follow-Up Phase: Cognitive DNA Routing & Memory Governance
+| Story ID | Title | Assigned Owner | Depends On | Tool / Runner | Success Criteria |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Story 95.14** | RDNA-Assisted HyDE Semantic Expansion Bridge | `[SWARM:LOCAL]` | *None* | `delegate.py --story 9514 --local` | Reverse-HyDE lookup resolves abstract queries in <10ms via `rdna` exemplar bank |
+| **Story 95.15** | Ambient Hook Recalibration & Fail-Loud Telemetry Sentinel | `[AGY:PRIMARY]` | *None* | `HomeLabAI/config/hooks/icm_hook.py` | Verified sub-100ms multi-domain semantic recall with visible warnings on >150ms |
+| **Story 95.16** | Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles | `[SWARM:LOCAL]` | Story 95.14 | `delegate.py --story 9516 --local` | Lean anchor dispatch reduces prompt bloat by >60%; contextual profiles verified |
+| **Story 95.17** | Cloud Oracle Spike — Triage Finding & Post-Triage Scope Focuser | `[SWARM:CLOUD]` | Stories 95.14–95.16 | `delegate.py --story 9517 --oracle` | Adversarial audit of triage finding in `wisdom_dna` & post-triage context pruning |
 
 ---
 
