@@ -124,7 +124,7 @@
             var cy = height / 2;
             simEnergy = Math.max(simEnergy, 0.65);
 
-            var focalNodeId = window.__focalNodeId || 'PHL-001';
+            var focalNodeId = window.__focalNodeId || (cardsById['INS-001'] ? 'INS-001' : (cardsById['PHL-001'] ? 'PHL-001' : Object.keys(cardsById)[0] || 'INS-001'));
             var focalBreadcrumbs = window.__focalBreadcrumbs || [focalNodeId];
             var globalNodesMap = getGlobalNodes();
             var cardsById = getCardsMap();
@@ -164,7 +164,13 @@
                 Object.keys(directSet).forEach(function(cid) {
                     var nData = cardsById[cid] || globalNodesMap[cid];
                     var dName = ((nData && nData.domain) || cid.split('-')[0]).toUpperCase();
-                    if (dName !== synapseFilterDomain) {
+                    var matchesDomain = false;
+                    if (synapseFilterDomain === 'INS' || synapseFilterDomain === 'PHL' || synapseFilterDomain === 'INSPIRATION' || synapseFilterDomain === 'PHILOSOPHY') {
+                        matchesDomain = (dName === 'INS' || dName === 'PHL' || dName === 'INSPIRATION' || dName === 'PHILOSOPHY');
+                    } else {
+                        matchesDomain = (dName === synapseFilterDomain);
+                    }
+                    if (!matchesDomain) {
                         delete directSet[cid];
                     }
                 });
@@ -172,7 +178,7 @@
             }
 
             // Peninsula Escape [FEAT-619]: If cluster is isolated (<= 4 nodes), inject global anchor gateway hubs
-            var globalHubs = ['PHL-001', 'BKM-001', 'FEAT-582', 'WIS-001'];
+            var globalHubs = ['INS-001', 'PHL-001', 'BKM-001', 'FEAT-582', 'WIS-001'];
             if (clusterIds.length <= 4) {
                 globalHubs.forEach(function(ghId) {
                     if (clusterIds.indexOf(ghId) === -1 && ghId !== focalNodeId) {
