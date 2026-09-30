@@ -378,18 +378,18 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
   3. Wire `assert_live_bytecode(enforce_vocal=True)` into `test_perf_5x5_timed.py` pre-flight check.
 * **Success Criteria:** LabStatus initializes to `INIT`, auto-ignites to `OPERATIONAL` upon daemon boot under `[FEAT-136]`, and `test_perf_5x5_timed.py` strictly gates on active vocal silicon.
 
-#### Story 95.20: Hybrid HyDE Cascade & Dynamic RDNA Flywheel Caching
+#### Story 95.20: Hybrid HyDE Cascade & Pinky Flywheel Caching
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Target:** `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/dna/rdna_questions.json`, `HomeLabAI/src/tests/test_rdna_hyde_unit.py`
-* **JITC Anchors:** `[FEAT-630]`, `[FEAT-437]`, `[BKM-015]`, `[BKM-060]`
+* **Target:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`, `HomeLabAI/src/tests/test_rdna_hyde_unit.py`
+* **JITC Anchors:** `[FEAT-630]`, `[FEAT-554]`, `[FEAT-437]`, `[BKM-015]`, `[BKM-060]`
 * **Scope:**
-  1. Refactor `archive_node.select_vector_query()` into a 3-Tier Hybrid Cascade:
+  1. Refactor `archive_node.select_vector_query()` and `cognitive_hub.py` into a 3-Tier Hybrid Cascade:
      - **Tier 1 (Fast-Path <10ms):** Query `rdna` collection in ChromaDB `:8001`. If similarity confidence $\ge 0.75$ (dist $\le 0.45$), use exemplar anchor immediately.
-     - **Tier 2 (Synthetic Fallback ~1.5s):** If `rdna` misses or confidence $< 0.75$, trigger `FEAT-437` live synthetic HyDE generation turn.
-     - **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persist newly generated synthetic HyDE question/anchor pairs back into `Portfolio_Dev/dna/rdna_questions.json` and sync to ChromaDB `:8001` `rdna` collection.
+     - **Tier 2 (Pinky Analytical First Turn ~1.5s):** If `rdna` misses or query is novel, Pinky (holding fine-tuned `cli_voice_v1` LoRA weights per `[FEAT-554]`) generates the **first legitimate human-facing analytical response / quip**. This spoken turn simultaneously serves as the authoritative HyDE vector for deep Archive citation retrieval.
+     - **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persist the novel (query ↔ Pinky HyDE anchor) pair back into `Portfolio_Dev/dna/rdna_questions.json` and sync to ChromaDB `:8001`, permanently expanding the zero-latency exemplar bank so subsequent related queries hit Tier 1 in <10ms.
   2. Write unit tests validating:
      - Tier 1 instant exemplar match.
-     - Tier 2 synthetic fallback execution on novel query.
+     - Tier 2 Pinky analytical turn generation and HyDE derivation on novel query.
      - Tier 3 automated caching into RDNA bank and subsequent <10ms hit on re-query.
 * **Success Criteria:** Sub-10ms fast retrieval with automatic self-learning expansion into RDNA memory.
 
