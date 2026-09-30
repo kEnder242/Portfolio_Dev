@@ -387,7 +387,7 @@
             if (currentFilter === 'all') matchesFilter = true;
             else if (currentFilter === 'needs_review') matchesFilter = card.classList.contains('flagged');
             else if (currentFilter === 'archive') matchesFilter = card.classList.contains('archived');
-            else if (currentFilter === 'philosophy') matchesFilter = (domain === 'phl' || domain === 'philosophy');
+            else if (currentFilter === 'philosophy' || currentFilter === 'ins' || currentFilter === 'phl' || currentFilter === 'inspiration') matchesFilter = (domain === 'phl' || domain === 'philosophy' || domain === 'ins' || domain === 'inspiration');
             else if (currentFilter === 'behavioral') matchesFilter = (domain === 'bkm' || domain === 'behavioral');
             else if (currentFilter === 'feature') matchesFilter = (domain === 'feat' || domain === 'feature');
             else if (currentFilter === 'wisdom') matchesFilter = (domain === 'wis' || domain === 'wisdom');
