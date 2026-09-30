@@ -368,6 +368,7 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
 
 #### Story 95.18: Default State INIT & FEAT-136 Autonomous Boot Ignition
 * **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Target:** `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
 * **JITC Anchors:** `[FEAT-136]`, `[FEAT-517]`, `[FEAT-265]`, `[BKM-044]`
 * **Scope:**
@@ -380,6 +381,7 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
 
 #### Story 95.20: Hybrid HyDE Cascade & Pinky Flywheel Caching
 * **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Target:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`, `HomeLabAI/src/tests/test_rdna_hyde_unit.py`
 * **JITC Anchors:** `[FEAT-630]`, `[FEAT-554]`, `[FEAT-437]`, `[BKM-015]`, `[BKM-060]`
 * **Scope:**
@@ -395,6 +397,7 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
 
 #### Story 95.21: In-Process Lab Attendant Supervisor Consolidation
 * **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Target:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/ignition/supervisor.py`
 * **JITC Anchors:** `[FEAT-136]`, `[FEAT-143]`, `[FEAT-537]`, `[FEAT-265]`, `[BKM-044]`
 * **Scope:**
