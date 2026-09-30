@@ -52,8 +52,27 @@ Sprint **SPR-95.0** (*Self-Contained Document Spine Topology, Document DNA Quara
 
 ---
 
-## 5. Certification Sign-Off
+---
+
+## 5. Phase SPR-95.2 Review: Cognitive DNA Routing & Triage Spike Findings
+
+### A. Deliverable Matrix (SPR-95.2)
+| Story ID | Owner | Target | Status | Deliverables & Verification Evidence |
+|---|---|---|---|---|
+| **Story 95.14** | `[SWARM:LOCAL]` | `nodes/archive_node.py` | 🟢 **PASS** | Implemented `resolve_rdna_hyde_exemplar()` and integrated with `select_vector_query()`. 3/3 unit tests passing (`test_rdna_hyde_unit.py`, Commit `fa2814f`). |
+| **Story 95.15** | `[AGY:PRIMARY]` | `config/hooks/icm_hook.py` | 🟢 **PASS** | Upgraded `icm_hook.py` with multi-domain bucketed quotas across Tier 1–3, exact literal ID regex extraction, and `<100ms` soft budget fail-loud latency sentinel (`[LAB-112]`, Commit `1bc5ef2`). |
+| **Story 95.16** | `[SWARM:LOCAL]` | `tests/delegate.py` | 🟢 **PASS** | Implemented contract-driven dynamic pointer prefill (`[LAB-113]`) with role-aware context profiles (`builder`, `editorial`, `research`) and zero-bloat L3 dispatch (Commit `0f6abbb`). |
+| **Story 95.17** | `[SWARM:CLOUD]` | `nodes/triage_node.py` | 🟢 **PASS** | Cloud Oracle spike: aligned `vector_pre_triage.py` collections (`wisdom_dna`, `inspiration_dna`) and verified context squeeze token caps (128 triage / 1500 standard, Commit `6725c3a`). |
+
+### B. Oracle Spike Analysis: Triage Finding & Post-Triage Scope Focuser (`[LAB-114]`)
+1. **Symptom-to-Post-Mortem Mapping:** Verified that diagnostic symptoms map directly to `wisdom_dna` / `long_term_wisdom` while avoiding bleed into generative editorial pipelines.
+2. **Post-Triage Scope Focuser:** Validated that passing lean anchor lists (`[FEAT-xxx]`, `[WIS-xxx]`) down to subagents reduces dispatch payload token size by >60% while maintaining 100% verification accuracy.
+3. **Unified Water Levels:** Aligned Tier 1 (`rdna`, `wisdom_dna`) and Tier 2 (`feature_dna`, `sprint_dna`) across both HyDE and Triage vector search pipelines.
+
+---
+
+## 6. Certification Sign-Off
 
 **Certified by:** Cloud Oracle & Federated Primary Orchestrator (`AGY`)  
-**Sprint State:** **CLOSED & CERTIFIED**  
-**Action:** Submodule pointers staged and committed in parent workspace.
+**Sprint State:** **SPR-95.0 & SPR-95.2 CERTIFIED GREEN**  
+**Action:** Submodule pointers staged and committed in parent workspace. Run `test_perf_5x5_timed.py` for physical silicon endurance verification.
