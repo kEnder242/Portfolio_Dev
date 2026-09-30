@@ -110,7 +110,10 @@ Portfolio_Dev/field_notes/data/papers/
 | **Story 95.15** | Ambient Hook Recalibration & Fail-Loud Telemetry Sentinel | `[AGY:PRIMARY]` | *None* | `HomeLabAI/config/hooks/icm_hook.py` | Verified sub-100ms multi-domain semantic recall with visible warnings on >150ms |
 | **Story 95.16** | Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles | `[SWARM:LOCAL]` | Story 95.14 | `delegate.py --story 9516 --local` | Lean anchor dispatch reduces prompt bloat by >60%; contextual profiles verified |
 | **Story 95.17** | Cloud Oracle Spike — Triage Finding & Post-Triage Scope Focuser | `[SWARM:CLOUD]` | Stories 95.14–95.16 | `delegate.py --story 9517 --oracle` | Adversarial audit of triage finding in `wisdom_dna` & post-triage context pruning |
-| **Story 95.18** | Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024) | `[AGY:PRIMARY]` | Stories 95.0–95.17 | `test_perf_5x5_timed.py --intervals 5 10 15 20 25` | 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions |
+| **Story 95.18** | Default State `INIT` & FEAT-136 Autonomous Boot Ignition | `[SWARM:LOCAL]` | Stories 95.14–95.17 | `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/foyer/router.py` | Default state set to `INIT`; autonomous self-ignition invoked on Foyer boot when hibernation disabled |
+| **Story 95.20** | Hybrid HyDE Cascade & Dynamic RDNA Flywheel Caching | `[SWARM:LOCAL]` | Story 95.14 | `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/dna/rdna_questions.json` | Tier-1 RDNA exemplar lookup (<10ms) cascades to Tier-2 Synthetic HyDE (FEAT-437) on miss; auto-caches synthetic output back into RDNA |
+| **Story 95.21** | In-Process Lab Attendant Supervisor Consolidation | `[SWARM:LOCAL]` | Story 95.18 | `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py` | Eliminates fragile manager.py flat-file IPC; brings VRAM lock, ignition, and health supervisor directly into router.py |
+| **Story 95.19** | Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024) | `[AGY:PRIMARY]` | Stories 95.0–95.21 | `test_perf_5x5_timed.py --intervals 5 10 15 20 25` | 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions |
 
 ---
 
@@ -363,7 +366,48 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
   3. Align triage and HyDE vector water levels at Tier 1 & 2 while verifying decoupling of diagnostic telemetry from generative editorial pipelines.
 * **Success Criteria:** Oracle report with benchmarked pruning algorithms and certified triage recall precision.
 
-#### Story 95.18: Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024)
+#### Story 95.18: Default State INIT & FEAT-136 Autonomous Boot Ignition
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`
+* **JITC Anchors:** `[FEAT-136]`, `[FEAT-517]`, `[FEAT-265]`, `[BKM-044]`
+* **Scope:**
+  1. Update `LabStatus.state: str = "INIT"` in `HomeLabAI/src/v5/common/types.py` (purging `HIBERNATING` as default startup state).
+  2. Implement `_safe_pilot_startup_hook()` in `HomeLabAI/src/v5/foyer/router.py` to check `config/infrastructure.json` (`hibernation.enabled`):
+     - If hibernation is disabled (or on cold daemon start), immediately dispatch `self.manager.start_lab(reason="FEAT-136_AUTO_IGNITION")` as a background startup task.
+     - Eliminate resting in `HIBERNATING` without explicit manual wake.
+  3. Wire `assert_live_bytecode(enforce_vocal=True)` into `test_perf_5x5_timed.py` pre-flight check.
+* **Success Criteria:** LabStatus initializes to `INIT`, auto-ignites to `OPERATIONAL` upon daemon boot under `[FEAT-136]`, and `test_perf_5x5_timed.py` strictly gates on active vocal silicon.
+
+#### Story 95.20: Hybrid HyDE Cascade & Dynamic RDNA Flywheel Caching
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/dna/rdna_questions.json`, `HomeLabAI/src/tests/test_rdna_hyde_unit.py`
+* **JITC Anchors:** `[FEAT-630]`, `[FEAT-437]`, `[BKM-015]`, `[BKM-060]`
+* **Scope:**
+  1. Refactor `archive_node.select_vector_query()` into a 3-Tier Hybrid Cascade:
+     - **Tier 1 (Fast-Path <10ms):** Query `rdna` collection in ChromaDB `:8001`. If similarity confidence $\ge 0.75$ (dist $\le 0.45$), use exemplar anchor immediately.
+     - **Tier 2 (Synthetic Fallback ~1.5s):** If `rdna` misses or confidence $< 0.75$, trigger `FEAT-437` live synthetic HyDE generation turn.
+     - **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persist newly generated synthetic HyDE question/anchor pairs back into `Portfolio_Dev/dna/rdna_questions.json` and sync to ChromaDB `:8001` `rdna` collection.
+  2. Write unit tests validating:
+     - Tier 1 instant exemplar match.
+     - Tier 2 synthetic fallback execution on novel query.
+     - Tier 3 automated caching into RDNA bank and subsequent <10ms hit on re-query.
+* **Success Criteria:** Sub-10ms fast retrieval with automatic self-learning expansion into RDNA memory.
+
+#### Story 95.21: In-Process Lab Attendant Supervisor Consolidation
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/ignition/supervisor.py`
+* **JITC Anchors:** `[FEAT-136]`, `[FEAT-143]`, `[FEAT-537]`, `[FEAT-265]`, `[BKM-044]`
+* **Scope:**
+  1. Eliminate decoupled external `manager.py` OS daemon and fragile `foyer_queue.jsonl` flat-file IPC.
+  2. Create lean in-process `IgnitionSupervisor` inside Foyer (`router.py`):
+     - In-process NVML VRAM safety gating (`_acquire_vram_lock()`).
+     - Direct `start_vllm.sh` / `stop_vllm` lifecycle management and PID tracking.
+     - Direct `/wake` and `/sleep` state machine transitions with zero dropped intents.
+     - Health supervision, 30-minute rolling reset (`FEAT-537`), and KENDER remote prime.
+  3. Ensure standalone `acme_foyer_v5` startup directly provides 100% of Lab Attendant supervisory authority without sibling dependencies.
+* **Success Criteria:** 100% reliable in-process silicon ignition, zero dropped `/wake` intents, and zero external manager flat-file failure modes.
+
+#### Story 95.19: Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Target:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`
 * **JITC Anchors:** `[BKM-010]`, `[BKM-024]`, `[FEAT-521]`, `[FEAT-501]`
