@@ -3494,24 +3494,24 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Mechanism:** Oracle adversarial audit and triage benchmark suite.
 
 ## [FEAT-632] Loop DNA Domain & Federated Feedback ChromaDB Collection
-**Sprint:** BACKLOG / SPR-96.0
-**Status:** PROPOSED
+**Sprint:** SPR-96.0 (Planned)
+**Status:** PLANNED
 **Code:** `Portfolio_Dev/field_notes/data/LOOP_LEDGER.md`, `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/src/clara/server.py`
 **Logic:** Elevates feedback loops (`[LOOP-xxx]`) into a first-class peer DNA domain under `BKM-060` with a dedicated ChromaDB collection (`loop_dna`). Parses `LOOP_LEDGER.md` into vector embeddings, enabling agentic subagents and orchestrators to query active systemic feedback mechanics, signal emitters, and actuator gates via `query_dna(collection="loop_dna")`.
 **Rationale:** Preserves architectural feedback loops as live, verifiable instruction assets rather than static human documentation.
 **Mechanism:** ChromaDB collection sync hook and CLaRa MCP tool integration.
 
 ## [FEAT-633] Flywheel Deepening: Pinky Coherence Judge & Human Upvote Promotion Gating
-**Sprint:** BACKLOG / SPR-96.0
-**Status:** PROPOSED
+**Sprint:** SPR-96.0 (Planned)
+**Status:** PLANNED
 **Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/intercom.html`
 **Logic:** Connects Pinky's Coherence Critic judge score (`[FEAT-406]`, `[FEAT-470]`) and the Intercom UI Human Upvote trigger (`[FEAT-582]`) directly into the RDNA Flywheel caching gate. Novel (query ↔ Pinky HyDE anchor) pairs generated in Tier 2 are only promoted to permanent canonical RDNA when validated by Pinky Coherence Judge ($\ge 4/5$) or confirmed via explicit Human Upvote.
 **Rationale:** Empowers the judge phase to lift serious architectural weight and prevents conversational noise from contaminating the high-speed Tier-1 exemplar bank.
 **Mechanism:** `evaluate_rdna_promotion_candidate()` in `archive_node.py` and WebSocket upvote signal bridge.
 
 ## [FEAT-634] Human Downvote Signal & Negative Memory Foil Shortcut
-**Sprint:** BACKLOG / SPR-96.0
-**Status:** PROPOSED
+**Sprint:** SPR-96.0 (Planned)
+**Status:** PLANNED
 **Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/intercom.html`
 **Logic:** Introduces a streamlined human downvote feedback shortcut (`👎` / `DOWNVOTE` / `BAD_TAKE`) across Intercom UI and CLI Co-Pilot flows (`[BKM-010]`). When triggered, immediately:
 1. Purges the corresponding synthetic HyDE anchor from the candidate RDNA cache.
