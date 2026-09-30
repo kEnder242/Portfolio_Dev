@@ -293,3 +293,56 @@ During Sprint 95 execution, an audit revealed that unit tests passed in 2.4s bec
   2. **Live Test Round:** Run comprehensive integration suite against live RTX 2080 Ti (`:8088`) and M5 Air (`:8000`); certify VRAM allocation and generation throughput.
 * **Success Criteria:** Negative test fails cleanly on offline engines; live test passes 100% against active silicon.
 
+---
+
+## 🧠 Follow-Up Phase: SPR-95.2 — Cognitive DNA Routing & Ambient Memory Governance
+
+### Context & Design Realignment
+Sprint 95 established the Document Spine topology and decoupled nightly forge, but revealed grounding friction across ambient prompt hooks and subagent delegation:
+1. The **25ms hook limit** (`LAB-019`) was an overreaction to blocking inference and heavy subprocesses, prematurely truncating rich semantic context from `wisdom_dna`, `inspiration_dna`, and `sprint_dna`.
+2. Traditional assumptions treated subagents ("mice") as purely mechanical builders. In reality, key subagents (Projection Studio editorial lenses, Pinky & Brain dialogue, interview answerers) engage in **philosophy, narrative, and editorial dialectics**, requiring dedicated narrative grounding rather than code execution ballast.
+3. Subagent prompt baking caused token bloat and stale context. A **Contract-Driven Dynamic Pointer ("Half-Baked" Prefill)** strategy passes lean anchor lists (`[FEAT-xxx]`, `[WIS-xxx]`) to Layer 2 Conductor (`Atlas`) to look up via CLaRa MCP on demand and pass razor-thin, zero-bloat surgical tasks down to Layer 3 Workers (`Sisyphus-Junior`).
+
+### SPR-95.2 Story Cards
+
+#### Story 95.14: RDNA-Assisted HyDE Semantic Expansion Bridge
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/config/hooks/icm_hook.py`, `Portfolio_Dev/dna/rdna_questions.json`
+* **JITC Anchors:** `[FEAT-630]`, `[BKM-060]`, `[BKM-046]`
+* **Scope:**
+  1. Wire `rdna` collection into CLaRa `:8001` and `probe_claradb()` as a zero-latency exemplar routing bank for HyDE (Tier 1–2 water level: `rdna`, `wisdom_dna`, `feature_dna`, `sprint_dna`).
+  2. Match incoming abstract or sparse natural language queries against RDNA `question_variants` and `intent_categories` to immediately bridge to authoritative `target_dna` without runtime LLM generation penalties.
+* **Success Criteria:** Exemplar HyDE query expansion resolves ambiguous intent in <10ms with zero synthetic LLM generation cost.
+
+#### Story 95.15: Ambient Hook Recalibration & Fail-Loud Telemetry Sentinel
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/config/hooks/icm_hook.py`
+* **JITC Anchors:** `[FEAT-631]`, `[LAB-112]`, `[BKM-062]`, `[BKM-060]`
+* **Scope:**
+  1. Recalibrate hook latency budget from 25ms hard ceiling to a 100ms soft budget / 250ms hard timeout, enabling full multi-collection semantic retrieval across Tier 1–3 DNA domains (`behavioral_dna`, `feature_dna`, `wisdom_dna`, `sprint_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`).
+  2. Implement dedicated collection quotas and Dynamic Distance Banding to prevent large collections from drowning out high-salience philosophical (`INS`) or operational (`BKM`) cards.
+  3. Implement fail-loud telemetry: if hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, inject an explicit warning header `[⚠️ HOOK WARNING: ...]` into prompt context and log red alert to `stderr`.
+* **Success Criteria:** Verified sub-100ms multi-domain semantic recall with visible prompt warnings upon degradation.
+
+#### Story 95.16: Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Target:** `HomeLabAI/src/tests/delegate.py`, `AGENTS_L2.md`, `AGENTS_L3.md`
+* **JITC Anchors:** `[LAB-113]`, `[BKM-049]`, `[FEAT-625]`
+* **Scope:**
+  1. Implement "half-baked" task dispatch in `delegate.py`: pass lean anchor lists (`[FEAT-xxx]`, `[WIS-xxx]`) to Layer 2 Conductor (`Atlas`), which queries CLaRa MCP on demand and forwards razor-thin surgical code instructions to Layer 3 Workers (`Sisyphus-Junior`).
+  2. Define role-aware context profiles:
+     - **Surgical Builder Profile:** Tool BKMs (`BKM-011`, `BKM-040`), `wisdom_dna`, and interface contracts.
+     - **Cognitive / Editorial Profile:** Direct ballast of `document_dna` (`DOC-xxx`), `inspiration_dna` (`INS-041`), and `vibe_dna`, with `feature_dna`/`wisdom_dna` accessible on-demand via MCP for technical claim verification.
+* **Success Criteria:** Subagent prompt token overhead reduced by >60% while maintaining 100% verification accuracy.
+
+#### Story 95.17: Cloud Oracle Spike — Triage Finding & Post-Triage Scope Focuser
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/nodes/triage_node.py`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`
+* **JITC Anchors:** `[LAB-114]`, `[BKM-049]`, `[BKM-068]`
+* **Scope:**
+  1. Execute Cloud Oracle adversarial evaluation on triage root-cause detection and symptom-to-post-mortem mapping in `wisdom_dna`.
+  2. Evaluate and benchmark post-triage context filtering algorithms to prune irrelevant telemetry and focus the context window before delegating down to worker or editorial subagents.
+  3. Align triage and HyDE vector water levels at Tier 1 & 2 while verifying decoupling of diagnostic telemetry from generative editorial pipelines.
+* **Success Criteria:** Oracle report with benchmarked pruning algorithms and certified triage recall precision.
+
+

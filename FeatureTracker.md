@@ -3450,3 +3450,44 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.
 **Mechanism:** `nightly_forge.py` (phase-isolated `try/except` execution flow), `daily_accountability_digest.json`, `nightly_dialogue.json`.
 
+## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge
+**Sprint:** SPR-95.0 / SPR-95.2
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/config/hooks/icm_hook.py`, `Portfolio_Dev/dna/rdna_questions.json`
+**Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE). Rather than paying 500-1500ms LLM generation penalties, subagent and operator natural language queries are matched against pre-computed RDNA `question_variants` and `intent_categories` to immediately bridge abstract semantic queries to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets.
+**Rationale:** Unlocks high-precision vector search for sparse or ambiguous subagent prompts without runtime generation latency or hallucination risk.
+**Mechanism:** Reverse-HyDE lookup in `probe_claradb()` and CLaRa MCP `:8001`.
+
+## [FEAT-631] Ambient Hook Recalibration & Bucketed Quota Routing
+**Sprint:** SPR-95.0 / SPR-95.2
+**Status:** ACTIVE
+**Code:** `HomeLabAI/config/hooks/icm_hook.py`
+**Logic:** Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements dedicated collection quotas and Dynamic Distance Banding across all Tier 1–3 DNA domains (`behavioral_dna`, `feature_dna`, `wisdom_dna`, `sprint_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`), ensuring large vector collections never drown out high-salience philosophical or operational anchors.
+**Rationale:** The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) provide vastly richer multi-domain context without human-perceptible delay.
+**Mechanism:** `probe_claradb()` in `HomeLabAI/config/hooks/icm_hook.py`.
+
+## [LAB-112] Fail-Loud Hook Latency & Degradation Telemetry Sentinel
+**Sprint:** SPR-95.0 / SPR-95.2
+**Status:** ACTIVE
+**Code:** `HomeLabAI/config/hooks/icm_hook.py`
+**Logic:** Telemetry watchdog embedded directly inside the ambient pre-turn hook. If hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, the hook immediately injects a prominent warning header (`[⚠️ HOOK WARNING: ...]`) into the model prompt context and emits a colored alert to `stderr`.
+**Rationale:** Enforces `BKM-062` ("fail loudly and visibly") so degraded recall or vector database latency is never masked by silent fallbacks.
+**Mechanism:** Timing decorator and error accumulator in `icm_hook.py`.
+
+## [LAB-113] Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles
+**Sprint:** SPR-95.0 / SPR-95.2
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/tests/delegate.py`, `AGENTS_L2.md`, `AGENTS_L3.md`
+**Logic:** Implements a "half-baked" prefill strategy where orchestrators pass lean anchor pointer lists (`[FEAT-xxx]`, `[WIS-xxx]`) to Layer 2 Conductor (`Atlas`), which queries CLaRa MCP `:8001` on demand and hands razor-thin, zero-bloat surgical instructions down to Layer 3 Workers (`Sisyphus-Junior`). Establishes distinct context profiles for Surgical Builders (tool BKMs, wisdom, code contracts) vs. Cognitive/Editorial Mice (inspiration, document DNA, vibe, narrative synthesis).
+**Rationale:** Prevents context bloat in leaf workers while giving editorial and dialectical subagents rich narrative grounding.
+**Mechanism:** `delegate.py` and task contract payloads.
+
+## [LAB-114] Triage Finding & Post-Triage Context Scope Focuser (Oracle Spike)
+**Sprint:** SPR-95.0 / SPR-95.2
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/nodes/triage_node.py`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`
+**Logic:** Cloud Oracle investigative spike to evaluate and optimize triage root-cause detection and post-triage context filtering algorithms. Evaluates symptom-to-post-mortem mapping in `wisdom_dna` and designs pruning algorithms to narrow context scope before delegating to worker or editorial subagents.
+**Rationale:** Aligns triage and HyDE vector water levels (Tier 1 & 2) while keeping diagnostic telemetry cleanly decoupled from generative editorial pipelines.
+**Mechanism:** Oracle adversarial audit and triage benchmark suite.
+
+
