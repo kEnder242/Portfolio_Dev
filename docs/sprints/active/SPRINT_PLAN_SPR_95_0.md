@@ -412,6 +412,7 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
 
 #### Story 95.19: Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024)
 * **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Target:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`
 * **JITC Anchors:** `[BKM-010]`, `[BKM-024]`, `[FEAT-521]`, `[FEAT-501]`
 * **Scope:**
@@ -419,6 +420,7 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
   2. Measure Warming Pop (<100ms), Deep Thought Quip (<1.5s), TTFT, and crosstalk lift across all cycles against live RTX 2080 Ti (`:8088`), Foyer (`:8765`), and M5 Air (`:8000`).
   3. Enforce immediate fail-fast exit on any dropped response, VRAM eviction, or latency timeout.
 * **Success Criteria:** 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions.
+* **Certification Telemetry:** 5/5 Cycles Passed (0m: 30.41s, 5m: 16.66s, 10m: 15.68s, 20m: 12.15s, 40m: 16.71s; avg dead air with crosstalk: 16.27s).
 
 ---
 
