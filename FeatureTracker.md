@@ -3441,3 +3441,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Establishes a 2-tier scoping boundary for cognitive DNA: document-scoped DNA (`DOC-<paper>-<idx>`) is quarantined inside `PAPER-<paper_id>_spine.json` during drafting, preventing local noise from polluting global vector memory. When an empirical lesson or insight demonstrates broad cross-domain applicability ($\ge 0.85$ utility per `BKM-060`), the graduation gate promotes the record into permanent global lab DNA (`WIS-xxx` or `INS-xxx`) and syncs it to ChromaDB `:8001`.
 **Rationale:** Balances rich local draft annotations with high-precision global semantic retrieval.
 **Mechanism:** `promote_dna.py` CLI and `SpineManager.promote_dna_record()`.
+
+## [FEAT-629] Phase-Isolated Decoupled Nightly Architecture & Cascade Elimination
+**Sprint:** SPR-95.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/infra/nightly_forge.py`, `HomeLabAI/src/infra/nightly_lora_training.py`, `HomeLabAI/src/forge/build_lora_datasets.py`
+**Logic:** Decouples all nightly maintenance, training, and synthesis phases into isolated execution cells. A failure or partial completion in LoRA adapter fine-tuning (or VRAM quiesce) logs a warning and evaluates degraded accountability, but NEVER cascades to abort independent downstream tasks (Subconscious Dreaming, Automated Wisdom Refinement, Sprint DNA Sync, Dynamic Federated Benchmarks, Morning Round Table Probe, or Historical Journal Bridge / Mass Scan). Restores Foyer state to OPERATIONAL in a guaranteed `finally` block before initiating post-training synthesis.
+**Rationale:** Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.
+**Mechanism:** `nightly_forge.py` (phase-isolated `try/except` execution flow), `daily_accountability_digest.json`, `nightly_dialogue.json`.
+
