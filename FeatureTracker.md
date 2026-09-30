@@ -3450,16 +3450,16 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.
 **Mechanism:** `nightly_forge.py` (phase-isolated `try/except` execution flow), `daily_accountability_digest.json`, `nightly_dialogue.json`.
 
-## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge & Flywheel Cache
+## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge & Pinky Flywheel Cache
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/config/hooks/icm_hook.py`, `Portfolio_Dev/dna/rdna_questions.json`
-**Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade:
-1. **Tier 1 (Fast-Path <10ms):** Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB `:8001` (confidence $\ge 0.75$, distance $\le 0.45$) to immediately bridge to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets with zero LLM generation latency.
-2. **Tier 2 (Synthetic Fallback ~1.5s):** If RDNA misses or falls below confidence floor, falls back cleanly to `[FEAT-437]` live synthetic HyDE generation.
-3. **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persists newly synthesized HyDE question-anchor pairs back into `Portfolio_Dev/dna/rdna_questions.json` and syncs to ChromaDB `:8001`, permanently expanding the zero-latency exemplar bank.
-**Rationale:** Unlocks high-precision semantic expansion for sparse or ambiguous subagent prompts without runtime generation latency or hallucination risk, while creating a self-improving memory flywheel.
-**Mechanism:** `resolve_rdna_hyde_exemplar()` and `select_vector_query()` in `HomeLabAI/src/nodes/archive_node.py`.
+**Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`
+**Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade and Pinky Voice Integration:
+1. **Tier 1 (Zero-Latency Fast-Path <10ms):** Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB `:8001` (confidence $\ge 0.75$, distance $\le 0.45$) to immediately bridge to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets with zero LLM generation latency.
+2. **Tier 2 (Pinky Analytical First Turn ~1.5s):** If RDNA misses or query is novel, Pinky (holding fine-tuned `cli_voice_v1` LoRA weights per `[FEAT-554]`) generates the **first legitimate human-facing analytical response / quip**. This spoken turn simultaneously serves as the authoritative HyDE vector for deep Archive citation retrieval.
+3. **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persists the novel (query ↔ Pinky HyDE anchor) pair back into `Portfolio_Dev/dna/rdna_questions.json` and syncs to ChromaDB `:8001`, permanently expanding the zero-latency exemplar bank so subsequent related queries hit Tier 1 in <10ms.
+**Rationale:** Restores true division of labor: eliminates artificial background pre-triage delays while turning Pinky's visible conversational dialogue into a self-improving semantic retrieval flywheel.
+**Mechanism:** `resolve_rdna_hyde_exemplar()` and `select_vector_query()` in `HomeLabAI/src/nodes/archive_node.py`, and `_HYDE_SYNTHESIS_PROMPT` in `HomeLabAI/src/logic/cognitive_hub.py`.
 
 ## [FEAT-631] Ambient Hook Recalibration & Bucketed Quota Routing
 **Sprint:** SPR-95.0 / SPR-95.2
