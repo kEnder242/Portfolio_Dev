@@ -20,8 +20,8 @@ LAB_ROOT = REPO_ROOT.parent
 
 FEATURE_TRACKER_MD = REPO_ROOT / "FeatureTracker.md"
 PROTOCOLS_MD = LAB_ROOT / "HomeLabAI" / "docs" / "Protocols.md"
-WISDOM_PATH = BASE_DIR / "data" / "wisdom_data.json"
-PHILOSOPHY_PATH = BASE_DIR / "data" / "philosophy_data.json"
+WISDOM_PATH = REPO_ROOT / "dna" / "wisdom_data.json" if (REPO_ROOT / "dna" / "wisdom_data.json").exists() else BASE_DIR / "data" / "wisdom_data.json"
+PHILOSOPHY_PATH = REPO_ROOT / "dna" / "inspiration_data.json" if (REPO_ROOT / "dna" / "inspiration_data.json").exists() else (REPO_ROOT / "dna" / "philosophy_data.json" if (REPO_ROOT / "dna" / "philosophy_data.json").exists() else BASE_DIR / "data" / "philosophy_data.json")
 TIMELINE_PATH = BASE_DIR / "data" / "timeline_data.json"
 MANIFEST_PATH = BASE_DIR / "data" / "dna_manifest.json"
 SPRINTS_DIR = REPO_ROOT / "docs" / "sprints"
