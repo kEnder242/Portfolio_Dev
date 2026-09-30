@@ -234,3 +234,62 @@ Portfolio_Dev/field_notes/data/papers/
   3. Verify live daemon synchronization (`POST http://127.0.0.1:8765/reload_residents`).
 * **Success Criteria:** 100% unit and integration test pass rate, Oracle report saved, and git checkpoint committed.
 
+---
+
+## 🚀 Follow-Up Phase: SPR-95.1 — Live LLM Powerhouse Remediation & Swarm Delegation Reconciliation
+
+### Context & Root Cause Analysis
+During Sprint 95 execution, an audit revealed that unit tests passed in 2.4s because subagents implemented deterministic regex/mock fallbacks rather than wiring live LLM inference turns (`BKM-024` violation). Furthermore, fix-retry loops had drifted `delegate.py` and `oh-my-openagent.json` away from the Sprint 88 decoupled design (`b6654d3` / `1fa7fc7` / `939413d`), hardcoding `big-pickle` and conflating `sisyphus` (cloud engineer) with `sisyphus-junior` (local leaf worker).
+
+### Swarm Delegation Reconciliation Plan
+1. **Restore `oh-my-openagent.json`:**
+   - Repoint `sisyphus` to Cloud Meta-Router (`openrouter/free` -> `cohere/command-a-plus-05-2026` -> `opencode/big-pickle`).
+   - Retain `sisyphus-junior` as Local M5 Air leaf worker (`TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) with strict `task: deny`.
+   - Retain `atlas` as Local Conductor on KENDER 4090 (`Qwen3.8-27B`).
+2. **Decouple `delegate.py`:**
+   - Remove inline hardcoded model dictionaries (`current_model = {"providerID": "opencode", "modelID": "big-pickle"}`).
+   - Re-enable dynamic model resolution from `HomeLabAI/config/infrastructure.json` (`fast_worker`, `champion_coder`, `local_bicameral`).
+   - Retain all valuable recent enhancements: BKM-049 reflection extraction into ICM, FEAT-600 resident ambient recall, live swarm telemetry inspector, and directory protection.
+3. **Update Playbook Log:**
+   - Register the Sprint 95 delegation calibration fix in `Portfolio_Dev/docs/playbooks/OPENAGENT_HANDOVER_PLAYBOOK.md` §7.
+
+### SPR-95.1 Story Cards
+
+#### Story 95.10: Live LLM Engine Integration for RevisionBlender & CoverLetter
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/projection/recommender.py`, `HomeLabAI/src/projection/cover_letter.py`
+* **JITC Anchors:** `[FEAT-627]`, `[FEAT-618]`, `[BKM-024]`, `[BKM-015]`
+* **Scope:**
+  1. Implement live completion calls to central vLLM (`http://127.0.0.1:8088/v1/chat/completions`) and M5 Air (`http://192.168.1.46:8000/v1/chat/completions`).
+  2. Synthesize blended revision candidates from $v_a$, $v_b$, and human instruction, followed by post-generation CP-1 / CP-5 validation.
+  3. Synthesize grounded cover letters from AST bones and job descriptions.
+  4. Raise explicit `ConnectionError` / `SiliconUnreachableError` if engines are offline (no silent fake mocks).
+* **Success Criteria:** Real LLM tokens generated and validated against CP-1 / CP-5 invariants.
+
+#### Story 95.11: Live LLM Semantic Persona Extraction in Job Ingest
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/ops/job_ingest.py`
+* **JITC Anchors:** `[FEAT-622]`, `[BKM-024]`, `[BKM-070]`
+* **Scope:**
+  1. Replace heuristic regex extraction of Tier-1 semantic persona (hiring manager tenets, impact focus) with live structured LLM extraction.
+  2. Preserve heuristic token extraction for Tier-0 strict keywords (hybrid powerhouse design).
+* **Success Criteria:** Verified live LLM extraction of rubric semantics.
+
+#### Story 95.12: Live LLM Tier-1 Semantic Rubric Judge in Lens Service
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Target:** `HomeLabAI/src/curator/lens_service.py`
+* **JITC Anchors:** `[FEAT-585]`, `[FEAT-627]`, `[BKM-024]`, `[BKM-015]`
+* **Scope:**
+  1. Replace deterministic length/count scoring in Tier-1 evaluation with live LLM semantic judging against target rubric criteria.
+  2. Keep Tier-0 arithmetic tokens deterministic for sub-millisecond fast filtering.
+* **Success Criteria:** Live LLM semantic score (0.0–1.0) and rationale generated per node.
+
+#### Story 95.13: Negative & Live Testing Certification (BKM-024 Mandate)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target:** `HomeLabAI/tests/test_live_llm_powerhouse.py`, `HomeLabAI/tests/test_spine_integration.py`
+* **JITC Anchors:** `[BKM-024]`, `[BKM-044]`, `[BKM-049]`
+* **Scope:**
+  1. **Negative Test:** Execute tests with lab disabled/stopped; assert immediate test failure (`ConnectionError` / `SiliconUnreachableError`). Any passing test is flagged as a BKM-024 violation.
+  2. **Live Test Round:** Run comprehensive integration suite against live RTX 2080 Ti (`:8088`) and M5 Air (`:8000`); certify VRAM allocation and generation throughput.
+* **Success Criteria:** Negative test fails cleanly on offline engines; live test passes 100% against active silicon.
+
