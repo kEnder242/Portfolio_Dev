@@ -110,6 +110,7 @@ Portfolio_Dev/field_notes/data/papers/
 | **Story 95.15** | Ambient Hook Recalibration & Fail-Loud Telemetry Sentinel | `[AGY:PRIMARY]` | *None* | `HomeLabAI/config/hooks/icm_hook.py` | Verified sub-100ms multi-domain semantic recall with visible warnings on >150ms |
 | **Story 95.16** | Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles | `[SWARM:LOCAL]` | Story 95.14 | `delegate.py --story 9516 --local` | Lean anchor dispatch reduces prompt bloat by >60%; contextual profiles verified |
 | **Story 95.17** | Cloud Oracle Spike — Triage Finding & Post-Triage Scope Focuser | `[SWARM:CLOUD]` | Stories 95.14–95.16 | `delegate.py --story 9517 --oracle` | Adversarial audit of triage finding in `wisdom_dna` & post-triage context pruning |
+| **Story 95.18** | Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024) | `[AGY:PRIMARY]` | Stories 95.0–95.17 | `test_perf_5x5_timed.py --intervals 5 10 15 20 25` | 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions |
 
 ---
 
@@ -361,5 +362,16 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
   2. Evaluate and benchmark post-triage context filtering algorithms to prune irrelevant telemetry and focus the context window before delegating down to worker or editorial subagents.
   3. Align triage and HyDE vector water levels at Tier 1 & 2 while verifying decoupling of diagnostic telemetry from generative editorial pipelines.
 * **Success Criteria:** Oracle report with benchmarked pruning algorithms and certified triage recall precision.
+
+#### Story 95.18: Staged 5x5 Physical Bedrock Certification (BKM-010 / BKM-024)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Target:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`
+* **JITC Anchors:** `[BKM-010]`, `[BKM-024]`, `[FEAT-521]`, `[FEAT-501]`
+* **Scope:**
+  1. Execute definitive 75-minute staged quiescence gauntlet (`0m -> 5m -> 10m -> 20m -> 40m`) or custom interval suite (`--intervals 5 10 15 20 25`) via Playwright browser integration.
+  2. Measure Warming Pop (<100ms), Deep Thought Quip (<1.5s), TTFT, and crosstalk lift across all cycles against live RTX 2080 Ti (`:8088`), Foyer (`:8765`), and M5 Air (`:8000`).
+  3. Enforce immediate fail-fast exit on any dropped response, VRAM eviction, or latency timeout.
+* **Success Criteria:** 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions.
+
 
 
