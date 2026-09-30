@@ -503,5 +503,134 @@
       "CRITIQUE: { \"score\": 1, \"reasoning\": \"The user wants to discuss the implications of the research link on Intel's appstore issues on our system design stance.\""
     ],
     "consensus_1liner": "{ \"score\": 1, \"reasoning\": \"The user wants to discuss the implications of the research link on Intel's appstore issues on our system design stance.\""
+  },
+  {
+    "turn": 1,
+    "timestamp": 1790720569,
+    "time_str": "15:22:49",
+    "topic": "LAB_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 1.826,
+      "pinky_stance": 1.829,
+      "brain_arch": 1.833,
+      "oracle": 1.85,
+      "pinky_judgment": 1.851
+    },
+    "deltas_elapsed_s": {
+      "triage": 1.826,
+      "pinky_stance": 0.003,
+      "brain_arch": 0.004,
+      "oracle": 0.017,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 1.826,
+      "pinky_stance": 1.829,
+      "brain_arch": 1.833,
+      "oracle": 1.85,
+      "pinky_judgment": 1.851
+    },
+    "deltas": {
+      "triage": 1.826,
+      "pinky_stance": 0.003,
+      "brain_arch": 0.004,
+      "oracle": 0.017,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 1.851,
+    "total_s": 1.851,
+    "distillation_bullets": [
+      "CRITIQUE: Test token"
+    ],
+    "consensus_1liner": "Test token"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1790720724,
+    "time_str": "15:25:24",
+    "topic": "LAB_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 0.601,
+      "pinky_stance": 0.604,
+      "brain_arch": 0.605,
+      "oracle": 0.616,
+      "pinky_judgment": 0.616
+    },
+    "deltas_elapsed_s": {
+      "triage": 0.601,
+      "pinky_stance": 0.003,
+      "brain_arch": 0.001,
+      "oracle": 0.011,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 0.601,
+      "pinky_stance": 0.604,
+      "brain_arch": 0.605,
+      "oracle": 0.616,
+      "pinky_judgment": 0.616
+    },
+    "deltas": {
+      "triage": 0.601,
+      "pinky_stance": 0.003,
+      "brain_arch": 0.001,
+      "oracle": 0.011,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 0.616,
+    "total_s": 0.616,
+    "distillation_bullets": [
+      "CRITIQUE: Test token"
+    ],
+    "consensus_1liner": "Test token"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1790728014,
+    "time_str": "17:26:54",
+    "topic": "LAB_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 0.791,
+      "pinky_stance": 0.793,
+      "brain_arch": 0.795,
+      "oracle": 0.818,
+      "pinky_judgment": 0.818
+    },
+    "deltas_elapsed_s": {
+      "triage": 0.791,
+      "pinky_stance": 0.002,
+      "brain_arch": 0.002,
+      "oracle": 0.023,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 0.791,
+      "pinky_stance": 0.793,
+      "brain_arch": 0.795,
+      "oracle": 0.818,
+      "pinky_judgment": 0.818
+    },
+    "deltas": {
+      "triage": 0.791,
+      "pinky_stance": 0.002,
+      "brain_arch": 0.002,
+      "oracle": 0.023,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 0.818,
+    "total_s": 0.818,
+    "distillation_bullets": [
+      "CRITIQUE: Test token"
+    ],
+    "consensus_1liner": "Test token"
   }
 ]
