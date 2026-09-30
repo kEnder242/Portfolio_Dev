@@ -3465,8 +3465,10 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
 **Code:** `HomeLabAI/config/hooks/icm_hook.py`
-**Logic:** Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements dedicated collection quotas and Dynamic Distance Banding across all Tier 1–3 DNA domains (`behavioral_dna`, `feature_dna`, `wisdom_dna`, `sprint_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`), ensuring large vector collections never drown out high-salience philosophical or operational anchors.
-**Rationale:** The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) provide vastly richer multi-domain context without human-perceptible delay.
+**Logic:** Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements a Two-Pass Universal Quota Routing strategy:
+1. **Pass 1 (Universal First Spot):** Guarantees that every peer DNA domain (`feature_dna`, `behavioral_dna`, `wisdom_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`, and `loop_dna`/`vibe_dna`) is evaluated with a guaranteed top-1 slot under strict distance banding ($\le 0.52$, or $\le 0.58$ for QQ), eliminating keyword-conditional gating and preventing dense collections from crowding out philosophical, behavioral, or research anchors.
+2. **Pass 2 (Capacity Ceiling Fill):** Expands dense operational collections (`feature_dna` and `behavioral_dna` / `BKM`) up to a maximum capacity ceiling of 3 slots each to fill remaining prompt budget.
+**Rationale:** The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) with universal domain representation provide vastly richer multi-domain context without human-perceptible delay.
 **Mechanism:** `probe_claradb()` in `HomeLabAI/config/hooks/icm_hook.py`.
 
 ## [LAB-112] Fail-Loud Hook Latency & Degradation Telemetry Sentinel
