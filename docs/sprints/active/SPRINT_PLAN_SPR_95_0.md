@@ -420,5 +420,21 @@ Sprint 95 established the Document Spine topology and decoupled nightly forge, b
   3. Enforce immediate fail-fast exit on any dropped response, VRAM eviction, or latency timeout.
 * **Success Criteria:** 100% completion across all staged wait intervals with zero dropped cycles or VRAM regressions.
 
+---
+
+## 📋 Backlog & Improvement Sessions (SPR-96.0 Candidate Pool)
+
+### Backlog Item 1: `[FEAT-632]` Loop DNA Domain & ChromaDB Ingestion
+* **Theme:** Elevate `LOOP_LEDGER.md` (`[LOOP-xxx]`) into a first-class peer DNA domain under `BKM-060` with a dedicated ChromaDB collection (`loop_dna`).
+* **JITC Anchors:** `[BKM-060]`, `[BKM-069]`, `[FEAT-632]`, `[LOOP-001]`, `[LOOP-002]`, `[LOOP-003]`
+
+### Backlog Item 2: `[FEAT-633]` Flywheel Deepening — Pinky Coherence Judge & Human Upvote Promotion
+* **Theme:** Connect Pinky's Coherence Critic judge score (`[FEAT-406]`, `[FEAT-470]`) and the Intercom UI Human Upvote trigger (`[FEAT-582]`) directly into the RDNA Flywheel caching gate.
+* **JITC Anchors:** `[FEAT-630]`, `[FEAT-633]`, `[FEAT-406]`, `[FEAT-582]`
+
+### Backlog Item 3: `[FEAT-634]` Human Downvote Signal & Negative Memory Foil Shortcut
+* **Theme:** Streamlined human downvote trigger (`👎` / `DOWNVOTE`) across Intercom UI and CLI Co-Pilot flows (`[BKM-010]`) that immediately purges candidate synthetic exemplars, registers negative foils in `blackboard_ledger.json`, and cues Pinky Critic for rapid post-mortem feedback.
+* **JITC Anchors:** `[BKM-010]`, `[FEAT-634]`, `[FEAT-470]`
+
 
 
