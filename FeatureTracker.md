@@ -3450,13 +3450,16 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.
 **Mechanism:** `nightly_forge.py` (phase-isolated `try/except` execution flow), `daily_accountability_digest.json`, `nightly_dialogue.json`.
 
-## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge
+## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge & Flywheel Cache
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
 **Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/config/hooks/icm_hook.py`, `Portfolio_Dev/dna/rdna_questions.json`
-**Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE). Rather than paying 500-1500ms LLM generation penalties, subagent and operator natural language queries are matched against pre-computed RDNA `question_variants` and `intent_categories` to immediately bridge abstract semantic queries to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets.
-**Rationale:** Unlocks high-precision vector search for sparse or ambiguous subagent prompts without runtime generation latency or hallucination risk.
-**Mechanism:** Reverse-HyDE lookup in `probe_claradb()` and CLaRa MCP `:8001`.
+**Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade:
+1. **Tier 1 (Fast-Path <10ms):** Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB `:8001` (confidence $\ge 0.75$, distance $\le 0.45$) to immediately bridge to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets with zero LLM generation latency.
+2. **Tier 2 (Synthetic Fallback ~1.5s):** If RDNA misses or falls below confidence floor, falls back cleanly to `[FEAT-437]` live synthetic HyDE generation.
+3. **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persists newly synthesized HyDE question-anchor pairs back into `Portfolio_Dev/dna/rdna_questions.json` and syncs to ChromaDB `:8001`, permanently expanding the zero-latency exemplar bank.
+**Rationale:** Unlocks high-precision semantic expansion for sparse or ambiguous subagent prompts without runtime generation latency or hallucination risk, while creating a self-improving memory flywheel.
+**Mechanism:** `resolve_rdna_hyde_exemplar()` and `select_vector_query()` in `HomeLabAI/src/nodes/archive_node.py`.
 
 ## [FEAT-631] Ambient Hook Recalibration & Bucketed Quota Routing
 **Sprint:** SPR-95.0 / SPR-95.2
