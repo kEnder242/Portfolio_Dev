@@ -34,7 +34,7 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
 | **Primary Local Conductor & Verifier (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) for 128k context architecture and verification | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
 | **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) for 128k context bounded surgical patching & greenfield | Subagent target for surgical edits (`sisyphus-junior`, `hephaestus`) |
-| **Cloud Fallback Tier** | OpenCode (`opencode/big-pickle`) $\rightarrow$ DeepSeek (`openrouter/deepseek/deepseek-chat`) | Automatic runtime fallback (Zero Google, Zero Cohere, No Free Router) |
+| **Cloud Fallback Tier** | OpenCode (`opencode/big-pickle`) $\rightarrow$ OpenRouter Free (`openrouter/openrouter/free`) | Automatic runtime fallback (Zero Google, Zero Cohere) |
 
 ---
 
