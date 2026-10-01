@@ -23,10 +23,10 @@
             <div class="wisdom-header">
                 <div>
                     <h2 class="section-title">🧬 DNA Forge: Knowledge Foundry</h2>
-                    <p class="section-subtitle">Sovereign 3-Tab Architecture: Drafting Workbench, Synapse Knowledge Graph, and Census Review.</p>
+                    <p class="section-subtitle">Sovereign 4-Tab Architecture: Drafting Workbench, Synapse Knowledge Graph, Census Review, and Split-Diff Recommendations.</p>
                 </div>
 
-                <!-- Top 3-Tab Switcher Bar -->
+                <!-- Top 4-Tab Switcher Bar -->
                 <div class="forge-tabs-bar">
                     <button class="forge-tab-btn" data-tab="draft" id="tabBtnDraft">
                         <span>📝 Drafting &amp; Decompose</span>
@@ -36,6 +36,9 @@
                     </button>
                     <button class="forge-tab-btn active" data-tab="review" id="tabBtnReview">
                         <span>📇 Review &amp; Cards (<span id="tabReviewCount">__TOTAL_CENSUS__</span>)</span>
+                    </button>
+                    <button class="forge-tab-btn" data-tab="recommendations" id="tabBtnRecs">
+                        <span>⚖️ Recommendations <span id="rec-badge" class="badge" style="background: #238636; color: #fff; padding: 1px 6px; border-radius: 10px; font-size: 0.72rem; margin-left: 4px;">0</span></span>
                     </button>
                 </div>
             </div>
@@ -208,6 +211,33 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                 <!-- Cards Grid View -->
                 <div id="wisdom-container" class="wisdom-grid">
 __CARDS_HTML__
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 4: RECOMMENDATIONS & SPLIT-DIFF [FEAT-593 / FEAT-614] -->
+            <!-- ========================================================= -->
+            <div id="tab-recommendations-view" class="recommendations-container" style="display: none;">
+                <div class="recommendations-header">
+                    <div class="recommendations-title-group">
+                        <span class="recommendations-main-title">⚖️ In-Place Split-Diff Review Engine</span>
+                        <span class="recommendations-subtitle">Review proposed bedrock mutations, duplicate merges, and link suggestions side-by-side.</span>
+                    </div>
+                    <div class="split-diff-actions">
+                        <button id="btnAcceptDiff" class="studio-btn btn-accept">✅ Accept Diff</button>
+                        <button id="btnEditDiff" class="studio-btn btn-edit">✏️ Edit in Place</button>
+                        <button id="btnRejectDiff" class="studio-btn btn-reject">✖ Reject / Dismiss</button>
+                    </div>
+                </div>
+                <div class="split-diff-container">
+                    <div class="split-diff-pane original">
+                        <h4>Original Bedrock Text</h4>
+                        <pre id="diffOriginalText" contenteditable="false">// Select a recommendation to view original bedrock text...</pre>
+                    </div>
+                    <div class="split-diff-pane proposed">
+                        <h4>Proposed Mutation Diff</h4>
+                        <pre id="diffProposedText" contenteditable="true">// Proposed mutations and links will appear here for in-place editing...</pre>
+                    </div>
                 </div>
             </div>
         </section>

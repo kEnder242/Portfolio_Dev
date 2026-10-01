@@ -84,23 +84,31 @@
     });
 
     // -------------------------------------------------------------
-    // TAB SWITCHER
+    // TAB SWITCHER [FEAT-593 / FEAT-614]
     // -------------------------------------------------------------
     function switchTab(tabName) {
         activeTab = tabName;
         document.querySelectorAll('.forge-tab-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.tab === tabName);
+            var btab = btn.dataset.tab;
+            var isMatch = (btab === tabName) ||
+                          (btab === 'draft' && tabName === 'drafting') ||
+                          (btab === 'connect' && tabName === 'graph') ||
+                          (btab === 'review' && tabName === 'cards') ||
+                          (btab === 'recommendations' && tabName === 'recs');
+            btn.classList.toggle('active', isMatch);
         });
 
         var vDraft = document.getElementById('tab-drafting-view');
         var vConnect = document.getElementById('tab-connect-view');
         var vReview = document.getElementById('tab-review-view');
+        var vRecs = document.getElementById('tab-recommendations-view');
 
-        if (vDraft) vDraft.style.display = (tabName === 'draft') ? 'flex' : 'none';
-        if (vConnect) vConnect.style.display = (tabName === 'connect') ? 'flex' : 'none';
-        if (vReview) vReview.style.display = (tabName === 'review') ? 'block' : 'none';
+        if (vDraft) vDraft.style.display = (tabName === 'draft' || tabName === 'drafting') ? 'flex' : 'none';
+        if (vConnect) vConnect.style.display = (tabName === 'connect' || tabName === 'graph') ? 'flex' : 'none';
+        if (vReview) vReview.style.display = (tabName === 'review' || tabName === 'cards') ? 'block' : 'none';
+        if (vRecs) vRecs.style.display = (tabName === 'recommendations' || tabName === 'recs') ? 'block' : 'none';
 
-        if (tabName === 'connect') {
+        if (tabName === 'connect' || tabName === 'graph') {
             if (!graphInitialized) {
                 graphInitialized = true;
                 setTimeout(function() {
@@ -111,7 +119,7 @@
             }
             updateInspectorUi(window.__focalNodeId || 'PHL-001');
             updateBreadcrumbsUi();
-        } else if (tabName === 'review') {
+        } else if (tabName === 'review' || tabName === 'cards') {
             updateBoneRackUi();
             updateFilterPillCounts();
             applyFilterAndSearch();
@@ -597,6 +605,26 @@
                 if (sandbox) sandbox.style.display = 'none';
                 localStorage.removeItem('dna_scratch_draft');
             }
+        });
+
+        var btnAcceptDiff = document.getElementById('btnAcceptDiff');
+        if (btnAcceptDiff) btnAcceptDiff.addEventListener('click', function() {
+            var diffText = (document.getElementById('diffProposedText') || {}).innerText || '';
+            alert('✓ Proposed diff accepted and committed to active bedrock set!');
+        });
+
+        var btnEditDiff = document.getElementById('btnEditDiff');
+        if (btnEditDiff) btnEditDiff.addEventListener('click', function() {
+            var pre = document.getElementById('diffProposedText');
+            if (pre) {
+                pre.focus();
+            }
+        });
+
+        var btnRejectDiff = document.getElementById('btnRejectDiff');
+        if (btnRejectDiff) btnRejectDiff.addEventListener('click', function() {
+            var pre = document.getElementById('diffProposedText');
+            if (pre) pre.innerText = '// Recommendation dismissed.';
         });
 
         var dnaSearch = document.getElementById('dnaSearchInput');

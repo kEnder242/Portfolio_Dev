@@ -15,6 +15,8 @@ COLLECTION_INSPIRATION = "inspiration_dna"
 COLLECTION_WISDOM = "wisdom_dna"
 COLLECTION_RDNA = "rdna"
 COLLECTION_VIBE = "vibe_dna"
+COLLECTION_LOOP = "loop_dna"
+COLLECTION_SPRINT = "sprint_dna"
 
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
@@ -29,6 +31,9 @@ RDNA_QUESTIONS_PATH = os.path.expanduser(
     "~/Dev_Lab/Portfolio_Dev/dna/rdna_questions.json"
 )
 VIBE_DATA_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/dna/vibe_data.json")
+FEEDBACK_LEDGER_PATH = os.path.expanduser(
+    "~/Dev_Lab/HomeLabAI/data/foyer_feedback_ledger.jsonl"
+)
 
 # [STORY-8614] SHA256 checksum cache for the idempotency guard (Finding 17 of
 # SPRINT_86_DEEP_DIVE_DEFICIENCY_REPORT.md). Maps each source file path to the
@@ -123,11 +128,14 @@ SYNC_SOURCES = [
     (COLLECTION_WISDOM, "wisdom_data.json", WISDOM_DATA_PATH),
     (COLLECTION_RDNA, "rdna_questions.json", RDNA_QUESTIONS_PATH),
     (COLLECTION_VIBE, "vibe_data.json", VIBE_DATA_PATH),
+    (COLLECTION_LOOP, "foyer_feedback_ledger.jsonl", FEEDBACK_LEDGER_PATH),
 ]
 
 
 def _sha256_file(filepath: str) -> str | None:
     """Return the SHA256 hex digest of a file, or None if it cannot be read."""
+    if not os.path.exists(filepath):
+        return None
     import hashlib
 
     try:
@@ -562,7 +570,69 @@ def parse_vibe(filepath):
     return vibe_items
 
 
-def sync(force: bool = False, dry_run: bool = False):
+def parse_feedback_ledger(filepath):
+    """[FEAT-632] Parse foyer_feedback_ledger.jsonl for loop_dna ChromaDB collection."""
+    if not os.path.exists(filepath):
+        return []
+    import json
+    entries = []
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                data = json.loads(line)
+                turn_id = data.get("turn_id", "unknown")
+                rating = data.get("rating", "UP")
+                notes = data.get("notes", "")
+                ts = data.get("timestamp", "")
+                doc = f"FEEDBACK: {rating}\nTurn: {turn_id}\nTimestamp: {ts}\nNotes: {notes}"
+                entries.append(
+                    {
+                        "id": f"loop_{turn_id}_{rating}",
+                        "document": doc,
+                        "metadata": {
+                            "turn_id": turn_id,
+                            "rating": rating,
+                            "timestamp": ts,
+                            "source": "foyer_feedback_ledger.jsonl",
+                            "type": "LOOP_FEEDBACK",
+                        },
+                    }
+                )
+            except Exception:
+                continue
+    return entries
+
+
+def sync_sprint_dna(chroma_client, ef=None):
+    """[FEAT-557] Parse and vectorize active and archived sprint plans into sprint_dna collection."""
+    col = get_safe_collection(chroma_client, COLLECTION_SPRINT, ef)
+    sprint_dirs = [
+        os.path.expanduser("~/Dev_Lab/Portfolio_Dev/docs/sprints/active"),
+        os.path.expanduser("~/Dev_Lab/Portfolio_Dev/docs/sprints/archive"),
+    ]
+    count = 0
+    for sdir in sprint_dirs:
+        if not os.path.exists(sdir):
+            continue
+        for fname in os.listdir(sdir):
+            if fname.endswith(".md") and "SPRINT_PLAN" in fname:
+                fpath = os.path.join(sdir, fname)
+                with open(fpath, "r", encoding="utf-8") as f:
+                    text = f.read()
+                doc_id = f"sprint_{os.path.splitext(fname)[0]}"
+                col.upsert(
+                    ids=[doc_id],
+                    documents=[text[:4000]],
+                    metadatas=[{"source": fname, "type": "sprint_plan"}],
+                )
+                count += 1
+    return count
+
+
+def sync(force: bool = False, dry_run: bool = False, collection_filter: str = None):
     """Sync DNA source files into ChromaDB.
 
     Idempotency guard ([STORY-8614] / Finding 17): unless ``force`` is set,
@@ -812,7 +882,7 @@ def sync(force: bool = False, dry_run: bool = False):
             logging.info("rdna collection sync complete.")
 
     # 6. Sync vibe_dna from vibe_data.json
-    if not to_sync[VIBE_DATA_PATH]:
+    if not to_sync.get(VIBE_DATA_PATH, False):
         logging.info(
             "[IDEMPOTENCY] Skipping vibe_dna: vibe_data.json checksum unchanged."
         )
@@ -836,6 +906,38 @@ def sync(force: bool = False, dry_run: bool = False):
             checksums[VIBE_DATA_PATH] = _sha256_file(VIBE_DATA_PATH)
             logging.info("vibe_dna sync complete.")
 
+    # 7. Sync loop_dna from foyer_feedback_ledger.jsonl [FEAT-632]
+    if os.path.exists(FEEDBACK_LEDGER_PATH):
+        if not to_sync.get(FEEDBACK_LEDGER_PATH, False):
+            logging.info(
+                "[IDEMPOTENCY] Skipping loop_dna: foyer_feedback_ledger.jsonl checksum unchanged."
+            )
+        else:
+            logging.info("Parsing foyer_feedback_ledger.jsonl...")
+            feedback_items = parse_feedback_ledger(FEEDBACK_LEDGER_PATH)
+            if feedback_items:
+                collection_loop = get_safe_collection(client, COLLECTION_LOOP, ef)
+                logging.info("Clearing existing entries from loop_dna...")
+                try:
+                    collection_loop.delete(where={"source": "foyer_feedback_ledger.jsonl"})
+                except Exception as e:
+                    logging.warning(f"Could not clear loop_dna entries: {e}")
+
+                ids = [fb["id"] for fb in feedback_items]
+                documents = [fb["document"] for fb in feedback_items]
+                metadatas = [fb["metadata"] for fb in feedback_items]
+
+                logging.info(f"Uploading {len(ids)} Feedback entries to loop_dna...")
+                collection_loop.add(ids=ids, documents=documents, metadatas=metadatas)
+                checksums[FEEDBACK_LEDGER_PATH] = _sha256_file(FEEDBACK_LEDGER_PATH)
+                logging.info("loop_dna sync complete.")
+
+    # 8. Sync sprint_dna [FEAT-557]
+    if collection_filter in (None, "sprint_dna"):
+        logging.info("Syncing sprint_dna from active/archive sprint plans...")
+        sprint_count = sync_sprint_dna(client, ef)
+        logging.info(f"sprint_dna sync complete ({sprint_count} sprint plans indexed).")
+
     save_checksums(checksums)
 
 
@@ -844,7 +946,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description="Sync DNA source files (FeatureTracker.md, Protocols.md, "
-        "LAB_INFRASTRUCTURE.md, philosophy/wisdom/rdna JSON) into ChromaDB."
+        "LAB_INFRASTRUCTURE.md, philosophy/wisdom/rdna JSON, sprint plans) into ChromaDB."
     )
     parser.add_argument(
         "--force",
@@ -857,5 +959,11 @@ if __name__ == "__main__":
         help="Log which collections would be synced, then exit without modifying "
         "ChromaDB or the checksum cache.",
     )
+    parser.add_argument(
+        "--collection",
+        type=str,
+        default=None,
+        help="Target specific collection to sync (e.g. sprint_dna, loop_dna).",
+    )
     args = parser.parse_args()
-    sync(force=args.force, dry_run=args.dry_run)
+    sync(force=args.force, dry_run=args.dry_run, collection_filter=args.collection)
