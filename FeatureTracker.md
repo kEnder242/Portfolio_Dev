@@ -3521,5 +3521,18 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 3. Signals Pinky Critic to generate a concise post-mortem diagnostic turn without manual operator prompt retyping.
 **Rationale:** Closes the human-in-the-loop corrective feedback loop rapidly and non-invasively during live co-pilot pairing.
 **Mechanism:** `POST /stream_ingest` with `downvote` intent payload and `archive_node.purge_candidate_exemplar()`.
+## [FEAT-635] Brain Information Gatekeeper & Curator Synergy Annotations
+**Sprint:** SPR-96.0 (Active)
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Transforms the local Brain node into an Information Gatekeeper. Brain evaluates candidate vectors collected by Pinky, drops ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage `💡 Curator Note: [ID] connects with [ID]` annotations. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.
+**Rationale:** Eliminates prompt pollution and hallucination cascades in Deep Thought by guaranteeing high-density, strictly grounded context injection.
+**Mechanism:** `BrainNode.curate_context()` and `CognitiveHub.build_deep_thought_context()`.
 
-
+## [FEAT-636] In-Flight Dynamic Retrieval Scope Override ("Direct Flight")
+**Sprint:** SPR-96.0 (Active)
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Grants the Brain node the authority to dynamically expand or override the retrieval scope in-flight (e.g. immediately fetching `blackboard_ledger_dna` when conversational continuity is detected) without bouncing back into an expensive 2-3s recursive re-triage loop.
+**Rationale:** Prevents conversational dead-ends and avoids unnecessary latency when Triage misclassifies a follow-up turn.
+**Mechanism:** `BrainNode.direct_flight_override()` in `HomeLabAI/src/nodes/brain_node.py`.
