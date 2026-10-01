@@ -68,20 +68,21 @@ flowchart TD
 ---
 
 ### 🧭 Story 96.2: Triage Decoupling & Target Domain Routing
-* **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** READY FOR DISPATCH
+* **Assigned Owner:** `[AGY:TAKEOVER]` (Tri-Loop Complete: Local Attempt 1-2 & Cloud Timeout)
+* **Status:** **COMPLETED & CERTIFIED**
 * **Root Cause & Architectural Flaw Discovered:**
   1. `vector_pre_triage.py` was unconditionally probing all 10 ChromaDB collections synchronously for *every* query *before* Triage even ran.
   2. Triage outputted only `vibe`, but never emitted or used `target_domains: List[str]` to constrain downstream retrieval. As a result, downstream nodes (Pinky/Brain) were either unconstrained or forced to consume arbitrary top-1 chunks that won an unconstrained 10-collection race.
-* **Task Breakdown:**
-  1. **Task 96.2.1:** Update Triage schema in `triage_engine.py` / `cognitive_hub.py` to output `target_domains: List[str]` (`["BKM"]`, `["FEAT"]`, `["WIS"]`, `["RESUME"]`, or `[]` for ZERO DNA) evaluated against collection scope descriptors.
-  2. **Task 96.2.2:** Update `vector_pre_triage.py` (`probe_clara_dna_sync`) to accept an optional `collections: List[str]` parameter. If `target_domains == []`, immediately return empty results (0ms bypass).
-  3. **Task 96.2.3:** Wire `target_domains` through `cognitive_hub.py` so Pinky and Brain queries are strictly bounded to the requested collections.
+* **Task Breakdown & Deliverables:**
+  1. **Task 96.2.1:** Updated Triage schema in `cognitive_hub.py` to output `target_domains: List[str]` (`["BKM"]`, `["FEAT"]`, `["WIS"]`, `["RESUME"]`, or `[]` for ZERO DNA) evaluated against collection scope descriptors.
+  2. **Task 96.2.2:** Updated `vector_pre_triage.py` (`probe_clara_dna_sync`) to accept `collections: Optional[List[str]]`. Immediate 0ms bypass for `collections=[]` returning `[ZERO_DNA]` semantic hint; filtered probes restrict vector search to requested collections.
+  3. **Task 96.2.3:** Wired `target_domains` into `CognitiveHub` routing (`self.current_target_domains`).
+  4. **Task 96.2.4:** Added unit tests in `test_vector_pre_triage.py` (`test_zero_dna_probe_bypass`, `test_filtered_collections_probe`). All 5/5 unit tests passed green.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/vector_pre_triage.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_vector_pre_triage.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_vector_pre_triage.py -v`
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_vector_pre_triage.py -v` (5/5 PASSED, 1.77s).
   * **Anchor 3 (Live Silicon Invariant):** Zero-DNA turns complete in $< 15\text{ms}$ with 0 ChromaDB lookups; domain-targeted turns restrict vector search strictly to listed collections.
-  * **Anchor 4 (DNA Links):** `[FEAT-540]`, `[FEAT-542]`, `[BKM-015]`, `[BKM-060]`.
+  * **Anchor 4 (DNA Links):** `[FEAT-540]`, `[FEAT-542]`, `[BKM-015]`, `[BKM-060]`. Commit: `87e185f`.
 
 ---
 
