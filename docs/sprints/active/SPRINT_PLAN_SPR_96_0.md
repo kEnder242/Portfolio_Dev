@@ -87,14 +87,18 @@ flowchart TD
 ---
 
 ### 🧠 Story 96.3: Brain Coherence Gate & Curator Synergy Annotations
-* **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** READY FOR DISPATCH
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Context & Mechanism:** Brain acts as an Information Gatekeeper. It evaluates candidates retrieved by Pinky, drops irrelevant items without showing negative clutter to Deep Thought, forwards approved bedrock text verbatim (no lossy rewrites), and appends high-leverage `💡 Curator Note: [ID] connects with [ID] on ...` annotations. Trims obsolete prior dialogue turns to eliminate conversational drag.
+* **Accomplished:**
+  1. Updated `BRAIN_SYSTEM_PROMPT` in `brain_node.py` with Directive #8 (`[FEAT-635] Information Gatekeeper & Curator Synergy`).
+  2. Updated `build_two_mice_stage_prompt` Stage 1 prompt builder in `cognitive_hub.py` with explicit Information Gatekeeper and Curator Note evaluation instructions.
+  3. Created `test_brain_gatekeeper.py` unit test suite (3/3 tests passing, verified alongside `test_two_mice_handover.py` 16/16 tests green).
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_brain_gatekeeper.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py -v`
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py HomeLabAI/src/tests/test_two_mice_handover.py -v` (16/16 PASSED, 0.59s).
   * **Anchor 3 (Live Silicon Invariant):** Deep Thought prompt context contains strictly approved candidate items + curator notes; zero dropped candidates present in prompt; full transcript retains dropped IDs for telemetry.
-  * **Anchor 4 (DNA Links):** `[FEAT-584]`, `[FEAT-586]`, `[FEAT-635]`, `[INS-036]`.
+  * **Anchor 4 (DNA Links):** `[FEAT-584]`, `[FEAT-586]`, `[FEAT-635]`, `[INS-036]`. Commit: `0d59142`.
 
 ---
 
