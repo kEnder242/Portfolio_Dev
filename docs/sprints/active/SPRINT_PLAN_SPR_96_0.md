@@ -6,6 +6,11 @@
 **Parent Framework:** `[BKM-064]` (Tracked Conversational Ledger), `[BKM-049]` (Owner Tag Mandate), `[BKM-060]` (Federated DNA Taxonomy), `[BKM-015]` (Semantic Intent Routing), `[BKM-020]` (Intent Preservation)  
 **Target Hardware Nodes:** z87-Linux (RTX 2080 Ti Local vLLM 3B Base), KENDER (RTX 4090 Deep Thought), ChromaDB Port 8001 (CLaRa-DNA)
 
+## 📝 Operator Directives & Mid-Flight Guidance
+- **BKM-049 Owner Tag Mandate**: Every sprint story MUST declare an Assigned Owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`).
+- **Strict Delegation Rule**: When a story is tagged `[SWARM:LOCAL]`, direct primary-agent code edits are strictly forbidden without prior failed execution attempts via `delegate.py --mode local` on Port 4097.
+- **Tri-Loop Diagnostic Protocol**: Follow the 3-attempt local diagnostic retry loop, cloud escalation if local fails, and mandatory `OPENAGENT_HANDOVER_PLAYBOOK.md` audit before any AGY fix-repair or takeover.
+
 ---
 
 ## 🧭 Executive Summary & Architectural Roadmap
@@ -107,10 +112,63 @@ flowchart TD
 * **Status:** READY FOR DISPATCH
 * **Context & Mechanism:** Register and implement **`[FEAT-636]`**. If Brain detects that Triage misclassified a turn (e.g., historical query when the user was referring to earlier conversational dialogue), Brain has the authority to directly override the retrieval scope in-flight and fetch `blackboard_ledger_dna` without triggering an expensive 2-3s recursive re-triage loop.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`.
+  * **Anchor 1 (Target Files & Line Anchors):**
+    - `HomeLabAI/src/nodes/brain_node.py` (after line 86, add `@mcp.tool() async def direct_flight_override(target_domains: list[str], query: str = "") -> str:`)
+    - `HomeLabAI/src/logic/cognitive_hub.py` (line 1464–1475: add `direct_flight_override(domains, query)` helper method to `CognitiveHub` that calls `probe_clara_dna_sync(query, collections=domains)`)
+    - `HomeLabAI/src/tests/test_direct_flight_override.py` (greenfield pytest suite)
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_direct_flight_override.py -v`
-  * **Anchor 3 (Live Silicon Invariant):** In-flight scope adjustments complete within the Brain node turn in $< 35\text{ms}$ without invoking re-triage.
-  * **Anchor 4 (DNA Links):** `[FEAT-636]`, `[FEAT-584]`, `[BKM-015]`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```python
+    # Injection in HomeLabAI/src/nodes/brain_node.py:
+    @mcp.tool()
+    async def direct_flight_override(target_domains: list[str], query: str = "") -> str:
+        """[FEAT-636] Direct Flight: In-flight dynamic retrieval scope override.
+        Allows Brain to immediately pull from specific Chroma collections (e.g. ['blackboard_ledger_dna'])
+        without triggering a recursive 2-3s re-triage loop.
+        """
+        try:
+            from logic.vector_pre_triage import probe_clara_dna_sync
+            res = probe_clara_dna_sync(query, collections=target_domains)
+            return json.dumps({
+                "status": "success",
+                "target_domains": target_domains,
+                "semantic_hint": res.get("semantic_hint", ""),
+                "best_doc": res.get("best_doc", ""),
+                "min_distance": res.get("min_distance", 1.0),
+            })
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})
+    ```
+    ```python
+    # Test suite in HomeLabAI/src/tests/test_direct_flight_override.py:
+    import pytest
+    import json
+    from unittest.mock import patch
+    from nodes.brain_node import direct_flight_override
+
+    @pytest.mark.asyncio
+    async def test_direct_flight_override_success():
+        mock_res = {
+            "semantic_hint": "[HINT: Blackboard]",
+            "best_doc": "Prior turn context",
+            "min_distance": 0.25,
+        }
+        with patch("logic.vector_pre_triage.probe_clara_dna_sync", return_value=mock_res):
+            raw = await direct_flight_override(target_domains=["blackboard_ledger_dna"], query="earlier discussion")
+            data = json.loads(raw)
+            assert data["status"] == "success"
+            assert data["target_domains"] == ["blackboard_ledger_dna"]
+            assert data["best_doc"] == "Prior turn context"
+
+    @pytest.mark.asyncio
+    async def test_direct_flight_override_error_handling():
+        with patch("logic.vector_pre_triage.probe_clara_dna_sync", side_effect=RuntimeError("Chroma down")):
+            raw = await direct_flight_override(target_domains=["behavioral_dna"], query="test")
+            data = json.loads(raw)
+            assert data["status"] == "error"
+            assert "Chroma down" in data["message"]
+    ```
+  * **Anchor 4 (Silicon Invariants & DNA Links):** In-flight scope adjustments complete within the Brain node turn in $< 35\text{ms}$ without invoking re-triage. `[FEAT-636]`, `[FEAT-584]`, `[BKM-015]`.
 
 ---
 
@@ -119,10 +177,32 @@ flowchart TD
 * **Status:** READY FOR DISPATCH
 * **Context & Mechanism:** Integrate frontend `👍 / 👎` rating buttons in the UI and wire to Foyer endpoint `POST /feedback`. Upvotes trigger Pinky coherence promotion into bedrock DNA (`FEAT-633`); downvotes generate negative foil shortcuts to suppress bad retrieval patterns (`FEAT-634`). Formalize `loop_dna` ChromaDB collection (`FEAT-632`).
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/dna_forge/js/dna_forge.js`, `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/FeatureTracker.md`.
-  * **Anchor 2 (Verification Command):** `curl -X POST http://127.0.0.1:8765/feedback -H "Content-Type: application/json" -d '{"turn_id": "test", "rating": "UP", "notes": "Grounded response"}'`
-  * **Anchor 3 (Live Silicon Invariant):** Feedback packet persists to `foyer_feedback_ledger.jsonl` and updates `loop_dna` collection on Port 8001.
-  * **Anchor 4 (DNA Links):** `[FEAT-632]`, `[FEAT-633]`, `[FEAT-634]`, `[LOOP-001]`, `[LOOP-002]`, `[LOOP-003]`.
+  * **Anchor 1 (Target Files & Line Anchors):**
+    - `HomeLabAI/src/v5/foyer/router.py` (lines 120–160: add `POST /feedback` endpoint handler appending to `foyer_feedback_ledger.jsonl`)
+    - `Portfolio_Dev/sync_chroma_dna.py` (lines 80–120: add `loop_dna` collection definition and sync logic)
+    - `Portfolio_Dev/FeatureTracker.md` (register `[FEAT-632]`, `[FEAT-633]`, `[FEAT-634]`)
+  * **Anchor 2 (Verification Command):** `curl -s -X POST http://127.0.0.1:8765/feedback -H "Content-Type: application/json" -d '{"turn_id": "test_96_5", "rating": "UP", "notes": "Grounded response"}' | grep -q "success"`
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```python
+    # Endpoint in HomeLabAI/src/v5/foyer/router.py:
+    @router.post("/feedback")
+    async def record_user_feedback(payload: dict):
+        turn_id = payload.get("turn_id", "unknown")
+        rating = payload.get("rating", "UP").upper()  # UP or DOWN
+        notes = payload.get("notes", "")
+        entry = {
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "turn_id": turn_id,
+            "rating": rating,
+            "notes": notes,
+        }
+        ledger_path = os.path.expanduser("~/Dev_Lab/HomeLabAI/data/foyer_feedback_ledger.jsonl")
+        os.makedirs(os.path.dirname(ledger_path), exist_ok=True)
+        with open(ledger_path, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+        return {"status": "success", "recorded": entry}
+    ```
+  * **Anchor 4 (Silicon Invariants & DNA Links):** Feedback packet persists to `foyer_feedback_ledger.jsonl` in $< 10\text{ms}$. `[FEAT-632]`, `[FEAT-633]`, `[FEAT-634]`, `[LOOP-001]`, `[LOOP-002]`, `[LOOP-003]`.
 
 ---
 
@@ -134,10 +214,29 @@ flowchart TD
   - Right Pane: Editable Proposed Mutation Diff (Polish, New Links, Dupes, Drift, Proposed `AR-xxx`).
   - Action Bar: `[Accept Diff]`, `[Edit in Place]`, `[Reject / Dismiss]`.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/dna_forge/templates/dna_forge.html`, `Portfolio_Dev/dna_forge/js/dna_forge.js`, `Portfolio_Dev/dna_forge/css/dna_forge.css`.
+  * **Anchor 1 (Target Files & Line Anchors):**
+    - `Portfolio_Dev/dna_forge/templates/dna_forge.html` (tab bar navigation: add `<button class="tab-btn" data-tab="recommendations">Recommendations</button>`)
+    - `Portfolio_Dev/dna_forge/js/dna_forge.js` (render split-diff pane and action bar handlers)
+    - `Portfolio_Dev/dna_forge/css/dna_forge.css` (split diff two-column grid layout styles)
   * **Anchor 2 (Verification Command):** `python3 Portfolio_Dev/dna_forge/dna_forge_build.py && test -f Portfolio_Dev/dna_forge/dna_forge.html`
-  * **Anchor 3 (Live Silicon Invariant):** 4 tabs switch with 0ms client-side latency; in-place diff edits persist to `decisions.json` and ChromaDB on commit.
-  * **Anchor 4 (DNA Links):** `[FEAT-593]`, `[FEAT-614]`, `[FEAT-582]`, `[FEAT-612]`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```html
+    <!-- Tab bar in Portfolio_Dev/dna_forge/templates/dna_forge.html -->
+    <div class="forge-tabs">
+      <button class="tab-btn active" data-tab="drafting">Drafting</button>
+      <button class="tab-btn" data-tab="graph">Graph</button>
+      <button class="tab-btn" data-tab="cards">Cards</button>
+      <button class="tab-btn" data-tab="recommendations">Recommendations <span id="rec-badge" class="badge">0</span></button>
+    </div>
+    ```
+    ```css
+    /* Split Diff Grid in Portfolio_Dev/dna_forge/css/dna_forge.css */
+    .split-diff-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: calc(100vh - 180px); }
+    .split-diff-pane { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 12px; overflow-y: auto; font-family: monospace; font-size: 13px; }
+    .split-diff-pane.original { border-left: 3px solid #8b949e; }
+    .split-diff-pane.proposed { border-left: 3px solid #238636; }
+    ```
+  * **Anchor 4 (Silicon Invariants & DNA Links):** 4 tabs switch with 0ms client-side latency; in-place diff edits persist to `decisions.json` and ChromaDB on commit. `[FEAT-593]`, `[FEAT-614]`, `[FEAT-582]`, `[FEAT-612]`.
 
 ---
 
@@ -146,10 +245,39 @@ flowchart TD
 * **Status:** READY FOR DISPATCH
 * **Context & Mechanism:** Implement [`[FEAT-557]`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) in `Portfolio_Dev/sync_chroma_dna.py` and `HomeLabAI/src/infra/nightly_forge.py` Step 8 to parse all active and archived `SPRINT_PLAN_*.md` files and populate the `sprint_dna` ChromaDB collection automatically during the 2:00 AM maintenance sweep.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/src/infra/nightly_forge.py`.
+  * **Anchor 1 (Target Files & Line Anchors):**
+    - `Portfolio_Dev/sync_chroma_dna.py` (lines 140–200: add `sync_sprint_dna(client)` function parsing `Portfolio_Dev/docs/sprints/active/*.md` and `Portfolio_Dev/docs/sprints/archive/*.md`)
+    - `HomeLabAI/src/infra/nightly_forge.py` (lines 350–380: Step 8 invoking `python3 Portfolio_Dev/sync_chroma_dna.py --collection sprint_dna`)
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 Portfolio_Dev/sync_chroma_dna.py --collection sprint_dna`
-  * **Anchor 3 (Live Silicon Invariant):** ChromaDB Port 8001 reports `sprint_dna` collection count matching total historical sprint plans.
-  * **Anchor 4 (DNA Links):** `[FEAT-557]`, `[BKM-060]`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```python
+    # In Portfolio_Dev/sync_chroma_dna.py:
+    def sync_sprint_dna(chroma_client):
+        """[FEAT-557] Parse and vectorize active and archived sprint plans into sprint_dna collection."""
+        col = chroma_client.get_or_create_collection(name="sprint_dna")
+        sprint_dirs = [
+            os.path.expanduser("~/Dev_Lab/Portfolio_Dev/docs/sprints/active"),
+            os.path.expanduser("~/Dev_Lab/Portfolio_Dev/docs/sprints/archive"),
+        ]
+        count = 0
+        for sdir in sprint_dirs:
+            if not os.path.exists(sdir):
+                continue
+            for fname in os.listdir(sdir):
+                if fname.endswith(".md") and "SPRINT_PLAN" in fname:
+                    fpath = os.path.join(sdir, fname)
+                    with open(fpath, "r", encoding="utf-8") as f:
+                        text = f.read()
+                    doc_id = f"sprint_{os.path.splitext(fname)[0]}"
+                    col.upsert(
+                        ids=[doc_id],
+                        documents=[text[:4000]],
+                        metadatas=[{"source": fname, "type": "sprint_plan"}]
+                    )
+                    count += 1
+        return count
+    ```
+  * **Anchor 4 (Silicon Invariants & DNA Links):** ChromaDB Port 8001 reports `sprint_dna` collection count matching total historical sprint plans. `[FEAT-557]`, `[BKM-060]`.
 
 ---
 
