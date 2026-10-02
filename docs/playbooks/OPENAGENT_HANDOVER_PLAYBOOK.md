@@ -250,14 +250,10 @@ The Federated Lab operates under a streamlined **3-Tier Bicameral Hierarchy** de
 ### 6.2 Agent Permission Matrix in the Cascade
 | Role / Persona | Silicon Seat | Tools Permitted | Tools Denied | Primary Mandate |
 | :--- | :--- | :--- | :--- | :--- |
-| **Atlas** (Layer 2 Conductor) | KENDER 4090 | `read`, `grep`, `glob`, `task` | `edit`, `write`, `safe_patch`, `bash`, `question`, `icm_*` | Ingest sprint plan, synthesize Layer 3 contracts |
-| **Sisyphus-Junior** (Layer 3 Patcher) | Apple M5 Air (:8002) | `safe_patch`, `read`, `bash` | `edit`, `write`, `task`, `question`, `icm_*` | Surgical file edits and pytest verification |
-| **Hephaestus** (Layer 3 Greenfield) | Apple M5 Air (:8002) | `write`, `safe_patch`, `read`, `bash` | `edit`, `task`, `question`, `icm_*` | Greenfield scaffolding and module creation |
-| **Librarian** (Utility Scout) | KENDER 4090 | `read`, `grep`, `glob` | `write`, `edit`, `bash`, `task`, `icm_*` | Specialized code and symbol discovery |
-| **Momus** (Utility Verifier) | KENDER 4090 | `bash`, `read` | `write`, `edit`, `safe_patch`, `task` | Isolated test traceback analysis |
-| **Sisyphus-Junior** (Patcher)| M5 Air (:8000) | `clara-dna_safe_patch` | `bash`, `edit`, `write`, `icm_*`, `task`, `question` | Apply surgical code edits via exact AST diffs (<2k tokens) |
-| **Hephaestus** (Scaffolder)| M5 Air (:8000) | `write`, `clara-dna_safe_patch`, `read` | `bash`, `edit`, `icm_*`, `task`, `question` | Greenfield module creation & full-file scaffolding |
-| **Momus / Argus** (Verifier) | KENDER 4090 | `bash`, `read` | `write`, `edit`, `safe_patch`, `task`, `icm_*` | Run pytest / ruff check, parse tracebacks |
+| **Atlas** (Layer 2 Conductor) | KENDER 4090 | `read`, `glob`, `clara-dna_locate_grounding`, `task` | `grep`, `edit`, `write`, `safe_patch`, `bash`, `question`, `icm_*` | Ingest sprint plan, discover paths via locate_grounding, synthesize Layer 3 contracts |
+| **Sisyphus-Junior** (Layer 3 Patcher) | Apple M5 Air (:8002) | `clara-dna_safe_patch`, `read`, `bash` | `edit`, `write`, `task`, `question`, `icm_*` | Surgical file edits and pytest verification |
+| **Hephaestus** (Layer 3 Greenfield) | Apple M5 Air (:8002) | `write`, `clara-dna_safe_patch`, `read`, `bash` | `edit`, `task`, `question`, `icm_*` | Greenfield scaffolding and module creation |
+| **Daedalus** (Layer 3 Blocker Surgeon) | Apple M5 Air (:8002) | `clara-dna_safe_patch`, `read` | `bash`, `write`, `edit`, `task`, `question`, `icm_*` | Precision AST & syntax blocker surgery without bash exploration |
 
 ---
 
@@ -288,5 +284,8 @@ This ledger records live operational calibration fixes, tool adjustments, and ha
 | 2026-10-01 (Spr 96.0) | Zero Fallback Bleed Invariant & Local Isolation | Local agents had cross-tier and cloud fallbacks, which caused silent cloud escalation, burned API quota, and leaked local code context during transient local stalls. | Enforced `"fallback_models": []` across all local agents (`atlas`, `junior`, `hephaestus`, `daedalus`) and local categories (`coder`, `unspecified-low`). Cloud fallbacks remain strictly on Cloud Ultraworker (`sisyphus`). |
 | 2026-10-01 (Spr 96.0) | Dynamic Model Inheritance & Scrubbing Re-Baked Tags | Hardcoded model tag strings proliferated across every agent block in `oh-my-openagent.json`, making configs brittle to model updates on local hardware endpoints. | Decoupled endpoint definitions into `opencode.json` (single source of hardware truth) and omitted redundant `model` declarations in `oh-my-openagent.json` so agents dynamically inherit root/category models. |
 | 2026-10-01 (Spr 96.0) | Scrubbing Legacy Momus & Librarian Stages | Intermediate Momus and Librarian agents added unnecessary prompt hops and tool permission complexity. | Officially purged Momus and Librarian from `oh-my-openagent.json`, `delegate.py`, and playbook permissions, locking in direct 2-tier local execution: Atlas (L2) $\to$ Junior (L3). |
+| 2026-10-01 (Spr 96.0) | Locating Grounding Tool & Atlas Grep Ban | Conductor (Atlas) executed repetitive `grep` queries searching for missing context across repos, ballooning session history to 50k–100k tokens and breaching the 8k output limit (`finish=length`). | 1) Banned `grep` on Atlas (`"grep": "deny"`); 2) Implemented MCP tool `@mcp.tool() locate_grounding(pattern, intent_description)` returning strictly relative paths with zero line bodies; 3) Formalized early-quit blocker mandate (`[BLOCKER REPORT: MISSING_CONTEXT]`) in `AGENTS_L2.md` and `oh-my-openagent.json`. |
+| 2026-10-01 (Spr 96.0) | Prompt Deduplication & Mandate Pruning | Triple-redundant prompt engineering across `oh-my-openagent.json`, `delegate.py` (1,500-token mandate block + verbose psychological safety text), and `AGENTS_*.md` inflated baseline tokens and degraded KV cache prefill. | Pruned 1,500-token mandate preamble from `delegate.py`; streamlined `oh-my-openagent.json` prompt appends to concise single-line role specs; anchored all behavioral laws in `AGENTS_L2.md` and `AGENTS_L3.md`. |
+| 2026-10-01 (Spr 96.0) | Full DNA Document Ambient Recall Injection | Ambient memory hooks extracted only metadata titles (`- [BKM-049] Title`) and badges, discarding `r["documents"][0]` and leaving agents blind to actual contract text. | Updated `ambient_hook_claradb.py`, `ambient_recall.py`, and `~/.config/opencode/plugins/icm.ts` to inject full markdown document bodies for all matched BKM and Feature protocols and complete ICM summaries into turn context. |
 
 
