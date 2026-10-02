@@ -2753,14 +2753,13 @@
 5. **Inspection Gate Law:** 5-minute watchdog is an inspection gate to probe token flow and abort stalled/zombie sessions.
 6. **Diagnostic Routing:** Refer to `[BKM-071]` for failure diagnosis, circular trap prevention, and playbook indexing.
 
-## [BKM-071] Delegation Diagnostics, Circular Traps & Playbook Index Guide
+## [BKM-071] Delegation Playbook Index
 **Parent Anchors:** `[FEAT-522]`, `[BKM-049]`, `[BKM-069]`, `[VIBE-009]`  
-**Philosophy:** When delegation fails, agents must avoid recency amnesia and circular reasoning traps (`BKM-071`). Resilient diagnosis requires anchoring against version control ground truth and consulting structured playbook indices rather than inventing ad-hoc fixes.
+**Philosophy:** Ambient hook recall must remain ultra-lean, navigational, and invariant (`BKM-071`). The Delegation Playbook Index provides single-line routing pointers to the OpenAgent Handover Playbook, avoiding prompt bloat while grounding the agent in version control ground truth.
 **Operational Rules:**
-1. **Version Control Ground Truth Audit:** Always inspect `git log` and `git diff` in `~/.config/opencode` and `Dev_Lab` before modifying configs, prompts, or harnesses.
-2. **Circular Trap Prevention:** Prevent waffle loops across agent names (`atlas`/`junior`), prompt bloat (<1.5k tokens), tool permission resurrects (`grep`/`edit` ban), and symlink bypasses.
-3. **Cognitive Feedback Probe:** Extract and synthesize `[HANDOVER REFLECTION]` to identify prompt ambiguity between retry attempts.
-4. **Playbook Index Routing:** Match failure symptoms directly to `OPENAGENT_HANDOVER_PLAYBOOK.md` sections before re-dispatching.
+1. **Index Only Modus Operandi:** Strictly maintained as a lean single-line routing pointer into `OPENAGENT_HANDOVER_PLAYBOOK.md`.
+2. **Synchronization Mandate:** Whenever the playbook is updated or refined, Section 0 and BKM-071 must be synchronized.
+3. **Version Control Ground Truth:** §8 of the index mandates `git log`/`git diff` audits before modifying any delegation configuration.
 
 ## [FEAT-493] Centralized Swarm Model Alias Registry
 **Sprint:** SPR-66.0

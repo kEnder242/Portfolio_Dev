@@ -13,6 +13,9 @@ This playbook serves as the definitive reference guide for task allocation, mode
 > 2. Baseline against the [Version Control Ground Truth Anchor (§8)](#8-the-version-control-ground-truth-anchor-local-git-repositories) via `git log`/`git diff` in `~/.config/opencode` and `Dev_Lab`.
 > 3. Audit delegation code ([`delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)) vs active configuration files (`~/.config/opencode/oh-my-openagent.json`, `opencode.json`).
 > 4. Audit target files, prompt anchors, and runtime environment (inference endpoints, socket states, service health) to eliminate discrepancies before re-dispatching.
+>
+> **PLAYBOOK & BKM-071 SYNCHRONIZATION MANDATE:**  
+> Whenever this Playbook is refined, expanded, or restructured, Section 0 and **[BKM-071: Delegation Playbook Index]** MUST be immediately updated and synchronized in CLaRa-DNA to ensure ambient memory recall remains lean, accurate, and 100% aligned with live playbook rules.
 
 | # | Playbook Section | Core Invariants & Rules | When to Consult (Diagnostic Symptoms) |
 | :- | :--- | :--- | :--- |
