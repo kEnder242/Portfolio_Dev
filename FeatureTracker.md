@@ -3536,3 +3536,11 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Grants the Brain node the authority to dynamically expand or override the retrieval scope in-flight (e.g. immediately fetching `blackboard_ledger_dna` when conversational continuity is detected) without bouncing back into an expensive 2-3s recursive re-triage loop.
 **Rationale:** Prevents conversational dead-ends and avoids unnecessary latency when Triage misclassifies a follow-up turn.
 **Mechanism:** `BrainNode.direct_flight_override()` in `HomeLabAI/src/nodes/brain_node.py`.
+
+## [LAB-115] Headroom Proxy, TurboQuant KV Compression & Silicon Reasoning Control Protocol
+**Sprint:** SPR-96.0 (Active)
+**Status:** ACTIVE
+**Code:** `HomeLabAI/docs/LAB_INFRASTRUCTURE.md`, `opencode.json`, `HomeLabAI/docs/Protocols.md`
+**Logic:** Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces reasoning suppression on M5 Air worker endpoints (`'reasoning': 0`) and Ollama conduction thinking controls.
+**Rationale:** Prevents macOS Metal wired memory crashes (`24.46GB` cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.
+**Mechanism:** Port 8002 proxying, `opencode.json` provider config, and prompt generation directives.
