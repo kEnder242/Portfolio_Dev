@@ -3554,3 +3554,43 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces reasoning suppression on M5 Air worker endpoints (`'reasoning': 0`) and Ollama conduction thinking controls.
 **Rationale:** Prevents macOS Metal wired memory crashes (`24.46GB` cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.
 **Mechanism:** Port 8002 proxying, `opencode.json` provider config, and prompt generation directives.
+
+## [FEAT-637] Single-Home Runtime Data & Interleaved Accountability Engine
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/daily_accountability_audit.py`, `HomeLabAI/src/v5/ignition/manager.py`
+**Logic:** Enforces single canonical home architecture for all dynamic ledgers, logs, and statuses directly in `Portfolio_Dev/field_notes/data/`. Eliminates split-brain multi-homed file writing to `www_deploy/data/`. Wires `status.html` `pollPager()` to ingest and interleave `accountability_ledger.jsonl` events into the unified forensic timeline.
+**Rationale:** Eliminates data drift between build artifacts and active runtime files while elevating morning health audits to the operator console.
+**Mechanism:** Single-directory logging in `manager.py` and DOM timeline interleaving in `status.html`.
+
+## [FEAT-638] Intercom Fourth Wall Feedback UI & REST Bridge
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/field_notes/intercom.html`, `Portfolio_Dev/field_notes/intercom_v2.js`, `HomeLabAI/src/v5/foyer/router.py`
+**Logic:** Embeds discrete, interactive `👍` (thumbs up) and `👎` (thumbs down) feedback actuators into assistant chat bubbles in `intercom.html`. Dispatches asynchronous payloads (`{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }`) to Foyer port `:8765/feedback`, providing immediate visual feedback glow and persisting signals into `foyer_feedback_ledger.jsonl`.
+**Rationale:** Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique.
+**Mechanism:** Event listeners in `intercom_v2.js` and `POST /feedback` handler in `router.py`.
+
+## [FEAT-639] Attendant Dead-Lock Reaping, VRAM Status Clean-up & Queue Gate Hardening
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/ignition/manager.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+**Logic:** Implements an automated dead-lock reaping engine in the Lab Attendant at 05:45 AM that inspects PID liveness and forcibly purges orphaned `maintenance.lock` files, logging a `CRITICAL` alert and re-igniting vLLM via `/wake`. Corrects status serialization in `types.py` to output genuine states (`"Lab Offline"`, `"Standby"`, `"Maintenance"`) and locks the intercom "Send" button when Foyer is locked/offline, preserving unsent text in the client input area.
+**Rationale:** Guarantees self-healing from aborted nightly fine-tuning tasks and prevents message drop during engine transitions.
+**Mechanism:** `engine_watchdog.py` reaping sweep, `types.py` status mapper, and `intercom_v2.js` button gating.
+
+## [FEAT-640] Expanded Cognitive Vibe Palette & Speculative Head-Start Calibration
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/logic/vector_pre_triage.py`
+**Logic:** Deprecates the catch-all `CASUAL` vibe in favor of an expressive cognitive taxonomy (`SOCRATIC`, `FORENSIC`, `CHRONICLE`, `RETROSPECTIVE`, `ARCHITECTURAL`, `TACTICAL`, `STRATEGIC`, `PROVOCATIVE`, `METABOLIC`). Injects gentle `semantic_hint` vector priors from sub-15ms FastEmbed ChromaDB probes (`BKM-015`) and calibrates the speculative relay to ensure REST-probed M5 Air is granted its full dynamic EWMA lead window before local vLLM fallback racing.
+**Rationale:** Enhances reasoning depth and unlocks nuanced domain routing without introducing brittle keyword hardcoding.
+**Mechanism:** `_extract_triage_intuition()` in `cognitive_hub.py` and `SpeculativeTriageRelay` in `speculative_triage.py`.
+
+## [FEAT-641] Live Lab Vitals 6:00 AM Daily Sanity Check Badges & Passive Telemetry Guarantee
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Code:** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/live_telemetry.py`, `HomeLabAI/src/infra/daily_accountability_audit.py`
+**Logic:** Enforces 100% passive, read-only status and telemetry polling across `/status`, `/sys_metrics`, `/telemetry_kpi`, and DCGM port 9400 with zero engine wake side effects. Quarantines vocal synthesis testing strictly to the 06:00 AM daily health audit and equips `status.html` vital cards with visual 06:00 AM baseline health sanity check badges.
+**Rationale:** Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.
+**Mechanism:** `live_telemetry.py` read-only probes and `status.html` DOM badge rendering.
