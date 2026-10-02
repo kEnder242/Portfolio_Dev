@@ -22648,7 +22648,8 @@
         "narrative_context": "Creating a clean architectural boundary or framework does not eliminate domain complexity\u2014it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
         "lab_anchors": [
           "Philosophy and Learnings (Frameworks vs Content)",
-          "FEAT-586 (Triage Waffle Point & Deterministic Routing)"
+          "FEAT-586 (Triage Waffle Point & Deterministic Routing)",
+          "INS-042 (The Waffle Trap & Circular Fixing Traps)"
         ],
         "review_notes": "Axiom governing system abstractions, translation layers, and complexity conservation.",
         "last_refined_by": "AGY",
@@ -22675,7 +22676,8 @@
         "explicit_links": [
           "INS-024",
           "INS-025",
-          "FEAT-586"
+          "FEAT-586",
+          "INS-042"
         ],
         "aliases": [
           "rug-bump-law",
@@ -22850,6 +22852,72 @@
         "aliases": [
           "PHL-041",
           "document-spine-invariant"
+        ],
+        "status": "APPROVED",
+        "bucket_id": "bucket_systems_architecture"
+      }
+    },
+    {
+      "id": "INS-042",
+      "theme": "Systems Architecture & Agentic Operational Rigor",
+      "paper_order": 42,
+      "origin": {
+        "author": "jallred",
+        "text": "Waffle points are documented friction areas in agentic development that lead to circular fixing\u2014where agents endlessly tweak heuristic thresholds, string matches, prompt adjectives, and internal configs back and forth until they regress to the origin. Instead of hardcoded string matching or endless heuristic oscillations, systems must recognize waffle points, acknowledge complexity conservation (Rug Bump Law), and break circular traps with invariant structural anchors and grounded semantic judgment.",
+        "source": "Agentic Development Forensics & Sprint 13/97 Architectural Reflection",
+        "immutable": true,
+        "created_at": "2026-10-02T15:00:00Z"
+      },
+      "synthesis": {
+        "title": "The Waffle Trap & Circular Fixing Traps (Agentic Oscillation)",
+        "narrative_context": "In agentic software development, unanchored agents fall into circular fixing traps\u2014endlessly oscillating across prompt phrasing, heuristic thresholds, agent names, and regex assertions without making forward progress. Breaking the Waffle Trap requires recognizing where domain complexity is conserved (INS-038) and substituting brittle heuristic string matches with grounded semantic judgment (FEAT-190), deterministic engine lead windows (FEAT-586), and rigid Git ground-truth discipline (BKM-049/BKM-071).",
+        "lab_anchors": [
+          "HomeLabAI/src/infra/cognitive_audit.py",
+          "FEAT-190 (Cognitive Audit / The Judge)",
+          "INS-038 (The Rug Bump Law)",
+          "BKM-049 (The Delegation Execution Rulebook)",
+          "BKM-071 (Delegation Playbook Index)",
+          "OPENAGENT_HANDOVER_PLAYBOOK.md"
+        ],
+        "review_notes": "Grounds the inspiration behind FEAT-190 and establishes the governing axiom against circular agentic fixing traps.",
+        "last_refined_by": "AGY",
+        "refinement_version": 1,
+        "mutations": [],
+        "revisions": [
+          {
+            "version": 1,
+            "lens": "Original Verbatim",
+            "text": "Waffle points are documented friction areas in agentic development that lead to circular fixing. Breaking the Waffle Trap requires recognizing complexity conservation (Rug Bump Law) and replacing brittle heuristic string matching with invariant anchors and grounded semantic judgment.",
+            "certified_at": "2026-10-02T15:00:00Z"
+          }
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "inspiration",
+          "waffle-trap",
+          "waffle-points",
+          "circular-fixing",
+          "agentic-development",
+          "oscillation",
+          "rug-bump-law",
+          "grounded-judgment",
+          "systems-architecture"
+        ],
+        "explicit_links": [
+          "INS-038",
+          "INS-011",
+          "INS-033",
+          "INS-040",
+          "FEAT-190",
+          "FEAT-586",
+          "BKM-049",
+          "BKM-071"
+        ],
+        "aliases": [
+          "PHL-042",
+          "the-waffle-trap",
+          "waffle-points-and-circular-traps"
         ],
         "status": "APPROVED",
         "bucket_id": "bucket_systems_architecture"
@@ -35347,6 +35415,303 @@
         "status": "ACTIVE",
         "bucket_id": "bucket_5_infra"
       }
+    },
+    {
+      "id": "FEAT-630",
+      "title": "RDNA-Assisted HyDE Semantic Expansion Bridge & Pinky Flywheel Cache",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Restores true division of labor: eliminates artificial background pre-triage delays while turning Pinky's visible conversational dialogue into a self-improving semantic retrieval flywheel.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade and Pinky Voice Integration:\n1. **Tier 1 (Zero-Latency Fast-Path <10ms):** Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB `:8001` (confidence $\\ge 0.75$, distance $\\le 0.45$) to immediately bridge to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets with zero LLM generation latency.\n2. **Tier 2 (Pinky Analytical First Turn ~1.5s):** If RDNA misses or query is novel, Pinky (holding fine-tuned `cli_voice_v1` LoRA weights per `[FEAT-554]`) generates the **first legitimate human-facing analytical response / quip**. This spoken turn simultaneously serves as the authoritative HyDE vector for deep Archive citation retrieval.\n3. **Tier 3 (Self-Learning Flywheel Cache):** Asynchronously persists the novel (query \u2194 Pinky HyDE anchor) pair back into `Portfolio_Dev/dna/rdna_questions.json` and syncs to ChromaDB `:8001`, permanently expanding the zero-latency exemplar bank so subsequent related queries hit Tier 1 in <10ms.\n\n`resolve_rdna_hyde_exemplar()` and `select_vector_query()` in `HomeLabAI/src/nodes/archive_node.py`, and `_HYDE_SYNTHESIS_PROMPT` in `HomeLabAI/src/logic/cognitive_hub.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-631",
+      "title": "Ambient Hook Recalibration & Bucketed Quota Routing",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) with universal domain representation provide vastly richer multi-domain context without human-perceptible delay.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements a Two-Pass Universal Quota Routing strategy:\n1. **Pass 1 (Universal First Spot):** Guarantees that every peer DNA domain (`feature_dna`, `behavioral_dna`, `wisdom_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`, and `loop_dna`/`vibe_dna`) is evaluated with a guaranteed top-1 slot under strict distance banding ($\\le 0.52$, or $\\le 0.58$ for QQ), eliminating keyword-conditional gating and preventing dense collections from crowding out philosophical, behavioral, or research anchors.\n2. **Pass 2 (Capacity Ceiling Fill):** Expands dense operational collections (`feature_dna` and `behavioral_dna` / `BKM`) up to a maximum capacity ceiling of 3 slots each to fill remaining prompt budget.\n\n`probe_claradb()` in `HomeLabAI/config/hooks/icm_hook.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/config/hooks/icm_hook.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "LAB-112",
+      "title": "Fail-Loud Hook Latency & Degradation Telemetry Sentinel",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Enforces `BKM-062` (\"fail loudly and visibly\") so degraded recall or vector database latency is never masked by silent fallbacks.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Telemetry watchdog embedded directly inside the ambient pre-turn hook. If hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, the hook immediately injects a prominent warning header (`[\u26a0\ufe0f HOOK WARNING: ...]`) into the model prompt context and emits a colored alert to `stderr`.\n\nTiming decorator and error accumulator in `icm_hook.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/config/hooks/icm_hook.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "LAB-113",
+      "title": "Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Prevents context bloat in leaf workers while giving editorial and dialectical subagents rich narrative grounding.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Implements a \"half-baked\" prefill strategy where orchestrators pass lean anchor pointer lists (`[FEAT-xxx]`, `[WIS-xxx]`) to Layer 2 Conductor (`Atlas`), which queries CLaRa MCP `:8001` on demand and hands razor-thin, zero-bloat surgical instructions down to Layer 3 Workers (`Sisyphus-Junior`). Establishes distinct context profiles for Surgical Builders (tool BKMs, wisdom, code contracts) vs. Cognitive/Editorial Mice (inspiration, document DNA, vibe, narrative synthesis).\n\n`delegate.py` and task contract payloads.",
+        "lab_anchors": [
+          "`HomeLabAI/src/tests/delegate.py`, `AGENTS_L2.md`, `AGENTS_L3.md`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "LAB-114",
+      "title": "Triage Finding & Post-Triage Context Scope Focuser (Oracle Spike)",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Aligns triage and HyDE vector water levels (Tier 1 & 2) while keeping diagnostic telemetry cleanly decoupled from generative editorial pipelines.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Cloud Oracle investigative spike to evaluate and optimize triage root-cause detection and post-triage context filtering algorithms. Evaluates symptom-to-post-mortem mapping in `wisdom_dna` and designs pruning algorithms to narrow context scope before delegating to worker or editorial subagents.\n\nOracle adversarial audit and triage benchmark suite.",
+        "lab_anchors": [
+          "`HomeLabAI/src/nodes/triage_node.py`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-632",
+      "title": "Loop DNA Domain & Federated Feedback ChromaDB Collection",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Preserves architectural feedback loops as live, verifiable instruction assets rather than static human documentation.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Elevates feedback loops (`[LOOP-xxx]`) into a first-class peer DNA domain under `BKM-060` with a dedicated ChromaDB collection (`loop_dna`). Parses `foyer_feedback_ledger.jsonl` and loop structures into vector embeddings, enabling agentic subagents and orchestrators to query active systemic feedback mechanics, signal emitters, and actuator gates via `query_dna(collection=\"loop_dna\")`.\n\n`POST /feedback` endpoint in `router.py`, ChromaDB collection sync in `sync_chroma_dna.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/data/foyer_feedback_ledger.jsonl`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-633",
+      "title": "Flywheel Deepening: Pinky Coherence Judge & Human Upvote Promotion Gating",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Empowers the judge phase to lift serious architectural weight and prevents conversational noise from contaminating the high-speed Tier-1 exemplar bank.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Connects Pinky's Coherence Critic judge score (`[FEAT-406]`, `[FEAT-470]`) and the Intercom/Foyer feedback telemetry (`POST /feedback`) directly into the RDNA Flywheel caching gate. Novel (query \u2194 Pinky HyDE anchor) pairs generated in Tier 2 are promoted to permanent canonical RDNA when validated by Pinky Coherence Judge ($\\ge 4/5$) or confirmed via explicit Human Upvote.\n\n`evaluate_rdna_promotion_candidate()` in `archive_node.py` and `POST /feedback` telemetry in `router.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-634",
+      "title": "Human Downvote Signal & Negative Memory Foil Shortcut",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Closes the human-in-the-loop corrective feedback loop rapidly and non-invasively during live co-pilot pairing.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Introduces a streamlined human downvote feedback shortcut (`\ud83d\udc4e` / `DOWN` / `BAD_TAKE`) across Intercom UI and Foyer telemetry (`POST /feedback`). When triggered, immediately:\n1. Purges the corresponding synthetic HyDE anchor from the candidate RDNA cache.\n2. Registers a negative foil exemplar in `foyer_feedback_ledger.jsonl` / `memory_foil` to prevent recurring misroutes.\n3. Signals Pinky Critic to generate a concise post-mortem diagnostic turn without manual operator prompt retyping.\n\n`POST /feedback` in `router.py` and `archive_node.purge_candidate_exemplar()`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-635",
+      "title": "Brain Information Gatekeeper & Curator Synergy Annotations",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Eliminates prompt pollution and hallucination cascades in Deep Thought by guaranteeing high-density, strictly grounded context injection.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Transforms the local Brain node into an Information Gatekeeper. Brain evaluates candidate vectors collected by Pinky, drops ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage `\ud83d\udca1 Curator Note: [ID] connects with [ID]` annotations. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.\n\n`BrainNode.curate_context()` and `CognitiveHub.build_deep_thought_context()`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "FEAT-636",
+      "title": "In-Flight Dynamic Retrieval Scope Override (\"Direct Flight\")",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Prevents conversational dead-ends and avoids unnecessary latency when Triage misclassifies a follow-up turn.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Grants the Brain node the authority to dynamically expand or override the retrieval scope in-flight (e.g. immediately fetching `blackboard_ledger_dna` when conversational continuity is detected) without bouncing back into an expensive 2-3s recursive re-triage loop.\n\n`BrainNode.direct_flight_override()` in `HomeLabAI/src/nodes/brain_node.py`.",
+        "lab_anchors": [
+          "`HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
+    {
+      "id": "LAB-115",
+      "title": "Headroom Proxy, TurboQuant KV Compression & Silicon Reasoning Control Protocol",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "Prevents macOS Metal wired memory crashes (`24.46GB` cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.",
+        "source": "FeatureTracker.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces reasoning suppression on M5 Air worker endpoints (`'reasoning': 0`) and Ollama conduction thinking controls.\n\nPort 8002 proxying, `opencode.json` provider config, and prompt generation directives.",
+        "lab_anchors": [
+          "`HomeLabAI/docs/LAB_INFRASTRUCTURE.md`, `opencode.json`, `HomeLabAI/docs/Protocols.md`"
+        ],
+        "review_notes": "Status: ACTIVE",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "feature",
+          "code-anchor",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
     }
   ],
   "behavioral": [
@@ -35495,7 +35860,7 @@
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "## BKM-006: Autonomous Work Protocol\n**Objective**: Enable deep Agent work cycles during user downtime while maintaining transparency.\n\n1.  **Autonomous Work Trigger**: Initiates an independent work cycle. The Agent works through the agreed-upon task list (from `ProjectStatus.md` or a specific session goal).\n2.  **AFK Hint**: User says \"AFK\" or \"Coffee Break\" to signal they are stepping away. The Agent should check for any queued tasks or proceed autonomously.\n3.  **Detailed Reasoning**: The agent must provide clear reasoning and explanations for each step during autonomous work. High visibility and verbosity is the standard for intent preservation and review.\n4.  **Efficiency**: The agent should complete as much of the plan as possible. If blocked by hardware or permissions, skip the item and maintain momentum on the next available task.\n5.  **Linting Mandate**: The Agent MUST use a linter (e.g., `ruff check`) or the **Atomic Patcher** for all code modifications during a Heads Down sprint to prevent \"Zero-Visibility\" regressions like `NameError`.\n6.  **Conclusion**: Once the backlog is exhausted or the sprint goal is achieved, exit heads down mode and provide the verbose **BKM-007** \"Heads Up\" report.\n7.  **Mid-Flight Guidance Capture (Recommended Practice)**: When the operator provides last-minute guidance, constraints, or preference hints within an \"AFK\" / \"Heads Down\" prompt, the agent is strongly encouraged to jot down these instructions into the active sprint plan (`SPRINT_PLAN_*.md`) or session notes under a dedicated `## \ud83d\udcdd Operator Directives & Mid-Flight Guidance` section. This acts as a reliable reminder so critical guidance is never forgotten during deep autonomous focus or context compaction.",
+        "narrative_context": "## BKM-006: Autonomous Work Protocol\n**Objective**: Enable deep Agent work cycles during user downtime while maintaining transparency.\n\n1.  **Autonomous Work Trigger**: Initiates an independent work cycle. The Agent works through the agreed-upon task list (from `ProjectStatus.md` or a specific session goal).\n2.  **AFK Hint**: User says \"AFK\" or \"Coffee Break\" to signal they are stepping away. The Agent should check for any queued tasks or proceed autonomously.\n3.  **Detailed Reasoning**: The agent must provide clear reasoning and explanations for each step during autonomous work. High visibility and verbosity is the standard for intent preservation and review.\n4.  **Efficiency**: The agent should complete as much of the plan as possible. If blocked by hardware or permissions, skip the item and maintain momentum on the next available task.\n5.  **Linting Mandate**: The Agent MUST use a linter (e.g., `ruff check`) or the **Atomic Patcher** for all code modifications during a Heads Down sprint to prevent \"Zero-Visibility\" regressions like `NameError`.\n6.  **Conclusion**: Once the backlog is exhausted or the sprint goal is achieved, exit heads down mode and provide the verbose **BKM-007** \"Heads Up\" report.\n7.  **Mid-Flight Guidance Capture (Recommended Practice)**: When the operator provides last-minute guidance, constraints, or preference hints within an \"AFK\" / \"Heads Down\" prompt, the agent is strongly encouraged to jot down these instructions into the active sprint plan (`SPRINT_PLAN_*.md`) or session notes under a dedicated `## \ud83d\udcdd Operator Directives & Mid-Flight Guidance` section. This acts as a reliable reminder so critical guidance is never forgotten during deep autonomous focus or context compaction.\n8.  **Delegation & Owner Tag Discipline (BKM-049)**: During an autonomous Heads Down sprint, every story MUST declare an Assigned Owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). The orchestrating agent must dispatch stories via `delegate.py` adhering to the Tri-Loop safety contracts, diagnostic retries, and handover reflection audits before taking over or mutating state directly.\n    *   **Caution Against Delegation Bypass**: Primary agents must NEVER bypass planned swarm delegation to directly write or edit code for `[SWARM:*]` stories. Skipping delegation circumvents swarm capability validation, corrupts telemetry, and denies worker models the diagnostic iterations required to improve playbook calibrations. Direct takeover (`[AGY:TAKEOVER]`) is strictly illegal without exhausted delegation attempts.",
         "lab_anchors": [
           "HomeLabAI/docs/Protocols.md"
         ],
@@ -35954,7 +36319,7 @@
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "## BKM-030: The Resonant Planning Pattern\n**Role: [SPRINT] - Planning & Execution Protocol**\n\n> [!IMPORTANT]\n> **Purpose:** To ensure clear, iterative project development through structured planning and execution.\n\n### 1. Document Architecture\n*   **Location**: All Master Sprint Plans reside in `Portfolio_Dev/SPRINT_PLAN_SPR_XX_X.md`.\n*   **Structure**: Every task/story MUST include:\n    - **How**: Technical implementation path.\n    - **Why**: Strategic architectural rationale.\n    - **Assigned Owner**: Explicit execution tier (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). Direct code modifications by AGY on swarm-tagged stories are strictly forbidden per `BKM-049`.\n    - **Target Files**: Explicit file paths targeted for modification.\n*   **Pointers**: Conductor-level plans (`conductor/tracks/<track_id>/plan.md`) must contain explicit pointers to the Master Sprint Plan and any relevant forensic audits or BKMs.\n\n### 2. The Planning Phase (The \"Greenlight\" Gate)\n*   **The Wait**: The Agent is FORBIDDEN from beginning implementation until the User provides a \"Greenlight\" or \"Buy-in\" on the proposed Sprint Plan.\n*   **Strategic Inquiry**: Use the Planning Phase to brainstorm \"Traps,\" waffling risks (e.g., hardcoding vs. BKM-015), and lost requirements from previous sessions.\n\n### 3. Iterative Append Protocol (History over Overwrites)\n*   **Immutability of Early Phases**: Do NOT re-write or summarize existing phases of an active sprint plan to \"save space.\"\n*   **Append Revisions**: New requirements, course corrections, or missed tasks discovered mid-sprint must be appended as new **Phases** at the end of the document.\n*   **Rationale Report**: Every set of appended phases must include a **Forensic Rationale** section explaining the \"Why\" behind the mid-sprint pivot.\n\n### 4. Execution & Validation\n*   **Look First**: Before creating new tools or scripts, the Agent MUST consult `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md` and reuse existing diagnostic infrastructure.\n*   **Validation**: Every edit must be followed by `ruff check` to ensure code quality.\n*   **Conductor Delegation**: For complex or high-volume tasks, the Agent should use the Conductor track to delegate work to sub-agents, preserving the primary context window for strategic orchestration.",
+        "narrative_context": "## BKM-030: The Resonant Planning Pattern\n**Role: [SPRINT] - Planning & Execution Protocol**\n\n> [!IMPORTANT]\n> **Purpose:** To ensure clear, iterative project development through structured planning and execution.\n\n### 1. Document Architecture\n*   **Location**: All Master Sprint Plans reside in `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_XX_X.md`.\n*   **Structure**: Every task/story MUST include:\n    - **How & Why**: Technical implementation mechanism and strategic architectural rationale.\n    - **Assigned Owner**: Explicit execution tier (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`). Direct code modifications by AGY on swarm-tagged stories are strictly forbidden per `BKM-049`.\n    - **Target Files**: Explicit file paths targeted for modification.\n    - **Mandatory 4-Anchor Specification ([BKM-043])**:\n      * **Anchor 1 (Target Files & Line Anchors)**: Explicit file paths, target functions/classes, and line numbers.\n      * **Anchor 2 (Verification Command)**: Verbatim CLI/pytest command and exact return/exit criteria.\n      * **Anchor 3 (Verbatim Code Anchors & Injection Specs)**: **MANDATORY EXECUTABLE CODE SNIPPETS**. Must contain the exact before/after code blocks, function signatures, class stubs, and complete companion pytest test fixtures. Descriptive summaries or omitting Anchor 3 code blocks is strictly forbidden.\n      * **Anchor 4 (Silicon Invariants & DNA Links)**: Memory caps, latency budgets, and BKM/FEAT anchors.\n*   **Pointers**: Conductor-level plans (`conductor/tracks/<track_id>/plan.md`) must contain explicit pointers to the Master Sprint Plan and any relevant forensic audits or BKMs.\n\n### 2. The Planning Phase (The \"Greenlight\" Gate)\n*   **The Wait**: The Agent is FORBIDDEN from beginning implementation until the User provides a \"Greenlight\" or \"Buy-in\" on the proposed Sprint Plan.\n*   **Strategic Inquiry**: Use the Planning Phase to brainstorm \"Traps,\" waffling risks (e.g., hardcoding vs. BKM-015), and lost requirements from previous sessions.\n\n### 3. Iterative Append Protocol (History over Overwrites)\n*   **Immutability of Early Phases**: Do NOT re-write or summarize existing phases of an active sprint plan to \"save space.\"\n*   **Append Revisions**: New requirements, course corrections, or missed tasks discovered mid-sprint must be appended as new **Phases** at the end of the document.\n*   **Rationale Report**: Every set of appended phases must include a **Forensic Rationale** section explaining the \"Why\" behind the mid-sprint pivot.\n\n### 4. Execution & Validation\n*   **Look First**: Before creating new tools or scripts, the Agent MUST consult `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md` and reuse existing diagnostic infrastructure.\n*   **Validation**: Every edit must be followed by `ruff check` to ensure code quality.\n*   **Conductor Delegation**: For complex or high-volume tasks, the Agent should use the Conductor track to delegate work to sub-agents, preserving the primary context window for strategic orchestration.",
         "lab_anchors": [
           "HomeLabAI/docs/Protocols.md"
         ],
@@ -36486,19 +36851,46 @@
     },
     {
       "id": "BKM-049",
-      "title": "Tri-Loop Story Delegation, Diagnostic & Feedback Protocol",
+      "title": "The Delegation Execution Rulebook (Tri-Loop Story Delegation Protocol)",
       "origin": {
         "author": "Federated Lab",
-        "text": "BKM-049: Tri-Loop Story Delegation, Diagnostic & Feedback Protocol",
+        "text": "BKM-049: The Delegation Execution Rulebook (Tri-Loop Story Delegation Protocol)",
         "source": "HomeLabAI/docs/Protocols.md",
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "## BKM-049: Tri-Loop Story Delegation, Diagnostic & Feedback Protocol\n**Feature Anchor:** `[FEAT-522]` / `[BKM-049]` / `[BKM-069]` / `[VIBE-009]`  \n**Domain:** Swarm Delegation, Autonomous Subagent Execution, Cognitive Feedback & Harness Diagnostics  \n**Status:** ACTIVE / MANDATORY  \n\n#### 1. The Tri-Loop Law\n1. **Execution Tiers & Retry Boundaries:**\n   * **`[SWARM:LOCAL]` (The 3-Loop Diagnostic Mandate):** When targeting sovereign local silicon (Windows RTX 4090 Kender + macOS M5 Air Brain), the orchestrator MUST execute up to **3 full diagnostic remediation rounds on local silicon** (Attempt 1a \u2192 diagnose & fix harness/prompt/knobs \u2192 Attempt 1b \u2192 Attempt 1c). Any failure on Attempt 1 requires the orchestrator to diagnose the failure, adjust the harness/config/prompt, and retry on local. Local silicon is NEVER abandoned after a single failure. Only after all 3 diagnosed local attempts are exhausted does the story escalate to Cloud Swarm (`[SWARM:CLOUD]`), followed by Primary Takeover (`[AGY:TAKEOVER]`).\n   * **`[SWARM:CLOUD]` (Direct Cloud Route):** When a story is tagged `[SWARM:CLOUD]`, local attempts are skipped entirely. The dispatch routes directly to Cloud Swarm (Groq / OpenCode Cloud / Big-Pickle / Cohere). If Cloud Swarm fails, it skips local retries and routes straight to Primary Takeover (`[AGY:TAKEOVER]`).\n   * **`[AGY:PRIMARY]` (Direct Architectural Core):** Architectural scaffolding, protocol governance, and schema bootstrap executed directly by the primary agent.\n2. **Never Blindly Retry (Zero Internal Script Loops):** `delegate.py` is strictly a single-shot execution harness. Retries are smart outer-loop operations driven by AGY diagnostics, never blind script-level loops. A retry within local silicon (or between escalation tiers) is strictly defined as an execution attempt preceded by root-cause diagnosis and harness/prompt remediation.\n3. **Non-Convergence Circuit Breaker (\"Definition of Insanity\" Law):** If a local worker generates degenerate output, enters an unrecoverable non-convergent loop, or demonstrates fundamental capacity failure for a specific task and a viable harness/prompt remedy is not apparent, the orchestrator is authorized to trip the circuit breaker immediately. The orchestrator logs the diagnostic failure reason in the sprint ledger and escalates directly to `[SWARM:CLOUD]` or `[AGY:TAKEOVER]` without burning identical futile retry cycles.\n4. **Safe-Patch Mandate (Anti-Bash-Clobber):** Subagents MUST NOT use destructive bash file writes (`cat << 'EOF' >` or `echo >`) on existing codebase files. Subagents must invoke `clara-dna_safe_patch` (or atomic patchers) for existing files, reserving `write` strictly for new standalone files.\n\n#### 2. The Cognitive Feedback Loop & Handover Reflection Law (VIBE-009 / BKM-069)\n1. **Mandatory Handover Reflection Injection:** Every delegation dispatch MUST include the standardized `[HANDOVER REFLECTION]` prompt block requesting the peer subagent to candidly report:\n   - What tripped it up during execution.\n   - What was inaccurate, missing, or ambiguous in the prompt/anchors.\n   - What single change to the instructions would have accelerated completion.\n2. **Automated Reflection Ingestion & Invariant Persistence:**\n   - The delegation harness (`delegate.py`) automatically extracts the subagent's `[HANDOVER REFLECTION]` from execution output.\n   - Ingests the reflection into persistent short/long-term memory (`icm store -t delegation_feedback`).\n   - Appends the reflection into persistent ledger records (`HomeLabAI/data/delegation_ledger.jsonl` and `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`).\n3. **Outer Diagnostic Action Loop:** Between local retry attempts (Attempt 1a \u2192 1b \u2192 1c), the primary orchestrator (AGY) MUST read and synthesize the subagent's reflection alongside error traces, fixing missing imports, tightening schema bounds, refining prompt anchors, or tuning `opencode.json` configuration *before* re-dispatching.\n4. **The Psychological Safety & Naive Start Contract:**\n   - Every dispatch explicitly reassures the subagent that all needed context is provided, that first-try naive starts are safe and encouraged, and that mistakes/assumptions will be met with constructive outer-loop feedback rather than silent penalties.\n   - Paves a clean path for local execution by eliminating exploratory paralysis and establishing bidirectional honor-bound trust across swarm layers.\n\n#### 3. Mandatory Diagnostics Between Retries\nBefore initiating a retry for a stalled, failed, or timed-out subagent, the orchestrator MUST perform five diagnostic probes:\n0. **Playbook Quick-Diagnostic Index Audit (Mandatory First Step):**\n   - Read Section 0 (lines 1\u201360) of [`OPENAGENT_HANDOVER_PLAYBOOK.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/playbooks/OPENAGENT_HANDOVER_PLAYBOOK.md).\n   - Match the observed failure symptom directly against the Playbook's Quick-Diagnostic Routing Table before re-dispatching.\n1. **Cognitive Feedback Probe:** Inspect the subagent's `[HANDOVER REFLECTION]` and transcript to identify where prompt wording, missing files, or context limits tripped up the model.\n2. **Server & Silicon State:**\n   - Probe inference endpoints (`curl http://192.168.1.46:8000/v1/models`, `nvidia-smi`).\n   - Check socket states (`ss -tulpn | grep 4097` or target port) to ensure child connections are not hanging.\n3. **Session Transcripts & Logs:**\n   - Inspect OpenCode / subagent transcripts for syntax loops, compaction triggers, or unhandled tool rejections.\n   - Verify whether OpenCode auto-compaction hijacked the context window.\n4. **Harness & Configuration Audit:**\n   - Audit `delegate.py` and `opencode.json` for prompt contradictions (e.g. Single Task Law vs. micro-patterns).\n   - Verify file permissions, diff patch formats, and linting constraints.\n\n#### 4. Root Cause Escalation Matrix\n| Failure Symptom | Diagnostic Finding | Remediation Required Before Retry |\n| :--- | :--- | :--- |\n| `\"Model is busy\"` / 503 | Parallel requests exceeded single-stream ceiling | Enforce Single Task Law; serialize dispatches. |\n| Subagent freezes mid-read | Auto-compaction agent spawned | Set `\"compaction\": {\"auto\": false}` in `opencode.json`. |\n| Ruff / Syntax loop | Indentation or multiline whitespace slip | Provide explicit AST line anchors or simplify patch scope. |\n| Bash clobber attempt | Subagent attempted `echo >` on existing file | Inject explicit `clara-dna_safe_patch` JSON tool call schema into prompt. |\n| Context Overflow | Prompt exceeded 28k local ceiling | Decompose prompt into atomic sub-tasks; remove large inline code dumps. |\n| Code 3: Silent Failure | 0 text tokens streamed; session deadlocked | Check inference server health; escalate to Attempt 2 (Cloud Swarm). |\n\n#### 5. The 5-Minute Watchdog & Inspection Gate Law\n1. **Inspection Gate, Not an Automatic Kill:** The 5-minute watchdog ceiling is an **Inspection Gate**, not a blind termination trigger. Reaching 5 minutes does NOT mean immediate cancellation.\n2. **Active Progress Probe:** At the 5-minute mark, the orchestrator must inspect the live session:\n   - Query `GET /session/{id}` or `GET /session/{id}/message` to inspect token generation and tool calls.\n   - **Progressing:** If tokens are actively flowing and constructive work is progressing, extend the timer window.\n   - **Stalled:** If token generation is dead, or the agent is spinning in an unresolvable tool retry loop or orphaned subagent wait, only then terminate the attempt.\n3. **Mandatory Zombie Cleanup:** When an attempt is halted, timed out, or interrupted, the harness (`delegate.py`) and orchestrator MUST issue an explicit `POST /session/{id}/abort` frame to the OpenCode REST port. Never allow orphaned subagent loops to churn GPU silicon after client disconnects.\n\n#### 6. The Story Owner Tag & Anti-Bypass Guard\n1. **Mandatory Owner Tag in Sprint Stories:** Every story defined in `SPRINT_PLAN_*.md` MUST specify an explicit `Assigned Owner:` tag:\n   - `[SWARM:LOCAL]`: Story is assigned to local silicon execution via `delegate.py` with up to 3 diagnostic remediation rounds on local silicon.\n   - `[SWARM:CLOUD]`: Story is assigned to cloud swarm burst via `delegate.py` directly, skipping local retries.\n   - `[AGY:PRIMARY]`: Story is architectural, diagnostic, or governance work reserved for the primary orchestrator.\n2. **Anti-Bypass Invariant:** When a story is tagged `[SWARM:*]`, the primary agent (AGY) is **strictly forbidden from directly modifying the story's target codebase files** without first executing delegation attempts via `delegate.py` (including all 3 local diagnostic rounds for `[SWARM:LOCAL]`).\n3. **Escalation Record Required:** AGY direct code takeover (`[AGY:TAKEOVER]`) is only permissible after the assigned swarm tier (and its required diagnostic retries) has executed, failed, and logged an explicit diagnostic post-mortem in the sprint report. Direct coding on swarm-tagged stories without prior delegation attempts is a high-severity operational violation.\n\n#### 7. Sovereign Local Silicon Topology Invariant (KENDER -> Air)\n1. **The Sovereign Conductor & Leaf Worker Pattern:**\n   `[SWARM:LOCAL]` execution MUST strictly adhere to the canonical bicameral silicon topology:\n   - **Conductor (Root Dispatch / Architectural Roles):** Node KENDER (Windows RTX 4090 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL` / `Atlas` / `Momus` / `Architect`). Receives the sprint story, conducts architecture planning, and dispatches bounded leaf tasks.\n   - **Leaf Worker (Surgical Patching / Execution):** Node Brain (macOS M5 Air MLX via Headroom `:8002`: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` / `Sisyphus-Junior` or `Daedalus`). Receives spoon-fed 4-anchor tasks, applies atomic `clara-dna_safe_patch` edits, and is strictly forbidden from delegating further (`task: deny`).\n   - **Verifier (Execution & Lint Runner):** Node KENDER (Windows RTX 4090 / `Momus`). Executes verification commands and digests tracebacks back to Atlas.\n2. **Topology Deviation Invariant:** Any inversion or deviation from this pattern constitutes an immediate operational failure. `delegate.py` and diagnostic monitors MUST enforce this check and fail immediately upon deviation.\n\n#### 8. Post-Sprint Adversarial Oracle Sweep Gate (BKM-061)\n1. **Mandatory Post-Sprint Closeout Sweep:** Before any sprint is marked `COMPLETED` or certified, the orchestrator MUST invoke the **Dual Adversarial Oracle Sweep** defined in **[BKM-061]**:\n   - **Oracle 1 (Architecture & Invariants):** Audits threshold math, schema consistency, vector boundaries, and zero-work invariants.\n   - **Oracle 2 (Side Effects & Blast Radius):** Audits port/socket contention, background daemon lifecycles, and backwards compatibility shims.\n2. **Glaring Issue Remediation Gate:** If oracles discover glaring deficiencies or hidden \"Green Lies\", the orchestrator MUST fix and certify all glaring issues before publishing the final Work Completion Report ([BKM-007]).\n\n---",
+        "narrative_context": "## BKM-049: The Delegation Execution Rulebook (Tri-Loop Story Delegation Protocol)\n**Feature Anchor:** `[FEAT-522]` / `[BKM-049]` / `[BKM-071]` / `[BKM-069]` / `[VIBE-009]`  \n**Domain:** Swarm Delegation, Autonomous Subagent Execution, Story Lifecycle & Execution Invariants  \n**Status:** ACTIVE / MANDATORY  \n\n#### 1. The Tri-Loop Law\n1. **Execution Tiers & Retry Boundaries:**\n   * **`[SWARM:LOCAL]` (The 3-Loop Diagnostic Mandate):** When targeting sovereign local silicon (Windows RTX 4090 Kender + macOS M5 Air Brain), the orchestrator MUST execute up to **3 full diagnostic remediation rounds on local silicon** (Attempt 1a \u2192 diagnose & fix harness/prompt/knobs via [BKM-071] \u2192 Attempt 1b \u2192 Attempt 1c). Any failure on Attempt 1 requires the orchestrator to diagnose the failure, adjust the harness/config/prompt, and retry on local. Local silicon is NEVER abandoned after a single failure. Only after all 3 diagnosed local attempts are exhausted does the story escalate to Cloud Swarm (`[SWARM:CLOUD]`), followed by Primary Takeover (`[AGY:TAKEOVER]`).\n   * **`[SWARM:CLOUD]` (Direct Cloud Route):** When a story is tagged `[SWARM:CLOUD]`, local attempts are skipped entirely. The dispatch routes directly to Cloud Swarm (Groq / OpenCode Cloud / Big-Pickle / Cohere). If Cloud Swarm fails, it skips local retries and routes straight to Primary Takeover (`[AGY:TAKEOVER]`).\n   * **`[AGY:PRIMARY]` (Direct Architectural Core):** Architectural scaffolding, protocol governance, and schema bootstrap executed directly by the primary agent.\n2. **Never Blindly Retry (Zero Internal Script Loops):** `delegate.py` is strictly a single-shot execution harness. Retries are smart outer-loop operations driven by AGY diagnostics, never blind script-level loops. A retry within local silicon (or between escalation tiers) is strictly defined as an execution attempt preceded by root-cause diagnosis and harness/prompt remediation per **[BKM-071]**.\n3. **Non-Convergence Circuit Breaker (\"Definition of Insanity\" Law):** If a local worker generates degenerate output, enters an unrecoverable non-convergent loop, or demonstrates fundamental capacity failure for a specific task and a viable harness/prompt remedy is not apparent, the orchestrator is authorized to trip the circuit breaker immediately. The orchestrator logs the diagnostic failure reason in the sprint ledger and escalates directly to `[SWARM:CLOUD]` or `[AGY:TAKEOVER]` without burning identical futile retry cycles.\n4. **Safe-Patch Mandate (Anti-Bash-Clobber):** Subagents MUST NOT use destructive bash file writes (`cat << 'EOF' >` or `echo >`) on existing codebase files. Subagents must invoke `clara-dna_safe_patch` (or atomic patchers) for existing files, reserving `write` strictly for new standalone files.\n\n#### 2. The 5-Minute Watchdog & Inspection Gate Law\n1. **Inspection Gate, Not an Automatic Kill:** The 5-minute watchdog ceiling is an **Inspection Gate**, not a blind termination trigger. Reaching 5 minutes does NOT mean immediate cancellation.\n2. **Active Progress Probe:** At the 5-minute mark, the orchestrator must inspect the live session:\n   - Query `GET /session/{id}` or `GET /session/{id}/message` to inspect token generation and tool calls.\n   - **Progressing:** If tokens are actively flowing and constructive work is progressing, extend the timer window.\n   - **Stalled:** If token generation is dead, or the agent is spinning in an unresolvable tool retry loop or orphaned subagent wait, only then terminate the attempt.\n3. **Mandatory Zombie Cleanup:** When an attempt is halted, timed out, or interrupted, the harness (`delegate.py`) and orchestrator MUST issue an explicit `POST /session/{id}/abort` frame to the OpenCode REST port (`4097`). Never allow orphaned subagent loops to churn GPU silicon after client disconnects.\n\n#### 3. The Story Owner Tag & Anti-Bypass Guard\n1. **Mandatory Owner Tag in Sprint Stories:** Every story defined in `SPRINT_PLAN_*.md` MUST specify an explicit `Assigned Owner:` tag:\n   - `[SWARM:LOCAL]`: Story is assigned to local silicon execution via `delegate.py` with up to 3 diagnostic remediation rounds on local silicon.\n   - `[SWARM:CLOUD]`: Story is assigned to cloud swarm burst via `delegate.py` directly, skipping local retries.\n   - `[AGY:PRIMARY]`: Story is architectural, diagnostic, or governance work reserved for the primary orchestrator.\n2. **Anti-Bypass Invariant:** When a story is tagged `[SWARM:*]`, the primary agent (AGY) is **strictly forbidden from directly modifying the story's target codebase files** without first executing delegation attempts via `delegate.py` (including all 3 local diagnostic rounds for `[SWARM:LOCAL]`).\n3. **Escalation Record Required:** AGY direct code takeover (`[AGY:TAKEOVER]`) is only permissible after the assigned swarm tier (and its required diagnostic retries) has executed, failed, and logged an explicit diagnostic post-mortem in the sprint report. Direct coding on swarm-tagged stories without prior delegation attempts is a high-severity operational violation.\n\n#### 4. Sovereign Local Silicon Topology Invariant (KENDER -> Air)\n1. **The Sovereign Conductor & Leaf Worker Pattern:**\n   `[SWARM:LOCAL]` execution MUST strictly adhere to the canonical bicameral silicon topology:\n   - **Conductor (Root Dispatch / Architectural Roles):** Node KENDER (Windows RTX 4090 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL` / `Atlas` / `Architect`). Receives the sprint story, conducts architecture planning, and dispatches bounded leaf tasks.\n   - **Leaf Worker (Surgical Patching / Execution):** Node Brain (macOS M5 Air MLX via Headroom `:8002`: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` / `Sisyphus-Junior` or `Daedalus`). Receives spoon-fed 4-anchor tasks, applies atomic `clara-dna_safe_patch` edits, and is strictly forbidden from delegating further (`task: deny`).\n2. **Topology Deviation Invariant:** Any inversion or deviation from this pattern constitutes an immediate operational failure. `delegate.py` and diagnostic monitors MUST enforce this check and fail immediately upon deviation.\n\n#### 5. Handover Reflection Ingestion & Feedback Record\n1. **Standardized Reflection Capture:** Every delegation dispatch automatically extracts the subagent's `[HANDOVER REFLECTION]` reporting what tripped it up, what was missing/ambiguous, and what single change would accelerate completion.\n2. **Persistent Storage:** Reflections are persisted to `icm store -t delegation_feedback` and recorded in `HomeLabAI/data/delegation_ledger.jsonl`.\n3. **Inter-Attempt Diagnostic Index:** For all failure diagnosis, prompt tuning, circular trap prevention, and playbook references, proceed immediately to **[BKM-071]**.\n\n---",
         "lab_anchors": [
           "HomeLabAI/docs/Protocols.md"
         ],
         "review_notes": "Operational Protocol BKM-049",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "bkm",
+          "behavioral-dna",
+          "protocol"
+        ],
+        "status": "APPROVED",
+        "bucket_id": "bucket_4_rigor"
+      }
+    },
+    {
+      "id": "BKM-071",
+      "title": "Delegation Playbook Index",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "BKM-071: Delegation Playbook Index",
+        "source": "HomeLabAI/docs/Protocols.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "## BKM-071: Delegation Playbook Index\n**Feature Anchor:** `[FEAT-522]` / `[BKM-049]` / `[BKM-071]`  \n**Domain:** Swarm Delegation, Playbook Routing & Index Grounding  \n**Status:** ACTIVE / MANDATORY  \n**Modus Operandi:** Index Only \u2014 strictly a lean single-line routing pointer into [`OPENAGENT_HANDOVER_PLAYBOOK.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/playbooks/OPENAGENT_HANDOVER_PLAYBOOK.md) to preserve ambient hook context efficiency.\n\n- **\u00a70 Quick-Diagnostic Routing:** Symptom lookup, inter-retry comparative audit, and discrepancy verification.\n- **\u00a71 Swarm Topology & Models:** KENDER 4090 (`Atlas` / Qwen 27B), M5 Air (`Junior` / Bonsai 27B), Cloud Tier (`Big-Pickle` / `OpenRouter Free`).\n- **\u00a72 Lifecycle & Visibility:** REST 4097 dispatch, Web UI 4096 proxy, `safe_patch` mandate, single-tenant zombie nuke.\n- **\u00a73 Token Optimization:** Narrow `--dir`, zero Gemini in OpenAgent, Port 8002 Headroom proxy, subagent tool denial (`icm_*`, `grep`).\n- **\u00a74 Swarm Map & Taxonomy:** Symlink law (`~/.config/opencode`), 7 category routes, Layer 3 terminal execution (`task: deny`).\n- **\u00a75 Safety Gates & Loops:** Pre-delegation audit, git ownership gate (workers never commit), loop circuit breakers.\n- **\u00a76 Cascade Architecture:** 3-Tier hierarchy (AGY L1 $\\to$ Atlas L2 $\\to$ Junior L3) and permission matrix.\n- **\u00a77 Calibration Ledger:** Sprint root-cause calibration history and verified operational fixes.\n- **\u00a78 Git Ground Truth Anchor:** Dual repos (`Dev_Lab` + `~/.config/opencode`), VSCode multi-root visibility, anti-amnesia `git log`/`git diff` mandate.\n\n---",
+        "lab_anchors": [
+          "HomeLabAI/docs/Protocols.md"
+        ],
+        "review_notes": "Operational Protocol BKM-071",
         "refinement_version": 1
       },
       "metadata": {
@@ -37081,6 +37473,33 @@
       }
     },
     {
+      "id": "ORACLE_REVIEW_SPRINT_96",
+      "title": "\ud83c\udfdb\ufe0f Cloud Oracle Adversarial Audit & Live Certification \u2014 Sprint SPR-96.0",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "# \ud83c\udfdb\ufe0f Cloud Oracle Adversarial Audit & Live Certification \u2014 Sprint SPR-96.0\n\n**Audit Date:** 2026-10-01T16:51:00-07:00  \n**Oracle Architecture:** Bicameral Swarm Coordination & Live Silicon Certification (`BKM-024` / `BKM-049` / `BKM-068`)  \n**Overall Verdict:** \ud83d\udfe2 **CERTIFIED PASS (100% GREEN)**  \n**Total Sprint 96 Test Matrix:** 20 / 20 Unit & Integration Tests Passing (0 Regressions, 0.75s Execution Time)  \n**Silicon Ecosystem Status:** Node KENDER 4090 (`192.168.1.26:11434`), Apple M5 Air oMLX...",
+        "source": "docs/sprints/active/ORACLE_REVIEW_SPRINT_96.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "# \ud83c\udfdb\ufe0f Cloud Oracle Adversarial Audit & Live Certification \u2014 Sprint SPR-96.0\n\n**Audit Date:** 2026-10-01T16:51:00-07:00  \n**Oracle Architecture:** Bicameral Swarm Coordination & Live Silicon Certification (`BKM-024` / `BKM-049` / `BKM-068`)  \n**Overall Verdict:** \ud83d\udfe2 **CERTIFIED PASS (100% GREEN)**  \n**Total Sprint 96 Test Matrix:** 20 / 20 Unit & Integration Tests Passing (0 Regressions, 0.75s Execution Time)  \n**Silicon Ecosystem Status:** Node KENDER 4090 (`192.168.1.26:11434`), Apple M5 Air oMLX (`192.168.1.46:8002`), ChromaDB Port 8001 (64 Sprint Plans, 421 Features, 60 BKMs), OpenCode REST `:4097` Synchronized.\n\n---\n\n## 1. Executive Summary & Sprint Certification\n\nSprint **SPR-96.0** (*Two-Mice Handover Protocol, Swarm Conduction & Tri-Loop Governance, Information Gatekeeper & Curator Synergy, Direct Flight In-Flight Retrieval Override, Feedback Flywheel Closure, DNA Forge 4-Tab Split-Diff Workbench, and Automated Sprint DNA Nightly Ingestion*) has successfully completed all 7 planne",
+        "lab_anchors": [
+          "docs/sprints/active/ORACLE_REVIEW_SPRINT_96.md"
+        ],
+        "review_notes": "Sprint document ORACLE_REVIEW_SPRINT_96",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "sprint",
+          "planning",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_sprints"
+      }
+    },
+    {
       "id": "PLAN_DECOUPLED_ACCOUNTABILITY",
       "title": "Sprint / Architecture Plan: Decoupled Morning Accountability Watchdog (FEAT-619 & BKM-066)",
       "origin": {
@@ -37608,6 +38027,33 @@
           "docs/sprints/active/SPRINT_PLAN_SPR_95_0.md"
         ],
         "review_notes": "Sprint document SPRINT_PLAN_SPR_95_0",
+        "refinement_version": 1
+      },
+      "metadata": {
+        "tags": [
+          "sprint",
+          "planning",
+          "active"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_sprints"
+      }
+    },
+    {
+      "id": "SPRINT_PLAN_SPR_96_0",
+      "title": "\ud83d\ude80 SPRINT PLAN 96.0: Brain Information Gatekeeper, LoRA Host Isolation & DNA Forge Split-Diff Workbench",
+      "origin": {
+        "author": "Federated Lab",
+        "text": "# \ud83d\ude80 SPRINT PLAN 96.0: Brain Information Gatekeeper, LoRA Host Isolation & DNA Forge Split-Diff Workbench\n\n**Sprint ID:** `SPR_96_0`  \n**Theme:** Strict Information-Gatekeeping & Multi-Tier JITC, LoRA Resource Hardening, DNA Forge 4-Tab Architecture (`Recommendations` Split-Diff), and The Closed Flywheel Feedback Loop (`LOOP-001`\u2013`LOOP-003`, `FEAT-632`\u2013`FEAT-636`)  \n**Status:** ACTIVE  \n**Parent Framework:** `[BKM-064]` (Tracked Conversational Ledger), `[BKM-049]` (Owner Tag Mandate), `[BKM-060]`...",
+        "source": "docs/sprints/active/SPRINT_PLAN_SPR_96_0.md",
+        "immutable": true
+      },
+      "synthesis": {
+        "narrative_context": "# \ud83d\ude80 SPRINT PLAN 96.0: Brain Information Gatekeeper, LoRA Host Isolation & DNA Forge Split-Diff Workbench\n\n**Sprint ID:** `SPR_96_0`  \n**Theme:** Strict Information-Gatekeeping & Multi-Tier JITC, LoRA Resource Hardening, DNA Forge 4-Tab Architecture (`Recommendations` Split-Diff), and The Closed Flywheel Feedback Loop (`LOOP-001`\u2013`LOOP-003`, `FEAT-632`\u2013`FEAT-636`)  \n**Status:** ACTIVE  \n**Parent Framework:** `[BKM-064]` (Tracked Conversational Ledger), `[BKM-049]` (Owner Tag Mandate), `[BKM-060]` (Federated DNA Taxonomy), `[BKM-015]` (Semantic Intent Routing), `[BKM-020]` (Intent Preservation)  \n**Target Hardware Nodes:** z87-Linux (RTX 2080 Ti Local vLLM 3B Base), KENDER (RTX 4090 Deep Thought), ChromaDB Port 8001 (CLaRa-DNA)\n\n## \ud83d\udcdd Operator Directives & Mid-Flight Guidance\n- **BKM-049 Owner Tag Mandate**: Every sprint story MUST declare an Assigned Owner (`[SWARM:LOCAL]`, `[SWARM:CLOUD]`, or `[AGY:PRIMARY]`).\n- **Strict Delegation Rule**: When a story is tagged `[SWARM:LOCAL]`, direct ",
+        "lab_anchors": [
+          "docs/sprints/active/SPRINT_PLAN_SPR_96_0.md"
+        ],
+        "review_notes": "Sprint document SPRINT_PLAN_SPR_96_0",
         "refinement_version": 1
       },
       "metadata": {

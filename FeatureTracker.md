@@ -973,6 +973,7 @@
 
 ## [FEAT-190] Cognitive Audit (The Judge)
 **Status:** ACTIVE
+**Inspiration Anchor:** [INS-042] (The Waffle Trap & Circular Fixing Traps) / [INS-038] (The Rug Bump Law)
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L225) — Cognitive Audit (The Judge).
 **Logic:** Automated test and runtime validation using a logic-based auditor routine.
 **Rationale:** To break the 'Waffle Trap' of hardcoded string matching. Replaces length-based heuristics in the Fidelity Gate with semantic judgment.
