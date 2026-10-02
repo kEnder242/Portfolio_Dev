@@ -2742,15 +2742,25 @@
 2. **Always clamp dataloaders to single-process** (`num_workers = 0`, `pin_memory = False`) to prevent memory space collisions.
 3. **Always enforce kernel hung task watchdog** (`hung_task_panic = 1`) to guarantee unattended recovery within 120 seconds.
 
-## [BKM-049] Tri-Loop Story Delegation, Diagnostic & Feedback Protocol
-**Parent Anchors:** `[VIBE-009]`, `[BKM-069]`, `[PHL-009]`, `[FEAT-522]`  
-**Philosophy:** Multi-node federated delegation is governed by active, layered feedback loops (`VIBE-009`). Systems achieve resilience not from static prompts or blind retry loops, but from capturing rich diagnostic backpressure—including the subagent's cognitive `[HANDOVER REFLECTION]` (`PHL-009`) and registering them into the Loop Ledger (`BKM-069`).
+## [BKM-049] The Delegation Execution Rulebook
+**Parent Anchors:** `[VIBE-009]`, `[BKM-069]`, `[BKM-071]`, `[PHL-009]`, `[FEAT-522]`  
+**Philosophy:** Multi-node federated delegation is governed by strict execution tiers and single-shot execution harnesses (`VIBE-009`). Systems achieve resilience by adhering to the Tri-Loop boundaries, owner tag invariants, safe patch mandates, and live progress inspection gates.
 **Operational Rules:**
 1. **The 3-Loop Diagnostic Mandate:** Enforce up to 3 diagnostic rounds on local silicon before escalating to cloud swarm or primary takeover.
-2. **Cognitive Reflection Extraction:** Automatically extract `[HANDOVER REFLECTION]` from all subagent dispatches, persisting into ICM (`topic: delegation_feedback`) and `delegation_ledger.jsonl`.
-3. **Outer Diagnostic Action Loop:** The orchestrator must synthesize subagent feedback and unit test tracebacks to fix prompt ambiguity or harness mismatches between retry rounds.
-4. **Resident Hardware Anchoring:** Preserve resident model topology (Qwen3.8-27B on Kender RTX 4090, Ternary-Bonsai-2-27B via Headroom :8002 on M5 Air). Protect Apple Unified RAM from cold-load thrashing.
-5. **Playbook Quick-Diagnostic Index Mandate:** The orchestrator MUST audit Section 0 (Quick-Diagnostic Index) of `OPENAGENT_HANDOVER_PLAYBOOK.md` prior to formulating any retry dispatch or tier escalation.
+2. **Story Owner Tag Invariant:** Stories tagged `[SWARM:*]` strictly forbid primary agent direct code mutations without exhausted delegation attempts.
+3. **Safe-Patch Mandate:** Subagents must use `clara-dna_safe_patch` (or atomic patchers) for existing codebase files.
+4. **Sovereign Topology Invariant:** Root dispatch routes to Atlas on KENDER 4090; leaf worker routes to Sisyphus-Junior (or Hephaestus) on M5 Air via `task(category="coder")`.
+5. **Inspection Gate Law:** 5-minute watchdog is an inspection gate to probe token flow and abort stalled/zombie sessions.
+6. **Diagnostic Routing:** Refer to `[BKM-071]` for failure diagnosis, circular trap prevention, and playbook indexing.
+
+## [BKM-071] Delegation Diagnostics, Circular Traps & Playbook Index Guide
+**Parent Anchors:** `[FEAT-522]`, `[BKM-049]`, `[BKM-069]`, `[VIBE-009]`  
+**Philosophy:** When delegation fails, agents must avoid recency amnesia and circular reasoning traps (`BKM-071`). Resilient diagnosis requires anchoring against version control ground truth and consulting structured playbook indices rather than inventing ad-hoc fixes.
+**Operational Rules:**
+1. **Version Control Ground Truth Audit:** Always inspect `git log` and `git diff` in `~/.config/opencode` and `Dev_Lab` before modifying configs, prompts, or harnesses.
+2. **Circular Trap Prevention:** Prevent waffle loops across agent names (`atlas`/`junior`), prompt bloat (<1.5k tokens), tool permission resurrects (`grep`/`edit` ban), and symlink bypasses.
+3. **Cognitive Feedback Probe:** Extract and synthesize `[HANDOVER REFLECTION]` to identify prompt ambiguity between retry attempts.
+4. **Playbook Index Routing:** Match failure symptoms directly to `OPENAGENT_HANDOVER_PLAYBOOK.md` sections before re-dispatching.
 
 ## [FEAT-493] Centralized Swarm Model Alias Registry
 **Sprint:** SPR-66.0

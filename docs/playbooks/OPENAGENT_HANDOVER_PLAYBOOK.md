@@ -7,11 +7,12 @@ This playbook serves as the definitive reference guide for task allocation, mode
 ## 0. Playbook Quick-Diagnostic Index & Routing Table
 
 > [!IMPORTANT]
-> **MANDATORY FULL-SYSTEM INTER-RETRY AUDIT (BKM-049 Step 4):**  
+> **MANDATORY FULL-SYSTEM INTER-RETRY AUDIT (BKM-049 / BKM-071):**  
 > Before formulating any diagnostic fix, retry prompt, or swarm escalation, the primary orchestrator (AGY) MUST perform a **comprehensive comparative audit**:
 > 1. Audit this Playbook Index table (§0, lines 1–60) to match observed symptoms directly to authoritative rules.
-> 2. Audit delegation code ([`delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)) vs active configuration files (`~/.config/opencode/oh-my-openagent.json`, `opencode.json`).
-> 3. Audit target files, prompt anchors, and runtime environment (inference endpoints, socket states, service health) to eliminate discrepancies before re-dispatching.
+> 2. Baseline against the [Version Control Ground Truth Anchor (§8)](#8-the-version-control-ground-truth-anchor-local-git-repositories) via `git log`/`git diff` in `~/.config/opencode` and `Dev_Lab`.
+> 3. Audit delegation code ([`delegate.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/delegate.py)) vs active configuration files (`~/.config/opencode/oh-my-openagent.json`, `opencode.json`).
+> 4. Audit target files, prompt anchors, and runtime environment (inference endpoints, socket states, service health) to eliminate discrepancies before re-dispatching.
 
 | # | Playbook Section | Core Invariants & Rules | When to Consult (Diagnostic Symptoms) |
 | :- | :--- | :--- | :--- |
@@ -22,6 +23,7 @@ This playbook serves as the definitive reference guide for task allocation, mode
 | **§5** | [Safety Gates & Troubleshooting Ledger](#5-safety-gates--troubleshooting-ledger) | • Mandatory Pre-Delegation Audit (`FEAT-477`)<br>• Git Ownership Gate (Workers never commit)<br>• Anti-Looping circuit breaker (`BKM-038`) | Verification failures, loop detection, uncommitted git drift |
 | **§6** | [The Agent Cascade Architecture](#6-the-agent-cascade-architecture-context-isolated-swarms) | • 3-Tier Swarm Hierarchy (AGY $\rightarrow$ Atlas $\rightarrow$ Junior/Hephaestus)<br>• **Permission Matrix:** Atlas (`task`), Junior (`safe_patch`), Hephaestus (`write`, `safe_patch`) | Subagent tool permission rejections, Atlas attempting writes, Junior attempting bash |
 | **§7** | [Operational Calibration Ledger](#7-operational-fix--calibration-ledger-bkm-049-tri-loop-inter-attempt-log) | • Historical root causes & verified calibrations across sprints | Repeated operational anomalies, historical regressions |
+| **§8** | [Version Control Ground Truth Anchor](#8-the-version-control-ground-truth-anchor-local-git-repositories) | • Dual Git Repos (`Dev_Lab` + `~/.config/opencode`)<br>• Anti-Amnesia Grounding Protocol<br>• Circular Trap Prevention (`BKM-071`) | Config thrashing, agent hallucinating new schemas, circular repair loops |
 
 ---
 
@@ -287,5 +289,46 @@ This ledger records live operational calibration fixes, tool adjustments, and ha
 | 2026-10-01 (Spr 96.0) | Locating Grounding Tool & Atlas Grep Ban | Conductor (Atlas) executed repetitive `grep` queries searching for missing context across repos, ballooning session history to 50k–100k tokens and breaching the 8k output limit (`finish=length`). | 1) Banned `grep` on Atlas (`"grep": "deny"`); 2) Implemented MCP tool `@mcp.tool() locate_grounding(pattern, intent_description)` returning strictly relative paths with zero line bodies; 3) Formalized early-quit blocker mandate (`[BLOCKER REPORT: MISSING_CONTEXT]`) in `AGENTS_L2.md` and `oh-my-openagent.json`. |
 | 2026-10-01 (Spr 96.0) | Prompt Deduplication & Mandate Pruning | Triple-redundant prompt engineering across `oh-my-openagent.json`, `delegate.py` (1,500-token mandate block + verbose psychological safety text), and `AGENTS_*.md` inflated baseline tokens and degraded KV cache prefill. | Pruned 1,500-token mandate preamble from `delegate.py`; streamlined `oh-my-openagent.json` prompt appends to concise single-line role specs; anchored all behavioral laws in `AGENTS_L2.md` and `AGENTS_L3.md`. |
 | 2026-10-01 (Spr 96.0) | Full DNA Document Ambient Recall Injection | Ambient memory hooks extracted only metadata titles (`- [BKM-049] Title`) and badges, discarding `r["documents"][0]` and leaving agents blind to actual contract text. | Updated `ambient_hook_claradb.py`, `ambient_recall.py`, and `~/.config/opencode/plugins/icm.ts` to inject full markdown document bodies for all matched BKM and Feature protocols and complete ICM summaries into turn context. |
+
+---
+
+## 8. The Version Control Ground Truth Anchor (Local Git Repositories)
+
+### 8.1 The Dual-Repository Topology
+The Federated Lab's operational state is anchored across two separate Git repositories on disk:
+1. **The Workspace Monorepo (`/home/jallred/Dev_Lab`):**
+   - Tracks codebase implementations, test suites, sprint plans (`SPRINT_PLAN_*.md`), architectural DNA (`dna/`), and version-controlled configuration templates (`opencode.json`, `oh-my-openagent.json`).
+   - Tracks submodules: `HomeLabAI`, `Portfolio_Dev`, `www_deploy`.
+   - Remotes: Synchronized locally; tracked upstream to `https://github.com/kEnder242/`.
+2. **The OpenCode Daemon Repository (`~/.config/opencode`):**
+   - Tracks active systemd daemon configuration, runtime plugin source (`plugins/icm.ts`), `package.json`, and symbolic links back to `/home/jallred/Dev_Lab`.
+   - **Local-Only Repository:** This repository has NO upstream remote configured. It operates strictly as a local version-control safety net on disk.
+
+### 8.2 The VSCode Invisibility Blindspot
+> [!NOTE]
+> **Why `~/.config/opencode` is Invisible in VSCode:**
+> When VSCode opens `/home/jallred/Dev_Lab` as a single-folder workspace, VSCode's Source Control tree monitors only Git repositories inside the workspace tree. Because `~/.config/opencode` is located in the user's home directory outside the workspace root, VSCode will NOT show its git status, uncommitted changes, or branch history unless:
+> 1. You add `~/.config/opencode` to your workspace via **File $\to$ Add Folder to Workspace...** (creating a multi-root workspace), or
+> 2. You inspect/commit it directly via the CLI: `cd ~/.config/opencode && git status`.
+
+### 8.3 The Amnesia & Circular Brainstorming Trap
+When delegation attempts encounter friction (such as a subagent stall, tool permission rejection, or context overflow), LLMs frequently fall into **Recency Amnesia**:
+- **The Anti-Pattern:** The agent attempts to brainstorm a new configuration, invent a novel schema, or rewrite system prompts from scratch.
+- **The Result (Circular Thrash):** The agent oscillates between previously failed states (e.g. re-enabling banned `grep`, adding 1,500 words of redundant preambles, or renaming `sisyphus-junior` $\leftrightarrow$ `junior`), burning hours to reinvent what was working two commits prior.
+
+### 8.4 Mandatory Ground-Truth Protocol ([BKM-071])
+Before attempting to debug, modify, or rewrite any delegation harness script, prompt template, or OpenCode configuration:
+1. **Audit Git History First:**
+   ```bash
+   # Check OpenCode daemon configuration history
+   cd ~/.config/opencode && git status && git log -n 5 --oneline
+   
+   # Check workspace and harness history
+   cd /home/jallred/Dev_Lab && git status && git log -n 5 --oneline
+   ```
+2. **Inspect Diffs Against Known Working Commits:** Run `git diff` against the last verified working checkpoint (e.g. `d24b36e`, `a055245`) to identify exact regressions rather than guessing.
+3. **Double-Commit Invariant:** Whenever configuration changes are validated:
+   - Commit the source template in `Dev_Lab` / `Portfolio_Dev`.
+   - Commit the daemon runtime in `~/.config/opencode`.
 
 
