@@ -260,6 +260,7 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
         "model": model_name,
         "prompt": PROMPT,
         "stream": True,
+        "think": False,
         "options": {"temperature": 0.1, "num_predict": 60},
     }
 
