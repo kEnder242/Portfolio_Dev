@@ -21088,7 +21088,7 @@
     }
   },
   {
-    "id": "DISC-001",
+    "id": "DISC-011",
     "theme": "Swarm Governance & Architectural JITC",
     "paper_order": 491,
     "origin": {
@@ -21132,7 +21132,7 @@
       "aliases": [
         "just-in-time-illusion",
         "WIS-490",
-        "DISC-001"
+        "DISC-011"
       ],
       "status": "APPROVED"
     }
