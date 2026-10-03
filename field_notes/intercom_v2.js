@@ -45,6 +45,10 @@ let lastMsgSource = "";
 let currentSocketId = "Unknown"; // [FEAT-344] Persistence Tracker
 let currentLabKey = ""; // [FEAT-426] X-Lab-Key for WS handshake + heartbeat fetch
 
+// [FEAT-638] Response Feedback State
+let lastUserQuery = ""; // Stores the last user query for feedback attribution
+let lastRequestId = ""; // Stores the last request ID for feedback attribution
+
 // [FEAT-339] Message De-duplication
 const seenMsgIds = new Set();
 const MAX_SEEN_IDS = 50;
@@ -337,6 +341,21 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         `;
     }
     
+    // [FEAT-638] Response Feedback Buttons
+    let respFbHtml = '';
+    if (channel === 'chat' && !isRestoringHistory && 
+        source && /pinky|brain|insight|thought|resident|shadow/i.test(source.toLowerCase()) && 
+        sl_low !== 'system' && sl_low !== 'me' && 
+        !isInternal && text) {
+        // Store feedback data on the message element
+        msg.setAttribute('data-fb-query', lastUserQuery || '');
+        msg.setAttribute('data-fb-reqid', lastRequestId || (metadata && metadata.msg_id) || 'session-msg');
+        msg.setAttribute('data-fb-response', text);
+        
+        // Build feedback buttons HTML
+        respFbHtml = '<div class="resp-fb"><button type="button" class="fb-btn" data-fb="UP" onclick="submitResponseFeedback(this)">👍</button><button type="button" class="fb-btn" data-fb="DOWN" onclick="submitResponseFeedback(this)">👎</button></div>';
+    }
+    
     const isSystem = sl_low === 'system';
     const text_low = text.toLowerCase();
     const isSystemStrategic = (isSystem) && (text_low.includes('strategic') || text_low.includes('engaging'));
@@ -405,6 +424,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
             </div>
             <div class="msg-body">${formattedText}</div>
             ${metaHtml}
+            ${respFbHtml}
         `;
     }
     
@@ -506,6 +526,9 @@ function sendText() {
     }
 
     const request_id = `UI_${Math.random().toString(36).substr(2, 6)}`;
+    // [FEAT-638] Store user query and request ID for feedback attribution
+    lastUserQuery = content;
+    lastRequestId = request_id;
     appendMsg(content, 'user-msg', 'ME');
     lastMsgSource = 'me';
     ws.send(JSON.stringify({ 
@@ -940,6 +963,8 @@ async function connect() {
                 
                 // acme_lab.py sends tagged_query: f"[ME] {query}"
                 const cleanText = data.text.replace("[ME] ", "");
+                // [FEAT-638] Store voice user query for feedback attribution
+                lastUserQuery = cleanText;
                 appendMsg(cleanText, 'user-msg', 'Me (Voice)');
                 lastMsgSource = 'me';
             }
@@ -1109,5 +1134,30 @@ window.dismissDnaProposal = function(btn) {
             status.style.color = '#8b949e';
         }
     }
+};
+
+// [FEAT-638] Global Response Feedback Handler
+window.submitResponseFeedback = function(btn) {
+    const msg = btn.closest('.message'); if (!msg || btn.disabled) return;
+    const rating = btn.getAttribute('data-fb');
+    const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://127.0.0.1:8765' : 'https://acme.jason-lab.dev';
+    const payload = {
+        rating: rating,
+        query: msg.getAttribute('data-fb-query') || '',
+        request_id: msg.getAttribute('data-fb-reqid') || 'session-msg',
+        response: msg.getAttribute('data-fb-response') || '',
+        source: 'UI'
+    };
+    fetch(base + '/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(res => res.json().then(d => ({ ok: res.ok, d })))
+        .then(({ok, d}) => {
+            if (!ok || d.status !== 'success') throw new Error('feedback rejected: ' + JSON.stringify(d));
+            const row = msg.querySelector('.resp-fb');
+            row.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; });
+            btn.classList.add(rating === 'UP' ? 'active-up' : 'active-down');
+            console.log('[FEAT-638] feedback recorded:', d);
+        })
+        .catch(err => console.error('[FEAT-638] feedback failed:', err));
 };
 
