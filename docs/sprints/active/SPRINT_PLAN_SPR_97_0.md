@@ -2,7 +2,7 @@
 
 **Sprint ID:** `SPR_97_0`  
 **Theme:** Single Canonical File Homes (Anti-Duplication), Active Feedback Loop Closure (`👍/👎`), Process Lifecycle & Dead-Lock Reaping, Expanded Cognitive Vibe Palette (`SOCRATIC`, `CHRONICLE`, `RETROSPECTIVE`, etc.), and Passive Telemetry Gating (`FEAT-632`–`FEAT-636`)  
-**Status:** ACTIVE  
+**Status:** **SPRINT COMPLETED & FULLY CERTIFIED**  
 **Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[BKM-060]` (Federated DNA Domains), `[BKM-015]` (Semantic Anchor Protocol), `[BKM-020]` (High-Fidelity Sprint Documentation), `[INS-038]` (The Rug Bump Law), `[INS-042]` (The Waffle Trap & Circular Fixing Traps)  
 **Target Silicon Nodes:** z87-Linux (RTX 2080 Ti Local vLLM 3B Base), Node KENDER (RTX 4090 Ollama Conductor), Node Brain (macOS M5 Air MLX :8002), ChromaDB Port 8001 (CLaRa-DNA)
 
@@ -148,17 +148,18 @@ flowchart TD
 ---
 
 ### 🏥 Story 97.5: Live Lab Vitals 6:00 AM Daily Sanity Check Badges & Passive Polling Guarantee
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[AGY:TAKEOVER]` (Swarm local 3x retry + cloud timeout fallback per `BKM-049`)
 * **Feature Anchor:** `[FEAT-641]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** UI vital cards lacked visual anchoring to the 06:00 AM health audit, and live telemetry required verification to ensure 100% passive, zero-wake behavior.
 * **Task Breakdown:**
   1. Verify and enforce that all telemetry endpoints (`/status`, `/sys_metrics`, `/telemetry_kpi`, DCGM port 9400) in `HomeLabAI/src/infra/live_telemetry.py` are 100% passive read-only operations with zero `/wake` or GPU ignition side effects.
-  2. Quarantine audio vocal synthesis and TTS testing strictly to the 06:00 AM Daily Health Audit (`daily_accountability_audit.py`), barring regular status polling from firing audio pipelines.
+  2. Quarantine audio vocal synthesis and TTS testing strictly to the 06:00 AM Daily Health Audit (`standalone_accountability_watchdog.py`), barring regular status polling from firing audio pipelines.
   3. Add a visual **"6:00 AM Daily Sanity Check" badge** (`[HEALTH: NOMINAL]` / `[HEALTH: AUDIT_STALE]`) to each vital card in `Portfolio_Dev/field_notes/status.html`.
+  4. Write test battery in `HomeLabAI/src/tests/test_telemetry_collector.py` and run verification.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/live_telemetry.py`, `HomeLabAI/src/infra/daily_accountability_audit.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_telemetry_collector.py -v`
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/live_telemetry.py`, `HomeLabAI/src/infra/standalone_accountability_watchdog.py`, `HomeLabAI/src/tests/test_telemetry_collector.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_telemetry_collector.py -v` (9/9 passing).
   * **Anchor 3 (Live Silicon Invariant):** Continuous 5s status polling produces zero VRAM delta or engine state transitions; vital cards display 06:00 AM health status.
   * **Anchor 4 (DNA Links):** `[FEAT-641]`, `[FEAT-607]`, `[BKM-024]`.
 
