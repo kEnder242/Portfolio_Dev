@@ -3604,14 +3604,15 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Eliminates multi-turn interactive slicing loops and prevents conductor context ballooning on KENDER 4090 while maintaining self-contained tool autonomy.
 **Mechanism:** Python AST extraction and MCP tool interface in `clara_dna_mcp_server.py`.
 
-## [FEAT-643] Asynchronous Semantic Pre-Warm & Conductor Context Buffer
+## [FEAT-643] Asynchronous Semantic Pre-Warm (Neural Map-Reduce on M5 Air)
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
 **Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
 **Code:** `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
-**Logic:** Implements a pre-warm target file reducer in `delegate.py` that processes declared target files before session execution, populating `/tmp/clara_context_cache.json` with structured semantic summaries (lock paths, scheduling anchors, state strings, test mock fixtures). When L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached digest seamlessly alongside the dynamic AST blueprint in <10ms.
-**Rationale:** Preserves L2 conductor agency and avoids turn bloat while ensuring the conductor operates with complete semantic ground truth from Turn 1.
-**Mechanism:** Target context caching in `delegate.py` and cache lookup/volunteering in `clara_dna_mcp_server.py`.
+**Logic:** Implements an asynchronous pre-warming pipeline during story delegation that dispatches declared target files to Node Brain (macOS M5 Air via MLX on port `:8000`/`:8002`) before session execution. M5 Air executes neural Map-Reduce code summarization, populating `/tmp/clara_context_cache.json` with high-density architectural digests (classes, lock paths, state machines, handlers). When the L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached neural digest seamlessly alongside the dynamic AST blueprint in <10ms.
+**Rationale:** Preserves L2 conductor agency, dumps context bloat before L2 reads, and eliminates runaway multi-turn slicing loops by tricking L2 into receiving a complete, pre-chewed semantic map on Turn 1.
+**Mechanism:** M5 Air MLX chat completions in `delegate.py` (`_prewarm_target_context`) and cache lookup in `clara_dna_mcp_server.py`.
+
 
 ## [DISC-011] The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)
 **Sprint:** SPR-97.0
