@@ -99,9 +99,10 @@ flowchart TD
 ---
 
 ### 🛡️ Story 97.3: Dead-Lock Reaping, VRAM Status Clean-up & Queue Hardening
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Resolved via `[AGY:TAKEOVER]` after Attempt 3 timeout)
 * **Feature Anchor:** `[FEAT-639]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED** (`4188c6c`, `97e1c47`)
+* **Certification Summary:** 10/10 pytest battery in `HomeLabAI/src/tests/test_lock_reaper.py` passed cleanly (100% green). Verified: 1. Dead PID lock reaping sweep at 05:45 AM; 2. Hard 60-minute training watchdog; 3. Genuine per-state status strings in `types.py`; 4. Disabled send button in `intercom_v2.js` when locked/offline with preserved message drafts.
 * **Why & Root Cause:** 
   1. An unhandled `SIGKILL` during nightly LoRA training left an orphaned `maintenance.lock`, blocking `/wake` and stranding VRAM at 208MB.
   2. `types.py` line 114 contained a hardcoded binary ternary emitting `"Lab Hibernating"` for any non-operational state even when hibernation was disabled.
