@@ -618,6 +618,11 @@ async function getLabKey(target) {
                     bar.style.color = '#f85149';
                 }
                 statusDot.className = 'status-dot offline';
+                if (sendBtn) {
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.5';
+                    sendBtn.title = 'Lab is locked during maintenance';
+                }
                 return null;
             }
             if (data.session_token) {
@@ -671,6 +676,11 @@ async function connect() {
         window.ws = ws;
         ws.onopen = () => {
             statusDot.className = 'status-dot online';
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.style.opacity = '1';
+                sendBtn.title = 'Send message (Enter)';
+            }
             
             ws.send(JSON.stringify({ 
                 type: "handshake", 
@@ -682,6 +692,11 @@ async function connect() {
         };
         ws.onclose = (event) => {
             statusDot.className = 'status-dot offline';
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.style.opacity = '0.5';
+                sendBtn.title = 'Disconnected from Lab';
+            }
             const reason = event.reason || (event.code ? `Code: ${event.code}` : '');
             if (event.code === 1008 && event.reason && (event.reason.includes("Code updated") || event.reason.includes("Stale bytecode"))) {
                 const reasonText = event.reason;
