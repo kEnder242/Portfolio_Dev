@@ -1136,6 +1136,17 @@ window.dismissDnaProposal = function(btn) {
     }
 };
 
+// [FEAT-638] Feedback Toast (Story 97.2 / Task 3)
+let toastTimer = null;
+function showToast(msg, kind) {
+    const t = document.getElementById('intercom-toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.className = 'pg-toast ' + (kind === 'success' ? 'success' : 'error') + ' show';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = 'pg-toast ' + (kind === 'success' ? 'success' : 'error'); }, 2400);
+}
+
 // [FEAT-638] Global Response Feedback Handler
 window.submitResponseFeedback = function(btn) {
     const msg = btn.closest('.message'); if (!msg || btn.disabled) return;
@@ -1157,7 +1168,8 @@ window.submitResponseFeedback = function(btn) {
             row.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; });
             btn.classList.add(rating === 'UP' ? 'active-up' : 'active-down');
             console.log('[FEAT-638] feedback recorded:', d);
+            showToast((rating === 'UP' ? '👍' : '👎') + ' Feedback recorded', 'success');
         })
-        .catch(err => console.error('[FEAT-638] feedback failed:', err));
+        .catch(err => { console.error('[FEAT-638] feedback failed:', err); showToast('Feedback capture failed — Foyer unreachable.', 'error'); });
 };
 

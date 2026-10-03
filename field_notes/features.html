@@ -4963,6 +4963,12 @@
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Inspiration Anchor</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>[INS-042] (The Waffle Trap &amp; Circular Fixing Traps) / [INS-038] (The Rug Bump Law)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L225" style="color:var(--accent-color); text-decoration:none;">src/logic/cognitive_hub.py</a>
@@ -13964,25 +13970,23 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Philosophy</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Multi-node federated delegation is governed by active, layered feedback loops (<code>VIBE-009</code>). Systems achieve resilience not from static prompts or blind retry loops, but from capturing rich diagnostic backpressure—including the subagent's cognitive <code>[HANDOVER REFLECTION]</code> (<code>PHL-009</code>) and registering them into the Loop Ledger (<code>BKM-069</code>).</p>
+                    <p>Ambient hook recall must remain ultra-lean, navigational, and invariant (<code>BKM-071</code>). The Delegation Playbook Index provides single-line routing pointers to the OpenAgent Handover Playbook, avoiding prompt bloat while grounding the agent in version control ground truth.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Operational Rules</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <ol>
-<li><strong>The 3-Loop Diagnostic Mandate:</strong> Enforce up to 3 diagnostic rounds on local silicon before escalating to cloud swarm or primary takeover.</li>
-<li><strong>Cognitive Reflection Extraction:</strong> Automatically extract <code>[HANDOVER REFLECTION]</code> from all subagent dispatches, persisting into ICM (<code>topic: delegation_feedback</code>) and <code>delegation_ledger.jsonl</code>.</li>
-<li><strong>Outer Diagnostic Action Loop:</strong> The orchestrator must synthesize subagent feedback and unit test tracebacks to fix prompt ambiguity or harness mismatches between retry rounds.</li>
-<li><strong>Resident Hardware Anchoring:</strong> Preserve resident model topology (Qwen3.8-27B on Kender RTX 4090, Ternary-Bonsai-2-27B via Headroom :8002 on M5 Air). Protect Apple Unified RAM from cold-load thrashing.</li>
-<li><strong>Playbook Quick-Diagnostic Index Mandate:</strong> The orchestrator MUST audit Section 0 (Quick-Diagnostic Index) of <code>OPENAGENT_HANDOVER_PLAYBOOK.md</code> prior to formulating any retry dispatch or tier escalation.</li>
+<li><strong>Index Only Modus Operandi:</strong> Strictly maintained as a lean single-line routing pointer into <code>OPENAGENT_HANDOVER_PLAYBOOK.md</code>.</li>
+<li><strong>Synchronization Mandate:</strong> Whenever the playbook is updated or refined, Section 0 and BKM-071 must be synchronized.</li>
+<li><strong>Version Control Ground Truth:</strong> §8 of the index mandates <code>git log</code>/<code>git diff</code> audits before modifying any delegation configuration.</li>
 </ol>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Parent Anchors</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>[VIBE-009]</code>, <code>[BKM-069]</code>, <code>[PHL-009]</code>, <code>[FEAT-522](#FEAT-522)</code></p>
+                    <p><code>[FEAT-522](#FEAT-522)</code>, <code>[BKM-049]</code>, <code>[BKM-069]</code>, <code>[VIBE-009]</code></p>
                 </div>
             </div>     </div>
                             </details>
@@ -17608,6 +17612,762 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>promote_dna.py</code> CLI and <code>SpineManager.promote_dna_record()</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-629">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-629</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Phase-Isolated Decoupled Nightly Architecture & Cascade Elimination
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/infra/nightly_forge.py</code>, <code>HomeLabAI/src/infra/nightly_lora_training.py</code>, <code>HomeLabAI/src/forge/build_lora_datasets.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decouples all nightly maintenance, training, and synthesis phases into isolated execution cells. A failure or partial completion in LoRA adapter fine-tuning (or VRAM quiesce) logs a warning and evaluates degraded accountability, but NEVER cascades to abort independent downstream tasks (Subconscious Dreaming, Automated Wisdom Refinement, Sprint DNA Sync, Dynamic Federated Benchmarks, Morning Round Table Probe, or Historical Journal Bridge / Mass Scan). Restores Foyer state to OPERATIONAL in a guaranteed <code>finally</code> block before initiating post-training synthesis.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>nightly_forge.py</code> (phase-isolated <code>try/except</code> execution flow), <code>daily_accountability_digest.json</code>, <code>nightly_dialogue.json</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-630">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-630</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    RDNA-Assisted HyDE Semantic Expansion Bridge & Pinky Flywheel Cache
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0 / SPR-95.2</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>Portfolio_Dev/dna/rdna_questions.json</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Integrates <code>rdna</code> as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade and Pinky Voice Integration:
+1. <strong>Tier 1 (Zero-Latency Fast-Path &lt;10ms):</strong> Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB <code>:8001</code> (confidence $\ge 0.75$, distance $\le 0.45$) to immediately bridge to authoritative <code>feature_dna</code>, <code>wisdom_dna</code>, and <code>philosophy_dna</code> targets with zero LLM generation latency.
+2. <strong>Tier 2 (Pinky Analytical First Turn ~1.5s):</strong> If RDNA misses or query is novel, Pinky (holding fine-tuned <code>cli_voice_v1</code> LoRA weights per <code>[FEAT-554](#FEAT-554)</code>) generates the <strong>first legitimate human-facing analytical response / quip</strong>. This spoken turn simultaneously serves as the authoritative HyDE vector for deep Archive citation retrieval.
+3. <strong>Tier 3 (Self-Learning Flywheel Cache):</strong> Asynchronously persists the novel (query ↔ Pinky HyDE anchor) pair back into <code>Portfolio_Dev/dna/rdna_questions.json</code> and syncs to ChromaDB <code>:8001</code>, permanently expanding the zero-latency exemplar bank so subsequent related queries hit Tier 1 in &lt;10ms.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Restores true division of labor: eliminates artificial background pre-triage delays while turning Pinky's visible conversational dialogue into a self-improving semantic retrieval flywheel.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>resolve_rdna_hyde_exemplar()</code> and <code>select_vector_query()</code> in <code>HomeLabAI/src/nodes/archive_node.py</code>, and <code>_HYDE_SYNTHESIS_PROMPT</code> in <code>HomeLabAI/src/logic/cognitive_hub.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-631">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-631</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Ambient Hook Recalibration & Bucketed Quota Routing
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0 / SPR-95.2</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/hooks/icm_hook.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements a Two-Pass Universal Quota Routing strategy:
+1. <strong>Pass 1 (Universal First Spot):</strong> Guarantees that every peer DNA domain (<code>feature_dna</code>, <code>behavioral_dna</code>, <code>wisdom_dna</code>, <code>inspiration_dna</code>/<code>philosophy_dna</code>, <code>rdna</code>, and <code>loop_dna</code>/<code>vibe_dna</code>) is evaluated with a guaranteed top-1 slot under strict distance banding ($\le 0.52$, or $\le 0.58$ for QQ), eliminating keyword-conditional gating and preventing dense collections from crowding out philosophical, behavioral, or research anchors.
+2. <strong>Pass 2 (Capacity Ceiling Fill):</strong> Expands dense operational collections (<code>feature_dna</code> and <code>behavioral_dna</code> / <code>BKM</code>) up to a maximum capacity ceiling of 3 slots each to fill remaining prompt budget.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) with universal domain representation provide vastly richer multi-domain context without human-perceptible delay.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>probe_claradb()</code> in <code>HomeLabAI/config/hooks/icm_hook.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-112">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-112</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Fail-Loud Hook Latency & Degradation Telemetry Sentinel
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0 / SPR-95.2</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/hooks/icm_hook.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Telemetry watchdog embedded directly inside the ambient pre-turn hook. If hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, the hook immediately injects a prominent warning header (<code>[⚠️ HOOK WARNING: ...]</code>) into the model prompt context and emits a colored alert to <code>stderr</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces <code>BKM-062</code> ("fail loudly and visibly") so degraded recall or vector database latency is never masked by silent fallbacks.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Timing decorator and error accumulator in <code>icm_hook.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-113">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-113</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0 / SPR-95.2</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>AGENTS_L2.md</code>, <code>AGENTS_L3.md</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a "half-baked" prefill strategy where orchestrators pass lean anchor pointer lists (<code>[FEAT-xxx]</code>, <code>[WIS-xxx]</code>) to Layer 2 Conductor (<code>Atlas</code>), which queries CLaRa MCP <code>:8001</code> on demand and hands razor-thin, zero-bloat surgical instructions down to Layer 3 Workers (<code>Sisyphus-Junior</code>). Establishes distinct context profiles for Surgical Builders (tool BKMs, wisdom, code contracts) vs. Cognitive/Editorial Mice (inspiration, document DNA, vibe, narrative synthesis).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents context bloat in leaf workers while giving editorial and dialectical subagents rich narrative grounding.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>delegate.py</code> and task contract payloads.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-114">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-114</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Triage Finding & Post-Triage Context Scope Focuser (Oracle Spike)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-95.0 / SPR-95.2</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/nodes/triage_node.py</code>, <code>Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Cloud Oracle investigative spike to evaluate and optimize triage root-cause detection and post-triage context filtering algorithms. Evaluates symptom-to-post-mortem mapping in <code>wisdom_dna</code> and designs pruning algorithms to narrow context scope before delegating to worker or editorial subagents.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Aligns triage and HyDE vector water levels (Tier 1 &amp; 2) while keeping diagnostic telemetry cleanly decoupled from generative editorial pipelines.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Oracle adversarial audit and triage benchmark suite.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-632">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-632</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Loop DNA Domain & Federated Feedback ChromaDB Collection
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>Portfolio_Dev/sync_chroma_dna.py</code>, <code>HomeLabAI/data/foyer_feedback_ledger.jsonl</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Elevates feedback loops (<code>[LOOP-xxx]</code>) into a first-class peer DNA domain under <code>BKM-060</code> with a dedicated ChromaDB collection (<code>loop_dna</code>). Parses <code>foyer_feedback_ledger.jsonl</code> and loop structures into vector embeddings, enabling agentic subagents and orchestrators to query active systemic feedback mechanics, signal emitters, and actuator gates via <code>query_dna(collection="loop_dna")</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Preserves architectural feedback loops as live, verifiable instruction assets rather than static human documentation.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>POST /feedback</code> endpoint in <code>router.py</code>, ChromaDB collection sync in <code>sync_chroma_dna.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-633">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-633</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Flywheel Deepening: Pinky Coherence Judge & Human Upvote Promotion Gating
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Connects Pinky's Coherence Critic judge score (<code>[FEAT-406](#FEAT-406)</code>, <code>[FEAT-470](#FEAT-470)</code>) and the Intercom/Foyer feedback telemetry (<code>POST /feedback</code>) directly into the RDNA Flywheel caching gate. Novel (query ↔ Pinky HyDE anchor) pairs generated in Tier 2 are promoted to permanent canonical RDNA when validated by Pinky Coherence Judge ($\ge 4/5$) or confirmed via explicit Human Upvote.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Empowers the judge phase to lift serious architectural weight and prevents conversational noise from contaminating the high-speed Tier-1 exemplar bank.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>evaluate_rdna_promotion_candidate()</code> in <code>archive_node.py</code> and <code>POST /feedback</code> telemetry in <code>router.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-634">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-634</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Human Downvote Signal & Negative Memory Foil Shortcut
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Introduces a streamlined human downvote feedback shortcut (<code>👎</code> / <code>DOWN</code> / <code>BAD_TAKE</code>) across Intercom UI and Foyer telemetry (<code>POST /feedback</code>). When triggered, immediately:
+1. Purges the corresponding synthetic HyDE anchor from the candidate RDNA cache.
+2. Registers a negative foil exemplar in <code>foyer_feedback_ledger.jsonl</code> / <code>memory_foil</code> to prevent recurring misroutes.
+3. Signals Pinky Critic to generate a concise post-mortem diagnostic turn without manual operator prompt retyping.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Closes the human-in-the-loop corrective feedback loop rapidly and non-invasively during live co-pilot pairing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>POST /feedback</code> in <code>router.py</code> and <code>archive_node.purge_candidate_exemplar()</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-635">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-635</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Brain Information Gatekeeper & Curator Synergy Annotations
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Transforms the local Brain node into an Information Gatekeeper. Brain evaluates candidate vectors collected by Pinky, drops ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage <code>💡 Curator Note: [ID] connects with [ID]</code> annotations. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates prompt pollution and hallucination cascades in Deep Thought by guaranteeing high-density, strictly grounded context injection.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>BrainNode.curate_context()</code> and <code>CognitiveHub.build_deep_thought_context()</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-636">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-636</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    In-Flight Dynamic Retrieval Scope Override ("Direct Flight")
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Grants the Brain node the authority to dynamically expand or override the retrieval scope in-flight (e.g. immediately fetching <code>blackboard_ledger_dna</code> when conversational continuity is detected) without bouncing back into an expensive 2-3s recursive re-triage loop.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents conversational dead-ends and avoids unnecessary latency when Triage misclassifies a follow-up turn.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>BrainNode.direct_flight_override()</code> in <code>HomeLabAI/src/nodes/brain_node.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-115">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-115</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Headroom Proxy, TurboQuant KV Compression & Silicon Reasoning Control Protocol
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-96.0 (Active)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/docs/LAB_INFRASTRUCTURE.md</code>, <code>opencode.json</code>, <code>HomeLabAI/docs/Protocols.md</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (<code>192.168.1.26:11434</code> / Ollama / RTX 4090) and Apple M5 Air (<code>192.168.1.46:8002</code> / oMLX Headroom Proxy). Enforces reasoning suppression on M5 Air worker endpoints (<code>'reasoning': 0</code>) and Ollama conduction thinking controls.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents macOS Metal wired memory crashes (<code>24.46GB</code> cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Port 8002 proxying, <code>opencode.json</code> provider config, and prompt generation directives.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-637">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-637</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Single-Home Runtime Data & Interleaved Accountability Engine
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/status.html</code>, <code>HomeLabAI/src/infra/daily_accountability_audit.py</code>, <code>HomeLabAI/src/v5/ignition/manager.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces single canonical home architecture for all dynamic ledgers, logs, and statuses directly in <code>Portfolio_Dev/field_notes/data/</code>. Eliminates split-brain multi-homed file writing to <code>www_deploy/data/</code>. Wires <code>status.html</code> <code>pollPager()</code> to ingest and interleave <code>accountability_ledger.jsonl</code> events into the unified forensic timeline.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates data drift between build artifacts and active runtime files while elevating morning health audits to the operator console.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Single-directory logging in <code>manager.py</code> and DOM timeline interleaving in <code>status.html</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-638">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-638</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Intercom Fourth Wall Feedback UI & REST Bridge
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/intercom.html</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>HomeLabAI/src/v5/foyer/router.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Embeds discrete, interactive <code>👍</code> (thumbs up) and <code>👎</code> (thumbs down) feedback actuators into assistant chat bubbles in <code>intercom.html</code>. Dispatches asynchronous payloads (<code>{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }</code>) to Foyer port <code>:8765/feedback</code>, providing immediate visual feedback glow and persisting signals into <code>foyer_feedback_ledger.jsonl</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Event listeners in <code>intercom_v2.js</code> and <code>POST /feedback</code> handler in <code>router.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-639">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-639</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Attendant Dead-Lock Reaping, VRAM Status Clean-up & Queue Gate Hardening
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/v5/common/types.py</code>, <code>HomeLabAI/src/v5/ignition/manager.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements an automated dead-lock reaping engine in the Lab Attendant at 05:45 AM that inspects PID liveness and forcibly purges orphaned <code>maintenance.lock</code> files, logging a <code>CRITICAL</code> alert and re-igniting vLLM via <code>/wake</code>. Corrects status serialization in <code>types.py</code> to output genuine states (<code>"Lab Offline"</code>, <code>"Standby"</code>, <code>"Maintenance"</code>) and locks the intercom "Send" button when Foyer is locked/offline, preserving unsent text in the client input area.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees self-healing from aborted nightly fine-tuning tasks and prevents message drop during engine transitions.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>engine_watchdog.py</code> reaping sweep, <code>types.py</code> status mapper, and <code>intercom_v2.js</code> button gating.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-640">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-640</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Expanded Cognitive Vibe Palette & Speculative Head-Start Calibration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code>, <code>HomeLabAI/src/logic/vector_pre_triage.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Deprecates the catch-all <code>CASUAL</code> vibe in favor of an expressive cognitive taxonomy (<code>SOCRATIC</code>, <code>FORENSIC</code>, <code>CHRONICLE</code>, <code>RETROSPECTIVE</code>, <code>ARCHITECTURAL</code>, <code>TACTICAL</code>, <code>STRATEGIC</code>, <code>PROVOCATIVE</code>, <code>METABOLIC</code>). Injects gentle <code>semantic_hint</code> vector priors from sub-15ms FastEmbed ChromaDB probes (<code>BKM-015</code>) and calibrates the speculative relay to ensure REST-probed M5 Air is granted its full dynamic EWMA lead window before local vLLM fallback racing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enhances reasoning depth and unlocks nuanced domain routing without introducing brittle keyword hardcoding.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>_extract_triage_intuition()</code> in <code>cognitive_hub.py</code> and <code>SpeculativeTriageRelay</code> in <code>speculative_triage.py</code>.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-641">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-641</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Live Lab Vitals 6:00 AM Daily Sanity Check Badges & Passive Telemetry Guarantee
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/status.html</code>, <code>HomeLabAI/src/infra/live_telemetry.py</code>, <code>HomeLabAI/src/infra/daily_accountability_audit.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces 100% passive, read-only status and telemetry polling across <code>/status</code>, <code>/sys_metrics</code>, <code>/telemetry_kpi</code>, and DCGM port 9400 with zero engine wake side effects. Quarantines vocal synthesis testing strictly to the 06:00 AM daily health audit and equips <code>status.html</code> vital cards with visual 06:00 AM baseline health sanity check badges.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>live_telemetry.py</code> read-only probes and <code>status.html</code> DOM badge rendering.</p>
                 </div>
             </div>     </div>
                             </details>

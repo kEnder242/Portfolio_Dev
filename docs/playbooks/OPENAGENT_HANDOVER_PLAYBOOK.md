@@ -42,7 +42,7 @@ Tasks are allocated based on engine roles to minimize API costs, prevent rate-li
 | **Prometheus (Planner & Diagnostic Investigator)** | Read-only strategic planner, pre-flight context auditor, diagnostic investigator | Dispatched via `delegate.py --mode plan/investigate` |
 | **Primary Local Conductor & Verifier (KENDER)** | Node KENDER / Windows 4090 (Port 11434 Ollama: `hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q3_K_XL`) for 128k context architecture and verification | Subagent `task()` primary target (`atlas`, `librarian`, `momus`) |
 | **Primary Local Reasoning Node (M5 Air)** | Mac M5 Air (Port 8002 Headroom Proxy → Port 8000 oMLX: `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp`) for 128k context bounded surgical patching & greenfield | Subagent target for surgical edits (`sisyphus-junior`, `hephaestus`) |
-| **Cloud Fallback Tier** | OpenCode (`opencode/big-pickle`) $\rightarrow$ OpenRouter Free (`openrouter/openrouter/free`) | Automatic runtime fallback (Zero Google, Zero Cohere) |
+| **Cloud Fallback Tier** | OpenRouter Free (`openrouter/openrouter/free`) for Sisyphus/Prometheus $\rightarrow$ Cohere Command A+ (`cohere/command-a-plus-05-2026`) for Oracle (Zero Cohere on Sisyphus) | Automatic runtime fallback (Zero Google API keys) |
 
 ---
 
@@ -86,10 +86,10 @@ The OmO web UI proxy (`opencode-proxy.service`) is socket-activated via `opencod
 ### 3.2 Vector DNA Grounding (Port 8001)
 - Instead of injecting full markdown files (`FeatureTracker.md` or `Protocols.md`) into prompt text, BKM and FEAT context is retrieved dynamically from ChromaDB vector collections (`behavioral_dna`, `feature_dna`) running on port 8001.
 
-### 3.3 The Anti-Starvation Rule (Zero Google Gemini in OpenAgent)
-- When AGY (Gemini Strategic Guardian) exhausts its API token quota, Google APIs are rate-limited for both systems.
-- Therefore, **Google Gemini models are strictly prohibited from OpenAgent fallback chains**.
-- OpenAgent fallbacks must route strictly through **OpenRouter Free $\rightarrow$ OpenCode Free $\rightarrow$ Cohere/Mistral $\rightarrow$ M5 Air MLX $\rightarrow$ Windows 4090**.
+### 3.3 The Anti-Starvation Rule (Zero Google Gemini API Keys in OpenAgent)
+- **Direct Google API Ban:** When AGY (Gemini Strategic Guardian) exhausts its API token quota, Google APIs are rate-limited for both systems. Therefore, **direct Google Gemini API keys (`GOOGLE_GENERATIVE_AI_API_KEY` / `GEMINI_API_KEY`) and native Gemini models are strictly prohibited from OpenAgent fallback chains**.
+- **The OpenRouter Open-Weights Exception:** Open-weights Google models hosted independently by third-party providers on OpenRouter's free tier (e.g. `openrouter/google/gemma-4-31b-it:free`) are **EXEMPT** from this ban. They consume strictly OpenRouter free quota (zero AGY/Gemini API credits) and provide vital architectural model diversity when local Qwen silicon encounters a blind spot.
+- OpenAgent fallbacks route strictly through **OpenRouter Free (Gemma/OpenRouter) $\rightarrow$ Cohere (Oracle) $\rightarrow$ macOS M5 Air MLX $\rightarrow$ Windows 4090**.
 
 ### 3.4 Local Silicon Token Overhead & Metal Memory Ceilings (Port 8002 Proxy)
 - **The Physical Memory Constraint (24GB Apple Silicon):** Running `Qwen3.8-27B` (15.5 GB resident weights) without KV compression risks breaching macOS Metal's 24.46 GB wired allocation cap (`iogpu.wired_limit_mb`).

@@ -2750,7 +2750,7 @@
 1. **The 3-Loop Diagnostic Mandate:** Enforce up to 3 diagnostic rounds on local silicon before escalating to cloud swarm or primary takeover.
 2. **Story Owner Tag Invariant:** Stories tagged `[SWARM:*]` strictly forbid primary agent direct code mutations without exhausted delegation attempts.
 3. **Safe-Patch Mandate:** Subagents must use `clara-dna_safe_patch` (or atomic patchers) for existing codebase files.
-4. **Sovereign Topology Invariant:** Root dispatch routes to Atlas on KENDER 4090; leaf worker routes to Sisyphus-Junior (or Hephaestus) on M5 Air via `task(category="coder")`.
+4. **Sovereign Topology Invariant:** Root dispatch routes to Atlas on KENDER 4090; leaf worker routes to Sisyphus-Junior (or Hephaestus) on M5 Air via `task(category="quick")`.
 5. **Inspection Gate Law:** 5-minute watchdog is an inspection gate to probe token flow and abort stalled/zombie sessions.
 6. **Diagnostic Routing:** Refer to `[BKM-071]` for failure diagnosis, circular trap prevention, and playbook indexing.
 
