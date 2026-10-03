@@ -159,3 +159,23 @@ flowchart TD
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_telemetry_collector.py -v`
   * **Anchor 3 (Live Silicon Invariant):** Continuous 5s status polling produces zero VRAM delta or engine state transitions; vital cards display 06:00 AM health status.
   * **Anchor 4 (DNA Links):** `[FEAT-641]`, `[FEAT-607]`, `[BKM-024]`.
+
+---
+
+## 🔮 Sprint 98+ Architectural Backlog Candidates
+
+### 📌 [BACKLOG-98.1] JITC Bounded Reader Renaming (`clara-dna_read` $\to$ `jitc_read`)
+* **Feature Anchor:** `[FEAT-642]`
+* **Goal:** Disambiguate codebase reading from vector DNA retrieval by renaming MCP tool `clara-dna_read` to `jitc_read` (or `bounded_read`).
+
+### 📌 [BACKLOG-98.2] L3 Offload: Dedicated Test Runner & Failure Diagnostician on M5 Air
+* **Feature Anchor:** `[FEAT-644]` (Candidate)
+* **Goal:** Offload test execution and traceback analysis to Sisyphus-Junior on M5 Air. Atlas applies code on 4090 $\to$ L3 runs `pytest`, parses failures, and returns concise 3-line diagnostic fixes to Atlas.
+
+### 📌 [BACKLOG-98.3] Pipelined Speculative Pre-Warming for Story $N+1$
+* **Feature Anchor:** `[FEAT-645]` (Candidate)
+* **Goal:** While Story $N$ is executing on 4090, `delegate.py` speculatively pre-warms target files for Story $N+1$ concurrently on M5 Air, eliminating start-up pre-warm delay.
+
+### 📌 [BACKLOG-98.4] Background Blast-Radius & Syntax Linter
+* **Feature Anchor:** `[FEAT-646]` (Candidate)
+* **Goal:** L3 worker runs continuous passive validation (`py_compile`, `node --check`, unassigned file diff audits) during execution.
