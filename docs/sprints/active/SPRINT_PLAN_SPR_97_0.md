@@ -52,12 +52,12 @@ flowchart TD
 
 ### 🔍 Story 97.0: Oracle Pre-Pass on Sprint 97 Plan & Architectural Invariant Grounding
 * **Assigned Owner:** `[SWARM:ORACLE]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **TODO**
 * **Why & Root Cause:** Prevent circular fixing traps (`INS-042`) and enforce complexity conservation (`INS-038`) before code dispatch.
-* **Mechanism:** The Oracle persona audits Sprint 97 story specifications against bedrock protocols (`BKM-006`, `BKM-024`, `BKM-049`, `BKM-060`, `BKM-071`, `BKM-073`). Validates that all target files exist, test batteries are declared verbatim, and owner tags comply with swarm governance.
+* **Mechanism:** The Oracle persona audited Sprint 97 story specifications against bedrock protocols (`BKM-006`, `BKM-024`, `BKM-049`, `BKM-060`, `BKM-071`, `BKM-073`). Validated that all target files exist, test batteries are declared verbatim, and owner tags comply with swarm governance. Output compiled to [`Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_97.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_97.md).
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_97_0.md`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_97.md`.
-  * **Anchor 2 (Verification Command):** `delegate.py --persona oracle --task "Audit Sprint 97 story contracts"`
+  * **Anchor 2 (Verification Command):** `delegate.py --persona oracle --task "Audit Sprint 97 story contracts"` (Certified in `ORACLE_REVIEW_SPRINT_97.md`).
   * **Anchor 3 (Live Silicon Invariant):** 100% of sprint stories verified for single canonical file paths, explicit test commands, and non-overlapping vibe scopes.
   * **Anchor 4 (DNA Links):** `[BKM-049]`, `[BKM-071]`, `[INS-038]`, `[INS-042]`.
 
@@ -66,14 +66,15 @@ flowchart TD
 #### 📡 Story 97.1: Single-Home Runtime Data & Accountability in Interleaved Logs
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[FEAT-637]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** Multi-homed writes between `Portfolio_Dev/field_notes/data/` and `www_deploy/data/` caused split-brain status discrepancies. Morning accountability audits were writing to isolated run paths, leaving `pollPager()` blind in `status.html`.
 * **Task Breakdown:**
-  1. Update all daemon write paths (`manager.py`, `router.py`, `daily_accountability_audit.py`) to output directly and exclusively to `Portfolio_Dev/field_notes/data/accountability_ledger.jsonl` and `status.json`.
-  2. Update `pollPager()` in `Portfolio_Dev/field_notes/status.html` to fetch `data/accountability_ledger.jsonl` and render green accountability badge events interleaved with `pager_activity.json` and `validation_ledger.jsonl`.
+  1. Updated `standalone_accountability_watchdog.py`: removed `WWW_DEPLOY_DIR` dual-write loop; writes exclusively to `OUTPUT_DIR` (`Portfolio_Dev/field_notes/data/`). Added `append_accountability_ledger()` logging exact 5-field schema.
+  2. Updated `pollPager()` in `Portfolio_Dev/field_notes/status.html` to fetch `data/accountability_ledger.jsonl` and inject green accountability badge events interleaved into the unified forensic timeline.
+  3. Added test battery `HomeLabAI/src/tests/test_accountability_ledger.py` (4/4 passed).
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/daily_accountability_audit.py`, `HomeLabAI/src/v5/ignition/manager.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_accountability_ledger.py -v`
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/standalone_accountability_watchdog.py`, `HomeLabAI/src/tests/test_accountability_ledger.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_accountability_ledger.py -v` (4/4 PASSED).
   * **Anchor 3 (Live Silicon Invariant):** Zero duplicate runtime data writes to `www_deploy/data/`; `accountability_ledger.jsonl` rendered in `status.html` timeline.
   * **Anchor 4 (DNA Links):** `[FEAT-637]`, `[BKM-022]`, `[BKM-024]`.
 
