@@ -1085,6 +1085,27 @@
                     }
                 }
                 
+                // [Story 971] Interleave the single-home accountability ledger
+                // (appended nightly by the standalone watchdog) with the pager stream.
+                const r3 = await fetch('data/accountability_ledger.jsonl?t=' + new Date().getTime());
+                if (r3.ok) {
+                    const text3 = await r3.text();
+                    for (const line of text3.trim().split('\n').filter(l => l.trim().length > 0)) {
+                        try {
+                            const entry = JSON.parse(line);
+                            const status = entry.overall_status || 'UNKNOWN';
+                            const severity = status === 'PASS' ? 'info' : (status === 'FAIL' ? 'critical' : 'warning');
+                            alerts.push({
+                                timestamp: entry.timestamp,
+                                severity: severity,
+                                source: 'ACCOUNTABILITY',
+                                message: `[AUDIT: ${status}] ${entry.passed_checks}/${entry.total_checks} checks passed${entry.discrepancies && entry.discrepancies.length ? ' | ' + entry.discrepancies.join(' • ').substring(0, 180) : ''}`,
+                                accountability: entry
+                            });
+                        } catch (e) {}
+                    }
+                }
+
                 renderInterleavedTimeline(alerts);
             } catch (err) {
                 console.error("Pager/RAG poll failed", err);
