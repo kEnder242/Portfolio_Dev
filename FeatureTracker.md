@@ -3595,31 +3595,32 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.
 **Mechanism:** `live_telemetry.py` read-only probes and `status.html` DOM badge rendering.
 
-## [FEAT-642] Bounded Multi-Tier Reader (`clara-dna_read` & First-Touch AST Blueprint)
+### [FEAT-642] Bounded Multi-Tier Reader (`clara-dna_read` & First-Touch AST Blueprint)
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
 **Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
-**Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `AGENTS_L2.md`, `oh-my-openagent.json`
-**Logic:** Provides an intelligent, bounded syntax-aware AST reader tool in the CLaRa MCP server. On first touch or when `outline_only=True` is passed, delivers a dynamic, high-density AST structural blueprint (class hierarchies, method signatures, argument types, route decorators, line numbers) in <350 tokens without body bloat. If the file is not yet cached in `/tmp/clara_context_cache.json`, an `outline_only=True` request blocks briefly (~1.0–1.5s) to generate the full reduced summary, returning both AST + semantic map in a single turn. When a line slice is requested on an uncached file, the slice is returned instantly while an asynchronous background reduce is kicked off, volunteering the summary on subsequent reads.
+**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `AcmeLab/src/clara_dna_mcp_server.py`, `AGENTS_L2.md`, `oh-my-openagent.json`
+**Logic:** Provides an intelligent, bounded syntax-aware AST reader tool in the CLaRa MCP server via the canonical `context_prewarmer` module. On first touch or when `outline_only=True` is passed, delivers a dynamic, high-density AST structural blueprint (class hierarchies, method signatures, argument types, route decorators, line numbers) in <350 tokens without body bloat. If the file is not yet cached in `/tmp/clara_context_cache.json`, an `outline_only=True` request queries M5 Air via Headroom port 8002 to generate the reduced semantic digest, returning both AST + semantic map in a single turn. When a line slice is requested, serves code immediately and volunteers newly available summaries.
 **Rationale:** Eliminates multi-turn interactive slicing loops and prevents conductor context ballooning on KENDER 4090 while maintaining self-contained tool autonomy.
-**Mechanism:** Python AST extraction and MCP tool interface in `clara_dna_mcp_server.py`.
+**Mechanism:** Canonical AST extraction and cache coordination in `context_prewarmer.py` and MCP tool interface in `clara_dna_mcp_server.py`.
 
 ## [FEAT-643] Asynchronous Semantic Pre-Warm (Neural Map-Reduce on M5 Air)
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
 **Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
-**Code:** `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
-**Logic:** Implements an asynchronous pre-warming pipeline during story delegation that dispatches declared target files to Node Brain (macOS M5 Air via MLX on port `:8000`/`:8002`) before session execution. M5 Air executes neural Map-Reduce code summarization, populating `/tmp/clara_context_cache.json` with high-density architectural digests (classes, lock paths, state machines, handlers). When the L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached neural digest seamlessly alongside the dynamic AST blueprint in <10ms.
+**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
+**Logic:** Implements a parallel semantic pre-warming pipeline during story delegation that dispatches declared target files to Node Brain (macOS M5 Air via Headroom port `:8002` running `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` with TurboQuant 4-bit KV compression) before session execution. M5 Air executes parallel neural Map-Reduce code summarization across target files via `ThreadPoolExecutor`, populating `/tmp/clara_context_cache.json` with high-density architectural digests (classes, lock paths, state machines, handlers). When the L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached neural digest seamlessly alongside the dynamic AST blueprint in <10ms.
 **Rationale:** Preserves L2 conductor agency, dumps context bloat before L2 reads, and eliminates runaway multi-turn slicing loops by tricking L2 into receiving a complete, pre-chewed semantic map on Turn 1.
-**Mechanism:** M5 Air MLX chat completions in `delegate.py` (`_prewarm_target_context`) and cache lookup in `clara_dna_mcp_server.py`.
-
+**Mechanism:** Canonical `prewarm_files` in `context_prewarmer.py` invoked by `delegate.py` (`_prewarm_target_context`) and served via `clara_dna_mcp_server.py`.
 
 ## [DISC-011] The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)
 **Sprint:** SPR-97.0
 **Status:** APPROVED
 **Tags:** `#systems_architecture`, `#swarm_governance`, `#jitc`, `[LAB-019]`, `[FEAT-642]`, `[FEAT-643]`, `[BKM-049]`, `[BKM-060]`
+**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
 **Origin Quote:** "The trick works if L2 thinks it's reading the file. Pre-warming saves the summary but waits for L2 to ask to read it with clara-dna_read. By using delegate we convince L2 it did its due diligence when in fact just spoon fed under the table."
-**Synthesis:** High-reasoning orchestrators often face a dilemma when delegating to bounded local conductors (L2): forcing context into initial prompts bloats context and biases planning, whereas letting conductors read raw files leads to runaway slicing loops (18+ turns, 115k tokens) or context starvation. The breakthrough is the *Just-In-Time Illusion*: separate dynamic structural discovery (instant on-the-fly AST generation) from semantic comprehension (pre-warmed or JIT-reduced micro-digests). By pre-reducing target files into an ambient cache (`/tmp/clara_context_cache.json`), when L2 exercises its own agency and issues `clara-dna_read()`, the tool returns the AST outline + semantic anchors in a single bounded 300-token payload. L2 feels autonomous and fully grounded on Turn 1, while cognitive load and token bloat remain strictly bounded.
+**Synthesis:** High-reasoning orchestrators often face a dilemma when delegating to bounded local conductors (L2): forcing context into initial prompts bloats context and biases planning, whereas letting conductors read raw files leads to runaway slicing loops (18+ turns, 115k tokens) or context starvation. The breakthrough is the *Just-In-Time Illusion*: separate dynamic structural discovery (instant on-the-fly AST generation) from semantic comprehension (pre-warmed or JIT-reduced micro-digests on M5 Air via Headroom port 8002). By pre-reducing target files into an ambient cache (`/tmp/clara_context_cache.json`), when L2 exercises its own agency and issues `clara-dna_read()`, the tool returns the AST outline + semantic anchors in a single bounded 300-token payload. L2 feels autonomous and fully grounded on Turn 1, while cognitive load and token bloat remain strictly bounded.
+
 
 
 
