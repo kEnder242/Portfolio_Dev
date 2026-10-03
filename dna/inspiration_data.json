@@ -1831,5 +1831,65 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-043",
+    "theme": "Economics of Federated Silicon & Cognitive Division of Labor",
+    "paper_order": 43,
+    "origin": {
+      "author": "jallred",
+      "text": "Cloud bleed isn't, technically bad. I just want to preserve tokens and if it's doable locally then it's free. As long as it's stable and we have a good sprint plan I can run it overnight and it feels the same to me as a cloud sprint. Also, reviewing work is more efficient than making new work from what I understand so when you review local code I think we're actually saving something.",
+      "source": "Federated Swarm Economics & Sprint 97 Architectural Alignment",
+      "immutable": true,
+      "created_at": "2026-10-02T22:42:00Z"
+    },
+    "synthesis": {
+      "title": "The Asymmetry of Generation vs. Review (The Zero-Marginal Labor Law)",
+      "narrative_context": "In a federated AI lab, code generation (exploring, drafting, AST modifications, iterative testing) is computationally expensive and token-heavy, while code review and verification are precise, fast, and token-light. Leveraging sovereign local silicon (Node KENDER 4090 + Node Brain M5 Air) for overnight execution delivers zero-marginal-cost code production. The strategic frontier guardian (AGY) achieves maximum cognitive leverage not by typing raw lines from scratch, but by evaluating structured diffs, test outputs, and handover reflections—yielding frontier quality at sovereign local cost.",
+      "lab_anchors": [
+        "BKM-049 (The Delegation Execution Rulebook)",
+        "BKM-024 (Live Validation Mandate)",
+        "FEAT-497 (Federated Silicon Multi-Node Live Certification)",
+        "OPENAGENT_HANDOVER_PLAYBOOK.md"
+      ],
+      "review_notes": "Establishes the governing economic invariant for overnight local silicon delegation vs frontier strategic code review.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Code generation is token-heavy and computationally expensive, while verification and review are fast and token-light. Local silicon delivers zero-marginal-cost execution overnight, while frontier agents provide maximum cognitive leverage through structured code review.",
+          "certified_at": "2026-10-02T22:42:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "federated-economics",
+        "zero-marginal-cost",
+        "generation-vs-review",
+        "asymmetry",
+        "overnight-execution",
+        "cognitive-leverage",
+        "systems-architecture"
+      ],
+      "explicit_links": [
+        "INS-038",
+        "INS-042",
+        "BKM-049",
+        "BKM-024",
+        "FEAT-497"
+      ],
+      "aliases": [
+        "PHL-043",
+        "zero-marginal-labor-law",
+        "asymmetry-of-generation-vs-review"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
