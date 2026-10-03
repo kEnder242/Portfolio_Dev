@@ -816,5 +816,48 @@
       "CRITIQUE: You're absolutely right, Deep Thought. Customization is key to staying ahead in the ever-evolving tech landscape. By the way, have you encountered any"
     ],
     "consensus_1liner": "You're absolutely right, Deep Thought. Customization is key to staying ahead in the ever-evolving tech landscape. By the way, have you encountered any difficulties in integrating new technologies whil"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1790902303,
+    "time_str": "17:51:43",
+    "topic": "LAB_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 0.548,
+      "pinky_stance": 0.55,
+      "brain_arch": 0.552,
+      "oracle": 0.563,
+      "pinky_judgment": 0.563
+    },
+    "deltas_elapsed_s": {
+      "triage": 0.548,
+      "pinky_stance": 0.002,
+      "brain_arch": 0.002,
+      "oracle": 0.011,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 0.548,
+      "pinky_stance": 0.55,
+      "brain_arch": 0.552,
+      "oracle": 0.563,
+      "pinky_judgment": 0.563
+    },
+    "deltas": {
+      "triage": 0.548,
+      "pinky_stance": 0.002,
+      "brain_arch": 0.002,
+      "oracle": 0.011,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 0.563,
+    "total_s": 0.563,
+    "distillation_bullets": [
+      "CRITIQUE: Test token"
+    ],
+    "consensus_1liner": "Test token"
   }
 ]
