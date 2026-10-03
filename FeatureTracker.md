@@ -3613,10 +3613,11 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Preserves L2 conductor agency and avoids turn bloat while ensuring the conductor operates with complete semantic ground truth from Turn 1.
 **Mechanism:** Asynchronous context caching in `delegate.py` and cache lookup in `clara_dna_mcp_server.py`.
 
-## [DISC-001] The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)
+## [DISC-011] The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)
 **Sprint:** SPR-97.0
 **Status:** APPROVED
 **Tags:** `#systems_architecture`, `#swarm_governance`, `#jitc`, `[LAB-019]`, `[FEAT-642]`, `[FEAT-643]`, `[BKM-049]`, `[BKM-060]`
 **Origin Quote:** "The trick works if L2 thinks it's reading the file. Pre-warming saves the summary but waits for L2 to ask to read it with clara-dna_read. By using delegate we convince L2 it did its due diligence when in fact just spoon fed under the table."
 **Synthesis:** High-reasoning orchestrators often face a dilemma when delegating to bounded local conductors (L2): forcing context into initial prompts bloats context and biases planning, whereas letting conductors read raw files leads to runaway slicing loops (18+ turns, 115k tokens) or context starvation. The breakthrough is the *Just-In-Time Illusion*: pre-extract semantic summaries and AST maps asynchronously before session start, but store them invisibly in an ambient micro-cache (`/tmp/clara_context_cache.json`). When L2 exercises its own agency and issues `clara-dna_read()`, the tool returns the pre-chewed AST outline + semantic anchors in a single bounded 300-token payload. L2 feels autonomous and fully grounded on Turn 1, while cognitive load and token bloat remain strictly bounded.
+
 
