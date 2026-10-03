@@ -83,7 +83,7 @@ flowchart TD
 ### 👍 Story 97.2: Intercom Feedback UI (Thumbs Up/Down) & Co-Pilot Bridge
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Feature Anchor:** `[FEAT-638]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** Story 96.5 implemented the backend `POST /feedback` endpoint in `router.py`, but the user-facing clickable icons were deferred, leaving the Fourth Wall feedback flywheel open.
 * **Task Breakdown:**
   1. Add discrete `👍` (thumbs up) and `👎` (thumbs down) icon buttons to assistant message bubbles in `Portfolio_Dev/field_notes/intercom.html` and `intercom_v2.js`.
