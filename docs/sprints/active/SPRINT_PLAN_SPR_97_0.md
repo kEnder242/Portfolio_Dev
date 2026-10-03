@@ -121,9 +121,10 @@ flowchart TD
 ---
 
 ### 🧠 Story 97.4: Triage Vibe Palette Expansion & Speculative Head-Start Calibration
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:CLOUD]` (Resolved via `[AGY:TAKEOVER]` after Cloud single-shot output ceiling)
 * **Feature Anchor:** `[FEAT-640]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED** (`cc97415`)
+* **Certification Summary:** 10/10 pytest battery in `test_live_pre_reflection_triage.py` and `test_vector_pre_triage.py` passed cleanly (100% green). Verified: 1. All 9 expanded cognitive vibes (`SOCRATIC`, `FORENSIC`, `CHRONICLE`, `RETROSPECTIVE`, `ARCHITECTURAL`, `TACTICAL`, `STRATEGIC`, `PROVOCATIVE`, `METABOLIC`) active in schema and prompt rules; 2. Gentle `semantic_hint` vector priors in `vector_pre_triage.py`; 3. Dynamic EWMA lead window ($W_{\text{lead}} = 2 \cdot t_{\text{warmed}} + L_t + 4 \cdot J_t$) calibrated.
 * **Why & Root Cause:** `CASUAL` vibe acted as an over-aggressive catch-all that dampened reasoning depth. Work Past vs Recent Past was conflated under "HISTORICAL".
 * **Task Breakdown:**
   1. Deprecate `CASUAL` vibe and expand cognitive triage taxonomy in `cognitive_hub.py` and `speculative_triage.py`:
