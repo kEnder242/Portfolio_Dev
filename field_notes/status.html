@@ -187,25 +187,25 @@
             <h2 class="section-title">Live Lab Vitals</h2>
             <div class="vitals-grid">
                 <div class="vital-card">
-                    <div class="vital-label">Scanner Engine</div>
+                    <div class="vital-label">Scanner Engine <span class="vital-health-badge" id="scanner-health-badge"></span></div>
                     <div class="vital-value" id="scanner-status"><span class="status-led led-offline"></span>OFFLINE</div>
                     <div class="progress-container"><div class="progress-bar" id="burn-progress"></div></div>
                 </div>
                 <div class="vital-card">
-                    <div class="vital-label">Bicameral State</div>
+                    <div class="vital-label">Bicameral State <span class="vital-health-badge" id="engine-health-badge"></span></div>
                     <div class="vital-value" id="engine-mode"><span class="status-led led-offline"></span>OPERATIONAL</div>
                     <div id="ignition-reason" style="font-size: 0.7em; color: #666; margin-top: 4px; font-family: monospace;">[UNITY-3B]</div>
                 </div>
                 <div class="vital-card">
-                    <div class="vital-label">Active Model</div>
+                    <div class="vital-label">Active Model <span class="vital-health-badge" id="model-health-badge"></span></div>
                     <div class="vital-value" id="model-name">Llama-3.2-3B-AWQ</div>
                 </div>
                 <div class="vital-card">
-                    <div class="vital-label">Web Intercom</div>
+                    <div class="vital-label">Web Intercom <span class="vital-health-badge" id="intercom-health-badge"></span></div>
                     <div class="vital-value" id="intercom-status"><span class="status-led led-yielded"></span>HIBERNATING</div>
                 </div>
                 <div class="vital-card" id="job-hunt-card" style="display:none; border-left-color: #ffc107;">
-                    <div class="vital-label">Recruiter Brief</div>
+                    <div class="vital-label">Recruiter Brief <span class="vital-health-badge" id="job-health-badge"></span></div>
                     <div class="vital-value" id="job-status"><span id="job-led" class="status-led led-online"></span>IDLE</div>
                     <div id="job-meta" style="font-size: 0.7rem; color: #888; margin-top: 5px;"></div>
                 </div>
@@ -1019,11 +1019,18 @@
                         if (ram) ram.textContent = data.vitals.ram;
                     }
 
-                    // [FEAT-607 / Story 88.6] Green-Lie Discrepancy Sentry
+                    // [FEAT-607 / FEAT-641] Green-Lie Discrepancy Sentry & 6:00 AM Daily Sanity Check Badges
                     fetch('data/daily_accountability_digest.json?t=' + Date.now())
                         .then(r => r.ok ? r.json() : null)
                         .then(digest => {
-                            if (!digest) return;
+                            if (!digest) {
+                                ['scanner-health-badge', 'engine-health-badge', 'model-health-badge', 'intercom-health-badge', 'job-health-badge'].forEach(id => {
+                                    const el = document.getElementById(id);
+                                    if (el) el.innerHTML = `<span style="background:rgba(227,179,65,0.15);color:#e3b341;border:1px solid rgba(227,179,65,0.3);font-size:0.6rem;padding:1px 4px;border-radius:3px;margin-left:4px;font-family:monospace;font-weight:normal;" title="6:00 AM Daily Sanity Check (No Audit Digest Found)">[HEALTH: AUDIT_STALE]</span>`;
+                                });
+                                return;
+                            }
+                            
                             const sentryBanner = document.getElementById('discrepancy-sentry-banner');
                             if (digest.discrepancies && digest.discrepancies.length > 0) {
                                 if (sentryBanner) {
@@ -1033,6 +1040,24 @@
                             } else if (sentryBanner) {
                                 sentryBanner.style.display = 'none';
                             }
+
+                            // [FEAT-641] Live Lab Vitals 6:00 AM Daily Sanity Check Badges
+                            const now = Date.now();
+                            const auditDate = digest.timestamp ? new Date(digest.timestamp).getTime() : 0;
+                            const ageHours = (now - auditDate) / (1000 * 3600);
+                            const isNominal = digest.overall_status === 'PASS' && ageHours < 26.0;
+
+                            const badgeText = isNominal ? '[HEALTH: NOMINAL]' : '[HEALTH: AUDIT_STALE]';
+                            const badgeStyle = isNominal 
+                                ? 'background:rgba(40,167,69,0.15);color:#28a745;border:1px solid rgba(40,167,69,0.3);font-size:0.6rem;padding:1px 4px;border-radius:3px;margin-left:4px;font-family:monospace;font-weight:normal;'
+                                : 'background:rgba(227,179,65,0.15);color:#e3b341;border:1px solid rgba(227,179,65,0.3);font-size:0.6rem;padding:1px 4px;border-radius:3px;margin-left:4px;font-family:monospace;font-weight:normal;';
+
+                            const badgeHtml = `<span style="${badgeStyle}" title="6:00 AM Daily Sanity Check (${digest.timestamp || 'N/A'})">${badgeText}</span>`;
+
+                            ['scanner-health-badge', 'engine-health-badge', 'model-health-badge', 'intercom-health-badge', 'job-health-badge'].forEach(id => {
+                                const el = document.getElementById(id);
+                                if (el) el.innerHTML = badgeHtml;
+                            });
                         }).catch(e => {});
                 })
                 .catch(err => console.error("Status poll failed", err));
