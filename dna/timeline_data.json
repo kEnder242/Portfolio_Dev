@@ -237,7 +237,7 @@
     "id": "DISC-011",
     "title": "The Just-In-Time Illusion",
     "theme": "Swarm Governance",
-    "summary": "Pre-warming semantic digests into an ambient micro-cache lets L2 conductor models exercise agency via clara-dna_read while bounding context below 400 tokens and eliminating runaway slicing loops.",
+    "summary": "Separate dynamic structural discovery (instant AST) from semantic comprehension (pre-warmed/volunteered micro-digests), preserving L2 agency while bounding context below 350 tokens.",
     "date": "2026-10-03",
     "status": "APPROVED",
     "anchors": [
