@@ -23,6 +23,7 @@ Sprint 97.0 executes critical operational hardening and cognitive expansion acro
 4. **Story 97.3 (Dead-Lock Reaping & Queue Hardening):** Deploys automated 05:45 AM stale lock reaping in the Attendant with `CRITICAL` alerting, eliminates bogus "Lab Hibernating" messages in `types.py`, and enforces "Disabled to Send" button gating.
 5. **Story 97.4 (Triage Vibe Expansion):** Deprecates `CASUAL` vibe; implements an expressive cognitive palette (`SOCRATIC`, `FORENSIC`, `CHRONICLE`, `RETROSPECTIVE`, `ARCHITECTURAL`, `TACTICAL`, `STRATEGIC`, `PROVOCATIVE`, `METABOLIC`) with BKM-015 vector hints and M5 Air speculative lead calibration.
 6. **Story 97.5 (Live Lab Vitals & Passive Guarantee):** Adds "6:00 AM Daily Sanity Check" visual badges to `status.html` vital cards and quarantines audio vocal synthesis testing strictly to the 06:00 AM daily health audit.
+7. **Infrastructure Hardening (`[FEAT-642]` / `[FEAT-643]`):** Deploys `clara-dna_read` (First-Touch AST Blueprint + Bounded Slicing) and asynchronous semantic pre-warming via M5 Air (`#jitc`, `[LAB-019]`), eliminating multi-turn conductor slicing loops and preserving <2,000 token context on KENDER 4090.
 
 ```mermaid
 flowchart TD

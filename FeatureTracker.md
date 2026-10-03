@@ -3594,3 +3594,21 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Enforces 100% passive, read-only status and telemetry polling across `/status`, `/sys_metrics`, `/telemetry_kpi`, and DCGM port 9400 with zero engine wake side effects. Quarantines vocal synthesis testing strictly to the 06:00 AM daily health audit and equips `status.html` vital cards with visual 06:00 AM baseline health sanity check badges.
 **Rationale:** Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.
 **Mechanism:** `live_telemetry.py` read-only probes and `status.html` DOM badge rendering.
+
+## [FEAT-642] Bounded Multi-Tier Reader (`clara-dna_read` & First-Touch AST Blueprint)
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
+**Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `AGENTS_L2.md`, `oh-my-openagent.json`
+**Logic:** Provides an intelligent, bounded syntax-aware AST reader tool in the CLaRa MCP server. On first touch of any file, delivers a complete, high-density AST structural blueprint (class hierarchies, method signatures, argument types, route decorators, line numbers) in <300 tokens without body bloat. On subsequent requests or explicit line parameters, calms down to bounded line slicing (max 150 lines), while pulling pre-warmed semantic digests from the CLaRa Context Cache.
+**Rationale:** Eliminates multi-turn interactive slicing loops and prevents conductor context ballooning on KENDER 4090 while maintaining sub-15ms reading latency.
+**Mechanism:** Python AST extraction and MCP tool interface in `clara_dna_mcp_server.py`.
+
+## [FEAT-643] Asynchronous Semantic Pre-Warm & Conductor Context Buffer
+**Sprint:** SPR-97.0
+**Status:** ACTIVE
+**Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
+**Code:** `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
+**Logic:** Implements an asynchronous pre-warming pipeline during story delegation that analyzes target files concurrently on M5 Air or local AST buffers before session execution. Populates `/tmp/clara_context_cache.json` with structured semantic summaries (lock paths, scheduling anchors, state strings, test mock fixtures). When L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached digest seamlessly alongside the AST blueprint in <10ms.
+**Rationale:** Preserves L2 conductor agency and avoids turn bloat while ensuring the conductor operates with complete semantic ground truth from Turn 1.
+**Mechanism:** Asynchronous context caching in `delegate.py` and cache lookup in `clara_dna_mcp_server.py`.
