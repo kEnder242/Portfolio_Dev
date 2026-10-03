@@ -52,7 +52,7 @@ flowchart TD
 
 ### 🔍 Story 97.0: Oracle Pre-Pass on Sprint 97 Plan & Architectural Invariant Grounding
 * **Assigned Owner:** `[SWARM:ORACLE]`
-* **Status:** **TODO**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** Prevent circular fixing traps (`INS-042`) and enforce complexity conservation (`INS-038`) before code dispatch.
 * **Mechanism:** The Oracle persona audited Sprint 97 story specifications against bedrock protocols (`BKM-006`, `BKM-024`, `BKM-049`, `BKM-060`, `BKM-071`, `BKM-073`). Validated that all target files exist, test batteries are declared verbatim, and owner tags comply with swarm governance. Output compiled to [`Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_97.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_97.md).
 * **4-Anchor Specification:**
