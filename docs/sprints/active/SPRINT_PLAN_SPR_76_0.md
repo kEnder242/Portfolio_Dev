@@ -64,6 +64,7 @@ During the Sprint 76.0 alignment sessions, the following fundamental design deci
   1. `oh-my-openagent.json` mapped to verified active models (`nvidia/nemotron-3-super-120b-a12b:free`, `nvidia/nemotron-3.5-lightning:free`, `cohere/north-mini-code:free`).
   2. `delegate.py` implements `--mode oracle` with structured prompt contracts for clustering, outlines, and review.
   3. Canary test passes with 0 interactive popups and sub-2s tool latency.
+  4. Live verification of ambient hooks in OpenCode/OpenAgent via delegation: confirm `delegate.py` does not bake in ambient hooks and relies strictly on ambient hook triggers.
 
 ---
 

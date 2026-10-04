@@ -3676,6 +3676,23 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Refactors round table accountability probes to eliminate all synthetic mocks, fake score fallbacks, and naive substring assertions. Probes execute genuine end-to-end multi-stage deliberation (Triage -> Pinky -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) against live silicon endpoints, measuring physical token latency and recording genuine semantic consensus in `foyer_stage_ledger.jsonl` and `judge_backpressure.jsonl`.
 **Rationale:** Enforces BKM-062 and BKM-024 by preventing deceptive green-lie test passes and ensuring round table multi-agent deliberation is authenticated against running daemons.
 
+## [FEAT-652] Sovereign Decoupling & Autonomous Startup Ignition
+**Sprint:** SPR-99.0
+**Status:** ACTIVE
+**Tags:** `#sovereign_decoupling`, `#autonomous_ignition`, `#state_machine`, `[FEAT-136]`, `[FEAT-517]`, `[BKM-024]`
+**Code:** `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/speculative_triage.py`
+**Logic:** Enforces complete sovereign decoupling of local startup and ignition from remote secondary endpoints (Node KENDER / Node M5 Air). All remote background priming tasks execute as detached non-blocking coroutines with a strict 2.0s timeout and dynamic host resolution from `infrastructure.json`. The resident daemon automatically reconciles silicon state on `/reload_residents` if the lab is in `INIT` with hibernation disabled, preventing stranded scale-to-zero states.
+**Rationale:** Eliminates event-loop blocking, network hang risks, and auto-ignition discrepancies during cold boot and resident reloads.
+
+## [FEAT-653] PID-Aware Stale VRAM Mutex Auto-Reclaim Protocol
+**Sprint:** SPR-99.0
+**Status:** ACTIVE
+**Tags:** `#vram_mutex`, `#self_healing`, `#process_liveness`, `[FEAT-287]`, `[BKM-024]`
+**Code:** `HomeLabAI/src/v5/ignition/manager.py`
+**Logic:** Implements active PID recording and process liveness verification on `/tmp/vram.lock`. When lock acquisition encounters `fcntl.flock` contention (`OSError`), the manager reads the holding PID from disk and evaluates `os.kill(pid, 0)`. If the holding process is dead or orphaned from a prior crash/kill, the stale mutex is automatically broken and reclaimed without requiring manual operator intervention.
+**Rationale:** Prevents spurious `VRAM Mutex busy` ignition lockouts after unexpected process terminations.
+
+
 
 
 
