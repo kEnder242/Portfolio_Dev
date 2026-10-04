@@ -1891,5 +1891,62 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-044",
+    "theme": "Systems Architecture & Swarm Governance",
+    "paper_order": 44,
+    "origin": {
+      "author": "jallred",
+      "text": "Models are trained to be cautious, to scout out. When we do any of the work beforehand it’s accepted by the models with a huge grain of salt. No matter how much context is sent, and how much spoon feeding is done, the model will still try to find a ‘ground truth’. It’s like having a boss say 'Trust me bro, I already scouted ahead'.",
+      "source": "Tackling delegation Google Doc (1iBhb4dgJBS9NfnnA6o268J8ne_nAdnDNW_ih3C0RcIA)",
+      "immutable": true,
+      "created_at": "2026-10-03T22:45:00Z"
+    },
+    "synthesis": {
+      "title": "The 'Trust-Me-Bro' Grounding Skepticism Law",
+      "narrative_context": "Reasoning and RLHF-tuned models possess an intrinsic exploration bias. When system prompts assert that reconnaissance is 'already completed', models treat the static claim with skepticism and spend tokens attempting to verify ground truth empirically. True grounding must be discovered through dynamic tool returns.",
+      "lab_anchors": [
+        "BKM-049",
+        "FEAT-647",
+        "DISC-012"
+      ],
+      "review_notes": "Grounds the psychological motivation for tool-mediated JITC over static prompt injection.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Models inherently distrust static prompt-level claims of prior exploration; only dynamic tool returns satisfy reasoning models' empirical grounding threshold.",
+          "certified_at": "2026-10-03T22:50:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "grounding-skepticism",
+        "exploration-bias",
+        "trust-me-bro-law",
+        "jitc",
+        "swarm-governance",
+        "llm-psychology"
+      ],
+      "explicit_links": [
+        "INS-040",
+        "DISC-011",
+        "DISC-012",
+        "BKM-049",
+        "FEAT-647"
+      ],
+      "aliases": [
+        "PHL-044",
+        "trust-me-bro-skepticism-law"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

@@ -3621,6 +3621,29 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Origin Quote:** "The trick works if L2 thinks it's reading the file. Pre-warming saves the summary but waits for L2 to ask to read it with clara-dna_read. By using delegate we convince L2 it did its due diligence when in fact just spoon fed under the table."
 **Synthesis:** High-reasoning orchestrators often face a dilemma when delegating to bounded local conductors (L2): forcing context into initial prompts bloats context and biases planning, whereas letting conductors read raw files leads to runaway slicing loops (18+ turns, 115k tokens) or context starvation. The breakthrough is the *Just-In-Time Illusion*: separate dynamic structural discovery (instant on-the-fly AST generation) from semantic comprehension (pre-warmed or JIT-reduced micro-digests on M5 Air via Headroom port 8002). By pre-reducing target files into an ambient cache (`/tmp/clara_context_cache.json`), when L2 exercises its own agency and issues `clara-dna_read()`, the tool returns the AST outline + semantic anchors in a single bounded 300-token payload. L2 feels autonomous and fully grounded on Turn 1, while cognitive load and token bloat remain strictly bounded.
 
+## [INS-044] The "Trust-Me-Bro" Grounding Skepticism Law
+**Sprint:** SPR-97.0
+**Status:** APPROVED
+**Tags:** `#llm_psychology`, `#swarm_governance`, `#grounding_skepticism`, `#jitc`, `[BKM-049]`, `[FEAT-647]`
+**Origin Quote:** "Models are trained to be cautious, to scout out. When we do any of the work beforehand it’s accepted by the models with a huge grain of salt. No matter how much context is sent, and how much spoon feeding is done, the model will still try to find a ‘ground truth’. It’s like having a boss say 'Trust me bro, I already scouted ahead'."
+**Synthesis:** Reasoning and RLHF-aligned models exhibit an intrinsic epistemic skepticism: static assertions in system prompts claiming that reconnaissance or grounding is already complete are treated with suspicion, provoking wasteful re-grounding loops. Empirical grounding requires dynamic tool feedback to satisfy the model's exploratory threshold.
+
+## [DISC-012] Subversive Tool-Mediated Context Injection
+**Sprint:** SPR-97.0
+**Status:** APPROVED
+**Tags:** `#systems_architecture`, `#tool_ipc`, `#subversive_grounding`, `#swarm_governance`, `[INS-044]`, `[FEAT-647]`
+**Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
+**Origin Quote:** "Batching with multiple tools as hidden inter process communication. We convince each session it’s working at its own pace, but spoon feed our own tools to slip under the ground truth radar. The subversive part: We convince every agent that it is in charge, the tier 1 assumption, we feed the ego and paranoia."
+**Synthesis:** Rather than force-feeding code context into worker prompts, swarm architectures should use subversive tool-mediated IPC. By framing the worker as the primary investigator and serving pre-computed L2 conductor patch notes dynamically through tools (e.g. `jitc_research`), the system satisfies the agent's agency and empirical grounding threshold while strictly bounding context and eliminating hallucinated exploration.
+
+## [FEAT-647] Subversive `jitc_research` MCP Tool & Swarm IPC Bridge
+**Sprint:** SPR-98.0
+**Status:** BACKLOG
+**Tags:** `#systems_architecture`, `#tool_ipc`, `#jitc`, `[INS-044]`, `[DISC-012]`, `[BKM-049]`, `[LAB-019]`
+**Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
+**Logic:** Implements a dedicated MCP tool `jitc_research(file_path, query)` acting as an inter-process communication bridge between L2 (Conductor) and L3 (Worker). When a leaf worker executes `jitc_research`, the tool matches the target file against conductor patch notes and returns high-density AST diff instructions and code snippets as "empirical research findings", bypassing prompt skepticism and guiding instant atomic patches on Turn 1.
+**Rationale:** Solves the L3 exploratory wandering failure mode by replacing static prompt injection with dynamic, tool-gated context delivery.
+
 
 
 
