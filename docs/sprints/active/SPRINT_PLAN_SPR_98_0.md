@@ -130,7 +130,7 @@ flowchart TD
 ### 🧪 Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air (27B Stack)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Feature Anchor:** `[BKM-072]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** AGY executes the end-to-end benchmark suite across live silicon to certify that the 27B Conductor/Worker stack operates autonomously with zero exploratory wandering.
 * **Task Breakdown:**
   1. Dispatch live coding tasks across 3 test modules using `delegate.py --local-only` targeting Kender 4090 (Qwen3.8-27B) and M5 Air (Ternary-Bonsai-2-27B).
