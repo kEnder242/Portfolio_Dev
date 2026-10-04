@@ -36,7 +36,7 @@
 * **`TODO-004` (Manuscript Stretch Goal):** "Define intuition as a retrieval problem without actually using the word intuition inside the paper prose."
 * **`TODO-005` (Archive Option A Implementation):** Local disk snapshotting (`papers/archive/PAPER-001_<timestamp>.json`) coupled with automated local Git commit tags.
 * **`TODO-006` (LangGraph Sovereign Multi-Agent Graph & Live Visual Webview):** Architectural evaluation of migrating multi-agent coordination from OpenAgent nested subagent trees to a standalone LangGraph execution engine with live local browser state visualization (LangGraph Studio / custom webview).
-* **`TODO-007` (Subversive JITC Research IPC Bridge):** Dedicated MCP tool and blocking IPC gate (`jitc_research`) delivering pre-computed $L_2$ conductor patch notes to $L_3$ workers on demand.
+* **`TODO-007` (Subversive JITC Research IPC Bridge):** Dedicated MCP tool and blocking IPC gate (`research`) delivering pre-computed $L_2$ conductor patch notes to $L_3$ workers on demand. **[COMPLETED in Sprint 98.0 - `FEAT-647`]**
 | **spr-73-0-triage-rubric** | Phase 15 | Triage Rubric Health, Scalar Decoupling, BKM DNA & Discourse Grounding | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_73_0.md](./SPRINT_PLAN_SPR_73_0.md) |
 | **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
 | **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
