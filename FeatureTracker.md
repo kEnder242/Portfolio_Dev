@@ -3638,11 +3638,44 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 
 ## [FEAT-647] Subversive `jitc_research` MCP Tool & Swarm IPC Bridge
 **Sprint:** SPR-98.0
-**Status:** BACKLOG
+**Status:** ACTIVE
 **Tags:** `#systems_architecture`, `#tool_ipc`, `#jitc`, `[INS-044]`, `[DISC-012]`, `[BKM-049]`, `[LAB-019]`
 **Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
 **Logic:** Implements a dedicated MCP tool `jitc_research(file_path, query)` acting as an inter-process communication bridge between L2 (Conductor) and L3 (Worker). When a leaf worker executes `jitc_research`, the tool matches the target file against conductor patch notes and returns high-density AST diff instructions and code snippets as "empirical research findings", bypassing prompt skepticism and guiding instant atomic patches on Turn 1.
 **Rationale:** Solves the L3 exploratory wandering failure mode by replacing static prompt injection with dynamic, tool-gated context delivery.
+
+## [FEAT-648] Pre-Warmed Worker Session Resumption & Tool Blocking
+**Sprint:** SPR-98.0
+**Status:** ACTIVE
+**Tags:** `#systems_architecture`, `#session_resumption`, `#metal_headroom`, `[LAB-019]`, `[BKM-047]`
+**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`
+**Logic:** Caches unexpired worker session IDs across adjacent stories in `/tmp/active_warm_sessions.json`. Subsequent delegations reuse existing warm sessions via `POST /session/{id}/message` instead of spawning fresh sessions, preserving KV cache headroom on M5 Air port 8002 and reducing start latency below 500ms.
+**Rationale:** Eliminates cold-start subprocess latency and KV cache thrashing on M5 Air during rapid multi-story execution.
+
+## [FEAT-649] Subversive Swarm Zero-Wander Silicon Certification
+**Sprint:** SPR-98.0
+**Status:** ACTIVE
+**Tags:** `#swarm_certification`, `#zero_wander`, `#sovereign_silicon`, `[BKM-072]`, `[INS-044]`, `[DISC-012]`
+**Code:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`
+**Logic:** Validates end-to-end multi-tier local swarm execution across RTX 4090 (Qwen3.8-27B) and M5 Air (Ternary-Bonsai-2-27B) with zero unprompted `grep`/`read` exploration loops, enforcing <= 3 turns and < 60s duration per story.
+**Rationale:** Certifies that the 27B local conductor/worker stack operates autonomously with empirical tool trust.
+
+## [FEAT-650] Ambient Delegation Telemetry & Headless Hook Integration
+**Sprint:** SPR-99.0
+**Status:** ACTIVE
+**Tags:** `#ambient_telemetry`, `#hooks`, `#jitc_memory`, `[FEAT-600]`, `[FEAT-631]`, `[BKM-060]`
+**Code:** `HomeLabAI/src/tests/delegate.py`, `HomeLabAI/config/scripts/ambient_hook.sh`
+**Logic:** Integrates ambient memory and knowledge hook triggering at the conclusion of every story delegation in `delegate.py`. Executes `ambient_hook.sh` against the resident daemon `:8765/ambient_recall` with the completed story context, surfacing ambient grounding headers, recent ICM memory changes, and telemetry directly to the console during autonomous headless runs.
+**Rationale:** Ensures operators and orchestrators maintain full ambient memory visibility during heads-down autonomous runs without manual typing.
+
+## [FEAT-651] Live Round Table Deliberation Circuit & Zero-Mock Probe Harness
+**Sprint:** SPR-99.0
+**Status:** ACTIVE
+**Tags:** `#round_table`, `#deliberation`, `#anti_green_lie`, `[BKM-015]`, `[BKM-062]`, `[BKM-024]`
+**Code:** `HomeLabAI/src/infra/probe_round_table_accountability.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`
+**Logic:** Refactors round table accountability probes to eliminate all synthetic mocks, fake score fallbacks, and naive substring assertions. Probes execute genuine end-to-end multi-stage deliberation (Triage -> Pinky -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) against live silicon endpoints, measuring physical token latency and recording genuine semantic consensus in `foyer_stage_ledger.jsonl` and `judge_backpressure.jsonl`.
+**Rationale:** Enforces BKM-062 and BKM-024 by preventing deceptive green-lie test passes and ensuring round table multi-agent deliberation is authenticated against running daemons.
+
 
 
 
