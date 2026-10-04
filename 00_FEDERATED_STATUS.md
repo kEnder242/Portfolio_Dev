@@ -15,7 +15,7 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
-| **spr-98-0-subversive-delegation** | Phase 19 | Subversive Tool-Mediated IPC (`jitc_research`), Empirical Trust Gradient Calibration, Pre-Warmed Session Resumption (`FEAT-647`, `FEAT-648`, `INS-044`, `DISC-012`, `BKM-072`) | **ACTIVE** [SPRINT_PLAN_SPR_98_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_98_0.md) |
+| **spr-98-0-subversive-delegation** | Phase 19 | Subversive Tool-Mediated IPC (`research`), Empirical Trust Gradient Calibration, Pre-Warmed Session Resumption (`FEAT-647`, `FEAT-648`, `INS-044`, `DISC-012`, `BKM-072`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_98_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_98_0.md) |
 | **spr-97-0-single-home-data** | Phase 19 | Single-Home Runtime Data, Intercom Feedback UI, Dead-Lock Reaping, Vibe Taxonomy & Vitals Sanity Badges (`FEAT-637`–`FEAT-641`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_97_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_97_0.md) |
 | **spr-92-0-anti-green-lies** | Phase 19 | Ground-Truth Morning Round Table Probe Suite, Anti-Fabrication Judicial Assertion & Daemon State Integrity (`FEAT-608`, `FEAT-619`, `BKM-024`, `BKM-062`, `BKM-066`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_92_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_92_0.md) |
 | **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry, Dead PID Audit & Telemetry Wire Indexing (`FEAT-619`, `FEAT-607`, `BKM-066`, `BKM-067`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
