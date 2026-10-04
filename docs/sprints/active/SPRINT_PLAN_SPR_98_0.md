@@ -61,7 +61,7 @@ flowchart TD
 ### 🛠️ Story 98.1: Subversive Tool Suite (`research`, `failure_whisperer`, `handoff_checkpoint`, `locate_path`) & Conductor Cache
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[FEAT-647]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** $L_3$ workers ignore static prompt blueprints because of model skepticism. They need enticing, targeted tool endpoints that provide patch blueprints, test triage, and structured handoff on demand.
 * **Task Breakdown:**
   1. Implement `@mcp.tool() research(file_path: str, query: str = "") -> str` (titled `"JITC Research tool"`) in `AcmeLab/src/clara_dna_mcp_server.py`. Returns cached conductor patch blueprints, AST anchors, and semantic summaries dynamically.
