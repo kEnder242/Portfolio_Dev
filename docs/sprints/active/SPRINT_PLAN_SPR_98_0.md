@@ -34,7 +34,7 @@ flowchart TD
         S98_3["Story 98.3: Pre-Warmed Worker Session Resumption & Tool Blocking [FEAT-648] [SWARM:CLOUD]"]
     end
     subgraph STAGE3 ["🧪 Shakedown & Benchmark"]
-        S98_4["Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air [BKM-072] [SWARM:LOCAL]"]
+        S98_4["Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air [BKM-072] [AGY:PRIMARY]"]
     end
 
     S98_0 --> S98_1
@@ -111,14 +111,14 @@ flowchart TD
 
 ---
 
-### 🧪 Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air
-* **Assigned Owner:** `[SWARM:LOCAL]`
+### 🧪 Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air (27B Stack)
+* **Assigned Owner:** `[AGY:PRIMARY]`
 * **Feature Anchor:** `[BKM-072]`
 * **Status:** **PENDING EXECUTION**
-* **Why & Root Cause:** Certify the entire end-to-end bicameral pipeline on real silicon with zero primary-agent intervention.
+* **Why & Root Cause:** AGY executes the end-to-end benchmark suite across live silicon to certify that the 27B Conductor/Worker stack operates autonomously with zero exploratory wandering.
 * **Task Breakdown:**
-  1. Dispatch live coding tasks across 3 test modules using `delegate.py --local-only`.
-  2. Assert $L_2$ Conductor (4090) generates AST plan $\to$ $L_3$ Worker (M5 Air) calls `research` $\to$ applies `clara-dna_safe_patch` $\to$ verifies via `failure_whisperer` if needed $\to$ exits via `handoff_checkpoint`.
+  1. Dispatch live coding tasks across 3 test modules using `delegate.py --local-only` targeting Kender 4090 (Qwen3.8-27B) and M5 Air (Ternary-Bonsai-2-27B).
+  2. Assert $L_2$ Conductor (Qwen3.8-27B) generates AST plan $\to$ $L_3$ Worker (Ternary-Bonsai-2-27B) calls `research` $\to$ applies `clara-dna_safe_patch` $\to$ verifies via `failure_whisperer` if needed $\to$ exits via `handoff_checkpoint`.
   3. Validate full autonomy, $\le 3$ turns, and $<60\text{s}$ wall-clock duration per story.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`.
