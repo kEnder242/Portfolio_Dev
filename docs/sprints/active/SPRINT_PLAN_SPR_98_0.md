@@ -191,21 +191,21 @@ flowchart TD
 
 ---
 
-### 🔌 Story 98.7: OpenCode Global Hook Integration & Resident Daemon Symlink
+### 🔌 Story 98.7: OpenCode Global Hook Integration & Resident Daemon Pointer
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Feature Anchor:** `[FEAT-600]` / `[LAB-019]` / `[BKM-060]`
 * **Status:** **READY FOR EXECUTION**
-* **Why & Root Cause:** OpenCode sessions dispatched via `delegate.py` or interactive TUI must inherit the warm `:8765/ambient_recall` fast-path automatically across both workspace and global configurations.
+* **Why & Root Cause:** OpenCode sessions dispatched via `delegate.py` or interactive TUI must inherit the warm `:8765/ambient_recall` fast-path automatically across both workspace and global configurations without cross-cgroup symlink traversal failures.
 * **Task Breakdown:**
-  1. Ensure `~/.config/opencode/hooks.json` symlinks to `/home/jallred/Dev_Lab/.agents/hooks.json`.
+  1. Maintain discrete pointer configuration in `~/.config/opencode/hooks.json` and `/home/jallred/Dev_Lab/.agents/hooks.json` targeting `/home/jallred/.gemini/config/scripts/ambient_hook.sh`.
   2. Verify OpenCode lifecycle triggers execute `ambient_hook.sh` with $<100\text{ms}$ latency.
   3. Verify `delegate.py` dispatches pass through without injecting duplicate static ambient text.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `~/.config/opencode/hooks.json`, `.agents/hooks.json`, `~/.gemini/config/scripts/ambient_hook.sh`.
+  * **Anchor 1 (Target Files):** `~/.config/opencode/hooks.json`, `/home/jallred/Dev_Lab/.agents/hooks.json`, `/home/jallred/.gemini/config/scripts/ambient_hook.sh`.
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
     Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_delegation_canary.py -v`  
     **Literal Assertions:**
-    * `test_opencode_hook_symlink_exists`: Assert `os.path.exists(os.path.expanduser("~/.config/opencode/hooks.json"))`.
+    * `test_opencode_hook_config_exists`: Assert `os.path.exists(os.path.expanduser("~/.config/opencode/hooks.json"))`.
     * `test_hook_execution_under_100ms`: Assert `ambient_hook.sh` executes in $<100\text{ms}$ with full grounding breadcrumbs.
   * **Anchor 3 (Live Silicon Invariant):** 100% of OpenCode turns receive warm ambient memory grounding without daemon restarts.
   * **Anchor 4 (DNA Links):** `[FEAT-600]`, `[LAB-019]`, `[BKM-060]`.
