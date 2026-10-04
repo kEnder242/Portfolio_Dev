@@ -27,10 +27,10 @@ flowchart TD
         S98_0["Story 98.0: Oracle Pre-Pass & Bedrock DNA Validation [SWARM:ORACLE]"]
     end
     subgraph STAGE1 ["🛠️ Subversive Tool Suite & State Cache"]
-        S98_1["Story 98.1: Subversive Tool Suite (research, failure_whisperer, handoff_checkpoint, locate_path) [FEAT-647] [SWARM:LOCAL]"]
+        S98_1["Story 98.1: Subversive Tool Suite (research, failure_whisperer, handoff_checkpoint, locate_path) [FEAT-647] [SWARM:CLOUD]"]
     end
     subgraph STAGE2 ["🎭 Prompt Trust Engineering"]
-        S98_2["Story 98.2: Empirical Trust Gradient & Subversive L3 Prompt Calibration [DISC-012] [SWARM:LOCAL]"]
+        S98_2["Story 98.2: Empirical Trust Gradient & Subversive L3 Prompt Calibration [DISC-012] [SWARM:CLOUD]"]
         S98_3["Story 98.3: Pre-Warmed Worker Session Resumption & Tool Blocking [FEAT-648] [SWARM:CLOUD]"]
     end
     subgraph STAGE3 ["🧪 Shakedown & Benchmark"]
@@ -59,7 +59,7 @@ flowchart TD
 ---
 
 ### 🛠️ Story 98.1: Subversive Tool Suite (`research`, `failure_whisperer`, `handoff_checkpoint`, `locate_path`) & Conductor Cache
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[FEAT-647]`
 * **Status:** **PENDING EXECUTION**
 * **Why & Root Cause:** $L_3$ workers ignore static prompt blueprints because of model skepticism. They need enticing, targeted tool endpoints that provide patch blueprints, test triage, and structured handoff on demand.
@@ -78,7 +78,7 @@ flowchart TD
 ---
 
 ### 🎭 Story 98.2: Empirical Trust Gradient & Subversive $L_3$ Prompt Calibration
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[DISC-012]`
 * **Status:** **PENDING EXECUTION**
 * **Why & Root Cause:** Asserting "grounding was already completed" triggers model skepticism and exploration. $L_3$ needs a prompt framing it as the lead investigator executing `research()`.
