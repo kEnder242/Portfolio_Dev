@@ -2,7 +2,7 @@
 
 **Sprint ID:** `SPR_98_0`  
 **Theme:** Subversive Tool-Mediated IPC (`research`), Empirical Prompt Trust Calibration, Diagnostic Whisperer (`failure_whisperer`), Clean Handoff (`handoff_checkpoint`), Path Resolver (`locate_path`), Pre-Warmed Session Resumption, and Zero-Wandering Local Swarm Execution (`FEAT-647`–`FEAT-649`)  
-**Status:** **ACTIVE**  
+**Status:** **COMPLETED & CERTIFIED**  
 **Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[INS-044]` (The "Trust-Me-Bro" Grounding Skepticism Law), `[DISC-012]` (Subversive Tool-Mediated Context Injection), `[BKM-072]` (Tool-as-IPC Swarm Delegation Protocol), `[BKM-051]` (MCP Ballast Tax Prevention), `[BKM-020]` (High-Fidelity Sprint Gates), `[BKM-060]` (Federated DNA Domains), `[BKM-024]` (Live Validation Mandate)  
 **Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor :11434, Qwen3.8-27B), Node Brain (macOS M5 Air MLX :8002 via Headroom, Ternary-Bonsai-2-27B), ChromaDB Port 8001 (CLaRa-DNA)
 
@@ -172,7 +172,7 @@ flowchart TD
 ### 👑 Story 98.6: `stage_research` Conductor Cache & Pre-Written Findings Bridge
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[FEAT-647]` / `[DISC-012]` / `[INS-044]`
-* **Status:** **READY FOR EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** $L_3$ reasoning models suffer from model skepticism when told "grounding is complete" in prompt text. Atlas ($L_2$) must pre-write the research output via `stage_research()` so that when $L_3$ invokes `research(file_path)` on Turn 1, the pre-computed plan returns as fresh empirical findings.
 * **Task Breakdown:**
   1. Implement `@mcp.tool() stage_research(file_path: str, plan_content: str, patch_blueprint: str = "", ast_anchors: list = None) -> dict` in `AcmeLab/src/clara_dna_mcp_server.py`.
@@ -194,7 +194,7 @@ flowchart TD
 ### 🔌 Story 98.7: OpenCode Global Hook Integration & Resident Daemon Pointer
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Feature Anchor:** `[FEAT-600]` / `[LAB-019]` / `[BKM-060]`
-* **Status:** **READY FOR EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** OpenCode sessions dispatched via `delegate.py` or interactive TUI must inherit the warm `:8765/ambient_recall` fast-path automatically across both workspace and global configurations without cross-cgroup symlink traversal failures.
 * **Task Breakdown:**
   1. Maintain discrete pointer configuration in `~/.config/opencode/hooks.json` and `/home/jallred/Dev_Lab/.agents/hooks.json` targeting `/home/jallred/.gemini/config/scripts/ambient_hook.sh`.
