@@ -145,3 +145,24 @@ flowchart TD
     * `test_e2e_duration_under_60s`: Assert `ledger_entry["duration_seconds"] < 60.0`.
   * **Anchor 3 (Live Silicon Invariant):** 100% of local stories pass self-verification without fallback to `[AGY:TAKEOVER]`.
   * **Anchor 4 (DNA Links):** `[BKM-072]`, `[INS-044]`, `[DISC-012]`, `[BKM-049]`.
+
+---
+
+### 🧬 Story 98.5: Live Hook Memory Convergence & ChromaDB Daemon Cosine Verification
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Feature Anchor:** `[FEAT-631]` / `[LAB-112]` / `[BKM-060]`
+* **Status:** **COMPLETED & CERTIFIED**
+* **Why & Root Cause:** Restore unified cosine distance vector scoring for ambient memory recall alongside DNA collections via ChromaDB `:8001` REST daemon mesh, eliminating subprocess taxes and ensuring OpenAgent delegation runs natively without baking in ambient hooks.
+* **Task Breakdown:**
+  1. Unify memory recall with ChromaDB `:8001` vector collections using FastEmbed and native cosine distance banding ($\le 0.55$).
+  2. Verify ambient hooks in OpenCode/OpenAgent delegation: confirm `delegate.py` does not bake in ambient hooks as they fire automatically via native hook triggers.
+  3. Validate sub-150ms total hook execution latency and assert zero PyTorch in-process module loading (`[BKM-054]`).
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/config/hooks/icm_hook.py`, `HomeLabAI/src/tests/delegate.py`, `HomeLabAI/src/tests/test_delegation_canary.py`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_delegation_canary.py -v`  
+    **Literal Assertions:**
+    * `test_ambient_hook_latency_under_150ms`: Assert hook completes in $<150\text{ms}$ with full multi-item segmentation and cosine scoring.
+    * `test_delegation_relies_on_ambient_hooks`: Assert `delegate.py` dispatches cleanly without injecting redundant ambient prompts.
+  * **Anchor 3 (Live Silicon Invariant):** Zero in-process PyTorch startup overhead; 100% ChromaDB REST queries to port 8001.
+  * **Anchor 4 (DNA Links):** `[FEAT-631]`, `[LAB-112]`, `[BKM-054]`, `[BKM-060]`.
