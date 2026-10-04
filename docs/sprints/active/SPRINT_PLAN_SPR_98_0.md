@@ -109,7 +109,7 @@ flowchart TD
 ### ⚡ Story 98.3: Pre-Warmed Worker Session Resumption & Tool Blocking
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[FEAT-648]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Why & Root Cause:** Starting fresh OpenCode sessions incurs a 5-10s cold-start penalty and loses KV cache headroom on M5 Air.
 * **Task Breakdown:**
   1. Wire `context_prewarmer.py` / `delegate.py` to maintain warm worker session IDs across adjacent stories.
