@@ -3222,12 +3222,12 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Mechanism:** `dna_forge_build.py`, `dna_manifest.json` schema (`revisions` vs `mutations`), Foyer REST endpoint `/dna/certify_mutation`.
 
 ## [FEAT-600] Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture
-**Sprint:** SPR-86.0 / SPR-88.0
+**Sprint:** SPR-86.0 / SPR-88.0 / SPR-98.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py) — Just-In-Time Context (JITC) Closed Loop & Ambient Hook Architecture.
-**Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB in resident daemon memory prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in <1ms.
-**Rationale:** Solves agent manic degradation over long contexts while eliminating Python subprocess startup latency via a sub-5ms `curl` micro-bridge (`ambient_hook.sh`) to resident Foyer/CLaRa daemons.
-**Mechanism:** `ambient_recall.py`, `ambient_hook.sh`, Foyer REST endpoint `/ambient_recall` (:8765), CLaRa ChromaDB (:8001).
+**Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py) — Canonical Ambient Recall Library & ChromaDB Daemon Mesh.
+**Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents directly against the 24/7 resident ChromaDB daemon on port 8001 and local SQLite memories, injecting minimal micro-grounding with full uncropped markdown document text at runtime. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in <1ms.
+**Rationale:** Eliminates split-brain divergence and Python subprocess startup latency by standardizing on a single canonical client library (`ambient_recall.py`) querying the live ChromaDB port 8001 daemon mesh.
+**Mechanism:** `ambient_recall.py`, `ambient_hook.sh`, CLaRa ChromaDB (:8001).
 
 ## [FEAT-601] Bones as the Transitory Scratchpad Between Raw Original Text and Database
 **Sprint:** SPR-87.0
@@ -3472,22 +3472,22 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Mechanism:** `resolve_rdna_hyde_exemplar()` and `select_vector_query()` in `HomeLabAI/src/nodes/archive_node.py`, and `_HYDE_SYNTHESIS_PROMPT` in `HomeLabAI/src/logic/cognitive_hub.py`.
 
 ## [FEAT-631] Ambient Hook Recalibration & Bucketed Quota Routing
-**Sprint:** SPR-95.0 / SPR-95.2
+**Sprint:** SPR-95.0 / SPR-95.2 / SPR-98.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/config/hooks/icm_hook.py`
+**Code:** `HomeLabAI/src/curator/ambient_recall.py`
 **Logic:** Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements a Two-Pass Universal Quota Routing strategy:
 1. **Pass 1 (Universal First Spot):** Guarantees that every peer DNA domain (`feature_dna`, `behavioral_dna`, `wisdom_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`, and `loop_dna`/`vibe_dna`) is evaluated with a guaranteed top-1 slot under strict distance banding ($\le 0.52$, or $\le 0.58$ for QQ), eliminating keyword-conditional gating and preventing dense collections from crowding out philosophical, behavioral, or research anchors.
 2. **Pass 2 (Capacity Ceiling Fill):** Expands dense operational collections (`feature_dna` and `behavioral_dna` / `BKM`) up to a maximum capacity ceiling of 3 slots each to fill remaining prompt budget.
 **Rationale:** The original 25ms limit was an overreaction to blocking inference daemons and heavy subprocesses; in-process ChromaDB/SQLite lookups (30-75ms) with universal domain representation provide vastly richer multi-domain context without human-perceptible delay.
-**Mechanism:** `probe_claradb()` in `HomeLabAI/config/hooks/icm_hook.py`.
+**Mechanism:** `probe_claradb()` in `HomeLabAI/src/curator/ambient_recall.py`.
 
 ## [LAB-112] Fail-Loud Hook Latency & Degradation Telemetry Sentinel
-**Sprint:** SPR-95.0 / SPR-95.2
+**Sprint:** SPR-95.0 / SPR-95.2 / SPR-98.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/config/hooks/icm_hook.py`
+**Code:** `HomeLabAI/src/curator/ambient_recall.py`
 **Logic:** Telemetry watchdog embedded directly inside the ambient pre-turn hook. If hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, the hook immediately injects a prominent warning header (`[⚠️ HOOK WARNING: ...]`) into the model prompt context and emits a colored alert to `stderr`.
 **Rationale:** Enforces `BKM-062` ("fail loudly and visibly") so degraded recall or vector database latency is never masked by silent fallbacks.
-**Mechanism:** Timing decorator and error accumulator in `icm_hook.py`.
+**Mechanism:** Timing decorator and error accumulator in `HomeLabAI/src/curator/ambient_recall.py`.
 
 ## [LAB-113] Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles
 **Sprint:** SPR-95.0 / SPR-95.2
