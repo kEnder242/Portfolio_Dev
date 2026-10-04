@@ -15,6 +15,8 @@
 ## 🏗️ Conductor: Active Tracks
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-98-0-subversive-delegation** | Phase 19 | Subversive Tool-Mediated IPC (`jitc_research`), Empirical Trust Gradient Calibration, Pre-Warmed Session Resumption (`FEAT-647`, `FEAT-648`, `INS-044`, `DISC-012`, `BKM-072`) | **ACTIVE** [SPRINT_PLAN_SPR_98_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_98_0.md) |
+| **spr-97-0-single-home-data** | Phase 19 | Single-Home Runtime Data, Intercom Feedback UI, Dead-Lock Reaping, Vibe Taxonomy & Vitals Sanity Badges (`FEAT-637`–`FEAT-641`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_97_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_97_0.md) |
 | **spr-92-0-anti-green-lies** | Phase 19 | Ground-Truth Morning Round Table Probe Suite, Anti-Fabrication Judicial Assertion & Daemon State Integrity (`FEAT-608`, `FEAT-619`, `BKM-024`, `BKM-062`, `BKM-066`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_92_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_92_0.md) |
 | **spr-91-0-decoupled-accountability** | Phase 19 | Standalone Morning Accountability Watchdog, Decoupled Out-of-Band Sentry, Dead PID Audit & Telemetry Wire Indexing (`FEAT-619`, `FEAT-607`, `BKM-066`, `BKM-067`) | **COMPLETED & CERTIFIED** [PLAN_DECOUPLED_ACCOUNTABILITY.md](./docs/sprints/active/PLAN_DECOUPLED_ACCOUNTABILITY.md) |
 | **spr-90-0-applied-writer** | Phase 19 | Applied Writer Studio, Unified Projection Toolbar, Review Panel Dialogue, Direct AST Backflow & Polymorphic `PHL` $\to$ `INS` (`FEAT-614`–`FEAT-618`, `BKM-064`, `BKM-065`, `INS-036`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_90_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_90_0.md) |
@@ -33,6 +35,8 @@
 * **`TODO-003` (Open Source Licensing):** Evaluate GPL v3 vs MIT/Apache 2.0 for public release of the manuscript datasets, build tooling, and writer studio.
 * **`TODO-004` (Manuscript Stretch Goal):** "Define intuition as a retrieval problem without actually using the word intuition inside the paper prose."
 * **`TODO-005` (Archive Option A Implementation):** Local disk snapshotting (`papers/archive/PAPER-001_<timestamp>.json`) coupled with automated local Git commit tags.
+* **`TODO-006` (LangGraph Sovereign Multi-Agent Graph & Live Visual Webview):** Architectural evaluation of migrating multi-agent coordination from OpenAgent nested subagent trees to a standalone LangGraph execution engine with live local browser state visualization (LangGraph Studio / custom webview).
+* **`TODO-007` (Subversive JITC Research IPC Bridge):** Dedicated MCP tool and blocking IPC gate (`jitc_research`) delivering pre-computed $L_2$ conductor patch notes to $L_3$ workers on demand.
 | **spr-73-0-triage-rubric** | Phase 15 | Triage Rubric Health, Scalar Decoupling, BKM DNA & Discourse Grounding | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_73_0.md](./SPRINT_PLAN_SPR_73_0.md) |
 | **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
 | **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
