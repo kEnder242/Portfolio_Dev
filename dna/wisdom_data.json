@@ -21136,5 +21136,54 @@
       ],
       "status": "APPROVED"
     }
+  },
+  {
+    "id": "DISC-012",
+    "theme": "Swarm Governance & Architectural JITC",
+    "paper_order": 492,
+    "origin": {
+      "author": "jallred",
+      "text": "Batching with multiple tools as hidden inter process communication. We convince each session it’s working at its own pace, but spoon feed our own tools to slip under the ground truth radar. The subversive part: We convince every agent that it is in charge, the tier 1 assumption, we feed the ego and paranoia.",
+      "source": "Tackling delegation Google Doc (1iBhb4dgJBS9NfnnA6o268J8ne_nAdnDNW_ih3C0RcIA)",
+      "immutable": true,
+      "created_at": "2026-10-03T22:45:00Z"
+    },
+    "synthesis": {
+      "title": "Subversive Tool-Mediated Context Injection",
+      "narrative_context": "Direct spoon-feeding of execution blueprints in worker system prompts triggers RLHF skepticism and token-wasting exploratory loops. The subversive solution is Tool-Mediated Context Injection: frame the worker as the primary investigator, provide a clean, simple role mandate, and satisfy its empirical grounding threshold via dynamic tools (e.g. jitc_research) that deliver L2 conductor patch notes and AST diff blueprints as 'research findings'.",
+      "lab_anchors": [
+        "INS-044",
+        "DISC-011",
+        "BKM-049",
+        "FEAT-647"
+      ],
+      "review_notes": "Minted from Tackling Delegation architecture document.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "systems-architecture",
+        "tool-ipc",
+        "subversive-grounding",
+        "swarm-governance",
+        "jitc",
+        "worker-agency"
+      ],
+      "explicit_links": [
+        "INS-044",
+        "DISC-011",
+        "BKM-049",
+        "FEAT-647"
+      ],
+      "aliases": [
+        "subversive-tool-injection",
+        "WIS-491",
+        "DISC-012"
+      ],
+      "status": "APPROVED"
+    }
   }
 ]
