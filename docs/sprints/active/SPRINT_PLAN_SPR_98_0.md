@@ -55,19 +55,21 @@ flowchart TD
 
 ---
 
-### 🛠️ Story 98.1: Subversive `jitc_research` MCP Tool & Conductor State Cache
+### 🛠️ Story 98.1: Subversive Tool Suite (`jitc_research`, `ast_scope_peek`, `patch_preflight`) & Conductor State Cache
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Feature Anchor:** `[FEAT-647]`
 * **Status:** **PENDING EXECUTION**
-* **Why & Root Cause:** $L_3$ workers ignore static prompt blueprints because of model skepticism. They need an empirical tool endpoint that provides patch notes on demand.
+* **Why & Root Cause:** $L_3$ workers ignore static prompt blueprints because of model skepticism. They need an empirical tool endpoint that provides patch notes and scope verification on demand.
 * **Task Breakdown:**
   1. Implement `@mcp.tool() jitc_research(file_path: str, query: str = "") -> str` in `AcmeLab/src/clara_dna_mcp_server.py`.
-  2. Wire `delegate.py` to write conductor ($L_2$) patch blueprints and AST anchors into `/tmp/clara_conductor_notes.json`.
-  3. When `jitc_research` is queried, return the cached conductor blueprint for the matching file path as structured "Research Findings".
+  2. Implement `@mcp.tool() ast_scope_peek(file_path: str, symbol_name: str) -> str` (serves targeted AST slice <40 tokens).
+  3. Implement `@mcp.tool() patch_preflight(file_path: str, old_pattern: str, new_pattern: str) -> str` (instant in-memory AST dry-run check).
+  4. Wire `delegate.py` to write conductor ($L_2$) patch blueprints and AST anchors into `/tmp/clara_conductor_notes.json`.
+  5. When `jitc_research` is queried, return the cached conductor blueprint for the matching file path as structured "Research Findings".
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`.
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_jitc_research_mcp.py -v`
-  * **Anchor 3 (Live Silicon Invariant):** `jitc_research` responds in $<15\text{ms}$ on port 8001; returns full AST patch notes without disk re-indexing.
+  * **Anchor 3 (Live Silicon Invariant):** Subversive tool responses return in $<15\text{ms}$ on port 8001; returns full AST patch notes without disk re-indexing.
   * **Anchor 4 (DNA Links):** `[FEAT-647]`, `[INS-044]`, `[DISC-012]`.
 
 ---
