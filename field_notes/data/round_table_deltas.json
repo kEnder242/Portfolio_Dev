@@ -859,5 +859,97 @@
       "CRITIQUE: Test token"
     ],
     "consensus_1liner": "Test token"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791107922,
+    "time_str": "02:58:42",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 8.201,
+      "pinky_stance": 8.201,
+      "brain_arch": 46.937,
+      "oracle": 53.625,
+      "pinky_judgment": 53.625
+    },
+    "deltas_elapsed_s": {
+      "triage": 8.201,
+      "pinky_stance": 0.001,
+      "brain_arch": 38.736,
+      "oracle": 6.688,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 8.201,
+      "pinky_stance": 8.201,
+      "brain_arch": 46.937,
+      "oracle": 53.625,
+      "pinky_judgment": 53.625
+    },
+    "deltas": {
+      "triage": 8.201,
+      "pinky_stance": 0.001,
+      "brain_arch": 38.736,
+      "oracle": 6.688,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 53.625,
+    "total_s": 53.625,
+    "distillation_bullets": [
+      "LAB: { \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.6,\n  \"intr",
+      "PINKY: { \"score\": 4, \"reasoning\": \"Your thought trace provides a clear overview of Jason's project and its goals. It also highlights the importance of IPMI t",
+      "BRAIN: [CONVERSATIONAL ONRAMPS]\nWhile you were away, I wanted to bring up a fascinating case study that aligns with our current discussion on audit active si",
+      "CRITIQUE: That's a great summary! Your thought trace effectively conveys the main points of Jason's project.\n\nYour thought trace provides a clear overview of Ja"
+    ],
+    "consensus_1liner": "That's a great summary! Your thought trace effectively conveys the main points of Jason's project.\n\nYour thought trace provides a clear overview of Jason's project and its goals. It also highlights th"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791118852,
+    "time_str": "06:00:52",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 4.297,
+      "pinky_stance": 4.297,
+      "brain_arch": 41.493,
+      "oracle": 47.184,
+      "pinky_judgment": 47.184
+    },
+    "deltas_elapsed_s": {
+      "triage": 4.297,
+      "pinky_stance": 0.001,
+      "brain_arch": 37.196,
+      "oracle": 5.691,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 4.297,
+      "pinky_stance": 4.297,
+      "brain_arch": 41.493,
+      "oracle": 47.184,
+      "pinky_judgment": 47.184
+    },
+    "deltas": {
+      "triage": 4.297,
+      "pinky_stance": 0.001,
+      "brain_arch": 37.196,
+      "oracle": 5.691,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 47.184,
+    "total_s": 47.184,
+    "distillation_bullets": [
+      "LAB: { \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.6,\n  \"intr",
+      "PINKY: { \"score\": 4, \"reasoning\": \"Your critique dimensions align with the original text's tone and content.\" , \"slop_found\": true, \"retort\": \"Jason's Stall ",
+      "BRAIN: [CONVERSATIONAL ONRAMPS]\nWhile you were away, I wanted to bring up some interesting findings related to Jason's Stall Points project. As you know, he ",
+      "CRITIQUE: Jason's Stall Points project effectively demonstrated the value of IPMI-based validation for ensuring MSR consistency and PECI register access across "
+    ],
+    "consensus_1liner": "Jason's Stall Points project effectively demonstrated the value of IPMI-based validation for ensuring MSR consistency and PECI register access across multiple threads.\n\nYour critique dimensions align "
   }
 ]
