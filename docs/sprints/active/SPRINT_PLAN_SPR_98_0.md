@@ -4,7 +4,7 @@
 **Theme:** Subversive Tool-Mediated IPC (`research`), Empirical Prompt Trust Calibration, Diagnostic Whisperer (`failure_whisperer`), Clean Handoff (`handoff_checkpoint`), Path Resolver (`locate_path`), Pre-Warmed Session Resumption, and Zero-Wandering Local Swarm Execution (`FEAT-647`–`FEAT-649`)  
 **Status:** **ACTIVE**  
 **Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[INS-044]` (The "Trust-Me-Bro" Grounding Skepticism Law), `[DISC-012]` (Subversive Tool-Mediated Context Injection), `[BKM-072]` (Tool-as-IPC Swarm Delegation Protocol), `[BKM-060]` (Federated DNA Domains), `[BKM-024]` (Live Validation Mandate)  
-**Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor), Node Brain (macOS M5 Air MLX :8002 via Headroom), Linux z87 (RTX 2080 Ti vLLM 3B), ChromaDB Port 8001 (CLaRa-DNA)
+**Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor :11434), Node Brain (macOS M5 Air MLX :8002 via Headroom), ChromaDB Port 8001 (CLaRa-DNA)
 
 ---
 
