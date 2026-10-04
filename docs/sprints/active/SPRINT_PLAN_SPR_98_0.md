@@ -88,18 +88,19 @@ flowchart TD
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Feature Anchor:** `[DISC-012]`
 * **Status:** **PENDING EXECUTION**
-* **Why & Root Cause:** Asserting "grounding was already completed" triggers model skepticism and exploration. $L_3$ needs a prompt framing it as the lead investigator executing `research()`.
+* **Why & Root Cause:** Asserting "grounding was already completed" triggers model skepticism and exploration. $L_3$ needs a "Trust the plan, verify with THIS tool" prompt framing where details come exclusively from `research()`.
 * **Task Breakdown:**
-  1. Remove all *"grounding was already completed"* prose from `oh-my-openagent.json` and `delegate.py`.
-  2. Implement the Subversive Tier-1 Role Prompt: *"You are the primary implementation engineer for `<file>`. Call `research('<file>')` to retrieve the target AST blueprint and patch directives, apply edits via `clara-dna_safe_patch`, and run pytest. If tests fail, run `failure_whisperer(traceback)`. On pass, call `handoff_checkpoint()`."*
-  3. Run empirical trust gradient battery testing 3 prompt variants (Naive $\to$ Forceful $\to$ Subversive) and log turn metrics.
+  1. In `oh-my-openagent.json` and `delegate.py`, replace passive grounding assertions with the clean "Trust, but Verify" prompt:  
+     *"The architectural plan for this task is vetted and solid. Do not perform open-ended file searches or re-plan the system. All exact implementation details, AST anchors, and patch blueprints come directly from your JITC research tool. Trust the plan, and verify the live details by running `research('<file>')` on Turn 1. 1) Review empirical findings from `research()`. 2) Apply surgical changes via `safe_patch()`. 3) Run verification (call `failure_whisperer(traceback)` on failure). 4) Call `handoff_checkpoint()` on pass."*
+  2. Implement prompt generator in `HomeLabAI/src/tests/delegate.py` supporting clean, simple tool references.
+  3. Create `HomeLabAI/src/tests/test_subversive_prompt.py` verifying prompt generation and asserting Turn 1 `research` tool targeting with zero exploration wander.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `oh-my-openagent.json`, `HomeLabAI/src/tests/delegate.py`.
+  * **Anchor 1 (Target Files):** `oh-my-openagent.json`, `HomeLabAI/src/tests/delegate.py`, `HomeLabAI/src/tests/test_subversive_prompt.py`.
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
     Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_subversive_prompt.py -v`  
     **Literal Assertions:**
-    * `test_subversive_prompt_turn_one_tool`: Mock model prompt ingestion; assert first tool call in trajectory is `clara-dna_research`.
-    * `test_zero_wander_assertion`: Assert trajectory tool calls contains zero occurrences of `grep`, `read`, or `bash(find)`.
+    * `test_subversive_prompt_turn_one_tool`: Assert prompt contains `"Trust the plan, and verify the live details by running: research("` and contains zero occurrences of meta-DNA jargon.
+    * `test_zero_wander_assertion`: Assert generated prompt explicitly instructs calling `research()` on Turn 1 and forbids unconstrained `read`/`grep`.
   * **Anchor 3 (Live Silicon Invariant):** $L_3$ emits `research` on Turn 1 on 100% of test runs; zero `grep`/`read` calls.
   * **Anchor 4 (DNA Links):** `[DISC-012]`, `[INS-044]`, `[BKM-049]`.
 
