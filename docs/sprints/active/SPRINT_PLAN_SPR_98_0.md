@@ -3,8 +3,8 @@
 **Sprint ID:** `SPR_98_0`  
 **Theme:** Subversive Tool-Mediated IPC (`research`), Empirical Prompt Trust Calibration, Diagnostic Whisperer (`failure_whisperer`), Clean Handoff (`handoff_checkpoint`), Path Resolver (`locate_path`), Pre-Warmed Session Resumption, and Zero-Wandering Local Swarm Execution (`FEAT-647`–`FEAT-649`)  
 **Status:** **ACTIVE**  
-**Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[INS-044]` (The "Trust-Me-Bro" Grounding Skepticism Law), `[DISC-012]` (Subversive Tool-Mediated Context Injection), `[BKM-072]` (Tool-as-IPC Swarm Delegation Protocol), `[BKM-060]` (Federated DNA Domains), `[BKM-024]` (Live Validation Mandate)  
-**Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor :11434), Node Brain (macOS M5 Air MLX :8002 via Headroom), ChromaDB Port 8001 (CLaRa-DNA)
+**Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[INS-044]` (The "Trust-Me-Bro" Grounding Skepticism Law), `[DISC-012]` (Subversive Tool-Mediated Context Injection), `[BKM-072]` (Tool-as-IPC Swarm Delegation Protocol), `[BKM-051]` (MCP Ballast Tax Prevention), `[BKM-020]` (High-Fidelity Sprint Gates), `[BKM-060]` (Federated DNA Domains), `[BKM-024]` (Live Validation Mandate)  
+**Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor :11434, Qwen3.8-27B), Node Brain (macOS M5 Air MLX :8002 via Headroom, Ternary-Bonsai-2-27B), ChromaDB Port 8001 (CLaRa-DNA)
 
 ---
 
@@ -24,17 +24,17 @@ Sprint 98.0 replaces static prompt spoon-feeding with **Subversive Tool-Mediated
 ```mermaid
 flowchart TD
     subgraph STAGE0 ["🔍 Pre-Flight"]
-        S98_0["Story 98.0: Oracle Pre-Pass & Bedrock DNA Validation [SWARM:ORACLE]"]
+        S98_0["Story 98.0: Oracle Pre-Pass & Bedrock DNA Validation<br><b>[SWARM:ORACLE]</b>"]
     end
-    subgraph STAGE1 ["🛠️ Subversive Tool Suite & State Cache"]
-        S98_1["Story 98.1: Subversive Tool Suite (research, failure_whisperer, handoff_checkpoint, locate_path) [FEAT-647] [SWARM:CLOUD]"]
+    subgraph STAGE1 ["🛠️ Tool Suite Scaffolding (Cloud Built)"]
+        S98_1["Story 98.1: Subversive Tool Suite (research, failure_whisperer, handoff_checkpoint, locate_path)<br><b>[SWARM:CLOUD]</b>"]
     end
-    subgraph STAGE2 ["🎭 Prompt Trust Engineering"]
-        S98_2["Story 98.2: Empirical Trust Gradient & Subversive L3 Prompt Calibration [DISC-012] [SWARM:CLOUD]"]
-        S98_3["Story 98.3: Pre-Warmed Worker Session Resumption & Tool Blocking [FEAT-648] [SWARM:CLOUD]"]
+    subgraph STAGE2 ["🎭 Calibration & Pre-Warming (Cloud Built)"]
+        S98_2["Story 98.2: Empirical Trust Gradient & L3 Prompt Calibration<br><b>[SWARM:CLOUD]</b>"]
+        S98_3["Story 98.3: Pre-Warmed Worker Session Resumption & Tool Blocking<br><b>[SWARM:CLOUD]</b>"]
     end
-    subgraph STAGE3 ["🧪 Shakedown & Benchmark"]
-        S98_4["Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air [BKM-072] [AGY:PRIMARY]"]
+    subgraph STAGE3 ["🧪 Live Silicon Certification"]
+        S98_4["Story 98.4: Zero-Wandering Local Swarm Certification on 4090 + M5 Air<br><b>[AGY:PRIMARY]</b>"]
     end
 
     S98_0 --> S98_1
@@ -50,7 +50,7 @@ flowchart TD
 ### 🔍 Story 98.0: Oracle Pre-Pass on Sprint 98 & DNA Grounding
 * **Assigned Owner:** `[SWARM:ORACLE]`
 * **Feature Anchor:** `[FEAT-647]`
-* **Status:** **PENDING EXECUTION**
+* **Status:** **COMPLETED & CERTIFIED**
 * **Task Breakdown:**
   1. Adversarially audit Sprint 98.0 specifications against `[INS-044]`, `[DISC-012]`, and `[BKM-049]`.
   2. Verify tool schemas for `research`, `failure_whisperer`, `handoff_checkpoint`, and `locate_path` do not introduce MCP ballast tax (`[BKM-051]`).
@@ -69,11 +69,18 @@ flowchart TD
   3. Implement `@mcp.tool() handoff_checkpoint(status: str, summary: str, artifacts_modified: list) -> dict` in `clara_dna_mcp_server.py`. Appends structured execution reflection to `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl` and signals clean task completion.
   4. Refactor and rename `locate_grounding` $\to$ `locate_path(pattern: str, intent_description: str = "") -> dict` with clear docstring as the fast submodule file locator and import resolver.
   5. Wire `delegate.py` to write conductor ($L_2$) patch blueprints and AST anchors into `/tmp/clara_conductor_notes.json`.
+  6. Update `oh-my-openagent.json` permissions to strictly allow subversive tools on `atlas` and `sisyphus-junior` while setting `"deny"` for non-participating personas (`hephaestus`, `daedalus`, `prometheus`) to prevent MCP ballast tax (`[BKM-051]`).
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_jitc_research_mcp.py -v`
+  * **Anchor 1 (Target Files):** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`, `oh-my-openagent.json`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_jitc_research_mcp.py -v`  
+    **Literal Assertions:**
+    * `test_research_returns_cached_conductor_notes`: Assert `res["content"]` contains string `"Conductor Blueprint: Applied Scalpel Match"` and `res["tokens"] < 400`.
+    * `test_failure_whisperer_triage`: Assert input `pytest AssertionError: Expected 200 got 500` returns `res["diagnosis"]` containing `"Root cause: Server returned 500 status code"`.
+    * `test_handoff_checkpoint_appends_ledger`: Assert entry in `delegation_ledger.jsonl` contains `{"status": "SUCCESS", "artifacts_modified": ["src/target.py"]}` and returns `{"checkpoint_saved": True}`.
+    * `test_locate_path_submodule_resolution`: Assert `locate_path("context_prewarmer.py")` returns `["HomeLabAI/src/v5/cognition/context_prewarmer.py"]`.
   * **Anchor 3 (Live Silicon Invariant):** Subversive tool suite responses return in $<20\text{ms}$ on port 8001; zero disk re-indexing.
-  * **Anchor 4 (DNA Links):** `[FEAT-647]`, `[INS-044]`, `[DISC-012]`.
+  * **Anchor 4 (DNA Links):** `[FEAT-647]`, `[INS-044]`, `[DISC-012]`, `[BKM-051]`.
 
 ---
 
@@ -88,7 +95,11 @@ flowchart TD
   3. Run empirical trust gradient battery testing 3 prompt variants (Naive $\to$ Forceful $\to$ Subversive) and log turn metrics.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `oh-my-openagent.json`, `HomeLabAI/src/tests/delegate.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_subversive_prompt.py -v`
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_subversive_prompt.py -v`  
+    **Literal Assertions:**
+    * `test_subversive_prompt_turn_one_tool`: Mock model prompt ingestion; assert first tool call in trajectory is `clara-dna_research`.
+    * `test_zero_wander_assertion`: Assert trajectory tool calls contains zero occurrences of `grep`, `read`, or `bash(find)`.
   * **Anchor 3 (Live Silicon Invariant):** $L_3$ emits `research` on Turn 1 on 100% of test runs; zero `grep`/`read` calls.
   * **Anchor 4 (DNA Links):** `[DISC-012]`, `[INS-044]`, `[BKM-049]`.
 
@@ -105,7 +116,11 @@ flowchart TD
   3. Verify that warm sessions retain KV cache on M5 Air port 8002 without Metal memory growth.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_session_resumption.py -v`
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_session_resumption.py -v`  
+    **Literal Assertions:**
+    * `test_session_resumption_reuses_id`: Assert `delegate_story(story_id="98.2", resume_session="sess-123")` sends `POST /session/sess-123/message`.
+    * `test_session_latency_under_500ms`: Assert `res.elapsed_time < 0.500`.
   * **Anchor 3 (Live Silicon Invariant):** Session resumption latency $<500\text{ms}$; zero KV cache thrashing on M5 Air port 8002.
   * **Anchor 4 (DNA Links):** `[FEAT-648]`, `[BKM-047]`, `[LAB-019]`.
 
@@ -122,6 +137,10 @@ flowchart TD
   3. Validate full autonomy, $\le 3$ turns, and $<60\text{s}$ wall-clock duration per story.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_subversive_swarm_e2e.py -v`
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_subversive_swarm_e2e.py -v`  
+    **Literal Assertions:**
+    * `test_e2e_zero_wandering`: Assert `ledger_entry["turn_count"] <= 3` and `"grep" not in ledger_entry["tools_used"]`.
+    * `test_e2e_duration_under_60s`: Assert `ledger_entry["duration_seconds"] < 60.0`.
   * **Anchor 3 (Live Silicon Invariant):** 100% of local stories pass self-verification without fallback to `[AGY:TAKEOVER]`.
   * **Anchor 4 (DNA Links):** `[BKM-072]`, `[INS-044]`, `[DISC-012]`, `[BKM-049]`.
