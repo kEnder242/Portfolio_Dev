@@ -182,3 +182,7 @@ flowchart TD
 ### 📌 [BACKLOG-98.4] Background Blast-Radius & Syntax Linter
 * **Feature Anchor:** `[FEAT-646]` (Candidate)
 * **Goal:** L3 worker runs continuous passive validation (`py_compile`, `node --check`, unassigned file diff audits) during execution.
+
+### 📌 [BACKLOG-98.5] LangGraph Sovereign Multi-Agent Graph & Live Visual Webview
+* **Goal:** Plan architectural migration to a standalone LangGraph execution engine for deterministic multi-agent state machines and IPC, retaining OpenCode for cloud tasks while streaming live node state transitions to a local webview dashboard (LangGraph Studio / custom web UI).
+
