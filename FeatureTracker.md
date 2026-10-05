@@ -3226,7 +3226,7 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Status:** ACTIVE
 **Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py) — Canonical Ambient Recall Library & ChromaDB Daemon Mesh.
 **Logic:** Executes the 4-phase cognitive lifecycle (Triage -> Injection -> Save -> Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents directly against the 24/7 resident ChromaDB daemon on port 8001 and local SQLite memories, injecting minimal micro-grounding with full uncropped markdown document text at runtime. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in <1ms.
-**Rationale:** Eliminates split-brain divergence and Python subprocess startup latency by standardizing on a single canonical client library (`ambient_recall.py`) querying the live ChromaDB port 8001 daemon mesh.
+**Rationale:** Eliminates split-brain divergence by standardizing Layer 1 strategic planning (AGY or Cloud OpenCode personas) on a single canonical client library (`ambient_recall.py`), while enforcing a strict **Hook-Free Execution Law (BKM-076)** on Layer 2 conductors and Layer 3 leaf workers to eliminate context re-bloating and cognitive wandering during code synthesis loops.
 **Mechanism:** `ambient_recall.py`, `ambient_hook.sh`, CLaRa ChromaDB (:8001).
 
 ## [FEAT-601] Bones as the Transitory Scratchpad Between Raw Original Text and Database
