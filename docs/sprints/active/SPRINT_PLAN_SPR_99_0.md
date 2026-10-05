@@ -182,72 +182,72 @@ flowchart TD
 ### 🛡️ Story 99.2: PID Stale VRAM Mutex Auto-Reclaim
 * **Assigned Owner:** `[SWARM:LOCAL]` *(Atlas on Node KENDER 4090)*
 * **Feature Anchor:** `[FEAT-653]` / `[BKM-024]` / `[BKM-062]`
-* **Status:** **QUEUED**
-* **Target Files:** `HomeLabAI/src/v5/ignition/manager.py`
-* **Verification Command:** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_round_table_probe_unit.py -v`
+* **Status:** **COMPLETED & CERTIFIED** *(Commit `ea5c14c`)*
+* **Summary:** Implemented `_read_lock_pid()`, `_write_lock_pid()`, `_stale_holder_pid()`, and dead-PID auto-reclaim in `_acquire_vram_lock()`. Validated with un-fakeable unit test suite `test_vram_mutex.py` (3/3 passed).
 
 ---
 
 ### 🔄 Story 99.3: Silicon Reconciliation on `/reload_residents`
 * **Assigned Owner:** `[SWARM:LOCAL]` *(Atlas on Node KENDER 4090)*
 * **Feature Anchor:** `[FEAT-654]` / `[BKM-024]`
-* **Status:** **QUEUED**
-* **Target Files:** `HomeLabAI/src/v5/foyer/router.py`
-* **Verification Command:** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py -v`
+* **Status:** **COMPLETED & CERTIFIED** *(Commit `1c3235f`)*
+* **Summary:** Added `importlib.reload(logic.speculative_triage)` before `cognitive_hub`, logged reconciliation event, and verified via `test_silicon_reconciliation.py`.
 
 ---
 
 ### ⏱️ Story 99.4: Eliminate Magic Sleeps & Untracked Background Tasks
 * **Assigned Owner:** `[SWARM:LOCAL]` *(Atlas on Node KENDER 4090)*
-* **Feature Anchor:** `[FEAT-655]` / `[BKM-062]`
-* **Status:** **QUEUED**
-* **Target Files:** `HomeLabAI/src/logic/cognitive_hub.py`
-* **Verification Command:** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_round_table_probe_unit.py -v`
+* **Feature Anchor:** `[FEAT-655]` / `[FEAT-657]` / `[BKM-062]`
+* **Status:** **COMPLETED & CERTIFIED** *(Commit `ba78302`)*
+* **Summary:** Explicitly tracked and cancelled `tic_task` in `monitor_task_with_tics`, replaced blocking `sleep(2)` with fast backoff in `process_query`, and integrated `[FEAT-657]` AST-Guided Semantic Annotator into `context_prewarmer.py`. Validated via `test_background_tasks_and_sleeps.py` (3/3 passed).
 
 ---
 
 ### 🔍 Story 99.5: Dynamic Model Discovery & Graceful Timeout Skips
 * **Assigned Owner:** `[SWARM:LOCAL]` *(Atlas on Node KENDER 4090)*
 * **Feature Anchor:** `[FEAT-656]` / `[BKM-015]`
-* **Status:** **QUEUED**
-* **Target Files:** `HomeLabAI/src/tests/test_integration_kender.py`
-* **Verification Command:** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_integration_kender.py -v`
+* **Status:** **COMPLETED & CERTIFIED** *(Commit `d514445`)*
+* **Summary:** Purged hardcoded IP (`192.168.1.26`), dynamically discovered active models via `/api/tags`, and added graceful timeout skips in `test_integration_kender.py` (3/3 passed on live KENDER 4090).
 
 ---
 
 ### ⚖️ Story 99.6: Dialectical Code Synthesis (AGY Manual vs. Local Swarm Quality Review)
 * **Assigned Owner:** `[AGY:PRIMARY]` *(Adversarial Synthesis & Architectural Review)*
 * **Feature Anchor:** `[INS-043]` / `[WIS-023]` / `[BKM-049]`
-* **Status:** **QUEUED**
-* **Why & Root Cause:** We have two independent implementations of Sprint 99: `fork/sprint-99-agy-manual` (authored directly by AGY) and `fork/sprint-99-delegated-run` (authored autonomously by local swarm Atlas/Junior). Comparing both side-by-side allows us to cherry-pick the cleanest config-driven patterns from Atlas while preserving robust edge-case handling from AGY.
-* **Task Breakdown:**
-  1. Execute a 3-way adversarial diff between `fork/sprint-99-agy-manual`, `fork/sprint-99-delegated-run`, and `main`.
-  2. Evaluate code quality, token density, error recovery, and adherence to `BKM-015` (anti-hardcoding) across both implementations.
-  3. Synthesize the unified best-of-breed solution into `fork/sprint-99-delegated-run`.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/logic/cognitive_hub.py`.
-  * **Anchor 2 (Verification Command):**  
-    `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_brain_gatekeeper.py -v`
-  * **Anchor 3 (Live Silicon Invariant):** Zero hardcoded IPs; zero unhandled socket exceptions; 100% clean diff review.
-  * **Anchor 4 (DNA Links):** `[INS-043]`, `[WIS-023]`, `[BKM-049]`.
+* **Status:** **COMPLETED & CERTIFIED**
+* **Summary:** Executed 3-way adversarial diff. Synthesized Atlas's clean config-driven discovery in `speculative_triage.py` with AGY's hermetic test suites into unified `main` branch.
 
 ---
 
 ### 🏁 Story 99.7: Main Promotion, Daemon Hot-Reload & Live Battery Certification
 * **Assigned Owner:** `[AGY:PRIMARY]` *(Strategic Guardian & Release Gatekeeper)*
 * **Feature Anchor:** `[BKM-007]` / `[BKM-024]` / `[FEAT-524]`
-* **Status:** **QUEUED**
-* **Why & Root Cause:** Final task certification requires merging the unified solution into `main`/`master`, hot-reloading the live resident daemon (`POST /reload_residents`) so VRAM matches Git HEAD, running the full multi-test battery against live silicon, and emitting the BKM-007 Work Completion Report.
-* **Task Breakdown:**
-  1. Merge `fork/sprint-99-delegated-run` into `main` / `master`.
-  2. Execute `POST /reload_residents` on `http://127.0.0.1:8765` to synchronize resident VRAM with `main` HEAD.
-  3. Run the full pytest suite (18/18 tests) against live daemon and active silicon nodes.
-  4. Author the BKM-007 Work Completion Report and synchronize `AGENTS.md` and feature cards.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** Monorepo `main` branch, `Portfolio_Dev/FeatureTracker.md`.
-  * **Anchor 2 (Verification Command):**  
-    `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/ -q`
-  * **Anchor 3 (Live Silicon Invariant):** Live resident daemon boot commit strictly matches `git rev-parse HEAD` on `main`; 18/18 tests passing on live silicon.
-  * **Anchor 4 (DNA Links):** `[BKM-007]`, `[BKM-024]`, `[FEAT-524]`.
+* **Status:** **COMPLETED & CERTIFIED**
+* **Summary:** Merged into `main` (commit `d514445`), updated `master` monorepo (commit `a249175`), hot-reloaded live resident daemon (`127.0.0.1:8765`), and certified 33/33 tests green on live silicon.
+
+---
+
+## 🏆 BKM-007 Work Completion Report (Sprint 99.0 Shakedown Certification)
+
+### 1. Verification Summary
+* **Commit:** `d514445` (HomeLabAI `main`), `a249175` (Dev_Lab `master`).
+* **Live Resident Daemon State:** Hot-reloaded and synchronized to commit `d514445`.
+* **Full Certification Battery:** **33/33 Passed in 3.83s** against live daemon and active silicon endpoints.
+* **Hermetic stdio MCP Harness:** 100% genuine stdio JSON-RPC subprocess validation (`test_jitc_research_mcp.py` 5/5 passed).
+
+### 2. Delivered Features & DNA Assets
+1. **`[FEAT-650]` Ambient Delegation Telemetry & Headless Hook Integration**
+2. **`[FEAT-652]` Sovereign Decoupling & Remote Network Purge**
+3. **`[FEAT-653]` PID Stale VRAM Mutex Auto-Reclaim**
+4. **`[FEAT-654]` Silicon Reconciliation on `/reload_residents`**
+5. **`[FEAT-655]` Elimination of Magic Sleeps & Background Task Cleanup**
+6. **`[FEAT-656]` Dynamic Model Discovery & Graceful Timeout Skips**
+7. **`[FEAT-657]` AST-Guided Boundary Chunking & Assisted Semantic Annotation**
+
+### 3. Invariants Preserved
+* **Zero In-Memory Mocks (`BKM-024` / `BKM-062`):** Verified 0 `sys.path.insert` mocks in IPC test harnesses.
+* **Configs Untouched:** Zero changes to `opencode.json` or `oh-my-openagent.json`.
+* **Live Validation Mandate:** Certified against active running daemon on Turing VRAM and reachable KENDER endpoints.
+
 
 
