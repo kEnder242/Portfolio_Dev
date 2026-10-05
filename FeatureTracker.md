@@ -3692,8 +3692,23 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Implements active PID recording and process liveness verification on `/tmp/vram.lock`. When lock acquisition encounters `fcntl.flock` contention (`OSError`), the manager reads the holding PID from disk and evaluates `os.kill(pid, 0)`. If the holding process is dead or orphaned from a prior crash/kill, the stale mutex is automatically broken and reclaimed without requiring manual operator intervention.
 **Rationale:** Prevents spurious `VRAM Mutex busy` ignition lockouts after unexpected process terminations.
 
+## [FEAT-654] Dual-Mode Verification Mandate (Mock-Isolate + Live-Ready Architecture) & Airtight Live Gate
+**Sprint:** Backlog (Sprint 100)
+**Status:** ACTIVE
+**Tags:** `#delegation_mandate`, `#dual_mode_verification`, `#airtight_governance`, `#live_gate`, `#live_is_god`, `[BKM-024]`, `[BKM-062]`, `[BKM-075]`
+**Code:** 
+- [AGENTS_L2.md](https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L2.md#L28) — Layer 2 Conductor Dual-Mode Contract & Live Gate Protocol.
+- [AGENTS_L3.md](https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L3.md#L31) — Layer 3 Worker Production Mandate & Machine-Readable Tag Mandate.
+- [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L457) — `_log_delegation_ledger()` with `live_gate_status` & `live_gate_details` schema.
+- [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1908) — Live Gate parser & high-visibility alert banner.
+- [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L560) — `show_delegation_ledger()` displaying `LIVE_GATE` status column.
+- [Portfolio_Dev/field_notes/data/delegation_ledger.jsonl](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/data/delegation_ledger.jsonl) — Persistent delegation ledger.
 
+**Logic:**
+1. **Dual-Mode Contract:** Demands that all code authored or modified during swarm delegation passes hermetic unit/mock assertions during the subagent sandbox run, while strictly maintaining live-ready production contracts (real endpoint resolution, dynamic config bindings, clean dependency injection). Delegation agents are forbidden from hardcoding synthetic mocks or stubbing out production paths to achieve false green passes.
+2. **The Delegation "Way Out" Protocol:** If a story inherently requires dependencies, physical GPU inference, or daemons unreachable within the isolated sandbox, subagents are permitted to complete unit-isolated mock execution, provided they emit the machine-readable tag `[LIVE_GATE_PENDING: daemon=<port/name> endpoint=<path> probe=<test_command>]` in their `[HANDOVER REFLECTION]`, specifying exact endpoints and live verification steps. Pure algorithmic stories with no daemon dependencies emit `[LIVE_GATE: PASSED]`.
+3. **Airtight Closed-Loop Governance (Generality):** Solves the multi-agent "Green Sandbox Illusion" where subagents pass isolated tests but produce code incompatible with production runtime. The dispatcher programmatically captures the live gate tag, records the pending status into the persistent ledger (`delegation_ledger.jsonl`), and renders a high-visibility gate banner to the primary orchestrator (AGY). Layer 1 (AGY) must execute final live certification against active running daemons (port 8765) and reachable silicon endpoints per BKM-024 before merging code to Git HEAD.
 
-
+**Rationale:** Prevents "green-lie" sandbox drift across all autonomous tiers while providing models a structured escape hatch that guarantees end-to-end live verification integrity.
 
 

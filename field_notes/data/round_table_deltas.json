@@ -951,5 +951,48 @@
       "CRITIQUE: Jason's Stall Points project effectively demonstrated the value of IPMI-based validation for ensuring MSR consistency and PECI register access across "
     ],
     "consensus_1liner": "Jason's Stall Points project effectively demonstrated the value of IPMI-based validation for ensuring MSR consistency and PECI register access across multiple threads.\n\nYour critique dimensions align "
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791177048,
+    "time_str": "22:10:48",
+    "topic": "LAB_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 0.528,
+      "pinky_stance": 0.529,
+      "brain_arch": 0.531,
+      "oracle": 0.566,
+      "pinky_judgment": 0.566
+    },
+    "deltas_elapsed_s": {
+      "triage": 0.528,
+      "pinky_stance": 0.001,
+      "brain_arch": 0.002,
+      "oracle": 0.035,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 0.528,
+      "pinky_stance": 0.529,
+      "brain_arch": 0.531,
+      "oracle": 0.566,
+      "pinky_judgment": 0.566
+    },
+    "deltas": {
+      "triage": 0.528,
+      "pinky_stance": 0.001,
+      "brain_arch": 0.002,
+      "oracle": 0.035,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 0.566,
+    "total_s": 0.566,
+    "distillation_bullets": [
+      "CRITIQUE: Test token"
+    ],
+    "consensus_1liner": "Test token"
   }
 ]
