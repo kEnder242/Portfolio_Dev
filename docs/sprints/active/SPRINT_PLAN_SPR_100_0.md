@@ -41,7 +41,7 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 | **ANCHOR-17** | Cloud Delegation Baseline & Model Invocation Probe (`FEAT-649` / `BKM-071`) | Swarm Audit | `STAGED` | Story 100.13: Verify cloud delegate dispatch executes with designated cloud models, babysit logs at regular intervals, and enforce Playbook Calibration protocol. |
 | **ANCHOR-18** | Triage Voting & In-Line / Hover Timestamp Feedback UI (`FEAT-638`) | User Turn 2.1 | `STAGED` | Story 100.14: Whitelist triage in `intercom_v2.js`, inject `voteable_sources` from `infrastructure.json` via `build_site.py`, and relocate buttons to `.msg-header` hover (0 extra lines). |
 | **ANCHOR-19** | Re-Purge Vestigial `internal=True` Masking in Adherence to `FEAT-361` (`FEAT-361`) | User Turn 3 | `STAGED` | Story 100.15: Abolish silent token suppression (`stream_source = None`) in `nodes/loader.py`; route intermediate tokens to dedicated channels without gagging. |
-| **ANCHOR-20** | Oracle Adversarial Pre-Pass on Phase 4 & Legacy Regression Audit (`BKM-061`) | Operator Directive | `STAGED` | Story 100.8B: Adversarial audit of Stories 100.9–100.15 against legacy regressions, obsolete patterns, and design divergence; targets `ORACLE_REVIEW_SPRINT_100.md`. |
+| **ANCHOR-20** | Oracle Adversarial Pre-Pass on Phase 4 & Legacy Regression Audit (`BKM-061`) | Operator Directive | `✅ DONE` | Story 100.8B: Genuine Cloud Oracle pass executed via `delegate.py --oracle` (Session `ses_ee7ce694effequXShiSXcZD0cN`, OpenRouter Nemotron-120B / Free Tier, 54,632 tokens). Adversarial findings blended into `ORACLE_REVIEW_SPRINT_100.md`. |
 
 ---
 
@@ -298,7 +298,7 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 #### Story 100.8B — Oracle Adversarial Pre-Pass on Phase 4 & Legacy Regression Audit
 * **Feature Anchor:** `[BKM-061]` / `[BKM-007]` / `[FEAT-640]`
 * **Assigned Owner:** `[SWARM:ORACLE]`
-* **Status:** `STAGED`
+* **Status:** `✅ DONE`
 * **Why:** The operator requested an adversarial Oracle pass to review each Phase 4 story (100.9 through 100.15) before execution, explicitly to catch legacy regressions and obsolete code patterns (such as Sprint 32 leftovers like `_distill_strategic_brief()`, `PECI/MSR` text, `internal=True` Censorship Waffle, and vestigial gags in `loader.py`) and verify 100% alignment with latest designs (Sprint 96 Two-Mice Handover, Sprint 90+ Coherence Critic, Sprint 95 Triage Taxonomy, BKM-015 Semantic Anchors, BKM-062 Anti-Green-Lie).
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files & Line Anchors):**
@@ -319,6 +319,7 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
   * **Anchor 4 (Silicon Invariants & DNA Links):**
     - Invariant: Zero silent fallback to dead code; zero employer persona leakage outside `WIS-xxx` Gems; 100% alignment with active system state.
     - DNA Links: `[BKM-061]`, `[BKM-007]`, `[BKM-015]`, `[BKM-062]`, `[FEAT-640]`.
+* **Verification Log:** Dispatched to Cloud Oracle via `delegate.py --oracle` (Session `ses_ee7ce694effequXShiSXcZD0cN`, OpenRouter Nemotron-120B / Free Tier, 54,632 total tokens, 5,386 reasoning tokens). External Cloud Oracle independently audited Stories 100.9–100.15, catching declarative drift in `config/triage_policy.json` and mandating global searches for `stream_source = None` and `_distill_strategic_brief`. Blended findings committed to `ORACLE_REVIEW_SPRINT_100.md`.
 
 ---
 
