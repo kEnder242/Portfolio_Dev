@@ -18,21 +18,21 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 
 ---
 
-## 🎾 BKM-077: BALL_TRACK Ledger
+## ⚓ BKM-077: ANCHOR_TRACK Ledger
 
-| ID | Item Description | Origin | State | Target Milestone |
+| ID | Topic / Objective | Origin | State | Target Milestone |
 | :--- | :--- | :--- | :--- | :--- |
-| **BALL-01** | RDP Connection Rejection Recovery & GDM Autologin | Triage 1 | `✅ DONE` | Resolved via GDM restart; port 3389 listening. Sentry design documented. |
-| **BALL-02** | Stale Lockfile Purge (Dead PID Reaper) | Triage 2 | `✅ DONE` | Implemented in `standalone_accountability_watchdog.py` (`b384a15`). |
-| **BALL-03** | Intercom Deploy Drift & State Case Normalization | Triage 3 / Item 3 | `✅ DONE` | Resolved in `intercom_v2.js`, synced to `www_deploy`, hash-guarded in `build_site.py` (`fd2906a` / `90d8fb9`). |
-| **BALL-04** | Tool Namespace Migration (`clara-dna_read` $\to$ `jit_*`) | Item 4 / 8 | `✅ DONE` | Story 100.2: FastMCP canonical tools & backwards-compatible aliases registered in `clara_dna_mcp_server.py`. |
-| **BALL-05** | Relocate Context Cache from `/tmp` to Gitignored `.jit_cache/` | Item 5 | `✅ DONE` | Story 100.3: `.jit_cache/` created, gitignored, `mtime` invalidation & `evict_cached_summary` active. |
-| **BALL-06** | Sub-Inference Receipt Ledger (M5 Air Token Observability) | Item 6 | `✅ DONE` | Story 100.4 & 100.5: `sub_inference_ledger.jsonl` logged by `context_prewarmer.py`, blended into `delegate.py`. |
-| **BALL-07** | OpenCode Permissions & Conductor Prompt Ingestion | Item 4 / 7 | `✅ DONE` | Story 100.4: `oh-my-openagent.json`, `AGENTS_L2.md`, `AGENTS_L3.md`, `test_subversive_prompt.py` verified 6/6 green. |
-| **BALL-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `✅ DONE` | Story 100.6: Certified live on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`). |
-| **BALL-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `✅ DONE` | Verified single service `lab-attendant.service` maintains `ignition/manager.py` + `foyer/router.py` boundaries. |
-| **BALL-10** | Codify `BKM-077: BALL_TRACK` Protocol in Protocols.md | Item 11 | `✅ DONE` | Codified in `HomeLabAI/docs/Protocols.md` (`[FEAT-649]`). |
-| **BALL-11** | JIT One-Shot Surgical Contract & Anti-Spiral Orchestration | Post-Sprint Alignment | `✅ DONE` | Story 100.7: Codified in `FEAT-655`, `BKM-078`, `AGENTS_L3.md`, `AGENTS_L2.md`. |
+| **ANCHOR-01** | RDP Connection Rejection Recovery & GDM Autologin | Triage 1 | `✅ DONE` | Resolved via GDM restart; port 3389 listening. Sentry design documented. |
+| **ANCHOR-02** | Stale Lockfile Purge (Dead PID Reaper) | Triage 2 | `✅ DONE` | Implemented in `standalone_accountability_watchdog.py` (`b384a15`). |
+| **ANCHOR-03** | Intercom Deploy Drift & State Case Normalization | Triage 3 / Item 3 | `✅ DONE` | Resolved in `intercom_v2.js`, synced to `www_deploy`, hash-guarded in `build_site.py` (`fd2906a` / `90d8fb9`). |
+| **ANCHOR-04** | Tool Namespace Migration (`clara-dna_read` $\to$ `jit_*`) | Item 4 / 8 | `✅ DONE` | Story 100.2: FastMCP canonical tools & backwards-compatible aliases registered in `clara_dna_mcp_server.py`. |
+| **ANCHOR-05** | Relocate Context Cache from `/tmp` to Gitignored `.jit_cache/` | Item 5 | `✅ DONE` | Story 100.3: `.jit_cache/` created, gitignored, `mtime` invalidation & `evict_cached_summary` active. |
+| **ANCHOR-06** | Sub-Inference Receipt Ledger (M5 Air Token Observability) | Item 6 | `✅ DONE` | Story 100.4 & 100.5: `sub_inference_ledger.jsonl` logged by `context_prewarmer.py`, blended into `delegate.py`. |
+| **ANCHOR-07** | OpenCode Permissions & Conductor Prompt Ingestion | Item 4 / 7 | `✅ DONE` | Story 100.4: `oh-my-openagent.json`, `AGENTS_L2.md`, `AGENTS_L3.md`, `test_subversive_prompt.py` verified 6/6 green. |
+| **ANCHOR-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `✅ DONE` | Story 100.6: Certified live on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`). |
+| **ANCHOR-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `✅ DONE` | Verified single service `lab-attendant.service` maintains `ignition/manager.py` + `foyer/router.py` boundaries. |
+| **ANCHOR-10** | Codify `BKM-077: ANCHOR_TRACK` Protocol in Protocols.md | Item 11 | `✅ DONE` | Codified in `HomeLabAI/docs/Protocols.md` (`[FEAT-649]`). |
+| **ANCHOR-11** | JIT One-Shot Surgical Contract & Anti-Spiral Orchestration | Post-Sprint Alignment | `✅ DONE` | Story 100.7: Codified in `FEAT-655`, `BKM-078`, `AGENTS_L3.md`, `AGENTS_L2.md`. |
 
 ---
 
