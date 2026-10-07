@@ -138,6 +138,24 @@ def deploy_to_airlock(snapshots=False):
             ):
                 shutil.copy2(s_html, d_html)
 
+        # [Story 100.1] Sync root source files and HTML pages (including intercom_v2.js and intercom.html)
+        for root_asset in set(SOURCE_FILES + HTML_FILES):
+            s_asset = os.path.join(BASE_DIR, root_asset)
+            d_asset = os.path.join(www_dir, root_asset)
+            if os.path.isfile(s_asset):
+                if not os.path.exists(d_asset) or os.path.getmtime(s_asset) > os.path.getmtime(d_asset):
+                    os.makedirs(os.path.dirname(d_asset), exist_ok=True)
+                    shutil.copy2(s_asset, d_asset)
+                    print(f"✅ Airlock synced root asset: {root_asset}")
+
+        # Assert intercom_v2.js md5 parity between field_notes and www_deploy
+        s_icm = os.path.join(BASE_DIR, "intercom_v2.js")
+        d_icm = os.path.join(www_dir, "intercom_v2.js")
+        if os.path.exists(s_icm) and os.path.exists(d_icm):
+            if get_hash(s_icm) != get_hash(d_icm):
+                shutil.copy2(s_icm, d_icm)
+                print("🔄 Corrected hash mismatch for intercom_v2.js in www_deploy")
+
         # [FEAT-461] Intelligent Sync: Run sync scripts only when internal source is newer than airlock target
         sync_map = {
             "sync_protocols.sh": (
