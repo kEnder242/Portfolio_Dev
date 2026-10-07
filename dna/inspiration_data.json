@@ -1951,46 +1951,48 @@
   },
   {
     "id": "INS-045",
-    "theme": "Systems Architecture & Swarm Governance",
+    "theme": "Cognitive Architecture & Swarm Governance",
     "paper_order": 45,
     "origin": {
       "author": "jallred",
-      "text": "diagnose .. you keep bringing this one up and I keep saying its redundant.... what does it give us? is diagnose more than just calling L3 a second time inside itself?",
+      "text": "I have a hunch if we offload patch-test-recommend to L3 we bypass the need for semantic compression... WITH offload what's left? pure orchestration? the brain analogy is compelling. One shot has the potential to clean up tokens.",
       "source": "Federated Lab Sprint 100 Architectural Review",
       "immutable": true,
       "created_at": "2026-10-07T08:18:00Z"
     },
     "synthesis": {
-      "title": "The Illusion of Diagnostic Tools vs. In-Context Synthesis",
-      "narrative_context": "Tools that merely perform regex extractions on compiler tracebacks already present in an agent's active context window introduce superfluous IPC round-trips and conversational bloat. True root-cause diagnosis is an in-context cognitive completion of the language model, not an external tool lookup.",
+      "title": "One-Shot Delegation as Organic Token Cleaning (Bypassing Semantic Compression)",
+      "narrative_context": "Instead of burdening compute nodes with lossy runtime semantic compression or multi-pass KV cache summarization to rescue bloated session histories, architectural delegation solves context accumulation at the root. By offloading the patch-test-recommend loop to an ephemeral, disposable worker (jit_one_shot), all terminal tracebacks, compiler noise, and failed syntactic attempts die with the worker process. The orchestrator retains pure, pristine coordination context without token exhaustion or semantic degradation.",
       "lab_anchors": [
         "BKM-078",
         "FEAT-655",
-        "WIS-020"
+        "INS-046"
       ],
-      "review_notes": "Grounds the retirement of redundant diagnostic tool calls in favor of in-context output reports.",
+      "review_notes": "Codifies the breakthrough that one-shot delegation inherently purges context ballast and keeps the orchestrator pristine without needing lossy compression.",
       "last_refined_by": "AGY",
-      "refinement_version": 1,
+      "refinement_version": 2,
       "mutations": [],
       "revisions": []
     },
     "metadata": {
       "tags": [
         "inspiration",
-        "diagnostic-illusion",
-        "in-context-synthesis",
-        "tool-redundancy",
-        "jitc",
+        "one-shot-offload",
+        "organic-token-cleaning",
+        "pure-orchestration",
+        "anti-compression",
+        "context-hygiene",
         "swarm-governance"
       ],
       "explicit_links": [
-        "INS-044",
+        "INS-042",
+        "INS-046",
         "BKM-078",
         "FEAT-655"
       ],
       "aliases": [
         "PHL-045",
-        "diagnostic-illusion-law"
+        "organic-token-cleaning-law"
       ],
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
