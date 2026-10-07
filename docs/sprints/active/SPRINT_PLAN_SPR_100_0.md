@@ -255,32 +255,31 @@ Additionally: the Foyer returns `"state": "OFFLINE"` (uppercase) but the JS chec
 
 ---
 
-## Item 1 (Triage) — RDP Self-Healing Design
+## Item 1 (Triage) — RDP Rejection Root Cause, Resolution & Self-Healing Design
 
-**Current state (forensic):**
-- System service `gnome-remote-desktop.service` **healthy** (running since Oct 1)
-- **User session** service `gnome-remote-desktop.service` (user scope): **inactive (dead)** since 11:31:35
-- Last RDP disconnect reason: `ERRINFO_RPC_INITIATED_DISCONNECT` — the previous RDP client disconnected cleanly, but the user-session daemon didn't restart
-- Display: only `gdm` holds `:0` (X0 socket). User display session `jallred` has no `:1` socket — no user graphical session is running.
+**Forensics & Verified Root Cause:**
+1. **User Mode vs System Mode**: In GNOME 46+, GNOME Remote Desktop has two tiers:
+   - *System tier* (`gnome-remote-desktop --system`): Intended for GDM login screen / system-level RDP. On z87-Linux, `sudo grdctl --system status` showed: `Status: disabled` (no certificate, no user configured).
+   - *User tier* (`systemctl --user gnome-remote-desktop.service`): Runs inside the graphical user session (`jallred`'s GNOME Shell / Mutter) with credentials enabled.
+2. **Session Drop**: At 11:31:35, the previous desktop session was disconnected/terminated by an administrative tool. GDM returned to the greeter login screen (`seat0 tty1`).
+3. **Autologin Quirk**: Although `/etc/gdm3/custom.conf` specifies `AutomaticLoginEnable=True` and `AutomaticLogin=jallred`, GDM only auto-logs in on daemon boot/restart. Once a session exits and GDM returns to the login screen, it stays at the login screen.
+4. **The Rejection**: Without an active GNOME Shell session, the user-level daemon died (`inactive (dead)`). Even when manually started, it could not bind to port 3389 without a live Mutter display session (`GDBus.Error.ServiceUnknown: The name :1.43 was not provided`). And because system RDP was disabled, nothing listened on `3389`. Any connection attempts were refused/rejected.
 
-**Root cause:** During nightly VRAM quiesce, the user graphical session was torn down (or suspended). GNOME Remote Desktop in user scope requires an active graphical session. Without one, nothing to connect to.
+**Live Recovery Applied:**
+- Executed `sudo systemctl restart gdm.service`.
+- GDM re-initialized, evaluated `AutomaticLoginEnable=True`, and spawned a fresh graphical session on `tty2` (Session `1661`) for `jallred`.
+- `gnome-remote-desktop` immediately attached to the Mutter display and bound to `*:3389` (`users:(("gnome-remote-de",pid=2133850,fd=64))`).
+- Status: **Listening and active on port 3389**.
 
-**What needs to be recoverable:**
-| Component | Must Survive? | Current? | Self-Heal? |
-|-----------|--------------|---------|-----------|
-| lab-attendant (port 8765) | ✅ Yes | ✅ Yes (system service) | ✅ Already |
-| Foyer API | ✅ Yes | ✅ Alive (OFFLINE state) | ✅ Ignites at end of nightly |
-| RDP access | ✅ Yes | ❌ User session dead | ❌ No |
-| WebSocket intercom | ✅ Yes | ✅ Yes | ✅ via reconnect loop |
-| nightly_forge.lock | ✅ Clean | ✅ Reaped (FEAT-641) | ✅ Now |
-
-**Self-healing design options for RDP:**
-1. **`autologin` + `gnome-remote-desktop` as system service** (current approach): works as long as the user session stays alive. Nightly quiesce kills it.
-2. **Headless VNC fallback**: `x11vnc -create` creates a virtual display even without a physical session. RDP tunneled through that. Survives session death.
-3. **`systemd-logind` session keep-alive**: Add `KillUserProcesses=no` to `logind.conf` to prevent session teardown on idle. Crude but effective.
-4. **Restart trigger via watchdog**: Accountability watchdog (06:00 AM) attempts `loginctl activate <session>` to re-attach user session, then checks port 3389.
-
-**Recommended Sprint 100 story:** Add RDP session watchdog to accountability script — detect dead user-session gnome-remote-desktop, attempt `systemctl --user start gnome-remote-desktop` via `loginctl` or `machinectl`. Log result. Make this the 06:00 self-heal pass.
+**Self-Healing Architecture (What Needs to be Recoverable):**
+1. **Sentry Check (Port 3389 Liveness)**:
+   - Probe `ss -tulpn | grep -q ":3389"`.
+2. **Auto-Recovery Action**:
+   - If port 3389 is closed and GDM is idling at the login screen (`loginctl list-sessions` shows only `gdm` seat0 or no active user graphical shell):
+     - Trigger `systemctl restart gdm.service` to force autologin re-evaluation.
+     - Verify `systemctl --user is-active gnome-remote-desktop.service`.
+3. **Hardening Option (System-Level RDP Fallback)**:
+   - Configure `sudo grdctl --system rdp enable` and set fallback credentials so the machine answers RDP even when stuck on the GDM login screen.
 
 ---
 
