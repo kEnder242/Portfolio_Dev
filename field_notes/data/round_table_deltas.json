@@ -1268,5 +1268,51 @@
       "CRITIQUE: {"
     ],
     "consensus_1liner": "{"
+  },
+  {
+    "turn": 2,
+    "timestamp": 1791399949,
+    "time_str": "12:05:49",
+    "topic": "WORK_HISTORY",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 3.782,
+      "pinky_stance": 3.782,
+      "brain_arch": 39.726,
+      "oracle": 43.053,
+      "pinky_judgment": 43.053
+    },
+    "deltas_elapsed_s": {
+      "triage": 3.782,
+      "pinky_stance": 0.001,
+      "brain_arch": 35.944,
+      "oracle": 3.327,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 3.782,
+      "pinky_stance": 3.782,
+      "brain_arch": 39.726,
+      "oracle": 43.053,
+      "pinky_judgment": 43.053
+    },
+    "deltas": {
+      "triage": 3.782,
+      "pinky_stance": 0.001,
+      "brain_arch": 35.944,
+      "oracle": 3.327,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 43.053,
+    "total_s": 43.053,
+    "distillation_bullets": [
+      "LAB: { \"inferred_intent\": \"query_regressions\", \"addressed_to\": \"NONE\", \"vibe\": \"HISTORICAL\", \"domain\": \"work_history\", \"casual\": 0.6, \"intrigue\": 0.5, \"imp",
+      "PINKY: { \"score\": 1, \"reasoning\": \"No\" , \"slop_found\": false, \"retort\": \"No\" }",
+      "BRAIN: Based on the provided historical record, I found several regular expressions that you have used and documented before:\n\n1. `replace` (exact string mat",
+      "CRITIQUE: No\n\nNo"
+    ],
+    "consensus_1liner": "No\n\nNo"
   }
 ]
