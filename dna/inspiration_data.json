@@ -1948,5 +1948,101 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-045",
+    "theme": "Systems Architecture & Swarm Governance",
+    "paper_order": 45,
+    "origin": {
+      "author": "jallred",
+      "text": "diagnose .. you keep bringing this one up and I keep saying its redundant.... what does it give us? is diagnose more than just calling L3 a second time inside itself?",
+      "source": "Federated Lab Sprint 100 Architectural Review",
+      "immutable": true,
+      "created_at": "2026-10-07T08:18:00Z"
+    },
+    "synthesis": {
+      "title": "The Illusion of Diagnostic Tools vs. In-Context Synthesis",
+      "narrative_context": "Tools that merely perform regex extractions on compiler tracebacks already present in an agent's active context window introduce superfluous IPC round-trips and conversational bloat. True root-cause diagnosis is an in-context cognitive completion of the language model, not an external tool lookup.",
+      "lab_anchors": [
+        "BKM-078",
+        "FEAT-655",
+        "WIS-020"
+      ],
+      "review_notes": "Grounds the retirement of redundant diagnostic tool calls in favor of in-context output reports.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "diagnostic-illusion",
+        "in-context-synthesis",
+        "tool-redundancy",
+        "jitc",
+        "swarm-governance"
+      ],
+      "explicit_links": [
+        "INS-044",
+        "BKM-078",
+        "FEAT-655"
+      ],
+      "aliases": [
+        "PHL-045",
+        "diagnostic-illusion-law"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
+  },
+  {
+    "id": "INS-046",
+    "theme": "Systems Architecture & Swarm Governance",
+    "paper_order": 46,
+    "origin": {
+      "author": "jallred",
+      "text": "What if we run the stack trace and interpret it but STOP before fixing, bubble up a small report and recommendations to L2, then L2 tracks the progress and queues up another pristine L3.",
+      "source": "Federated Lab Sprint 100 Architectural Review",
+      "immutable": true,
+      "created_at": "2026-10-07T08:20:00Z"
+    },
+    "synthesis": {
+      "title": "The Disposable Worker & Ephemeral Garbage Isolation",
+      "narrative_context": "Letting small open-weights agents attempt recursive self-fixing loops inevitably induces context pollution and manic degradation. Treating surgical workers as ephemeral, single-shot probes (jit_one_shot) ensures that terminal traceback noise and failed syntax diffs die with the subagent session, keeping the orchestrator's context window pristine.",
+      "lab_anchors": [
+        "BKM-078",
+        "FEAT-655",
+        "WIS-482",
+        "INS-042"
+      ],
+      "review_notes": "Formalizes the one-shot disposable worker lifecycle and context isolation pattern.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "disposable-worker",
+        "garbage-isolation",
+        "one-shot-contract",
+        "anti-spiral",
+        "swarm-governance"
+      ],
+      "explicit_links": [
+        "INS-042",
+        "INS-045",
+        "BKM-078",
+        "FEAT-655"
+      ],
+      "aliases": [
+        "PHL-046",
+        "ephemeral-garbage-isolation"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
