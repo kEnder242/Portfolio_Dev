@@ -326,7 +326,8 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 #### Story 100.9 — Multi-Turn Turn Isolation & HyDE Context Poisoning Remediation
 * **Feature Anchor:** `[FEAT-640]` / `[FEAT-437]` / `[BKM-015]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `STAGED`
+* **Status:** `COMPLETED`
+* **Verification Log:** Dispatched to SWARM:LOCAL via `delegate.py --mode local` on Node KENDER Windows RTX 4090 (`my-windows-4090`). Atlas conducted surgical worker Sisyphus-Junior to patch `cognitive_hub.py` (threading `request_id` and passing `scope=ContextScope.TURN` on HyDE `_process_node_stream`) and author companion TDD unit tests in `test_feat437_resolve_hyde_vector.py`. Certified via pytest (13 passed in 0.55s) with live daemon synchronization verified. Committed in HomeLabAI `bc38f7b`.
 * **Why:** In multi-turn sessions, HyDE synthesis in `resolve_hyde_vector` defaulted to `ContextScope.LONG` because its `source_name` (`"Pinky (HyDE)"`) lacked the substring `"triage"`. Consequently, previous debate context (`[PREVIOUS_DEBATE]: User: hi`) was injected into Pinky's HyDE synthesis prompt. Pinky latched onto the previous turn's greeting, hallucinated `{"is_casual": true, "hyde_vector": ""}`, and suppressed RAG retrieval on technical queries.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files & Line Anchors):**
