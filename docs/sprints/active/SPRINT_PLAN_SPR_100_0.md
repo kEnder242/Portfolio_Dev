@@ -1,369 +1,156 @@
 # Sprint 100 — JIT Architecture, Parallel Orchestration & Lab Hardening
-**Status:** PLANNING — Brainstorm items 4-11 captured (no stories). Stories 100.1 (intercom) and 100.2 (lock reaper ✅ DONE) staged.
+**Status:** ACTIVE / HEADS DOWN
 **Created:** 2026-10-06
+**Mode:** Bicameral Hybrid — Phase 1 & 2 directly authored via `[AGY:PRIMARY]` (per BKM-049 Section 3: harness cannot self-delegate); Phase 3 certified via `[SWARM:LOCAL]`.
 **Preceded by:** Sprint 99 (Run B merged `ff2daf4` / `85d399a`)
-**FEAT tag:** FEAT-641 (stale lock reaper) committed `b384a15`
+**FEAT Tags:** `[FEAT-641]` (Stale lock reaper), `[FEAT-648]` (Persistent JIT cache & file-scoped invalidation), `[FEAT-649]` (Multi-tier agent choreography DAG & JIT tool protocol).
 
 ---
 
-## Overview
+## 🧭 Executive Summary & Core Invariant
 
-This sprint captures a cluster of architectural ideas emerging from the Sprint 99 experience:
-- The `dna_read()` → JIT namespace unification
-- Moving JIT cache off tmp
-- Token accounting for apples-to-apples cloud/local cost comparison
-- IPC tools as the face of parallel agentic coordination
-- Reverse/publish tools for context broadcasting
-- Multi-story parallel orchestration via Atlas
-
-> [!NOTE]
-> These are brainstorm items. No stories, no implementation tasks. Scope and feasibility TBD.
+Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JIT) execution architecture across the Federated Lab:
+1. **The Tool Namespace Law:** Disentangles long-term database storage (`dna_*` targeting ChromaDB) from dynamic execution tools (`jit_*` serving L2 conductor inspection and L3 worker recall).
+2. **Context Isolation Firewall:** Reaffirms that `task()` is not redundant overhead, but the essential context firewall that keeps the L2 conductor pristine (<2,000 tokens on KENDER 4090) while allowing L3 disposable surgical workers to absorb dirty test-fix loops.
+3. **Persistent Local Caching:** Relocates volatile context digests from `/tmp` into `.jit_cache/` (strictly gitignored) with granular, file-scoped `mtime` invalidation.
+4. **Sub-Inference Observability:** Prevents the "sub-inference trap" where heavy M5 Air neural map-reduce is hidden from telemetry by logging structured audit receipts into `.jit_cache/sub_inference_ledger.jsonl`.
+5. **Zero Service Sprawl:** Retains the single monolithic systemd daemon (`lab-attendant.service`), establishing clean modular Python boundaries between ignition/hardware management (`src/v5/ignition/manager.py`) and API/WebSocket routing (`src/v5/foyer/router.py`).
 
 ---
 
-## Item 4 — Rename `dna_read()` → `jit_read()` and Audit the `dna_*` Namespace
+## 🎾 BKM-077: BALL_TRACK Ledger
 
-**Motivation:** The `clara-dna_read` tool name is opaque. The DNA acronym refers to the persistence layer, not the retrieval mechanism. `jit_read` (Just-In-Time) better captures the *behavior*: fetching live, contextual memory at inference time.
-
-**Investigation needed:**
-- Does the `jit` prefix trigger the DNA ambient hook in `ambient_recall.py`? The hook currently listens for tool names starting with `dna_`. A prefix rename breaks that trigger unless the hook is updated to match `jit_*` OR a short alias without the 'c' is added.
-- Inventory all `clara-dna_*` tool names: `read`, `query_dna`, `get_protocol`, `safe_patch`, `locate_grounding`, `stage_research`, `research`, `failure_whisperer`, `handoff_checkpoint`, `locate_path`.
-- Which of these are internal-facing (infra) vs agent-facing (interface)? Only agent-facing ones warrant a JIT rename.
-
-**Proposed mapping (draft):**
-| Old | New | Notes |
-|-----|-----|-------|
-| `dna_read` | `jit_read` | Retrieve DNA card by ID — JIT at call time |
-| `query_dna` | `jit_query` | Search DNA by pattern |
-| `locate_grounding` | `jit_ground` | Pull grounding header |
-| `research` | `jit_research` | ← also item 7, dual use |
-| `safe_patch` | `dna_patch` | Write-side; keep `dna_` as publish verb? |
-| `stage_research` | `dna_stage` | Publish to staging |
-| `handoff_checkpoint` | `dna_checkpoint` | Write-side |
-
-**Open question:** Do we need to distinguish `jit_*` (reads context) vs `dna_*` (publishes context)? See Item 8.
+| ID | Item Description | Origin | State | Target Milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| **BALL-01** | RDP Connection Rejection Recovery & GDM Autologin | Triage 1 | `✅ DONE` | Resolved via GDM restart; port 3389 listening. Sentry design documented. |
+| **BALL-02** | Stale Lockfile Purge (Dead PID Reaper) | Triage 2 | `✅ DONE` | Implemented in `standalone_accountability_watchdog.py` (`b384a15`). |
+| **BALL-03** | Intercom Deploy Drift & State Case Normalization | Triage 3 / Item 3 | `📌 STAGED` | Story 100.1 |
+| **BALL-04** | Tool Namespace Migration (`clara-dna_read` $\to$ `jit_*`) | Item 4 / 8 | `📌 STAGED` | Story 100.2 |
+| **BALL-05** | Relocate Context Cache from `/tmp` to Gitignored `.jit_cache/` | Item 5 | `📌 STAGED` | Story 100.3 |
+| **BALL-06** | Sub-Inference Receipt Ledger (M5 Air Token Observability) | Item 6 | `📌 STAGED` | Story 100.4 |
+| **BALL-07** | OpenCode Permissions & Conductor Prompt Ingestion | Item 4 / 7 | `📌 STAGED` | Story 100.5 |
+| **BALL-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `📌 STAGED` | Story 100.6 |
+| **BALL-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `📌 STAGED` | Verified in place; documented under Architecture. |
+| **BALL-10** | Codify `BKM-077: BALL_TRACK` Protocol in Protocols.md | Item 11 | `📌 STAGED` | Protocols.md commit in Phase 2. |
 
 ---
 
-## Item 5 — Move JIT Cache from `/tmp` to Persistent Cache Directory
+## 🛠️ Unified Tool Flow & Permission Matrix
 
-**Motivation:** `/tmp` is ephemeral. After a delegation or subagent, the cache is gone, forcing fresh DNA reads on every delegation. This adds latency and token cost. A persistent cache dir eliminates the "clean tmp between delegations" requirement.
+The canonical mapping governing the tool migration across the 4-tier stack:
 
-**Current state:**
-- `context_prewarmer.py` uses `/tmp/active_warm_sessions.json`
-- Cache invalidation: currently based on session token rotation (each new delegation = new session = cold start)
-
-**Design questions:**
-1. **Where?** Candidate: `HomeLabAI/run/jit_cache/` (alongside `run/*.lock`) or `AcmeLab/.jit_cache/`. Must survive service restarts but be gitignored.
-2. **Invalidation:** What makes a JIT read "stale"? Candidates:
-   - DNA card's own `updated_at` timestamp (per-card TTL)
-   - Global cache bust on `safe_patch` writes (any write invalidates affected keys)
-   - Max TTL: 1h hard cap regardless of write activity
-3. **Cross-delegation sharing:** If subagents share a cache dir, concurrent writes need locking. Use atomic rename or `fcntl` like the forge lock.
-4. **Cleanup:** Without `/tmp` auto-wipe, need an explicit eviction policy. Tie to accountability watchdog at 06:00.
+| Current Tool (MCP) | Canonical Name | Flow Role | Permission Profile (`oh-my-openagent.json`) | Purpose / Silicon Surface |
+| :--- | :--- | :--- | :--- | :--- |
+| `clara-dna_read` | **`jit_read`** | **Consume** (Fetch) | `atlas`: allow \| `sisyphus-junior`: deny | High-density AST structural blueprint + M5 Air semantic map (<400 tokens). |
+| `clara-dna_locate_grounding` / `locate_path` | **`jit_locate`** | **Consume** (Fetch) | `atlas`: allow \| `sisyphus-junior`: allow | Context-clean path & symbol discovery without dumping code bodies. |
+| `stage_research` | **`jit_stage`** | **Publish** (Save) | `atlas`: allow \| `sisyphus-junior`: deny | L2 saves pre-computed patch blueprints & diff directives for L3. |
+| `research` | **`jit_research`** | **Consume** (Recall) | `atlas`: allow \| `sisyphus-junior`: allow | L3 retrieves staged blueprints, AST anchors, or AGENTS_L3 operational rules. |
+| `failure_whisperer` | **`jit_diagnose`** | **Consume** (Fetch) | `atlas`: allow \| `sisyphus-junior`: allow | Isolates pytest traceback assertion failures into an atomic 2-line diagnosis. |
+| `handoff_checkpoint` | **`jit_checkpoint`** | **Publish** (Save) | `atlas`: allow \| `sisyphus-junior`: allow | Commits status & modified artifacts to `delegation_ledger.jsonl`. |
+| `safe_patch` *(retained)* | **`safe_patch`** | **Publish** (Execute) | `atlas`: allow \| `sisyphus-junior`: allow | Surgical, regex-tolerant disk patcher with automated syntax linting. |
+| `query_dna`, `get_protocol`, `list_collections` | **`dna_*`** | **DNA DB** | Read-only across all tiers | Semantic search against ChromaDB long-term memory archive. |
 
 ---
 
-## Item 6 — Token Tracking Inside Tools for Apples-to-Apples Cost Comparison
+## 🔄 The Multi-Tier Agent Choreography DAG
 
-**Motivation:** Current A/B (cloud vs local) comparisons only count "outer" tokens (the LLM's input/output). But `jit_read` itself calls an embedding model or vector search — those are NOT free. Without accounting for tool-side tokens, cloud vs local comparisons are misleading.
-
-**Scope:**
-- Any MCP tool that calls an LLM (embedding, rerank, generation): `jit_read`, `jit_query`, `research`, `stage_research`, `failure_whisperer`
-- Anything calling Ollama or VLLM internally counts as "local tokens"
-- Anything calling OpenAI/Anthropic API from within a tool counts as "cloud tokens"
-
-**Proposed mechanism:**
-1. Each tool response includes an optional `_tokens` field in its JSON: `{"output": ..., "_tokens": {"local": 412, "cloud": 0}}`
-2. Orchestrator (Atlas or delegate.py) accumulates across the delegation turn
-3. End-of-turn report appends token accounting to the handoff JSON
-
-**Comparison table goal:**
-| Metric | Cloud (AGY) | Local (Ollama) |
-|--------|-------------|----------------|
-| Outer tokens | N | M |
-| Tool tokens (local) | 0 | T |
-| Tool tokens (cloud) | K | 0 |
-| Total tokens | N+K | M+T |
-| Wall time | Ws | Ls |
-
----
-
-## Item 7 — IPC Tools as the Face of All Air & Cached Communications
-
-**Motivation:** Parallel tool calling = parallel work. If coding tasks, research, and testing are exposed as tools, the orchestrator can fire them simultaneously. Right now, `delegate.py` serializes everything through a single call.
-
-**Proposed tool surface:**
-| Tool | Parallelizable? | Notes |
-|------|----------------|-------|
-| `jit_code` | ✅ Yes | Code a single file/function in isolation |
-| `jit_patch` | ✅ Yes (if no dep) | Apply a targeted patch to one file |
-| `jit_research` | ✅ Yes | Read-only DNA/web lookup |
-| `jit_test` | ✅ Yes (read-only) | Run test suite for a module |
-| `jit_debug` | ⚠️ Usually | May need serial if state-dependent |
-| `jit_create_patch` | ✅ Yes | Generate diff from spec; no write |
-| `dna_write` | ❌ No | DNA writes need coordination |
-| `dna_patch` | ❌ No | Mutates shared state |
-
-**Atlas as main orchestrator:**
-- Atlas (L2) sees the full story backlog and decomposes into parallel `jit_*` tool calls
-- L2 KV cache concern: multiple stories in parallel means very wide context. Is L2's KV cache large enough? Need empirical test.
-- **Open question:** Can we do away with the `task()` write entirely if tool calls handle all side effects?
-
-**Dependency management:**
-- Atlas must track file-level write dependencies (can't parallelize two tools writing the same file)
-- Story-level dependencies (Story B depends on Story A's output) block parallel scheduling
-- Stories with no shared file writes can be fully parallel
-
----
-
-## Item 8 — Reverse Tools: Publish vs. Consume (Two Sides of a Coin)
-
-**Motivation:** Current tools are primarily *consumers* of context. We need *publishers* — tools that broadcast finished work back to the Air/DNA so subsequent reads are fresh.
-
-**Taxonomy:**
-```
-CONSUME (read)          PUBLISH (write)
------------             ----------------
-jit_read       ←→      dna_write
-jit_query      ←→      dna_index
-jit_research   ←→      dna_stage
-jit_ground     ←→      dna_anchor
+```text
+Orchestrator (L1 / delegate.py)
+   │
+   ├─► Pre-Warm (M5 Air Neural Map-Reduce) ──► Populates .jit_cache/
+   │
+   └─► Atlas (L2 Conductor on KENDER 4090)
+         │
+         ├─► jit_read(file_paths) ───────► Inspects AST outlines (<400 tokens)
+         ├─► jit_locate(pattern) ────────► Finds module paths
+         ├─► jit_stage(blueprint) ───────► Saves AST anchors & diff directives
+         │
+         └─► task(category='coder') ─────► Dispatches Sisyphus-Junior (L3 on M5 Air)
+               │
+               ├─► jit_research(file) ───► Ingests staged blueprint without wandering
+               ├─► safe_patch(diff) ─────► Applies surgical code changes to disk
+               ├─► bash("pytest ...") ───► Runs isolated unit/mock verification
+               │     │
+               │     └─► [On failure] jit_diagnose(traceback) ──► Re-attempts patch
+               │
+               └─► jit_checkpoint() ────► Logs completion & modified artifacts
 ```
 
-**Naming convention options:**
-1. **Verb-based:** `jit_*` = read/consume, `dna_*` = write/publish
-2. **Tag-based:** `jitc_*` suffix for "commit" (write-back): `jitc_write`, `jitc_patch`
-3. **Directional:** Arrow metaphor — `air_pull` vs `air_push`
+---
 
-**Open design question:** Should the agent explicitly call a publish tool after coding, or should `jit_code` auto-publish its output to a staging area? Auto-publish risks polluting DNA with draft work.
+## 📦 Detailed Sprint Stories
 
-**Recommended approach (hypothesis):** Explicit two-phase:
-1. `jit_code` → returns code artifact in response (no DNA write)
-2. `dna_stage(artifact)` → publishes to staging for review
-3. `dna_patch(staged_id)` → promotes staging to live DNA
+### Phase 1: Lab Recovery & UI Drift (`[AGY:PRIMARY]`)
+
+#### Story 100.1 — Intercom Deploy Sync, State Case Normalization & Ledger Clean
+* **Why:** `www_deploy/intercom_v2.js` is 4 FEATs behind `field_notes/intercom_v2.js` (missing FEAT-638 feedback, FEAT-590 DNA proposals, and send-lock logic). Foyer returns uppercase `"state": "OFFLINE"` while JS tested lowercase `"offline"`, preventing the maintenance overlay from rendering. Additionally, the crashed nightly forge left a stale `Age: 999h` sentinel in `nightly_forge_state.json`.
+* **How:**
+  1. Sync `Portfolio_Dev/field_notes/intercom_v2.js` to `www_deploy/intercom_v2.js` and `www_deploy/assets/intercom_v2.js`.
+  2. In `intercom_v2.js`, normalize state comparisons to case-insensitive: `(data.state || '').toLowerCase() === 'offline'`.
+  3. In `build_site.py`, add a file hash guard asserting that `www_deploy/intercom_v2.js` matches `field_notes/intercom_v2.js`.
+  4. Reset `HomeLabAI/run/nightly_forge_state.json` to clear the `Age: 999h` sentinel.
+* **Proof:** Live test on http://localhost:8765 status poll; `build_site.py` passes cleanly.
 
 ---
 
-## Item 9 — Double Down on Orchestrator: Multi-Story, Multi-File Parallel Coding
+### Phase 2: JIT Migration & Infrastructure (`[AGY:PRIMARY]`)
 
-**Motivation:** If Atlas can manage dependencies, we can parallelize across stories within a sprint — not just across files within a story. This is the "federated parallel sprinting" concept.
+#### Story 100.2 — FastMCP Tool Registrations & Namespace Aliasing
+* **Why:** Disentangles execution tools from database retrieval.
+* **How:**
+  1. In `AcmeLab/src/clara_dna_mcp_server.py`:
+     - Register `jit_read` (with `read` / `clara-dna_read` aliases for backwards compatibility).
+     - Register `jit_locate` (aliasing `locate_path` / `locate_grounding`).
+     - Register `jit_stage` (aliasing `stage_research`).
+     - Register `jit_research` (aliasing `research`).
+     - Register `jit_diagnose` (aliasing `failure_whisperer`).
+     - Register `jit_checkpoint` (aliasing `handoff_checkpoint`).
+     - Retain `safe_patch` and `clara-dna_safe_patch`.
+     - Retain `dna_*` tools for pure ChromaDB operations.
+* **Proof:** Direct MCP tool invocation verification using `clara_dna_mcp_server.py` in-process probe.
 
-**Key questions:**
-1. **Can we code multiple files in parallel?** Yes, if files have no import dependency on each other. Atlas needs a dependency graph.
-2. **Can we run multiple stories in parallel?** Yes, if story outputs don't feed into each other. Atlas needs story DAG.
-3. **Does queuing up coding tasks leverage Air caching?** Hypothesis: yes — if all jit_code calls share a common context prefix (the sprint spec), the Air KV cache reuse is very high.
-4. **Can we trust Atlas (L2) to manage dependencies?** L2 is smart enough if given a clear dependency manifest. The manifest itself is a DNA card.
-5. **Is L2's KV cache too small for multi-story context?** Unknown — needs empirical test. Each story at high-detail level might be 8-16K tokens; 4 parallel stories = 32-64K context overhead.
+#### Story 100.3 — Persistent JIT Cache Relocation & File-Scoped Invalidation
+* **Why:** Ephemeral `/tmp` files force cold restarts and require constant sweeps.
+* **How:**
+  1. Define canonical cache root: `Dev_Lab/.jit_cache/`.
+  2. Add `.jit_cache/` to `.gitignore` in `Dev_Lab/`, `HomeLabAI/`, and `AcmeLab/`.
+  3. In `HomeLabAI/src/v5/cognition/context_prewarmer.py`:
+     - Redirect `CONTEXT_CACHE_PATH` from `/tmp/clara_context_cache.json` to `.jit_cache/clara_context_cache.json`.
+     - Implement file-scoped invalidation: store file `mtime` alongside digest.
+     - On read, if disk `mtime > cached_mtime`, regenerate.
+  4. In `safe_patch`: trigger cache eviction for the specific modified target file (`cache.pop(file_path, None)`).
+  5. In `jit_stage` / `jit_research`: move notes path from `/tmp/clara_conductor_notes.json` to `.jit_cache/clara_conductor_notes.json`.
+* **Proof:** Run unit test creating, reading, patching, and verifying cache invalidation in `.jit_cache/`.
 
-**Orchestration model sketch:**
-```
-Atlas (L2, orchestrator)
-├── Parallel batch 1 (no cross-deps):
-│   ├── jit_code(story_A, file_1) 
-│   ├── jit_code(story_A, file_2)  
-│   └── jit_research(story_B, context)  
-└── Serial gate (story_A output needed):
-    ├── jit_test(story_A)
-    └── jit_code(story_B, file_1)  ← depends on story_A result
-```
+#### Story 100.4 — OpenCode Permission Profiles & Operational Contracts
+* **Why:** OpenCode enforces tool access through declarative permission blocks. If a tool is renamed without updating permissions, OpenCode blocks the agent with `deny`.
+* **How:**
+  1. Update `Dev_Lab/oh-my-openagent.json`:
+     - Grant `atlas`: `jit_read: allow`, `jit_locate: allow`, `jit_stage: allow`, `jit_research: allow`, `jit_diagnose: allow`, `jit_checkpoint: allow`, `safe_patch: allow`.
+     - Grant `sisyphus-junior`: `jit_read: deny`, `jit_locate: allow`, `jit_stage: deny`, `jit_research: allow`, `jit_diagnose: allow`, `jit_checkpoint: allow`, `safe_patch: allow`.
+     - Maintain existing aliases during the transition window.
+  2. Update `Dev_Lab/AGENTS_L2.md` and `Dev_Lab/AGENTS_L3.md`:
+     - Update tool manifest tables and Laws 1/2 to reference `jit_*` tools.
+  3. Update `HomeLabAI/src/tests/test_subversive_prompt.py`:
+     - Assert `jit_read` is denied for L3 worker.
+* **Proof:** Unit test suite in `test_subversive_prompt.py` passes 100%.
 
-**Risk:** If one parallel jit_code fails, partial writes may corrupt a story. Need transactional semantics (all-or-nothing per story).
-
----
-
-## Triage Items (Live Issues — Sprint 99 Aftermath)
-
-> [!CAUTION]
-> Items below are live operational issues found at 02:41 PDT Oct 6. See forensic analysis in conversation.
-
-### Triage 1 — RDP Not Connecting
-- **Status:** `gnome-remote-desktop.service` is **active** (running since Oct 1). Service did NOT crash.
-- **Root cause:** Port 3389 is NOT listening. GNOME Remote Desktop runs in user session context (via PAM/gdm), not the system service. During nightly VRAM quiesce, display session may have been disrupted.
-- **Action:** RDP likely recovers when nightly forge completes and system re-stabilizes. Check again after 06:00. If persistent: `systemctl --user status gnome-remote-desktop` from a local terminal.
-
-### Triage 2 — Accountability `FAIL`: Foyer OFFLINE + nightly_forge.lock Stale
-**Root cause analysis:**
-
-| Check | Expected | Actual | Verdict |
-|-------|----------|--------|---------|
-| Foyer Re-Ignition | ONLINE by 06:00 | `state=OFFLINE` (dead since 02:00:28) | 🔴 REGRESSION — Foyer did NOT re-ignite after nightly |
-| Lock Cleanliness | nightly_forge.lock cleared | `DEAD PID 1870642, 240m old` | 🔴 REGRESSION — lock reaper NOT running |
-| Nightly Forge | COMPLETED | `Status: RUNNING (Age: 999h)` | 🔴 REGRESSION — state ledger broken (shows 999h) |
-| LoRA Training | COMPLETED | `FAILED` | 🔴 Likely consequence of forge crash/abort |
-| Morning Round Table | critic > 0 | `Critic Score: 0.00` | 🔴 Consequence of Foyer OFFLINE |
-
-**Forensic comparison vs prior work (FEAT-639):**
-- FEAT-639 implemented `check_stale_locks()` in `standalone_accountability_watchdog.py` — **DETECTION works** (it correctly found the stale lock).
-- FEAT-639 **did NOT implement lock reaping/cleanup**. The watchdog *reports* the stale lock but never *deletes* it. This is the gap.
-- Foyer did not re-ignite: the nightly forge apparently crashed (PID 1870642 dead) without calling `record_nightly_completion()`, leaving the lock file alive and the state ledger in `RUNNING` state.
-- The forge's `record_nightly_completion()` is only called on clean exit. A crash = leaked lock + corrupted state = `Age: 999h` sentinel.
-
-**Sprint 100 candidate bug:** Add a `nightly_forge.lock` reaper to the accountability watchdog (delete stale DEAD-PID locks, not just detect them). Also add crash recovery: forge should register a systemd `ExecStopPost=` script to clean up locks on unexpected exit.
-
-### Triage 3 — Intercom Send Lock NOT Working
-**Root cause analysis:**
-
-The send-lock code in `Portfolio_Dev/field_notes/intercom_v2.js` (lines 621-625) is **present in `field_notes`** but **STRIPPED from `www_deploy/intercom_v2.js`**.
-
-```
-diff Portfolio_Dev/field_notes/intercom_v2.js www_deploy/intercom_v2.js
-621,625d571
-<                 if (sendBtn) {
-<                     sendBtn.disabled = true;
-```
-
-The deployed version (`www_deploy/`) is **4 features behind** `field_notes/`:
-- Missing FEAT-638 (Response Feedback)
-- Missing FEAT-590 (DNA Proposal Cards)
-- Missing send-lock logic
-
-Additionally: the Foyer returns `"state": "OFFLINE"` (uppercase) but the JS checks `data.state === "offline"` (lowercase). **Case mismatch** — the offline display branch never triggers.
-
-**Sprint 100 candidate fixes:**
-1. Deploy `field_notes/intercom_v2.js` → `www_deploy/`
-2. Normalize Foyer state strings to lowercase OR update JS to `toLowerCase()` compare
-3. Add `build_site.py` step to auto-sync intercom_v2.js to www_deploy on commit
-
+#### Story 100.5 — Sub-Inference Token Receipt Ledger in `delegate.py`
+* **Why:** Map-reduce operations on M5 Air must be visible in telemetry to eliminate the sub-inference opacity trap.
+* **How:**
+  1. In `context_prewarmer.py`: when M5 Air performs map-reduce, append an audit entry to `.jit_cache/sub_inference_ledger.jsonl`:
+     `{"timestamp": ..., "engine": "m5_air", "prompt_tokens": N, "completion_tokens": M}`.
+  2. In `HomeLabAI/src/tests/delegate.py`: in `record_swarm_telemetry()`, read and aggregate unrecorded receipts from `.jit_cache/sub_inference_ledger.jsonl`, blending local silicon tokens into overall story telemetry.
+* **Proof:** Verify that running `prewarm_files()` generates a ledger entry and `record_swarm_telemetry()` logs blended tokens.
 
 ---
 
-## Staged Stories
+### Phase 3: Live Verification & Certification (`[SWARM:LOCAL]`)
 
-### Story 100.1 — Intercom Deploy Sync & State Case Normalization
-
-**Acceptance criteria:**
-1. `www_deploy/intercom_v2.js` matches `Portfolio_Dev/field_notes/intercom_v2.js` (currently 4 FEATs behind: FEAT-638, FEAT-590, send-lock logic)
-2. Foyer state string comparison uses case-insensitive match (`data.state.toLowerCase() === "offline"`) OR Foyer normalizes to lowercase before emitting — pick one
-3. `build_site.py` gains an assertion that `www_deploy/intercom_v2.js` md5 matches `field_notes/intercom_v2.js` (fail-fast on drift)
-
-**Root cause logged:** Deploy pipeline has no sync step. FEAT-638 and FEAT-590 were committed to `field_notes/` but never copied to `www_deploy/`. Send-lock lines 621-625 stripped from deployed version.
-
----
-
-### Story 100.2 — Stale Lock Reaper ✅ DONE (FEAT-641, commit `b384a15`)
-
-**What was implemented:** `check_stale_locks()` in `standalone_accountability_watchdog.py` upgraded to two-phase detect+purge:
-- Phase 1: classify each lock (live/stale/unknown) via PID liveness + fcntl probe
-- Phase 2: `unlink()` any confirmed-dead-PID lock older than 30 minutes
-- Safety gate: never reap if kernel advisory lock is actively held
-- `[REAP]` log sentinel + `reaped` list in digest JSON
-
-**Validated live:** Reaped `nightly_forge.lock` (DEAD PID 1870642, 1088.5m old). All locks now clear.
-
-**What's NOT fixed:** The forge itself crashed without calling `record_nightly_completion()`, leaving the state ledger at `Age: 999h`. A follow-up story should add `systemd` crash recovery (ExecStopPost or WatchdogSec) to ensure the ledger is always updated even on SIGKILL.
-
----
-
-## Item 1 (Triage) — RDP Rejection Root Cause, Resolution & Self-Healing Design
-
-**Forensics & Verified Root Cause:**
-1. **User Mode vs System Mode**: In GNOME 46+, GNOME Remote Desktop has two tiers:
-   - *System tier* (`gnome-remote-desktop --system`): Intended for GDM login screen / system-level RDP. On z87-Linux, `sudo grdctl --system status` showed: `Status: disabled` (no certificate, no user configured).
-   - *User tier* (`systemctl --user gnome-remote-desktop.service`): Runs inside the graphical user session (`jallred`'s GNOME Shell / Mutter) with credentials enabled.
-2. **Session Drop**: At 11:31:35, the previous desktop session was disconnected/terminated by an administrative tool. GDM returned to the greeter login screen (`seat0 tty1`).
-3. **Autologin Quirk**: Although `/etc/gdm3/custom.conf` specifies `AutomaticLoginEnable=True` and `AutomaticLogin=jallred`, GDM only auto-logs in on daemon boot/restart. Once a session exits and GDM returns to the login screen, it stays at the login screen.
-4. **The Rejection**: Without an active GNOME Shell session, the user-level daemon died (`inactive (dead)`). Even when manually started, it could not bind to port 3389 without a live Mutter display session (`GDBus.Error.ServiceUnknown: The name :1.43 was not provided`). And because system RDP was disabled, nothing listened on `3389`. Any connection attempts were refused/rejected.
-
-**Live Recovery Applied:**
-- Executed `sudo systemctl restart gdm.service`.
-- GDM re-initialized, evaluated `AutomaticLoginEnable=True`, and spawned a fresh graphical session on `tty2` (Session `1661`) for `jallred`.
-- `gnome-remote-desktop` immediately attached to the Mutter display and bound to `*:3389` (`users:(("gnome-remote-de",pid=2133850,fd=64))`).
-- Status: **Listening and active on port 3389**.
-
-**Self-Healing Architecture (What Needs to be Recoverable):**
-1. **Sentry Check (Port 3389 Liveness)**:
-   - Probe `ss -tulpn | grep -q ":3389"`.
-2. **Auto-Recovery Action**:
-   - If port 3389 is closed and GDM is idling at the login screen (`loginctl list-sessions` shows only `gdm` seat0 or no active user graphical shell):
-     - Trigger `systemctl restart gdm.service` to force autologin re-evaluation.
-     - Verify `systemctl --user is-active gnome-remote-desktop.service`.
-3. **Hardening Option (System-Level RDP Fallback)**:
-   - Configure `sudo grdctl --system rdp enable` and set fallback credentials so the machine answers RDP even when stuck on the GDM login screen.
-
----
-
-## Item 10 — Router vs Hooks vs Attendant: Generalize the Architecture
-
-**Motivation:** `lab-attendant.service` does too many things: WebSocket server, routing, hook dispatch, state machine, process management. This creates tight coupling — a hook failure can bring down the WS server. As we add more tools (JIT tools, IPC tools from item 7), the attendant becomes a bottleneck.
-
-**Current responsibilities of the attendant:**
-- WebSocket server (inbound connections from intercom.html)
-- Intent routing (which cognitive node handles this request?)
-- Hook invocation (ambient hooks, pre/post hooks)
-- Process lifecycle (ignition, quiesce, VRAM management)
-- State machine (OFFLINE → WAKING → READY → WORKING)
-
-**The question:** Should routing live outside the attendant?
-
-**Proposal: Three-Layer Split**
-
-```
-Layer 1: lab-attendant (renamed: lab-conductor?)
-  → Keep: WebSocket server, state machine, process lifecycle
-  → Remove: routing logic, hook dispatch
-
-Layer 2: lab-router (new, or promote existing router.py to a standalone service)
-  → Intent classification, node selection, load balancing across nodes
-  → Could be an HTTP microservice or pure library
-
-Layer 3: hook-bus (new concept)
-  → Receives tool call events and fires ambient hooks
-  → Decoupled from both attendant and router
-  → Can run hooks in parallel (non-blocking)
-  → Natural home for JIT tools (item 7) and future MCP tools
-```
-
-**Naming candidates for the generalized attendant:**
-- `lab-conductor` — orchestrates without doing the work itself
-- `lab-runtime` — generic enough to be "plug and play"
-- `lab-nexus` — junction point for all communications
-- `lab-switchboard` — telephony metaphor, makes sense for IPC
-
-**Open question:** Do we have a separate watchdog today? Answer: the accountability watchdog is a *cron job* (06:00 AM), not a live watchdog daemon. A live watchdog (restart-on-death, health-check loop) is different — and currently missing for anything except systemd's built-in `Restart=on-failure`.
-
-**Connection to items 7+8:** If the hook-bus dispatches tools in parallel (item 7), and those tools are both JIT reads and DNA writes (item 8), the hook-bus IS the IPC layer. This unifies items 7, 8, 9, and 10.
-
----
-
-## Item 11 — Ball Cleanup BKM: Tracking Actionable Items in Conversation
-
-**Motivation:** Long conversations drop action items. Sprint planning produces decisions that never become stories. Triage produces findings that never get filed. We need a lightweight protocol to capture and track "balls in the air."
-
-**Proposed name candidates:**
-- `BKM-077: BALL_TRACK` — "Ball Tracking Protocol"
-- `BKM-077: CLEAR_DESK` — "Don't leave the desk dirty"
-- `BKM-077: TRAIL_CLOSE` — closing the trail of open items
-- `BKM-077: ACTION_FENCE` — fencing actionable items from discussion
-
-**Draft BKM content:**
-
-> **BKM-077: BALL_TRACK — Conversation Action Item Closure Protocol**
->
-> **Problem:** Long agentic conversations generate findings, decisions, and action items that get buried in context. Items discussed but not committed to a story, BKM, or commit are effectively dropped.
->
-> **Protocol:**
-> 1. **At every sprint planning session:** Before ending, list all "in-flight balls" — items discussed but not yet assigned to a story, BKM, or commit.
-> 2. **Ball states:** `🎾 OPEN` (discussed, not assigned), `📌 STAGED` (added to sprint doc), `✅ DONE` (committed), `🗑️ DROPPED` (explicitly deferred/abandoned).
-> 3. **Trigger:** Any item prefixed with "we should...", "plan to...", "follow-up...", "add a story to..." is automatically a ball.
-> 4. **End-of-session checkpoint:** Before any handoff or context summary, agent outputs a BALL_TRACK table of all open balls from the session.
-> 5. **Where balls live:** Sprint plan doc OR a dedicated `OPEN_BALLS.md` in `Portfolio_Dev/docs/`.
->
-> **Naming convention for the doc:**
-> `Portfolio_Dev/docs/OPEN_BALLS.md` — flat running list, one per line, with state emoji.
-
-**Questions to resolve:**
-- Do we use a separate `OPEN_BALLS.md` or embed in each sprint plan? Suggest: embed during sprint, promote to `OPEN_BALLS.md` when sprint closes without resolution.
-- Should the BKM include a "ball expiry" rule? (Balls older than 2 sprints auto-drop unless re-affirmed)
-- Should the ball tracker be a tool? `jit_track_ball`, `jit_close_ball`?
-
----
-
-## Next Steps
-- [ ] **Story 100.1:** Implement intercom deploy sync (copy from field_notes to www_deploy + case-insensitive state check + build_site.py guard)
-- [ ] **Story 100.2:** ✅ Done (FEAT-641, `b384a15`) — needs follow-up: forge crash recovery via ExecStopPost
-- [ ] **Item 10:** Decide on naming for generalized attendant; scope the router/hook-bus split as a future sprint
-- [ ] **Item 11:** Author BKM-077 (BALL_TRACK) as a DNA card; decide OPEN_BALLS.md vs sprint-embedded
-- [ ] **RDP:** Add RDP session self-heal to accountability watchdog (06:00 pass)
-- [ ] **Items 4-9:** Decide split: JIT namespace (4+5) as Sprint 100, parallel orchestration (7+8+9) as Sprint 101?
-- [ ] **Empirical:** Test L2 KV cache capacity for multi-story parallel context
+#### Story 100.6 — Sovereign Delegation Shakedown Pass
+* **Why:** Live certification of the new JIT architecture under live silicon endpoints (KENDER 4090 + M5 Air).
+* **How:**
+  1. Execute a real story delegation via `delegate.py --story 100.6 --mode local`.
+  2. Verify Atlas invokes `jit_read`, stages via `jit_stage`, dispatches `task()`, and Sisyphus-Junior consumes `jit_research`, applies `safe_patch`, and calls `jit_checkpoint`.
+  3. Confirm telemetry correctly captures outer + sub-inference tokens.
+* **Proof:** Greenfield or hermetic regression test verified green; story marked `SUCCESS` in `delegation_ledger.jsonl`.
