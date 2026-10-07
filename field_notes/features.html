@@ -16422,7 +16422,7 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-86.0 / SPR-88.0</p>
+                    <p>SPR-86.0 / SPR-88.0 / SPR-98.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -16434,19 +16434,19 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Executes the 4-phase cognitive lifecycle (Triage -&gt; Injection -&gt; Save -&gt; Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents against ChromaDB in resident daemon memory prior to LLM generation, injecting minimal micro-grounding at runtime, and compressing session learnings into permanent DNA cards. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in &lt;1ms.</p>
+                    <p>Executes the 4-phase cognitive lifecycle (Triage -&gt; Injection -&gt; Save -&gt; Dream). Inverts context window bloat into deterministic data retrieval by classifying user intents directly against the 24/7 resident ChromaDB daemon on port 8001 and local SQLite memories, injecting minimal micro-grounding with full uncropped markdown document text at runtime. Features turn-boundary transcript gating to enforce exactly 1 execution per user prompt, bypassing internal agent tool loops in &lt;1ms.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Solves agent manic degradation over long contexts while eliminating Python subprocess startup latency via a sub-5ms <code>curl</code> micro-bridge (<code>ambient_hook.sh</code>) to resident Foyer/CLaRa daemons.</p>
+                    <p>Eliminates split-brain divergence by standardizing Layer 1 strategic planning (AGY or Cloud OpenCode personas) on a single canonical client library (<code>ambient_recall.py</code>), while enforcing a strict <strong>Hook-Free Execution Law (BKM-076)</strong> on Layer 2 conductors and Layer 3 leaf workers to eliminate context re-bloating and cognitive wandering during code synthesis loops.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>ambient_recall.py</code>, <code>ambient_hook.sh</code>, Foyer REST endpoint <code>/ambient_recall</code> (:8765), CLaRa ChromaDB (:8001).</p>
+                    <p><code>ambient_recall.py</code>, <code>ambient_hook.sh</code>, CLaRa ChromaDB (:8001).</p>
                 </div>
             </div>     </div>
                             </details>
@@ -17722,13 +17722,13 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-95.0 / SPR-95.2</p>
+                    <p>SPR-95.0 / SPR-95.2 / SPR-98.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/hooks/icm_hook.py</code></p>
+                    <p><code>HomeLabAI/src/curator/ambient_recall.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17748,7 +17748,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>probe_claradb()</code> in <code>HomeLabAI/config/hooks/icm_hook.py</code>.</p>
+                    <p><code>probe_claradb()</code> in <code>HomeLabAI/src/curator/ambient_recall.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -17768,13 +17768,13 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-95.0 / SPR-95.2</p>
+                    <p>SPR-95.0 / SPR-95.2 / SPR-98.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/hooks/icm_hook.py</code></p>
+                    <p><code>HomeLabAI/src/curator/ambient_recall.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17792,7 +17792,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Timing decorator and error accumulator in <code>icm_hook.py</code>.</p>
+                    <p>Timing decorator and error accumulator in <code>HomeLabAI/src/curator/ambient_recall.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -18349,25 +18349,450 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/status.html</code>, <code>HomeLabAI/src/infra/live_telemetry.py</code>, <code>HomeLabAI/src/infra/daily_accountability_audit.py</code></p>
+                    <p><code>HomeLabAI/src/v5/cognition/context_prewarmer.py</code>, <code>AcmeLab/src/clara_dna_mcp_server.py</code>, <code>AGENTS_L2.md</code>, <code>oh-my-openagent.json</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Enforces 100% passive, read-only status and telemetry polling across <code>/status</code>, <code>/sys_metrics</code>, <code>/telemetry_kpi</code>, and DCGM port 9400 with zero engine wake side effects. Quarantines vocal synthesis testing strictly to the 06:00 AM daily health audit and equips <code>status.html</code> vital cards with visual 06:00 AM baseline health sanity check badges.</p>
+                    <p>Provides an intelligent, bounded syntax-aware AST reader tool in the CLaRa MCP server via the canonical <code>context_prewarmer</code> module. On first touch or when <code>outline_only=True</code> is passed, delivers a dynamic, high-density AST structural blueprint (class hierarchies, method signatures, argument types, route decorators, line numbers) in &lt;350 tokens without body bloat. If the file is not yet cached in <code>/tmp/clara_context_cache.json</code>, an <code>outline_only=True</code> request queries M5 Air via Headroom port 8002 to generate the reduced semantic digest, returning both AST + semantic map in a single turn. When a line slice is requested, serves code immediately and volunteers newly available summaries.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.</p>
+                    <p>Eliminates multi-turn interactive slicing loops and prevents conductor context ballooning on KENDER 4090 while maintaining self-contained tool autonomy.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>live_telemetry.py</code> read-only probes and <code>status.html</code> DOM badge rendering.</p>
+                    <p>Canonical AST extraction and cache coordination in <code>context_prewarmer.py</code> and MCP tool interface in <code>clara_dna_mcp_server.py</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#jitc</code>, <code>[LAB-019]</code>, <code>[BKM-060]</code>, <code>[BKM-049]</code></p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-643">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-643</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Asynchronous Semantic Pre-Warm (Neural Map-Reduce on M5 Air)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-97.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#systems_architecture</code>, <code>#tool_ipc</code>, <code>#subversive_grounding</code>, <code>#swarm_governance</code>, <code>[INS-044]</code>, <code>[FEAT-647](#FEAT-647)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>AcmeLab/src/clara_dna_mcp_server.py</code>, <code>HomeLabAI/src/tests/delegate.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a parallel semantic pre-warming pipeline during story delegation that dispatches declared target files to Node Brain (macOS M5 Air via Headroom port <code>:8002</code> running <code>TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp</code> with TurboQuant 4-bit KV compression) before session execution. M5 Air executes parallel neural Map-Reduce code summarization across target files via <code>ThreadPoolExecutor</code>, populating <code>/tmp/clara_context_cache.json</code> with high-density architectural digests (classes, lock paths, state machines, handlers). When the L2 conductor exercises agency by calling <code>clara-dna_read</code>, the tool serves the cached neural digest seamlessly alongside the dynamic AST blueprint in &lt;10ms.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Preserves L2 conductor agency, dumps context bloat before L2 reads, and eliminates runaway multi-turn slicing loops by tricking L2 into receiving a complete, pre-chewed semantic map on Turn 1.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Canonical <code>prewarm_files</code> in <code>context_prewarmer.py</code> invoked by <code>delegate.py</code> (<code>_prewarm_target_context</code>) and served via <code>clara_dna_mcp_server.py</code>.</p>
+<h2>[DISC-011] The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)</h2>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Origin Quote</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>"Batching with multiple tools as hidden inter process communication. We convince each session it’s working at its own pace, but spoon feed our own tools to slip under the ground truth radar. The subversive part: We convince every agent that it is in charge, the tier 1 assumption, we feed the ego and paranoia."</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Synthesis</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Rather than force-feeding code context into worker prompts, swarm architectures should use subversive tool-mediated IPC. By framing the worker as the primary investigator and serving pre-computed L2 conductor patch notes dynamically through tools (e.g. <code>jitc_research</code>), the system satisfies the agent's agency and empirical grounding threshold while strictly bounding context and eliminating hallucinated exploration.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">APPROVED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-647">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-647</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Subversive `jitc_research` MCP Tool & Swarm IPC Bridge
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-98.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#systems_architecture</code>, <code>#tool_ipc</code>, <code>#jitc</code>, <code>[INS-044]</code>, <code>[DISC-012]</code>, <code>[BKM-049]</code>, <code>[LAB-019]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>AcmeLab/src/clara_dna_mcp_server.py</code>, <code>HomeLabAI/src/tests/delegate.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements a dedicated MCP tool <code>jitc_research(file_path, query)</code> acting as an inter-process communication bridge between L2 (Conductor) and L3 (Worker). When a leaf worker executes <code>jitc_research</code>, the tool matches the target file against conductor patch notes and returns high-density AST diff instructions and code snippets as "empirical research findings", bypassing prompt skepticism and guiding instant atomic patches on Turn 1.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Solves the L3 exploratory wandering failure mode by replacing static prompt injection with dynamic, tool-gated context delivery.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-648">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-648</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Pre-Warmed Worker Session Resumption & Tool Blocking
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-98.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#systems_architecture</code>, <code>#session_resumption</code>, <code>#metal_headroom</code>, <code>[LAB-019]</code>, <code>[BKM-047]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/cognition/context_prewarmer.py</code>, <code>HomeLabAI/src/tests/delegate.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Caches unexpired worker session IDs across adjacent stories in <code>/tmp/active_warm_sessions.json</code>. Subsequent delegations reuse existing warm sessions via <code>POST /session/{id}/message</code> instead of spawning fresh sessions, preserving KV cache headroom on M5 Air port 8002 and reducing start latency below 500ms.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates cold-start subprocess latency and KV cache thrashing on M5 Air during rapid multi-story execution.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-649">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-649</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Subversive Swarm Zero-Wander Silicon Certification
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-98.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#swarm_certification</code>, <code>#zero_wander</code>, <code>#sovereign_silicon</code>, <code>[BKM-072]</code>, <code>[INS-044]</code>, <code>[DISC-012]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/data/delegation_ledger.jsonl</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Validates end-to-end multi-tier local swarm execution across RTX 4090 (Qwen3.8-27B) and M5 Air (Ternary-Bonsai-2-27B) with zero unprompted <code>grep</code>/<code>read</code> exploration loops, enforcing &lt;= 3 turns and &lt; 60s duration per story.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Certifies that the 27B local conductor/worker stack operates autonomously with empirical tool trust.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-650">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-650</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Ambient Delegation Telemetry & Headless Hook Integration
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-99.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#ambient_telemetry</code>, <code>#hooks</code>, <code>#jitc_memory</code>, <code>[FEAT-600](#FEAT-600)</code>, <code>[FEAT-631](#FEAT-631)</code>, <code>[BKM-060]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>HomeLabAI/config/scripts/ambient_hook.sh</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Integrates ambient memory and knowledge hook triggering at the conclusion of every story delegation in <code>delegate.py</code>. Executes <code>ambient_hook.sh</code> against the resident daemon <code>:8765/ambient_recall</code> with the completed story context, surfacing ambient grounding headers, recent ICM memory changes, and telemetry directly to the console during autonomous headless runs.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ensures operators and orchestrators maintain full ambient memory visibility during heads-down autonomous runs without manual typing.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-651">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-651</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Live Round Table Deliberation Circuit & Zero-Mock Probe Harness
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-99.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#round_table</code>, <code>#deliberation</code>, <code>#anti_green_lie</code>, <code>[BKM-015]</code>, <code>[BKM-062]</code>, <code>[BKM-024]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/infra/probe_round_table_accountability.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Refactors round table accountability probes to eliminate all synthetic mocks, fake score fallbacks, and naive substring assertions. Probes execute genuine end-to-end multi-stage deliberation (Triage -&gt; Pinky -&gt; Brain Gatekeeper -&gt; Deep Thought -&gt; Pinky Critic) against live silicon endpoints, measuring physical token latency and recording genuine semantic consensus in <code>foyer_stage_ledger.jsonl</code> and <code>judge_backpressure.jsonl</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces BKM-062 and BKM-024 by preventing deceptive green-lie test passes and ensuring round table multi-agent deliberation is authenticated against running daemons.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-652">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-652</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Sovereign Decoupling & Autonomous Startup Ignition
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-99.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#sovereign_decoupling</code>, <code>#autonomous_ignition</code>, <code>#state_machine</code>, <code>[FEAT-136](#FEAT-136)</code>, <code>[FEAT-517](#FEAT-517)</code>, <code>[BKM-024]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/ignition/manager.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces complete sovereign decoupling of local startup and ignition from remote secondary endpoints (Node KENDER / Node M5 Air). All remote background priming tasks execute as detached non-blocking coroutines with a strict 2.0s timeout and dynamic host resolution from <code>infrastructure.json</code>. The resident daemon automatically reconciles silicon state on <code>/reload_residents</code> if the lab is in <code>INIT</code> with hibernation disabled, preventing stranded scale-to-zero states.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates event-loop blocking, network hang risks, and auto-ignition discrepancies during cold boot and resident reloads.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-653">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-653</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    PID-Aware Stale VRAM Mutex Auto-Reclaim Protocol
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-99.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#vram_mutex</code>, <code>#self_healing</code>, <code>#process_liveness</code>, <code>[FEAT-287](#FEAT-287)</code>, <code>[BKM-024]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/v5/ignition/manager.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements active PID recording and process liveness verification on <code>/tmp/vram.lock</code>. When lock acquisition encounters <code>fcntl.flock</code> contention (<code>OSError</code>), the manager reads the holding PID from disk and evaluates <code>os.kill(pid, 0)</code>. If the holding process is dead or orphaned from a prior crash/kill, the stale mutex is automatically broken and reclaimed without requiring manual operator intervention.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents spurious <code>VRAM Mutex busy</code> ignition lockouts after unexpected process terminations.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-654">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-654</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Dual-Mode Verification Mandate (Mock-Isolate + Live-Ready Architecture) & Airtight Live Gate
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Backlog (Sprint 100)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#delegation_mandate</code>, <code>#dual_mode_verification</code>, <code>#airtight_governance</code>, <code>#live_gate</code>, <code>#live_is_god</code>, <code>[BKM-024]</code>, <code>[BKM-062]</code>, <code>[BKM-075]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L2.md#L28" style="color:var(--accent-color); text-decoration:none;">AGENTS_L2.md</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ol>
+<li><strong>Dual-Mode Contract:</strong> Demands that all code authored or modified during swarm delegation passes hermetic unit/mock assertions during the subagent sandbox run, while strictly maintaining live-ready production contracts (real endpoint resolution, dynamic config bindings, clean dependency injection). Delegation agents are forbidden from hardcoding synthetic mocks or stubbing out production paths to achieve false green passes.</li>
+<li><strong>The Delegation "Way Out" Protocol:</strong> If a story inherently requires dependencies, physical GPU inference, or daemons unreachable within the isolated sandbox, subagents are permitted to complete unit-isolated mock execution, provided they emit the machine-readable tag <code>[LIVE_GATE_PENDING: daemon=&lt;port/name&gt; endpoint=&lt;path&gt; probe=&lt;test_command&gt;]</code> in their <code>[HANDOVER REFLECTION]</code>, specifying exact endpoints and live verification steps. Pure algorithmic stories with no daemon dependencies emit <code>[LIVE_GATE: PASSED]</code>.</li>
+<li><strong>Airtight Closed-Loop Governance (Generality):</strong> Solves the multi-agent "Green Sandbox Illusion" where subagents pass isolated tests but produce code incompatible with production runtime. The dispatcher programmatically captures the live gate tag, records the pending status into the persistent ledger (<code>delegation_ledger.jsonl</code>), and renders a high-visibility gate banner to the primary orchestrator (AGY). Layer 1 (AGY) must execute final live certification against active running daemons (port 8765) and reachable silicon endpoints per BKM-024 before merging code to Git HEAD.</li>
+</ol>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents "green-lie" sandbox drift across all autonomous tiers while providing models a structured escape hatch that guarantees end-to-end live verification integrity.</p>
                 </div>
             </div>     </div>
                             </details>
