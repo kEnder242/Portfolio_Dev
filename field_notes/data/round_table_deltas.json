@@ -994,5 +994,279 @@
       "CRITIQUE: Test token"
     ],
     "consensus_1liner": "Test token"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791388647,
+    "time_str": "08:57:27",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 9.854,
+      "pinky_stance": 9.854,
+      "brain_arch": 64.295,
+      "oracle": 146.417,
+      "pinky_judgment": 146.417
+    },
+    "deltas_elapsed_s": {
+      "triage": 9.854,
+      "pinky_stance": 0.001,
+      "brain_arch": 54.441,
+      "oracle": 82.122,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 9.854,
+      "pinky_stance": 9.854,
+      "brain_arch": 64.295,
+      "oracle": 146.417,
+      "pinky_judgment": 146.417
+    },
+    "deltas": {
+      "triage": 9.854,
+      "pinky_stance": 0.001,
+      "brain_arch": 54.441,
+      "oracle": 82.122,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 146.417,
+    "total_s": 146.417,
+    "distillation_bullets": [
+      "PINKY: { \"score\": 1, \"reasoning\": \"1. The archival evidence suggests that the active silicon residency and memory topology require attention. 2. IPMI-based v",
+      "CRITIQUE: { \"score\": 1, \"reasoning\": \"1. The archival evidence suggests that the active silicon residency and memory topology require attention. 2. IPMI-based v"
+    ],
+    "consensus_1liner": "{ \"score\": 1, \"reasoning\": \"1. The archival evidence suggests that the active silicon residency and memory topology require attention. 2. IPMI-based validation is effective for identifying PECI/MSR in"
+  },
+  {
+    "turn": 3,
+    "timestamp": 1791388715,
+    "time_str": "08:58:35",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 13.742,
+      "pinky_stance": 13.742,
+      "brain_arch": 64.295,
+      "oracle": 163.585,
+      "pinky_judgment": 163.585
+    },
+    "deltas_elapsed_s": {
+      "triage": 13.742,
+      "pinky_stance": 0.001,
+      "brain_arch": 50.553,
+      "oracle": 99.29,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 13.742,
+      "pinky_stance": 13.742,
+      "brain_arch": 64.295,
+      "oracle": 163.585,
+      "pinky_judgment": 163.585
+    },
+    "deltas": {
+      "triage": 13.742,
+      "pinky_stance": 0.001,
+      "brain_arch": 50.553,
+      "oracle": 99.29,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 163.585,
+    "total_s": 163.585,
+    "distillation_bullets": [
+      "PINKY: { \"score\" : 1,  \"reasoning\" :  \"no, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not ",
+      "CRITIQUE: { \"score\" : 1, \"reasoning\" : \"no, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not th",
+      "THOUGHT: {\n  \"inferred_intent\": \"Audit active silicon residency and memory topology to determine current state of the platform.\",\n  \"addressed_to\": \"SYSTEM\",\n ",
+      "BRAIN: <thought> \ud83d\udca1 Curator Note: [GEM-456] connects with [HECI-789]\n\n\u2022 Active silicon residency: z87-Linux (RTX 2080 Ti, 11GB VRAM) is the current host, whil"
+    ],
+    "consensus_1liner": "{ \"score\" : 1, \"reasoning\" : \"no, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1, not the 1,"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791388806,
+    "time_str": "09:00:06",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 4.62,
+      "pinky_stance": 4.62,
+      "brain_arch": 33.656,
+      "oracle": 40.67,
+      "pinky_judgment": 40.67
+    },
+    "deltas_elapsed_s": {
+      "triage": 4.62,
+      "pinky_stance": 0.001,
+      "brain_arch": 29.036,
+      "oracle": 7.014,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 4.62,
+      "pinky_stance": 4.62,
+      "brain_arch": 33.656,
+      "oracle": 40.67,
+      "pinky_judgment": 40.67
+    },
+    "deltas": {
+      "triage": 4.62,
+      "pinky_stance": 0.001,
+      "brain_arch": 29.036,
+      "oracle": 7.014,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 40.67,
+    "total_s": 40.67,
+    "distillation_bullets": [
+      "LAB: { \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.6,\n  \"intr",
+      "PINKY: { \"score\": 1, \"reasoning\": \"I'm not sure what you're referring to, but I'll play along. Can you please provide more context or clarify which query you",
+      "BRAIN: [CONVERSATIONAL ONRAMPS]\nWhile you were busy with other tasks, I wanted to bring up a fascinating project that caught my attention - Jason's Stall Poi",
+      "CRITIQUE: I'm not sure what you're referring to, but I'll play along. Can you please provide more context or clarify which query you're asking about?\n\nI'm not s"
+    ],
+    "consensus_1liner": "I'm not sure what you're referring to, but I'll play along. Can you please provide more context or clarify which query you're asking about?\n\nI'm not sure what you're referring to, but I'll play along."
+  },
+  {
+    "turn": 2,
+    "timestamp": 1791388871,
+    "time_str": "09:01:11",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 8.976,
+      "pinky_stance": 8.976,
+      "brain_arch": 54.121,
+      "oracle": 60.539,
+      "pinky_judgment": 60.54
+    },
+    "deltas_elapsed_s": {
+      "triage": 8.976,
+      "pinky_stance": 0.001,
+      "brain_arch": 45.145,
+      "oracle": 6.418,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 8.976,
+      "pinky_stance": 8.976,
+      "brain_arch": 54.121,
+      "oracle": 60.539,
+      "pinky_judgment": 60.54
+    },
+    "deltas": {
+      "triage": 8.976,
+      "pinky_stance": 0.001,
+      "brain_arch": 45.145,
+      "oracle": 6.418,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 60.54,
+    "total_s": 60.54,
+    "distillation_bullets": [
+      "LAB: {  \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.4,\n  \"int",
+      "PINKY: { \"score\": 1, \"reasoning\": \"I'm not sure what you're referring to, but I'll play along. Can you please provide more context or clarify which query you",
+      "BRAIN: [CONVERSATIONAL ONRAMPS] Ah, the audit of active silicon residency and memory topology! I'd like to start by referencing the archival evidence provide",
+      "CRITIQUE: I'm still trying to understand how this relates to our current task...\n\nI'm not sure what you're referring to, but I'll play along. Can you please pro"
+    ],
+    "consensus_1liner": "I'm still trying to understand how this relates to our current task...\n\nI'm not sure what you're referring to, but I'll play along. Can you please provide more context or clarify which query you're as"
+  },
+  {
+    "turn": 1,
+    "timestamp": 1791398385,
+    "time_str": "11:39:45",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 5.41,
+      "pinky_stance": 5.41,
+      "brain_arch": 42.308,
+      "oracle": 55.749,
+      "pinky_judgment": 55.749
+    },
+    "deltas_elapsed_s": {
+      "triage": 5.41,
+      "pinky_stance": 0.001,
+      "brain_arch": 36.898,
+      "oracle": 13.441,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 5.41,
+      "pinky_stance": 5.41,
+      "brain_arch": 42.308,
+      "oracle": 55.749,
+      "pinky_judgment": 55.749
+    },
+    "deltas": {
+      "triage": 5.41,
+      "pinky_stance": 0.001,
+      "brain_arch": 36.898,
+      "oracle": 13.441,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 55.749,
+    "total_s": 55.749,
+    "distillation_bullets": [
+      "LAB: { \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.6,\n  \"intr",
+      "PINKY: {\n  \"score\": 1,\n  \"reasoning\": \"I'm not sure what you mean by 'no more' but I think it would be good to add a new feature to the lab's website.  Pleas",
+      "BRAIN: [CONVERSATIONAL ONRAMPS]\nBy the way, while we're auditing our active silicon residency and memory topology, let's revisit Jason's Stall Points project",
+      "CRITIQUE: I'm not sure what you mean by 'no more' but I think it would be good to add a new feature to the lab's website. Please use the following template to w"
+    ],
+    "consensus_1liner": "I'm not sure what you mean by 'no more' but I think it would be good to add a new feature to the lab's website. Please use the following template to write a concise, professional, and technically accu"
+  },
+  {
+    "turn": 2,
+    "timestamp": 1791398564,
+    "time_str": "11:42:44",
+    "topic": "EXP_TLM",
+    "scope": "CONTEXT_SCOPE_LONG",
+    "turn_mode": "FULL_ROUND_TABLE",
+    "is_full_round_table": true,
+    "checkpoints_elapsed_s": {
+      "triage": 5.395,
+      "pinky_stance": 5.395,
+      "brain_arch": 47.199,
+      "oracle": 147.086,
+      "pinky_judgment": 147.086
+    },
+    "deltas_elapsed_s": {
+      "triage": 5.395,
+      "pinky_stance": 0.001,
+      "brain_arch": 41.804,
+      "oracle": 99.887,
+      "pinky_judgment": 0.001
+    },
+    "cumulative": {
+      "triage": 5.395,
+      "pinky_stance": 5.395,
+      "brain_arch": 47.199,
+      "oracle": 147.086,
+      "pinky_judgment": 147.086
+    },
+    "deltas": {
+      "triage": 5.395,
+      "pinky_stance": 0.001,
+      "brain_arch": 41.804,
+      "oracle": 99.887,
+      "pinky_judgment": 0.001
+    },
+    "total_elapsed_s": 147.086,
+    "total_s": 147.086,
+    "distillation_bullets": [
+      "LAB: {  \n  \"inferred_intent\": \"query_memory_topology\",\n  \"addressed_to\": \"SYSTEM\", \n  \"vibe\": \"TECHNICAL\", \n  \"domain\": \"exp_tlm\", \n  \"casual\": 0.4,\n  \"int",
+      "PINKY: {                                                                                                                                                     ",
+      "BRAIN: [CONVERSATIONAL ONRAMPS] Ah, accountability probe! Let's dive into the world of active silicon residency and memory topology. While we're auditing our",
+      "CRITIQUE: {"
+    ],
+    "consensus_1liner": "{"
   }
 ]
