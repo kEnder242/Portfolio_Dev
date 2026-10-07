@@ -1,6 +1,7 @@
 # 🔍 ORACLE ADVERSARIAL REVIEW: Sprint 100.0 (Phase 4 Cognitive Pipeline Hardening & Legacy Regression Excision)
 
 **Reviewer:** `[SWARM:ORACLE]` (Cloud / High-Density Architectural Adversary)  
+**Oracle Engine:** `openrouter/nvidia/nemotron-3-super-120b-a12b:free` (Session `ses_ee7ce694effequXShiSXcZD0cN`, 54,632 tokens, 5,386 reasoning tokens)  
 **Date:** 2026-10-07  
 **Target Specifications:** [`SPRINT_PLAN_SPR_100_0.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_100_0.md) (Stories 100.9 – 100.15)  
 **Governing Laws:** `[BKM-061]` (Adversarial Oracle Protocol), `[BKM-062]` (Zero-Mock Anti-Green-Lie Mandate), `[BKM-015]` (Semantic Anchor Protocol), `[FEAT-361]` (Nuke Internal Masking), `[FEAT-640]` (Multi-Turn Turn Isolation), `[FEAT-635]` (Stage 1 Brain Information Gatekeeper), `[FEAT-406/470]` (Pinky Critic Scorecard)
@@ -31,11 +32,12 @@
   3. Validate with `pytest HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py HomeLabAI/src/tests/test_triage_context_squeeze.py -v`.
 
 ### B. Story 100.10: `CASUAL` Vibe Defeaturing & Persona Quarantine
-- **Forensic Verification:** `cognitive_hub.py#L1486` lists `1. CASUAL: Conversational pleasantries...`. Line 1489 additionally contains `'4. HISTORICAL: Questions on past Intel/career projects...'`.
+- **Forensic Verification:** `cognitive_hub.py#L1486` lists `1. CASUAL: Conversational pleasantries...`. Line 1489 additionally contains `'4. HISTORICAL: Questions on past Intel/career projects...'`. Furthermore, the Cloud Oracle identified that `HomeLabAI/config/triage_policy.json` retains `CASUAL: { "enabled": true }`, which could cause declarative policy drift if not synchronized.
 - **Mitigation Directive:**
   1. Comment out line 1486 in `triage_mode_context`.
-  2. Sanitize line 1489 to read `'4. HISTORICAL: Questions on past career / hardware projects...'`.
-  3. Retain Python dictionary mappings and fast-path handlers in `cognitive_hub.py` so no runtime exceptions occur if legacy vectors appear.
+  2. Set `"enabled": false` for `CASUAL` in `HomeLabAI/config/triage_policy.json`.
+  3. Sanitize line 1489 to read `'4. HISTORICAL: Questions on past career / hardware projects...'`.
+  4. Retain Python dictionary mappings and fast-path handlers in `cognitive_hub.py` so no runtime exceptions occur if legacy vectors appear.
 
 ### C. Story 100.11: Excision of Sprint 32 Brief & Mandatory Brain Gatekeeper
 - **Forensic Verification:** `_distill_strategic_brief` at `cognitive_hub.py#L2298-L2339` is the sole origin of the `"PECI/MSR scars"` text. It is invoked exclusively by `_run_brain_leg()#L2718`. In turn dispatch (`#L1843-L1885`), if `current_interest < TWO_MICE_FUNNEL_INTEREST` (0.70), execution falls back to `_run_brain_leg`, bypassing the modern Sprint 96 Brain Gatekeeper.
@@ -91,6 +93,7 @@
   1. Remove `stream_source = None` token suppression.
   2. Route internal or intermediate tokens to `channel="crosstalk"` or `channel="insight"` rather than gagging them.
   3. Fully uphold `FEAT-361` (100% transparency; zero silent nodes).
+  4. Perform a global workspace search across all resident node files (`loader.py`, `ear_node.py`, etc.) to verify zero remaining instances of silent `stream_source = None` token gags.
 
 ---
 
