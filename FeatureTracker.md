@@ -3710,5 +3710,16 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 3. **Airtight Closed-Loop Governance (Generality):** Solves the multi-agent "Green Sandbox Illusion" where subagents pass isolated tests but produce code incompatible with production runtime. The dispatcher programmatically captures the live gate tag, records the pending status into the persistent ledger (`delegation_ledger.jsonl`), and renders a high-visibility gate banner to the primary orchestrator (AGY). Layer 1 (AGY) must execute final live certification against active running daemons (port 8765) and reachable silicon endpoints per BKM-024 before merging code to Git HEAD.
 
 **Rationale:** Prevents "green-lie" sandbox drift across all autonomous tiers while providing models a structured escape hatch that guarantees end-to-end live verification integrity.
-
-
+## [FEAT-655] JIT One-Shot Surgical Contract & Anti-Spiral Orchestration
+**Sprint:** Sprint 100 / Backlog
+**Status:** ACTIVE
+**Tags:** `#jit_one_shot`, `#anti_spiral`, `#orchestration`, `#bounded_worker`, `[BKM-078]`, `[INS-042]`, `[WIS-482]`
+**Code:**
+- `Dev_Lab/AGENTS_L3.md` — Layer 3 Worker `jit_one_shot` contract (patch-test-diagnose-recommend, zero recursive retries).
+- `Dev_Lab/AGENTS_L2.md` — Layer 2 Conductor anti-spiral orchestration & state evaluation.
+- `HomeLabAI/docs/Protocols.md` — `BKM-078: JIT_ONE_SHOT Protocol`.
+**Logic:**
+1. **The Single-Shot Worker Contract (`jit_one_shot`):** Constrains Layer 3 surgical workers (Junior on M5 Air) to an ephemeral, single-attempt task loop: Turn 1: Ingest blueprint and execute `safe_patch`; Turn 2: Run pytest; Turn 3: If pass, record `jit_checkpoint` and exit; if fail, perform in-context root-cause diagnosis, synthesize a 3-line recommendation report (assertion failure, root cause, recommended fix), and terminate immediately without attempting recursive self-fixing.
+2. **Context Garbage Isolation:** Prevents terminal traceback soup and intermediate failure diffs from accumulating in worker context or leaking upward to Layer 2. The failed execution context is discarded upon worker termination.
+3. **Layer 2 Anti-Spiral Orchestration:** Layer 2 (Atlas) retains the macro plan and session trajectory. Upon receiving Layer 3's recommendation report, Layer 2 evaluates whether the suggestion is regressive, circular (the "Waffle Trap" [INS-042]), or structurally sound. Layer 2 exercises executive judgment: if sound, it updates the blueprint via `jit_stage` and spawns a fresh, zero-mileage Layer 3 instance; if circular, Layer 2 rejects the suggestion and synthesizes an alternative architectural route.
+**Rationale:** Eliminates the quadratic context accumulation trap, prevents 27B model panic-fixing spirals, and enforces pristine separation between micro-execution and macro-orchestration.

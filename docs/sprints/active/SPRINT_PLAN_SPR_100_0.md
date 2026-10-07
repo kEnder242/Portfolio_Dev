@@ -32,6 +32,7 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 | **BALL-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `✅ DONE` | Story 100.6: Certified live on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`). |
 | **BALL-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `✅ DONE` | Verified single service `lab-attendant.service` maintains `ignition/manager.py` + `foyer/router.py` boundaries. |
 | **BALL-10** | Codify `BKM-077: BALL_TRACK` Protocol in Protocols.md | Item 11 | `✅ DONE` | Codified in `HomeLabAI/docs/Protocols.md` (`[FEAT-649]`). |
+| **BALL-11** | JIT One-Shot Surgical Contract & Anti-Spiral Orchestration | Post-Sprint Alignment | `✅ DONE` | Story 100.7: Codified in `FEAT-655`, `BKM-078`, `AGENTS_L3.md`, `AGENTS_L2.md`. |
 
 ---
 
@@ -157,3 +158,14 @@ Orchestrator (L1 / delegate.py)
   - Dispatch completed in 829.0s on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`).
   - Full DAG verified: `jit_read` $\to$ `jit_stage` $\to$ `task(category='quick')` $\to$ `jit_research` $\to$ `safe_patch` (2 atomic edits) $\to$ `bash` pytest (1 passed in 0.08s) $\to$ `jit_checkpoint` $\to$ Atlas re-verify $\to$ `LIVE_GATE: PASSED`.
   - Recorded as `SUCCESS` in `delegation_ledger.jsonl`. Verification cmd passed cleanly.
+
+#### Story 100.7 — JIT One-Shot Contract & Anti-Spiral Conductor Flow
+* **Feature Anchor:** `[FEAT-655]` / `[BKM-078]` / `[INS-042]` / `[WIS-482]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `✅ DONE`
+* **Why:** In multi-tier swarms, letting open-weights surgical workers ($L_3$) attempt recursive self-fixing when tests fail triggers the Waffle Trap (`[INS-042]`) and quadratic context bloat ($O(N^2)$ accumulation). Workers must operate as disposable single-shot execution probes that diagnose in context and report recommendations to $L_2$ before terminating cleanly.
+* **How:**
+  1. Codify `jit_one_shot` contract in `AGENTS_L3.md` (patch $\to$ test $\to$ diagnose $\to$ recommend $\to$ exit).
+  2. Codify anti-spiral orchestration rules in `AGENTS_L2.md` (Atlas evaluates recommendations, detects circular spirals, and dispatches fresh pristine retries).
+  3. Register `FEAT-655` in `FeatureTracker.md` and `BKM-078` in `Protocols.md`.
+* **Proof:** Verified in `AGENTS_L3.md`, `AGENTS_L2.md`, `FeatureTracker.md`, `Protocols.md`.
