@@ -16076,19 +16076,19 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Adds <code>preferred_triage_engine</code> (<code>M5_AIR</code> vs <code>LOCAL_VLLM</code>) as a declarative configuration parameter in <code>config/infrastructure.json</code>. Dynamically grants the 2x head-start window (<code>2 * t_warmed</code>) to whichever engine is set as preferred, allowing the operator to dynamically test local silicon vs remote high-reasoning triage without code modifications.</p>
+                    <p>Adds <code>preferred_triage_engine</code> (<code>M5_AIR</code> vs <code>LOCAL_VLLM</code>) as a declarative configuration parameter in <code>config/infrastructure.json</code>. Grants an asymmetric speculative head-start window (<code>W_lead = max(2 * t_warmed, L_t + 4 * J_t)</code>) to the preferred engine. Calibrated via the <strong>parallel race differential formula</strong> $W_{\text{lead}} > t_{\text{air}} - t_{\text{vllm}} \approx 980\text{ms} - 650\text{ms} = 330\text{ms}$, setting $t_{\text{warmed}} = 0.20\text{s} \implies W_{\text{lead}} = 0.40\text{s}$ (400ms). When warm, M5 Air finishes in ~930ms, beating vLLM (which launches at 400ms and finishes at 1,080ms) by ~150ms for a >90% warm win rate. When M5 Air is cold or sluggish (~3.0s), vLLM completes at 1.08s, saving 600ms over sequential timeouts and eliminating cold-wake stalls. Latency estimators are strictly isolated per engine to prevent cross-engine EWMA poisoning.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Gives the lab operator complete control over triage latency versus reasoning depth without code refactoring.</p>
+                    <p>Replaces sequential timeout waits with genuine speculative parallelism. Sizing the head start to the inter-engine execution differential rather than full inference latency guarantees high-quality sovereign reasoning wins steady-state turns while dramatically accelerating fallback resolution on cold starts.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code>.</p>
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code> (<code>_EWMALatencyEstimator</code>, <code>SpeculativeTriageRelay</code>), <code>HomeLabAI/src/logic/cognitive_hub.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>

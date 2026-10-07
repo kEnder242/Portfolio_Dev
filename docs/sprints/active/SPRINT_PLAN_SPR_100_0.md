@@ -33,6 +33,7 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 | **ANCHOR-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `✅ DONE` | Verified single service `lab-attendant.service` maintains `ignition/manager.py` + `foyer/router.py` boundaries. |
 | **ANCHOR-10** | Codify `BKM-077: ANCHOR_TRACK` Protocol in Protocols.md | Item 11 | `✅ DONE` | Codified in `HomeLabAI/docs/Protocols.md` (`[FEAT-649]`). |
 | **ANCHOR-11** | JIT One-Shot Surgical Contract & Anti-Spiral Orchestration | Post-Sprint Alignment | `✅ DONE` | Story 100.7: Codified in `FEAT-655`, `BKM-078`, `AGENTS_L3.md`, `AGENTS_L2.md`. |
+| **ANCHOR-12** | Speculative Triage Inference Lead Calibration (`FEAT-586` / `BKM-079`) | Live Characterization | `✅ DONE` | Story 100.8: Calibrated $t_{\text{warmed}}=0.20\text{s} \to W_{\text{lead}}=0.40\text{s}$ via parallel differential model ($W_{\text{lead}} > t_{\text{air}} - t_{\text{vllm}}$); isolated EWMA estimators in `speculative_triage.py`. |
 
 ---
 
