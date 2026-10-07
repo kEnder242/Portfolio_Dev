@@ -24,14 +24,14 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 | :--- | :--- | :--- | :--- | :--- |
 | **BALL-01** | RDP Connection Rejection Recovery & GDM Autologin | Triage 1 | `✅ DONE` | Resolved via GDM restart; port 3389 listening. Sentry design documented. |
 | **BALL-02** | Stale Lockfile Purge (Dead PID Reaper) | Triage 2 | `✅ DONE` | Implemented in `standalone_accountability_watchdog.py` (`b384a15`). |
-| **BALL-03** | Intercom Deploy Drift & State Case Normalization | Triage 3 / Item 3 | `📌 STAGED` | Story 100.1 |
-| **BALL-04** | Tool Namespace Migration (`clara-dna_read` $\to$ `jit_*`) | Item 4 / 8 | `📌 STAGED` | Story 100.2 |
-| **BALL-05** | Relocate Context Cache from `/tmp` to Gitignored `.jit_cache/` | Item 5 | `📌 STAGED` | Story 100.3 |
-| **BALL-06** | Sub-Inference Receipt Ledger (M5 Air Token Observability) | Item 6 | `📌 STAGED` | Story 100.4 |
-| **BALL-07** | OpenCode Permissions & Conductor Prompt Ingestion | Item 4 / 7 | `📌 STAGED` | Story 100.5 |
-| **BALL-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `📌 STAGED` | Story 100.6 |
-| **BALL-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `📌 STAGED` | Verified in place; documented under Architecture. |
-| **BALL-10** | Codify `BKM-077: BALL_TRACK` Protocol in Protocols.md | Item 11 | `📌 STAGED` | Protocols.md commit in Phase 2. |
+| **BALL-03** | Intercom Deploy Drift & State Case Normalization | Triage 3 / Item 3 | `✅ DONE` | Resolved in `intercom_v2.js`, synced to `www_deploy`, hash-guarded in `build_site.py` (`fd2906a` / `90d8fb9`). |
+| **BALL-04** | Tool Namespace Migration (`clara-dna_read` $\to$ `jit_*`) | Item 4 / 8 | `✅ DONE` | Story 100.2: FastMCP canonical tools & backwards-compatible aliases registered in `clara_dna_mcp_server.py`. |
+| **BALL-05** | Relocate Context Cache from `/tmp` to Gitignored `.jit_cache/` | Item 5 | `✅ DONE` | Story 100.3: `.jit_cache/` created, gitignored, `mtime` invalidation & `evict_cached_summary` active. |
+| **BALL-06** | Sub-Inference Receipt Ledger (M5 Air Token Observability) | Item 6 | `✅ DONE` | Story 100.4 & 100.5: `sub_inference_ledger.jsonl` logged by `context_prewarmer.py`, blended into `delegate.py`. |
+| **BALL-07** | OpenCode Permissions & Conductor Prompt Ingestion | Item 4 / 7 | `✅ DONE` | Story 100.4: `oh-my-openagent.json`, `AGENTS_L2.md`, `AGENTS_L3.md`, `test_subversive_prompt.py` verified 6/6 green. |
+| **BALL-08** | In-Flight Sovereign Delegation Shakedown Pass | Item 9 | `✅ DONE` | Story 100.6: Certified live on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`). |
+| **BALL-09** | Modular Python Boundaries (Core vs Router vs Hooks) | Item 10 | `✅ DONE` | Verified single service `lab-attendant.service` maintains `ignition/manager.py` + `foyer/router.py` boundaries. |
+| **BALL-10** | Codify `BKM-077: BALL_TRACK` Protocol in Protocols.md | Item 11 | `✅ DONE` | Codified in `HomeLabAI/docs/Protocols.md` (`[FEAT-649]`). |
 
 ---
 
@@ -153,4 +153,7 @@ Orchestrator (L1 / delegate.py)
   1. Execute a real story delegation via `delegate.py --story 100.6 --mode local`.
   2. Verify Atlas invokes `jit_read`, stages via `jit_stage`, dispatches `task()`, and Sisyphus-Junior consumes `jit_research`, applies `safe_patch`, and calls `jit_checkpoint`.
   3. Confirm telemetry correctly captures outer + sub-inference tokens.
-* **Proof:** Greenfield or hermetic regression test verified green; story marked `SUCCESS` in `delegation_ledger.jsonl`.
+* **Proof:** `✅ CERTIFIED (100% GREEN)`
+  - Dispatch completed in 829.0s on KENDER 4090 + M5 Air (`ses_eeb08d8f0ffes9iYH0Pe36rPed`).
+  - Full DAG verified: `jit_read` $\to$ `jit_stage` $\to$ `task(category='quick')` $\to$ `jit_research` $\to$ `safe_patch` (2 atomic edits) $\to$ `bash` pytest (1 passed in 0.08s) $\to$ `jit_checkpoint` $\to$ Atlas re-verify $\to$ `LIVE_GATE: PASSED`.
+  - Recorded as `SUCCESS` in `delegation_ledger.jsonl`. Verification cmd passed cleanly.
