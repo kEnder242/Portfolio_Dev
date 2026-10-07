@@ -761,34 +761,43 @@ async function connect() {
                     // [FEAT-453] Status text targets the dedicated status line so log entries survive
                     const statusLine = getCrosstalkStatusLine();
                     if (data.type === 'status') {
-                        if (data.state === "hibernating") {
+                        const st = (data.state || '').toLowerCase();
+                        if (st === "hibernating") {
                             statusLine.innerText = "🌙 HIBERNATING";
                             bar.classList.add('status-hibernating');
-                        } else if (data.state === "waking") {
+                            if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.5'; sendBtn.title = 'Lab is hibernating'; }
+                        } else if (st === "waking") {
                             statusLine.innerText = "⚡ [IGNITION IN PROGRESS]";
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "quiesced") {
+                            if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.5'; sendBtn.title = 'Lab is igniting...'; }
+                        } else if (st === "quiesced") {
                             statusLine.innerText = "⚙️ MAINTENANCE (QUIESCED)";
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "offline") {
+                            if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.5'; sendBtn.title = 'Lab is locked during maintenance'; }
+                        } else if (st === "offline") {
                             statusLine.innerText = "💀 OFFLINE";
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "init") {
+                            if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.5'; sendBtn.title = 'Lab is offline'; }
+                        } else if (st === "init") {
                             // [FEAT-265.6] Functional Gate: Distinguish between Up and Vocal
                             if (data.full_lab_ready || data.operational) {
                                 statusLine.innerText = "⚡ Mind is OPERATIONAL.";
+                                if (sendBtn && ws && ws.readyState === WebSocket.OPEN) { sendBtn.disabled = false; sendBtn.style.opacity = '1'; sendBtn.title = 'Send message (Enter)'; }
                             } else {
                                 statusLine.innerText = "⏳ SYNCHRONIZING NODES...";
+                                if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.5'; sendBtn.title = 'Synchronizing nodes...'; }
                             }
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "ready") {
+                        } else if (st === "ready") {
                             // Legacy support for older Hub signals
                             statusLine.innerText = "⚡ Mind is READY.";
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "working") {
+                            if (sendBtn && ws && ws.readyState === WebSocket.OPEN) { sendBtn.disabled = false; sendBtn.style.opacity = '1'; sendBtn.title = 'Send message (Enter)'; }
+                        } else if (st === "working") {
                             statusLine.innerText = `🧠 ${data.message || "THINKING..."}`;
                             bar.classList.remove('status-hibernating');
-                        } else if (data.state === "error") {
+                            if (sendBtn && ws && ws.readyState === WebSocket.OPEN) { sendBtn.disabled = false; sendBtn.style.opacity = '1'; sendBtn.title = 'Send message (Enter)'; }
+                        } else if (st === "error") {
                             statusLine.innerText = `⚠️ ${data.message || "SYSTEM ERROR"}`;
                             bar.classList.remove('status-hibernating');
                         }
