@@ -36,11 +36,12 @@ Sprint 100 crystallizes the lessons of Sprint 99 into a unified Just-In-Time (JI
 | **ANCHOR-12** | Speculative Triage Inference Lead Calibration (`FEAT-586` / `BKM-079`) | Live Characterization | `✅ DONE` | Story 100.8: Calibrated $t_{\text{warmed}}=0.20\text{s} \to W_{\text{lead}}=0.40\text{s}$ via parallel differential model ($W_{\text{lead}} > t_{\text{air}} - t_{\text{vllm}}$); isolated EWMA estimators in `speculative_triage.py`. |
 | **ANCHOR-13** | HyDE Turn Isolation & Multi-Turn Context Leak Fix (`FEAT-640` / `FEAT-437`) | Live Intercom Feedback | `STAGED` | Story 100.9: Enforce `ContextScope.TURN` on HyDE synthesis, purge prior turn context, and pass explicit `request_id`. |
 | **ANCHOR-14** | Defeature `CASUAL` Vibe via Prompt Comment (Preserve Plumbing) (`FEAT-640`) | User Turn 2.2 | `STAGED` | Story 100.10: Comment out `CASUAL` line in `cognitive_hub.py#L1486` prompt string while retaining Python fast-path plumbing. |
-| **ANCHOR-15** | Mandatory Brain Information Gatekeeper & Hardcoded Brief Retirement (`FEAT-635`) | User Turn 4 | `STAGED` | Story 100.11: Make Stage 1 Brain Gatekeeper mandatory for technical queries; retire hardcoded PECI/MSR brief in `_distill_strategic_brief()`. |
+| **ANCHOR-15** | Mandatory Brain Information Gatekeeper & Complete Deletion of Sprint 32 Brief (`FEAT-635`) | User Turn 4 | `STAGED` | Story 100.11: Make Stage 1 Brain Gatekeeper mandatory for technical queries; completely delete 68-sprint-old `_distill_strategic_brief()` (commit `15b4705`) and retire `_run_brain_leg()`. |
 | **ANCHOR-16** | Pinky Critic Scorecard (Single-Pass WHY Reasoning + Spoken Retort) (`FEAT-406` / `FEAT-470`) | User Turn 2.3 / 2.4 | `STAGED` | Story 100.12: Align `build_critic_prompt` and `eval_schema`, eliciting technical `reasoning` and in-character spoken `retort`, keeping debug scalar visible. |
 | **ANCHOR-17** | Cloud Delegation Baseline & Model Invocation Probe (`FEAT-649` / `BKM-071`) | Swarm Audit | `STAGED` | Story 100.13: Verify cloud delegate dispatch executes with designated cloud models, babysit logs at regular intervals, and enforce Playbook Calibration protocol. |
 | **ANCHOR-18** | Triage Voting & In-Line / Hover Timestamp Feedback UI (`FEAT-638`) | User Turn 2.1 | `STAGED` | Story 100.14: Whitelist triage in `intercom_v2.js`, inject `voteable_sources` from `infrastructure.json` via `build_site.py`, and relocate buttons to `.msg-header` hover (0 extra lines). |
 | **ANCHOR-19** | Re-Purge Vestigial `internal=True` Masking in Adherence to `FEAT-361` (`FEAT-361`) | User Turn 3 | `STAGED` | Story 100.15: Abolish silent token suppression (`stream_source = None`) in `nodes/loader.py`; route intermediate tokens to dedicated channels without gagging. |
+| **ANCHOR-20** | Oracle Adversarial Pre-Pass on Phase 4 & Legacy Regression Audit (`BKM-061`) | Operator Directive | `STAGED` | Story 100.8B: Adversarial audit of Stories 100.9–100.15 against legacy regressions, obsolete patterns, and design divergence; targets `ORACLE_REVIEW_SPRINT_100.md`. |
 
 ---
 
@@ -203,7 +204,7 @@ Orchestrator (L1 / delegate.py)
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **ANCHOR-13** | HyDE Turn Isolation & Multi-Turn Context Leak Fix | Turn Trace 3 | `STAGED` | `HomeLabAI/src/logic/cognitive_hub.py` | `[SWARM:LOCAL]` |
 | **ANCHOR-14** | Defeature `CASUAL` Vibe via Prompt Comment (Preserve Plumbing) | User Turn 2.2 | `STAGED` | `HomeLabAI/src/logic/cognitive_hub.py#L1486` | `[SWARM:LOCAL]` |
-| **ANCHOR-15** | Mandatory Brain Information Gatekeeper & Hardcoded Brief Retirement | User Turn 4 | `STAGED` | `HomeLabAI/src/logic/cognitive_hub.py` | `[SWARM:LOCAL]` |
+| **ANCHOR-15** | Mandatory Brain Information Gatekeeper & Complete Deletion of Sprint 32 Brief | User Turn 4 | `STAGED` | `HomeLabAI/src/logic/cognitive_hub.py` | `[SWARM:LOCAL]` |
 | **ANCHOR-16** | Extend Critic Single-Pass Scorecard (Semantic WHY Reasoning + Spoken Retort) | User Turn 2.3 / 2.4 | `STAGED` | `HomeLabAI/src/nodes/pinky_critic_persona.py` | `[SWARM:LOCAL]` |
 | **ANCHOR-17** | Cloud Delegation Baseline & Model Invocation Probe | Swarm Audit | `STAGED` | `HomeLabAI/src/tests/delegate.py`, `oh-my-openagent.json` | `[SWARM:CLOUD]` |
 | **ANCHOR-18** | Triage Voting & In-Line / Hover Timestamp Feedback UI | User Turn 2.1 | `STAGED` | `Portfolio_Dev/field_notes/intercom_v2.js`, `build_site.py` | `[SWARM:CLOUD]` |
@@ -283,6 +284,44 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 
 ---
 
+## 📝 Operator Directives & Mid-Flight Guidance (BKM-006 §7)
+
+1. **Mid-Flight Sprint Pause & Regression Halt:** Immediately halt in-flight Story 100.9 execution to insert an adversarial Oracle pre-pass across each story.
+2. **Oracle Adversarial Story Audit Mandate:** Review each Phase 4 story (100.9 through 100.15) to uncover legacy regressions, obsolete architectural assumptions (e.g. Sprint 32 leftovers), and alignment with latest certified designs (Sprint 90+ Critic, Sprint 95 Triage, Sprint 96 Two-Mice Handover).
+3. **Employer Persona Quarantine:** Guarantee zero employer/job persona terms (e.g. PECI, MSR, platform scars) leak into general lab prompts or code logic. Career validation history belongs exclusively in quarantined `WIS-xxx` personal reference Gems.
+4. **Heads Down Execution Authorization:** Upon completion and certification of the Oracle audit pass, proceed into autonomous Heads Down execution (BKM-006) across the approved story backlog.
+
+---
+
+### Phase 4 Stories: Hardening & Refinement
+
+#### Story 100.8B — Oracle Adversarial Pre-Pass on Phase 4 & Legacy Regression Audit
+* **Feature Anchor:** `[BKM-061]` / `[BKM-007]` / `[FEAT-640]`
+* **Assigned Owner:** `[SWARM:ORACLE]`
+* **Status:** `STAGED`
+* **Why:** The operator requested an adversarial Oracle pass to review each Phase 4 story (100.9 through 100.15) before execution, explicitly to catch legacy regressions and obsolete code patterns (such as Sprint 32 leftovers like `_distill_strategic_brief()`, `PECI/MSR` text, `internal=True` Censorship Waffle, and vestigial gags in `loader.py`) and verify 100% alignment with latest designs (Sprint 96 Two-Mice Handover, Sprint 90+ Coherence Critic, Sprint 95 Triage Taxonomy, BKM-015 Semantic Anchors, BKM-062 Anti-Green-Lie).
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files & Line Anchors):**
+    - `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_100_0.md`
+    - `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_100.md`
+  * **Anchor 2 (Verification Command & Literal Test Battery):**
+    - Command: `HomeLabAI/.venv/bin/python3 HomeLabAI/src/tests/delegate.py --sprint 100 --story 100.8B --title "Phase 4 Oracle Adversarial Audit & Legacy Regression Sweep" --reference Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_100_0.md --target "Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_100.md" --details "Adversarially audit Stories 100.9 through 100.15 for legacy regressions, outdated architectural assumptions, and target file alignment" --oracle`
+    - Assertions: Comprehensive audit matrix compiled in `ORACLE_REVIEW_SPRINT_100.md`; all CRITICAL and HIGH severity findings resolved or remediated in story specs prior to execution.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    Audit checklist across each story:
+    - Story 100.9: Validate HyDE turn scope isolation (`ContextScope.TURN`) vs `_process_node_stream` parameters.
+    - Story 100.10: Validate `CASUAL` defeature preserves Python enum / fast-path plumbing while purging from prompt choices.
+    - Story 100.11: Validate total excision of `_distill_strategic_brief()`, elimination of `_run_brain_leg()`, zero `PECI/MSR` strings, and mandatory Stage 1 Brain Gatekeeper on 100% of technical queries.
+    - Story 100.12: Validate Pinky Critic single-pass scorecard schema (`score`, `reasoning`, `retort`, `slop_found`) matches `build_critic_prompt` and `evaluate_grounding`.
+    - Story 100.13: Validate Cloud pre-flight probe verifies genuine cloud model invocation (OpenRouter/Cohere) and log babysitting protocol.
+    - Story 100.14: Validate triage vote whitelist in `infrastructure.json`, `build_site.py`, and hover UI in `intercom_v2.js`.
+    - Story 100.15: Validate complete removal of `stream_source = None` gags in `loader.py` per FEAT-361.
+  * **Anchor 4 (Silicon Invariants & DNA Links):**
+    - Invariant: Zero silent fallback to dead code; zero employer persona leakage outside `WIS-xxx` Gems; 100% alignment with active system state.
+    - DNA Links: `[BKM-061]`, `[BKM-007]`, `[BKM-015]`, `[BKM-062]`, `[FEAT-640]`.
+
+---
+
 #### Story 100.9 — Multi-Turn Turn Isolation & HyDE Context Poisoning Remediation
 * **Feature Anchor:** `[FEAT-640]` / `[FEAT-437]` / `[BKM-015]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
@@ -342,35 +381,36 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 
 ---
 
-#### Story 100.11 — Mandatory Stage 1 Brain Information Gatekeeper & Hardcoded Brief Retirement
+#### Story 100.11 — Mandatory Stage 1 Brain Information Gatekeeper & Complete Deletion of Sprint 32 Brief
 * **Feature Anchor:** `[FEAT-635]` / `[FEAT-489]` / `[BKM-015]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Status:** `STAGED`
-* **Why:** Brain's Information Gatekeeper (`FEAT-635`) was mistakenly gated behind `interest >= 0.70`. Low-interest turns fell into `_run_brain_leg()`, which invoked an ancient `_distill_strategic_brief()` that hardcoded `"Extract specific platform anchors, validation targets, and known PECI/MSR scars."` Brain must ALWAYS act as the Information Gatekeeper on technical queries, and `interest` must strictly govern Deep Thought escalation.
+* **Why:** Originating in Sprint 32 (May 2026, commit `15b4705`), `_distill_strategic_brief()` is a 68-sprint-old dinosaur that hardcoded `"Extract specific platform anchors, validation targets, and known PECI/MSR scars."` In Turn 2, when interest was $< 0.70$, execution fell into the legacy `_run_brain_leg()` fallback, invoking this ancient relic and polluting Brain's output with off-topic PECI/MSR text. Rather than maintaining or patching this dead code, we completely delete `_distill_strategic_brief()`, retire `_run_brain_leg()`, and route 100% of technical queries through the modern Sprint 96 Brain Information Gatekeeper (`build_two_mice_stage_prompt(stage=1)`), making Stage 1 mandatory regardless of interest.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files & Line Anchors):**
     - `HomeLabAI/src/logic/cognitive_hub.py#L1831-L1885` (turn dispatch)
-    - `HomeLabAI/src/logic/cognitive_hub.py#L2312-L2326` (`_distill_strategic_brief`)
-    - `HomeLabAI/src/logic/cognitive_hub.py#L2718` (`_run_brain_leg`)
+    - `HomeLabAI/src/logic/cognitive_hub.py#L2298-L2339` (complete deletion of `_distill_strategic_brief`)
+    - `HomeLabAI/src/logic/cognitive_hub.py#L2622-L2790` (retirement of legacy `_run_brain_leg`)
   * **Anchor 2 (Verification Command & Literal Test Battery):**
     - Command: `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py HomeLabAI/src/tests/test_two_mice_handover.py -v`
-    - Assertions: `test_stage1_prompt_contains_gatekeeper_and_curator_instructions`, `test_mandatory_gatekeeper_low_interest_technical_query`.
+    - Assertions: `test_stage1_prompt_contains_gatekeeper_and_curator_instructions`, `test_mandatory_gatekeeper_low_interest_technical_query`, assert zero references to `_distill_strategic_brief` exist in codebase.
   * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
     ```python
     # In HomeLabAI/src/logic/cognitive_hub.py::process_message
     # [FEAT-635 / Sprint 100]: Mandatory Stage 1 Brain Information Gatekeeper
     if lead_node == "brain":
-        # Stage 1 Brain Gatekeeper executes for ALL technical queries
-        stage1_success = await self._run_two_mice_stage1_gatekeeper(
-            turn, focus_context=handover_context, request_id=request_id
+        # Stage 1 Brain Gatekeeper executes for ALL technical inquiries:
+        stage1_success = await self._run_two_mice_handover(
+            turn, focus_context=handover_context, shutdown_event=shutdown_event, request_id=request_id
         )
-        # Interest strictly governs Stage 2 Deep Thought escalation:
-        if self.current_interest >= TWO_MICE_FUNNEL_INTEREST:
-            await self._run_deep_thought_escalation(...)
     ```
-    Retire the hardcoded PECI/MSR string in `_distill_strategic_brief()`.
+    Complete deletion:
+    ```python
+    # DELETED: def _distill_strategic_brief(self, raw_context, request_id="default"):
+    # DELETED: def _run_brain_leg(...)
+    ```
   * **Anchor 4 (Silicon Invariants & DNA Links):**
-    - Invariant: Zero occurrences of ungrounded PECI/MSR text when queries concern regex or non-PECI domains.
+    - Invariant: Zero occurrences of `_distill_strategic_brief` or ungrounded `PECI/MSR` text in codebase or runtime logs.
     - DNA Links: `[FEAT-635]`, `[FEAT-489]`, `[BKM-015]`.
 
 ---
