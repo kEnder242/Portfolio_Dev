@@ -16,7 +16,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-WISDOM_DATA_PATH = DATA_DIR / "wisdom_data.json"
+CANONICAL_WISDOM_PATH = BASE_DIR.parent / "dna" / "wisdom_data.json"
+WISDOM_DATA_PATH = CANONICAL_WISDOM_PATH if CANONICAL_WISDOM_PATH.exists() else (DATA_DIR / "wisdom_data.json")
 PHILOSOPHY_DATA_PATH = DATA_DIR / "philosophy_data.json"
 PENDING_REVIEW_PATH = DATA_DIR / "pending_review.json"
 BUCKETS_PATH = DATA_DIR / "buckets.json"
