@@ -50,7 +50,8 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 | **ANCHOR-101.11** | `HomeLabAI/src/infra/nightly_forge.py` | Subprocess timeout (60s) prematurely cuts probe (75s wait) | `COMPLETED` | Story 101.11: Expand timeout to 120s (`FEAT-608`). |
 | **ANCHOR-101.12** | Cgroup Telemetry (`/sys/fs/cgroup`) | Lack of swap peak monitoring during nightly heavy load | `COMPLETED` | Story 101.12: Add swap peak telemetry to watchdog & digest (`LAB-110`). |
 | **ANCHOR-101.13** | Silicon & Daemons (`:8088`, `:8765`) | Foyer in OFFLINE standby; vLLM dead; digest graded FAIL | `COMPLETED` | Story 101.13: Physical restoration & 7/7 watchdog certification pass (`BKM-024`). |
-| **ANCHOR-101.14** | `HomeLabAI/src/infra/sprint_telemetry.py`, `Portfolio_Dev/field_notes/benchmarks.html` | Swarm delegation runs and realized ROI un-indexed on internal website | `PROPOSED` | Story 101.14: Export delegation ledger JSON and integrate Tab 4 under benchmarks.html (`FEAT-552`, `FEAT-498`, `FEAT-525`). |
+| **ANCHOR-101.14** | `HomeLabAI/src/infra/sprint_telemetry.py` | Swarm delegation runs un-indexed for external/web ingestion | `PROPOSED` | Story 101.14: Export delegation ledger JSON feed via `--export-web` (`FEAT-552`, `FEAT-498`). |
+| **ANCHOR-101.15** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Tab 4 Model Benchmarks missing live swarm ROI & accordion ledger | `PROPOSED` | Story 101.15: Integrate Tab 4 UI & Accordion Ledger Rendering (`FEAT-525`, `FEAT-498`). |
 
 ---
 
@@ -347,22 +348,55 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 
 *Objective: Surface authoritative delegation runs, sovereign token metrics, and realized ROI dollar savings directly into the internal website (`benchmarks.html`) under Model Benchmarks.*
 
-### 🐝 Story 101.14: Swarm Delegation Web Feed & Model Benchmarks Tab 4 Integration
+### 🐝 Story 101.14: Swarm Delegation Web Feed Export Engine (`--export-web`)
 * **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
-* **Feature Anchor:** `[FEAT-552]` / `[FEAT-498]` / `[FEAT-525]` / `[BKM-024]` / `[BKM-048]` / `[BKM-049]`
+* **Feature Anchor:** `[FEAT-552]` / `[FEAT-498]` / `[BKM-024]` / `[BKM-048]` / `[BKM-049]`
 * **Positive Context Guidance:**  
-  *Add `--export-web` to `HomeLabAI/src/infra/sprint_telemetry.py` dumping authoritative `delegation_runs.json` to `Portfolio_Dev/field_notes/data/delegation_runs.json`, and render Tab 4 (`🐝 SWARM DELEGATION & SOVEREIGN GAINS`) in `Portfolio_Dev/field_notes/benchmarks.html` and `benchmarks.js` because human operators require real-time visibility into sovereign token offload and ROI savings directly from the internal website.*
+  *Add `--export-web` to `HomeLabAI/src/infra/sprint_telemetry.py` dumping authoritative `delegation_runs.json` to `Portfolio_Dev/field_notes/data/delegation_runs.json` because human operators and web dashboards require a structured, pre-aggregated JSON feed of sovereign ROI and run history.*
 * **Task Breakdown:**
-  1. In `HomeLabAI/src/infra/sprint_telemetry.py`, add `--export-web` CLI flag and function `export_web_telemetry(output_path)` that parses `HomeLabAI/data/delegation_ledger.jsonl`, calculates aggregate sovereign ROI (MTok processed, cloud dollars saved vs Sonnet $3/MTok, local electrical cost, local execution ratio), and writes clean JSON feed to `Portfolio_Dev/field_notes/data/delegation_runs.json`.
-  2. In `Portfolio_Dev/field_notes/benchmarks.html`, add 4th tab button: `<button class="tab-btn" onclick="switchTab(event, 'tab-delegation')">🐝 SWARM DELEGATION & SOVEREIGN GAINS</button>` and tab pane `<div id="tab-delegation" class="tab-pane hidden">` containing ROI metric badges, sprint filter dropdown, and execution runs table.
-  3. In `Portfolio_Dev/field_notes/benchmarks.js`, add `loadDelegationRuns()` fetching `data/delegation_runs.json` and rendering the delegation table with expandable row details (reflection, verification cmd, token breakdown).
-  4. Verify feed generation and UI syntax via verification command.
+  1. In `HomeLabAI/src/infra/sprint_telemetry.py`, implement `export_web_telemetry(output_path: str = None) -> dict`.
+  2. Read `HomeLabAI/data/delegation_ledger.jsonl`, aggregate by sprint, and compute cumulative summary statistics:
+     - `total_runs`, `successful_runs`, `total_tokens_blended`, `total_conductor_tokens`, `total_l3_tokens`, `total_cached_tokens`, `total_wall_time_minutes`.
+     - `estimated_cloud_cost_usd` (Sonnet baseline: $3.00/MTok input, $15.00/MTok output).
+     - `estimated_local_power_cost_usd` (200W average during run at $0.15/kWh).
+     - `net_savings_usd`.
+     - `local_offload_ratio_pct`.
+  3. Emit structured list of `runs` sorted chronologically descending, with fields: `sprint`, `story`, `title`, `mode`, `tier`, `model`, `status`, `duration_s`, `duration_m`, `tokens` (conductor, l3, total, cache_read), `verification_passed`, `reflection`.
+  4. Write JSON payload to `Portfolio_Dev/field_notes/data/delegation_runs.json`.
+  5. Add `--export-web` to CLI `argparse`.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `HomeLabAI/src/infra/sprint_telemetry.py`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/delegation_runs.json`.
+  * **Anchor 1 (Target Files):** `src/infra/sprint_telemetry.py`.
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
-    `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 HomeLabAI/src/infra/sprint_telemetry.py --export-web && test -f Portfolio_Dev/field_notes/data/delegation_runs.json && grep -q "tab-delegation" Portfolio_Dev/field_notes/benchmarks.html && /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 -c "import json; data=json.load(open('Portfolio_Dev/field_notes/data/delegation_runs.json')); assert 'runs' in data and 'summary' in data, 'Invalid export feed'"`
-  * **Anchor 3 (Live Silicon Invariant):** `delegation_runs.json` successfully rendered and reachable by web server; Tab 4 operational on `benchmarks.html`.
-  * **Anchor 4 (DNA Links):** `[FEAT-552]`, `[FEAT-498]`, `[FEAT-525]`, `[BKM-024]`, `[BKM-048]`, `[BKM-049]`.
+    `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 src/infra/sprint_telemetry.py --export-web && /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 -c "import json; data=json.load(open('../Portfolio_Dev/field_notes/data/delegation_runs.json')); assert len(data.get('runs', [])) > 0 and 'summary' in data, 'Invalid export feed'"`
+  * **Anchor 3 (Live Silicon Invariant):** Valid `delegation_runs.json` generated on disk containing active sprint runs.
+  * **Anchor 4 (DNA Links):** `[FEAT-552]`, `[FEAT-498]`, `[BKM-024]`, `[BKM-048]`, `[BKM-049]`.
+
+---
+
+### 🎨 Story 101.15: Model Benchmarks Tab 4 UI & Accordion Ledger Rendering
+* **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
+* **Feature Anchor:** `[FEAT-525]` / `[FEAT-498]` / `[BKM-024]` / `[BKM-048]` / `[BKM-049]`
+* **Positive Context Guidance:**  
+  *Add Tab 4 (`🐝 SWARM DELEGATION & SOVEREIGN GAINS`) to `Portfolio_Dev/field_notes/benchmarks.html` and `benchmarks.js` rendering ROI metric badges, sprint filter dropdown, and execution runs table because operators need visual insight into delegation performance.*
+* **Task Breakdown:**
+  1. In `Portfolio_Dev/field_notes/benchmarks.html`, add 4th tab navigation button:
+     `<button class="tab-btn" onclick="switchTab(event, 'tab-delegation')">🐝 SWARM DELEGATION & SOVEREIGN GAINS</button>`.
+  2. Add `<div id="tab-delegation" class="tab-pane hidden">` containing:
+     - Metric cards: Total Sovereign Tokens, Realized Savings ($), Local Offload %, Wall Time.
+     - Sprint filter pills: `All Sprints`, `Sprint 101`, `Sprint 100`, `Sprint 99`, etc.
+     - Table container `#delegation-table-container`.
+  3. In `Portfolio_Dev/field_notes/benchmarks.js`, implement `loadDelegationRuns()` and `renderDelegationTable(filterSprint)`:
+     - Fetch `data/delegation_runs.json?t=` + Date.now().
+     - Populate summary metric cards.
+     - Render table rows with expandable details (showing verification cmd, reflection, and L3 sub-inference receipts).
+     - Hook into `loadBenchmarks()`.
+  4. Verify syntax and tab interactivity.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `field_notes/benchmarks.html`, `field_notes/benchmarks.js`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    `grep -q "tab-delegation" field_notes/benchmarks.html && grep -q "loadDelegationRuns" field_notes/benchmarks.js`
+  * **Anchor 3 (Live Silicon Invariant):** Tab 4 present in DOM and loads `data/delegation_runs.json`.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-498]`, `[BKM-024]`, `[BKM-048]`, `[BKM-049]`.
 
 ---
 
