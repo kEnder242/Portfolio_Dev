@@ -200,3 +200,51 @@ Anthropic thinking suppression on /v1/, and Qwen fell into infinite reasoning sp
 > [!CAUTION]
 > **NO MORE PANIC BYPASSES:** When a worker fails to execute a task, do NOT disable `task` delegation or make Atlas a direct coder. Check the MCP namespace prefix in `oh-my-openagent.json`, verify the context return size in `clara_dna_mcp_server.py`, and inspect the Headroom proxy port. The bicameral model (Conductor on 4090 $\to$ Worker on M5 Air) is the law.
 
+---
+
+## 8. Phase 4 Execution & Delegation Maturation: The Hardening Sprints (100.8B - 100.11)
+
+### 8.1 The Story Execution Trajectory
+
+1. **Story 100.8B — Oracle Adversarial Pre-Pass (`[BKM-061]`/`[FEAT-640]`):**
+   - Dispatched to Cloud Oracle (OpenRouter Nemotron-120B / Free Tier, 54k tokens).
+   - Adversarially audited Stories 100.9–100.15, catching legacy Sprint 32 PECI/MSR scars in `_distill_strategic_brief()`, HyDE turn leakage, and triage policy drift.
+   - Result: Blended findings committed to `ORACLE_REVIEW_SPRINT_100.md` with explicit remediation checklists.
+
+2. **Story 100.9 — HyDE Multi-Turn Scope Isolation (`[FEAT-640]`/`[FEAT-437]`):**
+   - Forensic defect: Pinky HyDE synthesis defaulted to `ContextScope.LONG`, injecting Turn 1 greetings (`[PREVIOUS_DEBATE]: User: hi`) into Stage 2 vector generation and causing false-positive casual classification.
+   - Fix: Threaded explicit `request_id` and enforced `scope=ContextScope.TURN` in `cognitive_hub.py::resolve_hyde_vector`.
+   - Verified 13/13 green in `test_feat437_resolve_hyde_vector.py`. Committed in HomeLabAI `bc38f7b`.
+
+3. **Story 100.10 — Defeature CASUAL Vibe & 9-Vibe Taxonomy Alignment (`[FEAT-640]`):**
+   - Forensic defect: Triage prompt offered CASUAL as an explicit LLM archetype choice, bypassing RAG on conversational greetings.
+   - Fix: Commented out `CASUAL` line from `cognitive_hub.py#L1487` prompt string with `[DEFEATURED]` marker; updated fallback test assertions in `test_triage_engine.py` (L578, L632) from `CASUAL` to `SOCRATIC`; sanitized line 1490 to eliminate employer persona leakage.
+   - Forensic lesson (BKM-049 reflection audit): The Oracle review suggested setting `"enabled": false` in `triage_policy.json`, which collided with `test_triage_policy_loader.py::test_production_has_all_nine_vibes` (which checks that all 9 vibes remain enabled in policy). Reconciled by keeping CASUAL enabled in policy while defeatured in prompt choices.
+   - Verified 79/79 green in `test_triage_engine.py`. Committed in HomeLabAI `3b1972d`.
+
+4. **Story 100.11 — Mandatory Stage 1 Brain Gatekeeper & Relic Excision (`[FEAT-635]`):**
+   - Forensic defect: 68-sprint-old `_distill_strategic_brief()` hardcoded `"Extract specific platform anchors, validation targets, and known PECI/MSR scars."` Fallback when interest $< 0.70$ routed to `_run_brain_leg`, polluting Brain output with off-topic PECI/MSR text.
+   - Attempt 1 (Law 6 Fast-Halt): Atlas inspected `cognitive_hub.py` via `jit_read`, discovered 4 call sites and 2 sibling test files dependent on `_run_brain_leg`, and strictly halted per Law 6 (Under-Specified Contract Blocker Mandate) to escalate to AGY.
+   - Attempt 1b (BKM-049 Tri-Loop Remediation): AGY formulated the decoupled stub pattern—completely excise `_distill_strategic_brief()`, enforce Stage 1 Brain Gatekeeper (`_run_two_mice_handover`) on 100% of technical queries on the Brain lead branch, and preserve `_run_brain_leg` as a clean pass-through stub so sibling tests and `both`-branch calls stay functional.
+
+### 8.2 What We Learned & Infrastructure Upgrades Built
+
+1. **LiteLLM Native Ollama Acceleration (`think: false`):**
+   - Discovered that Ollama `/api/chat` ignores `options: {"enable_thinking": false}` and strictly requires root `"think": false`.
+   - Benchmarked on Kender RTX 4090: dropped turn latency from 1.80s (61 reasoning tokens) to 0.39s (5 tokens) with 0 reasoning chars.
+   - Deployed standard `litellm` gateway daemon (`litellm-kender.service` on port 11435) with `extra_body.think: false`, delivering instant streaming without response-side censorship.
+
+2. **The Psychological Escalation Protocol (`ask_oracle` / `[FEAT-656]`/`[BKM-080]`):**
+   - Built `@mcp.tool() ask_oracle` in `clara_dna_mcp_server.py`.
+   - Wired polling intercept in `delegate.py` that exits cleanly with code 3, logs diagnostic banner, and caches state in `.jit_cache/paused_session.json`.
+   - Added `--feedback "<directive>"` flag for zero-friction resumption and live test monitoring.
+
+3. **Strict Cache-Mediated IPC & Zero-Diff Task Ticket Mandate (`[FEAT-655]`):**
+   - Solved the L2/L3 redundancy trap: when L2 inlined diffs into `task()`, L3 skipped `jit_research()`.
+   - Codified strict invariant in `AGENTS_L2.md`: All blueprints, AST anchors, and diff directives live exclusively in `jit_stage()`. `task()` prompts are strictly compact tickets (<100 tokens). If conductor must put diffs in `task()`, it must halt and call `ask_oracle`.
+
+4. **BKM-049 Handover Reflection Ingestion as Epistemic Bridge:**
+   - Established that AGY must never ignore `[HANDOVER REFLECTION]` reports.
+   - Reflections provide the empirical ground truth needed to detect spec collisions (Story 100.10) and under-specified contracts (Story 100.11), allowing smart outer-loop remediation instead of blind retry thrashing.
+
+
