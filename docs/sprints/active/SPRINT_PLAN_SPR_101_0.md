@@ -1,9 +1,9 @@
 # 🚀 SPRINT PLAN 101.0: 02:00 AM Nightly Stability, Ignition Guardrails & Historical Grounding Hardening
 
 **Sprint ID:** `SPR_101_0`  
-**Theme:** 02:00 AM Nightly Task Stabilization, Morning Ignition 30-Minute Timeout & Kill Guardrail, LoRA Multi-Adapter Payload Calibration, Post-Training vLLM Profiling Settle Gate, Dedicated Sprint DNA Curator Engine Reconnection, Canonical Single-Home Wisdom Path Alignment, and Pre-Ignition Hygiene Cleanups  
+**Theme:** 02:00 AM Nightly Task Stabilization, Morning Ignition 30-Minute Timeout & Kill Guardrail, LoRA Multi-Adapter Payload Calibration, Post-Training vLLM Profiling Settle Gate, Dedicated Sprint DNA Curator Engine Reconnection, Canonical Single-Home Wisdom Path Alignment, ICM Memory Lifecycle Hardening, and Pre-Ignition Hygiene Cleanups  
 **Status:** **PROPOSED & AWAITING OPERATOR GREENLIGHT**  
-**Parent Framework:** `[BKM-005]` (Design Studio Alignment), `[BKM-006]` / `[BKM-007]` (Work Completion Protocol), `[BKM-020]` (High-Fidelity Sprint Gates & Phase 0 Housekeeping), `[BKM-024]` (Live Validation Mandate), `[BKM-048]` (JIT Fingertips Protocol), `[BKM-049]` (Owner Tag Mandate), `[BKM-066]` / `[BKM-067]` (Decoupled Accountability), `[BKM-077]` (ANCHOR_TRACK Ledger), `[BKM-082]` (Sprint Grounding Run Mandate), `[LAB-103]` / `[LAB-107]` / `[LAB-110]` (Host Memory & Power Sentinels), `[FEAT-160]` (Hardware Pacing), `[FEAT-213]` (VRAM Handover), `[FEAT-361]` (Token Transparency), `[FEAT-416]` (05:00 AM Work Window Cutoff), `[FEAT-557]` (Sprint DNA Curator Engine), `[FEAT-562]` (Wisdom Refiner), `[FEAT-629]` (Phase-Isolated Decoupled Nightly Architecture), `[FEAT-659]` (Sprint Grounding Protocol)  
+**Parent Framework:** `[BKM-005]` (Design Studio Alignment), `[BKM-006]` / `[BKM-007]` (Work Completion Protocol), `[BKM-020]` (High-Fidelity Sprint Gates & Phase 0 Housekeeping), `[BKM-024]` (Live Validation Mandate), `[BKM-048]` (JIT Fingertips Protocol), `[BKM-049]` (Owner Tag Mandate), `[BKM-061]` (Adversarial Oracle Audit), `[BKM-066]` / `[BKM-067]` (Decoupled Accountability), `[BKM-077]` (ANCHOR_TRACK Ledger), `[BKM-080]` (Ask-Oracle Delegation Protocol), `[BKM-082]` (Sprint Grounding Run Mandate), `[LAB-103]` / `[LAB-107]` / `[LAB-110]` (Host Memory & Power Sentinels), `[FEAT-160]` (Hardware Pacing), `[FEAT-213]` (VRAM Handover), `[FEAT-361]` (Token Transparency), `[FEAT-416]` (05:00 AM Work Window Cutoff), `[FEAT-557]` (Sprint DNA Curator Engine), `[FEAT-562]` (Wisdom Refiner), `[FEAT-629]` (Phase-Isolated Decoupled Nightly Architecture), `[FEAT-656]`–`[FEAT-659]`, `[INS-047]` ("Live is King, History is Queen")  
 **Target Silicon Nodes:** `z87-Linux` (RTX 2080 Ti Local vLLM 3B Base :8088), Node KENDER (RTX 4090 Ollama Conductor :11434), Node Brain (macOS M5 Air MLX :8002 via Headroom), ChromaDB Port 8001 (CLaRa-DNA)
 
 ---
@@ -12,9 +12,23 @@
 
 Sprint 101.0 addresses the operational breakdown discovered during the 02:00 AM – 08:30 AM log horizon audit of October 8, 2026. The 2:00 AM nightly tasks made significant progress (successfully completing multi-adapter fine-tuning across 4 adapters), but degraded due to resource tightness, concurrency races, argument drift, and missing ignition guardrails.
 
-Per **`[BKM-082]`**, every story embeds the full forensic context and cautions re-framed into **positive execution directives** ("Do Y because Z context guides you to do it this way"), ensuring that future agents operate with zero amnesia and full respect for physical hardware sentinels.
+Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, every story embeds the full forensic context and cautions re-framed into **positive execution directives** ("Do Y because Z context guides you to do it this way"), ensuring that future agents operate with zero amnesia and full respect for physical hardware sentinels.
 
-Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Housekeeping**, paying documentation debt forward before story execution begins.
+### 🏛️ Delegation & Silicon Governance (`[BKM-049]`)
+1. **Local-First BKM-049 Stories (`[SWARM:LOCAL]`):** Surgical code tasks that touch configuration, cutoff logic, script targets, and path resolution are assigned to Node KENDER (RTX 4090) and Node Brain (macOS M5 Air) via `delegate.py --mode local`.
+2. **Cloud Quality Consideration (`[SWARM:CLOUD]`):** High-complexity state machine and process-supervision tasks (active process termination, vLLM re-ignition profiling gates, cgroup telemetry) are assigned to Cloud frontier models via `delegate.py --mode cloud` because past lab benchmarks demonstrate measurably superior precision on complex lifecycle recovery.
+3. **Orchestrator Focus (`[AGY:PRIMARY]`):** AGY owns Phase 0 documentation fortification, pre-ignition hygiene, and final BKM-024 physical daemon live certification.
+
+---
+
+## 🔮 Milestone 0: Adversarial Oracle Pre-Flight Audit (`[BKM-080]` / `[BKM-061]`)
+
+> [!IMPORTANT]
+> **ORACLE GOVERNANCE MANDATE:** The Oracle is an **external, frontier reasoning model** invoked via the execution harness (`delegate.py --oracle` or `ask_oracle` tool). The Oracle is **NOT** an in-process AGY sub-agent. It operates out-of-band to provide independent, adversarial verification of sprint plans, contracts, and failure modes before any code execution begins.
+
+* **Audit Target:** Pre-flight review of `SPRINT_PLAN_SPR_101_0.md`.
+* **Execution Command:** `python3 HomeLabAI/src/infra/delegate.py --oracle --prompt "Audit SPRINT_PLAN_SPR_101_0.md for circular traps, hardware sentinel regressions, and 4-anchor completeness."`
+* **Pass Gate:** Greenlight verdict from Oracle prior to Story 101.4 execution.
 
 ---
 
@@ -25,16 +39,17 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 | **ANCHOR-101.0** | Documentation & Maps | Argument drift & stale path pointers | `COMPLETED` | Phase 0: Fortify `DIAGNOSTIC_SCRIPT_MAP.md`, `FeatureTracker.md`, `BOOTSTRAP_v4.5.md`, `LAB_INFRASTRUCTURE.md`. |
 | **ANCHOR-101.1** | `HomeLabAI/run/vllm.pid` | Dead PID file left on disk; port 8088 down | `PROPOSED` | Story 101.1: Pre-ignition hygiene; remove dead `vllm.pid` & purge orphan processes (`FEAT-119`). |
 | **ANCHOR-101.2** | `HomeLabAI/src/logic/cognitive_hub.py` | Residual dialogue abort event flags | `PROPOSED` | Story 101.2: Ensure clean reset of turn abort flags on new turn initiation (`FEAT-227`). |
-| **ANCHOR-101.3** | `HomeLabAI/src/nodes/loader.py` | Unexecuted Carry-Over Story 100.15: `internal=True` token suppression | `PROPOSED` | Story 101.3: Remove `stream_source = None` gag in `loader.py:210` per `FEAT-361`. |
-| **ANCHOR-101.4** | `HomeLabAI/config/infrastructure.json` | LoRA training ran 208m (28m over 180m budget) | `PROPOSED` | Story 101.4: Trim steps 450 $\to$ 350 (~22% reduction) to fit under 04:30 AM (`FEAT-657`). |
-| **ANCHOR-101.5** | `HomeLabAI/src/v5/ignition/manager.py` | 5-minute timeout leaves hanging vLLM process; no hard-kill | `PROPOSED` | Story 101.5: 30-min timeout + active process kill on timeout (`FEAT-656`). |
-| **ANCHOR-101.6** | `field-notes-nibbler.service` | Mass scanning overrunning past 05:00 AM | `PROPOSED` | Story 101.6: Enforce 05:00 AM hard cutoff gate in nibbler per `FEAT-416`. |
-| **ANCHOR-101.7** | `HomeLabAI/src/infra/nightly_forge.py` | vLLM memory profiling race with concurrent Subconscious Dreaming | `PROPOSED` | Story 101.7: 30s settling delay + blocking probe gate before Step 5 (`FEAT-658`). |
-| **ANCHOR-101.8** | `HomeLabAI/src/infra/nightly_forge.py` | Argument drift calling `sync_chroma_dna.py --collection sprint_dna` | `PROPOSED` | Story 101.8: Rewire to dedicated `src/curator/sync_sprint_dna.py` (`FEAT-557`). |
-| **ANCHOR-101.9** | `Portfolio_Dev/field_notes/refine_wisdom.py` | Path mismatch looking in `field_notes/data/wisdom_data.json` | `PROPOSED` | Story 101.9: Target canonical `Portfolio_Dev/dna/wisdom_data.json` (`FEAT-562`). |
-| **ANCHOR-101.10** | `HomeLabAI/src/infra/nightly_forge.py` | Subprocess timeout (60s) prematurely cuts probe (75s wait) | `PROPOSED` | Story 101.10: Expand timeout to 120s (`FEAT-608`). |
-| **ANCHOR-101.11** | Cgroup Telemetry (`/sys/fs/cgroup`) | Lack of swap peak monitoring during nightly heavy load | `PROPOSED` | Story 101.11: Add swap peak telemetry to watchdog & digest (`LAB-110`). |
-| **ANCHOR-101.12** | Silicon & Daemons (`:8088`, `:8765`) | Foyer in OFFLINE standby; vLLM dead; digest graded FAIL | `PROPOSED` | Story 101.12: Physical restoration & 7/7 watchdog certification pass (`BKM-024`). |
+| **ANCHOR-101.3** | `HomeLabAI/src/curator/ambient_recall.py` | Stale ICM session memories bubbling up old git commits | `PROPOSED` | Story 101.3: Add git commit validity filter and handover memory retirement (`LAB-019`). |
+| **ANCHOR-101.4** | `HomeLabAI/src/nodes/loader.py` | Unexecuted Carry-Over Story 100.15: `internal=True` token suppression | `PROPOSED` | Story 101.4: Remove `stream_source = None` gag in `loader.py:210` per `FEAT-361`. |
+| **ANCHOR-101.5** | `HomeLabAI/config/infrastructure.json` | LoRA training ran 208m (28m over 180m budget) | `PROPOSED` | Story 101.5: Trim steps 450 $\to$ 350 (~22% reduction) to fit under 04:30 AM (`FEAT-657`). |
+| **ANCHOR-101.6** | `HomeLabAI/src/v5/ignition/manager.py` | 5-minute timeout leaves hanging vLLM process; no hard-kill | `PROPOSED` | Story 101.6: 30-min timeout + active process kill on timeout (`FEAT-656`). |
+| **ANCHOR-101.7** | `field-notes-nibbler.service` | Mass scanning overrunning past 05:00 AM | `PROPOSED` | Story 101.7: Enforce 05:00 AM hard cutoff gate in nibbler per `FEAT-416`. |
+| **ANCHOR-101.8** | `HomeLabAI/src/infra/nightly_forge.py` | vLLM memory profiling race with concurrent Subconscious Dreaming | `PROPOSED` | Story 101.8: 30s settling delay + blocking probe gate before Step 5 (`FEAT-658`). |
+| **ANCHOR-101.9** | `HomeLabAI/src/infra/nightly_forge.py` | Argument drift calling `sync_chroma_dna.py --collection sprint_dna` | `PROPOSED` | Story 101.9: Rewire to dedicated `src/curator/sync_sprint_dna.py` (`FEAT-557`). |
+| **ANCHOR-101.10** | `Portfolio_Dev/field_notes/refine_wisdom.py` | Path mismatch looking in `field_notes/data/wisdom_data.json` | `PROPOSED` | Story 101.10: Target canonical `Portfolio_Dev/dna/wisdom_data.json` (`FEAT-562`). |
+| **ANCHOR-101.11** | `HomeLabAI/src/infra/nightly_forge.py` | Subprocess timeout (60s) prematurely cuts probe (75s wait) | `PROPOSED` | Story 101.11: Expand timeout to 120s (`FEAT-608`). |
+| **ANCHOR-101.12** | Cgroup Telemetry (`/sys/fs/cgroup`) | Lack of swap peak monitoring during nightly heavy load | `PROPOSED` | Story 101.12: Add swap peak telemetry to watchdog & digest (`LAB-110`). |
+| **ANCHOR-101.13** | Silicon & Daemons (`:8088`, `:8765`) | Foyer in OFFLINE standby; vLLM dead; digest graded FAIL | `PROPOSED` | Story 101.13: Physical restoration & 7/7 watchdog certification pass (`BKM-024`). |
 
 ---
 
@@ -52,7 +67,7 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 ### Story 101.0B: Fortify `FeatureTracker.md` Feature Lineage & Code Mappings
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Status:** `COMPLETED`
-* **Feature Anchor:** `[FEAT-659]` / `[BKM-082]`
+* **Feature Anchor:** `[FEAT-659]` / `[BKM-082]` / `[INS-047]`
 * **Positive Context Guidance:**  
   *Update `FEAT-227` (spliced chunk uncoupling), `FEAT-407` (AST line link to L1077), `FEAT-557`, `FEAT-562`, `FEAT-160`, and register `FEAT-656`–`FEAT-659` in [`FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md), because the Feature Tracker is the primary DNA truth anchor used by CLaRa MCP tools during JITC lookups.*
 
@@ -109,20 +124,45 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 🛡️ Story 101.3: Carry-Over Story 100.15 — Abolish Vestigial `internal=True` Censorship Masking
+### 🧬 Story 101.3: Ambient Recall ICM Session Memory Lifecycle & Git Validity Filter
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Feature Anchor:** `[FEAT-600]` / `[LAB-019]` / `[BKM-060]` / `[BKM-082]`
+* **Positive Context Guidance:**  
+  *Add a git commit validation check and handover memory filter in [`ambient_recall.py#get_recent_memories`](file:///home/jallred/Dev_Lab/HomeLabAI/src/curator/ambient_recall.py#L270), because transient handover notes referencing historical commits (`a6567a8 vs fc867e7`) must not be bubbled up as active session wake-up facts once Git HEAD has advanced.*
+* **Root Cause & Rationale:**
+  - `ambient_recall.py` unconditionally executes `SELECT ... FROM memories ORDER BY created_at DESC LIMIT 4`.
+  - Subagents write transient status (`[HANDOVER REFLECTION]`, commit hash diffs) into SQLite `memories`.
+  - Lacking a TTL or Git reconciliation filter, these transient records persist at the top of the stack, polluting every future turn's `[Grounding Header]`.
+* **Task Breakdown:**
+  1. In `HomeLabAI/src/curator/ambient_recall.py#get_recent_memories()`:
+     - Parse summary for commit hashes (e.g. `[0-9a-f]{7,40}`).
+     - If commit hashes are detected, execute `git rev-parse --verify <hash>` and compare to `git rev-parse HEAD`. If HEAD has moved past or does not match, omit the memory from active wake-up injection or label it `(Historical Archive)`.
+     - Filter out transient `delegation_feedback` rows older than 12 hours.
+  2. Add unit test `test_ambient_recall_git_filter` in `HomeLabAI/src/tests/test_ambient_recall.py`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/curator/ambient_recall.py`, `HomeLabAI/src/tests/test_ambient_recall.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ambient_recall.py -k test_ambient_recall_git_filter -v`
+  * **Anchor 3 (Live Silicon Invariant):** Grounding Header in ephemeral turn messages contains zero stale commit hashes.
+  * **Anchor 4 (DNA Links):** `[FEAT-600]`, `[LAB-019]`, `[BKM-060]`, `[BKM-082]`.
+
+---
+
+### 🛡️ Story 101.4: Carry-Over Story 100.15 — Abolish Vestigial `internal=True` Censorship Masking
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Feature Anchor:** `[FEAT-361]` (Token Transparency Mandate)
 * **Positive Context Guidance:**  
   *Abolish `stream_source = None` suppression in `nodes/loader.py#L210` and route intermediate/diagnostic tokens to dedicated stream channels (`crosstalk`, `insight`), because `FEAT-361` strictly forbids black-hole token silencing and mandates 100% telemetry visibility.*
+* **Context & Operator Caution Against Censoring:**  
+  *In Sprint 26 (`f50d92f`), `stream_source = None` was originally added to keep internal triage reasoning from polluting the primary user chat window. Under `FEAT-361`, silencing tokens into a black hole prevents developer inspection. The positive resolution preserves both requirements: broadcast intermediate tokens with `channel="crosstalk"` or `channel="insight"` and `is_internal=True`, so diagnostic tools see every token while the primary user chat pane stays clean.*
 * **Task Breakdown:**
   1. In `HomeLabAI/src/nodes/loader.py#L210`, replace `stream_source = self.name if not internal else None` with channel-tagged routing:
-     `stream_source = self.name` and tag metadata with `is_internal=internal`.
+     `stream_source = self.name` and tag payload metadata with `is_internal=internal`, `channel=("crosstalk" if internal else "primary")`.
   2. Verify that `self._broadcast_token` is never bypassed.
   3. Run existing unit test `test_visibility_truth.py`.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/nodes/loader.py`.
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_visibility_truth.py -v`
-  * **Anchor 3 (Live Silicon Invariant):** 100% of tokens emitted by resident nodes are visible to the UI/websocket plane.
+  * **Anchor 3 (Live Silicon Invariant):** 100% of tokens emitted by resident nodes are visible to the UI/websocket plane; zero silent black holes.
   * **Anchor 4 (DNA Links):** `[FEAT-361]`.
 
 ---
@@ -131,8 +171,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 *Objective: Stabilize the 02:00 AM – 06:00 AM compute cycle, eliminate memory profiling races, and calibrate workloads to guaranteed SLA windows.*
 
-### ⏱️ Story 101.4: Multi-Adapter LoRA Training Payload & Step Calibration
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### ⏱️ Story 101.5: Multi-Adapter LoRA Training Payload & Step Calibration
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 / Bonsai on M5 Air via `delegate.py --mode local`)
 * **Feature Anchor:** `[FEAT-160]` / `[FEAT-657]` / `[FEAT-416]` / `[LAB-103]` / `[LAB-107]`
 * **Positive Context Guidance:**  
   *Maintain the mandatory 5.0s `HardwarePacingCallback` inter-step delay and micro-batching (`batch_size=1`, `grad_accum=4`) because `FEAT-160` and `SCAR-035` prove that host motherboard VRMs, PSU capacitors, and GDDR6 power rails require inter-step settling to eliminate electrical $di/dt$ power trips; calibrate `default_steps` down to 350 to achieve the desired ~155-minute training window and guarantee completion before 04:30 AM.*
@@ -149,8 +189,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 🛡️ Story 101.5: Morning Ignition 30-Minute Timeout & Hard-Kill Guardrail
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### 🛡️ Story 101.6: Morning Ignition 30-Minute Timeout & Hard-Kill Guardrail
+* **Assigned Owner:** `[SWARM:CLOUD]` (High-reasoning cloud worker via `delegate.py --mode cloud`)
 * **Feature Anchor:** `[FEAT-656]` / `[LAB-112]` / `[BKM-024]` / `[FEAT-119]`
 * **Positive Context Guidance:**  
   *Expand the readiness probe loop to 360 iterations (30 minutes) and execute active process termination (`_kill_stale_vllm`) if port 8088 fails to bind, because `FEAT-119` (Parallel Assassin) requires ensuring that hung background subprocesses and dead port bindings are aggressively purged to prevent silent degradation into an `OFFLINE` standby trap.*
@@ -170,8 +210,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### ⏱️ Story 101.6: Tail Mass Scan 05:00 AM Hard Cutoff Gate
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### ⏱️ Story 101.7: Tail Mass Scan 05:00 AM Hard Cutoff Gate
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 / Bonsai on M5 Air via `delegate.py --mode local`)
 * **Feature Anchor:** `[FEAT-416]` (05:00 AM Quiet Hours Mandate)
 * **Positive Context Guidance:**  
   *Enforce a strict 05:00 AM check within `field-notes-nibbler` and related note indexing sweeps because `FEAT-416` requires total system quiescence between 05:00 AM and 06:00 AM to give memory buffers time to drain before morning sentry audits.*
@@ -186,8 +226,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 🛡️ Story 101.7: vLLM Re-Ignition Isolation & VRAM Profiling Settle Gate
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### 🛡️ Story 101.8: vLLM Re-Ignition Isolation & VRAM Profiling Settle Gate
+* **Assigned Owner:** `[SWARM:CLOUD]` (High-reasoning cloud worker via `delegate.py --mode cloud`)
 * **Feature Anchor:** `[FEAT-213]` / `[FEAT-658]` / `[FEAT-629]` / `[SCAR-036]`
 * **Positive Context Guidance:**  
   *Enforce a 30s settling delay and block on polling `:8088/v1/models` until the engine is confirmed healthy and vocal before initiating Subconscious Dreaming, because vLLM's memory profiler requires exclusive GPU memory stability during its 17-second initialization to avoid `AssertionError` memory snapshot discrepancies.*
@@ -207,8 +247,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 🧬 Story 101.8: Dedicated Sprint DNA Curator Engine Reconnection
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### 🧬 Story 101.9: Dedicated Sprint DNA Curator Engine Reconnection
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 / Bonsai on M5 Air via `delegate.py --mode local`)
 * **Feature Anchor:** `[FEAT-557]` / `[BKM-060]`
 * **Positive Context Guidance:**  
   *Directly invoke `HomeLabAI/src/curator/sync_sprint_dna.py` because `FEAT-557` established it as the dedicated curator for `sprint_dna` with Level 1/2 chunking, recency curves, and `sprint_data.json` compilation, while `sync_chroma_dna.py` is reserved exclusively for static DNA files.*
@@ -226,8 +266,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 📚 Story 101.9: Canonical Wisdom DNA Path Resolution in Refiner
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### 📚 Story 101.10: Canonical Wisdom DNA Path Resolution in Refiner
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 / Bonsai on M5 Air via `delegate.py --mode local`)
 * **Feature Anchor:** `[FEAT-562]` / `[FEAT-558]` / `[FEAT-637]`
 * **Positive Context Guidance:**  
   *Target canonical `Portfolio_Dev/dna/wisdom_data.json` because `FEAT-637` (Single-Home Runtime Data Law) mandates a single canonical home in `dna/` to prevent split-brain state drift across submodules.*
@@ -245,8 +285,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### ⏱️ Story 101.10: Round Table Accountability Probe Timeout Alignment
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### ⏱️ Story 101.11: Round Table Accountability Probe Timeout Alignment
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 / Bonsai on M5 Air via `delegate.py --mode local`)
 * **Feature Anchor:** `[FEAT-608]` / `[FEAT-651]` / `[BKM-062]`
 * **Positive Context Guidance:**  
   *Configure the subprocess timeout to 120s because `probe_round_table_accountability.py`'s internal deliberation circuit requires up to 75s to complete genuine multi-stage deliberation across Triage, Pinky, Brain, M5 Air, and Pinky Critic.*
@@ -261,8 +301,8 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 ---
 
-### 📊 Story 101.11: Cgroup Swap Peak & Memory Pressure Telemetry Sentinel
-* **Assigned Owner:** `[AGY:PRIMARY]`
+### 📊 Story 101.12: Cgroup Swap Peak & Memory Pressure Telemetry Sentinel
+* **Assigned Owner:** `[SWARM:CLOUD]` (High-reasoning cloud worker via `delegate.py --mode cloud`)
 * **Feature Anchor:** `[LAB-110]` / `[FEAT-619]` / `[BKM-066]`
 * **Positive Context Guidance:**  
   *Read `/sys/fs/cgroup/memory.swap.peak` (or `memory.swap.current`) within `standalone_accountability_watchdog.py` and record it into `daily_accountability_digest.json`, because swap thrashing during overnight training is a primary root cause of morning ignition latency and must be tracked empirically.*
@@ -282,11 +322,11 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
 
 *Objective: Certify 100% operational health across all reachable endpoints and achieve 7/7 green marks on the physical watchdog digest.*
 
-### 🏥 Story 101.12: Physical Lab Live Recovery & 7/7 Accountability Certification
+### 🏥 Story 101.13: Physical Lab Live Recovery & 7/7 Accountability Certification
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Feature Anchor:** `[BKM-024]` / `[BKM-066]` / `[FEAT-619]`
+* **Feature Anchor:** `[BKM-024]` / `[BKM-066]` / `[FEAT-619]` / `[INS-047]`
 * **Positive Context Guidance:**  
-  *Verify against the running live daemons (`:8088`, `:8765`) and certify 7/7 checks green via `standalone_accountability_watchdog.py` because `BKM-024` mandates that final certification requires matching Git HEAD on active silicon.*
+  *Verify against the running live daemons (`:8088`, `:8765`) and certify 7/7 checks green via `standalone_accountability_watchdog.py` because `BKM-024` and `[INS-047]` mandate that final certification requires matching Git HEAD on active silicon.*
 * **Task Breakdown:**
   1. Verify clean daemon startup via Foyer `/wake` or `start_vllm.sh`.
   2. Verify port 8088 responds with `{"object": "list"}` on `/v1/models` and confirms all 4 LoRA adapters loaded.
@@ -297,7 +337,15 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
     `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 HomeLabAI/src/infra/standalone_accountability_watchdog.py`
   * **Anchor 3 (Live Silicon Invariant):** 7/7 checks green in `daily_accountability_digest.json`; Foyer `OPERATIONAL`; vLLM `UP`.
-  * **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-066]`, `[FEAT-619]`.
+  * **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-066]`, `[FEAT-619]`, `[INS-047]`.
+
+---
+
+## 🔮 Milestone 4: Adversarial Oracle Post-Flight Audit (`[BKM-080]` / `[BKM-061]`)
+
+* **Audit Target:** Post-execution verification of all applied changes and live certification.
+* **Execution Command:** `python3 HomeLabAI/src/infra/delegate.py --oracle --prompt "Verify Sprint 101 execution against BKM-024 live certification and check for regressions."`
+* **Pass Gate:** Greenlight verdict from Oracle before branch merge or sprint close.
 
 ---
 
@@ -320,12 +368,12 @@ Furthermore, this sprint formalizes **Phase 0: Documentation Fortification & Hou
    * *Why it's wrong:* The probe failed simply because the outer subprocess timeout in `nightly_forge.py` was 60 seconds, which abruptly killed the probe before its internal 75-second multi-stage deliberation timeout could finish.
 6. **Mistake Avoided: Blindly Committing Code Without Process Quiescence**  
    * *What would have happened:* Attempting to run unit tests while background subagents or zombie vLLM PIDs linger.  
-   * *Why it's wrong:* Residual process table entries can cause port collisions and memory leaks during pytest runs. Pre-ignition hygiene (Stories 101.1–101.3) ensures total quiescence before testing.
+   * *Why it's wrong:* Residual process table entries can cause port collisions and memory leaks during pytest runs. Pre-ignition hygiene (Stories 101.1–101.4) ensures total quiescence before testing.
 
 ---
 
 ## 🧭 Grounding Gap Audit
 
 - **Audit Result:** **100% Grounded.**
-- Every single story in Sprint 101.0 is tied to specific historical sprints, existing DNA features (`FEAT-119`, `FEAT-160`, `FEAT-213`, `FEAT-227`, `FEAT-361`, `FEAT-407`, `FEAT-416`, `FEAT-557`, `FEAT-562`, `FEAT-608`, `FEAT-619`, `FEAT-629`, `FEAT-656`), physical hardware scars (`SCAR-035`, `SCAR-036`), and verified codebase paths.
+- Every single story in Sprint 101.0 is tied to specific historical sprints, existing DNA features (`FEAT-119`, `FEAT-160`, `FEAT-213`, `FEAT-227`, `FEAT-361`, `FEAT-407`, `FEAT-416`, `FEAT-557`, `FEAT-562`, `FEAT-608`, `FEAT-619`, `FEAT-629`, `FEAT-656`–`FEAT-659`), physical hardware scars (`SCAR-035`, `SCAR-036`), and verified codebase paths.
 - **Zero ungrounded items remain.**
