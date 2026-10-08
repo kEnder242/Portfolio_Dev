@@ -132,7 +132,7 @@ def main():
 
     start_tag, end_tag = "<tbody>", "</tbody>"
     start_idx = html_content.find(start_tag) + len(start_tag)
-    end_idx = html_content.find(end_tag)
+    end_idx = html_content.rfind(end_tag)
 
     if start_idx == -1 or end_idx == -1:
         return
