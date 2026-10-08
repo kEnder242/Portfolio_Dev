@@ -3,7 +3,7 @@
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
-> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.4.md](../BOOTSTRAP_v4.4.md)**.
+> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.5.md](../BOOTSTRAP_v4.5.md)**.
 
 ## 🧭 Navigation
 *   **🧠 The Brain (Backend):** [HomeLabAI/ProjectStatus.md](../HomeLabAI/ProjectStatus.md)
