@@ -52,6 +52,10 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 | **ANCHOR-101.13** | Silicon & Daemons (`:8088`, `:8765`) | Foyer in OFFLINE standby; vLLM dead; digest graded FAIL | `COMPLETED` | Story 101.13: Physical restoration & 7/7 watchdog certification pass (`BKM-024`). |
 | **ANCHOR-101.14** | `HomeLabAI/src/infra/sprint_telemetry.py` | Swarm delegation runs un-indexed for external/web ingestion | `COMPLETED` | Story 101.14: Export delegation ledger JSON feed via `--export-web` (`FEAT-552`, `FEAT-498`). |
 | **ANCHOR-101.15** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Tab 4 Model Benchmarks missing live swarm ROI & accordion ledger | `COMPLETED` | Story 101.15: Integrate Tab 4 UI & Accordion Ledger Rendering (`FEAT-525`, `FEAT-498`). |
+| **ANCHOR-101.16** | `HomeLabAI/src/infra/sprint_telemetry.py` | Standalone test pings and duplicate `jit_checkpoint` stubs pollute web feed | `PENDING` | Story 101.16: Ledger Ingestion Hygiene, Deduplication & Historical Backfill (`FEAT-552`, `FEAT-498`). |
+| **ANCHOR-101.17** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Vertical card stacking, pill filter sprawl, harsh binary failure badges | `PENDING` | Story 101.17: Dashboard Polish — Horizontal Cards, Dropdown Filter & Semantic Badges (`FEAT-525`, `FEAT-494`). |
+| **ANCHOR-101.18** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Lack of longitudinal visual token tracking across swarm tiers | `PENDING` | Story 101.18: Swarm Token Multi-Series Canvas Line Graph (`FEAT-525`, `FEAT-526`). |
+| **ANCHOR-101.19** | `Portfolio_Dev/field_notes/bench_models.py`, `benchmarks.html` | Hardcoded 32k context and stale 14B coder fallback; dead refresh button | `PENDING` | Story 101.19: Dynamic Seat Card Synchronization & Header Fluff Purge (`FEAT-495`, `FEAT-494`). |
 
 ---
 
@@ -493,4 +497,100 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
   * **Story 101.14 (`[SWARM:LOCAL]`):** Swarm Delegation Web Feed Export Engine (`--export-web`) implemented in `HomeLabAI/src/infra/sprint_telemetry.py`. Exported 291 historical runs, computing 11 sovereign summary metrics ($8.64 net sovereign savings, 66.7% success rate) to `Portfolio_Dev/field_notes/data/delegation_runs.json` (`703ba5b`).
   * **Story 101.15 (`[SWARM:LOCAL]`):** Model Benchmarks Tab 4 UI & Accordion Ledger Rendering (`tab-delegation`) added to `Portfolio_Dev/field_notes/benchmarks.html` and `benchmarks.js` with responsive summary cards, sprint filter pills, and expandable run inspection (`456a94c`).
 
+---
 
+## 🌐 Phase 5: Swarm Dashboard Polish, Ledger Hygiene & Live Telemetry Hardening
+
+*Objective: Resolve dashboard friction, eliminate ledger double-writing, introduce multi-series token visualization, align live seat card context with Node KENDER Qwen 3.8 27B, and strip obsolete UI fluff.*
+
+### 🚫 Phase 5 Pre-Flight Mistake Ledger (Mistakes Avoided by Grounding)
+1. **Mistake Avoided: Blaming Cloud Swarm / OpenRouter for Missing Token Telemetry**  
+   * *What would have happened:* Investigating cloud API gateways, litellm endpoints, or adding defensive network retry loops.  
+   * *Why it's wrong:* Grounding in `data/delegation_ledger.jsonl` proved Cloud was 100% compliant. The missing fields and "No Sprint" artifacts were caused entirely by local L3 subagents calling `clara-dna_jit_checkpoint`, which only logged status and summary without story metadata.
+2. **Mistake Avoided: Slapping a New Build Script or Cron Job for Kender 4090 Context Window**  
+   * *What would have happened:* Writing a standalone script or cron entry to poll Ollama and overwrite `benchmarks_cache.json`.  
+   * *Why it's wrong:* Violates the **Single Orchestrator Law (`[INS-047]` / `[FEAT-495]`)**. Grounding in `nightly_forge.py` revealed that Step 6 (`run_benchmark_sweep()`, lines 785–800) already invokes `bench_models.py --no-serve` at 02:00 AM every night. Teaching `bench_models.py` to dynamically inspect Ollama `/api/tags` and `/api/show` naturally keeps the seat cards fresh without fracturing the harness.
+3. **Mistake Avoided: Pulling in Heavy External Charting Libraries (Chart.js / D3 / npm)**  
+   * *What would have happened:* Adding external JS dependencies to `Portfolio_Dev` to build the Swarm Token sprint line graph.  
+   * *Why it's wrong:* Violates the zero-dependency static airlock law (`[FEAT-494]`). The existing Delta-T chart (`renderDeltaTChart()`) in `benchmarks.js` already provides a clean, responsive, pure HTML5 Canvas pattern. We reuse that exact Canvas engine for the sprint token graph.
+4. **Mistake Avoided: Overwriting or Compressing Historical Ledger Entries to "Clean Up" Data**  
+   * *What would have happened:* Running an in-place destructive script to delete historical rows from `delegation_ledger.jsonl`.  
+   * *Why it's wrong:* Violates the **Immutable Append-Only Law (`[BKM-081]` / `[BKM-020]`)**. Raw telemetry must remain permanently auditable. Ingestion-time deduplication and backfilling in `sprint_telemetry.py` produces a clean web feed (`delegation_runs.json`) without mutating raw ledger history.
+
+### 🧭 Phase 5 Grounding Gap Audit
+- **Audit Result:** **100% Grounded.**
+- All Phase 5 stories are anchored in verified codebase paths:
+  - Stories 101.17, 101.18: `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js`, `style.css`.
+  - Story 101.16: `HomeLabAI/src/infra/sprint_telemetry.py`, `HomeLabAI/data/delegation_ledger.jsonl`, `HomeLabAI/src/mcp/clara_dna_mcp_server.py`.
+  - Story 101.19: `Portfolio_Dev/field_notes/bench_models.py`, `HomeLabAI/src/infra/nightly_forge.py`, `Portfolio_Dev/field_notes/benchmarks.html`.
+- Zero ungrounded items remain.
+
+### 🐝 Story 101.16: Ledger Ingestion Hygiene, Deduplication & Historical Backfill
+* **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
+* **Feature Anchor:** `[FEAT-552]` / `[FEAT-498]` / `[BKM-081]` / `[INS-047]`
+* **Positive Context Guidance:**  
+  *Upgrade `export_web_telemetry()` in `HomeLabAI/src/infra/sprint_telemetry.py` to filter out raw MCP test pings, suppress duplicate `jit_checkpoint` stubs when authoritative `delegate.py` records exist, and extract story/sprint from summary text for historical backfill because human operators and web dashboards require clean, deduplicated sprint attribution without "No Sprint" artifacts.*
+* **Scope & Tasks:**
+  1. Filter out raw test pings (e.g. `"Live stdio checkpoint test"` with 0 tokens and no story).
+  2. For `jit_checkpoint` stubs whose `Story X.Y` matches an authoritative run, suppress the redundant stub.
+  3. For historical orphan stubs where no companion `delegate.py` run exists, extract `story`, `sprint`, and `title` using regex from `summary` so they file under the correct sprint.
+  4. Ensure `clara_dna_mcp_server.py` `jit_checkpoint()` supports optional `story` and `sprint` parameters to protect future sprints.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `src/infra/sprint_telemetry.py`, `src/mcp/clara_dna_mcp_server.py`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    `python3 HomeLabAI/src/infra/sprint_telemetry.py --export-web && python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/data/delegation_runs.json')); runs=[r for r in d['runs'] if r['story']=='101.15']; assert len(runs)==1 and runs[0]['sprint']=='101' and runs[0]['tokens']['total']>50000; print('PASS: Story 101.15 clean sprint 101 attribution')"`
+  * **Anchor 3 (Live Silicon Invariant):** 0 orphan stubs for completed stories; clean sprint attribution in `delegation_runs.json`.
+  * **Anchor 4 (DNA Links):** `[FEAT-552]`, `[FEAT-498]`, `[BKM-081]`.
+
+### 🎨 Story 101.17: Dashboard Polish — Horizontal Cards, Dropdown Filter & Semantic Badges
+* **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
+* **Feature Anchor:** `[FEAT-525]` / `[FEAT-494]` / `[BKM-024]`
+* **Positive Context Guidance:**  
+  *Update `benchmarks.html` and `benchmarks.js` to style delegation summary cards with `.calc-grid` horizontal layout, replace button pills with a dark-themed `<select>` dropdown, and replace harsh binary verification failures with 3-tier badges (`PASSED`, `UNVERIFIED`, `FAILED`) because high-density consoles must present balanced, ergonomic telemetry without visual clutter.*
+* **Scope & Tasks:**
+  1. Add `.delegation-summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }` to align summary cards horizontally.
+  2. Replace `.delegation-filter-row` button loop with `<select id="delegation-sprint-select">` rendering `All Sprints (N)`, `Sprint 101 (N)`, etc.
+  3. Update `statusBadge()` and the Verification column to render:
+     - `PASSED` (Green `✔`) for `verification_passed === true`
+     - `UNVERIFIED` / `N/A` (Slate `○`) for `COMPLETED_UNVERIFIED` / no test harness
+     - `FAILED` (Red `✘`) strictly for `VERIFICATION_FAILED` or execution errors.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `field_notes/benchmarks.html`, `field_notes/benchmarks.js`, `field_notes/style.css`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    `node --check Portfolio_Dev/field_notes/benchmarks.js && grep -q "delegation-sprint-select" Portfolio_Dev/field_notes/benchmarks.html`
+  * **Anchor 3 (Live Silicon Invariant):** DOM renders horizontal card grid and functional select dropdown; no false `FAILED` labels.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-494]`.
+
+### 📈 Story 101.18: Swarm Token Multi-Series Canvas Line Graph
+* **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
+* **Feature Anchor:** `[FEAT-525]` / `[FEAT-494]` / `[FEAT-526]`
+* **Positive Context Guidance:**  
+  *Implement `renderSwarmTokenChart()` in `benchmarks.js` using pure HTML5 Canvas above the delegation table, tracking total tokens per sprint across Local (Green), Primary AGY (Purple), and Cloud+Oracle (Pink) because operators need longitudinal visibility into sovereign offload trajectories.*
+* **Scope & Tasks:**
+  1. Add `<canvas id="swarm-token-chart" width="1000" height="280">` with a custom legend box in `tab-delegation`.
+  2. Implement `renderSwarmTokenChart(runs)` in `benchmarks.js` aggregating tokens by sprint and tier (`local`, `cloud`, `oracle`, `agy`).
+  3. Render crisp 1px grid lines, monotonic trend lines, and data point badges matching the style of the Delta-T chart.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `field_notes/benchmarks.html`, `field_notes/benchmarks.js`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    `grep -q "swarm-token-chart" Portfolio_Dev/field_notes/benchmarks.html && grep -q "renderSwarmTokenChart" Portfolio_Dev/field_notes/benchmarks.js && node --check Portfolio_Dev/field_notes/benchmarks.js`
+  * **Anchor 3 (Live Silicon Invariant):** Canvas element present in Tab 4; renders token lines across sprints without console error.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-526]`.
+
+### 🖥️ Story 101.19: Dynamic Seat Card Synchronization & Header Fluff Purge
+* **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
+* **Feature Anchor:** `[FEAT-495]` / `[FEAT-494]` / `[BKM-082]`
+* **Positive Context Guidance:**  
+  *Update `Portfolio_Dev/field_notes/bench_models.py` to dynamically discover active Ollama models (Qwen 3.8 27B) and context windows (128k) from `/api/tags` and `/api/show`, purge the redundant `REFRESH TELEMETRY` button, and clean header subtitle fluff in `benchmarks.html` because hardware dashboards must reflect live silicon state without obsolete UI controls.*
+* **Scope & Tasks:**
+  1. In `bench_models.py`, update `SEATS_CONFIG["kender_4090"]` and `FALLBACKS["kender_4090"]` defaults to `qwen3.8:nothink` with `128k (131,072)` context window.
+  2. In `discover_and_benchmark_ollama_node()`, dynamically extract `context_length` from Ollama's model tags/details.
+  3. In `benchmarks.html`, remove `<div class="controls-bar">` (`REFRESH TELEMETRY` button).
+  4. Streamline header subtitle: remove `[BKM-049]` jargon and replace static `telemetry-banner` text with a clean single-line last-sweep timestamp.
+  5. Run `python3 Portfolio_Dev/field_notes/bench_models.py --no-serve` to regenerate `benchmarks_cache.json` with live 4090 Qwen 3.8 27B metrics.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `field_notes/bench_models.py`, `field_notes/benchmarks.html`, `field_notes/benchmarks_cache.json`.
+  * **Anchor 2 (Verification Command & Literal Test Battery):**  
+    `python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/benchmarks_cache.json')); k=[r for r in d['results'] if r['seat_id']=='kender_4090'][0]; assert '128k' in k['context_window'] or '262' in k['context_window']; print('PASS: Kender 4090 context is', k['context_window'])"`
+  * **Anchor 3 (Live Silicon Invariant):** Seat Card displays live Qwen 3.8 27B and 128k context; dead controls purged.
+  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`.
