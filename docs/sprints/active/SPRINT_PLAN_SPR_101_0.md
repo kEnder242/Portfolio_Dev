@@ -579,18 +579,20 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 
 ### 🖥️ Story 101.19: Dynamic Seat Card Synchronization & Header Fluff Purge
 * **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
-* **Feature Anchor:** `[FEAT-495]` / `[FEAT-494]` / `[BKM-082]`
+* **Feature Anchor:** `[FEAT-495]` / `[FEAT-494]` / `[BKM-082]` / `[BKM-062]` / `[INS-047]`
 * **Positive Context Guidance:**  
-  *Update `Portfolio_Dev/field_notes/bench_models.py` to dynamically discover active Ollama models (Qwen 3.8 27B) and context windows (128k) from `/api/tags` and `/api/show`, purge the redundant `REFRESH TELEMETRY` button, and clean header subtitle fluff in `benchmarks.html` because hardware dashboards must reflect live silicon state without obsolete UI controls.*
+  *Update `Portfolio_Dev/field_notes/bench_models.py` to adopt pure live discovery with ZERO synthetic fallbacks (abolishing the `FALLBACKS` dictionary entirely). If a node is unreachable, report it honestly as `OFFLINE / SLEEP` with null/dash metrics (`--`) rather than fabricating fake models or contexts. When online, dynamically extract resident models (e.g. Qwen 3.8 27B) and true context lengths (128k/262k) from live endpoints (`/api/tags`, `/api/show`, `/v1/models`). Purge the redundant `REFRESH TELEMETRY` button and clean header subtitle fluff in `benchmarks.html` because hardware dashboards must reflect live silicon truth without deceptive defaults.*
 * **Scope & Tasks:**
-  1. In `bench_models.py`, update `SEATS_CONFIG["kender_4090"]` and `FALLBACKS["kender_4090"]` defaults to `qwen3.8:nothink` with `128k (131,072)` context window.
-  2. In `discover_and_benchmark_ollama_node()`, dynamically extract `context_length` from Ollama's model tags/details.
-  3. In `benchmarks.html`, remove `<div class="controls-bar">` (`REFRESH TELEMETRY` button).
-  4. Streamline header subtitle: remove `[BKM-049]` jargon and replace static `telemetry-banner` text with a clean single-line last-sweep timestamp.
-  5. Run `python3 Portfolio_Dev/field_notes/bench_models.py --no-serve` to regenerate `benchmarks_cache.json` with live 4090 Qwen 3.8 27B metrics.
+  1. In `bench_models.py`, abolish the `FALLBACKS` dictionary. Unreachable nodes are recorded as `status: "offline"` with `model: null`, `context_window: "--"`, `throughput: 0`, and `warm_ttft_ms: null`.
+  2. In `discover_and_benchmark_ollama_node()`, dynamically discover whatever model is active (discovering `qwen3.8:nothink` / `atlas:27b`) and query `/api/show` or tags to extract real `context_length` (e.g. `262k` or `128k`).
+  3. In `benchmarks.js`, update `renderSeatCards()` to gracefully render offline nodes with dashes (`--`) and `OFFLINE / SLEEP` badges without NaN or broken values.
+  4. In `benchmarks.html`, remove `<div class="controls-bar">` (`REFRESH TELEMETRY` button).
+  5. Streamline header subtitle: remove `[BKM-049]` jargon and replace static `telemetry-banner` text with a clean single-line last-sweep timestamp.
+  6. Run `python3 Portfolio_Dev/field_notes/bench_models.py --no-serve` to regenerate `benchmarks_cache.json` with live discovered metrics (zero synthetic fallbacks).
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `field_notes/bench_models.py`, `field_notes/benchmarks.html`, `field_notes/benchmarks_cache.json`.
+  * **Anchor 1 (Target Files):** `field_notes/bench_models.py`, `field_notes/benchmarks.html`, `field_notes/benchmarks.js`, `field_notes/benchmarks_cache.json`.
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
-    `python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/benchmarks_cache.json')); k=[r for r in d['results'] if r['seat_id']=='kender_4090'][0]; assert '128k' in k['context_window'] or '262' in k['context_window']; print('PASS: Kender 4090 context is', k['context_window'])"`
-  * **Anchor 3 (Live Silicon Invariant):** Seat Card displays live Qwen 3.8 27B and 128k context; dead controls purged.
-  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`.
+    `python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/benchmarks_cache.json')); k=[r for r in d['results'] if r['seat_id']=='kender_4090'][0]; assert ('128k' in str(k.get('context_window')) or '262' in str(k.get('context_window')) or k.get('status')=='offline'); print('PASS: Pure live discovery verified, status:', k.get('status'))"`
+  * **Anchor 3 (Live Silicon Invariant):** Seat cards display pure live state or honest offline dashes; zero synthetic defaults present in cache.
+  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[BKM-062]`, `[INS-047]`.
+
