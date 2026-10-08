@@ -133,3 +133,70 @@
 * **`Portfolio_Dev/field_notes/features.html`:** Updated `[FEAT-586]` Logic, Rationale, and Mechanism to formalize the parallel differential model ($W_{\text{lead}} > t_{\text{air}} - t_{\text{vllm}}$) and estimator state isolation.
 * **`Portfolio_Dev/field_notes/triage_inference_calibration.md`:** Published field note capturing full telemetry benchmarks, regime comparison table, and lead-time equations.
 * **`Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_100_0.md`:** Updated `ANCHOR-12` as certified completed.
+
+---
+
+## 🧭 7. Forensic System Lineage: The Anatomy of a Cascading Regression & Restoration to Known-Good Architecture
+
+### 7.1 Context & Motivation ("Staying Sane")
+Every day we felt we were slipping backwards into regressions: thinking loops reappearing, context blowing up, and agents refusing to delegate. This log records the exact causal chain—applying the South Park rule (*"Because X, Therefore Y"*)—to serve as the definitive sanity anchor and prevent recurring amnesia across future sessions.
+
+### 7.2 The Causal Chain of Breakdown
+
+```
+[Sprint 98-99 "Green Lie"] 
+OpenCode ran /home/jallred/AcmeLab/src/clara_dna_mcp_server.py externally,
+while tests imported in-tree copies.
+   │
+   ▼ (Because we needed a single source of truth...)
+[Oct 6 23:37 PDT: Commit 9fdc567 / f60f75e]
+Consolidated canonical MCP server into HomeLabAI/src/mcp/clara_dna_mcp_server.py
+and symlinked AcmeLab.
+   │
+   ├─► Bug A (Context Dump): stage_research returned {"blueprint": patch_blueprint...}
+   │                         echoing multi-KB plans back into Atlas's context on Turn 2.
+   │
+   └─► Bug B (Namespace Mismatch): Junior's permission in oh-my-openagent.json
+                                   was set to safe_patch instead of clara-dna_safe_patch.
+   │
+   ▼ (Because Junior was blocked by OpenCode tool-namespacing and Atlas was bloated...)
+[Oct 7 17:17 PDT: Panic Bypass Commit 124ec01]
+Operators assumed Layer 2 -> Layer 3 delegation was fundamentally broken.
+Therefore, "task" was added to disabled_tools, Atlas was set to "task": "deny",
+and Atlas was forced into "DIRECT EXECUTION MODE" with safe_patch/write permissions.
+   │
+   ▼ (Because Atlas on KENDER 4090 was forced to read full files and write diffs directly...)
+[The VRAM & Reasoning Collapse]
+Atlas read full 200KB source files, exploding context from <3,000 tokens to 64,000+ tokens.
+Therefore, KENDER 4090 stalled in 4-to-5 minute prompt-eval stalls, Ollama ignored
+Anthropic thinking suppression on /v1/, and Qwen fell into infinite reasoning spirals.
+```
+
+### 7.3 The Forensic Discoveries
+
+1. **The MCP Server Move Was Right, But Poisoned at the Seams:**
+   Moving the MCP server inside `HomeLabAI/src/mcp/` and keeping `/home/jallred/AcmeLab/src/clara_dna_mcp_server.py` as a symlink was the correct architectural choice to end the "Green Lie". However, shipping untested return dictionaries (`"blueprint"` echo) directly broke Conductor context invariants.
+2. **OpenCode Namespacing Is Inflexible:**
+   FastMCP tools exposed by `clara-dna` MUST be matched in `oh-my-openagent.json` with their server prefix (`clara-dna_safe_patch`, `clara-dna_jit_stage`). Unprefixed entries cause silent runtime permission rejections.
+3. **Panic Bypasses Warp Architecture:**
+   When delegation failed, committing "Direct Execution Mode" (`124ec01`) broke `BKM-078: JIT_ONE_SHOT` and corrupted the bicameral model. Instead of fixing the 1-line tool permission on Junior, the entire delegation topology was dismantled.
+4. **Ollama /v1/ vs. Headroom:**
+   Ollama's native `/api/chat` respects `"think": false`, but its OpenAI-compatible `/v1/` endpoint does not reliably strip reasoning blocks. Headroom proxy (port 8787 / 8002) is mandatory to enforce thinking suppression and clean context boundaries on local silicon.
+
+### 7.4 In-Flight Fixes Applied on `fork/sprint-100-run-b`
+
+1. **Context Dump Stripped (`83855c5` in `HomeLabAI`):**
+   `stage_research` in `clara_dna_mcp_server.py` now returns strictly `{"status": "staged", "file_path": file_path}`, restoring Turn 2 Conductor response payload to <10 tokens.
+2. **Bicameral Separation Restored (`31f439f` in `Dev_Lab`):**
+   - Removed `"task"` from `disabled_tools`.
+   - Set `"task": "allow"` on Atlas; set `"write": "deny"`, `"edit": "deny"`, `"safe_patch": "deny"`, `"read": "deny"`. Atlas is once again a **Pure Conductor**.
+   - Granted Junior `"clara-dna_safe_patch": "allow"` alongside `"safe_patch"`, keeping Junior terminal (`"task": "deny"`).
+3. **Hardware Context Hardening (`31f439f` in `Dev_Lab`):**
+   - Capped `atlas:27b` context to `32,768` tokens in `opencode.json` per `LAB-115`.
+4. **Headroom Proxy Reactivated:**
+   - Started and enabled `headroom-proxy.service` on `127.0.0.1:8787`.
+
+### 7.5 Invariant Rule Going Forward
+> [!CAUTION]
+> **NO MORE PANIC BYPASSES:** When a worker fails to execute a task, do NOT disable `task` delegation or make Atlas a direct coder. Check the MCP namespace prefix in `oh-my-openagent.json`, verify the context return size in `clara_dna_mcp_server.py`, and inspect the Headroom proxy port. The bicameral model (Conductor on 4090 $\to$ Worker on M5 Air) is the law.
+
