@@ -2046,5 +2046,62 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-047",
+    "theme": "Grounding Philosophy & Physical Empirical Reality",
+    "paper_order": 47,
+    "origin": {
+      "author": "jallred",
+      "text": "Live is king, history is queen. Do NOT remove hard won code or features. Every time you consider removing a feature or a step or changing the batching behavior or renaming files etc, please correlate what you are doing with the most recent sprint that touched the features around that area. Use your DNA lookup tools heavily. I want you GROUNDED in the past. Write the sprint and report in text to me as well. keep track of and list out mistakes you would have made if not for this additional grounding... make it harder for you to gloss over things than it is to just read, you're REALLY good at reading, so use it! Positive context guidance ('Do Y because Z context guides you to do it this way').",
+      "source": "Federated Lab Sprint 101 Grounding Session",
+      "immutable": true,
+      "created_at": "2026-10-08T09:58:00Z"
+    },
+    "synthesis": {
+      "title": "Live is King, History is Queen",
+      "narrative_context": "The Sovereign Dyad of the Federated Lab. Live validation is King: fast unit tests and mocks verify isolated logic, but final task certification unconditionally requires verifying against the active running daemon (matching Git HEAD) and reachable physical silicon endpoints (BKM-024). History is Queen: sprints and DNA records are not passive human archives, but an active, curated state machine for autonomous agents (BKM-082). Live without History is blind—doomed to repeat historical anti-patterns, misdiagnose multi-hour log horizons, and strip hard-won physical sentinels. History without Live is toothless—producing theoretical plans that fail on physical silicon. The King executes sovereign authority on the physical floor; the Queen governs strategic memory and protects the realm from circular amnesia.",
+      "lab_anchors": [
+        "BKM-024",
+        "BKM-082",
+        "FEAT-659",
+        "FEAT-497",
+        "SCAR-035",
+        "INS-009",
+        "INS-033",
+        "INS-042"
+      ],
+      "review_notes": "Codifies the fundamental dialectic between live empirical validation (King) and historical sprint grounding (Queen).",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "live-is-king",
+        "history-is-queen",
+        "sovereign-dyad",
+        "grounding-mandate",
+        "anti-amnesia",
+        "physical-validation",
+        "positive-guidance"
+      ],
+      "explicit_links": [
+        "BKM-024",
+        "BKM-082",
+        "FEAT-659",
+        "FEAT-497",
+        "SCAR-035"
+      ],
+      "aliases": [
+        "PHL-047",
+        "sovereign-dyad-protocol",
+        "live-is-king-history-is-queen"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_grounding_philosophy"
+    }
   }
 ]
