@@ -1,3 +1,4 @@
+import datetime
 import glob
 import hashlib
 import json
@@ -71,6 +72,10 @@ def get_system_load():
 
 
 def can_burn():
+    now = datetime.datetime.now()
+    if 5 <= now.hour < 6:
+        log("Quiet Hours (05:00-06:00 AM). Skipping nibble.")
+        return False
     load = get_system_load()
     if load > MAX_LOAD:
         log(f"System Load High ({load} > {MAX_LOAD}). Skipping nibble.")

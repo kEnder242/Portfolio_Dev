@@ -346,6 +346,11 @@ def synthesize_career_mesh():
 
 def distill_journal_ledger():
     """[FEAT-161] Distills all Rank 4 and Rank 5 technical gems into instruction-tuning conversation pairs for train_expert.py."""
+    # [FEAT-416] Quiet Hours: 05:00-22:00 hard cutoff - yield cleanly
+    now = datetime.datetime.now()
+    if 5 <= now.hour < 22:
+        logging.info(f"[DISTILL] Quiet Hours gate (hour={now.hour}: 05-22). Yielding cleanly - no ledger writes.")
+        return
     ledger_file = os.path.join(DATA_DIR, "journal_ledger.jsonl")
     json_files = glob.glob(os.path.join(DATA_DIR, "20*.json"))
 
