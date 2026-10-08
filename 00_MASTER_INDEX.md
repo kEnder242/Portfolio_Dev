@@ -2,7 +2,7 @@
 **"The Map Room"**
 
 > [!IMPORTANT]
-> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.4.md](../BOOTSTRAP_v4.4.md)**.
+> **BOOTSTRAP PROTOCOL:** For environment orientation and cold-starts, always begin with **[BOOTSTRAP_v4.5.md](../BOOTSTRAP_v4.5.md)**.
 
 ## 📍 Primary Entry Points
 *   **[GEMINI.md](./GEMINI.md)**: **The Agent Manifesto.** The active state machine, current phase checklist (Phase 15), and core mandates. **Start here for context.**
