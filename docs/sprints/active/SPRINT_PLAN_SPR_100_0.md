@@ -360,7 +360,8 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 #### Story 100.10 — Defeature `CASUAL` Vibe via Prompt Comment & Align 9-Vibe Taxonomy
 * **Feature Anchor:** `[FEAT-640]` / `[BKM-015]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `STAGED`
+* **Status:** `COMPLETED & CERTIFIED`
+* **Verification Log:** Dispatched to SWARM:LOCAL via `delegate.py --mode local` on Node KENDER Windows RTX 4090 (`my-windows-4090`). Atlas staged blueprints via `jit_stage()` and dispatched surgical worker Sisyphus-Junior on M5 Air. Junior commented out `CASUAL` from active prompt choices in `cognitive_hub.py#L1487`, updated fallback assertions in `test_triage_engine.py` (L578, L632) to `SOCRATIC`, and AGY sanitized line 1490 to eliminate employer persona leakage per Oracle review. Certified via `test_triage_engine.py` (79/79 passed in 0.24s). Live gate passed (`[LIVE_GATE: PASSED]`); committed in HomeLabAI `3b1972d`.
 * **Why:** The triage prompt still listed `1. CASUAL: Conversational pleasantries...`, causing greetings to be classified as `vibe: "CASUAL"`, which bypassed RAG and downstream analysis. Defeaturing `CASUAL` in the prompt prevents the LLM from choosing it while preserving all underlying Python fast-path handling.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files & Line Anchors):**
@@ -386,7 +387,10 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 #### Story 100.11 — Mandatory Stage 1 Brain Information Gatekeeper & Complete Deletion of Sprint 32 Brief
 * **Feature Anchor:** `[FEAT-635]` / `[FEAT-489]` / `[BKM-015]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `STAGED`
+* **Status:** `IN-PROGRESS (Attempt 1b)`
+* **Verification Log:**
+  - **Attempt 1 (Fast-Halt Blocker):** Atlas inspected `cognitive_hub.py` via `jit_read` on Kender RTX 4090, identified 4 callsites and 2 sibling test dependencies for `_run_brain_leg` that were under-specified in the story plan. Obeying Law 6 (`Under-Specified Contract Blocker Mandate`), Atlas fast-halted without code mutations and emitted structured feedback in its `[HANDOVER REFLECTION]`.
+  - **Attempt 1b (BKM-049 Tri-Loop Remediation):** AGY audited reflection and formulated the decoupled stub pattern: completely delete `_distill_strategic_brief()`, enforce Stage 1 Brain Gatekeeper on 100% of technical queries when `lead_node == 'brain'`, and retain `_run_brain_leg` as a clean pass-through stub so sibling tests and `both`-branch calls stay green. Staged and dispatched via `delegate.py --mode local`.
 * **Why:** Originating in Sprint 32 (May 2026, commit `15b4705`), `_distill_strategic_brief()` is a 68-sprint-old dinosaur that hardcoded `"Extract specific platform anchors, validation targets, and known PECI/MSR scars."` In Turn 2, when interest was $< 0.70$, execution fell into the legacy `_run_brain_leg()` fallback, invoking this ancient relic and polluting Brain's output with off-topic PECI/MSR text. Rather than maintaining or patching this dead code, we completely delete `_distill_strategic_brief()`, retire `_run_brain_leg()`, and route 100% of technical queries through the modern Sprint 96 Brain Information Gatekeeper (`build_two_mice_stage_prompt(stage=1)`), making Stage 1 mandatory regardless of interest.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files & Line Anchors):**
