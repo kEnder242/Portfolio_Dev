@@ -377,3 +377,29 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 - **Audit Result:** **100% Grounded.**
 - Every single story in Sprint 101.0 is tied to specific historical sprints, existing DNA features (`FEAT-119`, `FEAT-160`, `FEAT-213`, `FEAT-227`, `FEAT-361`, `FEAT-407`, `FEAT-416`, `FEAT-557`, `FEAT-562`, `FEAT-608`, `FEAT-619`, `FEAT-629`, `FEAT-656`–`FEAT-659`), physical hardware scars (`SCAR-035`, `SCAR-036`), and verified codebase paths.
 - **Zero ungrounded items remain.**
+
+---
+
+## 📜 Sprint Log: In-Flight Narrative & Friction Ledger (`[BKM-081]`)
+
+### ⚠️ In-Flight Friction Incident 101.A: `safe_patch` Matching Vulnerability (`[LOOP-001]` / `[BKM-048]`)
+* **Occurrence:** Story 101.5 dispatch to Node KENDER (`[SWARM:LOCAL]`).
+* **Symptom:** L3 worker reported `clara-dna_safe_patch failed on 5 attempts with identical "Pattern not found" despite the exact pattern being confirmed present`.
+* **Worker Response:** L3 properly invoked the Anti-Scavenging Law, fell back to a surgical one-shot Python replacement, and verified valid JSON.
+* **Harness Remediation (Halting to Fix the Harness per BKM-048 §3):**
+  - Diagnosed root cause in [`HomeLabAI/src/mcp/clara_dna_mcp_server.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/mcp/clara_dna_mcp_server.py): exact matching failed on CRLF (`\r\n` from Windows KENDER node), escaped JSON quotes (`\"`), and indentation drift (8 spaces vs 4 spaces).
+  - Hardened `safe_patch` with:
+    1. Line ending normalization (`\r\n` and `\r` $\to$ `\n`).
+    2. Escaped quote unescaping (`\"` $\to$ `"`).
+    3. Flexible block replacement preserving original line endings.
+    4. Tokenized whitespace-tolerant regex fallback (`\s*` between literal tokens).
+  - Verified with test suite covering exact, indentation drift, and escaped quotes. Committed as `4ae354e`.
+
+### ⚠️ In-Flight Friction Incident 101.B: Unintended Instant OpenCode Service Bouncing (`[FEAT-537]`)
+* **Occurrence:** Story 101.6 preflight check (`[SWARM:CLOUD]`).
+* **Symptom:** `delegate.py` immediately executed `systemctl --user restart opencode-core.service` upon detecting `infrastructure.json` modification, bypassing the 30-minute quiet-window guarantee of `[FEAT-537]`.
+* **Root Cause:** `_verify_and_sync_service_freshness` in `delegate.py` had `infrastructure.json` included in its monitored configs list, even though OpenCode does not consume that file.
+* **Remediation:** Removed `infrastructure.json` from `delegate.py`'s immediate restart list, allowing it to adhere to `[FEAT-537]`. Increased probe timeout from 1.0s to 3.0s. Committed as `eac8515`.
+
+### 🏛️ Protocol Clarification: Pre-Execution Housekeeping vs. In-Flight Harness Friction
+* Clarified in `BKM-082` (§7) and `BKM-021` that Phase 0 is strictly **Pre-Execution Housekeeping** (bounded to debt identified during planning/grounding). Unforeseen mid-sprint tool issues are **In-Flight Harness Friction**, which must be logged in real-time and halted/repaired per `BKM-048` §3 before dependent stories run. Committed as `76aa3fe`.
