@@ -3551,9 +3551,17 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
 **Code:** `HomeLabAI/docs/LAB_INFRASTRUCTURE.md`, `opencode.json`, `HomeLabAI/docs/Protocols.md`
-**Logic:** Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces reasoning suppression on M5 Air worker endpoints (`'reasoning': 0`) and Ollama conduction thinking controls.
+**Logic:** Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090 via port `11435` proxy) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces hardware/proxy-level reasoning suppression on both local silicon endpoints (`'reasoning': 0`), eliminating prompt-level adversarial instructions.
 **Rationale:** Prevents macOS Metal wired memory crashes (`24.46GB` cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.
-**Mechanism:** Port 8002 proxying, `opencode.json` provider config, and prompt generation directives.
+**Mechanism:** Port 8002 proxying (M5 Air), Port 11435 proxying (Kender), and `opencode.json` provider config.
+
+## [LAB-116] Kender Thought-Stripping Proxy & Silicon Decoupling Protocol
+**Sprint:** SPR-100.0 (Active)
+**Status:** ACTIVE
+**Code:** `HomeLabAI/src/infra/kender_proxy.py`, `~/.config/systemd/user/kender-proxy.service`, `opencode.json`
+**Logic:** Deploys a dedicated host-resident FastAPI/uvicorn proxy on port 11435 intercepting `/v1/chat/completions` from OpenCode to Node KENDER. Deletes `reasoning` and `reasoning_content` delta blocks from SSE streams and non-streaming responses, dropping empty reasoning chunks so OpenCode receives immediate text and tool calls without `<think>` loops.
+**Rationale:** Completely decouples thinking suppression from prompt templates or modelfiles, enforcing zero reasoning tokens directly in silicon.
+**Mechanism:** `kender-proxy.service` on port 11435 forwarding to Ollama port 11434.
 
 ## [FEAT-637] Single-Home Runtime Data & Interleaved Accountability Engine
 **Sprint:** SPR-97.0
