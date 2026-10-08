@@ -3752,7 +3752,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-659] Sprint Grounding Run (Historical Anchoring & Horizon-Aware Pre-Flight Protocol)
 **Sprint:** Sprint 101
 **Status:** ACTIVE
-**Tags:** `#grounding`, `#sprint_architecture`, `#log_horizon`, `#historical_invariants`, `[BKM-082]`, `[BKM-020]`, `[BKM-006]`, `[BKM-005]`, `[BKM-048]`
+**Tags:** `#grounding`, `#sprint_architecture`, `#log_horizon`, `#historical_invariants`, `[BKM-082]`, `[BKM-020]`, `[BKM-006]`, `[BKM-005]`, `[BKM-048]`, `[INS-047]`
 **Code:**
 - `HomeLabAI/docs/Protocols.md` — Authoritative codification of `BKM-082`, mandating 5-sprint lookbacks, full log horizon inspection, anti-removal invariants, pre-flight mistake ledgers, and grounding gap audits across `BKM-005`, `BKM-006`, `BKM-020`, and `BKM-048`.
 - `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_101_0.md` — Canonical exemplar sprint plan executing full pre-flight grounding, 02:00 AM log horizon diagnosis, and mistakes-avoided ledger.
