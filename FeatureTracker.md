@@ -1530,10 +1530,10 @@
 
 ## [FEAT-407] Tag-Delimited Grounding Isolation (<historical_record>)
 **Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L514) — Tag-Delimited Grounding Isolation (<historical_record>).
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1077) — Tag-Delimited Grounding Isolation (<historical_record>).
 **Logic:** Wraps RAG retrieval evidence within `<historical_record>` XML boundary tags during `HISTORICAL`, `FORENSIC`, and `TECHNICAL` turns, injecting a strict `GROUNDING_PROTOCOL` instruction restricting generation exclusively to tagged evidence.
 **Rationale:** Protects against context leakage between historical query briefs and live operational parameters (such as current OS runtime, host CPU/GPU hardware, or active ports). Without XML boundary tags, small models mix past historical events with present-day runtime state.
-**Mechanism:** Conditional string wrapping and positive grounding guidance injection in `cognitive_hub.py` (`_process_node_stream`).
+**Mechanism:** Conditional string wrapping and positive grounding guidance injection in `cognitive_hub.py` (`_process_node_stream` at line 1077).
 
 ## [FEAT-408] Tool-Driven Waterfall Cascade
 **Status:** ACTIVE
@@ -2144,11 +2144,11 @@
 **Logic:** elif task == "forge": [FEAT-217] Sequenced Batch Forge - bypass MCP catch-22 async def _run_batch_forge(): try:
 **Mechanism:** `src/v5/foyer/router.py` at line 764.
 
-## [FEAT-227] Component Subsystem (FEAT-227)
+## [FEAT-227] The Grounding Gate (V5)
 **Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1157) — Component Subsystem (FEAT-227).
-**Logic:** except Exception as e: logging.error(f"[HUB] Journal ledger write failed: {e}") [FEAT-247] Physical Audit Gate async def evaluate_grounding(self, source, text, interest=0.8, shutdown_event=None, request_id="default", ...
-**Mechanism:** `src/logic/cognitive_hub.py` at line 1157.
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L2121) — The Grounding Gate (V5).
+**Logic:** Restores character balance by prompting Pinky to critique or conversationally summarize Deep Thought's technical output directly into the Chat pane.
+**Mechanism:** `src/logic/cognitive_hub.py` at line 2121 (`evaluate_grounding`).
 
 ## [FEAT-232] Feedback Harvester
 **Status:** ACTIVE
@@ -3748,4 +3748,20 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 3. **Clean-Kill Handback via Unix Harness:** When Atlas executes `ask_oracle`, the MCP server persists the consultation structured payload. The execution harness (`delegate.py`) intercepts the tool call in its live telemetry polling loop, logs `ORACLE_CONSULTATION_REQUESTED`, prints the structured diagnostic report directly to standard out for AGY, cleanly frees resources/aborts the active model stream, and exits with code 3.
 4. **Resumption & Session Reconnection:** OpenCode preserves the conversation history on its REST endpoint. Tier 1 (AGY) evaluates the consultation report in its prompt, resolves the architectural ambiguity or corrects the contract, and can seamlessly reconnect to the paused session via `delegate.py --resume <session_id> --answer '<guidance>'` or re-dispatch with corrected context.
 **Rationale:** Eliminates open-ended model wandering without building complex live chat or bidirectional socket infrastructure. Atlas gets a structured, dignified "way out", and AGY receives structured empirical feedback immediately.
+
+## [FEAT-659] Sprint Grounding Run (Historical Anchoring & Horizon-Aware Pre-Flight Protocol)
+**Sprint:** Sprint 101
+**Status:** ACTIVE
+**Tags:** `#grounding`, `#sprint_architecture`, `#log_horizon`, `#historical_invariants`, `[BKM-082]`, `[BKM-020]`, `[BKM-006]`, `[BKM-005]`, `[BKM-048]`
+**Code:**
+- `HomeLabAI/docs/Protocols.md` — Authoritative codification of `BKM-082`, mandating 5-sprint lookbacks, full log horizon inspection, anti-removal invariants, pre-flight mistake ledgers, and grounding gap audits across `BKM-005`, `BKM-006`, `BKM-020`, and `BKM-048`.
+- `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_101_0.md` — Canonical exemplar sprint plan executing full pre-flight grounding, 02:00 AM log horizon diagnosis, and mistakes-avoided ledger.
+**Logic:**
+1. **The Short Horizon Trap:** Under tight resources, overnight compute cascades (LoRA training, VRAM reallocation, daemon re-ignition), and distributed multi-tier orchestration, evaluating system state based only on the trailing 15 minutes of logs causes severe diagnostic blindness, circular fixes, and accidental deletion of hard-won hardware sentinels.
+2. **Mandatory 5-Sprint Lookback:** Before proposing or modifying sprint plans or executing code changes, agents must review the preceding 5 sprint plans and logs to internalize historical failure modes and design constraints.
+3. **Anti-Removal Invariant:** Hardware laws (e.g. 5.0s thermal pacing in `FEAT-160`, host memory gates in `LAB-110`, single-home runtime data in `FEAT-637`) must never be bypassed or deleted to solve time pressure; workloads must be proportionally calibrated instead.
+4. **Pre-Flight Mistakes Avoided Ledger:** Every sprint specification must document concrete mistakes that would have occurred without deep historical grounding.
+5. **Grounding Gap Declaration:** Any actionable item that cannot be anchored in past history or DNA must be declared as a gap and clarified with the operator before modifying code.
+**Rationale:** Transforms historical documentation from passive archives into active, mandatory JITC guardrails, immunizing autonomous agents against circular traps and architectural amnesia.
+
 
