@@ -3731,3 +3731,20 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 2. **Context Garbage Isolation:** Prevents terminal traceback soup and intermediate failure diffs from accumulating in worker context or leaking upward to Layer 2. The failed execution context is discarded upon worker termination.
 3. **Layer 2 Anti-Spiral Orchestration:** Layer 2 (Atlas) retains the macro plan and session trajectory. Upon receiving Layer 3's recommendation report, Layer 2 evaluates whether the suggestion is regressive, circular (the "Waffle Trap" [INS-042]), or structurally sound. Layer 2 exercises executive judgment: if sound, it updates the blueprint via `jit_stage` and spawns a fresh, zero-mileage Layer 3 instance; if circular, Layer 2 rejects the suggestion and synthesizes an alternative architectural route.
 **Rationale:** Eliminates the quadratic context accumulation trap, prevents 27B model panic-fixing spirals, and enforces pristine separation between micro-execution and macro-orchestration.
+
+## [FEAT-656] Ask-Oracle Psychological Escalation & Clean-Kill Handback Protocol
+**Sprint:** Sprint 100
+**Status:** ACTIVE
+**Tags:** `#ask_oracle`, `#escalation`, `#clean_kill`, `#opencode_harness`, `#agency_preservation`, `[BKM-080]`, `[FEAT-655]`
+**Code:**
+- `HomeLabAI/src/mcp/clara_dna_mcp_server.py` — `@mcp.tool() ask_oracle` endpoint writing diagnostic payloads to `.jit_cache/oracle_request.json`.
+- `HomeLabAI/src/tests/delegate.py` — Polling loop intercept for `ask_oracle`/`clara-dna_ask_oracle` with high-visibility banner, session abort, and clean exit (code 3).
+- `~/.config/opencode/oh-my-openagent.json` — Declarative tool grants for `ask_oracle` and `clara-dna_ask_oracle` on `atlas` and `Atlas`.
+- `Dev_Lab/AGENTS_L2.md` — Layer 2 Conductor protocol advertising `ask_oracle` as authoritative Tier 1 architectural consultation.
+**Logic:**
+1. **The Agency & Model Skepticism Paradox:** Open-weights conductor models (e.g. Qwen 27B) often resist halting or admitting defeat via `[BLOCKER REPORT]` when faced with ambiguous specifications, conflicting test assertions, or missing domain schemas. Models perceive termination as failure/loss of control, often spiraling into endless bash wandering or hallucinated code searches.
+2. **Psychological Peer Escalation:** Provides the model with an attractive, authoritative peer-consulting tool (`ask_oracle(question, current_hypothesis, code_inspected)`). The model believes it is consulting the Tier 1 Strategic Oracle (AGY) while maintaining conductor agency, rather than failing.
+3. **Clean-Kill Handback via Unix Harness:** When Atlas executes `ask_oracle`, the MCP server persists the consultation structured payload. The execution harness (`delegate.py`) intercepts the tool call in its live telemetry polling loop, logs `ORACLE_CONSULTATION_REQUESTED`, prints the structured diagnostic report directly to standard out for AGY, cleanly frees resources/aborts the active model stream, and exits with code 3.
+4. **Resumption & Session Reconnection:** OpenCode preserves the conversation history on its REST endpoint. Tier 1 (AGY) evaluates the consultation report in its prompt, resolves the architectural ambiguity or corrects the contract, and can seamlessly reconnect to the paused session via `delegate.py --resume <session_id> --answer '<guidance>'` or re-dispatch with corrected context.
+**Rationale:** Eliminates open-ended model wandering without building complex live chat or bidirectional socket infrastructure. Atlas gets a structured, dignified "way out", and AGY receives structured empirical feedback immediately.
+
