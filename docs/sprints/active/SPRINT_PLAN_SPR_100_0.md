@@ -547,5 +547,40 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
     - Invariant: Zero silent drops in `loader.py`; 100% of node generation tokens stream to Foyer with appropriate channel tags.
     - DNA Links: `[FEAT-361]`.
 
+---
+
+## 📜 Real-Time Execution Ledger (Sprint Log)
+*Governed by `[BKM-081]` (The Sprint Append Ledger Protocol). Timely chronological trace of execution milestones, forensic lessons, and verification certificates.*
+
+### [2026-10-07 20:45 PDT] — Story 100.8B: Oracle Adversarial Pre-Pass on Phase 4
+- **Assigned Tier & Silicon:** `[SWARM:ORACLE]` (OpenRouter `nvidia/nemotron-3-super-120b-a12b:free`, 54,632 tokens).
+- **Status:** `✅ COMPLETED & CERTIFIED`
+- **Forensic Delta / Code Modified:** Audited Stories 100.9–100.15 against active codebase. Compiled risk matrix in `ORACLE_REVIEW_SPRINT_100.md`.
+- **Forensic Insights & Lessons Learned:** Flagged legacy Sprint 32 PECI/MSR scars in `_distill_strategic_brief()`, HyDE turn scope leakage (`ContextScope.LONG`), and declarative policy drift in `triage_policy.json`. Generated actionable remediation checklists for Phase 4.
+- **Live Gate Status:** `[LIVE_GATE: PASSED]`
+
+### [2026-10-07 22:30 PDT] — Story 100.9: Multi-Turn Turn Isolation & HyDE Context Poisoning Remediation
+- **Assigned Tier & Silicon:** `[SWARM:LOCAL]` (Node KENDER Windows RTX 4090 $\to$ M5 Air).
+- **Status:** `✅ COMPLETED & CERTIFIED`
+- **Forensic Delta / Code Modified:** `HomeLabAI/src/logic/cognitive_hub.py` (enforced `scope=ContextScope.TURN` and threaded `request_id` in `resolve_hyde_vector` and `_process_node_stream`); authored companion TDD tests in `HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py`.
+- **Verification Evidence:** `pytest test_feat437_resolve_hyde_vector.py` $\to$ **13 passed in 0.55s**.
+- **Forensic Insights & Lessons Learned:** Multi-turn HyDE defaulted to `ContextScope.LONG` because `source_name="Pinky (HyDE)"` lacked `"triage"`, injecting previous turn banter into vector generation and suppressing RAG. Threading explicit single-turn scope completely cured context poisoning.
+- **Live Gate Status:** `[LIVE_GATE: PASSED]` (Committed in HomeLabAI `bc38f7b`).
+
+### [2026-10-08 01:05 PDT] — Story 100.10: Defeature CASUAL Vibe & 9-Vibe Taxonomy Alignment
+- **Assigned Tier & Silicon:** `[SWARM:LOCAL]` (Node KENDER Windows RTX 4090 $\to$ M5 Air).
+- **Status:** `✅ COMPLETED & CERTIFIED`
+- **Forensic Delta / Code Modified:** `cognitive_hub.py#L1487` (commented out CASUAL prompt choice with `[DEFEATURED]` tag); `test_triage_engine.py` (L578, L632 updated fallback assertions to `SOCRATIC`); sanitized line 1490 to eliminate employer persona leakage.
+- **Verification Evidence:** `pytest test_triage_engine.py` $\to$ **79 passed in 0.24s** (full battery 126 passed, 10 skipped).
+- **Forensic Insights & Lessons Learned:** The Oracle review suggested setting `enabled: false` in `triage_policy.json`. Auditing the reflection per `BKM-049` revealed that disabling it in policy broke `test_triage_policy_loader.py::test_production_has_all_nine_vibes`. Defeaturing CASUAL belongs in the LLM prompt choices, keeping the underlying 9-vibe policy contract intact.
+- **Live Gate Status:** `[LIVE_GATE: PASSED]` (Committed in HomeLabAI `3b1972d`).
+
+### [2026-10-08 01:16 PDT] — Story 100.11: Mandatory Stage 1 Brain Gatekeeper & Complete Deletion of Sprint 32 Brief
+- **Assigned Tier & Silicon:** `[SWARM:LOCAL]` (Node KENDER Windows RTX 4090 $\to$ M5 Air).
+- **Status:** `🔄 IN-PROGRESS (Attempt 1b)`
+- **Forensic Delta / Code Modified:** In Attempt 1, Atlas inspected `cognitive_hub.py` via `jit_read`, detected 4 callsites and 2 sibling test dependencies for `_run_brain_leg`, and strictly halted per Law 6 (`Under-Specified Contract Blocker Mandate`) to escalate to AGY without mutating code.
+- **Remediation Formulated (Attempt 1b):** AGY formulated the decoupled stub pattern: completely excise `_distill_strategic_brief()`, enforce Stage 1 Brain Gatekeeper (`_run_two_mice_handover`) on 100% of technical queries when `lead_node == 'brain'`, and retain `_run_brain_leg` as a clean decoupled pass-through stub so sibling tests and `both`-branch calls stay green.
+- **Live Gate Status:** `[LIVE_GATE_PENDING: daemon=8765 endpoint=/status probe=pytest test_brain_gatekeeper.py test_two_mice_handover.py -v]`
+
 
 
