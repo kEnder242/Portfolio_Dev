@@ -5,6 +5,8 @@ import os
 import subprocess
 import time
 
+from datetime import datetime
+
 import requests
 
 logger = logging.getLogger(__name__)
@@ -157,6 +159,11 @@ def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95, min_free_vram_g
     Politeness check for background tasks.
     Returns (bool, reason)
     """
+    # 0. [FEAT-416] Quiet Hours Hard Cutoff Gate
+    now = datetime.now()
+    if 5 <= now.hour < 6:
+        return False, "Quiet Hours (05:00-06:00 AM)"
+
     # 1. Check for Active Session Lock
     if os.path.exists(ROUND_TABLE_LOCK):
         return False, "Active Intercom Session (Lock)"
