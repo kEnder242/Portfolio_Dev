@@ -583,5 +583,12 @@ Task 14.1 was assigned to remove it, but it was only partially stripped. `intern
 - **Verification Evidence:** `pytest test_brain_gatekeeper.py test_two_mice_handover.py test_two_mice_single_execution.py test_interest_speculative_prefetch.py` $\to$ **21/21 passed across 4 test suites**. `grep _distill_strategic_brief` $\to$ **0 matches**.
 - **Live Gate Status:** `[LIVE_GATE: PASSED]` (Daemon hot-bounced; boot commit `d8badab` matches Local HEAD). Committed in HomeLabAI `d8badab`.
 
+### [2026-10-08 01:30 PDT] — Story 100.12: Pinky Coherence Critic Retort & Reasoning Scorecard Architecture
+- **Assigned Tier & Silicon:** `[SWARM:LOCAL]` (Node KENDER Windows RTX 4090 $\to$ M5 Air).
+- **Status:** `🔄 IN-PROGRESS`
+- **Forensic Scope:** Harmonizing Pinky Critic single-pass scorecard schema (`eval_schema`) and `format_chat_delivery` in `pinky_critic_persona.py` and `cognitive_hub.py::evaluate_grounding`. Eliminates conflicting keys (`retort` vs `cartoon_retort`) and ensures both the analytical technical WHY (`reasoning`) and the spoken in-character quip (`retort`) are generated coherently.
+- **Verification Battery:** `pytest HomeLabAI/src/tests/test_pinky_critic_persona.py -v`.
+- **Live Gate Status:** `[LIVE_GATE_PENDING: daemon=8765 endpoint=/status probe=pytest test_pinky_critic_persona.py -v]`
+
 
 
