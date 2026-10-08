@@ -27,8 +27,9 @@ async function loadBenchmarks() {
         await loadLiveUsageStream();
         await loadCumulativeTelemetry();
     }
-    await initDeltaTView();
-}
+        await initDeltaTView();
+        await loadDelegationRuns();
+    }
 
 function renderAll(results) {
     renderSeatCards(results);
@@ -593,3 +594,120 @@ async function initDeltaTView() {
 
 // Attach initial page loader
 window.addEventListener('DOMContentLoaded', loadBenchmarks);
+
+// ===================== SWARM DELEGATION & SOVEREIGN GAINS (STORY 101.15) =====================
+let delegationRuns = [];
+let delegationFilter = 'all';
+
+async function loadDelegationRuns() {
+    try {
+        const resp = await fetch('data/delegation_runs.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        delegationRuns = data.runs || [];
+        renderDelegationSummary(data.summary || {});
+        renderDelegationFilters(delegationRuns);
+        renderDelegationRuns(delegationRuns, delegationFilter);
+    } catch (e) {
+        console.warn('[Benchmarks] Delegation runs unreachable:', e);
+        const tbody = document.getElementById('delegation-runs-tbody');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#6a737d;">Delegation ledger offline (standby)</td></tr>';
+    }
+}
+
+function renderDelegationSummary(s) {
+    const tokensEl = document.getElementById('delg-tokens-val');
+    const savingsEl = document.getElementById('delg-savings-val');
+    const offloadEl = document.getElementById('delg-offload-val');
+    const wallEl = document.getElementById('delg-walltime-val');
+    if (tokensEl) tokensEl.textContent = (s.total_tokens_blended != null) ? Number(s.total_tokens_blended).toLocaleString() : '--';
+    if (savingsEl) savingsEl.textContent = (s.net_savings_usd != null) ? '$' + Number(s.net_savings_usd).toFixed(4) : '--';
+    if (offloadEl) offloadEl.textContent = (s.local_offload_ratio_pct != null) ? Number(s.local_offload_ratio_pct).toFixed(2) + '%' : '--';
+    if (wallEl) wallEl.textContent = (s.total_wall_time_minutes != null) ? Number(s.total_wall_time_minutes).toFixed(0) + ' min' : '--';
+}
+
+function renderDelegationFilters(runs) {
+    const row = document.getElementById('delegation-sprint-filter');
+    if (!row) return;
+    const counts = {};
+    runs.forEach(r => {
+        const k = (r.sprint && r.sprint.trim()) ? r.sprint.trim() : '(none)';
+        counts[k] = (counts[k] || 0) + 1;
+    });
+    const sprints = Object.keys(counts).sort((a, b) => b.localeCompare(a));
+    let html = '<button class="tab-btn' + (delegationFilter === 'all' ? ' active' : '') + '" onclick="filterDelegationRuns(\'all\')">All (' + runs.length + ')</button>';
+    sprints.forEach(s => {
+        const label = (s === '(none)') ? 'No Sprint' : 'Sprint ' + s;
+        const cls = (delegationFilter === s) ? 'tab-btn active' : 'tab-btn';
+        html += '<button class="' + cls + '" onclick="filterDelegationRuns(\'' + s + '\')">' + label + ' (' + counts[s] + ')</button>';
+    });
+    row.innerHTML = html;
+}
+
+function filterDelegationRuns(sprint) {
+    delegationFilter = (sprint === 'all') ? 'all' : sprint;
+    renderDelegationFilters(delegationRuns);
+    renderDelegationRuns(delegationRuns, delegationFilter);
+}
+
+function statusBadge(status) {
+    const colors = { 'SUCCESS': '#3fb950', 'COMPLETED_UNVERIFIED': '#d29922', 'VERIFICATION_FAILED': '#f85149', 'STAGED': '#58a6ff' };
+    const c = colors[status] || '#8b949e';
+    return '<span style="color:' + c + '; font-family:\'JetBrains Mono\', monospace; font-size:0.75rem;">' + (status || 'UNKNOWN') + '</span>';
+}
+
+function renderDelegationRuns(runs, filter) {
+    const tbody = document.getElementById('delegation-runs-tbody');
+    if (!tbody) return;
+    const filtered = (filter === 'all') ? runs : runs.filter(r => ((r.sprint && r.sprint.trim()) || '(none)') === filter);
+    if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#6a737d;">No runs for this filter</td></tr>';
+        return;
+    }
+    let html = '';
+    filtered.forEach(r => {
+        const idx = r;
+        const t = r.tokens || {};
+        const totalTok = (t.total != null) ? Number(t.total).toLocaleString() : '--';
+        const dur = (r.duration_m != null && r.duration_m > 0) ? Number(r.duration_m).toFixed(1) + 'm' : ((r.duration_s != null) ? Number(r.duration_s).toFixed(0) + 's' : '--');
+        const verified = r.verification_passed ? '<span style="color:#3fb950;">✔</span>' : '<span style="color:#f85149;">✘</span>';
+        const title = r.title ? r.title : (r.story ? r.story : '—');
+        const sprintCell = (r.sprint && r.sprint.trim()) ? r.sprint : '<span style="color:#6a737d;">—</span>';
+        html += '<tr class="delegation-row" style="cursor:pointer; border-bottom:1px solid #1f242c;" onclick="toggleDelegationAccordion(this)">'
+            + '<td style="color:#58a6ff;">▶</td>'
+            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + sprintCell + '</td>'
+            + '<td style="max-width:340px;">' + title + '</td>'
+            + '<td style="font-family:\'JetBrains Mono\',monospace; font-size:0.75rem;">' + (r.mode || '—') + ' / ' + (r.tier || '—') + '</td>'
+            + '<td>' + statusBadge(r.status) + '</td>'
+            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + totalTok + '</td>'
+            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + dur + '</td>'
+            + '<td>' + verified + '</td>'
+            + '</tr>';
+        // Accordion detail row (hidden by default)
+        const reflection = r.reflection ? r.reflection : '<span style="color:#6a737d;">(no reflection recorded)</span>';
+        const verifCmd = r.verification_passed ? '<span style="color:#3fb950;">Verification PASSED</span>' : '<span style="color:#f85149;">Verification FAILED / not run</span>';
+        const model = r.model ? r.model : '—';
+        const ts = r.timestamp ? r.timestamp : '—';
+        html += '<tr class="delegation-detail" style="display:none; background:#0d1117;">'
+            + '<td></td>'
+            + '<td colspan="7">'
+            + '<div style="font-family:\'JetBrains Mono\',monospace; font-size:0.78rem; line-height:1.7; padding:8px 12px;">'
+            + '<div><strong style="color:#8b949e;">REFLECTION:</strong> ' + reflection + '</div>'
+            + '<div><strong style="color:#8b949e;">VERIFICATION:</strong> ' + verifCmd + '</div>'
+            + '<div><strong style="color:#8b949e;">MODEL:</strong> ' + model + ' &nbsp;|&nbsp; <strong style="color:#8b949e;">TS:</strong> ' + ts + '</div>'
+            + '<div><strong style="color:#8b949e;">L3 SUB-INFERENCE RECEIPTS:</strong> conductor=' + (t.conductor != null ? Number(t.conductor).toLocaleString() : '0')
+            + ' | l3=' + (t.l3 != null ? Number(t.l3).toLocaleString() : '0')
+            + ' | cache_read=' + (t.cache_read != null ? Number(t.cache_read).toLocaleString() : '0')
+            + ' | total=' + (t.total != null ? Number(t.total).toLocaleString() : '0') + '</div>'
+            + '</div></td></tr>';
+    });
+    tbody.innerHTML = html;
+}
+
+function toggleDelegationAccordion(row) {
+    const detail = row.nextElementSibling;
+    if (detail && detail.classList.contains('delegation-detail')) {
+        detail.style.display = (detail.style.display === 'none') ? 'table-row' : 'none';
+        row.cells[0].textContent = (detail.style.display === 'none') ? '▶' : '▼';
+    }
+}
