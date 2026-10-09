@@ -842,9 +842,15 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Static Site Synthesis (build_site.py)
+                                    Static Site Synthesis & Public Airlock Invariant (build_site.py)
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#airlock</code>, <code>#build_site</code>, <code>#www_deploy</code>, <code>#hash_parity</code>, <code>#anti_fake_fixes</code>, <code>[FEAT-461](#FEAT-461)</code>, <code>[FEAT-528](#FEAT-528)</code>, <code>[FEAT-549](#FEAT-549)</code></p>
+                </div>
+            </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
@@ -854,13 +860,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Automated pipeline that clears caches and prepares the <code>www_deploy</code> directory for public hosting.</p>
+                    <ol>
+<li><strong>The Airlock Derivative Invariant:</strong> <code>www_deploy</code> is an air-gapped, compiled public mirror and cache. It is NEVER the primary source of truth for application logic, scripts, or styles. Direct edits or manual patches to <code>www_deploy</code> are strictly classified as "Fake Fixes" because any subsequent build sweep will wipe or diverge from them.</li>
+<li><strong>Canonical Source Residency:</strong> All frontend application code, UI styling, and logic live exclusively in <code>Portfolio_Dev/field_notes/</code> (e.g., <code>benchmarks.js</code>, <code>benchmarks.html</code>, <code>style.css</code>, <code>script.js</code>).</li>
+<li><strong>Internal vs Public Segregation:</strong></li>
+<li><strong>Public Airlock Pages (<code>www.jason-lab.dev</code>):</strong> <code>index.html</code>, <code>stories.html</code>, <code>protocols.html</code>, <code>research.html</code>, and sanitized <code>public_benchmarks.html</code>. Only public assets are deployed to <code>www_deploy</code>.</li>
+<li><strong>Internal Mission Control Pages (<code>notes.jason-lab.dev</code>):</strong> <code>benchmarks.html</code>, <code>features.html</code>, <code>intercom.html</code>, <code>status.html</code>, <code>files.html</code>. These are served directly from live source on port 9001 and are NEVER mixed into <code>www_deploy</code>.</li>
+<li><strong>Automated Synthesis Pipeline (<code>build_site.py</code>):</strong></li>
+<li>Compiles dynamic markdown schemas (<code>research.html</code>, <code>protocols.html</code>, <code>features.html</code>, <code>dna_forge.html</code>, <code>wisdom.html</code>, <code>timeline.html</code>).</li>
+<li>Calculates MD5 cache-busting hashes for all <code>SOURCE_FILES</code> (<code>style.css</code>, <code>script.js</code>, <code>benchmarks.js</code>, <code>intercom_v2.js</code>, etc.) and injects <code>?v=&lt;hash&gt;</code> into all HTML asset references.</li>
+<li>Generates Git anchor telemetry (<code>git_anchor.json</code>).</li>
+<li>Enforces byte-level parity via <code>deploy_to_airlock()</code>, synchronizing root assets whenever destination is missing, mtime is newer, or content hash differs (<code>get_hash(src) != get_hash(dst)</code>).</li>
+<li><strong>Agent Working Rule:</strong> When addressing any UI issue, agents must edit <code>Portfolio_Dev/field_notes/</code> first, then run <code>python3 Portfolio_Dev/field_notes/build_site.py</code> to synthesize public assets. Direct edits to <code>www_deploy</code> are rejected in code review.</li>
+</ol>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Runs <code>python3 field_notes/build_site.py</code> to trigger versioned cache-busting and asset bundling.</p>
+                    <p>Runs <code>python3 field_notes/build_site.py</code> to trigger versioned cache-busting, dynamic markdown compilation, and airlock synchronization.</p>
                 </div>
             </div>     </div>
                             </details>

@@ -132,11 +132,23 @@
 **Code:** [src/infra/cognitive_audit.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/cognitive_audit.py#L24) — Hallucination Shunting.
 **Logic:** If a reasoning node attempts to use an unknown or hallucinated tool, the orchestrator intercepts the error and shunts it back to the Pinky Gateway for characterful recovery and user feedback.
 
-## [FEAT-064] Static Site Synthesis (build_site.py)
+## [FEAT-064] Static Site Synthesis & Public Airlock Invariant (build_site.py)
 **Status:** ACTIVE
-**Code:** [field_notes/build_site.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/build_site.py#L1) — Static Site Synthesis (build_site.py).
-**Logic:** Automated pipeline that clears caches and prepares the `www_deploy` directory for public hosting.
-**Mechanism:** Runs `python3 field_notes/build_site.py` to trigger versioned cache-busting and asset bundling.
+**Tags:** `#airlock`, `#build_site`, `#www_deploy`, `#hash_parity`, `#anti_fake_fixes`, `[FEAT-461]`, `[FEAT-528]`, `[FEAT-549]`
+**Code:** [field_notes/build_site.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/build_site.py#L1) — Static Site Synthesis & Public Airlock Invariant.
+**Logic:**
+1. **The Airlock Derivative Invariant:** `www_deploy` is an air-gapped, compiled public mirror and cache. It is NEVER the primary source of truth for application logic, scripts, or styles. Direct edits or manual patches to `www_deploy` are strictly classified as "Fake Fixes" because any subsequent build sweep will wipe or diverge from them.
+2. **Canonical Source Residency:** All frontend application code, UI styling, and logic live exclusively in `Portfolio_Dev/field_notes/` (e.g., `benchmarks.js`, `benchmarks.html`, `style.css`, `script.js`).
+3. **Internal vs Public Segregation:**
+   - **Public Airlock Pages (`www.jason-lab.dev`):** `index.html`, `stories.html`, `protocols.html`, `research.html`, and sanitized `public_benchmarks.html`. Only public assets are deployed to `www_deploy`.
+   - **Internal Mission Control Pages (`notes.jason-lab.dev`):** `benchmarks.html`, `features.html`, `intercom.html`, `status.html`, `files.html`. These are served directly from live source on port 9001 and are NEVER mixed into `www_deploy`.
+4. **Automated Synthesis Pipeline (`build_site.py`):**
+   - Compiles dynamic markdown schemas (`research.html`, `protocols.html`, `features.html`, `dna_forge.html`, `wisdom.html`, `timeline.html`).
+   - Calculates MD5 cache-busting hashes for all `SOURCE_FILES` (`style.css`, `script.js`, `benchmarks.js`, `intercom_v2.js`, etc.) and injects `?v=<hash>` into all HTML asset references.
+   - Generates Git anchor telemetry (`git_anchor.json`).
+   - Enforces byte-level parity via `deploy_to_airlock()`, synchronizing root assets whenever destination is missing, mtime is newer, or content hash differs (`get_hash(src) != get_hash(dst)`).
+5. **Agent Working Rule:** When addressing any UI issue, agents must edit `Portfolio_Dev/field_notes/` first, then run `python3 Portfolio_Dev/field_notes/build_site.py` to synthesize public assets. Direct edits to `www_deploy` are rejected in code review.
+**Mechanism:** Runs `python3 field_notes/build_site.py` to trigger versioned cache-busting, dynamic markdown compilation, and airlock synchronization.
 
 ## [FEAT-065] Cross-Platform Synchronization
 **Status:** ACTIVE

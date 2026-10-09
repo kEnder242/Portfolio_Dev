@@ -754,7 +754,7 @@ function renderDelegationSummary(s) {
     const offloadEl = document.getElementById('delg-offload-val');
     const wallEl = document.getElementById('delg-walltime-val');
     if (tokensEl) tokensEl.textContent = (s.total_tokens_blended != null) ? Number(s.total_tokens_blended).toLocaleString() : '--';
-    if (savingsEl) savingsEl.textContent = (s.net_savings_usd != null) ? '$' + Number(s.net_savings_usd).toFixed(4) : '--';
+    if (savingsEl) savingsEl.textContent = (s.net_savings_usd != null) ? '$' + Number(s.net_savings_usd).toFixed(2) : '--';
     if (offloadEl) offloadEl.textContent = (s.local_offload_ratio_pct != null) ? Number(s.local_offload_ratio_pct).toFixed(2) + '%' : '--';
     if (wallEl) wallEl.textContent = (s.total_wall_time_minutes != null) ? Number(s.total_wall_time_minutes).toFixed(0) + ' min' : '--';
 }

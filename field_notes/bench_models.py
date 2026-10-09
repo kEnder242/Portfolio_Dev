@@ -61,7 +61,7 @@ SEATS_CONFIG = {
         "vram_gb": 5.5,
         "architecture": "24GB Unified Memory (5.5GB Resident)",
         "role": "Fast Scaffolding & Surgical Patcher",
-        "context_window": "65k (65,536)",
+        "context_window": "--",
         "cost_per_1m": 0.008,
         "reasoning_ratio": 0.85,
     },
@@ -75,7 +75,7 @@ SEATS_CONFIG = {
         "vram_gb": 14.5,
         "architecture": "24GB GDDR6X PCIe (1,008 GB/s)",
         "role": "High-Throughput Autonomous Coding (Qwen 3.8 27B)",
-        "context_window": "32k (32,768)",
+        "context_window": "--",
         "cost_per_1m": 0.095,
         "reasoning_ratio": 0.25,
     },
@@ -89,7 +89,7 @@ SEATS_CONFIG = {
         "vram_gb": 2.5,
         "architecture": "11GB GDDR6 Multi-LoRA (616 GB/s)",
         "role": "Sensory Foyer & Multi-LoRA Engine",
-        "context_window": "8k (8,192)",
+        "context_window": "--",
         "cost_per_1m": 0.035,
         "reasoning_ratio": 0.10,
     },
@@ -103,7 +103,7 @@ SEATS_CONFIG = {
         "vram_gb": 0.0,
         "architecture": "Distributed Cloud Clusters",
         "role": "Swarm Fallback & Cross-Review",
-        "context_window": "128k (128,000)",
+        "context_window": "--",
         "cost_per_1m": 0.00,
         "reasoning_ratio": 0.40,
     },
@@ -201,7 +201,7 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
     itl_ms = (gen_time / tokens * 1000.0) if tokens > 1 else 0
 
     # Live context window discovery via /api/show
-    context_window = cfg.get("context_window", "--")
+    context_window = "--"
     try:
         show_url = f"http://{host}:{port}/api/show"
         show_resp = requests.get(show_url, params={"name": model_name}, timeout=3)
@@ -293,7 +293,7 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
     itl_ms = (gen_time / tokens * 1000.0) if tokens > 1 else 0
 
     # Live context window discovery via /api/show
-    context_window = cfg.get("context_window", "--")
+    context_window = "--"
     try:
         show_url = f"http://{host}:{port}/api/show"
         show_resp = requests.post(show_url, json={"name": model_name}, timeout=3)
@@ -393,7 +393,7 @@ def run_sweep():
             "display_name": cfg["display_name"],
             "architecture": cfg["architecture"],
             "role": cfg["role"],
-            "context_window": metrics.get("context_window") or cfg.get("context_window", "--"),
+            "context_window": metrics["context_window"],
             "cold_ttft_ms": metrics["cold_ttft_ms"],
             "warm_ttft_ms": metrics["warm_ttft_ms"],
             "ttft_ms": metrics["warm_ttft_ms"],
