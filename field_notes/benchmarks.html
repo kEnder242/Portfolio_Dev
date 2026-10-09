@@ -301,6 +301,13 @@
             text-transform: uppercase;
         }
 
+        .delegation-summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
         /* Delta-T Chart & Legend Box */
         .delta-t-chart-box {
             background: #12161f;
@@ -674,8 +681,7 @@
             </div>
 
             <div class="delegation-filter-row" id="delegation-sprint-filter">
-                <button class="tab-btn active" onclick="filterDelegationRuns('all')">All</button>
-                <!-- Sprint filter buttons injected dynamically by renderDelegationFilters() -->
+                <select id="delegation-sprint-select" onchange="filterDelegationRuns(this.value)"></select>
             </div>
 
             <div class="table-wrap">

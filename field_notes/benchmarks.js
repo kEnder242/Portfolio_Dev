@@ -629,19 +629,21 @@ function renderDelegationSummary(s) {
 function renderDelegationFilters(runs) {
     const row = document.getElementById('delegation-sprint-filter');
     if (!row) return;
+    const sel = row.querySelector('select#delegation-sprint-select');
+    if (!sel) return;
     const counts = {};
     runs.forEach(r => {
         const k = (r.sprint && r.sprint.trim()) ? r.sprint.trim() : '(none)';
         counts[k] = (counts[k] || 0) + 1;
     });
     const sprints = Object.keys(counts).sort((a, b) => b.localeCompare(a));
-    let html = '<button class="tab-btn' + (delegationFilter === 'all' ? ' active' : '') + '" onclick="filterDelegationRuns(\'all\')">All (' + runs.length + ')</button>';
+    let html = '<option value="all">All Sprints (' + runs.length + ')</option>';
     sprints.forEach(s => {
-        const label = (s === '(none)') ? 'No Sprint' : 'Sprint ' + s;
-        const cls = (delegationFilter === s) ? 'tab-btn active' : 'tab-btn';
-        html += '<button class="' + cls + '" onclick="filterDelegationRuns(\'' + s + '\')">' + label + ' (' + counts[s] + ')</button>';
+        const label = (s === '(none)') ? 'No Sprint' : ('Sprint ' + s);
+        const val = (s === '(none)') ? '(none)' : s;
+        html += '<option value="' + val + '">' + label + ' (' + counts[s] + ')</option>';
     });
-    row.innerHTML = html;
+    sel.innerHTML = html;
 }
 
 function filterDelegationRuns(sprint) {
@@ -650,10 +652,22 @@ function filterDelegationRuns(sprint) {
     renderDelegationRuns(delegationRuns, delegationFilter);
 }
 
-function statusBadge(status) {
-    const colors = { 'SUCCESS': '#3fb950', 'COMPLETED_UNVERIFIED': '#d29922', 'VERIFICATION_FAILED': '#f85149', 'STAGED': '#58a6ff' };
-    const c = colors[status] || '#8b949e';
-    return '<span style="color:' + c + '; font-family:\'JetBrains Mono\', monospace; font-size:0.75rem;">' + (status || 'UNKNOWN') + '</span>';
+function classifySwarmStatus(r) {
+    const status = r.status || '';
+    if (status === 'DISPATCH_FAILED' || status === 'API_ERROR' || status === 'FAILURE') return 'ABORTED';
+    if (r.verification_passed === true) return 'CERTIFIED';
+    if (status === 'VERIFICATION_FAILED' || status === 'COMPLETED_UNVERIFIED' || status === 'BLOCKER_HALT' || status === 'ESCALATED') return 'ESCALATED';
+    return 'ESCALATED';
+}
+function statusBadge(status, run) {
+    const state = classifySwarmStatus(run || { status: status, verification_passed: false });
+    const lex = {
+        'CERTIFIED': { c: '#3fb950', icon: '\u2714', label: 'CERTIFIED' },
+        'ESCALATED': { c: '#58a6ff', icon: '\u2B06', label: 'ESCALATED' },
+        'ABORTED':   { c: '#f85149', icon: '\u2718', label: 'ABORTED' }
+    };
+    const L = lex[state];
+    return '<span style="color:' + L.c + '; font-family:\'JetBrains Mono\', monospace; font-size:0.75rem;">' + L.icon + ' ' + L.label + '</span>';
 }
 
 function renderDelegationRuns(runs, filter) {
@@ -678,14 +692,19 @@ function renderDelegationRuns(runs, filter) {
             + '<td style="font-family:\'JetBrains Mono\',monospace;">' + sprintCell + '</td>'
             + '<td style="max-width:340px;">' + title + '</td>'
             + '<td style="font-family:\'JetBrains Mono\',monospace; font-size:0.75rem;">' + (r.mode || '—') + ' / ' + (r.tier || '—') + '</td>'
-            + '<td>' + statusBadge(r.status) + '</td>'
+            + '<td>' + statusBadge(r.status, r) + '</td>'
             + '<td style="font-family:\'JetBrains Mono\',monospace;">' + totalTok + '</td>'
             + '<td style="font-family:\'JetBrains Mono\',monospace;">' + dur + '</td>'
             + '<td>' + verified + '</td>'
             + '</tr>';
         // Accordion detail row (hidden by default)
         const reflection = r.reflection ? r.reflection : '<span style="color:#6a737d;">(no reflection recorded)</span>';
-        const verifCmd = r.verification_passed ? '<span style="color:#3fb950;">Verification PASSED</span>' : '<span style="color:#f85149;">Verification FAILED / not run</span>';
+        const swarmState = classifySwarmStatus(r);
+        const verifMsg = swarmState === 'CERTIFIED'
+            ? '<span style="color:#3fb950;">Verification PASSED \u2014 clean</span>'
+            : (swarmState === 'ESCALATED'
+                ? '<span style="color:#58a6ff;">Discrepancies found \u2014 handed over to L1 for strategic review</span>'
+                : '<span style="color:#f85149;">Process or tool abort \u2014 no clean feedback</span>');
         const model = r.model ? r.model : '—';
         const ts = r.timestamp ? r.timestamp : '—';
         html += '<tr class="delegation-detail" style="display:none; background:#0d1117;">'
@@ -693,7 +712,7 @@ function renderDelegationRuns(runs, filter) {
             + '<td colspan="7">'
             + '<div style="font-family:\'JetBrains Mono\',monospace; font-size:0.78rem; line-height:1.7; padding:8px 12px;">'
             + '<div><strong style="color:#8b949e;">REFLECTION:</strong> ' + reflection + '</div>'
-            + '<div><strong style="color:#8b949e;">VERIFICATION:</strong> ' + verifCmd + '</div>'
+            + '<div><strong style="color:#8b949e;">VERIFICATION:</strong> [' + swarmState + '] ' + verifMsg + '</div>'
             + '<div><strong style="color:#8b949e;">MODEL:</strong> ' + model + ' &nbsp;|&nbsp; <strong style="color:#8b949e;">TS:</strong> ' + ts + '</div>'
             + '<div><strong style="color:#8b949e;">L3 SUB-INFERENCE RECEIPTS:</strong> conductor=' + (t.conductor != null ? Number(t.conductor).toLocaleString() : '0')
             + ' | l3=' + (t.l3 != null ? Number(t.l3).toLocaleString() : '0')
