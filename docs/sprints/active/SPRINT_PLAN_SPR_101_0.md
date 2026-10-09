@@ -550,16 +550,16 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 * **Scope & Tasks:**
   1. Add `.delegation-summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }` to align summary cards horizontally.
   2. Replace `.delegation-filter-row` button loop with `<select id="delegation-sprint-select">` rendering `All Sprints (N)`, `Sprint 101 (N)`, etc.
-  3. Update `statusBadge()` and the Verification column to render:
-     - `PASSED` (Green `✔`) for `verification_passed === true`
-     - `UNVERIFIED` / `N/A` (Slate `○`) for `COMPLETED_UNVERIFIED` / no test harness
-     - `FAILED` (Red `✘`) strictly for `VERIFICATION_FAILED` or execution errors.
+  3. Update `statusBadge()` and the Verification column to render the 3-state swarm lexicon:
+     - `CERTIFIED` (Green `✔`) for `verification_passed === true` (assertions executed and passed 100% clean).
+     - `ESCALATED` (Blue/Indigo `⬆`) for `status in ("VERIFICATION_FAILED", "COMPLETED_UNVERIFIED", "BLOCKER_HALT", "ESCALATED")` (worker discovered broken tests or edge cases and cleanly handed diff + reflection upstream to L1 for strategic review).
+     - `ABORTED` (Red `✘`) for `status in ("DISPATCH_FAILED", "API_ERROR", "FAILURE")` (unhandled crash or timeout with no feedback).
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `field_notes/benchmarks.html`, `field_notes/benchmarks.js`, `field_notes/style.css`.
   * **Anchor 2 (Verification Command & Literal Test Battery):**  
     `node --check Portfolio_Dev/field_notes/benchmarks.js && grep -q "delegation-sprint-select" Portfolio_Dev/field_notes/benchmarks.html`
-  * **Anchor 3 (Live Silicon Invariant):** DOM renders horizontal card grid and functional select dropdown; no false `FAILED` labels.
-  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-494]`.
+  * **Anchor 3 (Live Silicon Invariant):** DOM renders horizontal card grid, functional select dropdown, and CERTIFIED / ESCALATED / ABORTED badges; zero false 'FAILED' labels.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-494]`, `[INS-046]`.
 
 ### 📈 Story 101.18: Swarm Token Multi-Series Canvas Line Graph
 * **Assigned Owner:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`)
