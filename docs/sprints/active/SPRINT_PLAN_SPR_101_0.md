@@ -52,10 +52,10 @@ Per **`[BKM-082]`** and **`[INS-047]` ("Live is King, History is Queen")**, ever
 | **ANCHOR-101.13** | Silicon & Daemons (`:8088`, `:8765`) | Foyer in OFFLINE standby; vLLM dead; digest graded FAIL | `COMPLETED` | Story 101.13: Physical restoration & 7/7 watchdog certification pass (`BKM-024`). |
 | **ANCHOR-101.14** | `HomeLabAI/src/infra/sprint_telemetry.py` | Swarm delegation runs un-indexed for external/web ingestion | `COMPLETED` | Story 101.14: Export delegation ledger JSON feed via `--export-web` (`FEAT-552`, `FEAT-498`). |
 | **ANCHOR-101.15** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Tab 4 Model Benchmarks missing live swarm ROI & accordion ledger | `COMPLETED` | Story 101.15: Integrate Tab 4 UI & Accordion Ledger Rendering (`FEAT-525`, `FEAT-498`). |
-| **ANCHOR-101.16** | `HomeLabAI/src/infra/sprint_telemetry.py` | Standalone test pings and duplicate `jit_checkpoint` stubs pollute web feed | `PENDING` | Story 101.16: Ledger Ingestion Hygiene, Deduplication & Historical Backfill (`FEAT-552`, `FEAT-498`). |
-| **ANCHOR-101.17** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Vertical card stacking, pill filter sprawl, harsh binary failure badges | `PENDING` | Story 101.17: Dashboard Polish — Horizontal Cards, Dropdown Filter & Semantic Badges (`FEAT-525`, `FEAT-494`). |
-| **ANCHOR-101.18** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Lack of longitudinal visual token tracking across swarm tiers | `PENDING` | Story 101.18: Swarm Token Multi-Series Canvas Line Graph (`FEAT-525`, `FEAT-526`). |
-| **ANCHOR-101.19** | `Portfolio_Dev/field_notes/bench_models.py`, `benchmarks.html` | Hardcoded 32k context and stale 14B coder fallback; dead refresh button | `PENDING` | Story 101.19: Dynamic Seat Card Synchronization & Header Fluff Purge (`FEAT-495`, `FEAT-494`). |
+| **ANCHOR-101.16** | `HomeLabAI/src/infra/sprint_telemetry.py` | Standalone test pings and duplicate `jit_checkpoint` stubs pollute web feed | `COMPLETED` | Story 101.16: Ledger Ingestion Hygiene, Deduplication & Historical Backfill (`FEAT-552`, `FEAT-498`). |
+| **ANCHOR-101.17** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Vertical card stacking, pill filter sprawl, harsh binary failure badges | `COMPLETED` | Story 101.17: Dashboard Polish — Horizontal Cards, Dropdown Filter & Semantic Badges (`FEAT-525`, `FEAT-494`). |
+| **ANCHOR-101.18** | `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js` | Lack of longitudinal visual token tracking across swarm tiers | `COMPLETED` | Story 101.18: Swarm Token Multi-Series Canvas Line Graph (`FEAT-525`, `FEAT-526`). |
+| **ANCHOR-101.19** | `Portfolio_Dev/field_notes/bench_models.py`, `benchmarks.html` | Hardcoded 32k context and stale 14B coder fallback; dead refresh button | `COMPLETED` | Story 101.19: Dynamic Seat Card Synchronization & Header Fluff Purge (`FEAT-495`, `FEAT-494`). |
 
 ---
 
