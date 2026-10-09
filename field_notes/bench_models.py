@@ -117,7 +117,7 @@ def build_offline_metrics(cfg):
         "throughput": 0,
         "itl_ms": 0,
         "status": "offline",
-        "context_window": cfg.get("context_window", "--"),
+        "context_window": "--",
     }
 
 
