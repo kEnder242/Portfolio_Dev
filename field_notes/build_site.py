@@ -12,28 +12,32 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE_FILES = [
     "style.css",
     "script.js",
+    "benchmarks.js",
     "intercom_v2.js",
     "mission-control.js",
     "css/dna_forge.css",
     "js/dna_forge.js",
     "js/synapse_graph.js",
 ]
-HTML_FILES = [
+PUBLIC_AIRLOCK_HTML = [
     "index.html",
     "stories.html",
+    "protocols.html",
+    "research.html",
+    "public_benchmarks.html",
+]
+INTERNAL_HTML = [
     "timeline.html",
     "files.html",
     "status.html",
-    "research.html",
-    "protocols.html",
     "features.html",
     "intercom.html",
     "benchmarks.html",
-    "public_benchmarks.html",
     "wisdom.html",
     "dna_forge.html",
     "writer.html",
 ]
+HTML_FILES = PUBLIC_AIRLOCK_HTML + INTERNAL_HTML
 TRAILERS_DIR = os.path.join(BASE_DIR, "assets/trailers")
 
 
@@ -138,12 +142,22 @@ def deploy_to_airlock(snapshots=False):
             ):
                 shutil.copy2(s_html, d_html)
 
-        # [Story 100.1] Sync root source files and HTML pages (including intercom_v2.js and intercom.html)
-        for root_asset in set(SOURCE_FILES + HTML_FILES):
+        # [FEAT-064] Sync shared source files and strictly PUBLIC airlock HTML pages
+        AIRLOCK_SOURCE_FILES = [
+            "style.css",
+            "script.js",
+            "mission-control.js",
+        ]
+        for root_asset in set(AIRLOCK_SOURCE_FILES + PUBLIC_AIRLOCK_HTML):
             s_asset = os.path.join(BASE_DIR, root_asset)
             d_asset = os.path.join(www_dir, root_asset)
             if os.path.isfile(s_asset):
-                if not os.path.exists(d_asset) or os.path.getmtime(s_asset) > os.path.getmtime(d_asset):
+                needs_sync = (
+                    not os.path.exists(d_asset)
+                    or os.path.getmtime(s_asset) > os.path.getmtime(d_asset)
+                    or get_hash(s_asset) != get_hash(d_asset)
+                )
+                if needs_sync:
                     os.makedirs(os.path.dirname(d_asset), exist_ok=True)
                     shutil.copy2(s_asset, d_asset)
                     print(f"✅ Airlock synced root asset: {root_asset}")
