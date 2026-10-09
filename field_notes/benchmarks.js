@@ -446,6 +446,133 @@ function renderDeltaTChart(data) {
     ctx.fillText('Turn Sequence (Chronological) ►', width - padRight, height - padBottom + 45);
 }
 
+function renderSwarmTokenChart(runs) {
+    const canvas = document.getElementById('swarm-token-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Background reset
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, width, height);
+
+    const classify = (r) => {
+        const mode = String(r.mode || '').toLowerCase();
+        const tier = String(r.tier || '').toUpperCase();
+        if (mode === 'local' || tier.includes('LOCAL')) return 'local';
+        if (mode === 'agy' || tier.includes('AGY') || tier.includes('PRIMARY')) return 'agy';
+        if (mode === 'cloud' || mode === 'oracle' || tier.includes('CLOUD') || tier.includes('ORACLE') || tier.includes('HYBRID')) return 'cloud_oracle';
+        return null;
+    };
+
+    const agg = {};
+    (Array.isArray(runs) ? runs : []).forEach(r => {
+        const s = (r.sprint && String(r.sprint).trim()) ? String(r.sprint).trim() : '000';
+        const tierKey = classify(r);
+        if (!tierKey) return;
+        const tok = Number((r.tokens && r.tokens.total) || 0);
+        if (!agg[s]) agg[s] = { local: 0, agy: 0, cloud_oracle: 0 };
+        agg[s][tierKey] += tok;
+    });
+
+    const sprints = Object.keys(agg).sort((a, b) => Number(a) - Number(b));
+    if (!sprints.length) {
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '12px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('🐝 No swarm token telemetry recorded yet.', width / 2, height / 2);
+        return;
+    }
+
+    const padLeft = 70;
+    const padRight = 50;
+    const padTop = 40;
+    const padBottom = 45;
+    const chartW = width - padLeft - padRight;
+    const chartH = height - padTop - padBottom;
+
+    const maxVal = Math.max(1000, ...sprints.flatMap(s => Object.values(agg[s]))) * 1.25;
+    const fmt = (v) => v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v >= 1e3 ? (v / 1e3).toFixed(0) + 'K' : v.toFixed(0));
+
+    const ySteps = 4;
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= ySteps; i++) {
+        const val = (maxVal / ySteps) * i;
+        const y = padTop + chartH - (val / maxVal) * chartH;
+        ctx.strokeStyle = '#1f242c';
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(width - padRight, y);
+        ctx.stroke();
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(fmt(val), padLeft - 10, y + 3);
+    }
+
+    const series = [
+        { key: 'cloud_oracle', color: '#f778ba' },
+        { key: 'agy', color: '#bc8cff' },
+        { key: 'local', color: '#3fb950' }
+    ];
+
+    const n = sprints.length;
+    const getX = (idx) => padLeft + (n > 1 ? (idx / (n - 1)) * chartW : chartW / 2);
+    const getY = (val) => padTop + chartH - (val / maxVal) * chartH;
+
+    sprints.forEach((s, idx) => {
+        const x = getX(idx);
+        ctx.strokeStyle = '#1a202c';
+        ctx.beginPath();
+        ctx.moveTo(x, padTop);
+        ctx.lineTo(x, padTop + chartH);
+        ctx.stroke();
+        ctx.fillStyle = '#c9d1d9';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('SPR_' + s, x, height - padBottom + 18);
+    });
+
+    series.forEach(s => {
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        sprints.forEach((sp, idx) => {
+            const x = getX(idx);
+            const y = getY(agg[sp][s.key]);
+            if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        sprints.forEach((sp, idx) => {
+            const x = getX(idx);
+            const val = agg[sp][s.key];
+            const y = getY(val);
+            ctx.fillStyle = s.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#0d1117';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.fillStyle = s.color;
+            ctx.font = 'bold 9px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            if (val > 0) ctx.fillText(Number(val).toLocaleString(), x, y - 9);
+        });
+    });
+
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('▲ Total Tokens per Sprint (by Tier)', padLeft, padTop - 12);
+    ctx.textAlign = 'right';
+    ctx.fillText('Sprint Sequence (Chronological) ►', width - padRight, height - padBottom + 34);
+}
+
 function renderBlackboardLedger(data) {
     const container = document.getElementById('blackboard-ledger-container');
     if (!container) return;
@@ -607,6 +734,7 @@ async function loadDelegationRuns() {
         delegationRuns = data.runs || [];
         renderDelegationSummary(data.summary || {});
         renderDelegationFilters(delegationRuns);
+        renderSwarmTokenChart(delegationRuns);
         renderDelegationRuns(delegationRuns, delegationFilter);
     } catch (e) {
         console.warn('[Benchmarks] Delegation runs unreachable:', e);
