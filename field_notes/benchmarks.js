@@ -43,8 +43,13 @@ function renderSeatCards(results) {
     
     let html = '';
     results.forEach(r => {
-        const statusClass = r.status === 'online' ? 'status-online' : 'status-offline';
-        const statusText = r.status === 'online' ? 'ONLINE' : 'OFFLINE / SLEEP';
+        const isOnline = r.status === 'online';
+        const statusClass = isOnline ? 'status-online' : 'status-offline';
+        const statusText = isOnline ? 'ONLINE' : 'OFFLINE / SLEEP';
+        const modelText = (r.model !== null && r.model !== undefined) ? r.model : '--';
+        const ctxText = (r.context_window && r.context_window !== 'null') ? r.context_window : '--';
+        const tpText = (typeof r.throughput === 'number' && isOnline) ? r.throughput.toFixed(1) + ' tok/s' : '--';
+        const ttftText = (typeof r.warm_ttft_ms === 'number' && isOnline) ? r.warm_ttft_ms.toFixed(0) + ' ms' : '--';
         const nameClean = r.display_name.split(' (')[0];
         const powerText = (r.power_watts !== null && r.power_watts !== undefined) ? r.power_watts.toFixed(0) + 'W' : 'N/A (Cloud Hosted)';
         html += `
@@ -58,11 +63,11 @@ function renderSeatCards(results) {
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Resident Model:</span>
-                    <span class="stat-value" style="color:#58a6ff;">${r.model}</span>
+                    <span class="stat-value" style="color:#58a6ff;">${modelText}</span>
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Context Window:</span>
-                    <span class="stat-value" style="color:#d2a8ff;">${r.context_window || '32k'}</span>
+                    <span class="stat-value" style="color:#d2a8ff;">${ctxText}</span>
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Target Role:</span>
@@ -70,11 +75,11 @@ function renderSeatCards(results) {
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Throughput:</span>
-                    <span class="stat-value" style="color:#3fb950;">${r.throughput.toFixed(1)} tok/s</span>
+                    <span class="stat-value" style="color:#3fb950;">${tpText}</span>
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Warm TTFT:</span>
-                    <span class="stat-value">${r.warm_ttft_ms.toFixed(0)} ms</span>
+                    <span class="stat-value">${ttftText}</span>
                 </div>
                 <div class="seat-stat">
                     <span class="stat-label">Power Draw:</span>

@@ -74,7 +74,7 @@ SEATS_CONFIG = {
         "power_watts": 290.0,
         "vram_gb": 14.5,
         "architecture": "24GB GDDR6X PCIe (1,008 GB/s)",
-        "role": "High-Throughput Interactive Coding",
+        "role": "High-Throughput Autonomous Coding (Qwen 3.8 27B)",
         "context_window": "32k (32,768)",
         "cost_per_1m": 0.095,
         "reasoning_ratio": 0.25,
@@ -109,41 +109,17 @@ SEATS_CONFIG = {
     },
 }
 
-# Fallbacks for offline nodes
-FALLBACKS = {
-    "m5_air": {
-        "model": "mlx-community--Qwen3.8-27B-4bit",
-        "cold_ttft_ms": 6923.7,
-        "warm_ttft_ms": 910.0,
-        "throughput": 16.07,
-        "itl_ms": 62.2,
-        "status": "offline_fallback",
-    },
-    "kender_4090": {
-        "model": "qwen2.5-coder:14b",
-        "cold_ttft_ms": 1100.0,
-        "warm_ttft_ms": 280.0,
-        "throughput": 48.5,
-        "itl_ms": 20.6,
-        "status": "offline_fallback",
-    },
-    "z87_2080ti": {
-        "model": "Llama-3.2-3B-AWQ",
-        "cold_ttft_ms": 950.0,
-        "warm_ttft_ms": 180.0,
-        "throughput": 42.0,
-        "itl_ms": 23.8,
-        "status": "offline_fallback",
-    },
-    "cloud_swarm": {
-        "model": "openrouter/free",
-        "cold_ttft_ms": 1200.0,
-        "warm_ttft_ms": 450.0,
-        "throughput": 35.0,
-        "itl_ms": 28.5,
-        "status": "online",
-    },
-}
+def build_offline_metrics(cfg):
+    return {
+        "model": None,
+        "cold_ttft_ms": None,
+        "warm_ttft_ms": None,
+        "throughput": 0,
+        "itl_ms": 0,
+        "status": "offline",
+        "context_window": cfg.get("context_window", "--"),
+    }
+
 
 
 def is_socket_up(host, port, timeout=0.8):
@@ -224,6 +200,33 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
     throughput = tokens / gen_time if gen_time > 0 else 0
     itl_ms = (gen_time / tokens * 1000.0) if tokens > 1 else 0
 
+    # Live context window discovery via /api/show
+    context_window = cfg.get("context_window", "--")
+    try:
+        show_url = f"http://{host}:{port}/api/show"
+        show_resp = requests.get(show_url, params={"name": model_name}, timeout=3)
+        show_resp.raise_for_status()
+        show_data = show_resp.json()
+        ctx = None
+        if isinstance(show_data.get("model_info"), dict):
+            params = show_data["model_info"].get("params")
+            if isinstance(params, str):
+                try:
+                    params = json.loads(params)
+                except Exception:
+                    params = None
+            if isinstance(params, dict):
+                ctx = params.get("num_ctx") or params.get("context_length")
+        if ctx is None:
+            details = show_data.get("details") or {}
+            ctx = details.get("context_length")
+        if ctx is None:
+            ctx = show_data.get("context_length")
+        if ctx and ctx > 0:
+            context_window = f"{int(ctx)//1000}k ({int(ctx):,})"
+    except Exception:
+        pass
+
     return {
         "model": model_name,
         "cold_ttft_ms": (ttft or 1.0) * 1000.0,
@@ -231,6 +234,7 @@ def discover_and_benchmark_openai_node(seat_id, cfg):
         "throughput": throughput,
         "itl_ms": itl_ms,
         "status": "online",
+        "context_window": context_window,
     }
 
 
@@ -246,14 +250,17 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
     if not models:
         raise ValueError("No models found in Ollama tags")
 
-    # Prioritize 14B coder over toy 1.5B models
+    # Pure live discovery: prioritize the active 27B autonomous coding model
     tag_names = [m.get("name", "") for m in models]
-    if "qwen2.5-coder:14b" in tag_names:
-        model_name = "qwen2.5-coder:14b"
-    elif "qwen3:14b" in tag_names:
-        model_name = "qwen3:14b"
-    else:
-        model_name = models[0].get("name")
+    priority = ["qwen3.8:nothink", "atlas:27b", "Qwen3.8-27B", "qwen3.8-27b", "qwen3.8"]
+    model_name = None
+    for cand in priority:
+        if cand in tag_names:
+            model_name = cand
+            break
+    if model_name is None:
+        matches = [t for t in tag_names if "qwen3.8" in t.lower() or "27b" in t.lower()]
+        model_name = matches[0] if matches else models[0].get("name")
 
     gen_url = f"http://{host}:{port}/api/generate"
     payload = {
@@ -285,6 +292,40 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
     throughput = tokens / gen_time if gen_time > 0 else 0
     itl_ms = (gen_time / tokens * 1000.0) if tokens > 1 else 0
 
+    # Live context window discovery via /api/show
+    context_window = cfg.get("context_window", "--")
+    try:
+        show_url = f"http://{host}:{port}/api/show"
+        show_resp = requests.post(show_url, json={"name": model_name}, timeout=3)
+        show_resp.raise_for_status()
+        show_data = show_resp.json()
+        ctx = None
+        if isinstance(show_data.get("model_info"), dict):
+            m_info = show_data["model_info"]
+            for k, v in m_info.items():
+                if "context_length" in k or k == "num_ctx":
+                    ctx = v
+                    break
+            if ctx is None:
+                params = m_info.get("params")
+                if isinstance(params, str):
+                    try:
+                        params = json.loads(params)
+                    except Exception:
+                        params = None
+                if isinstance(params, dict):
+                    ctx = params.get("num_ctx") or params.get("context_length")
+        if ctx is None:
+            details = show_data.get("details") or {}
+            ctx = details.get("context_length")
+        if ctx is None:
+            ctx = show_data.get("context_length")
+        if ctx and int(ctx) > 0:
+            ctx_int = int(ctx)
+            context_window = f"{ctx_int // 1000}k ({ctx_int:,})"
+    except Exception:
+        pass
+
     return {
         "model": model_name,
         "cold_ttft_ms": (ttft or 0.3) * 1000.0,
@@ -292,6 +333,7 @@ def discover_and_benchmark_ollama_node(seat_id, cfg):
         "throughput": throughput,
         "itl_ms": itl_ms,
         "status": "online",
+        "context_window": context_window,
     }
 
 
@@ -308,13 +350,17 @@ def run_sweep():
             elif cfg["type"] == "ollama":
                 metrics = discover_and_benchmark_ollama_node(seat_id, cfg)
             else:
-                metrics = FALLBACKS[seat_id]
-            print(
-                f"   ✔ [ONLINE] Model: {metrics['model']} | TTFT: {metrics['warm_ttft_ms']:.1f}ms | Throughput: {metrics['throughput']:.2f} tok/s"
-            )
+                metrics = build_offline_metrics(cfg)
+
+            if metrics and metrics.get("status") == "online":
+                print(
+                    f"   ✔ [ONLINE] Model: {metrics['model']} | TTFT: {metrics['warm_ttft_ms']:.1f}ms | Throughput: {metrics['throughput']:.2f} tok/s"
+                )
+            else:
+                print(f"   ✖ [OFFLINE] Node {cfg['display_name']} is offline/unconfigured")
         except Exception as e:
-            print(f"   ✖ [OFFLINE/FALLBACK] Reason: {e}")
-            metrics = FALLBACKS[seat_id]
+            print(f"   ✖ [OFFLINE] Reason: {e}")
+            metrics = build_offline_metrics(cfg)
 
         power_w = cfg["power_watts"]
         tp = metrics["throughput"]
@@ -347,7 +393,7 @@ def run_sweep():
             "display_name": cfg["display_name"],
             "architecture": cfg["architecture"],
             "role": cfg["role"],
-            "context_window": cfg.get("context_window", "32k"),
+            "context_window": metrics.get("context_window") or cfg.get("context_window", "--"),
             "cold_ttft_ms": metrics["cold_ttft_ms"],
             "warm_ttft_ms": metrics["warm_ttft_ms"],
             "ttft_ms": metrics["warm_ttft_ms"],
@@ -367,15 +413,18 @@ def run_sweep():
         sweep_results.append(item)
 
         # Expose to Prometheus
-        moe_model_ttft_seconds.labels(
-            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
-        ).set(metrics["warm_ttft_ms"] / 1000.0)
-        moe_model_throughput_tokens_per_second.labels(
-            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
-        ).set(metrics["throughput"])
-        moe_model_itl_seconds.labels(
-            model=metrics["model"], seat=seat_id, engine=cfg["engine"]
-        ).set(metrics["itl_ms"] / 1000.0)
+        if metrics["warm_ttft_ms"] is not None:
+            moe_model_ttft_seconds.labels(
+                model=metrics["model"] or "offline", seat=seat_id, engine=cfg["engine"]
+            ).set(metrics["warm_ttft_ms"] / 1000.0)
+        if metrics["throughput"] is not None:
+            moe_model_throughput_tokens_per_second.labels(
+                model=metrics["model"] or "offline", seat=seat_id, engine=cfg["engine"]
+            ).set(metrics["throughput"])
+        if metrics["itl_ms"] is not None:
+            moe_model_itl_seconds.labels(
+                model=metrics["model"] or "offline", seat=seat_id, engine=cfg["engine"]
+            ).set(metrics["itl_ms"] / 1000.0)
 
     # Save to benchmarks_cache.json atomically
     cache_payload = {
