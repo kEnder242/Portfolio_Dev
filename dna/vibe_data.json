@@ -166,5 +166,58 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "VIBE-015",
+    "theme": "Two-Mice Sideband Consensus",
+    "paper_order": 15,
+    "origin": {
+      "author": "jallred",
+      "text": "Sideband - interest isn't just a high/medium/low, it's tracking a live consensus... Pinky personifies HyDE, Brain personifies Interest Consensus using pinky's initial reply as an initial side-band reason. Brain steers the narrative back to reality rather than simply vetoing or downvoting.",
+      "source": "Sprint 102 Architectural Synthesis & DNA Governance",
+      "immutable": true,
+      "created_at": "2026-10-13T16:55:00Z"
+    },
+    "synthesis": {
+      "title": "Two-Mice Sideband Consensus & Distillation Funnel",
+      "narrative_context": "Interest and context filtering track a live emergent consensus rather than static categorical buckets. Pinky personifies speculative hypothesis generation (HyDE) while Brain personifies interest consensus and narrative reality steering without stalling the pipeline.",
+      "lab_anchors": [
+        "FEAT-635",
+        "FEAT-523",
+        "BKM-077"
+      ],
+      "review_notes": "VIBE card establishing Two-Mice sideband consensus and narrative steering.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Sideband - interest isn't just a high/medium/low, it's tracking a live consensus... Pinky personifies HyDE, Brain personifies Interest Consensus using pinky's initial reply as an initial side-band reason. Brain steers the narrative back to reality rather than simply vetoing or downvoting.",
+          "certified_at": "2026-10-13T16:55:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "sideband-consensus",
+        "two-mice",
+        "narrative-steering",
+        "curator-notes",
+        "distillation-funnel"
+      ],
+      "explicit_links": [
+        "FEAT-635",
+        "FEAT-523",
+        "BKM-077"
+      ],
+      "aliases": [
+        "two-mice-sideband-consensus"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
