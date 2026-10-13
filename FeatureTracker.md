@@ -2872,12 +2872,12 @@
 **Rationale:** Quantifies the psychological latency reduction provided by intermediate system crosstalk during multi-model inference.
 **Mechanism:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`, `Portfolio_Dev/field_notes/DEAD_AIR_LIVELINESS_REPORT.md`.
 
-## [FEAT-523] Round Table Context Scoping & Blackboard Ledger DNA
-**Sprint:** SPR-70.0
+## [FEAT-523] Continuous Interest Multiplier Pacing
+**Sprint:** SPR-70.0 / SPR-102.0
 **Status:** ACTIVE
-**Logic:** Replaces string-sniffing with explicit `ContextScope` enum (`ContextScope.TURN` vs `ContextScope.LONG`). Triage and Deep Thought receive isolated `TURN` scope. Mice (Pinky & Brain) receive `LONG` scope with Blackboard Ledger + 1 prior turn. Brain writes distillation bullets; Pinky writes 1-line consensus; stored in ChromaDB `blackboard_ledger_dna`.
-**Rationale:** Resolves long context bloat while keeping conversational agents self-aware across multi-turn sessions.
-**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
+**Logic:** Redefines conversational token budgeting from a discrete binary ternary step function (`1500 if interest >= 0.3 else 150`) into a continuous mathematical scalar multiplier: `clamp(int(current_interest * multiplier), floor, ceiling)` (default `multiplier: 150`, `floor: 32`, `ceiling: 1500`). Low interest smoothly tapers turn length toward zero without abrupt gags, while high interest grants proportional elaboration headroom. Generation profiles and repetition penalties are configured declaratively in `infrastructure.json`.
+**Rationale:** Preserves conversational dynamism across the interest spectrum and eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/logic/cognitive_hub.py`.
 
 ## [FEAT-524] LIVE IS GOD Invariant Bytecode Gate
 **Sprint:** SPR-70.0
@@ -3543,13 +3543,13 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 3. Signals Pinky Critic to generate a concise post-mortem diagnostic turn without manual operator prompt retyping.
 **Rationale:** Closes the human-in-the-loop corrective feedback loop rapidly and non-invasively during live co-pilot pairing.
 **Mechanism:** `POST /feedback` in `router.py` and `archive_node.purge_candidate_exemplar()`.
-## [FEAT-635] Brain Information Gatekeeper & Curator Synergy Annotations
-**Sprint:** SPR-96.0 (Active)
+## [FEAT-635] Brain Information Gatekeeper & Narrative Steering
+**Sprint:** SPR-96.0 / SPR-102.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
-**Logic:** Transforms the local Brain node into an Information Gatekeeper. Brain evaluates candidate vectors collected by Pinky, drops ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage `💡 Curator Note: [ID] connects with [ID]` annotations. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.
-**Rationale:** Eliminates prompt pollution and hallucination cascades in Deep Thought by guaranteeing high-density, strictly grounded context injection.
-**Mechanism:** `BrainNode.curate_context()` and `CognitiveHub.build_deep_thought_context()`.
+**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_brain_voice_replay.py`
+**Logic:** Transforms the local Brain node into an Epistemic Gatekeeper and Narrative Reality Steerer. Brain evaluates candidate vectors collected by Pinky, prunes ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage `💡 Curator Note: [ID] connects with [ID]` annotations. Critically, Brain steers the narrative back to concrete reality rather than downvoting interest or stalling the conversational turn. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.
+**Rationale:** Eliminates prompt pollution, hallucination cascades, and artificial conversation stalls in Deep Thought by guaranteeing high-density, strictly grounded context injection while preserving dialogue momentum.
+**Mechanism:** `BrainNode.curate_context()`, `CognitiveHub.build_two_mice_stage_prompt()`, and `CognitiveHub.build_deep_thought_context()`.
 
 ## [FEAT-636] In-Flight Dynamic Retrieval Scope Override ("Direct Flight")
 **Sprint:** SPR-96.0 (Active)
@@ -3775,5 +3775,16 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 4. **Pre-Flight Mistakes Avoided Ledger:** Every sprint specification must document concrete mistakes that would have occurred without deep historical grounding.
 5. **Grounding Gap Declaration:** Any actionable item that cannot be anchored in past history or DNA must be declared as a gap and clarified with the operator before modifying code.
 **Rationale:** Transforms historical documentation from passive archives into active, mandatory JITC guardrails, immunizing autonomous agents against circular traps and architectural amnesia.
+
+## [VIBE-015] Two-Mice Sideband Consensus & Distillation Funnel
+**Sprint:** Sprint 102
+**Status:** ACTIVE
+**Tags:** `#vibe`, `#sideband_consensus`, `#two_mice`, `#narrative_steering`, `#curator_notes`, `[FEAT-635]`, `[FEAT-523]`, `[BKM-077]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`, `HomeLabAI/src/tests/test_brain_voice_replay.py`
+**Logic:**
+1. **Dynamic Consensus over Static Categorization:** Interest and context filtering are not rigid high/medium/low buckets. Pinky personifies speculative hypothesis generation (HyDE), while Brain personifies interest consensus and epistemic steering.
+2. **Sideband Curator Rationale:** Brain audits candidate chunks from Pinky's retrieval, prunes tangential noise, and appends `💡 Curator Note: [ID] connects with [ID]` annotations.
+3. **No-Stall Distillation Funnel:** Brain's steering guides the conversational narrative toward technical reality without stalling the pipeline or downvoting the turn.
+**Rationale:** Unifies conversational charm with rigorous technical ground truth, enabling emergent multi-agent dialogue that never loses grounding.
 
 
