@@ -2783,24 +2783,27 @@
 
 ## [FEAT-494] [CONSOLIDATED] benchmarks.html 3-Tab Federated Silicon Workbench
 **Sprint:** SPR-66.0 / SPR-102.0
-**Status:** CONSOLIDATED (Hypothetical ROI calculator DEFEATURED; superseded by [FEAT-525] Empirical Sovereign Delegation Gains)
-**Logic:** Upgrades `benchmarks.html` from a single-node snapshot into a streamlined 3-tab workbench: Tab 1 (Live Round Table Elapsed Time), Tab 2 (Model Throughput), and Tab 3 (Sprint Delegation Gains). Hypothetical slider-based volume projections were defeatured in Sprint 102 in favor of empirical live token and dollar savings tracked in `[FEAT-525]`.
+**Status:** CONSOLIDATED (Hypothetical ROI calculator DEFEATURED; superseded by [FEAT-525] and [FEAT-552] Empirical Telemetry)
+**Logic:** Upgrades `benchmarks.html` from a single-node snapshot into a streamlined 3-tab workbench grounded entirely in authenticated physical data stores:
+- **Tab 1 (Live Round Table Elapsed Time):** Physical deliberation checkpoints backed by `Portfolio_Dev/field_notes/data/round_table_deltas.json` (`[FEAT-525]`).
+- **Tab 2 (Model Throughput):** Real-time generation throughput and workload events backed by `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` (`[FEAT-496]`).
+- **Tab 3 (Sprint Delegation Gains):** Swarm delegation volume and financial sovereign savings backed by `Portfolio_Dev/field_notes/data/delegation_runs.json` and `HomeLabAI/data/delegation_ledger.jsonl` (`[FEAT-552]`).
 **Rationale:** Eliminates misleading hypothetical estimations in favor of authenticated empirical telemetry from live homelab workloads.
-**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
+**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`, `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`, `Portfolio_Dev/field_notes/data/delegation_runs.json`.
 
-## [FEAT-495] Dynamic Auto-Discovery Benchmark Engine & Nightly Sweep Integration
-**Sprint:** SPR-66.0
-**Status:** ACTIVE
-**Logic:** Overhauls `bench_models.py` to dynamically query endpoints (`:8000/v1/models`, `:11434/api/tags`, `:8088/v1/models`), discovering whatever model is currently resident on each hardware seat without hardcoded names. Automatically updates `benchmarks_cache.json` and Prometheus metrics.
-**Rationale:** Ensures daily benchmarks automatically track resident model swaps and hardware changes without manual code edits.
+## [FEAT-495] Dynamic Auto-Discovery Benchmark Engine & Service De-escalation
+**Sprint:** SPR-66.0 / SPR-102.0
+**Status:** RETIRED / DECOUPLED (Synthetic nightly sweep decoupled in Sprint 102 Story 102.20; superseded by [FEAT-496] Continuous Passive Telemetry)
+**Logic:** Originally dynamically queried model endpoints to discover resident models. In Sprint 102 (`Story 102.20`), synthetic nightly benchmark sweeps in `nightly_forge.py` were retired in favor of continuous passive telemetry harvested from real multi-seat production workloads (`[FEAT-496]`), eliminating synthetic token burn and needless endpoint wakes.
+**Rationale:** Real production dispatches provide higher-fidelity hardware calibration than synthetic probe pings.
 **Mechanism:** `Portfolio_Dev/field_notes/bench_models.py`, `HomeLabAI/src/infra/nightly_forge.py`.
 
 ## [FEAT-496] Passive Real-Time Swarm Telemetry Stream
-**Sprint:** SPR-66.0
+**Sprint:** SPR-66.0 / SPR-102.0
 **Status:** ACTIVE
-**Logic:** Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` upon every `delegate.py` completion, rendering a live workload activity waterfall on `benchmarks.html`.
+**Logic:** Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` upon every `delegate.py` completion, rendering a live workload activity waterfall and scatter plot on `benchmarks.html`. Full 83+ authentic record history displayed in reverse chronological order with sticky table headers.
 **Rationale:** Provides "free benchmarking" and real-time operational visibility into active hardware utilization under real production workloads.
-**Mechanism:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/benchmarks.html`.
+**Mechanism:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
 
 ## [FEAT-497] Federated Silicon Multi-Node Live Certification
 **Sprint:** SPR-66.0
@@ -2887,10 +2890,10 @@
 **Mechanism:** `HomeLabAI/src/tests/conftest.py`.
 
 ## [FEAT-525] Round Table Delta-T Telemetry & Blackboard Drawer UI
-**Sprint:** SPR-70.0
+**Sprint:** SPR-70.0 / SPR-102.0
 **Status:** ACTIVE
 **Code:** [field_notes/benchmarks.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/benchmarks.js#L380) — Round Table Delta-T Telemetry & Blackboard Drawer UI.
-**Logic:** Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} > 0$ and $d_{\text{thought}} > 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in `benchmarks.html` via cumulative canvas waterfall charts and expandable Blackboard Ledger cards.
+**Logic:** Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} > 0$ and $d_{\text{thought}} > 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in `benchmarks.html` via cumulative canvas waterfall charts and expandable Blackboard Ledger cards. In Sprint 102, re-engineered turn sequencing to guarantee persistent monotonic integer indexing (`len(records) + 1`) across hub restarts, captured the operator's prompt into `round_table_deltas.json`, and rendered the prompt directly inside styled drawer cards.
 **Rationale:** Eliminates synthetic multipliers and conversational noise, delivering authentic physical benchmarks of multi-actor deliberation dynamics.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
 
