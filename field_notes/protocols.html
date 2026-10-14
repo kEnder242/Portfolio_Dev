@@ -1240,6 +1240,13 @@
 <li><strong>Prohibition of Multi-Story Dirty Trees:</strong></li>
 <li>Leaving uncommitted modifications in the workspace across story dispatches is strictly forbidden. Every dispatch MUST start from a clean, unambiguous Git HEAD so L2's scope-enforcement lens reflects 100% active-story changes.</li>
 </ol>
+<h4>8. Canonical Story Argument Law (Dotted Identifier Mandate)</h4>
+<ol>
+<li><strong>The Invariant Formatting Law:</strong></li>
+<li>All dispatch launchers (<code>delegate.py --story &lt;id&gt;</code>), JIT checkpoints (<code>clara-dna_jit_checkpoint</code>), and sprint telemetry analyzers MUST format the story argument in <strong>canonical dotted notation</strong>: <code>&lt;sprint&gt;.&lt;story_index&gt;</code> (e.g. <code>102.1</code>, <code>102.9</code>, <code>102.10</code>, <code>101.15</code>).</li>
+<li><strong>Prohibition of Un-dotted and Free-form Prefixes:</strong></li>
+<li>Passing un-dotted integers (<code>--story 1029</code>) or free-form strings (<code>--story "STORY 1029"</code>) is strictly prohibited. Un-dotted notation breaks regex deduplication in <code>sprint_telemetry.py</code>, prevents correlation between conductor <code>delegate.py</code> records and worker <code>jit_checkpoint</code> records, and pollutes public web feeds with undecorated stubs.</li>
+</ol>
                             </div>
                         </td>
                     </tr>
