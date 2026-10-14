@@ -1953,8 +1953,10 @@
 **Mechanism:** `src/tests/delegate.py`, `~/.config/opencode/oh-my-openagent.json`, and `BKM-034` in `Protocols.md`.
 
 ## [FEAT-459] Deep Thought Unified Preamble & Dynamic LLM Greeting Fusion
-**Status:** UPDATED (Sprint 56)
+**Status:** UPDATED (Sprint 56 / Superseded Sprint 103)
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1402) — Deep Thought Unified Preamble & Dynamic LLM Greeting Fusion.
+> [!NOTE] SUPERSEDED (Sprint 103 / FEAT-645): The binary `"is_casual"` boolean in HyDE prompts is deprecated. In Sprint 103, HyDE synthesis declares `"search_required": boolean` to govern ChromaDB retrieval, while conversational tone and token budgets are modulated continuously by scalar interest (`[FEAT-523]`).
+
 **Logic:** Fuses $t=0$ HyDE vector synthesis and casual greeting preambles into a single LLM-generated JSON pass from Deep Thought on KENDER (`_spawn_deep_thought_preamble`). Replaces Python regex domain keyword checks and static `casual_reflections` string arrays, fully restoring **BKM-015** compliance ("No hardcoded string lists"). If the query is casual, Deep Thought sets `"is_casual": true` and dynamically generates a 1-sentence analytical greeting; if technical, it outputs `"is_casual": false` alongside the 3-part Composite HyDE vector. Routes preambles to `channel: "insight"` for persona partitioning.
 **Rationale:** Restores BKM-015 compliance, eliminates persona bleed, and provides dynamic LLM preamble responses without adding extra inference passes.
 **Mechanism:** `_spawn_deep_thought_preamble` in `HomeLabAI/src/v5/foyer/router.py` & `_HYDE_SYNTHESIS_PROMPT` in `HomeLabAI/src/logic/cognitive_hub.py`.
@@ -2699,11 +2701,13 @@
 **Mechanism:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `src/tests/test_prompt_isolation_guardrail.py`.
 
 ## [FEAT-489] Two-Mice Sequential Streaming Handover & Distillation Pipeline
-**Status:** ACTIVE
+**Status:** ACTIVE (Augmented Sprint 103)
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L650) — Two-Mice Sequential Handover.
-**Logic:** Orchestrates high-interest historical turns into a sequential two-mice distillation funnel: Brain extracts 3-4 dense technical bullet points from raw RAG context to the Right Console, and Pinky receives Brain's extract to deliver a conversational in-character TL;DR directly to the user on the Left Console.
+> [!NOTE] AUGMENTED (Sprint 103 / FEAT-645): Evolved from a two-party relay into the **Tri-Node Handover Relay**: Stage 1 Brain Information Gatekeeper (Right Console) $\to$ Stage 2 Deep Thought Strategic Synthesis (Center/Left Console) $\to$ Stage 3 Pinky Voice Delivery (Left Console / TTS).
+
+**Logic:** Orchestrates high-interest historical turns into a sequential distillation funnel: Brain extracts 3-4 dense technical bullet points from raw RAG context to the Right Console, Deep Thought synthesizes the strategic reality, and Pinky delivers a conversational in-character TL;DR directly to the user on the Left Console.
 **Rationale:** Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes.
-**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/pinky_critic_persona.py`, `src/tests/test_two_mice_handover.py`.
+**Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/pinky_critic_persona.py`, `src/tests/test_two_mice_handover.py`, `src/tests/test_multi_stage_replay_pipeline.py`.
 
 ## [FEAT-490] Fast Resident Node Hot-Reload (vLLM VRAM Preservation)
 **Status:** ACTIVE
@@ -2890,9 +2894,11 @@
 **Mechanism:** `HomeLabAI/src/tests/conftest.py`.
 
 ## [FEAT-525] Round Table Delta-T Telemetry & Blackboard Drawer UI
-**Sprint:** SPR-70.0 / SPR-102.0
+**Sprint:** SPR-70.0 / SPR-102.0 / SPR-103.0
 **Status:** ACTIVE
 **Code:** [field_notes/benchmarks.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/benchmarks.js#L380) — Round Table Delta-T Telemetry & Blackboard Drawer UI.
+> [!NOTE] RECONNECTED (Sprint 103 / FEAT-645): Reconnected to active Deep Thought execution in the Tri-Node Handover Relay ($d_{\text{thought}} > 0$). Restores persistent benchmark recording to `round_table_deltas.json` across all brain-led multi-actor deliberations.
+
 **Logic:** Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} > 0$ and $d_{\text{thought}} > 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in `benchmarks.html` via cumulative canvas waterfall charts and expandable Blackboard Ledger cards. In Sprint 102, re-engineered turn sequencing to guarantee persistent monotonic integer indexing (`len(records) + 1`) across hub restarts, captured the operator's prompt into `round_table_deltas.json`, and rendered the prompt directly inside styled drawer cards.
 **Rationale:** Eliminates synthetic multipliers and conversational noise, delivering authentic physical benchmarks of multi-actor deliberation dynamics.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`, `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
@@ -2916,9 +2922,11 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Mechanism:** `Portfolio_Dev/field_notes/intercom_v2.js`.
 
 ## [FEAT-539] Auto-Regressive Context Isolation & Domain Taxonomy
-**Sprint:** SPR-71.0
-**Status:** ACTIVE
-**Logic:** Dynamically bounds `ContextScope.TURN` and clamps token budget to 150 tokens for low-interest/casual queries (`importance < 0.3` or `vibe == 'CASUAL'`). Sanitizes `round_table_memory` against unclosed JSON blocks, excessive whitespace, and bounds session memory to the last 10 turns. Refines domain taxonomy to cleanly distinguish between `work_history` (18-year Intel/silicon career archive) and `acme_lab_history` (internal Acme Lab system events & DNA).
+**Sprint:** SPR-71.0 / Superseded Sprint 103
+**Status:** ACTIVE (Partially Superseded)
+> [!NOTE] PARTIALLY SUPERSEDED (Sprint 102/103 / FEAT-523): The 150-token hardcoded clamp for `vibe == 'CASUAL'` and `importance < 0.3` is excised in Sprint 103. Token budgeting across all turns is modulated smoothly by continuous scalar interest (`FEAT-523`) via `infrastructure.json:interest_pacing` ($\operatorname{clamp}(\operatorname{int}(\text{interest} \times 150), 32, 1500)$).
+
+**Logic:** Dynamically bounds `ContextScope.TURN` and modulates token budget via continuous interest pacing. Sanitizes `round_table_memory` against unclosed JSON blocks, excessive whitespace, and bounds session memory to the last 10 turns. Refines domain taxonomy to cleanly distinguish between `work_history` (18-year Intel/silicon career archive) and `acme_lab_history` (internal Acme Lab system events & DNA).
 **Rationale:** Eliminates auto-regressive context pollution and looping spam on simple greeting turns without prompt lecturing.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/memory/blackboard_ledger.py`.
 
@@ -3789,5 +3797,25 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 2. **Sideband Curator Rationale:** Brain audits candidate chunks from Pinky's retrieval, prunes tangential noise, and appends `💡 Curator Note: [ID] connects with [ID]` annotations.
 3. **No-Stall Distillation Funnel:** Brain's steering guides the conversational narrative toward technical reality without stalling the pipeline or downvoting the turn.
 **Rationale:** Unifies conversational charm with rigorous technical ground truth, enabling emergent multi-agent dialogue that never loses grounding.
+
+## [FEAT-645] Multi-Stage Replay Pipeline Harness & Contract Assertion
+**Sprint:** SPR-103.0
+**Status:** ACTIVE
+**Tags:** `#replay_pipeline`, `#test_harness`, `#decoupled_testing`, `#intercom_debug`, `[BKM-083]`, `[FEAT-523]`, `[FEAT-635]`
+**Code:** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Standalone offline test harness (`test_multi_stage_replay_pipeline.py`) exercising the 5 decoupled round table stages (Pre-Triage $\to$ Triage $\to$ HyDE/RAG $\to$ Brain Gatekeeper $\to$ Deep Thought Strategic Synthesis / Pinky Voice Delivery) with frozen litmus fixtures (e.g. *Aurora / psys*). Asserts deterministic token emissions and schema compliance across all resident nodes offline in $< 2.0\text{s}$.
+**Rationale:** Replaces isolated, single-component mocks with end-to-end integration contracts, permanently immunizing the lab against "The Green Lie" (`BKM-062`).
+
+## [BKM-083] Decouple-and-Stitch Round Table Protocol (Live Unit Testing & Stage Isolation)
+**Sprint:** SPR-103.0
+**Status:** ACTIVE
+**Tags:** `#architecture`, `#decoupling`, `#unit_testing`, `#stage_isolation`, `[FEAT-645]`, `[BKM-024]`
+**Code:** `HomeLabAI/docs/Protocols.md`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:**
+1. **Discrete Stage Methods:** Multi-stage cognitive pipelines must be authored as discrete, callable `step_*` methods on `CognitiveHub` (`step_pre_triage`, `step_triage`, `step_hyde_rag`, `step_brain_gatekeeper`, `step_deep_thought`, `step_pinky_voice`).
+2. **Zero Execution Divergence:** The live `process_turn()` loop in production must call `step_*` methods sequentially without duplicate code paths or architectural divergence.
+3. **Offline Unit Testability:** Pytest test suites must test individual `step_*` methods independently using frozen stage fixtures, enabling sub-second prompt and logic iteration without full-turn overhead.
+4. **Continuous Parameter Passing:** Stage methods pass continuous parameters (`interest: float`, `semantic_affinity: float`, `search_required: bool`) rather than relying on mutable shared object state or binary clamps.
+**Rationale:** Eliminates the "Monolithic Debug Trap" where diagnosing an upstream stage failure requires running 30-second multi-node websocket sessions.
 
 
