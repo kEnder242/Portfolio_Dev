@@ -369,5 +369,79 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.13: Final Phase 3 Git Checkpoint & Sprint Completion
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING PHASE 3`
+* **Status:** `COMPLETED`
 * **Context & Mechanism:** Final sync of `FeatureTracker.md` and ChromaDB DNA. Atomic commit: `chore(sprint): complete Sprint 102.0 certification`. Update sprint status to `COMPLETED & CERTIFIED`.
+
+---
+
+### 🌐 Phase 4: Telemetry Synthesis, Dashboard Unification & Clean Delegation Tracking
+
+#### Story 102.14: Dual Live & Deploy Feed Publisher Hook in `delegate.py` and `build_site.py` (`[FEAT-552]` / `[FEAT-064]`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:**
+  1. In `HomeLabAI/src/tests/delegate.py`, invoke `export_web_telemetry()` immediately upon writing to `delegation_ledger.jsonl`. This gives zero-delay live updates whenever local, cloud, or oracle runs complete.
+  2. In `Portfolio_Dev/field_notes/build_site.py`, call `export_web_telemetry()` right before `deploy_to_airlock()`, guaranteeing the feed is freshly compiled and synced to `www_deploy/data/delegation_runs.json`.
+  3. Update `FeatureTracker.md` under `[FEAT-552]` to document this dual publisher pattern.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/build_site.py`, `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `python3 Portfolio_Dev/field_notes/build_site.py --no-verify --no-js-lint && test -f www_deploy/data/delegation_runs.json`.
+  * **Anchor 3 (Silicon Invariant):** Zero-delay update to `delegation_runs.json` upon delegate completion; airlock receives identical payload.
+  * **Anchor 4 (DNA Links):** `[FEAT-552]`, `[FEAT-064]`, `[BKM-049]`.
+
+#### Story 102.15: Tab Nomenclature Cleanup, Compact Button Styling & ROI Slider Purge
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:**
+  1. In `Portfolio_Dev/field_notes/benchmarks.html`, clean and compact the tab names:
+     - `Live Round Table` (was `⏱️ LIVE ROUND TABLE ELAPSED TIME`)
+     - `Model Throughput` (was `🏛️ SILICON ARENA & WORKLOAD`)
+     - `Sprint Delegation` (was `🐝 SWARM DELEGATION & SOVEREIGN GAINS`)
+  2. In `Portfolio_Dev/field_notes/style.css`, squish tab button padding (`6px 12px`, `font-size: 0.8rem`, `letter-spacing: normal`).
+  3. Purge Tab 3 (`#tab-roi` and Hypothetical Scaling Calculator) from `benchmarks.html` and `benchmarks.js`.
+  4. Mark `[FEAT-426]` in `Portfolio_Dev/FeatureTracker.md` as `DEFEATURED (Sprint 102) — Superseded by [FEAT-525]`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/style.css`, `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `node --check Portfolio_Dev/field_notes/benchmarks.js && ! grep -q "tab-roi" Portfolio_Dev/field_notes/benchmarks.html`.
+  * **Anchor 3 (Silicon Invariant):** Clean DOM layout without JS errors; 3 unified tabs active.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-426]`, `[FEAT-494]`.
+
+#### Story 102.16: Codify BKM-049 §8 (Canonical Story Argument Law) & Multi-Format Ingestion in `sprint_telemetry.py`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:**
+  1. In `HomeLabAI/docs/Protocols.md`, codify `BKM-049 §8` mandating canonical dotted story IDs (`--story 102.1`, `--story 102.9`) across all dispatch commands and JIT checkpoint calls.
+  2. In `HomeLabAI/src/infra/sprint_telemetry.py`, harden `export_web_telemetry()`:
+     - Normalize story keys across both dotted (`102.9`) and un-dotted (`1029`) formats so JIT checkpoint stubs match authoritative `delegate.py` records.
+     - Suppress unpopulated stub records when an authoritative record with matching story exists.
+     - Extract clean story, sprint, and titles for all historical entries.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/docs/Protocols.md`, `HomeLabAI/src/infra/sprint_telemetry.py`.
+  * **Anchor 2 (Verification Command):** `python3 HomeLabAI/src/infra/sprint_telemetry.py --export-web && python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/data/delegation_runs.json')); s102=[r for r in d['runs'] if r['sprint']=='102']; assert all(r['title'] and r['tier'] for r in s102), 'Blank stubs detected in Sprint 102'; print('PASS: All Sprint 102 runs decorated clean')"`
+  * **Anchor 3 (Silicon Invariant):** Zero un-decorated JIT stubs; 100% clean story, title, tier, and token metrics.
+  * **Anchor 4 (DNA Links):** `[BKM-049]`, `[BKM-081]`, `[FEAT-552]`.
+
+#### Story 102.17: Delegation Table Mobile Optimization & Blackboard Header Ergonomics
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:**
+  1. In `Portfolio_Dev/field_notes/benchmarks.js`:
+     - Collapse `Mode / Tier` column to strictly `Tier` (`r.tier || '—'`).
+     - In `renderBlackboardLedger()`, replace redundant static badges (`[FULL ROUND TABLE]`, `[CONTEXT_SCOPE_LONG]`) with a clean timestamp including date (`YYYY-MM-DD HH:MM:SS` from `turn.timestamp`) and turn duration.
+  2. In `Portfolio_Dev/field_notes/style.css`:
+     - Add responsive styles for `#delegation-runs-table` (`@media (max-width: 768px)` hides chevron and duration, allows title wrapping).
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/style.css`.
+  * **Anchor 2 (Verification Command):** `node --check Portfolio_Dev/field_notes/benchmarks.js && ! grep -q "CONTEXT_SCOPE_LONG" Portfolio_Dev/field_notes/benchmarks.js`.
+  * **Anchor 3 (Silicon Invariant):** Clean, date-stamped accordion headers; responsive table layout on mobile.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-526]`.
+
+#### Story 102.18: Model Throughput Live Telemetry Planning & Swarm Specification
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:** Document architectural specification in `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md` detailing how `live_usage_stream.jsonl` will feed real observed Tok/s and TTFT into a multi-seat Canvas trend graph in a subsequent sprint story, replacing synthetic `bench_models.py` pings.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
+  * **Anchor 2 (Verification Command):** `grep -q "Model Throughput Live Telemetry Specification" Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
+  * **Anchor 3 (Silicon Invariant):** Formal spec approved for local swarm delegation.
+  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[INS-047]`.
