@@ -392,7 +392,7 @@ flowchart TD
 
 ### Story 103.9: Live Silicon Probe against M5 Air & KENDER 4090 (`BKM-024`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING`
+* **Status:** `COMPLETED`
 * **Why:** In accordance with Invariant Operational Law 3 (`LIVE VALIDATION MANDATE`), unit tests are not enough. We must bounce the daemon, verify matched git HEAD, and execute a live multi-turn probe against running silicon endpoints on M5 Air (port 8000/8002) and KENDER (port 11434).
 * **Localized Root Cause:** The "Green Lie" permitted code to be committed based solely on mocked unit tests while live running daemons served broken pipelines.
 * **4-Anchor Specification:**
@@ -411,7 +411,7 @@ flowchart TD
 
 ### Story 103.10: Codify BKM-083 & Final Retrospective
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING`
+* **Status:** `COMPLETED`
 * **Why:** Permanently codify `BKM-083` (The Decouple-and-Stitch Round Table Protocol) in `HomeLabAI/docs/Protocols.md` and `Portfolio_Dev/FeatureTracker.md`. Append the final Phase 4 retrospective to this document.
 * **Localized Root Cause:** Architectural lessons learned during debug sessions evaporate unless committed to the permanent document spine.
 * **4-Anchor Specification:**
@@ -426,3 +426,21 @@ flowchart TD
     4. Gating MUST be continuous (FEAT-523) rather than binary clamps.
     ```
   * **Anchor 4 (DNA Links):** `[BKM-083]`, `[FEAT-645]`.
+
+---
+
+## 🏁 Phase 4 Sprint Retrospective: The Decouple-and-Stitch Triumph
+
+### 1. Root Cause Resolution
+The persistent "casual" clamp and muting of Deep Thought was not an isolated prompt failure, but an architectural consequence of monolithic code sharing mutable state:
+1. **The Toxic Casual Clamp:** In `cognitive_hub.py`, line 1705 clamped `self.current_interest = min(self.current_interest, 0.1)` whenever `vibe == "CASUAL"`. Furthermore, line 1684 penalized `base_interest` by `(1.0 - (casual * 0.5))`. Because small triage models labeled personal history inquiries (*Aurora / psys*) as non-technical chit-chat, interest plummeted to 0.1, silencing the Distillation Funnel (`TWO_MICE_FUNNEL_INTEREST = 0.35`).
+2. **The Muted Deep Thought Resident:** In Sprint 100/102, `_distill_strategic_brief` was removed and `_run_brain_leg` stubbed out. The Two-Mice Handover only orchestrated Brain and Pinky, leaving Deep Thought completely uncalled during active conversational delivery.
+3. **The Disconnect from Live Silicon:** Mocked unit tests asserted isolated functions, allowing broken pipelines to pass green while the running daemon served dead code ("The Green Lie").
+
+### 2. The Architectural Remedy (BKM-083 & FEAT-645)
+1. **Decoupled Stage Methods:** Extracted 6 discrete `step_*` methods on `CognitiveHub` (`step_pre_triage`, `step_triage`, `step_hyde_rag`, `step_brain_gatekeeper`, `step_deep_thought`, `step_pinky_voice`).
+2. **Penalty-Free Interest Multiplier:** Replaced the casual penalty with `base_interest = (intrigue * 0.4) + (effective_importance * 0.6)` and excised the `vibe == "CASUAL"` clamp entirely.
+3. **Replaced `is_casual` with `search_required` in HyDE:** Enabled retrieval dispatch whenever `search_required is True` or `len(target_domains) > 0` and `interest >= 0.30`.
+4. **Tri-Node Sequential Streaming Handover Relay:** Reconnected Deep Thought (`channel="insight"`, `console="center"`, `source="Deep Thought (Strategy)"`) between Brain's bedrock extraction and Pinky's conversational TL;DR.
+5. **FEAT-525 Telemetry Bridge:** Corrected timestamp tracking so full physical deliberation checkpoints ($d_{\text{brain}} > 0, d_{\text{thought}} > 0$) write to `round_table_deltas.json`.
+6. **Live Silicon Hot-Reload (`BKM-024`):** Hot-reloaded running daemon (`POST /reload_residents`) with boot commit `111d02c` matching Git HEAD, verified 114/114 passing tests, and confirmed live physical silicon triage and delivery on M5 Air & KENDER 4090.
