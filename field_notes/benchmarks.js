@@ -432,6 +432,28 @@ async function loadCumulativeTelemetry() {
 }
 
 // ==============================================================================
+// SHARED EXPANDABLE DRAWER HELPER [STORY 102.22]
+// ==============================================================================
+// Standardizes the <details class="feature-details"> boilerplate shared by the
+// blackboard ledger turn drawers and the batch scans ledger drawer.
+// options: { id: string, open: boolean, summaryHtml: string, contentHtml: string }
+function createExpandableDrawer(options) {
+    const details = document.createElement('details');
+    details.className = 'feature-details';
+    if (options.id) details.id = options.id;
+    if (options.open) details.setAttribute('open', '');
+    details.innerHTML = `
+        <summary${options.summaryStyle ? ` ${options.summaryStyle}` : ''}>
+            ${options.summaryHtml}
+        </summary>
+        <div class="details-content" style="${options.contentBorder || ''}">
+            ${options.contentHtml}
+        </div>
+    `;
+    return details;
+}
+
+// ==============================================================================
 // 2. ROUND TABLE DELTA-T & BLACKBOARD LEDGER ENGINE [FEAT-525]
 // ==============================================================================
 async function loadDeltaTData() {
@@ -726,11 +748,6 @@ function renderBlackboardLedger(data) {
     // [Item 11] Render latest turn first (reverse chronological)
     const reversedData = Array.isArray(data) ? data.slice().reverse() : [];
     reversedData.forEach((turn, idx) => {
-        const details = document.createElement('details');
-        details.className = 'feature-details';
-        details.id = `turn-${turn.turn}`;
-        if (idx === 0) details.setAttribute('open', ''); // open newest turn by default
-
         const checkpoints = turn.checkpoints_elapsed_s || turn.cumulative || {};
         const deltas = turn.deltas_elapsed_s || turn.deltas || {};
         const deltaSummary = `Δt1: ${((deltas.triage || 0) * 1000).toFixed(0)}ms | Δt2: ${((deltas.pinky_stance || 0) * 1000).toFixed(0)}ms | Δt3: ${((deltas.brain_arch || 0) * 1000).toFixed(0)}ms | Δt4: ${((deltas.oracle || 0) * 1000).toFixed(0)}ms | Δt5: ${((deltas.pinky_judgment || 0) * 1000).toFixed(0)}ms`;
@@ -774,8 +791,7 @@ function renderBlackboardLedger(data) {
         const dateStr = formatTurnDate(turn.timestamp, turn.time_str);
         const durSec = ((turn.total_elapsed_s || turn.total_s || 0)).toFixed(2);
         const promptPreview = turn.user_prompt ? turn.user_prompt.slice(0, 75) + (turn.user_prompt.length > 75 ? '...' : '') : (turn.topic || 'ROUND_TABLE_DELIBERATION');
-        details.innerHTML = `
-            <summary style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        const details = createExpandableDrawer({ id: `turn-${turn.turn}`, open: idx === 0, summaryStyle: 'style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;"', summaryHtml: `
                 <span style="color:#8b949e; font-family:'JetBrains Mono',monospace; font-size:0.75rem;">${dateStr}</span>
                 <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:0.78rem;">TURN ${turn.turn}</span>
                 <span style="color:#f0f3f6; font-weight:500; max-width:520px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${(turn.user_prompt || '').replace(/"/g, '&quot;')}">
@@ -783,9 +799,7 @@ function renderBlackboardLedger(data) {
                 </span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
                     <strong style="color:#3fb950;">${durSec}s</strong>
-                </span>
-            </summary>
-            <div class="details-content" style="border-left: 3px solid #3fb950;">
+                </span>`, contentBorder: 'border-left: 3px solid #3fb950; ', contentHtml: `
                 ${turn.user_prompt ? `
                 <div style="margin-bottom: 10px; padding: 6px 12px; background: rgba(88, 166, 255, 0.08); border-left: 3px solid #58a6ff; border-radius: 4px;">
                     <span class="field-label" style="color:#58a6ff; font-size:0.68rem; text-transform:uppercase;">User Prompt</span>
@@ -816,26 +830,19 @@ function renderBlackboardLedger(data) {
                     </div>
                 </div>
                 ${subagentTableHtml}
-            </div>
-        `;
+            `});
         container.appendChild(details);
     });
 
     // Render [BATCH] Card for non-interactive / background scans
     const batchRecords = liveRecords.filter(r => r.is_batch || (r.source && (r.source.includes('mass_scan') || r.source.includes('refine_gem') || r.source.includes('NIGHTLY_REFINEMENT'))));
     if (batchRecords.length > 0) {
-        const batchDetails = document.createElement('details');
-        batchDetails.className = 'feature-details';
-        batchDetails.id = 'batch-scans-ledger';
-        batchDetails.innerHTML = `
-            <summary>
+        const batchDetails = createExpandableDrawer({ id: 'batch-scans-ledger', summaryHtml: `
                 <span class="badge" style="background:#382714; color:#f78166; border:1px solid #bd561d; margin-right:8px;">[BATCH]</span>
                 <span style="color:#f0f3f6; font-weight:600;">NIGHTLY_REFINEMENT & ARCHIVE SCANS</span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
                     ${batchRecords.length} batch job(s)
-                </span>
-            </summary>
-            <div class="details-content" style="border-left: 3px solid #f78166;">
+                </span>`, contentBorder: 'border-left: 3px solid #f78166; ', contentHtml: `
                 <table class="live-stream-table" style="margin-top: 6px; font-size: 0.72rem;">
                     <thead>
                         <tr>
@@ -860,8 +867,7 @@ function renderBlackboardLedger(data) {
                         `).join('')}
                     </tbody>
                 </table>
-            </div>
-        `;
+            `});
         container.appendChild(batchDetails);
     }
 }
