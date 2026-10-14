@@ -474,7 +474,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.19: Public Benchmarks Layout Hygiene & Legacy ROI Purge
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `842470c` in Portfolio_Dev)
 * **Context & Mechanism:** In `Portfolio_Dev/field_notes/public_benchmarks.html`, purge Section 4 (`<!-- 4. Electricity Cost per 1M Tokens & Savings Multiplier -->`) and update the header subtitle to remove `& Energy ROI Model`. Preserve the 4 certified hardware seats, execution throughput, reasoning depth, and energy efficiency cards.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/public_benchmarks.html`.
@@ -484,7 +484,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.20: Decouple Synthetic Benchmarks from Nightly Forge
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `92941cc` in HomeLabAI)
 * **Context & Mechanism:** In `HomeLabAI/src/infra/nightly_forge.py`, completely decouple synthetic benchmark execution by disabling `run_benchmark_sweep()`. With passive real workload harvesting via `live_usage_stream.jsonl`, nightly synthetic pings burn tokens and risk waking endpoints needlessly. Retain step logging indicating dynamic benchmarks are continuously harvested.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/infra/nightly_forge.py`.
@@ -492,19 +492,19 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
   * **Anchor 3 (Silicon Invariant):** 2:00 AM nightly forge runs zero synthetic Ollama/vLLM prompt pings.
   * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-570]`, `[BKM-024]`.
 
-#### Story 102.21: FeatureTracker Telemetry Provenance Annotations & `[FEAT-657]` Definition
+#### Story 102.21: FeatureTracker Telemetry Provenance Annotations & `[FEAT-496]` Grounding
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
-* **Context & Mechanism:** In `Portfolio_Dev/FeatureTracker.md`, surgically update `[FEAT-494]` and `[FEAT-525]` with concrete data source file paths, and author new feature card `[FEAT-657]` (Passive Swarm Live Usage Stream & Hardware Telemetry) documenting `live_usage_stream.jsonl` so Clara ambient hooks associate all 3 telemetry streams automatically.
+* **Status:** **COMPLETED & CERTIFIED** (Commit `e0887d6` in Portfolio_Dev)
+* **Context & Mechanism:** In `Portfolio_Dev/FeatureTracker.md`, surgically update `[FEAT-494]`, `[FEAT-495]`, `[FEAT-496]`, and `[FEAT-525]` with concrete data source file paths (`live_usage_stream.jsonl`, `round_table_deltas.json`, `delegation_ledger.jsonl`), and synchronize vector embeddings into ChromaDB collection `feature_dna`.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `Portfolio_Dev/FeatureTracker.md`.
-  * **Anchor 2 (Verification Command):** `grep -q "FEAT-657" Portfolio_Dev/FeatureTracker.md && grep -q "live_usage_stream.jsonl" Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `grep -q "FEAT-496" Portfolio_Dev/FeatureTracker.md && grep -q "live_usage_stream.jsonl" Portfolio_Dev/FeatureTracker.md`.
   * **Anchor 3 (Silicon Invariant):** ChromaDB sync passes clean; Clara hooks resolve live telemetry paths.
-  * **Anchor 4 (DNA Links):** `[FEAT-657]`, `[FEAT-525]`, `[FEAT-552]`.
+  * **Anchor 4 (DNA Links):** `[FEAT-496]`, `[FEAT-525]`, `[FEAT-552]`.
 
 #### Story 102.22: Benchmark UI Expandable Drawer Component Deduplication
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `fd2e6bc` in Portfolio_Dev)
 * **Context & Mechanism:** In `Portfolio_Dev/field_notes/benchmarks.js`, introduce a shared helper function (`createExpandableDrawer(options)`) to generate collapsible drawer cards across Tab 1 (Turn Deliberations), Tab 2 (Batch Scans / Subagent Dispatches), and Tab 3 (Delegation Runs), keeping existing visual styling 100% intact while eliminating duplicate DOM assembly logic.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.js`.
