@@ -2700,13 +2700,17 @@
 **Rationale:** Eliminates prompt echoes and header duplication in small parameter base models (Llama-3.2-3B).
 **Mechanism:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `src/tests/test_prompt_isolation_guardrail.py`.
 
-## [FEAT-489] Two-Mice Sequential Streaming Handover & Distillation Pipeline
+## [FEAT-489] Two-Mice Sequential Streaming Handover & Deliberation Circuit
 **Status:** ACTIVE (Augmented Sprint 103)
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L650) — Two-Mice Sequential Handover.
-> [!NOTE] AUGMENTED (Sprint 103 / FEAT-645): Evolved from a two-party relay into the **Tri-Node Handover Relay**: Stage 1 Brain Information Gatekeeper (Right Console) $\to$ Stage 2 Deep Thought Strategic Synthesis (Center/Left Console) $\to$ Stage 3 Pinky Voice Delivery (Left Console / TTS).
+**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L2950) — Two-Mice Sequential Handover.
+> [!NOTE] AUGMENTED (Sprint 103 / FEAT-645): Evolved into **Macro Stage 3: Two-Mice Deliberation Circuit** comprising 4 discrete micro-stages:
+> - **Stage 3.1: Brain Gatekeeper (Right Console):** Filters out distractor fluff, forwards cohesive bedrock RAG verbatim, and appends high-leverage `💡 Curator Note: [ID] connects with [ID]` annotations.
+> - **Stage 3.2: Deep Thought Strategy (Center Console):** Sovereign architectural synthesis with `FEAT-523` interest token budget.
+> - **Stage 3.3: Pinky Voice Delivery (Left Console / TTS):** Conversational in-character TL;DR streamed directly to user.
+> - **Stage 3.4: Pinky Grounding Critic (Left Console) [FEAT-227 / FEAT-470]:** Evaluates strategic response against bedrock RAG evidence, emitting 4-key scorecard (`score`, `reasoning`, `slop_found`, `retort`).
 
-**Logic:** Orchestrates high-interest historical turns into a sequential distillation funnel: Brain extracts 3-4 dense technical bullet points from raw RAG context to the Right Console, Deep Thought synthesizes the strategic reality, and Pinky delivers a conversational in-character TL;DR directly to the user on the Left Console.
-**Rationale:** Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes.
+**Logic:** Orchestrates high-interest turns into a sequential deliberation funnel under Macro Stage 3. Eliminates monolithic prompt confusion by decoupling extraction, synthesis, delivery, and audit into isolated micro-stages.
+**Rationale:** Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes, backed by live coherence verification.
 **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/pinky_critic_persona.py`, `src/tests/test_two_mice_handover.py`, `src/tests/test_multi_stage_replay_pipeline.py`.
 
 ## [FEAT-490] Fast Resident Node Hot-Reload (vLLM VRAM Preservation)
@@ -3812,7 +3816,15 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Tags:** `#architecture`, `#decoupling`, `#unit_testing`, `#stage_isolation`, `[FEAT-645]`, `[BKM-024]`
 **Code:** `HomeLabAI/docs/Protocols.md`, `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:**
-1. **Discrete Stage Methods:** Multi-stage cognitive pipelines must be authored as discrete, callable `step_*` methods on `CognitiveHub` (`step_pre_triage`, `step_triage`, `step_hyde_rag`, `step_brain_gatekeeper`, `step_deep_thought`, `step_pinky_voice`).
+1. **Discrete Stage Methods:** Multi-stage cognitive pipelines must be authored as discrete, callable `step_*` methods on `CognitiveHub`:
+   - `step_pre_triage(query)`: Sub-20ms vector probe emitting continuous `semantic_affinity`.
+   - `step_triage(query, pre_triage)`: Speculative triage relay emitting decoupled intent and target domains.
+   - `step_hyde_rag(query, triage)`: HyDE synthesis with `search_required: bool` and unified ChromaDB retrieval.
+   - Macro Stage 3 Deliberation Micro-Stages:
+     - `step_brain_gatekeeper(query, rag_context, interest)`: Stage 3.1 Gatekeeper forwarding cohesive bedrock RAG + Curator Notes.
+     - `step_deep_thought(query, brain_bullets, interest)`: Stage 3.2 Deep Thought strategic synthesis with `FEAT-523` pacing.
+     - `step_pinky_voice(query, synthesis, interest)`: Stage 3.3 Pinky voice TL;DR, TTS delivery, and consensus telemetry.
+     - `step_grounding_critic(query, ...)`: Stage 3.4 Pinky Grounding Critic 4-key scorecard audit against evidence.
 2. **Zero Execution Divergence:** The live `process_turn()` loop in production must call `step_*` methods sequentially without duplicate code paths or architectural divergence.
 3. **Offline Unit Testability:** Pytest test suites must test individual `step_*` methods independently using frozen stage fixtures, enabling sub-second prompt and logic iteration without full-turn overhead.
 4. **Continuous Parameter Passing:** Stage methods pass continuous parameters (`interest: float`, `semantic_affinity: float`, `search_required: bool`) rather than relying on mutable shared object state or binary clamps.
