@@ -378,7 +378,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.14: Dual Live & Deploy Feed Publisher Hook in `delegate.py` and `build_site.py` (`[FEAT-552]` / `[FEAT-064]`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `63056f5` in HomeLabAI, `a24831a` in Portfolio_Dev)
 * **Context & Mechanism:**
   1. In `HomeLabAI/src/tests/delegate.py`, invoke `export_web_telemetry()` immediately upon writing to `delegation_ledger.jsonl`. This gives zero-delay live updates whenever local, cloud, or oracle runs complete.
   2. In `Portfolio_Dev/field_notes/build_site.py`, call `export_web_telemetry()` right before `deploy_to_airlock()`, guaranteeing the feed is freshly compiled and synced to `www_deploy/data/delegation_runs.json`.
@@ -391,57 +391,70 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.15: Tab Nomenclature Cleanup, Compact Button Styling & ROI Slider Purge
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `569b884` in Portfolio_Dev)
 * **Context & Mechanism:**
   1. In `Portfolio_Dev/field_notes/benchmarks.html`, clean and compact the tab names:
      - `Live Round Table` (was `⏱️ LIVE ROUND TABLE ELAPSED TIME`)
      - `Model Throughput` (was `🏛️ SILICON ARENA & WORKLOAD`)
      - `Sprint Delegation` (was `🐝 SWARM DELEGATION & SOVEREIGN GAINS`)
-  2. In `Portfolio_Dev/field_notes/style.css`, squish tab button padding (`6px 12px`, `font-size: 0.8rem`, `letter-spacing: normal`).
-  3. Purge Tab 3 (`#tab-roi` and Hypothetical Scaling Calculator) from `benchmarks.html` and `benchmarks.js`.
-  4. Mark `[FEAT-426]` in `Portfolio_Dev/FeatureTracker.md` as `DEFEATURED (Sprint 102) — Superseded by [FEAT-525]`.
+  2. In `Portfolio_Dev/field_notes/benchmarks.html`, squished `.tab-btn` styling (`padding: 6px 12px; font-size: 0.78rem; letter-spacing: normal`).
+  3. Purged Tab 3 (`#tab-roi` and Hypothetical Scaling Calculator) from `benchmarks.html` and `benchmarks.js`.
+  4. Marked `[FEAT-426]` / `[FEAT-494]` in `Portfolio_Dev/FeatureTracker.md` as `DEFEATURED (Sprint 102) — Superseded by [FEAT-525]`.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/style.css`, `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/FeatureTracker.md`.
   * **Anchor 2 (Verification Command):** `node --check Portfolio_Dev/field_notes/benchmarks.js && ! grep -q "tab-roi" Portfolio_Dev/field_notes/benchmarks.html`.
   * **Anchor 3 (Silicon Invariant):** Clean DOM layout without JS errors; 3 unified tabs active.
   * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-426]`, `[FEAT-494]`.
 
 #### Story 102.16: Codify BKM-049 §8 (Canonical Story Argument Law) & Multi-Format Ingestion in `sprint_telemetry.py`
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `c4c9a72` in HomeLabAI)
 * **Context & Mechanism:**
-  1. In `HomeLabAI/docs/Protocols.md`, codify `BKM-049 §8` mandating canonical dotted story IDs (`--story 102.1`, `--story 102.9`) across all dispatch commands and JIT checkpoint calls.
-  2. In `HomeLabAI/src/infra/sprint_telemetry.py`, harden `export_web_telemetry()`:
-     - Normalize story keys across both dotted (`102.9`) and un-dotted (`1029`) formats so JIT checkpoint stubs match authoritative `delegate.py` records.
-     - Suppress unpopulated stub records when an authoritative record with matching story exists.
-     - Extract clean story, sprint, and titles for all historical entries.
+  1. In `HomeLabAI/docs/Protocols.md`, codified `BKM-049 §8` mandating canonical dotted story IDs (`--story 102.1`, `--story 102.9`) across all dispatch commands and JIT checkpoint calls.
+  2. In `HomeLabAI/src/infra/sprint_telemetry.py`, implemented `normalize_story_id()` and `is_authoritative_run()`:
+     - Normalizes story keys across both dotted (`102.9`) and un-dotted (`1029`) formats so JIT checkpoint stubs match authoritative `delegate.py` records.
+     - Suppresses unpopulated stub records when an authoritative record with matching story exists.
+     - Extracts clean story, sprint, and titles for all historical entries.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/docs/Protocols.md`, `HomeLabAI/src/infra/sprint_telemetry.py`.
-  * **Anchor 2 (Verification Command):** `python3 HomeLabAI/src/infra/sprint_telemetry.py --export-web && python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/data/delegation_runs.json')); s102=[r for r in d['runs'] if r['sprint']=='102']; assert all(r['title'] and r['tier'] for r in s102), 'Blank stubs detected in Sprint 102'; print('PASS: All Sprint 102 runs decorated clean')"`
+  * **Anchor 2 (Verification Command):** `python3 HomeLabAI/src/infra/sprint_telemetry.py --export-web && python3 -c "import json; d=json.load(open('Portfolio_Dev/field_notes/data/delegation_runs.json')); s102=[r for r in d['runs'] if r['sprint']=='102']; assert len(s102)==8 and all(r['title'] and r['tier'] for r in s102), 'Sprint 102 decoration incomplete'; print('PASS: All 8 Sprint 102 runs decorated clean')"`
   * **Anchor 3 (Silicon Invariant):** Zero un-decorated JIT stubs; 100% clean story, title, tier, and token metrics.
   * **Anchor 4 (DNA Links):** `[BKM-049]`, `[BKM-081]`, `[FEAT-552]`.
 
 #### Story 102.17: Delegation Table Mobile Optimization & Blackboard Header Ergonomics
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `170748d` in Portfolio_Dev)
 * **Context & Mechanism:**
   1. In `Portfolio_Dev/field_notes/benchmarks.js`:
-     - Collapse `Mode / Tier` column to strictly `Tier` (`r.tier || '—'`).
-     - In `renderBlackboardLedger()`, replace redundant static badges (`[FULL ROUND TABLE]`, `[CONTEXT_SCOPE_LONG]`) with a clean timestamp including date (`YYYY-MM-DD HH:MM:SS` from `turn.timestamp`) and turn duration.
-  2. In `Portfolio_Dev/field_notes/style.css`:
-     - Add responsive styles for `#delegation-runs-table` (`@media (max-width: 768px)` hides chevron and duration, allows title wrapping).
+     - Added `formatTier()` rendering clean, color-coded badges matching the swarm palette (`LOCAL` green, `PRIMARY` purple, `ORACLE` pink, `CLOUD` blue).
+     - Collapsed table column 4 to strictly `Tier` (desktop & mobile).
+     - In `renderBlackboardLedger()`, purged redundant static badges (`[FULL ROUND TABLE]`, `[CONTEXT_SCOPE_LONG]`) and added `formatTurnDate()` producing full `YYYY-MM-DD HH:MM:SS` timestamps alongside turn duration.
+  2. In `Portfolio_Dev/field_notes/benchmarks.html`:
+     - Added `@media (max-width: 768px)` rules: hides chevron and duration columns, wraps story title cleanly, adjusts padding to 6px, and switches summary cards to a 2x2 grid.
 * **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/style.css`.
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/benchmarks.html`.
   * **Anchor 2 (Verification Command):** `node --check Portfolio_Dev/field_notes/benchmarks.js && ! grep -q "CONTEXT_SCOPE_LONG" Portfolio_Dev/field_notes/benchmarks.js`.
   * **Anchor 3 (Silicon Invariant):** Clean, date-stamped accordion headers; responsive table layout on mobile.
   * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-526]`.
 
-#### Story 102.18: Model Throughput Live Telemetry Planning & Swarm Specification
+#### Story 102.18: Model Throughput Live Telemetry Architectural Specification
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `READY FOR EXECUTION`
-* **Context & Mechanism:** Document architectural specification in `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md` detailing how `live_usage_stream.jsonl` will feed real observed Tok/s and TTFT into a multi-seat Canvas trend graph in a subsequent sprint story, replacing synthetic `bench_models.py` pings.
+* **Status:** **COMPLETED & SPECIFIED** (Ready for `[SWARM:LOCAL]` delegation)
+* **Context & Mechanism:**
+  1. **Historical Mining & Intent Analysis (`FEAT-495` / `FEAT-494`):**
+     - Sprint 101.19 introduced `bench_models.py` to test hardware endpoints during nightly builds. However, `bench_models.py` used synthetic probe pings (`"Explain quantum computing in 20 words"`) that failed to capture real-world performance under heavy prompt caching, long system context, and streaming round table multi-turn deliberations.
+     - Just as `Live Round Table Elapsed` was successfully shifted from synthetic approximations to real observed deliberation checkpoints (`round_table_deltas.json`), `Model Throughput` must be grounded in the active telemetry stream (`data/live_usage_stream.jsonl`).
+  2. **Architectural Specification for Implementation Story (Next Phase / Sprint 103):**
+     - **Telemetry Source:** Harvest real observed execution receipts from `HomeLabAI/data/live_usage_stream.jsonl` (and OpenCode REST session transcripts). Each receipt records: `timestamp`, `seat` (`Node KENDER`, `z87-Linux`, `Node Brain`, `Gemini Cloud`), `model`, `tokens_generated`, `duration_seconds`, and `throughput_tok_s`.
+     - **Canvas Visualization (`model-throughput-chart`):**
+       - Mirror the multi-series architecture of `swarm-token-chart` and `delta-t-chart`.
+       - Render a 1000x260 HTML5 Canvas line/scatter plot showing Tok/s over time, partitioned by seat color (Kender 4090: Cyan `#58a6ff`, 2080 Ti: Green `#3fb950`, M5 Air: Purple `#bc8cff`, Cloud: Pink `#f778ba`).
+       - Compute running P50/P90 observed generation speeds instead of static bar estimates.
+     - **Delegation Target Analysis:**
+       - **Target Tier:** `[SWARM:LOCAL]` (Node KENDER via `delegate.py --mode local`).
+       - **Rationale:** This is 100% frontend JavaScript, Canvas math, and lightweight Python JSON aggregation. It requires zero cloud tokens, operates hermetically within the local repository, and can be verified via `node --check` and `build_site.py`.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
-  * **Anchor 2 (Verification Command):** `grep -q "Model Throughput Live Telemetry Specification" Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
-  * **Anchor 3 (Silicon Invariant):** Formal spec approved for local swarm delegation.
-  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[INS-047]`.
+  * **Anchor 2 (Verification Command):** `grep -q "Model Throughput Live Telemetry Architectural Specification" Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
+  * **Anchor 3 (Silicon Invariant):** Complete architectural blueprint codified and ready for atomic local delegation dispatch.
+  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[INS-047]`, `[BKM-024]`.
