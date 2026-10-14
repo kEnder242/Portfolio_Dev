@@ -560,6 +560,14 @@ function renderSwarmTokenChart(runs) {
     ctx.fillText('Sprint Sequence (Chronological) ►', width - padRight, height - padBottom + 34);
 }
 
+function formatTurnDate(ts, timeStr) {
+    if (!ts) return timeStr || '';
+    const d = new Date(ts > 1e11 ? ts : ts * 1000);
+    if (isNaN(d.getTime())) return timeStr || '';
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
 function renderBlackboardLedger(data) {
     const container = document.getElementById('blackboard-ledger-container');
     if (!container) return;
@@ -615,13 +623,15 @@ function renderBlackboardLedger(data) {
             `;
         }
 
+        const dateStr = formatTurnDate(turn.timestamp, turn.time_str);
+        const durSec = ((turn.total_elapsed_s || turn.total_s || 0)).toFixed(2);
         details.innerHTML = `
-            <summary>
-                <span class="badge" style="background:#14291e; color:#3fb950; border:1px solid #238636; margin-right:8px; font-size:0.68rem; padding:1px 6px;">[FULL ROUND TABLE]</span>
-                <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace;">TURN ${turn.turn}</span>
-                <span style="color:#f0f3f6; margin-left:10px;">${turn.topic || 'ROUND_TABLE_DELIBERATION'}</span>
+            <summary style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span style="color:#8b949e; font-family:'JetBrains Mono',monospace; font-size:0.75rem;">${dateStr}</span>
+                <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:0.78rem;">TURN ${turn.turn}</span>
+                <span style="color:#f0f3f6; font-weight:500;">${turn.topic || 'ROUND_TABLE_DELIBERATION'}</span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
-                    [${turn.scope || 'CONTEXT_SCOPE_LONG'}] &bull; ${turn.time_str || ''} &bull; <strong style="color:#3fb950;">${(turn.total_elapsed_s || turn.total_s).toFixed(3)}s</strong>
+                    <strong style="color:#3fb950;">${durSec}s</strong>
                 </span>
             </summary>
             <div class="details-content" style="border-left: 3px solid #3fb950;">
@@ -785,6 +795,15 @@ function statusBadge(status, run) {
     return '<span style="color:' + L.c + '; font-family:\'JetBrains Mono\', monospace; font-size:0.75rem;">' + L.icon + ' ' + L.label + '</span>';
 }
 
+function formatTier(r) {
+    const t = String(r.tier || r.mode || '—').toUpperCase();
+    if (t.includes('LOCAL')) return '<span style="color:#3fb950; font-weight:600;">LOCAL</span>';
+    if (t.includes('AGY') || t.includes('PRIMARY')) return '<span style="color:#bc8cff; font-weight:600;">PRIMARY</span>';
+    if (t.includes('ORACLE') || t === 'ORACLE') return '<span style="color:#f778ba; font-weight:600;">ORACLE</span>';
+    if (t.includes('CLOUD')) return '<span style="color:#58a6ff; font-weight:600;">CLOUD</span>';
+    return '<span style="color:#8b949e;">' + (r.tier || r.mode || '—') + '</span>';
+}
+
 function renderDelegationRuns(runs, filter) {
     const tbody = document.getElementById('delegation-runs-tbody');
     if (!tbody) return;
@@ -803,14 +822,14 @@ function renderDelegationRuns(runs, filter) {
         const title = r.title ? r.title : (r.story ? r.story : '—');
         const sprintCell = (r.sprint && r.sprint.trim()) ? r.sprint : '<span style="color:#6a737d;">—</span>';
         html += '<tr class="delegation-row" style="cursor:pointer; border-bottom:1px solid #1f242c;" onclick="toggleDelegationAccordion(this)">'
-            + '<td style="color:#58a6ff;">▶</td>'
-            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + sprintCell + '</td>'
-            + '<td style="max-width:340px;">' + title + '</td>'
-            + '<td style="font-family:\'JetBrains Mono\',monospace; font-size:0.75rem;">' + (r.mode || '—') + ' / ' + (r.tier || '—') + '</td>'
-            + '<td>' + statusBadge(r.status, r) + '</td>'
-            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + totalTok + '</td>'
-            + '<td style="font-family:\'JetBrains Mono\',monospace;">' + dur + '</td>'
-            + '<td>' + verified + '</td>'
+            + '<td class="col-chevron" style="color:#58a6ff;">▶</td>'
+            + '<td class="col-sprint" style="font-family:\'JetBrains Mono\',monospace;">' + sprintCell + '</td>'
+            + '<td class="col-title" style="max-width:340px;">' + title + '</td>'
+            + '<td class="col-tier" style="font-family:\'JetBrains Mono\',monospace; font-size:0.75rem;">' + formatTier(r) + '</td>'
+            + '<td class="col-status">' + statusBadge(r.status, r) + '</td>'
+            + '<td class="col-tokens" style="font-family:\'JetBrains Mono\',monospace;">' + totalTok + '</td>'
+            + '<td class="col-duration" style="font-family:\'JetBrains Mono\',monospace;">' + dur + '</td>'
+            + '<td class="col-verified">' + verified + '</td>'
             + '</tr>';
         // Accordion detail row (hidden by default)
         const reflection = r.reflection ? r.reflection : '<span style="color:#6a737d;">(no reflection recorded)</span>';
@@ -823,7 +842,7 @@ function renderDelegationRuns(runs, filter) {
         const model = r.model ? r.model : '—';
         const ts = r.timestamp ? r.timestamp : '—';
         html += '<tr class="delegation-detail" style="display:none; background:#0d1117;">'
-            + '<td></td>'
+            + '<td class="col-chevron"></td>'
             + '<td colspan="7">'
             + '<div style="font-family:\'JetBrains Mono\',monospace; font-size:0.78rem; line-height:1.7; padding:8px 12px;">'
             + '<div><strong style="color:#8b949e;">REFLECTION:</strong> ' + reflection + '</div>'
