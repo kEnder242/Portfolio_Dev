@@ -203,6 +203,157 @@ function renderBars(results) {
     }
 }
 
+function renderThroughputLiveChart(records) {
+    const canvas = document.getElementById('throughput-live-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Background reset
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, width, height);
+
+    const SEAT_COLORS = {
+        'Windows 4090RTX': '#58a6ff',
+        'Linux 2080ti': '#3fb950',
+        'Apple M5 Air': '#bc8cff',
+        'Cloud Swarm': '#f778ba'
+    };
+    const SEAT_LABELS = {
+        'Windows 4090RTX': 'Kender 4090',
+        'Linux 2080ti': '2080 Ti',
+        'Apple M5 Air': 'M5 Air',
+        'Cloud Swarm': 'Cloud'
+    };
+    const colorFor = (seat) => SEAT_COLORS[seat] || '#8b949e';
+    const labelFor = (seat) => SEAT_LABELS[seat] || seat || 'Unknown';
+
+    // Partition receipts by seat (chronological), latest 120 per seat
+    const bySeat = {};
+    (Array.isArray(records) ? records : []).forEach(r => {
+        const seat = r.seat || 'Unknown';
+        const tp = Number(r.throughput_tok_s);
+        if (!isFinite(tp)) return;
+        if (!bySeat[seat]) bySeat[seat] = [];
+        bySeat[seat].push(r);
+    });
+    const seatNames = Object.keys(bySeat);
+    seatNames.forEach(s => { bySeat[s] = bySeat[s].slice(-120); });
+
+    const allPoints = seatNames.flatMap(s => bySeat[s]);
+    if (!allPoints.length) {
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '12px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('⚡ No live throughput telemetry recorded yet. Awaiting workload dispatches.', width / 2, height / 2);
+        return;
+    }
+
+    const padLeft = 70;
+    const padRight = 50;
+    const padTop = 40;
+    const padBottom = 45;
+    const chartW = width - padLeft - padRight;
+    const chartH = height - padTop - padBottom;
+
+    const maxVal = Math.max(10, ...allPoints.map(r => Number(r.throughput_tok_s) || 0)) * 1.25;
+    const n = allPoints.length;
+    const getX = (idx) => padLeft + (n > 1 ? (idx / (n - 1)) * chartW : chartW / 2);
+    const getY = (val) => padTop + chartH - (val / maxVal) * chartH;
+
+    // Horizontal grid + Y labels (tok/s)
+    const ySteps = 4;
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= ySteps; i++) {
+        const val = (maxVal / ySteps) * i;
+        const y = getY(val);
+        ctx.strokeStyle = '#1f242c';
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(width - padRight, y);
+        ctx.stroke();
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(val.toFixed(1), padLeft - 10, y + 3);
+    }
+
+    // X tick labels: first, last, and every ~24th point (HH:MM:SS)
+    const timeOf = (r) => {
+        if (r.date_str) return String(r.date_str).slice(11, 19);
+        if (r.timestamp) return new Date(r.timestamp * 1000).toTimeString().slice(0, 8);
+        return '';
+    };
+    const step = Math.max(1, Math.floor(n / 6));
+    const labelIdxs = new Set([0, n - 1]);
+    for (let i = 0; i < n; i += step) labelIdxs.add(i);
+
+    allPoints.forEach((r, idx) => {
+        const x = getX(idx);
+        if (labelIdxs.has(idx)) {
+            ctx.fillStyle = '#8b949e';
+            ctx.font = '9px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(timeOf(r), x, height - padBottom + 18);
+        }
+    });
+
+    // Per-seat lines + points + value badges
+    seatNames.forEach(seat => {
+        const pts = bySeat[seat];
+        const color = colorFor(seat);
+        const label = labelFor(seat);
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        let started = false;
+        allPoints.forEach((r, idx) => {
+            if (r.seat !== seat) return;
+            const x = getX(idx);
+            const y = getY(Number(r.throughput_tok_s));
+            if (!started) { ctx.moveTo(x, y); started = true; }
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        allPoints.forEach((r, idx) => {
+            if (r.seat !== seat) return;
+            const x = getX(idx);
+            const val = Number(r.throughput_tok_s);
+            const y = getY(val);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#0d1117';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        });
+
+        // Value badge above last 3 points of this seat
+        const seatPts = allPoints.map((r, idx) => ({ r, idx })).filter(p => p.r.seat === seat).slice(-3);
+        seatPts.forEach(({ r, idx }) => {
+            const x = getX(idx);
+            const y = getY(Number(r.throughput_tok_s));
+            ctx.fillStyle = color;
+            ctx.font = 'bold 9px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(Number(r.throughput_tok_s).toFixed(1), x, y - 9);
+        });
+    });
+
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('▲ Live Throughput (tok/s)', padLeft, padTop - 12);
+    ctx.textAlign = 'right';
+    ctx.fillText('Receipt Sequence (Chronological) ►', width - padRight, height - padBottom + 34);
+}
+
 async function loadLiveUsageStream() {
     const container = document.getElementById('live-usage-container');
     if (!container) return;
@@ -224,6 +375,7 @@ async function loadLiveUsageStream() {
             try { return JSON.parse(l); } catch(e) { return null; }
         }).filter(r => r !== null);
         window.cachedLiveRecords = allRecords;
+        renderThroughputLiveChart(allRecords);
 
         const records = allRecords.slice(-10).reverse();
         let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
