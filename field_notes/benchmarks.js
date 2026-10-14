@@ -34,7 +34,6 @@ async function loadBenchmarks() {
 function renderAll(results) {
     renderSeatCards(results);
     renderBars(results);
-    updateRoiCalc(25);
 }
 
 function renderSeatCards(results) {
@@ -202,23 +201,6 @@ function renderBars(results) {
         });
         reasoningContainer.innerHTML = reasoningHtml;
     }
-}
-
-function updateRoiCalc(mtok) {
-    const label = document.getElementById('tokenVolumeLabel');
-    if (label) label.textContent = mtok + ' MTok';
-    const apiCost = mtok * 3.00;
-    const localPowerKwh = mtok * 0.22;
-    const electricityCost = localPowerKwh * 0.15;
-    const savings = apiCost - electricityCost;
-    const savingsPct = ((savings / apiCost) * 100).toFixed(1);
-
-    const apiEl = document.getElementById('apiCostVal');
-    const localEl = document.getElementById('localCostVal');
-    const savEl = document.getElementById('savingsVal');
-    if (apiEl) apiEl.textContent = '$' + apiCost.toFixed(2);
-    if (localEl) localEl.textContent = '$' + electricityCost.toFixed(2);
-    if (savEl) savEl.textContent = '$' + savings.toFixed(2) + ' (' + savingsPct + '%)';
 }
 
 async function loadLiveUsageStream() {

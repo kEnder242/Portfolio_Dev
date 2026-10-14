@@ -151,12 +151,14 @@
             border: none;
             border-bottom: 2px solid transparent;
             color: #8b949e;
-            padding: 10px 18px;
+            padding: 6px 12px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 600;
+            letter-spacing: normal;
             cursor: pointer;
             transition: all 0.2s;
+            white-space: nowrap;
         }
         .tab-btn:hover {
             color: #c9d1d9;
@@ -463,12 +465,11 @@
             <!-- Rendered dynamically via JS -->
         </div>
 
-        <!-- 3-Tab Navigation (Delta-T Default, Arena, ROI+CoT) -->
+        <!-- 3-Tab Navigation (Live Round Table, Model Throughput, Sprint Delegation) -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab(event, 'tab-delta-t')">⏱️ LIVE ROUND TABLE ELAPSED TIME</button>
-            <button class="tab-btn" onclick="switchTab(event, 'tab-arena')">🏛️ SILICON ARENA & WORKLOAD</button>
-            <button class="tab-btn" onclick="switchTab(event, 'tab-roi')">⚡ ENERGY, ROI & CoT</button>
-            <button class="tab-btn" onclick="switchTab(event, 'tab-delegation')">🐝 SWARM DELEGATION & SOVEREIGN GAINS</button>
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-delta-t')">Live Round Table</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-arena')">Model Throughput</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-delegation')">Sprint Delegation</button>
         </div>
 
         <!-- TAB 1 (DEFAULT): LIVE ROUND TABLE ELAPSED TIME & BLACKBOARD LEDGER [FEAT-525/526] -->
@@ -534,92 +535,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: ENERGY, FINANCIAL ROI & INTELLIGENCE (CoT) -->
-        <div id="tab-roi" class="tab-pane hidden">
-            <!-- Reasoning CoT Depth (Rolled into ROI tab per user directive) -->
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>🧠 Reasoning Depth Ratio (CoT Thinking Tokens vs Direct Output)</span>
-                    <span class="chart-subtitle">Percentage of generated tokens dedicated to internal reasoning / self-reflection (Test-Time Compute Scaling)</span>
-                </div>
-                <div id="reasoning-bars"></div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>⚡ Silicon Energy Efficiency (Tokens per Joule)</span>
-                    <span class="chart-subtitle">Tokens/Joule = (Throughput tok/s) / (Power Watts) (Higher is more efficient)</span>
-                </div>
-                <div id="tokens-joule-bars"></div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>💰 Local Electricity Cost per 1M Tokens vs. Cloud ($3.00/MTok Claude 3.5 Sonnet)</span>
-                    <span class="chart-subtitle">Calculated at $0.15/kWh residential rate (Lower cost / Higher multiplier is better)</span>
-                </div>
-                <div id="roi-multipliers-bars"></div>
-            </div>
-
-            <!-- Realized Lifetime ROI Counter -->
-            <div class="roi-calculator" style="border-left: 4px solid #3fb950;">
-                <div class="chart-title">
-                    <span>💎 Your Realized Sovereign ROI (Lifetime To-Date)</span>
-                    <span class="chart-subtitle" id="realized-sync-time">Tracking all lab dispatches, Intercom sessions & nightly scans</span>
-                </div>
-                <div class="calc-grid" style="margin-top: 10px;">
-                    <div class="calc-card">
-                        <div class="calc-label">Sovereign Tokens Generated</div>
-                        <div class="calc-num" id="realizedTokensVal" style="color:#d2a8ff;">0</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Total Workload Output</div>
-                    </div>
-                    <div class="calc-card">
-                        <div class="calc-label">Cloud API Equivalent</div>
-                        <div class="calc-num" id="realizedApiCostVal" style="color:#f78166;">$0.00</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Anthropic / OpenAI Cost</div>
-                    </div>
-                    <div class="calc-card">
-                        <div class="calc-label">Actual Power Cost</div>
-                        <div class="calc-num" id="realizedPowerCostVal" style="color:#58a6ff;">$0.00</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Residential Electricity ($0.15/kWh)</div>
-                    </div>
-                    <div class="calc-card">
-                        <div class="calc-label">Net Realized Savings</div>
-                        <div class="calc-num" id="realizedSavingsVal">$0.00</div>
-                        <div id="realizedPctVal" style="font-size:0.7rem; color:#3fb950;">100.0% Reduction</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="roi-calculator">
-                <div class="chart-title">
-                    <span>🔮 Hypothetical Scaling Calculator</span>
-                    <span class="chart-subtitle">Calculated against Commercial API Rates ($3.00/MTok Claude 3.5 Sonnet Rate)</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:15px; margin-top:10px;">
-                    <span style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:#8b949e;">Monthly Token Volume:</span>
-                    <input type="range" id="tokenVolumeSlider" min="1" max="100" value="25" style="flex-grow:1; accent-color:#3fb950;" oninput="updateRoiCalc(this.value)" />
-                    <span id="tokenVolumeLabel" style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:#3fb950; font-weight:700; min-width:80px;">25 MTok</span>
-                </div>
-                <div class="calc-grid">
-                    <div class="calc-card">
-                        <div class="calc-label">Commercial API Cost</div>
-                        <div class="calc-num" id="apiCostVal" style="color:#f78166;">$75.00</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Anthropic/OpenAI API bill</div>
-                    </div>
-                    <div class="calc-card">
-                        <div class="calc-label">Local Electricity Cost</div>
-                        <div class="calc-num" id="localCostVal" style="color:#58a6ff;">$0.82</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Z87 + M5 power draw</div>
-                    </div>
-                    <div class="calc-card">
-                        <div class="calc-label">Net Monthly Savings</div>
-                        <div class="calc-num" id="savingsVal" style="color:#3fb950;">$74.18 (98.9%)</div>
-                        <div style="font-size:0.7rem; color:#6a737d;">Calculated net margin</div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- TAB 4 (NEW): SWARM DELEGATION & SOVEREIGN GAINS [STORY 101.15] -->
         <div id="tab-delegation" class="tab-pane hidden">
