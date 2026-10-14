@@ -204,6 +204,15 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 | **Story 102.11** | Multi-Turn Live Silicon Validation (`BKM-024`) | `[AGY:PRIMARY]` | Live Daemon Probe | Live turns exhibit proportional token pacing |
 | **Story 102.12** | Standalone Watchdog 8/8 Green Certification | `[AGY:PRIMARY]` | Watchdog Runner | `standalone_accountability_watchdog.py` PASS |
 | **Story 102.13** | Final Sprint 102 Certification & DNA Sync | `[AGY:PRIMARY]` | ChromaDB & Git Sync | `FeatureTracker.md` and ChromaDB synchronized |
+| **Story 102.14** | Dual Live & Deploy Feed Publisher Hook | `[AGY:PRIMARY]` | `delegate.py` & `build_site.py` | Real-time `delegation_runs.json` export hook |
+| **Story 102.15** | Tab Nomenclature & ROI Slider Purge | `[AGY:PRIMARY]` | HTML/JS refactor | Clean 3-tab layout; `#tab-roi` defeatured |
+| **Story 102.16** | Canonical Story Dotted Notation Mandate | `[AGY:PRIMARY]` | `BKM-049 §8` & `sprint_telemetry.py` | Normalized story IDs; stub suppression |
+| **Story 102.17** | Delegation Mobile & Blackboard Ergonomics | `[AGY:PRIMARY]` | CSS/@media & `benchmarks.js` | Responsive mobile table; ISO timestamps |
+| **Story 102.18** | Model Throughput Live Telemetry Specification | `[AGY:PRIMARY]` | Architecture Spec | 4-anchor blueprint for canvas scatter chart |
+| **Story 102.19** | Public Benchmarks Layout & Legacy ROI Purge | `[SWARM:LOCAL]` | `public_benchmarks.html` | Section 4 & ROI subtitle purged |
+| **Story 102.20** | Decouple Synthetic Benchmarks from Nightly Forge | `[SWARM:LOCAL]` | `nightly_forge.py` | `run_benchmark_sweep()` disabled |
+| **Story 102.21** | FeatureTracker Telemetry Annotations & `[FEAT-657]` | `[AGY:PRIMARY]` | `FeatureTracker.md` | Concrete data source paths documented |
+| **Story 102.22** | Benchmark UI Expandable Drawer Component | `[SWARM:LOCAL]` | `benchmarks.js` | Deduplicated drawer rendering helper |
 
 ---
 
@@ -242,7 +251,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.3: Configurable Multiplier Token Budget & Node Profiles in `infrastructure.json`
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 0`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `a7685b0` in HomeLabAI)
 * **Context & Mechanism:** Add declarative configuration keys for continuous interest token budgeting and node generation profiles in `HomeLabAI/config/infrastructure.json`:
   ```json
   "interest_pacing": {
@@ -265,7 +274,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.4: CognitiveHub Multiplier Pacing & String Vibe Decoupling
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 0`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `a7685b0` in HomeLabAI)
 * **Context & Mechanism:** Refactor `HomeLabAI/src/logic/cognitive_hub.py` to decouple hardcoded string branches (`"CASUAL"` / `"TECHNICAL"`):
   1. **Token Budgeting (L1104–L1118):** Replace binary ternary clamp with continuous multiplier:
      ```python
@@ -291,7 +300,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.5: Clean Prompt Meta-Vocabulary Purge
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 0`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `f8b0502` in HomeLabAI)
 * **Context & Mechanism:** Audit and sanitize prompt strings in `HomeLabAI/src/logic/cognitive_hub.py` and `HomeLabAI/src/logic/speculative_triage.py`. Remove meta-intent labels ("fluff", "casual chatter") that artificially bias regex/intent classification (`FBK_1791400074_4d41d3`). Prompts evaluate semantic alignment against facts only.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/speculative_triage.py`.
@@ -301,7 +310,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.6: Phase 1 Atomic Git Checkpoint & Oracle Audit
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING PHASE 1`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `f8b0502` in HomeLabAI)
 * **Context & Mechanism:** Run local tests, verify clean git status, and execute an atomic `git commit` checkpoint: `feat(hub): implement continuous interest multiplier pacing and vibe decoupling [FEAT-523]`. Trigger an intermediate Oracle review if necessary.
 
 ---
@@ -310,7 +319,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.7: Brain Cynical Voice & Narrative Steering Prompt
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 1`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `a6de44d` in HomeLabAI)
 * **Context & Mechanism:** Update `BRAIN_SYSTEM_PROMPT` in `HomeLabAI/src/nodes/brain_node.py`. Brain's role is refined: 1st person cynical evaluator who critiques Pinky's take, steers the narrative back to reality, and filters unrelated RAG without downvoting or killing the turn.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/nodes/brain_node.py`.
@@ -320,7 +329,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.8: Two-Mice Sideband Consensus & RAG Filter Logic (`VIBE-015`)
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 1`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `139029b` in HomeLabAI)
 * **Context & Mechanism:** Wire Brain's narrative steering and filtered RAG IDs directly into Deep Thought's prompt assembly in `cognitive_hub.py`. Filtered/unrelated chunks are strictly excluded from Deep Thought's context, eliminating negative clutter. Brain's sideband rationale is logged in telemetry and attached as a high-density curator note.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py`.
@@ -330,7 +339,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.9: Standalone Brain Voice & Replay Test Harness
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING PHASE 1`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `ae632a5` in HomeLabAI)
 * **Context & Mechanism:** Build `HomeLabAI/src/tests/test_brain_voice_replay.py`. Create a lightweight offline harness that feeds sample multi-turn queries and Pinky responses to Brain, evaluating voice cynicism, narrative steering, and filtering precision without full websocket overhead.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_brain_voice_replay.py`.
@@ -340,7 +349,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.10: Phase 2 Atomic Git Checkpoint & Oracle Audit
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING PHASE 2`
+* **Status:** **COMPLETED & CERTIFIED** (Commit `22e9067` in HomeLabAI)
 * **Context & Mechanism:** Verify all unit tests pass, commit Phase 2 atomically: `feat(brain): implement narrative steering and sideband consensus [VIBE-015] [FEAT-635]`.
 
 ---
@@ -349,7 +358,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.11: Multi-Turn Conversation Live Certification
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING PHASE 2`
+* **Status:** **COMPLETED & CERTIFIED** (Phase 3 Live Probe Passed)
 * **Context & Mechanism:** Run live multi-turn test session against active running daemons across Node Brain (M5 Air oMLX) and Node KENDER (RTX 4090 Deep Thought). Verify continuous token scaling, Brain narrative steering, and absence of runaway 1500-token diatribes.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/run/foyer_journal.jsonl`.
@@ -359,7 +368,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.12: Standalone Watchdog 8/8 Green Certification
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING PHASE 2`
+* **Status:** **COMPLETED & CERTIFIED** (8/8 Checks Passed)
 * **Context & Mechanism:** Execute `standalone_accountability_watchdog.py`. Verify 8/8 checks pass GREEN with 0 failures or stale states.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/run/watchdog_report.json`.
@@ -369,7 +378,7 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
 
 #### Story 102.13: Final Phase 3 Git Checkpoint & Sprint Completion
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `COMPLETED`
+* **Status:** **COMPLETED & CERTIFIED**
 * **Context & Mechanism:** Final sync of `FeatureTracker.md` and ChromaDB DNA. Atomic commit: `chore(sprint): complete Sprint 102.0 certification`. Update sprint status to `COMPLETED & CERTIFIED`.
 
 ---
@@ -458,6 +467,50 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
   * **Anchor 2 (Verification Command):** `grep -q "Model Throughput Live Telemetry Architectural Specification" Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
   * **Anchor 3 (Silicon Invariant):** Complete architectural blueprint codified and ready for atomic local delegation dispatch.
   * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[INS-047]`, `[BKM-024]`.
+
+---
+
+### 🧹 Phase 5: Post-Audit Hardening & Dropped-Ball Resolution
+
+#### Story 102.19: Public Benchmarks Layout Hygiene & Legacy ROI Purge
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:** In `Portfolio_Dev/field_notes/public_benchmarks.html`, purge Section 4 (`<!-- 4. Electricity Cost per 1M Tokens & Savings Multiplier -->`) and update the header subtitle to remove `& Energy ROI Model`. Preserve the 4 certified hardware seats, execution throughput, reasoning depth, and energy efficiency cards.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/public_benchmarks.html`.
+  * **Anchor 2 (Verification Command):** `! grep -q "Electricity Cost per 1M Tokens" Portfolio_Dev/field_notes/public_benchmarks.html && ! grep -q "ROI Model" Portfolio_Dev/field_notes/public_benchmarks.html`.
+  * **Anchor 3 (Silicon Invariant):** Clean static layout matching empirical public benchmarks; zero broken DOM tags.
+  * **Anchor 4 (DNA Links):** `[FEAT-426]`, `[FEAT-494]`, `[BKM-024]`.
+
+#### Story 102.20: Decouple Synthetic Benchmarks from Nightly Forge
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:** In `HomeLabAI/src/infra/nightly_forge.py`, completely decouple synthetic benchmark execution by disabling `run_benchmark_sweep()`. With passive real workload harvesting via `live_usage_stream.jsonl`, nightly synthetic pings burn tokens and risk waking endpoints needlessly. Retain step logging indicating dynamic benchmarks are continuously harvested.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/infra/nightly_forge.py`.
+  * **Anchor 2 (Verification Command):** `python3 -c "import ast; tree = ast.parse(open('HomeLabAI/src/infra/nightly_forge.py').read()); print('Syntax valid')"`
+  * **Anchor 3 (Silicon Invariant):** 2:00 AM nightly forge runs zero synthetic Ollama/vLLM prompt pings.
+  * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-570]`, `[BKM-024]`.
+
+#### Story 102.21: FeatureTracker Telemetry Provenance Annotations & `[FEAT-657]` Definition
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:** In `Portfolio_Dev/FeatureTracker.md`, surgically update `[FEAT-494]` and `[FEAT-525]` with concrete data source file paths, and author new feature card `[FEAT-657]` (Passive Swarm Live Usage Stream & Hardware Telemetry) documenting `live_usage_stream.jsonl` so Clara ambient hooks associate all 3 telemetry streams automatically.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `grep -q "FEAT-657" Portfolio_Dev/FeatureTracker.md && grep -q "live_usage_stream.jsonl" Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 3 (Silicon Invariant):** ChromaDB sync passes clean; Clara hooks resolve live telemetry paths.
+  * **Anchor 4 (DNA Links):** `[FEAT-657]`, `[FEAT-525]`, `[FEAT-552]`.
+
+#### Story 102.22: Benchmark UI Expandable Drawer Component Deduplication
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `READY FOR EXECUTION`
+* **Context & Mechanism:** In `Portfolio_Dev/field_notes/benchmarks.js`, introduce a shared helper function (`createExpandableDrawer(options)`) to generate collapsible drawer cards across Tab 1 (Turn Deliberations), Tab 2 (Batch Scans / Subagent Dispatches), and Tab 3 (Delegation Runs), keeping existing visual styling 100% intact while eliminating duplicate DOM assembly logic.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/field_notes/benchmarks.js`.
+  * **Anchor 2 (Verification Command):** `node --check Portfolio_Dev/field_notes/benchmarks.js`.
+  * **Anchor 3 (Silicon Invariant):** Zero visual regression in DOM rendering or mobile layouts across all 3 tabs.
+  * **Anchor 4 (DNA Links):** `[FEAT-525]`, `[FEAT-526]`.
 
 ---
 
