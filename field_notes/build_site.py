@@ -96,6 +96,23 @@ def deploy_to_airlock(snapshots=False):
         www_dir = os.path.join(os.path.dirname(BASE_DIR), "www_deploy")
 
     if os.path.exists(www_dir):
+        # [FEAT-552] Auto-Sync Swarm Delegation Web Feed before airlock deployment
+        try:
+            telemetry_script = os.path.join(
+                repo_root, "HomeLabAI", "src", "infra", "sprint_telemetry.py"
+            )
+            if os.path.exists(telemetry_script):
+                py_bin = sys.executable
+                subprocess.run(
+                    [py_bin, telemetry_script, "--export-web"],
+                    capture_output=True,
+                    check=False,
+                    timeout=10,
+                )
+                print("✅ Exported live delegation web feed (delegation_runs.json)")
+        except Exception as e:
+            print(f"⚠️ Warning: Could not export delegation web feed: {e}")
+
         # Sync json data files to public airlock data directory
         src_data = os.path.join(BASE_DIR, "data")
         dst_data = os.path.join(www_dir, "data")

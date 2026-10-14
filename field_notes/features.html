@@ -14550,31 +14550,31 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Round Table Context Scoping & Blackboard Ledger DNA
+                                    Continuous Interest Multiplier Pacing
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-70.0</p>
+                    <p>SPR-70.0 / SPR-102.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces string-sniffing with explicit <code>ContextScope</code> enum (<code>ContextScope.TURN</code> vs <code>ContextScope.LONG</code>). Triage and Deep Thought receive isolated <code>TURN</code> scope. Mice (Pinky &amp; Brain) receive <code>LONG</code> scope with Blackboard Ledger + 1 prior turn. Brain writes distillation bullets; Pinky writes 1-line consensus; stored in ChromaDB <code>blackboard_ledger_dna</code>.</p>
+                    <p>Redefines conversational token budgeting from a discrete binary ternary step function (<code>1500 if interest &gt;= 0.3 else 150</code>) into a continuous mathematical scalar multiplier: <code>clamp(int(current_interest * multiplier), floor, ceiling)</code> (default <code>multiplier: 150</code>, <code>floor: 32</code>, <code>ceiling: 1500</code>). Low interest smoothly tapers turn length toward zero without abrupt gags, while high interest grants proportional elaboration headroom. Generation profiles and repetition penalties are configured declaratively in <code>infrastructure.json</code>.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Resolves long context bloat while keeping conversational agents self-aware across multi-turn sessions.</p>
+                    <p>Preserves conversational dynamism across the interest spectrum and eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/memory/blackboard_ledger.py</code>.</p>
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -15792,13 +15792,13 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Structured Delegation Execution Ledger (`data/delegation_ledger.jsonl`)
+                                    Structured Delegation Execution Ledger & Auto-Live Web Feed Hook
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-82.0 / SPR-83.0</p>
+                    <p>SPR-82.0 / SPR-83.0 / SPR-101.0 / SPR-102.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -15810,19 +15810,19 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Automatically records every swarm delegation attempt into a machine-readable JSONL ledger (<code>HomeLabAI/data/delegation_ledger.jsonl</code>). Captures session IDs, target stories, providers, models, duration, token metrics (input/output/reasoning/cache), finish statuses, and deep diagnostic message traces on failures. Provides a clean ASCII table view via <code>python3 delegate.py --ledger</code>.</p>
+                    <p>Automatically records every swarm delegation attempt into machine-readable JSONL ledgers (<code>delegation_ledger.jsonl</code>). To guarantee zero-delay dashboard freshness, <code>delegate.py</code> immediately triggers <code>export_web_telemetry()</code> upon run completion, regenerating <code>delegation_runs.json</code> in real time. Simultaneously, <code>build_site.py</code> executes the export hook prior to copying data to the public airlock (<code>www_deploy/data/</code>), establishing a dual live-and-deploy publishing pipeline with zero dependency on nightly batch windows.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Eliminates telemetry blindness across multi-attempt delegation loops, providing persistent auditability and forensic traceability for Tri-Loop governance.</p>
+                    <p>Eliminates telemetry blindness across multi-attempt delegation loops and ensures operators see up-to-the-second execution metrics on the web dashboard immediately upon story finish.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>_log_delegation_ledger</code> and <code>--ledger</code> CLI action in <code>delegate.py</code>.</p>
+                    <p><code>record_delegation()</code> in <code>delegate.py</code>, <code>export_web_telemetry()</code> in <code>sprint_telemetry.py</code>, and <code>deploy_to_airlock()</code> in <code>build_site.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -18047,37 +18047,37 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Brain Information Gatekeeper & Curator Synergy Annotations
+                                    Brain Information Gatekeeper & Narrative Steering
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-96.0 (Active)</p>
+                    <p>SPR-96.0 / SPR-102.0 (Active)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_brain_voice_replay.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Transforms the local Brain node into an Information Gatekeeper. Brain evaluates candidate vectors collected by Pinky, drops ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage <code>💡 Curator Note: [ID] connects with [ID]</code> annotations. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.</p>
+                    <p>Transforms the local Brain node into an Epistemic Gatekeeper and Narrative Reality Steerer. Brain evaluates candidate vectors collected by Pinky, prunes ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage <code>💡 Curator Note: [ID] connects with [ID]</code> annotations. Critically, Brain steers the narrative back to concrete reality rather than downvoting interest or stalling the conversational turn. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Eliminates prompt pollution and hallucination cascades in Deep Thought by guaranteeing high-density, strictly grounded context injection.</p>
+                    <p>Eliminates prompt pollution, hallucination cascades, and artificial conversation stalls in Deep Thought by guaranteeing high-density, strictly grounded context injection while preserving dialogue momentum.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>BrainNode.curate_context()</code> and <code>CognitiveHub.build_deep_thought_context()</code>.</p>
+                    <p><code>BrainNode.curate_context()</code>, <code>CognitiveHub.build_two_mice_stage_prompt()</code>, and <code>CognitiveHub.build_deep_thought_context()</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -18981,40 +18981,35 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Sprint 101</p>
+                    <p>Sprint 102</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Tags</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>#grounding</code>, <code>#sprint_architecture</code>, <code>#log_horizon</code>, <code>#historical_invariants</code>, <code>[BKM-082]</code>, <code>[BKM-020]</code>, <code>[BKM-006]</code>, <code>[BKM-005]</code>, <code>[BKM-048]</code>, <code>[INS-047]</code></p>
+                    <p><code>#vibe</code>, <code>#sideband_consensus</code>, <code>#two_mice</code>, <code>#narrative_steering</code>, <code>#curator_notes</code>, <code>[FEAT-635](#FEAT-635)</code>, <code>[FEAT-523](#FEAT-523)</code>, <code>[BKM-077]</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <ul>
-<li><code>HomeLabAI/docs/Protocols.md</code> — Authoritative codification of <code>BKM-082</code>, mandating 5-sprint lookbacks, full log horizon inspection, anti-removal invariants, pre-flight mistake ledgers, and grounding gap audits across <code>BKM-005</code>, <code>BKM-006</code>, <code>BKM-020</code>, and <code>BKM-048</code>.</li>
-<li><code>Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_101_0.md</code> — Canonical exemplar sprint plan executing full pre-flight grounding, 02:00 AM log horizon diagnosis, and mistakes-avoided ledger.</li>
-</ul>
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/tests/test_two_mice_handover.py</code>, <code>HomeLabAI/src/tests/test_brain_voice_replay.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <ol>
-<li><strong>The Short Horizon Trap:</strong> Under tight resources, overnight compute cascades (LoRA training, VRAM reallocation, daemon re-ignition), and distributed multi-tier orchestration, evaluating system state based only on the trailing 15 minutes of logs causes severe diagnostic blindness, circular fixes, and accidental deletion of hard-won hardware sentinels.</li>
-<li><strong>Mandatory 5-Sprint Lookback:</strong> Before proposing or modifying sprint plans or executing code changes, agents must review the preceding 5 sprint plans and logs to internalize historical failure modes and design constraints.</li>
-<li><strong>Anti-Removal Invariant:</strong> Hardware laws (e.g. 5.0s thermal pacing in <code>FEAT-160</code>, host memory gates in <code>LAB-110</code>, single-home runtime data in <code>FEAT-637</code>) must never be bypassed or deleted to solve time pressure; workloads must be proportionally calibrated instead.</li>
-<li><strong>Pre-Flight Mistakes Avoided Ledger:</strong> Every sprint specification must document concrete mistakes that would have occurred without deep historical grounding.</li>
-<li><strong>Grounding Gap Declaration:</strong> Any actionable item that cannot be anchored in past history or DNA must be declared as a gap and clarified with the operator before modifying code.</li>
+<li><strong>Dynamic Consensus over Static Categorization:</strong> Interest and context filtering are not rigid high/medium/low buckets. Pinky personifies speculative hypothesis generation (HyDE), while Brain personifies interest consensus and epistemic steering.</li>
+<li><strong>Sideband Curator Rationale:</strong> Brain audits candidate chunks from Pinky's retrieval, prunes tangential noise, and appends <code>💡 Curator Note: [ID] connects with [ID]</code> annotations.</li>
+<li><strong>No-Stall Distillation Funnel:</strong> Brain's steering guides the conversational narrative toward technical reality without stalling the pipeline or downvoting the turn.</li>
 </ol>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Transforms historical documentation from passive archives into active, mandatory JITC guardrails, immunizing autonomous agents against circular traps and architectural amnesia.</p>
+                    <p>Unifies conversational charm with rigorous technical ground truth, enabling emergent multi-agent dialogue that never loses grounding.</p>
                 </div>
             </div>     </div>
                             </details>

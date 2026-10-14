@@ -3113,13 +3113,13 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Rationale:** Deepens the pool of contextual references for rich academic writing while keeping peripheral diagnostic chrome easily minimizable for distraction-free authoring.
 **Mechanism:** `Portfolio_Dev/field_notes/writer.html`, `HomeLabAI/src/v5/foyer/router.py`, ChromaDB vector retrieval, and collapsible console controller.
 
-## [FEAT-552] Structured Delegation Execution Ledger (`data/delegation_ledger.jsonl`)
-**Sprint:** SPR-82.0 / SPR-83.0
+## [FEAT-552] Structured Delegation Execution Ledger & Auto-Live Web Feed Hook
+**Sprint:** SPR-82.0 / SPR-83.0 / SPR-101.0 / SPR-102.0
 **Status:** ACTIVE
-**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py) — Structured Delegation Execution Ledger & CLI Inspector.
-**Logic:** Automatically records every swarm delegation attempt into a machine-readable JSONL ledger (`HomeLabAI/data/delegation_ledger.jsonl`). Captures session IDs, target stories, providers, models, duration, token metrics (input/output/reasoning/cache), finish statuses, and deep diagnostic message traces on failures. Provides a clean ASCII table view via `python3 delegate.py --ledger`.
-**Rationale:** Eliminates telemetry blindness across multi-attempt delegation loops, providing persistent auditability and forensic traceability for Tri-Loop governance.
-**Mechanism:** `_log_delegation_ledger` and `--ledger` CLI action in `delegate.py`.
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py), [HomeLabAI/src/infra/sprint_telemetry.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/sprint_telemetry.py), [Portfolio_Dev/field_notes/build_site.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/build_site.py)
+**Logic:** Automatically records every swarm delegation attempt into machine-readable JSONL ledgers (`delegation_ledger.jsonl`). To guarantee zero-delay dashboard freshness, `delegate.py` immediately triggers `export_web_telemetry()` upon run completion, regenerating `delegation_runs.json` in real time. Simultaneously, `build_site.py` executes the export hook prior to copying data to the public airlock (`www_deploy/data/`), establishing a dual live-and-deploy publishing pipeline with zero dependency on nightly batch windows.
+**Rationale:** Eliminates telemetry blindness across multi-attempt delegation loops and ensures operators see up-to-the-second execution metrics on the web dashboard immediately upon story finish.
+**Mechanism:** `record_delegation()` in `delegate.py`, `export_web_telemetry()` in `sprint_telemetry.py`, and `deploy_to_airlock()` in `build_site.py`.
 
 ## [FEAT-554] Automated JavaScript AST / Syntax Verification Gate in `build_site.py`
 **Sprint:** SPR-82.0
