@@ -520,17 +520,11 @@ function renderDeltaTChart(data) {
         ctx.lineTo(x, padTop + chartH);
         ctx.stroke();
 
-        // X-axis label (Turn)
+        // X-axis label (Turn Integer)
         ctx.fillStyle = '#c9d1d9';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`Turn ${turnData.turn}`, x, height - padBottom + 18);
-
-        // Topic sub-label
-        ctx.fillStyle = '#8b949e';
-        ctx.font = '9px "JetBrains Mono", monospace';
-        const topicPreview = (turnData.topic || '').slice(0, 15);
-        ctx.fillText(topicPreview, x, height - padBottom + 32);
+        ctx.fillText(turnData.turn, x, height - padBottom + 18);
     });
 
     // Draw Monotonic Elapsed Lines from top (Judgment) down to bottom (Triage)
@@ -609,12 +603,14 @@ function renderSwarmTokenChart(runs) {
 
     const agg = {};
     (Array.isArray(runs) ? runs : []).forEach(r => {
-        const s = (r.sprint && String(r.sprint).trim()) ? String(r.sprint).trim() : '000';
+        const rawS = (r.sprint && String(r.sprint).trim()) ? String(r.sprint).trim() : '';
+        const cleanS = rawS.replace(/^SPR_/i, '').trim();
+        if (!cleanS || cleanS === '0' || cleanS === '000') return;
         const tierKey = classify(r);
         if (!tierKey) return;
         const tok = Number((r.tokens && r.tokens.total) || 0);
-        if (!agg[s]) agg[s] = { local: 0, agy: 0, cloud_oracle: 0 };
-        agg[s][tierKey] += tok;
+        if (!agg[cleanS]) agg[cleanS] = { local: 0, agy: 0, cloud_oracle: 0 };
+        agg[cleanS][tierKey] += tok;
     });
 
     const sprints = Object.keys(agg).sort((a, b) => Number(a) - Number(b));
@@ -672,7 +668,7 @@ function renderSwarmTokenChart(runs) {
         ctx.fillStyle = '#c9d1d9';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('SPR_' + s, x, height - padBottom + 18);
+        ctx.fillText(s, x, height - padBottom + 18);
     });
 
     series.forEach(s => {
@@ -777,16 +773,24 @@ function renderBlackboardLedger(data) {
 
         const dateStr = formatTurnDate(turn.timestamp, turn.time_str);
         const durSec = ((turn.total_elapsed_s || turn.total_s || 0)).toFixed(2);
+        const promptPreview = turn.user_prompt ? turn.user_prompt.slice(0, 75) + (turn.user_prompt.length > 75 ? '...' : '') : (turn.topic || 'ROUND_TABLE_DELIBERATION');
         details.innerHTML = `
             <summary style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <span style="color:#8b949e; font-family:'JetBrains Mono',monospace; font-size:0.75rem;">${dateStr}</span>
                 <span style="color:#58a6ff; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:0.78rem;">TURN ${turn.turn}</span>
-                <span style="color:#f0f3f6; font-weight:500;">${turn.topic || 'ROUND_TABLE_DELIBERATION'}</span>
+                <span style="color:#f0f3f6; font-weight:500; max-width:520px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${(turn.user_prompt || '').replace(/"/g, '&quot;')}">
+                    💬 ${promptPreview}
+                </span>
                 <span style="color:#8b949e; font-size:0.75rem; margin-left:auto; font-family:'JetBrains Mono',monospace;">
                     <strong style="color:#3fb950;">${durSec}s</strong>
                 </span>
             </summary>
             <div class="details-content" style="border-left: 3px solid #3fb950;">
+                ${turn.user_prompt ? `
+                <div style="margin-bottom: 10px; padding: 6px 12px; background: rgba(88, 166, 255, 0.08); border-left: 3px solid #58a6ff; border-radius: 4px;">
+                    <span class="field-label" style="color:#58a6ff; font-size:0.68rem; text-transform:uppercase;">User Prompt</span>
+                    <div style="color:#e6edf3; font-size:0.85rem; font-family:var(--font-stack); margin-top:2px;">${turn.user_prompt}</div>
+                </div>` : ''}
                 <div style="margin-bottom: 8px;">
                     <span class="field-label" style="color:#58a6ff;">Distillation Bullets</span>
                     <div class="feature-body">
@@ -881,6 +885,7 @@ async function loadDelegationRuns() {
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         delegationRuns = data.runs || [];
+        window.cachedDelegationRuns = delegationRuns;
         renderDelegationSummary(data.summary || {});
         renderDelegationFilters(delegationRuns);
         renderSwarmTokenChart(delegationRuns);
