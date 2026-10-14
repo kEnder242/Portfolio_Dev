@@ -235,8 +235,10 @@ function renderThroughputLiveChart(records) {
     const bySeat = {};
     (Array.isArray(records) ? records : []).forEach(r => {
         const seat = r.seat || 'Unknown';
+        const dur = Number(r.duration_seconds);
         const tp = Number(r.throughput_tok_s);
-        if (!isFinite(tp)) return;
+        if (!isFinite(tp) || tp <= 0 || tp > 1000.0) return;
+        if (!isFinite(dur) || dur < 1.0) return;
         if (!bySeat[seat]) bySeat[seat] = [];
         bySeat[seat].push(r);
     });
@@ -373,7 +375,7 @@ async function loadLiveUsageStream() {
 
         const allRecords = lines.map(l => {
             try { return JSON.parse(l); } catch(e) { return null; }
-        }).filter(r => r !== null);
+        }).filter(r => r !== null && Number(r.duration_seconds) >= 1.0 && Number(r.throughput_tok_s) <= 1000.0);
         window.cachedLiveRecords = allRecords;
         renderThroughputLiveChart(allRecords);
 
