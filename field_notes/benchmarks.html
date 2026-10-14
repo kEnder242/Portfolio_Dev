@@ -524,28 +524,12 @@
 
         <!-- TAB 2: SILICON ARENA & WORKLOAD STREAM (SPEED, LATENCY, LIVE RUNS) -->
         <div id="tab-arena" class="tab-pane hidden">
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>Generation Throughput Comparison</span>
-                    <span class="chart-subtitle">Tokens per Second (Higher is faster)</span>
-                </div>
-                <div id="throughput-bars"></div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-title">
-                    <span>Time to First Token (TTFT)</span>
-                    <span class="chart-subtitle">Warm Prompt Cache Latency in ms (Lower is better)</span>
-                </div>
-                <div id="ttft-bars"></div>
-            </div>
-
             <!-- Live Model Throughput Canvas [STORY 102.18] -->
             <div class="chart-card">
                 <div class="chart-title">
                     <span>⚡ Live Model Throughput Trajectory (tok/s)</span>
                 </div>
-                <div class="chart-subtitle" style="margin: 0 0 10px 0;">Live receipts from data/live_usage_stream.jsonl partitioned by seat (latest 120 events per seat).</div>
+                <div class="chart-subtitle" style="margin: 0 0 10px 0;">Live production receipts from data/live_usage_stream.jsonl partitioned by seat (latest 120 events per seat).</div>
                 <div style="display:flex; gap:18px; align-items:center; margin:6px 0 10px 0; font-family:'JetBrains Mono', monospace; font-size:0.72rem;">
                     <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:#58a6ff; display:inline-block;"></span>Kender 4090</span>
                     <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:#3fb950; display:inline-block;"></span>2080 Ti</span>
@@ -644,6 +628,12 @@
 
             if (tabId === 'tab-delta-t' && typeof initDeltaTView === 'function') {
                 setTimeout(initDeltaTView, 50);
+            }
+            if (tabId === 'tab-arena' && typeof renderThroughputLiveChart === 'function' && window.cachedLiveRecords) {
+                setTimeout(() => renderThroughputLiveChart(window.cachedLiveRecords), 50);
+            }
+            if (tabId === 'tab-delegation' && typeof renderSwarmTokenChart === 'function' && window.cachedDelegationRuns) {
+                setTimeout(() => renderSwarmTokenChart(window.cachedDelegationRuns), 50);
             }
         }
     </script>
