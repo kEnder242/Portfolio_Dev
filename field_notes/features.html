@@ -14062,7 +14062,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Status Details</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>ED (Hypothetical ROI calculator DEFEATURED; superseded by <a href="#FEAT-525">FEAT-525</a> Empirical Sovereign Delegation Gains)</p>
+                    <p>ED (Hypothetical ROI calculator DEFEATURED; superseded by <a href="#FEAT-525">FEAT-525</a> and <a href="#FEAT-552">FEAT-552</a> Empirical Telemetry)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14074,7 +14074,10 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Upgrades <code>benchmarks.html</code> from a single-node snapshot into a streamlined 3-tab workbench: Tab 1 (Live Round Table Elapsed Time), Tab 2 (Model Throughput), and Tab 3 (Sprint Delegation Gains). Hypothetical slider-based volume projections were defeatured in Sprint 102 in favor of empirical live token and dollar savings tracked in <code>[FEAT-525](#FEAT-525)</code>.</p>
+                    <p>Upgrades <code>benchmarks.html</code> from a single-node snapshot into a streamlined 3-tab workbench grounded entirely in authenticated physical data stores:
+- <strong>Tab 1 (Live Round Table Elapsed Time):</strong> Physical deliberation checkpoints backed by <code>Portfolio_Dev/field_notes/data/round_table_deltas.json</code> (<code>[FEAT-525](#FEAT-525)</code>).
+- <strong>Tab 2 (Model Throughput):</strong> Real-time generation throughput and workload events backed by <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code> (<code>[FEAT-496](#FEAT-496)</code>).
+- <strong>Tab 3 (Sprint Delegation Gains):</strong> Swarm delegation volume and financial sovereign savings backed by <code>Portfolio_Dev/field_notes/data/delegation_runs.json</code> and <code>HomeLabAI/data/delegation_ledger.jsonl</code> (<code>[FEAT-552](#FEAT-552)</code>).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14086,7 +14089,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/benchmarks.html</code>, <code>Portfolio_Dev/field_notes/benchmarks.js</code>.</p>
+                    <p><code>Portfolio_Dev/field_notes/benchmarks.html</code>, <code>Portfolio_Dev/field_notes/benchmarks.js</code>, <code>Portfolio_Dev/field_notes/data/round_table_deltas.json</code>, <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code>, <code>Portfolio_Dev/field_notes/data/delegation_runs.json</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -14100,25 +14103,31 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Dynamic Auto-Discovery Benchmark Engine & Nightly Sweep Integration
+                                    Dynamic Auto-Discovery Benchmark Engine & Service De-escalation
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>/ DECOUPLED (Synthetic nightly sweep decoupled in Sprint 102 Story 102.20; superseded by <a href="#FEAT-496">FEAT-496</a> Continuous Passive Telemetry)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-66.0</p>
+                    <p>SPR-66.0 / SPR-102.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Overhauls <code>bench_models.py</code> to dynamically query endpoints (<code>:8000/v1/models</code>, <code>:11434/api/tags</code>, <code>:8088/v1/models</code>), discovering whatever model is currently resident on each hardware seat without hardcoded names. Automatically updates <code>benchmarks_cache.json</code> and Prometheus metrics.</p>
+                    <p>Originally dynamically queried model endpoints to discover resident models. In Sprint 102 (<code>Story 102.20</code>), synthetic nightly benchmark sweeps in <code>nightly_forge.py</code> were retired in favor of continuous passive telemetry harvested from real multi-seat production workloads (<code>[FEAT-496](#FEAT-496)</code>), eliminating synthetic token burn and needless endpoint wakes.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Ensures daily benchmarks automatically track resident model swaps and hardware changes without manual code edits.</p>
+                    <p>Real production dispatches provide higher-fidelity hardware calibration than synthetic probe pings.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14130,7 +14139,7 @@
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-live">ACTIVE</span>
+                            <span class="impact-badge impact-stable">RETIRED</span>
                         </td>
                     </tr>
                     <tr id="FEAT-496">
@@ -14144,13 +14153,13 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-66.0</p>
+                    <p>SPR-66.0 / SPR-102.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code> upon every <code>delegate.py</code> completion, rendering a live workload activity waterfall on <code>benchmarks.html</code>.</p>
+                    <p>Automatically logs real-world task execution metrics (seat, model, duration, token volume, throughput) to <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code> upon every <code>delegate.py</code> completion, rendering a live workload activity waterfall and scatter plot on <code>benchmarks.html</code>. Full 83+ authentic record history displayed in reverse chronological order with sticky table headers.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14162,7 +14171,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/benchmarks.html</code>.</p>
+                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/data/live_usage_stream.jsonl</code>, <code>Portfolio_Dev/field_notes/benchmarks.html</code>, <code>Portfolio_Dev/field_notes/benchmarks.js</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -14638,7 +14647,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-70.0</p>
+                    <p>SPR-70.0 / SPR-102.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14650,7 +14659,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} &gt; 0$ and $d_{\text{thought}} &gt; 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in <code>benchmarks.html</code> via cumulative canvas waterfall charts and expandable Blackboard Ledger cards.</p>
+                    <p>Physical silicon stopwatch telemetry engine tracking the 5 sequential deliberation stages (Triage $\rightarrow$ Pinky $\rightarrow$ Brain $\rightarrow$ Deep Thought / Oracle $\rightarrow$ Pinky Judgment / Summary). Telemetry recording is strictly and exclusively bounded to Full Round Table turns ($d_{\text{brain}} &gt; 0$ and $d_{\text{thought}} &gt; 0$), bypassing single-actor casual dialogue turns to maintain pure multi-actor benchmark fidelity. Rendered in <code>benchmarks.html</code> via cumulative canvas waterfall charts and expandable Blackboard Ledger cards. In Sprint 102, re-engineered turn sequencing to guarantee persistent monotonic integer indexing (<code>len(records) + 1</code>) across hub restarts, captured the operator's prompt into <code>round_table_deltas.json</code>, and rendered the prompt directly inside styled drawer cards.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
