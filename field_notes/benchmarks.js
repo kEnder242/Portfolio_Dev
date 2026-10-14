@@ -377,8 +377,8 @@ async function loadLiveUsageStream() {
         window.cachedLiveRecords = allRecords;
         renderThroughputLiveChart(allRecords);
 
-        const records = allRecords.slice(-10).reverse();
-        let tableHtml = '<table class="live-stream-table"><thead><tr><th>Timestamp</th><th>Tier</th><th>Seat</th><th>Task / Story</th><th>Model</th><th>Output Tokens</th><th>Duration</th><th>Throughput</th></tr></thead><tbody>';
+        const records = [...allRecords].reverse();
+        let tableHtml = '<div style="max-height:480px; overflow-y:auto; border:1px solid #1f242c; border-radius:6px;"><table class="live-stream-table" style="margin:0;"><thead><tr><th style="position:sticky; top:0; background:#0d1117; z-index:2;">Timestamp</th><th style="position:sticky; top:0; background:#0d1117; z-index:2;">Tier</th><th style="position:sticky; top:0; background:#0d1117; z-index:2;">Seat</th><th style="position:sticky; top:0; background:#0d1117; z-index:2;">Task / Story</th><th style="position:sticky; top:0; background:#0d1117; z-index:2;">Model</th><th style="position:sticky; top:0; background:#0d1117; z-index:2; text-align:right;">Output Tokens</th><th style="position:sticky; top:0; background:#0d1117; z-index:2; text-align:right;">Duration</th><th style="position:sticky; top:0; background:#0d1117; z-index:2; text-align:right;">Throughput</th></tr></thead><tbody>';
         records.forEach(r => {
             const timeStr = r.date_str ? r.date_str : (r.timestamp ? new Date(r.timestamp * 1000).toLocaleString() : 'N/A');
             const isLocal = (r.tier === 'sovereign_local') || (r.seat && !r.seat.includes('Cloud') && r.provider !== 'openrouter');
@@ -397,7 +397,7 @@ async function loadLiveUsageStream() {
                 '<td style="text-align:right; font-weight:700; color:#3fb950;">' + r.throughput_tok_s + ' tok/s</td>' +
             '</tr>';
         });
-        tableHtml += '</tbody></table>';
+        tableHtml += '</tbody></table></div>';
         container.innerHTML = tableHtml;
     } catch (e) {
         container.innerHTML = '<div style="font-family:monospace; font-size:0.75rem; color:#8b949e;">Live usage stream initialized. Awaiting workload dispatches...</div>';

@@ -458,3 +458,90 @@ In adherence to `BKM-049` (Tri-Loop Delegation) and `BKM-080` (Ask-Oracle Protoc
   * **Anchor 2 (Verification Command):** `grep -q "Model Throughput Live Telemetry Architectural Specification" Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_102_0.md`.
   * **Anchor 3 (Silicon Invariant):** Complete architectural blueprint codified and ready for atomic local delegation dispatch.
   * **Anchor 4 (DNA Links):** `[FEAT-495]`, `[FEAT-494]`, `[INS-047]`, `[BKM-024]`.
+
+---
+
+## 📜 Phase 4 Execution Narrative & Post-Sprint Consensus Ledger (`BKM-081` / `BKM-077`)
+
+### 1. Executive Summary & Forensic Context
+Following the delivery of Phase 3, an intensive multi-turn refinement dialogue (Turns 6–11) was conducted between the Human Operator (L0) and the Conductor (`[AGY:PRIMARY]`). The objective was to eliminate all synthetic contrivances across the Federated Benchmarking and Swarm Telemetry subsystems (`benchmarks.html`), root out subtle data parsing regressions, establish strict 1:1 conversational swim lanes, backfill historical conductor telemetry, and evaluate Grafana integration.
+
+Per `BKM-081` (Sprint Append Ledger Protocol) and `BKM-077` (Conversational Anchor Tracking Protocol), this consensus narrative captures the complete forensic provenance, root causes, architectural decisions, and verified code implementations across all tracked conversational anchors.
+
+---
+
+### 2. Conversational Anchor & Refinement Ledger
+
+| Anchor / Item | Domain & Focus | Forensic Root Cause | Resolution & Implementation Anchor | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Item 1** | Primary AGY Token Backfill | Historical session transcripts lived in `~/.gemini/antigravity-cli/brain/` but were never ingested into the delegation ledger. | Engineered `HomeLabAI/src/infra/backfill_agy_telemetry.py`. Harvested 39 authoritative runs; updated `delegation_ledger.jsonl` (271 runs, 174 verified). | `✅ COMPLETED` |
+| **Item 2** | Conductor AGY Telemetry Flag | Conductor executions lacked a native CLI mechanism to record orchestration overhead. | Implemented `--log-agy`, `--tokens <T>`, and `--duration <D>` in `delegate.py`. Codified `BKM-049 §9` (Primary Conductor Telemetry Mandate). | `✅ COMPLETED` |
+| **Item 3** | Sprint Token Chart X-Axis | Chart renderer concatenated raw string names with `SPR_` prefixes, causing text clipping. | Normalized X-axis in `benchmarks.js` to render strictly numeric sprint integers (`100`, `101`, `102`). | `✅ COMPLETED` |
+| **Item 4** | Model Throughput Data Scrub | Test probe harnesses flooded `live_usage_stream.jsonl` with 957 synthetic lines (`64,000 tok/s`), obscuring real workloads. | Backed up raw stream to `.bak` and purged 957 synthetic records on disk, leaving 83 authentic multi-seat production dispatches. | `✅ COMPLETED` |
+| **Item 5** | Empty Baseline Catalog Purge | Static DOM elements (`#throughput-bars`, `#ttft-bars`) were legacy placeholders from early prototypes. | Purged placeholder cards from `benchmarks.html`. Kept Tier column active for multi-tier telemetry dispatches. | `✅ COMPLETED` |
+| **Item 6** | Prompt Retention in Deltas | `clean_user` was captured for journal logs in `cognitive_hub.py` but dropped before calling `append_round_table_delta()`. | Threaded `user_prompt` through `cognitive_hub.py` & `blackboard_ledger.py`. Added prompt drawer cards and badge rendering in `benchmarks.js`. | `✅ COMPLETED` |
+| **Item 7** | Monotonic Turn Numbering | `turn_num = len(self.round_table_memory) + 1` was session-scoped in RAM; hub restarts reset sequence numbers to 1. | Keyed turns monotonically against persistent disk storage (`len(records) + 1`). Re-indexed historical records 1..29; clean integer X-axis. | `✅ COMPLETED` |
+| **Item 8** | Grafana Dashboard Evaluation | Evaluating whether native Canvas charts should be replaced or augmented by interactive Grafana dashboards. | Created & provisioned `federated_benchmarks_dashboard.json` (UID: `federated-benchmarks-01`) on Grafana `:3000` for side-by-side operator review. | `✅ COMPLETED` |
+| **Item 9** | Public Benchmarks Overhaul | Tab 3 ROI calculator was contrived and impractical for federated multi-seat operations. | Defeatured ROI calculator (`#tab-roi`). Logged `TODO-009` (Public Benchmarks Practicality Overhaul) in `00_FEDERATED_STATUS.md`. | `📋 TABLED (TODO-009)` |
+| **Item 10** | Swim Lane Offset Notation | Conversational alignment across multi-turn dialogues required structured tracking notation. | Codified `BKM-077 §4` mandating strict 1:1 un-merged numbered swim lanes. | `✅ COMPLETED` |
+| **Item 11** | Real Telemetry Visibility | Perceived stale data was caused by synthetic probe flooding. | Resolved via disk scrub (Item 4). Authentic dispatches spanning Atlas 4090, Apple M5, and Cloud Swarm verified. | `✅ COMPLETED` |
+| **Item 12** | Strict Config Pacing | Hardcoded fallback defaults conflicted with declarative infrastructure principles. | Removed hardcoded defaults from `cognitive_hub.py#L1120`; pacing strictly enforced from `infrastructure.json["interest_pacing"]`. | `✅ COMPLETED` |
+| **Item 13** | Tier Formatting & Styles | AGY orchestration tier rendered unstyled as `-`. | Implemented `formatTier()` in `benchmarks.js` rendering color-coded badges matching the swarm palette. | `✅ COMPLETED` |
+| **Item 14** | Foyer Reload & Build Discipline | Verifying Foyer daemon status and countdown timer to prevent unintended hot-reload disruptions. | Verified Foyer in OFFLINE standby (30-min timer expiring at 23:51:21). Maintained strict phase-boundary build discipline. | `✅ VERIFIED` |
+| **Item 15 (Turn 11)** | Live Stream Table Cropping | Table displayed only 10 rows while scatter plot displayed all 83 authentic telemetry points. | Discovered hardcoded `.slice(-10)` in `benchmarks.js#L380`. Removed slice, wrapped table in scrollable container with sticky headers. | `✅ COMPLETED` |
+
+---
+
+### 3. Detailed Forensic Findings & Architectural Resolutions
+
+#### Item 1 & 2: Primary Conductor Telemetry & Historical Mining (`BKM-049 §9`)
+* **Discovery:** During review of the Sprint Delegation charts, the operator noted that Primary AGY was recorded at 0 tokens and lacked a recognized tier badge (`-`). Investigation revealed that while `delegate.py` diligently recorded `[SWARM:LOCAL]` and `[SWARM:CLOUD]` invocations to `delegation_ledger.jsonl`, orchestrator turns executed directly by `[AGY:PRIMARY]` were never written to the ledger.
+* **Resolution:**
+  1. Developed `HomeLabAI/src/infra/backfill_agy_telemetry.py` to parse historical session transcripts (`~/.gemini/antigravity-cli/brain/`) and correlate them with sprint commit hashes. This harvested 39 verified `[AGY:PRIMARY]` records, raising total delegation runs from 232 to 271 (174 verified).
+  2. Enhanced `delegate.py` with `--log-agy`, `--tokens <T>`, and `--duration <D>` flags.
+  3. Formally codified `BKM-049 §9` (Primary Conductor Telemetry Mandate) requiring that conductor overhead be logged at phase boundaries.
+
+#### Item 4 & 11: Elimination of Synthetic Telemetry Flood
+* **Discovery:** The operator reported that the Model Throughput chart appeared locked to stale, repetitive data (`2026-10-13 21:38:21`). Forensic analysis revealed that `live_usage_stream.jsonl` had been inundated with 957 synthetic test probes (`Mice Turn: Lab/Pinky/Brain` running at simulated `64,000 tok/s`). These artificial entries drowned out real workload dispatches.
+* **Resolution:**
+  1. Created a raw backup at `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl.bak`.
+  2. Executed a targeted in-place disk scrub, removing all 957 synthetic rows while preserving 83 authentic production records.
+  3. The resulting dataset cleanly showcases real-world inference across the Windows 4090RTX (Atlas), Apple M5 Air, and Cloud Swarm seats.
+
+#### Item 6 & 7: Monotonic Turn Integrity & Operator Prompt Provenance
+* **Discovery:** In the Live Round Table chart, turn numbers repeatedly reset to 1 upon CognitiveHub restarts or websocket reconnections, causing deliberation data points to cluster illegibly on the left edge. Furthermore, the collapsible turn drawers displayed redundant static badges (`[FULL ROUND TABLE]`, `[CONTEXT_SCOPE_LONG]`) while omitting the operator's actual prompt.
+* **Resolution:**
+  1. In `cognitive_hub.py`, identified that `self.round_table_memory` was an in-memory list cleared on daemon restart. Modified the sequence generator in `blackboard_ledger.py` to calculate `monotonic_turn = len(records) + 1` directly from persistent storage (`round_table_deltas.json`).
+  2. Captured `clean_user` at the ingress of `cognitive_hub.py` and threaded it through `blackboard_ledger.append_round_table_delta(user_prompt=clean_user)`.
+  3. Re-indexed historical deltas 1..29 with descriptive prompts.
+  4. Updated `benchmarks.js` to render the operator's prompt inside a prominent top-level drawer card, accompanied by clean ISO timestamps and integer X-axis coordinates.
+
+#### Item 8: Provisioned Grafana Dashboard (`federated-benchmarks-01`)
+* **Discovery:** The operator inquired whether migrating charts to Grafana would improve interactivity and ergonomics.
+* **Resolution:**
+  1. Preserved the custom Canvas charts in `benchmarks.html` to allow direct side-by-side comparison without altering the live website.
+  2. Authored and provisioned a production Grafana dashboard (`Portfolio_Dev/monitor/grafana/provisioning/dashboards/federated_benchmarks_dashboard.json`) on the local Grafana instance (Docker container `field_grafana` at `http://127.0.0.1:3000`).
+  3. The dashboard connects to Prometheus (`:9090`) and DCGM NVIDIA Exporter (`:9400`), rendering live silicon telemetry:
+     - ⚡ Physical Silicon Utilization under Load (`DCGM_FI_DEV_GPU_UTIL`)
+     - 🔌 Real-Time Silicon Power Draw in Watts (`DCGM_FI_DEV_POWER_USAGE`)
+     - 🧠 Physical VRAM Footprint in MB (`DCGM_FI_DEV_FB_USED`)
+     - 🌡️ Silicon Core Thermal Profile in °C (`DCGM_FI_DEV_GPU_TEMP`)
+     - ⏱️ Round Table & Deliberation Stage Durations (`moe_stage_duration_seconds`)
+     - 🧭 Intent Routing & Triage Latency Heatmap (`moe_router_latency_seconds`)
+     - 📊 TTFT vs Inter-Token Latency (ITL) Distribution (`moe_model_ttft_seconds`)
+
+#### Item 15 (Turn 11): Live Usage Stream Table Cropping Fix
+* **Discovery:** The operator observed that the `live-stream-table` below the scatter chart appeared cropped, displaying far fewer data points than the graph above it.
+* **Root Cause:** In `benchmarks.js` line 380, the code passed `allRecords` (all 83 entries) to `renderThroughputLiveChart(allRecords)`, but truncated the table rows using `const records = allRecords.slice(-10).reverse();`.
+* **Resolution:** Removed `.slice(-10)`, displaying all 83 records in reverse chronological order within a responsive, scrollable container (`max-height: 480px; overflow-y: auto;`) featuring sticky table headers.
+
+---
+
+### 4. Verification Checkpoint & Git Sign-Off
+* **HomeLabAI Commit:** `f87fa85` (`feat(telemetry): codify BKM-077 1:1 swim lanes, --log-agy CLI in delegate.py, backfill tool, and strict config pacing`).
+* **Portfolio_Dev Commit:** `d06f723` (`feat(benchmarks): purge ROI calculators & empty baselines, integer X-axis, prompt drawer rendering, and TODO-009`).
+* **Live Daemons & Endpoints:**
+  - Prometheus (`http://127.0.0.1:9090`): UP, scraping DCGM and node-exporter.
+  - Grafana (`http://127.0.0.1:3000`): UP, provisioning `federated-benchmarks-01`.
+  - Foyer (`http://127.0.0.1:8765`): OFFLINE (standby; 0 intrusive builds performed during review).
+
