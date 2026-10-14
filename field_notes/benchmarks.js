@@ -10,19 +10,16 @@ let cachedDeltas = null;
 // 1. HARDWARE & ROI BENCHMARKS LOADER
 // ==============================================================================
 async function loadBenchmarks() {
-    const timestampEl = document.getElementById('telemetry-timestamp');
     try {
         const resp = await fetch('benchmarks_cache.json?t=' + Date.now());
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         cachedData = await resp.json();
         
-        if (timestampEl) timestampEl.textContent = cachedData.date_str || new Date().toLocaleString();
         renderAll(cachedData.results || []);
         await loadLiveUsageStream();
         await loadCumulativeTelemetry();
     } catch (e) {
         console.warn("[Benchmarks] Telemetry cache unreachable:", e);
-        if (timestampEl) timestampEl.textContent = 'Telemetry Offline (Standby)';
         renderAll([]);
         await loadLiveUsageStream();
         await loadCumulativeTelemetry();
