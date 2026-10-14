@@ -588,13 +588,29 @@ Per `BKM-081` (Sprint Append Ledger Protocol) and `BKM-077` (Conversational Anch
 * **Root Cause:** In `benchmarks.js` line 380, the code passed `allRecords` (all 83 entries) to `renderThroughputLiveChart(allRecords)`, but truncated the table rows using `const records = allRecords.slice(-10).reverse();`.
 * **Resolution:** Removed `.slice(-10)`, displaying all 83 records in reverse chronological order within a responsive, scrollable container (`max-height: 480px; overflow-y: auto;`) featuring sticky table headers.
 
+#### Item 16 (Turn 12): M5 Air Outlier Purge & Div-0 Ingest/Frontend Defense
+* **Discovery:** Apple M5 Air displayed 48,000 tok/s outliers flattening genuine production trajectories down to baseline.
+* **Root Cause:** In `delegate.py`, M5 Air Map-Reduce sub-inference tokens were logged with hardcoded `duration_seconds=0.0`. In `cumulative_telemetry.py`, clamping with `max(0.01, duration)` led to `480 / 0.01 = 48,000 tok/s`.
+* **Resolution:**
+  1. Scrubbed 3 historical sub-second records (26,200 tok/s, 16,000 tok/s, 48,000 tok/s) from `live_usage_stream.jsonl`. Peak throughput normalized from 48,000 to 40.0 tok/s.
+  2. In `delegate.py`, passed real story duration floored to `max(1.0, float(duration))`.
+  3. In `cumulative_telemetry.py`, enforced `>= 1.0s` duration floor, capped velocity at 1,000 tok/s, and filtered sub-second entries (`raw_dur < 1.0`) from stream persistence.
+  4. In `benchmarks.js`, added frontend defense filters (`duration_seconds >= 1.0 && throughput_tok_s <= 1000.0`) in both `loadLiveUsageStream()` and `renderThroughputLiveChart()`.
+
+#### Item 17 (Turn 13): Legacy Telemetry Banner Purge
+* **Discovery:** "Last Nightly Silicon Sweep" telemetry banner was obsolete following decoupling of synthetic sweeps from nightly forge.
+* **Resolution:** Removed the banner HTML markup, `timestampEl` DOM lookups, and `.telemetry-banner` CSS styling from `benchmarks.html` and `benchmarks.js`.
+
 ---
 
 ### 4. Verification Checkpoint & Git Sign-Off
-* **HomeLabAI Commit:** `f87fa85` (`feat(telemetry): codify BKM-077 1:1 swim lanes, --log-agy CLI in delegate.py, backfill tool, and strict config pacing`).
-* **Portfolio_Dev Commit:** `d06f723` (`feat(benchmarks): purge ROI calculators & empty baselines, integer X-axis, prompt drawer rendering, and TODO-009`).
+* **HomeLabAI Commit:** `555abbe` (`fix(telemetry): enforce >=1.0s duration floor and filter sub-second div-0 outliers`).
+* **Portfolio_Dev Commit:** `42a3258` (`fix(benchmarks): remove Last Nightly Silicon Sweep telemetry banner and styles`).
+* **www_deploy Commit:** `abf4985` (`chore(deploy): sync airlock state`).
+* **Monorepo Commit:** `1984a5d` (`chore(submodules): update Portfolio_Dev and www_deploy pointers`).
 * **Live Daemons & Endpoints:**
   - Prometheus (`http://127.0.0.1:9090`): UP, scraping DCGM and node-exporter.
   - Grafana (`http://127.0.0.1:3000`): UP, provisioning `federated-benchmarks-01`.
+  - Python HTTP Server (`http://127.0.0.1:9001`): UP, serving clean benchmarks.html without banner or outliers.
   - Foyer (`http://127.0.0.1:8765`): OFFLINE (standby; 0 intrusive builds performed during review).
 
