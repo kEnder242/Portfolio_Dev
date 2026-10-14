@@ -436,6 +436,25 @@
                 padding: 80px 20px 40px 20px;
             }
         }
+        @media screen and (max-width: 768px) {
+            .delegation-summary-cards {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            .live-stream-table th, .live-stream-table td {
+                padding: 6px 6px !important;
+                font-size: 0.7rem !important;
+            }
+            .live-stream-table .col-chevron,
+            .live-stream-table .col-duration {
+                display: none !important;
+            }
+            .live-stream-table .col-title {
+                max-width: 160px !important;
+                white-space: normal !important;
+                word-break: break-word;
+            }
+        }
     </style>
 </head>
 <body>
@@ -580,14 +599,14 @@
                 <table class="live-stream-table" id="delegation-runs-table">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>Sprint</th>
-                            <th>Story / Title</th>
-                            <th>Mode / Tier</th>
-                            <th>Status</th>
-                            <th>Tokens</th>
-                            <th>Duration</th>
-                            <th>Verified</th>
+                            <th class="col-chevron"></th>
+                            <th class="col-sprint">Sprint</th>
+                            <th class="col-title">Story / Title</th>
+                            <th class="col-tier">Tier</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-tokens">Tokens</th>
+                            <th class="col-duration">Duration</th>
+                            <th class="col-verified">Verified</th>
                         </tr>
                     </thead>
                     <tbody id="delegation-runs-tbody"></tbody>
@@ -613,6 +632,6 @@
             }
         }
     </script>
-    <script src="benchmarks.js?v=203d3840"></script>
+    <script src="benchmarks.js?v=66c55873"></script>
 </body>
 </html>
