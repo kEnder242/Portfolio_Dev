@@ -2781,12 +2781,12 @@
 **Rationale:** Eliminates brittle, multi-file reconfigurations when updating resident models on Apple Silicon or KENDER.
 **Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/tests/delegate.py`.
 
-## [FEAT-494] benchmarks.html 3-Tab Federated Silicon & ROI Workbench
-**Sprint:** SPR-66.0
-**Status:** ACTIVE
-**Logic:** Upgrades `benchmarks.html` from a single-node RTX 2080 Ti snapshot into a comprehensive 3-tab workbench: Tab 1 (Silicon Arena comparison), Tab 2 (Energy & Financial ROI Calculator), Tab 3 (Intelligence Quotient & CoT depth), plus an interactive live shakedown waterfall runner.
-**Rationale:** Enables clear visualization of speed, cost, energy, and reasoning depth across all four federated hardware tiers.
-**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks_cache.json`.
+## [FEAT-494] [CONSOLIDATED] benchmarks.html 3-Tab Federated Silicon Workbench
+**Sprint:** SPR-66.0 / SPR-102.0
+**Status:** CONSOLIDATED (Hypothetical ROI calculator DEFEATURED; superseded by [FEAT-525] Empirical Sovereign Delegation Gains)
+**Logic:** Upgrades `benchmarks.html` from a single-node snapshot into a streamlined 3-tab workbench: Tab 1 (Live Round Table Elapsed Time), Tab 2 (Model Throughput), and Tab 3 (Sprint Delegation Gains). Hypothetical slider-based volume projections were defeatured in Sprint 102 in favor of empirical live token and dollar savings tracked in `[FEAT-525]`.
+**Rationale:** Eliminates misleading hypothetical estimations in favor of authenticated empirical telemetry from live homelab workloads.
+**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`.
 
 ## [FEAT-495] Dynamic Auto-Discovery Benchmark Engine & Nightly Sweep Integration
 **Sprint:** SPR-66.0
