@@ -516,6 +516,14 @@ Following the completion of Phase 4 and the live litmus certification of the Aur
   4. **Deep Thought Tri-Node Visibility (`BKM-083` / `CONTEXT_MEMORY_FLOW_MAP`):** Confirmed architectural specification in `CONTEXT_MEMORY_FLOW_MAP.md` declaring that Deep Thought must see the full Current Turn Package (User Query + Pinky Take/Greeting + Brain Bedrock Bullets + RAG Context). Restored `pinky_take` and `rag_context` parameters in `step_deep_thought()` and updated prompt synthesis to weigh against Pinky's take.
 * **Verification:** Authored `test_censorship_memory_tri_node.py` (4/4 tests pass). All 27 unit tests passed in 1.44s. Hot-reloaded live resident daemon to commit `b630d4b` (`POST /reload_residents`). Synchronized with active silicon.
 
+#### Milestone 5.8: Purging "Bullet" Nomenclature in Favor of Epistemic Grounding (`FEAT-489` / `FEAT-635`)
+* **Timestamp:** 2026-10-14 20:50:00
+* **Action:**
+  1. **Historical Alignment Audit:** Confirmed that the "bullet" terminology was an oversimplified/over-engineered prompt artifact introduced in Sprint 65 (`FEAT-489`, commit `4dfadcb`) that turned Brain into a robotic bullet-summarizer, conflicting with the original `_run_brain_leg` (`[LOCAL_BRAIN_BASELINE]`) and `FEAT-635` (Brain as Epistemic Reality-Steerer forwarding verbatim bedrock + Curator Notes).
+  2. **Code & Prompt Sanitation:** Purged lingering `brain_bullets` variable names and `[BRAIN_BEDROCK_BULLETS]` / `[BRAIN_EXTRACTED_BULLETS]` prompt tags in `cognitive_hub.py`, transitioning to `brain_grounding` and `[BRAIN_GROUNDING]`, while retaining backward-compatible keyword aliases (`brain_bullets`) for legacy tests.
+  3. **Verbatim RAG Grounding:** Refined Stage 2 and Deep Thought prompts to instruct nodes to evaluate against `[BRAIN_GROUNDING]` without reciting raw text verbatim.
+* **Verification:** Full unit test suite (27/27 passed in 0.70s). Hot-reloaded live resident daemon to commit `e2406b1` via `POST /reload_residents`. Working trees clean and synchronized.
+
 ---
 
 ## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
