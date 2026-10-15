@@ -2,6 +2,8 @@
   "wisdom": [
     {
       "id": "WIS-001",
+      "title": "The RAKP Security Catch (CVE-2013-4786)",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 1,
       "origin": {
@@ -44,6 +46,8 @@
     },
     {
       "id": "WIS-002",
+      "title": "The Kernel Patch (Topology & Architecture)",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 2,
       "origin": {
@@ -86,6 +90,8 @@
     },
     {
       "id": "WIS-003",
+      "title": "Negative Testing (The Yield Use Case)",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 3,
       "origin": {
@@ -128,6 +134,8 @@
     },
     {
       "id": "WIS-004",
+      "title": "The Texas Power-On (Strategic Career Pivot)",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 4,
       "origin": {
@@ -170,6 +178,8 @@
     },
     {
       "id": "WIS-005",
+      "title": "The Failed Microsoft Demo (Preparation & Redundancy)",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 5,
       "origin": {
@@ -212,6 +222,8 @@
     },
     {
       "id": "WIS-006",
+      "title": "RMCP+ Socket Optimization",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 6,
       "origin": {
@@ -254,6 +266,8 @@
     },
     {
       "id": "WIS-007",
+      "title": "The VISA Tool Engine (Metadata-Driven Design)",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 7,
       "origin": {
@@ -298,6 +312,8 @@
     },
     {
       "id": "WIS-008",
+      "title": "Automated Parsing - The XSLT Experience",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 8,
       "origin": {
@@ -342,6 +358,8 @@
     },
     {
       "id": "WIS-009",
+      "title": "A Simple Config File",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 9,
       "origin": {
@@ -386,6 +404,8 @@
     },
     {
       "id": "WIS-010",
+      "title": "Associative Mice & Intuition Round Tables",
+      "domain": "WISDOM",
       "theme": "Cognitive Architecture & Synthetic Deliberation",
       "paper_order": 10,
       "origin": {
@@ -438,6 +458,8 @@
     },
     {
       "id": "WIS-011",
+      "title": "The Cygwin Wall (Environment Parity)",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 11,
       "origin": {
@@ -482,6 +504,8 @@
     },
     {
       "id": "WIS-012",
+      "title": "Reinventing TI Basic",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 12,
       "origin": {
@@ -526,6 +550,8 @@
     },
     {
       "id": "WIS-013",
+      "title": "The QuakeCon Hot Swap",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 13,
       "origin": {
@@ -570,6 +596,8 @@
     },
     {
       "id": "WIS-014",
+      "title": "Reading Like a Robot (Deep Log Debugging)",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 14,
       "origin": {
@@ -612,6 +640,8 @@
     },
     {
       "id": "WIS-015",
+      "title": "RAPL & Matplotlib (Telemetry Visualization)",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 15,
       "origin": {
@@ -654,6 +684,8 @@
     },
     {
       "id": "WIS-016",
+      "title": "How to Grok Code",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 16,
       "origin": {
@@ -696,6 +728,8 @@
     },
     {
       "id": "WIS-017",
+      "title": "The Beating Heart",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 17,
       "origin": {
@@ -738,6 +772,8 @@
     },
     {
       "id": "WIS-018",
+      "title": "Expect Fragments (Serial Validation)",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 18,
       "origin": {
@@ -780,6 +816,8 @@
     },
     {
       "id": "WIS-019",
+      "title": "Crazy Callbacks",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 19,
       "origin": {
@@ -823,6 +861,8 @@
     },
     {
       "id": "WIS-020",
+      "title": "Throughput Gotchas",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 20,
       "origin": {
@@ -866,6 +906,8 @@
     },
     {
       "id": "WIS-021",
+      "title": "Curl over Postman",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 21,
       "origin": {
@@ -908,6 +950,8 @@
     },
     {
       "id": "WIS-022",
+      "title": "Venv is like Hot Glue",
+      "domain": "WISDOM",
       "theme": "Platform Validation Methodology",
       "paper_order": 22,
       "origin": {
@@ -950,6 +994,8 @@
     },
     {
       "id": "WIS-023",
+      "title": "To SCM or Not to SCM (Integration Reliability)",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 23,
       "origin": {
@@ -994,6 +1040,8 @@
     },
     {
       "id": "WIS-024",
+      "title": "Estimates: High vs. Low (The Code Archaeologist)",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 24,
       "origin": {
@@ -1038,6 +1086,8 @@
     },
     {
       "id": "WIS-025",
+      "title": "The PythonSV API Thrash",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 25,
       "origin": {
@@ -1082,6 +1132,8 @@
     },
     {
       "id": "WIS-026",
+      "title": "Synergy of Validation Working with Architect and Dev",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 26,
       "origin": {
@@ -1127,6 +1179,8 @@
     },
     {
       "id": "WIS-027",
+      "title": "Always Fix the First Error",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 27,
       "origin": {
@@ -1171,6 +1225,8 @@
     },
     {
       "id": "WIS-028",
+      "title": "Count the Ok's",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 28,
       "origin": {
@@ -1215,6 +1271,8 @@
     },
     {
       "id": "WIS-029",
+      "title": "The Conflict Management Lesson",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 29,
       "origin": {
@@ -1259,6 +1317,8 @@
     },
     {
       "id": "WIS-030",
+      "title": "General Thoughts & Philosophy",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 30,
       "origin": {
@@ -1302,6 +1362,8 @@
     },
     {
       "id": "WIS-031",
+      "title": "BMC23 module upgrade and Embedded File System (EFS) update to version 1.15",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 31,
       "origin": {
@@ -1345,6 +1407,8 @@
     },
     {
       "id": "WIS-032",
+      "title": "Addressing data integrity and system stability issues with BMC23 module upgrade",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 32,
       "origin": {
@@ -1388,6 +1452,8 @@
     },
     {
       "id": "WIS-033",
+      "title": "Evaluation run using EFS1.16 on HW BMC25 shows platform does not matter in terms",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 33,
       "origin": {
@@ -1431,6 +1497,8 @@
     },
     {
       "id": "WIS-034",
+      "title": "Second evaluation run conducted using EFS1.16 due to observation that platform d",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 34,
       "origin": {
@@ -1474,6 +1542,8 @@
     },
     {
       "id": "WIS-035",
+      "title": "Initial evaluation run used EFS1.15, leading to decision to conduct second evalu",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 35,
       "origin": {
@@ -1517,6 +1587,8 @@
     },
     {
       "id": "WIS-036",
+      "title": "Development of FTF library to automate HTTP_MTP tests",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 36,
       "origin": {
@@ -1560,6 +1632,8 @@
     },
     {
       "id": "WIS-037",
+      "title": "BMC26 and EFS1.17 issues with SEL pages causing cascading effect on trackers",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 37,
       "origin": {
@@ -1603,6 +1677,8 @@
     },
     {
       "id": "WIS-038",
+      "title": "Prefix added to tracker titles for simplification",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 38,
       "origin": {
@@ -1646,6 +1722,8 @@
     },
     {
       "id": "WIS-039",
+      "title": "In 2005-2007-01, the milestone was: Test run for FTF202",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 39,
       "origin": {
@@ -1689,6 +1767,8 @@
     },
     {
       "id": "WIS-040",
+      "title": "In 2005-2007-01, the milestone was: Tool release",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 40,
       "origin": {
@@ -1732,6 +1812,8 @@
     },
     {
       "id": "WIS-041",
+      "title": "In 2005-2007-01, the milestone was: Update to SOL presentation and API documenta",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 41,
       "origin": {
@@ -1775,6 +1857,8 @@
     },
     {
       "id": "WIS-042",
+      "title": "In 2005-2007-01, the milestone was: Fix to variable not found error in testResul",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 42,
       "origin": {
@@ -1818,6 +1902,8 @@
     },
     {
       "id": "WIS-043",
+      "title": "In 2005-2007-01, the milestone was: Update to SDK API with new information on es",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 43,
       "origin": {
@@ -1861,6 +1947,8 @@
     },
     {
       "id": "WIS-044",
+      "title": "Updated RPC.tcl to reflect MC's verbosity changes",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 44,
       "origin": {
@@ -1904,6 +1992,8 @@
     },
     {
       "id": "WIS-045",
+      "title": "Resolved xtrans.dll issue by updating IpmiSessionProcessor.cpp and re-compiling",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 45,
       "origin": {
@@ -1947,6 +2037,8 @@
     },
     {
       "id": "WIS-046",
+      "title": "Completed APIRmcpPriv.tcl and updated I2CorSMS in rmcpp_recover with a working p",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 46,
       "origin": {
@@ -1990,6 +2082,8 @@
     },
     {
       "id": "WIS-047",
+      "title": "SOL MTP was investigated and new cases were identified from escapes",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 47,
       "origin": {
@@ -2033,6 +2127,8 @@
     },
     {
       "id": "WIS-048",
+      "title": "Health and Monitoring script (Tao 126579) was executed every 2 hours for 64 hour",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 48,
       "origin": {
@@ -2076,6 +2172,8 @@
     },
     {
       "id": "WIS-049",
+      "title": "Changes made to IpmiSessionProcessor.cpp and apiRmcpSeq.tcl related to 'incInbSe",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 49,
       "origin": {
@@ -2119,6 +2217,8 @@
     },
     {
       "id": "WIS-050",
+      "title": "Write SolMsg.tcl based on IPS",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 50,
       "origin": {
@@ -2162,6 +2262,8 @@
     },
     {
       "id": "WIS-051",
+      "title": "Issues with NIC differences on 1750s and cygwin requirements for 1850s identifie",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 51,
       "origin": {
@@ -2205,6 +2307,8 @@
     },
     {
       "id": "WIS-052",
+      "title": "LAN testing on BMC51 encountered map problems; RPC installed in rack, help provi",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 52,
       "origin": {
@@ -2248,6 +2352,8 @@
     },
     {
       "id": "WIS-053",
+      "title": "[STRATEGIC_ANCHOR] Mastery of Firmware Development and Transport Library Creatio",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 53,
       "origin": {
@@ -2291,6 +2397,8 @@
     },
     {
       "id": "WIS-054",
+      "title": "Exception occurred when submitting job to DAL due to parsing issue with SNL expr",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 54,
       "origin": {
@@ -2334,6 +2442,8 @@
     },
     {
       "id": "WIS-055",
+      "title": "Debugging session on Haswell Server using HsxRegisterLib library in C#",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 55,
       "origin": {
@@ -2377,6 +2487,8 @@
     },
     {
       "id": "WIS-056",
+      "title": "VISA signals programmed to control pattern generators as part of debugging sessi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 56,
       "origin": {
@@ -2420,6 +2532,8 @@
     },
     {
       "id": "WIS-057",
+      "title": "Configured registers in MEM32 space as part of mux programming for SA_IOT_LANE0",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 57,
       "origin": {
@@ -2463,6 +2577,8 @@
     },
     {
       "id": "WIS-058",
+      "title": "Investigate missing micro-code patch causing assembly loading error",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 58,
       "origin": {
@@ -2506,6 +2622,8 @@
     },
     {
       "id": "WIS-059",
+      "title": "Analyze stack trace to identify specific exception causing DAL MasterFrame insta",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 59,
       "origin": {
@@ -2549,6 +2667,8 @@
     },
     {
       "id": "WIS-060",
+      "title": "Understand relationship between failed access to processor resources and executi",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 60,
       "origin": {
@@ -2592,6 +2712,8 @@
     },
     {
       "id": "WIS-061",
+      "title": "Register definitions updated for BDW B0, SKL A0, and SKL ULT A0, including fixes",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 61,
       "origin": {
@@ -2635,6 +2757,8 @@
     },
     {
       "id": "WIS-062",
+      "title": "Visa plugin encountered unrecognized architecture/stepping combination BDW_U_UC",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 62,
       "origin": {
@@ -2678,6 +2802,8 @@
     },
     {
       "id": "WIS-063",
+      "title": "HSD sighting 4723781: issue regarding unselecting signals in the final mux, whic",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 63,
       "origin": {
@@ -2721,6 +2847,8 @@
     },
     {
       "id": "WIS-064",
+      "title": "Implemented VISA support for SKL PO and GTPO decoration",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 64,
       "origin": {
@@ -2764,6 +2892,8 @@
     },
     {
       "id": "WIS-065",
+      "title": "Accessed GTPO register definitions using XML files `visa_custom_rs.xml` and `vis",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 65,
       "origin": {
@@ -2807,6 +2937,8 @@
     },
     {
       "id": "WIS-066",
+      "title": "Assigned signals to output groups, configured pattern generators, and wrote to d",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 66,
       "origin": {
@@ -2850,6 +2982,8 @@
     },
     {
       "id": "WIS-067",
+      "title": "Update visa_legacy_channel.xml to include PDM_Mux between ncnoaupmuxs and noactl",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 67,
       "origin": {
@@ -2893,6 +3027,8 @@
     },
     {
       "id": "WIS-068",
+      "title": "Modify SKL GT architecture registers to enable bypass controls and mux control",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 68,
       "origin": {
@@ -2936,6 +3072,8 @@
     },
     {
       "id": "WIS-069",
+      "title": "Disable PCU DFX IO disconnect control and enable PDM outbound enable in UCRB32 r",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 69,
       "origin": {
@@ -2979,6 +3117,8 @@
     },
     {
       "id": "WIS-070",
+      "title": "Resolved error code HSD 5026975 by correcting CT item selection in the VISA pane",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 70,
       "origin": {
@@ -3022,6 +3162,8 @@
     },
     {
       "id": "WIS-071",
+      "title": "Resolved error code HSD 5026953 by correcting script generated from CEC register",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 71,
       "origin": {
@@ -3065,6 +3207,8 @@
     },
     {
       "id": "WIS-072",
+      "title": "Merged Main Visa with Skylake PO",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 72,
       "origin": {
@@ -3108,6 +3252,8 @@
     },
     {
       "id": "WIS-073",
+      "title": "Investigating logging for VISA on multiple dates (1/24/2014)",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 73,
       "origin": {
@@ -3151,6 +3297,8 @@
     },
     {
       "id": "WIS-074",
+      "title": "SKL ODLAT enable feature and PEG8 NOA Compression feature relationship unknown",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 74,
       "origin": {
@@ -3194,6 +3342,8 @@
     },
     {
       "id": "WIS-075",
+      "title": "Investigate PythonStateDef ReadModifyWrite TODO",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 75,
       "origin": {
@@ -3237,6 +3387,8 @@
     },
     {
       "id": "WIS-076",
+      "title": "HswConverters.cs performs conversion of PythonStateDef ReadModifyWrite operation",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 76,
       "origin": {
@@ -3280,6 +3432,8 @@
     },
     {
       "id": "WIS-077",
+      "title": "Compression disabled by default in visa_custom_rs.xml to resolve PEG16.CMPRNOALN",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 77,
       "origin": {
@@ -3323,6 +3477,8 @@
     },
     {
       "id": "WIS-078",
+      "title": "SKL registers.txt sent to Hernan, potential ongoing work or discussion on Skylak",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 78,
       "origin": {
@@ -3366,6 +3522,8 @@
     },
     {
       "id": "WIS-079",
+      "title": "/uncore/etrog/edc directory structure updated to reflect EDRAM IOT implementatio",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 79,
       "origin": {
@@ -3409,6 +3567,8 @@
     },
     {
       "id": "WIS-080",
+      "title": "Exception related to UNSL0_SQIDI_GDTUNIT_0x9840 not found, possibly investigatin",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 80,
       "origin": {
@@ -3452,6 +3612,8 @@
     },
     {
       "id": "WIS-081",
+      "title": "ITP Bug [5027277] reported for a test case involving BDW (Block Data Width) 0x98",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 81,
       "origin": {
@@ -3495,6 +3657,8 @@
     },
     {
       "id": "WIS-082",
+      "title": "Accessing EDRAMBAR registers at addresses 0x6e_0_0_mem_regs, 0x6f_0_0_mem_regs,",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 82,
       "origin": {
@@ -3538,6 +3702,8 @@
     },
     {
       "id": "WIS-083",
+      "title": "Encountering error codes EFALWAYS_CR_VISA_CTL_EFALWAYS (0x3210), EFALWAYS_CR_VIS",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 83,
       "origin": {
@@ -3581,6 +3747,8 @@
     },
     {
       "id": "WIS-084",
+      "title": "Role of pci module in accessing and modifying PCI configuration space",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 84,
       "origin": {
@@ -3624,6 +3792,8 @@
     },
     {
       "id": "WIS-085",
+      "title": "Initialization of Northpeak API using broxton_a0_red.xml configuration file",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 85,
       "origin": {
@@ -3667,6 +3837,8 @@
     },
     {
       "id": "WIS-086",
+      "title": "Utilization of IpcApiTargetAccess class to access target devices via OpenIPC API",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 86,
       "origin": {
@@ -3710,6 +3882,8 @@
     },
     {
       "id": "WIS-087",
+      "title": "TODO: Add PO support for BXT (Broadwell eXtended Thermal)",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 87,
       "origin": {
@@ -3753,6 +3927,8 @@
     },
     {
       "id": "WIS-088",
+      "title": "Integrated GTEST with TeamCity for continuous integration and testing",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 88,
       "origin": {
@@ -3796,6 +3972,8 @@
     },
     {
       "id": "WIS-089",
+      "title": "Replaced CATCH with GTEST due to significant investment in NPK tools",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 89,
       "origin": {
@@ -3839,6 +4017,8 @@
     },
     {
       "id": "WIS-090",
+      "title": "TODO: Set up BXT FPGA system with NPK SDK using known working NPK_Raw_Tap_only_b",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 90,
       "origin": {
@@ -3882,6 +4062,8 @@
     },
     {
       "id": "WIS-091",
+      "title": "Resolved NullPointerException by changing connection type to LTB",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 91,
       "origin": {
@@ -3925,6 +4107,8 @@
     },
     {
       "id": "WIS-092",
+      "title": "Manually installed IpcApiAccess, ISDBaseWin64, and BXTSupportPkWin64 due to thei",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 92,
       "origin": {
@@ -3968,6 +4152,8 @@
     },
     {
       "id": "WIS-093",
+      "title": "npk_cfg64.exe used to configure and stop tracing from FPGA",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 93,
       "origin": {
@@ -4011,6 +4197,8 @@
     },
     {
       "id": "WIS-094",
+      "title": "Out of Memory error (code 0x80000009) prevented replication of M0 Python CLI GT",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 94,
       "origin": {
@@ -4054,6 +4242,8 @@
     },
     {
       "id": "WIS-095",
+      "title": "Set up hosts & Targets for PVT validation testing using BXTP, JF5 lab, and DSDJF",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 95,
       "origin": {
@@ -4097,6 +4287,8 @@
     },
     {
       "id": "WIS-096",
+      "title": "Host Interface Error with a WriteMemoryWithStreamer:Read ipc_msg_read() failed m",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 96,
       "origin": {
@@ -4140,6 +4332,8 @@
     },
     {
       "id": "WIS-097",
+      "title": "Resolved IPC error code (0x800e0001) and improved FPGAIntegration stability by p",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 97,
       "origin": {
@@ -4183,6 +4377,8 @@
     },
     {
       "id": "WIS-098",
+      "title": "Test runs failed due to missing VCDs and incorrect MSR values",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 98,
       "origin": {
@@ -4226,6 +4422,8 @@
     },
     {
       "id": "WIS-099",
+      "title": "Error code IPC_ErrorCode.IPC_Error MSR_Access_Faulted (0x80090003L) indicates CP",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 99,
       "origin": {
@@ -4269,6 +4467,8 @@
     },
     {
       "id": "WIS-100",
+      "title": "Script failed to recover from 'TRACE32 device already in use' issue",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 100,
       "origin": {
@@ -4312,6 +4512,8 @@
     },
     {
       "id": "WIS-101",
+      "title": "visa_patgen_manual_stop function failed due to unknown reason",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 101,
       "origin": {
@@ -4355,6 +4557,8 @@
     },
     {
       "id": "WIS-102",
+      "title": "Causality error: conflicting dates between log and tool release",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 102,
       "origin": {
@@ -4398,6 +4602,8 @@
     },
     {
       "id": "WIS-103",
+      "title": "IPC connection failure prevented target config sequence from starting",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 103,
       "origin": {
@@ -4441,6 +4647,8 @@
     },
     {
       "id": "WIS-104",
+      "title": "cfg_apitest64.exe used to run tests in probemode and tap2sb modes",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 104,
       "origin": {
@@ -4484,6 +4692,8 @@
     },
     {
       "id": "WIS-105",
+      "title": "ITP bugs [5661248] and [5659929] reported",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 105,
       "origin": {
@@ -4527,6 +4737,8 @@
     },
     {
       "id": "WIS-106",
+      "title": "ipccli module failed to import in Python 2.7.9 environment on Windows",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 106,
       "origin": {
@@ -4570,6 +4782,8 @@
     },
     {
       "id": "WIS-107",
+      "title": "Installed BXT OEM toolstack to configure system trace",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 107,
       "origin": {
@@ -4613,6 +4827,8 @@
     },
     {
       "id": "WIS-108",
+      "title": "Internal error occurred during session tde_boot due to missing metadata file",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 108,
       "origin": {
@@ -4656,6 +4872,8 @@
     },
     {
       "id": "WIS-109",
+      "title": "Dockable content 'EDRAMIOT' created with dimensions 383x525.13 pixels and anchor",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 109,
       "origin": {
@@ -4699,6 +4917,8 @@
     },
     {
       "id": "WIS-110",
+      "title": "Modifications to SkyLake_M0 platform's EDRAM signals and VISA panel configuratio",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 110,
       "origin": {
@@ -4742,6 +4962,8 @@
     },
     {
       "id": "WIS-111",
+      "title": "Update to visa_custom_rs.xml file affected EDC changes path",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 111,
       "origin": {
@@ -4785,6 +5007,8 @@
     },
     {
       "id": "WIS-112",
+      "title": "New programming implemented using Python scripts for VISA signals",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 112,
       "origin": {
@@ -4828,6 +5052,8 @@
     },
     {
       "id": "WIS-113",
+      "title": "PVT BXTOEM testing on SV2K8122 using InstallPVT-BXTOEM.1.0.193.400.exe",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 113,
       "origin": {
@@ -4871,6 +5097,8 @@
     },
     {
       "id": "WIS-114",
+      "title": "BXTP target relocation note",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 114,
       "origin": {
@@ -4914,6 +5142,8 @@
     },
     {
       "id": "WIS-115",
+      "title": "NPK SDK installation and configuration",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 115,
       "origin": {
@@ -4957,6 +5187,8 @@
     },
     {
       "id": "WIS-116",
+      "title": "CAUSALITY ERROR: Tool XMon version 2.7.3 was released in 2015 but used in log en",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 116,
       "origin": {
@@ -5000,6 +5232,8 @@
     },
     {
       "id": "WIS-117",
+      "title": "HSD update issue: BSSB no data on first trace, need to retry",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 117,
       "origin": {
@@ -5043,6 +5277,8 @@
     },
     {
       "id": "WIS-118",
+      "title": "Debug configuration issue: BLUE - C:\\Users\\lab_vtglab1\\Documents\\APL IFWI 2015_W",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 118,
       "origin": {
@@ -5086,6 +5322,8 @@
     },
     {
       "id": "WIS-119",
+      "title": "Resolved gt_portid issue in PythonCLI scripts",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 119,
       "origin": {
@@ -5129,6 +5367,8 @@
     },
     {
       "id": "WIS-120",
+      "title": "Added DOA tests to TestRunner files and updated TargetConfigurations.xml",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 120,
       "origin": {
@@ -5172,6 +5412,8 @@
     },
     {
       "id": "WIS-121",
+      "title": "TODO: Update and share bxt_utils.py code",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 121,
       "origin": {
@@ -5215,6 +5457,8 @@
     },
     {
       "id": "WIS-122",
+      "title": "Resolve VISA panel configuration issue on Skylake_RO",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 122,
       "origin": {
@@ -5258,6 +5502,8 @@
     },
     {
       "id": "WIS-123",
+      "title": "Discuss Northpeak Break (NPK_BREAK) with Arun and Ilya",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 123,
       "origin": {
@@ -5301,6 +5547,8 @@
     },
     {
       "id": "WIS-124",
+      "title": "Python 2.7 released",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 124,
       "origin": {
@@ -5344,6 +5592,8 @@
     },
     {
       "id": "WIS-125",
+      "title": "ITP Bug [5661723] reported: Installer interrupted when Python is in a corrupt st",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 125,
       "origin": {
@@ -5387,6 +5637,8 @@
     },
     {
       "id": "WIS-126",
+      "title": "init_soc.cmm script used to fix BSSB4",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 126,
       "origin": {
@@ -5430,6 +5682,8 @@
     },
     {
       "id": "WIS-127",
+      "title": "BSSB tracing issues on BXT E0 reported: BIOS overwrites swdest_0, GetDebugPortPo",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 127,
       "origin": {
@@ -5473,6 +5727,8 @@
     },
     {
       "id": "WIS-128",
+      "title": "VISA patgen tool used to verify BSSB on BXT E0",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 128,
       "origin": {
@@ -5516,6 +5772,8 @@
     },
     {
       "id": "WIS-129",
+      "title": "Resolve 'Can't bind socket to port: Address already in use' error by killing Aub",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 129,
       "origin": {
@@ -5559,6 +5817,8 @@
     },
     {
       "id": "WIS-130",
+      "title": "Dump and process HAS environment variables",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 130,
       "origin": {
@@ -5602,6 +5862,8 @@
     },
     {
       "id": "WIS-131",
+      "title": "Plan relevant Maestro tests for Pipe2d and document test methods",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 131,
       "origin": {
@@ -5645,6 +5907,8 @@
     },
     {
       "id": "WIS-132",
+      "title": "Fix XML errors due to missing external entities in Simics by editing start_simic",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 132,
       "origin": {
@@ -5688,6 +5952,8 @@
     },
     {
       "id": "WIS-133",
+      "title": "Reverted dc6.bl2 due to outdated bling and pipes B or C compatibility issues",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 133,
       "origin": {
@@ -5731,6 +5997,8 @@
     },
     {
       "id": "WIS-134",
+      "title": "Updated build process for dc6 to accommodate changes in configuration or setting",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 134,
       "origin": {
@@ -5774,6 +6042,8 @@
     },
     {
       "id": "WIS-135",
+      "title": "Used specific version of PlatformConfig.xml for dc6 build",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 135,
       "origin": {
@@ -5817,6 +6087,8 @@
     },
     {
       "id": "WIS-136",
+      "title": "Repeated mmio read and write operations on addresses 0x64000 and 0x64050 with po",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 136,
       "origin": {
@@ -5860,6 +6132,8 @@
     },
     {
       "id": "WIS-137",
+      "title": "Server process creation failed on dc6 due to 'Resource temporarily unavailable'",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 137,
       "origin": {
@@ -5903,6 +6177,8 @@
     },
     {
       "id": "WIS-138",
+      "title": "MMIO read and write operations failed at addresses 0x0000000000664000 and 0x0000",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 138,
       "origin": {
@@ -5946,6 +6222,8 @@
     },
     {
       "id": "WIS-139",
+      "title": "Display powerup sequence allowed access to regions that are otherwise inaccessib",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 139,
       "origin": {
@@ -5989,6 +6267,8 @@
     },
     {
       "id": "WIS-140",
+      "title": "Simulation environment setup using Simics 4.8.pre22 and XMON 2.7.3",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 140,
       "origin": {
@@ -6032,6 +6312,8 @@
     },
     {
       "id": "WIS-141",
+      "title": "Include files used to set up the simulation environment",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 141,
       "origin": {
@@ -6075,6 +6357,8 @@
     },
     {
       "id": "WIS-142",
+      "title": "Hint towards further investigation into the tool registry",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 142,
       "origin": {
@@ -6118,6 +6402,8 @@
     },
     {
       "id": "WIS-143",
+      "title": "Simulation encountered issues with proxy trace and HW_FW warnings, filtered out",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 143,
       "origin": {
@@ -6161,6 +6447,8 @@
     },
     {
       "id": "WIS-144",
+      "title": "Used `softmon` tool to capture waveforms of DDI_BUF_CTR and display pixel data",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 144,
       "origin": {
@@ -6204,6 +6492,8 @@
     },
     {
       "id": "WIS-145",
+      "title": "MAESTRO_GFX variable set to enable GFX modules in build process",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 145,
       "origin": {
@@ -6247,6 +6537,8 @@
     },
     {
       "id": "WIS-146",
+      "title": "Investigate regressions and unit tests for PureVP/Pipe2d/SV stack",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 146,
       "origin": {
@@ -6290,6 +6582,8 @@
     },
     {
       "id": "WIS-147",
+      "title": "Mismatched CRC issue attributed to outdated Fulsim version",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 147,
       "origin": {
@@ -6333,6 +6627,8 @@
     },
     {
       "id": "WIS-148",
+      "title": "Setup test environment using set_farm.sh and run Maestro tests with specific par",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 148,
       "origin": {
@@ -6376,6 +6672,8 @@
     },
     {
       "id": "WIS-149",
+      "title": "Nightly build of fulsim includes bug fix for Maestro tests crashing after upgrad",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 149,
       "origin": {
@@ -6419,6 +6717,8 @@
     },
     {
       "id": "WIS-150",
+      "title": "Errors encountered during test related to PCI Cfg writes and executed callbacks",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 150,
       "origin": {
@@ -6462,6 +6762,8 @@
     },
     {
       "id": "WIS-151",
+      "title": "In 2016-2019-01, the milestone was: Collaboration between development team and T",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 151,
       "origin": {
@@ -6505,6 +6807,8 @@
     },
     {
       "id": "WIS-152",
+      "title": "Proton1 and Proton2 platforms tested for App Direct Dependency Failure during Bo",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 152,
       "origin": {
@@ -6548,6 +6852,8 @@
     },
     {
       "id": "WIS-153",
+      "title": "Stress testing conducted on Proton2 using stressapptest and FIO to validate DC C",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 153,
       "origin": {
@@ -6591,6 +6897,8 @@
     },
     {
       "id": "WIS-154",
+      "title": "CScripts version Rev 1.46 Bld 726820 used for Purley 2S and 4S Platforms",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 154,
       "origin": {
@@ -6634,6 +6942,8 @@
     },
     {
       "id": "WIS-155",
+      "title": "Install HAMR (no specific version mentioned)",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 155,
       "origin": {
@@ -6677,6 +6987,8 @@
     },
     {
       "id": "WIS-156",
+      "title": "Configure HAMR with shmemcc using UFM - mellanox unified fabric manager",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 156,
       "origin": {
@@ -6720,6 +7032,8 @@
     },
     {
       "id": "WIS-157",
+      "title": "Setup Infiniband port-to-port post-driver using quickstart",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 157,
       "origin": {
@@ -6763,6 +7077,8 @@
     },
     {
       "id": "WIS-158",
+      "title": "Provision AEP DIMM(s) as AppDirect Mode, map to PMEM device under OS, and logica",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 158,
       "origin": {
@@ -6806,6 +7122,8 @@
     },
     {
       "id": "WIS-159",
+      "title": "TODO: Investigate 'POST memory test. -VC30' (2204264234) and DXE INIT 0xD4 hang",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 159,
       "origin": {
@@ -6849,6 +7167,8 @@
     },
     {
       "id": "WIS-160",
+      "title": "Memory configuration corrected using ixpdimm-cli create -goal persistentmemoryty",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 160,
       "origin": {
@@ -6892,6 +7212,8 @@
     },
     {
       "id": "WIS-161",
+      "title": "Verification process initiated on Cluster with 0/60397968 error rate (0.000000%)",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 161,
       "origin": {
@@ -6935,6 +7257,8 @@
     },
     {
       "id": "WIS-162",
+      "title": "Configuration setting for SHMEM_SYMMETRIC_HEAP_SIZE set to 4000M",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 162,
       "origin": {
@@ -6978,6 +7302,8 @@
     },
     {
       "id": "WIS-163",
+      "title": "System's memory resources increase after creating a persistent namespace using i",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 163,
       "origin": {
@@ -7021,6 +7347,8 @@
     },
     {
       "id": "WIS-164",
+      "title": "Accessed lanconf script at http://andante.intel.com/scripts/swview.pl?view=/LAN_",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 164,
       "origin": {
@@ -7064,6 +7392,8 @@
     },
     {
       "id": "WIS-165",
+      "title": "Mounted PMEM device with dax option in /etc/fstab",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 165,
       "origin": {
@@ -7107,6 +7437,8 @@
     },
     {
       "id": "WIS-166",
+      "title": "Partitioned and formatted PMEM devices using parted and mkfs.ext4",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 166,
       "origin": {
@@ -7150,6 +7482,8 @@
     },
     {
       "id": "WIS-167",
+      "title": "POST memory test failure with Machine Check Exception (MCE) error code VC30 in H",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 167,
       "origin": {
@@ -7193,6 +7527,8 @@
     },
     {
       "id": "WIS-168",
+      "title": "ixpdimm-cli help command takes an excessively long time to execute in HSD-ES cas",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 168,
       "origin": {
@@ -7236,6 +7572,8 @@
     },
     {
       "id": "WIS-169",
+      "title": "App Direct Dependency Failure during Boot and BIOS update to PSE119N",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 169,
       "origin": {
@@ -7279,6 +7617,8 @@
     },
     {
       "id": "WIS-170",
+      "title": "Configuring grub2-mkconfig settings",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 170,
       "origin": {
@@ -7322,6 +7662,8 @@
     },
     {
       "id": "WIS-171",
+      "title": "Creating persistent memory resources using ipmctl",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 171,
       "origin": {
@@ -7365,6 +7707,8 @@
     },
     {
       "id": "WIS-172",
+      "title": "DC Cycling Cold Reset Ungraceful OS Shutdown During Rd/Wrt Traffic",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 172,
       "origin": {
@@ -7408,6 +7752,8 @@
     },
     {
       "id": "WIS-173",
+      "title": "No primary TODO or research link mentioned in the logs",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 173,
       "origin": {
@@ -7451,6 +7797,8 @@
     },
     {
       "id": "WIS-174",
+      "title": "PCIe correctable error injection commands",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 174,
       "origin": {
@@ -7494,6 +7842,8 @@
     },
     {
       "id": "WIS-175",
+      "title": "Configuration options used for error injection in the biosKnobs variable",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 175,
       "origin": {
@@ -7537,6 +7887,8 @@
     },
     {
       "id": "WIS-176",
+      "title": "biosKnobs variable settings similar to those on 11/15/2018",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 176,
       "origin": {
@@ -7580,6 +7932,8 @@
     },
     {
       "id": "WIS-177",
+      "title": "EINJ (Error Injection) used to inject various types of errors into the system fo",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 177,
       "origin": {
@@ -7623,6 +7977,8 @@
     },
     {
       "id": "WIS-178",
+      "title": "[CAUSALITY ERROR]: Tool used (SvBios) was likely released after 2018, as it uses",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 178,
       "origin": {
@@ -7666,6 +8022,8 @@
     },
     {
       "id": "WIS-179",
+      "title": "biosKnobs variable settings enable specific error injection features",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 179,
       "origin": {
@@ -7709,6 +8067,8 @@
     },
     {
       "id": "WIS-180",
+      "title": "System configuration knobs verified to ensure proper error injection feature con",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 180,
       "origin": {
@@ -7752,6 +8112,8 @@
     },
     {
       "id": "WIS-181",
+      "title": "Cloned Git repository from remote server to local directory",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 181,
       "origin": {
@@ -7795,6 +8157,8 @@
     },
     {
       "id": "WIS-182",
+      "title": "Set user configuration for Git repository",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 182,
       "origin": {
@@ -7838,6 +8202,8 @@
     },
     {
       "id": "WIS-183",
+      "title": "Fetched commit-msg hook from remote repository and placed it in local .git/hooks",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 183,
       "origin": {
@@ -7881,6 +8247,8 @@
     },
     {
       "id": "WIS-184",
+      "title": "In 2018-2019-01, the milestone was: Primary TODO or research link mentioned in t",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 184,
       "origin": {
@@ -7924,6 +8292,8 @@
     },
     {
       "id": "WIS-185",
+      "title": "In 2018-2019-01, the milestone was: Purpose of running the Python script `startC",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 185,
       "origin": {
@@ -7967,6 +8337,8 @@
     },
     {
       "id": "WIS-186",
+      "title": "In 2018-2019-01, the milestone was: Significance of reviewing documentation on A",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 186,
       "origin": {
@@ -8010,6 +8382,8 @@
     },
     {
       "id": "WIS-187",
+      "title": "[STRATEGIC_ANCHOR] Successfully integrated Kayak and Montana platforms, enabling",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 187,
       "origin": {
@@ -8053,6 +8427,8 @@
     },
     {
       "id": "WIS-188",
+      "title": "Montana tool experiencing issues establishing IPMI v2/RMCP+ sessions",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 188,
       "origin": {
@@ -8096,6 +8472,8 @@
     },
     {
       "id": "WIS-189",
+      "title": "Maximum number of retries for Get Device ID command not specified",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 189,
       "origin": {
@@ -8139,6 +8517,8 @@
     },
     {
       "id": "WIS-190",
+      "title": "Invalid command response (0xAB) when attempting to read data from specific PCI d",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 190,
       "origin": {
@@ -8182,6 +8562,8 @@
     },
     {
       "id": "WIS-191",
+      "title": "Jenkins CI/CD pipeline error: ECONNRESET due to socket timeout",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 191,
       "origin": {
@@ -8225,6 +8607,8 @@
     },
     {
       "id": "WIS-192",
+      "title": "Docker registry connection issue resolved using aws-ecr-credential-helper plugin",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 192,
       "origin": {
@@ -8268,6 +8652,8 @@
     },
     {
       "id": "WIS-193",
+      "title": "Misconfigured docker-compose.yml file causing Docker build process issues",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 193,
       "origin": {
@@ -8311,6 +8697,8 @@
     },
     {
       "id": "WIS-194",
+      "title": "Cloned Git repository ptv-riv from remote server git-amr-7.devtools.intel.com us",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 194,
       "origin": {
@@ -8354,6 +8742,8 @@
     },
     {
       "id": "WIS-195",
+      "title": "Configured local repository with user name and email address",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 195,
       "origin": {
@@ -8397,6 +8787,8 @@
     },
     {
       "id": "WIS-196",
+      "title": "Retrieved commit-msg hook from remote server via SCP",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 196,
       "origin": {
@@ -8440,6 +8832,8 @@
     },
     {
       "id": "WIS-197",
+      "title": "Investigation into IPMI commands related to Node Manager",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 197,
       "origin": {
@@ -8483,6 +8877,8 @@
     },
     {
       "id": "WIS-198",
+      "title": "Initial error code received when using `ipmitool` with specific options and para",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 198,
       "origin": {
@@ -8526,6 +8922,8 @@
     },
     {
       "id": "WIS-199",
+      "title": "Change made to resolve IPMI communication issue between ME and BMC on ICX-HCC",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 199,
       "origin": {
@@ -8569,6 +8967,8 @@
     },
     {
       "id": "WIS-200",
+      "title": "Power limit accuracy issue across domains reported",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 200,
       "origin": {
@@ -8612,6 +9012,8 @@
     },
     {
       "id": "WIS-201",
+      "title": "Montana testing affects stability of UUT, causing fatal error due to BIST errors",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 201,
       "origin": {
@@ -8655,6 +9057,8 @@
     },
     {
       "id": "WIS-202",
+      "title": "Tool 'montana.nativemodules.pmcapsweep' used to investigate power limit accuracy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 202,
       "origin": {
@@ -8698,6 +9102,8 @@
     },
     {
       "id": "WIS-203",
+      "title": "Power limiting tests using IPMI commands resulted in an error due to incorrect p",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 203,
       "origin": {
@@ -8741,6 +9147,8 @@
     },
     {
       "id": "WIS-204",
+      "title": "Attempt to send raw PECI commands using `ipmitool` resulted in unknown return co",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 204,
       "origin": {
@@ -8784,6 +9192,8 @@
     },
     {
       "id": "WIS-205",
+      "title": "Policy #231 sets expected average power limit to 312W",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 205,
       "origin": {
@@ -8827,6 +9237,8 @@
     },
     {
       "id": "WIS-206",
+      "title": "avgpowercmp module identifies discrepancies in average power readings within \u00b15%",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 206,
       "origin": {
@@ -8870,6 +9282,8 @@
     },
     {
       "id": "WIS-207",
+      "title": "avgpowercmp module reports 'Fail!!' when actual value exceeds \u00b15% range",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 207,
       "origin": {
@@ -8913,6 +9327,8 @@
     },
     {
       "id": "WIS-208",
+      "title": "Setting power limits on domain 0 using montana.FAI.RAPL.setcap policy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 208,
       "origin": {
@@ -8956,6 +9372,8 @@
     },
     {
       "id": "WIS-209",
+      "title": "Kernel panic due to out-of-memory (OOM) condition and subsequent reboot in 10 se",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 209,
       "origin": {
@@ -8999,6 +9417,8 @@
     },
     {
       "id": "WIS-210",
+      "title": "Debugging verifysamepolicy.py script",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 210,
       "origin": {
@@ -9042,6 +9462,8 @@
     },
     {
       "id": "WIS-211",
+      "title": "Repeated attempts to send IPMI commands using GetDeviceID and ForceMeRecovery fa",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 211,
       "origin": {
@@ -9085,6 +9507,8 @@
     },
     {
       "id": "WIS-212",
+      "title": "Causality error: Log entries conflict with the release year of the tool (ipmitoo",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 212,
       "origin": {
@@ -9128,6 +9552,8 @@
     },
     {
       "id": "WIS-213",
+      "title": "Investigate IPMI configuration and ensure ME is properly configured to accept IP",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 213,
       "origin": {
@@ -9171,6 +9597,8 @@
     },
     {
       "id": "WIS-214",
+      "title": "Measuring internal PECI performance and network timing identified as a TODO or r",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 214,
       "origin": {
@@ -9214,6 +9642,8 @@
     },
     {
       "id": "WIS-215",
+      "title": "BMC firmware updates with 250ms timeout implemented to improve existing PECI com",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 215,
       "origin": {
@@ -9257,6 +9687,8 @@
     },
     {
       "id": "WIS-216",
+      "title": "TODO: Configure maximum non-turbo limit ratio and efficiency ratio for CLX (Cann",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 216,
       "origin": {
@@ -9300,6 +9732,8 @@
     },
     {
       "id": "WIS-217",
+      "title": "IPMI command failed with error code 'ab' due to wrong command codes and errors r",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 217,
       "origin": {
@@ -9343,6 +9777,8 @@
     },
     {
       "id": "WIS-218",
+      "title": "CLX platform being tested with MIV software features: Node Manager (NM), Power L",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 218,
       "origin": {
@@ -9386,6 +9822,8 @@
     },
     {
       "id": "WIS-219",
+      "title": "Using futurize tool as a workaround for resolving issues",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 219,
       "origin": {
@@ -9429,6 +9867,8 @@
     },
     {
       "id": "WIS-220",
+      "title": "Potential issues identified with certain PECI commands that may not be implement",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 220,
       "origin": {
@@ -9472,6 +9912,8 @@
     },
     {
       "id": "WIS-221",
+      "title": "Error: No module named 'icelakex' while initializing PECI Xtor IPMI_HOST",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 221,
       "origin": {
@@ -9515,6 +9957,8 @@
     },
     {
       "id": "WIS-222",
+      "title": "Using pyghmi and Crypto libraries for MSR reads on host IP address 10.3.3.31",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 222,
       "origin": {
@@ -9558,6 +10002,8 @@
     },
     {
       "id": "WIS-223",
+      "title": "MIV Reset and Recovery issues with Force ME recovery and Get Device ID return co",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 223,
       "origin": {
@@ -9601,6 +10047,8 @@
     },
     {
       "id": "WIS-224",
+      "title": "PECI commands and BMC PECI master functionality discussions",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 224,
       "origin": {
@@ -9644,6 +10092,8 @@
     },
     {
       "id": "WIS-225",
+      "title": "MIV test cases fail strangely after do min_nm_dca test on Dell system",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 225,
       "origin": {
@@ -9687,6 +10137,8 @@
     },
     {
       "id": "WIS-226",
+      "title": "ME RAS Force ME recovery issues",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 226,
       "origin": {
@@ -9730,6 +10182,8 @@
     },
     {
       "id": "WIS-227",
+      "title": "BMC PECI master functionality discussion",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 227,
       "origin": {
@@ -9773,6 +10227,8 @@
     },
     {
       "id": "WIS-228",
+      "title": "Higher-order PECI test cases were planned",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 228,
       "origin": {
@@ -9816,6 +10272,8 @@
     },
     {
       "id": "WIS-229",
+      "title": "DTAF Core installation guide needs update from Raveendra",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 229,
       "origin": {
@@ -9859,6 +10317,8 @@
     },
     {
       "id": "WIS-230",
+      "title": "BMC provisioning BKM through host interface involves issuing a command to enable",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 230,
       "origin": {
@@ -9902,6 +10362,8 @@
     },
     {
       "id": "WIS-231",
+      "title": "Integrated DTAF with MIV content readiness for CPX & ICX platforms using pip ins",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 231,
       "origin": {
@@ -9945,6 +10407,8 @@
     },
     {
       "id": "WIS-232",
+      "title": "Prioritized PCIE Whitley priority execution requests by Li, Xiang Z and lead BKC",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 232,
       "origin": {
@@ -9988,6 +10452,8 @@
     },
     {
       "id": "WIS-233",
+      "title": "Configured Crasdump/EINJ knobs to disable and enable Lock Chipset and EV DFX Fea",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 233,
       "origin": {
@@ -10031,6 +10497,8 @@
     },
     {
       "id": "WIS-234",
+      "title": "Review of NM-4.0 External Interface Spec",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 234,
       "origin": {
@@ -10074,6 +10542,8 @@
     },
     {
       "id": "WIS-235",
+      "title": "Update test setup to install at least 4 DIMMs for Domain 2 (memory) power usage",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 235,
       "origin": {
@@ -10117,6 +10587,8 @@
     },
     {
       "id": "WIS-236",
+      "title": "Delete (NmPolicy 0x2E 0xC1) Returns 0x80 after disabling existing policy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 236,
       "origin": {
@@ -10160,6 +10632,8 @@
     },
     {
       "id": "WIS-237",
+      "title": "Cooper City Modular BMC Support _WW51.4.pptx outlines partially supported BMC fe",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 237,
       "origin": {
@@ -10203,6 +10677,8 @@
     },
     {
       "id": "WIS-238",
+      "title": "Proposed modular BMC support relates to existing BMC features by providing metho",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 238,
       "origin": {
@@ -10246,6 +10722,8 @@
     },
     {
       "id": "WIS-239",
+      "title": "Commit 1b3f8aefd3f1b01a36094f81259294c0795b712f and merge request 97 addressed a",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 239,
       "origin": {
@@ -10289,6 +10767,8 @@
     },
     {
       "id": "WIS-240",
+      "title": "Code review issue forwarded to Dave/Curtis for investigation",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 240,
       "origin": {
@@ -10332,6 +10812,8 @@
     },
     {
       "id": "WIS-241",
+      "title": "Updated L-BMC firmware provides method for validation team to access SMBus segme",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 241,
       "origin": {
@@ -10375,6 +10857,8 @@
     },
     {
       "id": "WIS-242",
+      "title": "IVL crash dump issue addressed",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 242,
       "origin": {
@@ -10418,6 +10902,8 @@
     },
     {
       "id": "WIS-243",
+      "title": "Opcode 0x2E found to be a common prefix for various NM and PLP functions",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 243,
       "origin": {
@@ -10461,6 +10947,8 @@
     },
     {
       "id": "WIS-244",
+      "title": "Manageability Ignition-Redfish Content Plan (pptx) referenced but not directly l",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 244,
       "origin": {
@@ -10504,6 +10992,8 @@
     },
     {
       "id": "WIS-245",
+      "title": "PECI commands tested and found to be supported or unsupported",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 245,
       "origin": {
@@ -10547,6 +11037,8 @@
     },
     {
       "id": "WIS-246",
+      "title": "Architectural decisions regarding PECI command execution, specifically with rega",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 246,
       "origin": {
@@ -10590,6 +11082,8 @@
     },
     {
       "id": "WIS-247",
+      "title": "Primary TODO or research link: Intel Redfish Power Cap OEM Schema",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 247,
       "origin": {
@@ -10633,6 +11127,8 @@
     },
     {
       "id": "WIS-248",
+      "title": "Unable to determine the tool used based on the provided evidence",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 248,
       "origin": {
@@ -10676,6 +11172,8 @@
     },
     {
       "id": "WIS-249",
+      "title": "Unable to determine the error codes encountered based on the provided evidence",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 249,
       "origin": {
@@ -10719,6 +11217,8 @@
     },
     {
       "id": "WIS-250",
+      "title": "Tool or API used to troubleshoot the issue: Era Registry (associated with Cray S",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 250,
       "origin": {
@@ -10762,6 +11262,8 @@
     },
     {
       "id": "WIS-251",
+      "title": "Architectural decisions regarding power management and capacity planning were li",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 251,
       "origin": {
@@ -10805,6 +11307,8 @@
     },
     {
       "id": "WIS-252",
+      "title": "Formulas updated to calculate inventory metrics",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 252,
       "origin": {
@@ -10848,6 +11352,8 @@
     },
     {
       "id": "WIS-253",
+      "title": "Updated list of inventory requests available at https://intel.sharepoint.com/sit",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 253,
       "origin": {
@@ -10891,6 +11397,8 @@
     },
     {
       "id": "WIS-254",
+      "title": "BMC for MCTP stack validation link shared",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 254,
       "origin": {
@@ -10934,6 +11442,8 @@
     },
     {
       "id": "WIS-255",
+      "title": "Research link: PythonSV/peciframework to exercise PCS mailbox functionality",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 255,
       "origin": {
@@ -10977,6 +11487,8 @@
     },
     {
       "id": "WIS-256",
+      "title": "MCTP stack configuration for BMC communication",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 256,
       "origin": {
@@ -11020,6 +11532,8 @@
     },
     {
       "id": "WIS-257",
+      "title": "MCTP BUS Owner Selection configured for OOB MSMS or CSME",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 257,
       "origin": {
@@ -11063,6 +11577,8 @@
     },
     {
       "id": "WIS-258",
+      "title": "PECI framework handles connection aborts by res-establishing the connection",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 258,
       "origin": {
@@ -11106,6 +11622,8 @@
     },
     {
       "id": "WIS-259",
+      "title": "Integration of PECI/i3c/MCTP components into BMC firmware architecture",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 259,
       "origin": {
@@ -11149,6 +11667,8 @@
     },
     {
       "id": "WIS-260",
+      "title": "MIV report Weldon/Hooper/Staff",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 260,
       "origin": {
@@ -11192,6 +11712,8 @@
     },
     {
       "id": "WIS-261",
+      "title": "Fuzzing support added for PECI commands",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 261,
       "origin": {
@@ -11235,6 +11757,8 @@
     },
     {
       "id": "WIS-262",
+      "title": "Documentation of error codes and MSR addresses",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 262,
       "origin": {
@@ -11278,6 +11802,8 @@
     },
     {
       "id": "WIS-263",
+      "title": "PECI commands tested in Base category using peci_checkout",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 263,
       "origin": {
@@ -11321,6 +11847,8 @@
     },
     {
       "id": "WIS-264",
+      "title": "Issue with PTU calibration identified during test plan execution",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 264,
       "origin": {
@@ -11364,6 +11892,8 @@
     },
     {
       "id": "WIS-265",
+      "title": "Primary TODO or research link mentioned: Archer City Platform Architecture",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 265,
       "origin": {
@@ -11407,6 +11937,8 @@
     },
     {
       "id": "WIS-266",
+      "title": "peci_flood.tdf test impacts PECI throughput on MSR reads by comparing throughput",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 266,
       "origin": {
@@ -11450,6 +11982,8 @@
     },
     {
       "id": "WIS-267",
+      "title": "Running peci_poison.tdf with bad payload/lengths simulates a scenario where all",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 267,
       "origin": {
@@ -11493,6 +12027,8 @@
     },
     {
       "id": "WIS-268",
+      "title": "No conflicts found in the RAW LOGS regarding tool release years",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 268,
       "origin": {
@@ -11536,6 +12072,8 @@
     },
     {
       "id": "WIS-269",
+      "title": "dumpJournal.py script retrieves journal entries from BMC's LogServices/Journal/E",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 269,
       "origin": {
@@ -11579,6 +12117,8 @@
     },
     {
       "id": "WIS-270",
+      "title": "MSR whitelisting updated in icx_peci_arrays.py and spr_peci_arrays.py with new f",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 270,
       "origin": {
@@ -11622,6 +12162,8 @@
     },
     {
       "id": "WIS-271",
+      "title": "CD Summarizer script may need updates to be compatible with ACD",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 271,
       "origin": {
@@ -11665,6 +12207,8 @@
     },
     {
       "id": "WIS-272",
+      "title": "Adapt MIV tests to use spr_peci_arrays and spr_peci_exceptions instead of deprec",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 272,
       "origin": {
@@ -11708,6 +12252,8 @@
     },
     {
       "id": "WIS-273",
+      "title": "Updated PECI framework handles exceptions and arrays using spr_peci_arrays and s",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 273,
       "origin": {
@@ -11751,6 +12297,8 @@
     },
     {
       "id": "WIS-274",
+      "title": "rdEndPointConfig_PCI function modified to use peci_wrapper method considering en",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 274,
       "origin": {
@@ -11794,6 +12342,8 @@
     },
     {
       "id": "WIS-275",
+      "title": "Implementing a 'Tiger Team' structure to improve collaboration and reduce siloed",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 275,
       "origin": {
@@ -11837,6 +12387,8 @@
     },
     {
       "id": "WIS-276",
+      "title": "Update to LTM specification in SPR+EBG_XCC_LTM_DEF_D0.0x000D.xlsx",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 276,
       "origin": {
@@ -11880,6 +12432,8 @@
     },
     {
       "id": "WIS-277",
+      "title": "Issue with PCS TMF IB Lock out causing average power consumption not to be limit",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 277,
       "origin": {
@@ -11923,6 +12477,8 @@
     },
     {
       "id": "WIS-278",
+      "title": "Power limiting issue on various systems, including Archer City with broken suppo",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 278,
       "origin": {
@@ -11966,6 +12522,8 @@
     },
     {
       "id": "WIS-279",
+      "title": "PECI v4.0 Commands Checkout (MCTP) research and development ongoing",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 279,
       "origin": {
@@ -12009,6 +12567,8 @@
     },
     {
       "id": "WIS-280",
+      "title": "Team utilizes MCTP stack for communication with BMC through various commands",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 280,
       "origin": {
@@ -12052,6 +12612,8 @@
     },
     {
       "id": "WIS-281",
+      "title": "Minimum read time of 6000ms must be set for domain 0 in SetNmPolicy command",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 281,
       "origin": {
@@ -12095,6 +12657,8 @@
     },
     {
       "id": "WIS-282",
+      "title": "Critical issue identified with MIV framework, requires further investigation",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 282,
       "origin": {
@@ -12138,6 +12702,8 @@
     },
     {
       "id": "WIS-283",
+      "title": "Error code reported on HSD-ES: 22013940445",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 283,
       "origin": {
@@ -12181,6 +12747,8 @@
     },
     {
       "id": "WIS-284",
+      "title": "ipmitool used to troubleshoot issue, output identical to BMC console raw command",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 284,
       "origin": {
@@ -12224,6 +12792,8 @@
     },
     {
       "id": "WIS-285",
+      "title": "Redfish OEM API validation meeting",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 285,
       "origin": {
@@ -12267,6 +12837,8 @@
     },
     {
       "id": "WIS-286",
+      "title": "IEH CORRECT ERROR with ErrorStatus 0x1 and MaxBitIdx 0xA cleared",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 286,
       "origin": {
@@ -12310,6 +12882,8 @@
     },
     {
       "id": "WIS-287",
+      "title": "IFU MCA error in BIOS Serial logs related to Archer City board design",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 287,
       "origin": {
@@ -12353,6 +12927,8 @@
     },
     {
       "id": "WIS-288",
+      "title": "Merging Montana into DTAF-content using git-filter-repo to preserve history",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 288,
       "origin": {
@@ -12396,6 +12972,8 @@
     },
     {
       "id": "WIS-289",
+      "title": "Error setting CorrectionInMs property in power limit configuration",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 289,
       "origin": {
@@ -12439,6 +13017,8 @@
     },
     {
       "id": "WIS-290",
+      "title": "Primary TODO or research link mentioned: MCTP packets not reaching OOB-MSM FW",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 290,
       "origin": {
@@ -12482,6 +13062,8 @@
     },
     {
       "id": "WIS-291",
+      "title": "Team uses PythonSV to send MCTP packets from MEMBAR2 of the VMD device to OOB-MS",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 291,
       "origin": {
@@ -12525,6 +13107,8 @@
     },
     {
       "id": "WIS-292",
+      "title": "Team investigates PC6 occurrence using PythonSV and pmdebug tools, no issues fou",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 292,
       "origin": {
@@ -12568,6 +13152,8 @@
     },
     {
       "id": "WIS-293",
+      "title": "Preserving history while merging Montana into DTAF-content using git-filter-repo",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 293,
       "origin": {
@@ -12611,6 +13197,8 @@
     },
     {
       "id": "WIS-294",
+      "title": "PECI commands executed to update TDFs on PCI devices",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 294,
       "origin": {
@@ -12654,6 +13242,8 @@
     },
     {
       "id": "WIS-295",
+      "title": "No plans to merge fix for EGS",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 295,
       "origin": {
@@ -12697,6 +13287,8 @@
     },
     {
       "id": "WIS-296",
+      "title": "Python scripts executed using OpenPythonSV to unlock and refresh PMC",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 296,
       "origin": {
@@ -12740,6 +13332,8 @@
     },
     {
       "id": "WIS-297",
+      "title": "Hook a Logic Analyzer (LA) to the PECI bus for further investigation",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 297,
       "origin": {
@@ -12783,6 +13377,8 @@
     },
     {
       "id": "WIS-298",
+      "title": "Stress test OOBMSM on 10nm architecture using various test files",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 298,
       "origin": {
@@ -12826,6 +13422,8 @@
     },
     {
       "id": "WIS-299",
+      "title": "Validate Xeon PECI specification on 10nm architecture despite differences",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 299,
       "origin": {
@@ -12869,6 +13467,8 @@
     },
     {
       "id": "WIS-300",
+      "title": "Unexpected PECI return codes during base GPU frequency check",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 300,
       "origin": {
@@ -12912,6 +13512,8 @@
     },
     {
       "id": "WIS-301",
+      "title": "Setting power control policy to limit power consumption to 0W using PATCH method",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 301,
       "origin": {
@@ -12955,6 +13557,8 @@
     },
     {
       "id": "WIS-302",
+      "title": "Accessed meeting recording via Intel's SharePoint platform for partner training",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 302,
       "origin": {
@@ -12998,6 +13602,8 @@
     },
     {
       "id": "WIS-303",
+      "title": "Exploration of new Redfish schema for pmcapsweep script",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 303,
       "origin": {
@@ -13041,6 +13647,8 @@
     },
     {
       "id": "WIS-304",
+      "title": "LTM updates to address duplicate endpoints and DMI CSR overlap issues",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 304,
       "origin": {
@@ -13084,6 +13692,8 @@
     },
     {
       "id": "WIS-305",
+      "title": "XPIV pecistressor tool used to measure PECI traffic impact on CPU benchmarks",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 305,
       "origin": {
@@ -13127,6 +13737,8 @@
     },
     {
       "id": "WIS-306",
+      "title": "Review PECI-related issues and EGS DRAM ECS info over OOB PECI",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 306,
       "origin": {
@@ -13170,6 +13782,8 @@
     },
     {
       "id": "WIS-307",
+      "title": "crdefeature2_bs accessed registers 21850h and 29850h across multiple channels",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 307,
       "origin": {
@@ -13213,6 +13827,8 @@
     },
     {
       "id": "WIS-308",
+      "title": "I/O statistics revealed by show_access_info method for crdefeature2_bs on mc3.ch",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 308,
       "origin": {
@@ -13256,6 +13872,8 @@
     },
     {
       "id": "WIS-309",
+      "title": "Functions defined for accessing MMIO registers",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 309,
       "origin": {
@@ -13299,6 +13917,8 @@
     },
     {
       "id": "WIS-310",
+      "title": "Experiment conducted using Cscripts over BMC to validate changes",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 310,
       "origin": {
@@ -13342,6 +13962,8 @@
     },
     {
       "id": "WIS-311",
+      "title": "Analysis of CSV files revealed performance of `wrEndPointConfig_PCI` function",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 311,
       "origin": {
@@ -13385,6 +14007,8 @@
     },
     {
       "id": "WIS-312",
+      "title": "MSR register access issues and unexpected return codes encountered during PECI t",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 312,
       "origin": {
@@ -13428,6 +14052,8 @@
     },
     {
       "id": "WIS-313",
+      "title": "PECI framework initialized with BKM and used to configure BMCs via Redfish API",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 313,
       "origin": {
@@ -13471,6 +14097,8 @@
     },
     {
       "id": "WIS-314",
+      "title": "Several tools used, including pysvtools, ipccli, and peci-obj",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 314,
       "origin": {
@@ -13514,6 +14142,8 @@
     },
     {
       "id": "WIS-315",
+      "title": "Causality error: lack of information about tools' release years",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 315,
       "origin": {
@@ -13557,6 +14187,8 @@
     },
     {
       "id": "WIS-316",
+      "title": "New Redfish schema 2.0 mentioned, but primary TODO or research link not explicit",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 316,
       "origin": {
@@ -13600,6 +14232,8 @@
     },
     {
       "id": "WIS-317",
+      "title": "PSU MUX fix needed to allow NM S (NM power limit sweep) to function correctly",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 317,
       "origin": {
@@ -13643,6 +14277,8 @@
     },
     {
       "id": "WIS-318",
+      "title": "Era Registry reference found in ARTIFACT section",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 318,
       "origin": {
@@ -13686,6 +14322,8 @@
     },
     {
       "id": "WIS-319",
+      "title": "Platform Energy Counter (PCS) interaction with BMC and SUT using ipmitool and Re",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 319,
       "origin": {
@@ -13729,6 +14367,8 @@
     },
     {
       "id": "WIS-320",
+      "title": "EIDs associated with bus owners on SRR4PIVR28B02H2.gar.corp.intel.com",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 320,
       "origin": {
@@ -13772,6 +14412,8 @@
     },
     {
       "id": "WIS-321",
+      "title": "Unexpected PECI return codes observed for various endpoints",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 321,
       "origin": {
@@ -13815,6 +14457,8 @@
     },
     {
       "id": "WIS-322",
+      "title": "`busctl` commands used to send and receive MCTP payloads, as well as for PCI dev",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 322,
       "origin": {
@@ -13858,6 +14502,8 @@
     },
     {
       "id": "WIS-323",
+      "title": "Error codes encountered during device discovery in Montana test suite: discovery",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 323,
       "origin": {
@@ -13901,6 +14547,8 @@
     },
     {
       "id": "WIS-324",
+      "title": "Team used journalctl to troubleshoot issues with MCTP device discovery and reset",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 324,
       "origin": {
@@ -13944,6 +14592,8 @@
     },
     {
       "id": "WIS-325",
+      "title": "Primary TODO or research link mentioned: MIV Wiki and Manageability specificatio",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 325,
       "origin": {
@@ -13987,6 +14637,8 @@
     },
     {
       "id": "WIS-326",
+      "title": "Protocols used for communication between BMC, I3C, OOBMSM, LTM, SB, and iMHPUnit",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 326,
       "origin": {
@@ -14030,6 +14682,8 @@
     },
     {
       "id": "WIS-327",
+      "title": "Tools used to test manageability features: Simics, DTAF",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 327,
       "origin": {
@@ -14073,6 +14727,8 @@
     },
     {
       "id": "WIS-328",
+      "title": "New test cases implemented, old journal data fixed by scanning in reverse order,",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 328,
       "origin": {
@@ -14116,6 +14772,8 @@
     },
     {
       "id": "WIS-329",
+      "title": "Blackbox recorder telemetry software developed to debug RAPL failures",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 329,
       "origin": {
@@ -14159,6 +14817,8 @@
     },
     {
       "id": "WIS-330",
+      "title": "Delivered negative BDF and MSR scan with refactored code for future testing",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 330,
       "origin": {
@@ -14202,6 +14862,8 @@
     },
     {
       "id": "WIS-331",
+      "title": "Granite Rapids X2/X3 (GNR SP) PO Plan exit criteria met by Q1",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 331,
       "origin": {
@@ -14245,6 +14907,8 @@
     },
     {
       "id": "WIS-332",
+      "title": "Used ipmitool to set and get network management policy settings",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 332,
       "origin": {
@@ -14288,6 +14952,8 @@
     },
     {
       "id": "WIS-333",
+      "title": "Retrieved enumerated bus information using pythonsv_loader",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 333,
       "origin": {
@@ -14331,6 +14997,8 @@
     },
     {
       "id": "WIS-334",
+      "title": "Implementation of PECI stepping support for SRF/GNR",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 334,
       "origin": {
@@ -14374,6 +15042,8 @@
     },
     {
       "id": "WIS-335",
+      "title": "Adaptation of SPR MCTP reset test automation for GNR",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 335,
       "origin": {
@@ -14417,6 +15087,8 @@
     },
     {
       "id": "WIS-336",
+      "title": "CSV file creation and reading using pandas library",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 336,
       "origin": {
@@ -14460,6 +15132,8 @@
     },
     {
       "id": "WIS-337",
+      "title": "Sending/receiving MCTP messages using curl and busctl",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 337,
       "origin": {
@@ -14503,6 +15177,8 @@
     },
     {
       "id": "WIS-338",
+      "title": "Compressing CSV files using 7z.exe",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 338,
       "origin": {
@@ -14546,6 +15222,8 @@
     },
     {
       "id": "WIS-339",
+      "title": "MCTP/BMC remote debugging issues with EIDs 9, 19, 29, 28, 27, and 26",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 339,
       "origin": {
@@ -14589,6 +15267,8 @@
     },
     {
       "id": "WIS-340",
+      "title": "Montana code updates for PECI/NM/MCTP on GNR/SRF/EMR platforms",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 340,
       "origin": {
@@ -14632,6 +15312,8 @@
     },
     {
       "id": "WIS-341",
+      "title": "Correlating MCTP failures caught by automation with known issues using TDF archi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 341,
       "origin": {
@@ -14675,6 +15357,8 @@
     },
     {
       "id": "WIS-342",
+      "title": "Running Python scripts using kayak framework to install and test Montana code up",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 342,
       "origin": {
@@ -14718,6 +15402,8 @@
     },
     {
       "id": "WIS-343",
+      "title": "Sending PECI command over network using curl",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 343,
       "origin": {
@@ -14761,6 +15447,8 @@
     },
     {
       "id": "WIS-344",
+      "title": "Execution of montana.py script with test file mctp_reset_cold.tdf and loop optio",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 344,
       "origin": {
@@ -14804,6 +15492,8 @@
     },
     {
       "id": "WIS-345",
+      "title": "System topology discovery using Redfish and MCTP protocols",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 345,
       "origin": {
@@ -14847,6 +15537,8 @@
     },
     {
       "id": "WIS-346",
+      "title": "Hardware component enumeration using lspci command",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 346,
       "origin": {
@@ -14890,6 +15582,8 @@
     },
     {
       "id": "WIS-347",
+      "title": "Potential causality error: Redfish API calls for power management exploration",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 347,
       "origin": {
@@ -14933,6 +15627,8 @@
     },
     {
       "id": "WIS-348",
+      "title": "Primary TODO or research link mentioned: MSR write - find list of offsets from F",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 348,
       "origin": {
@@ -14976,6 +15672,8 @@
     },
     {
       "id": "WIS-349",
+      "title": "Commands implemented by the team to configure endpoint configurations for differ",
+      "domain": "WISDOM",
       "theme": "Engineering Leadership",
       "paper_order": 349,
       "origin": {
@@ -15019,6 +15717,8 @@
     },
     {
       "id": "WIS-350",
+      "title": "Tool used to interact with MCTP services on the BMC: peci_cmds",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 350,
       "origin": {
@@ -15062,6 +15762,8 @@
     },
     {
       "id": "WIS-351",
+      "title": "MCTP device discovery and interaction using various tools",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 351,
       "origin": {
@@ -15105,6 +15807,8 @@
     },
     {
       "id": "WIS-352",
+      "title": "Executed PECI commands using peci_cmds tool",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 352,
       "origin": {
@@ -15148,6 +15852,8 @@
     },
     {
       "id": "WIS-353",
+      "title": "Failed PECI command execution with error code cc:0x81",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 353,
       "origin": {
@@ -15191,6 +15897,8 @@
     },
     {
       "id": "WIS-354",
+      "title": "Authentication error encountered when connecting to remote computer JF53SPV0009",
+      "domain": "WISDOM",
       "theme": "Security & Manageability",
       "paper_order": 354,
       "origin": {
@@ -15234,6 +15942,8 @@
     },
     {
       "id": "WIS-355",
+      "title": "Connected to target system using IPMI and MTM on DMR-7 platform",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 355,
       "origin": {
@@ -15277,6 +15987,8 @@
     },
     {
       "id": "WIS-356",
+      "title": "Visited Intel's TPMI specification documentation",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 356,
       "origin": {
@@ -15320,6 +16032,8 @@
     },
     {
       "id": "WIS-357",
+      "title": "Ran Python script using access_tpmi_mmio function to access PECI registers",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 357,
       "origin": {
@@ -15363,6 +16077,8 @@
     },
     {
       "id": "WIS-358",
+      "title": "Inventory management follow-up on SMNC75000143",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 358,
       "origin": {
@@ -15406,6 +16122,8 @@
     },
     {
       "id": "WIS-359",
+      "title": "Simulation targeting Oakstream platform with specific configuration",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 359,
       "origin": {
@@ -15449,6 +16167,8 @@
     },
     {
       "id": "WIS-360",
+      "title": "Error code 0014.D.57 encountered during BIOS configuration",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 360,
       "origin": {
@@ -15492,6 +16212,8 @@
     },
     {
       "id": "WIS-361",
+      "title": "Set up a testing server for Prometheus metrics and telemetry",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 361,
       "origin": {
@@ -15535,6 +16257,8 @@
     },
     {
       "id": "WIS-362",
+      "title": "History_PythonSV2-2-19.txt is a Engineering Tool in Jason's technical portfolio",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 362,
       "origin": {
@@ -15578,6 +16302,8 @@
     },
     {
       "id": "WIS-363",
+      "title": "For Engineering Tool, Jason developed History_PythonSV2-2-19.txt. Synopsis: Impl",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 363,
       "origin": {
@@ -15621,6 +16347,8 @@
     },
     {
       "id": "WIS-364",
+      "title": "Intel\u00ae Intelligent Power Node Manager 4.0 External Interface.pdf is a Engineerin",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 364,
       "origin": {
@@ -15664,6 +16392,8 @@
     },
     {
       "id": "WIS-365",
+      "title": "For Engineering Tool, Jason developed Intel\u00ae Intelligent Power Node Manager 4.0",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 365,
       "origin": {
@@ -15707,6 +16437,8 @@
     },
     {
       "id": "WIS-366",
+      "title": "Lenovo HSDES.xlsx is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 366,
       "origin": {
@@ -15750,6 +16482,8 @@
     },
     {
       "id": "WIS-367",
+      "title": "For Engineering Tool, Jason developed Lenovo HSDES.xlsx. Synopsis: Validated har",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 367,
       "origin": {
@@ -15793,6 +16527,8 @@
     },
     {
       "id": "WIS-368",
+      "title": "Lenovo Proton Retrospective.txt is a Engineering Tool in Jason's technical portf",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 368,
       "origin": {
@@ -15836,6 +16572,8 @@
     },
     {
       "id": "WIS-369",
+      "title": "For Engineering Tool, Jason developed Lenovo Proton Retrospective.txt. Synopsis:",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 369,
       "origin": {
@@ -15879,6 +16617,8 @@
     },
     {
       "id": "WIS-370",
+      "title": "P12_03.15.02_SPS_PECI_Continuous_Peci_Calls_ReqTest_BMC_NMoff_Ipmi.rtf is a Engi",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 370,
       "origin": {
@@ -15922,6 +16662,8 @@
     },
     {
       "id": "WIS-371",
+      "title": "For Engineering Tool, Jason developed P12_03.15.02_SPS_PECI_Continuous_Peci_Call",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 371,
       "origin": {
@@ -15965,6 +16707,8 @@
     },
     {
       "id": "WIS-372",
+      "title": "Purley-R Lenovo Collabration Retrospective .pptx is a Engineering Tool in Jason'",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 372,
       "origin": {
@@ -16008,6 +16752,8 @@
     },
     {
       "id": "WIS-373",
+      "title": "For Engineering Tool, Jason developed Purley-R Lenovo Collabration Retrospective",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 373,
       "origin": {
@@ -16051,6 +16797,8 @@
     },
     {
       "id": "WIS-374",
+      "title": "Stall Points (for bug fixing).pptx is a Engineering Tool in Jason's technical po",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 374,
       "origin": {
@@ -16094,6 +16842,8 @@
     },
     {
       "id": "WIS-375",
+      "title": "For Engineering Tool, Jason developed Stall Points (for bug fixing).pptx. Synops",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 375,
       "origin": {
@@ -16137,6 +16887,8 @@
     },
     {
       "id": "WIS-376",
+      "title": "Test Case Summary of RAS for Test Library on Validation Engineering.docx is a En",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 376,
       "origin": {
@@ -16180,6 +16932,8 @@
     },
     {
       "id": "WIS-377",
+      "title": "For Engineering Tool, Jason developed Test Case Summary of RAS for Test Library",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 377,
       "origin": {
@@ -16223,6 +16977,8 @@
     },
     {
       "id": "WIS-378",
+      "title": "presentation.txt is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 378,
       "origin": {
@@ -16266,6 +17022,8 @@
     },
     {
       "id": "WIS-379",
+      "title": "For Engineering Tool, Jason developed presentation.txt. Synopsis: Engineered BMC",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 379,
       "origin": {
@@ -16309,6 +17067,8 @@
     },
     {
       "id": "WIS-380",
+      "title": "ras-einj.txt is a Engineering Tool in Jason's technical portfolio. Purpose: Vali",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 380,
       "origin": {
@@ -16352,6 +17112,8 @@
     },
     {
       "id": "WIS-381",
+      "title": "For Engineering Tool, Jason developed ras-einj.txt. Synopsis: Validated raw Peci",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 381,
       "origin": {
@@ -16395,6 +17157,8 @@
     },
     {
       "id": "WIS-382",
+      "title": "ras-viral.txt is a Engineering Tool in Jason's technical portfolio. Purpose: Tec",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 382,
       "origin": {
@@ -16438,6 +17202,8 @@
     },
     {
       "id": "WIS-383",
+      "title": "For Engineering Tool, Jason developed ras-viral.txt. Synopsis: Technical notes a",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 383,
       "origin": {
@@ -16481,6 +17247,8 @@
     },
     {
       "id": "WIS-384",
+      "title": "riv_common.py is a Engineering Tool in Jason's technical portfolio. Purpose: Cor",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 384,
       "origin": {
@@ -16524,6 +17292,8 @@
     },
     {
       "id": "WIS-385",
+      "title": "For Engineering Tool, Jason developed riv_common.py. Synopsis: Core PythonSV uti",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 385,
       "origin": {
@@ -16567,6 +17337,8 @@
     },
     {
       "id": "WIS-386",
+      "title": "scan_NetFunction_8-25-2020.py is a Engineering Tool in Jason's technical portfol",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 386,
       "origin": {
@@ -16610,6 +17382,8 @@
     },
     {
       "id": "WIS-387",
+      "title": "For Engineering Tool, Jason developed scan_NetFunction_8-25-2020.py. Synopsis: T",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 387,
       "origin": {
@@ -16653,6 +17427,8 @@
     },
     {
       "id": "WIS-388",
+      "title": "BMC presentation.pptx is a Engineering Tool in Jason's technical portfolio. Purp",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 388,
       "origin": {
@@ -16696,6 +17472,8 @@
     },
     {
       "id": "WIS-389",
+      "title": "For Engineering Tool, Jason developed BMC presentation.pptx. Synopsis: File cont",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 389,
       "origin": {
@@ -16739,6 +17517,8 @@
     },
     {
       "id": "WIS-390",
+      "title": "MCTP Debug features.pptx is a Engineering Tool in Jason's technical portfolio. P",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 390,
       "origin": {
@@ -16782,6 +17562,8 @@
     },
     {
       "id": "WIS-391",
+      "title": "For Engineering Tool, Jason developed MCTP Debug features.pptx. Synopsis: Techni",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 391,
       "origin": {
@@ -16825,6 +17607,8 @@
     },
     {
       "id": "WIS-392",
+      "title": "MIV DTAF integration.pptx is a Engineering Tool in Jason's technical portfolio.",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 392,
       "origin": {
@@ -16868,6 +17652,8 @@
     },
     {
       "id": "WIS-393",
+      "title": "For Engineering Tool, Jason developed MIV DTAF integration.pptx. Synopsis: Archi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 393,
       "origin": {
@@ -16911,6 +17697,8 @@
     },
     {
       "id": "WIS-394",
+      "title": "MIV_Sprint_Planning.xlsx is a Engineering Tool in Jason's technical portfolio. P",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 394,
       "origin": {
@@ -16954,6 +17742,8 @@
     },
     {
       "id": "WIS-395",
+      "title": "For Engineering Tool, Jason developed MIV_Sprint_Planning.xlsx. Synopsis: Sequen",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 395,
       "origin": {
@@ -16997,6 +17787,8 @@
     },
     {
       "id": "WIS-396",
+      "title": "Migration_TC.xlsx is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 396,
       "origin": {
@@ -17040,6 +17832,8 @@
     },
     {
       "id": "WIS-397",
+      "title": "For Engineering Tool, Jason developed Migration_TC.xlsx. Synopsis: PECI commands",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 397,
       "origin": {
@@ -17083,6 +17877,8 @@
     },
     {
       "id": "WIS-398",
+      "title": "PECI_Comparison.xlsx is a Engineering Tool in Jason's technical portfolio. Purpo",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 398,
       "origin": {
@@ -17126,6 +17922,8 @@
     },
     {
       "id": "WIS-399",
+      "title": "For Engineering Tool, Jason developed PECI_Comparison.xlsx. Synopsis: Side-by-si",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 399,
       "origin": {
@@ -17169,6 +17967,8 @@
     },
     {
       "id": "WIS-400",
+      "title": "SIV+MIV Sprint Review - new focus.docx is a Engineering Tool in Jason's technica",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 400,
       "origin": {
@@ -17212,6 +18012,8 @@
     },
     {
       "id": "WIS-401",
+      "title": "For Engineering Tool, Jason developed SIV+MIV Sprint Review - new focus.docx. Sy",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 401,
       "origin": {
@@ -17255,6 +18057,8 @@
     },
     {
       "id": "WIS-402",
+      "title": "Stressing Redfish PECI_demo.pptx is a Engineering Tool in Jason's technical port",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 402,
       "origin": {
@@ -17298,6 +18102,8 @@
     },
     {
       "id": "WIS-403",
+      "title": "For Engineering Tool, Jason developed Stressing Redfish PECI_demo.pptx. Synopsis",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 403,
       "origin": {
@@ -17341,6 +18147,8 @@
     },
     {
       "id": "WIS-404",
+      "title": "backup_MIV_Debug_Report_2021.xlsx is a Engineering Tool in Jason's technical por",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 404,
       "origin": {
@@ -17384,6 +18192,8 @@
     },
     {
       "id": "WIS-405",
+      "title": "For Engineering Tool, Jason developed backup_MIV_Debug_Report_2021.xlsx. Synopsi",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 405,
       "origin": {
@@ -17427,6 +18237,8 @@
     },
     {
       "id": "WIS-406",
+      "title": "ipmi-second-gen-interface-spec-v2-rev1-1_qct.pdf is a Engineering Tool in Jason'",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 406,
       "origin": {
@@ -17470,6 +18282,8 @@
     },
     {
       "id": "WIS-407",
+      "title": "For Engineering Tool, Jason developed ipmi-second-gen-interface-spec-v2-rev1-1_q",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 407,
       "origin": {
@@ -17513,6 +18327,8 @@
     },
     {
       "id": "WIS-408",
+      "title": "pl1_pl2.txt is a Engineering Tool in Jason's technical portfolio. Purpose: Autom",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 408,
       "origin": {
@@ -17556,6 +18372,8 @@
     },
     {
       "id": "WIS-409",
+      "title": "For Engineering Tool, Jason developed pl1_pl2.txt. Synopsis: Automated power lim",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 409,
       "origin": {
@@ -17599,6 +18417,8 @@
     },
     {
       "id": "WIS-410",
+      "title": "psys_ipmi.xlsx is a Engineering Tool in Jason's technical portfolio. Purpose: Re",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 410,
       "origin": {
@@ -17642,6 +18462,8 @@
     },
     {
       "id": "WIS-411",
+      "title": "For Engineering Tool, Jason developed psys_ipmi.xlsx. Synopsis: Redfish power do",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 411,
       "origin": {
@@ -17685,6 +18507,8 @@
     },
     {
       "id": "WIS-412",
+      "title": "redfish_utils.py is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 412,
       "origin": {
@@ -17728,6 +18552,8 @@
     },
     {
       "id": "WIS-413",
+      "title": "For Engineering Tool, Jason developed redfish_utils.py. Synopsis: Abstraction la",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 413,
       "origin": {
@@ -17771,6 +18597,8 @@
     },
     {
       "id": "WIS-414",
+      "title": "Jason Insight April-Nov 2022.xlsx is a Engineering Tool in Jason's technical por",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 414,
       "origin": {
@@ -17814,6 +18642,8 @@
     },
     {
       "id": "WIS-415",
+      "title": "For Engineering Tool, Jason developed Jason Insight April-Nov 2022.xlsx. Synopsi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 415,
       "origin": {
@@ -17857,6 +18687,8 @@
     },
     {
       "id": "WIS-416",
+      "title": "MIV- Requirements for Automation.xlsx is a Engineering Tool in Jason's technical",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 416,
       "origin": {
@@ -17900,6 +18732,8 @@
     },
     {
       "id": "WIS-417",
+      "title": "For Engineering Tool, Jason developed MIV- Requirements for Automation.xlsx. Syn",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 417,
       "origin": {
@@ -17943,6 +18777,8 @@
     },
     {
       "id": "WIS-418",
+      "title": "PECI_commands.xlsx is a Engineering Tool in Jason's technical portfolio. Purpose",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 418,
       "origin": {
@@ -17986,6 +18822,8 @@
     },
     {
       "id": "WIS-419",
+      "title": "For Engineering Tool, Jason developed PECI_commands.xlsx. Synopsis: Drove silico",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 419,
       "origin": {
@@ -18029,6 +18867,8 @@
     },
     {
       "id": "WIS-420",
+      "title": "PECI_experiments_WW31.3_1.txt is a Engineering Tool in Jason's technical portfol",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 420,
       "origin": {
@@ -18072,6 +18912,8 @@
     },
     {
       "id": "WIS-421",
+      "title": "For Engineering Tool, Jason developed PECI_experiments_WW31.3_1.txt. Synopsis: L",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 421,
       "origin": {
@@ -18115,6 +18957,8 @@
     },
     {
       "id": "WIS-422",
+      "title": "_Stressing Redfish PECI.pptx is a Engineering Tool in Jason's technical portfoli",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 422,
       "origin": {
@@ -18158,6 +19002,8 @@
     },
     {
       "id": "WIS-423",
+      "title": "For Engineering Tool, Jason developed _Stressing Redfish PECI.pptx. Synopsis: Pr",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 423,
       "origin": {
@@ -18201,6 +19047,8 @@
     },
     {
       "id": "WIS-424",
+      "title": "blackbox.py is a Engineering Tool in Jason's technical portfolio. Purpose: Syste",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 424,
       "origin": {
@@ -18244,6 +19092,8 @@
     },
     {
       "id": "WIS-425",
+      "title": "For Engineering Tool, Jason developed blackbox.py. Synopsis: System telemetry re",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 425,
       "origin": {
@@ -18287,6 +19137,8 @@
     },
     {
       "id": "WIS-426",
+      "title": "gethostcpudata.py is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 426,
       "origin": {
@@ -18330,6 +19182,8 @@
     },
     {
       "id": "WIS-427",
+      "title": "For Engineering Tool, Jason developed gethostcpudata.py. Synopsis: Utility for e",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 427,
       "origin": {
@@ -18373,6 +19227,8 @@
     },
     {
       "id": "WIS-428",
+      "title": "makechart.py is a Engineering Tool in Jason's technical portfolio. Purpose: Tele",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 428,
       "origin": {
@@ -18416,6 +19272,8 @@
     },
     {
       "id": "WIS-429",
+      "title": "For Engineering Tool, Jason developed makechart.py. Synopsis: Telemetry visualiz",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 429,
       "origin": {
@@ -18459,6 +19317,8 @@
     },
     {
       "id": "WIS-430",
+      "title": "mctp_wrapper.cpp is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 430,
       "origin": {
@@ -18502,6 +19362,8 @@
     },
     {
       "id": "WIS-431",
+      "title": "For Engineering Tool, Jason developed mctp_wrapper.cpp. Synopsis: C++ packet han",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 431,
       "origin": {
@@ -18545,6 +19407,8 @@
     },
     {
       "id": "WIS-432",
+      "title": "peci_redfish.py is a Engineering Tool in Jason's technical portfolio. Purpose: T",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 432,
       "origin": {
@@ -18588,6 +19452,8 @@
     },
     {
       "id": "WIS-433",
+      "title": "For Engineering Tool, Jason developed peci_redfish.py. Synopsis: Tool for bridgi",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 433,
       "origin": {
@@ -18631,6 +19497,8 @@
     },
     {
       "id": "WIS-434",
+      "title": "peci_validation.csv is a Engineering Tool in Jason's technical portfolio. Purpos",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 434,
       "origin": {
@@ -18674,6 +19542,8 @@
     },
     {
       "id": "WIS-435",
+      "title": "For Engineering Tool, Jason developed peci_validation.csv. Synopsis: Documenting",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 435,
       "origin": {
@@ -18717,6 +19587,8 @@
     },
     {
       "id": "WIS-436",
+      "title": "pecistressor.py is a Engineering Tool in Jason's technical portfolio. Purpose: H",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 436,
       "origin": {
@@ -18760,6 +19632,8 @@
     },
     {
       "id": "WIS-437",
+      "title": "For Engineering Tool, Jason developed pecistressor.py. Synopsis: High-throughput",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 437,
       "origin": {
@@ -18803,6 +19677,8 @@
     },
     {
       "id": "WIS-438",
+      "title": "policy.py is a Engineering Tool in Jason's technical portfolio. Purpose: Platfor",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 438,
       "origin": {
@@ -18846,6 +19722,8 @@
     },
     {
       "id": "WIS-439",
+      "title": "For Engineering Tool, Jason developed policy.py. Synopsis: Platform power policy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 439,
       "origin": {
@@ -18889,6 +19767,8 @@
     },
     {
       "id": "WIS-440",
+      "title": "sensor_validator.py is a Engineering Tool in Jason's technical portfolio. Purpos",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 440,
       "origin": {
@@ -18932,6 +19812,8 @@
     },
     {
       "id": "WIS-441",
+      "title": "For Engineering Tool, Jason developed sensor_validator.py. Synopsis: Automated v",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 441,
       "origin": {
@@ -18975,6 +19857,8 @@
     },
     {
       "id": "WIS-442",
+      "title": "statistics.py is a Engineering Tool in Jason's technical portfolio. Purpose: Doc",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 442,
       "origin": {
@@ -19018,6 +19902,8 @@
     },
     {
       "id": "WIS-443",
+      "title": "For Engineering Tool, Jason developed statistics.py. Synopsis: Documenting suppo",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 443,
       "origin": {
@@ -19061,6 +19947,8 @@
     },
     {
       "id": "WIS-444",
+      "title": "stats_unit.csv is a Engineering Tool in Jason's technical portfolio. Purpose: Se",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 444,
       "origin": {
@@ -19104,6 +19992,8 @@
     },
     {
       "id": "WIS-445",
+      "title": "For Engineering Tool, Jason developed stats_unit.csv. Synopsis: Senior Engineer'",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 445,
       "origin": {
@@ -19147,6 +20037,8 @@
     },
     {
       "id": "WIS-446",
+      "title": "10-24-2023-Insights.txt is a Engineering Tool in Jason's technical portfolio. Pu",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 446,
       "origin": {
@@ -19190,6 +20082,8 @@
     },
     {
       "id": "WIS-447",
+      "title": "For Engineering Tool, Jason developed 10-24-2023-Insights.txt. Synopsis: Designi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 447,
       "origin": {
@@ -19233,6 +20127,8 @@
     },
     {
       "id": "WIS-448",
+      "title": "Backup -MIV Blackbox Recorder.pptx is a Engineering Tool in Jason's technical po",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 448,
       "origin": {
@@ -19276,6 +20172,8 @@
     },
     {
       "id": "WIS-449",
+      "title": "For Engineering Tool, Jason developed Backup -MIV Blackbox Recorder.pptx. Synops",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 449,
       "origin": {
@@ -19319,6 +20217,8 @@
     },
     {
       "id": "WIS-450",
+      "title": "DSP0236_1.3.0_MCTP_base.pdf is a Engineering Tool in Jason's technical portfolio",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 450,
       "origin": {
@@ -19362,6 +20262,8 @@
     },
     {
       "id": "WIS-451",
+      "title": "For Engineering Tool, Jason developed DSP0236_1.3.0_MCTP_base.pdf. Synopsis: Led",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 451,
       "origin": {
@@ -19405,6 +20307,8 @@
     },
     {
       "id": "WIS-452",
+      "title": "MIV for Execution.pptx is a Engineering Tool in Jason's technical portfolio. Pur",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 452,
       "origin": {
@@ -19448,6 +20352,8 @@
     },
     {
       "id": "WIS-453",
+      "title": "For Engineering Tool, Jason developed MIV for Execution.pptx. Synopsis: Strategi",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 453,
       "origin": {
@@ -19491,6 +20397,8 @@
     },
     {
       "id": "WIS-454",
+      "title": "MCTP on DMR.docx is a Engineering Tool in Jason's technical portfolio. Purpose:",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 454,
       "origin": {
@@ -19534,6 +20442,8 @@
     },
     {
       "id": "WIS-455",
+      "title": "For Engineering Tool, Jason developed MCTP on DMR.docx. Synopsis: Designed a dis",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 455,
       "origin": {
@@ -19577,6 +20487,8 @@
     },
     {
       "id": "WIS-456",
+      "title": "MCTP-Topology-DMR.vsdx is a Engineering Tool in Jason's technical portfolio. Pur",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 456,
       "origin": {
@@ -19620,6 +20532,8 @@
     },
     {
       "id": "WIS-457",
+      "title": "For Engineering Tool, Jason developed MCTP-Topology-DMR.vsdx. Synopsis: Validate",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 457,
       "origin": {
@@ -19663,6 +20577,8 @@
     },
     {
       "id": "WIS-458",
+      "title": "DTTC_2022_Peci_Stress.pdf is a Engineering Tool in Jason's technical portfolio.",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 458,
       "origin": {
@@ -19706,6 +20622,8 @@
     },
     {
       "id": "WIS-459",
+      "title": "For Engineering Tool, Jason developed DTTC_2022_Peci_Stress.pdf. Synopsis: Peer-",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 459,
       "origin": {
@@ -19749,6 +20667,8 @@
     },
     {
       "id": "WIS-460",
+      "title": "HomeLabAI.md is a Engineering Tool in Jason's technical portfolio. Purpose: Engi",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 460,
       "origin": {
@@ -19792,6 +20712,8 @@
     },
     {
       "id": "WIS-461",
+      "title": "For Engineering Tool, Jason developed HomeLabAI.md. Synopsis: Engineered BMC fir",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 461,
       "origin": {
@@ -19835,6 +20757,8 @@
     },
     {
       "id": "WIS-462",
+      "title": "Jason Allred - OpenBMC Development experience.rtf is a Engineering Tool in Jason",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 462,
       "origin": {
@@ -19878,6 +20802,8 @@
     },
     {
       "id": "WIS-463",
+      "title": "For Engineering Tool, Jason developed Jason Allred - OpenBMC Development experie",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 463,
       "origin": {
@@ -19921,6 +20847,8 @@
     },
     {
       "id": "WIS-464",
+      "title": "Jason Allred - War stories (Work).docx is a Engineering Tool in Jason's technica",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 464,
       "origin": {
@@ -19964,6 +20892,8 @@
     },
     {
       "id": "WIS-465",
+      "title": "For Engineering Tool, Jason developed Jason Allred - War stories (Work).docx. Sy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 465,
       "origin": {
@@ -20007,6 +20937,8 @@
     },
     {
       "id": "WIS-466",
+      "title": "Philosophy and Learnings 2024.docx is a Engineering Tool in Jason's technical po",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 466,
       "origin": {
@@ -20050,6 +20982,8 @@
     },
     {
       "id": "WIS-467",
+      "title": "For Engineering Tool, Jason developed Philosophy and Learnings 2024.docx. Synops",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 467,
       "origin": {
@@ -20093,6 +21027,8 @@
     },
     {
       "id": "WIS-468",
+      "title": "PnP Engineering Story- High-Fidelity Power Hysteresis Characterization.docx is a",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 468,
       "origin": {
@@ -20136,6 +21072,8 @@
     },
     {
       "id": "WIS-469",
+      "title": "For Engineering Tool, Jason developed PnP Engineering Story- High-Fidelity Power",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 469,
       "origin": {
@@ -20179,6 +21117,8 @@
     },
     {
       "id": "WIS-470",
+      "title": "War Stories 2015-2026 - Jason Allred.docx is a Engineering Tool in Jason's techn",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 470,
       "origin": {
@@ -20222,6 +21162,8 @@
     },
     {
       "id": "WIS-471",
+      "title": "For Engineering Tool, Jason developed War Stories 2015-2026 - Jason Allred.docx",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 471,
       "origin": {
@@ -20265,6 +21207,8 @@
     },
     {
       "id": "WIS-472",
+      "title": "linkedin.txt is a Engineering Tool in Jason's technical portfolio. Purpose: Deve",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 472,
       "origin": {
@@ -20308,6 +21252,8 @@
     },
     {
       "id": "WIS-473",
+      "title": "For Engineering Tool, Jason developed linkedin.txt. Synopsis: Developed OpenBMC",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 473,
       "origin": {
@@ -20351,6 +21297,8 @@
     },
     {
       "id": "WIS-474",
+      "title": "secret.txt is a Engineering Tool in Jason's technical portfolio. Purpose: Expert",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 474,
       "origin": {
@@ -20394,6 +21342,8 @@
     },
     {
       "id": "WIS-475",
+      "title": "For Engineering Tool, Jason developed secret.txt. Synopsis: Expert in validating",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 475,
       "origin": {
@@ -20437,6 +21387,8 @@
     },
     {
       "id": "WIS-476",
+      "title": "mctp_validation.md is a validation in Jason's technical portfolio. Purpose: MCTP",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 476,
       "origin": {
@@ -20480,6 +21432,8 @@
     },
     {
       "id": "WIS-477",
+      "title": "For validation, Jason developed mctp_validation.md. Synopsis: MCTP Protocol & Cy",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 477,
       "origin": {
@@ -20523,6 +21477,8 @@
     },
     {
       "id": "WIS-478",
+      "title": "transport_apis.md is a manageability in Jason's technical portfolio. Purpose: Ge",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 478,
       "origin": {
@@ -20566,6 +21522,8 @@
     },
     {
       "id": "WIS-479",
+      "title": "For manageability, Jason developed transport_apis.md. Synopsis: Generic Transpor",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 479,
       "origin": {
@@ -20609,6 +21567,8 @@
     },
     {
       "id": "WIS-480",
+      "title": "pecistressor.md is a telemetry in Jason's technical portfolio. Purpose: PECI Str",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 480,
       "origin": {
@@ -20652,6 +21612,8 @@
     },
     {
       "id": "WIS-481",
+      "title": "For telemetry, Jason developed pecistressor.md. Synopsis: PECI Stressor & Therma",
+      "domain": "WISDOM",
       "theme": "Silicon Validation Methodology",
       "paper_order": 481,
       "origin": {
@@ -20694,22 +21656,9 @@
       }
     },
     {
-      "id": "RDNA-001",
-      "title": "Dual-Engine Creative Process Query",
-      "question": "How does the dual-engine process work?",
-      "synthesis": {
-        "title": "Dual-Engine Creative Process Query",
-        "narrative_context": "Test live save verification of RDNA routing."
-      },
-      "metadata": {
-        "tags": [
-          "test",
-          "rdna"
-        ]
-      }
-    },
-    {
       "id": "WIS-482",
+      "title": "The KV Cache Horizon & Agentic Mania",
+      "domain": "WISDOM",
       "theme": "Systems Architecture & Automation",
       "paper_order": 482,
       "origin": {
@@ -20778,6 +21727,8 @@
     },
     {
       "id": "WIS-483",
+      "title": "Projection as Retraction (Semantic Closure)",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 483,
       "origin": {
@@ -20823,6 +21774,8 @@
     },
     {
       "id": "WIS-484",
+      "title": "The Symbolic Enforcement Partition",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 484,
       "origin": {
@@ -20868,6 +21821,8 @@
     },
     {
       "id": "WIS-485",
+      "title": "The Diamond Topology (Bounded Error vs Compounding Drift)",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 485,
       "origin": {
@@ -20913,6 +21868,8 @@
     },
     {
       "id": "WIS-486",
+      "title": "Drift Is Relative to the Rubric (Rubric-Relative Bisimulation)",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 486,
       "origin": {
@@ -20957,6 +21914,8 @@
     },
     {
       "id": "WIS-487",
+      "title": "The Refusal Branch (Total Function Rubric Compilation)",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 487,
       "origin": {
@@ -21001,6 +21960,8 @@
     },
     {
       "id": "WIS-488",
+      "title": "Orthogonal Register and Structure",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 488,
       "origin": {
@@ -21046,6 +22007,8 @@
     },
     {
       "id": "WIS-489",
+      "title": "A Rubric Without Preference Is a Detector",
+      "domain": "WISDOM",
       "theme": "Mathematics & Projections",
       "paper_order": 489,
       "origin": {
@@ -21089,7 +22052,25 @@
       }
     },
     {
+      "id": "RDNA-001",
+      "title": "Dual-Engine Creative Process Query",
+      "domain": "WISDOM",
+      "question": "How does the dual-engine process work?",
+      "synthesis": {
+        "title": "Dual-Engine Creative Process Query",
+        "narrative_context": "Test live save verification of RDNA routing."
+      },
+      "metadata": {
+        "tags": [
+          "test",
+          "rdna"
+        ]
+      }
+    },
+    {
       "id": "DISC-011",
+      "title": "The Just-In-Time Illusion (L2 Agency Preserved via Pre-Warmed Micro-Digests)",
+      "domain": "WISDOM",
       "theme": "Swarm Governance & Architectural JITC",
       "paper_order": 491,
       "origin": {
@@ -21140,6 +22121,8 @@
     },
     {
       "id": "DISC-012",
+      "title": "Subversive Tool-Mediated Context Injection",
+      "domain": "WISDOM",
       "theme": "Swarm Governance & Architectural JITC",
       "paper_order": 492,
       "origin": {
@@ -21191,6 +22174,7 @@
   "philosophy": [
     {
       "id": "INS-001",
+      "title": "The Three Pillars & Just-In-Time Context (JITC)",
       "theme": "Memory & JITC",
       "paper_order": 1,
       "origin": {
@@ -21235,6 +22219,7 @@
     },
     {
       "id": "INS-002",
+      "title": "The Hippocampus & Prefrontal Cortex Architecture",
       "theme": "Memory & JITC",
       "paper_order": 2,
       "origin": {
@@ -21279,6 +22264,7 @@
     },
     {
       "id": "INS-003",
+      "title": "Intuition as an Ambient Retrieval Problem",
       "theme": "Memory & JITC",
       "paper_order": 3,
       "origin": {
@@ -21323,6 +22309,7 @@
     },
     {
       "id": "INS-004",
+      "title": "The Five-Phase JITC Cognitive Cycle",
       "theme": "Memory & JITC",
       "paper_order": 4,
       "origin": {
@@ -21368,6 +22355,7 @@
     },
     {
       "id": "INS-005",
+      "title": "Token Golf over Token Maxing & Trust Ceilings",
       "theme": "Memory & JITC",
       "paper_order": 5,
       "origin": {
@@ -21410,6 +22398,7 @@
     },
     {
       "id": "INS-006",
+      "title": "Code Comments as Vector Anchors & Index Flags",
       "theme": "Memory & JITC",
       "paper_order": 6,
       "origin": {
@@ -21454,6 +22443,7 @@
     },
     {
       "id": "INS-007",
+      "title": "Pearls of Wisdom Lifecycle & The Bones Model",
       "theme": "Memory & JITC",
       "paper_order": 7,
       "origin": {
@@ -21498,6 +22488,7 @@
     },
     {
       "id": "INS-008",
+      "title": "Feedback Backpressure & The Customer Service Model",
       "theme": "Stability & Feedback",
       "paper_order": 8,
       "origin": {
@@ -21541,6 +22532,7 @@
     },
     {
       "id": "INS-009",
+      "title": "The Handover Reflection Protocol",
       "theme": "Stability & Feedback",
       "paper_order": 9,
       "origin": {
@@ -21584,6 +22576,7 @@
     },
     {
       "id": "INS-010",
+      "title": "Ground-Truth Telemetry & Live Data as God",
       "theme": "Stability & Feedback",
       "paper_order": 10,
       "origin": {
@@ -21628,6 +22621,7 @@
     },
     {
       "id": "INS-011",
+      "title": "The Foobar Trap & Language-Rich Variable Semantics",
       "theme": "Stability & Feedback",
       "paper_order": 11,
       "origin": {
@@ -21670,6 +22664,7 @@
     },
     {
       "id": "INS-012",
+      "title": "The Slow Burn Corollary to the Mythical Man-Month",
       "theme": "Stability & Feedback",
       "paper_order": 12,
       "origin": {
@@ -21712,6 +22707,7 @@
     },
     {
       "id": "INS-013",
+      "title": "The Perfect Foil & The Architect / PM Pivot",
       "theme": "Human-AI Interface",
       "paper_order": 13,
       "origin": {
@@ -21754,6 +22750,7 @@
     },
     {
       "id": "INS-014",
+      "title": "Velocity Whiplash, 10x Debt & Reading Like a Robot",
       "theme": "Human-AI Interface",
       "paper_order": 14,
       "origin": {
@@ -21797,6 +22794,7 @@
     },
     {
       "id": "INS-015",
+      "title": "Reading Like a Robot & Serializing Stack Traces",
       "theme": "Human-AI Interface",
       "paper_order": 15,
       "origin": {
@@ -21840,6 +22838,7 @@
     },
     {
       "id": "INS-016",
+      "title": "Numbered Lists as Cognitive Anchors",
       "theme": "Human-AI Interface",
       "paper_order": 16,
       "origin": {
@@ -21884,6 +22883,7 @@
     },
     {
       "id": "INS-017",
+      "title": "Language as Humanity's Best Invention & The Book Analogy",
       "theme": "Human-AI Interface",
       "paper_order": 17,
       "origin": {
@@ -21926,6 +22926,7 @@
     },
     {
       "id": "INS-018",
+      "title": "Captured Insight & Trapping Lightning in a Bottle",
       "theme": "Human-AI Interface",
       "paper_order": 18,
       "origin": {
@@ -21968,6 +22969,7 @@
     },
     {
       "id": "INS-019",
+      "title": "The South Park Narrative Rule in System Lineage",
       "theme": "Human-AI Interface",
       "paper_order": 19,
       "origin": {
@@ -22011,6 +23013,7 @@
     },
     {
       "id": "INS-020",
+      "title": "Engineering Disciplines in the Latent Space",
       "theme": "Engineering Rigor & Vectors",
       "paper_order": 20,
       "origin": {
@@ -22054,6 +23057,7 @@
     },
     {
       "id": "INS-021",
+      "title": "The Vectors of Engineering: Libraries over Frameworks",
       "theme": "Engineering Rigor & Vectors",
       "paper_order": 21,
       "origin": {
@@ -22097,6 +23101,7 @@
     },
     {
       "id": "INS-022",
+      "title": "Avoiding Speculative Scaffolding",
       "theme": "Engineering Rigor & Vectors",
       "paper_order": 22,
       "origin": {
@@ -22139,6 +23144,7 @@
     },
     {
       "id": "INS-023",
+      "title": "Forgotten Code Hygiene & Cognitive Pruning",
       "theme": "Engineering Rigor & Vectors",
       "paper_order": 23,
       "origin": {
@@ -22181,6 +23187,7 @@
     },
     {
       "id": "INS-024",
+      "title": "The Translation Layer: Bridging Silicon to People",
       "theme": "Silicon & Systems Telemetry",
       "paper_order": 24,
       "origin": {
@@ -22224,6 +23231,7 @@
     },
     {
       "id": "INS-025",
+      "title": "The Class 1 Assumption Hazard",
       "theme": "Silicon & Systems Telemetry",
       "paper_order": 25,
       "origin": {
@@ -22267,6 +23275,7 @@
     },
     {
       "id": "INS-026",
+      "title": "Content is King over Framework Ceremony",
       "theme": "Silicon & Systems Telemetry",
       "paper_order": 26,
       "origin": {
@@ -22309,6 +23318,7 @@
     },
     {
       "id": "INS-027",
+      "title": "Code Archaeology & The Beating Heart",
       "theme": "Silicon & Systems Telemetry",
       "paper_order": 27,
       "origin": {
@@ -22352,6 +23362,7 @@
     },
     {
       "id": "INS-028",
+      "title": "Consensus-Driven Leadership & The 2/7 Career Rhythms",
       "theme": "Silicon & Systems Telemetry",
       "paper_order": 28,
       "origin": {
@@ -22394,6 +23405,7 @@
     },
     {
       "id": "INS-031",
+      "title": "The Decoupled Determinism Tenet (Artifacts of Record vs. Ephemeral Runtime)",
       "theme": "Systems Architecture & Invariant Records",
       "paper_order": 31,
       "origin": {
@@ -22438,6 +23450,7 @@
     },
     {
       "id": "INS-032",
+      "title": "The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution",
       "theme": "Software Engineering Philosophy & Creative Process",
       "paper_order": 32,
       "origin": {
@@ -22484,6 +23497,7 @@
     },
     {
       "id": "INS-033",
+      "title": "The Sovereign Human-in-the-Loop: Disagreement Trapping & Active Knowledge Re-Forging",
       "theme": "Human-AI Interface & Co-Pilot Architecture",
       "paper_order": 33,
       "origin": {
@@ -22532,6 +23546,7 @@
     },
     {
       "id": "INS-034",
+      "title": "First-Class DNA Citizens & Polymorphic Idea Representation",
       "theme": "Federated DNA Architecture & Schema Foundations",
       "paper_order": 34,
       "origin": {
@@ -22579,6 +23594,7 @@
     },
     {
       "id": "INS-035",
+      "title": "The Invariant Truth & Fluid Projection Law (Decoupling Meaning from Presentation)",
       "theme": "Decoupling & The Voice Vector Space",
       "paper_order": 35,
       "origin": {
@@ -22626,6 +23642,7 @@
     },
     {
       "id": "INS-036",
+      "title": "The Dense Token Hypothesis (Think in Chinese)",
       "theme": "Memory & JITC",
       "paper_order": 36,
       "origin": {
@@ -22674,6 +23691,7 @@
     },
     {
       "id": "INS-037",
+      "title": "The Inversion Principle: Context Bloat vs. Deterministic Retrieval",
       "theme": "Systems Architecture & Automation",
       "paper_order": 37,
       "origin": {
@@ -22733,6 +23751,7 @@
     },
     {
       "id": "INS-038",
+      "title": "The Rug Bump Law (Conservation of System Complexity)",
       "theme": "Systems Architecture & Operational Rigor",
       "paper_order": 38,
       "origin": {
@@ -22789,6 +23808,7 @@
     },
     {
       "id": "INS-039",
+      "title": "The Logistic Map Principle (Loops Birth Complexity)",
       "theme": "Feedback Loops & Complexity Engines",
       "paper_order": 39,
       "origin": {
@@ -22844,6 +23864,7 @@
     },
     {
       "id": "INS-040",
+      "title": "The Psychological Safety Invariant (Curing Exploratory Anxiety)",
       "theme": "Applied Epistemology & Cognitive Swarms",
       "paper_order": 40,
       "origin": {
@@ -22901,6 +23922,7 @@
     },
     {
       "id": "INS-041",
+      "title": "The Document Spine (Topological Invariance Across Mutating Lenses)",
       "theme": "Systems Architecture & Document Epistemology",
       "paper_order": 41,
       "origin": {
@@ -22958,6 +23980,7 @@
     },
     {
       "id": "INS-042",
+      "title": "The Waffle Trap & Circular Fixing Traps (Agentic Oscillation)",
       "theme": "Systems Architecture & Agentic Operational Rigor",
       "paper_order": 42,
       "origin": {
@@ -23024,6 +24047,7 @@
     },
     {
       "id": "INS-043",
+      "title": "The Asymmetry of Generation vs. Review (The Zero-Marginal Labor Law)",
       "theme": "Economics of Federated Silicon & Cognitive Division of Labor",
       "paper_order": 43,
       "origin": {
@@ -23084,6 +24108,7 @@
     },
     {
       "id": "INS-044",
+      "title": "The 'Trust-Me-Bro' Grounding Skepticism Law",
       "theme": "Systems Architecture & Swarm Governance",
       "paper_order": 44,
       "origin": {
@@ -23141,6 +24166,7 @@
     },
     {
       "id": "INS-045",
+      "title": "One-Shot Delegation as Organic Token Cleaning (Bypassing Semantic Compression)",
       "theme": "Cognitive Architecture & Swarm Governance",
       "paper_order": 45,
       "origin": {
@@ -23190,6 +24216,7 @@
     },
     {
       "id": "INS-046",
+      "title": "The Disposable Worker & Ephemeral Garbage Isolation",
       "theme": "Systems Architecture & Swarm Governance",
       "paper_order": 46,
       "origin": {
@@ -23239,6 +24266,7 @@
     },
     {
       "id": "INS-047",
+      "title": "Live is King, History is Queen",
       "theme": "Grounding Philosophy & Physical Empirical Reality",
       "paper_order": 47,
       "origin": {
@@ -38445,7 +39473,7 @@
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "## BKM-084: The Lettered Dropped Threads Protocol (ANCHOR_LETTER)\n**Feature Anchor:** `[BKM-084]` / `[BKM-004]` / `[BKM-064]` / `[BKM-077]` / `[INS-016]`  \n**Colloquial Alias:** \"The Lettered Reminders Ledger\"  \n**Domain:** Conversational Accountability, Thread Preservation, Anti-Abandonment  \n**Status:** ACTIVE / MANDATORY  \n\n### 1. The Dual-Namespace Architecture\nTo prevent confusion between active work and pending reminders:\n* **Numbered Lanes ($1 \\dots N$):** Reserved exclusively for active, foreground conversational swim lanes under `BKM-064` / `BKM-077`.\n* **Lettered Ledger ($A \\dots Z$):** Reserved exclusively for unaddressed findings, paused ideas, or bugs uncovered under QQ (`BKM-004`) that lack active follow-up.\n\n### 2. The Anti-Hijack Invariant\nThe agent MUST answer the user's current prompt first, completely, and with 100% focus. The lettered dropped threads ledger is rendered strictly as a compact tail addendum or footnote at the very end of the turn.\n\n### 3. Persistent Letter Tracking Across Turns\nDropped threads assigned a letter (A:, B:, ...) persist across turns with stable keys until they hit a **Valid Exit Gate**. An agent may not silently drop a lettered thread between turns.\n\n### 4. Valid Exit Gates (Silence is Never an Exit)\nA lettered item only clears from the ledger when one of four explicit gates is satisfied:\n1. **Addressed:** The item is actively implemented in the current turn or verified resolved in code/tests.\n2. **Documented:** The item is formally recorded into a sprint backlog (`SPRINT_PLAN_*.md`), general project backlog, feature tracker (`FeatureTracker.md`), or DNA card.\n3. **Integrated:** The operator directs the item into an active numbered topic (e.g., *\"Put A\u2013C into #3\"* $\\rightarrow$ absorbed into Topic 3's scope).\n4. **Explicitly Dismissed:** The operator explicitly commands *\"dismiss A\"*, *\"drop B\"*, or *\"not doing C\"*. Operator silence or conversational pivots NEVER clear the ledger.\n\n### 5. Format Standard\n```markdown\n---\n### \ud83e\uddf5 Pending Threads Ledger\n* A: Leaked raw JSON token stream filter on Deep Thought (stalled under QQ, Turn 8).\n* B: Active human vote (`\ud83d\udc4d`/`\ud83d\udc4e`) backpressure in Foyer (`FEAT-633`).\n* C: Review Panel UI backend endpoint connection (`field_notes/writer.html`).\n*(Commands: \"Put A into #2\", \"Document C to backlog\", \"Dismiss B\", or \"Execute A\")*\n```",
+        "narrative_context": "## BKM-084: The Lettered Dropped Threads Protocol (ANCHOR_LETTER)\n**Feature Anchor:** `[BKM-084]` / `[BKM-004]` / `[BKM-064]` / `[BKM-077]` / `[INS-016]`  \n**Colloquial Alias:** \"The Lettered Reminders Ledger\"  \n**Domain:** Conversational Accountability, Thread Preservation, Anti-Abandonment  \n**Status:** ACTIVE / MANDATORY  \n\n### 1. The Dual-Namespace Architecture\nTo prevent confusion between active work and pending reminders:\n* **Numbered Lanes ($1 \\dots N$):** Reserved exclusively for active, foreground conversational swim lanes under `BKM-064` / `BKM-077`.\n* **Lettered Ledger ($A \\dots Z$):** Reserved exclusively for unaddressed findings, paused ideas, or bugs uncovered under QQ (`BKM-004`) that lack active follow-up.\n\n### 2. The Lookback Horizon & Anti-Hijack Invariant\n1. **The Lookback Horizon:** Review the prior 2\u20134 turns (specifically turns $N-2$ through $N-4$). The immediate last turn ($N-1$) is active conversational context and is never treated as a dropped thread.\n2. **Never Hijack:** The agent MUST answer the user's current prompt first, completely, and with 100% focus. The lettered dropped threads ledger is rendered strictly as a compact tail addendum or footnote at the very end of the turn.\n3. **Empty Ledger Invariant:** If all items have exited or no pending items exist, omit the ledger section completely.\n\n### 3. Persistent Letter Tracking Across Turns\nDropped threads assigned a letter (A:, B:, ...) persist across turns with stable keys until they hit a **Valid Exit Gate**. An agent may not silently drop a lettered thread between turns.\n\n### 4. Valid Exit Gates (Silence is Never an Exit)\nA lettered item only clears from the ledger when one of four explicit gates is satisfied:\n1. **Addressed:** The item is actively implemented in the current turn or verified resolved in code/tests.\n2. **Documented:** The item is formally recorded into a sprint backlog (`SPRINT_PLAN_*.md`), general project backlog, feature tracker (`FeatureTracker.md`), or DNA card.\n3. **Integrated:** The operator directs the item into an active numbered topic (e.g., *\"Put A\u2013C into #3\"* $\\rightarrow$ absorbed into Topic 3's scope).\n4. **Explicitly Dismissed:** The operator explicitly commands *\"dismiss A\"*, *\"drop B\"*, or *\"not doing C\"*. Operator silence or conversational pivots NEVER clear the ledger.\n\n### 5. Format Standard\nWhen active pending threads exist, render the reminder at the very conclusion of the turn. Format each item using a capital letter with a colon followed by a concise, one-line description (e.g., `A: One-line description`). If no pending threads exist, omit the ledger entirely.",
         "lab_anchors": [
           "HomeLabAI/docs/Protocols.md"
         ],
