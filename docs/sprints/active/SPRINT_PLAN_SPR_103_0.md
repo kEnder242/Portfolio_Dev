@@ -695,6 +695,127 @@ Through a point-by-point walkthrough across canonical swim lanes, we achieved co
 
 ---
 
+### Phase 7: Conversational HyDE, Resonant Voice & Blackboard Memory Closure
+
+#### 📖 Phase 7 Narrative & Consensus Synthesis
+Following the successful certification of Phase 6, live forensic analysis of turn `bcf4440f` revealed three remaining architectural bottlenecks:
+1. **Pinky Was Still Wooden & Muted Pre-RAG:** In Phase 6, Pinky was constrained by `response_format={"type": "json_schema"}` during HyDE generation, reducing his expressive capacity to a cold 1-sentence dictionary greeting. Tracing back to Turn 27 (2026-10-07), Pinky possessed authentic conversational warmth. We combine conversational voice and vector synthesis in a single turn without double-querying vLLM: Pinky streams his natural stance to Jason and the Left Console, and the orchestrator uses Pinky's spoken words as the vector embedding query (or extracts trailing anchors). Furthermore, Pinky regains his sovereign `<upvote>` into the `FEAT-238` shared interest collection tin.
+2. **Brain Echoed System Directives:** Brain recited `[PILLAR_1_RECORD]` and `[PILLAR_2_RECORD]` ("Shared bicameral lab environment... current interest is 0.83") because Step 3 lacked context boundary guidance. We refine Step 3 to explicitly instruct: *"Mention your context and role only when it is part of the conversation."*
+3. **Deep Thought Parroted Sprint 52.4 Form Headers:** Deep Thought was found outputting rigid headers (`**Core Conclusion:**`, `**Synthesis:**`, `**Pinky's Take:**`, `**Constraint:**`). Forensic archaeology traced this to commit `4a1acd9fef` (Sprint 52.4), where numbered prompt directives were added to suppress raw DCGM/RAPL dumps. Deep Thought's base model treated those capitalized directives as form fields. We excise the rigid directive headers and adopt positive JITC framing: *"Find things consistent with Jason's query and the consensus of the lab mice."* We also preserve the 300-token snippet architecture rather than forcing multi-megabyte raw file unrolling.
+4. **The Critic's Retort Was Detached from Jason:** Pinky Critic's `retort` was prompted to speak *to Brain* as an internal judge. We retune the schema contract so Pinky speaks directly to Jason, confirming the technical reality and offering an organic conversational follow-up onramp.
+5. **Blackboard Ledger DNA Extraction & Full-Fidelity Logging:** The 150-character slice on `distillation_bullets` in `cognitive_hub.py` was an archaic terminal relic that chopped off chunk IDs and conclusions. Storing full turns is trivial web payload ($\sim 100\text{ KB}$ for 50 turns). We remove the slice, add clean Deep Thought prose to `distillation_bullets`, move `CRITIQUE` exclusively to the green `consensus_1liner`, and wire `commit_to_chroma()` into the live loop to index full turn summaries into `blackboard_ledger_dna`.
+
+---
+
+#### Story 103.18: Single-Turn Conversational HyDE & Sovereign Interest Upvote
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-432]` (Open HyDE Preamble), `[FEAT-437]` (Era Compass HyDE), `[FEAT-238]` (Council of Hemispheres Peer Boost)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Un-gag Pinky during pre-RAG triage. Instead of forcing Pinky into a mechanical JSON schema that suppresses personality, Pinky speaks a natural 2-sentence conversational stance to the Left Console in a single pass. The spoken text serves directly as the semantic vector query for ChromaDB. Pinky can also emit `<boost_interest>` or `<upvote>` into the stream to expand Deep Thought's token ceiling via `FEAT-523`.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2480-L2530` (`step_hyde_rag`)
+  * `HomeLabAI/src/logic/cognitive_hub.py#L1200-L1220` (`_process_node_stream` boost detection)
+* **Implementation Contract (The What):**
+  1. In `step_hyde_rag()`, replace rigid JSON schema formatting with Pinky's conversational voice prompt while retaining Era Compass anchors.
+  2. Stream Pinky's natural stance to UI Left Console (`source="Pinky (Triage)"`, `channel="voice"`).
+  3. Extract search intent and vector from Pinky's spoken words or lightweight trailing tag `[HYDE: ...]`.
+  4. Detect `<boost_interest>` / `<upvote>` in Pinky's stream and increment `self.current_interest = min(1.0, self.current_interest + 0.20)`.
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage3_hyde" -v
+  ```
+
+#### Story 103.19: Brain Gatekeeper Step 3 Context Isolation & Echo Prevention
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-635]` (Positive JITC Prompting), `[VIBE-006]` (Analytical Curator)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Stop Brain from reciting `[PILLAR_1_RECORD]` ("Shared bicameral lab environment...") and `[PILLAR_2_RECORD]` ("Current interest: 0.83..."). Give Brain positive, focused framing that enforces silence on system boundaries unless relevant.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L403-L418` (`build_two_mice_stage_prompt`)
+* **Implementation Contract (The What):**
+  Update Step 3 in `build_two_mice_stage_prompt(stage=1)`:
+  ```text
+  3. Respond to Jason's query and Pinky's response in a focused and concise manner, cynical if deserved. Mention your context and role only when it is part of the conversation.
+  ```
+  Assert in replay test that Brain's output contains zero occurrences of `"shared bicameral lab"` or `"right-hemisphere technical analysis"`.
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage4_brain" -v
+  ```
+
+#### Story 103.20: Deep Thought Prompt Header Excision & Positive Coherence Framing
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-452]` (Telemetry Suppression), `[FEAT-489]` (Two-Mice Streaming Handover), `[FEAT-523]` (Continuous Multiplier)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Excise Sprint 52.4 rigid directive headers (`Core Conclusion:`, `Synthesis:`, `Pinky's Take:`, `Constraint:`) in `thought_node.py` that caused Deep Thought to parrot form fields. Deploy positive JITC guidance: *"Find things consistent with Jason's query and the consensus of the lab mice."* Preserve 300-token snippet grounding without forcing raw file unrolling.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/nodes/thought_node.py#L17-L35` (`DEEP_THOUGHT_SYSTEM_PROMPT`)
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2950-L2965` (`step_deep_thought`)
+* **Implementation Contract (The What):**
+  1. In `DEEP_THOUGHT_SYSTEM_PROMPT`, replace rigid numbered directive headers with fluid architectural guidance while preserving telemetry suppression.
+  2. In `step_deep_thought()`, replace prompt tail with positive coherence directive:
+     ```text
+     Synthesize the architectural reality in high-authority engineering prose. Find things consistent with Jason's query and the consensus of the lab mice. Do not repeat prompt instructions or form headings.
+     ```
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage5_tri_node" -v
+  ```
+
+#### Story 103.21: Pinky Critic Conversational Bridge & Forward Onramp
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-470]` (Structured Coherence Critic), `[FEAT-227]` (Dual-Critic Scorecard)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Transform Pinky Critic's `retort` from an internal critique directed at Brain into a spoken conversational bridge directed to Jason, confirming the technical reality and offering a natural conversational follow-up.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/nodes/pinky_critic_persona.py#L135-L140` (`build_critic_prompt`)
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2237-L2241` (`_run_coherence_critic`)
+* **Implementation Contract (The What):**
+  Update `retort` in `output_schema`:
+  ```python
+  "retort": "string — Pinky's final spoken verdict to Jason, confirming the technical reality and offering a natural conversational follow-up"
+  ```
+  Update behavioral guidance in `_run_coherence_critic()` to direct the spoken delivery toward Jason.
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_pinky_critic_persona.py -v
+  ```
+
+#### Story 103.22: Blackboard Ledger DNA Extraction & Full-Fidelity Unclipped Bullets
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-444]` (Blackboard Memory), `[FEAT-525]` (Round Table Delta-T Telemetry)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Remove the 150-char slice in `cognitive_hub.py` that truncates Brain's citations and Deep Thought's conclusions in `round_table_deltas.json`. Populate `distillation_bullets` with clean Deep Thought prose (`THOUGHT`), move `CRITIQUE` exclusively to the green `consensus_1liner`, and connect `commit_to_chroma()` to embed full structured turn records into `blackboard_ledger_dna`.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2080-L2096` (`_record_round_table_delta`)
+  * `HomeLabAI/src/memory/blackboard_ledger.py#L259-L278` (`commit_to_chroma`)
+* **Implementation Contract (The What):**
+  1. In `_record_round_table_delta()`, remove `[:150]` on `distillation_bullets` and `[:200]` on `consensus_text`.
+  2. Populate `bullets_list` with `LAB`, `PINKY`, `BRAIN`, `THOUGHT` (clean prose); omit `CRITIQUE` from bullets.
+  3. Set `consensus_1liner` to Critic's score and retort.
+  4. In `blackboard_ledger.py`, embed structured turn summaries (user prompt, brain curation, thought synthesis, critic score) into `blackboard_ledger_dna` via non-blocking `commit_to_chroma()`.
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_blackboard_dna.py HomeLabAI/src/tests/test_round_table_telemetry.py -v
+  ```
+
+#### Story 103.23: Phase 7 Full Pipeline Replay Certification & Live Validation Gate
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[BKM-024]` (Live Validation Mandate), `[FEAT-645]` (Multi-Stage Replay Pipeline)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Execute end-to-end replay test suite and perform live daemon validation on port 8765 to certify all Phase 7 enhancements on physical silicon.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
+  * Live daemon port 8765 (`POST /inject`, `GET /status?timeout=15`)
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v
+  curl -s "http://127.0.0.1:8765/status?timeout=15" | jq '{status: .status, full_lab_ready: .full_lab_ready}'
+  curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "Can you look up my experience on psys? I think the project was Aurora. I want to refresh my memory on what I did."}'
+  ```
+
+---
+
 ## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
 
 ### 1. The Mess Uncovered (The Manic Excision of Sprint 100)
