@@ -444,3 +444,63 @@ The persistent "casual" clamp and muting of Deep Thought was not an isolated pro
 4. **Tri-Node Sequential Streaming Handover Relay:** Reconnected Deep Thought (`channel="insight"`, `console="center"`, `source="Deep Thought (Strategy)"`) between Brain's bedrock extraction and Pinky's conversational TL;DR.
 5. **FEAT-525 Telemetry Bridge:** Corrected timestamp tracking so full physical deliberation checkpoints ($d_{\text{brain}} > 0, d_{\text{thought}} > 0$) write to `round_table_deltas.json`.
 6. **Live Silicon Hot-Reload (`BKM-024`):** Hot-reloaded running daemon (`POST /reload_residents`) with boot commit `111d02c` matching Git HEAD, verified 114/114 passing tests, and confirmed live physical silicon triage and delivery on M5 Air & KENDER 4090.
+
+
+---
+
+## 📜 Phase 5 Sprint Log: Post-Sprint Stabilization & Regression Recovery (`BKM-081`)
+
+### 1. Context & Epistemic Motivation
+Following the completion of Phase 4 and the live litmus certification of the Aurora inquiry, live testing surfaced subtle downstream anomalies that survived initial unit tests:
+1. **The Severed Grounding Critic (`FEAT-227` / `FEAT-470`):** In Sprint 100 Story 100.11, the excision of dead code in `_distill_strategic_brief` accidentally severed the callsite to `evaluate_grounding()`. While Story 100.12 aligned the 4-key scorecard schema, the method itself was never called in the new Two-Mice Handover loop, creating an orphaned critic.
+2. **Attendant Self-Healing Ignition Deadlock (`manager.py`):** When the physical silicon fell offline, the Foyer failed to self-heal. Investigation revealed a state check anti-pattern in `manager.py`: checking a closed whitelist of down states (`["HIBERNATING", "UNKNOWN", "ERROR"]`) that silently ignored `OFFLINE`.
+3. **Micro-Stage Confusion in Two-Mice Deliberation:** The Two-Mice Handover internally referred to Stages 1–4, while the outer Foyer pipeline had Macro Stages 1–4, creating conceptual friction in debugging and telemetry.
+4. **The Silent HyDE Gag (`FEAT-459` / `FEAT-437`):** Pinky was converted in Sprint 100 into a silent JSON generator emitting markdown blocks, while the spoken greeting/preamble was never broadcast to TTS or the user.
+5. **Speculative Race Token Contamination (`FEAT-586`):** When local vLLM beat remote Deep Thought during speculative triage, the slower task cancellation failed to clear the session buffer in `_process_node_stream`, allowing residual triage tokens to contaminate subsequent stages.
+
+---
+
+### 2. Chronological Execution Chronicle
+
+#### Milestone 5.1: Grounding Critic Reconnection & Scorecard Validation (`FEAT-227` / `FEAT-470`)
+* **Timestamp:** 2026-10-14 16:15:00
+* **Action:** Re-anchored `evaluate_grounding()` into `CognitiveHub` via a decoupled `step_grounding_critic()` method. Wired it as Stage 3.4 of the Two-Mice deliberation circuit. Guarded `self.broadcast` against `NoneType` in test harnesses and fixed variable scoping bugs in `_process_node_stream`.
+* **Verification:** Confirmed 22/22 tests passing in `HomeLabAI`. Tested live turn `f2fadaa8`, receiving genuine token generation from the `reviewer_v1` LoRA adapter on RTX 2080 Ti port 8088 emitting 4-key schema: `{"score": 1, "reasoning": "...", "slop_found": false, "retort": "..."}`.
+
+#### Milestone 5.2: Self-Healing Ignition & State Whitelist Inversion (`manager.py`)
+* **Timestamp:** 2026-10-14 16:30:00
+* **Action:** Diagnosed why the Attendant daemon logged `Lab already OFFLINE. Skipping ignition.` Inverted the closed whitelist anti-pattern (`if self.status.state in ["HIBERNATING", ...]`) to an operational readiness invariant (`if self.status.state not in ["OPERATIONAL", "WAKING"]`).
+* **Verification:** Successfully triggered wake via `POST http://127.0.0.1:8765/wake`. Attendant cleanly launched `start_vllm.sh` (PID 1020298) and loaded all 4 LoRA adapters (`cli_voice_v1`, `lab_history_v1`, `triage_v1`, `reviewer_v1`) into RTX 2080 Ti VRAM.
+
+#### Milestone 5.3: Two-Mice Stage Hierarchy Renaming (`FEAT-489` / `FEAT-500` / `BKM-083`)
+* **Timestamp:** 2026-10-14 16:33:00
+* **Action:** Renamed internal Two-Mice stages to **Stage 3.1 through Stage 3.4** under Macro Stage 3:
+  - **Stage 3.1:** Brain Gatekeeper (RAG filtering, verbatim forwarding & Curator Notes)
+  - **Stage 3.2:** Deep Thought Strategy (Sovereign Architectural Synthesis with `FEAT-523` budget)
+  - **Stage 3.3:** Pinky Voice (Conversational TL;DR & TTS Delivery to Left Console)
+  - **Stage 3.4:** Pinky Grounding Critic (Grounding Scorecard & Backpressure Audit)
+* **Verification:** Updated `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/docs/Protocols.md` (`BKM-083`), and `Portfolio_Dev/FeatureTracker.md` (`FEAT-489`, `FEAT-645`). All 19 unit tests passing.
+
+#### Milestone 5.4: HyDE Spoken Preamble Restoration & Race Cleanup (`FEAT-459` / `FEAT-437` / `FEAT-586`)
+* **Timestamp:** 2026-10-14 17:03:00
+* **Action:** 
+  1. Updated `_process_node_stream` to wrap in a `finally:` block, ensuring that when a speculative task is cancelled, `call_task.cancel()` aborts the remote HTTP request on M5 Air/Ollama and `self.session_buffers[buf_key]` is immediately wiped.
+  2. Enhanced `resolve_hyde_vector` to parse structured JSON output, extract Pinky's `greeting`, and broadcast it immediately out loud to the user over `channel="pinky"` / `source="Pinky (Voice)"` while passing the clean semantic vector to ChromaDB.
+* **Verification:** Pytest verified clean execution; committed as `2aa0252` and hot-reloaded into live daemon (`POST /reload_residents`).
+
+---
+
+## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
+
+### 1. The Mess Uncovered (The Manic Excision of Sprint 100)
+Sprint 100 operated in a state of high velocity and manic pruning, excising hundreds of lines of legacy code to turn test suites green. However, because features were not checked against canonical DNA and active callers:
+* **The Severed Critic:** Excision of `_distill_strategic_brief` severed `evaluate_grounding()`. Tests passed because unit tests mocked around the missing call, hiding the dead critic for three full sprints.
+* **The Gagged HyDE Pass:** Pinky was turned into a silent backend JSON generator, losing the conversational charm and immediate interactive life that made HyDE a "literary trick" rather than a dry database pre-filter.
+* **The Closed State Whitelist:** Adding the state string `OFFLINE` broke self-healing ignition because state checking was built as an allowlist of negative states rather than an invariant check for operational readiness.
+* **The "3-4 Dense Bullets" Prompt Injection:** Brain Gatekeeper was instructed to write summary bullet points, directly violating `FEAT-635` which mandates forwarding bedrock text verbatim with Curator Notes.
+
+### 2. The Gems Recovered
+* **The Dual-Critic Scorecard (`FEAT-227` / `FEAT-470`):** Pinky Grounding Critic running `reviewer_v1` LoRA on RTX 2080 Ti silicon is back online, actively scoring turns 1–5, auditing slop, and providing peer backpressure.
+* **Pinky's Coherence Instinct:** The live test proved that the Critic actually works—when Deep Thought leaked JSON tokens and Pinky spat out `[INTERCOMPARISON]: 3 (Networks)`, Pinky Critic immediately flagged it as nonsensical gibberish ("there may be a typo in your message") and gave it a score of 1.
+* **Decoupled Architecture (`BKM-083` / `FEAT-645`):** The monolith has been unstitched. Pre-Triage, Triage, HyDE/RAG, Brain Gatekeeper, Deep Thought Strategy, Pinky Voice, and Grounding Critic are discrete, callable, sub-second testable methods.
+* **Live Resident Hot-Reload (`FEAT-490` / `BKM-024`):** Changes to hub logic and prompts hot-reload in $<1\text{s}$ via `POST /reload_residents`, preserving 6.5 GB of loaded vLLM LoRA weights in GPU VRAM without restart thrash.
