@@ -365,7 +365,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     const isSystemStrategic = (isSystem) && (text_low.includes('strategic') || text_low.includes('engaging'));
 
     // [Task 16.2] Markdown Pop via Marked.js
-    let formattedText = text;
+    let formattedText = text.replace(/<thought>([\s\S]*?)<\/thought>/g, '<div class="thought-bubble"><em>$1</em></div>');
     
     // Check if the response is a JSON block to pretty-print
     let isJSON = false;
