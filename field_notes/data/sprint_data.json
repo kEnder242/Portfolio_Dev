@@ -1,5 +1,28 @@
 [
   {
+    "id": "SPR-103.0",
+    "title": "Intercom Debug, Multi-Stage Replay Pipeline (FEAT-645), Un-Muting Deep Thought, and Decoupled Round Table Architecture",
+    "origin": {
+      "text": "Intercom Debug & Monologue Restoration, Multi-Stage Replay Pipeline Harness (`FEAT-645`), Decoupled Round Table Architecture (`BKM-083`), Excising Binary Casual Clamps, Un-Muting Deep Thought Live Backchannel, and Sovereign Swarm Cloud Delegation",
+      "source": "SPRINT_PLAN_SPR_103_0.md"
+    },
+    "synthesis": {
+      "narrative_context": "Intercom Debug & Monologue Restoration, Multi-Stage Replay Pipeline Harness (`FEAT-645`), Decoupled Round Table Architecture (`BKM-083`), Excising Binary Casual Clamps, Un-Muting Deep Thought Live Backchannel, and Sovereign Swarm Cloud Delegation",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_103_0.md"
+      ],
+      "review_notes": "Active sprint in execution."
+    },
+    "metadata": {
+      "tags": [
+        "sprint-103",
+        "sprint-plan"
+      ],
+      "status": "ACTIVE",
+      "bucket_id": "bucket_5_infra"
+    }
+  },
+  {
     "id": "SPR-102.0",
     "title": "Continuous Interest Multiplier Pacing, Brain Epistemic Gatekeeper & Narrative Steering, Sideband Consensus, and Meta-Vocabulary Prompt Decoupling",
     "origin": {
