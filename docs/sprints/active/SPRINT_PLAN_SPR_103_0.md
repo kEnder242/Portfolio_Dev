@@ -708,7 +708,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
 ---
 
 #### Story 103.18: Single-Turn Conversational HyDE & Sovereign Interest Upvote
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`9f77109`, `ede1005`)
 * **DNA / Feature Tag:** `[FEAT-432]` (Open HyDE Preamble), `[FEAT-437]` (Era Compass HyDE), `[FEAT-238]` (Council of Hemispheres Peer Boost)
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Context & Objective (The Why):** Un-gag Pinky during pre-RAG triage. Instead of forcing Pinky into a mechanical JSON schema that suppresses personality, Pinky speaks a natural 2-sentence conversational stance to the Left Console in a single pass. The spoken text serves directly as the semantic vector query for ChromaDB. Pinky can also emit `<boost_interest>` or `<upvote>` into the stream to expand Deep Thought's token ceiling via `FEAT-523`.
@@ -726,7 +726,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   ```
 
 #### Story 103.19: Brain Gatekeeper Step 3 Context Isolation & Echo Prevention
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`9f77109`, `ede1005`)
 * **DNA / Feature Tag:** `[FEAT-635]` (Positive JITC Prompting), `[VIBE-006]` (Analytical Curator)
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Context & Objective (The Why):** Stop Brain from reciting `[PILLAR_1_RECORD]` ("Shared bicameral lab environment...") and `[PILLAR_2_RECORD]` ("Current interest: 0.83..."). Give Brain positive, focused framing that enforces silence on system boundaries unless relevant.
@@ -744,7 +744,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   ```
 
 #### Story 103.20: Deep Thought Prompt Header Excision & Positive Coherence Framing
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`9f77109`, `ede1005`)
 * **DNA / Feature Tag:** `[FEAT-452]` (Telemetry Suppression), `[FEAT-489]` (Two-Mice Streaming Handover), `[FEAT-523]` (Continuous Multiplier)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):** Excise Sprint 52.4 rigid directive headers (`Core Conclusion:`, `Synthesis:`, `Pinky's Take:`, `Constraint:`) in `thought_node.py` that caused Deep Thought to parrot form fields. Deploy positive JITC guidance: *"Find things consistent with Jason's query and the consensus of the lab mice."* Preserve 300-token snippet grounding without forcing raw file unrolling.
@@ -763,7 +763,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   ```
 
 #### Story 103.21: Pinky Critic Conversational Bridge & Forward Onramp
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`9f77109`, `ede1005`)
 * **DNA / Feature Tag:** `[FEAT-470]` (Structured Coherence Critic), `[FEAT-227]` (Dual-Critic Scorecard)
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Context & Objective (The Why):** Transform Pinky Critic's `retort` from an internal critique directed at Brain into a spoken conversational bridge directed to Jason, confirming the technical reality and offering a natural conversational follow-up.
@@ -782,7 +782,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   ```
 
 #### Story 103.22: Blackboard Ledger DNA Extraction & Full-Fidelity Unclipped Bullets
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`9f77109`, `ede1005`)
 * **DNA / Feature Tag:** `[FEAT-444]` (Blackboard Memory), `[FEAT-525]` (Round Table Delta-T Telemetry)
 * **Assigned Owner:** `[SWARM:CLOUD]`
 * **Context & Objective (The Why):** Remove the 150-char slice in `cognitive_hub.py` that truncates Brain's citations and Deep Thought's conclusions in `round_table_deltas.json`. Populate `distillation_bullets` with clean Deep Thought prose (`THOUGHT`), move `CRITIQUE` exclusively to the green `consensus_1liner`, and connect `commit_to_chroma()` to embed full structured turn records into `blackboard_ledger_dna`.
@@ -800,7 +800,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   ```
 
 #### Story 103.23: Phase 7 Full Pipeline Replay Certification & Live Validation Gate
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETED (`ede1005`, `Live Turn 40 Certified`)
 * **DNA / Feature Tag:** `[BKM-024]` (Live Validation Mandate), `[FEAT-645]` (Multi-Stage Replay Pipeline)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):** Execute end-to-end replay test suite and perform live daemon validation on port 8765 to certify all Phase 7 enhancements on physical silicon.
