@@ -528,32 +528,166 @@ Following the completion of Phase 4 and the live litmus certification of the Aur
 
 ### Phase 6: Roles, Tone, & Prompt Resonance (The Pipeline Prompt Engineering Phase)
 
-#### Story 103.9: BKM-084 Protocol & Invariant Operational Law 8 Refinement
-* **Status:** ✅ COMPLETED (`bb720c3`, `8a97ed7`)
-* **Scope:** Codify `BKM-084: The Lettered Dropped Threads Protocol` into `HomeLabAI/docs/Protocols.md` and enshrine Invariant Operational Law 8 in `AGENTS.md`. Established turn-counting lookback horizon (Turn $N-2$ to $N-4$), anti-hijack invariant, lettered ledger namespace ($A:, B:, \dots$), and the rule that zero pending items omits the ledger completely.
+#### 📖 Phase 6 Narrative & Consensus Synthesis
+Over the course of an intensive multi-turn alignment dialogue, we set out to solve the identity collapse in the multi-stage round table: **Brain had become a redundant, verbose echo of Deep Thought**, speaking for other personas, reciting system prompt directives, and choking the downstream pipeline with verbatim walls of RAG text. Simultaneously, **Pinky had been reduced to a silent, mechanical JSON emitter**, while **Deep Thought was constrained from revealing its internal analytical reasoning**.
 
-#### Story 103.10: Intercom UI Polish & Deep Thought `<thought>` Italicization
-* **Status:** 📋 PLANNED
-* **Scope:**
-  1. Parse `<thought>...</thought>` tags in `intercom_v2.js` and render them as a dedicated, italicized, muted block on the Right Console alongside Deep Thought's bold prose.
-  2. Strip `<thought>` blocks before dispatching text to Pinky Grounding Critic in `step_grounding_critic()`.
-  3. Hide upvote/downvote feedback buttons until bubble hover (`intercom_v2.css`).
+Through a point-by-point walkthrough across canonical swim lanes, we achieved complete technical consensus:
+1. **Roles & Evidentiary Curation:** Brain is the **Subconscious Information Gatekeeper and Evidentiary Curator**. Brain's job is to inspect candidate RAG records, declare what is cohesive versus ungrounded, respond concisely (and cynically if deserved) to Jason and Pinky, and explicitly pass verified records to Deep Thought. Triage JSON is fenced out to prevent category-parroting.
+2. **Positive Framing & Prefix Caching:** Prohibitive rules ("never cite system prompts") are replaced with affirmative task-oriented directives. Prefix caching in vLLM is maximized by keeping static bedrock foundations and instructions at the prompt head, while tagging `<historical_record>` chunks with distinct anchor keys (`[DOC_ID: ...]`) so Brain references sources concisely rather than regurgitating passages.
+3. **Interest Boost Confined to Brain's Turn:** Restored the git-archaeological `commit 1ff83ad` (`FEAT-238` Council of Hemispheres). Interest remains the primary continuous scalar across the loop, but the boost mechanism is strictly confined to Brain's turn: finding verified bedrock records triggers `<boost_interest>` ($\Delta I = +0.20$), which dynamically scales Deep Thought's token generation budget via `FEAT-523`.
+4. **Pinky, HyDE, and Grounding Forensics:** We discovered that Sprint `SPR_56_0` introduced rigid JSON formatting to eliminate brittle regexes. However, `cognitive_hub.py` only ever loaded the flat keyword list from `career_compass.json`, leaving the rich `tier_1_anchor_map` (the 18-year career timeline) disconnected from Pinky's context. We resolve to inject this high-level map prior to HyDE, preserving the rigid JSON schema for machine routing while giving Pinky the contextual bedrock to formulate authentic conversational inquiries.
+5. **Monolithic Thought Streaming:** Evaluated monolithic streaming versus side-channeled co-location. Monolithic streaming with `<thought>...</thought>` tags won decisively across TTFT responsiveness, UX naturalness, and code simplicity. The frontend styles `<thought>` as an italicized callout card on the Right Console, and a single-line regex strips the thought block for Critic evaluation.
+6. **Telemetry Hooks:** Reconnected the two severed flywheel endpoints: `archive_node.purge_candidate_exemplar()` on downvote (`FEAT-634`) and `archive_node.evaluate_rdna_promotion_candidate()` on upvote (`FEAT-633`). In UI styling, feedback buttons remain hidden until message bubble hover, lighting up on direct hover.
+7. **Single-File Safety:** Confirmed all changes remain localized inside `HomeLabAI/src/logic/cognitive_hub.py` to avoid circular import thrash while prompt schemas evolve.
 
-#### Story 103.11: Brain Tone Resonance & Positive JITC Prompting
-* **Status:** 📋 PLANNED
-* **Scope:** Reframe Brain's Stage 3.1 prompt with positive JITC guidance (`VIBE-006`, `FEAT-182`, `FEAT-635`). Brain receives Pinky's Stage 2 greeting, reacts in character, evaluates data coherence, and forwards bedrock text + curator notes without reciting prompt directives or system metrics.
+---
 
-#### Story 103.12: Continuous Interest Boost & Terse Brain Pacing
-* **Status:** 📋 PLANNED
-* **Scope:** Clamp Brain's Stage 3.1 generation budget to terse length (250–350 tokens) and award an interest boost (`interest += 0.15`) upon multi-anchor bedrock validation, expanding Deep Thought's token allocation via `FEAT-523`.
+#### Story 103.11: BKM-084 Protocol & Invariant Operational Law 8 Refinement
+* **Status:** ✅ COMPLETED (`bb720c3`, `8a97ed7`, `254425f`)
+* **DNA / Feature Tag:** `[BKM-084]`, `[BKM-004]`, `[BKM-077]`, `[INS-016]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Codify `BKM-084: The Lettered Dropped Threads Protocol` into `HomeLabAI/docs/Protocols.md` and enshrine Invariant Operational Law 8 in `AGENTS.md`. Established turn-counting lookback horizon (Turn $N-2$ to $N-4$), anti-hijack invariant, lettered ledger namespace ($A:, B:, \dots$), and the rule that zero pending items omits the ledger completely.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/docs/Protocols.md#L1522`
+  * `AGENTS.md#L16`
+* **Implementation Contract (The What):** Codified positive BKM-084 phrasing without mock code blocks, added explicit lookback window, and synchronized `dna_manifest.json`.
+* **Verification & Test Command (The How):**
+  ```bash
+  git log -n 3 --oneline HomeLabAI/docs/Protocols.md AGENTS.md
+  ```
 
-#### Story 103.13: Pinky Stage 3.3 Prompt Tuning & Offline Harness Certification
-* **Status:** 📋 PLANNED
-* **Scope:** Tune Pinky's Stage 3.3 prompt using `test_multi_stage_replay_pipeline.py` so the local 3B model reliably emits a warm 2-sentence conversational TL;DR rather than choking to 2 tokens when handed Deep Thought synthesis.
+#### Story 103.12: Intercom Monolithic `<thought>` Rendering & Critic Regex Stripping
+* **Status:** ✅ COMPLETED (`94b1b09`, `68a50ce`)
+* **DNA / Feature Tag:** `[FEAT-489]` (Two-Mice Streaming Handover), `[FEAT-638]` (Feedback Hover Polish)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Deep Thought emits internal reasoning inside `<thought>...</thought>`. The UI must stream this live as an italicized callout block above the formal prose on the Right Console. The Critic must evaluate only the final architectural prose, not the internal chain of thought.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `Portfolio_Dev/field_notes/intercom_v2.js`
+  * `Portfolio_Dev/field_notes/intercom.html#L248`
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2910`
+* **Implementation Contract (The What):**
+  1. In `intercom_v2.js`, wrap `<thought>(.*?)</thought>` into `<div class="thought-bubble"><em>$1</em></div>`.
+  2. In `intercom.html`, style `.thought-bubble { border-left: 2px solid #58a6ff; background: rgba(88, 166, 255, 0.05); padding: 8px 12px; margin-bottom: 8px; font-style: italic; color: #8b949e; }`.
+  3. In `step_deep_thought()` of `cognitive_hub.py`, extract clean prose for the critic and downstream relay:
+     ```python
+     clean_dt_prose = re.sub(r"<thought>.*?</thought>", "", dt_synthesis, flags=re.DOTALL).strip()
+     ```
+* **Verification & Test Command (The How):**
+  ```bash
+  python3 -c 'import re; s = "<thought>Thinking...</thought>Result"; assert re.sub(r"<thought>.*?</thought>", "", s, flags=re.DOTALL).strip() == "Result"'
+  ```
 
-#### Story 103.14: Flywheel Upvote/Downvote Telemetry Hookup (`FEAT-633` / `FEAT-634`)
-* **Status:** 📋 PLANNED
-* **Scope:** Wire `POST /feedback` upvote to RDNA promotion (`rdna` ChromaDB collection) and downvote to candidate purging and negative memory foil creation.
+#### Story 103.13: Pinky High-Level Grounding & Dynamic Era Compass Injection
+* **Status:** ✅ COMPLETED (`2491fa0`)
+* **DNA / Feature Tag:** `[FEAT-437]` (3-Tier HyDE Cascade), `[FEAT-459]` (Unified Preamble Fusion)
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Context & Objective (The Why):** Pinky's HyDE synthesis currently receives only flat keywords, leaving out the 18-year career timeline in `career_compass.json`. Injecting the matching `tier_1_anchor_map` era gives Pinky the necessary high-level career grounding to formulate coherent hypotheses without guessing.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L157-L209` (`_load_hyde_synthesis_prompt`)
+  * `Portfolio_Dev/field_notes/data/career_compass.json#L4` (`tier_1_anchor_map`)
+* **Implementation Contract (The What):**
+  1. In `_load_hyde_synthesis_prompt()`, parse `tier_1_anchor_map` alongside keywords.
+  2. Format era anchors into a concise high-level reference block in `HYDE_SYNTHESIS_PROMPT`:
+     ```text
+     High-Level Career Anchors:
+     - 2005-2008: Server firmware, EFI/Linux automation, IPMI IA64/x86 bring-up
+     - 2008-2010: BMC Firmware, IPMI 2.0, DCMI, Serial Over LAN (SOL), HECI
+     - 2011-2015: Post-Silicon Debug Software Developer, Intel VISA signal traces, CI automation
+     - 2016-2019: Datacenter PAE, Mellanox cluster debug, Optane AEP memory bring-up
+     - 2019-2024: Manageability Test Content Lead, 100+ IPMI/Redfish/PECI/MCTP tests, SIMICS
+     - 2024-2026: Federated AI Architecture, Acme Lab, HomeLabAI, vLLM, DCGM telemetry
+     ```
+  3. Preserve the rigid JSON schema output contract (`search_required`, `greeting`, `hyde_vector`) for downstream ChromaDB embedding.
+* **Verification & Test Command (The How):**
+  ```bash
+  python3 -c 'from src.logic.cognitive_hub import _load_hyde_synthesis_prompt; p = _load_hyde_synthesis_prompt(); assert "2011-2015: Post-Silicon Debug" in p'
+  ```
+
+#### Story 103.14: Brain "Inspect & Declare" Curator Prompt & Keyed Chunk Tagging
+* **Status:** ✅ COMPLETED (`c73e812`)
+* **DNA / Feature Tag:** `[VIBE-006]` (Analytical Curator), `[FEAT-635]` (Positive JITC Prompting)
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Context & Objective (The Why):** Brain must stop summarizing Deep Thought's conclusion or reciting instructions. It must act as the analytical curator: inspecting chunks, declaring coherence/gaps, responding concisely (and cynically if deserved) to Jason and Pinky, and tagging chunks with explicit IDs.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L320-L405` (`build_two_mice_stage_prompt`)
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2843` (`step_brain_gatekeeper`)
+* **Implementation Contract (The What):**
+  1. In `build_two_mice_stage_prompt(stage=1)`, deploy the adopted prompt:
+     ```text
+     [STAGE_1_INSTRUCTIONS]: You are Brain, the Information Gatekeeper and Subconscious Curator.
+     Jason talked to the lab. Pinky has provided an initial stance.
+     Your task is strictly evidentiary inspection:
+
+     1. Review the candidate chunks in <historical_record>.
+     2. Discern which chunks are cohesive bedrock truth versus irrelevant noise or cross-domain bleed.
+     3. Respond to Jason's query and Pinky's response in a concise manner, cynical if deserved.
+     4. Declare your curation:
+        - Identify the specific anchored records that directly bear on Jason's query.
+        - Note what technical reality is coherent from the data, and flag any ungrounded assumptions.
+        - Signal which records you are passing to Deep Thought and why.
+
+     Leave synthesis and final architectural conclusion to Deep Thought. Provide clean, decisive curation, then yield the floor.
+     ```
+  2. Tag candidate chunks formatted in `<historical_record>` with explicit identifiers: `[DOC_ID: <filename_or_id>]`.
+  3. Clamp Brain's generation budget in `step_brain_gatekeeper` to a terse **150–250 tokens**.
+* **Verification & Test Command (The How):**
+  ```bash
+  python3 /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/tests/test_multi_stage_replay_pipeline.py
+  ```
+
+#### Story 103.15: Brain-Confined Dynamic Boost & Token Runway Scaling
+* **Status:** ✅ COMPLETED (`4ab3ce1`)
+* **DNA / Feature Tag:** `[FEAT-238]` (Dynamic Peer Boosting), `[FEAT-523]` (Continuous Interest Multiplier)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** When Brain finds verified bedrock records, it signals `<boost_interest>`. This boost must be strictly confined to Brain's turn to scale Deep Thought's token runway without leaking runaway interest into global session state.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2843-L2905` (`step_brain_gatekeeper` and `step_deep_thought`)
+* **Implementation Contract (The What):**
+  1. In `step_brain_gatekeeper()`, inspect Brain's streaming output for `<boost_interest>` or `<upvote>`:
+     ```python
+     boosted_interest = interest
+     if "<boost_interest>" in brain_grounding or "<upvote>" in brain_grounding:
+         boosted_interest = min(1.0, interest + 0.20)
+         logging.info(f"[HUB] [FEAT-238] Brain boosted interest from {interest:.2f} to {boosted_interest:.2f}")
+     ```
+  2. Return `(brain_grounding, boosted_interest)`.
+  3. Forward `boosted_interest` directly into `step_deep_thought(interest=boosted_interest)`, dynamically scaling Deep Thought's `max_tokens` from 300 to 1200+ via `FEAT-523`.
+* **Verification & Test Command (How):**
+  ```bash
+  python3 -m pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_refinement.py -k "test_interest"
+  ```
+
+#### Story 103.16: Flywheel Telemetry Closure: Downvote Purge & Upvote Promotion
+* **Status:** ✅ COMPLETED (`32abbe4`)
+* **DNA / Feature Tag:** `[FEAT-633]` (RDNA Promotion Gating), `[FEAT-634]` (Downvote Purge Shortcut)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Connect the live `POST /feedback` handler to `archive_node.py` so human ratings actively prune bad retrieval vectors and promote validated bedrock exemplars.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/v5/foyer/router.py#L1416` (`handle_feedback`)
+  * `HomeLabAI/src/logic/archive_node.py` (`purge_candidate_exemplar`, `evaluate_rdna_promotion_candidate`)
+* **Implementation Contract (The What):**
+  1. In `handle_feedback()`, when `rating == "DOWN"`, invoke `archive_node.purge_candidate_exemplar(query, request_id)` to remove the synthetic anchor from candidate RDNA and register the negative foil in `foyer_feedback_ledger.jsonl`.
+  2. When `rating == "UP"`, invoke `archive_node.evaluate_rdna_promotion_candidate(query, response, request_id)` to promote the anchor into ChromaDB `rdna` collection.
+* **Verification & Test Command (The How):**
+  ```bash
+  python3 -m pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_foyer_feedback.py -v
+  ```
+
+#### Story 103.17: Multi-Stage Replay Pipeline Verification & Live Validation
+* **Status:** ✅ COMPLETED (`32abbe4`, `c83b7e9`)
+* **DNA / Feature Tag:** `[BKM-024]` (Live Validation Mandate), `[FEAT-645]` (Multi-Stage Replay Pipeline)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Verify the entire decoupled pipeline under both offline replay (sub-second harness) and live daemon execution against reachable silicon endpoints.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
+  * `HomeLabAI/src/tests/test_foyer_feedback.py`
+  * `HomeLabAI/src/logic/cognitive_hub.py`
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py HomeLabAI/src/tests/test_foyer_feedback.py -v
+  curl -s http://127.0.0.1:8765/status | jq '{status: .status, full_lab_ready: .full_lab_ready, boot_commit: .boot_commit}'
+  curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "Can you look up my experience on psys? I think the project was Aurora. I want to refresh my memory on what I did."}'
+  ```
 
 #### General Backlog Additions:
 * **Backlog Item 1:** Review Panel UI backend endpoint connection (`field_notes/writer.html`).
