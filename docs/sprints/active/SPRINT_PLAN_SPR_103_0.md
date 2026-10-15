@@ -710,7 +710,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
 #### Story 103.18: Single-Turn Conversational HyDE & Sovereign Interest Upvote
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-432]` (Open HyDE Preamble), `[FEAT-437]` (Era Compass HyDE), `[FEAT-238]` (Council of Hemispheres Peer Boost)
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Context & Objective (The Why):** Un-gag Pinky during pre-RAG triage. Instead of forcing Pinky into a mechanical JSON schema that suppresses personality, Pinky speaks a natural 2-sentence conversational stance to the Left Console in a single pass. The spoken text serves directly as the semantic vector query for ChromaDB. Pinky can also emit `<boost_interest>` or `<upvote>` into the stream to expand Deep Thought's token ceiling via `FEAT-523`.
 * **Symbol Anchors & Touchpoints (The Where):**
   * `HomeLabAI/src/logic/cognitive_hub.py#L2480-L2530` (`step_hyde_rag`)
@@ -746,7 +746,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
 #### Story 103.20: Deep Thought Prompt Header Excision & Positive Coherence Framing
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-452]` (Telemetry Suppression), `[FEAT-489]` (Two-Mice Streaming Handover), `[FEAT-523]` (Continuous Multiplier)
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):** Excise Sprint 52.4 rigid directive headers (`Core Conclusion:`, `Synthesis:`, `Pinky's Take:`, `Constraint:`) in `thought_node.py` that caused Deep Thought to parrot form fields. Deploy positive JITC guidance: *"Find things consistent with Jason's query and the consensus of the lab mice."* Preserve 300-token snippet grounding without forcing raw file unrolling.
 * **Symbol Anchors & Touchpoints (The Where):**
   * `HomeLabAI/src/nodes/thought_node.py#L17-L35` (`DEEP_THOUGHT_SYSTEM_PROMPT`)
@@ -784,7 +784,7 @@ Following the successful certification of Phase 6, live forensic analysis of tur
 #### Story 103.22: Blackboard Ledger DNA Extraction & Full-Fidelity Unclipped Bullets
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-444]` (Blackboard Memory), `[FEAT-525]` (Round Table Delta-T Telemetry)
-* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Assigned Owner:** `[SWARM:CLOUD]`
 * **Context & Objective (The Why):** Remove the 150-char slice in `cognitive_hub.py` that truncates Brain's citations and Deep Thought's conclusions in `round_table_deltas.json`. Populate `distillation_bullets` with clean Deep Thought prose (`THOUGHT`), move `CRITIQUE` exclusively to the green `consensus_1liner`, and connect `commit_to_chroma()` to embed full structured turn records into `blackboard_ledger_dna`.
 * **Symbol Anchors & Touchpoints (The Where):**
   * `HomeLabAI/src/logic/cognitive_hub.py#L2080-L2096` (`_record_round_table_delta`)
