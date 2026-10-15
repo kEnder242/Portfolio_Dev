@@ -526,6 +526,41 @@ Following the completion of Phase 4 and the live litmus certification of the Aur
 
 ---
 
+### Phase 6: Roles, Tone, & Prompt Resonance (The Pipeline Prompt Engineering Phase)
+
+#### Story 103.9: BKM-084 Protocol & Invariant Operational Law 8 Refinement
+* **Status:** ✅ COMPLETED (`bb720c3`, `8a97ed7`)
+* **Scope:** Codify `BKM-084: The Lettered Dropped Threads Protocol` into `HomeLabAI/docs/Protocols.md` and enshrine Invariant Operational Law 8 in `AGENTS.md`. Established turn-counting lookback horizon (Turn $N-2$ to $N-4$), anti-hijack invariant, lettered ledger namespace ($A:, B:, \dots$), and the rule that zero pending items omits the ledger completely.
+
+#### Story 103.10: Intercom UI Polish & Deep Thought `<thought>` Italicization
+* **Status:** 📋 PLANNED
+* **Scope:**
+  1. Parse `<thought>...</thought>` tags in `intercom_v2.js` and render them as a dedicated, italicized, muted block on the Right Console alongside Deep Thought's bold prose.
+  2. Strip `<thought>` blocks before dispatching text to Pinky Grounding Critic in `step_grounding_critic()`.
+  3. Hide upvote/downvote feedback buttons until bubble hover (`intercom_v2.css`).
+
+#### Story 103.11: Brain Tone Resonance & Positive JITC Prompting
+* **Status:** 📋 PLANNED
+* **Scope:** Reframe Brain's Stage 3.1 prompt with positive JITC guidance (`VIBE-006`, `FEAT-182`, `FEAT-635`). Brain receives Pinky's Stage 2 greeting, reacts in character, evaluates data coherence, and forwards bedrock text + curator notes without reciting prompt directives or system metrics.
+
+#### Story 103.12: Continuous Interest Boost & Terse Brain Pacing
+* **Status:** 📋 PLANNED
+* **Scope:** Clamp Brain's Stage 3.1 generation budget to terse length (250–350 tokens) and award an interest boost (`interest += 0.15`) upon multi-anchor bedrock validation, expanding Deep Thought's token allocation via `FEAT-523`.
+
+#### Story 103.13: Pinky Stage 3.3 Prompt Tuning & Offline Harness Certification
+* **Status:** 📋 PLANNED
+* **Scope:** Tune Pinky's Stage 3.3 prompt using `test_multi_stage_replay_pipeline.py` so the local 3B model reliably emits a warm 2-sentence conversational TL;DR rather than choking to 2 tokens when handed Deep Thought synthesis.
+
+#### Story 103.14: Flywheel Upvote/Downvote Telemetry Hookup (`FEAT-633` / `FEAT-634`)
+* **Status:** 📋 PLANNED
+* **Scope:** Wire `POST /feedback` upvote to RDNA promotion (`rdna` ChromaDB collection) and downvote to candidate purging and negative memory foil creation.
+
+#### General Backlog Additions:
+* **Backlog Item 1:** Review Panel UI backend endpoint connection (`field_notes/writer.html`).
+* **Backlog Item 2:** Revisit `dna_forge.html` `[Review & Cards]` and `[Recommendations]` tabs.
+
+---
+
 ## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
 
 ### 1. The Mess Uncovered (The Manic Excision of Sprint 100)
