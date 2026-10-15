@@ -507,6 +507,15 @@ Following the completion of Phase 4 and the live litmus certification of the Aur
   5. **Stage 3.3 Pinky Voice:** Delivered 2-sentence conversational TL;DR out loud directly to Jason.
   6. **Stage 3.4 Pinky Grounding Critic:** Evaluated coherence using `reviewer_v1` LoRA on RTX 2080 Ti silicon. M5 Judge awarded 0.95 score. Live turn logged as Turn 33 in `field_notes/data/round_table_deltas.json`.
 
+#### Milestone 5.7: Censorship Transparency, 15m Temporal Memory Decay & Deep Thought Tri-Node Visibility (`FEAT-489` / `FEAT-539` / `BKM-083`)
+* **Timestamp:** 2026-10-14 20:36:00
+* **Action:**
+  1. **Dual-Console Censorship Transparency (`FEAT-489`):** Fixed WebSocket transport drop where `router.py:broadcast_worker` overwrote `message_dict["brain"] = ""` on `thought_stream` packets due to checking only `"brain"` and `"message"`. Added `"token"` and `"source"` fallback in `router.py`, added both `"brain"` and `"token"` in `build_two_mice_stream_packet`, and broadcast Stage 2 Pinky spoken greetings as permanent `type: "chat"` frames directly into the Left Console.
+  2. **Intercom Streaming UI (`FEAT-489`):** Added a dedicated `data.type === 'thought_stream'` handler in `intercom_v2.js` to stream tokens in real-time to `insightConsole` (Brain/Deep Thought) and `chatConsole` (Pinky) without frame drops or bubble duplication.
+  3. **15-Minute Working Memory Decay (`FEAT-539` / `FEAT-455`):** Solved cross-topic context poisoning by storing timestamps with each `round_table_memory` turn. In `_process_node_stream`, filtered `[PREVIOUS_DEBATE]` context to only inject turns within a rolling 900-second (15-minute) window. Added `/topic` and `/reset` command intercepts to immediately purge working memory on demand.
+  4. **Deep Thought Tri-Node Visibility (`BKM-083` / `CONTEXT_MEMORY_FLOW_MAP`):** Confirmed architectural specification in `CONTEXT_MEMORY_FLOW_MAP.md` declaring that Deep Thought must see the full Current Turn Package (User Query + Pinky Take/Greeting + Brain Bedrock Bullets + RAG Context). Restored `pinky_take` and `rag_context` parameters in `step_deep_thought()` and updated prompt synthesis to weigh against Pinky's take.
+* **Verification:** Authored `test_censorship_memory_tri_node.py` (4/4 tests pass). All 27 unit tests passed in 1.44s. Hot-reloaded live resident daemon to commit `b630d4b` (`POST /reload_residents`). Synchronized with active silicon.
+
 ---
 
 ## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
