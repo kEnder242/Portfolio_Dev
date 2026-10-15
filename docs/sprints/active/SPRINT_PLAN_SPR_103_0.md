@@ -488,6 +488,25 @@ Following the completion of Phase 4 and the live litmus certification of the Aur
   2. Enhanced `resolve_hyde_vector` to parse structured JSON output, extract Pinky's `greeting`, and broadcast it immediately out loud to the user over `channel="pinky"` / `source="Pinky (Voice)"` while passing the clean semantic vector to ChromaDB.
 * **Verification:** Pytest verified clean execution; committed as `2aa0252` and hot-reloaded into live daemon (`POST /reload_residents`).
 
+#### Milestone 5.5: Zero Reasoning Monologue & Headroom/Ollama Port Separation (`LAB-115` / `FEAT-361` / `FEAT-500`)
+* **Timestamp:** 2026-10-14 17:17:00
+* **Action:**
+  1. Updated `HomeLabAI/src/nodes/thought_node.py` system prompt: excised legacy rule 4 (`"Use <thought> tags"`) and replaced with `[LAB-115 / FEAT-361] ZERO REASONING MONOLOGUE: Speak directly with high engineering authority. Do NOT emit <thought> or <think> tags, scratchpads, or JSON triage echoes. Begin directly with the core architectural conclusion.`
+  2. Updated `HomeLabAI/src/nodes/loader.py`: added `</thought>` and `</think>` to stop tokens, added `extra_body: {"reasoning": 0, "enable_thinking": False}` for OpenAI/oMLX engines, and added top-level `"think": False` and `"options": {"enable_thinking": False}` for Ollama engines on KENDER.
+  3. Identified that port 8002 on M5 Air is a non-streaming Headroom proxy; restored `mlx_port: 8000` for native SSE streaming inference while enforcing zero reasoning via prompt directives and stop tokens.
+* **Verification:** Committed to `HomeLabAI` as `29ecfce`. Successfully hot-reloaded daemon via `POST /reload_residents`.
+
+#### Milestone 5.6: End-to-End Live Silicon Verification of Psys/Aurora Litmus (`BKM-024` / `FEAT-489`)
+* **Timestamp:** 2026-10-14 17:19:17
+* **Action:** Injected user query: *"Can you look up my experience on psys? I think the project was Aurora. I want to refresh my memory on what I did."* into live running Foyer daemon (commit `29ecfce`).
+* **Verification:**
+  1. **Stage 1 Triage:** Lab vLLM won in 411ms TTFT, classified as `work_history`, interest = 0.83.
+  2. **Stage 2 Pinky HyDE:** Spoke greeting *"Refresh your memory on psys/Aurora project."* and generated clean semantic vector `'Aurora'`.
+  3. **Stage 3.1 Brain Gatekeeper:** Retrieved `2021_03.json` Section 13.4 (*PSYS SENSE CIRCUIT FOR SYSTEM POWER TELEMETRY in Archer City Combined PAS*) and `2023_05.json` Platform Energy Counter validation records; forwarded factual bedrock bullets.
+  4. **Stage 3.2 Deep Thought Strategy:** Streamed from M5 Air (`TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` on port 8000) with zero `<thought>` tags or internal monologue, synthesizing the 2019–2024 Manageability Test Content Lead role and platform power telemetry.
+  5. **Stage 3.3 Pinky Voice:** Delivered 2-sentence conversational TL;DR out loud directly to Jason.
+  6. **Stage 3.4 Pinky Grounding Critic:** Evaluated coherence using `reviewer_v1` LoRA on RTX 2080 Ti silicon. M5 Judge awarded 0.95 score. Live turn logged as Turn 33 in `field_notes/data/round_table_deltas.json`.
+
 ---
 
 ## 🏛️ Comprehensive Sprint 103 Retrospective: Scars, Relics, and Recovered Gems
