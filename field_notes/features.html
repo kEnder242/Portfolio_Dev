@@ -9827,7 +9827,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Status Details</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
-                    <p>(Sprint 56)</p>
+                    <p>(Sprint 56 / Superseded Sprint 103)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -13789,31 +13789,37 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Two-Mice Sequential Streaming Handover & Distillation Pipeline
+                                    Two-Mice Sequential Streaming Handover & Deliberation Circuit
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Augmented Sprint 103)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L650" style="color:var(--accent-color); text-decoration:none;">src/logic/cognitive_hub.py</a>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L2950" style="color:var(--accent-color); text-decoration:none;">src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Orchestrates high-interest historical turns into a sequential two-mice distillation funnel: Brain extracts 3-4 dense technical bullet points from raw RAG context to the Right Console, and Pinky receives Brain's extract to deliver a conversational in-character TL;DR directly to the user on the Left Console.</p>
+                    <p>Orchestrates high-interest turns into a sequential deliberation funnel under Macro Stage 3. Eliminates monolithic prompt confusion by decoupling extraction, synthesis, delivery, and audit into isolated micro-stages.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes.</p>
+                    <p>Replaces uncoordinated parallel essays with a true self-aware dialogue between the lab's analytical and conversational resident nodes, backed by live coherence verification.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/pinky_critic_persona.py</code>, <code>src/tests/test_two_mice_handover.py</code>.</p>
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/pinky_critic_persona.py</code>, <code>src/tests/test_two_mice_handover.py</code>, <code>src/tests/test_multi_stage_replay_pipeline.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -14647,7 +14653,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-70.0 / SPR-102.0</p>
+                    <p>SPR-70.0 / SPR-102.0 / SPR-103.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14774,15 +14780,24 @@ Foyer Router also pre-checks <code>X-Client-Commit</code> header (rejects with H
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
+                <span class="field-label">Status Details</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: #888; margin-left: 10px; margin-top: 2px;">
+                    <p>(Partially Superseded)</p>
+<blockquote>
+<p>[!NOTE] PARTIALLY SUPERSEDED (Sprint 102/103 / FEAT-523): The 150-token hardcoded clamp for <code>vibe == 'CASUAL'</code> and <code>importance &lt; 0.3</code> is excised in Sprint 103. Token budgeting across all turns is modulated smoothly by continuous scalar interest (<code>FEAT-523</code>) via <code>infrastructure.json:interest_pacing</code> ($\operatorname{clamp}(\operatorname{int}(\text{interest} \times 150), 32, 1500)$).</p>
+</blockquote>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-71.0</p>
+                    <p>SPR-71.0 / Superseded Sprint 103</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Dynamically bounds <code>ContextScope.TURN</code> and clamps token budget to 150 tokens for low-interest/casual queries (<code>importance &lt; 0.3</code> or <code>vibe == 'CASUAL'</code>). Sanitizes <code>round_table_memory</code> against unclosed JSON blocks, excessive whitespace, and bounds session memory to the last 10 turns. Refines domain taxonomy to cleanly distinguish between <code>work_history</code> (18-year Intel/silicon career archive) and <code>acme_lab_history</code> (internal Acme Lab system events &amp; DNA).</p>
+                    <p>Dynamically bounds <code>ContextScope.TURN</code> and modulates token budget via continuous interest pacing. Sanitizes <code>round_table_memory</code> against unclosed JSON blocks, excessive whitespace, and bounds session memory to the last 10 turns. Refines domain taxonomy to cleanly distinguish between <code>work_history</code> (18-year Intel/silicon career archive) and <code>acme_lab_history</code> (internal Acme Lab system events &amp; DNA).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19025,6 +19040,65 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Unifies conversational charm with rigorous technical ground truth, enabling emergent multi-agent dialogue that never loses grounding.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-645">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-645</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Multi-Stage Replay Pipeline Harness & Contract Assertion
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>SPR-103.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#architecture</code>, <code>#decoupling</code>, <code>#unit_testing</code>, <code>#stage_isolation</code>, <code>[FEAT-645](#FEAT-645)</code>, <code>[BKM-024]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/docs/Protocols.md</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ol>
+<li><strong>Discrete Stage Methods:</strong> Multi-stage cognitive pipelines must be authored as discrete, callable <code>step_*</code> methods on <code>CognitiveHub</code>:</li>
+<li><code>step_pre_triage(query)</code>: Sub-20ms vector probe emitting continuous <code>semantic_affinity</code>.</li>
+<li><code>step_triage(query, pre_triage)</code>: Speculative triage relay emitting decoupled intent and target domains.</li>
+<li><code>step_hyde_rag(query, triage)</code>: HyDE synthesis with <code>search_required: bool</code> and unified ChromaDB retrieval.</li>
+<li>Macro Stage 3 Deliberation Micro-Stages:<ul>
+<li><code>step_brain_gatekeeper(query, rag_context, interest)</code>: Stage 3.1 Gatekeeper forwarding cohesive bedrock RAG + Curator Notes.</li>
+<li><code>step_deep_thought(query, brain_bullets, interest)</code>: Stage 3.2 Deep Thought strategic synthesis with <code>FEAT-523</code> pacing.</li>
+<li><code>step_pinky_voice(query, synthesis, interest)</code>: Stage 3.3 Pinky voice TL;DR, TTS delivery, and consensus telemetry.</li>
+<li><code>step_grounding_critic(query, ...)</code>: Stage 3.4 Pinky Grounding Critic 4-key scorecard audit against evidence.</li>
+</ul>
+</li>
+<li><strong>Zero Execution Divergence:</strong> The live <code>process_turn()</code> loop in production must call <code>step_*</code> methods sequentially without duplicate code paths or architectural divergence.</li>
+<li><strong>Offline Unit Testability:</strong> Pytest test suites must test individual <code>step_*</code> methods independently using frozen stage fixtures, enabling sub-second prompt and logic iteration without full-turn overhead.</li>
+<li><strong>Continuous Parameter Passing:</strong> Stage methods pass continuous parameters (<code>interest: float</code>, <code>semantic_affinity: float</code>, <code>search_required: bool</code>) rather than relying on mutable shared object state or binary clamps.</li>
+</ol>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates the "Monolithic Debug Trap" where diagnosing an upstream stage failure requires running 30-second multi-node websocket sessions.</p>
                 </div>
             </div>     </div>
                             </details>

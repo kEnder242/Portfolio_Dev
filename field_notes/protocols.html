@@ -2045,6 +2045,33 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-083</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Decouple-and-Stitch Round Table Protocol (Live Unit Testing & Stage Isolation)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-083]</code> / <code>[FEAT-645]</code> / <code>[FEAT-489]</code> / <code>[FEAT-523]</code> / <code>[BKM-024]</code><br />
+<strong>Colloquial Alias:</strong> "The Decouple-and-Stitch Stage Protocol / Unstitching the Monolith"<br />
+<strong>Domain:</strong> Cognitive Hub Orchestration, Modular Pipeline Architecture, Fast Offline Unit Testing<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 103)  </p>
+<h3>1. The Core Law: Discrete Stage Isolation</h3>
+<p>Monolithic cognitive loops (e.g., 3,000-line <code>cognitive_hub.py</code> files sharing mutable local variables across hundreds of lines) create severe diagnostic blindness. A prompt engineering failure in an upstream stage (such as HyDE returning an empty vector) starves downstream RAG retrieval, which starves the Information Gatekeeper, which silences Deep Thought. Diagnosing this failure via 30-second live websocket sessions burns tokens, risks timeouts, and causes thrash.</p>
+<p>Under <code>BKM-083</code>, cognitive orchestration pipelines MUST adhere to the <strong>Decouple-and-Stitch Invariants</strong>:
+1. <strong>Discrete Stage Methods:</strong> Multi-stage cognitive pipelines MUST be authored as discrete, callable <code>step_*</code> methods on the orchestrator class:
+   - <code>step_pre_triage(query)</code>: Sub-20ms vector probe emitting continuous <code>semantic_affinity</code>.
+   - <code>step_triage(query, pre_triage)</code>: Speculative triage relay emitting decoupled intent and target domains.
+   - <code>step_hyde_rag(query, triage)</code>: HyDE synthesis with <code>search_required: bool</code> and unified ChromaDB retrieval.
+   - Macro Stage 3 Deliberation Micro-Stages:
+     - <code>step_brain_gatekeeper(query, rag_context, interest)</code>: Stage 3.1 Gatekeeper forwarding cohesive bedrock RAG + Curator Notes.
+     - <code>step_deep_thought(query, brain_bullets, interest)</code>: Stage 3.2 Deep Thought strategic synthesis with <code>FEAT-523</code> pacing.
+     - <code>step_pinky_voice(query, synthesis, interest)</code>: Stage 3.3 Pinky voice TL;DR, TTS delivery, and consensus telemetry.
+     - <code>step_grounding_critic(query, ...)</code>: Stage 3.4 Pinky Grounding Critic 4-key scorecard audit against evidence.
+2. <strong>Zero Execution Divergence:</strong> The live <code>process_turn()</code> loop in production MUST delegate directly and sequentially to these <code>step_*</code> methods. Standalone divergence (separate CLI tools with duplicate logic) is strictly prohibited.
+3. <strong>Fast Offline Unit Testing:</strong> Pytest test suites (such as <code>test_multi_stage_replay_pipeline.py</code> / <code>FEAT-645</code>) MUST be able to execute any single <code>step_*</code> method independently using frozen input fixtures, verifying prompts and JSON parsing in $&lt; 500\text{ms}$ without spinning up live websocket sessions.
+4. <strong>Continuous Parameter Passing:</strong> Stage methods pass continuous parameters (<code>interest: float</code>, <code>semantic_affinity: float</code>, <code>search_required: bool</code>) explicitly across boundaries rather than relying on mutable shared state or binary clamps (<code>vibe == 'CASUAL'</code>).</p>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
