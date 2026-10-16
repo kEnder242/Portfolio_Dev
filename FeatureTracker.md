@@ -3846,3 +3846,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Completely excises the `lead_node` router block (lines 1890-2055) and the legacy July 2026 bifurcated branches (`elif lead_node == "both"` and `else: # pinky leads`). Treats `addressed_to` strictly as conversational metadata for persona guidance, never an execution switch. Every turn enters the staged handover Waterfall directly; execution cascades down the stack (Pinky HyDE -> RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) and naturally peters out based on continuous fluid fuel (interest).
 **Rationale:** Eliminates the architectural flaw where addressing a turn to Pinky stranded the query in an isolated, amnesic loop that completely bypassed the Council of Hemispheres and Deep Thought.
 
+## [FEAT-659] Zero-Domain Architecture & Semantic DNA Collection Resolution
+**Sprint:** SPR-104.0 (Phase 5)
+**Status:** ACTIVE
+**Tags:** `#zero_domain`, `#dna_resolution`, `#target_domains`, `#clara_parity`, `[FEAT-540]`, `[FEAT-636]`, `[FEAT-658]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/traversal_dispatcher.py`, `HomeLabAI/src/nodes/archive_node.py`
+**Logic:** Establishes "Zero Domain" as the evidential definition of a pure casual turn (`target_domains == []`), resulting in an immediate 0ms RAG bypass, zero document noise, and early fuel depletion. Unifies the downstream collection mapping pipeline by passing `target_domains` directly from `cognitive_hub.py` into `archive_node.py`, and refactoring `resolve_collection_scope(target_domains, vibe, domain)` to map semantic domain tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) into concrete ChromaDB collections (`behavioral_dna`, `feature_dna`, `sprint_dna`, `wisdom_dna`, `lab_journal`, `career_ledger`), achieving full conversational and grounding parity with AGY Clara hooks.
+**Rationale:** Resolves the architectural disconnect where Triage evaluated `target_domains` but dropped them before calling `archive_node`, forcing downstream retrieval to re-guess collections using coarse vibe strings and stranding the mice from accessing rich DNA collections.
+
+
