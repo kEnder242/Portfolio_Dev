@@ -524,9 +524,10 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 
 ### 2. Architecture: Positive Domain Density Fuel & Multi-Domain DNA Resolution
 1. **Positive Evidential Fuel Resonance**:
-   - Instead of a negative zero-domain abort gate, queries start at a resting baseline interest ($0.05$ for greetings).
+   - Queries start at a resting baseline interest ($0.05$ for greetings).
    - Each recognized factual domain hit injects continuous evidential fuel (+0.20 for single domains, compounding for multi-domain cross-cutting inquiries).
    - Queries with 0 domain hits stay at resting fuel, naturally petering out after Pinky's greeting without requiring negative abort clamps.
+
 2. **Direct Semantic & Vibe-Prioritized Resolution**:
    - `resolve_collection_scope` is consolidated to accept both `target_domains: list[str]` and `vibe: str`.
    - Semantic tokens emitted by Triage map directly to ChromaDB collections:
