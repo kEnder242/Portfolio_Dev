@@ -812,7 +812,38 @@ Following the successful certification of Phase 6, live forensic analysis of tur
   PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v
   curl -s "http://127.0.0.1:8765/status?timeout=15" | jq '{status: .status, full_lab_ready: .full_lab_ready}'
   curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "Can you look up my experience on psys? I think the project was Aurora. I want to refresh my memory on what I did."}'
+#### Story 103.24: Constrained 3-Field HyDE Schema & Clean Spoken Left Console Stream
+* **Status:** ✅ COMPLETED (`d1dbd29`, `d1e663e`, `Live Turn 42 Certified`)
+* **DNA / Feature Tag:** `[FEAT-437]` (3-Tier HyDE Cascade), `[FEAT-238]` (Sovereign Upvote), `[BKM-039]` (RAG Taxonomy Separation)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Replace fragile trailing `[HYDE: ...]` tag scraping with a constrained 3-field JSON schema (`spoken_take`, `search_terms`, `upvote`). Decouple character voice from search vectors so clean spoken dialogue streams to the UI Left Console while dense keywords bypass conversational noise in ChromaDB.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py#L146-L175` (`PINKY_HYDE_SCHEMA`, `_load_hyde_synthesis_prompt`)
+  * `HomeLabAI/src/logic/cognitive_hub.py#L2490-L2580` (`resolve_hyde_vector`)
+  * `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py#L200-L240` (`test_stage7_conversational_hyde_and_upvote`)
+* **Implementation Contract (The What):**
+  1. Define `PINKY_HYDE_SCHEMA` with `spoken_take` (string), `search_terms` (string), and `upvote` (boolean).
+  2. In `resolve_hyde_vector`, dispatch to `local-unified-base` with `use_lora=False` and `temperature=0.2` to ensure sub-second guided schema generation without LoRA grammar conflicts.
+  3. Buffer Pinky's 0.45s response and broadcast clean `spoken_take` to Left Console (`channel="voice"`, `console="Left"`, `source="Pinky (Triage)"`).
+  4. Pass `search_terms` directly to ChromaDB and apply sovereign upvote (`current_interest = min(1.0, current_interest + 0.20)`).
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k test_stage7 -v
+  curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "Can you look up my experience on psys? I think the project was Aurora. I want to refresh my memory on what I did."}'
   ```
+
+#### Story 103.25: [BACKLOG] Polymorphic Nightly LoRA Training for Pinky HyDE Schema
+* **Status:** ⏳ BACKLOGGED (Per Human Directive)
+* **DNA / Feature Tag:** `[FEAT-174]` (Multi-LoRA Architecture), `[FEAT-437]` (Conversational HyDE), `[BKM-039]` (RAG Taxonomy Separation)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):** Train a dual-purpose adapter during Nightly Forge that embeds Pinky's authentic cartoon persona ("Narf!", idiosyncratic cadence) directly into the `spoken_take` field without triggering guided decoding whitespace collapse.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/forge/build_lora_datasets.py#L77` (`cli_voice_training.jsonl`)
+  * `HomeLabAI/src/infra/nightly_lora_training.py`
+* **Implementation Contract (The What):**
+  1. Synthesize 200–300 polymorphic training examples pairing character spoken takes with dense search vectors and boolean upvotes matching `PINKY_HYDE_SCHEMA`.
+  2. Augment `cli_voice_training.jsonl` so LoRA weights accept JSON delimiters and structural keys alongside dialogue tokens.
+  3. Validate guided decoding execution on `cli_voice_v1` post-training.
 
 ---
 
