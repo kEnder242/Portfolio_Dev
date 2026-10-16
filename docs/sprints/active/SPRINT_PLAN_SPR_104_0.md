@@ -443,6 +443,70 @@ Unit test mocks had masked this defect because `_last_thought_duration` was alwa
 | **Story 104.5** | Sequential Upvote Causality & Adaptive Critic Yield | `[SWARM:CLOUD]` | `✅ COMPLETED` | `fe27189` (`HomeLabAI`) |
 | **Story 104.6** | Multi-Stage Replay Pipeline 118-Test Suite Pass | `[SWARM:LOCAL]` | `✅ COMPLETED` | `fe27189` (`HomeLabAI`) |
 | **Story 104.7** | Physical Silicon Litmus Certification on Port 8765 | `[AGY:PRIMARY]` | `✅ COMPLETED` | `10f919b` (`HomeLabAI`) |
-| **Story 104.8** | Final Retrospective & DNA Synchronization | `[AGY:PRIMARY]` | `✅ COMPLETED` | HEAD |
+| **Story 104.8** | Final Retrospective & DNA Synchronization | `[AGY:PRIMARY]` | `✅ COMPLETED` | `bb4feb8` (`Portfolio_Dev`) |
+
+---
+
+## 🌊 Phase 4: Total Abolition of `lead_node` & Pure Waterfall Execution (`FEAT-658` / `FEAT-233`)
+
+### 1. Forensic Discovery & Root Cause (Pillar 1)
+Git archaeology on `HomeLabAI` traced the `lead_node` branching apparatus to commit `f9ec302` (`FEAT-418`, July 21, 2026). Written before the multi-stage Council existed, `f9ec302` created three divergent loops:
+1. `lead_node == "brain"`: Escalated to `_run_brain_leg`.
+2. `lead_node == "both"`: Pinky spoke, then called `_run_brain_leg`.
+3. `lead_node == "pinky"`: Ran an isolated Pinky-only loop with background RAG pre-fetch.
+
+When Sprints 96–103 introduced `_run_two_mice_handover`, Deep Thought, and Brain Information Gatekeeper, they were added exclusively inside `if lead_node == "brain":`. As a result, any turn where triage evaluated `addressed_to: PINKY` remained permanently trapped in the July 2026 isolated loop, completely bypassing the Council and Deep Thought!
+
+### 2. Architecture: Pure Waterfall Execution
+`lead_node` is completely abolished. `addressed_to` is passed strictly as conversational metadata to persona prompts, **never as a router switch**.
+100% of turns pass into the single Waterfall (`_run_two_mice_handover`). Deliberation depth is governed purely by continuous fluid fuel (`FEAT-233` / `FEAT-234`):
+* **Low Fuel ($< 0.25$)**: Pinky opening quip $\to$ Brain dry quip $\to$ Deep Thought dormant $\to$ Critic yields.
+* **Medium Fuel ($0.25 - 0.50$)**: Pinky take $\to$ Brain curation $\to$ Deep Thought dormant $\to$ Pinky verdict.
+* **High Fuel ($> 0.50$)**: Pinky take $\to$ ChromaDB $\to$ Brain gatekeeper $\to$ Deep Thought synthesis $\to$ Pinky verdict.
+
+Lines 1890–2055 of `cognitive_hub.py` collapse into a single 15-line block.
+
+### 3. Phase 4 Story Specifications
+
+#### Story 104.9: Pre-Execution Housekeeping & `FEAT-658` Registration
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `PENDING`
+* **Why:** Register `[FEAT-658]` (Pure Waterfall Execution & Total Abolition of `lead_node`) in `Portfolio_Dev/FeatureTracker.md`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `grep -q "FEAT-658" /home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 3 (Code Anchors):** Spec defines complete eradication of `lead_node` and reliance on continuous fuel.
+  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-233]`, `[FEAT-234]`.
+
+#### Story 104.10: Excision of `lead_node` Router Block in `cognitive_hub.py`
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Status:** `PENDING`
+* **Why:** Eradicate lines 1890–2055 in `HomeLabAI/src/logic/cognitive_hub.py`. Delete `lead_node = ...`, `if lead_node == "brain":`, `elif lead_node == "both":`, and `else: # pinky leads`. Wire 100% of turns directly into `_run_two_mice_handover`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L1890-L2055`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v`.
+  * **Anchor 3 (Code Anchors):** Direct invocation of `_run_two_mice_handover` with zero `lead_node` conditionals.
+  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-233]`.
+
+#### Story 104.11: Replay Pipeline Assertion for Direct-Addressed Queries
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `PENDING`
+* **Why:** Add test asserting that queries explicitly addressed to Pinky (`addressed_to: "PINKY"`) or Brain (`addressed_to: "BRAIN"`) enter the Council handover and do not branch into isolated loops.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage11_addressed_waterfall_contract" -v`.
+  * **Anchor 3 (Code Anchors):** Test fixture verifying `addressed_to: PINKY` enters `_run_two_mice_handover`.
+  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-645]`.
+
+#### Story 104.12: Live Silicon Certification of Addressed Waterfall Turns
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `PENDING`
+* **Why:** Hot-reload physical daemon on port 8765 and verify that `"hey pinky, what do you think about Aurora?"` executes the full Council with Deep Thought and ChromaDB.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** Physical daemon `:8765`.
+  * **Anchor 2 (Verification Command):** `curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "hey pinky, what do you think about Aurora?", "source": "SYNTHETIC_PROBE"}'`.
+  * **Anchor 3 (Code Anchors):** Stage ledger and telemetry verify full multi-node council completion.
+  * **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-525]`.
+
 
 
