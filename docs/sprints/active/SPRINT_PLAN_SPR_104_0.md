@@ -676,5 +676,12 @@ Across 5 core phases and 2 post-certification operational stories (104.13–104.
 * **Lab Attendant**: Physical daemon running `main` HEAD (`state: OPERATIONAL`, `boot_commit: fdc0d5a`, `dirty: false`).
 * **Sprint Status**: **`SPRINT 104.0 OFFICIALLY COMPLETE`**.
 
+---
 
-
+### 7.5 Post-Sprint Operational Plan: Pacing Range & Continuous Budget Calibration (Story 104.19 / FEAT-523 / BKM-015)
+* **Context**: A post-completion conversational probe identified that hardcoded token floors (`max(250, ...)`, `max(500, ...)`, `+ 200`) were injected during early Sprint 104 commits (`cb131e7`), bypassing `config/infrastructure.json`'s continuous interest multiplier (`token_multiplier: 150` -> `50/100`). This defeated natural fuel exhaustion on low-interest turns and bloated Brain's budget to 250 tokens on zero context.
+* **Core Realignment Mandates**:
+  1. **Prompt-Driven Pacing (`calculate_pacing_range`)**: Use `calculate_pacing_range(node, interest)` exclusively as the fuzzy target range injected into system prompts (`[PACING]: Target ~low to high tokens.`) to guide natural cadence without abrupt cropping.
+  2. **Physical Token Ceiling (`max_tokens`)**: Compute physical safety budgets dynamically via `config/infrastructure.json`'s multiplier (`int(interest * multiplier)`) or relaxed `high` ceiling, eradicating artificial hardcoded floors (`max(250, ...)`, `max(500, ...)`, and `+ 200` padding).
+  3. **Actor Dormancy Restoration**: Remove the inverted low-interest yield from Pinky (`step_pinky_voice`). Pinky *always* speaks her conversational take. Brain's gatekeeper activates with tight continuous pacing (~40 tokens) or remains dormant on zero-context banter unless explicitly addressed.
+  4. **The Primer Protocol & Persona Preservation**: Add Brain escape route for Pinky silence in Stage 1, retain The Brain's rigorous cynical identity, enforce Pinky context fencing (*"Stay relevant to the primer and the actors before you"*), and institutionalize `"PRIMER"` as an enabled declarative vibe.
