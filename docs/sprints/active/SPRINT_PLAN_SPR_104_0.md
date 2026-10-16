@@ -614,5 +614,15 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 3. **Live Silicon Transition**: Hot-reloaded `lab-attendant.service` matching `main` HEAD (`0bd1ec0`, `state: OPERATIONAL`, `dirty: false`). `✅ COMPLETED`
 4. **Sprint Closure**: Phase 5 certified 100% complete. `✅ COMPLETED`
 
+---
+
+### 5. Sprint Addendum: Safe Revival of `CASUAL` Vibe (`FEAT-657` / `FEAT-659`)
+- **Problem Statement**: After Phase 5 certification, operator observed that simple greetings (`"hi"`) were triaged as `"vibe": "TECHNICAL"`, `"domain": "acme_lab_history"`. Historical excavation revealed that Sprint 100 (`FEAT-640`) disabled `CASUAL` in `config/triage_policy.json` to prevent the legacy "Casual Pinky" execution bypass and RAG amnesia. With `CASUAL` disabled in the prompt palette, the LLM classifier was forced to guess from the remaining technical/historical vibes.
+- **Root Cause Resolution**: Because Sprint 104 completely abolished execution bifurcation and unified 100% of turns into the Council waterfall governed purely by fluid `interest` and `target_domains: []`, the historical landmine is completely defused.
+- **Execution**:
+  - Re-enabled `CASUAL` (`"enabled": true`) in `HomeLabAI/config/triage_policy.json` (commit `050e3f5`).
+  - Hot-reloaded physical resident nodes on port 8765 (`boot_commit: 050e3f5`, vLLM running on port 8088).
+  - Verified live silicon behavior: greeting probe (`"hi"`) resolves cleanly without triggering unwanted technical collection searches.
+
 
 

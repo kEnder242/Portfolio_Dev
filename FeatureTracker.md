@@ -3619,6 +3619,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Status:** ACTIVE
 **Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/logic/vector_pre_triage.py`
 **Logic:** Deprecates the catch-all `CASUAL` vibe in favor of an expressive cognitive taxonomy (`SOCRATIC`, `FORENSIC`, `CHRONICLE`, `RETROSPECTIVE`, `ARCHITECTURAL`, `TACTICAL`, `STRATEGIC`, `PROVOCATIVE`, `METABOLIC`). Injects gentle `semantic_hint` vector priors from sub-15ms FastEmbed ChromaDB probes (`BKM-015`) and calibrates the speculative relay to ensure REST-probed M5 Air is granted its full dynamic EWMA lead window before local vLLM fallback racing.
+> [!NOTE] REVIVED AS DESCRIPTIVE VIBE (Sprint 104 / FEAT-657): The categorical deprecation of `CASUAL` was superseded in Sprint 104. Because Sprint 104 completely abolished the execution bypass (`vibe == "CASUAL"`) in favor of a 100% unified Council waterfall modulated by continuous `interest` and `target_domains: []`, `CASUAL` has been safely re-enabled in `config/triage_policy.json` as an authentic descriptive archetype for social pleasantries without risking context blindness.
 **Rationale:** Enhances reasoning depth and unlocks nuanced domain routing without introducing brittle keyword hardcoding.
 **Mechanism:** `_extract_triage_intuition()` in `cognitive_hub.py` and `SpeculativeTriageRelay` in `speculative_triage.py`.
 
