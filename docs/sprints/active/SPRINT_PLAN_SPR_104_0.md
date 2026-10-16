@@ -624,5 +624,19 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   - Hot-reloaded physical resident nodes on port 8765 (`boot_commit: 050e3f5`, vLLM running on port 8088).
   - Verified live silicon behavior: greeting probe (`"hi"`) resolves cleanly without triggering unwanted technical collection searches.
 
+---
+
+### 6. Story 104.18: Self-Healing Ignition Liveness Guard (`FEAT-125` / `FEAT-265.8` / `BKM-044`)
+* **Problem**: In `HomeLabAI/src/v5/ignition/manager.py`, the in-memory state check `if self.status.state in ["WAKING", "OPERATIONAL"]: return True` preceded the port 8088 physical liveness probe. If vLLM died or was killed while Foyer remained `OPERATIONAL`, `/wake` calls silently returned `True` without spawning `start_vllm.sh` (Zombie Operational State).
+* **Grounded Regression Analysis**:
+  - The check was originally added as a concurrency debounce to prevent multiple simultaneous `/wake` calls from spawning redundant processes.
+  - The `FEAT-125` warm-start probe (`http://localhost:8088/v1/models`) was subsequently added, but placed after the state check, causing it to be bypassed whenever `state == "OPERATIONAL"`.
+  - Fix: Decouple `WAKING` (in-flight boot debounce) from `OPERATIONAL`. If `state == "WAKING"`, return `True` to prevent double-spawning. If port 8088 is alive, return `True` (warm start). If port 8088 is dead and `state == "OPERATIONAL"`, detect zombie state: log warning, reset `state = "COLD"`, and proceed through normal mutex acquisition and ignition.
+* **4-Anchor Specification**:
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/v5/ignition/manager.py#L194-L216`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_ignition_manager.py -v`.
+  * **Anchor 3 (Code Anchors):** Port probe check before returning `True` on `OPERATIONAL`; preserve `if self.status.state == "WAKING": return True`.
+  * **Anchor 4 (DNA Links):** `[FEAT-125]`, `[FEAT-265.8]`, `[BKM-044]`.
+
 
 
