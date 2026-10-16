@@ -251,5 +251,184 @@ Per `BKM-077`, the following discrete numbered lanes will structure Sprint 104:
 
 ---
 
-> [!NOTE]
-> **Story Authoring Gate**: Per user instruction, individual task/story authoring is deferred. The narrative above stands as the verified design foundation for Sprint 104.
+## 🔍 Mandatory 5-Sprint Forensic Lookback (`BKM-082`)
+
+| Sprint | Focus & Theme | Direct Lessons & Code Anchors for Sprint 104 |
+| :--- | :--- | :--- |
+| **SPR-99** | Ambient Delegation Telemetry & Zero-Mock Probe | Proved that mock-heavy tests allow fatal runtime regressions. Final task certification requires live verification against physical running daemons matching Git HEAD. |
+| **SPR-100** | Sovereign Swarm Tri-Loop & Phase 4 Defeaturing | Excised legacy dinosaur `_distill_strategic_brief`, but accidentally muted Deep Thought and left `self.current_interest = min(self.current_interest, 0.1)` behind when tests failed. Lesson: never leave categorical bypasses in place when cleaning up routing. |
+| **SPR-101** | Telemetry Hardening & Multi-Turn Context Isolation | Fixed HyDE multi-turn context poisoning by passing `ContextScope.TURN`. Proved single-turn boundary is essential for RAG accuracy. |
+| **SPR-102** | Continuous Interest Multiplier & Brain Sideband Consensus | Configured `interest_pacing` in `infrastructure.json`. Discovered that binary casual clamps prevented the multiplier from functioning. |
+| **SPR-103** | Intercom Debug, Multi-Stage Replay Pipeline (`FEAT-645`), Prompt-Driven Pacing (`BKM-015`) | Excised casual interest clamp, replaced `is_casual` with `search_required`, proved Pinky's dual voice/vector schema (`PINKY_HYDE_SCHEMA`), and eliminated hardcoded clamps in 4 nodes. Revealed that `lead_node = "both"` was still fracturing the pipeline. |
+
+---
+
+## 📋 Grounding Gap Declaration (`BKM-082` §2.3)
+
+* **Gap 1: Missing HyDE Pacing**: `resolve_hyde_vector` currently lacks prompt-driven pacing (`BKM-015`), leaving Pinky's opening take with static `"1 to 2 sentences"` and fixed `max_tokens=250`.
+* **Gap 2: The Casual Router Ghost**: `cognitive_hub.py:1898` still switches on `vibe == "CASUAL"` to route to `lead_node = "both"`, bypassing the entire council for greetings and breaking RAG on informal queries.
+* **Gap 3: Redundant Greeting Critic**: In the unified flow, simple greetings must not trigger a redundant, repetitive second spoken turn from Pinky. An adaptive pass is required for Stage 6 when interest is low.
+
+---
+
+## 📦 Phased Implementation Architecture
+
+```mermaid
+flowchart TD
+    subgraph Phase0["Phase 0: Grounding & Baseline Contract Assertion"]
+        P0_0["Story 104.0: Pre-Execution Housekeeping (FeatureTracker & DIAGNOSTIC_MAP)"]
+        P0_1["Story 104.1: Extend FEAT-645 Replay Pipeline with Unified Council Contract"]
+    end
+
+    subgraph Phase1["Phase 1: Excision of the Casual Bifurcation"]
+        P1_1["Story 104.2: Excise lead_node == 'both' and Route 100% of Turns to Handover"]
+        P1_2["Story 104.3: Decouple ChromaDB RAG from Vibe and Wire Domain/Fact Dispatch"]
+    end
+
+    subgraph Phase2["Phase 2: Continuous Interest Pacing & Alarm Pull Causality"]
+        P2_1["Story 104.4: Wire format_pacing_line into PINKY_HYDE_SCHEMA (BKM-015)"]
+        P2_2["Story 104.5: Enforce Sequential Upvote Causality & Adaptive Stage 6 Critic Pass"]
+    end
+
+    subgraph Phase3["Phase 3: Live Silicon Certification & Telemetry Codification"]
+        P3_1["Story 104.6: Offline Multi-Stage Replay Pipeline Certification (FEAT-645)"]
+        P3_2["Story 104.7: Live Silicon Litmus Certification on Physical Nodes (BKM-024)"]
+        P3_3["Story 104.8: Final Retrospective & DNA Synchronization"]
+    end
+
+    Phase0 --> Phase1 --> Phase2 --> Phase3
+```
+
+---
+
+## 📋 Phase 0: Grounding & Baseline Contract Assertion
+
+### Story 104.0: Phase 0 Pre-Execution Housekeeping (`BKM-020 §6` / `BKM-082`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `PENDING`
+* **Why:** In accordance with `BKM-020 §6`, pre-register `[FEAT-657]` (Unified Council of Hemispheres) in `Portfolio_Dev/FeatureTracker.md` and annotate the deprecation of `FEAT-542` (Casual Brevity Fast Path).
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/FeatureTracker.md`, `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md`.
+  * **Anchor 2 (Verification Command):** `grep -q "FEAT-657" /home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```markdown
+    ## [FEAT-657] Unified Council of Hemispheres (Zero-Bifurcation Pipeline)
+    **Sprint:** SPR-104.0
+    **Status:** ACTIVE
+    **Logic:** Unifies 100% of cognitive hub turns into a single sequential Council flow (Triage -> Pinky Opening Voice & Search Terms -> Domain-Gated ChromaDB RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Spoken Verdict). Excises `lead_node == "both"`. Modulates token budget and node dormancy purely via continuous scalar interest (`FEAT-523`).
+    **Rationale:** Eradicates the "Island of Green Illusion" and "Aurora Miss" where casual vibe bypassed RAG and severed Deep Thought.
+    **Mechanism:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
+    ```
+  * **Anchor 4 (DNA Links):** `[FEAT-657]`, `[FEAT-523]`, `[BKM-082]`.
+
+### Story 104.1: Extend FEAT-645 Replay Pipeline with Unified Council Contract
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `PENDING`
+* **Why:** Establish the red baseline test. Update `test_multi_stage_replay_pipeline.py` to assert that a casual greeting (`"hi"`) routes through the staged handover and asserts that Deep Thought stays dormant while Pinky and Brain emit single quips.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_replay_greeting_unified_council" -v`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):** Add test fixture `test_replay_greeting_unified_council` asserting `lead_node == "brain"` and `_run_two_mice_handover` execution for greeting queries.
+  * **Anchor 4 (DNA Links):** `[FEAT-645]`, `[FEAT-657]`.
+
+---
+
+## 📋 Phase 1: Excision of the Casual Bifurcation
+
+### Story 104.2: Excise `lead_node == "both"` & Route 100% of Turns to Staged Handover
+* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron surgery, reviewed by `[AGY:PRIMARY]`)
+* **Status:** `PENDING`
+* **Why:** Eradicate the dual-path architecture by deleting line 1898 (`if vibe == "CASUAL": lead_node = "both"`) and eliminating the separate `lead_node == "both"` branch (lines 1959-1980) in `cognitive_hub.py`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L1890-L1985`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -v`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```python
+    # In cognitive_hub.py:
+    # REPLACE:
+    # if vibe == "CASUAL":
+    #     lead_node = "both"
+    # else:
+    #     lead_node = "brain"
+    # WITH:
+    lead_node = "brain"  # [FEAT-657] 100% of unaddressed/system turns enter the Council
+    ```
+  * **Anchor 4 (DNA Links):** `[FEAT-657]`, `[FEAT-489]`, `[FEAT-418]`.
+
+### Story 104.3: Decouple ChromaDB RAG from Vibe & Wire Pure Domain/Fact Dispatch
+* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron surgery, reviewed by `[AGY:PRIMARY]`)
+* **Status:** `PENDING`
+* **Why:** Ensure vector retrieval triggers whenever `search_terms` contains valid keywords and `target_domains` has collections, regardless of whether Triage scored the turn as casual or friendly.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L2490-L2515`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py -v`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    Remove any remaining checks against `vibe == "CASUAL"` or `domain == "unknown"` that abort retrieval when valid keywords or target collections exist.
+  * **Anchor 4 (DNA Links):** `[FEAT-437]`, `[FEAT-645]`, `[FEAT-657]`.
+
+---
+
+## 📋 Phase 2: Continuous Interest Pacing & Alarm Pull Causality
+
+### Story 104.4: Wire `format_pacing_line` into `PINKY_HYDE_SCHEMA` (`BKM-015`)
+* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron surgery, reviewed by `[AGY:PRIMARY]`)
+* **Status:** `PENDING`
+* **Why:** Eliminate the static `"1 to 2 sentences"` cap and fixed 250-token ceiling in Pinky's opening HyDE turn. Inject `[PACING]: Target ~X to Y tokens.` dynamically scaled to pre-boosted `initial_interest`.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L2525-L2540`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_feat437_resolve_hyde_vector.py -k "test_pinky_hyde_pacing" -v`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):**
+    ```python
+    pinky_pacing = format_pacing_line("pinky", interest)
+    # Pass pinky_pacing into behavioral_guidance of _process_node_stream
+    ```
+  * **Anchor 4 (DNA Links):** `[BKM-015]`, `[FEAT-523]`, `[FEAT-657]`.
+
+### Story 104.5: Enforce Sequential Upvote Causality & Adaptive Stage 6 Critic Pass
+* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron surgery, reviewed by `[AGY:PRIMARY]`)
+* **Status:** `PENDING`
+* **Why:** Address Oracle Findings 2 & 3:
+  1. Pinky's `upvote: true` must boost `self.current_interest` before Brain and Deep Thought compute their token budgets.
+  2. For low-interest turns ($< 0.25$), Pinky's Stage 6 Critic pass must adaptively yield or emit a single micro-quip to avoid sounding redundant after her Stage 2 opening take.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L2250-L2300`, `HomeLabAI/src/logic/cognitive_hub.py#L2950-L3080`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -v`.
+  * **Anchor 3 (Verbatim Code Anchors & Injection Specs):** Apply upvote before `_run_two_mice_handover`; add `if interest < 0.25` condition in `step_grounding_critic` to yield or micro-quip.
+  * **Anchor 4 (DNA Links):** `[FEAT-238]`, `[FEAT-406/470]`, `[FEAT-657]`.
+
+---
+
+## 📋 Phase 3: Live Silicon Certification & Telemetry Codification
+
+### Story 104.6: Offline Multi-Stage Replay Pipeline Certification (`FEAT-645`)
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Status:** `PENDING`
+* **Why:** Run the comprehensive offline test suite across all 5 stages of the unified pipeline without remote network dependencies.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v`.
+  * **Anchor 3 (Verbatim Code Anchors):** 100% pass across greeting, technical, and forensic replay fixtures.
+  * **Anchor 4 (DNA Links):** `[FEAT-645]`, `[BKM-024]`.
+
+### Story 104.7: Live Silicon Litmus Certification on Physical Nodes (`BKM-024`)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `PENDING`
+* **Why:** Certify against the live running `lab-attendant.service` on port 8765, validating:
+  1. Litmus A (Greeting): `"hi"` $\to$ latency $< 2.5\text{s}$, single Pinky opening quip, Deep Thought dormant, 0 RAG noise.
+  2. Litmus B (Informal Technical): `"remember that Aurora project?"` $\to$ hits ChromaDB 2021 platform notes, Brain curates, Deep Thought synthesizes, Pinky concludes.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** Live runtime `:8765`.
+  * **Anchor 2 (Verification Command):** `curl -s -X POST http://127.0.0.1:8765/api/turn -H "Content-Type: application/json" -d '{"query": "hi"}'`.
+  * **Anchor 3 (Verbatim Code Anchors):** Telemetry JSON verifies expected node activations and delta-T benchmarks.
+  * **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-525]`.
+
+### Story 104.8: Final Retrospective & DNA Synchronization
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Status:** `PENDING`
+* **Why:** Commit the final retrospective, update `FeatureTracker.md` with verified `[FEAT-657]`, and sync ChromaDB DNA.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_104_0.md`, `Portfolio_Dev/FeatureTracker.md`.
+  * **Anchor 2 (Verification Command):** `git -C /home/jallred/Dev_Lab/Portfolio_Dev status -s`.
+  * **Anchor 3 (Verbatim Code Anchors):** Final Sprint 104 Executive Retrospective table.
+  * **Anchor 4 (DNA Links):** `[BKM-020]`, `[BKM-082]`.
+
