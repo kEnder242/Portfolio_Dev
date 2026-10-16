@@ -3837,3 +3837,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
 **Logic:** Unifies 100% of cognitive hub turns into a single sequential Council flow (Triage -> Pinky Opening Voice & Search Terms -> Domain-Gated ChromaDB RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Spoken Verdict). Excises `lead_node == "both"` and eliminates the categorical `vibe == "CASUAL"` execution bypass. Modulates token budget and node dormancy purely via continuous scalar interest (`FEAT-523`) with prompt-driven pacing (`BKM-015`).
 **Rationale:** Eradicates the "Island of Green Illusion" and "Aurora Miss" where casual vibe bypassed RAG and severed Deep Thought.
+
+## [FEAT-658] Pure Waterfall Execution & Total Abolition of lead_node
+**Sprint:** SPR-104.0 (Phase 4)
+**Status:** ACTIVE
+**Tags:** `#pure_waterfall`, `#abolish_lead_node`, `#single_interest_loop`, `[FEAT-233]`, `[FEAT-234]`, `[FEAT-418]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Completely excises the `lead_node` router block (lines 1890-2055) and the legacy July 2026 bifurcated branches (`elif lead_node == "both"` and `else: # pinky leads`). Treats `addressed_to` strictly as conversational metadata for persona guidance, never an execution switch. Every turn enters the staged handover Waterfall directly; execution cascades down the stack (Pinky HyDE -> RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) and naturally peters out based on continuous fluid fuel (interest).
+**Rationale:** Eliminates the architectural flaw where addressing a turn to Pinky stranded the query in an isolated, amnesic loop that completely bypassed the Council of Hemispheres and Deep Thought.
+
