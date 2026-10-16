@@ -843,7 +843,26 @@ Following the successful certification of Phase 6, live forensic analysis of tur
 * **Implementation Contract (The What):**
   1. Synthesize 200–300 polymorphic training examples pairing character spoken takes with dense search vectors and boolean upvotes matching `PINKY_HYDE_SCHEMA`.
   2. Augment `cli_voice_training.jsonl` so LoRA weights accept JSON delimiters and structural keys alongside dialogue tokens.
-  3. Validate guided decoding execution on `cli_voice_v1` post-training.
+#### Story 103.26: Prompt-Driven Pacing & Decoupled Interest Governance (Eliminating BKM-015 Violations)
+* **Status:** ✅ COMPLETED (`cb131e7`)
+* **DNA / Feature Tag:** `[BKM-015]` (Prompt-Driven Pacing), `[FEAT-523]` (Continuous Interest Multiplier), `[FEAT-489]` (Tri-Node Handover)
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):** Eliminate silent Python-side token clamping and arbitrary magic constants (e.g. `< 12 words`, `max_tokens=32`) that cause models to hit mid-sentence execution cliffs. Replace raw internal variable leakage (`Current interest: {interest}`) in prompts with a clean, single-line `[PACING]: Target ~X to Y tokens.` benchmark calculated from internal interest, coupled with generous completion headroom.
+* **Symbol Anchors & Touchpoints (The Where):**
+  * `HomeLabAI/src/logic/cognitive_hub.py` (`calculate_pacing_range`, `format_pacing_line`, `build_two_mice_stage_prompt`, `step_brain_gatekeeper`, `step_deep_thought`, `step_pinky_voice`, `evaluate_grounding`, `_run_brain_leg`, `_process_node_stream`)
+  * `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
+  * `HomeLabAI/src/tests/test_two_mice_handover.py`
+* **Implementation Contract (The What):**
+  1. Define `calculate_pacing_range(node_name, interest)` and `format_pacing_line(node_name, interest)` in `cognitive_hub.py` returning `[PACING]: Target ~X to Y tokens.`.
+  2. Decouple raw interest floats from prompts: Replace Pillar 2 in `build_two_mice_stage_prompt` with the clean pacing line.
+  3. Replace the hardcoded `< 12 words` casual prompt with dynamic pacing for Pinky, and add matching pacing guidance to Brain in `_run_brain_leg`.
+  4. Inject pacing lines into `step_deep_thought` and `evaluate_grounding` (Pinky Coherence Critic).
+  5. Elevate `min_token_floor` in `_process_node_stream` to 200 tokens to ensure generous physical generation headroom so models never hit a Python-clamped truncation cliff.
+* **Verification & Test Command (The How):**
+  ```bash
+  PYTHONPATH=/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v
+  curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "hi"}'
+  ```
 
 ---
 
