@@ -512,22 +512,23 @@ With Phase 4 certified on live silicon, `lead_node` is completely extinct across
 
 ---
 
-## 🧬 Phase 5: Zero-Domain Architecture & Semantic DNA Collection Resolution (`FEAT-659`)
+## 🧬 Phase 5: Multi-Domain Evidential Resonance & Fluid DNA Scope Resolution (`FEAT-659`)
 
-### 1. Forensic Discovery & Root Cause Analysis (The Disconnect)
+### 1. Forensic Discovery & Root Cause Analysis (The Disconnect & Heritage)
 An architectural audit of the DNA retrieval pipeline revealed why the mice could not converse with the rich DNA context accessible to AGY:
 1. **The Dropped Parameter**: In Sprint 96 (`FEAT-540`), Triage was upgraded to output `target_domains: list[str]` (`["bkm"]`, `["feat"]`, `["wisdom"]`, or `[]`). However, in `cognitive_hub.py` (`_fetch_rag_context`), `target_domains` was only checked as a boolean gate (`len(target_domains) > 0`). When calling `archive_node.call_tool("get_context", ...)`, `target_domains` was dropped; only scalar `vibe` and `domain` strings were forwarded.
 2. **The Guesswork Routers**: `archive_node.py` was left blind to Triage's intent. It fell back to `resolve_collection_scope(vibe, domain)` in `traversal_dispatcher.py` and `get_collection_priorities(vibe, domain)` in `lab_dna_router.py`, which attempted to re-guess collections from coarse strings.
 3. **The Lingering Casual Trap**: `traversal_dispatcher.py` contained a hardcoded rule: `if vibe in ("CASUAL", "SUPERVISORY", "META"): return ["short_term_stream"]`. This trapped informal technical turns in `short_term_stream` even after Phase 1-4 unlocked the waterfall.
 4. **DNA Collections Stranded**: ChromaDB port 8001 holds 22 collections (`behavioral_dna`, `feature_dna`, `wisdom_dna`, `sprint_dna`, `philosophy_dna`), but `archive_node` was never instructed to query them because domain mapping happened at the wrong level and was disconnected from Triage.
+5. **The Sprint 61/64 Heritage**: Sprints 61 and 64 brainstormed and built the original vibe-to-collection mapping (`HISTORICAL` prioritizing career/archives, `TECHNICAL` prioritizing silicon/protocols, `META` prioritizing live ops). This heritage must be preserved and combined with explicit `target_domains`, not thrown away.
 
-### 2. Architecture: Zero-Domain & Semantic Collection Mapping
-1. **Zero-Domain Invariant**:
-   - When a turn has zero evidential mass (e.g. `"hello"`, `"hi"`), Triage sets `target_domains: []`.
-   - `target_domains == []` represents the exact physical definition of a pure casual turn.
-   - Downstream retrieval performs an immediate 0ms bypass: zero ChromaDB network queries, zero document noise in prompts, and fuel naturally exhausts at Pinky's greeting.
-2. **Direct Semantic Resolution**:
-   - `resolve_collection_scope` is consolidated and refactored to accept `target_domains: list[str]`.
+### 2. Architecture: Positive Domain Density Fuel & Multi-Domain DNA Resolution
+1. **Positive Evidential Fuel Resonance**:
+   - Instead of a negative zero-domain abort gate, queries start at a resting baseline interest ($0.05$ for greetings).
+   - Each recognized factual domain hit injects continuous evidential fuel (+0.20 for single domains, compounding for multi-domain cross-cutting inquiries).
+   - Queries with 0 domain hits stay at resting fuel, naturally petering out after Pinky's greeting without requiring negative abort clamps.
+2. **Direct Semantic & Vibe-Prioritized Resolution**:
+   - `resolve_collection_scope` is consolidated to accept both `target_domains: list[str]` and `vibe: str`.
    - Semantic tokens emitted by Triage map directly to ChromaDB collections:
      - `"bkm"` / `"protocol"` $\to$ `behavioral_dna`
      - `"feat"` / `"feature"` $\to$ `feature_dna`
@@ -535,6 +536,8 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
      - `"sprint"` / `"history"` $\to$ `sprint_dna`
      - `"infra"` / `"lab"` $\to$ `lab_journal`, `lab_infrastructure`
      - `"career"` $\to$ `career_ledger`
+   - If multiple domains are hit, `archive_node.py` queries them concurrently via `_query_multi_collections` (`asyncio.gather`).
+   - `vibe` provides the secondary priority ranking across the candidate sets per Sprint 61/64 design.
    - `cognitive_hub.py` passes `target_domains` directly into `archive_node.get_context(collections=resolved_collections)`.
 
 ### 3. Phase 5 Story Specifications
@@ -542,11 +545,11 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 #### Story 104.13: Consolidation of `resolve_collection_scope` & DNA Mapping
 * **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron architecture, reviewed by `[AGY:PRIMARY]`)
 * **Status:** `PENDING`
-* **Why:** Consolidate `traversal_dispatcher.py` and `lab_dna_router.py`. Accept `target_domains: list[str]` as primary selector. Remove `vibe in ("CASUAL", ...)` short-circuit trap. Map semantic tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) to concrete collections. Return `[]` for Zero Domain.
+* **Why:** Consolidate `traversal_dispatcher.py` and `lab_dna_router.py`. Accept `target_domains: list[str]` as primary selector. Remove `vibe in ("CASUAL", ...)` short-circuit trap. Map semantic tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) to concrete collections. Return `[]` for zero domain hits.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/traversal_dispatcher.py`, `HomeLabAI/src/nodes/lab_dna_router.py`.
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_lab_dna_router.py -v`.
-  * **Anchor 3 (Code Anchors):** `def resolve_collection_scope(target_domains: list[str] | None = None, ...)`
+  * **Anchor 3 (Code Anchors):** `def resolve_collection_scope(target_domains: list[str] | None = None, vibe: str = "TECHNICAL", ...)`
   * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-540]`, `[BKM-015]`.
 
 #### Story 104.14: Forward `target_domains` from Cognitive Hub to Archive Node
@@ -559,26 +562,37 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   * **Anchor 3 (Code Anchors):** Forward `collections` in `archive.call_tool("get_context", ...)`.
   * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-467]`.
 
-#### Story 104.15: Replay Pipeline Zero-Domain & Multi-DNA Retrieval Contract Assertion
+#### Story 104.15: Replay Pipeline Multi-Domain Retrieval Contract Assertion
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Status:** `PENDING`
 * **Why:** Add assertions verifying that:
   1. `target_domains: []` produces 0 collections and returns empty context immediately.
   2. `target_domains: ["bkm"]` targets `behavioral_dna`.
-  3. `target_domains: ["sprint"]` targets `sprint_dna`.
+  3. `target_domains: ["bkm", "feature"]` targets multiple collections concurrently.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage12_zero_domain_and_dna_resolution_contract" -v`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage12_multi_domain_dna_resolution_contract" -v`.
   * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-645]`.
 
 #### Story 104.16: Live Silicon Certification on Port 8765 (`BKM-024`)
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Status:** `PENDING`
 * **Why:** Certify on live physical daemon that:
-  1. Casual greeting (`"hi"`) evaluates to Zero Domain with 0ms RAG bypass.
+  1. Casual greeting (`"hi"`) operates at resting fuel with zero ChromaDB lookups.
   2. Protocol inquiry (`"what is BKM-015?"`) pulls `behavioral_dna` and grounds Brain and Pinky.
 * **4-Anchor Specification:**
   * **Anchor 1 (Target Files):** Physical daemon `:8765`.
   * **Anchor 2 (Verification Command):** `curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "what is BKM-015?", "source": "SYNTHETIC_PROBE"}'`.
   * **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-659]`.
+
+#### Story 104.17: Preserve & Wire Vibe-to-Domain Priority in `resolve_collection_scope`
+* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Status:** `PENDING`
+* **Why:** Complement `FEAT-659` by preserving Sprint 61/64 heritage. When multiple candidate collections are resolved or when `target_domains` is generic, use `vibe` (`HISTORICAL`, `TECHNICAL`, `META`) to order and prioritize the collection search sequence.
+* **4-Anchor Specification:**
+  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/traversal_dispatcher.py`.
+  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_lab_dna_router.py -k "test_vibe_collection_priority" -v`.
+  * **Anchor 3 (Code Anchors):** Ordered priority ranking combining `target_domains` and `vibe`.
+  * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-469]`.
+
 
