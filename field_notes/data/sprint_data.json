@@ -1,5 +1,28 @@
 [
   {
+    "id": "SPR-104.0",
+    "title": "The Unified Council of Hemispheres \u2014 Excision of the Casual Bifurcation & End-to-End Continuous Interest Orchestration",
+    "origin": {
+      "text": "Unification of the Cognitive Pipeline into a Single Invariant Council Flow, Complete Excision of the `vibe == \"CASUAL\"` Execution Bifurcation, Continuous Scalar Pacing of Pinky's Opening HyDE Turn, Pure Domain/Fact-Driven Vector Retrieval, and Elimination of Dual-Persona Fragmentations",
+      "source": "SPRINT_PLAN_SPR_104_0.md"
+    },
+    "synthesis": {
+      "narrative_context": "Unification of the Cognitive Pipeline into a Single Invariant Council Flow, Complete Excision of the `vibe == \"CASUAL\"` Execution Bifurcation, Continuous Scalar Pacing of Pinky's Opening HyDE Turn, Pure Domain/Fact-Driven Vector Retrieval, and Elimination of Dual-Persona Fragmentations",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_104_0.md"
+      ],
+      "review_notes": "Active sprint in execution."
+    },
+    "metadata": {
+      "tags": [
+        "sprint-104",
+        "sprint-plan"
+      ],
+      "status": "ACTIVE",
+      "bucket_id": "bucket_5_infra"
+    }
+  },
+  {
     "id": "SPR-103.0",
     "title": "Intercom Debug, Multi-Stage Replay Pipeline (FEAT-645), Un-Muting Deep Thought, and Decoupled Round Table Architecture",
     "origin": {
