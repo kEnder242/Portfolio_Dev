@@ -3830,4 +3830,10 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 4. **Continuous Parameter Passing:** Stage methods pass continuous parameters (`interest: float`, `semantic_affinity: float`, `search_required: bool`) rather than relying on mutable shared object state or binary clamps.
 **Rationale:** Eliminates the "Monolithic Debug Trap" where diagnosing an upstream stage failure requires running 30-second multi-node websocket sessions.
 
-
+## [FEAT-657] Unified Council of Hemispheres (Zero-Bifurcation Pipeline)
+**Sprint:** SPR-104.0
+**Status:** ACTIVE
+**Tags:** `#unified_council`, `#continuous_interest`, `#bkm_015`, `#zero_bifurcation`, `[FEAT-233]`, `[FEAT-234]`, `[FEAT-523]`, `[FEAT-645]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
+**Logic:** Unifies 100% of cognitive hub turns into a single sequential Council flow (Triage -> Pinky Opening Voice & Search Terms -> Domain-Gated ChromaDB RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Spoken Verdict). Excises `lead_node == "both"` and eliminates the categorical `vibe == "CASUAL"` execution bypass. Modulates token budget and node dormancy purely via continuous scalar interest (`FEAT-523`) with prompt-driven pacing (`BKM-015`).
+**Rationale:** Eradicates the "Island of Green Illusion" and "Aurora Miss" where casual vibe bypassed RAG and severed Deep Thought.
