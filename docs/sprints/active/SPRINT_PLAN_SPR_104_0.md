@@ -602,11 +602,11 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 
 | Story ID | Description | Owner | Status | Git Target |
 | :--- | :--- | :--- | :--- | :--- |
-| **Story 104.13** | Consolidate `resolve_collection_scope` & DNA Mapping | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
-| **Story 104.14** | Forward `target_domains` from Hub to Archive Node | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
-| **Story 104.15** | Replay Pipeline Multi-Domain Contract Assertion | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+| **Story 104.13** | Consolidate `resolve_collection_scope` & DNA Mapping | `[SWARM:LOCAL]` | `PASSED` | `HomeLabAI` (`sprint-104` @ `c82a82f`) |
+| **Story 104.14** | Forward `target_domains` from Hub to Archive Node | `[SWARM:LOCAL]` | `PASSED` | `HomeLabAI` (`sprint-104` @ `47a252b`) |
+| **Story 104.15** | Replay Pipeline Multi-Domain Contract Assertion | `[SWARM:LOCAL]` | `IN_PROGRESS` | `HomeLabAI` (`sprint-104`) |
 | **Story 104.16** | Live Silicon Certification on Port 8765 (`BKM-024`) | `[AGY:PRIMARY]` | `PENDING` | Physical Port 8765 |
-| **Story 104.17** | Preserve & Wire Vibe-to-Domain Priority | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+| **Story 104.17** | Preserve & Wire Vibe-to-Domain Priority | `[SWARM:LOCAL]` | `PASSED` | `HomeLabAI` (`sprint-104` @ `c82a82f`) |
 
 #### Mainline Merge Execution Steps (Upon Story 104.16 Certification):
 1. **Regression Gate**: Run full 118-test suite on `HomeLabAI` branch `sprint-104`.
