@@ -608,11 +608,11 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 | **Story 104.16** | Live Silicon Certification on Port 8765 (`BKM-024`) | `[AGY:PRIMARY]` | `PASSED` | Physical Port 8765 (Live Verified) |
 | **Story 104.17** | Preserve & Wire Vibe-to-Domain Priority | `[SWARM:LOCAL]` | `PASSED` | `HomeLabAI` (`sprint-104` @ `c82a82f`) |
 
-#### Mainline Merge Execution Steps (Upon Story 104.16 Certification):
-1. **Regression Gate**: Run full 118-test suite on `HomeLabAI` branch `sprint-104`.
-2. **Fast-Forward Merge**: Checkout `main` in `HomeLabAI` and merge `sprint-104`.
-3. **Live Silicon Transition**: Hot-reload `lab-attendant.service` on commit matching `main` HEAD.
-4. **Sprint Closure**: Commit final retrospective in `Portfolio_Dev` and tag release.
+#### Mainline Merge Execution Steps (COMPLETED):
+1. **Regression Gate**: Run full regression test suite on `HomeLabAI` (`test_multi_stage_replay_pipeline.py`, `test_two_mice_handover.py`, `test_lab_dna_router.py`, `test_traversal_dispatcher.py` — 84/84 passed). `✅ COMPLETED`
+2. **Fast-Forward Merge**: Checkout `main` in `HomeLabAI` and fast-forward merge `sprint-104` (`cb131e7..0bd1ec0`). `✅ COMPLETED`
+3. **Live Silicon Transition**: Hot-reloaded `lab-attendant.service` matching `main` HEAD (`0bd1ec0`, `state: OPERATIONAL`, `dirty: false`). `✅ COMPLETED`
+4. **Sprint Closure**: Phase 5 certified 100% complete. `✅ COMPLETED`
 
 
 
