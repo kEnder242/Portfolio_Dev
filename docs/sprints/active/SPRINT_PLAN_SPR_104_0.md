@@ -544,7 +544,7 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
 ### 3. Phase 5 Story Specifications
 
 #### Story 104.13: Consolidation of `resolve_collection_scope` & DNA Mapping
-* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron architecture, reviewed by `[AGY:PRIMARY]`)
+* **Assigned Owner:** `[SWARM:LOCAL]` (Local RTX 4090 surgery, reviewed by `[AGY:PRIMARY]`)
 * **Status:** `PENDING`
 * **Why:** Consolidate `traversal_dispatcher.py` and `lab_dna_router.py`. Accept `target_domains: list[str]` as primary selector. Remove `vibe in ("CASUAL", ...)` short-circuit trap. Map semantic tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) to concrete collections. Return `[]` for zero domain hits.
 * **4-Anchor Specification:**
@@ -554,7 +554,7 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-540]`, `[BKM-015]`.
 
 #### Story 104.14: Forward `target_domains` from Cognitive Hub to Archive Node
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Local RTX 4090 surgery, reviewed by `[AGY:PRIMARY]`)
 * **Status:** `PENDING`
 * **Why:** Update `_fetch_rag_context` in `cognitive_hub.py` and `get_context` in `archive_node.py` to forward and accept `collections: list[str]` derived from `target_domains`.
 * **4-Anchor Specification:**
@@ -587,7 +587,7 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   * **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-659]`.
 
 #### Story 104.17: Preserve & Wire Vibe-to-Domain Priority in `resolve_collection_scope`
-* **Assigned Owner:** `[SWARM:CLOUD]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Local RTX 4090 surgery, reviewed by `[AGY:PRIMARY]`)
 * **Status:** `PENDING`
 * **Why:** Complement `FEAT-659` by preserving Sprint 61/64 heritage. When multiple candidate collections are resolved or when `target_domains` is generic, use `vibe` (`HISTORICAL`, `TECHNICAL`, `META`) to order and prioritize the collection search sequence.
 * **4-Anchor Specification:**
@@ -595,5 +595,24 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_lab_dna_router.py -k "test_vibe_collection_priority" -v`.
   * **Anchor 3 (Code Anchors):** Ordered priority ranking combining `target_domains` and `vibe`.
   * **Anchor 4 (DNA Links):** `[FEAT-659]`, `[FEAT-469]`.
+
+---
+
+### 4. Phase 5 Scorecard & Mainline Merge Plan
+
+| Story ID | Description | Owner | Status | Git Target |
+| :--- | :--- | :--- | :--- | :--- |
+| **Story 104.13** | Consolidate `resolve_collection_scope` & DNA Mapping | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+| **Story 104.14** | Forward `target_domains` from Hub to Archive Node | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+| **Story 104.15** | Replay Pipeline Multi-Domain Contract Assertion | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+| **Story 104.16** | Live Silicon Certification on Port 8765 (`BKM-024`) | `[AGY:PRIMARY]` | `PENDING` | Physical Port 8765 |
+| **Story 104.17** | Preserve & Wire Vibe-to-Domain Priority | `[SWARM:LOCAL]` | `PENDING` | `HomeLabAI` (`sprint-104`) |
+
+#### Mainline Merge Execution Steps (Upon Story 104.16 Certification):
+1. **Regression Gate**: Run full 118-test suite on `HomeLabAI` branch `sprint-104`.
+2. **Fast-Forward Merge**: Checkout `main` in `HomeLabAI` and merge `sprint-104`.
+3. **Live Silicon Transition**: Hot-reload `lab-attendant.service` on commit matching `main` HEAD.
+4. **Sprint Closure**: Commit final retrospective in `Portfolio_Dev` and tag release.
+
 
 
