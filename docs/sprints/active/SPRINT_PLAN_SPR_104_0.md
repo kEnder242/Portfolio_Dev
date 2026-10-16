@@ -2,7 +2,7 @@
 
 **Sprint ID:** `SPR_104_0`  
 **Theme:** Unification of the Cognitive Pipeline into a Single Invariant Council Flow, Complete Excision of the `vibe == "CASUAL"` Execution Bifurcation, Continuous Scalar Pacing of Pinky's Opening HyDE Turn, Pure Domain/Fact-Driven Vector Retrieval, and Elimination of Dual-Persona Fragmentations  
-**Status:** **DRAFT / NARRATIVE ARCHITECTURE ONLY (STORIES DEFERRED PER HUMAN DIRECTIVE)**  
+**Status:** ✅ **COMPLETE (100% Certified on Physical Silicon & Mainline Merged)**  
 **Parent Framework:** `[BKM-004]` (QQ Protocol), `[BKM-005]` (Design Studio Alignment), `[BKM-015]` (Prompt-Driven Pacing Law), `[BKM-020]` (Intent Preservation & Phase Gates), `[BKM-024]` (Live Silicon Validation Mandate), `[BKM-030]` (Document Hierarchy), `[BKM-035]` (Meta-Triage Feedback Interceptor), `[BKM-039]` (Pure Interest Cascade Protocol), `[BKM-043]` (Verbatim Code Anchor Law), `[BKM-064]` (Tracked Conversational Ledger), `[BKM-077]` (1:1 Numbered Swim Lane Rule), `[BKM-081]` (Pre-Flight Mistakes Avoided), `[BKM-082]` (Sprint Grounding Run Mandate), `[BKM-083]` (Decouple-and-Stitch Architecture), `[FEAT-233]` (Waterfall Depth Cascading), `[FEAT-234]` (Pure Scalar Fuel), `[FEAT-238]` (Council of Hemispheres / Peer Vote / Alarm Pull), `[FEAT-355]` (Visible Consensus Backchannel), `[FEAT-406/470]` (Coherence Judge Evaluation & Spoken Retort), `[FEAT-418]` (Symmetrical Interest Cascade & Entity Routing), `[FEAT-436]` (Conversational HyDE Synthesis), `[FEAT-437]` (3-Tier HyDE Failover Cascade), `[FEAT-457]` (Speculative Context Pre-Fetch), `[FEAT-489]` (Two-Mice Sequential Streaming Handover), `[FEAT-523]` (Continuous Multiplier Token Pacing), `[FEAT-539]` (Auto-Regressive Context Isolation & Domain Taxonomy), `[FEAT-635]` (Brain Information Gatekeeper & Narrative Reality Steerer), `[FEAT-640]` (Turn Context Isolation), `[FEAT-645]` (Multi-Stage Replay Pipeline Harness), `[WIS-010]` (Two-Mice Banter Archetypes)  
 **Target Silicon Nodes:** `z87-Linux` (RTX 2080 Ti Local vLLM 3B Base :8088 / LoRA Adapters), Node KENDER (RTX 4090 Ollama Conductor :11434 / Deep Thought), Node Brain (macOS M5 Air MLX :8002 / :8000), ChromaDB Port 8001 (CLaRa-DNA)
 
@@ -637,6 +637,44 @@ An architectural audit of the DNA retrieval pipeline revealed why the mice could
   * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_ignition_manager.py -v`.
   * **Anchor 3 (Code Anchors):** Port probe check before returning `True` on `OPERATIONAL`; preserve `if self.status.state == "WAKING": return True`.
   * **Anchor 4 (DNA Links):** `[FEAT-125]`, `[FEAT-265.8]`, `[BKM-044]`.
+* **Status:** `✅ COMPLETED` (Committed at `4e7a82f` / `bbcf860`; verified via unit tests and live reload).
+
+---
+
+## 🏁 7. Sprint 104.0 Retrospective: The Unified Council & Sovereign Resonance
+
+### 7.1 Executive Summary & Core Breakthroughs
+Sprint 104.0 permanently resolved one of the oldest and most stubborn architectural contradictions in the Federated Lab: **the coexistence of a continuous, interest-driven deliberation model with hardcoded categorical execution bypasses (`vibe == "CASUAL"` and `lead_node = "both"`).**
+
+Across 5 core phases and 2 post-certification operational stories (104.13–104.18), the cognitive pipeline was transformed into a pure, invariant Council Waterfall:
+1. **Total Abolition of `lead_node` (`FEAT-658`)**: Eradicated 165 lines of legacy routing conditionals in `cognitive_hub.py`. Every turn—whether addressed to Pinky, Brain, or unaddressed—passes directly into the sequential handover pipeline (`_run_two_mice_handover`).
+2. **Continuous Pacing & Dormancy (`BKM-015` / `FEAT-657`)**: Token budgeting and node activation are purely governed by fluid evidential interest ($0.0 \dots 1.0$). On low-interest turns ($< 0.30$), Deep Thought remains completely dormant (0 tokens, 0ms delay), eliminating the need for brittle short-circuit aborts.
+3. **Multi-Domain Evidential Resonance (`FEAT-659`)**: Inverted negative zero-domain gating into positive evidential fuel resonance. Consolidated `resolve_collection_scope` to accept explicit `target_domains`, mapping semantic tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) to concrete Chroma collections while preserving Sprint 61/64 vibe priority ordering.
+4. **Sponge Deprecation (`CASUAL` $\to$ `social`)**: Extricated `CASUAL` from the `unknown` sponge domain. `CASUAL` is now a fully enabled, first-class descriptive archetype with `default_domain: "social"` and 0ms RAG bypass, while `unknown` is restored to represent legitimately unclassified or out-of-domain inquiries.
+5. **Self-Healing Physical Ignition (`Story 104.18` / `FEAT-125`)**: Re-architected `manager.py:start_lab` so physical port 8088 liveness probes precede in-memory state assumptions, completely preventing the "Zombie Operational State".
+
+---
+
+### 7.2 What Went Well
+* **Swarm Delegation Discipline (`BKM-049` / `BKM-086`)**: Local RTX 4090 surgery (Atlas & Junior) executed Stories 104.13, 104.14, and 104.15 autonomously through `delegate.py`, achieving 100% green verification without primary bypassing.
+* **Grounded Pre-Regression Archaeology (`BKM-085`)**: Defect investigations followed the 3-phase mandate (Sprint intent $\to$ Git baseline `HEAD~1` $\to$ DNA alignment), discovering root causes rather than patching symptoms.
+* **Hermetic Replay Pipeline (`FEAT-645`)**: Fast offline contract testing (`test_multi_stage_replay_pipeline.py`) verified full 12-stage cascade contracts in $< 2\text{s}$ before live silicon touch.
+* **Live Silicon Synchronization (`BKM-024` / `INS-047`)**: Final certification validated physical port 8765 endpoints with synthetic probes (`"hi"` and `"what is BKM-015?"`), verifying real GPU telemetry, HyDE vector seeding, and zero-duplicate RAG caching.
+
+---
+
+### 7.3 Key Mistakes Avoided & Protocols Codified (`BKM-081`)
+1. **The Self-Promotion Trap (`BKM-049`)**: Primary attempted a direct file edit on a `[SWARM:LOCAL]` story; operator halted execution. Primary immediately checked out clean HEAD, engaged `delegate.py`, and allowed the sovereign local swarm to deliver the verified code.
+2. **The Dropped Threads Tombstone Loop (`BKM-084`)**: Retaining completed items in the footer with `— *Addressed*` badges caused prompt-continuation mimicry across turns. Codified **Section 4.1 (The Zero-Tombstone Pruning Law)** in `BKM-084`: immediate eviction, zero tombstones, and total header omission when 0 pending items remain.
+3. **State Machine vs Physical Reality**: In-memory flags (`state == "OPERATIONAL"`) must never supersede physical port reachability. Inverted probe ordering in `manager.py` to ensure physical silicon truth governs state transitions.
+
+---
+
+### 7.4 Final Scorecard & Mainline Delivery
+* **HomeLabAI**: Branch `sprint-104` fast-forward merged into `main` at commit `fdc0d5a` (followed by `73b491b` Protocols update).
+* **Portfolio_Dev**: Feature tracker updated (`FEAT-640` revival note), ChromaDB synchronized (71 BKM entries, 443 features), and site compiled to airlock (`www_deploy` commit `0cfa78f`).
+* **Lab Attendant**: Physical daemon running `main` HEAD (`state: OPERATIONAL`, `boot_commit: fdc0d5a`, `dirty: false`).
+* **Sprint Status**: **`SPRINT 104.0 OFFICIALLY COMPLETE`**.
 
 
 
