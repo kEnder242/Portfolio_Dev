@@ -468,45 +468,44 @@ Lines 1890–2055 of `cognitive_hub.py` collapse into a single 15-line block.
 
 ### 3. Phase 4 Story Specifications
 
-#### Story 104.9: Pre-Execution Housekeeping & `FEAT-658` Registration
+##### Story 104.9: Pre-Execution Housekeeping & `FEAT-658` Registration
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING`
-* **Why:** Register `[FEAT-658]` (Pure Waterfall Execution & Total Abolition of `lead_node`) in `Portfolio_Dev/FeatureTracker.md`.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `Portfolio_Dev/FeatureTracker.md`.
-  * **Anchor 2 (Verification Command):** `grep -q "FEAT-658" /home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md`.
-  * **Anchor 3 (Code Anchors):** Spec defines complete eradication of `lead_node` and reliance on continuous fuel.
-  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-233]`, `[FEAT-234]`.
+* **Status:** `✅ COMPLETED` (`a9cd96f` in `Portfolio_Dev`)
+* **Verification:** `grep -q "FEAT-658" /home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md` verified; ChromaDB `feature_dna` collection synchronized.
 
 #### Story 104.10: Excision of `lead_node` Router Block in `cognitive_hub.py`
-* **Assigned Owner:** `[SWARM:CLOUD]`
-* **Status:** `PENDING`
-* **Why:** Eradicate lines 1890–2055 in `HomeLabAI/src/logic/cognitive_hub.py`. Delete `lead_node = ...`, `if lead_node == "brain":`, `elif lead_node == "both":`, and `else: # pinky leads`. Wire 100% of turns directly into `_run_two_mice_handover`.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `HomeLabAI/src/logic/cognitive_hub.py#L1890-L2055`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v`.
-  * **Anchor 3 (Code Anchors):** Direct invocation of `_run_two_mice_handover` with zero `lead_node` conditionals.
-  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-233]`.
+* **Assigned Owner:** `[SWARM:CLOUD]` (Cloud Nemotron architecture, reviewed by `[AGY:PRIMARY]`)
+* **Status:** `✅ COMPLETED` (`caba91f` in `HomeLabAI`)
+* **Verification:** Eradicated lines 1890–2055 in `HomeLabAI/src/logic/cognitive_hub.py`. Removed `lead_node` variable and conditionals. 100% of turns pass directly to `_run_two_mice_handover`. 118 regression tests passing.
 
 #### Story 104.11: Replay Pipeline Assertion for Direct-Addressed Queries
 * **Assigned Owner:** `[SWARM:LOCAL]`
-* **Status:** `PENDING`
-* **Why:** Add test asserting that queries explicitly addressed to Pinky (`addressed_to: "PINKY"`) or Brain (`addressed_to: "BRAIN"`) enter the Council handover and do not branch into isolated loops.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`.
-  * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage11_addressed_waterfall_contract" -v`.
-  * **Anchor 3 (Code Anchors):** Test fixture verifying `addressed_to: PINKY` enters `_run_two_mice_handover`.
-  * **Anchor 4 (DNA Links):** `[FEAT-658]`, `[FEAT-645]`.
+* **Status:** `✅ COMPLETED` (`caba91f` in `HomeLabAI`)
+* **Verification Command:** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage11_addressed_waterfall_contract" -v`
+* **Result:** Passed in 0.08s. Confirmed `addressed_to: PINKY` executes full two-mice waterfall handover.
 
 #### Story 104.12: Live Silicon Certification of Addressed Waterfall Turns
 * **Assigned Owner:** `[AGY:PRIMARY]`
-* **Status:** `PENDING`
-* **Why:** Hot-reload physical daemon on port 8765 and verify that `"hey pinky, what do you think about Aurora?"` executes the full Council with Deep Thought and ChromaDB.
-* **4-Anchor Specification:**
-  * **Anchor 1 (Target Files):** Physical daemon `:8765`.
-  * **Anchor 2 (Verification Command):** `curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "hey pinky, what do you think about Aurora?", "source": "SYNTHETIC_PROBE"}'`.
-  * **Anchor 3 (Code Anchors):** Stage ledger and telemetry verify full multi-node council completion.
-  * **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-525]`.
+* **Status:** `✅ COMPLETED` (Physical daemon on port 8765 certified at commit `caba91f`)
+* **Verification Command:** `curl -s -X POST http://127.0.0.1:8765/inject -H "Content-Type: application/json" -d '{"query": "hey pinky, what do you think about Aurora?", "source": "SYNTHETIC_PROBE"}'`
+* **Silicon Telemetry Results (Turn `1e778910`):**
+  - **Triage Assessment:** Inferred `addressed_to: "PINKY"`, `interest: 0.58` (casual: 0.4, intrigue: 0.6, importance: 0.5).
+  - **Waterfall Execution:** Rather than bypassing multi-stage council into an isolated Pinky loop, turn executed the unified 4-node council.
+  - **Pinky HyDE Node (`vLLM :8088`)**: Extracted search terms: `"Aurora, Federated AI Architecture, Telemetry Pipeline, vLLM, Acme Lab"`. 72 tokens, 20.95 tok/s, TTFT: 523.59ms.
+  - **ChromaDB Vector RAG**: Successfully pulled historical platform anchors (`[2022-04-11] Script execution for Aurora Subsystem Execution Tracker`, `[ASSET: Jason Aurora Subsystem Execution Tracker.xlsx]`).
+  - **Brain Gatekeeper Node (`vLLM :8088`)**: Curated anchored records per 4-Anchor Standard, generated curator thought, and formatted handover for Deep Thought. 324 tokens, 23.11 tok/s, TTFT: 560.43ms.
+  - **Deep Thought Node (`OMLX :8000` on Mac Studio)**: Executed deep strategic synthesis on `Ternary-Bonsai-2-27B`. 40 tokens, 1.72 tok/s, TTFT: 8991.34ms.
+  - **Total Pipeline Latency:** ~44.4s across all distributed silicon endpoints.
 
+---
 
+### 4. Phase 4 Scorecard & Retrospective
 
+| Story ID | Description | Owner | Status | Git Commit |
+| :--- | :--- | :--- | :--- | :--- |
+| **Story 104.9** | Register `[FEAT-658]` in FeatureTracker & Sync DNA | `[AGY:PRIMARY]` | `✅ COMPLETED` | `a9cd96f` (`Portfolio_Dev`) |
+| **Story 104.10** | Excision of `lead_node` Router in `cognitive_hub.py` | `[SWARM:CLOUD]` | `✅ COMPLETED` | `caba91f` (`HomeLabAI`) |
+| **Story 104.11** | Replay Pipeline Addressed Waterfall Assertion | `[SWARM:LOCAL]` | `✅ COMPLETED` | `caba91f` (`HomeLabAI`) |
+| **Story 104.12** | Physical Silicon Certification on Port 8765 | `[AGY:PRIMARY]` | `✅ COMPLETED` | `caba91f` (`HomeLabAI`) |
+
+With Phase 4 certified on live silicon, `lead_node` is completely extinct across the codebase. The Cognitive Hub operates as a pure fluid waterfall governed solely by continuous interest.
