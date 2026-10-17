@@ -25,6 +25,34 @@
 
 ---
 
+## 🛡️ Pre-Flight Mistakes Avoided Ledger (`BKM-081` / `BKM-082`)
+
+### 0.1 5-Sprint Historical Lookback Summary (`BKM-082 §2.1`)
+- **SPR-100**: Mandated `X-Lab-Key` handshake policy in Foyer WebSocket server (`foyer_gate.py`). *Historical Lesson:* Any client connecting without the header receives immediate 1008 rejection. The Nibbler stall was directly caused by failing to include this header in `ai_engine_v2.py`.
+- **SPR-101**: Sprint Grounding Run and Nightly Cascade log horizon mandate. *Historical Lesson:* Overnight processes (LoRA training, dream synthesis, watchdog audits) cannot be verified by looking only at trailing 15-minute logs.
+- **SPR-102**: Decoupled Nightly Architecture & passive telemetry over synthetic benchmarking. *Historical Lesson:* Background daemons must operate within strict time windows (02:00–06:00 AM) without daytime polling interference.
+- **SPR-103**: Decouple-and-Stitch Architecture (`BKM-083`) & Multi-Stage Replay Pipeline (`FEAT-645`). *Historical Lesson:* Discrete stage isolation prevents multi-actor script hallucinations and cascading failures.
+- **SPR-104**: Waterfall Depth Cascading (`FEAT-233`), Continuous Multiplier Token Pacing (`FEAT-523`), and Brain Information Gatekeeper (`FEAT-635`). *Historical Lesson:* Conversational fuel must exhaust naturally without artificial lower-bound token bloat.
+
+### 0.2 Pre-Flight Mistakes Avoided (`BKM-082 §2.4`)
+1. **Wiping or Bypassing Nibbler State:** Avoided naively resetting `chunk_state.json` or changing queue parameters. Grounding into SPR-100 revealed the root cause was WebSocket 1008 policy rejection due to missing `X-Lab-Key`. Fixing auth restores natural queue draining.
+2. **"Grep-First" Context Flooding:** Avoided executing ripgrep before semantic retrieval. Grounding showed that running regex across 1.5MB raw notes without entity boundaries returns thousands of lines of noise, bloating prompts and inducing hallucinations. "RAG-first, Grep-second" pinpoints the exact entity gap before expansion.
+3. **Accepting Watchdog False-Green ("Green Lie"):** Avoided trusting `check_subconscious_dreaming()` solely because `len(gems) > 0`. Grounding proved the gems file had been stale since August 25, 2026. Adding atomic `st_mtime` validation eliminates a 7-week silent failure.
+4. **LLM Floor-Filling Token Inflation:** Avoided imposing `Target ~low to high tokens` prompt ranges. Instruction-tuned LLMs treat `low` as an obligatory floor and hallucinate fluff to reach it. Removing the floor and enforcing a pure ceiling headroom aligns with `BKM-087 §3`.
+5. **Shared File Race Condition in Learning Queue:** Avoided naive uncoordinated appends to `queue.json`. Adversarial Oracle audit exposed that concurrent turns would corrupt the JSON file; mitigated via atomic temporary file renaming and in-memory deduplication.
+
+### 0.3 Delegation Justification Matrix (`Invariant 7` / `BKM-049`)
+| Story | Title | Assigned Owner | Rationale / Swarm Consideration |
+|---|---|---|---|
+| **105.6** | RAG-First Ripgrep Expansion | `[SWARM:LOCAL]` | Local Python logic in `cognitive_hub.py` and `archive_node.py`; unit tested via pytest. |
+| **105.7** | Nibbler WebSocket Auth Fix | `[SWARM:LOCAL]` | Surgical client parameter addition (`X-Lab-Key`) in `Portfolio_Dev/field_notes/ai_engine_v2.py`. |
+| **105.8** | Watchdog Green Lie Excision | `[SWARM:LOCAL]` | Pure Python datetime/mtime logic in `standalone_accountability_watchdog.py`. |
+| **105.9** | Dedicated Nightly Batch Window | `[AGY:PRIMARY]` | **Assigned to AGY**: Configures host systemd user units (`field-notes-nightly.timer`) and cross-repository timer lifecycles. Swarm workers lack systemd user session access. |
+| **105.10** | Post-Waterfall Learning Queue | `[SWARM:LOCAL]` | Atomic file write utility and cognitive hub hook in `cognitive_hub.py`. |
+| **105.11** | Ceiling-Only Headroom & De-Fluff | `[SWARM:LOCAL]` | Configuration edits in `infrastructure.json` and prompt string refactoring in `cognitive_hub.py`. |
+
+---
+
 ## 🏛️ Master Consensus Narrative & Executive Synthesis
 
 ### 1. The Architectural Truth
@@ -266,11 +294,11 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
 ---
 
 ## 🛑 Pre-Flight Checklist Gate (`BKM-082`)
-- [ ] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps, watchdog sentinels, and auth borders (`BKM-082 §2.1`).
-- [ ] **2. Mistakes-Avoided Ledger**: Enumerated $\ge$ 3 concrete mistakes avoided in Section 0 (`BKM-082 §2.4`).
-- [ ] **3. Oracle Review**: Adversarial audit completed and appended (`BKM-007` / `BKM-080`).
-- [ ] **4. Delegation Justification**: Evaluated `LOCAL`/`CLOUD` first; documented rationale for any story assigned to `AGY:PRIMARY` (`Invariant 7` / `BKM-049`).
-*Execution is blocked until all 4 boxes are checked with section citations.*
+- [x] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps, watchdog sentinels, and auth borders (`BKM-082 §2.1` -> Section 0.1).
+- [x] **2. Mistakes-Avoided Ledger**: Enumerated 5 concrete mistakes avoided in Section 0.2 (`BKM-082 §2.4` -> Section 0.2).
+- [x] **3. Oracle Review**: Adversarial audit completed by Nemotron-3 Super 120B and appended (`BKM-007` / `BKM-080` -> `ORACLE_REVIEW_SPRINT_105.md`).
+- [x] **4. Delegation Justification**: Evaluated `LOCAL`/`CLOUD` first; documented rationale for any story assigned to `AGY:PRIMARY` (`Invariant 7` / `BKM-049` -> Section 0.3).
+*Gate certified: All 4 pre-flight deliverables completed and grounded on disk.*
 
 ---
 
