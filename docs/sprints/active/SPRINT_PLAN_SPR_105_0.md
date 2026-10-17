@@ -423,6 +423,29 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
   - In `nibble_v2.py`: Upgrade default log extraction prompt to include strict negative constraints: "EXCLUDE logistics, shipping, meeting requests, inventory follow-ups, and password resets. ONLY extract hardware configurations, registers, scripts, tools, and debug scars."
 * **Anchor 4 (DNA Links)**: `[FEAT-101]`, `[FEAT-131]`, `[VIBE-008]`.
 
+### Story 105.14: Inclusive Multi-Tier Intake & Domain Tagging (Rollback of Intake Pruning) (`INS-019` / `FEAT-101` / `BKM-007`)
+* **Objective**: Roll back the destructive `ONLY`/`EXCLUDE` clause in `nibble_v2.py` to restore lossless intake recall for institutional memory, and introduce multi-tiered domain tagging (`hardware_debug`, `logistics`, `career_timeline`, `vendor_comm`, `operations`) to preserve operational context without polluting Rank 4/5 technical diamonds.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on Qwen3.8-27B).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`Portfolio_Dev/field_notes/nibble_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py#L365-L375) (lines 365–375: replace prompt with inclusive domain-tagged prompt)
+  - [`Portfolio_Dev/field_notes/tests/test_gem_refine_quality.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/tests/test_gem_refine_quality.py#L25-L35) (update test to verify inclusive prompt & domain tagging)
+* **Anchor 2 (Verification Command)**:
+  - `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/tests/test_gem_refine_quality.py -v`
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `nibble_v2.py`:
+    ```python
+    prompt = (
+        f"Extract technical events, architectural milestones, hardware deployments, "
+        f"and operational notes from this log. "
+        f"For each event, include concrete evidence (commands, tools, registers, or context) "
+        f"and tag it with a 'domain' from: ['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations']. "
+        f"Log content: {scrubbed_content[:4000]}"
+    )
+    ```
+  - In `test_gem_refine_quality.py`:
+    Update test assertions: verify `domain` is required, verify `logistics` and `operations` are included in extraction scope rather than banned.
+* **Anchor 4 (DNA Links)**: `[INS-019]`, `[FEAT-101]`, `[FEAT-131]`, `[BKM-007]`.
+
 ---
 
 ## 🛑 Phase 3 Pre-Flight Checklist Gate (`BKM-082`)
@@ -445,6 +468,7 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 - [x] **Step 3: Surgical Execution**:
   - [x] Apply Story 105.12 (Dynamic Intake Target Resolver) — Commit [`ff5abe1`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py)
   - [x] Apply Story 105.13 (Gem Quality Prompt Hardening & Rank Promotion Excision) — Commit [`376c6eb`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py)
+  - [ ] Apply Story 105.14 (Inclusive Multi-Tier Intake & Domain Tagging)
 - [x] **Step 4: Offline Verification**: Pytest suite 100% green (`test_gem_refine_quality.py`: 3/3 passed).
 - [x] **Step 5: Live Silicon Verification**: `extract_latest_gems.py` executed live, extracting 4 Rank 4/5 gems dynamically.
-- [x] **Step 6: Retrospective & Documentation**: Documented findings and Oracle synthesis.
+- [ ] **Step 6: Retrospective & Documentation**: Documented findings, Oracle synthesis, and vocabulary alignment.
