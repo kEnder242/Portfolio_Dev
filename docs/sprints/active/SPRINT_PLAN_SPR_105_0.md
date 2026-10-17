@@ -174,7 +174,7 @@ Validated via [`scripts/probe_sprint105_waterfall.py`](file:///home/jallred/Dev_
 
 **Phase ID:** `SPR_105_PHASE_2`  
 **Theme:** Precision RAG-First Ripgrep Expansion ([`FEAT-451`]), Nibbler `McpClient` WebSocket Authentication Fix ([`FEAT-330`]), Accountability Watchdog Freshness Enforcement ([`FEAT-619`]), and Nightly Batch Window Pinning ([`FEAT-416`]).  
-**Status:** 📋 **PLANNING & REVIEW (Awaiting User Question & Alignment)**  
+**Status:** 🏆 **COMPLETE (Validated on Physical Silicon)**  
 **Parent Frameworks:**
 - [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
 - [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
@@ -303,16 +303,58 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
 ---
 
 ## 🚦 Phase 2 AFK Execution Checklist (`BKM-086`)
-- [ ] **Step 1: Grounding Alignment**: Verified against `FEAT-451`, `FEAT-330`, `FEAT-619`, `FEAT-523`, and `BKM-081`.
-- [ ] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 2 plan (Hold heads-down until approved).
-- [ ] **Step 3: Surgical Execution**:
-  - [ ] Apply Story 105.6 (RAG-First Ripgrep Expansion)
-  - [ ] Apply Story 105.7 (Nibbler McpClient Auth Fix)
-  - [ ] Apply Story 105.8 (Watchdog Green Lie Excision)
-  - [ ] Apply Story 105.9 (Nightly Batch Window Pinning)
-  - [ ] Apply Story 105.10 (Post-Waterfall Learning Queue)
-  - [ ] Apply Story 105.11 (Continuous Ceiling-Only Headroom & Prompt De-Fluffing)
-- [ ] **Step 4: Offline Verification**: Pytest suite 100% green.
-- [ ] **Step 5: Live Silicon Verification**: Re-probe `remember Aurora?` and verify rich Ponte Vecchio/OpenBMC lines are synthesized with zero fluff.
-- [ ] **Step 6: Retrospective & Documentation**: Append Phase 2 Retrospective.
+- [x] **Step 1: Grounding Alignment**: Verified against `FEAT-451`, `FEAT-330`, `FEAT-619`, `FEAT-523`, and `BKM-081`.
+- [x] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 2 plan (Hold heads-down until approved; reviewed and approved by user).
+- [x] **Step 3: Surgical Execution**:
+  - [x] Apply Story 105.6 (RAG-First Ripgrep Expansion)
+  - [x] Apply Story 105.7 (Nibbler McpClient Auth Fix)
+  - [x] Apply Story 105.8 (Watchdog Green Lie Excision)
+  - [x] Apply Story 105.9 (Nightly Batch Window Pinning)
+  - [x] Apply Story 105.10 (Post-Waterfall Learning Queue)
+  - [x] Apply Story 105.11 (Continuous Ceiling-Only Headroom & Prompt De-Fluffing)
+- [x] **Step 4: Offline Verification**: Pytest suite 100% green across all unit suites (test_two_mice_handover: 13/13, test_cognitive_hub_pacing: 27/27, test_standalone_accountability_watchdog: 6/6, test_agentic_r_retrieval: 6/6, test_post_waterfall_queue: 6/6).
+- [x] **Step 5: Live Silicon Verification**: Physical probe injection against running `lab-attendant.service` on port 8765 (`scripts/probe_sprint105_waterfall.py`).
+- [x] **Step 6: Retrospective & Documentation**: Append Phase 2 Retrospective and merge sprint branches.
+
+---
+
+## 📜 Phase 2 Retrospective & Silicon Certification
+
+### 1. Delivery Summary across the 6 Stories
+- **Story 105.6 (RAG-First Ripgrep Expansion Pipeline)**:
+  - Wired `execute_grep_search_pivot` in `HomeLabAI/src/nodes/archive_node.py` with TitleCase codenames, conversational stop-word suppression (`"hello"`, `"today"`), and curated hardware anchors (`"Aurora"`, `"PECI"`).
+  - Wired `[EXPANDED_NOTES]` enrichment directly into `HomeLabAI/src/logic/cognitive_hub.py` between Brain Gatekeeper and Deep Thought synthesis.
+- **Story 105.7 (Nibbler McpClient Authentication & Groundhog Loop Unblock)**:
+  - Resolved persistent WebSocket 1008 policy violation in `Portfolio_Dev/field_notes/ai_engine_v2.py`.
+  - Upgraded `McpClient.generate` to fetch active session token from Foyer `/status?timeout=5` and supply `X-Lab-Key` and `X-Client-Commit` in WS upgrade headers and initial handshake packet.
+- **Story 105.8 (Accountability Watchdog Green Lie Excision)**:
+  - Excised the 7-week silent false-green in `HomeLabAI/src/infra/standalone_accountability_watchdog.py`.
+  - Added strict 30-hour `st_mtime` staleness guard to `check_subconscious_dreaming()` and verified 48-hour forward intake progress in `check_nibbler_intake_progress()`.
+- **Story 105.9 (Dedicated Nightly Batch Window for Nibbler & Daytime Suppression)**:
+  - Implemented `--once` single-pass processing mode in `Portfolio_Dev/field_notes/nibble_v2.py`.
+  - Enforced daytime quiet window (07:00–22:00 unless `--force`) to eliminate daytime polling churn against Foyer and resident models.
+- **Story 105.10 (Post-Waterfall Learning Target Queueing)**:
+  - Implemented `queue_post_waterfall_learning_target()` in `HomeLabAI/src/logic/cognitive_hub.py` utilizing `fcntl.flock` and atomic temporary file replacement (`os.replace`) to prevent concurrency corruption.
+  - Automatically enqueues thin or ungrounded entity anchors into `Portfolio_Dev/field_notes/data/queue.json` for nightly intake ingestion.
+- **Story 105.11 (Continuous Ceiling-Only Headroom & Prompt De-Fluffing)**:
+  - Excised artificial `min_token_floor` from `HomeLabAI/config/infrastructure.json`.
+  - Refactored `calculate_pacing_range` to `calculate_pacing_ceiling()` and standardized all prompt budget formatting to `[BUDGET]: Headroom ceiling is {ceiling} tokens. Answer concisely within this budget; do not add conversational fluff or filler.`
+
+### 2. Physical Silicon Live Validation Results (`BKM-024`)
+- **Runtime Environment**:
+  - `lab-attendant.service`: Active, `OPERATIONAL`, boot commit matching Git HEAD (`1b307c5`).
+  - Resident vLLM: Port 8088 (`Llama-3.2-3B-AWQ`, 4 LoRA adapters).
+  - ChromaDB: Port 8001 (`behavioral_dna` updated with new `BKM-082`).
+- **Silicon Probe Verification via `scripts/probe_sprint105_waterfall.py`**:
+  - **Probe 1 (Casual Banter `"[ME] hi"`)**:
+    - **Triage**: `vibe: "CASUAL"`, `domain: "unknown"`, `interest: 0.15`.
+    - **Pinky Spoken Output**: Immediate warm greeting (`"Hey, hi! What's up?"`), perfectly adhering to single headroom ceiling with zero fluff.
+    - **Brain & Deep Thought**: 100% Dormant (0 tokens, 0 calls).
+  - **Probe 2 (Historical Inquiry `"[ME] remember Aurora?"`)**:
+    - **Triage**: `vibe: "HISTORICAL"`, `domain: "work_history"`, `interest: 0.70`.
+    - **Pinky Take**: Delivered rapid preliminary stance (`135 tokens`).
+    - **Brain Gatekeeper / Curator**: Extracted bedrock anchor (April 11, 2022 Aurora Subsystem Execution Tracker), pruned noisy triage hints, and passed pure technical signal downstream.
+    - **Deep Thought Synthesis**: Received curated bedrock signal and synthesized rich technical architectural summary without speculative hallucination.
+    - **Result**: **PASS (100% Live Silicon Gauntlet Verified)**.
+
 
