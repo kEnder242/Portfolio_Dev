@@ -1,3 +1,4 @@
+import datetime
 import difflib
 import hashlib
 import json
@@ -253,11 +254,23 @@ def scrub_input_buffer(text):
 def main():
     log(f"--- Pinky Nibbler v2.1 (Reasoning: {REASONING_MODE}) ---")
 
-    # --- LIMIT FLAG ---
+    # --- CLI FLAGS & DAYTIME SUPPRESSION (Story 105.9 / FEAT-416 / LAB-009) ---
     limit = 999
+    if "--once" in sys.argv:
+        limit = 1
     for arg in sys.argv:
         if arg.startswith("--limit="):
             limit = int(arg.split("=")[1])
+
+    force = "--force" in sys.argv
+    now = datetime.datetime.now()
+    if not force and 7 <= now.hour < 22:
+        log(
+            f"[POLITENESS] Daytime session active ({now.strftime('%H:%M:%S')}). "
+            "Background nibbling suppressed until nightly window (03:00-05:00 AM). Use --force to override."
+        )
+        update_status("IDLE", "Daytime suppression active (07:00-22:00).")
+        return
 
     if not os.path.exists(QUEUE_FILE):
         update_status("IDLE", "Queue empty.")
