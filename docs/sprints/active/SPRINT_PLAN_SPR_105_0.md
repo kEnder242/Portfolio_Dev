@@ -139,3 +139,121 @@ Validated via [`scripts/probe_sprint105_waterfall.py`](file:///home/jallred/Dev_
   - **Pinky Pseudo-HyDE Output**: Synthesized career anchors (`"Aurora, recall, 2015, 2016, DCMI, IPMI"`).
   - **Brain Gatekeeper / Curator**: Extracted and curated bedrock facts (`Aurora Subsystem Execution Tracker (April 11th, 2022)`), filtered extraneous noise, signaled downstream council (`[Signal to Deep Thought:]`).
   - **Result**: **PASS**. Multi-stage council successfully orchestrated via decoupled Tri-Anchor.
+
+---
+
+# 🌊 SPRINT 105.0 PHASE 2: RAG-First Ripgrep Expansion, Nibbler Unblock & Watchdog Truth Enforcement
+
+**Phase ID:** `SPR_105_PHASE_2`  
+**Theme:** Precision RAG-First Ripgrep Expansion ([`FEAT-451`]), Nibbler `McpClient` WebSocket Authentication Fix ([`FEAT-330`]), Accountability Watchdog Freshness Enforcement ([`FEAT-619`]), and Nightly Batch Window Pinning ([`FEAT-416`]).  
+**Status:** 📋 **PLANNING & REVIEW (Awaiting User Question & Alignment)**  
+**Parent Frameworks:**
+- [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
+- [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
+- [`BKM-043`]: Master 4-Anchor Prompt Standard (Grep-Stable Surgical Anchoring)
+- [`BKM-037`]: Persistent Memory Efficiency Protocol (Deferred Extraction Sweeps)
+- [`FEAT-117`]: Two-Tier Discovery Pattern (ChromaDB Anchor ➔ Raw File Acquisition)
+- [`FEAT-330`]: Unified MCP Client Resource Coordination
+- [`FEAT-405`]: Gems-to-Notes Ground Truth Synthesis & Neighborhood Expansion
+- [`FEAT-416`]: Single-Epoch Nightly Refinement Sweeper
+- [`FEAT-451`]: Ripgrep Autonomous Search Pivot & Expansion
+- [`FEAT-619`]: Standalone Accountability Watchdog & Zero-Lie Invariant
+
+---
+
+## 🏛️ Phase 2 Master Narrative: RAG-First Precision & Unblocking the Intake Pipeline
+
+In Phase 1, we restored the decoupled Waterfall design, certified independent Tri-Anchors, and proved on physical silicon that Brain successfully filters ungrounded eras. 
+
+However, live probing on `"remember Aurora?"` exposed two critical memory pipeline blockages:
+1. **The Retrieval Detail Chasm**: ChromaDB matches high-level titles (`artifacts_2022.json`), but because raw `.txt` notes (`notes_2024_PIAV.txt`) were never indexed, Brain declared the implementation record sparse. Brain correctly established the bedrock date (April 11, 2022), but lacked the technical meat (Ponte Vecchio GPUs, OpenBMC Node Manager, RAPL power limiting).
+2. **The "RAG-First, Grep-Second" Solution**: Rather than grepping raw notes blindly from user prompts, the system must execute **RAG First** (ChromaDB identifies the entity `Aurora Subsystem`), **Brain Curates** (identifies the gap and selects the precise search anchor `"Aurora"`), and **Grep Expands** (`/usr/bin/rg -m 5 -i "Aurora" notes_2024_PIAV.txt`) in $<3$ms. This eliminates cruft completely and hands Deep Thought rich engineering text.
+3. **The Nibbler Groundhog Loop**: The intake engine ([`nibble_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py)) has been frozen since September 18, 2026 because [`ai_engine_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/ai_engine_v2.py) omits the `X-Lab-Key` header, causing Foyer rejection code `1008`.
+4. **The Watchdog "Green Lie"**: [`standalone_accountability_watchdog.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/standalone_accountability_watchdog.py) has been reporting `✅ Active Gems: 4` every night by inspecting a static file from August 25 without verifying file freshness or intake forward progress.
+
+Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep expansion.
+
+---
+
+## 🎯 Phase 2 Stories (Mandatory 4-Anchor Standard)
+
+### Story 105.6: RAG-First Ripgrep Expansion Pipeline (`FEAT-451` / `FEAT-117` / `FEAT-405`)
+* **Objective**: Enable Brain-curated, zero-cruft ripgrep expansion into raw text notes between Brain Gatekeeper and Deep Thought.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on dflash2/oMLX or Junior on Ollama).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/src/nodes/archive_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/archive_node.py#L824-L880) (lines 824–880: `execute_grep_search_pivot`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3172-L3196) (lines 3172–3196: Stage 3.1 ➔ Stage 3.2 handover)
+* **Anchor 2 (Verification Command)**:
+  - `HomeLabAI/.venv/bin/pytest src/tests/test_agentic_r_retrieval.py -v`
+  - `HomeLabAI/.venv/bin/python scripts/probe_sprint105_waterfall.py`
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `archive_node.py:execute_grep_search_pivot`:
+    1. Update command from `rg` to `/usr/bin/rg -m 5 -i --no-heading -N` (with `/usr/bin/grep` fallback).
+    2. Expand regex to match TitleCase codenames: `r"\b(?:[A-Z0-9_-]{2,}|[A-Z][a-z0-9_]{2,}|0x[0-9a-fA-F]+|[a-zA-Z0-9_]+\.(?:py|sh|c|h|txt))\b"`.
+  - In `cognitive_hub.py`: In `_run_two_mice_handover`, after `step_brain_gatekeeper` returns `brain_grounding`, if Brain indicates a thin record or anchor gap, invoke `execute_grep_search_pivot` on Brain's curated anchor and append `[RAW_NOTES_EXPANSION]` directly to `dt_synthesis` prompt context.
+* **Anchor 4 (DNA Links)**: `[FEAT-451]`, `[FEAT-117]`, `[FEAT-405]`.
+
+### Story 105.7: Nibbler McpClient Authentication & Groundhog Loop Unblock (`FEAT-330` / `FEAT-416`)
+* **Objective**: Fix the `1008 X-Lab-Key` policy violation in `ai_engine_v2.py` so the Nibbler advances through `notes_2024_PIAV.txt` into 2022 notes.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on dflash2/oMLX or Junior on Ollama).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`Portfolio_Dev/field_notes/ai_engine_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/ai_engine_v2.py#L62-L115) (lines 62–115: `McpClient.generate`)
+* **Anchor 2 (Verification Command)**:
+  - `PYTHONPATH=/home/jallred/Dev_Lab/Portfolio_Dev/field_notes:/home/jallred/Dev_Lab/HomeLabAI/src /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py --once`
+  - Verify output shows successful LLM response without `McpClient Failure: received 1008` and updates `chunk_state.json`.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `McpClient.generate`: Fetch the active session token from `http://127.0.0.1:8765/status?timeout=5`. Pass `additional_headers={"X-Lab-Key": session_token}` to `websockets.connect()` and send `"lab_key": session_token` in the handshake packet.
+* **Anchor 4 (DNA Links)**: `[FEAT-330]`, `[FEAT-416]`, `[BKM-037]`.
+
+### Story 105.8: Accountability Watchdog Green Lie Excision & Freshness Verification (`FEAT-619`)
+* **Objective**: Eliminate the false-green check in the nightly accountability watchdog by requiring proof of 24-hour file freshness and intake progress.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on dflash2/oMLX).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/src/infra/standalone_accountability_watchdog.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/standalone_accountability_watchdog.py#L312-L338) (lines 312–338: `check_subconscious_dreaming`)
+* **Anchor 2 (Verification Command)**:
+  - `HomeLabAI/.venv/bin/pytest src/tests/test_standalone_accountability_watchdog.py -v`
+  - Run `HomeLabAI/.venv/bin/python src/infra/standalone_accountability_watchdog.py` and verify it reports a real failure or warning on stale files.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `check_subconscious_dreaming()`: Inspect `file_mtime = gems_path.stat().st_mtime`. If `time.time() - file_mtime > 86400`: mark `passed = False` with `detail = f"Stale gems file (last modified {(time.time() - file_mtime) / 3600:.1f}h ago)"`.
+  - Add `check_nibbler_intake_progress()`: Verify `chunk_state.json` mtime has updated within 48 hours.
+* **Anchor 4 (DNA Links)**: `[FEAT-619]`, `[BKM-024]`, `[BKM-044]`.
+
+### Story 105.9: Dedicated Nightly Batch Window for Nibbler & 24/7 Polling Suppression (`LAB-009` / `FEAT-416`)
+* **Objective**: Ensure the Nibbler runs strictly as a scheduled nightly batch (03:00–05:00 AM) and is forbidden from 24/7 background polling loops during daytime user sessions.
+* **Delegation Tier**: `[AGY:PRIMARY]`.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/config/systemd/field-notes-nightly.service`](file:///home/jallred/Dev_Lab/HomeLabAI/config/systemd/field-notes-nightly.service)
+  - [`Portfolio_Dev/field_notes/mass_scan.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mass_scan.py#L174-L215)
+* **Anchor 2 (Verification Command)**:
+  - `systemctl --user list-timers | grep -E "field-notes|nightly"`
+* **Anchor 3 (Verbatim Code Specs)**:
+  - Verify `field-notes-nightly.timer` triggers at 03:00 AM.
+  - Assert `nibble_v2.py` exits immediately if invoked during non-quiesced daytime hours or when `lab-attendant` reports interactive state.
+* **Anchor 4 (DNA Links)**: `[LAB-009]`, `[FEAT-416]`.
+
+### Story 105.10: Post-Waterfall Learning Target Queueing (`FEAT-416` / `BKM-037`)
+* **Objective**: Emit post-turn learning targets into `queue.json` when the live waterfall encounters a knowledge gap, priming the nightly Nibbler.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on dflash2/oMLX).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3195-L3225)
+* **Anchor 2 (Verification Command)**:
+  - Unit test in `HomeLabAI/src/tests/test_two_mice_handover.py` asserting `queue.json` receives a target item on thin archive detection.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `_run_two_mice_handover`: If `brain_grounding` contains indicators of ungrounded or thin evidence (e.g. `"Without a historical record"` or `"details are scarce"`), append `{"file": "notes_2024_PIAV.txt", "anchor": curated_entity, "source": "foyer_gap", "timestamp": time.time()}` to `Portfolio_Dev/field_notes/data/queue.json`.
+* **Anchor 4 (DNA Links)**: `[FEAT-416]`, `[BKM-037]`, `[AT2QA]`.
+
+---
+
+## 🚦 Phase 2 AFK Execution Checklist (`BKM-086`)
+- [ ] **Step 1: Grounding Alignment**: Verified against `FEAT-451`, `FEAT-330`, `FEAT-619`, and `BKM-081`.
+- [ ] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 2 plan (Hold heads-down until approved).
+- [ ] **Step 3: Surgical Execution**:
+  - [ ] Apply Story 105.6 (RAG-First Ripgrep Expansion)
+  - [ ] Apply Story 105.7 (Nibbler McpClient Auth Fix)
+  - [ ] Apply Story 105.8 (Watchdog Green Lie Excision)
+  - [ ] Apply Story 105.9 (Nightly Batch Window Pinning)
+  - [ ] Apply Story 105.10 (Post-Waterfall Learning Queue)
+- [ ] **Step 4: Offline Verification**: Pytest suite 100% green.
+- [ ] **Step 5: Live Silicon Verification**: Re-probe `remember Aurora?` and verify rich Ponte Vecchio/OpenBMC lines are synthesized.
+- [ ] **Step 6: Retrospective & Documentation**: Append Phase 2 Retrospective.
+
