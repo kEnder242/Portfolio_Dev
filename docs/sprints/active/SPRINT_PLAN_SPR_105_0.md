@@ -357,4 +357,79 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
     - **Deep Thought Synthesis**: Received curated bedrock signal and synthesized rich technical architectural summary without speculative hallucination.
     - **Result**: **PASS (100% Live Silicon Gauntlet Verified)**.
 
+---
+
+# 🌊 SPRINT 105.0 PHASE 3: Dynamic Intake Target Coupling & Gem Quality Hardening
+
+**Phase ID:** `SPR_105_PHASE_3`  
+**Theme:** Dynamic Intake Target Coupling for Gem Extraction (`FEAT-454`), Excision of Hardcoded 2024 Monopoly, Alignment with Nibbler Progress State (`FEAT-619`), and Forensic Gem Quality & Prompt Hardening.  
+**Status:** 📋 **PLANNING & REVIEW (Awaiting Alignment)**  
+**Parent Frameworks:**
+- [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
+- [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
+- [`BKM-043`]: Master 4-Anchor Prompt Standard
+- [`FEAT-454`]: Dynamic Gem Extraction & Discovery Ledger
+- [`FEAT-619`]: Standalone Accountability Watchdog & Zero-Lie Invariant
+- [`FEAT-101`]: Dual-Pipeline Synthesis & Load-Aware Nibbling
+
+---
+
+## 🏛️ Phase 3 Master Narrative: Eliminating the 2024 Monopoly & Gem Leakages
+
+In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excised the 7-week watchdog green lie. However, post-sprint investigation revealed a critical architectural disconnect in how candidate gems are extracted and tested:
+
+1. **The 2024 Extraction Monopoly**: [`extract_latest_gems.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py) attempts to read `status.json["last_file"]`. Because modern Foyer vitals do not supply `last_file`, it perpetually defaults to `notes_2024_PIAV.txt` and `2024.json`. Even as the intake engine processes 2015, 2018, or 2022 notes, the gem extractor only ever extracts the same 4 gems from 2024, starving the rest of the 18-year archive and biasing the discovery ledger.
+2. **Dynamic Nibbler State Coupling**: Rather than maintaining disconnected static fallbacks, the extractor must dynamically resolve the target year directly from active Nibbler artifacts:
+   - Primary: The most recently updated chunk entry in [`chunk_state.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/chunk_state.json).
+   - Secondary: Pending gap items in [`queue.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/queue.json) (emitted by Story 105.10).
+   - Fallback: Globbing the latest valid year archive on disk with Rank >= 4 items.
+3. **Forensic Gem Quality Audit & Leakage Vector Excision**:
+   - **The "Duplicate Merge Free Upgrade" Leak**: In `refine_gem.py`, whenever two entries on the same date have cosine similarity > 0.85, the script merges them and unconditionally slams `rank = 4` on the entry, regardless of whether it is an admin task, meeting note, or inventory follow-up.
+   - **The "Empty Evidence Rank 5" Leak**: High-level `META` prompts generate `[STRATEGIC_ANCHOR]` summaries with empty `"evidence": ""`, which receive Rank 5 despite lacking concrete register, tool, or CLI breadcrumbs.
+   - **The Raw Log Prompt Gap**: In `nibble_v2.py`, standard non-reasoning mode uses a single-line prompt (`"Extract technical events from this log: ..."`) lacking negative boundaries, resulting in mundane tickets (e.g., inventory follow-ups) entering the archive as technical milestones.
+
+---
+
+## 🎯 Phase 3 Stories (Mandatory 4-Anchor Standard)
+
+### Story 105.12: Dynamic Intake Target Resolver for Gem Extraction & Watchdog Coupling (`FEAT-454` / `FEAT-619`)
+* **Objective**: Refactor `extract_latest_gems.py` to dynamically resolve its target parsing file and year from live Nibbler state (`chunk_state.json` / `queue.json`), breaking the hardcoded 2024 monopoly and giving the gem candidate distribution an organic rolling window.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on Qwen3.8-27B).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`Portfolio_Dev/field_notes/extract_latest_gems.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py#L15-L78)
+  - [`Portfolio_Dev/field_notes/nibble_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py#L440-L460) (tail invocation)
+* **Anchor 2 (Verification Command)**:
+  - `python /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py`
+  - Verify `latest_synthesis_gems.json` reflects the target year of the latest `chunk_state.json` entry rather than defaulting to 2024.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `extract_latest_gems.py`:
+    Replace static `status.json` check with `resolve_active_intake_target()`:
+    1. Parse `chunk_state.json` and extract the target year from the last modified chunk key (`"notes_YYYY_*.txt::YYYY-MM"`).
+    2. If empty, check `queue.json` for pending targets.
+    3. If empty, scan `sorted(DATA_DIR.glob("20*.json"), reverse=True)` and pick the latest year with entries having `rank >= 4`.
+  - Wire `extract_latest_gems()` as an optional post-nibble step in `nibble_v2.py` when a chunk is successfully committed.
+* **Anchor 4 (DNA Links)**: `[FEAT-454]`, `[FEAT-619]`, `[FEAT-101]`.
+
+### Story 105.13: Gem Quality Prompt Hardening & Unconditional Rank Promotion Excision (`FEAT-101` / `FEAT-131`)
+* **Objective**: Eliminate low-value admin/inventory pollution from Rank 4/5 gems and harden extraction prompts with explicit technical criteria and negative guidance.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on Qwen3.8-27B).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`Portfolio_Dev/field_notes/refine_gem.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py#L180-L188) (lines 180–188: unconditional `event_i["rank"] = 4`)
+  - [`Portfolio_Dev/field_notes/nibble_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py#L366-L370) (lines 366–370: unconstrained log prompt)
+* **Anchor 2 (Verification Command)**:
+  - Run test asserting admin/logistics entries are rejected from Rank >= 4 promotion.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `refine_gem.py`: Remove unconditional `rank = 4` assignment on deduplication merge. Require presence of concrete `evidence` containing technical anchors (registers, tools, commands) before promoting to Rank 4.
+  - In `nibble_v2.py`: Upgrade default log extraction prompt to include strict negative constraints: "EXCLUDE logistics, shipping, meeting requests, inventory follow-ups, and password resets. ONLY extract hardware configurations, registers, scripts, tools, and debug scars."
+* **Anchor 4 (DNA Links)**: `[FEAT-101]`, `[FEAT-131]`, `[VIBE-008]`.
+
+---
+
+## 🛑 Phase 3 Pre-Flight Checklist Gate (`BKM-082`)
+- [ ] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps.
+- [ ] **2. Mistakes-Avoided Ledger**: Document 5 mistakes avoided.
+- [ ] **3. Oracle Review**: Adversarial audit completed by Nemotron-3 Super 120B.
+- [ ] **4. Delegation Justification**: Evaluated LOCAL/CLOUD first.
+
+
 
