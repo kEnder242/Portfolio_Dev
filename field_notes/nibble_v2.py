@@ -446,6 +446,13 @@ def main():
             # [FEAT-130] Atomic State Update: ONLY mark as done if data was captured
             state[task["id"]] = content_hash
             save_json(STATE_FILE, state)
+            # [Story 105.12] Refresh latest gems after committing a chunk
+            try:
+                from extract_latest_gems import extract_latest_gems
+
+                extract_latest_gems()
+            except Exception as e:
+                log(f"   ! Gem extraction failed: {e}")
         else:
             log("   > No valid events found. State NOT updated.")
 

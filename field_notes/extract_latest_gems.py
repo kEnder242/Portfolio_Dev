@@ -12,21 +12,79 @@ from pathlib import Path
 DATA_DIR = Path(__file__).resolve().parent / "data"
 
 
-def extract_latest_gems(max_gems=4):
-    status_file = DATA_DIR / "status.json"
-    last_file = "notes_2024_PIAV.txt"
-    target_year = "2024"
+def _parse_year_from_key(key):
+    """Extract 4-digit year from trailing '::YYYY-MM' or '::YYYY-YYYY' part of a chunk key."""
+    date_part = key.split("::")[-1]
+    m = re.search(r"(20\d{2})-", date_part)
+    if m:
+        return m.group(1)
+    m = re.search(r"(20\d{2})", date_part)
+    return m.group(1) if m else None
 
-    if status_file.exists():
+
+def _year_rank_gems(year_file):
+    try:
+        with open(year_file, "r") as f:
+            items = json.load(f)
+        return sum(1 for it in items if isinstance(it, dict) and it.get("rank", 0) >= 4)
+    except Exception:
+        return 0
+
+
+def _resolve_target_year():
+    """[Story 105.12] Dynamically resolve target year: chunk_state.json > queue.json > latest rank>=4 year."""
+    last_file = "unknown"
+    state_file = DATA_DIR / "chunk_state.json"
+    if state_file.exists():
         try:
-            with open(status_file, "r") as f:
-                s = json.load(f)
-                last_file = s.get("last_file", last_file)
-                m = re.search(r"20\d{2}", last_file)
-                if m:
-                    target_year = m.group(0)
-        except Exception:
-            pass
+            with open(state_file, "r") as f:
+                state = json.load(f)
+            keys = [k for k in state.keys() if "::" in k]
+            if keys:
+                def recency(k):
+                    m = re.search(r"::(\d{4}-\d{2})$", k)
+                    return m.group(1) if m else k.rsplit("::", 1)[-1]
+                latest_key = max(keys, key=recency)
+                last_file = latest_key.split("::")[0]
+                year = _parse_year_from_key(latest_key)
+                if year:
+                    return last_file, year
+        except Exception as e:
+            print(f"⚠️ chunk_state.json unreadable: {e}")
+    queue_file = DATA_DIR / "queue.json"
+    if queue_file.exists():
+        try:
+            with open(queue_file, "r") as f:
+                queue = json.load(f)
+            if isinstance(queue, list) and queue:
+                task = queue[-1]
+                if isinstance(task, dict):
+                    last_file = task.get("last_file") or task.get("filename") or last_file
+                    for field in ("bucket", "last_file", "filename"):
+                        val = task.get(field, "")
+                        if isinstance(val, str):
+                            m = re.search(r"(20\d{2})-\d{2}", val)
+                            if m:
+                                return last_file, m.group(1)
+                            m = re.search(r"(20\d{2})$", val)
+                            if m:
+                                return last_file, m.group(1)
+        except Exception as e:
+            print(f"⚠️ queue.json unreadable: {e}")
+    year_files = sorted(
+        (p for p in DATA_DIR.glob("20*.json") if re.match(r"20\d{2}\.json$", p.name)),
+        reverse=True,
+    )
+    for p in year_files:
+        if _year_rank_gems(p) >= 4:
+            return last_file, p.stem
+    if year_files:
+        return last_file, year_files[0].stem
+    return last_file, "2024"
+
+
+def extract_latest_gems(max_gems=4):
+    last_file, target_year = _resolve_target_year()
 
     year_file = DATA_DIR / f"{target_year}.json"
     if not year_file.exists():
