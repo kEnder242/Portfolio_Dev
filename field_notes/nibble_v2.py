@@ -365,11 +365,12 @@ def main():
             """
         else:
             prompt = (
-                f"Extract technical events from this log. "
-                f"ONLY extract hardware configurations, memory registers, MSRs, "
-                f"firmware/BIOS behaviors, scripts, tool invocations, and telemetry data. "
-                f"EXCLUDE office logistics, shipping/tracking, catering, room bookings, "
-                f"password resets, and admin invites. "
+                f"Extract all significant events from this log across multiple domains. "
+                f"Capture technical events (hardware configs, registers, MSRs, firmware/BIOS, "
+                f"scripts, tool invocations, telemetry), hardware milestones, lab operations, "
+                f"vendor tickets, and shipping/chassis deployments. "
+                f"For each event, tag it with a 'domain' field from exactly one of: "
+                f"['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations']. "
                 f"Log content: {scrubbed_content[:4000]}"
             )
 
