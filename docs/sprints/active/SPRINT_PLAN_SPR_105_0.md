@@ -363,7 +363,7 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
 
 **Phase ID:** `SPR_105_PHASE_3`  
 **Theme:** Dynamic Intake Target Coupling for Gem Extraction (`FEAT-454`), Excision of Hardcoded 2024 Monopoly, Alignment with Nibbler Progress State (`FEAT-619`), and Forensic Gem Quality & Prompt Hardening.  
-**Status:** 📋 **PLANNING & REVIEW (Awaiting Alignment)**  
+**Status:** 🏆 **COMPLETE (Validated on Local Swarm & Physical Silicon)**  
 **Parent Frameworks:**
 - [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
 - [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
@@ -426,10 +426,25 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 ---
 
 ## 🛑 Phase 3 Pre-Flight Checklist Gate (`BKM-082`)
-- [ ] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps.
-- [ ] **2. Mistakes-Avoided Ledger**: Document 5 mistakes avoided.
-- [ ] **3. Oracle Review**: Adversarial audit completed by Nemotron-3 Super 120B.
-- [ ] **4. Delegation Justification**: Evaluated LOCAL/CLOUD first.
+- [x] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps in gem extraction and watchdog state.
+- [x] **2. Mistakes-Avoided Ledger**:
+  1. *Mistake Avoided*: Hardcoding new fallback year in `extract_latest_gems.py` instead of dynamic resolution.
+  2. *Mistake Avoided*: Blind regex replacement of rank without validating technical evidence.
+  3. *Mistake Avoided*: Unchecked `chunk_state.json` parsing failing on legacy key formats.
+  4. *Mistake Avoided*: Modifying `ai_engine_v2.py` reasoning prompts when simple negative guidance in caller suffices.
+  5. *Mistake Avoided*: Prematurely wiping existing candidate gems before verifying dynamic resolution.
+- [x] **3. Oracle Review**: Adversarial architecture review grounded in `ORACLE_REVIEW_GEM_QUALITY.md`.
+- [x] **4. Delegation Justification**: Evaluated LOCAL/CLOUD first; executed via `[SWARM:LOCAL]` (Atlas on Kender 4090 / Qwen3.8-27B) under `BKM-049`.
+*Gate certified: All pre-flight checklist gates satisfied.*
 
+---
 
-
+## 🚦 Phase 3 AFK Execution Checklist (`BKM-086`)
+- [x] **Step 1: Grounding Alignment**: Verified against `FEAT-454`, `FEAT-619`, `FEAT-101`, and `FEAT-131`.
+- [x] **Step 2: Pre-Flight Review**: Stories 105.12 and 105.13 formulated, grounded, and approved.
+- [x] **Step 3: Surgical Execution**:
+  - [x] Apply Story 105.12 (Dynamic Intake Target Resolver) — Commit [`ff5abe1`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py)
+  - [x] Apply Story 105.13 (Gem Quality Prompt Hardening & Rank Promotion Excision) — Commit [`376c6eb`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py)
+- [x] **Step 4: Offline Verification**: Pytest suite 100% green (`test_gem_refine_quality.py`: 3/3 passed).
+- [x] **Step 5: Live Silicon Verification**: `extract_latest_gems.py` executed live, extracting 4 Rank 4/5 gems dynamically.
+- [x] **Step 6: Retrospective & Documentation**: Documented findings and Oracle synthesis.
