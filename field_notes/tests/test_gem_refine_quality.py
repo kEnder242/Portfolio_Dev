@@ -24,11 +24,12 @@ def test_technical_evidence_detector_negative():
     assert _has_technical_evidence("Booked room 4B for weekly project planning meeting") is False
 
 
-def test_prompt_negative_constraints():
-    """Verify that nibble_v2 default extraction prompt contains negative guidance against fluff."""
+def test_prompt_domain_tagging_and_inclusive_scope():
+    """Verify that nibble_v2 default extraction prompt tags events with a domain and includes logistics/operations in scope."""
     import inspect
     import nibble_v2
 
     source = inspect.getsource(nibble_v2.main)
-    assert "EXCLUDE" in source or "negative" in source.lower()
-    assert "logistics" in source.lower() or "shipping" in source.lower()
+    assert "domain" in source.lower()
+    assert "logistics" in source.lower()
+    assert "operations" in source.lower()
