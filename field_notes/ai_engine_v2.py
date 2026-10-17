@@ -79,16 +79,43 @@ class McpClient(OllamaClient):
 
         target_source = options.get("target_source") if options else None
 
+        # [FEAT-416] Retrieve live Foyer credentials to authenticate the WS handshake
+        lab_key = ""
+        commit = ""
+        try:
+            foyer_resp = requests.get(
+                "http://127.0.0.1:8765/status", params={"timeout": 5}, timeout=5
+            )
+            if foyer_resp.status_code == 200:
+                foyer_data = foyer_resp.json()
+                lab_key = foyer_data.get("session_token", "")
+                commit = foyer_data.get("boot_commit", "")
+        except Exception as e:
+            logging.error(f"Foyer Status Retrieval Failed: {e}")
+
         async def _call():
             try:
                 # Use a high timeout for weights loading/derivation
+                # [FEAT-416] Pass lab key + client commit as HTTP headers on WS upgrade
+                ws_headers = {}
+                if lab_key:
+                    ws_headers["X-Lab-Key"] = lab_key
+                if commit:
+                    ws_headers["X-Client-Commit"] = commit
                 async with websockets.connect(
-                    self.uri, open_timeout=10, ping_interval=20
+                    self.uri,
+                    additional_headers=ws_headers,
+                    open_timeout=10,
+                    ping_interval=20,
                 ) as ws:
                     # Handshake
-                    await ws.send(
-                        json.dumps({"type": "handshake", "client": "refine_worker"})
-                    )
+                    # [FEAT-416] Include lab_key + client_commit in handshake payload
+                    handshake = {"type": "handshake", "client": "refine_worker"}
+                    if lab_key:
+                        handshake["lab_key"] = lab_key
+                    if commit:
+                        handshake["client_commit"] = commit
+                    await ws.send(json.dumps(handshake))
 
                     # Call Think Tool (via text_input for simplified Hub routing)
                     message = {
