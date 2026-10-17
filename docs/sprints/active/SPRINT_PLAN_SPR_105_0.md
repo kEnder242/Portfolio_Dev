@@ -468,7 +468,7 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 - [x] **Step 3: Surgical Execution**:
   - [x] Apply Story 105.12 (Dynamic Intake Target Resolver) — Commit [`ff5abe1`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py)
   - [x] Apply Story 105.13 (Gem Quality Prompt Hardening & Rank Promotion Excision) — Commit [`376c6eb`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py)
-  - [ ] Apply Story 105.14 (Inclusive Multi-Tier Intake & Domain Tagging)
+  - [x] Apply Story 105.14 (Inclusive Multi-Tier Intake & Domain Tagging) — Commit [`aa6fdfd`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py)
 - [x] **Step 4: Offline Verification**: Pytest suite 100% green (`test_gem_refine_quality.py`: 3/3 passed).
 - [x] **Step 5: Live Silicon Verification**: `extract_latest_gems.py` executed live, extracting 4 Rank 4/5 gems dynamically.
-- [ ] **Step 6: Retrospective & Documentation**: Documented findings, Oracle synthesis, and vocabulary alignment.
+- [x] **Step 6: Retrospective & Documentation**: Documented findings, Oracle synthesis, and vocabulary alignment (Stories 105.12, 105.13, 105.14 complete).
