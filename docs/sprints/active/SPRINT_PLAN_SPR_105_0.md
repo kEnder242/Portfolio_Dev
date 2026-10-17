@@ -2,7 +2,7 @@
 
 **Sprint ID:** `SPR_105_0`  
 **Theme:** Full Restoration of the Pure Waterfall Cognitive Flow ([`FEAT-658`]), Complete Excision of `BKM-015` String-Routing Violations, Independent Decoupling of the Tri-Anchor Pillars (Domain, Vibe, and Continuous Interest), and Gating of Career Compass to Historical Inquiries under AFK Paved-Path Execution ([`BKM-086`]).  
-**Status:** 📋 **PLANNING & REVIEW (Awaiting Pre-Flight Approval)**  
+**Status:** 🏆 **COMPLETE (Validated on Physical Silicon)**  
 **Parent Frameworks:**
 - [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
 - [`BKM-015`]: Semantic Anchor Protocol (Anti-Drift, Indirection & Prompt-Driven Pacing)
@@ -108,9 +108,34 @@ graph TD
 ---
 
 ## 🚦 AFK Execution Checklist (`BKM-086`)
-- [ ] **Step 1: Grounding Alignment**: Verified against sprint lineage (Sprint 31 `FEAT-233`, Sprint 103 `FEAT-658`, Sprint 104 `FEAT-523`).
-- [ ] **Step 2: Pre-Flight Review**: Human review and alignment on sprint plan.
-- [ ] **Step 3: Surgical Execution**: Apply Stories 105.1 through 105.4 via atomic line replacements.
-- [ ] **Step 4: Offline Verification**: 100% green on pytest suite.
-- [ ] **Step 5: Live Silicon Verification**: Physical probe injection against port 8765.
-- [ ] **Step 6: Retrospective & Documentation**: Log sprint closure and update ProjectStatus.md.
+- [x] **Step 1: Grounding Alignment**: Verified against sprint lineage (Sprint 31 `FEAT-233`, Sprint 103 `FEAT-658`, Sprint 104 `FEAT-523`).
+- [x] **Step 2: Pre-Flight Review**: Human review and alignment on sprint plan.
+- [x] **Step 3: Surgical Execution**: Apply Stories 105.1 through 105.4 via atomic line replacements.
+- [x] **Step 4: Offline Verification**: 100% green on pytest suite (242/242 passed).
+- [x] **Step 5: Live Silicon Verification**: Physical probe injection against port 8765 (Casual banter: Pinky speaks, Brain dormant; Historical: Pinky + Brain active).
+- [x] **Step 6: Retrospective & Documentation**: Log sprint closure and update ProjectStatus.md.
+
+---
+
+## 📜 Sprint Retrospective & Silicon Certification
+
+### 1. Test Suite Realignment
+- **Root Cause of Anti-Pattern Enforcement**: Four unit tests (`test_two_mice_handover.py`, `test_multi_stage_replay_pipeline.py`, `test_brain_gatekeeper.py`, `test_triage_policy_loader.py`) were actively encoding defensive legacy workarounds—such as asserting Brain execution on $interest = 0.30$, demanding rigid 3-title gatekeeper strings, and calculating obsolete `lead_node` values.
+- **Surgical Alignment**: Realigned test assertions to the pure decoupled waterfall contract:
+  - On low-interest turns ($interest = 0.30$), Brain call count is strictly asserted to be 0 (dormant).
+  - Obsolete `lead_node` calculations were eradicated.
+  - Full combined offline test suite: **242 / 242 passed (100% green)** in 3.14s.
+
+### 2. Physical Silicon Live Validation Results (`BKM-024`)
+Validated via [`scripts/probe_sprint105_waterfall.py`](file:///home/jallred/Dev_Lab/HomeLabAI/scripts/probe_sprint105_waterfall.py) against running `lab-attendant.service` on port 8765:
+- **Probe 1: Casual Banter (`"[ME] hi"`)**:
+  - **Triage Result**: `vibe: "CASUAL"`, `domain: "unknown"`, `casual: 0.8`, `intrigue: 0.0`, `importance: 0.0`.
+  - **Pinky Spoken Output**: *"Zort!"* (warm, immediate character voice).
+  - **Brain Status**: 100% Dormant (0 tokens, 0 messages).
+  - **Deep Thought Status**: 100% Dormant (0 tokens, 0 messages).
+  - **Result**: **PASS**. Waterfall fuel naturally exhausted; no artificial Brain shoehorning.
+- **Probe 2: Historical Inquiry (`"[ME] remember Aurora?"`)**:
+  - **Triage Result**: `vibe: "HISTORICAL"`, `domain: "work_history"`, `target_domains: ["work_history"]`.
+  - **Pinky Pseudo-HyDE Output**: Synthesized career anchors (`"Aurora, recall, 2015, 2016, DCMI, IPMI"`).
+  - **Brain Gatekeeper / Curator**: Extracted and curated bedrock facts (`Aurora Subsystem Execution Tracker (April 11th, 2022)`), filtered extraneous noise, signaled downstream council (`[Signal to Deep Thought:]`).
+  - **Result**: **PASS**. Multi-stage council successfully orchestrated via decoupled Tri-Anchor.
