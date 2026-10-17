@@ -365,7 +365,12 @@ def main():
             """
         else:
             prompt = (
-                f"Extract technical events from this log: {scrubbed_content[:4000]}"
+                f"Extract technical events from this log. "
+                f"ONLY extract hardware configurations, memory registers, MSRs, "
+                f"firmware/BIOS behaviors, scripts, tool invocations, and telemetry data. "
+                f"EXCLUDE office logistics, shipping/tracking, catering, room bookings, "
+                f"password resets, and admin invites. "
+                f"Log content: {scrubbed_content[:4000]}"
             )
 
         bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")

@@ -21,6 +21,61 @@ def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
+import re
+
+
+def _has_technical_evidence(text: str) -> bool:
+    """Detect hard technical evidence in a gem's evidence string.
+
+    Returns True if the text contains any of:
+      - Memory/register hex addresses  (0x..., hex with 0x prefix, 4+ digits)
+      - CLI flags                     (--foo, -v, --force)
+      - Script/code file extensions   (.py, .sh, .js, .ts, .c, .cpp, .rb, .pl, .go, .rs, .java, .ipynb)
+      - Hardware / firmware acronyms  (RAPL, PECI, MSR, PCIe, I2C, IPMI, BMC,
+                                       OpenBMC, BIOS, PythonSV, ITP, JTAG)
+    """
+    if not isinstance(text, str) or not text:
+        return False
+
+    # 1. Hex register / address patterns (0x + 2+ hex digits)
+    if re.search(r"0x[0-9a-fA-F]{2,}", text):
+        return True
+
+    # 2. CLI flags (--long-flag or -single-char, not at line-start)
+    if re.search(r"(?<!\S)--[a-zA-Z][\w-]+", text):
+        return True
+    if re.search(r"(?<!\S)-[a-zA-Z](?=\s|$|[,:;])", text):
+        return True
+
+    # 3. Script / code file extensions
+    tech_exts = (
+        r"\.(py|sh|bash|js|ts|c|cpp|h|hpp|rb|pl|pm|go|rs|java|ipynb|json|yaml|yml|toml|ini|cfg|conf|xml|csv)\b"
+    )
+    if re.search(tech_exts, text):
+        return True
+
+    # 4. Hardware / firmware acronyms (word-boundary match, case-sensitive for most)
+    hw_acronyms = (
+        r"\bRAPL\b",
+        r"\bPECI\b",
+        r"\bMSR\b",
+        r"\bPCIe\b",
+        r"\bI2C\b",
+        r"\bIPMI\b",
+        r"\bBMC\b",
+        r"\bOpenBMC\b",
+        r"\bBIOS\b",
+        r"\bPythonSV\b",
+        r"\bITP\b",
+        r"\bJTAG\b",
+    )
+    for pattern in hw_acronyms:
+        if re.search(pattern, text):
+            return True
+
+    return False
+
+
 def get_embedding_function():
     """Get an embedding function with ChromaDB HttpClient fallback.
 
@@ -182,7 +237,15 @@ def deduplicate_gems():
                     tags_i = set(event_i.get("tags", []))
                     tags_j = set(event_j.get("tags", []))
                     event_i["tags"] = list(tags_i.union(tags_j))
-                    event_i["rank"] = 4
+
+                    # STORY 105.13: Conditional rank promotion based on technical evidence
+                    rank_i = event_i.get("rank", 2)
+                    rank_j = event_j.get("rank", 2)
+                    base_rank = max(rank_i, rank_j)
+                    if _has_technical_evidence(event_i.get("evidence", "")):
+                        event_i["rank"] = max(4, base_rank)
+                    else:
+                        event_i["rank"] = base_rank
 
                     merged_indices.add(j)
 
