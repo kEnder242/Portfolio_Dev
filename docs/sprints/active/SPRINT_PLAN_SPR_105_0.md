@@ -242,10 +242,40 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
   - In `_run_two_mice_handover`: If `brain_grounding` contains indicators of ungrounded or thin evidence (e.g. `"Without a historical record"` or `"details are scarce"`), append `{"file": "notes_2024_PIAV.txt", "anchor": curated_entity, "source": "foyer_gap", "timestamp": time.time()}` to `Portfolio_Dev/field_notes/data/queue.json`.
 * **Anchor 4 (DNA Links)**: `[FEAT-416]`, `[BKM-037]`, `[AT2QA]`.
 
+### Story 105.11: Continuous Ceiling-Only Headroom & Prompt De-Fluffing (`FEAT-523` / `BKM-015` / `BKM-087`)
+* **Objective**: Eliminate min-token target floors from all prompts and configs, re-framing budgets purely as upper headroom ceilings ("answer concisely within this budget") to prevent LLM floor-filling fluff.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on dflash2/oMLX).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/config/infrastructure.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/infrastructure.json#L8-L13)
+  - [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L366-L396) (lines 366–396, 1240, 1759, 2164, 2382, 2985)
+  - [`HomeLabAI/src/tests/test_cognitive_hub_pacing.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_cognitive_hub_pacing.py)
+* **Anchor 2 (Verification Command)**:
+  - `HomeLabAI/.venv/bin/pytest src/tests/test_cognitive_hub_pacing.py -v`
+  - Synthetic probe validation via `scripts/probe_sprint105_waterfall.py` confirming zero padding on casual greetings.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `infrastructure.json`: Deprecate `min_token_floor` in favor of pure headroom ceiling.
+  - In `cognitive_hub.py`: Refactor `calculate_pacing_range` $\to$ `calculate_pacing_ceiling(node_name, interest) -> int`.
+  - Refactor `format_pacing_line`:
+    ```python
+    def format_pacing_line(node_name: str, interest: float) -> str:
+        ceiling = calculate_pacing_ceiling(node_name, interest)
+        return f"[BUDGET]: Headroom ceiling is {ceiling} tokens. Answer concisely within this budget; do not add conversational fluff or filler."
+    ```
+* **Anchor 4 (DNA Links)**: `[FEAT-523]`, `[BKM-015]`, `[BKM-087]`.
+
+---
+
+## 🛑 Pre-Flight Checklist Gate (`BKM-082`)
+- [ ] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps, watchdog sentinels, and auth borders (`BKM-082 §2.1`).
+- [ ] **2. Mistakes-Avoided Ledger**: Enumerated $\ge$ 3 concrete mistakes avoided in Section 0 (`BKM-082 §2.4`).
+- [ ] **3. Oracle Review**: Adversarial audit completed and appended (`BKM-007` / `BKM-080`).
+- [ ] **4. Delegation Justification**: Evaluated `LOCAL`/`CLOUD` first; documented rationale for any story assigned to `AGY:PRIMARY` (`Invariant 7` / `BKM-049`).
+*Execution is blocked until all 4 boxes are checked with section citations.*
+
 ---
 
 ## 🚦 Phase 2 AFK Execution Checklist (`BKM-086`)
-- [ ] **Step 1: Grounding Alignment**: Verified against `FEAT-451`, `FEAT-330`, `FEAT-619`, and `BKM-081`.
+- [ ] **Step 1: Grounding Alignment**: Verified against `FEAT-451`, `FEAT-330`, `FEAT-619`, `FEAT-523`, and `BKM-081`.
 - [ ] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 2 plan (Hold heads-down until approved).
 - [ ] **Step 3: Surgical Execution**:
   - [ ] Apply Story 105.6 (RAG-First Ripgrep Expansion)
@@ -253,7 +283,8 @@ Phase 2 surgically unblocks the intake pipeline and delivers RAG-first ripgrep e
   - [ ] Apply Story 105.8 (Watchdog Green Lie Excision)
   - [ ] Apply Story 105.9 (Nightly Batch Window Pinning)
   - [ ] Apply Story 105.10 (Post-Waterfall Learning Queue)
+  - [ ] Apply Story 105.11 (Continuous Ceiling-Only Headroom & Prompt De-Fluffing)
 - [ ] **Step 4: Offline Verification**: Pytest suite 100% green.
-- [ ] **Step 5: Live Silicon Verification**: Re-probe `remember Aurora?` and verify rich Ponte Vecchio/OpenBMC lines are synthesized.
+- [ ] **Step 5: Live Silicon Verification**: Re-probe `remember Aurora?` and verify rich Ponte Vecchio/OpenBMC lines are synthesized with zero fluff.
 - [ ] **Step 6: Retrospective & Documentation**: Append Phase 2 Retrospective.
 
