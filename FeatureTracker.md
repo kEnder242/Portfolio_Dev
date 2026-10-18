@@ -3855,7 +3855,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Logic:** Implements **Domain Density Resonance**: user turns begin at resting baseline interest (`current_interest = 0.05`), and each recognized factual domain hit (`target_domains`) injects continuous evidential fuel into `current_interest` (+0.20 for single domains, compounding for multi-domain cross-cutting inquiries). Queries with 0 domain hits remain at resting interest fuel, naturally petering out after Pinky's greeting without requiring negative abort clamps. Resolves semantic domain tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) into concrete ChromaDB collections while preserving Sprint 61/64 vibe-to-collection priority rankings (`HISTORICAL`, `TECHNICAL`, `META`) to achieve full conversational and grounding parity with AGY Clara hooks.
 **Rationale:** Eliminates negative filtering gates in favor of continuous interest fuel injection, while bridging the node boundary disconnect between Triage domain intent and Archive Node multi-collection retrieval.
 
-
-
-
-
+## [FEAT-660] Universal Bicameral Context Fencing (Anti-Unrolling Invariant)
+**Sprint:** Sprint 105.0 (Phase 4)
+**Status:** ACTIVE
+**Tags:** `#context_fencing`, `#anti_unrolling`, `#bicameral_invariants`, `#primer_protocol`, `[BKM-087]`, `[FEAT-658]`
+**Code:** `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/pinky_node.py`, `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/nodes/thought_node.py`
+**Logic:** Establishes a single authoritative constant `UNIVERSAL_CONTEXT_FENCE` in `nodes/loader.py`:
+`"CONTEXT FENCING: Stay relevant to the primer and the actors before you. Limit topics you talk about to topics in the conversation. Do not inject unprompted background history or meta-explanations of your persona."`
+Applied unconditionally to all resident node personas (Pinky, Brain, Deep Thought).
+**Rationale:** Eliminates the negative-priming anti-pattern where prompts unrolled forbidden lists of domain keywords ("laboratory telemetry, silicon specs, or technical history"), which paradoxically prompted smaller instruction-tuned models to fixate on and recite those exact concepts. Providing a concise positive boundary ("stay relevant to the primer and the actors before you") prevents self-referential identity monologues.
