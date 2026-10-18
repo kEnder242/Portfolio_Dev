@@ -1208,12 +1208,12 @@
 3.  **Route Awareness**: Nodes receive a [ROUTE] block indicating which nodes have already fired or are upcoming.
 **Related Features:** [FEAT-233] (Waterfall), [FEAT-234] (Scalar Fuel), [FEAT-111] (Identity Lock).
 
-## [FEAT-238] Council of Hemispheres (Peer Vote)
+## [FEAT-238] Council of Hemispheres (Peer Vote & Dynamic Evidential Damping)
 **Status:** ACTIVE
-**Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L549) — Council of Hemispheres (Peer Vote).
-**Logic:** Enables mid-relay adjustment of the turn's importance level based on node-level reasoning.
-**Rationale:** The Lab Node may under-estimate a query (e.g. Pi as general knowledge). This feature allows Pinky to "Pull the Alarm" by recommending a fuel boost, or "Demote" a turn if she detects it's a joke or mistake.
-**Mechanism:** `CognitiveHub` parses explicit steering signals from node responses and updates the session's fuel state before the Sovereign Brain check.
+**Code:** [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3242-L3270), [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L19) — Council of Hemispheres (Peer Vote & Dynamic Evidential Damping).
+**Logic:** Enables mid-relay adjustment of the turn's fuel level based on node-level reasoning and evidence verification. Brain emits `<boost_interest>` (+0.20) when deep technical bedrock is discovered, or `<damp_interest>` (-0.25) when candidate evidence is absent, irrelevant, or on casual banter.
+**Rationale:** Prevents cascade runaway on casual turns (e.g. *"How are you and Brain?"*). If Brain discovers zero bedrock truth, it damps fuel below $0.35$, cleanly gating Deep Thought into quiescence (`dt_synthesis = ""`) and allowing Pinky to deliver a terse, single-sentence response without cascading.
+**Mechanism:** `CognitiveHub._run_two_mice_handover` parses discrete semantic tags (`<boost_interest>`, `<damp_interest>`, `<upvote>`, `<downvote>`), computes Dual-Channel Evidential Accounting, updates `self.current_interest`, and gates downstream Deep Thought synthesis.
 
 ## [FEAT-239] Neural Action Tags
 **Status:** ACTIVE
