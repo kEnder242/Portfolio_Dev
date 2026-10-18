@@ -2884,11 +2884,12 @@
 **Mechanism:** `HomeLabAI/src/debug/test_perf_5x5_timed.py`, `Portfolio_Dev/field_notes/DEAD_AIR_LIVELINESS_REPORT.md`.
 
 ## [FEAT-523] Continuous Interest Multiplier Pacing
-**Sprint:** SPR-70.0 / SPR-102.0
+**Sprint:** SPR-70.0 / SPR-102.0 / SPR-105.0
 **Status:** ACTIVE
-**Logic:** Redefines conversational token budgeting from a discrete binary ternary step function (`1500 if interest >= 0.3 else 150`) into a continuous mathematical scalar multiplier: `clamp(int(current_interest * multiplier), floor, ceiling)` (default `multiplier: 150`, `floor: 32`, `ceiling: 1500`). Low interest smoothly tapers turn length toward zero without abrupt gags, while high interest grants proportional elaboration headroom. Generation profiles and repetition penalties are configured declaratively in `infrastructure.json`.
-**Rationale:** Preserves conversational dynamism across the interest spectrum and eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds.
-**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/logic/cognitive_hub.py`.
+**Logic:** Redefines conversational token budgeting from a discrete binary ternary step function into a continuous mathematical scalar multiplier: `max(0, int(current_interest * max_token_ceiling))`. In Sprint 105.0 post-stabilization, excised legacy arbitrary per-node base floors (`300` for Thought, `80` for Brain, `60` for Pinky) in `calculate_pacing_ceiling()` that previously prevented fuel from ever tapering to zero. Interest is restored as the sole universal currency shaping turn headroom across all sovereign personas; when interest remains flat, each persona receives the identical headroom ceiling.
+**Rationale:** Preserves conversational dynamism across the interest spectrum, eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds, and guarantees that turns naturally conclude without residual unearned token floors.
+**Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/logic/cognitive_hub.py` (`calculate_pacing_ceiling()`, `format_pacing_line()`), `HomeLabAI/src/tests/test_cognitive_hub_pacing.py`.
+
 
 ## [FEAT-524] LIVE IS GOD Invariant Bytecode Gate
 **Sprint:** SPR-70.0
