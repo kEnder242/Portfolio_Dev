@@ -518,12 +518,14 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 
 #### 1. Chronological Git Commit Log
 * **`HomeLabAI`**:
+  * [`791c624`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-582 tiered candidate host discovery and failover in BicameralNode` (2026-10-17 21:43:36 -0700)
   * [`6b695a4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-660 Universal Bicameral Context Fencing across all personas` (2026-10-17 20:43:41 -0700)
   * [`b6fdbac`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `fix(infra): decouple Step 6b round table probe to 06:00 AM standalone watchdog [FEAT-619 / BKM-066]` (2026-10-17 20:26:38 -0700)
   * [`58c6adc`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(protocols): add digital checkbox paper trail mandate to BKM-086` (2026-10-17 13:34:08 -0700)
   * [`9e0c73d`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(forensics): sync oh-my-openagent.json timeout extension to 60s` (2026-10-17 12:06:35 -0700)
   * [`639e987`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(status): log completion of Sprint 105.0 in ProjectStatus.md` (2026-10-17 02:41:33 -0700)
 * **`Portfolio_Dev`**:
+  * [`cd71441`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): register FEAT-661 In-Line Interest Hover Micro-Telemetry and append Sprint 105 log` (2026-10-17 21:20:08 -0700)
   * [`478bf7e`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): register FEAT-660 Universal Bicameral Context Fencing in FeatureTracker` (2026-10-17 20:43:41 -0700)
   * [`4e137d2`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) — `docs(sprint): add Story 105.15 Dynamic Brain Interest Damping to Sprint 105` (2026-10-17 20:27:03 -0700)
   * [`8de7f92`](file:///home/jallred/Dev_Lab/Portfolio_Dev/dna/Protocols.md) — `chore(dna): update sync checksum cache for Protocols.md` (2026-10-17 13:34:14 -0700)
@@ -545,4 +547,8 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
    * *Remediation*: Formulated Story 105.15 adding `<damp_interest>` / `<downvote>` channel to Brain and hit-proportional evidential fueling (`[FEAT-659]`).
 5. **In-Line Interest Telemetry & Closed-Loop Feedback (`[FEAT-661]`)**:
    * *Design*: Leveraged `[FEAT-638]` in-line hover feedback component (`.resp-fb`) in `intercom_v2.js` to expose micro-interest fuel (`⚡ 0.45`) on header hover (0 extra lines), binding `interest` to `POST /feedback` payloads for empirical RLHF correlation in `feedback_ledger.json`.
+6. **Tiered Engine Candidate Discovery & Failover (`[FEAT-582]` Commit `791c624`)**:
+   * *Diagnosis*: In `HomeLabAI/src/nodes/loader.py`, `ping_engine` probed only `self.primary_host` (`M5_AIR`). If `M5_AIR` was unreachable, `ThoughtNode` entered a 60s hold-the-line retry solely against `M5_AIR`, ignoring `fallback: "KENDER"` and `local_fallback: "localhost"` declared in `infrastructure.json`.
+   * *Remediation*: Upgraded `BicameralNode` with ordered candidate resolution (`self.candidate_hosts = [primary, fallback, local_fallback]`). Each candidate is probed in priority order; upon failure, it gracefully downshifts to Kender (Ollama) or localhost (vLLM). Upon 300s TTL cache expiry, it re-probes M5_AIR first, re-promoting to primary as soon as M5_AIR wakes up. Live verified on silicon under commit [`791c624`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py).
+
 
