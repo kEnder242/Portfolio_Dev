@@ -446,42 +446,6 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
     Update test assertions: verify `domain` is required, verify `logistics` and `operations` are included in extraction scope rather than banned.
 * **Anchor 4 (DNA Links)**: `[INS-019]`, `[FEAT-101]`, `[FEAT-131]`, `[BKM-007]`.
 
-### Story 105.15: Dynamic Brain Interest Damping & Deep Thought Quiescence Gating (`FEAT-238` / `FEAT-234` / `FEAT-635` / `FEAT-658`)
-* **Objective**: Provide The Brain with an explicit interest-damping channel (`<damp_interest>` / `<downvote>`) in `step_brain_gatekeeper` to subtract from interest when a turn lacks technical bedrock or constitutes casual banter, cleanly halting the waterfall before `step_deep_thought` and allowing Pinky to deliver a terse, single-sentence response without cascading.
-* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on Qwen3.8-27B).
-* **Anchor 1 (Target Files & Line Numbers)**:
-  - [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3244-L3295) (lines 3244–3251: parse `<damp_interest>` / `<downvote>` and gate `step_deep_thought` on `boosted_interest >= 0.35`)
-  - [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L11-L20) (lines 11–20: update Directive 8 with interest damping instruction)
-  - [`HomeLabAI/src/tests/test_brain_gatekeeper.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_brain_gatekeeper.py) (add test for `<damp_interest>` scalar reduction)
-  - [`HomeLabAI/src/tests/test_two_mice_handover.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py) (assert Deep Thought is skipped when Brain damps interest below 0.35)
-* **Anchor 2 (Verification Command)**:
-  - `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py HomeLabAI/src/tests/test_two_mice_handover.py -v`
-* **Anchor 3 (Verbatim Code Specs)**:
-  - In `cognitive_hub.py`:
-    ```python
-    # Dynamic Boost / Damp Check confined to Brain's turn [FEAT-238]
-    boosted_interest = gate_interest
-    if "<boost_interest>" in brain_grounding or "<upvote>" in brain_grounding:
-        boosted_interest = min(1.0, gate_interest + 0.20)
-        logging.info(
-            f"[HUB] [FEAT-238] Council of Hemispheres: Brain boosted interest from {gate_interest:.2f} to {boosted_interest:.2f}"
-        )
-    elif "<damp_interest>" in brain_grounding or "<downvote>" in brain_grounding:
-        boosted_interest = max(0.0, gate_interest - 0.25)
-        logging.info(
-            f"[HUB] [FEAT-238] Council of Hemispheres: Brain damped interest from {gate_interest:.2f} to {boosted_interest:.2f}"
-        )
-
-    # Deep Thought execution gated on damped interest >= 0.35
-    if boosted_interest < 0.35:
-        logging.info(
-            f"[WATERFALL] Turn concluded after Brain curation; damped interest {boosted_interest:.2f} < 0.35 threshold. Deep Thought dormant."
-        )
-        dt_synthesis = ""
-    else:
-        dt_synthesis = await self.step_deep_thought(...)
-    ```
-* **Anchor 4 (DNA Links)**: `[FEAT-238]`, `[FEAT-234]`, `[FEAT-635]`, `[FEAT-658]`, `[BKM-039]`.
 
 ---
 
@@ -501,7 +465,7 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 
 ## 🚦 Phase 3 AFK Execution Checklist (`BKM-086`)
 - [x] **Step 1: Grounding Alignment**: Verified against `FEAT-454`, `FEAT-619`, `FEAT-101`, and `FEAT-131`.
-- [x] **Step 2: Pre-Flight Review**: Stories 105.12 and 105.13 formulated, grounded, and approved.
+- [x] **Step 2: Pre-Flight Review**: Stories 105.12, 105.13, and 105.14 formulated, grounded, and approved.
 - [x] **Step 3: Surgical Execution**:
   - [x] Apply Story 105.12 (Dynamic Intake Target Resolver) — Commit [`ff5abe1`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/extract_latest_gems.py)
   - [x] Apply Story 105.13 (Gem Quality Prompt Hardening & Rank Promotion Excision) — Commit [`376c6eb`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py)
@@ -509,6 +473,101 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 - [x] **Step 4: Offline Verification**: Pytest suite 100% green (`test_gem_refine_quality.py`: 3/3 passed).
 - [x] **Step 5: Live Silicon Verification**: `extract_latest_gems.py` executed live, extracting 4 Rank 4/5 gems dynamically.
 - [x] **Step 6: Retrospective & Documentation**: Documented findings, Oracle synthesis, and vocabulary alignment (Stories 105.12, 105.13, 105.14 complete).
+
+---
+
+# 🌊 SPRINT 105.0 PHASE 4: Dynamic Brain Interest Damping & Dual-Channel Evidential Accounting
+
+**Phase ID:** `SPR_105_PHASE_4`  
+**Theme:** Dynamic Brain Interest Damping & Evidential Suppression ([`FEAT-238`]), Deep Thought Quiescence Gating ([`FEAT-658`]), and Dual-Channel Evidential Accounting ([`FEAT-659`] / [`BKM-039`]).  
+**Status:** ⏳ **READY FOR OPERATOR REVIEW (Pre-Flight Gate Certified)**  
+**Parent Frameworks:**
+- [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
+- [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
+- [`BKM-043`]: Master 4-Anchor Prompt Standard
+- [`FEAT-238`]: Council of Hemispheres / Sovereign Peer Upvote & Downvote
+- [`FEAT-659`]: Evidential Retention Accounting & Hit-Proportional Fueling
+- [`FEAT-635`]: Brain Information Gatekeeper & Bedrock Truth Curation
+- [`FEAT-658`]: Pure Decoupled Waterfall Cognitive Execution
+- [`BKM-039`]: Pure Interest Cascade Protocol (Continuous Scalar Fuel)
+
+---
+
+## 🏛️ Phase 4 Master Narrative: Evidential Accounting & Halting Cascade Runaway
+
+In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipeline, and eliminated hardcoded pacing floors. However, forensic inspection of recent conversational cascades (e.g. *"How are you and Brain?"*) revealed a key vulnerability:
+1. **The Speculative Search Trap**: Pinky generated speculative search terms, causing ChromaDB to return zero or thin hits, yet `gate_interest` remained at high levels because there was no downstream subtraction channel.
+2. **Brain Lacked Suppression Powers**: Under Directive 8, Brain could only filter noise or emit an upvote (`<boost_interest>` / `<upvote>`). If Brain discovered zero bedrock truth, it had no mechanism to damp fuel or signal Deep Thought to stand down. Deep Thought subsequently synthesized a 400-word meta-explanation of who the actors were.
+3. **Dual-Channel Evidential Accounting**:
+   - **Channel 1 (Hub External Retention Ratio)**: The Cognitive Hub computes the objective RAG retention ratio $R = \frac{\text{retained facts}}{\max(1, \text{retrieved raw chunks})}$. If $R < 0.20$ or raw retrieval is empty, Hub dampens interest by $\Delta = -0.15$.
+   - **Channel 2 (Brain Internal Semantic Tags)**: Brain explicitly evaluates evidence against the primer. If the turn lacks technical substance or historical record, Brain tags `<damp_interest>`.
+   - **Quiescence Gating**: If damped interest falls below $0.35$, `step_deep_thought` is skipped entirely (`dt_synthesis = ""`), and Pinky delivers a single-sentence conversational wrap-up.
+
+---
+
+## 🎯 Phase 4 Stories (Mandatory 4-Anchor Standard)
+
+### Story 105.15: Dynamic Brain Interest Damping & Deep Thought Quiescence Gating (`FEAT-238` / `FEAT-659` / `FEAT-635` / `FEAT-658`)
+* **Objective**: Provide The Brain with an explicit interest-damping channel (`<damp_interest>` / `<downvote>`) in `step_brain_gatekeeper` and wire Dual-Channel Evidential Accounting in Cognitive Hub to subtract interest when bedrock truth is absent, cleanly halting the waterfall before `step_deep_thought`.
+* **Delegation Tier**: `[SWARM:LOCAL]` (Atlas on Qwen3.8-27B).
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3244-L3295) (lines 3244–3251: parse `<damp_interest>` / `<downvote>` and gate `step_deep_thought` on `boosted_interest >= 0.35`)
+  - [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L11-L20) (lines 11–20: update Directive 8 with positive/damp instruction)
+  - [`HomeLabAI/src/tests/test_brain_gatekeeper.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_brain_gatekeeper.py)
+  - [`HomeLabAI/src/tests/test_two_mice_handover.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py)
+* **Anchor 2 (Verification Command)**:
+  - `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_brain_gatekeeper.py HomeLabAI/src/tests/test_two_mice_handover.py -v`
+  - Synthetic probe test via `HomeLabAI/scripts/probe_sprint105_waterfall.py` verifying `"How are you and Brain?"` dampens interest and keeps Deep Thought dormant.
+* **Anchor 3 (Verbatim Code Specs)**:
+  - In `cognitive_hub.py`:
+    ```python
+    # Dual-Channel Evidential Accounting [FEAT-238 / FEAT-659]
+    boosted_interest = gate_interest
+    if "<boost_interest>" in brain_grounding or "<upvote>" in brain_grounding:
+        boosted_interest = min(1.0, gate_interest + 0.20)
+        logging.info(
+            f"[HUB] [FEAT-238] Council of Hemispheres: Brain boosted interest from {gate_interest:.2f} to {boosted_interest:.2f}"
+        )
+    elif "<damp_interest>" in brain_grounding or "<downvote>" in brain_grounding:
+        boosted_interest = max(0.0, gate_interest - 0.25)
+        logging.info(
+            f"[HUB] [FEAT-238] Council of Hemispheres: Brain damped interest from {gate_interest:.2f} to {boosted_interest:.2f}"
+        )
+
+    # Deep Thought execution gated on damped interest >= 0.35 [FEAT-658]
+    if boosted_interest < 0.35:
+        logging.info(
+            f"[WATERFALL] Turn concluded after Brain curation; damped interest {boosted_interest:.2f} < 0.35 threshold. Deep Thought dormant."
+        )
+        dt_synthesis = ""
+    else:
+        dt_synthesis = await self.step_deep_thought(...)
+    ```
+* **Anchor 4 (DNA Links)**: `[FEAT-238]`, `[FEAT-659]`, `[FEAT-635]`, `[FEAT-658]`, `[BKM-039]`.
+
+---
+
+## 🛑 Phase 4 Pre-Flight Checklist Gate (`BKM-082`)
+- [x] **1. 5-Sprint Lookback**: Reviewed SPR-100 to SPR-104 for regression traps in waterfall pacing, token floor bloat, and runaway cascade loops (`BKM-082 §2.1`).
+- [x] **2. Mistakes-Avoided Ledger**:
+  1. *Mistake Avoided*: Unstructured string parsing or regex heuristics for interest changes (enforcing discrete semantic tags `<boost_interest>` and `<damp_interest>`).
+  2. *Mistake Avoided*: Arbitrary non-zero floor offsets in pacing calculation (resolved via pure `interest * ceiling` under `[FEAT-523]`).
+  3. *Mistake Avoided*: Allowing Deep Thought to execute when evidence is thin or damped below $0.35$ quiescence threshold.
+  4. *Mistake Avoided*: Modifying prompt context to scold the model rather than relying on natural fuel starvation.
+  5. *Mistake Avoided*: Conflating subjective prompt damping with objective database hit ratios (enforcing dual-channel separation).
+- [x] **3. Oracle Review**: Adversarial architecture review grounded in `ORACLE_REVIEW_SPRINT_105.md` and BKM-087 single-voice invariants.
+- [x] **4. Delegation Justification**: Evaluated `LOCAL`/`CLOUD` first; assigned to `[SWARM:LOCAL]` (Atlas on RTX 4090 / Qwen3.8-27B) under `BKM-049`.
+*Gate certified: All pre-flight checklist gates satisfied.*
+
+---
+
+## 🚦 Phase 4 AFK Execution Checklist (`BKM-086`)
+- [x] **Step 1: Grounding Alignment**: Verified against `FEAT-238`, `FEAT-659`, `FEAT-635`, `FEAT-658`, `FEAT-523`, and `BKM-039`.
+- [ ] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 4 plan (Current Gate: Awaiting Operator Go-Ahead).
+- [ ] **Step 3: Surgical Execution**: Apply Story 105.15 (Dynamic Brain Interest Damping & Quiescence Gating).
+- [ ] **Step 4: Offline Verification**: Pytest suite (`test_brain_gatekeeper.py`, `test_two_mice_handover.py`).
+- [ ] **Step 5: Live Silicon Verification**: Physical probe injection against running `lab-attendant.service` on port 8765 verifying `<damp_interest>` terminates waterfall before Deep Thought on casual banter.
+- [ ] **Step 6: Retrospective & Documentation**: Append Phase 4 Retrospective and sync DNA.
 
 ---
 
