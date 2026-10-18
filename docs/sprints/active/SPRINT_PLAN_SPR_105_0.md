@@ -509,3 +509,40 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 - [x] **Step 4: Offline Verification**: Pytest suite 100% green (`test_gem_refine_quality.py`: 3/3 passed).
 - [x] **Step 5: Live Silicon Verification**: `extract_latest_gems.py` executed live, extracting 4 Rank 4/5 gems dynamically.
 - [x] **Step 6: Retrospective & Documentation**: Documented findings, Oracle synthesis, and vocabulary alignment (Stories 105.12, 105.13, 105.14 complete).
+
+---
+
+## 📜 Sprint Log: In-Flight Execution Narrative & Git Log (`[BKM-081]`)
+
+### 🛠️ Session Execution Trace (Oct 17, 2026 - Sprint 105.0 Post-Stabilization)
+
+#### 1. Chronological Git Commit Log
+* **`HomeLabAI`**:
+  * [`6b695a4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-660 Universal Bicameral Context Fencing across all personas` (2026-10-17 20:43:41 -0700)
+  * [`b6fdbac`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `fix(infra): decouple Step 6b round table probe to 06:00 AM standalone watchdog [FEAT-619 / BKM-066]` (2026-10-17 20:26:38 -0700)
+  * [`58c6adc`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(protocols): add digital checkbox paper trail mandate to BKM-086` (2026-10-17 13:34:08 -0700)
+  * [`9e0c73d`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(forensics): sync oh-my-openagent.json timeout extension to 60s` (2026-10-17 12:06:35 -0700)
+  * [`639e987`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(status): log completion of Sprint 105.0 in ProjectStatus.md` (2026-10-17 02:41:33 -0700)
+* **`Portfolio_Dev`**:
+  * [`478bf7e`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): register FEAT-660 Universal Bicameral Context Fencing in FeatureTracker` (2026-10-17 20:43:41 -0700)
+  * [`4e137d2`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) — `docs(sprint): add Story 105.15 Dynamic Brain Interest Damping to Sprint 105` (2026-10-17 20:27:03 -0700)
+  * [`8de7f92`](file:///home/jallred/Dev_Lab/Portfolio_Dev/dna/Protocols.md) — `chore(dna): update sync checksum cache for Protocols.md` (2026-10-17 13:34:14 -0700)
+  * [`31feabb`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) — `docs(sprint): complete Phase 3 AFK execution checklist (Story 105.14 verified)` (2026-10-17 10:19:13 -0700)
+  * [`aa6fdfd`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py) — `feat(intake): rollback destructive prompt pruning and introduce inclusive domain tagging (Story 105.14)` (2026-10-17 10:19:03 -0700)
+
+#### 2. Narrative of Accomplishments & Friction Remediations
+1. **Host Cgroup DRAM Exhaustion & LAB-093 Restoration**:
+   * *Diagnosis*: Recovered from host memory thrashing where `lab-attendant.service` was starved by an untracked drop-in `/etc/systemd/system/lab-attendant.service.d/50-memory-limit.conf` clamping `MemoryHigh=1.5G` / `MemoryMax=2.0G` (dating back to Sprint 53 ZFS ARC crisis).
+   * *Remediation*: Re-established `LAB-093` (`MemoryHigh=3.5G` / `MemoryMax=4.0G`), expanding cgroup physical DRAM headroom from 51 MB to 2.0 GB and instantly halting disk swap thrashing.
+2. **Accountability Probe Decoupling (Step 6b)**:
+   * *Diagnosis*: Addressed double round-table probe execution during nightly runs. Step 6b inside `nightly_forge.py` had an ungrounded 60s delay that collided with autonomous testing.
+   * *Remediation*: Excised Step 6b from `nightly_forge.py` and decoupled round-table accountability probe to `06:00 AM` standalone watchdog (`standalone_accountability_watchdog.py`), verified clean under commit [`b6fdbac`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py).
+3. **Universal Bicameral Context Fencing (`[FEAT-660]`)**:
+   * *Diagnosis*: Identified negative semantic priming in SLMs (3B models fixating on unrolled forbidden topic lists).
+   * *Remediation*: Codified single immutable constant `UNIVERSAL_CONTEXT_FENCE` in `HomeLabAI/src/nodes/loader.py` and propagated to `pinky_node.py`, `brain_node.py`, and `thought_node.py`. Registered in `FeatureTracker.md` and re-indexed into `feature_dna` on ChromaDB (commit [`6b695a4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) and [`478bf7e`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md)).
+4. **Dynamic Interest Damping (Story 105.15) & Evidential Resonance**:
+   * *Diagnosis*: Traced runaway waterfall cascade on casual queries (*"How are you and Brain?"*) to speculative search terms and forced Pinky upvotes before database retrieval occurred.
+   * *Remediation*: Formulated Story 105.15 adding `<damp_interest>` / `<downvote>` channel to Brain and hit-proportional evidential fueling (`[FEAT-659]`).
+5. **In-Line Interest Telemetry & Closed-Loop Feedback (`[FEAT-661]`)**:
+   * *Design*: Leveraged `[FEAT-638]` in-line hover feedback component (`.resp-fb`) in `intercom_v2.js` to expose micro-interest fuel (`⚡ 0.45`) on header hover (0 extra lines), binding `interest` to `POST /feedback` payloads for empirical RLHF correlation in `feedback_ledger.json`.
+
