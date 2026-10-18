@@ -577,6 +577,8 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 #### 1. Chronological Git Commit Log
 * **`HomeLabAI`**:
+  * [`96da730`](file:///home/jallred/Dev_Lab/HomeLabAI/src/memory/blackboard_ledger.py) — `fix(perf): [FEAT-444/FEAT-657] offload commit_to_chroma to background thread and decouple triage pinky_budget` (2026-10-18 00:03:18 -0700)
+  * [`403ee6a`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(telemetry): [FEAT-661] embed interest in thought_stream packets and feedback ledger` (2026-10-17 23:51:02 -0700)
   * [`8675078`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `fix(critic): [FEAT-470/FEAT-523] decouple coherence critic schema budget from conversational fuel starvation` (2026-10-17 23:37:25 -0700)
   * [`e2ab7b1`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 streamline _HYDE_OVERHEARING_PROMPT and conversational headroom floor` (2026-10-17 23:14:06 -0700)
   * [`a7ad589`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 decoupled triage bypass for Brain-addressed turns with dedicated overhearing prompt` (2026-10-17 22:59:26 -0700)
@@ -642,3 +644,12 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 10. **Coherence Critic Token Starvation Decoupling (`[FEAT-470]` / `[FEAT-523]` Commit `8675078`)**:
     * *Diagnosis*: In `evaluate_grounding()` (`cognitive_hub.py:2242`), `critic_high = calculate_pacing_ceiling("critic", interest)` was passed directly as `max_tokens` and behavioral guidance budget. On low-interest turns ($0.0 \dots 0.05$), the token ceiling dropped to $\le 16$ tokens, starving Pinky's Coherence Critic so it truncated mid-JSON at `{ "score"`.
     * *Remediation*: Decoupled diagnostic judge budget from conversational fuel starvation. While conversational personas scale continuously with interest, internal schema-bound evaluators require a fixed functional floor (`critic_budget = max(critic_high, 300)`) and matching budget directive to guarantee complete emission of the 4-field scorecard (`score`, `reasoning`, `slop_found`, `retort`). All unit tests 23/23 passed and hot-reloaded to live silicon under commit [`8675078`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py).
+
+11. **Blackboard ChromaDB Freeze Excision & Pinky Triage Starvation Fix (`[FEAT-444]` / `[FEAT-657]` Commit `96da730`)**:
+    * *Diagnosis*:
+      1. *52-Second Server Freeze*: At the conclusion of every turn, `append_turn_record()` in [`blackboard_ledger.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/memory/blackboard_ledger.py) invoked `self.commit_to_chroma()` synchronously on the main thread. It iterated through all past turns (50 records) and issued sequential single-document HTTP calls to ChromaDB, blocking the asyncio event loop for 52 seconds and delaying WebSocket flushing and subsequent turn ingestion.
+      2. *Pinky Mute / Brain Dormant on 2019 Query*: On low initial interest turns ($0.06$), `pinky_budget` in `step_prereflection_triage()` was clamped to $60$ tokens, truncating Pinky's 3-field JSON output mid-string (`"search_terms": "vLLM, Acme Lab, Federated AI, Multi`). Parsing failed, search terms were lost, upvoting was aborted, and the waterfall halted immediately ($0.06 < 0.35$).
+    * *Remediation*:
+      1. Offloaded `commit_to_chroma()` to a background daemon thread, batching single turn upserts so the main event loop is never blocked ($0$ms latency).
+      2. Decoupled Pinky's triage JSON schema budget from fuel starvation by establishing a minimum functional floor (`pinky_budget = max(pinky_high, 250)`), ensuring complete emission of `spoken_take`, `search_terms`, and `upvote`.
+      3. Validated with 27/27 unit tests passing and hot-reloaded to live silicon under commit [`96da730`](file:///home/jallred/Dev_Lab/HomeLabAI/src/memory/blackboard_ledger.py).
