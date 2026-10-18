@@ -577,6 +577,9 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 #### 1. Chronological Git Commit Log
 * **`HomeLabAI`**:
+  * [`e2ab7b1`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 streamline _HYDE_OVERHEARING_PROMPT and conversational headroom floor` (2026-10-17 23:14:06 -0700)
+  * [`a7ad589`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 decoupled triage bypass for Brain-addressed turns with dedicated overhearing prompt` (2026-10-17 22:59:26 -0700)
+  * [`ec56696`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 add vocative overhearing fallback and quiescence for Brain-addressed turns` (2026-10-17 22:47:37 -0700)
   * [`8ccea68`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): implement dynamic interest damping, dual-channel evidential accounting, and Deep Thought quiescence gating [FEAT-238 / FEAT-659 / FEAT-658]` (2026-10-17 22:17:59 -0700)
   * [`eb20eb4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(pacing): excise hardcoded node floors and enforce pure interest-proportional ceiling [FEAT-523]` (2026-10-17 22:07:03 -0700)
   * [`791c624`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-582 tiered candidate host discovery and failover in BicameralNode` (2026-10-17 21:43:36 -0700)
@@ -626,3 +629,11 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 
 
+9. **Decoupled Vocative Triage Bypass & Overhearing Curation (`[FEAT-660]` Commits `ec56696`, `a7ad589`, `e2ab7b1`)**:
+   * *Diagnosis*: On casual turns addressed explicitly to Brain (`"[ME] How are you, Brain?"`), triage marked `addressed_to: "NONE"`. Pinky answered as if the query were for herself, while Brain remained dormant because interest was low ($< 0.35$). Attempting to boost interest artificially ($0.40$) perturbed council fuel and caused Brain to hallucinate a need for historical archives, triggering an unwanted Deep Thought cascade.
+   * *Remediation*:
+     1. Excised artificial interest elevation from `step_prereflection_triage`, keeping interest purely continuous and un-mucked-with ($0.0$).
+     2. In `_run_two_mice_handover`, decoupled triage routing from fuel: when `target == "brain"`, the $< 0.35$ gate check is bypassed, giving Brain the floor directly while leaving council fuel unperturbed.
+     3. Streamlined `_HYDE_OVERHEARING_PROMPT` for Pinky (`"Respond with a structured JSON object containing 'spoken_take': 1 lively sentence in character alerting Brain that Jason is asking for him."`), enabling Pinky to authentically overhear without searching archives.
+     4. Enforced minimum conversational headroom (`brain_budget = max(brain_high, 100) if interest < 0.35 else brain_high`) so Brain completes his direct answer without truncation when invoked via low-interest bypass.
+     5. Deep Thought remains 100% dormant ($0.0 < 0.35$). Handover concludes cleanly after Brain's response without redundant Pinky distillation.
