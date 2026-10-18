@@ -6022,31 +6022,31 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Council of Hemispheres (Peer Vote)
+                                    Council of Hemispheres (Peer Vote & Dynamic Evidential Damping)
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L549" style="color:var(--accent-color); text-decoration:none;">src/logic/cognitive_hub.py</a>
+                    <p><a href="file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3242-L3270"><code>HomeLabAI/src/logic/cognitive_hub.py</code></a>, <a href="file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L19"><code>HomeLabAI/src/nodes/brain_node.py</code></a> — Council of Hemispheres (Peer Vote &amp; Dynamic Evidential Damping).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Enables mid-relay adjustment of the turn's importance level based on node-level reasoning.</p>
+                    <p>Enables mid-relay adjustment of the turn's fuel level based on node-level reasoning and evidence verification. Brain emits <code>&lt;boost_interest&gt;</code> (+0.20) when deep technical bedrock is discovered, or <code>&lt;damp_interest&gt;</code> (-0.25) when candidate evidence is absent, irrelevant, or on casual banter.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>The Lab Node may under-estimate a query (e.g. Pi as general knowledge). This feature allows Pinky to "Pull the Alarm" by recommending a fuel boost, or "Demote" a turn if she detects it's a joke or mistake.</p>
+                    <p>Prevents cascade runaway on casual turns (e.g. <em>"How are you and Brain?"</em>). If Brain discovers zero bedrock truth, it damps fuel below $0.35$, cleanly gating Deep Thought into quiescence (<code>dt_synthesis = ""</code>) and allowing Pinky to deliver a terse, single-sentence response without cascading.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>CognitiveHub</code> parses explicit steering signals from node responses and updates the session's fuel state before the Sovereign Brain check.</p>
+                    <p><code>CognitiveHub._run_two_mice_handover</code> parses discrete semantic tags (<code>&lt;boost_interest&gt;</code>, <code>&lt;damp_interest&gt;</code>, <code>&lt;upvote&gt;</code>, <code>&lt;downvote&gt;</code>), computes Dual-Channel Evidential Accounting, updates <code>self.current_interest</code>, and gates downstream Deep Thought synthesis.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -14577,25 +14577,25 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-70.0 / SPR-102.0</p>
+                    <p>SPR-70.0 / SPR-102.0 / SPR-105.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Redefines conversational token budgeting from a discrete binary ternary step function (<code>1500 if interest &gt;= 0.3 else 150</code>) into a continuous mathematical scalar multiplier: <code>clamp(int(current_interest * multiplier), floor, ceiling)</code> (default <code>multiplier: 150</code>, <code>floor: 32</code>, <code>ceiling: 1500</code>). Low interest smoothly tapers turn length toward zero without abrupt gags, while high interest grants proportional elaboration headroom. Generation profiles and repetition penalties are configured declaratively in <code>infrastructure.json</code>.</p>
+                    <p>Redefines conversational token budgeting from a discrete binary ternary step function into a continuous mathematical scalar multiplier: <code>max(0, int(current_interest * max_token_ceiling))</code>. In Sprint 105.0 post-stabilization, excised legacy arbitrary per-node base floors (<code>300</code> for Thought, <code>80</code> for Brain, <code>60</code> for Pinky) in <code>calculate_pacing_ceiling()</code> that previously prevented fuel from ever tapering to zero. Interest is restored as the sole universal currency shaping turn headroom across all sovereign personas; when interest remains flat, each persona receives the identical headroom ceiling.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Preserves conversational dynamism across the interest spectrum and eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds.</p>
+                    <p>Preserves conversational dynamism across the interest spectrum, eliminates the jarring runaway verbosity cliff when interest slightly crosses discrete thresholds, and guarantees that turns naturally conclude without residual unearned token floors.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>.</p>
+                    <p><code>HomeLabAI/config/infrastructure.json</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code> (<code>calculate_pacing_ceiling()</code>, <code>format_pacing_line()</code>), <code>HomeLabAI/src/tests/test_cognitive_hub_pacing.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -19234,6 +19234,96 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Eliminates negative filtering gates in favor of continuous interest fuel injection, while bridging the node boundary disconnect between Triage domain intent and Archive Node multi-collection retrieval.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-660">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-660</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Universal Bicameral Context Fencing (Anti-Unrolling Invariant)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 105.0 (Phase 4)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#context_fencing</code>, <code>#anti_unrolling</code>, <code>#bicameral_invariants</code>, <code>#primer_protocol</code>, <code>[BKM-087]</code>, <code>[FEAT-658](#FEAT-658)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/nodes/loader.py</code>, <code>HomeLabAI/src/nodes/pinky_node.py</code>, <code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/nodes/thought_node.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a single authoritative constant <code>UNIVERSAL_CONTEXT_FENCE</code> in <code>nodes/loader.py</code>:
+<code>"CONTEXT FENCING: Stay relevant to the primer and the actors before you. Limit topics you talk about to topics in the conversation. Do not inject unprompted background history or meta-explanations of your persona."</code>
+Applied unconditionally to all resident node personas (Pinky, Brain, Deep Thought).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates the negative-priming anti-pattern where prompts unrolled forbidden lists of domain keywords ("laboratory telemetry, silicon specs, or technical history"), which paradoxically prompted smaller instruction-tuned models to fixate on and recite those exact concepts. Providing a concise positive boundary ("stay relevant to the primer and the actors before you") prevents self-referential identity monologues.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-661">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-661</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    In-Line Interest Hover Micro-Telemetry & Closed-Loop Feedback Pacing
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 105.0 (Phase 4)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#interest_telemetry</code>, <code>#hover_ui</code>, <code>#closed_loop_feedback</code>, <code>#pacing_telemetry</code>, <code>[FEAT-523](#FEAT-523)</code>, <code>[FEAT-638](#FEAT-638)</code>, <code>[BKM-077]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Embeds scalar interest fuel (<code>current_interest</code> $\in [0.00, 1.00]$) into WebSocket <code>thought_stream</code> packets and attaches it to message DOM elements via <code>data-interest</code>. Leverages the existing <code>[FEAT-638](#FEAT-638)</code> in-line hover feedback container (<code>.resp-fb</code>) in <code>intercom_v2.js</code> to render a non-intrusive micro-badge (<code>⚡ 0.45</code>) alongside the <code>👍 / 👎</code> vote buttons. The telemetry consumes 0 extra vertical lines in the chat stream, remaining hidden during normal conversation flow and revealing itself strictly on message header hover. Furthermore, binds <code>interest</code> directly into the <code>POST /feedback</code> JSON payload, creating an empirical closed-loop ledger in <code>feedback_ledger.json</code> that correlates human rating with deliberation depth and token pacing.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates invisible interest budgeting. Enables instant operator inspection of node pacing and deliberation thresholds without UI clutter, while capturing ground-truth training data on whether high- or low-interest waterfall responses produce superior user satisfaction.</p>
                 </div>
             </div>     </div>
                             </details>
