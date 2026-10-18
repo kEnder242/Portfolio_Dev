@@ -577,6 +577,7 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 #### 1. Chronological Git Commit Log
 * **`HomeLabAI`**:
+  * [`8675078`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `fix(critic): [FEAT-470/FEAT-523] decouple coherence critic schema budget from conversational fuel starvation` (2026-10-17 23:37:25 -0700)
   * [`e2ab7b1`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 streamline _HYDE_OVERHEARING_PROMPT and conversational headroom floor` (2026-10-17 23:14:06 -0700)
   * [`a7ad589`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 decoupled triage bypass for Brain-addressed turns with dedicated overhearing prompt` (2026-10-17 22:59:26 -0700)
   * [`ec56696`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): FEAT-660 add vocative overhearing fallback and quiescence for Brain-addressed turns` (2026-10-17 22:47:37 -0700)
@@ -637,3 +638,7 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
      3. Streamlined `_HYDE_OVERHEARING_PROMPT` for Pinky (`"Respond with a structured JSON object containing 'spoken_take': 1 lively sentence in character alerting Brain that Jason is asking for him."`), enabling Pinky to authentically overhear without searching archives.
      4. Enforced minimum conversational headroom (`brain_budget = max(brain_high, 100) if interest < 0.35 else brain_high`) so Brain completes his direct answer without truncation when invoked via low-interest bypass.
      5. Deep Thought remains 100% dormant ($0.0 < 0.35$). Handover concludes cleanly after Brain's response without redundant Pinky distillation.
+
+10. **Coherence Critic Token Starvation Decoupling (`[FEAT-470]` / `[FEAT-523]` Commit `8675078`)**:
+    * *Diagnosis*: In `evaluate_grounding()` (`cognitive_hub.py:2242`), `critic_high = calculate_pacing_ceiling("critic", interest)` was passed directly as `max_tokens` and behavioral guidance budget. On low-interest turns ($0.0 \dots 0.05$), the token ceiling dropped to $\le 16$ tokens, starving Pinky's Coherence Critic so it truncated mid-JSON at `{ "score"`.
+    * *Remediation*: Decoupled diagnostic judge budget from conversational fuel starvation. While conversational personas scale continuously with interest, internal schema-bound evaluators require a fixed functional floor (`critic_budget = max(critic_high, 300)`) and matching budget directive to guarantee complete emission of the 4-field scorecard (`score`, `reasoning`, `slop_found`, `retort`). All unit tests 23/23 passed and hot-reloaded to live silicon under commit [`8675078`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py).
