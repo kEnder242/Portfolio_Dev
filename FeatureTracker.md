@@ -3864,3 +3864,12 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 `"CONTEXT FENCING: Stay relevant to the primer and the actors before you. Limit topics you talk about to topics in the conversation. Do not inject unprompted background history or meta-explanations of your persona."`
 Applied unconditionally to all resident node personas (Pinky, Brain, Deep Thought).
 **Rationale:** Eliminates the negative-priming anti-pattern where prompts unrolled forbidden lists of domain keywords ("laboratory telemetry, silicon specs, or technical history"), which paradoxically prompted smaller instruction-tuned models to fixate on and recite those exact concepts. Providing a concise positive boundary ("stay relevant to the primer and the actors before you") prevents self-referential identity monologues.
+
+## [FEAT-661] In-Line Interest Hover Micro-Telemetry & Closed-Loop Feedback Pacing
+**Sprint:** Sprint 105.0 (Phase 4)
+**Status:** ACTIVE
+**Tags:** `#interest_telemetry`, `#hover_ui`, `#closed_loop_feedback`, `#pacing_telemetry`, `[FEAT-523]`, `[FEAT-638]`, `[BKM-077]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+**Logic:** Embeds scalar interest fuel (`current_interest` $\in [0.00, 1.00]$) into WebSocket `thought_stream` packets and attaches it to message DOM elements via `data-interest`. Leverages the existing `[FEAT-638]` in-line hover feedback container (`.resp-fb`) in `intercom_v2.js` to render a non-intrusive micro-badge (`⚡ 0.45`) alongside the `👍 / 👎` vote buttons. The telemetry consumes 0 extra vertical lines in the chat stream, remaining hidden during normal conversation flow and revealing itself strictly on message header hover. Furthermore, binds `interest` directly into the `POST /feedback` JSON payload, creating an empirical closed-loop ledger in `feedback_ledger.json` that correlates human rating with deliberation depth and token pacing.
+**Rationale:** Eliminates invisible interest budgeting. Enables instant operator inspection of node pacing and deliberation thresholds without UI clutter, while capturing ground-truth training data on whether high- or low-interest waterfall responses produce superior user satisfaction.
+
