@@ -480,7 +480,7 @@ In Phase 2, we unblocked the Nibbler intake engine (`ai_engine_v2.py`) and excis
 
 **Phase ID:** `SPR_105_PHASE_4`  
 **Theme:** Dynamic Brain Interest Damping & Evidential Suppression ([`FEAT-238`]), Deep Thought Quiescence Gating ([`FEAT-658`]), and Dual-Channel Evidential Accounting ([`FEAT-659`] / [`BKM-039`]).  
-**Status:** ⏳ **READY FOR OPERATOR REVIEW (Pre-Flight Gate Certified)**  
+**Status:** 🏆 **COMPLETE (Validated on Physical Silicon)**  
 **Parent Frameworks:**
 - [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
 - [`BKM-081`]: The Phased Sprint Architecture Invariant (Phase ➔ Log ➔ Phase ➔ Log)
@@ -563,11 +563,11 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 ## 🚦 Phase 4 AFK Execution Checklist (`BKM-086`)
 - [x] **Step 1: Grounding Alignment**: Verified against `FEAT-238`, `FEAT-659`, `FEAT-635`, `FEAT-658`, `FEAT-523`, and `BKM-039`.
-- [ ] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 4 plan (Current Gate: Awaiting Operator Go-Ahead).
-- [ ] **Step 3: Surgical Execution**: Apply Story 105.15 (Dynamic Brain Interest Damping & Quiescence Gating).
-- [ ] **Step 4: Offline Verification**: Pytest suite (`test_brain_gatekeeper.py`, `test_two_mice_handover.py`).
-- [ ] **Step 5: Live Silicon Verification**: Physical probe injection against running `lab-attendant.service` on port 8765 verifying `<damp_interest>` terminates waterfall before Deep Thought on casual banter.
-- [ ] **Step 6: Retrospective & Documentation**: Append Phase 4 Retrospective and sync DNA.
+- [x] **Step 2: Pre-Flight Review**: Human review and alignment on Phase 4 plan (Approved by operator: "fantastic! heads down.").
+- [x] **Step 3: Surgical Execution**: Apply Story 105.15 (Dynamic Brain Interest Damping & Quiescence Gating) — Commit [`8ccea68`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py).
+- [x] **Step 4: Offline Verification**: Pytest suite 100% green across all unit suites (42/42 passed in 2.48s).
+- [x] **Step 5: Live Silicon Verification**: Physical 3-probe gauntlet executed against running `lab-attendant.service` on port 8765 (`probe_sprint105_waterfall.py`: 100% PASS).
+- [x] **Step 6: Retrospective & Documentation**: Document Phase 4 certification, sync DNA on ChromaDB, and append Milestone 8 to Sprint Log.
 
 ---
 
@@ -577,6 +577,7 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 
 #### 1. Chronological Git Commit Log
 * **`HomeLabAI`**:
+  * [`8ccea68`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(waterfall): implement dynamic interest damping, dual-channel evidential accounting, and Deep Thought quiescence gating [FEAT-238 / FEAT-659 / FEAT-658]` (2026-10-17 22:17:59 -0700)
   * [`eb20eb4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py) — `feat(pacing): excise hardcoded node floors and enforce pure interest-proportional ceiling [FEAT-523]` (2026-10-17 22:07:03 -0700)
   * [`791c624`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-582 tiered candidate host discovery and failover in BicameralNode` (2026-10-17 21:43:36 -0700)
   * [`6b695a4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) — `feat(nodes): implement FEAT-660 Universal Bicameral Context Fencing across all personas` (2026-10-17 20:43:41 -0700)
@@ -585,6 +586,9 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
   * [`9e0c73d`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(forensics): sync oh-my-openagent.json timeout extension to 60s` (2026-10-17 12:06:35 -0700)
   * [`639e987`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py) — `docs(status): log completion of Sprint 105.0 in ProjectStatus.md` (2026-10-17 02:41:33 -0700)
 * **`Portfolio_Dev`**:
+  * [`938d0ac`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) — `docs(sprint): organize Phase 4 with BKM-082 Pre-Flight Gate and BKM-086 AFK Checklist for Story 105.15` (2026-10-17 22:11:31 -0700)
+  * [`27a0d20`](file:///home/jallred/Dev_Lab/Portfolio_Dev/dna/.sync_checksums.json) — `chore(dna): record updated FeatureTracker checksum in sync_checksums.json` (2026-10-17 22:10:11 -0700)
+  * [`5c39d50`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): update FEAT-523 in FeatureTracker and log pacing fix in Sprint 105 log` (2026-10-17 22:08:18 -0700)
   * [`cbace69`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) — `docs(sprint): log FEAT-582 tiered candidate host discovery and failover in Sprint 105 log` (2026-10-17 21:44:14 -0700)
   * [`cd71441`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): register FEAT-661 In-Line Interest Hover Micro-Telemetry and append Sprint 105 log` (2026-10-17 21:20:08 -0700)
   * [`478bf7e`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) — `feat(dna): register FEAT-660 Universal Bicameral Context Fencing in FeatureTracker` (2026-10-17 20:43:41 -0700)
@@ -605,7 +609,7 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
    * *Remediation*: Codified single immutable constant `UNIVERSAL_CONTEXT_FENCE` in `HomeLabAI/src/nodes/loader.py` and propagated to `pinky_node.py`, `brain_node.py`, and `thought_node.py`. Registered in `FeatureTracker.md` and re-indexed into `feature_dna` on ChromaDB (commit [`6b695a4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py) and [`478bf7e`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md)).
 4. **Dynamic Interest Damping (Story 105.15) & Evidential Resonance**:
    * *Diagnosis*: Traced runaway waterfall cascade on casual queries (*"How are you and Brain?"*) to speculative search terms and forced Pinky upvotes before database retrieval occurred.
-   * *Remediation*: Formulated Story 105.15 adding `<damp_interest>` / `<downvote>` channel to Brain and hit-proportional evidential fueling (`[FEAT-659]`).
+   * *Remediation*: Implemented Story 105.15 in `cognitive_hub.py` and `brain_node.py` adding `<damp_interest>` / `<downvote>` channel to Brain and hit-proportional evidential fueling (`[FEAT-659]`), gating Deep Thought into quiescence when interest falls below 0.35. Validated on physical silicon gauntlet (commit [`8ccea68`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py)).
 5. **In-Line Interest Telemetry & Closed-Loop Feedback (`[FEAT-661]`)**:
    * *Design*: Leveraged `[FEAT-638]` in-line hover feedback component (`.resp-fb`) in `intercom_v2.js` to expose micro-interest fuel (`⚡ 0.45`) on header hover (0 extra lines), binding `interest` to `POST /feedback` payloads for empirical RLHF correlation in `feedback_ledger.json`.
 6. **Tiered Engine Candidate Discovery & Failover (`[FEAT-582]` Commit `791c624`)**:
@@ -614,6 +618,11 @@ In Phase 1–3, we restored the decoupled Waterfall, repaired the intake pipelin
 7. **Pure Continuous Interest Pacing & Hardcoded Floor Excision (`[FEAT-523]` Commit `eb20eb4`)**:
    * *Diagnosis*: Identified that `calculate_pacing_ceiling()` in `cognitive_hub.py` gave nodes arbitrary base token floors (`300` for Thought, `80` for Brain, `60` for Pinky), meaning that even at `interest = 0.0`, the system allocated 300 tokens to Thought and never ran out of fuel.
    * *Remediation*: Excised all arbitrary per-node floors. Under pure `[FEAT-523]`, `ceiling = max(0, int(round(interest * max_token_ceiling)))`. At interest 0.0, ceiling is 0 (fuel completely exhausted). Across all nodes, when interest is flat, each persona receives the identical headroom ceiling. Unit tests 20/20 passed in `test_cognitive_hub_pacing.py` and committed under [`eb20eb4`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py).
+8. **Phase 4 Silicon Certification (Story 105.15 Commit `8ccea68`)**:
+   * *Validation*: Executed 3-probe physical silicon gauntlet against active `lab-attendant.service` (commit `8ccea68`):
+     - Probe 1 (`"[ME] hi"`): Pinky spoke Tier 1 greeting; Brain and Deep Thought remained 100% dormant.
+     - Probe 2 (`"[ME] remember Aurora?"`): Triage identified HISTORICAL work_history; Brain extracted bedrock record (`Aurora Subsystem Execution Tracker (2022-04-11)`), emitted `<BOOST_INTEREST>`, and Deep Thought synthesized rich architecture.
+     - Probe 3 (`"[ME] How are you and Brain?"`): Triage identified casual greeting; Brain/evidential damping halted fuel below 0.35, cleanly keeping Deep Thought dormant and preventing runaway cascade. 100% silicon pass.
 
 
 
