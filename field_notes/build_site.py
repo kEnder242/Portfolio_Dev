@@ -179,13 +179,16 @@ def deploy_to_airlock(snapshots=False):
                     shutil.copy2(s_asset, d_asset)
                     print(f"✅ Airlock synced root asset: {root_asset}")
 
-        # Assert intercom_v2.js md5 parity between field_notes and www_deploy
+        # Assert intercom_v2.js and intercom.html parity between field_notes and www_deploy
         s_icm = os.path.join(BASE_DIR, "intercom_v2.js")
         d_icm = os.path.join(www_dir, "intercom_v2.js")
-        if os.path.exists(s_icm) and os.path.exists(d_icm):
-            if get_hash(s_icm) != get_hash(d_icm):
-                shutil.copy2(s_icm, d_icm)
-                print("🔄 Corrected hash mismatch for intercom_v2.js in www_deploy")
+        d_asset_icm = os.path.join(www_dir, "assets", "intercom_v2.js")
+        for asset_name, dst_path in [("intercom_v2.js", d_icm), ("assets/intercom_v2.js", d_asset_icm), ("intercom.html", os.path.join(www_dir, "intercom.html"))]:
+            src_path = os.path.join(BASE_DIR, os.path.basename(dst_path))
+            if os.path.exists(src_path) and os.path.exists(dst_path):
+                if get_hash(src_path) != get_hash(dst_path):
+                    shutil.copy2(src_path, dst_path)
+                    print(f"🔄 Corrected hash mismatch for {asset_name} in www_deploy")
 
         # [FEAT-461] Intelligent Sync: Run sync scripts only when internal source is newer than airlock target
         sync_map = {
