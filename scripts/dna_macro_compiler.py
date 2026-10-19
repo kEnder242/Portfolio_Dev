@@ -198,32 +198,35 @@ def parse_markdown_with_dna_macros(markdown_text: str) -> list[dict[str, Any]]:
 
 
 def load_bone_collection(collection_name_or_file: str) -> dict[str, Any] | None:
-    """Load a 1:1 bone collection scratchpad from Portfolio_Dev/field_notes/data/bones/."""
-    target = BONES_DIR / collection_name_or_file
-    if not target.exists() and not collection_name_or_file.endswith(".json"):
-        target = BONES_DIR / f"{collection_name_or_file}.json"
-    if not target.exists():
-        # Fallback to legacy single file
-        legacy = REPO_ROOT / "field_notes" / "data" / "bone_collections.json"
-        if legacy.exists():
+    """Load a 1:1 bone collection scratchpad from Portfolio_Dev/field_notes/data/bones/ or archive."""
+    archive_dir = REPO_ROOT / "field_notes" / "data" / "archive" / "bones"
+    candidate_dirs = [BONES_DIR, archive_dir]
+    for b_dir in candidate_dirs:
+        target = b_dir / collection_name_or_file
+        if not target.exists() and not collection_name_or_file.endswith(".json"):
+            target = b_dir / f"{collection_name_or_file}.json"
+        if target.exists():
             try:
-                with open(legacy, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    for col in data:
-                        if (
-                            col.get("id") == collection_name_or_file
-                            or col.get("name") == collection_name_or_file
-                        ):
-                            return col
+                with open(target, "r", encoding="utf-8") as f:
+                    return json.load(f)
             except Exception:
-                pass
-        return None
+                return None
 
-    try:
-        with open(target, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return None
+    # Fallback to legacy single file
+    legacy = REPO_ROOT / "field_notes" / "data" / "bone_collections.json"
+    if legacy.exists():
+        try:
+            with open(legacy, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                for col in data:
+                    if (
+                        col.get("id") == collection_name_or_file
+                        or col.get("name") == collection_name_or_file
+                    ):
+                        return col
+        except Exception:
+            pass
+    return None
 
 
 def reconstruct_source_from_bones(

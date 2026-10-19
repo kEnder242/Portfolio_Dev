@@ -1,0 +1,547 @@
+{
+  "slug": "jitc_intuition",
+  "variable_prefix": "JITC",
+  "title": "JITC Intuition Kabal Knowledge Group",
+  "source_document": "paper_jitc_intuition.json",
+  "created_at": "2026-10-19T15:14:58.617783+00:00",
+  "updated_at": "2026-10-19T15:14:58.617783+00:00",
+  "cards": [
+    {
+      "id": "JITC.HEADER-001",
+      "local_id": "001",
+      "sub_namespace": "HEADER",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Just in time context retrieval and synthesis \u2014 Applied armchair philosophy"
+      },
+      "synthesis": {
+        "title": "Just in time context retrieval and synthesis",
+        "summary": "Just in time context retrieval and synthesis \u2014 Applied armchair philosophy",
+        "citations": [
+          "PHL-029",
+          "PHL-030"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "header",
+          "jitc",
+          "philosophy"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.SEC-002",
+      "local_id": "002",
+      "sub_namespace": "SEC",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Section 1 - Introducing the Just in Time Context Loop"
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop",
+        "summary": "Section 1 - Introducing the Just in Time Context Loop",
+        "citations": [
+          "PHL-001",
+          "PHL-002"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "section",
+          "jitc"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-003",
+      "local_id": "003",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration. History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle."
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop \u2014 Paragraph 1",
+        "summary": "Human introduction and ideas: JITC - make it obvious that Section 1 is my side of the collaboration. History: Large context models brute force, RAG, ICM and claude-mem are passive, grep is brittle.",
+        "citations": [
+          "PHL-001"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-004",
+      "local_id": "004",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "\u201cWhat I have is almost a blog. A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It's more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that."
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop \u2014 Paragraph 2",
+        "summary": "\u201cWhat I have is almost a blog. A collection of ideas that I noticed actually started to work. But measuring is hard. How do I describe a cognitive jump? It's more like a strategy guide that worked really well, applied on several levels, and connecting it to a loop allows me to have complex conversations about things only cloud models could talk about. I guess the idea is that cloud models are good like savants with huge memory, but all we need is to design a hippocampus and connect it to a prefontal cortex. What I have are practical notes on building that.",
+        "citations": [
+          "PHL-002",
+          "DISC-004"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-005",
+      "local_id": "005",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "LLM\u2019s are a prefrontal cortex, cloud models depend on massive short term memory but we don\u2019t need that what we need is to design a Hippocampus and connect it properly, RAG get\u2019s us half way thare."
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop \u2014 Paragraph 3",
+        "summary": "LLM\u2019s are a prefrontal cortex, cloud models depend on massive short term memory but we don\u2019t need that what we need is to design a Hippocampus and connect it properly, RAG get\u2019s us half way thare.",
+        "citations": [
+          "PHL-007"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-006",
+      "local_id": "006",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -> tagging -> wisdom -> hook/trigger -> intuitive behavior"
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop \u2014 Paragraph 4",
+        "summary": "Define Intuition as a retrieval problem: unsolicited ideas that bubble up relations and connections. Knowledge -> tagging -> wisdom -> hook/trigger -> intuitive behavior",
+        "citations": [
+          "PHL-005"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-007",
+      "local_id": "007",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots. Saving memories -> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification."
+      },
+      "synthesis": {
+        "title": "Section 1 - Introducing the Just in Time Context Loop \u2014 Paragraph 5",
+        "summary": "Supporting concepts: Like a Last mile math proof - call out unique ideas that connect the dots. Saving memories -> dreaming (distillation) -> Pearls. Gems (Pearls) of Wisdom - feats, gems, BKM, DNA. Tagging Pearls - contextual triggers, comments in code. Tagging: the critical connection. Comments in code serve as flags to references. Automatic indexes. Bringing intuition to the outside world beyond coding would need something similar - something to pop up critical context just in time. Refinement: Refine pearls rather than duplicate ideas. Provide a flow to Blend new ideas together. Providing flows - back pressure feedback loops. Building up complex flows with pearls as building blocks - gives bones to give structure and coherence. JITC is ambient, just in time, and just the relevant information at the right time. Concepts are pre compiled - needs nightly refinement and consolidation. JITC Cycle (Graphic): Describe the JITC Cycle: triage, fingertip context, collection, distillation, classification.",
+        "citations": [
+          "PHL-006",
+          "BKM-046"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.SEC-008",
+      "local_id": "008",
+      "sub_namespace": "SEC",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Section 2 - References & Prior Art"
+      },
+      "synthesis": {
+        "title": "Section 2 - References & Prior Art",
+        "summary": "Section 2 - References & Prior Art",
+        "citations": [
+          "ARXIV:2305.18290"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "section",
+          "jitc"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-009",
+      "local_id": "009",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Humble: Standing on the shoulders and all that, this isn't a deep math insight, it\u2019s just something that works. Something I built with what is around us, a logical step after integrating papers."
+      },
+      "synthesis": {
+        "title": "Section 2 - References & Prior Art \u2014 Paragraph 1",
+        "summary": "Humble: Standing on the shoulders and all that, this isn't a deep math insight, it\u2019s just something that works. Something I built with what is around us, a logical step after integrating papers.",
+        "citations": [
+          "ARXIV:2305.18290"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-010",
+      "local_id": "010",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "List of supporting documents and arxive links - Prior art etc. - Use AGY to find prior art - specifically leverage and note Research.html."
+      },
+      "synthesis": {
+        "title": "Section 2 - References & Prior Art \u2014 Paragraph 2",
+        "summary": "List of supporting documents and arxive links - Prior art etc. - Use AGY to find prior art - specifically leverage and note Research.html.",
+        "citations": [
+          "ARXIV:2401.03462"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-011",
+      "local_id": "011",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper."
+      },
+      "synthesis": {
+        "title": "Section 2 - References & Prior Art \u2014 Paragraph 3",
+        "summary": "Feel: AI reply/response and distillation, mirroring a prompt/response flow - this is where I show what AI did to help me write the paper.",
+        "citations": [
+          "PHL-029",
+          "PHL-030"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.SEC-012",
+      "local_id": "012",
+      "sub_namespace": "SEC",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Section 3 - Implementations & Empirical Lab Architecture"
+      },
+      "synthesis": {
+        "title": "Section 3 - Implementations & Empirical Lab Architecture",
+        "summary": "Section 3 - Implementations & Empirical Lab Architecture",
+        "citations": [
+          "FEAT-500",
+          "FEAT-526"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "section",
+          "jitc"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-013",
+      "local_id": "013",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Demo/Present/Implementation. Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker."
+      },
+      "synthesis": {
+        "title": "Section 3 - Implementations & Empirical Lab Architecture \u2014 Paragraph 1",
+        "summary": "Demo/Present/Implementation. Describe how ideas work at multiple levels from development to chat. Development hooks, protocols, feature tracker.",
+        "citations": [
+          "FEAT-500",
+          "FEAT-526"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-014",
+      "local_id": "014",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Inside the lab: gems, triage Hyde. Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier & hooks grouping. Decoupling triage and classification."
+      },
+      "synthesis": {
+        "title": "Section 3 - Implementations & Empirical Lab Architecture \u2014 Paragraph 2",
+        "summary": "Inside the lab: gems, triage Hyde. Common: JITC - stay positive - fingertips insight for small LLM - DNA scoping - triage classifier & hooks grouping. Decoupling triage and classification.",
+        "citations": [
+          "FEAT-546",
+          "FEAT-568"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.PARA-015",
+      "local_id": "015",
+      "sub_namespace": "PARA",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "paper_jitc_intuition.json",
+        "raw_text": "Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -> paper."
+      },
+      "synthesis": {
+        "title": "Section 3 - Implementations & Empirical Lab Architecture \u2014 Paragraph 3",
+        "summary": "Idea: tag paper concepts and use JITC Cycle to write this paper - save track refine and mark pearls - throw it in the mixer -> paper.",
+        "citations": [
+          "FEAT-581",
+          "FEAT-582",
+          "FEAT-583",
+          "FEAT-584"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "paragraph",
+          "jitc"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.BONE-016",
+      "local_id": "016",
+      "sub_namespace": "BONE",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "notes_jitc_bones.json",
+        "raw_text": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn\u2019t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it\u2019s possible to consume thousands of tokens just to answer a simple question. At some point it\u2019s necessary to save the work that was done and start a fresh new session."
+      },
+      "synthesis": {
+        "title": "Historical Bone: The KV Cache Horizon & Agentic Mania",
+        "summary": "When using agents to code, long context becomes a problem. Agents start forgetting passive directives and enter an unpredictable phase that I like to describe as manic behavior. I tend to trust an agent as far as their kv cache lasts. This isn\u2019t a new problem; adding more memory, kv cache optimizations, quantization, context compression, and RAG are all novel and interesting ways to enable stability over long context windows. The problem gets worse as projects grow, AGENTS.md expands and skills and tools are stacked on. The bloat is real and palatable, soon it\u2019s possible to consume thousands of tokens just to answer a simple question. At some point it\u2019s necessary to save the work that was done and start a fresh new session.",
+        "citations": [
+          "WIS-482"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "bone-legacy",
+          "adr-008",
+          "jitc"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.BONE-017",
+      "local_id": "017",
+      "sub_namespace": "BONE",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "notes_jitc_bones.json",
+        "raw_text": "What local models _do_ have is offline access to personal data. Personal data is intimately tied to local models, many users specifically turn to local models to avoid pushing personal data to the cloud, to keep things in-house. There are also advantages to keeping things local: we can pre-process data offline. Filtering and database access is easy and fast."
+      },
+      "synthesis": {
+        "title": "Historical Bone: Local Models & In-House Data Primacy",
+        "summary": "What local models _do_ have is offline access to personal data. Personal data is intimately tied to local models, many users specifically turn to local models to avoid pushing personal data to the cloud, to keep things in-house. There are also advantages to keeping things local: we can pre-process data offline. Filtering and database access is easy and fast.",
+        "citations": [
+          "FEAT-600"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "bone-legacy",
+          "adr-008",
+          "jitc"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.BONE-018",
+      "local_id": "018",
+      "sub_namespace": "BONE",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "notes_jitc_bones.json",
+        "raw_text": "Cloud models can use cache as a database, but local models don\u2019t have that luxury or capacity. With local models the context problem turns into a data retrieval problem. We have already solved data retrieval years ago. Modern tools like ClaraDB, grep, RAG, Infinite Context Memory, and Claude memory blend the solutions that worked for humans into something that LLM Agents can use. When buying more memory is not practical, I propose a move to the extreme other end by shrinking context. How far can we focus the context to only relevant information to answer those simple questions? What can we do with small models and limited kv cache on desktop hardware that normally need God tier cloud power to answer?"
+      },
+      "synthesis": {
+        "title": "Historical Bone: The Inversion Principle: Context Bloat vs. Deterministic Retrieval",
+        "summary": "Cloud models can use cache as a database, but local models don\u2019t have that luxury or capacity. With local models the context problem turns into a data retrieval problem. We have already solved data retrieval years ago. Modern tools like ClaraDB, grep, RAG, Infinite Context Memory, and Claude memory blend the solutions that worked for humans into something that LLM Agents can use. When buying more memory is not practical, I propose a move to the extreme other end by shrinking context. How far can we focus the context to only relevant information to answer those simple questions? What can we do with small models and limited kv cache on desktop hardware that normally need God tier cloud power to answer?",
+        "citations": [
+          "PHL-037"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "bone-legacy",
+          "adr-008",
+          "jitc"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.BONE-019",
+      "local_id": "019",
+      "sub_namespace": "BONE",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "notes_jitc_bones.json",
+        "raw_text": "The JITC concept and loop: Triage: use DB to classify prompt, know what you are looking for before you look for it. Injection: use hooks to put relevant context front, and related. Save: Domain Named Artifacts - extreme KV compression. Dream: Pre-process DB - Suggest connections, refinements, approve suggestions."
+      },
+      "synthesis": {
+        "title": "Historical Bone: The Just-In-Time Context (JITC) Closed Loop",
+        "summary": "The JITC concept and loop: Triage: use DB to classify prompt, know what you are looking for before you look for it. Injection: use hooks to put relevant context front, and related. Save: Domain Named Artifacts - extreme KV compression. Dream: Pre-process DB - Suggest connections, refinements, approve suggestions.",
+        "citations": [
+          "FEAT-600"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "bone-legacy",
+          "adr-008",
+          "jitc"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    },
+    {
+      "id": "JITC.BONE-020",
+      "local_id": "020",
+      "sub_namespace": "BONE",
+      "kabal": "jitc_intuition",
+      "origin": {
+        "author": "Jason Allred",
+        "source": "notes_jitc_bones.json",
+        "raw_text": "DNA as a meta language - decoupling meaning from presentation, semantic paragraphs, operations as adjectives/adverbs."
+      },
+      "synthesis": {
+        "title": "Historical Bone: The Granularity Triad: DNA Ideas, Certified Revisions, and Narrative Spines",
+        "summary": "DNA as a meta language - decoupling meaning from presentation, semantic paragraphs, operations as adjectives/adverbs.",
+        "citations": [
+          "VIBE-001"
+        ]
+      },
+      "metadata": {
+        "tags": [
+          "bone-legacy",
+          "adr-008",
+          "jitc"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T15:14:58.617783+00:00"
+      }
+    }
+  ]
+}

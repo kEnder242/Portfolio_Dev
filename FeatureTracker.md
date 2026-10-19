@@ -3892,5 +3892,14 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Logic:** Enhances the Applied Writer review drawer with cross-corpus search and drag-and-drop citation chips spanning Wisdom (`WIS-xxx`), Features (`FEAT-xxx`), Philosophy (`PHL-xxx`), and Gems (`focal_ledger.json` / `latest_synthesis_gems.json`). Employs a silent on-demand HyDE retrieval lens in the drawer rather than an intrusive conversational bot, preserving authorial sovereignty.
 **Rationale:** Unifies diverse lab knowledge corpuses into the manuscript authoring canvas without falling into the "Clippy" conversational chat-trap.
 
+## [FEAT-665] Active Kabal Staging & Epistemic Bone Retirement
+**Sprint:** Sprint 107.0
+**Status:** ACTIVE
+**Tags:** `#kabal_staging`, `#bone_retirement`, `#active_staging_shelf`, `#ast_reconciliation`, `[FEAT-662]`, `[FEAT-663]`, `[BKM-086]`
+**Code:** `Portfolio_Dev/dna_forge/`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/papers/jitc_intuition/`, `HomeLabAI/src/projection/ast_reconciliation.py`
+**Logic:** Complete retirement of archaic "Bone Collection" terminology across the entire Federated Lab ecosystem. In DNA Forge and Applied Writer, introduces `+ Stage` (`.btn-card-stage`) and the `📑 ACTIVE KABAL STAGING` floating shelf (`#btnStageToWriter`), persisting staged cards across sessions (`dna_active_staging_shelf`) with seamless forward handoff to Applied Writer via URL parameter (`writer.html?staged=ID1,ID2`). Migrates legacy standalone bone files (`notes_jitc_bones.json`, `paper_jitc_intuition.json`) into canonical atomic bundles in `Portfolio_Dev/papers/jitc_intuition/` (`jitc_intuition_kabal.json` and `jitc_intuition_spine.json`), verified via deterministic replay. Archives legacy `field_notes/data/bones/`, deprecates `bone_collections.json`, and re-anchors `HomeLabAI/src/projection/bones.py` to `ast_reconciliation.py` with 100% backward-compatible alias deprecation wrappers.
+**Rationale:** Eliminates morbid and ambiguous "bones" terminology that caused developer and UI confusion, aligning all document-staging workflows cleanly around the canonical Kabal and Spine epistemic model established in Sprint 106.0.
+
+
 
 

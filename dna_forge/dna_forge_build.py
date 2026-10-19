@@ -403,7 +403,7 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
             </div>
             <div class="card-actions-quick">
                 {writer_btn}
-                <button class="btn-card-rack" data-cid="{escape_html(cid)}" title="Dock into Active Bone Rack">+ Rack</button>
+                <button class="btn-card-stage" data-cid="{escape_html(cid)}" title="Stage into Active Working Kabal">+ Stage</button>
                 <button class="btn-card-synapse" data-cid="{escape_html(cid)}" title="View in Synapse Graph">🕸️ Synapse</button>
             </div>
         </div>
