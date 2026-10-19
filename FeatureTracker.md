@@ -3868,7 +3868,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 
 ## [FEAT-662] The Kabal: Emergent Ingestion Clusters & Manuscript Working Groups
 **Sprint:** Sprint 106.0 (Phase 5)
-**Status:** DRAFT / IN_PROGRESS
+**Status:** ACTIVE
 **Tags:** `#kabal`, `#emergent_affinity`, `#ingestion_cluster`, `#paper_writing`, `[VIBE-016]`, `[FEAT-614]`, `[BKM-060]`
 **Code:** `Portfolio_Dev/dna/vibe_data.json`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/nibble_v2.py`, `Portfolio_Dev/field_notes/scan_queue.py`
 **Logic:** Establishes **The Kabal** as an explicit architectural primitive representing an emergent middle tier between atomic DNA cards/gems and formal named collections or manuscripts.
@@ -3878,7 +3878,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 
 ## [FEAT-663] Spine Version Tagging & Deterministic Snapshot Projections
 **Sprint:** Sprint 106.0 (Phase 5)
-**Status:** DRAFT / IN_PROGRESS
+**Status:** ACTIVE
 **Tags:** `#spine_tagging`, `#snapshot_projections`, `#deterministic_replay`, `[INS-041]`, `[BKM-073]`, `[FEAT-662]`
 **Code:** `Portfolio_Dev/papers/*_spine.json`, `Portfolio_Dev/field_notes/replay_paper.py`
 **Logic:** Adds explicit snapshot version tags (`@v1_master`, `@v2_recruiter`, `@executive_2page`) directly into the paper's Spine manifest. Decouples the live, evolving manuscript canvas from frozen published snapshots. Allows the Replay Engine to deterministically reconstruct exact historical documents word-for-word from their Kabal node coordinates.
@@ -3886,7 +3886,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 
 ## [FEAT-664] Multi-Corpus Knowledge Ingestion in Applied Writer (DNA & Gems in Manuscripts)
 **Sprint:** Sprint 106.0 (Phase 5)
-**Status:** DRAFT / IN_PROGRESS
+**Status:** ACTIVE
 **Tags:** `#multi_corpus`, `#wisdom_integration`, `#gem_citations`, `#drawer_search`, `[VIBE-017]`, `[FEAT-614]`
 **Code:** `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/js/writer.js`
 **Logic:** Enhances the Applied Writer review drawer with cross-corpus search and drag-and-drop citation chips spanning Wisdom (`WIS-xxx`), Features (`FEAT-xxx`), Philosophy (`PHL-xxx`), and Gems (`focal_ledger.json` / `latest_synthesis_gems.json`). Employs a silent on-demand HyDE retrieval lens in the drawer rather than an intrusive conversational bot, preserving authorial sovereignty.
