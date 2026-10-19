@@ -517,8 +517,8 @@
             overflow: hidden;
         }
 
-        /* Bone Collections & Citations Containers */
-        .tier-bones-container {
+        /* Staging Collections & Citations Containers */
+        .tier-bones-container, .tier-staging-container {
             margin-top: 8px;
             padding: 8px;
             background: rgba(0, 0, 0, 0.25);
@@ -531,12 +531,12 @@
             min-height: 38px;
         }
 
-        .tier-bones-container.drag-over {
+        .tier-bones-container.drag-over, .tier-staging-container.drag-over {
             border-color: var(--accent-color);
             background: rgba(77, 170, 252, 0.1);
         }
 
-        .bone-collection-badge {
+        .bone-collection-badge, .citation-cluster-badge {
             background: var(--bone-bg);
             border: 1px solid var(--bone-border);
             border-radius: 6px;
@@ -547,7 +547,7 @@
             cursor: grab;
         }
 
-        .bone-collection-header {
+        .bone-collection-header, .citation-cluster-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -557,7 +557,7 @@
             gap: 8px;
         }
 
-        .bone-chips-wrap {
+        .bone-chips-wrap, .citation-chips-wrap {
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
@@ -21934,6 +21934,24 @@ window.__WRITER_QUOTES__ = [
                 logSysConsole('[INIT] Mounted active paper: ' + (STATE.activePaper ? STATE.activePaper.title : 'None') + ' (' + secCount + ' sections, ' + parCount + ' paragraphs, ' + boneCount + ' root bones)', 'success');
                 logSysConsole('[INIT] Manifest indexed ' + (STATE.manifest && STATE.manifest.papers ? STATE.manifest.papers.length : 0) + ' manuscript(s)', 'info');
                 logSysConsole('[INIT] DNA citation index: ' + Object.keys(STATE.citationIndex || {}).length + ' anchors registered', 'info');
+
+                // [FEAT-665] Support incoming staged cards from DNA Forge
+                try {
+                    var params = new URLSearchParams(window.location.search);
+                    var stagedParam = params.get('staged');
+                    if (stagedParam) {
+                        var cardIds = stagedParam.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+                        if (cardIds.length) {
+                            logSysConsole('[STAGING] Ingested ' + cardIds.length + ' staged card(s) from DNA Forge', 'success');
+                            showToast('📥 Loaded ' + cardIds.length + ' staged cards into Review Drawer', 'info');
+                            var corpusInput = document.getElementById('corpus-search-input');
+                            if (corpusInput) {
+                                corpusInput.value = cardIds[0];
+                                corpusInput.dispatchEvent(new Event('input'));
+                            }
+                        }
+                    }
+                } catch(e) {}
             }
 
             if (document.readyState === 'loading') {
