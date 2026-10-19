@@ -1,0 +1,162 @@
+{
+  "slug": "jitc_intuition",
+  "variable_prefix": "JITC",
+  "title": "Just in Time Context Retrieval and Synthesis Narrative Spine",
+  "source_document": "paper_jitc_intuition.json",
+  "active_tag": "@master",
+  "created_at": "2026-10-19T15:14:58.617783+00:00",
+  "updated_at": "2026-10-19T15:14:58.617783+00:00",
+  "tags": {
+    "@master": {
+      "name": "@master",
+      "description": "Canonical JITC manuscript sections, paragraphs, and citations",
+      "created_at": "2026-10-19T15:14:58.617783+00:00",
+      "node_ids": [
+        "JITC.HEADER-001",
+        "JITC.SEC-002",
+        "JITC.PARA-003",
+        "JITC.PARA-004",
+        "JITC.PARA-005",
+        "JITC.PARA-006",
+        "JITC.PARA-007",
+        "JITC.SEC-008",
+        "JITC.PARA-009",
+        "JITC.PARA-010",
+        "JITC.PARA-011",
+        "JITC.SEC-012",
+        "JITC.PARA-013",
+        "JITC.PARA-014",
+        "JITC.PARA-015"
+      ]
+    },
+    "@with_bones": {
+      "name": "@with_bones",
+      "description": "JITC manuscript including historical companion bone notes",
+      "created_at": "2026-10-19T15:14:58.617783+00:00",
+      "node_ids": [
+        "JITC.HEADER-001",
+        "JITC.SEC-002",
+        "JITC.PARA-003",
+        "JITC.PARA-004",
+        "JITC.PARA-005",
+        "JITC.PARA-006",
+        "JITC.PARA-007",
+        "JITC.SEC-008",
+        "JITC.PARA-009",
+        "JITC.PARA-010",
+        "JITC.PARA-011",
+        "JITC.SEC-012",
+        "JITC.PARA-013",
+        "JITC.PARA-014",
+        "JITC.PARA-015",
+        "JITC.BONE-016",
+        "JITC.BONE-017",
+        "JITC.BONE-018",
+        "JITC.BONE-019",
+        "JITC.BONE-020"
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "id": "JITC.HEADER-001",
+      "style": "heading",
+      "sub_namespace": "HEADER"
+    },
+    {
+      "id": "JITC.SEC-002",
+      "style": "heading",
+      "sub_namespace": "SEC"
+    },
+    {
+      "id": "JITC.PARA-003",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-004",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-005",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-006",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-007",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.SEC-008",
+      "style": "heading",
+      "sub_namespace": "SEC"
+    },
+    {
+      "id": "JITC.PARA-009",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-010",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-011",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.SEC-012",
+      "style": "heading",
+      "sub_namespace": "SEC"
+    },
+    {
+      "id": "JITC.PARA-013",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-014",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.PARA-015",
+      "style": "paragraph",
+      "sub_namespace": "PARA"
+    },
+    {
+      "id": "JITC.BONE-016",
+      "style": "callout",
+      "sub_namespace": "BONE"
+    },
+    {
+      "id": "JITC.BONE-017",
+      "style": "callout",
+      "sub_namespace": "BONE"
+    },
+    {
+      "id": "JITC.BONE-018",
+      "style": "callout",
+      "sub_namespace": "BONE"
+    },
+    {
+      "id": "JITC.BONE-019",
+      "style": "callout",
+      "sub_namespace": "BONE"
+    },
+    {
+      "id": "JITC.BONE-020",
+      "style": "callout",
+      "sub_namespace": "BONE"
+    }
+  ]
+}

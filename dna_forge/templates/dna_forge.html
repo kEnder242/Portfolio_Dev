@@ -68,7 +68,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                 <div class="draft-actions-bar">
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <button id="btnDecomposeDraft" class="draft-btn-decompose" title="Segment note into paragraph-level semantic units, infer DNA domains, and suggest bone skeleton">⚡ Decompose into DNA + Bones</button>
+                        <button id="btnDecomposeDraft" class="draft-btn-decompose" title="Segment note into paragraph-level semantic units, infer DNA domains, and suggest Kabal cards and spine">⚡ Decompose into Kabal Cards & Spine</button>
                         <button id="btnLoadSampleDraft" class="studio-btn" title="Load sample retrospective note for rapid testing">📋 Load Sample Note</button>
                         <button id="btnSaveDraftScratch" class="studio-btn" title="Save scratchpad locally">💾 Save Scratchpad</button>
                         <button id="btnClearDraft" class="studio-btn" title="Clear scratchpad">✖ Clear</button>
@@ -85,17 +85,17 @@ Rule: Double-Write Protocol must always update workspace repos first before push
 
                     <div id="decompChunksList" class="decomp-chunks-list"></div>
 
-                    <!-- Suggested Bone Collection Scaffold -->
+                    <!-- Suggested Kabal Track Scaffold -->
                     <div class="inspector-bones-section" id="decompBoneScaffold">
                         <div class="inspector-bones-title">
-                            <span>🦴 Suggested Bone Collection Track</span>
-                            <input type="text" id="suggestedBoneName" class="bone-rack-name-input" style="min-width:200px; font-size:0.78rem;" value="Decomposed Track Scaffold">
+                            <span>📑 Suggested Kabal Track Scaffold</span>
+                            <input type="text" id="suggestedBoneName" class="bone-rack-name-input" style="min-width:200px; font-size:0.78rem;" value="Decomposed Kabal Scaffold">
                         </div>
                         <div class="inspector-bones-list" id="decompBoneChips"></div>
                     </div>
 
                     <div class="decomp-promote-bar">
-                        <span style="font-size:0.8rem; color:#8b949e;">Promoting allocates official IDs, registers bone tracks, and commits to ChromaDB.</span>
+                        <span style="font-size:0.8rem; color:#8b949e;">Promoting allocates polymorphic IDs, registers Kabal spine tracks, and commits to ChromaDB.</span>
                         <button id="btnPromoteDraft" class="btn-promote-db">🚀 Promote to Sovereign DNA DB</button>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     <span class="synapse-domain-chip" data-domain="RDNA" style="border-color:#56d364; color:#56d364;">RDNA</span>
                     <span class="synapse-domain-chip" data-domain="SPRINT" style="border-color:#d2a8ff; color:#d2a8ff;">SPRINT</span>
                     <span class="synapse-domain-chip" data-domain="GEMS" style="border-color:#ec4899; color:#ec4899;">💎 GEMS</span>
-                    <span class="synapse-domain-chip" data-domain="BONES" style="border-color:#56d364; color:#56d364;">🦴 RACK BONES</span>
+                    <span class="synapse-domain-chip" data-domain="BONES" style="border-color:#38bdf8; color:#38bdf8;">📑 STAGED CARDS</span>
                 </div>
 
                 <!-- Main Synapse Canvas Workspace (100% Full-Bleed Canvas [FEAT-612]) -->
@@ -193,22 +193,23 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                     </div>
                 </div>
 
-                <!-- Persistent Bone Collection Rack (Builder Shelf) -->
-                <div id="bone-rack" class="bone-rack-container">
+                <!-- Persistent Active Kabal Staging Shelf (Builder Shelf) -->
+                <div id="bone-rack" class="bone-rack-container kabal-staging-container">
                     <div class="bone-rack-header">
                         <div class="bone-rack-title-row">
-                            <span class="bone-rack-badge">🦴 BONE COLLECTION BUILDER</span>
-                            <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Collection Name..." value="Default Track Scaffold">
-                            <span id="boneCountBadge" class="bone-count-badge">0 Bones Docked</span>
+                            <span class="bone-rack-badge kabal-staging-badge">📑 ACTIVE KABAL STAGING</span>
+                            <input type="text" id="boneCollectionName" class="bone-rack-name-input" placeholder="Working Kabal Title..." value="Active Working Caucus">
+                            <span id="boneCountBadge" class="bone-count-badge">0 Cards Staged</span>
                         </div>
                         <div class="bone-rack-actions">
-                            <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Bones using vector gap analysis">🧠 Suggest Bones</button>
-                            <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Save this collection to ChromaDB bone_collections registry">💾 Save Collection</button>
-                            <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active collection rack">✖ Clear</button>
+                            <button id="btnStageToWriter" class="studio-btn bone-btn-writer" style="background:rgba(56,189,248,0.15); border-color:#38bdf8; color:#38bdf8;" title="Send staged cards to Applied Writer review drawer">✍️ Open in Writer</button>
+                            <button id="btnSuggestBones" class="studio-btn bone-btn-suggest" title="Suggest Complementary Cards using vector gap analysis">🧠 Suggest Cards</button>
+                            <button id="btnSaveBoneCollection" class="studio-btn bone-btn-save" title="Export or save this staged working caucus">💾 Save Kabal</button>
+                            <button id="btnClearBoneRack" class="studio-btn bone-btn-clear" title="Clear active staged shelf">✖ Clear</button>
                         </div>
                     </div>
                     <div id="boneDockItems" class="bone-dock-items">
-                        <div class="bone-dock-empty">No DNA bones docked yet. Click <strong>+ Rack</strong> on any card below or hit <strong>Suggest Bones</strong> to build a track skeleton.</div>
+                        <div class="bone-dock-empty">No cards staged yet. Click <strong>+ Stage</strong> on any card below to build an active working caucus.</div>
                     </div>
                 </div>
 
