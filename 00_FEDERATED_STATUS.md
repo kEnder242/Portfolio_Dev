@@ -235,9 +235,9 @@
 ## 📋 Operational & Technical Debt Backlog
 
 ### Co-Pilot Mice Feedback Forensics & Action Items
-*   **Live Host Telemetry Node (`FEAT-557`)**: **[QUEUED FOR SPRINT 108.0]** Wire real-time hardware telemetry (NVML / psutil) tool hooks into the Hub/Brain so live memory and resource queries return physical silicon vitals instead of falling back to historical RAG hallucinations.
-*   **Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`)**: **[QUEUED FOR SPRINT 108.0]** Strip previous assistant reflection turns (`<thought>` tags and `Brain:` prefixes) from incoming multi-turn history in `CognitiveHub` to prevent recursive self-response loops.
-*   **Triage Feedback Domain Snapping (`FEAT-559`)**: **[QUEUED FOR SPRINT 108.0 CANDIDATE]** Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
+*   **Live Host Telemetry Node (`FEAT-557`)**: **[QUEUED FOR SPRINT 107.0 (PHASE 2)]** Wire real-time hardware telemetry (NVML / psutil) tool hooks into the Hub/Brain so live memory and resource queries return physical silicon vitals instead of falling back to historical RAG hallucinations.
+*   **Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`)**: **[QUEUED FOR SPRINT 107.0 (PHASE 2)]** Strip previous assistant reflection turns (`<thought>` tags and `Brain:` prefixes) from incoming multi-turn history in `CognitiveHub` to prevent recursive self-response loops.
+*   **Triage Feedback Domain Snapping (`FEAT-559`)**: **[QUEUED FOR SPRINT 107.0 (PHASE 2 CANDIDATE)]** Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
 
 ### General Engineering Backlog
 *   **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
