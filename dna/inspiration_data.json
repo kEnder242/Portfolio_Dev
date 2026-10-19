@@ -2103,5 +2103,120 @@
       "status": "APPROVED",
       "bucket_id": "bucket_grounding_philosophy"
     }
+  },
+  {
+    "id": "INS-048",
+    "theme": "Authoring Architecture & Epistemic Scaffolding",
+    "paper_order": 48,
+    "origin": {
+      "author": "jallred",
+      "text": "alright, let's track bone collection as inspiration for a new more refined concept of kabal. Use it for inspiration in the oracle reviews.",
+      "source": "Federated Lab Sprint 106.0 Ingestion & Kabal Dialogue",
+      "immutable": true,
+      "created_at": "2026-10-18T19:41:19Z"
+    },
+    "synthesis": {
+      "title": "The Bone Collection as the Skeletal Predecessor to the Kabal",
+      "narrative_context": "The foundational architecture of ADR-008 and FEAT-601 established the 1:1 Source Bone Collection (*_bones.json) to decouple atomic semantic meaning from presentation without corrupting original source notes. While ADR-008 conflated atomic thoughts with sequential narrative order in a single file and required early static ID binding ([WIS-xxx]), it established the core truth: authoring requires a private, non-destructive 1:1 working companion. The Kabal (FEAT-662) purifies and matures this inspiration: it bifurcates substance (<slug>_kabal.json) from topological spine ordering (<slug>_spine.json), introduces polymorphic variable namespaces (RESUME.EXP-042) to defer static commitment, and groups the entire bundle into papers/<slug>/ to establish an immutable, auditable Git paper trail (VIBE-017).",
+      "lab_anchors": [
+        "ADR-008",
+        "FEAT-601",
+        "FEAT-662",
+        "FEAT-663",
+        "FEAT-664",
+        "VIBE-016",
+        "VIBE-017",
+        "BKM-085"
+      ],
+      "review_notes": "Directly links the historical ADR-008 Bone Collection pattern to the modern polymorphic Kabal and deterministic Spine architecture.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "bone-collection",
+        "kabal",
+        "spine-architecture",
+        "adr-008",
+        "authoring",
+        "epistemic-scaffolding"
+      ],
+      "explicit_links": [
+        "ADR-008",
+        "FEAT-601",
+        "FEAT-662",
+        "FEAT-663",
+        "VIBE-016",
+        "VIBE-017"
+      ],
+      "aliases": [
+        "bone-collection-inspiration",
+        "kabal-predecessor"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_authoring_architecture"
+    }
+  },
+  {
+    "id": "INS-049",
+    "theme": "Cognitive Architecture & Epistemic Hydraulics",
+    "paper_order": 49,
+    "origin": {
+      "author": "jallred",
+      "text": "Everyone is literally boiling the ocean when all you need is a dam.\n\nLLM logic works but it's hard to control the flow.\n\nYou need to shore up the lines where prose leads you astray.  So many pitfalls.\n\nBut like building a dam, you can't stop ALL the water.  You MUST pave a way for the thoughts to flow.",
+      "source": "Federated Lab Sprint 106.0 Guidance & Flow Control",
+      "immutable": true,
+      "created_at": "2026-10-18T19:55:00Z"
+    },
+    "synthesis": {
+      "title": "Dam Building: The Law of Epistemic Hydraulics and Paved Flow",
+      "narrative_context": "The generative reasoning of Large Language Models behaves like a powerful hydraulic torrent: attempt to 'boil the ocean' with sprawling negative constraint prompts, exhaustive anti-inventories, or unbounded token sweeps, and the system dissipates enormous compute while leaking through subtle semantic fractures. Conversely, attempting to dam ALL the water—imposing rigid zero-entropy handcuffs or total blockage—creates severe backpressure that induces catastrophic hallucination, robotic paralysis, or sudden refusal. LLM logic works, but controlling its natural trajectory requires hydraulic engineering: shoring up the vulnerable earthen lines where prose leads astray into common pitfalls (BKM-081), while deliberately engineering a structured, paved spillway (the Paved Path per BKM-086) through which reasoning, tool orchestration, and positive intent can smoothly discharge. You do not stop the river; you construct the dam to shape, meter, and channel the flow.",
+      "lab_anchors": [
+        "BKM-086",
+        "BKM-015",
+        "BKM-081",
+        "FEAT-238",
+        "FEAT-660",
+        "INS-044",
+        "INS-047"
+      ],
+      "review_notes": "Codifies the dam building hydraulic principle: replacing negative constraint bloat and total blockage with reinforced embankments and paved positive flow paths.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "inspiration",
+        "dam-building",
+        "epistemic-hydraulics",
+        "flow-control",
+        "paved-path",
+        "positive-guidance",
+        "prompt-engineering",
+        "cognitive-architecture",
+        "prose-containment"
+      ],
+      "explicit_links": [
+        "BKM-086",
+        "BKM-015",
+        "BKM-081",
+        "FEAT-238",
+        "FEAT-660",
+        "INS-044",
+        "INS-047"
+      ],
+      "aliases": [
+        "dam-building",
+        "epistemic-hydraulics",
+        "paved-flow"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

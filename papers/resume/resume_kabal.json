@@ -1,0 +1,1324 @@
+{
+  "slug": "resume",
+  "variable_prefix": "RESUME",
+  "title": "Resume Kabal Knowledge Group",
+  "source_document": "Jason Allred Resume - Jan 2026.txt",
+  "source_path": "/home/jallred/knowledge_base/Jason Allred Resume - Jan 2026.txt",
+  "created_at": "2026-10-19T02:58:17.099281+00:00",
+  "updated_at": "2026-10-19T02:58:17.099281+00:00",
+  "cards": [
+    {
+      "id": "RESUME.HEADER-001",
+      "local_id": "001",
+      "sub_namespace": "HEADER",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Jason Allred | Portland, OR | kEnder242@gmail.com | 503.515.2663 | linkedin.com/in/jason-allred-7a55024"
+      },
+      "synthesis": {
+        "title": "Contact Information",
+        "summary": "Jason Allred | Portland, OR | kEnder242@gmail.com | 503.515.2663 | linkedin.com/in/jason-allred-7a55024",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "contact",
+          "header"
+        ],
+        "style": "header",
+        "created_at": "2026-10-19T02:58:17.098757+00:00"
+      }
+    },
+    {
+      "id": "RESUME.SUMMARY-002",
+      "local_id": "002",
+      "sub_namespace": "SUMMARY",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "System validation engineer with hands-on experience in silicon validation, SoC debug, firmware/BMC validation, and diagnostic automation, with a focus on platform telemetry, observability, and debuggability at datacenter scale. Skilled in functional and performance testing, root-cause analysis, and cross-team collaboration across architecture, BIOS, firmware, and hardware groups."
+      },
+      "synthesis": {
+        "title": "Platform Telemetry & Validation Summary",
+        "summary": "System validation engineer with hands-on experience in silicon validation, SoC debug, firmware/BMC validation, and diagnostic automation, with a focus on platform telemetry, observability, and debuggability at datacenter scale. Skilled in functional and performance testing, root-cause analysis, and cross-team collaboration across architecture, BIOS, firmware, and hardware groups.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "summary",
+          "telemetry",
+          "validation"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T02:58:17.098780+00:00"
+      }
+    },
+    {
+      "id": "RESUME.SKILL-003",
+      "local_id": "003",
+      "sub_namespace": "SKILL",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Python, C++, C, C#, TCL, Perl"
+      },
+      "synthesis": {
+        "title": "Skills: Languages",
+        "summary": "Python, C++, C, C#, TCL, Perl",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "skills",
+          "languages"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098787+00:00"
+      }
+    },
+    {
+      "id": "RESUME.SKILL-004",
+      "local_id": "004",
+      "sub_namespace": "SKILL",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Functional validation, silicon debug, power/performance validation, RAS validation, PCIe validation, memory controller validation, coherency, BIOS/microcode debug, SoC subsystem validation"
+      },
+      "synthesis": {
+        "title": "Skills: Areas",
+        "summary": "Functional validation, silicon debug, power/performance validation, RAS validation, PCIe validation, memory controller validation, coherency, BIOS/microcode debug, SoC subsystem validation",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "skills",
+          "areas"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098794+00:00"
+      }
+    },
+    {
+      "id": "RESUME.SKILL-005",
+      "local_id": "005",
+      "sub_namespace": "SKILL",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "x86, ARM, PCIe, DC/DC power management, GPU servers"
+      },
+      "synthesis": {
+        "title": "Skills: Hardware & Architecture",
+        "summary": "x86, ARM, PCIe, DC/DC power management, GPU servers",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "skills",
+          "hardware & architecture"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098799+00:00"
+      }
+    },
+    {
+      "id": "RESUME.SKILL-006",
+      "local_id": "006",
+      "sub_namespace": "SKILL",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Oscilloscopes, logic analyzers, JTAG debuggers, signal-trace tools (Intel VISA)"
+      },
+      "synthesis": {
+        "title": "Skills: Tools & Environments",
+        "summary": "Oscilloscopes, logic analyzers, JTAG debuggers, signal-trace tools (Intel VISA)",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "skills",
+          "tools & environments"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098806+00:00"
+      }
+    },
+    {
+      "id": "RESUME.LLM-007",
+      "local_id": "007",
+      "sub_namespace": "LLM",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Not long ago, I viewed language-model coding assistance as break-even at best; today it's indispensable. I use agent-driven workflows to read documentation, untangle bugs, generate clean implementations, and handle environment setup with ease. I've built hands-on experience using Gemini, Ollama, Whisper, DeepAgent, and other tools, and I've developed an instinct for when to trust the results—and when not to. This new way of working fits naturally with my existing strengths in design, code analysis, and troubleshooting, and it has transformed the pace and quality of my engineering work."
+      },
+      "synthesis": {
+        "title": "Agentic Workflow & AI Tooling Philosophy",
+        "summary": "Not long ago, I viewed language-model coding assistance as break-even at best; today it's indispensable. I use agent-driven workflows to read documentation, untangle bugs, generate clean implementations, and handle environment setup with ease. I've built hands-on experience using Gemini, Ollama, Whisper, DeepAgent, and other tools, and I've developed an instinct for when to trust the results—and when not to. This new way of working fits naturally with my existing strengths in design, code analysis, and troubleshooting, and it has transformed the pace and quality of my engineering work.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "ai",
+          "llm",
+          "workflows",
+          "tooling"
+        ],
+        "style": "callout",
+        "created_at": "2026-10-19T02:58:17.098811+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-008",
+      "local_id": "008",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Systems Software & AI Infrastructure (Independent Research) | 2025 – Present\nArchitecting a high-throughput, distributed AI ecosystem to validate emerging software stacks against hardware constraints. Optimized inference performance for Llama and DeepSeek models by integrating vLLM with PagedAttention and implementing Liger-Kernel (fused kernels) to reduce VRAM overhead. Engineered GPU multi-tenancy using NVIDIA MPS and developed RAG pipelines with ChromaDB to enable context-aware agentic workflows. Leveraged NVIDIA NeMo for low-latency sensory processing and utilized PyTorch and CUDA for deep-stack performance profiling, bridging 15 years of SoC validation expertise with modern generative AI infrastructure requirements."
+      },
+      "synthesis": {
+        "title": "Role: Systems Software & AI Infrastructure (Independent",
+        "summary": "Systems Software & AI Infrastructure (Independent Research) | 2025 – Present\nArchitecting a high-throughput, distributed AI ecosystem to validate emerging software stacks against hardware constraints. Optimized inference performance for Llama and DeepSeek models by integrating vLLM with PagedAttention and implementing Liger-Kernel (fused kernels) to reduce VRAM overhead. Engineered GPU multi-tenancy using NVIDIA MPS and developed RAG pipelines with ChromaDB to enable context-aware agentic workflows. Leveraged NVIDIA NeMo for low-latency sensory processing and utilized PyTorch and CUDA for deep-stack performance profiling, bridging 15 years of SoC validation expertise with modern generative AI infrastructure requirements.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.098821+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-009",
+      "local_id": "009",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Intel Corporation - Hillsboro, OR"
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Intel Corporation - Hillsboro, OR",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.098837+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-010",
+      "local_id": "010",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Manageability Test Content Lead | Cloud Software Development Engineer\nOct 2019 - Oct 2024"
+      },
+      "synthesis": {
+        "title": "Role: Manageability Test Content Lead | Cloud Software D",
+        "summary": "Manageability Test Content Lead | Cloud Software Development Engineer\nOct 2019 - Oct 2024",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.098844+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-011",
+      "local_id": "011",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Led validation and automation for server manageability across Intel’s datacenter platforms."
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Led validation and automation for server manageability across Intel’s datacenter platforms.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.098850+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-012",
+      "local_id": "012",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Developed and executed validation test plans for server manageability, power telemetry, and firmware features across multiple SoC generations."
+      },
+      "synthesis": {
+        "title": "Developed and executed validation test plans for server mana...",
+        "summary": "Developed and executed validation test plans for server manageability, power telemetry, and firmware features across multiple SoC generations.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098865+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-013",
+      "local_id": "013",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Performed functional, stress, and performance testing using hardware instruments, simulation environments, and Python-based diagnostic tools."
+      },
+      "synthesis": {
+        "title": "Performed functional, stress, and performance testing using ...",
+        "summary": "Performed functional, stress, and performance testing using hardware instruments, simulation environments, and Python-based diagnostic tools.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "automation",
+          "simulation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098878+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-014",
+      "local_id": "014",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Validated PCIe, memory controller behavior, power management features, and platform RAS mechanisms during system-level bring-up."
+      },
+      "synthesis": {
+        "title": "Validated PCIe, memory controller behavior, power management...",
+        "summary": "Validated PCIe, memory controller behavior, power management features, and platform RAS mechanisms during system-level bring-up.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098888+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-015",
+      "local_id": "015",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Worked extensively with time-series telemetry data and visualization pipelines used for diagnosis and analysis of platform health, power, and performance."
+      },
+      "synthesis": {
+        "title": "Worked extensively with time-series telemetry data and visua...",
+        "summary": "Worked extensively with time-series telemetry data and visualization pipelines used for diagnosis and analysis of platform health, power, and performance.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098899+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-016",
+      "local_id": "016",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Collaborated with design, architecture, BIOS, and firmware teams to provide actionable validation feedback and improve test methodologies."
+      },
+      "synthesis": {
+        "title": "Collaborated with design, architecture, BIOS, and firmware t...",
+        "summary": "Collaborated with design, architecture, BIOS, and firmware teams to provide actionable validation feedback and improve test methodologies.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098910+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-017",
+      "local_id": "017",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Analyzed power and performance behavior using telemetry, visualization tools, and automated Python pipelines."
+      },
+      "synthesis": {
+        "title": "Analyzed power and performance behavior using telemetry, vis...",
+        "summary": "Analyzed power and performance behavior using telemetry, visualization tools, and automated Python pipelines.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098918+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-018",
+      "local_id": "018",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Owned the design and maintenance of a Python-based test framework supporting 100+ automated IPMI, Redfish, PECI, and MCTP tests."
+      },
+      "synthesis": {
+        "title": "Owned the design and maintenance of a Python-based test fram...",
+        "summary": "Owned the design and maintenance of a Python-based test framework supporting 100+ automated IPMI, Redfish, PECI, and MCTP tests.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098926+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-019",
+      "local_id": "019",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Achieved 100% end-to-end automation coverage for multiple product generations."
+      },
+      "synthesis": {
+        "title": "Achieved 100% end-to-end automation coverage for multiple pr...",
+        "summary": "Achieved 100% end-to-end automation coverage for multiple product generations.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098934+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-020",
+      "local_id": "020",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Built and deployed internal Python modules for consistent validation workflows across teams."
+      },
+      "synthesis": {
+        "title": "Built and deployed internal Python modules for consistent va...",
+        "summary": "Built and deployed internal Python modules for consistent validation workflows across teams.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098941+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-021",
+      "local_id": "021",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Collaborated with firmware and BMC developers to debug complex platform issues during bring-up and validation."
+      },
+      "synthesis": {
+        "title": "Collaborated with firmware and BMC developers to debug compl...",
+        "summary": "Collaborated with firmware and BMC developers to debug complex platform issues during bring-up and validation.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098950+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-022",
+      "local_id": "022",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Enabled full production validation runs in SIMICS, leveraging S3E/SSM scripts for PECI and MCTP functional tests."
+      },
+      "synthesis": {
+        "title": "Enabled full production validation runs in SIMICS, leveragin...",
+        "summary": "Enabled full production validation runs in SIMICS, leveraging S3E/SSM scripts for PECI and MCTP functional tests.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability",
+          "simulation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098959+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-023",
+      "local_id": "023",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Used telemetry and data visualization to surface validation metrics and identify power/performance anomalies."
+      },
+      "synthesis": {
+        "title": "Used telemetry and data visualization to surface validation ...",
+        "summary": "Used telemetry and data visualization to surface validation metrics and identify power/performance anomalies.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098968+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-024",
+      "local_id": "024",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Mentored junior developers and led daily sprint planning and defect triage."
+      },
+      "synthesis": {
+        "title": "Mentored junior developers and led daily sprint planning and...",
+        "summary": "Mentored junior developers and led daily sprint planning and defect triage.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.098976+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-025",
+      "local_id": "025",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Datacenter PAE | Platform Application Engineer (Intel Federal)\nAug 2016 - Oct 2019"
+      },
+      "synthesis": {
+        "title": "Role: Datacenter PAE | Platform Application Engineer (In",
+        "summary": "Datacenter PAE | Platform Application Engineer (Intel Federal)\nAug 2016 - Oct 2019",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.098983+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-026",
+      "local_id": "026",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Supported OEM customers and internal validation teams for large-scale datacenter deployments. This role shaped my approach to telemetry, reliability, and observability by exposing failure modes that only appear in real-world datacenter operations."
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Supported OEM customers and internal validation teams for large-scale datacenter deployments. This role shaped my approach to telemetry, reliability, and observability by exposing failure modes that only appear in real-world datacenter operations.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.098997+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-027",
+      "local_id": "027",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Reproduced and debugged BIOS and microcode-related issues during platform bring-up and customer escalations."
+      },
+      "synthesis": {
+        "title": "Reproduced and debugged BIOS and microcode-related issues du...",
+        "summary": "Reproduced and debugged BIOS and microcode-related issues during platform bring-up and customer escalations.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099007+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-028",
+      "local_id": "028",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Developed C++ and IPMI-based automation scripts for thermal, power transient, and firmware validation."
+      },
+      "synthesis": {
+        "title": "Developed C++ and IPMI-based automation scripts for thermal,...",
+        "summary": "Developed C++ and IPMI-based automation scripts for thermal, power transient, and firmware validation.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability",
+          "telemetry",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099015+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-029",
+      "local_id": "029",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Managed a 100-node Mellanox-connected Linux cluster used for system-level stress and debug."
+      },
+      "synthesis": {
+        "title": "Managed a 100-node Mellanox-connected Linux cluster used for...",
+        "summary": "Managed a 100-node Mellanox-connected Linux cluster used for system-level stress and debug.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099026+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-030",
+      "local_id": "030",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Reproduced and resolved customer issues involving firmware, BIOS, and cluster networking."
+      },
+      "synthesis": {
+        "title": "Reproduced and resolved customer issues involving firmware, ...",
+        "summary": "Reproduced and resolved customer issues involving firmware, BIOS, and cluster networking.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099035+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-031",
+      "local_id": "031",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Collaborated with the RAS validation group on AEP mailbox automation tools, leading to a transition into the Manageability Test team."
+      },
+      "synthesis": {
+        "title": "Collaborated with the RAS validation group on AEP mailbox au...",
+        "summary": "Collaborated with the RAS validation group on AEP mailbox automation tools, leading to a transition into the Manageability Test team.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "telemetry"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099045+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-032",
+      "local_id": "032",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Contributed to early validation for Intel Optane Persistent Memory (AEP)."
+      },
+      "synthesis": {
+        "title": "Contributed to early validation for Intel Optane Persistent ...",
+        "summary": "Contributed to early validation for Intel Optane Persistent Memory (AEP).",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099055+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-033",
+      "local_id": "033",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Pre-Silicon Graphics Modeling Engineer"
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Pre-Silicon Graphics Modeling Engineer",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.099058+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-034",
+      "local_id": "034",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Jan 2016 - Jul 2016\nWorked in pre-silicon SIMICS simulation and modeling environments for GPU and SoC validation under Linux."
+      },
+      "synthesis": {
+        "title": "Role: Jan 2016 - Jul 2016",
+        "summary": "Jan 2016 - Jul 2016\nWorked in pre-silicon SIMICS simulation and modeling environments for GPU and SoC validation under Linux.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.099064+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-035",
+      "local_id": "035",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Developed scripts for large data searches and log analysis using grep, xargs, and custom Python tools."
+      },
+      "synthesis": {
+        "title": "Developed scripts for large data searches and log analysis u...",
+        "summary": "Developed scripts for large data searches and log analysis using grep, xargs, and custom Python tools.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099072+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-036",
+      "local_id": "036",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Post-Silicon Debug Software Developer"
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Post-Silicon Debug Software Developer",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.099078+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-037",
+      "local_id": "037",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Jan 2011 - Dec 2015\nOwned development of the VISA debug application within Intel's Platform Debug Toolkit, used for signal-trace and SoC debug."
+      },
+      "synthesis": {
+        "title": "Role: Jan 2011 - Dec 2015",
+        "summary": "Jan 2011 - Dec 2015\nOwned development of the VISA debug application within Intel's Platform Debug Toolkit, used for signal-trace and SoC debug.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.099083+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-038",
+      "local_id": "038",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Performed SoC subsystem debug using Intel VISA for internal signal tracing and functional analysis."
+      },
+      "synthesis": {
+        "title": "Performed SoC subsystem debug using Intel VISA for internal ...",
+        "summary": "Performed SoC subsystem debug using Intel VISA for internal signal tracing and functional analysis.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099092+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-039",
+      "local_id": "039",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Automated signal trace visualization and simplified workflow integration across products."
+      },
+      "synthesis": {
+        "title": "Automated signal trace visualization and simplified workflow...",
+        "summary": "Automated signal trace visualization and simplified workflow integration across products.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099100+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-040",
+      "local_id": "040",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Refactored and optimized core modules for faster turnaround and easier maintenance."
+      },
+      "synthesis": {
+        "title": "Refactored and optimized core modules for faster turnaround ...",
+        "summary": "Refactored and optimized core modules for faster turnaround and easier maintenance.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099108+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-041",
+      "local_id": "041",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Created TeamCity API tests to verify stability and CI readiness across releases."
+      },
+      "synthesis": {
+        "title": "Created TeamCity API tests to verify stability and CI readin...",
+        "summary": "Created TeamCity API tests to verify stability and CI readiness across releases.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099115+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-042",
+      "local_id": "042",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "BMC Firmware Engineer"
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "BMC Firmware Engineer",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.099120+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-043",
+      "local_id": "043",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Sep 2008 - Dec 2010"
+      },
+      "synthesis": {
+        "title": "Role: Sep 2008 - Dec 2010",
+        "summary": "Sep 2008 - Dec 2010",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.099124+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-044",
+      "local_id": "044",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Developed and validated embedded firmware for server manageability features."
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Developed and validated embedded firmware for server manageability features.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.099128+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-045",
+      "local_id": "045",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Implemented IPMI/DCMI and Serial Over LAN protocols in C."
+      },
+      "synthesis": {
+        "title": "Implemented IPMI/DCMI and Serial Over LAN protocols in C.",
+        "summary": "Implemented IPMI/DCMI and Serial Over LAN protocols in C.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099135+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-046",
+      "local_id": "046",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Built lightweight RMCP socket communication libraries and early HECI interface for DCMI."
+      },
+      "synthesis": {
+        "title": "Built lightweight RMCP socket communication libraries and ea...",
+        "summary": "Built lightweight RMCP socket communication libraries and early HECI interface for DCMI.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099151+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-047",
+      "local_id": "047",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Automated build and integration flows during SCM transition from SVN to ClearCase."
+      },
+      "synthesis": {
+        "title": "Automated build and integration flows during SCM transition ...",
+        "summary": "Automated build and integration flows during SCM transition from SVN to ClearCase.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099159+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-048",
+      "local_id": "048",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Validation Engineer | Firmware Validation (Contract & Internship)\nApr 2005 - Sep 2008"
+      },
+      "synthesis": {
+        "title": "Role: Validation Engineer | Firmware Validation (Contrac",
+        "summary": "Validation Engineer | Firmware Validation (Contract & Internship)\nApr 2005 - Sep 2008",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "role_overview"
+        ],
+        "style": "heading",
+        "created_at": "2026-10-19T02:58:17.099163+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-049",
+      "local_id": "049",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Validated server firmware and network tools across EFI, Windows, and Linux platforms."
+      },
+      "synthesis": {
+        "title": "Experience Narrative",
+        "summary": "Validated server firmware and network tools across EFI, Windows, and Linux platforms.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience"
+        ],
+        "style": "paragraph",
+        "created_at": "2026-10-19T02:58:17.099167+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-050",
+      "local_id": "050",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Automated 80% of manual NIC testing using Perl and TCL/Expect."
+      },
+      "synthesis": {
+        "title": "Automated 80% of manual NIC testing using Perl and TCL/Expec...",
+        "summary": "Automated 80% of manual NIC testing using Perl and TCL/Expect.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "automation"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099240+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-051",
+      "local_id": "051",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Debugged LAN access issues and built automated IPMI recovery tests, cutting validation cycles by half."
+      },
+      "synthesis": {
+        "title": "Debugged LAN access issues and built automated IPMI recovery...",
+        "summary": "Debugged LAN access issues and built automated IPMI recovery tests, cutting validation cycles by half.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet",
+          "manageability"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099253+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EXP-052",
+      "local_id": "052",
+      "sub_namespace": "EXP",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Collaborated with BIOS and hardware teams on IA64 and x86 platform validation."
+      },
+      "synthesis": {
+        "title": "Collaborated with BIOS and hardware teams on IA64 and x86 pl...",
+        "summary": "Collaborated with BIOS and hardware teams on IA64 and x86 platform validation.",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "experience",
+          "bullet"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099262+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EDU-053",
+      "local_id": "053",
+      "sub_namespace": "EDU",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Bachelor of Computer Science - Portland State University"
+      },
+      "synthesis": {
+        "title": "Academic Credentials",
+        "summary": "Bachelor of Computer Science - Portland State University",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "education",
+          "degree"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099268+00:00"
+      }
+    },
+    {
+      "id": "RESUME.EDU-054",
+      "local_id": "054",
+      "sub_namespace": "EDU",
+      "kabal": "resume",
+      "origin": {
+        "author": "jallred",
+        "source": "Jason Allred Resume - Jan 2026.txt",
+        "raw_text": "Associate of Science - Portland Community College"
+      },
+      "synthesis": {
+        "title": "Academic Credentials",
+        "summary": "Associate of Science - Portland Community College",
+        "citations": []
+      },
+      "metadata": {
+        "tags": [
+          "education",
+          "degree"
+        ],
+        "style": "bullet",
+        "created_at": "2026-10-19T02:58:17.099272+00:00"
+      }
+    }
+  ]
+}

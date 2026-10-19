@@ -1,0 +1,344 @@
+{
+  "slug": "resume",
+  "variable_prefix": "RESUME",
+  "title": "Resume Narrative Spine",
+  "source_document": "Jason Allred Resume - Jan 2026.txt",
+  "active_tag": "@master",
+  "created_at": "2026-10-19T02:58:17.099281+00:00",
+  "updated_at": "2026-10-19T02:58:17.099281+00:00",
+  "tags": {
+    "@master": {
+      "name": "@master",
+      "description": "Original full imported document verbatim",
+      "created_at": "2026-10-19T02:58:17.099281+00:00",
+      "node_ids": [
+        "RESUME.HEADER-001",
+        "RESUME.SUMMARY-002",
+        "RESUME.SKILL-003",
+        "RESUME.SKILL-004",
+        "RESUME.SKILL-005",
+        "RESUME.SKILL-006",
+        "RESUME.LLM-007",
+        "RESUME.EXP-008",
+        "RESUME.EXP-009",
+        "RESUME.EXP-010",
+        "RESUME.EXP-011",
+        "RESUME.EXP-012",
+        "RESUME.EXP-013",
+        "RESUME.EXP-014",
+        "RESUME.EXP-015",
+        "RESUME.EXP-016",
+        "RESUME.EXP-017",
+        "RESUME.EXP-018",
+        "RESUME.EXP-019",
+        "RESUME.EXP-020",
+        "RESUME.EXP-021",
+        "RESUME.EXP-022",
+        "RESUME.EXP-023",
+        "RESUME.EXP-024",
+        "RESUME.EXP-025",
+        "RESUME.EXP-026",
+        "RESUME.EXP-027",
+        "RESUME.EXP-028",
+        "RESUME.EXP-029",
+        "RESUME.EXP-030",
+        "RESUME.EXP-031",
+        "RESUME.EXP-032",
+        "RESUME.EXP-033",
+        "RESUME.EXP-034",
+        "RESUME.EXP-035",
+        "RESUME.EXP-036",
+        "RESUME.EXP-037",
+        "RESUME.EXP-038",
+        "RESUME.EXP-039",
+        "RESUME.EXP-040",
+        "RESUME.EXP-041",
+        "RESUME.EXP-042",
+        "RESUME.EXP-043",
+        "RESUME.EXP-044",
+        "RESUME.EXP-045",
+        "RESUME.EXP-046",
+        "RESUME.EXP-047",
+        "RESUME.EXP-048",
+        "RESUME.EXP-049",
+        "RESUME.EXP-050",
+        "RESUME.EXP-051",
+        "RESUME.EXP-052",
+        "RESUME.EDU-053",
+        "RESUME.EDU-054"
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "id": "RESUME.HEADER-001",
+      "style": "header",
+      "sub_namespace": "HEADER"
+    },
+    {
+      "id": "RESUME.SUMMARY-002",
+      "style": "callout",
+      "sub_namespace": "SUMMARY"
+    },
+    {
+      "id": "RESUME.SKILL-003",
+      "style": "bullet",
+      "sub_namespace": "SKILL"
+    },
+    {
+      "id": "RESUME.SKILL-004",
+      "style": "bullet",
+      "sub_namespace": "SKILL"
+    },
+    {
+      "id": "RESUME.SKILL-005",
+      "style": "bullet",
+      "sub_namespace": "SKILL"
+    },
+    {
+      "id": "RESUME.SKILL-006",
+      "style": "bullet",
+      "sub_namespace": "SKILL"
+    },
+    {
+      "id": "RESUME.LLM-007",
+      "style": "callout",
+      "sub_namespace": "LLM"
+    },
+    {
+      "id": "RESUME.EXP-008",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-009",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-010",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-011",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-012",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-013",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-014",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-015",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-016",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-017",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-018",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-019",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-020",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-021",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-022",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-023",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-024",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-025",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-026",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-027",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-028",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-029",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-030",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-031",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-032",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-033",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-034",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-035",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-036",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-037",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-038",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-039",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-040",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-041",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-042",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-043",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-044",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-045",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-046",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-047",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-048",
+      "style": "heading",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-049",
+      "style": "paragraph",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-050",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-051",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EXP-052",
+      "style": "bullet",
+      "sub_namespace": "EXP"
+    },
+    {
+      "id": "RESUME.EDU-053",
+      "style": "bullet",
+      "sub_namespace": "EDU"
+    },
+    {
+      "id": "RESUME.EDU-054",
+      "style": "bullet",
+      "sub_namespace": "EDU"
+    }
+  ]
+}

@@ -31,16 +31,25 @@ class VLLMClient(OllamaClient):
     OpenAI-compatible client for vLLM server.
     """
 
-    def __init__(self, url=VLLM_URL, model="llama-3.2-3b-awq"):
+    def __init__(self, url="http://localhost:8088/v1/chat/completions", model="local-unified-base"):
         super().__init__()
         self.url = url
+        # Map legacy or generic names to the active served vLLM model name
+        if model in ("llama-3.2-3b-awq", "llama3.2:3b", "default"):
+            model = "local-unified-base"
         self.model = model
 
     def generate(self, prompt, context="", options=None):
-        full_prompt = f"{context}\n\n{prompt}" if context else prompt
+        messages = []
+        if context:
+            messages.append({"role": "system", "content": context})
+        else:
+            messages.append({"role": "system", "content": "You are Pinky, an expert forensic systems engineer and log analyzer. When requested to output JSON, you return ONLY valid parseable JSON."})
+        messages.append({"role": "user", "content": prompt})
+
         payload = {
             "model": self.model,
-            "prompt": full_prompt,
+            "messages": messages,
             "max_tokens": options.get("num_predict", 512) if options else 512,
             "temperature": options.get("temperature", 0.1) if options else 0.1,
             "stream": False,
@@ -50,12 +59,24 @@ class VLLMClient(OllamaClient):
             resp = requests.post(self.url, json=payload, timeout=120)
             if resp.status_code == 200:
                 data = resp.json()
-                return data["choices"][0]["text"]
+                return data["choices"][0]["message"]["content"]
             else:
                 logging.error(f"vLLM Error ({resp.status_code}): {resp.text}")
+                # Fallback to completions endpoint
+                if "/chat/completions" in self.url:
+                    fallback_url = self.url.replace("/chat/completions", "/completions")
+                    fallback_payload = {
+                        "model": self.model,
+                        "prompt": f"{context}\n\n{prompt}" if context else prompt,
+                        "max_tokens": options.get("num_predict", 512) if options else 512,
+                        "temperature": options.get("temperature", 0.1) if options else 0.1,
+                    }
+                    r2 = requests.post(fallback_url, json=fallback_payload, timeout=120)
+                    if r2.status_code == 200:
+                        return r2.json()["choices"][0]["text"]
                 return ""
         except Exception as e:
-            logging.error(f"vLLM Connection Failed: {e}. Falling back to Ollama.")
+            logging.error(f"Failed to connect to vLLM: {e}. Falling back to Ollama.")
             return super().generate(prompt, context, options)
 
 
@@ -484,8 +505,16 @@ class CurriculumEngine(CognitiveEngine):
 
 
 def get_engine_v2(mode="LOCAL"):
-    if mode == "VLLM":
-        return VLLMClient()
+    if mode in ("VLLM", "LOCAL"):
+        try:
+            r = requests.get("http://localhost:8088/v1/models", timeout=1.0)
+            if r.status_code == 200:
+                return VLLMClient()
+        except Exception:
+            pass
+        if mode == "VLLM":
+            return VLLMClient()
+        return get_engine(mode)
     elif mode == "REASONING":
         return CurriculumEngine()
     elif mode == "DMA":

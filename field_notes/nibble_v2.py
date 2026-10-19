@@ -20,6 +20,7 @@ for p in [BASE_DIR, HOMELAB_SRC]:
 
 from ai_engine_v2 import get_engine_v2
 from infra.status_model import StatusModel
+from refine_gem import classify_impact_level, disentangle_chronology
 from utils import DATA_DIR, can_burn, update_status
 
 # Config
@@ -45,6 +46,7 @@ def log(msg):
 REASONING_MODE = "--reasoning" in sys.argv
 HYBRID_MODE = "--hybrid" in sys.argv
 FAST_MODE = "--fast" in sys.argv
+FORCE_MODE = "--force" in sys.argv
 engine_mode = "LOCAL"
 if HYBRID_MODE:
     engine_mode = "HYBRID"
@@ -57,6 +59,13 @@ MAX_LOAD = float(os.environ.get("MAX_LOAD", 4.0))
 
 def should_yield() -> bool:
     """Check if Nibbler should yield due to non-idle mode, memory pressure, or high load."""
+    if FORCE_MODE:
+        return False
+
+    if FAST_MODE:
+        ram_available_gb = psutil.virtual_memory().available / (1024**3)
+        return ram_available_gb < 0.8
+
     # Check StatusModel for logical mode
     status_model = StatusModel()
     if status_model.state["logical"]["mode"] != "IDLE":
@@ -71,10 +80,10 @@ def should_yield() -> bool:
         )
         return True
 
-    # Check system load
+    # Check system load against MAX_LOAD
     load_avg = psutil.getloadavg()[0]
-    if load_avg > 2.0:
-        log(f"[NIBBLER] Yielding: High System Load (Load Avg: {load_avg:.1f})")
+    if load_avg > MAX_LOAD:
+        log(f"[NIBBLER] Yielding: High System Load (Load Avg: {load_avg:.1f} > {MAX_LOAD})")
         return True
 
     return False
@@ -170,7 +179,18 @@ def extract_json_from_llm(text):
             return []
         return [data] if isinstance(data, dict) else data
     except:
-        return []
+        pass
+
+    # [FEAT-131] Truncation Recovery: extract any valid JSON objects from partial streams
+    recovered = []
+    for m in re.finditer(r"\{[^{}]*\}", text, re.DOTALL):
+        try:
+            obj = json.loads(m.group(0))
+            if isinstance(obj, dict) and obj:
+                recovered.append(obj)
+        except:
+            pass
+    return recovered
 
 
 def validate_date(date_str):
@@ -364,15 +384,25 @@ def main():
             ]
             """
         else:
-            prompt = (
-                f"Extract all significant events from this log across multiple domains. "
-                f"Capture technical events (hardware configs, registers, MSRs, firmware/BIOS, "
-                f"scripts, tool invocations, telemetry), hardware milestones, lab operations, "
-                f"vendor tickets, and shipping/chassis deployments. "
-                f"For each event, tag it with a 'domain' field from exactly one of: "
-                f"['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations']. "
-                f"Log content: {scrubbed_content[:4000]}"
-            )
+            prompt = f"""[ROLE] You are an expert systems engineer and log investigator.
+[TASK] Extract all significant technical events, hardware milestones, register/MSR investigations, lab operations, and vendor tickets from this log.
+For each event, tag it with a 'domain' field from exactly one of: ['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations'].
+
+Log content:
+{scrubbed_content[:4000]}
+
+[OUTPUT]
+Return ONLY a valid JSON list of event objects in the following schema:
+[
+  {{
+    "date": "YYYY-MM-DD",
+    "summary": "Concise summary of the event",
+    "evidence": "Specific log line, register, MSR, or technical evidence",
+    "domain": "hardware_debug",
+    "tags": ["tag1", "tag2"]
+  }}
+]
+"""
 
         bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
         existing_data = load_json(bucket_file)
@@ -380,13 +410,13 @@ def main():
         try:
             if file_type == "META":
                 # Meta documents always use the strategic anchor prompt
-                response = ENGINE.generate(prompt)
+                response = ENGINE.generate(prompt, options={"num_predict": 1024})
             elif REASONING_MODE and hasattr(ENGINE, "generate_with_reasoning"):
                 response = ENGINE.generate_with_reasoning(
                     scrubbed_content, task["bucket"]
                 )
             else:
-                response = ENGINE.generate(prompt)
+                response = ENGINE.generate(prompt, options={"num_predict": 1024})
 
             new_events = extract_json_from_llm(response)
         except Exception as e:
@@ -416,9 +446,23 @@ def main():
 
                 event["date"] = clean_date
 
+                # [FEAT-067 / Story 106.8] Chronological Disentanglement
+                combined_text = f"{event.get('evidence', '')} {event.get('summary', '')}"
+                chrono = disentangle_chronology(combined_text, clean_date)
+                event.update(chrono)
+
+                # [FEAT-454 / Story 106.6] Epistemic Two-Dimensional Model
+                if "impact_level" not in event:
+                    event["impact_level"] = classify_impact_level(event)
+                if "refinement_level" not in event:
+                    event["refinement_level"] = 0
+                event["passes"] = event.get("passes", 0)
+                event["consecutive_zero_deltas"] = event.get("consecutive_zero_deltas", 0)
+
                 # Rank 5 for META anchors
                 if file_type == "META":
                     event["rank"] = 5
+                    event["impact_level"] = 4
 
                 # Filter events for the same date to check for semantic duplicates
                 same_date_events = [
@@ -428,7 +472,8 @@ def main():
                 if not is_semantic_duplicate(
                     event.get("summary", ""), same_date_events
                 ):
-                    if event.get("sensitivity") == "Public":
+                    if event.get("sensitivity", "Public") == "Public":
+                        event["sensitivity"] = "Public"
                         final_events.append(event)
                         added_count += 1
                     else:

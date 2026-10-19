@@ -1,11 +1,22 @@
+import sys
 import glob
 import hashlib
 import json
 import os
 import re
+from pathlib import Path
+
+# Add HomeLabAI/src to sys.path
+_HOMELAB_SRC = Path(__file__).resolve().parent.parent.parent / "HomeLabAI" / "src"
+if str(_HOMELAB_SRC) not in sys.path:
+    sys.path.insert(0, str(_HOMELAB_SRC))
 
 import psutil
-from infra.status_model import StatusModel
+try:
+    from infra.status_model import StatusModel
+except ImportError:
+    StatusModel = None
+
 from utils import DATA_DIR, RAW_NOTES_DIR
 
 # Config
@@ -21,24 +32,31 @@ MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 
 def should_yield() -> bool:
     """Check if Scan Queue should yield due to non-idle mode, memory pressure, or high load."""
+    if "--force" in sys.argv:
+        return False
     # Check StatusModel for logical mode
-    status_model = StatusModel()
-    if status_model.state["logical"]["mode"] != "IDLE":
-        print("[SCAN_QUEUE] Yielding: Non-IDLE mode detected")
-        return True
+    if StatusModel is not None:
+        try:
+            status_model = StatusModel()
+            if status_model.state.get("logical", {}).get("mode") not in ("IDLE", None):
+                print("[SCAN_QUEUE] Yielding: Non-IDLE mode detected")
+                return True
+        except Exception:
+            pass
 
     # Check RAM
     ram_available_gb = psutil.virtual_memory().available / (1024**3)
-    if ram_available_gb < 3.0:
+    if ram_available_gb < 1.5:
         print(
             f"[SCAN_QUEUE] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB)"
         )
         return True
 
     # Check system load
+    max_load = float(os.getenv("MAX_LOAD", 4.0))
     load_avg = psutil.getloadavg()[0]
-    if load_avg > 2.0:
-        print(f"[SCAN_QUEUE] Yielding: High System Load (Load Avg: {load_avg:.1f})")
+    if load_avg > max_load:
+        print(f"[SCAN_QUEUE] Yielding: High System Load (Load Avg: {load_avg:.1f} > {max_load})")
         return True
 
     return False

@@ -173,6 +173,10 @@ Rule: Double-Write Protocol must always update workspace repos first before push
                         <span class="census-domain-pill" data-filter="discovery" style="border-color:#f0883e; color:#f0883e;" title="Discoveries &amp; Timeline">__DISC_COUNT__ DISC</span>
                         <span class="census-domain-pill" data-filter="rdna" style="border-color:#56d364; color:#56d364;" title="Reverse DNA Question Bank">__RDNA_COUNT__ RDNA</span>
                         <span class="census-domain-pill" data-filter="gems" style="border-color:#ec4899; color:#ec4899;" title="Synthesized Gems">__GEMS_COUNT__ GEMS</span>
+                        <span class="census-domain-pill" data-filter="kabals" id="pillKabals" style="border-color:#38bdf8; color:#38bdf8;" title="Polymorphic Kabal Collections">📜 KABALS (__KABALS_COUNT__)</span>
+                        <select id="kabalSelectorDropdown" class="kabal-select-dropdown" style="display:none; background:#0d1117; color:#38bdf8; border:1px solid #38bdf8; border-radius:6px; padding:2px 8px; font-size:0.75rem; cursor:pointer;" title="Filter by Specific Kabal">
+                            __KABAL_OPTIONS__
+                        </select>
                         <span class="census-domain-pill pill-review" data-filter="needs_review" id="pillNeedsReview" title="Needs Operator Review / Flagged Candidates">🚨 Needs Review (__NEEDS_REVIEW__)</span>
                         <span class="census-domain-pill pill-archive" data-filter="archive" id="pillArchive" title="Archived / Rejected Cards">📦 Archived (__ARCHIVED_COUNT__)</span>
                     </div>

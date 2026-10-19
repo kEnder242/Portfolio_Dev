@@ -181,15 +181,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-97.0",
@@ -258,15 +250,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-94.1",
@@ -312,15 +296,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-93.0",
@@ -343,15 +319,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-92.0",
@@ -466,15 +434,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-79.0",
@@ -497,15 +457,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-78.0",
@@ -574,15 +526,7 @@
       ],
       "status": "ACTIVE",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-75.0",
@@ -1134,15 +1078,7 @@
       ],
       "status": "COMPLETED",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-49.0",
@@ -1533,15 +1469,7 @@
       ],
       "status": "COMPLETED",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-32.0",
@@ -1656,15 +1584,7 @@
       ],
       "status": "COMPLETED",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-15.0",
@@ -1687,15 +1607,7 @@
       ],
       "status": "COMPLETED",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-14.0",
@@ -1741,15 +1653,7 @@
       ],
       "status": "COMPLETED",
       "bucket_id": "bucket_5_infra"
-    },
-    "inferred_intent": "greeting",
-    "addressed_to": "NONE",
-    "vibe": "CASUAL",
-    "domain": "unknown",
-    "casual": 0.8,
-    "intrigue": 0.0,
-    "importance": 0.0,
-    "target_domains": []
+    }
   },
   {
     "id": "SPR-11.8",
