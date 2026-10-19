@@ -12,8 +12,14 @@ import shutil
 from pathlib import Path
 
 # Paths
-DNA_FORGE_DIR = Path(__file__).resolve().parent
-PORTFOLIO_DEV_DIR = DNA_FORGE_DIR.parent
+CURRENT_DIR = Path(__file__).resolve().parent
+if (CURRENT_DIR / "templates/dna_forge.html").exists():
+    DNA_FORGE_DIR = CURRENT_DIR
+    PORTFOLIO_DEV_DIR = DNA_FORGE_DIR.parent
+else:
+    PORTFOLIO_DEV_DIR = CURRENT_DIR.parent if CURRENT_DIR.name == "field_notes" else CURRENT_DIR
+    DNA_FORGE_DIR = PORTFOLIO_DEV_DIR / "dna_forge"
+
 FIELD_NOTES_DIR = PORTFOLIO_DEV_DIR / "field_notes"
 DNA_DIR = PORTFOLIO_DEV_DIR / "dna"
 DATA_DIR = FIELD_NOTES_DIR / "data"
