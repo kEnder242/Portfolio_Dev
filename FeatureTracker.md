@@ -3866,11 +3866,31 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 Applied unconditionally to all resident node personas (Pinky, Brain, Deep Thought).
 **Rationale:** Eliminates the negative-priming anti-pattern where prompts unrolled forbidden lists of domain keywords ("laboratory telemetry, silicon specs, or technical history"), which paradoxically prompted smaller instruction-tuned models to fixate on and recite those exact concepts. Providing a concise positive boundary ("stay relevant to the primer and the actors before you") prevents self-referential identity monologues.
 
-## [FEAT-661] In-Line Interest Hover Micro-Telemetry & Closed-Loop Feedback Pacing
-**Sprint:** Sprint 105.0 (Phase 4)
-**Status:** ACTIVE
-**Tags:** `#interest_telemetry`, `#hover_ui`, `#closed_loop_feedback`, `#pacing_telemetry`, `[FEAT-523]`, `[FEAT-638]`, `[BKM-077]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
-**Logic:** Embeds scalar interest fuel (`current_interest` $\in [0.00, 1.00]$) into WebSocket `thought_stream` packets and attaches it to message DOM elements via `data-interest`. Leverages the existing `[FEAT-638]` in-line hover feedback container (`.resp-fb`) in `intercom_v2.js` to render a non-intrusive micro-badge (`⚡ 0.45`) alongside the `👍 / 👎` vote buttons. The telemetry consumes 0 extra vertical lines in the chat stream, remaining hidden during normal conversation flow and revealing itself strictly on message header hover. Furthermore, binds `interest` directly into the `POST /feedback` JSON payload, creating an empirical closed-loop ledger in `feedback_ledger.json` that correlates human rating with deliberation depth and token pacing.
-**Rationale:** Eliminates invisible interest budgeting. Enables instant operator inspection of node pacing and deliberation thresholds without UI clutter, while capturing ground-truth training data on whether high- or low-interest waterfall responses produce superior user satisfaction.
+## [FEAT-662] The Kabal: Emergent Ingestion Clusters & Manuscript Working Groups
+**Sprint:** Sprint 106.0 (Phase 5)
+**Status:** DRAFT / IN_PROGRESS
+**Tags:** `#kabal`, `#emergent_affinity`, `#ingestion_cluster`, `#paper_writing`, `[VIBE-016]`, `[FEAT-614]`, `[BKM-060]`
+**Code:** `Portfolio_Dev/dna/vibe_data.json`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/nibble_v2.py`, `Portfolio_Dev/field_notes/scan_queue.py`
+**Logic:** Establishes **The Kabal** as an explicit architectural primitive representing an emergent middle tier between atomic DNA cards/gems and formal named collections or manuscripts.
+1. **Ingestion Kabal (`import`)**: Batches of co-occurring ideas or parsed note chunks that share temporal or technical affinity are tagged with an ephemeral or named `kabal_id`. Prevents newly ingested DNA from floating as disconnected unbaptized islands before formal taxonomy is established.
+2. **Paper Kabal (`writer`)**: Acts as a working caucus inside Applied Writer (`writer.html`). Groups paragraphs, citations, and causal operational errata (`focal_ledger.json`) conspiring together to defend a specific manuscript thesis or section objective.
+**Rationale:** Solves the semantic missing-link problem: ideas do not jump directly from raw unstructured logs into finished papers. The Kabal provides an intermediate grouping construct that preserves natural affinity during ingestion and gives active agency to co-conspiring ideas during synthesis.
+
+## [FEAT-663] Spine Version Tagging & Deterministic Snapshot Projections
+**Sprint:** Sprint 106.0 (Phase 5)
+**Status:** DRAFT / IN_PROGRESS
+**Tags:** `#spine_tagging`, `#snapshot_projections`, `#deterministic_replay`, `[INS-041]`, `[BKM-073]`, `[FEAT-662]`
+**Code:** `Portfolio_Dev/papers/*_spine.json`, `Portfolio_Dev/field_notes/replay_paper.py`
+**Logic:** Adds explicit snapshot version tags (`@v1_master`, `@v2_recruiter`, `@executive_2page`) directly into the paper's Spine manifest. Decouples the live, evolving manuscript canvas from frozen published snapshots. Allows the Replay Engine to deterministically reconstruct exact historical documents word-for-word from their Kabal node coordinates.
+**Rationale:** Eliminates the risk of modifying a master document and inadvertently breaking the exact wording or citation sequence of a previously submitted/published artifact.
+
+## [FEAT-664] Multi-Corpus Knowledge Ingestion in Applied Writer (DNA & Gems in Manuscripts)
+**Sprint:** Sprint 106.0 (Phase 5)
+**Status:** DRAFT / IN_PROGRESS
+**Tags:** `#multi_corpus`, `#wisdom_integration`, `#gem_citations`, `#drawer_search`, `[VIBE-017]`, `[FEAT-614]`
+**Code:** `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/js/writer.js`
+**Logic:** Enhances the Applied Writer review drawer with cross-corpus search and drag-and-drop citation chips spanning Wisdom (`WIS-xxx`), Features (`FEAT-xxx`), Philosophy (`PHL-xxx`), and Gems (`focal_ledger.json` / `latest_synthesis_gems.json`). Employs a silent on-demand HyDE retrieval lens in the drawer rather than an intrusive conversational bot, preserving authorial sovereignty.
+**Rationale:** Unifies diverse lab knowledge corpuses into the manuscript authoring canvas without falling into the "Clippy" conversational chat-trap.
+
+
 

@@ -219,5 +219,116 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "VIBE-016",
+    "theme": "Emergent Knowledge Affinity & Manuscript Working Groups",
+    "paper_order": 16,
+    "origin": {
+      "author": "jallred",
+      "text": "A collection of ideas, newly added DNA in collections not yet named or named during import... Writing or paper group = kabal. Ideas in caucus conspiring together before formal taxonomy.",
+      "source": "Sprint 106 Applied Architecture (Inquiry & Ingestion Synthesis)",
+      "immutable": true,
+      "created_at": "2026-10-18T17:20:00Z"
+    },
+    "synthesis": {
+      "title": "The Kabal: Emergent Idea Affinity Clusters and Manuscript Working Conspiracies",
+      "narrative_context": "Establishes 'Kabal' as the emergent middle-tier grouping between atomic DNA cards/gems and formal named collections or finished manuscripts. In import, an Ingestion Kabal captures an unbaptized cluster of co-occurring ideas with implicit affinity. In Applied Writer, a Paper Kabal acts as a caucus of citations, operational errata, and arguments conspiring to prove a central thesis.",
+      "lab_anchors": [
+        "FEAT-643",
+        "FEAT-614",
+        "BKM-060"
+      ],
+      "review_notes": "Formalizes Kabal as the emergent affinity unit across ingestion and paper writing.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "A collection of ideas, newly added DNA in collections not yet named or named during import... Writing or paper group = kabal. Ideas in caucus conspiring together before formal taxonomy.",
+          "certified_at": "2026-10-18T17:20:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "kabal",
+        "affinity-cluster",
+        "ingestion-group",
+        "paper-writing",
+        "caucus"
+      ],
+      "explicit_links": [
+        "FEAT-643",
+        "FEAT-614",
+        "BKM-060"
+      ],
+      "aliases": [
+        "the-kabal",
+        "paper-kabal",
+        "ingestion-kabal"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
+  },
+  {
+    "id": "VIBE-017",
+    "theme": "Auditable Provenance & Prose Evolution",
+    "paper_order": 17,
+    "origin": {
+      "author": "jallred",
+      "text": "Paper trail: saving copies of words with citations that allow an audit and trace of the evolution of dynamic prose writing.",
+      "source": "Sprint 106 Architectural Guidance (Stamping, Auditing & Provenance)",
+      "immutable": true,
+      "created_at": "2026-10-18T18:45:00Z"
+    },
+    "synthesis": {
+      "title": "The Paper Trail: Word Copying, Citation Anchors, and Auditable Prose Evolution",
+      "narrative_context": "Establishes the paper trail law in manuscript composition. Rather than relying on fragile single-pointer indirections that break when external sources change or disconnect, prose is duplicated with explicit citation anchors back to the source DNA. Git diffs and text stamps create an auditable, verifiable paper trail tracking the exact evolution of dynamic writing across revisions and renames.",
+      "lab_anchors": [
+        "BKM-055",
+        "BKM-073",
+        "FEAT-662",
+        "FEAT-664"
+      ],
+      "review_notes": "Formalizes the paper trail concept where prose is copied alongside citations to create a Git-auditable history.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Paper trail: saving copies of words with citations that allow an audit and trace of the evolution of dynamic prose writing.",
+          "certified_at": "2026-10-18T18:45:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "paper-trail",
+        "provenance",
+        "git-auditing",
+        "citations",
+        "prose-evolution"
+      ],
+      "explicit_links": [
+        "BKM-055",
+        "BKM-073",
+        "FEAT-662",
+        "FEAT-664"
+      ],
+      "aliases": [
+        "the-paper-trail",
+        "auditable-prose-evolution"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
