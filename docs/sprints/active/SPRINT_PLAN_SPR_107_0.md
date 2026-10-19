@@ -203,3 +203,91 @@ Sprint 107.0 completes the architectural evolution started in ADR-008 and formal
 - [x] **Story 107.8: DNA Forge Compilation & Full Site Deployment**: Compiled via `dna_forge_build.py` and deployed to `www_deploy` via `build_site.py --no-verify`.
 - [x] **Story 107.9: Silicon Gauntlet & Live Daemon Validation**: All 24 unit tests in `Portfolio_Dev/field_notes/tests/` passed. `test_accountability_matrix_unit.py` passed. Lab Attendant daemon (port 8765) verified OPERATIONAL.
 - [x] **Story 107.10: Sprint Certification & Registration**: Registered `SPR-107.0` in `sprint_data.json` and `FEAT-665` in `FeatureTracker.md`.
+
+---
+
+# 🚀 SPRINT 107.0 (PHASE 2): Live Silicon Grounding & Self-Dialogue Circuit Breaker
+
+**Phase Theme:** Direct Real-Time Hardware Grounding (`FEAT-557`), Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`), and Triage Feedback Snapping (`FEAT-559`).  
+**Status:** 📋 **PLANNED / READY FOR REVIEW**  
+**Parent Frameworks:**
+- [`BKM-081` §4]: The Sprint Append Ledger Protocol (Phased Sprint Architecture Invariant)
+- [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
+- [`FEAT-557`]: Live Host Telemetry Node & Real-Time Hardware Grounding
+- [`FEAT-558`]: Self-Dialogue Sanitizer Circuit Breaker
+- [`FEAT-559`]: Triage Feedback Domain Snapping & Prompt Interception
+
+### 🏛️ Phase 2 Executive Summary & Narrative
+Phase 2 builds directly upon Sprint 107.0's epistemic staging stability to resolve two runtime cognitive issues identified in `copilot_mice_feedback_forensics_report.md`:
+1. **Physical Grounding over Historical Memory (`FEAT-557`)**: The lab frequently answers inquiries about live memory, GPU temperature, or hardware headroom using outdated documentation retrieved via RAG. We wire `live_telemetry.get_host_vitals()` directly into `CognitiveHub`, snapping telemetry inquiries to live silicon metrics.
+2. **Auto-Regressive Health & Circuit Breaking (`FEAT-558`)**: Multi-turn conversations degrade when model reasoning artifacts (`<thought>` tags, internal prompts) leak into conversation history buffers. We establish a strict multi-turn sanitizer circuit breaker that strips internal monologues from prior turns before context construction.
+3. **Feedback Intent Snapping (`FEAT-559`)**: User corrective turns (*"stop hallucinating"*, *"feedback: you missed the point"*) snap immediately to `domain: feedback` / `vibe: CRITIQUE`, suppressing standard RAG in favor of direct corrective reflection.
+
+### 🎯 Phase 2 Stories & 4-Anchor Specifications
+
+#### 📊 Story 107.11: Live Host Telemetry Tool & Context Injection (`FEAT-557`)
+* **Objective**: Connect `live_telemetry.get_host_vitals()` into `CognitiveHub` so live hardware questions receive deterministic physical metrics (GPU VRAM, RAM, CPU load, active model).
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `HomeLabAI/src/infra/live_telemetry.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: `live_telemetry.py`: Ensure `get_host_vitals()` returns structured dictionary with sub-5ms latency and graceful non-NVIDIA fallback.
+  - **Anchor 2**: `cognitive_hub.py`: Introduce `inject_live_telemetry_context(domain, query)` during waterfall context construction.
+  - **Anchor 3**: Suppress historical hardware spec RAG injection when live hardware intent is detected.
+  - **Anchor 4**: Verification via unit tests asserting physical memory values in prompt context.
+
+#### 📊 Story 107.12: Hardware Intent Routing in Semantic Triage (`FEAT-557`)
+* **Objective**: Ensure queries asking about current VRAM, RAM, GPU, or model state classify into `domain: infra` / `intent: live_telemetry` without falling through to generic tech RAG.
+* **Target Files**:
+  - `HomeLabAI/src/logic/triage_engine.py`
+  - `HomeLabAI/src/logic/traversal_dispatcher.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: In `triage_engine.py`, add live telemetry trigger patterns ("how much vram", "current memory", "hardware status", "silicon vitals").
+  - **Anchor 2**: Set high confidence routing to `domain: infra` with metadata flag `is_live_telemetry: True`.
+  - **Anchor 3**: Verify fast-path routing bypasses heavy vector search.
+  - **Anchor 4**: Unit tests in `test_fast_triage_harness.py`.
+
+#### 📊 Story 107.13: Multi-Turn Conversation History Sanitizer Circuit Breaker (`FEAT-558`)
+* **Objective**: Enforce multi-turn history sanitization in `CognitiveHub` before prompt compilation, excising prior `<thought>` blocks, internal tags, and self-speaker prefixes.
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `HomeLabAI/src/nodes/loader.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: In `cognitive_hub.py`, pipe all prior assistant turns in `recent_history` through `sanitize_spoken_dialogue()`.
+  - **Anchor 2**: Strip multiline `<thought>.*?</thought>` and `<role>.*?</role>` artifacts.
+  - **Anchor 3**: Remove redundant leading speaker prefixes (e.g. `Brain: Brain:`, `Pinky:`) from multi-turn accumulation.
+  - **Anchor 4**: Unit tests asserting clean multi-turn prompt generation with zero thought leakage.
+
+#### 📊 Story 107.14: Triage Feedback Domain Snapping (`FEAT-559`)
+* **Objective**: Automatically classify explicit user critique and feedback phrases into `domain: feedback` / `vibe: CRITIQUE` with priority prompt steering.
+* **Target Files**:
+  - `HomeLabAI/src/logic/triage_engine.py`
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: In `triage_engine.py`, map critique keywords (*"stop hallucinating"*, *"you missed"*, *"incorrect"*, *"feedback"*) to `vibe: CRITIQUE`.
+  - **Anchor 2**: In `cognitive_hub.py`, apply corrective framing when `vibe == "CRITIQUE"`.
+  - **Anchor 3**: Suppress repetitive previous verbiage and inject self-correction prompt constraints.
+  - **Anchor 4**: Verification via `test_feedback_semantic_triage.py`.
+
+#### 📊 Story 107.15: Anti-Self-Echo & Live Silicon Gauntlet Validation
+* **Objective**: Run full unit test gauntlets across `HomeLabAI` and `Portfolio_Dev`, perform live query validation against the attendant daemon, and certify zero regression.
+* **Target Files**:
+  - `HomeLabAI/src/tests/test_feedback_semantic_triage.py`
+  - `HomeLabAI/src/tests/test_integrated_fast.py`
+  - `Portfolio_Dev/field_notes/tests/`
+* **4-Anchor Specification**:
+  - **Anchor 1**: All 9 tests in `test_feedback_semantic_triage.py` passing.
+  - **Anchor 2**: `pytest field_notes/tests/` passing (24/24).
+  - **Anchor 3**: Live query probe: `curl` query verifying live VRAM returns actual hardware value.
+  - **Anchor 4**: Commit and update documentation.
+
+---
+
+### 🏁 Phase 2 Verification Checklist
+
+- [ ] Story 107.11: Live Host Telemetry Tool & Context Injection (`FEAT-557`)
+- [ ] Story 107.12: Hardware Intent Routing in Semantic Triage (`FEAT-557`)
+- [ ] Story 107.13: Multi-Turn Conversation History Sanitizer Circuit Breaker (`FEAT-558`)
+- [ ] Story 107.14: Triage Feedback Domain Snapping (`FEAT-559`)
+- [ ] Story 107.15: Anti-Self-Echo & Live Silicon Gauntlet Validation
+
