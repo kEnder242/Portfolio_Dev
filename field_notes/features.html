@@ -19288,42 +19288,132 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
-                    <tr id="FEAT-661">
-                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-661</td>
+                    <tr id="FEAT-662">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-662</td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    In-Line Interest Hover Micro-Telemetry & Closed-Loop Feedback Pacing
+                                    The Kabal: Emergent Ingestion Clusters & Manuscript Working Groups
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Sprint 105.0 (Phase 4)</p>
+                    <p>Sprint 106.0 (Phase 5)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Tags</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>#interest_telemetry</code>, <code>#hover_ui</code>, <code>#closed_loop_feedback</code>, <code>#pacing_telemetry</code>, <code>[FEAT-523](#FEAT-523)</code>, <code>[FEAT-638](#FEAT-638)</code>, <code>[BKM-077]</code></p>
+                    <p><code>#kabal</code>, <code>#emergent_affinity</code>, <code>#ingestion_cluster</code>, <code>#paper_writing</code>, <code>[VIBE-016]</code>, <code>[FEAT-614](#FEAT-614)</code>, <code>[BKM-060]</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code></p>
+                    <p><code>Portfolio_Dev/dna/vibe_data.json</code>, <code>Portfolio_Dev/field_notes/writer.html</code>, <code>Portfolio_Dev/field_notes/nibble_v2.py</code>, <code>Portfolio_Dev/field_notes/scan_queue.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Embeds scalar interest fuel (<code>current_interest</code> $\in [0.00, 1.00]$) into WebSocket <code>thought_stream</code> packets and attaches it to message DOM elements via <code>data-interest</code>. Leverages the existing <code>[FEAT-638](#FEAT-638)</code> in-line hover feedback container (<code>.resp-fb</code>) in <code>intercom_v2.js</code> to render a non-intrusive micro-badge (<code>⚡ 0.45</code>) alongside the <code>👍 / 👎</code> vote buttons. The telemetry consumes 0 extra vertical lines in the chat stream, remaining hidden during normal conversation flow and revealing itself strictly on message header hover. Furthermore, binds <code>interest</code> directly into the <code>POST /feedback</code> JSON payload, creating an empirical closed-loop ledger in <code>feedback_ledger.json</code> that correlates human rating with deliberation depth and token pacing.</p>
+                    <p>Establishes <strong>The Kabal</strong> as an explicit architectural primitive representing an emergent middle tier between atomic DNA cards/gems and formal named collections or manuscripts.
+1. <strong>Ingestion Kabal (<code>import</code>)</strong>: Batches of co-occurring ideas or parsed note chunks that share temporal or technical affinity are tagged with an ephemeral or named <code>kabal_id</code>. Prevents newly ingested DNA from floating as disconnected unbaptized islands before formal taxonomy is established.
+2. <strong>Paper Kabal (<code>writer</code>)</strong>: Acts as a working caucus inside Applied Writer (<code>writer.html</code>). Groups paragraphs, citations, and causal operational errata (<code>focal_ledger.json</code>) conspiring together to defend a specific manuscript thesis or section objective.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Eliminates invisible interest budgeting. Enables instant operator inspection of node pacing and deliberation thresholds without UI clutter, while capturing ground-truth training data on whether high- or low-interest waterfall responses produce superior user satisfaction.</p>
+                    <p>Solves the semantic missing-link problem: ideas do not jump directly from raw unstructured logs into finished papers. The Kabal provides an intermediate grouping construct that preserves natural affinity during ingestion and gives active agency to co-conspiring ideas during synthesis.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-663">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-663</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Spine Version Tagging & Deterministic Snapshot Projections
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 106.0 (Phase 5)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#spine_tagging</code>, <code>#snapshot_projections</code>, <code>#deterministic_replay</code>, <code>[INS-041]</code>, <code>[BKM-073]</code>, <code>[FEAT-662](#FEAT-662)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/papers/*_spine.json</code>, <code>Portfolio_Dev/field_notes/replay_paper.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Adds explicit snapshot version tags (<code>@v1_master</code>, <code>@v2_recruiter</code>, <code>@executive_2page</code>) directly into the paper's Spine manifest. Decouples the live, evolving manuscript canvas from frozen published snapshots. Allows the Replay Engine to deterministically reconstruct exact historical documents word-for-word from their Kabal node coordinates.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates the risk of modifying a master document and inadvertently breaking the exact wording or citation sequence of a previously submitted/published artifact.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-664">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-664</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Multi-Corpus Knowledge Ingestion in Applied Writer (DNA & Gems in Manuscripts)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 106.0 (Phase 5)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#multi_corpus</code>, <code>#wisdom_integration</code>, <code>#gem_citations</code>, <code>#drawer_search</code>, <code>[VIBE-017]</code>, <code>[FEAT-614](#FEAT-614)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, <code>Portfolio_Dev/field_notes/js/writer.js</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enhances the Applied Writer review drawer with cross-corpus search and drag-and-drop citation chips spanning Wisdom (<code>WIS-xxx</code>), Features (<code>FEAT-xxx</code>), Philosophy (<code>PHL-xxx</code>), and Gems (<code>focal_ledger.json</code> / <code>latest_synthesis_gems.json</code>). Employs a silent on-demand HyDE retrieval lens in the drawer rather than an intrusive conversational bot, preserving authorial sovereignty.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Unifies diverse lab knowledge corpuses into the manuscript authoring canvas without falling into the "Clippy" conversational chat-trap.</p>
                 </div>
             </div>     </div>
                             </details>

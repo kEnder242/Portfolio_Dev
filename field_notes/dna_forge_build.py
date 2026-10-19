@@ -12,8 +12,14 @@ import shutil
 from pathlib import Path
 
 # Paths
-DNA_FORGE_DIR = Path(__file__).resolve().parent
-PORTFOLIO_DEV_DIR = DNA_FORGE_DIR.parent
+CURRENT_DIR = Path(__file__).resolve().parent
+if (CURRENT_DIR / "templates/dna_forge.html").exists():
+    DNA_FORGE_DIR = CURRENT_DIR
+    PORTFOLIO_DEV_DIR = DNA_FORGE_DIR.parent
+else:
+    PORTFOLIO_DEV_DIR = CURRENT_DIR.parent if CURRENT_DIR.name == "field_notes" else CURRENT_DIR
+    DNA_FORGE_DIR = PORTFOLIO_DEV_DIR / "dna_forge"
+
 FIELD_NOTES_DIR = PORTFOLIO_DEV_DIR / "field_notes"
 DNA_DIR = PORTFOLIO_DEV_DIR / "dna"
 DATA_DIR = FIELD_NOTES_DIR / "data"
@@ -166,6 +172,26 @@ def load_manifest():
                 manifest["gems"] = formatted_gems
         except Exception as e:
             print(f"Warning loading {GEMS_PATH}: {e}")
+
+    # Discover and load polymorphic Kabals from Portfolio_Dev/papers/*/*_kabal.json
+    manifest["kabals"] = []
+    papers_dir = PORTFOLIO_DEV_DIR / "papers"
+    if papers_dir.exists():
+        for bundle_dir in sorted(papers_dir.glob("*")):
+            if bundle_dir.is_dir():
+                kfile = bundle_dir / f"{bundle_dir.name}_kabal.json"
+                if kfile.exists():
+                    try:
+                        with open(kfile, "r", encoding="utf-8") as f:
+                            kdata = json.load(f)
+                        for card in kdata.get("cards", []):
+                            kcard = dict(card)
+                            kcard["domain"] = "kabals"
+                            kcard["kabal_slug"] = bundle_dir.name
+                            kcard["kabal_title"] = kdata.get("title", bundle_dir.name.replace("_", " ").title())
+                            manifest["kabals"].append(kcard)
+                    except Exception as e:
+                        print(f"Warning loading kabal {kfile}: {e}")
 
     return manifest
 
@@ -364,8 +390,11 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
         i_badge = f'<span class="badge-impact" style="background:rgba(255,255,255,0.06);border:1px solid {i_colors.get(i_val, "#7d8590")};color:{i_colors.get(i_val, "#7d8590")};font-size:0.65rem;font-weight:bold;padding:1px 5px;border-radius:3px;margin-left:4px;" title="Discrete Structural Scope [FEAT-454]">{i_labels.get(i_val, f"Imp {i_val}")}</span>'
         dual_pills_html = f'<div class="card-epistemic-pills" style="display:inline-flex;gap:4px;margin-left:4px;">{r_badge}{i_badge}</div>'
 
+    kabal_slug = card.get("kabal_slug", "")
+    writer_btn = f'<a href="writer.html?paper={escape_html(kabal_slug)}" class="btn-card-writer" style="text-decoration:none; color:#38bdf8; font-size:0.75rem; border:1px solid #38bdf8; padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center;" title="Open in Applied Writer">✍️ Writer</a>' if kabal_slug else ""
+
     card_markup = f"""
-    <div class="dna-card {domain.lower()} {flag_class} {arch_class}" id="card-{escape_html(cid)}" data-card-id="{escape_html(cid)}" data-domain="{escape_html(domain.lower())}" data-json="{card_json_attr}">
+    <div class="dna-card {domain.lower()} {flag_class} {arch_class}" id="card-{escape_html(cid)}" data-card-id="{escape_html(cid)}" data-domain="{escape_html(domain.lower())}" data-kabal-slug="{escape_html(kabal_slug)}" data-json="{card_json_attr}">
         <div class="card-header">
             <div class="card-id-block">
                 <span class="domain-pill {domain.lower()}">{escape_html(domain)}</span>
@@ -373,6 +402,7 @@ def render_card_html(card, index, buckets, decisions=None, is_rw=True):
                 {dual_pills_html}
             </div>
             <div class="card-actions-quick">
+                {writer_btn}
                 <button class="btn-card-rack" data-cid="{escape_html(cid)}" title="Dock into Active Bone Rack">+ Rack</button>
                 <button class="btn-card-synapse" data-cid="{escape_html(cid)}" title="View in Synapse Graph">🕸️ Synapse</button>
             </div>
@@ -421,9 +451,16 @@ def build_page():
         "DISC": len(manifest.get("discovery", [])),
         "RDNA": len(manifest.get("rdna", [])),
         "GEMS": len(manifest.get("gems", [])),
+        "KABALS": len(manifest.get("kabals", [])),
     }
     total_census = sum(domain_counts.values())
     sprint_delta = "+451"
+
+    kabal_slugs = sorted(list({c.get("kabal_slug") for c in manifest.get("kabals", []) if c.get("kabal_slug")}))
+    kabal_options_html = '<option value="all">-- All Kabals --</option>' + "".join(
+        f'<option value="{escape_html(s)}">{escape_html(s.title())} ({sum(1 for c in manifest.get("kabals", []) if c.get("kabal_slug") == s)})</option>'
+        for s in kabal_slugs
+    )
 
     seen_ids = set()
     all_cards = []
@@ -469,16 +506,13 @@ def build_page():
     # Sync static CSS and JS to field_notes
     os.makedirs(FIELD_NOTES_DIR / "css", exist_ok=True)
     os.makedirs(FIELD_NOTES_DIR / "js", exist_ok=True)
-    if (DNA_FORGE_DIR / "css/dna_forge.css").resolve() != (FIELD_NOTES_DIR / "css/dna_forge.css").resolve():
-        shutil.copy2(
-            DNA_FORGE_DIR / "css/dna_forge.css", FIELD_NOTES_DIR / "css/dna_forge.css"
-        )
-    if (DNA_FORGE_DIR / "js/dna_forge.js").resolve() != (FIELD_NOTES_DIR / "js/dna_forge.js").resolve():
-        shutil.copy2(DNA_FORGE_DIR / "js/dna_forge.js", FIELD_NOTES_DIR / "js/dna_forge.js")
-    if (DNA_FORGE_DIR / "js/synapse_graph.js").resolve() != (FIELD_NOTES_DIR / "js/synapse_graph.js").resolve():
-        shutil.copy2(
-            DNA_FORGE_DIR / "js/synapse_graph.js", FIELD_NOTES_DIR / "js/synapse_graph.js"
-        )
+    shutil.copy2(
+        DNA_FORGE_DIR / "css/dna_forge.css", FIELD_NOTES_DIR / "css/dna_forge.css"
+    )
+    shutil.copy2(DNA_FORGE_DIR / "js/dna_forge.js", FIELD_NOTES_DIR / "js/dna_forge.js")
+    shutil.copy2(
+        DNA_FORGE_DIR / "js/synapse_graph.js", FIELD_NOTES_DIR / "js/synapse_graph.js"
+    )
 
     # Read template
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
@@ -505,6 +539,8 @@ def build_page():
     page_html = page_html.replace("__DISC_COUNT__", str(domain_counts["DISC"]))
     page_html = page_html.replace("__RDNA_COUNT__", str(domain_counts["RDNA"]))
     page_html = page_html.replace("__GEMS_COUNT__", str(domain_counts["GEMS"]))
+    page_html = page_html.replace("__KABALS_COUNT__", str(domain_counts["KABALS"]))
+    page_html = page_html.replace("__KABAL_OPTIONS__", kabal_options_html)
     page_html = page_html.replace("__NEEDS_REVIEW__", str(needs_review_count))
     page_html = page_html.replace("__ARCHIVED_COUNT__", str(archived_count))
     page_html = page_html.replace(
