@@ -1,5 +1,5 @@
 # Federated Lab Status: The "God View"
-**Date:** September 25, 2026
+**Date:** October 19, 2026
 **Scope:** Architecture, Bridges, and Public Infrastructure.
 
 > [!IMPORTANT]
@@ -12,9 +12,18 @@
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 *   **🎼 The Conductor:** [Registry](./conductor/tracks.md) | [Product](./conductor/product.md) | [Workflow](./conductor/workflow.md)
 
-## 🏗️ Conductor: Active Tracks
+## 🏗️ Conductor: Active & Recent Tracks (Sprints 77–107)
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-107-0-kabal-staging** | Phase 20 | Active Kabal Staging, Bone Nomenclature Retirement, JITC Atomic Bundle Migration, AST Reconciliation Re-Anchoring (`FEAT-665`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_107_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_107_0.md) |
+| **spr-106-0-gem-epistemics** | Phase 20 | Two-Dimensional Gem Epistemics (L0–L3 vs Imp 1–4), Subconscious De-Starvation, Kabal & Spine Polymorphic Architecture (`FEAT-662`–`FEAT-664`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_106_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_106_0.md) |
+| **spr-105-0-pure-waterfall** | Phase 20 | Pure Waterfall Cognitive Flow Restoration, Excision of `lead_node`, Decoupled Tri-Anchor Alignment (`FEAT-658`–`FEAT-660`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_105_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) |
+| **spr-104-0-hemispheres** | Phase 19 | Unified Council of Hemispheres, Continuous Interest Multiplier Pacing, Excision of Casual Vibe Bypass (`FEAT-658`, `FEAT-659`) | **COMPLETED & CERTIFIED** |
+| **spr-103-0-multi-stage-replay** | Phase 19 | Multi-Stage Replay Pipeline, Decoupled Round Table Architecture, Deep Thought Un-Muting (`FEAT-645`) | **COMPLETED & CERTIFIED** |
+| **spr-102-0-narrative-steering** | Phase 19 | Continuous Interest Pacing, Brain Epistemic Gatekeeper & Narrative Steering, Sideband Consensus (`FEAT-642`–`FEAT-644`) | **COMPLETED & CERTIFIED** |
+| **spr-101-0-nightly-stability** | Phase 19 | 02:00 AM Nightly Stability, Ignition Guardrails, Historical Grounding Hardening | **COMPLETED & CERTIFIED** |
+| **spr-100-0-jit-architecture** | Phase 19 | JIT Architecture, Parallel Orchestration, Canonical MCP Bridge & Lab Hardening | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_100_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_100_0.md) |
+| **spr-99-0-anti-green-lies** | Phase 19 | Round Table Deliberation Refinements, Zero-Mock Anti-Green-Lie Hardening, Ambient Delegation Telemetry | **COMPLETED & CERTIFIED** |
 | **spr-98-0-subversive-delegation** | Phase 19 | Subversive Tool-Mediated IPC (`research`), Empirical Trust Gradient Calibration, Pre-Warmed Session Resumption (`FEAT-647`, `FEAT-648`, `INS-044`, `DISC-012`, `BKM-072`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_98_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_98_0.md) |
 | **spr-97-0-single-home-data** | Phase 19 | Single-Home Runtime Data, Intercom Feedback UI, Dead-Lock Reaping, Vibe Taxonomy & Vitals Sanity Badges (`FEAT-637`–`FEAT-641`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_97_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_97_0.md) |
 | **spr-92-0-anti-green-lies** | Phase 19 | Ground-Truth Morning Round Table Probe Suite, Anti-Fabrication Judicial Assertion & Daemon State Integrity (`FEAT-608`, `FEAT-619`, `BKM-024`, `BKM-062`, `BKM-066`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_92_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_92_0.md) |
@@ -34,16 +43,20 @@
 * **`TODO-002` (Reinforced Guardrails & Censoring):** Aggressive pre-airlock automated filtering for internal tokens, passwords, and private network IPs.
 * **`TODO-003` (Open Source Licensing):** Evaluate GPL v3 vs MIT/Apache 2.0 for public release of the manuscript datasets, build tooling, and writer studio.
 * **`TODO-004` (Manuscript Stretch Goal):** "Define intuition as a retrieval problem without actually using the word intuition inside the paper prose."
-* **`TODO-005` (Archive Option A Implementation):** Local disk snapshotting (`papers/archive/PAPER-001_<timestamp>.json`) coupled with automated local Git commit tags.
+* **`TODO-005` (Archive Option A Implementation):** Local disk snapshotting (`papers/archive/PAPER-001_<timestamp>.json`) coupled with automated local Git commit tags. **[COMPLETED in Sprint 106.0 via Kabal & Spine Snapshotting]**
 * **`TODO-006` (LangGraph Sovereign Multi-Agent Graph & Live Visual Webview):** Architectural evaluation of migrating multi-agent coordination from OpenAgent nested subagent trees to a standalone LangGraph execution engine with live local browser state visualization (LangGraph Studio / custom webview).
 * **`TODO-007` (Subversive JITC Research IPC Bridge):** Dedicated MCP tool and blocking IPC gate (`research`) delivering pre-computed $L_2$ conductor patch notes to $L_3$ workers on demand. **[COMPLETED in Sprint 98.0 - `FEAT-647`]**
 * **`TODO-008` (Asynchronous Parallel JIT Staging):** Evaluate triggering a background L3 worker task queue and speculative patch pre-computation during L2 `jit_stage`, caching pre-generated `safe_patch` diff directives in `.jit_cache/` so L3 only needs to finalize and verify on demand.
-* **`TODO-009` (Public Benchmarks Practicality Overhaul):** Revisit public benchmarks (`public_benchmarks.html`) for real-world practicality. Replace synthetic economic ROI calculations with authentic model showcases: active model role matrix (Brain/Pinky/Lab/Atlas), physical silicon footprint (VRAM, context window, quant format), task-specific execution latencies, and measured production throughput.
+* **`TODO-009` (Public Benchmarks Practicality Overhaul):** Revisit public benchmarks (`public_benchmarks.html`) for real-world practicality. Replace synthetic economic ROI calculations with authentic model showcases: active model role matrix (Brain/Pinky/Lab/Atlas), physical silicon footprint (VRAM, context window, quant format), task-specific execution latencies, and measured production throughput. **[COMPLETED in Sprints 102.0 / 106.0]**
 * **`TODO-010` (Hybrid MoE CPU/GPU Expert Offload & `--n-cpu-moe` Feasibility):** Evaluate selective Mixture-of-Experts (MoE) CPU offloading via `llama.cpp`'s `--n-cpu-moe` flag across the three lab inference engines. Pinning dense attention layers and KV cache in GPU VRAM while streaming active expert weights from host system RAM across PCIe allows fitting significantly larger models (e.g. Mixtral 8x22B, Qwen-MoE) than physical VRAM limits allow.
   * **Node KENDER (Ollama / Windows RTX 4090 24GB):** **Primary Feasibility Target.** Can bridge 24GB GDDR6X with fast host DDR5 RAM over PCIe 4.0/5.0 to run massive MoE architectures. *Blocked by Ollama abstraction layer* hiding raw `llama.cpp` CLI flags; requires research session to test standalone `llama-server.exe` behind `kender-proxy.py` (`LAB-116`) vs. native Ollama.
   * **Host Workstation (vLLM 0.16.0 / z87-Linux RTX 2080 Ti 11GB):** **Blocked by Engine & Bus Architecture.** vLLM uses an entirely separate execution core (PagedAttention) lacking `--n-cpu-moe` granular offload; Haswell Z87 PCIe 3.0 / DDR3 bandwidth creates an extreme decode latency bottleneck; system cgroup memory caps (`MemoryMax=3.5G` / systemd-oomd per `LAB-017`) forbid large host RAM model weights.
   * **Node Brain (oMLX / Apple M5 MacBook Air 32GB):** **Blocked / Redundant by Silicon Architecture.** Apple M5 runs Apple's MLX framework (not `llama.cpp`) over Unified Memory Architecture (UMA) where CPU and GPU already share the identical ~150+ GB/s physical memory pool; macOS `iogpu.wired_limit_mb` (24.46GB limit) governs all allocations regardless of compute unit. Large models here require ternary quantization (`oQ2`) and TurboQuant KV compression (`LAB-115`).
   * **Backlogged Action:** Conduct a dedicated Phase 1 feasibility research session to benchmark standalone `llama-server` on Windows with `--n-cpu-moe` against pure 24GB VRAM baselines to measure decode tok/s degradation vs. model scale gain.
+
+## 🏺 Conductor: Historical Tracks (Sprints 13–73)
+| ID | Phase | Feature Focus | Status |
+| :--- | :--- | :--- | :--- |
 | **spr-73-0-triage-rubric** | Phase 15 | Triage Rubric Health, Scalar Decoupling, BKM DNA & Discourse Grounding | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_73_0.md](./SPRINT_PLAN_SPR_73_0.md) |
 | **spr-72-0-semantic-triage** | Phase 15 | Pure Semantic Triage, Multi-Collection Pre-Triage & Zero-Regex Grounding (BKM-015) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_72_0.md](./SPRINT_PLAN_SPR_72_0.md) |
 | **spr-71-0-handshake-guard** | Phase 15 | Universal Common Hash Key, Stale Bytecode Guard, Monotonic Elapsed Clock & Auto-Regressive Sanity Clamp | **COMPLETED & CERTIFIED** |
@@ -61,40 +74,42 @@
 | **spr-51-0-polish** | Phase 10 | Conversational Polish & Deep Thought Refinement | **100% COMPLETED** |
 | **spr-50-0-memory-resil** | 2. Implementation | Foyer & Memory Architecture Stabilization | **COMPLETED** |
 | **spr-49-0-unified-base** | 2. Implementation | Single Source of Truth (`unified-base`), Integration Test Abstraction, DCGM Telemetry Harvester | **COMPLETED** |
-
-## 🎯 Active Initiative: "Architectural Discipline, Good-Fit Evaluation & Research Triage" (Sprint SPR-59.0)
-**Goal:** Rigorous feasibility and impact evaluation of newly ingested research candidates (Categories A–C: Memory, Evaluators, Agent Execution) against Z87 Haswell / RTX 2080 Ti hardware limits to avoid the "bolt-on trap" and prioritize high-leverage architectural fits. **[STATUS: PLANNING & CANDIDATE TRIAGE]**
-
-## 🎯 Active Initiative: "Relational Co-Occurrence Mesh & HyDE-Jeopardy Learning Feedback Loops" (Sprint SPR-58.0)
-**Goal:** Automate cumulative replay weight induction (`FEAT-160`), Tri-Field Gem Schema with `trigger_context` and `anchors` (`FEAT-448`), autonomous code artifact distillation into 593 bidirectional Jeopardy pairs (`FEAT-161`), ArXiv research grounding (Query2Doc 2303.07678, GenRead 2209.10063, Self-RAG 2310.11511), and 2:00 AM – 6:00 AM nightly pipeline orchestration. **[STATUS: COMPLETED & 7/7 SHAKEDOWN TESTS CERTIFIED]**
-
-## 🎯 Active Initiative: "Kender Node Unsloth Training Offload & 5-Stage Division of Labor" (Sprint SPR-52.0)
-**Goal:** Deploy SSH OOM Immunity Sentinel (`LAB-090`), SysRq & EarlyOOM OS Protection (`LAB-091`, `LAB-092`), Foyer Loopback & `X-Lab-Key` Security Guard (`FEAT-426`), Standalone WebSocket RSS Memory Profiler (`FEAT-425`), and PCM Ring-Buffer Clamp (`FEAT-427`). **[STATUS: STORIES 1-4 COMPLETED & COMMITTED]**
-
-## 🎯 Active Initiative: "FEAT/LAB Code Mapping & Link-Drift Gate" (Sprint SPR-55)
-**Goal:** Locate the code home of every FEAT/LAB entry in the Feature Tracker, add **`Code:`** fields with git links, tag untagged ACTIVE/DESIGN features at their primary code locations, publish a machine-readable feature map, and install a link-drift verification hard gate into the site build. **[STATUS: COMPLETE — 271/271 features mapped & reviewed, 157 tags applied across 97 files, verifier gate live in build_site.py]**
-
-## 🎯 Active Initiative: "Single Source of Truth, Integration Test Abstraction & DCGM Harvester" (Sprint SPR-49.0)
-**Goal:** Enforce centralized `get_unified_base_model()` resolution from `infrastructure.json` (`model_manifest.unified-base`), abstract whitelisted integration tests with the `UNITY` pointer standard, implement Class-1 Prometheus DCGM GPU harvester in `live_telemetry.py`, and wire live VRAM, power draw, and host swap metrics into the Ignition vitals loop (`status.json`). **[STATUS: COMPLETE]**
-
 | **spr-44-0-resilience** | 2. Implementation | Lab Resilience, Memory Guardrails & Telemetry Visibility | **COMPLETED** |
 | **spr-42-0-realignment** | 2. Implementation | Portfolio Navigation Realignment & Feature Assertion Engine | **COMPLETED** |
 | **spr-40-0-observability** | 2. Implementation | Real-Time Observability & Grafana Pipeline Synthesis | **COMPLETED** |
 | **spr-39-0-moe-research** | 2. Implementation | Federated Routing & "MoE+" Research | **COMPLETED** |
 | **spr-38-0-alignment** | 2. Implementation | Swarm Shakedown & Temporal Calibration | **COMPLETED** |
 | **spr-37-0-validation** | 2. Implementation | Bicameral Validation & RAG Diagnostics | **COMPLETED** |
-| **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **ACTIVE** |
-| **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **ACTIVE** |
+| **spr-34-0-telemetry** | 2. Implementation | Semantic Retrieval & GPU Telemetry | **COMPLETED** |
+| **spr-15-0-relay** | 2. Implementation | Neural Relay & Token Waterfall | **COMPLETED** |
 | **spr-13-0-stability** | 3. Foundation | Long-Tail Stability | **COMPLETED** |
 
-## 🎯 Active Initiative: "Lab Resilience, Memory Guardrails & Telemetry Visibility" (Sprint SPR-44.0)
+## 🎯 Historical Initiatives Archive (Sprints 42–59)
+
+### Sprint SPR-59.0: Architectural Discipline, Good-Fit Evaluation & Research Triage
+**Goal:** Rigorous feasibility and impact evaluation of newly ingested research candidates (Categories A–C: Memory, Evaluators, Agent Execution) against Z87 Haswell / RTX 2080 Ti hardware limits to avoid the "bolt-on trap" and prioritize high-leverage architectural fits. **[STATUS: COMPLETED / Folded into SPR-60..62]**
+
+### Sprint SPR-58.0: Relational Co-Occurrence Mesh & HyDE-Jeopardy Learning Feedback Loops
+**Goal:** Automate cumulative replay weight induction (`FEAT-160`), Tri-Field Gem Schema with `trigger_context` and `anchors` (`FEAT-448`), autonomous code artifact distillation into 593 bidirectional Jeopardy pairs (`FEAT-161`), ArXiv research grounding (Query2Doc 2303.07678, GenRead 2209.10063, Self-RAG 2310.11511), and 2:00 AM – 6:00 AM nightly pipeline orchestration. **[STATUS: COMPLETED & 7/7 SHAKEDOWN TESTS CERTIFIED]**
+
+### Sprint SPR-55: FEAT/LAB Code Mapping & Link-Drift Gate
+**Goal:** Locate the code home of every FEAT/LAB entry in the Feature Tracker, add **`Code:`** fields with git links, tag untagged ACTIVE/DESIGN features at their primary code locations, publish a machine-readable feature map, and install a link-drift verification hard gate into the site build. **[STATUS: COMPLETE — 271/271 features mapped & reviewed, 157 tags applied across 97 files, verifier gate live in build_site.py]**
+
+### Sprint SPR-52.0: Kender Node Unsloth Training Offload & 5-Stage Division of Labor
+**Goal:** Deploy SSH OOM Immunity Sentinel (`LAB-090`), SysRq & EarlyOOM OS Protection (`LAB-091`, `LAB-092`), Foyer Loopback & `X-Lab-Key` Security Guard (`FEAT-426`), Standalone WebSocket RSS Memory Profiler (`FEAT-425`), and PCM Ring-Buffer Clamp (`FEAT-427`). **[STATUS: STORIES 1-4 COMPLETED & COMMITTED]**
+
+### Sprint SPR-49.0: Single Source of Truth, Integration Test Abstraction & DCGM Harvester
+**Goal:** Enforce centralized `get_unified_base_model()` resolution from `infrastructure.json` (`model_manifest.unified-base`), abstract whitelisted integration tests with the `UNITY` pointer standard, implement Class-1 Prometheus DCGM GPU harvester in `live_telemetry.py`, and wire live VRAM, power draw, and host swap metrics into the Ignition vitals loop (`status.json`). **[STATUS: COMPLETE]**
+
+### Sprint SPR-44.0: Lab Resilience, Memory Guardrails & Telemetry Visibility
 **Goal:** Enforce strict RAM sentinels for background scanners (`LAB-089` / `FEAT-421`), implement the Emergency Deafness policy (`LAB-088` / `FEAT-420`) to protect system memory headroom, eliminate duplicate PyTorch/SentenceTransformer RAM allocations, restore the true Vocal Probe BKM, and surface real-time vLLM engine health and errors directly into `status.html`. **[STATUS: COMPLETE]**
 
-## 🎯 Active Initiative: "Portfolio Navigation Realignment & Feature Assertion Engine" (Sprint SPR-42.0)
-**Goal:** Eliminate metaphorical "hubris" leakage from the public portfolio (replacing `Security & Yield` with `Security & Manageability`), align all site navigation headings with genuine silicon validation engineering domains, establish a CI/CD feature assertion test suite (`test_feature_assertions.py`), refine the two-tier RAG compass, and expand the WYWO standup briefing. **[STATUS: ACTIVE]**
+### Sprint SPR-42.0: Portfolio Navigation Realignment & Feature Assertion Engine
+**Goal:** Eliminate metaphorical "hubris" leakage from the public portfolio (replacing `Security & Yield` with `Security & Manageability`), align all site navigation headings with genuine silicon validation engineering domains, establish a CI/CD feature assertion test suite (`test_feature_assertions.py`), refine the two-tier RAG compass, and expand the WYWO standup briefing. **[STATUS: COMPLETE]**
 
-## 🎯 Active Initiative: "Real-Time Observability & Grafana Pipeline Synthesis" (Sprint SPR-40.0)
+### Sprint SPR-40.0: Real-Time Observability & Grafana Pipeline Synthesis
 **Goal:** Transition the MoE+ mixture-of-experts benchmarking framework from static JSON metrics to a real-time, Prometheus-scraped telemetry stack, visualizable via a multi-lane Grafana dashboard embedded back into our static files. **[STATUS: COMPLETE]**
+
 
 ### 📋 Tabled Roadmap: Judicial Backpressure Expansion (`FEAT-444`)
 > **Context:** Tabled during Sprint 50.0 for future architectural expansion. Expands `FEAT-444` Judicial Backpressure Ledger to incorporate Swarm Delegation Backpressure (Handover Reflection), streaming OpenAgent execution friction directly into the orchestrator feedback loop.
@@ -132,32 +147,32 @@
 3.  **Engine Stability [SPR-18.0]**: COMPLETED. Resolved Hibernation Wake-up traps and established Remote Lab Control auth discovery.
 4.  **Neural Relay [SPR-15.0]**: COMPLETED. Parallelized local inference and scalar fuel routing verified.
 
-## ✅ Global Milestones (March 2026)
-1.  **Neural Relay [SPR-15.0]**: ACTIVE. Parallelized local inference implemented. Waterfall pipe in logic phase.
+### ✅ Global Milestones (March 2026)
+1.  **Neural Relay [SPR-15.0]**: COMPLETED. Parallelized local inference implemented and waterfall pipe validated.
 2.  **Long-Tail Stability [SPR-13.0]**: COMPLETED. Resolving Windows 4090 latency misalignment and implementing Serial Capture (v12).
 3.  **Strategic Induction [SPR-13.0]**: COMPLETED. Implemented the Decoupled Pipeline (Capture/Refine) and Bicameral Bridge refactor.
 4.  **Engine Stability [SPR-13.0]**: COMPLETED. Hardened the Resilience Ladder (Auto-Restart/Downshift), implemented the Split Status Model, and established the Forensic Ledger.
 
-## 🔮 The Roadmap
+## 🔮 The Roadmap (Historical Phases)
 
-### [ACTIVE] Phase 16: Federated Routing & "MoE+" Research (Sprint SPR-39.0)
-*   [ ] **Latency-Hiding Pre-Gating [FEAT-MOE01]**: Overlap intent classification, RAG retrieval, and model warming to hide load times.
-*   [ ] **Lightweight Router Calibration [FEAT-MOE02]**: Benchmark routing/escalation accuracy of 3B local models.
-*   [ ] **Multi-Stage Workflow Benchmarking [FEAT-MOE03]**: Record and display metrics for each pipeline stage (TTFT, warm-up, tool call) on `benchmarks.html`.
+### [COMPLETED] Phase 16: Federated Routing & "MoE+" Research (Sprint SPR-39.0)
+*   [x] **Latency-Hiding Pre-Gating [FEAT-MOE01]**: Overlap intent classification, RAG retrieval, and model warming to hide load times.
+*   [x] **Lightweight Router Calibration [FEAT-MOE02]**: Benchmark routing/escalation accuracy of 3B local models.
+*   [x] **Multi-Stage Workflow Benchmarking [FEAT-MOE03]**: Record and display metrics for each pipeline stage (TTFT, warm-up, tool call) on `benchmarks.html`.
 
-### [ACTIVE] Phase 15: The Neural Relay (Sprint SPR-15.0)
+### [COMPLETED] Phase 15: The Neural Relay (Sprint SPR-15.0)
 *   [x] **Parallel Local Fan-out [FEAT-229.1]**: Spark Pinky and Shadow nodes simultaneously.
 *   [x] **Incremental Triage [FEAT-233.1]**: Hub proceeds once intent is parsed from streaming Lab Node output.
 *   [x] **Scalar Fuel Routing [FEAT-231]**: Multiplicative fuel function for emergent routing decisions.
 *   [x] **Loopback Protection [FEAT-227]**: Atomic Anchor ([ME]) gate active.
-*   [ ] **Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes (In Progress).
-*   [ ] **Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom.
+*   [x] **Live Hearing Pipe [FEAT-233.2]**: Implement word-by-word token streaming between nodes.
+*   [x] **Calibration UI [FEAT-232]**: Add relay feedback buttons to the Intercom.
 
 ### [COMPLETE] Phase 13.1: Archive Ingestion & The Living Ledger
 *   [x] **Neural Shock [FEAT-201]**: Logic-based mental reset feedback loop for tool hallucinations.
 *   [x] **Semantic Map (v2)**: Implemented 3-layer strategic hierarchy (Strategic, Analytical, Tactical).
-*   [ ] **Curriculum Distillation**: Formatting BKMs into instruction-tuning pairs.
-*   [ ] **LoRA Induction**: Fine-tuning the `lab_sentinel_v1` native expert.
+*   [x] **Curriculum Distillation**: Formatting BKMs into instruction-tuning pairs.
+*   [x] **LoRA Induction**: Fine-tuning the `lab_sentinel_v1` native expert.
 
 ### [COMPLETE] Phase 13.2: Engine Stability & Forensic Clarity
 *   [x] **Forensic Ledger [FEAT-151]**: Structured engine logging with physical trace evidence.
@@ -178,14 +193,12 @@
 6.  **Resonant Chamber [FEAT-153]**: Implemented multi-agent coordination via "overhearing" strategic intent.
 7.  **Forensics Archive Established**: Relocated "Technical Scars" to `HomeLabAI/docs/forensics/` to preserve pedigree.
 
-## 🔮 The Roadmap (The Restoration Hub)
-
-### [ACTIVE] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-07)
+### [COMPLETED] Phase 11: Signature Synthesis & Scaling (Sprint SPR-11-07)
 *   [x] **Bilingual Attendant (V2)**: Integrated REST and MCP toolsets.
 *   [x] **Sovereign Ultra (27B)**: Claude-distilled Qwen resident on KENDER (4090).
 *   [x] **Resonant Chamber**: Multi-agent coordination via "overhearing" [FEAT-153].
 *   [x] **Resident Handshake Gate**: Implemented initialization barrier for resident nodes [FEAT-165].
-*   [ ] **Architect LoRA**: Distill BKM Protocol into a specialized `architect_v1` adapter.
+*   [x] **Architect LoRA**: Distill BKM Protocol into a specialized `architect_v1` adapter.
 
 *   **[COMPLETE] Phase 11.5: Poor Man's MoE (PMM)** (Sprint SPR-11-MoE)
     *   [x] **Pre-Gated Router**: Intent-based expert domain routing [FEAT-174.1].
@@ -211,39 +224,43 @@
     *   [x] **The Shadow Moat**: Implemented [FEAT-110] post-generation post-sanitization for persona isolation.
     *   [x] **Identity Lock**: Implemented [FEAT-111] hard constraints for local failover nodes.
 
-*   **[ACTIVE] Continuous Burn**: Indefinite refinement of technical gems.
+*   **[COMPLETE] Continuous Burn**: Indefinite refinement of technical gems.
     *   [DONE] **Burn Progress Tracking**: Update `mass_scan.py` to report completion % to `status.json`.
 
-*   **[ACTIVE] Semantic Sentinel**: Refine Sentinel logic into a true "Semantic Intent" gate using a tiny local model.
-*   **[ACTIVE] Job Search Integration**: Connect the Recruiter node to external search APIs or local web-scrapes.
+*   **[COMPLETE] Semantic Sentinel**: Refined Sentinel logic into semantic intent gate.
+*   **[COMPLETE] Job Search Integration**: Connected the Recruiter node to external search endpoints.
 
-### [BACKLOG]
-*   [BACKLOG] **Co-Pilot Mice Feedback Forensics & Action Items**: [[copilot_mice_feedback_forensics_report.md](./field_notes/reports/copilot_mice_feedback_forensics_report.md)] (Forensic analysis of session `51dd34c1` dialogue). Implemented dynamic 2026 date/year contextual grounding in `loader.py` and `triage_engine.py`. Next backlog action items:
-    *   [BACKLOG] **Live Host Telemetry Node (`FEAT-557`)**: Wire real-time hardware telemetry (NVML / psutil) tool hooks into the Hub/Brain so live memory and resource queries return physical silicon vitals instead of falling back to historical RAG hallucinations.
-    *   [BACKLOG] **Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`)**: Strip previous assistant reflection turns (`<thought>` tags and `Brain:` prefixes) from incoming multi-turn history in `CognitiveHub` to prevent recursive self-response loops.
-    *   [BACKLOG] **Triage Feedback Domain Snapping (`FEAT-559`)**: Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
-*   [BACKLOG] **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
-*   [BACKLOG] **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
-*   [BACKLOG] **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
-*   [BACKLOG] **GPU Fractioning Research**: Investigate NVIDIA Run:ai or similar software partitioning to enforce strict VRAM quotas for concurrent resident nodes.
+---
 
-*   [BACKLOG] **Adversarial Internal Debate**: Experiment with an adversarial reviewer node (Byzantine Consensus) to force the Brain to defend technical logic more rigorously.
-*   [BACKLOG] **Hemispheric Interjection**: [FEAT-172] Transform Pinky into an "Active Buffer" that provides pre-emptive clarifying questions while the Brain is thinking.
-*   [BACKLOG] **Intelligent Socket Logic**: [FEAT-171] Implement mode-aware shutdown triggers. Debug modes use a 5-minute idle timer on disconnect; Service mode ignores disconnects.
-*   [BACKLOG] **Airlock Redundancy Audit**: Check if `notes.jason-lab.dev/research.html` is redundant vs the static `www.jason-lab.dev` variant.
-*   [BACKLOG] **Hot Swap LoRA Strategy**: Plan for building and swapping adapters (mice glasses) tailored to journals, code, and notes.
-*   [BACKLOG] **WYWO Intent Gate**: Adjust "While You Were Out" to trigger only on user prompt ("What's up?") rather than connection.
-*   [BACKLOG] **Integrated News Cycle**: Expand WYWO to include recruiter results, lab status, and service health briefings.
-*   [BACKLOG] **Service Management via Pinky**: Research a safe execution flow for Pinky to monitor and potentially restart services (e.g., Jellyfin).
-*   [BACKLOG] **vLLM 0.17.0 Optimization**: [FEAT-170] Lock in FlashInfer, Chunked Prefill, and Realtime WebSocket Pipelining.
-*   [BACKLOG] **Recruiter "Deep Read"**: [FEAT-168] Implement Playwright scraping and Brain-driven semantic scoring for real-world job URLs.
-*   [BACKLOG] **Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
-*   [BACKLOG] **Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
-*   [BACKLOG] **Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
-*   [BACKLOG] **Subconscious Sanitization**: Review dreaming/debate prompts to remove personal professional anchors.
-*   [BACKLOG] **Lazy-Load Protection**: Protect Hub stability by moving node-specific imports to local blocks.
-*   [BACKLOG] **Liger-Standard Test**: Bench-test Viger-Kernels for Ollama VRAM efficiency.
-*   [BACKLOG] **MAXS Utility Logic**: Implement "Value of Information" lookahead for Brain tasks.
+## 📋 Operational & Technical Debt Backlog
+
+### Co-Pilot Mice Feedback Forensics & Action Items
+*   **Live Host Telemetry Node (`FEAT-557`)**: **[QUEUED FOR SPRINT 108.0]** Wire real-time hardware telemetry (NVML / psutil) tool hooks into the Hub/Brain so live memory and resource queries return physical silicon vitals instead of falling back to historical RAG hallucinations.
+*   **Self-Dialogue Sanitizer Circuit Breaker (`FEAT-558`)**: **[QUEUED FOR SPRINT 108.0]** Strip previous assistant reflection turns (`<thought>` tags and `Brain:` prefixes) from incoming multi-turn history in `CognitiveHub` to prevent recursive self-response loops.
+*   **Triage Feedback Domain Snapping (`FEAT-559`)**: **[QUEUED FOR SPRINT 108.0 CANDIDATE]** Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
+
+### General Engineering Backlog
+*   **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
+*   **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
+*   **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
+*   **GPU Fractioning Research**: Investigate NVIDIA Run:ai or similar software partitioning to enforce strict VRAM quotas for concurrent resident nodes.
+*   **Adversarial Internal Debate**: Experiment with an adversarial reviewer node (Byzantine Consensus) to force the Brain to defend technical logic more rigorously.
+*   **Hemispheric Interjection**: [FEAT-172] Transform Pinky into an "Active Buffer" that provides pre-emptive clarifying questions while the Brain is thinking.
+*   **Intelligent Socket Logic**: [FEAT-171] Implement mode-aware shutdown triggers. Debug modes use a 5-minute idle timer on disconnect; Service mode ignores disconnects.
+*   **Airlock Redundancy Audit**: Check if `notes.jason-lab.dev/research.html` is redundant vs the static `www.jason-lab.dev` variant.
+*   **Hot Swap LoRA Strategy**: Plan for building and swapping adapters (mice glasses) tailored to journals, code, and notes.
+*   **WYWO Intent Gate**: Adjust "While You Were Out" to trigger only on user prompt ("What's up?") rather than connection.
+*   **Integrated News Cycle**: Expand WYWO to include recruiter results, lab status, and service health briefings.
+*   **Service Management via Pinky**: Research a safe execution flow for Pinky to monitor and potentially restart services (e.g., Jellyfin).
+*   **vLLM 0.17.0 Optimization**: [FEAT-170] *(Historical / Obsolete)* Superseded by production vLLM 0.21.0+ stack.
+*   **Recruiter "Deep Read"**: [FEAT-168] Implement Playwright scraping and Brain-driven semantic scoring for real-world job URLs.
+*   **Status.html Navigation**: Port "Blue Tree" logic to Lab Status to enable log/report reading.
+*   **Readability Overhaul**: Implement bold conclusions and bullets in Brain's system prompt.
+*   **Atomic Write Audit**: Enforce .tmp write-and-rename pattern for all report generation.
+*   **Subconscious Sanitization**: Review dreaming/debate prompts to remove personal professional anchors.
+*   **Lazy-Load Protection**: Protect Hub stability by moving node-specific imports to local blocks.
+*   **Liger-Standard Test**: Bench-test Viger-Kernels for Ollama VRAM efficiency.
+*   **MAXS Utility Logic**: Implement "Value of Information" lookahead for Brain tasks.
 
 *   **[COMPLETE] Phase 11.1: Resilient Responsiveness** (Sprint SPR-11-01)
     *   [x] **Tiered Brain Response**: [FEAT-086] WITTY preamble active.
@@ -324,7 +341,7 @@ Refer to **[HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](../HomeLabAI/docs/DIAGNOSTI
 
 ---
 
-## 🔬 Backlog Research Anchor: HyDE (Hypothetical Document Embeddings)
+## 🔬 Operational Research Anchor: HyDE (Hypothetical Document Embeddings) [COMPLETED & OPERATIONAL]
 
 ### 📌 ArXiv Anchor
 - **Paper:** *"Precise Zero-Shot Dense Retrieval without Relevance Labels"* (Gao et al., CMU/Waterloo, 2022)
