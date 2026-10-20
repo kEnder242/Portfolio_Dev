@@ -20,13 +20,13 @@ SOURCE_FILES = [
     "js/synapse_graph.js",
 ]
 PUBLIC_AIRLOCK_HTML = [
-    "index.html",
     "stories.html",
     "protocols.html",
     "research.html",
     "public_benchmarks.html",
 ]
 INTERNAL_HTML = [
+    "index.html",
     "timeline.html",
     "files.html",
     "status.html",
