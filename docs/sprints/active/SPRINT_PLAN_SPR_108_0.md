@@ -316,7 +316,8 @@ When a turn feels off-base or receives an interactive downvote / Fourth Wall cor
 ---
 
 #### Story 108.4: `BKM-088` Micro-Harness Test Rig Scaffolding
-* **Status:** 📋 PLANNED
+* **Status:** 🟢 COMPLETED & CERTIFIED
+* **Verification Log:** Dispatched to `[SWARM:LOCAL]` (Atlas on 4090 via `delegate.py --mode local`). Scaffolded `src/debug/test_empirical_step_harness.py` with CLI flags (`--stage`, `--litmus`, `--query`, `--dry-run`), frozen Litmus 1-3 fixtures, deterministic JSON telemetry output, and safe offline mock fallback. Registered in `DIAGNOSTIC_SCRIPT_MAP.md`. Verification passed cleanly (`python3 src/debug/test_empirical_step_harness.py --stage=filter --dry-run`). Committed in HomeLabAI `c5c8ce4`.
 * **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[FEAT-645]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Context & Objective (The Why):**
