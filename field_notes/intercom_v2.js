@@ -287,7 +287,20 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const sl = source ? source.toLowerCase() : "system";
-    let displaySource = source.toUpperCase();
+    // [Story 107.17] Canonical Persona Labeling & CSS Class Mapping
+    let cleanSource = source;
+    let baseClass = sl;
+    if (sl.includes('pinky')) {
+        cleanSource = 'Pinky (Voice)';
+        baseClass = 'pinky';
+    } else if (sl.includes('brain')) {
+        cleanSource = 'Brain (Archive)';
+        baseClass = 'brain';
+    } else if (sl.includes('deep thought') || sl.includes('thought')) {
+        cleanSource = 'Deep Thought (Strategy)';
+        baseClass = 'brain';
+    }
+    let displaySource = cleanSource;
 
     // [VISUAL THINK] Detect Building Upon state
     let isBuildingUpon = false;
@@ -427,7 +440,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         msg.innerHTML = `
             <div class="msg-body system-inline">
                 <span class="msg-time">${time}</span>
-                <span class="msg-source ${sl}">[${displaySource}]</span>
+                <span class="msg-source ${baseClass}">[${displaySource}]</span>
                 ${formattedText}
             </div>
         `;
@@ -435,7 +448,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         msg.innerHTML = `
             <div class="msg-header">
                 <span class="msg-time">${time}</span>
-                <span class="msg-source ${sl}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
+                <span class="msg-source ${baseClass}">[${isBuildingUpon ? '↳ ' : ''}${displaySource}]</span>
                 ${respFbHtml}
             </div>
             <div class="msg-body">${formattedText}</div>
@@ -445,13 +458,17 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     
     // Fix: Routing Logic - [FEAT-222] Source-First Authority
     
-    // [FEAT-224] Brain (Signal or Result) and Shadow (Intuition) always go to the Right
-    const isBrain = sl_low.includes('brain') || sl_low.includes('shadow') || sl_low.includes('deep thought');
+    // [FEAT-058] Immutable Node-Anchored Hemispheric Routing (BKM-061 Oracle Hardened)
+    // [FEAT-224] Brain (Signal or Result) and Deep Thought always go to the Right
+    const isBrain = sl_low.includes('brain') || sl_low.includes('shadow') || sl_low.includes('deep thought') || sl_low.includes('audit');
     // Pinky (Triage or Reflex) always goes to the Left
     const isPinky = sl_low.includes('pinky');
-    // System strategic messages go to the Right
     
-    if (isBrain || isSystemStrategic || channel === 'insight') {
+    const explicitConsole = (metadata && metadata.console) || '';
+    const isRightNode = explicitConsole === 'Right' || explicitConsole === 'right' || explicitConsole === 'center' || channel === 'insight' || isBrain || isSystemStrategic;
+    const isLeftNode = explicitConsole === 'Left' || explicitConsole === 'left' || channel === 'pinky' || (isPinky && !isBrain);
+    
+    if (isRightNode && !isLeftNode) {
         insightConsole.appendChild(msg);
         insightConsole.scrollTop = insightConsole.scrollHeight;
     } else {
@@ -861,14 +878,14 @@ async function connect() {
                         } catch(e) { /* not JSON, fall through */ }
                     }
 
-                    // [Story 6] Pretty-print coherence critic JSON
-                    if (sl_low.includes('coherence') || sl_low.includes('critic')) {
+                    // [FEAT-058 / STORY 108.3] Pretty-print entailment audit JSON to Right Console
+                    if (sl_low.includes('coherence') || sl_low.includes('critic') || sl_low.includes('audit')) {
                         try {
                             const critic = JSON.parse(data.brain);
                             if (critic.retort) {
                                 const scoreStars = '★'.repeat(Math.min(critic.score || 0, 5)) + '☆'.repeat(5 - Math.min(critic.score || 0, 5));
                                 const formatted = scoreStars + ' ' + critic.retort;
-                                appendMsg(formatted, 'system-msg', 'Coherence Critic', data.channel || 'chat', false, { msg_id: data.msg_id });
+                                appendMsg(formatted, 'system-msg', 'Entailment Audit', 'insight', false, { msg_id: data.msg_id, console: 'Right' });
                                 return;
                             }
                         } catch(e) { /* not JSON, fall through */ }
@@ -956,7 +973,7 @@ async function connect() {
                             </div>
                         </details>
                     `;
-                    appendMsg(cardHtml, 'system-msg', 'System');
+                    appendMsg(cardHtml, 'system-msg', 'System', 'insight');
                 }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
@@ -1026,6 +1043,15 @@ async function connect() {
                             }
                         }
                         targetConsole.scrollTop = targetConsole.scrollHeight;
+                    } else if (data.token) {
+                        // [Story 107.17] Zero-Streaming Paragraph Pop:
+                        // When zero token chunks are streamed, the finalized thought arrives directly on final: true.
+                        appendMsg(data.token, 'brain-msg', source, channel, false, {
+                            interest: data.interest,
+                            msg_id: data.request_id,
+                            hub_pid: data.hub_pid || window._lastHubPid,
+                            console: data.console
+                        });
                     }
                 }
             } else if (data.brain) {
@@ -1040,6 +1066,7 @@ async function connect() {
                     msg_id: data.msg_id, // [FIX] Task 2.4: Bridge the ID
                     hub_pid: data.hub_pid, // [FIX] Task 2.5: Bridge the PID
                     oracle_category: data.oracle_category,
+                    console: data.console,
                     sources: data.sources,
                     is_internal: data.is_internal,
                     topic: data.topic,
