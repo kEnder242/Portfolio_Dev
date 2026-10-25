@@ -483,8 +483,8 @@ Per `BKM-077 §2` (Sprint Crystallization), the in-conversation alignment findin
 
 | Anchor Tag | Lifecycle State | Topic & Architectural Alignment | Mapped Story / Target | Feature Tag |
 | :--- | :---: | :--- | :--- | :--- |
-| **`ANCHOR-01`** | `STAGED` | Taxonomy harmonization: rename domain `lab_history` $\to$ **`work_history`** per `FEAT-440`. | Story 108.10 | `[FEAT-440]` |
-| **`ANCHOR-02`** | `STAGED` | Formalize first-class **`UNCLEAR` vibe** with low interest ($0.20$) for natural quiescence. | Story 108.10 | `[FEAT-673]` |
+| **`ANCHOR-01`** | `CERTIFIED` | Taxonomy harmonization: rename domain `lab_history` $\to$ **`work_history`** per `FEAT-440`. | Story 108.10 | `[FEAT-440]` |
+| **`ANCHOR-02`** | `CERTIFIED` | Formalize first-class **`UNCLEAR` vibe** with low interest ($0.20$) for natural quiescence. | Story 108.10 | `[FEAT-673]` |
 | **`ANCHOR-03`** | `STAGED` | Add **`is_continuation: bool`** to Triage schema using formal linguistic cues (anaphora, deixis, ellipsis, correction). | Story 108.11 | `[FEAT-676]` |
 | **`ANCHOR-04`** | `STAGED` | Implement **Inclusive OR Continuation Hinting** (`anaphora OR single_pivot_momentum`). | Story 108.11 | `[FEAT-676]` / `[BKM-091]` |
 | **`ANCHOR-05`** | `STAGED` | **Universal Prior Context Chunking**: Inject `[CHUNK-PREV]` into `resolve_hyde_vector()` and Brain Gatekeeper. | Story 108.11 | `[FEAT-676]` / `[FEAT-437]` |
@@ -517,7 +517,8 @@ Per `BKM-077 §2` (Sprint Crystallization), the in-conversation alignment findin
 ### Phase 2.5: Conversational Continuity, Work History & JIT Grounding (`BKM-077` / `BKM-091`)
 
 #### Story 108.10: Work History Taxonomy Harmonization & `UNCLEAR` Quiescence Vibe Rule
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETE
+* **Verification Log:** Applied surgical patches across `config/triage_policy.json`, `src/logic/cognitive_hub.py`, `src/logic/triage_engine.py`, `src/tests/test_triage_engine.py`, and `src/tests/test_triage_policy_loader.py`. Renamed `lab_history` domain to `work_history` per `FEAT-440`. Formalized `UNCLEAR` vibe entry (`importance: 0.20`, `importance_floor: 0.15`, playful foil prompt). All 144 unit and loader tests passing in 0.51s (144 passed, 12 skipped). Stored in `HomeLabAI` commit `8cf100f`.
 * **DNA / Feature Tag:** `[FEAT-440]` / `[FEAT-673]` / `[BKM-085]` / `[BKM-089]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
 * **Context & Objective (The Why):**
