@@ -339,11 +339,18 @@
 <li><strong>The Vibe-First Mandate</strong>: Every <code>CognitiveHub</code> dispatch or intent-routing check must perform a semantic "Vibe Check" (Vector or LLM classifier) before selecting tools, adapters, or cognitive loadouts.</li>
 <li><strong>DNA-First Verification</strong>: A feature is only certified <code>[COMPLETE]</code> if its implementation matches the "Mechanism" described in <code>FeatureTracker.md</code>. If the mechanism specifies "Sentinel Pass" and the code uses "List-Matching," the status is <code>[PARTIAL/STALE]</code>.</li>
 <li><strong>The Symbolic Complement vs. Cognitive Substitution Boundary</strong>:<ul>
-<li><strong>Permitted (Symbolic Complement)</strong>: Regex and deterministic string operations are fully permitted to enforce physical boundaries, exact text anchoring, and mechanical retrieval. Examples: surgical patch anchoring in <code>safe_patch</code>, file path resolution in <code>locate_path</code>, badge ID token normalization in <code>get_protocol</code> (<code>BKM-\d+</code>), and deterministic syntax linting (<code>ruff</code>/<code>bash -n</code>).</li>
+<li><strong>Permitted (Symbolic Complement)</strong>: Regex and deterministic string operations are fully permitted to enforce physical boundaries, exact text anchoring, mechanical retrieval, and structural data validation. Examples: surgical patch anchoring in <code>safe_patch</code>, file path resolution in <code>locate_path</code>, badge ID token normalization in <code>get_protocol</code> (<code>BKM-\d+</code>), Markdown/HTML tag sanitization (e.g. stripping <code>&lt;thought&gt;</code> tags in <code>clean_synthesis</code>), query parameter hash replacement in <code>build_site.py</code>, and deterministic syntax linting (<code>ruff</code>/<code>bash -n</code>).</li>
 <li><strong>Prohibited (Cognitive Substitution)</strong>: Regex or hardcoded string heuristics must NEVER replace LLM cognitive synthesis, diagnostic reasoning, traceback comprehension, or intent classification. Exposing a regex pattern as an intelligent tool (e.g. <code>failure_whisperer</code> matching <code>E\s+(.*)</code> to simulate diagnostic insight) violates this protocol by creating the illusion of an external oracle while wasting inference turns and context.</li>
 </ul>
 </li>
 <li><strong>Physical Retrieval Exception</strong>: Hardcoded regex (e.g. 4-digit year extraction for <code>YYYY.json</code> file loading) is permitted strictly for physical disk retrieval <em>after</em> semantic intent has been established. It must never be used to gate intent or replace semantic classification.</li>
+<li><strong>Human-Approved Regex Exemption Tag (<code># [BKM-015:APPROVED_REGEX]</code>)</strong>:<ul>
+<li>When an intentional regex pattern is validated by human operator review to enforce high-speed mechanical boundaries, tag the declaration directly with:
+    <code>python
+    # [BKM-015:APPROVED_REGEX] &lt;Operator rationale explaining mechanical boundary enforcement&gt;</code></li>
+<li><strong>Automated Audit Invariant</strong>: Automated code linters, refactoring agents, and static analyzers MUST respect this tag and NEVER strip, flag, or alter human-approved regex blocks marked with <code>[BKM-015:APPROVED_REGEX]</code>.</li>
+</ul>
+</li>
 </ol>
                             </div>
                         </td>
@@ -552,6 +559,7 @@
 <li><strong>Anchor 2 (Verification Command)</strong>: Verbatim CLI/pytest command and exact return/exit criteria.</li>
 <li><strong>Anchor 3 (Verbatim Code Anchors &amp; Injection Specs)</strong>: <strong>MANDATORY EXECUTABLE CODE SNIPPETS</strong>. Must contain the exact before/after code blocks, function signatures, class stubs, and complete companion pytest test fixtures. Descriptive summaries or omitting Anchor 3 code blocks is strictly forbidden.</li>
 <li><strong>Anchor 4 (Silicon Invariants &amp; DNA Links)</strong>: Memory caps, latency budgets, and BKM/FEAT anchors.</li>
+<li><strong>BKM-015 Compliance Check</strong>: Explicit assertion that proposed mechanisms avoid brittle ghost-keywords, regex pseudo-oracles, or static string matching, referencing semantic vectors or tagged <code># [BKM-015:APPROVED_REGEX]</code> mechanical boundaries.</li>
 </ul>
 </li>
 <li><strong>Pointers</strong>: Conductor-level plans (<code>conductor/tracks/&lt;track_id&gt;/plan.md</code>) must contain explicit pointers to the Master Sprint Plan and any relevant forensic audits or BKMs.</li>
@@ -2010,6 +2018,7 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 - [ ] <strong>2. Mistakes-Avoided Ledger</strong>: Enumerate $\ge$ 3 concrete historical mistakes avoided (<code>BKM-082 §2.4</code>).
 - [ ] <strong>3. Oracle Review</strong>: Adversarial audit completed and appended (<code>BKM-007</code> / <code>BKM-080</code>).
 - [ ] <strong>4. Delegation Justification</strong>: Evaluated <code>LOCAL</code>/<code>CLOUD</code> first; documented rationale for any story assigned to <code>AGY:PRIMARY</code> (<code>Invariant 7</code> / <code>BKM-049</code>).
+- [ ] <strong>5. Risk Assessment</strong>: Evaluated <code>LOCAL</code> tasks for promotion to <code>CLOUD</code> based on blast radius, file scale, or refactoring complexity.
 <em>An agent MUST NOT mark these <code>[x]</code> without citing the corresponding section in the plan. Any unchecked box halts execution.</em></p>
 </blockquote>
 <h3>1. The Core Law: Grounding Before Action</h3>
@@ -2269,6 +2278,6 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
         </section>
     </main>
 
-    <script src="mission-control.js?v=9f1019d4"></script>
+    <script src="mission-control.js?v=8fef985d"></script>
 </body>
 </html>

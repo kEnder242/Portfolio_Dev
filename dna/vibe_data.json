@@ -330,5 +330,59 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "VIBE-018",
+    "theme": "Parallel Thought Dynamics & Forked KV Cognition",
+    "paper_order": 18,
+    "origin": {
+      "author": "jallred",
+      "text": "Parallel thinking, KV-cache forking, and what thinking actually is. Beyond linear token streams, human cognition runs simultaneous speculative hypotheses. We explore parallel thought execution—forking shared KV-caches into multi-track deliberation before collation, transcending linear Chain-of-Thought tunnel vision.",
+      "source": "Sprint 108 Epistemic Deliberation & Frontier Research Synthesis",
+      "immutable": true,
+      "created_at": "2026-10-21T19:15:00Z"
+    },
+    "synthesis": {
+      "title": "Parallel Thinking, KV-Cache Forking, and What Thinking Actually Is",
+      "narrative_context": "Linear autoregressive token generation (`<think>...</think>`) is only the first, primitive stage of artificial reasoning, prone to single-track tunnel vision. True cognition is multi-track. By leveraging GPU batch-tensor parallelism and Zero-Copy prefix KV-cache branching (RadixAttention / PagedAttention), an intelligence engine forks multiple divergent reasoning hypotheses in parallel from a common stem, exploring orthogonal analytical dimensions before collating consensus into a final stance.",
+      "lab_anchors": [
+        "FEAT-672",
+        "BKM-088",
+        "RESEARCH_SYNTHESIS.md"
+      ],
+      "review_notes": "Formalizes VIBE-018: multi-track parallel thinking and KV-cache forking over linear token tunnel vision.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": [
+        {
+          "version": 1,
+          "lens": "Original Verbatim",
+          "text": "Parallel thinking, KV-cache forking, and what thinking actually is. Beyond linear token streams, human cognition runs simultaneous speculative hypotheses. We explore parallel thought execution—forking shared KV-caches into multi-track deliberation before collation, transcending linear Chain-of-Thought tunnel vision.",
+          "certified_at": "2026-10-21T19:15:00Z"
+        }
+      ]
+    },
+    "metadata": {
+      "tags": [
+        "vibe",
+        "parallel-thinking",
+        "kv-cache-forking",
+        "multi-track-reasoning",
+        "test-time-compute",
+        "cognitive-hydraulics"
+      ],
+      "explicit_links": [
+        "FEAT-672",
+        "BKM-088",
+        "INS-049"
+      ],
+      "aliases": [
+        "parallel-thinking",
+        "kv-cache-forking"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]

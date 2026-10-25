@@ -281,13 +281,219 @@ Phase 2 builds directly upon Sprint 107.0's epistemic staging stability to resol
   - **Anchor 3**: Live query probe: `curl` query verifying live VRAM returns actual hardware value.
   - **Anchor 4**: Commit and update documentation.
 
+#### 📊 Story 107.16: Triage vs. Pinky Actual LLM Stopwatch Decoupling (Item 0)
+* **Objective**: Distinctly measure Pinky's actual local LLM generation duration ($\sim 3\text{s}$) rather than conflating it with the $0.03\text{s}$ event-loop reflex or aliasing it to triage elapsed time in `blackboard_ledger.py`, while strictly preserving the `"Initiating..."` handshake prints.
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `HomeLabAI/src/infra/blackboard_ledger.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: Strictly preserve all `"Initiating {source_name} intuition..."` broadcast prints across `_process_node_stream()`, maintaining unbroken handshake telemetry.
+  - **Anchor 2**: In `resolve_hyde_vector()` and `step_pinky_voice()`, wrap physical generation with a dedicated high-resolution stopwatch (`time.perf_counter()`), recording the genuine LLM token inference duration ($t_{\text{pinky\_llm}}$).
+  - **Anchor 3**: In `cognitive_hub.py#L1808-L1815`, record distinct elapsed times in `blackboard_ledger.py` ($t_{\text{triage}} \ne t_{\text{pinky}}$) so the ledger reflects true physical silicon reality.
+  - **Anchor 4**: Unit tests in `test_two_mice_handover.py` and `test_fast_triage_harness.py` asserting non-identical, positive delta timings.
+
+#### 📊 Story 107.17: Zero-Streaming UI Restoration, Paragraph Pop Primacy & Persona Theming (Item 1)
+* **Objective**: Re-affirm the Sprint 32 "Clinical Paragraph Pop" mandate and eliminate the Sprint 103 streaming regression. Simple implementation: completely silence `thought_stream` WebSocket chatter to the intercom, letting `router.py:waterfall_drainer` be the single authority delivering complete, popped thoughts with canonical headers, colors, and physical truth.
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `HomeLabAI/src/v5/foyer/router.py`
+  - `Portfolio_Dev/field_notes/intercom_v2.js`
+  - `Portfolio_Dev/field_notes/intercom.html`
+* **4-Anchor Specification**:
+  - **Anchor 1 (Zero Streaming to Intercom)**: Silence `thought_stream` packet emission to the Web Intercom, ending mid-stream token flicker and dual-stream duplication. Internal pipeline nodes stream for execution speed, but UI delivery relies 100% on the single Waterfall Drainer Pop.
+  - **Anchor 2 (Single Waterfall Pop Authority)**: In `router.py` (`_waterfall_consumer`), broadcast exactly one finalized `type: "chat"` frame upon `final: True`, mapping sources to user-preferred display names (`[Pinky (Voice)]` and `[Brain (Archive)]`) and logging sovereign telemetry (`[FEAT-498]`).
+  - **Anchor 3 (Canonical Styling & Physical Truth)**: In `intercom_v2.js` and `intercom.html`, fix CSS token class matching so `[Pinky (Voice)]` maps to `.msg-source.pinky` (cyan `#58a6ff`) and `[Brain (Archive)]` maps to `.msg-source.brain` (red `#f85149`), appending live `[SID: ...] [PID: ...]`.
+  - **Anchor 4 (Anti-Regex Formatting Mandate)**: Preserve intentional newlines and list spacing in `sanitize_spoken_dialogue()`. Inject system prompt guidance (`[FORMATTING]: Use clean markdown with single newlines between bullet items.`) rather than fighting the LLM with regex.
+
+#### 📊 Story 107.18: Additive Waterfall HyDE & Triage First-Class Data Type (Item 2)
+* **Objective**: Refactor pre-RAG HyDE prompt synthesis to use additive waterfall composition instead of branching `if/elif/else` ladders, trusting the structured `triage` dict directly as a first-class data type.
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `Portfolio_Dev/field_notes/intercom_v2.js`
+* **4-Anchor Specification**:
+  - **Anchor 1 (Additive HyDE Waterfall)**: Base HyDE synthesis (`search_terms`, `upvote`, `spoken_take`) always runs. If `triage.get("addressed_to") == "BRAIN"`, additively append the overhearing directive. If `triage.get("domain")` indicates historical/career records, additively append era indexing guidance.
+  - **Anchor 2 (Direct Triage Consumption)**: Excise synthetic boolean wrappers (e.g. `is_historical`). Check `triage["domain"]` and `triage["vibe"]` directly, enabling RAG search across all topics (infra, telemetry, non-gem DNA).
+  - **Anchor 3 (Right Console RAG Drawer)**: In `intercom_v2.js`, route `type: "rag_eval"` frames to `insightConsole` (`channel='insight'`) with full `<details class="rag-eval-card">` interactive `+`/`-` drawer above Brain's evidentiary grounding.
+  - **Anchor 4**: Unit tests in `test_rag_cache.py`, `test_two_mice_handover.py`, and `test_feedback_semantic_triage.py` passing cleanly.
+
+#### 📊 Story 107.19: Brain Gatekeeper Scope & Negative Constraint Filter (Item 3)
+* **Objective**: Invert the Brain-Pinky hierarchy in Stage 1 so Brain acts as a sovereign Gatekeeper and Exclusion Filter on Pinky's output and candidate records, actively pruning negative constraints (e.g., "not IPMI or PECI") without regex tampering.
+* **Target Files**:
+  - `HomeLabAI/src/logic/cognitive_hub.py`
+  - `HomeLabAI/src/tests/test_two_mice_handover.py`
+* **4-Anchor Specification**:
+  - **Anchor 1**: In `build_two_mice_stage_prompt(stage=1)`, inject the canonical `[GATEKEEPER SCOPE & EXCLUSION FILTER]` directive into Brain's instructions.
+  - **Anchor 2**: Explicitly instruct Brain to treat Pinky's stance as an unvetted associative hunch, using Jason's primer as a selective sieve to filter noise and discard candidate chunks touching excluded terms.
+  - **Anchor 3**: Strictly forbid Brain from validating, conversing with, or parroting excluded topics, focusing exclusively on the surviving technical core.
+  - **Anchor 4**: Unit tests in `test_two_mice_handover.py` asserting Brain's prompt embeds the exclusion filter specification.
+
 ---
 
 ### 🏁 Phase 2 Verification Checklist
 
-- [ ] Story 107.11: Live Host Telemetry Tool & Context Injection (`FEAT-557`)
-- [ ] Story 107.12: Hardware Intent Routing in Semantic Triage (`FEAT-557`)
-- [ ] Story 107.13: Multi-Turn Conversation History Sanitizer Circuit Breaker (`FEAT-558`)
-- [ ] Story 107.14: Triage Feedback Domain Snapping (`FEAT-559`)
-- [ ] Story 107.15: Anti-Self-Echo & Live Silicon Gauntlet Validation
+- [x] Story 107.11: Live Host Telemetry Tool & Context Injection (`FEAT-557`)
+- [x] Story 107.12: Hardware Intent Routing in Semantic Triage (`FEAT-557`)
+- [x] Story 107.13: Multi-Turn Conversation History Sanitizer Circuit Breaker (`FEAT-558`)
+- [x] Story 107.14: Triage Feedback Domain Snapping (`FEAT-559`)
+- [x] Story 107.15: Anti-Self-Echo & Live Silicon Gauntlet Validation
+- [x] Story 107.16: Triage vs. Pinky Actual LLM Stopwatch Decoupling (Item 0)
+- [x] Story 107.17: Zero-Streaming UI Restoration, Paragraph Pop Primacy & Persona Theming (Item 1)
+- [x] Story 107.18: Additive Waterfall HyDE & Triage First-Class Data Type (Item 2)
+- [x] Story 107.19: Brain Gatekeeper Scope & Negative Constraint Filter (Item 3)
+
+---
+
+## 📜 Sprint Log: In-Flight Execution Narrative & Epistemic Alignment Ledger (`[BKM-081]`)
+
+### 🛠️ Execution Trace: Sidebar Shortcut Navigation Alignment (Oct 19, 2026)
+
+#### 1. Action Summary
+* **User Directive**: Quick pivot to rename the `https://notes.jason-lab.dev/benchmarks.html` shortcut to **"Model Telemetry"** in the Mission Control sidebar, identify corresponding DNA alignment adjustments, and log the execution narrative into the active sprint plan.
+* **Target Files Modified**:
+  - `Portfolio_Dev/field_notes/mission-control.js` (line 35): Renamed anchor text from `Model Benchmarks` to `Model Telemetry`.
+  - `www_deploy/mission-control.js` (line 35): Synchronized deployed airlock component with canonical source.
+  - `Portfolio_Dev/FeatureTracker.md` (`[FEAT-494]`): Upgraded title to `[FEAT-494] [CONSOLIDATED] benchmarks.html 3-Tab Federated Silicon Workbench (Model Telemetry)` and documented navigation alignment.
+
+#### 2. DNA Consistency & Architectural Rationale
+* **The Epistemic Shift from Synthetic Benchmarks to Continuous Telemetry**:
+  - The historical nomenclature *"Model Benchmarks"* was a legacy artifact from Sprints 35–43 when synthetic nightly probe sweeps (`FEAT-495`) actively burned tokens to measure static throughput.
+  - In Sprint 102 (`Story 102.20`), synthetic sweeps were decoupled and retired (`FEAT-495`) in favor of continuous passive execution telemetry harvested from authentic production multi-seat workloads (`FEAT-496`).
+  - The underlying workbench `benchmarks.html` operates 100% on empirical live telemetry: Tab 1 (`FEAT-525` live deliberation elapsed time / blackboard ledger), Tab 2 (`FEAT-496` real-time task generation throughput waterfall), and Tab 3 (`FEAT-552` authentic sovereign token ledger and realized dollar savings).
+  - Renaming the navigation entry point from **"Model Benchmarks"** to **"Model Telemetry"** accurately describes the surface to human operators and autonomous agents alike, eliminating cognitive drift.
+* **Relevant DNA Cards Identified & Adjusted**:
+  - `[FEAT-494]`: Updated title and logic to designate `Model Telemetry` as the official sidebar entry point for `benchmarks.html`.
+  - `[FEAT-496]` (*Passive Real-Time Swarm Telemetry Stream*): Primary operational anchor for `benchmarks.html`; taxonomy is now 100% congruent.
+  - `[FEAT-495]` (*Dynamic Auto-Discovery Benchmark Engine & Service De-escalation*): Retired card providing the historical rationale for deprecating synthetic "benchmarks" in favor of passive "telemetry".
+  - `[FEAT-557]` (*Live Host Telemetry Node & Real-Time Hardware Grounding*): Sprint 107.0 Phase 2 feature bridging live backend physical host telemetry (`live_telemetry.py`) with frontend telemetry representations.
+
+#### 3. Verification & Silicon Health
+* `pytest Portfolio_Dev/field_notes/tests/`: 24/24 unit tests passed (0.71s).
+* Verified component rendering logic across both `Portfolio_Dev/field_notes/mission-control.js` and `www_deploy/mission-control.js`.
+
+### 🛠️ Execution Trace: Phase 2 Sovereign Deliberation & UI Restoration (Oct 19, 2026)
+
+#### 1. Stories Executed & Certified
+* **Story 107.16: Triage vs. Pinky Actual LLM Stopwatch Decoupling (Item 0)**:
+  - Preserved unbroken `"Initiating..."` handshake telemetry.
+  - Wrapped Pinky's physical LLM generation in `resolve_hyde_vector` with a high-resolution stopwatch (`time.perf_counter()`).
+  - Decoupled `t_pinky_elapsed` from `t_triage_elapsed` ($t_{\text{pinky\_elapsed}} = t_{\text{triage}} + d_{\text{hyde}}$), resolving the identical timestamp bug in `round_table_deltas.json`.
+* **Story 107.17: Zero-Streaming UI Restoration, Paragraph Pop Primacy & Persona Theming (Item 1)**:
+  - Re-affirmed Sprint 32 "Clinical Paragraph Pop" mandate: silenced mid-stream token broadcasting over WebSockets. Internal pipeline nodes stream for execution speed; the UI receives finalized, complete thoughts.
+  - Silenced duplicate monolithic broadcasts in `router.py:_waterfall_consumer` for handover personas, while preserving `log_telemetry_event()` for sovereign accounting (`[FEAT-498]`).
+  - Fixed CSS token matching in `intercom_v2.js` and `intercom.html`: removed `text-transform: uppercase`, mapped base class to `.pinky` (cyan `#58a6ff`) and `.brain` (red `#f85149`), preserving Title Case (`[Pinky (Voice)]` and `[Brain (Archive)]`) alongside physical truth signatures (`[SID: ...] [PID: ...]`).
+  - Excised destructive `re.sub(r"\s+", " ", ...)` whitespace collapsing in `sanitize_spoken_dialogue()`, preserving markdown formatting and intentional newlines.
+* **Story 107.18: Additive Waterfall HyDE & Triage First-Class Data Type (Item 2)**:
+  - Replaced branching `if/elif/else` ladders with additive waterfall prompt composition: Base HyDE synthesis (`search_terms`, `upvote`, `spoken_take`) always runs. If `addressed_to == "BRAIN"`, additively append the overhearing directive; if historical/career, additively append era indexing guidance.
+  - Consumed `triage` directly as a first-class structured dictionary, eliminating lossy `is_historical` boolean wrappers and unlocking multi-corpus RAG.
+  - Routed expandable `rag_eval` drawers directly to `insightConsole` (Right Console) above Brain's evidentiary grounding.
+* **Story 107.19: Brain Gatekeeper Scope & Negative Constraint Filter (Item 3)**:
+  - Inverted the Brain-Pinky hierarchy: injected `[GATEKEEPER SCOPE & EXCLUSION FILTER]` into Brain's Stage 1 prompt in `build_two_mice_stage_prompt`.
+  - Directed Brain to treat Pinky's stance as an unvetted associative hunch, using Jason's primer as a selective sieve to filter noise, reject baited tangents (e.g. "not IPMI or PECI"), and strictly refrain from validating or parroting excluded topics.
+  - Upheld `BKM-015`: Zero regex tampering in pre-retrieval; Brain exercises sovereign gatekeeper authority natively.
+
+#### 2. Physical Silicon Health & Gauntlet Certification
+* **Unit Test Gauntlet**:
+  - `pytest Portfolio_Dev/field_notes/tests/`: 24/24 PASSED (0.71s).
+  - `pytest HomeLabAI/src/tests/test_two_mice_handover.py`: 17/17 PASSED.
+  - `pytest HomeLabAI/src/tests/test_feedback_semantic_triage.py`: 9/9 PASSED.
+  - `pytest HomeLabAI/src/tests/test_censorship_memory_tri_node.py`: 4/4 PASSED.
+  - Total: 54/54 automated tests green.
+* **Daemon Hot-Reload**:
+  - `POST http://127.0.0.1:8765/reload_residents`: `{"status": "success", "message": "Resident nodes hot-reloaded successfully. vLLM VRAM preserved."}`
+* **Public Airlock Deployment**:
+  - Synchronized `intercom_v2.js` and `intercom.html` to `Dev_Lab/www_deploy/`.
+
+---
+
+## 🔬 Phase 3: Empirical Telemetry Grounding & Synthetic Benchmark Regression Audit (`BKM-085` / `FEAT-496` / `FEAT-498`)
+
+### 1. Architectural & Historical Problem Statement
+During a live review of the **Model Telemetry** surface (`benchmarks.html`), the operator observed that **Throughput is always flatlined at exactly 35.0 tok/s**.
+
+A focused historical regression analysis adhering to `BKM-085` traced this anomaly back to **Commit `cbce247` (August 31, 2026 - Sprint 66.5 / FEAT-498)**:
+* When wiring the Intercom sovereign token tap in `HomeLabAI/src/v5/foyer/router.py`, a placeholder estimation was introduced:
+  ```python
+  toks = max(1, int(len(content) / 3.8))
+  duration_seconds = max(1.0, toks / 35.0)  # Synthetic duration forced to 35 tps
+  raw_throughput_tok_s = 35.0               # Hardcoded 35.0 tok/s mock!
+  ```
+* Because `duration_seconds` was derived as `toks / 35.0` and `raw_throughput_tok_s` was hardcoded to `35.0`, `log_telemetry_event()` logged `throughput_tok_s: 35.0` and `workflow_velocity_tok_s: 35.0` on every single Mice turn (Pinky, Brain, Deep Thought, Lab) into `live_usage_stream.jsonl`.
+* Meanwhile, the true physical telemetry engine in `src/nodes/loader.py:880-900` was already measuring ground-truth `token_count`, `duration_s = time.time() - t0`, and `ttft_ms` and posting to `router.py:handle_telemetry_ingest`, but that handler only updated internal DCGM structures without updating `log_telemetry_event()`.
+
+### 2. Stories Executed & Certified
+
+#### 📊 Story 107.20: Empirical Model Throughput Telemetry Grounding (`FEAT-496` / `FEAT-498`) &mdash; [COMPLETED & CERTIFIED]
+* **Implementation Details**:
+  1. In `HomeLabAI/src/v5/foyer/router.py:handle_telemetry_ingest`:
+     - Rewired handler to capture physical generation telemetry emitted by `src/nodes/loader.py`: `total_tokens`, `duration_s`, and `ttft_ms`.
+     - Calculated real observed speed: `raw_tp = round(total_tokens / duration_s, 2)`.
+     - Mapped emitting node name dynamically to physical seat (`Windows 4090RTX`, `Linux 2080ti`, `Apple M5 Air`).
+     - Invoked `log_telemetry_event()` directly with ground-truth parameters.
+  2. In `HomeLabAI/src/v5/foyer/router.py:waterfall_drainer`:
+     - Completely excised lines 4870-4895 containing the synthetic `toks / 35.0` duration and `raw_throughput_tok_s = 35.0` mock tap.
+  3. Added regression verification unit tests in `HomeLabAI/src/tests/test_telemetry_grounding.py` (2/2 PASSED).
+
+#### 📊 Story 107.21: Historical Benchmark Synthetic Data Regression Audit & Scrub (`BKM-085` / `FEAT-494`) &mdash; [COMPLETED & CERTIFIED]
+* **Implementation Details**:
+  1. **Stream Scrub**:
+     - Backed up `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` to `*.bak_spr107_pre_scrub`.
+     - Purged 859 synthetic 35.0 tok/s Intercom entries, preserving all 121 authentic production multi-seat dispatches from `delegate.py`.
+     - Synchronized scrubbed stream to `Dev_Lab/www_deploy/data/live_usage_stream.jsonl`.
+  2. **Cumulative Sovereign Ledger Recalculation**:
+     - Recalculated `Portfolio_Dev/field_notes/data/cumulative_tokens.json` strictly from the 121 authentic dispatches (110,851 tokens, 2.099 kWh consumed).
+     - Reset `web_intercom` counters to 0 until new metered receipts arrive from `handle_telemetry_ingest`.
+     - Synchronized updated ledger to `Dev_Lab/www_deploy/data/cumulative_tokens.json`.
+  3. **Public Airlock Grounding & Zero-Fallback N/A Display**:
+     - Overhauled `Portfolio_Dev/field_notes/public_benchmarks.html`: replaced static hardcoded bars (35.4 tok/s, 75.0 tok/s, 280.0 tok/s) with authentic live measurements (`m5_air` 3.98 tok/s, `z87_2080ti` 23.9 tok/s) and explicit `— (N/A)` / `OFFLINE` indicators for unmeasured/offline tiers (`Windows 4090`, `Cloud Swarm`).
+     - Injected client-side `syncPublicBenchmarks()` script to dynamically bind to `benchmarks_cache.json`.
+     - Synchronized updated `public_benchmarks.html` and `data/benchmarks_cache.json` to `Dev_Lab/www_deploy/`.
+
+#### 📊 Story 107.22: Silicon Gauntlet, Daemon Reload & Airlock Deployment &mdash; [COMPLETED & CERTIFIED]
+* **Unit Test Gauntlet**:
+  - `pytest Portfolio_Dev/field_notes/tests/`: 24/24 PASSED (0.74s).
+  - `pytest HomeLabAI/src/tests/` (two_mice, triage, censorship, telemetry_grounding): 32/32 PASSED (2.62s).
+  - Total: 56/56 automated unit tests green.
+* **Daemon Hot-Reload**:
+  - `POST http://127.0.0.1:8765/reload_residents`: `{"status": "success", "message": "Resident nodes hot-reloaded successfully (commit: 9ee48f1). vLLM VRAM preserved."}`
+* **Public Airlock Deployment**:
+  - Verified synchronized deployment across `Dev_Lab/www_deploy/` (`public_benchmarks.html`, `data/live_usage_stream.jsonl`, `data/cumulative_tokens.json`, `data/benchmarks_cache.json`).
+
+#### 📊 Story 107.23: Pass 2 Scrub, Universal Timeline Canvas Overlay & 2080 Ti Pinky Backfill (`FEAT-494` / `FEAT-496`) &mdash; [COMPLETED & CERTIFIED]
+* **Implementation Details**:
+  1. **Pass 2 Stream Scrub (Synthetic Test Blended Telemetry)**:
+     - Identified 23 mock `"Test Blended Telemetry"` entries (200 tokens, 5.0s, 40.0 tok/s) originating from test loops in Sprint 100.5 (`delegate.py`).
+     - Excised all 23 mock records from `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`.
+  2. **Model Throughput Canvas Universal Timeline Overlay**:
+     - Diagnosed horizontal "chaining" in `field_notes/benchmarks.js`: `allPoints = seatNames.flatMap(s => bySeat[s])` partitioned seats side-by-side (`Cloud -> M5 Air -> Kender`) using array index `idx / (n - 1)`.
+     - Refactored `renderThroughputLiveChart(records)`: unified stream sorted chronologically by epoch `timestamp`, mapping `getX(ts) = padLeft + ((ts - minTime) / timeSpan) * chartW`.
+     - Rendered multi-series curves and scatter points for each seat across the shared universal time domain, adding 5 periodic date/time gridlines (`MM/DD HH:mm`) and seat value badges.
+     - Updated canvas subtitle in `field_notes/benchmarks.html` to reflect universal timeline overlay.
+  3. **Linux 2080 Ti Pinky Deliberation Backfill**:
+     - Harvested 20 authentic physical receipts from `round_table_deltas.json` (Turns 30–51), mapping exact Pinky deliberation token counts (`(X tokens)` in `distillation_bullets`) and stopwatch elapsed durations (`pinky_judgment` in `deltas_elapsed_s`).
+     - Backfilled 20 authentic `Linux 2080ti` records (0.9 to 13.3 tok/s) into `live_usage_stream.jsonl`.
+     - Verified full federated lab representation across all 4 tiers: Windows 4090RTX (50), Cloud Swarm (34), Linux 2080ti (20), Apple M5 Air (14) &mdash; total 118 authentic empirical records.
+  4. **Cumulative Ledger & Deployment Sync**:
+     - Recalculated `cumulative_tokens.json`: 109,429 lifetime tokens (42,661 sovereign local, 66,768 cloud swarm, 2.09959 kWh consumed).
+     - Synchronized `benchmarks.js`, `benchmarks.html`, `live_usage_stream.jsonl`, and `cumulative_tokens.json` to `Dev_Lab/www_deploy/`.
+
+#### 📊 Story 107.24: Metric 1 Decoupling, Macro Task N/A Display & Telemetry Engine Hardening &mdash; [COMPLETED & CERTIFIED]
+* **Implementation Details**:
+  1. **Telemetry Grounding (Metric 1 Standard)**:
+     - In `HomeLabAI/src/infra/cumulative_telemetry.py:log_telemetry_event`: decoupled hardware generation throughput (`throughput_tok_s`) from macro task workflow velocity (`workflow_velocity_tok_s`).
+     - Hardened the logging engine so that if `raw_throughput_tok_s` is not explicitly provided by a pure generation stopwatch, `throughput_tok_s` is stored as `null` (`N/A`) rather than falling back to dividing tokens by total multi-minute agent wall-clock time.
+  2. **Historical Stream Retrospective Cleanse**:
+     - Evaluated all 118 records in `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`.
+     - Preserved true physical decode benchmarks: 20 Pinky 2080 Ti deliberation rounds (0.9–13.3 tok/s), bulk 8K 4090 runs (13.6–14.1 tok/s), and verified LLM runs on M5 Air (15.8 tok/s) and Cloud (7.7–39.0 tok/s).
+     - Converted 83 macro agent coding stories (where duration measured test runs and tool execution loops) to `throughput_tok_s: null`, honestly reporting `— (N/A)` in the live stream table.
+  3. **Canvas & Table UI Grounding**:
+     - In `Portfolio_Dev/field_notes/benchmarks.js`: updated `loadLiveUsageStream()` to render `<span style="color:#8b949e;">— (N/A)</span>` for records lacking physical generation stopwatches, preventing false ~0.15 tok/s flatlines from pulling down silicon velocity lines.
+     - Updated `renderThroughputLiveChart()` to plot only authentic non-null Metric 1 points on the canvas.
+  4. **Future Telemetry Pipeline Hardening**:
+     - In `HomeLabAI/src/tests/delegate.py`: updated `record_swarm_telemetry` to extract true generation timing (`info.timing.eval_duration`) from upstream providers if present, passing `None` when only macro session wall time is known.
+     - Bumped cache buster in `field_notes/benchmarks.html` to `?v=spr107_metric1_na` and synchronized all assets to `Dev_Lab/www_deploy/`.
+     - Hot-reloaded resident daemons via `POST http://127.0.0.1:8765/reload_residents`.
+
+
+
+
 
