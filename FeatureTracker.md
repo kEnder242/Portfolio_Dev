@@ -2789,15 +2789,15 @@
 **Rationale:** Eliminates brittle, multi-file reconfigurations when updating resident models on Apple Silicon or KENDER.
 **Mechanism:** `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/tests/delegate.py`.
 
-## [FEAT-494] [CONSOLIDATED] benchmarks.html 3-Tab Federated Silicon Workbench
-**Sprint:** SPR-66.0 / SPR-102.0
-**Status:** CONSOLIDATED (Hypothetical ROI calculator DEFEATURED; superseded by [FEAT-525] and [FEAT-552] Empirical Telemetry)
-**Logic:** Upgrades `benchmarks.html` from a single-node snapshot into a streamlined 3-tab workbench grounded entirely in authenticated physical data stores:
+## [FEAT-494] [CONSOLIDATED] benchmarks.html 3-Tab Federated Silicon Workbench (Model Telemetry)
+**Sprint:** SPR-66.0 / SPR-102.0 / SPR-107.0
+**Status:** CONSOLIDATED (Hypothetical ROI calculator DEFEATURED; superseded by [FEAT-525] and [FEAT-552] Empirical Telemetry; Sidebar navigation aligned to 'Model Telemetry' in SPR-107.0)
+**Logic:** Upgrades `benchmarks.html` from a single-node snapshot into a streamlined 3-tab workbench grounded entirely in authenticated physical data stores. In Sprint 107.0, sidebar navigation on `notes.jason-lab.dev` was formally renamed from "Model Benchmarks" to **"Model Telemetry"** to reflect the retirement of synthetic benchmark sweeps (`FEAT-495`) in favor of continuous passive execution telemetry (`FEAT-496`, `FEAT-525`).
 - **Tab 1 (Live Round Table Elapsed Time):** Physical deliberation checkpoints backed by `Portfolio_Dev/field_notes/data/round_table_deltas.json` (`[FEAT-525]`).
 - **Tab 2 (Model Throughput):** Real-time generation throughput and workload events backed by `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl` (`[FEAT-496]`).
 - **Tab 3 (Sprint Delegation Gains):** Swarm delegation volume and financial sovereign savings backed by `Portfolio_Dev/field_notes/data/delegation_runs.json` and `HomeLabAI/data/delegation_ledger.jsonl` (`[FEAT-552]`).
 **Rationale:** Eliminates misleading hypothetical estimations in favor of authenticated empirical telemetry from live homelab workloads.
-**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`, `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`, `Portfolio_Dev/field_notes/data/delegation_runs.json`.
+**Mechanism:** `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/mission-control.js`, `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`, `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`, `Portfolio_Dev/field_notes/data/delegation_runs.json`.
 
 ## [FEAT-495] Dynamic Auto-Discovery Benchmark Engine & Service De-escalation
 **Sprint:** SPR-66.0 / SPR-102.0
@@ -3899,6 +3899,47 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Code:** `Portfolio_Dev/dna_forge/`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/papers/jitc_intuition/`, `HomeLabAI/src/projection/ast_reconciliation.py`
 **Logic:** Complete retirement of archaic "Bone Collection" terminology across the entire Federated Lab ecosystem. In DNA Forge and Applied Writer, introduces `+ Stage` (`.btn-card-stage`) and the `📑 ACTIVE KABAL STAGING` floating shelf (`#btnStageToWriter`), persisting staged cards across sessions (`dna_active_staging_shelf`) with seamless forward handoff to Applied Writer via URL parameter (`writer.html?staged=ID1,ID2`). Migrates legacy standalone bone files (`notes_jitc_bones.json`, `paper_jitc_intuition.json`) into canonical atomic bundles in `Portfolio_Dev/papers/jitc_intuition/` (`jitc_intuition_kabal.json` and `jitc_intuition_spine.json`), verified via deterministic replay. Archives legacy `field_notes/data/bones/`, deprecates `bone_collections.json`, and re-anchors `HomeLabAI/src/projection/bones.py` to `ast_reconciliation.py` with 100% backward-compatible alias deprecation wrappers.
 **Rationale:** Eliminates morbid and ambiguous "bones" terminology that caused developer and UI confusion, aligning all document-staging workflows cleanly around the canonical Kabal and Spine epistemic model established in Sprint 106.0.
+
+## [FEAT-672] Multi-Track Cognitive Deliberation & Forked KV-Cache Parallelism (Backlog)
+**Sprint:** Backlog (Research / Post-108)
+**Status:** PROPOSED
+**Tags:** `#parallel_thinking`, `#kv_cache_forking`, `#multi_track_reasoning`, `#speculative_deliberation`, `[VIBE-018]`, `[BKM-088]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/vibe_data.json`
+**Logic:** Transcends linear single-track autoregressive token generation (`<think>...</think>`) by implementing parallel branched deliberation. In collaboration with inference engines supporting zero-copy prefix sharing (RadixAttention / PagedAttention), forks candidate reasoning trajectories from a common stem KV-cache (e.g. branch A: register bounds; branch B: architectural scars; branch C: memory/thermal safety) and executes them concurrently across tensor batch dimensions before collating consensus into a final stance.
+**Rationale:** Eliminates the cognitive "tunnel vision" trap of linear Chain-of-Thought, where an early reasoning flaw corrupts all downstream tokens. Mirrors genuine human parallel subconscious deliberation.
+
+## [FEAT-673] Declarative Triage Policy, WYWO Grounding & Decoupled Vibe/Domain Schema
+**Sprint:** Sprint 108.0 (Phase 2)
+**Status:** ACTIVE
+**Tags:** `#declarative_triage`, `#wywo_grounding`, `#contextual_prompts`, `#decoupled_schema`, `[BKM-085]`, `[BKM-089]`, `[BKM-015]`
+**Code:** `HomeLabAI/config/triage_policy.json`, `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/triage_policy_loader.py`
+**Logic:** Establishes decoupled declarative policy schema in `config/triage_policy.json` separating behavioral stance (12 vibe archetypes with frugal in-character contextual-prompts and out-of-band Prompt MOs) from retrieval routing (domains, traversal modes, allowed collections). Reconnects deterministic `_WYWO_RE` fast-path pre-filter in `triage_engine.py` and grounds `_build_triage_mode_context()` with explicit standup briefing rules.
+**Rationale:** Eliminates hardcoded keyword drift, fixes orphaned `WYWO` standup routing, and adheres strictly to BKM-089 (Prompts explain HOW, Prompt MO explains WHY).
+
+## [FEAT-674] Universal [CHUNK-N] Serialization & Situational Pre-RAG Disk Hooking
+**Sprint:** Sprint 108.0 (Phase 2)
+**Status:** ACTIVE
+**Tags:** `#universal_chunking`, `#situational_payloads`, `#evidential_moat`, `[FEAT-666]`, `[BKM-085]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/tests/test_brain_keyed_filter.py`
+**Logic:** Implements pure `format_situational_payload_as_chunks(domain, payload)` serializing heterogeneous pre-RAG disk files (5 dream files for `WYWO`, 2 ledger files for `META`, NVML vitals for `OPERATIONAL`) into uniform indexed `[CHUNK-N]` blocks with `Source:` headers. Collapses empty payloads into `[ZERO_CONTEXT]`.
+**Rationale:** Ensures Brain's Stage 1 Evidential Moat filters all situational and historical evidence uniformly via mechanical KEEP/DROP parsing without format exceptions.
+
+## [FEAT-675] Waterfall Parameter Wiring, Composable Line-Jumping & Pinky 10% Voice Delivery
+**Sprint:** Sprint 108.0 (Phase 2)
+**Status:** ACTIVE
+**Tags:** `#waterfall_wiring`, `#contextual_prompts`, `#token_budget_clamp`, `[BKM-087]`, `[BKM-089]`, `[FEAT-658]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`
+**Logic:** Wires `vibe` and `topic_directive` through `_run_two_mice_handover()` and `step_pinky_voice()`, appending situational contextual-prompts into `build_two_mice_stage_prompt(stage=2)`. Enforces a dynamic Python token budget for Pinky clamped to 10% of Deep Thought's synthesis length (`max(60, min(150, int(dt_tokens * 0.10)))`) with single-turn conversational boundary enforcement.
+**Rationale:** Restores missing behavioral guidance stranded by lead-node abolition and prevents conversational overrun while maintaining sub-1200ms latency.
+
+## [FEAT-676] Conversational Continuation Hinting & Universal Prior Context Hooking
+**Sprint:** Sprint 108.0 (Phase 2.5)
+**Status:** PLANNED
+**Tags:** `#continuation_hinting`, `#anaphora_detection`, `#prior_context_chunks`, `#single_pivot_invariant`, `[FEAT-356]`, `[FEAT-437]`, `[BKM-091]`
+**Code:** `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Eliminates single-turn amnesia by inferring `is_continuation: bool` from current turn prose (detecting anaphora, deixis, ellipsis, or correction) combined via inclusive OR with the single-pivot momentum invariant. Injects Turn $N-1$ from `round_table_memory` as `[CHUNK-PREV]` into Pinky's Tier 1 reflection (`resolve_hyde_vector`) for grounded search terms and into Brain's Stage 1 Evidential Moat for line-by-line relevance filtering.
+**Rationale:** Solves coreference ambiguity ("check the thing") without bloating Triage with conversational memory, allowing Pinky to deliver authentic opening quips and grounded RAG search terms.
+
 
 
 
