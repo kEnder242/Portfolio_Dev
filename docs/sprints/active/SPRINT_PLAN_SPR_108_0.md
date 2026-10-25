@@ -567,9 +567,108 @@ Per `BKM-077 §2` (Sprint Crystallization), the in-conversation alignment findin
 
 ---
 
+### Phase 2.6: Knowledge Funnel Rebalancing, Epistemic Stamping & WYWO Alignment (`BKM-077` / `BKM-086`)
+
+#### Narrative & Grounding Context:
+The historical note life cycle follows a hybrid funnel-conveyor:
+1. **Ingestion (Conveyor Belt)**: Raw unstructured notes (`raw_notes/*.doc`, `*.pdf`, `*.txt`) ingested into monthly JSON tables.
+2. **Refinement (Convergence Funnel)**: `refine_gem.py` (`[LOOP-004]`) rotates multi-pass connections, extracts domains, establishes `event_era`, deduplicates, and elevates gems from Level 0/1 to Level 2/3.
+3. **Dreaming (Apex Synthesis)**: `dream_cycle.py` (`[FEAT-067]`) consolidates chaotic turns or refines high-impact gems into high-density Diamond Wisdom committed to ChromaDB (`behavioral_dna`) and `latest_synthesis_gems.json`.
+
+**The Three Systemic Imbalances Detected (October 25 Audit):**
+1. *Upstream Ingestion Starvation*: Over 15MB of raw performance reviews, war stories, and BMC documentation sit uningested in `raw_notes/` because Step 7 tail mop-up gets terminated at 05:00 AM.
+2. *Epistemic Stamping Deficit (Sprint 106 Regression)*: 497 out of 503 gems (98.8%) in `field_notes/data/20*.json` have `impact_level: unassigned`. While `refine_gem.py` has the classification logic (`classify_impact_level`), it only processes 5 gems when manually called and lacks an automated nightly multi-epoch driver.
+3. *Nightly Dreaming Misalignment*: `dream_cycle.py` was filtering candidates with `rank < 4`. Because 394 of 503 gems are marked legacy `rank >= 4`, dreaming repeatedly hit saturation or recycled low-rank exhaust instead of synthesizing gems by objective **Impact Level** ($\ge 3$).
+
+#### Phase 2.6 Pre-Flight & AFK Operational Checklist (`BKM-085` & `BKM-086 §1.1`)
+- [x] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
+  - [x] **BKM-085 Phase 1 (Intent)**: Excavate Sprint 46 (`FEAT-428` Cooldown), Sprint 52 (`Task 53.19` Nightly Task Ordering), and Sprint 106 (`[LOOP-004]` Two-Dimensional Gem Epistemics).
+  - [x] **BKM-085 Phase 2 (Git Archaeology)**: Inspect `HomeLabAI/src/dream_cycle.py`, `Portfolio_Dev/field_notes/refine_gem.py`, and `HomeLabAI/src/infra/nightly_forge.py`.
+  - [x] **BKM-085 Phase 3 (DNA Alignment)**: Re-grounding against `FEAT-067`, `FEAT-101`, `FEAT-127`, `FEAT-428`, `LOOP-004`.
+  - [x] **BKM-061 / BKM-082 Gate 3 (Oracle Pass 1 - Architectural Invariants)**: Adversarial review confirmed 5-epoch batches ($N=25$) run in $<15\text{s}$ CPU-bound with zero VRAM hazard. In-memory persist bug fixed.
+  - [x] **BKM-061 / BKM-082 Gate 3 (Oracle Pass 2 - Blast Radius & Side Effects)**: Systemd `LimitNOFILE=65535` drop-in configured for `lab-attendant.service` and `chroma-server.service`. Candidate fallback guard prevents pipeline stalls.
+- [x] **Pillar 2: 4-Anchor Plan & Anti-Drift**
+  - [x] Every story in Phase 2.6 specifies Anchor 1 (Files/Lines), Anchor 2 (Verification Command), Anchor 3 (Verbatim Specs), Anchor 4 (Silicon Invariants & DNA Links).
+  - [x] Explicit `BKM-015 Compliance Check` with zero semantic regex tone asserting.
+- [x] **Pillar 3: Structured Ownership & Assignment (`BKM-049`)**
+  - [x] Assigned Stories 108.12A, 108.12B, 108.12C to `[AGY:PRIMARY]` per human operator directive.
+- [x] **Pillar 4: Adversarial Audit & Silicon Certification (`BKM-024` / `BKM-090`)**
+  - [x] Live 8/8 checks passing in `daily_accountability_digest.json`: Foyer OPERATIONAL/ONLINE, Round Table Probe score 0.95 (1.09ms latency), Subconscious Dreaming fresh (0.2h), Swap 50.4%.
+
+---
+
+#### Story 108.12A: Automated Epistemic Batch Sweeper & Impact Stamping Driver (`[LOOP-004]` / `[FEAT-127]`)
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[LOOP-004]` / `[FEAT-127]` / `[FEAT-428]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):**
+  Eliminate the 497-gem `impact_level: unassigned` deficit across historical tables. Implement an automated multi-epoch driver in `refine_gem.py` that processes 25 gems per nightly sweep (5 epochs of 5 gems), stamps `event_era` and `impact_level` (1=Local, 2=Subsystem, 3=Platform, 4=Focal), and integrates cleanly into `nightly_forge.py` Step 5/7 without VRAM contention.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`Portfolio_Dev/field_notes/refine_gem.py#L525-L620`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py#L525-L620) (`populate_queue_from_archive`, `run_rotation_epoch`)
+  - [`HomeLabAI/src/infra/nightly_forge.py#L785-L835`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py#L785-L835) (`run_epistemic_refinement`)
+* **Implementation Contract (The What):**
+  1. In `refine_gem.py`, add CLI support for `--epochs N` (default: 5) and `--batch-size N` (default: 5).
+  2. Ensure `populate_queue_from_archive()` prioritizes unclassified gems (`impact_level: unassigned` or missing `event_era`) and writes updates back to disk.
+  3. Integrate `run_epistemic_refinement(epochs=5)` into `nightly_forge.py` as Step 5d with polite 5s inter-epoch settling.
+* **Verification & Test Command (The How):**
+  ```bash
+  /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py --epochs 1 --batch-size 5
+  ```
+* **Verification Log:** Executed 1-epoch rotation pass (`status: PASS`, `processed_gems: 5`, `active_queue_remaining: 50`). Ran full-archive disk stamping: 390 gems stamped across all historical tables (2005–2025). High-impact inventory elevated to 177 gems (Impact 4: 69, Impact 3: 108). Integrated as Step 5d in `nightly_forge.py`.
+* **Anchor 4 (Silicon Invariants & DNA Links):** Single epoch $< 15\text{s}$. Zero unclosed file handles.
+* **BKM-015 Compliance Check:** Pure topological and schema evaluation; zero hardcoded string matching.
+
+---
+
+#### Story 108.12B: Nightly Dream Pacing & Impact-Weighted Synthesis Selector (`[FEAT-067]` / `[FEAT-127.1]`)
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[FEAT-067]` / `[FEAT-127.1]` / `[BKM-062]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):**
+  Align Subconscious Dreaming with Two-Dimensional Epistemics. Replace the monolithic `rank < 4` filter in `dream_cycle.py` with an **Impact-Weighted Candidate Selector** that prioritizes `impact_level >= 3` gems for synthesis into high-density Diamond Wisdom. Configure `nightly_forge.py` to invoke `dream_cycle.py --count 5 --delay 5.0` to balance throughput against vector store stability.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/dream_cycle.py#L240-L270`](file:///home/jallred/Dev_Lab/HomeLabAI/src/dream_cycle.py#L240-L270) (`run_refinement_dream` candidate filtering)
+  - [`HomeLabAI/src/infra/nightly_forge.py#L657-L690`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py#L657-L690) (`run_dream_cycle` execution args)
+* **Implementation Contract (The What):**
+  1. In `dream_cycle.py`, update candidate search to select gems where `impact_level >= 3` and `refinement_level < 3` (or legacy `rank < 4`), falling back to any unrefined gem if saturated.
+  2. Update `nightly_forge.py` `run_dream_cycle()` to execute `[py_bin, dream_script, "--count", "5", "--delay", "5.0"]`.
+  3. Ensure structured telemetry parsing accepts `cycles_completed: 5` and passes accountability check.
+* **Verification & Test Command (The How):**
+  ```bash
+  /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python /home/jallred/Dev_Lab/HomeLabAI/src/dream_cycle.py --count 2 --delay 2.0
+  ```
+* **Verification Log:** Verified with count=2, delay=2.0s. Refined BMC/PECI platform gem from `2019_2024.json` and PECI/EGS DRAM ECS gem from `2022_09.json`. Both dispatched to Foyer and stored into `latest_synthesis_gems.json`. Duration: 12.45s, `cycles_completed: 2`, `items_refined: 2`, `status: PASS`.
+* **Anchor 4 (Silicon Invariants & DNA Links):** Dream pass terminates within 90s. ChromaDB socket count $< 250$.
+* **BKM-015 Compliance Check:** BKM-062 zero-work detection preserved.
+
+---
+
+#### Story 108.12C: WYWO Standup Candidate Scorer & High-Impact Surfacing Gate (`[FEAT-658]` / `[FEAT-674]`)
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[FEAT-658]` / `[FEAT-674]` / `[BKM-087]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):**
+  Establish an authoritative criteria gate for morning While You Were Out (WYWO) standup inclusion. Filter out operational exhaust tickets and ensure that only gems with $\text{Impact Level} \ge 3$ and $\text{Refinement Level} \ge 2$ surface in `nightly_dialogue.json` and the morning Intercom briefing card.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L540-L580`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L540-L580) (`filter_wywo_synthesis_gems`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L2040-L2080`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2040-L2080) (`vibe == 'WYWO'` situational chunking)
+* **Implementation Contract (The What):**
+  1. In `CognitiveHub`, filter WYWO synthesis gems strictly by `impact_level >= 3`.
+  2. Inject structured headline formatting (`[PLATFORM]` for Impact 3, `[FOCAL]` for Impact 4) into Pinky's standup prompt.
+  3. Verify `test_multi_stage_replay_pipeline.py::test_stage13_wywo_standup_fastpath_contract` enforces impact-gated surfacing.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k "test_stage13" -v
+  ```
+* **Verification Log:** Tested impact filter contract against mock fixtures. Verified Impact 1 and 2 tickets are filtered out, while Impact 3 (`[PLATFORM]`) and Impact 4 (`[FOCAL]`) surface cleanly. Full suite passed (14/14 tests in 1.75s).
+* **Anchor 4 (Silicon Invariants & DNA Links):** WYWO context assembly $< 15\text{ms}$. Zero low-impact ticket noise in morning card.
+* **BKM-015 Compliance Check:** Deterministic fixture assert; no regex tone matching.
+
+---
+
 ### Phase 3: Empirical Step Experimentation & Co-Pilot Calibration (`BKM-088`)
 
-#### Story 108.12: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout & Co-Pilot Calibration
+#### Story 108.13: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout & Co-Pilot Calibration
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[FEAT-666]`
 * **Assigned Owner:** `[AGY:PRIMARY]` (Interactive Co-Pilot Loop with Jason)
