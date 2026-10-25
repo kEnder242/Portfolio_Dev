@@ -668,14 +668,14 @@ The historical note life cycle follows a hybrid funnel-conveyor:
 
 ### Phase 3: Empirical Step Experimentation & Co-Pilot Calibration (`BKM-088`)
 
-#### Story 108.13: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout & Co-Pilot Calibration
-* **Status:** 📋 PLANNED
+#### Story 108.13A: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout & Co-Pilot Calibration
+* **Status:** ✅ COMPLETE
 * **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[FEAT-666]`
 * **Assigned Owner:** `[AGY:PRIMARY]` (Interactive Co-Pilot Loop with Jason)
 * **Context & Objective (The Why):**
   Test line-by-line discrimination prompt variants on Brain (RTX 2080 Ti) against the true, complete production evidence pool (including `[CHUNK-PREV]` conversation context and `work_history` records) to find the optimal balance between reasoning clarity in `[ANALYSIS]` and clean parsing in `[BEDROCK SELECTION]`.
 * **Symbol Anchors & Touchpoints (The Where):**
-  - [`HomeLabAI/src/logic/cognitive_hub.py#L3068`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3068) (Prompt strings)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L664-L680`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L664-L680) (`build_two_mice_stage_prompt` Stage 1 template)
   - [`Portfolio_Dev/field_notes/data/sprint_108_benchmarks.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/sprint_108_benchmarks.json) (Metric store)
 * **Implementation Contract (The What):**
   1. Execute micro-harness comparing 3 prompt variants:
@@ -690,19 +690,20 @@ The historical note life cycle follows a hybrid funnel-conveyor:
   ```bash
   python3 /home/jallred/Dev_Lab/HomeLabAI/src/debug/test_empirical_step_harness.py --stage=filter --query="Tell me about PSYS on Aurora"
   ```
-* **Anchor 4 (Silicon Invariants & DNA Links):** Parse reliability must be 100% across 10 consecutive runs. Latency $< 900\text{ms}$.
+* **Verification Log:** Shootout executed across all 3 variants on live port 8088 (`local-unified-base`). Metrics saved to `sprint_108_benchmarks.json`. Interactive Co-Pilot Loop resolved: Jason selected Variant A (Markdown Sections & Bullets, 100% regex reliability, TTFT 201ms) with Balanced Reasoning (1-line engineering justification per chunk). Winning prompt template locked into `cognitive_hub.py`. Stage filter probe verified (`status: SUCCESS`, TTFT 218.59ms, 69 tokens).
+* **Anchor 4 (Silicon Invariants & DNA Links):** Parse reliability 100% across 10 consecutive runs. Latency $< 900\text{ms}$ TTFT.
 * **BKM-015 Compliance Check:** No hardcoded keywords in prompt verification.
 
 ---
 
-#### Story 108.13: Stage 5 (Pinky TL;DR) & Deep Thought Synthesis Pacing Shootout
-* **Status:** 📋 PLANNED
+#### Story 108.13B: Stage 5 (Pinky TL;DR) & Deep Thought Synthesis Pacing Shootout
+* **Status:** ✅ COMPLETE
 * **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[BKM-087]`
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):**
   Validate that Pinky's voice delivery is snappy (<1.2s to first token, $\le 2$ sentences, zero robotic filler) when completely unburdened from the evaluation schema.
 * **Symbol Anchors & Touchpoints (The Where):**
-  - [`HomeLabAI/src/logic/cognitive_hub.py#L3202`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3202) (`step_pinky_voice`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L692-L702`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L692-L702) (`build_two_mice_stage_prompt` Stage 2 template)
   - [`HomeLabAI/src/nodes/pinky_critic_persona.py#L65`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/pinky_critic_persona.py#L65) (`_BANNED_PHRASES`)
 * **Implementation Contract (The What):**
   1. Run micro-harness evaluating Pinky's summary output across 3 declarative vibes: `TECHNICAL`, `CASUAL`, `HISTORICAL`.
@@ -710,9 +711,10 @@ The historical note life cycle follows a hybrid funnel-conveyor:
   3. Execute 2-Question Co-Pilot loop with Jason to calibrate persona brevity and tone.
 * **Verification & Test Command (The How):**
   ```bash
-  python3 /home/jallred/Dev_Lab/HomeLabAI/src/debug/test_empirical_step_harness.py --stage=pinky --query="Explain Haswell RAPL package limits"
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/debug/test_empirical_step_harness.py --stage=pinky --vibe=TECHNICAL --query="Explain Haswell RAPL package limits"
   ```
-* **Anchor 4 (Silicon Invariants & DNA Links):** First token time $< 1200\text{ms}$. Sentence count $\le 2$.
+* **Verification Log:** Tested across TECHNICAL, CASUAL, and HISTORICAL archetypes on `cli_voice_v1` adapter. TTFT measured at 219.45ms (< 1200ms target). 0% banned phrase occurrences. Embedded strict formatting directive (`Plain conversational speech only. Output NO markdown headers, NO bold section tags, and NO bullet points. Exactly 1 to 2 spoken sentences directly to Jason, then stop.`) into Stage 2 prompt in `cognitive_hub.py`. Verified 14/14 tests passing in `test_multi_stage_replay_pipeline.py`.
+* **Anchor 4 (Silicon Invariants & DNA Links):** First token time $< 1200\text{ms}$ (actual: 219ms). Sentence count $\le 2$.
 * **BKM-015 Compliance Check:** Enforces BKM-087 single-voice primer invariants.
 
 ---
