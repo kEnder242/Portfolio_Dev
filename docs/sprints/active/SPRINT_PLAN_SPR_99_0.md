@@ -1,18 +1,20 @@
-# 🚀 SPRINT PLAN 99.0: Round Table Deliberation Refinements, Zero-Mock Anti-Green-Lie Hardening & Ambient Delegation Telemetry
+# 🚀 SPRINT PLAN 108.0: Cognitive Hydraulics, Node-Anchored Routing & The Empirical Step-Trace Flywheel
 
-**Sprint ID:** `SPR_99_0`  
-**Theme:** Round Table Multi-Agent Deliberation Refinements, Zero-Mock Anti-Green-Lie Certification, BKM-015 Semantic Anchor Hardening, Ambient Delegation Telemetry (`delegate.py`), and Subversive Swarm Live Shakedown (`FEAT-650`, `FEAT-651`, `FEAT-635`, `FEAT-649`)  
-**Status:** **COMPLETED & CERTIFIED**  
-**Parent Framework:** `[BKM-049]` (The Delegation Execution Rulebook), `[BKM-071]` (Delegation Playbook Index), `[BKM-015]` (Semantic Intent Routing & Anti-Hardcoding), `[BKM-062]` (Zero-Mock Anti-Green-Lie Mandate), `[BKM-024]` (Live Validation Mandate), `[BKM-072]` (Tool-as-IPC Swarm Delegation Protocol), `[BKM-020]` (High-Fidelity Sprint Gates), `[BKM-060]` (Federated DNA Taxonomy)  
-**Target Silicon Nodes:** Node KENDER (RTX 4090 Ollama Conductor :11434, Qwen3.8-27B), Node Brain (macOS M5 Air MLX :8002 via Headroom, Ternary-Bonsai-2-27B), Local Foyer Daemon (:8765), ChromaDB Port 8001 (CLaRa-DNA)
+**Sprint ID:** `SPR_108_0`  
+**Master Sprint Plan File:** [`Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_108_0.md`](docs/sprints/active/SPRINT_PLAN_SPR_108_0.md)  
+**Theme:** Codification of Cognitive Hydraulics (Alternating Split/Sum Pipeline), Keyed Evidence Filtering & The Positive/Negative Evidential Moat, Node-Anchored Console Routing Invariants (`FEAT-058` / `VIBE-013`), The Empirical Step Judgment Micro-Harness (`BKM-088`), Post-Turn Scorecard Decoupling to Deep Thought, and Step-Trace Telemetry (`[LOOP-005]`).  
+**Status:** 🟡 **IN PLANNING / NARRATIVE GREENLIGHT**  
+**Parent Framework:** `[BKM-086]`, `[BKM-088]`, `[BKM-043]`, `[BKM-015]`, `[BKM-062]`, `[BKM-069]`, `[INS-049]`, `[VIBE-013]`, `[FEAT-058]`, `[FEAT-645]`, `[LOOP-005]`, `[VIBE-018]`, `[FEAT-672]`  
+**Target Silicon Nodes:** Node Z87 (RTX 2080 Ti / Llama-3.2-3B-AWQ), Node KENDER (RTX 4090 / Qwen2.5-32B / Deep Thought), Node Brain (M5 Air MLX / Ternary-Bonsai-2-27B / Atlas), Foyer WebSocket (:8765), ChromaDB (:8001)
 
 ---
 
 ## 🧭 Executive Summary & Architectural Contract
 
-Sprint 99.0 delivers a targeted refinement of the **Federated Lab Round Table deliberation pipeline** while simultaneously executing an end-to-end **Live Shakedown** of our new Subversive Tool Suite (`stage_research`, `research`, `safe_patch`, `failure_whisperer`, `handoff_checkpoint`, and `delegate.py`).
+Sprint 108.0 codifies **Cognitive Hydraulics** across the Federated Lab Round Table deliberation pipeline, establishing strict single-job prompts (alternating Split vs. Sum), keyed evidence filtering with mechanical evidential moat calculation, physical node-anchored console routing, and out-of-band Step-Trace root-cause attribution.
 
-### Key Objectives:
+*Refer to the authoritative Master Plan in [`docs/sprints/active/SPRINT_PLAN_SPR_108_0.md`](docs/sprints/active/SPRINT_PLAN_SPR_108_0.md) for full pre-flight mistake analysis, master narrative, and phased roadmap.*
+
 1. **Ambient Delegation Telemetry (`[FEAT-650]`):** Injects ambient memory and knowledge hook execution at the conclusion of every story in `delegate.py`. Headless and autonomous runs automatically surface ambient grounding headers and recent memory reflections even when the operator is not typing.
 2. **Zero-Mock Anti-Green-Lie Hardening (`[FEAT-651]` / `[BKM-062]` / `[BKM-024]`):** Purges synthetic mocks and fake default scores (e.g. `critic_score: 0.98`) from `test_round_table_probe_unit.py` and `probe_round_table_accountability.py`. Probes must execute genuine multi-stage deliberation against live daemons.
 3. **BKM-015 Semantic Anchor Hardening (`[BKM-015]` / `[FEAT-635]`):** Eliminates naive substring checks in Brain Information Gatekeeper and intent triage, replacing them with semantic vector cosine similarity ($\le 0.55$) against resident ChromaDB collections via `/ambient_recall`.
