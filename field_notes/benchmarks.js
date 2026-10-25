@@ -228,28 +228,32 @@ function renderThroughputLiveChart(records) {
     const colorFor = (seat) => SEAT_COLORS[seat] || '#8b949e';
     const labelFor = (seat) => SEAT_LABELS[seat] || seat || 'Unknown';
 
-    // Partition receipts by seat (chronological), latest 120 per seat
-    const bySeat = {};
-    (Array.isArray(records) ? records : []).forEach(r => {
-        const seat = r.seat || 'Unknown';
+    // Filter valid receipts with true hardware throughput (Metric 1)
+    const validRecords = (Array.isArray(records) ? records : []).filter(r => {
         const dur = Number(r.duration_seconds);
-        const tp = Number(r.throughput_tok_s);
-        if (!isFinite(tp) || tp <= 0 || tp > 1000.0) return;
-        if (!isFinite(dur) || dur < 1.0) return;
-        if (!bySeat[seat]) bySeat[seat] = [];
-        bySeat[seat].push(r);
+        const tp = (r.throughput_tok_s !== null && r.throughput_tok_s !== undefined) ? Number(r.throughput_tok_s) : NaN;
+        const ts = Number(r.timestamp);
+        return isFinite(tp) && tp > 0 && tp <= 1000.0 && isFinite(dur) && dur >= 1.0 && isFinite(ts) && ts > 0;
     });
-    const seatNames = Object.keys(bySeat);
-    seatNames.forEach(s => { bySeat[s] = bySeat[s].slice(-120); });
 
-    const allPoints = seatNames.flatMap(s => bySeat[s]);
-    if (!allPoints.length) {
+    if (!validRecords.length) {
         ctx.fillStyle = '#8b949e';
         ctx.font = '12px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('⚡ No live throughput telemetry recorded yet. Awaiting workload dispatches.', width / 2, height / 2);
         return;
     }
+
+    validRecords.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
+
+    // Full empirical timeline starting from 2026-08-31 across all recorded receipts
+    const bySeat = {};
+    validRecords.forEach(r => {
+        const seat = r.seat || 'Unknown';
+        if (!bySeat[seat]) bySeat[seat] = [];
+        bySeat[seat].push(r);
+    });
+    const seatNames = Object.keys(bySeat);
 
     const padLeft = 70;
     const padRight = 50;
@@ -258,9 +262,12 @@ function renderThroughputLiveChart(records) {
     const chartW = width - padLeft - padRight;
     const chartH = height - padTop - padBottom;
 
-    const maxVal = Math.max(10, ...allPoints.map(r => Number(r.throughput_tok_s) || 0)) * 1.25;
-    const n = allPoints.length;
-    const getX = (idx) => padLeft + (n > 1 ? (idx / (n - 1)) * chartW : chartW / 2);
+    const maxVal = Math.max(10, ...validRecords.map(r => Number(r.throughput_tok_s) || 0)) * 1.25;
+    const minTime = Math.min(...validRecords.map(r => Number(r.timestamp)));
+    const maxTime = Math.max(...validRecords.map(r => Number(r.timestamp)));
+    const timeSpan = maxTime - minTime;
+
+    const getX = (ts) => padLeft + (timeSpan > 0 ? ((ts - minTime) / timeSpan) * chartW : chartW / 2);
     const getY = (val) => padTop + chartH - (val / maxVal) * chartH;
 
     // Horizontal grid + Y labels (tok/s)
@@ -280,68 +287,70 @@ function renderThroughputLiveChart(records) {
         ctx.fillText(val.toFixed(1), padLeft - 10, y + 3);
     }
 
-    // X tick labels: first, last, and every ~24th point (HH:MM:SS)
-    const timeOf = (r) => {
-        if (r.date_str) return String(r.date_str).slice(11, 19);
-        if (r.timestamp) return new Date(r.timestamp * 1000).toTimeString().slice(0, 8);
-        return '';
-    };
-    const step = Math.max(1, Math.floor(n / 6));
-    const labelIdxs = new Set([0, n - 1]);
-    for (let i = 0; i < n; i += step) labelIdxs.add(i);
+    // Universal Timeline X ticks & gridlines
+    const timeSteps = 5;
+    for (let i = 0; i <= timeSteps; i++) {
+        const curTs = minTime + (timeSpan > 0 ? (timeSpan * i) / timeSteps : 0);
+        const x = padLeft + (i / timeSteps) * chartW;
+        ctx.strokeStyle = '#161b22';
+        ctx.beginPath();
+        ctx.moveTo(x, padTop);
+        ctx.lineTo(x, height - padBottom);
+        ctx.stroke();
 
-    allPoints.forEach((r, idx) => {
-        const x = getX(idx);
-        if (labelIdxs.has(idx)) {
-            ctx.fillStyle = '#8b949e';
-            ctx.font = '9px "JetBrains Mono", monospace';
-            ctx.textAlign = 'center';
-            ctx.fillText(timeOf(r), x, height - padBottom + 18);
-        }
-    });
+        const d = new Date(curTs * 1000);
+        const mo = String(d.getMonth() + 1).padStart(2, '0');
+        const da = String(d.getDate()).padStart(2, '0');
+        const hr = String(d.getHours()).padStart(2, '0');
+        const mi = String(d.getMinutes()).padStart(2, '0');
+        const dateLabel = `${mo}/${da} ${hr}:${mi}`;
 
-    // Per-seat lines + points + value badges
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(dateLabel, x, height - padBottom + 18);
+    }
+
+    // Per-seat lines + points + value badges (all overlaid across universal time axis)
     seatNames.forEach(seat => {
         const pts = bySeat[seat];
         const color = colorFor(seat);
-        const label = labelFor(seat);
 
+        // Multi-point series line connecting points chronologically
         ctx.strokeStyle = color;
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 2.0;
         ctx.beginPath();
-        let started = false;
-        allPoints.forEach((r, idx) => {
-            if (r.seat !== seat) return;
-            const x = getX(idx);
+        pts.forEach((r, idx) => {
+            const x = getX(Number(r.timestamp));
             const y = getY(Number(r.throughput_tok_s));
-            if (!started) { ctx.moveTo(x, y); started = true; }
+            if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         });
         ctx.stroke();
 
-        allPoints.forEach((r, idx) => {
-            if (r.seat !== seat) return;
-            const x = getX(idx);
+        // Dots on each sample point
+        pts.forEach(r => {
+            const x = getX(Number(r.timestamp));
             const val = Number(r.throughput_tok_s);
             const y = getY(val);
             ctx.fillStyle = color;
             ctx.beginPath();
-            ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+            ctx.arc(x, y, 4.0, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#0d1117';
             ctx.lineWidth = 1.5;
             ctx.stroke();
         });
 
-        // Value badge above last 3 points of this seat
-        const seatPts = allPoints.map((r, idx) => ({ r, idx })).filter(p => p.r.seat === seat).slice(-3);
-        seatPts.forEach(({ r, idx }) => {
-            const x = getX(idx);
+        // Value badge above the latest point(s) of this seat
+        const seatPts = pts.slice(-2);
+        seatPts.forEach(r => {
+            const x = getX(Number(r.timestamp));
             const y = getY(Number(r.throughput_tok_s));
             ctx.fillStyle = color;
             ctx.font = 'bold 9px "JetBrains Mono", monospace';
             ctx.textAlign = 'center';
-            ctx.fillText(Number(r.throughput_tok_s).toFixed(1), x, y - 9);
+            ctx.fillText(Number(r.throughput_tok_s).toFixed(1), x, y - 8);
         });
     });
 
@@ -350,7 +359,7 @@ function renderThroughputLiveChart(records) {
     ctx.textAlign = 'left';
     ctx.fillText('▲ Live Throughput (tok/s)', padLeft, padTop - 12);
     ctx.textAlign = 'right';
-    ctx.fillText('Receipt Sequence (Chronological) ►', width - padRight, height - padBottom + 34);
+    ctx.fillText('Universal Timeline (Chronological) ►', width - padRight, height - padBottom + 34);
 }
 
 async function loadLiveUsageStream() {
@@ -372,7 +381,7 @@ async function loadLiveUsageStream() {
 
         const allRecords = lines.map(l => {
             try { return JSON.parse(l); } catch(e) { return null; }
-        }).filter(r => r !== null && Number(r.duration_seconds) >= 1.0 && Number(r.throughput_tok_s) <= 1000.0);
+        }).filter(r => r !== null && Number(r.duration_seconds) >= 1.0);
         window.cachedLiveRecords = allRecords;
         renderThroughputLiveChart(allRecords);
 
@@ -385,6 +394,10 @@ async function loadLiveUsageStream() {
                 ? '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#1b4728; color:#3fb950; border:1px solid #238636;">LOCAL</span>'
                 : '<span style="display:inline-block; padding:2px 6px; font-size:0.68rem; font-weight:700; border-radius:4px; background:#382714; color:#f78166; border:1px solid #bd561d;">CLOUD</span>';
             const seatBadge = r.seat || (r.provider === 'openrouter' ? 'Cloud Swarm' : (r.provider.includes('m5') ? 'Apple M5 Air' : 'Windows 4090RTX'));
+            const hasValidTp = (r.throughput_tok_s !== null && r.throughput_tok_s !== undefined && isFinite(Number(r.throughput_tok_s)) && Number(r.throughput_tok_s) > 0);
+            const tpDisplay = hasValidTp
+                ? `<span style="font-weight:700; color:#3fb950;">${Number(r.throughput_tok_s).toFixed(1)} tok/s</span>`
+                : '<span style="color:#8b949e; font-weight:400;">— (N/A)</span>';
             tableHtml += '<tr>' +
                 '<td style="color:#8b949e;">' + timeStr + '</td>' +
                 '<td>' + tierBadge + '</td>' +
@@ -393,7 +406,7 @@ async function loadLiveUsageStream() {
                 '<td style="color:#d2a8ff;">' + r.model + '</td>' +
                 '<td style="text-align:right;">' + r.tokens_generated + '</td>' +
                 '<td style="text-align:right;">' + r.duration_seconds + 's</td>' +
-                '<td style="text-align:right; font-weight:700; color:#3fb950;">' + r.throughput_tok_s + ' tok/s</td>' +
+                '<td style="text-align:right;">' + tpDisplay + '</td>' +
             '</tr>';
         });
         tableHtml += '</tbody></table></div>';
