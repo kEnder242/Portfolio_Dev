@@ -352,14 +352,227 @@ When a turn feels off-base or receives an interactive downvote / Fourth Wall cor
 
 ---
 
-### Phase 2: Empirical Step Experimentation (`BKM-088`)
+### Phase 2: Generic Topic-Directed Waterfall & Situational Grounding
 
-#### Story 108.5: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout
-* **Status:** 📋 PLANNED
-* **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[FEAT-666]`
+#### Phase 2 Pre-Flight & AFK Operational Checklist (`BKM-085` & `BKM-086 §1.1`)
+
+Per `BKM-086 §1.1` (Level-of-Entry Flow-Down Rule), introducing Phase 2 mandates this formal pre-flight paper trail:
+
+- [x] **`BKM-085` Phase 1: Sprint Discovery (The Intent / "Why")**
+  - [x] SPR-44 (`commit 4fa0c13`): Excavated birth of `WYWO` file drops (`nightly_dialogue.json`, etc.).
+  - [x] SPR-64 (`commit 5e72240` / `1bfde29`): Excavated Zero-Context (`FEAT-475`), Epistemological Scarcity (`FEAT-485`), and `_WYWO_RE` regex introduction.
+  - [x] SPR-72 (`commit 3c66268`): Excavated `FEAT-536` regex purge that orphaned `_WYWO_RE` and omitted `WYWO` from mode context.
+  - [x] SPR-104 (`commit caba91f`): Excavated `FEAT-658` pure Waterfall unification that abolished `lead_node` and stranded `behavioral_guidance`.
+  - [x] SPR-105 (`commit 0e1f440`): Reconciled Primer Protocol (`BKM-087`) and continuous fuel pacing (`FEAT-523`).
+- [x] **`BKM-085` Phase 2: Git Archaeology (The Baseline / "What")**
+  - [x] Inspected `HEAD~1` of `commit 3c66268` in `src/logic/triage_engine.py` (verified pre-regression regex routing).
+  - [x] Inspected `HEAD~1` of `commit caba91f` in `src/logic/cognitive_hub.py` (verified legacy `lead_node == "pinky"` standup stream).
+- [x] **`BKM-085` Phase 3: DNA Correlation & Modern Alignment (The "How")**
+  - [x] Resolved architecture via modern non-branching primitives: `BKM-089` (Prompt MO & Evaluation Asymmetry), `BKM-090` (The Deferred Probe Protocol), and `STAGE_DEFERRED_PROBES_MATRIX.md`.
+  - [x] Substrate expansion approved: 5 `dream_stream` files (`nightly_dialogue`, `recruiter`, `status`, `pager`, `dreams`) + 2 `META` files (`validation_ledger.jsonl`, `round_table_deltas.json`).
+- [x] **`BKM-086` Pillar 1: Living Matrix & Grounding Currency**
+  - [x] Created and verified [`HomeLabAI/docs/plans/STAGE_DEFERRED_PROBES_MATRIX.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/plans/STAGE_DEFERRED_PROBES_MATRIX.md) containing all 5 pipeline sections.
+  - [x] Triage grounding gaps isolated: missing `WYWO` rule in `_build_triage_mode_context()` and orphaned `_WYWO_RE` at L450.
+- [x] **`BKM-086` Pillar 2: 4-Anchor Specification Integrity**
+  - [x] Every story in Phase 2 specifies Anchor 1 (Files/Lines), Anchor 2 (Test Command), Anchor 3 (Verbatim Specs), Anchor 4 (Silicon Invariants & DNA Links).
+  - [x] BKM-015 check: Zero semantic regexes; approved physical regex only (`[BKM-015:APPROVED_REGEX]`).
+- [x] **`BKM-086` Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard (`BKM-049` / `BKM-006`)**
+  - [x] Stories 108.5, 108.6, 108.7 assigned to Swarm via `delegate.py`.
+  - [x] AGY:PRIMARY strictly forbidden from directly editing target files assigned to `[SWARM:*]`.
+- [ ] **`BKM-086` Pillar 4: Adversarial Audit & Silicon Certification (`BKM-061` / `BKM-090` / `BKM-024`)**
+  - [x] Cloud Oracle Matrix Pass (`delegate.py --mode cloud --profile research`): Resolve missing Prompt MOs and substrate hooks across Sections 1–5 of `STAGE_DEFERRED_PROBES_MATRIX.md`.
+  - [ ] Probes in `test_empirical_step_harness.py` emit verdictless traces without pass/fail code.
+  - [ ] AGY acts as out-of-band evaluator grading Prompt MO rubrics.
+  - [ ] Sub-2s offline certification via `test_multi_stage_replay_pipeline.py`.
+
+---
+
+#### Story 108.5: Declarative Triage Policy, WYWO Grounding & Decoupled Vibe/Domain Schema
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[FEAT-673]` / `[BKM-085]` / `[BKM-089]` / `[BKM-015]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 via `delegate.py`, Commit `3e685dc`)
+* **Context & Objective (The Why):**
+  Ground `triage_engine.py` with missing `WYWO` prompt context rule and reconnect `_WYWO_RE` as a deterministic pre-filter. Author decoupled `vibe_registry` and `domain_hooks` declarative schema in `config/triage_policy.json` following `BKM-089` (Frugal Prompts, Rich Rubrics).
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/config/triage_policy.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/triage_policy.json) (Declarative schema)
+  - [`HomeLabAI/src/logic/triage_engine.py#L450`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/triage_engine.py#L450) (`_WYWO_RE` reconnect)
+  - [`HomeLabAI/src/logic/triage_engine.py#L488`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/triage_engine.py#L488) (`_build_triage_mode_context`)
+* **Implementation Contract (The What):**
+  1. Add explicit `WYWO` rule to `_build_triage_mode_context()`: `"  * Standup Briefing / Absence Catchup ('what did you do while I was out?', 'catch me up', 'wywo') -> domain: \"dream_stream\", vibe: \"WYWO\"."`
+  2. Wire `_WYWO_RE` in `classify_vibe_and_domain()` or `triage()` as a deterministic fast-path pre-filter.
+  3. Expand `config/triage_policy.json` with `vibe_registry` (contextual-prompts) and `domain_hooks` (substrate targets).
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_triage_engine.py -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Fast-path triggers in $< 5\text{ms}$. Passes 100% of grounded anchors in `test_grounded_anchors.py`.
+* **BKM-015 Compliance Check:** Fast-path uses `# [BKM-015:APPROVED_REGEX]` with semantic prompt fallback.
+
+---
+
+#### Story 108.6: Universal `[CHUNK-N]` Serialization & Situational Pre-RAG Disk Hooking
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[FEAT-674]` / `[BKM-085]` / `[FEAT-666]` / `[Story 108.1]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 via `delegate.py`, Commit `15c16db`)
+* **Context & Objective (The Why):**
+  Pre-RAG situational payloads (5 dream files for `WYWO`, 2 ledger files for `META`, and live sensors for `OPERATIONAL`) currently dump raw unindexed markdown blobs. Brain's Gatekeeper (`Story 108.1`) requires `[CHUNK-N]` tags for line-by-line filtering. We implement universal chunk serialization so Brain evaluates all evidence uniformly.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L1920-L1995`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1920-L1995) (Pre-RAG file reading)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L3360-L3375`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3360-L3375) (Evidential Moat matching)
+* **Implementation Contract (The What):**
+  1. Author `format_situational_payload_as_chunks()` serializing disk JSONs into indexed `[CHUNK-1] [SOURCE: <filename>]: <payload>` blocks.
+  2. Implement domain hooks for `dream_stream` (5 files) and `feedback`/`META` (`validation_ledger.jsonl` + `round_table_deltas.json`).
+  3. Pass serialized chunks into `focus_context` so Brain's Gatekeeper executes KEEP/DROP without format exceptions.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_grounded_anchors.py -k "wywo or dream" -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Serialization executes in $< 15\text{ms}$. Token cap per chunk enforced.
+* **BKM-015 Compliance Check:** All chunks keyed with approved format pattern.
+
+---
+
+#### Story 108.7: Waterfall Parameter Wiring, Composable Line-Jumping & Pinky 10% Voice Delivery
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[FEAT-675]` / `[BKM-087]` / `[BKM-089]` / `[FEAT-658]`
+* **Assigned Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090 via `delegate.py`, Commit `7a99256`)
+* **Context & Objective (The Why):**
+  `behavioral_guidance` was orphaned when `lead_node` was abolished in Sprint 104. We wire `vibe` and `topic_directive` through `_run_two_mice_handover()` and `step_pinky_voice()`, inject the contextual-prompt into `build_two_mice_stage_prompt(stage=2)`, and enforce the Python-calculated 10% token budget with a 2-sentence floor.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L623-L632`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L623-L632) (`build_two_mice_stage_prompt`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L3223`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3223) (`step_pinky_voice`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L3304`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3304) (`_run_two_mice_handover`)
+* **Implementation Contract (The What):**
+  1. Add `vibe: str = ""` and `topic_directive: str = ""` parameters to `_run_two_mice_handover()` and `step_pinky_voice()`.
+  2. In `step_pinky_voice()`, calculate Python budget: `pinky_budget = max(60, min(150, int(len(clean_synthesis.split()) * 0.10 * 1.3)))`.
+  3. Update `build_two_mice_stage_prompt(stage=2)` to frame Deep Thought as "Brain" and primer as "Jason", appending the situational contextual-prompt.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Enforces single-turn boundary. Sentence ceiling $\le 3$.
+* **BKM-015 Compliance Check:** No regex tone checking in production path.
+
+---
+
+#### Story 108.8: Dedicated Live-Model Empirical Shootout Across 10 Vibe Contextual-Prompts (`BKM-088` / `BKM-090`)
+* **Status:** ✅ COMPLETE
+* **DNA / Feature Tag:** `[BKM-088]` / `[BKM-089]` / `[BKM-090]`
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):**
-  Test line-by-line discrimination prompt variants on Brain (RTX 2080 Ti) to find the optimal balance between reasoning clarity in `[ANALYSIS]` and clean parsing in `[BEDROCK SELECTION]`.
+  Empirically validate the 10 vibe contextual-prompts on physical silicon (:11435 / :8088) using Deferred Probes (`BKM-090`). Probes emit verdictless traces without pass/fail code; AGY evaluates output against Prompt MO rubrics out-of-band and presents top variants to Jason for co-pilot review.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/debug/test_empirical_step_harness.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/debug/test_empirical_step_harness.py) (`--stage=pinky`)
+  - [`HomeLabAI/docs/plans/STAGE_DEFERRED_PROBES_MATRIX.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/plans/STAGE_DEFERRED_PROBES_MATRIX.md) (Rubric reference)
+* **Implementation Contract (The What):**
+  1. Expand `test_empirical_step_harness.py` to support `--vibe` testing across all 10 archetypes.
+  2. Probe emits JSON trace with `telemetry`, `raw_output`, `prompt_mo`, and `rubric_battery` without pass/fail code.
+  3. AGY evaluates traces and executes interactive Co-Pilot loop with Jason on winning prompts.
+* **Verification & Test Command (The How):**
+  ```bash
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/debug/test_empirical_step_harness.py --stage=pinky --vibe=WYWO
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** TTFT $< 1200\text{ms}$ (empirical average achieved: **230.8ms** on port `:8088`). Zero leak tokens.
+* **BKM-015 Compliance Check:** Evaluated by AGY out-of-band, zero regex in script.
+
+---
+
+### 📋 Conversational Anchor Rollup Ledger (`BKM-077` / `FEAT-649`)
+
+Per `BKM-077 §2` (Sprint Crystallization), the in-conversation alignment findings discovered during Phase 2 are captured into the formal canonical ledger table:
+
+| Anchor Tag | Lifecycle State | Topic & Architectural Alignment | Mapped Story / Target | Feature Tag |
+| :--- | :---: | :--- | :--- | :--- |
+| **`ANCHOR-01`** | `STAGED` | Taxonomy harmonization: rename domain `lab_history` $\to$ **`work_history`** per `FEAT-440`. | Story 108.10 | `[FEAT-440]` |
+| **`ANCHOR-02`** | `STAGED` | Formalize first-class **`UNCLEAR` vibe** with low interest ($0.20$) for natural quiescence. | Story 108.10 | `[FEAT-673]` |
+| **`ANCHOR-03`** | `STAGED` | Add **`is_continuation: bool`** to Triage schema using formal linguistic cues (anaphora, deixis, ellipsis, correction). | Story 108.11 | `[FEAT-676]` |
+| **`ANCHOR-04`** | `STAGED` | Implement **Inclusive OR Continuation Hinting** (`anaphora OR single_pivot_momentum`). | Story 108.11 | `[FEAT-676]` / `[BKM-091]` |
+| **`ANCHOR-05`** | `STAGED` | **Universal Prior Context Chunking**: Inject `[CHUNK-PREV]` into `resolve_hyde_vector()` and Brain Gatekeeper. | Story 108.11 | `[FEAT-676]` / `[FEAT-437]` |
+
+---
+
+#### Story 108.9: Multi-Stage Replay Litmus Certification (`FEAT-645`) & Protocols Documentation
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-645]` / `[BKM-083]` / `[BKM-089]` / `[BKM-090]`
+* **Assigned Owner:** `[AGY:PRIMARY]`
+* **Context & Objective (The Why):**
+  Lock the completed Phase 2 architecture with fast offline replay tests (`FEAT-645`) asserting end-to-end execution of WYWO Standups, Casual Greetings, Technical queries, and Speculative Foils in $< 2.0\text{s}$. Codify feature entries in `FeatureTracker.md`.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py)
+  - [`Portfolio_Dev/FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md)
+* **Implementation Contract (The What):**
+  1. Add litmus test fixtures for WYWO standup and ambiguous foil turns in `test_multi_stage_replay_pipeline.py`.
+  2. Assert 100% green pass in $< 2.0\text{s}$ offline execution.
+  3. Update `FeatureTracker.md` with `FEAT-673`, `FEAT-674`, `FEAT-675`.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Replay execution $< 2000\text{ms}$. Zero live network dependencies.
+* **BKM-015 Compliance Check:** Deterministic mock fixtures.
+
+---
+
+### Phase 2.5: Conversational Continuity, Work History & JIT Grounding (`BKM-077` / `BKM-091`)
+
+#### Story 108.10: Work History Taxonomy Harmonization & `UNCLEAR` Quiescence Vibe Rule
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-440]` / `[FEAT-673]` / `[BKM-085]` / `[BKM-089]`
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):**
+  Harmonize domain taxonomy by renaming `lab_history` -> `work_history` per `FEAT-440` (reserving `lab_internal` for local physical testbed). Formalize first-class `UNCLEAR` vibe in `config/triage_policy.json` with low fuel (`importance: 0.20`, `importance_floor: 0.15`) and inquisitive contextual-prompt so ambiguous queries naturally trigger waterfall quiescence (`gate_interest < 0.35`) without burning heavy compute.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/config/triage_policy.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/triage_policy.json) (`work_history` domain, `UNCLEAR` vibe rule)
+  - [`HomeLabAI/src/logic/triage_engine.py#L390-L403`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/triage_engine.py#L390-L403) (`_TRIAGE_SCHEMA` domain enum)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L2790-L2805`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2790-L2805) (`_fetch_rag_context` collection mapping)
+* **Implementation Contract (The What):**
+  1. Replace `lab_history` with `work_history` in `triage_policy.json` and `_TRIAGE_SCHEMA`.
+  2. Add `UNCLEAR` vibe entry to `config/triage_policy.json`:
+     - `importance: 0.20`, `importance_floor: 0.15`, `interest_boost: 0.05`.
+     - `contextual_prompt`: `"Ask Jason playfully which specific node, test, or topic he wants checked in 1 short sentence."`
+     - `prompt_mo`: `"Intent is ambiguous; deliver an inquisitive, playful 1-sentence foil presenting likely options rather than guessing."`
+  3. Update `classify_vibe_and_domain()` fallback to map ambiguous intent to `vibe: "UNCLEAR"`, `domain: "unclear"`.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_triage_policy_loader.py /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_triage_engine.py -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Unclear query returns in $< 10\text{ms}$ with interest $0.20 < 0.35$.
+* **BKM-015 Compliance Check:** Fast-path uses approved schema, zero hardcoded regex tone matching.
+
+---
+
+#### Story 108.11: Universal Prior Context Chunking & Conversational Continuation Hinting
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-676]` / `[FEAT-356]` / `[FEAT-437]` / `[BKM-091]`
+* **Assigned Owner:** `[SWARM:LOCAL]`
+* **Context & Objective (The Why):**
+  Eliminate single-turn amnesia by implementing the Inclusive OR Continuation Hint (`is_continuation: bool`) and Universal Prior Context Chunking. Triage detects anaphora, deixis, and ellipsis linguistically; Gateway evaluates the 1-Pivot Invariant; `resolve_hyde_vector()` and Brain Gatekeeper consume `[CHUNK-PREV]` when continuation is in the air.
+* **Symbol Anchors & Touchpoints (The Where):**
+  - [`HomeLabAI/src/logic/triage_engine.py#L488`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/triage_engine.py#L488) (`_build_triage_mode_context`, `_TRIAGE_SCHEMA`)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L2050-L2085`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2050-L2085) (Gateway 1-Pivot evaluation)
+  - [`HomeLabAI/src/logic/cognitive_hub.py#L2533-L2595`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2533-L2595) (`resolve_hyde_vector` prior-turn injection)
+* **Implementation Contract (The What):**
+  1. Add `is_continuation: {"type": "boolean"}` to `_TRIAGE_SCHEMA`.
+  2. Inject frugal linguistic detection rule into `_build_triage_mode_context`: `"is_continuation: true if the query relies on anaphora, deixis, ellipsis, or conversational correction; otherwise false."`
+  3. In `CognitiveHub`, implement inclusive OR continuation hinting: `is_cont = t_parsed.get("is_continuation", False) or (pivot_count <= 1)`.
+  4. When `is_cont` is True and `round_table_memory` exists, serialize Turn $N-1$ into `[CHUNK-PREV]` via `format_situational_payload_as_chunks()` and pass to `resolve_hyde_vector()` and `_fetch_rag_context()`.
+* **Verification & Test Command (The How):**
+  ```bash
+  pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -k "test_stage2 or test_continuation" -v
+  ```
+* **Anchor 4 (Silicon Invariants & DNA Links):** Serialization latency $< 5\text{ms}$. 100% preservation of anaphora references.
+* **BKM-015 Compliance Check:** Evaluated line-by-line by Brain's evidential moat; zero regex tone assertions.
+
+---
+
+### Phase 3: Empirical Step Experimentation & Co-Pilot Calibration (`BKM-088`)
+
+#### Story 108.12: Stage 3 (Brain Keyed Filter) Empirical Prompt Shootout & Co-Pilot Calibration
+* **Status:** 📋 PLANNED
+* **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[FEAT-666]`
+* **Assigned Owner:** `[AGY:PRIMARY]` (Interactive Co-Pilot Loop with Jason)
+* **Context & Objective (The Why):**
+  Test line-by-line discrimination prompt variants on Brain (RTX 2080 Ti) against the true, complete production evidence pool (including `[CHUNK-PREV]` conversation context and `work_history` records) to find the optimal balance between reasoning clarity in `[ANALYSIS]` and clean parsing in `[BEDROCK SELECTION]`.
 * **Symbol Anchors & Touchpoints (The Where):**
   - [`HomeLabAI/src/logic/cognitive_hub.py#L3068`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3068) (Prompt strings)
   - [`Portfolio_Dev/field_notes/data/sprint_108_benchmarks.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/sprint_108_benchmarks.json) (Metric store)
@@ -381,7 +594,7 @@ When a turn feels off-base or receives an interactive downvote / Fourth Wall cor
 
 ---
 
-#### Story 108.6: Stage 5 (Pinky TL;DR) & Deep Thought Synthesis Pacing Shootout
+#### Story 108.13: Stage 5 (Pinky TL;DR) & Deep Thought Synthesis Pacing Shootout
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-668]` / `[BKM-088]` / `[BKM-087]`
 * **Assigned Owner:** `[AGY:PRIMARY]`
@@ -403,9 +616,9 @@ When a turn feels off-base or receives an interactive downvote / Fourth Wall cor
 
 ---
 
-### Phase 3: Post-Experiment Hardening & Step-Trace Flywheel
+### Phase 4: Post-Experiment Hardening & Step-Trace Flywheel
 
-#### Story 108.7: Interactive Step-Trace Root Cause Attribution & UI Downvote Wiring
+#### Story 108.14: Interactive Step-Trace Root Cause Attribution & UI Downvote Wiring
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[FEAT-671]` / `[LOOP-005]` / `[BKM-035]`
 * **Assigned Owner:** `[SWARM:LOCAL]`
@@ -433,7 +646,7 @@ When a turn feels off-base or receives an interactive downvote / Fourth Wall cor
 
 ---
 
-#### Story 108.8: Live Attendant Daemon Hot-Reload & Physical Silicon End-to-End Certification
+#### Story 108.15: Live Attendant Daemon Hot-Reload & Physical Silicon End-to-End Certification
 * **Status:** 📋 PLANNED
 * **DNA / Feature Tag:** `[BKM-024]` / `[INS-047]` / `[BKM-086]`
 * **Assigned Owner:** `[AGY:PRIMARY]`
