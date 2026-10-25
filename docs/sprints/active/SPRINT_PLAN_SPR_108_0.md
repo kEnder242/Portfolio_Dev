@@ -379,11 +379,11 @@ Per `BKM-086 §1.1` (Level-of-Entry Flow-Down Rule), introducing Phase 2 mandate
 - [x] **`BKM-086` Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard (`BKM-049` / `BKM-006`)**
   - [x] Stories 108.5, 108.6, 108.7 assigned to Swarm via `delegate.py`.
   - [x] AGY:PRIMARY strictly forbidden from directly editing target files assigned to `[SWARM:*]`.
-- [ ] **`BKM-086` Pillar 4: Adversarial Audit & Silicon Certification (`BKM-061` / `BKM-090` / `BKM-024`)**
+- [x] **`BKM-086` Pillar 4: Adversarial Audit & Silicon Certification (`BKM-061` / `BKM-090` / `BKM-024`)**
   - [x] Cloud Oracle Matrix Pass (`delegate.py --mode cloud --profile research`): Resolve missing Prompt MOs and substrate hooks across Sections 1–5 of `STAGE_DEFERRED_PROBES_MATRIX.md`.
-  - [ ] Probes in `test_empirical_step_harness.py` emit verdictless traces without pass/fail code.
-  - [ ] AGY acts as out-of-band evaluator grading Prompt MO rubrics.
-  - [ ] Sub-2s offline certification via `test_multi_stage_replay_pipeline.py`.
+  - [x] Probes in `test_empirical_step_harness.py` emit verdictless traces without pass/fail code.
+  - [x] AGY acts as out-of-band evaluator grading Prompt MO rubrics.
+  - [x] Sub-2s offline certification via `test_multi_stage_replay_pipeline.py`.
 
 ---
 
@@ -492,7 +492,8 @@ Per `BKM-077 §2` (Sprint Crystallization), the in-conversation alignment findin
 ---
 
 #### Story 108.9: Multi-Stage Replay Litmus Certification (`FEAT-645`) & Protocols Documentation
-* **Status:** 📋 PLANNED
+* **Status:** ✅ COMPLETE
+* **Verification Log:** Executed as `[AGY:PRIMARY]`. Refactored `test_stage4_brain_gatekeeper_prompt_construction` in `test_multi_stage_replay_pipeline.py` to assert line-by-line `EVIDENCE FILTER`, `[ANALYSIS]`, `[BEDROCK SELECTION]`, and `[CHUNK-N]` invariants. Added `test_stage13_wywo_standup_fastpath_contract` (asserting `('WYWO', 'dream_stream')` fast-path routing and universal `[CHUNK-N]` serialization) and `test_stage14_unclear_foil_quiescence_contract` (asserting `< 0.35` interest threshold exhaustion and Deep Thought quiescence for ambiguous turns). All 14 tests passing in 1.90s offline execution (< 2.0s ceiling). Registered `FEAT-673`, `FEAT-674`, `FEAT-675` in `FeatureTracker.md`.
 * **DNA / Feature Tag:** `[FEAT-645]` / `[BKM-083]` / `[BKM-089]` / `[BKM-090]`
 * **Assigned Owner:** `[AGY:PRIMARY]`
 * **Context & Objective (The Why):**
