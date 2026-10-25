@@ -477,8 +477,8 @@ class RotationalRefinementEngine:
     """[FEAT-067 / Story 106.5 / LOOP-004] Multi-Pass Epistemic Refinement Engine & Active Rotation Queue."""
 
     def __init__(self, epoch: int = 106):
-        self.epoch = epoch
         self.queue_data = self._load_queue()
+        self.epoch = self.queue_data.get("epoch", epoch)
         self.graph_data = self._load_graph()
 
     def _load_queue(self) -> dict:
@@ -522,8 +522,8 @@ class RotationalRefinementEngine:
         with open(GRAPH_FILE, "w") as f:
             json.dump(self.graph_data, f, indent=2)
 
-    def populate_queue_from_archive(self, max_items: int = 50):
-        """Scan monthly JSON tables and enqueue unrefined gems."""
+    def populate_queue_from_archive(self, max_items: int = 50, persist_updates: bool = True):
+        """Scan monthly JSON tables, stamp unassigned levels on disk, and enqueue candidate gems."""
         existing_ids = {it["gem_id"] for it in self.queue_data.get("queue", [])}
         import glob
 
@@ -538,7 +538,9 @@ class RotationalRefinementEngine:
             "file_manifest.json",
         ]
 
-        enqueued = 0
+        candidate_entries = []
+        total_stamped = 0
+
         for jf in json_files:
             fname = os.path.basename(jf)
             if fname in ignore:
@@ -548,26 +550,32 @@ class RotationalRefinementEngine:
                     items = json.load(f)
                 if not isinstance(items, list):
                     continue
+
+                file_modified = False
                 for idx, gem in enumerate(items):
                     if not isinstance(gem, dict):
                         continue
                     # Ensure chronology & levels stamped
-                    if "event_era" not in gem:
+                    if "event_era" not in gem or not gem.get("event_era"):
                         chrono = disentangle_chronology(
                             gem.get("evidence", "") + " " + gem.get("summary", ""),
                             gem.get("date", ""),
                         )
                         gem.update(chrono)
-                    if "impact_level" not in gem:
+                        file_modified = True
+                    if "impact_level" not in gem or gem.get("impact_level") in ("unassigned", None):
                         gem["impact_level"] = classify_impact_level(
                             gem, self.graph_data
                         )
-                    if "refinement_level" not in gem:
+                        file_modified = True
+                        total_stamped += 1
+                    if "refinement_level" not in gem or gem.get("refinement_level") is None:
                         gem["refinement_level"] = (
                             3
                             if gem.get("rank", 0) >= 4 and gem.get("trigger_context")
                             else (1 if gem.get("rank", 0) >= 3 else 0)
                         )
+                        file_modified = True
 
                     gem_id = gem.get("id") or f"{fname}::{idx}"
                     if gem["refinement_level"] < 3 and gem_id not in existing_ids:
@@ -590,19 +598,32 @@ class RotationalRefinementEngine:
                                 else [str(anchors)]
                             ),
                         }
-                        self.queue_data["queue"].append(entry)
-                        existing_ids.add(gem_id)
-                        enqueued += 1
-                        if enqueued >= max_items:
-                            break
+                        entry["priority"] = self.compute_priority(entry)
+                        candidate_entries.append(entry)
+
+                if file_modified and persist_updates:
+                    try:
+                        with open(jf, "w") as f:
+                            json.dump(items, f, indent=2)
+                        logging.info(f"Persisted epistemic stamps to {fname}")
+                    except Exception as fe:
+                        logging.warning(f"Could not write epistemic stamps to {fname}: {fe}")
+
             except Exception as e:
                 logging.debug(f"Error scanning {fname}: {e}")
-            if enqueued >= max_items:
-                break
 
-        if enqueued > 0:
+        # Prioritize candidates by calculated priority (higher impact, higher refinement deficit)
+        candidate_entries.sort(key=lambda x: x["priority"], reverse=True)
+        to_enqueue = candidate_entries[:max_items]
+
+        for entry in to_enqueue:
+            self.queue_data["queue"].append(entry)
+            existing_ids.add(entry["gem_id"])
+
+        enqueued = len(to_enqueue)
+        if enqueued > 0 or total_stamped > 0:
             logging.info(
-                f"Enqueued {enqueued} unrefined candidate gems into active rotation."
+                f"Enqueued {enqueued} unrefined candidate gems into active rotation (stamped {total_stamped} gems on disk)."
             )
             self._save_queue()
 
@@ -692,12 +713,17 @@ class RotationalRefinementEngine:
                 updated_fields += 1
 
         # Stamp chronological disentanglement if missing
-        if "event_era" not in gem:
+        if "event_era" not in gem or not gem.get("event_era"):
             chrono = disentangle_chronology(
                 gem.get("evidence", "") + " " + gem.get("summary", ""),
                 gem.get("date", ""),
             )
             gem.update(chrono)
+            updated_fields += 1
+
+        # Stamp impact_level if missing or unassigned
+        if "impact_level" not in gem or gem.get("impact_level") in ("unassigned", None):
+            gem["impact_level"] = item.get("impact_level") or classify_impact_level(gem, self.graph_data)
             updated_fields += 1
 
         delta = new_edges + updated_fields
@@ -797,7 +823,39 @@ class RotationalRefinementEngine:
 
 
 def main():
-    logging.info("--- [LOOP-004] Epistemic Gem Refinement Rotation Loop ---")
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="[LOOP-004] Epistemic Gem Refinement Rotation Loop"
+    )
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=5,
+        help="Number of refinement rotation epochs to run (default: 5)",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=5,
+        help="Batch size per epoch (default: 5)",
+    )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=1.0,
+        help="Polite delay between epochs in seconds (default: 1.0)",
+    )
+    parser.add_argument(
+        "--stamp-all",
+        action="store_true",
+        help="Pre-emptively scan and stamp all archive tables on disk",
+    )
+    args = parser.parse_args()
+
+    logging.info(
+        f"--- [LOOP-004] Epistemic Gem Refinement Rotation Loop (epochs={args.epochs}, batch_size={args.batch_size}) ---"
+    )
 
     # 1. Run Semantic Deduplication (Goal 6)
     try:
@@ -810,15 +868,52 @@ def main():
     try:
         engine_client = get_engine_v2(mode="HYBRID")
     except Exception as e:
-        logging.warning(f"Optional AI Engine not available ({e}); using topological link engine.")
+        logging.warning(
+            f"Optional AI Engine not available ({e}); using topological link engine."
+        )
 
     rot_engine = RotationalRefinementEngine(epoch=106)
-    telemetry = rot_engine.run_rotation_epoch(batch_size=5, engine=engine_client)
+    if args.stamp_all:
+        rot_engine.populate_queue_from_archive(max_items=1000, persist_updates=True)
+
+    total_processed = 0
+    total_graduations = 0
+    total_delta = 0
+    epochs_run = 0
+
+    for ep in range(args.epochs):
+        telemetry = rot_engine.run_rotation_epoch(
+            batch_size=args.batch_size, engine=engine_client
+        )
+        epochs_run += 1
+        total_processed += telemetry.get("processed_gems", 0)
+        total_graduations += telemetry.get("graduations", 0)
+        total_delta += telemetry.get("total_delta", 0)
+
+        # Increment epoch for monotonic progression
+        rot_engine.epoch += 1
+
+        if ep < args.epochs - 1 and args.delay > 0:
+            time.sleep(args.delay)
+
+    summary = {
+        "status": "PASS" if total_processed > 0 or not rot_engine.queue_data.get("queue") else "QUIESCENT",
+        "epochs_run": epochs_run,
+        "processed_gems": total_processed,
+        "total_delta": total_delta,
+        "graduations": total_graduations,
+        "active_queue_remaining": len(rot_engine.queue_data.get("queue", [])),
+    }
+
     update_status(
         "REFINE",
-        f"Epoch {rot_engine.epoch}: {telemetry['processed_gems']} gems, {telemetry['graduations']} saturated",
-        telemetry["processed_gems"],
+        f"{epochs_run} Epochs: {total_processed} gems, {total_graduations} saturated",
+        total_processed,
     )
+
+    # Structured telemetry JSON printed on stdout for pipeline consumption
+    print(json.dumps(summary))
+    return summary
 
 
 if __name__ == "__main__":
