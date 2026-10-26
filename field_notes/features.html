@@ -18297,37 +18297,37 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Intercom Fourth Wall Feedback UI & REST Bridge
+                                    Intercom Fourth Wall Feedback UI & Downvote Step-Trace Attribution
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-97.0</p>
+                    <p>SPR-97.0 / SPR-108.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/intercom.html</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>HomeLabAI/src/v5/foyer/router.py</code></p>
+                    <p><code>Portfolio_Dev/field_notes/intercom.html</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Embeds discrete, interactive <code>👍</code> (thumbs up) and <code>👎</code> (thumbs down) feedback actuators into assistant chat bubbles in <code>intercom.html</code>. Dispatches asynchronous payloads (<code>{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }</code>) to Foyer port <code>:8765/feedback</code>, providing immediate visual feedback glow and persisting signals into <code>foyer_feedback_ledger.jsonl</code>.</p>
+                    <p>Embeds discrete, interactive <code>👍</code> (thumbs up) and <code>👎</code> (thumbs down) feedback actuators into assistant chat bubbles in <code>intercom.html</code>. Dispatches asynchronous payloads (<code>{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }</code>) to Foyer port <code>:8765/feedback</code>. On downvote (<code>rating == "DOWN"</code>), triggers an automated Step-Trace backward entailment walk (<code>step_trace_attribution</code>) across the cached turn artifacts (Voice TL;DR $\to$ Stance $\to$ Filter $\to$ Search), localizes the defect stage (<code>STAGE_5_VOICE_DRIFT</code>, <code>STAGE_4_HALLUCINATION</code>, <code>STAGE_3_FILTER_LEAK</code>, <code>STAGE_2_RETRIEVAL_MISS</code>), and atomically appends labeled negative exemplars to <code>Portfolio_Dev/field_notes/data/negative_exemplars.json</code> for offline LoRA distillation.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique.</p>
+                    <p>Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique, turning human downvotes directly into high-signal supervised training data.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Event listeners in <code>intercom_v2.js</code> and <code>POST /feedback</code> handler in <code>router.py</code>.</p>
+                    <p>Event listeners in <code>intercom_v2.js</code>, <code>POST /feedback</code> handler in <code>router.py</code>, and <code>step_trace_attribution()</code> in <code>cognitive_hub.py</code>.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -18488,13 +18488,13 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Sprint</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>SPR-97.0</p>
+                    <p>SPR-108.0</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Tags</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>#systems_architecture</code>, <code>#tool_ipc</code>, <code>#subversive_grounding</code>, <code>#swarm_governance</code>, <code>[INS-044]</code>, <code>[FEAT-647](#FEAT-647)</code></p>
+                    <p><code>#step_trace</code>, <code>#fault_localization</code>, <code>#downvote_flywheel</code>, <code>[FEAT-638](#FEAT-638)</code>, <code>[FEAT-671](#FEAT-671)</code>, <code>[BKM-035]</code></p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18525,13 +18525,13 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Origin Quote</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>"Batching with multiple tools as hidden inter process communication. We convince each session it’s working at its own pace, but spoon feed our own tools to slip under the ground truth radar. The subversive part: We convince every agent that it is in charge, the tier 1 assumption, we feed the ego and paranoia."</p>
+                    <p>"Treating a downvoted conversational turn as a monolithic failure yields zero training signal. Walking backward from leaf to root isolates the exact stage that cracked."</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Synthesis</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Rather than force-feeding code context into worker prompts, swarm architectures should use subversive tool-mediated IPC. By framing the worker as the primary investigator and serving pre-computed L2 conductor patch notes dynamically through tools (e.g. <code>jitc_research</code>), the system satisfies the agent's agency and empirical grounding threshold while strictly bounding context and eliminating hallucinated exploration.</p>
+                    <p>In sequential cognitive pipelines, downvotes cannot be treated as undifferentiated negative losses. Walking backward along the pipeline artifacts (Leaf TL;DR $\to$ Stance $\to$ Filter $\to$ Search) pinpoints the exact defect stage, generating high-signal, stage-attributed negative exemplars for targeted LoRA fine-tuning.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -19508,6 +19508,182 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <span class="impact-badge impact-stable">PROPOSED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-673">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-673</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Declarative Triage Policy, WYWO Grounding & Decoupled Vibe/Domain Schema
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 (Phase 2)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#declarative_triage</code>, <code>#wywo_grounding</code>, <code>#contextual_prompts</code>, <code>#decoupled_schema</code>, <code>[BKM-085]</code>, <code>[BKM-089]</code>, <code>[BKM-015]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/config/triage_policy.json</code>, <code>HomeLabAI/src/logic/triage_engine.py</code>, <code>HomeLabAI/src/logic/triage_policy_loader.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes decoupled declarative policy schema in <code>config/triage_policy.json</code> separating behavioral stance (12 vibe archetypes with frugal in-character contextual-prompts and out-of-band Prompt MOs) from retrieval routing (domains, traversal modes, allowed collections). Reconnects deterministic <code>_WYWO_RE</code> fast-path pre-filter in <code>triage_engine.py</code> and grounds <code>_build_triage_mode_context()</code> with explicit standup briefing rules.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates hardcoded keyword drift, fixes orphaned <code>WYWO</code> standup routing, and adheres strictly to BKM-089 (Prompts explain HOW, Prompt MO explains WHY).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-674">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-674</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Universal [CHUNK-N] Serialization & Situational Pre-RAG Disk Hooking
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 (Phase 2)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#universal_chunking</code>, <code>#situational_payloads</code>, <code>#evidential_moat</code>, <code>[FEAT-666](#FEAT-666)</code>, <code>[BKM-085]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/tests/test_brain_keyed_filter.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Implements pure <code>format_situational_payload_as_chunks(domain, payload)</code> serializing heterogeneous pre-RAG disk files (5 dream files for <code>WYWO</code>, 2 ledger files for <code>META</code>, NVML vitals for <code>OPERATIONAL</code>) into uniform indexed <code>[CHUNK-N]</code> blocks with <code>Source:</code> headers. Collapses empty payloads into <code>[ZERO_CONTEXT]</code>.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ensures Brain's Stage 1 Evidential Moat filters all situational and historical evidence uniformly via mechanical KEEP/DROP parsing without format exceptions.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-675">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-675</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Waterfall Parameter Wiring, Composable Line-Jumping & Pinky 10% Voice Delivery
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 (Phase 2)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#waterfall_wiring</code>, <code>#contextual_prompts</code>, <code>#token_budget_clamp</code>, <code>[BKM-087]</code>, <code>[BKM-089]</code>, <code>[FEAT-658](#FEAT-658)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_two_mice_handover.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Wires <code>vibe</code> and <code>topic_directive</code> through <code>_run_two_mice_handover()</code> and <code>step_pinky_voice()</code>, appending situational contextual-prompts into <code>build_two_mice_stage_prompt(stage=2)</code>. Enforces a dynamic Python token budget for Pinky clamped to 10% of Deep Thought's synthesis length (<code>max(60, min(150, int(dt_tokens * 0.10)))</code>) with single-turn conversational boundary enforcement.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Restores missing behavioral guidance stranded by lead-node abolition and prevents conversational overrun while maintaining sub-1200ms latency.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-676">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-676</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Conversational Continuation Hinting & Universal Prior Context Hooking
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 (Phase 2.5)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#continuation_hinting</code>, <code>#anaphora_detection</code>, <code>#prior_context_chunks</code>, <code>#single_pivot_invariant</code>, <code>[FEAT-356](#FEAT-356)</code>, <code>[FEAT-437](#FEAT-437)</code>, <code>[BKM-091]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/triage_engine.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates single-turn amnesia by inferring <code>is_continuation: bool</code> from current turn prose (detecting anaphora, deixis, ellipsis, or correction) combined via inclusive OR with the single-pivot momentum invariant. Injects Turn $N-1$ from <code>round_table_memory</code> as <code>[CHUNK-PREV]</code> into Pinky's Tier 1 reflection (<code>resolve_hyde_vector</code>) for grounded search terms and into Brain's Stage 1 Evidential Moat for line-by-line relevance filtering.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Solves coreference ambiguity ("check the thing") without bloating Triage with conversational memory, allowing Pinky to deliver authentic opening quips and grounded RAG search terms.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PLANNED</span>
                         </td>
                     </tr>
                     </tbody>
