@@ -2316,46 +2316,45 @@
   },
   {
     "turn": 51,
-    "timestamp": 1792964998,
-    "time_str": "14:49:58",
-    "topic": "EXP_TLM",
+    "timestamp": 1793030672,
+    "time_str": "09:04:32",
+    "topic": "STANDARD",
     "scope": "CONTEXT_SCOPE_LONG",
-    "user_prompt": "[ACCOUNTABILITY_PROBE] Audit active silicon residency and memory topology.",
+    "user_prompt": "What's up?",
     "turn_mode": "FULL_ROUND_TABLE",
     "is_full_round_table": true,
     "checkpoints_elapsed_s": {
-      "triage": 7.698,
-      "pinky_stance": 13.124,
-      "brain_arch": 16.762,
-      "oracle": 16.762,
-      "pinky_judgment": 21.669
+      "triage": 0.419,
+      "pinky_stance": 0.858,
+      "brain_arch": 1.297,
+      "oracle": 1.736,
+      "pinky_judgment": 2.156
     },
     "deltas_elapsed_s": {
-      "triage": 7.698,
-      "pinky_stance": 5.426,
-      "brain_arch": 3.638,
-      "oracle": 0.001,
-      "pinky_judgment": 4.907
+      "triage": 0.419,
+      "pinky_stance": 0.439,
+      "brain_arch": 0.439,
+      "oracle": 0.439,
+      "pinky_judgment": 0.42
     },
     "cumulative": {
-      "triage": 7.698,
-      "pinky_stance": 13.124,
-      "brain_arch": 16.762,
-      "oracle": 16.762,
-      "pinky_judgment": 21.669
+      "triage": 0.419,
+      "pinky_stance": 0.858,
+      "brain_arch": 1.297,
+      "oracle": 1.736,
+      "pinky_judgment": 2.156
     },
     "deltas": {
-      "triage": 7.698,
-      "pinky_stance": 5.426,
-      "brain_arch": 3.638,
-      "oracle": 0.001,
-      "pinky_judgment": 4.907
+      "triage": 0.419,
+      "pinky_stance": 0.439,
+      "brain_arch": 0.439,
+      "oracle": 0.439,
+      "pinky_judgment": 0.42
     },
-    "total_elapsed_s": 21.669,
-    "total_s": 21.669,
+    "total_elapsed_s": 2.156,
+    "total_s": 2.156,
     "distillation_bullets": [
-      "PINKY: [Two-Mice TL;DR delivered to Jason (55 tokens)]",
-      "BRAIN: [ANALYSIS]\n- CHUNK-1: DROP \u2014 No direct relevance to active silicon residency and memory topology.\n- CHUNK-2: DROP \u2014 No direct relevance to active silicon residency and memory topology.\n\n[BEDROCK SELECTION]\n- CHUNK-1: DROP\n- CHUNK-2: DROP"
+      "Live turn registered."
     ],
     "consensus_1liner": "Consensus nominal."
   }
