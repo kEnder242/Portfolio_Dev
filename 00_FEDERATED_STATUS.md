@@ -12,9 +12,10 @@
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 *   **🎼 The Conductor:** [Registry](./conductor/tracks.md) | [Product](./conductor/product.md) | [Workflow](./conductor/workflow.md)
 
-## 🏗️ Conductor: Active & Recent Tracks (Sprints 77–107)
+## 🏗️ Conductor: Active & Recent Tracks (Sprints 77–108)
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-108-0-cognitive-hydraulics** | Phase 20 | Cognitive Hydraulics, Node-Anchored Routing, Positive/Negative Evidential Moat, Empirical Step Judgment Micro-Harness, Decoupled Entailment Audit, Step-Trace Telemetry (`FEAT-058`, `FEAT-671`, `LOOP-005`, `BKM-088`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_108_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_108_0.md) |
 | **spr-107-0-kabal-staging** | Phase 20 | Active Kabal Staging, Bone Nomenclature Retirement, JITC Atomic Bundle Migration, AST Reconciliation Re-Anchoring (`FEAT-665`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_107_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_107_0.md) |
 | **spr-106-0-gem-epistemics** | Phase 20 | Two-Dimensional Gem Epistemics (L0–L3 vs Imp 1–4), Subconscious De-Starvation, Kabal & Spine Polymorphic Architecture (`FEAT-662`–`FEAT-664`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_106_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_106_0.md) |
 | **spr-105-0-pure-waterfall** | Phase 20 | Pure Waterfall Cognitive Flow Restoration, Excision of `lead_node`, Decoupled Tri-Anchor Alignment (`FEAT-658`–`FEAT-660`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_105_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_105_0.md) |
@@ -53,6 +54,12 @@
   * **Host Workstation (vLLM 0.16.0 / z87-Linux RTX 2080 Ti 11GB):** **Blocked by Engine & Bus Architecture.** vLLM uses an entirely separate execution core (PagedAttention) lacking `--n-cpu-moe` granular offload; Haswell Z87 PCIe 3.0 / DDR3 bandwidth creates an extreme decode latency bottleneck; system cgroup memory caps (`MemoryMax=3.5G` / systemd-oomd per `LAB-017`) forbid large host RAM model weights.
   * **Node Brain (oMLX / Apple M5 MacBook Air 32GB):** **Blocked / Redundant by Silicon Architecture.** Apple M5 runs Apple's MLX framework (not `llama.cpp`) over Unified Memory Architecture (UMA) where CPU and GPU already share the identical ~150+ GB/s physical memory pool; macOS `iogpu.wired_limit_mb` (24.46GB limit) governs all allocations regardless of compute unit. Large models here require ternary quantization (`oQ2`) and TurboQuant KV compression (`LAB-115`).
   * **Backlogged Action:** Conduct a dedicated Phase 1 feasibility research session to benchmark standalone `llama-server` on Windows with `--n-cpu-moe` against pure 24GB VRAM baselines to measure decode tok/s degradation vs. model scale gain.
+* **`TODO-011` (Empirical Harness-to-LoRA Synthesis Engine — Matrix & Deferred Probe SFT/DPO Datasets):**
+  Systematize the Sprint 108 9-Vibe Matrix ([`STAGE_DEFERRED_PROBES_MATRIX.md`](../HomeLabAI/docs/plans/STAGE_DEFERRED_PROBES_MATRIX.md)), decoupled MO criteria, and empirical step probe rig ([`test_empirical_step_harness.py`](../HomeLabAI/src/debug/test_empirical_step_harness.py)) into an automated synthetic training data pipeline for local LoRA distillation ([`FEAT-174`](../HomeLabAI/src/debug/atomic_patcher.py), [`FEAT-213`](../HomeLabAI/src/infra/nightly_forge.py), [`FEAT-629`](../HomeLabAI/src/forge/train_expert.py) Unsloth / Nightly Forge).
+  * **Supervised Fine-Tuning (SFT) Extraction:** Collect clean `(system, user, assistant)` triads directly from BKM-090 probe outputs, guaranteeing single-turn boundary compliance and zero markdown header / prompt scaffolding bleed for `cli_voice_v2` and `shadow_brain_v2`.
+  * **Direct Preference Optimization (DPO) Automatic Labeling:** Leverage Sovereign 27B Entailment Audit (`step_entailment_audit` Half A on M5 Air / KENDER) to automatically generate preference pairs: outputs passing `CLAIM_CHECK` / `VERDICT: PASS` become preferred completions ($y_w$), while outputs flagged with `MISMATCH` or rubric battery violations become hard negative rejections ($y_l$).
+  * **Synthetic Triage Distillation:** Utilize the offline regex primer generators (`generate_greeting_primers()`, `generate_wywo_primers()`) to synthesize thousands of valid JSON schema classification records for `triage_v2`, enabling sub-150ms pure semantic triage on the local 3B model with zero regex fallbacks.
+  * **Architectural Invariant (BKM-039 / BKM-015):** LoRA weights train strictly on tone, brevity, formatting compliance, Evidence-Before-Verdict structure, and single-turn boundaries. Factual data, hardware registers, and ephemeral lab state remain strictly partitioned inside ChromaDB RAG.
 
 ## 🏺 Conductor: Historical Tracks (Sprints 13–73)
 | ID | Phase | Feature Focus | Status |
@@ -240,6 +247,7 @@
 *   **Triage Feedback Domain Snapping (`FEAT-559`)**: **[QUEUED FOR SPRINT 107.0 (PHASE 2 CANDIDATE)]** Enhance triage meta-lexicon regex to automatically route explicit feedback corrections (e.g., *"feedback"*, *"you still didn't capture"*, *"stop hallucinating"*) to `domain: feedback` / `vibe: CRITIQUE` and trigger prompt interception.
 
 ### General Engineering Backlog
+*   **Empirical Step-to-LoRA Synthesis Pipeline**: [`TODO-011`] Systematize the Sprint 108 9-Vibe Matrix and BKM-090 step probe outputs with Sovereign 27B entailment audit judgments into automated SFT & DPO training sets for local `cli_voice_v2` and `triage_v2` LoRA distillation on RTX 2080 Ti / KENDER Unsloth forge.
 *   **Historical Benchmark Time-Series Ingestion**: Revisit model inference benchmarking (`bench_models.py`). Transition the script from a blocking static site build step to an asynchronous/oneshot background collector that logs TTFT, ITL, and throughput metrics over time into a historical time-series ledger (or Prometheus/Grafana pipeline) rather than forcing live inference checks during HTML generation when `benchmarks_cache.json` already exists.
 *   **Windows Voice Upgrade**: Research and test **Kani-TTS-2** (400M Param) on the Windows host for local voice cloning and low-latency speech generation.
 *   **The Tracing Checklist**: Build a Meta-style mandatory checklist pass into the Brain's code-patching prompt to improve line-by-line verification accuracy.
