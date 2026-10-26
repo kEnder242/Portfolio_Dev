@@ -247,5 +247,126 @@
       "BKM-060",
       "LAB-019"
     ]
+  },
+  {
+    "id": "DISC-012",
+    "title": "Subversive Tool-Mediated Context Injection",
+    "theme": "Swarm Governance & Tool IPC",
+    "summary": "Reasoning models exhibit strong grounding skepticism (INS-044); serving pre-computed conductor patch notes dynamically through tools (jitc_research) satisfies agent agency while bounding context below 500 tokens.",
+    "date": "2026-10-04",
+    "status": "APPROVED",
+    "anchors": [
+      "INS-044",
+      "FEAT-647",
+      "BKM-072",
+      "BKM-049"
+    ]
+  },
+  {
+    "id": "DISC-013",
+    "title": "The 'Island of Green' Trap & Judicial Daemon Assertion",
+    "theme": "Verification Integrity & Anti-Green-Lie",
+    "summary": "Unit test suites pass green by asserting self-affirming mocks while physical background processes are dead; true verification requires Judicial Assertion inspecting live socket handshakes and running proc states.",
+    "date": "2026-09-25",
+    "status": "APPROVED",
+    "anchors": [
+      "BKM-062",
+      "BKM-024",
+      "FEAT-608",
+      "FEAT-619"
+    ]
+  },
+  {
+    "id": "DISC-014",
+    "title": "Continuous Interest Fluidity vs. Binary Gate Clamping",
+    "theme": "Cognitive Flow & Hydraulic Pacing",
+    "summary": "Binary condition gates choke conversational flow and mute heavy reasoning nodes; continuous interest smoothly modulates token headroom (clamp(I * 150, 32, 1500)) without silencing downstream models.",
+    "date": "2026-10-14",
+    "status": "APPROVED",
+    "anchors": [
+      "FEAT-523",
+      "FEAT-645",
+      "VIBE-015",
+      "BKM-083"
+    ]
+  },
+  {
+    "id": "DISC-015",
+    "title": "Two-Dimensional Epistemic Stability & Subconscious De-Starvation",
+    "theme": "Knowledge Distillation & Memory Consolidation",
+    "summary": "Monolithic rank scoring causes database amnesia and starvation; decoupling substance (impact_level 1-4) from topology (refinement_level 0-3 via Lyapunov stability delta=0) preserves low-level operational exhaust.",
+    "date": "2026-10-18",
+    "status": "APPROVED",
+    "anchors": [
+      "LOOP-004",
+      "FEAT-662",
+      "FEAT-067",
+      "FEAT-127"
+    ]
+  },
+  {
+    "id": "DISC-016",
+    "title": "The Separation of Atomic Substance from Narrative Topology",
+    "theme": "Document Architecture & Applied Writer",
+    "summary": "Conflating atomic note content with narrative spine ordering forces paragraph reflows to corrupt revision history; separating Kabal Spines from AST reconciliation allows arbitrary narrative permutations over immutable substance.",
+    "date": "2026-10-20",
+    "status": "APPROVED",
+    "anchors": [
+      "FEAT-665",
+      "ADR-008",
+      "FEAT-601"
+    ]
+  },
+  {
+    "id": "DISC-017",
+    "title": "Causal Evidence-Before-Verdict Token Order Inversion",
+    "theme": "LLM Epistemics & Attention Dynamics",
+    "summary": "In causal autoregressive models, emitting an early verdict (KEEP/DROP) induces confirmation bias and post-hoc confabulation; evaluating anchor evidence before the verdict token guarantees deterministic conjunction rejection.",
+    "date": "2026-10-26",
+    "status": "APPROVED",
+    "anchors": [
+      "BKM-091",
+      "FEAT-671",
+      "BKM-088",
+      "BKM-089"
+    ]
+  },
+  {
+    "id": "DISC-018",
+    "title": "The Out-of-Band Entailment Capability Cliff",
+    "theme": "Heterogeneous Silicon & Model Specialization",
+    "summary": "Small edge models (3B) suffer 0% specificity when auditing their own generation out-of-band; logical entailment auditing must be decoupled to warm 27B+ sovereign silicon and operate in 100% silence on PASS.",
+    "date": "2026-10-26",
+    "status": "APPROVED",
+    "anchors": [
+      "BKM-094",
+      "FEAT-058",
+      "BKM-089"
+    ]
+  },
+  {
+    "id": "DISC-019",
+    "title": "Temporal Epistemic Disentanglement (Excavated Memory vs. Live Runtime)",
+    "theme": "Temporal Reasoning & Grounding",
+    "summary": "Presenting historical archives during real-time status queries provokes model abstentions or time-travel confabulations; explicit labeling as past dream excavations distinguishes historical engineering from live runtime state.",
+    "date": "2026-10-26",
+    "status": "APPROVED",
+    "anchors": [
+      "BKM-092",
+      "FEAT-671"
+    ]
+  },
+  {
+    "id": "DISC-020",
+    "title": "Step-Trace Backward Fault Localization",
+    "theme": "Telemetry & Closed-Loop Flywheels",
+    "summary": "Treating negative user feedback as a monolithic loss yields zero learning signal; walking backward across pipeline artifacts (Voice -> Stance -> Filter -> Search) isolates the exact defect stage into labeled exemplars.",
+    "date": "2026-10-26",
+    "status": "APPROVED",
+    "anchors": [
+      "FEAT-638",
+      "FEAT-671",
+      "BKM-035"
+    ]
   }
 ]

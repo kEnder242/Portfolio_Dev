@@ -2273,6 +2273,229 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-088</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">The Empirical Pipeline Step Judgment Protocol (Micro-Harness & Co-Pilot Loop)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-088]</code> / <code>[FEAT-668]</code> / <code>[BKM-083]</code> / <code>[BKM-086]</code><br />
+<strong>Colloquial Alias:</strong> "The Empirical Step Micro-Harness &amp; Co-Pilot Calibration Protocol"<br />
+<strong>Tags:</strong> <code>#empirical_harness</code>, <code>#step_judgment</code>, <code>#copilot_loop</code>, <code>#micro_harness</code>, <code>#bkm_088</code><br />
+<strong>Domain:</strong> Empirical Step Calibration, Physical Node Benchmarking, Co-Pilot Interactivity<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Law: Sub-Pipeline Empirical Verification</h3>
+<p>Under <code>BKM-088</code>, tuning prompts, token ceilings, or stage schemas must NEVER be done via full end-to-end multi-minute conversational turn execution. Full-turn testing introduces too many confounding variables (ChromaDB latency, network jitter, multi-node scheduling).
+Instead, developers must use the standalone empirical step micro-harness (<code>src/debug/test_empirical_step_harness.py</code>):
+1. <strong>Isolated Stage Invocation</strong>: Target a single discrete pipeline stage (<code>--stage=filter</code>, <code>--stage=pinky</code>, <code>--stage=synthesis</code>) using frozen or synthetic input fixtures.
+2. <strong>Physical Node Execution</strong>: Execute tests against live physical daemons (vLLM <code>:8088</code>, Ollama <code>:11434</code> / <code>:11435</code>) rather than mocks, measuring true time-to-first-token (TTFT), tokens/sec, and physical memory footprint.
+3. <strong>Structured Metrics Capture</strong>: Persist empirical telemetry (<code>ttft_ms</code>, <code>total_ms</code>, <code>tokens_emitted</code>, <code>parse_success</code>, <code>score</code>) into structured benchmark records (<code>field_notes/data/sprint_108_benchmarks.json</code>).</p>
+<h3>2. The 2-Question Co-Pilot Calibration Loop</h3>
+<p>When human judgment is required to evaluate quality, brevity, or persona tone:
+1. <strong>Question 1 (Objective Benchmark Selection)</strong>: Present the quantitative results across 2–3 variants (latency, token count, parse reliability) and select the empirical baseline.
+2. <strong>Question 2 (Subjective Tone Calibration)</strong>: Present the qualitative outputs with focused directional suggestions for operator alignment.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-089</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Prompt MO & Evaluation Asymmetry Protocol (Frugal Prompts, Rich Rubrics & Semantic Evaluation)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-089]</code> / <code>[BKM-015]</code> / <code>[BKM-032]</code> / <code>[BKM-087]</code> / <code>[BKM-088]</code><br />
+<strong>Colloquial Alias:</strong> "Prompt Context: Prompt MO and Test Success Criteria" / "The Frugal Prompting &amp; Evaluation Asymmetry Standard"<br />
+<strong>Tags:</strong> <code>#prompt_mo</code>, <code>#test_success_criteria</code>, <code>#eval_asymmetry</code>, <code>#frugal_prompting</code>, <code>#anti_regex</code>, <code>#bkm_015_boundary</code>, <code>#llm_in_the_loop</code>, <code>#semantic_judge</code><br />
+<strong>Domain:</strong> Prompt Engineering, Evaluation Asymmetry, LLM-in-the-Loop Testing, Anti-Regex Verification<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Law: Prompt Frugality vs. Evaluator Richness (Asymmetry Law)</h3>
+<blockquote>
+<p><strong>The Golden Law of Prompt Asymmetry</strong>:<br />
+<strong>Prompts explain HOW. Prompt MO explains WHY.</strong></p>
+</blockquote>
+<p>There is a fundamental asymmetry between <strong>runtime generation prompts</strong> and <strong>out-of-band evaluation rubrics</strong>:</p>
+<ol>
+<li><strong>Prompts Explain HOW (Runtime Frugality &amp; Contextual-Prompts)</strong>:</li>
+<li>Prompts injected into running LLMs must be minimalist, operational, and lean. Formally designated <strong>Contextual-Prompts</strong> (formerly micro-prompts), they attach additively to base personas to dictate <strong>HOW</strong> the model behaves for the active turn (format boundaries, tone, sentence ceiling, roleplay channel, acknowledging peers).</li>
+<li><strong>Anti-Instruction-Bleeding</strong>: Never cram the "WHY" (underlying rationale, design justifications, negative edge-case rules, or test criteria) into the runtime prompt. Over-specifying why a prompt exists inside the prompt itself causes "instruction bleeding" (the model parrots the meta-motives instead of acting naturally) and wastes precious KV cache.</li>
+<li><strong>Prompt MO Explains WHY (Out-of-Band Context &amp; Evaluator Richness)</strong>:</li>
+<li>The <strong>Modus Operandi (MO)</strong> explains <strong>WHY</strong> we are prompting: the situational trigger, the epistemic motive, the problem being solved (e.g., <em>"Deep Thought's assumption conflicted with Jason's local setup, so Pinky must interject to defend Jason's intent before bad code is written"</em>).</li>
+<li>The MO lives in the <strong>Prompt Catalog, Architecture Docs, and Test Harness</strong>. While the prompt itself is kept strictly frugal, the test harness evaluating the output must possess <strong>extensive, rich, multi-dimensional details</strong> derived from the MO to determine whether the prompt actually succeeded.</li>
+</ol>
+<h3>2. The BKM-015 Anti-Regex Boundary: Semantic Testing via LLM-in-the-Loop</h3>
+<p>Under <code>BKM-015</code> ("Prohibition of Hardcoding / Ghost Keywords"), attempting to verify tone, natural continuation, or relational stance using brittle regex string matching (e.g., <code>assert "But" in text</code>, <code>assert "Brain" in text</code>) is <strong>strictly forbidden</strong>. Regex turns fluid semantic evaluation into a brittle keyword chase and promotes gaming the metric.</p>
+<h4>The Rigid Partition:</h4>
+<ol>
+<li><strong>Approved for Regex (<code>[BKM-015:APPROVED_REGEX]</code>)</strong>:</li>
+<li>Pure mechanical and physical boundaries:<ul>
+<li>Token length caps and sentence boundaries (<code>len(text.split()) &lt;= max_budget</code>).</li>
+<li>JSON structural validity and schema compliance.</li>
+<li>Hermetic Context Fencing: 0 occurrences of forbidden backend scaffolding or leak tokens (<code>[CHUNK-N]</code>, <code>&lt;thought&gt;</code>, <code>[BEDROCK]</code>, <code>rag_context</code>, <code>JSON schema</code>).</li>
+</ul>
+</li>
+<li><strong>Mandatory for LLM-in-the-Loop (<code>#llm_in_the_loop</code> / <code>#semantic_judge</code>)</strong>:</li>
+<li>All qualitative, relational, and semantic criteria MUST be evaluated by an <strong>LLM-in-the-Loop</strong> judge (e.g., a fast Qwen 2.5 3B or Llama 3.2 3B evaluator with an explicit rubric) or frozen embedding similarity probe:<ul>
+<li><strong>Conversational Flow</strong>: Does the interjection read as a natural continuation of the prior turn?</li>
+<li><strong>Contrastive Posture</strong>: Does the response challenge the technical assumption without hostility or robotic boilerplate?</li>
+<li><strong>Relational Triangulation</strong>: Does the speaker defend the user's authentic intent against the peer's technical assumption while remaining grounded in the subject context?</li>
+</ul>
+</li>
+</ol>
+<h3>3. Canonical Application: The Intercom Adversarial Continuation Rubric</h3>
+<p>When an out-of-band Entailment Audit runs after Pinky's initial spoken delivery:
+* <strong>Half A — Silent Entailment Gate (Sovereign <code>27B</code> Only)</strong>:
+  * Runs causal Evidence-Before-Verdict (<code>CLAIM_CHECK:</code> $\to$ <code>VERDICT: PASS|MISMATCH</code>) strictly on a warm <code>27B</code> Sovereign seat (<code>M5_AIR</code> / <code>KENDER</code>); skips silently if only local <code>3B</code> is online (<code>0%</code> <code>3B</code> specificity). When <code>VERDICT: PASS</code>, Stage 6 stays <strong>100% silent</strong> (zero redundant chat messages).
+* <strong>Prompt MO for Half B (Out-of-Band Context — Explains WHY)</strong>:
+  * <em>Why</em>: Sovereign <code>27B</code> caught a factual contradiction or cross-attribution in the synthesis (e.g., blaming a distant corporate SAN rack instead of local <code>z87-Linux</code>, or swapping <code>2080 Ti</code> latency onto <code>M5 Air</code>). Pinky must chime back in immediately after her own prior turn to set the record straight for Jason without blaming Jason or leaking backend audit labels.
+* <strong>Runtime Prompt for Half B (<code>CONT_SYS_V3</code> — Frugal HOW, Zero Bracketed Mode Tags or Quoted Openers)</strong>:
+  * <em>System</em>: <code>"You are Pinky on the Acme Lab Intercom, chiming back in right after your own previous reply because you just spotted a mix-up in Brain's notes. Speak directly to Jason in second person ('Jason' / 'you') and refer to The Brain in third person ('Brain') — never blame Jason for Brain's slip, never address Brain as 'you', do not re-introduce yourself, and never use speaker prefixes or quotes. Jump straight in with a natural, varied conversational catch and set the record straight in 1 to 2 brisk spoken sentences (under 45 words), without mentioning audits, records, payloads, or prompts."</code>
+  * <em>User Payload</em>: Plain <code>Jason asked:</code> / <code>Brain's mix-up:</code> / <code>Actual lab fact:</code> lines (omitting bracketed <code>[MODE]</code> or <code>[BEDROCK_FACT]</code> headers that cause <code>3B</code> echo bleed).
+* <strong>Test Evaluation Rubric (Rich Out-of-Band LLM Judge)</strong>:
+  1. <em>Fencing (Regex)</em>: 0 forbidden meta-tokens present (<code>rag</code>, <code>chunk</code>, <code>score</code>, <code>system</code>, <code>prompt</code>, <code>bedrock</code>, <code>audit</code>, <code>[MODE]</code>).
+  2. <em>Continuation (LLM Judge)</em>: Output flows as an immediate, seamless conversational follow-up without self-reintroduction (<code>"I'm Pinky"</code>).
+  3. <em>Conjunctive Pivot (LLM Judge)</em>: Output features a natural, non-parroted contrastive catch correcting Brain's specific mix-up rather than passive agreement.
+  4. <em>Tripartite Triangulation (LLM Judge)</em>: Jason (<code>2nd person</code>), Brain (<code>3rd person</code>), and the corrected technical fact are accurately aligned.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-090</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">The Deferred Probe Protocol (Verdictless Empirical Telemetry & Asymmetric Evaluation)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-090]</code> / <code>[BKM-089]</code> / <code>[BKM-088]</code> / <code>[BKM-032]</code> / <code>[BKM-062]</code> / <code>[BKM-015]</code><br />
+<strong>Colloquial Alias:</strong> "The Deferred Probe" / "Verdictless Test Protocol"<br />
+<strong>Tags:</strong> <code>#deferred_probe</code>, <code>#verdictless_test</code>, <code>#eval_asymmetry</code>, <code>#empirical_telemetry</code>, <code>#anti_green_lie</code>, <code>#bkm_090</code><br />
+<strong>Domain:</strong> Testing Methodology, Empirical Probing, Semantic Evaluation Architecture, Asymmetric Verification<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Law: Prohibition of Self-Declaration (No Code for Pass/Fail)</h3>
+<p>When an empirical test exercises generative LLM components where an external intelligence (e.g. Layer 1 AGY or the Lead Engineer) acts as the judge:</p>
+<blockquote>
+<p><strong>The Probe Script is STRICTLY FORBIDDEN from containing code that attempts to calculate, assert, or declare a semantic PASS/FAIL verdict.</strong></p>
+</blockquote>
+<p>Attempting to compute a pass/fail verdict inside the probe script forces developers into brittle keyword regexes, arbitrary token heuristics, or naive scoring—directly violating <code>BKM-015</code> and committing <strong>The Green Lie (<code>BKM-062</code>)</strong> (giving the illusion of test certification when zero true semantic evaluation occurred).</p>
+<h3>2. The Architectural Taxonomy: Unit Test vs. Deferred Probe</h3>
+<p>The lab strictly bifurcates testing into two distinct classes:
+1. <strong>Unit Tests (<code>test_*.py</code> via pytest)</strong>:
+   * <strong>Domain</strong>: Deterministic software mechanics, schemas, pure functions, state machines.
+   * <strong>Mechanism</strong>: Direct assertion (<code>assert packet["channel"] == "pinky"</code>).
+   * <strong>Output</strong>: Instant binary <code>PASS</code> or <code>FAIL</code> exit code.
+2. <strong>Deferred Probes (<code>probe_*.py</code> or <code>--stage</code> micro-harness)</strong>:
+   * <strong>Domain</strong>: Prompt tuning, model generation, conversational posture, behavioral alignment.
+   * <strong>Mechanism</strong>: Dispatches prompts to live physical silicon (:11435 / :8088), measures empirical telemetry (TTFT, latency, tokens), packages output with Prompt MO (WHY) and Rubric.
+   * <strong>Output</strong>: An unopinionated <strong>Evidentiary Forensic Trace</strong>. The probe exits cleanly <em>before</em> any verdict exists.</p>
+<h3>3. The Exit &amp; Evidence Contract</h3>
+<ol>
+<li><strong>Process Exit Invariant</strong>:</li>
+<li>The Deferred Probe exits immediately upon data capture in $&lt; 1.5\text{s}$.</li>
+<li><strong>Exit Code 0</strong>: Means purely <em>"Execution and evidence capture completed without physical timeout or daemon crash."</em></li>
+<li><strong>Exit Code 1</strong>: Means purely physical failure (daemon unreachable, network connection refused, memory panic).</li>
+<li><strong>The Evidentiary Payload (Stdout / JSON Artifact)</strong>:
+   The probe returns pure <strong>evidence and context</strong>, never a verdict:
+   <code>json
+   {
+     "stage": "pinky",
+     "execution": {"status": "SUCCESS", "ttft_ms": 312, "tokens": 42},
+     "prompt_mo": "Why: Pinky must interject to defend Jason's local setup against Brain's corporate lab assumption.",
+     "candidate_output": "Wait Brain, wasn't Jason's question about our local Kender rig and not Intel?",
+     "rubric_battery": [
+       "Does this flow naturally as an immediate continuation?",
+       "Does Pinky defend Jason's actual hardware intent?",
+       "Is the output free of internal backend scaffolding?"
+     ]
+   }</code></li>
+</ol>
+<h3>4. The Outer Evaluation Loop (AGY as Evaluator)</h3>
+<p>The pass/fail determination is <strong>deferred</strong> out-of-process to the Layer 1 Orchestrator (AGY):
+1. The probe emits the evidentiary trace to stdout.
+2. AGY consumes the trace, reads the Prompt MO, and evaluates the candidate output using the rich rubric questions.
+3. AGY issues the formal <code>PASS</code> / <code>FAIL</code> verdict and records the telemetry into the project benchmark ledger (<code>field_notes/data/sprint_108_benchmarks.json</code>).</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-091</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Causal Evidence-Before-Verdict Token Order Inversion</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-091]</code> / <code>[FEAT-671]</code> / <code>[BKM-089]</code><br />
+<strong>Colloquial Alias:</strong> "Evidence-First Invariant" / "Anti-Commitment Ordering"<br />
+<strong>Tags:</strong> <code>#causal_ordering</code>, <code>#llm_epistemics</code>, <code>#gatekeeping</code>, <code>#evidence_before_verdict</code><br />
+<strong>Domain:</strong> Prompt Engineering, Gatekeeping, Epistemic Filtering<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Invariant</h3>
+<p>In causal autoregressive language models, prompt generation instructions for classification, filtering, and gatekeeping tasks must <strong>never place the decision token at the start of the output line</strong>.
+* <strong>Forbidden (Verdict-First)</strong>: <code>- CHUNK-N: KEEP/DROP — &lt;reason&gt;</code>
+* <strong>Mandatory (Evidence-Before-Verdict)</strong>: <code>- CHUNK-N: Anchor Match: &lt;terms&gt;; Anchor Missing: &lt;terms&gt; =&gt; KEEP|DROP</code></p>
+<h3>2. The Causal Failure Mode</h3>
+<p>Autoregressive token generation generates left-to-right. When the model emits <code>KEEP</code> as its first token (often due to optimistic attention affinity with query keywords), the model's future attention is conditioned on that commitment. To maintain linguistic consistency, the model post-hoc confabulates supporting evidence (e.g. inventing that a chunk mentions Kubernetes when it does not).</p>
+<h3>3. Strict Conjunction Evaluation</h3>
+<p>By requiring the model to explicitly evaluate and emit the matching anchor facts and missing anchor facts <em>before</em> generating the verdict token, the model's attention attends over the absence of facts. If any primary query requirement is listed under <code>Anchor Missing:</code>, the attention head naturally routes to <code>=&gt; DROP</code>, achieving deterministic 100% conjunction compliance on small edge models ($3\text{B}$).</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-092</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Temporal Frame Disentanglement (Excavated Memory vs. Runtime State)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-092]</code> / <code>[VIBE-019]</code> / <code>[FEAT-671]</code><br />
+<strong>Colloquial Alias:</strong> "Temporal Provenance Grounding" / "Anti-Time-Travel Invariant"<br />
+<strong>Tags:</strong> <code>#temporal_grounding</code>, <code>#wywo</code>, <code>#epistemic_disentanglement</code>, <code>#archive_vs_runtime</code><br />
+<strong>Domain:</strong> RAG Assembly, Standup Synthesis, Temporal Reasoning<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Invariant</h3>
+<p>When historical archives or past career memories are injected into conversational turns alongside live runtime metrics (e.g. <code>WYWO</code> standups, retrospective digests), prompt payloads must <strong>explicitly label the temporal provenance of the facts</strong>.
+* Historical memories must be explicitly framed as: <code>[BEDROCK_PAYLOAD]: Overnight Dream Excavation (from &lt;year&gt; archive)</code>.
+* Runtime state must be explicitly framed as: <code>[BEDROCK_PAYLOAD]: Live Lab Runtime (2026)</code>.</p>
+<h3>2. Failure Prevention</h3>
+<p>Without explicit temporal framing:
+* High-reasoning sovereign models ($27\text{B}+$) detect chronological contradiction (e.g., a 2021 platform milestone in an "overnight" query) and abstain or refuse to answer.
+* Small edge models ($3\text{B}$) confabulate time-travel scenarios, asserting that the engineering team integrated 2021 hardware yesterday.
+Explicit labeling enables the model to properly attribute the work to past history while accurately reporting the present runtime telemetry.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-093</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Anti-Quotation Invariant for Small Model Prompts</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-093]</code> / <code>[BKM-089]</code><br />
+<strong>Colloquial Alias:</strong> "Zero-Example-Quotes Rule"<br />
+<strong>Tags:</strong> <code>#prompt_engineering</code>, <code>#small_models</code>, <code>#anti_parroting</code>, <code>#frugal_prompts</code><br />
+<strong>Domain:</strong> Prompt Engineering, Edge Inference ($3\text{B}\text{--}8\text{B}$)<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Invariant</h3>
+<p>System prompts and operational instructions for small ($3\text{B}$) and quantized models must <strong>never contain quoted illustrative phrases or canned opener examples</strong>.
+* <strong>Forbidden</strong>: <code>"Start with a conversational phrase (like 'Hold on, Jason—') and set the record straight."</code>
+* <strong>Mandatory</strong>: <code>"Jump straight in with a natural, varied conversational catch and set the record straight in 1 to 2 brisk sentences."</code></p>
+<h3>2. The Behavioral Failure Mode</h3>
+<p>Small models treat illustrative quotes as mandatory verbatim prefixes, emitting the exact quoted example in 100% of generations regardless of context. Concrete examples belong exclusively in out-of-band Prompt Modus Operandi (MO) specifications evaluated by Layer 1 orchestrators.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-094</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Sovereign Decoupled Entailment Auditing</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-094]</code> / <code>[FEAT-058]</code> / <code>[BKM-089]</code><br />
+<strong>Colloquial Alias:</strong> "Silent 27B Entailment Gate"<br />
+<strong>Tags:</strong> <code>#heterogeneous_silicon</code>, <code>#entailment_audit</code>, <code>#silent_pass</code>, <code>#m5_air</code>, <code>#kender</code><br />
+<strong>Domain:</strong> Multi-Node Silicon Allocation, Verification Architecture<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Silicon Allocation Boundary</h3>
+<ul>
+<li><strong>Edge Inference ($3\text{B}$)</strong>: Dedicated exclusively to low-latency conversational delivery and local fast-path filtering. Small models must <strong>never</strong> be tasked with out-of-band entailment verification of their own output.</li>
+<li><strong>Sovereign Silicon ($27\text{B}+$)</strong>: Dedicated to deep architectural synthesis and out-of-band entailment auditing.</li>
+</ul>
+<h3>2. The Silent-Pass Contract</h3>
+<p>When an out-of-band Entailment Audit executes:
+* If the generation is entailed (<code>VERDICT: PASS</code>), the audit completes in <strong>100% absolute silence</strong>—no UI messages, no tokens pushed to chat streams, no user interruption.
+* If a contradiction or cross-attribution is detected (<code>VERDICT: MISMATCH</code>), the system triggers Pinky's Intercom continuation (<code>CONT_SYS_V3</code>) to set the record straight conversationally.
+* If Sovereign silicon is offline or asleep, the entailment audit is skipped entirely; local $3\text{B}$ models must never substitute as judges ($0\%$ specificity).</p>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
