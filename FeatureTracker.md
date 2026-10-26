@@ -3599,13 +3599,13 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Rationale:** Eliminates data drift between build artifacts and active runtime files while elevating morning health audits to the operator console.
 **Mechanism:** Single-directory logging in `manager.py` and DOM timeline interleaving in `status.html`.
 
-## [FEAT-638] Intercom Fourth Wall Feedback UI & REST Bridge
-**Sprint:** SPR-97.0
+## [FEAT-638] Intercom Fourth Wall Feedback UI & Downvote Step-Trace Attribution
+**Sprint:** SPR-97.0 / SPR-108.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/field_notes/intercom.html`, `Portfolio_Dev/field_notes/intercom_v2.js`, `HomeLabAI/src/v5/foyer/router.py`
-**Logic:** Embeds discrete, interactive `👍` (thumbs up) and `👎` (thumbs down) feedback actuators into assistant chat bubbles in `intercom.html`. Dispatches asynchronous payloads (`{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }`) to Foyer port `:8765/feedback`, providing immediate visual feedback glow and persisting signals into `foyer_feedback_ledger.jsonl`.
-**Rationale:** Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique.
-**Mechanism:** Event listeners in `intercom_v2.js` and `POST /feedback` handler in `router.py`.
+**Code:** `Portfolio_Dev/field_notes/intercom.html`, `Portfolio_Dev/field_notes/intercom_v2.js`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Logic:** Embeds discrete, interactive `👍` (thumbs up) and `👎` (thumbs down) feedback actuators into assistant chat bubbles in `intercom.html`. Dispatches asynchronous payloads (`{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }`) to Foyer port `:8765/feedback`. On downvote (`rating == "DOWN"`), triggers an automated Step-Trace backward entailment walk (`step_trace_attribution`) across the cached turn artifacts (Voice TL;DR $\to$ Stance $\to$ Filter $\to$ Search), localizes the defect stage (`STAGE_5_VOICE_DRIFT`, `STAGE_4_HALLUCINATION`, `STAGE_3_FILTER_LEAK`, `STAGE_2_RETRIEVAL_MISS`), and atomically appends labeled negative exemplars to `Portfolio_Dev/field_notes/data/negative_exemplars.json` for offline LoRA distillation.
+**Rationale:** Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique, turning human downvotes directly into high-signal supervised training data.
+**Mechanism:** Event listeners in `intercom_v2.js`, `POST /feedback` handler in `router.py`, and `step_trace_attribution()` in `cognitive_hub.py`.
 
 ## [FEAT-639] Attendant Dead-Lock Reaping, VRAM Status Clean-up & Queue Gate Hardening
 **Sprint:** SPR-97.0
@@ -3672,6 +3672,62 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
 **Origin Quote:** "Batching with multiple tools as hidden inter process communication. We convince each session it’s working at its own pace, but spoon feed our own tools to slip under the ground truth radar. The subversive part: We convince every agent that it is in charge, the tier 1 assumption, we feed the ego and paranoia."
 **Synthesis:** Rather than force-feeding code context into worker prompts, swarm architectures should use subversive tool-mediated IPC. By framing the worker as the primary investigator and serving pre-computed L2 conductor patch notes dynamically through tools (e.g. `jitc_research`), the system satisfies the agent's agency and empirical grounding threshold while strictly bounding context and eliminating hallucinated exploration.
+
+## [DISC-013] The "Island of Green" Trap & Judicial Daemon Assertion
+**Sprint:** SPR-92.0
+**Status:** APPROVED
+**Tags:** `#verification_integrity`, `#anti_green_lie`, `#daemon_monitoring`, `[BKM-062]`, `[BKM-024]`, `[FEAT-608]`, `[FEAT-619]`
+**Origin Quote:** "Tests that assert mocked expectations pass with flying colors while the physical daemon is stone dead. We built an island of green surrounded by a sea of silent failures."
+**Synthesis:** Traditional unit test suites create an illusion of correctness by asserting against mocks, permitting tests to pass green even while background services are dead or socket contracts are broken. Genuine verification requires Judicial Daemon Assertion: test suites must assert live socket handshakes, verify running process PIDs, and inspect real hardware vitals rather than mock responses.
+
+## [DISC-014] Continuous Interest Fluidity vs. Binary Gate Clamping
+**Sprint:** SPR-103.0
+**Status:** APPROVED
+**Tags:** `#cognitive_flow`, `#continuous_pacing`, `#hydraulic_interest`, `[FEAT-523]`, `[FEAT-645]`, `[VIBE-015]`
+**Origin Quote:** "Casual is a tone scalar, not an execution gate. Binary clamps choked continuous interest, suffocating multi-node conversation into amnesia."
+**Synthesis:** Hardcoded binary gates (e.g. `if vibe == 'CASUAL': abort()`) starve downstream models and abort multi-node deliberation. Cognitive interest is naturally a continuous scalar ($0.0 \dots 1.0$) that smoothly modulates token headroom rather than imposing binary silence, allowing conversation to breathe naturally.
+
+## [DISC-015] Two-Dimensional Epistemic Stability & Subconscious De-Starvation
+**Sprint:** SPR-106.0
+**Status:** APPROVED
+**Tags:** `#epistemic_stability`, `#gem_refinement`, `#subconscious_dreaming`, `[LOOP-004]`, `[FEAT-662]`, `[FEAT-067]`
+**Origin Quote:** "A database where every gem is labeled Rank 4 is not high quality; it is brittle and hallucinating. Operational exhaust is the bedrock that anchors platform trunks."
+**Synthesis:** Single-scalar ranking creates brittle knowledge bases by prematurely saturating notes into artificial summaries. Decoupling substance (`impact_level` 1–4) from structural topology (`refinement_level` 0–3 evaluated via Lyapunov stability $\Delta = 0$) prevents database starvation and preserves raw operational exhaust.
+
+## [DISC-016] The Separation of Atomic Substance from Narrative Topology
+**Sprint:** SPR-107.0
+**Status:** APPROVED
+**Tags:** `#document_architecture`, `#ast_reconciliation`, `#kabal_spines`, `[FEAT-665]`, `[ADR-008]`, `[FEAT-601]`
+**Origin Quote:** "Cramming substance and vertebrae into bones.json forced paragraph reordering to mutate source evidence. To scale writing, spine order must be decoupled from atomic cards."
+**Synthesis:** Conflating atomic evidence (cards, quotes) with narrative ordering (chapter spines) causes structural refactoring to corrupt underlying facts. Separating immutable atomic substance from fluid topological spines (Kabal Spines + AST Reconciliation) allows arbitrary narrative experimentation without evidence destruction.
+
+## [DISC-017] Causal Evidence-Before-Verdict Token Order Inversion
+**Sprint:** SPR-108.0
+**Status:** APPROVED
+**Tags:** `#causal_ordering`, `#llm_epistemics`, `#gatekeeping`, `[BKM-091]`, `[FEAT-671]`, `[BKM-088]`
+**Origin Quote:** "When a causal model emits KEEP first, it immediately confabulates fake evidence to justify the choice. Inverting the token order to evaluate evidence before the verdict forced deterministic truth."
+**Synthesis:** In causal autoregressive models, prompting for a verdict first (`- CHUNK-1: KEEP/DROP — reason`) causes small models to commit to `KEEP` and post-hoc confabulate evidence. Inverting output token order to Evidence-Before-Verdict (`Anchor Match: <terms>; Anchor Missing: <terms> => KEEP|DROP`) constrains causal attention to attend over missing facts before generating the verdict token, guaranteeing deterministic conjunction rejection.
+
+## [DISC-018] The Out-of-Band Entailment Capability Cliff
+**Sprint:** SPR-108.0
+**Status:** APPROVED
+**Tags:** `#heterogeneous_silicon`, `#entailment_cliff`, `#decoupled_audit`, `[BKM-094]`, `[FEAT-058]`, `[BKM-089]`
+**Origin Quote:** "Small local models cannot evaluate their own grounding out-of-band. They collapse into pedantic false alarms or blind confirmation. Entailment auditing belongs exclusively to warm 27B silicon."
+**Synthesis:** Small edge models ($3\text{B}$) suffer $0\%$ specificity when acting as out-of-band entailment judges, collapsing into continuous false alarms. In contrast, sovereign high-parameter models ($27\text{B}+$) achieve $100\%$ precision/recall. Silicon roles must be decoupled: $3\text{B}$ generates low-latency responses, while $27\text{B}$ executes out-of-band entailment audits in complete silence on passing turns.
+
+## [DISC-019] Temporal Epistemic Disentanglement (Excavated Memory vs. Live Runtime)
+**Sprint:** SPR-108.0
+**Status:** APPROVED
+**Tags:** `#temporal_grounding`, `#wywo`, `#epistemic_disentanglement`, `[BKM-092]`, `[FEAT-671]`
+**Origin Quote:** "Without explicit temporal labeling, 27B refused to answer because 2021 was not overnight, while 3B claimed we built 2021 hardware yesterday. Framing it as an excavated archive indexed last night solved both."
+**Synthesis:** Presenting historical archives during real-time status queries provokes model abstentions or time-travel confabulations. Explicitly framing archival evidence as excavated past memories indexed during nightly idle cycles resolves chronological contradictions across both large and small models.
+
+## [DISC-020] Step-Trace Backward Fault Localization
+**Sprint:** SPR-108.0
+**Status:** APPROVED
+**Tags:** `#step_trace`, `#fault_localization`, `#downvote_flywheel`, `[FEAT-638]`, `[FEAT-671]`, `[BKM-035]`
+**Origin Quote:** "Treating a downvoted conversational turn as a monolithic failure yields zero training signal. Walking backward from leaf to root isolates the exact stage that cracked."
+**Synthesis:** In sequential cognitive pipelines, downvotes cannot be treated as undifferentiated negative losses. Walking backward along the pipeline artifacts (Leaf TL;DR $\to$ Stance $\to$ Filter $\to$ Search) pinpoints the exact defect stage, generating high-signal, stage-attributed negative exemplars for targeted LoRA fine-tuning.
 
 ## [FEAT-647] Subversive `jitc_research` MCP Tool & Swarm IPC Bridge
 **Sprint:** SPR-98.0

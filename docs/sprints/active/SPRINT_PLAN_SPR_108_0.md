@@ -917,3 +917,38 @@ During the empirical probing of Stages 0–6, several important discrepancies, b
 * **`[FEAT-672]`**: Multi-Track Cognitive Deliberation & Forked KV-Cache Parallelism (`[VIBE-018]`). Exploring zero-copy RadixAttention branching for multi-hypothesis concurrent deliberation on oMLX / 4090.
 * **`[BACKLOG-CLI-VOICE]` (`cli_voice_v1` LoRA Adapter & CLI Voice Evaluation — `#1.2.1`)**: Evaluate whether to keep, re-train, or retire the `cli_voice_v1` LoRA adapter (investigating adapter-level training-distribution markdown header tendencies such as `**TECHNICAL INTUITION**` and `system`+`user` role-slot sensitivity independently from internal Waterfall prompt engineering).
 * **`[BACKLOG-CRITIC-EXCISION]` (Legacy `evaluate_grounding` `"Pinky (Coherence Critic)"` Code Excision — `BP-10`)**: Complete the Python plumbing excision of `evaluate_grounding()` in [`cognitive_hub.py#L2324-L2498`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2324-L2498) alongside Phase 5 `Story 108.15` (`step_trace_attribution`) so Stage 6 runs strictly through Deep Thought Entailment Audit without legacy UI chat broadcasts.
+
+---
+
+## 📋 Action Requests (AR) & DNA Tracking Ledger (Sprint 108 Epistemic Hardening)
+
+The following actionable additions and updates have been established from the Sprint 108 empirical probe findings and post-March retrospective:
+
+### Documentation & DNA Actions (Pre-Approved)
+* **`AR-108-11` (BKM / Protocols): Causal Evidence-Before-Verdict Token Order Inversion**
+  * *Target:* [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md) and [`Portfolio_Dev/FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md).
+  * *Action:* Codify rule that prompts for causal models must evaluate anchor evidence before emitting the decision token (`Anchor Match: X; Missing: Y => KEEP|DROP`).
+* **`AR-108-12` (INS): The Alternating Classification/Synthesis Cadence (The Cognitive Accordion)**
+  * *Target:* [`Portfolio_Dev/dna/inspiration_data.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/dna/inspiration_data.json).
+  * *Action:* Record narrative inspiration modeling the cognitive waterfall as alternating expansion (retrieval / synthesis) and contraction (classification / filtering) breathing cycles.
+* **`AR-108-13` (BKM): Temporal Frame Disentanglement (Excavated Memory vs. Runtime State)**
+  * *Target:* [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md).
+  * *Action:* Codify explicit temporal framing in prompt assembly for retrospective queries (`WYWO`) distinguishing past dream excavations from live runtime telemetry.
+* **`AR-108-14` (BKM): Anti-Quotation Invariant for Small Model Prompts**
+  * *Target:* [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md).
+  * *Action:* Mandate that runtime prompts for edge/quantized models must never include quoted example phrases to avoid verbatim prefix parroting.
+* **`AR-108-15` (BKM): Sovereign Decoupled Entailment Auditing**
+  * *Target:* [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md).
+  * *Action:* Codify silicon role allocation: small edge models ($3\text{B}$) handle generation; out-of-band entailment auditing is reserved exclusively for warm high-parameter silicon ($27\text{B}+$) and stays silent on pass.
+* **`AR-108-16` (LOOP): UI Voting Loop Step-Trace Attribution Extension**
+  * *Target:* [`Portfolio_Dev/FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md) (`[FEAT-638]` / `[LOOP-005]`).
+  * *Action:* Update the existing UI voting loop specification to document automated backward entailment trace walking and negative exemplar accumulation.
+* **`AR-108-17` (DISC Timeline): Record Discoveries Continuum (DISC-011 through DISC-020)**
+  * *Target:* [`Portfolio_Dev/dna/timeline_data.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/dna/timeline_data.json) and [`Portfolio_Dev/FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md).
+  * *Action:* Chronologically index post-March breakthroughs (Sprints 78–108) including Island of Green, Continuous Interest, 2D Epistemics, Substance vs Topology, Evidence-Before-Verdict, Entailment Cliff, and Temporal Disentanglement.
+
+### Code Actions (Pending Operator Review & Explicit Approval)
+* **`AR-108-18` (CODE PROPOSAL): Natural Zero-Context via Interest Collapse**
+  * *Touchpoints:* [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py), [`HomeLabAI/config/triage_policy.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/triage_policy.json).
+  * *Proposed Code Change:* Replace synthetic `vibe = "ZERO_CONTEXT"` injection in `_run_two_mice_handover` with natural interest collapse (`current_interest = 0.0` / floor). Drive Pinky's brevity and honest acknowledgment natively through existing interest pacing (`FEAT-523`).
+  * *Status:* ⏸️ **HELD FOR OPERATOR APPROVAL BEFORE CODE COMMENCEMENT**.

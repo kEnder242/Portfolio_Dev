@@ -2218,5 +2218,56 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-050",
+    "theme": "Cognitive Architecture & Hydraulic Cadence",
+    "paper_order": 50,
+    "origin": {
+      "author": "jallred",
+      "text": "Splitting roles was bad for 3b. I think we settled on what I consider classification vs synthesis, and alternating between the two provided an interesting expansion and narrative. In a way the waterfall expansion kinda mirrors the shrinking refinement of RAG gem along impact levels. Expansion and contraction make what I consider an effective synthesis.",
+      "source": "Sprint 108 Epistemic Review",
+      "immutable": true,
+      "created_at": "2026-10-26T22:50:00Z"
+    },
+    "synthesis": {
+      "title": "The Cognitive Accordion (Alternating Classification & Synthesis)",
+      "narrative_context": "Multi-agent cognitive pipelines succeed not by forcing small models into confused hybrid roles, but by breathing in alternating phases of Expansion and Contraction. Classification steps contract the search space (triage, evidence filtering, downvote attribution), while Synthesis steps expand the narrative space (HyDE query expansion, deep stance formulation). This expansion and contraction directly mirrors the maturation of raw notes contracting into diamond gems.",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_108_0.md",
+        "HomeLabAI/docs/Protocols.md:BKM-088",
+        "HomeLabAI/docs/Protocols.md:BKM-091",
+        "FEAT-671"
+      ],
+      "review_notes": "Codifies the breathing accordion model: alternating tight classification gates with wide generative synthesis rather than split personas.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "cognitive-accordion",
+        "classification-vs-synthesis",
+        "expansion-and-contraction",
+        "waterfall-dynamics",
+        "gem-refinement-mirror",
+        "small-model-purity"
+      ],
+      "explicit_links": [
+        "INS-049",
+        "BKM-088",
+        "BKM-089",
+        "BKM-091",
+        "FEAT-671"
+      ],
+      "aliases": [
+        "cognitive-accordion",
+        "breathing-waterfall",
+        "expansion-contraction-cadence"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
