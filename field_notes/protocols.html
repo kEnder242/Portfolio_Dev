@@ -2496,6 +2496,27 @@ Explicit labeling enables the model to properly attribute the work to past histo
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-095</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">UI Atomic Turn Dispatch & Zero-Streaming Invariant</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-095]</code> / <code>[FEAT-233]</code> / <code>[FEAT-361]</code> / <code>[FEAT-672]</code><br />
+<strong>Colloquial Alias:</strong> "Zero UI Streaming Invariant"<br />
+<strong>Tags:</strong> <code>#zero_streaming</code>, <code>#atomic_turns</code>, <code>#anti_pop</code>, <code>#clean_chat</code>, <code>#ui_hygiene</code><br />
+<strong>Domain:</strong> Frontend/Backend Interface, UI Orchestration<br />
+<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
+<h3>1. The Core Invariant</h3>
+<ul>
+<li><strong>UI Chat Bubbles Consume Only Completed, Atomic Payload Dispatches</strong>: Streaming partial tokens or typewriter effects to user-facing chat channels (<code>channel="pinky"</code> / <code>channel="chat"</code>) is strictly forbidden (<code>UI_STREAMING_PROHIBITED</code>).</li>
+<li><strong>Inter-Node Token Waterfalls Are Internal Only</strong>: Waterfall token streaming (<code>FEAT-233</code>) exists exclusively between backend processing nodes. Tokens must never leak mid-flight to public UI websockets.</li>
+<li><strong>Discrete Diagnostic Delivery</strong>: Triage classification, Brain retrieval/grounding telemetry, and Critic evaluation records must be dispatched strictly as complete, discrete, raw JSON payload cards to Left Console diagnostic channels (<code>channel="lab"</code> / <code>channel="diagnostic"</code>).</li>
+<li><strong>Single Spoken Delivery</strong>: Persona conversational text is extracted and dispatched <strong>once</strong> to Right Console chat channels as clean, human-readable prose. Unparsed intermediate JSON schemas or raw extraction dictionaries must never be routed to conversational bubbles.</li>
+<li><strong>100% Transparency Without Duplication</strong>: All thoughts, steps, and diagnostics remain completely visible to the operator across the two consoles without verbatim echoes or duplicate dispatches.</li>
+</ul>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>

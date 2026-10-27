@@ -5857,6 +5857,12 @@
 <li>Tokens are buffered in 100ms chunks before hitting the websocket (The Token Batching Victory), solving UI jitter during long reasoning chains.</li>
 </ol>
                 </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Anti-Pop / Anti-UX-Streaming Section</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Waterfall buffering is strictly an internal, inter-node pipeline mechanism (node-to-node). It is categorically prohibited from streaming tokens into user conversational chat bubbles. UI dialogue bubbles receive only completed, post-processed atomic turns.</p>
+                </div>
             </div>     </div>
                             </details>
                         </td>
@@ -12161,13 +12167,23 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>[NEW] Push to waterfall queue for real-time UI delivery <a href="#FEAT-361">FEAT-361</a> 100% Transparency: No masking of inter-node whispers. if hasattr(self, 'waterfall_queue') and self.waterfall_queue: await self.waterfall_queue.put(data)</p>
+                    <p>[NEW] Push to waterfall queue for real-time delivery to telemetry channels <a href="#FEAT-361">FEAT-361</a> 100% Transparency: No masking of inter-node whispers. if hasattr(self, 'waterfall_queue') and self.waterfall_queue: await self.waterfall_queue.put(data)</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>src/logic/cognitive_hub.py</code> at line 352.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">UX Invariants & Delivery Transparency</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ol>
+<li><strong>Zero UX Streaming Guardrail</strong>: Streaming, token typewriter effects, or partial-chunk typing into user-facing conversational bubbles (<code>channel="pinky"</code> / <code>channel="chat"</code>) is categorically banned.</li>
+<li><strong>Transparency Invariant</strong>: 100% transparency means no emissions are silently dropped. All steps, thoughts, and diagnostics must be visible to the user.</li>
+<li><strong>No Duplicate Emissions Invariant</strong>: Text and payload emissions are considered fulfilled if they are passed up to the user through pretty paths (Left Console diagnostic cards for JSON/telemetry; Right Console dialogue bubbles for spoken prose).</li>
+</ol>
                 </div>
             </div>     </div>
                             </details>
@@ -12565,7 +12581,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Universal Epistemic 5-Question Evaluation Battery
+                                    Universal Epistemic Evaluation Battery & Collapsible RAG Grounding Accordion
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -12577,13 +12593,15 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces subjective 1-5 integer scoring with 5 deterministic boolean checks (exact identifiers, reproduction recipe, cause-and-effect isolation, actionable BKM, zero fluff).</p>
+                    <p>Dual epistemic evaluation and evidence presentation architecture:
+1. <strong>Deterministic 5-Question Evaluation Battery</strong>: Replaces subjective 1-5 integer scoring with 5 deterministic boolean checks (exact identifiers, reproduction recipe, cause-and-effect isolation, actionable BKM, zero fluff). Verified via <code>src/tests/test_binary_evaluator_unit.py</code>.
+2. <strong>Unified DNA Grounding Accordion (Pinky Side)</strong>: Expanded from legacy isolated RAG stubs to encompass the full DNA corpus fed to Brain (Knowledge Gems, Protocols <code>BKM</code>, Features <code>FEAT</code>, Philosophy <code>PHL</code>, Discoveries <code>DISC</code>, Inspiration <code>INS</code>, and Loops <code>LOOP</code>). When Pinky finishes the Stage 2 HyDE scout phase, the resulting vector search query terms and retrieved DNA gems are rendered interactively on Pinky's side (Left Console / <code>channel="lab"</code>) as a collapsible <code>&lt;details class="rag-eval-card"&gt;</code> accordion with <code>+</code> click expanders, raw archive excerpts, similarity tiers, and doc references (<code>[Ref: doc_id]</code>).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>evaluate_gem_quality()</code> calculates deterministic Rank = min(5, 1 + sum(bool)). Verified via <code>src/tests/test_binary_evaluator_unit.py</code>.</p>
+                    <p><code>evaluate_gem_quality()</code> calculates deterministic Rank = min(5, 1 + sum(bool)). <code>CognitiveHub._fetch_rag_context</code> broadcasts discrete <code>type: "rag_eval"</code> packets; <code>intercom_v2.js</code> mounts interactive <code>&lt;details class="rag-eval-card"&gt;</code> DOM nodes on the Left Console under Pinky's step banner.</p>
                 </div>
             </div>     </div>
                             </details>
