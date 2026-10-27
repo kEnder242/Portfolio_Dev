@@ -297,7 +297,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
         cleanSource = 'Brain (Archive)';
         baseClass = 'brain';
     } else if (sl.includes('deep thought') || sl.includes('thought')) {
-        cleanSource = 'Deep Thought (Strategy)';
+        cleanSource = sl.includes('triage') ? 'Deep Thought (Triage)' : 'Deep Thought (Strategy)';
         baseClass = 'brain';
     }
     let displaySource = cleanSource;
