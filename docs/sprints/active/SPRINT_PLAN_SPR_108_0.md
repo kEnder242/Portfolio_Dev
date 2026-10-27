@@ -952,3 +952,52 @@ The following actionable additions and updates have been established from the Sp
   * *Touchpoints:* [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py), [`HomeLabAI/config/triage_policy.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/triage_policy.json).
   * *Proposed Code Change:* Replace synthetic `vibe = "ZERO_CONTEXT"` injection in `_run_two_mice_handover` with natural interest collapse (`current_interest = 0.0` / floor). Drive Pinky's brevity and honest acknowledgment natively through existing interest pacing (`FEAT-523`).
   * *Status:* ⏸️ **HELD FOR OPERATOR APPROVAL BEFORE CODE COMMENCEMENT**.
+
+* **`AR-108-19` (CODE PROPOSAL): Total UI Streaming Mute & Discrete Diagnostic Routing (`FEAT-233` / `FEAT-361` / `BKM-095`)**
+  * *Touchpoints:* [`HomeLabAI/src/nodes/loader.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py), [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py).
+  * *Proposed Code Change:* Mute all live token streaming to public UI chat websockets. Ensure intermediate structured nodes (HyDE probe JSON, Critic JSON) set `internal=True` so raw token streams never broadcast to the chat bubble. Dispatch completed diagnostic records strictly as raw JSON cards to Left Console (`channel="lab"`), and final spoken voice as pure prose to Right Console (`channel="pinky"`).
+  * *Status:* ⏸️ **HELD FOR OPERATOR APPROVAL BEFORE CODE COMMENCEMENT**.
+
+* **`AR-108-20` (CODE PROPOSAL): Restore Pinky Grounding Accordion for Unified DNA Ingestion (`FEAT-454` / `Story 108.21`)**
+  * *Touchpoints:* [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py), [`Portfolio_Dev/field_notes/intercom_v2.js`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/intercom_v2.js).
+  * *Proposed Code Change:* Reconnect explicit post-HyDE `rag_eval` / `type: "rag_context"` packet dispatch in `step_hyde_rag()`, feeding the full unified DNA corpus retrieved for Brain into the interactive `<details class="rag-eval-card">` accordion on Pinky's side (Left Console).
+  * *Status:* ⏸️ **HELD FOR OPERATOR APPROVAL BEFORE CODE COMMENCEMENT**.
+
+---
+
+## 🏛️ Phase 6: Zero-Streaming UI Invariant & Unified DNA Presentation
+
+### 📜 Canonical Stage Emission Audit (Console Split Reference)
+
+The following canonical routing table governs all node emissions across the system:
+
+| Stage / Node | Output Type | Target Console | Wire Channel | Example Payload Rendered in UI |
+| :--- | :--- | :--- | :--- | :--- |
+| **Stage 1: Lab (Triage)** | Raw JSON Card | **Left Console** (Diagnostic) | `channel="lab"` | ```json\n{\n  "inferred_intent": "career_summary",\n  "addressed_to": "NONE",\n  "vibe": "HISTORICAL",\n  "domain": "work_history",\n  "casual": 0.8,\n  "intrigue": 0.7,\n  "importance": 0.6\n}\n``` |
+| **Stage 2: Pinky (HyDE Probe)** | Telemetry Card *(Raw JSON)* | **Left Console** (Diagnostic) | `channel="lab"` | ```json\n{\n  "search_terms": "Datacenter PAE Intel Federal 2019, Manageability Test Content Lead",\n  "upvote": true\n}\n``` |
+| **Stage 2b: Pinky (Opening Take)** | Pure Spoken Prose | **Right Console** (Chat) | `channel="pinky"` | `"Jason, it sounds like you're looking back on your time here at Acme Lab around 2019. Let me check our records and see what we have on file."` |
+| **Stage 3: Brain (Retrieval & Grounding)** | Grounded Telemetry / JSON | **Left Console** (Diagnostic) | `channel="brain"` | ```json\n{\n  "retrieved_gems": 4,\n  "top_gem": "Manageability Test Content Lead 2019-2024",\n  "confidence": 0.94,\n  "source": "ChromaDB:dev_lab_dna"\n}\n``` |
+| **Stage 4: Sovereign Brain / Synthesis** | Synthesized Context Payload | **Left Console** (Diagnostic) | `channel="brain"` | ```text\n[BRAIN SYNTHESIS]\nStable role confirmed: Manageability Test Content Lead for 100+ automated IPMI, Redfish systems.\n``` |
+| **Stage 5: Critic (Coherence / Grounding)** | Structured Audit Card *(Raw JSON)* | **Left Console** (Diagnostic) | `channel="critic"` | ```json\n{\n  "score": 5,\n  "reasoning": "Archival records confirm stable 2019 role preceding the 2026 federated telemetry role.",\n  "slop_found": false,\n  "retort": ""\n}\n``` |
+| **Stage 6: Final Pinky Response** | Pure Spoken Prose | **Right Console** (Chat) | `channel="pinky"` | `"You were not transitioning in 2019; you were already embedded in the Manageability Test Content Lead role, which was the direct precursor to our current work."` |
+
+* **Left Console (Diagnostic)**: Houses raw JSON cards, search queries, scores, and telemetry.
+* **Right Console (Voice/Persona)**: Houses strictly natural spoken prose. **Zero JSON strings, zero curly braces, zero verbatim duplicates.**
+
+---
+
+### 🎨 Story 108.20: Total UI Streaming Mute & Discrete Diagnostic Routing (`[FEAT-233]` / `[FEAT-361]` / `[BKM-095]`)
+* **Goal:** Banish token-streaming leaks to UI chat websockets. Deliver all turns as atomic completed dispatches. Ensure intermediate JSON steps emit strictly to diagnostic channels.
+* **Acceptance Criteria:**
+  1. `loader.py` token broadcasts are suppressed from user conversational websockets (`channel in ("chat", "pinky", "intercom")`).
+  2. Intermediate structured LLM generations in `cognitive_hub.py` (HyDE JSON, Critic JSON) are flagged `internal=True` so raw partial tokens never hit conversational bubbles.
+  3. Single spoken dispatch: conversational responses emit once as clean prose extracted from payload.
+  4. Unit test assertion in `test_two_mice_handover.py` verifies zero `token` packets in conversational channels and zero raw JSON dictionaries rendered as spoken dialogue.
+
+### 🎨 Story 108.21: Restore Pinky Grounding Accordion for Unified DNA Ingestion (`[FEAT-454]`)
+* **Goal:** Restore the interactive collapsible `<details class="rag-eval-card">` accordion in `intercom.html` / `intercom_v2.js`, expanding it to visualize all DNA types fed into Brain from Pinky's Stage 2 scout phase.
+* **Acceptance Criteria:**
+  1. When Pinky generates HyDE search terms and Brain retrieves matching DNA, emit a discrete `type: "rag_eval"` packet.
+  2. Renders on Pinky's side (Left Console) as a collapsible accordion with `+` click expanders, showing retrieved DNA types (`BKM`, `FEAT`, `PHL`, `DISC`, `INS`, `LOOP`, `GEMS`).
+  3. Clicking doc references opens the document viewer cleanly without breaking dialogue layout.
+
