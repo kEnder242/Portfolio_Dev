@@ -1172,6 +1172,7 @@
 **Mechanism:** 
 1. `CognitiveHub` extracts tokens mid-stream.
 2. Tokens are buffered in 100ms chunks before hitting the websocket (The Token Batching Victory), solving UI jitter during long reasoning chains.
+**Anti-Pop / Anti-UX-Streaming Section:** Waterfall buffering is strictly an internal, inter-node pipeline mechanism (node-to-node). It is categorically prohibited from streaming tokens into user conversational chat bubbles. UI dialogue bubbles receive only completed, post-processed atomic turns.
 
 ## [FEAT-234] Pure Scalar Fuel (Multiplicative Orchestration)
 **Status:** ACTIVE
@@ -2377,8 +2378,12 @@
 ## [FEAT-361] 100% Transparency: No masking of inter-node whispers.
 **Status:** ACTIVE
 **Code:** [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L352) — 100% Transparency: No masking of inter-node whispers..
-**Logic:** [NEW] Push to waterfall queue for real-time UI delivery [FEAT-361] 100% Transparency: No masking of inter-node whispers. if hasattr(self, 'waterfall_queue') and self.waterfall_queue: await self.waterfall_queue.put(data)
+**Logic:** [NEW] Push to waterfall queue for real-time delivery to telemetry channels [FEAT-361] 100% Transparency: No masking of inter-node whispers. if hasattr(self, 'waterfall_queue') and self.waterfall_queue: await self.waterfall_queue.put(data)
 **Mechanism:** `src/logic/cognitive_hub.py` at line 352.
+**UX Invariants & Delivery Transparency:**
+1. **Zero UX Streaming Guardrail**: Streaming, token typewriter effects, or partial-chunk typing into user-facing conversational bubbles (`channel="pinky"` / `channel="chat"`) is categorically banned.
+2. **Transparency Invariant**: 100% transparency means no emissions are silently dropped. All steps, thoughts, and diagnostics must be visible to the user.
+3. **No Duplicate Emissions Invariant**: Text and payload emissions are considered fulfilled if they are passed up to the user through pretty paths (Left Console diagnostic cards for JSON/telemetry; Right Console dialogue bubbles for spoken prose).
 
 ## [FEAT-365] Characterful reflexes and persistence heartbeats.
 **Status:** ACTIVE
@@ -2451,11 +2456,13 @@
 **Logic:** Guarantees Foyer and vLLM are automatically re-ignited to OPERATIONAL post 05:40 AM dreaming cycle.
 **Mechanism:** `re_ignite_vllm()` called unconditionally at conclusion of nightly forge orchestration.
 
-## [FEAT-454] Universal Epistemic 5-Question Evaluation Battery
+## [FEAT-454] Universal Epistemic Evaluation Battery & Collapsible RAG Grounding Accordion
 **Status:** ACTIVE
-**Code:** [src/curator/scan_curator.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/scan_curator.py#L25) — Universal Epistemic 5-Question Evaluation Battery.
-**Logic:** Replaces subjective 1-5 integer scoring with 5 deterministic boolean checks (exact identifiers, reproduction recipe, cause-and-effect isolation, actionable BKM, zero fluff).
-**Mechanism:** `evaluate_gem_quality()` calculates deterministic Rank = min(5, 1 + sum(bool)). Verified via `src/tests/test_binary_evaluator_unit.py`.
+**Code:** [src/curator/scan_curator.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/scan_curator.py#L25), [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L2994), [field_notes/intercom_v2.js](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom_v2.js#L937)
+**Logic:** Dual epistemic evaluation and evidence presentation architecture:
+1. **Deterministic 5-Question Evaluation Battery**: Replaces subjective 1-5 integer scoring with 5 deterministic boolean checks (exact identifiers, reproduction recipe, cause-and-effect isolation, actionable BKM, zero fluff). Verified via `src/tests/test_binary_evaluator_unit.py`.
+2. **Unified DNA Grounding Accordion (Pinky Side)**: Expanded from legacy isolated RAG stubs to encompass the full DNA corpus fed to Brain (Knowledge Gems, Protocols `BKM`, Features `FEAT`, Philosophy `PHL`, Discoveries `DISC`, Inspiration `INS`, and Loops `LOOP`). When Pinky finishes the Stage 2 HyDE scout phase, the resulting vector search query terms and retrieved DNA gems are rendered interactively on Pinky's side (Left Console / `channel="lab"`) as a collapsible `<details class="rag-eval-card">` accordion with `+` click expanders, raw archive excerpts, similarity tiers, and doc references (`[Ref: doc_id]`).
+**Mechanism:** `evaluate_gem_quality()` calculates deterministic Rank = min(5, 1 + sum(bool)). `CognitiveHub._fetch_rag_context` broadcasts discrete `type: "rag_eval"` packets; `intercom_v2.js` mounts interactive `<details class="rag-eval-card">` DOM nodes on the Left Console under Pinky's step banner.
 
 ## [FEAT-455] AST Context Compiler for Agent Context Compaction
 **Status:** ACTIVE
