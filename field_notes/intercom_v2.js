@@ -973,7 +973,9 @@ async function connect() {
                             </div>
                         </details>
                     `;
-                    appendMsg(cardHtml, 'system-msg', 'System', 'insight');
+                    const targetChannel = data.channel || 'chat';
+                    const targetSource = data.brain_source || 'Pinky (Scout)';
+                    appendMsg(cardHtml, 'system-msg', targetSource, targetChannel);
                 }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
