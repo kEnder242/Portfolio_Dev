@@ -432,6 +432,18 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     } else if (isJSON) {
         const esc = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         formattedText = `<pre class="json-pretty-print" style="white-space: pre-wrap; font-family: monospace; background: var(--bg-card); padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.85em; margin: 5px 0;">${esc(jsonFormatted)}</pre>`;
+    } else if ((channel === 'insight' || (source && /brain|insight|thought/i.test(source))) && text && text.includes('[ANALYSIS]') && text.includes('CHUNK-')) {
+        const esc = (unsafe) => String(unsafe).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        const countMatch = text.match(/CHUNK-\d+/g);
+        const chunkCount = countMatch ? new Set(countMatch).size : 0;
+        formattedText = `<details class="rag-eval-card brain-chunk-card" style="margin: 6px 0; border: 1px solid #3d2d54; background: #0c0814; border-left: 3px solid #a371f7; border-radius: 4px; padding: 5px 9px;">
+<summary style="cursor: pointer; color: #a371f7; font-size: 0.78rem; font-weight: bold; user-select: none;">
+🧠 [+] Evidence Chunks (${chunkCount} evaluated)
+</summary>
+<div class="rag-eval-body" style="padding: 8px 4px 4px 4px; font-size: 0.75rem; color: #d2a8ff; border-top: 1px solid #2d1e3e; margin-top: 5px;">
+<pre style="white-space: pre-wrap; font-family: monospace; background: #07040a; padding: 8px; border-radius: 3px; border: 1px solid #2d1e3e; max-height: 250px; overflow-y: auto; color: #d2a8ff; font-size: 0.72rem; line-height: 1.45;">${esc(text)}</pre>
+</div>
+</details>`;
     } else if ((metadata && (metadata.is_raw_html || metadata.rawHtml)) || (text && text.trim().startsWith('<details'))) {
         formattedText = text;
     } else if (!isSystem && window.marked) {
@@ -480,7 +492,7 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
 }
 
 // [FEAT-453] Crosstalk Diagnostic Routing
-const DIAGNOSTIC_PREFIX_RE = /^\[(SYSTEM|HEARTBEAT|REMOTE|FOYER|INIT|LOCK|GOVERNOR|LAB|STAGE|PAGER)\]/i;
+const DIAGNOSTIC_PREFIX_RE = /^\[(SYSTEM|HEARTBEAT|REMOTE|FOYER|INIT|LOCK|GOVERNOR|LAB|STAGE|PAGER|CRITIC)\]/i;
 
 function getCrosstalkStatusLine() {
     const bar = document.getElementById('crosstalk-bar');
