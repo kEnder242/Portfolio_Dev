@@ -432,6 +432,8 @@ function appendMsg(text, type = 'system-msg', source = 'System', channel = 'chat
     } else if (isJSON) {
         const esc = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         formattedText = `<pre class="json-pretty-print" style="white-space: pre-wrap; font-family: monospace; background: var(--bg-card); padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.85em; margin: 5px 0;">${esc(jsonFormatted)}</pre>`;
+    } else if ((metadata && (metadata.is_raw_html || metadata.rawHtml)) || (text && text.trim().startsWith('<details'))) {
+        formattedText = text;
     } else if (!isSystem && window.marked) {
         formattedText = marked.parse(text);
     }
@@ -949,33 +951,31 @@ async function connect() {
                     window.renderRagEvalCard(data);
                 } else {
                     const docRef = data.doc_id ? `Ref: ${esc(data.doc_id)}` : `${data.n_results || 3} docs`;
-                    const cardHtml = `
-                        <details class="rag-eval-card" style="margin: 6px 0; border: 1px solid #2a2a3a; background: #0b0c10; border-left: 3px solid #7ec8e3; border-radius: 4px; padding: 5px 9px;">
-                            <summary style="cursor: pointer; color: #7ec8e3; font-size: 0.78rem; font-weight: bold; user-select: none;">
-                                🔍 [RAG] ${docRef} (${data.n_results || 3} docs) <span style="color: #666; font-size: 0.7rem;">[Tier: ${esc(data.tier || '2')}]</span>
-                            </summary>
-                            <div class="rag-eval-body" style="padding: 8px 4px 4px 4px; font-size: 0.75rem; color: #aaa; border-top: 1px solid #1a1a2e; margin-top: 5px;">
-                                <div style="margin-bottom: 5px; color: #e6edf3; font-weight: bold; font-size: 0.76rem;">
-                                    📖 Raw Historical Archive Record:
-                                </div>
-                                <pre style="white-space: pre-wrap; font-family: monospace; background: #050508; padding: 8px; border-radius: 3px; border: 1px solid #1a1a2e; max-height: 250px; overflow-y: auto; color: #88c0d0; font-size: 0.72rem; line-height: 1.45;">${esc(data.full_context || data.snippet || '')}</pre>
-                                <div style="margin-top: 6px; font-size: 0.72rem; color: #8b949e; display: flex; justify-content: space-between; align-items: center;">
-                                    <span><strong>Query:</strong> "${esc(data.query || '')}"</span>
-                                    <span><strong>Doc ID:</strong> <a href="#" onclick="openFile('${esc(data.doc_id || '')}'); return false;" style="color: var(--accent-color); text-decoration: none;">[Ref: ${esc(data.doc_id || 'N/A')}]</a></span>
-                                </div>
-                                ${data.hyde ? `
-                                <details style="margin-top: 6px; padding: 4px 6px; border: 1px dashed #21262d; border-radius: 3px; background: #090d13;">
-                                    <summary style="cursor: pointer; color: #8b949e; font-size: 0.7rem; user-select: none;">
-                                        ▶ Show HyDE Generated Vector Text
-                                    </summary>
-                                    <pre style="white-space: pre-wrap; font-family: monospace; color: #7ee787; font-size: 0.7rem; margin-top: 4px; max-height: 150px; overflow-y: auto;">${esc(data.hyde)}</pre>
-                                </details>` : ''}
-                            </div>
-                        </details>
-                    `;
+                    const cardHtml = `<details class="rag-eval-card" style="margin: 6px 0; border: 1px solid #2a2a3a; background: #0b0c10; border-left: 3px solid #7ec8e3; border-radius: 4px; padding: 5px 9px;">
+<summary style="cursor: pointer; color: #7ec8e3; font-size: 0.78rem; font-weight: bold; user-select: none;">
+🔍 [RAG] ${docRef} (${data.n_results || 3} docs) <span style="color: #666; font-size: 0.7rem;">[Tier: ${esc(data.tier || '2')}]</span>
+</summary>
+<div class="rag-eval-body" style="padding: 8px 4px 4px 4px; font-size: 0.75rem; color: #aaa; border-top: 1px solid #1a1a2e; margin-top: 5px;">
+<div style="margin-bottom: 5px; color: #e6edf3; font-weight: bold; font-size: 0.76rem;">
+📖 Raw Historical Archive Record:
+</div>
+<pre style="white-space: pre-wrap; font-family: monospace; background: #050508; padding: 8px; border-radius: 3px; border: 1px solid #1a1a2e; max-height: 250px; overflow-y: auto; color: #88c0d0; font-size: 0.72rem; line-height: 1.45;">${esc(data.full_context || data.snippet || '')}</pre>
+<div style="margin-top: 6px; font-size: 0.72rem; color: #8b949e; display: flex; justify-content: space-between; align-items: center;">
+<span><strong>Query:</strong> "${esc(data.query || '')}"</span>
+<span><strong>Doc ID:</strong> <a href="#" onclick="openFile('${esc(data.doc_id || '')}'); return false;" style="color: var(--accent-color); text-decoration: none;">[Ref: ${esc(data.doc_id || 'N/A')}]</a></span>
+</div>
+${data.hyde ? `
+<details style="margin-top: 6px; padding: 4px 6px; border: 1px dashed #21262d; border-radius: 3px; background: #090d13;">
+<summary style="cursor: pointer; color: #8b949e; font-size: 0.7rem; user-select: none;">
+▶ Show HyDE Generated Vector Text
+</summary>
+<pre style="white-space: pre-wrap; font-family: monospace; color: #7ee787; font-size: 0.7rem; margin-top: 4px; max-height: 150px; overflow-y: auto;">${esc(data.hyde)}</pre>
+</details>` : ''}
+</div>
+</details>`;
                     const targetChannel = data.channel || 'chat';
                     const targetSource = data.brain_source || 'Pinky (Scout)';
-                    appendMsg(cardHtml, 'system-msg', targetSource, targetChannel);
+                    appendMsg(cardHtml, 'system-msg', targetSource, targetChannel, false, { is_raw_html: true });
                 }
             } else if (data.type === 'file_content') {
                 activeFilename.textContent = data.filename;
