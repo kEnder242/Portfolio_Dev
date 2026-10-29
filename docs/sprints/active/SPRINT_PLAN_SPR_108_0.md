@@ -1005,10 +1005,30 @@ The following canonical routing table governs all node emissions across the syst
 
 ## 🏛️ Phase 7: Interactive Regressions & Epistemic UI Realignment (Stories 108.22 – 108.28)
 
+### 🛑 Phase 7 Pre-Flight Checklist Gate (`BKM-082` / `BKM-086 §1.1`)
+- [x] **1. 5-Sprint Lookback & Regression Archaeology (`BKM-082 §2.1` / `BKM-085`)**: Examined Sprint 88 (RAG accordion origins in `intercom.html`), Sprint 108 commit `115a5df` (critic silent-pass regression), commit `51ac897` (Brain chunk truncation), and `ignition/manager.py:937-959` (idle reboot refine gem trigger).
+- [x] **2. Mistakes-Avoided Ledger (`BKM-082 §2.4`)**:
+  1. *The Indentation-Only Band-Aid Trap*: Avoided stripping template indentation alone without also flagging `rawHtml: true` to prevent future CommonMark code-block escaping in `marked.parse()`.
+  2. *The Artificial Token Choke Trap*: Avoided post-generation string slicing / token clamping; committed to fuzzy LLM budgeting with full-sentence stop tokens and 200–250 token headroom.
+  3. *The Roleplay Pseudo-Tag Trap*: Avoided custom pseudo-tags like `[YOUR_OPENING_REACTION]` that confuse 3B models; committed to standard multi-turn chat history (`FEAT-677`).
+  4. *The Frontend Duplication Trap*: Avoided duplicating CSS/JS for Brain's Right Console accordion by reusing `.rag-eval-card` classes with target-parameterized mounting.
+  5. *The Headless Blindspot Trap*: Avoided hiding refine gem passes behind silent background endpoints; preserved real-time user visibility in Crosstalk telemetry (`channel="lab"`).
+- [x] **3. Oracle Review (`BKM-007` / `BKM-080`)**: Audited interaction boundaries between browser DOM (`marked.parse`), vLLM token limits, and WebSocket foyer queue.
+- [x] **4. Delegation & Owner Tag Assignment (`BKM-049`)**: Assigned `[AGY:PRIMARY]` across Stories 108.22 – 108.28 due to cross-repository frontend/backend runtime synchronization.
+- [x] **5. Risk Assessment**: Evaluated blast radius; isolated to `intercom_v2.js`, `cognitive_hub.py`, `router.py`, and test harnesses without breaking database schemas or physical daemon lifecycle.
+
+### 📝 Operator Directives & Mid-Flight Guidance (`BKM-006 §7`)
+- **Item 1.1 Approval**: Approved the "both" strategy (set `metadata.is_raw_html = true` to bypass `marked.parse()` AND strip template indentation).
+- **Item 2.2 / 2.3 Approval**: Enforce prompt-driven sentence stop tokens; fuzzy budget is desired; audit and purge all post-generation code clamps.
+- **Item 3.1 Approval**: Standardize on OpenAI/vLLM multi-turn chat schema (`FEAT-677`) so 3B models perceive prior utterances natively as turns.
+- **Item 4.1 & 4.2 Separation**: Split Brain chunk revert and Right Console accordion GUI into two distinct stories with dedicated verification probes.
+- **Item 5.2 Eradication**: Purge rogue `BKM-094` from protocols and memory; ensure 5/5 scorecards emit visibly to Crosstalk.
+- **Item 6.1 Visibility**: Preserve real-time user visibility of refine gem passes in the diagnostic console; isolate execution purely from conversational loops.
+
 ### 📋 ANCHOR_TRACK Reconciliation Ledger (BKM-077 §2)
 | Anchor ID | Tracked Topic & Origin Prompt | Aligned Resolution & Target Architecture | Sprint Story / Artifact | Status |
 |:---|:---|:---|:---|:---:|
-| `ANCHOR-00` | Protocol Meta-Governance (Prompts 8–10) | Codified BKM-096 (root-surgical edit), updated BKM-077 (sub-point continuity & integer roll-ups), updated BKM-084 (lettered ledger active scope exclusion) | `HomeLabAI/docs/Protocols.md` (`5c2f639`) | ✅ DONE |
+| `ANCHOR-00` | Protocol Meta-Governance (Prompts 8–10) | Codified BKM-096 (root-surgical edit), updated BKM-077 (sub-point continuity & integer roll-ups), updated BKM-084 (lettered ledger active scope exclusion), codified BKM-097 (Roll-Up Audit) | `HomeLabAI/docs/Protocols.md` (`5c2f639`, `66fcf31`) | ✅ DONE |
 | `ANCHOR-01` | RAG Accordion Missing GUI (Item 1, Prompts 6, 7, 8, 9) | Fix 24-space template indentation in `intercom_v2.js`, set `rawHtml` / bypass `marked.parse`, restore `<details class="rag-eval-card">` | Story 108.22 (`[FEAT-454]`) | 🟡 STAGED |
 | `ANCHOR-02` | Pinky Cutoff / Hard Token Clamp (Item 2, Prompts 6, 7, 8, 9) | Remove `min(150, int(dt_tokens * 0.10))` in `cognitive_hub.py:3467`; eliminate code clamps; enforce prompt stop tokens on full sentences with 200–250 token headroom | Story 108.23 (`[FEAT-523]`) | 🟡 STAGED |
 | `ANCHOR-03` | Turn Cohesion & 3B Grounding (Item 3, Prompts 6, 7, 8, 9) | Register FEAT-677; pass multi-turn chat message history `[{"role": "user", ...}, {"role": "assistant", ...}]` into Stage 5 prompt; A/B pipeline probe | Story 108.24 (`[FEAT-677]`) | 🟡 STAGED |
@@ -1018,90 +1038,98 @@ The following canonical routing table governs all node emissions across the syst
 | `ANCHOR-06` | Refine Gem Runaway Waterfall Loops (Item 6, Prompts 6, 7, 8, 9) | Architectural isolation: route internal/refine queries away from `foyer_queue.jsonl`; preserve real-time user visibility in diagnostic stream | Story 108.28 (`[FEAT-455]`) | 🟡 STAGED |
 
 ### 🎨 Story 108.22: Restore RAG Accordion GUI Element & Markdown Indentation Fix (`[FEAT-454]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Fix the missing RAG accordion GUI element in `intercom_v2.js`. Prevent markdown parser (`marked.parse`) from treating 24-space indented HTML template literals as raw `<pre><code>` text blocks.
-* **Regression Context:** Originally functional in `intercom.html` (Sprint 88 / FEAT-454); during the Sprint 108 refactoring into `intercom_v2.js`, `cardHtml` was indented with 24 leading spaces inside a method, triggering CommonMark code-block escaping when passed to `marked.parse()`.
-* **Technical Strategy:**
-  1. Set `metadata.is_raw_html = true` (or `metadata.rawHtml = true`) on `rag_eval` dispatches so `appendMsg()` natively mounts the HTML directly into the DOM container without executing `marked.parse()`.
-  2. Strip extraneous leading template indentation from the `<details class="rag-eval-card">` HTML snippet.
+* **Anchor 1 (Target Files & Lines):** `Portfolio_Dev/field_notes/intercom_v2.js:435-440, 952-975`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_playwright_accordion.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `appendMsg()`: `if ((metadata && (metadata.is_raw_html || metadata.rawHtml)) || text.trim().startsWith('<details')) { formattedText = text; }`
+  - In `rag_eval` handler: `this.appendMsg('Pinky (Scout)', cardHtml, 'pinky', false, false, { is_raw_html: true });`
+* **Anchor 4 (DNA Links):** `[FEAT-454]`, `[BKM-086]`, `[BKM-095]`.
 * **Acceptance Criteria:**
   1. `rag_eval` DOM nodes render as active interactive `<details class="rag-eval-card">` HTML elements on the Left Console rather than unparsed plain text code blocks.
   2. Clicking the `[+]` toggle expands and collapses the archive excerpt cleanly.
-* **Test Plan:**
-  - Automated Playwright browser test (`src/tests/test_live_playwright_accordion.py`) injecting a simulated `rag_eval` packet, asserting the DOM presence of `<details class="rag-eval-card">`, executing a click on `<summary>`, and asserting that the `open` attribute toggles to `true` and inner text is displayed.
 
 ### 🎨 Story 108.23: Pinky Token Budget Dynamic Scaling & Anti-Truncation (`[FEAT-523]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Eliminate hard 60-token artificial truncation on Pinky's conversational voice delivery. Pacing ceilings must guide generation naturally without clipping sentences mid-token.
-* **Regression Context:** Line 3467 in `cognitive_hub.py` contains `pinky_budget = max(60, min(150, int(dt_tokens * 0.10))) if dt_tokens > 0 else ...`. When Deep Thought emitted 200 tokens, this formula clamped Pinky's budget to `min(150, 20) = 20`, which defaulted to `max(60, 20) = 60` tokens. This hard ceiling was passed as `max_tokens=60` to vLLM, causing mid-sentence truncation (`thermal`).
-* **Technical Strategy:**
-  1. Remove `min(150, int(dt_tokens * 0.10))` hard ratio clamp in `cognitive_hub.py:3467`.
-  2. Audit and remove any post-generation clamping code across the waterfall; confirm `FEAT-523` is purely an LLM prompt/pacing budget guardrail.
-  3. Provide generous generation headroom (200–250 tokens) and rely on prompt-level sentence stop directives to emit natural stop tokens on full sentences.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3465-3475`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k test_pinky_budget_unclamped -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Replace line 3467: `pinky_budget = calculate_pacing_ceiling("pinky", interest)` (removing `min(150, int(dt_tokens * 0.10))` and `max(60, ...)` floor clamp).
+  - Pacing ceiling provides generous generation headroom (200–250 tokens).
+  - Stage 5 prompt explicitly guides completion: *"Conclude naturally with complete terminal sentences and standard punctuation."*
+* **Anchor 4 (DNA Links):** `[FEAT-523]`, `[BKM-087]`, `[BKM-086]`.
 * **Acceptance Criteria:**
   1. Pinky's budget scales dynamically with synthesized content depth and interest, never forcing a premature cutoff mid-thought or mid-sentence.
   2. LLM finishes with clean punctuation and standard terminal sentences.
   3. No post-generation string slicing or token-truncation logic exists in the delivery pipeline.
-* **Test Plan:**
-  - Fast offline replay test (`test_multi_stage_replay_pipeline.py`) asserting that Pinky voice output generated against complex historical queries terminates with standard terminal punctuation (`.`, `!`, `?`) and zero trailing backticks or incomplete words.
 
 ### 🎨 Story 108.24: Pinky Conversational Turn Cohesion & Standard 3B History Grounding (`[FEAT-677]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Give Pinky his own Stage 2 Opening Take context in the Stage 5 Voice prompt using standard turn-based chat message structure so he does not redundantly re-greet Jason or restart the conversation topic incoherently.
-* **Technical Strategy:**
-  1. Standardize on OpenAI/vLLM multi-turn chat format: pass the interaction history as standard roles (`[{"role": "user", "content": primer}, {"role": "assistant", "content": stage2_take}]`) instead of custom pseudo-tags like `[YOUR_OPENING_REACTION]`.
-  2. Blend the concept of conversational turn into the 3B model prompt so the LLM perceives its own prior utterance natively as its prior turn.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3450-3500`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -k test_pinky_turn_cohesion -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Pass structured chat history: `messages = [{"role": "user", "content": primer}, {"role": "assistant", "content": stage2_take}]` into Stage 5 synthesis prompt.
+  - Instruct Pinky: *"Build seamlessly upon your opening take. Do not repeat greetings, introduce yourself, or reset the topic."*
+* **Anchor 4 (DNA Links):** `[FEAT-677]`, `[BKM-087]`, `[FEAT-489]`.
 * **Acceptance Criteria:**
   1. `build_two_mice_stage_prompt(2, ...)` formats Pinky's Stage 2 opening take as a prior conversational turn in the prompt payload.
-  2. Pinky delivers a seamless, continuous dialogue that naturally acknowledges and builds upon his opening reaction without greeting resets ("Jason, let's dive into...").
-* **Test Plan:**
-  - Live A/B pipeline probe test comparing opening cohesion with and without turn history, asserting zero redundant re-greetings across the two stages.
+  2. Pinky delivers a seamless, continuous dialogue that naturally acknowledges and builds upon his opening reaction without greeting resets.
 
 ### 🎨 Story 108.25: Brain Rich Chunk Evidence Restoration (`[FEAT-671]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Restore the rich evidence "chunk vomit" preferred for deep grounding, reverting commit `51ac897`.
-* **Regression Context:** Commit `51ac897` modified `build_two_mice_stage_prompt(1, ...)` to instruct Brain to emit terse, single-line summaries, which stripped valuable engineering context and raw citations needed for verification.
-* **Technical Strategy:**
-  1. Revert prompt restriction in `cognitive_hub.py` Stage 1 back to pre-`51ac897`, instructing Brain to emit its full engineering rationale and preserve raw evidence chunks.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3210-3260`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py -k test_brain_rich_chunks -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Revert terse prompt restriction from `51ac897`; restore instructions in Stage 1 to provide comprehensive engineering rationales and full verbatim `<historical_record>` chunks.
+* **Anchor 4 (DNA Links):** `[FEAT-671]`, `[BKM-085]`, `[INS-049]`.
 * **Acceptance Criteria:**
   1. Brain evidence filter provides rich engineering justifications and preserved raw evidence blocks rather than terse single-line summaries.
-* **Test Plan:**
-  - Empirical harness probe asserting that Brain's filter trace contains complete `<historical_record>` chunks, file paths, and citations.
 
 ### 🎨 Story 108.26: Brain Right Console Collapsible Chunk Accordion GUI (`[FEAT-671]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Package Brain's verbose chunk evidence into a dedicated collapsible accordion element on Brain's Right Console.
-* **Technical Strategy:**
-  1. Reuse existing `.rag-eval-card` CSS styles and `intercom_v2.js` rendering logic, parameterized by console target (`chatConsole` vs `insightConsole`), ensuring zero code duplication.
-  2. Mount the collapsible `[+] [CHUNKS]` element inside the Right Console insight stream.
+* **Anchor 1 (Target Files & Lines):** `Portfolio_Dev/field_notes/intercom_v2.js:980-1020`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_live_playwright_accordion.py -k test_brain_chunks_accordion -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Render `<details class="rag-eval-card brain-chunk-card"><summary>[+] Evidence Chunks (N retrieved)</summary><div class="rag-content">...</div></details>` inside `insightConsole`.
+  - Reuse shared `.rag-eval-card` CSS styles with zero duplicate rules.
+* **Anchor 4 (DNA Links):** `[FEAT-671]`, `[FEAT-058]`, `[BKM-095]`.
 * **Acceptance Criteria:**
   1. Right Console renders a collapsible `[+] [CHUNKS]` accordion for inspecting full raw evidence on demand.
   2. Clicking `[+]` expands the raw chunks without breaking column width or dialogue layout.
-* **Test Plan:**
-  - Playwright / DOM verification test asserting the rendering and toggle state of `[+] [CHUNKS]` on the Right Console.
 
 ### 🎨 Story 108.27: Un-swallow Coherence Critic Telemetry & Eradicate Rogue BKM-094 (`[FEAT-058]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Un-swallow the Coherence Critic telemetry card on Left Console. Restore visibility of Pinky (Coherence Critic) and System score telemetry while preserving chat hygiene.
-* **Regression Context:** Commit `115a5df` introduced a rogue "Silent-Pass Contract" (`BKM-094`) with `if critic_res.slop_found or critic_res.score < 3: await execute_dispatch(...)`, accidentally silencing 5/5 score telemetry from the UI.
-* **Technical Strategy:**
-  1. Remove the silence condition; ensure the Critic **always** emits its diagnostic telemetry card.
-  2. Formally nuke rogue `BKM-094` from `docs/Protocols.md` and ChromaDB vector store.
-  3. Route the Pinky initiating intuition banner to the Left Console (`channel="critic"`) and the 4-key scorecard to Crosstalk (`channel="lab"`).
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3550-3580`, `HomeLabAI/docs/Protocols.md:BKM-094`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -k test_critic_telemetry_unswallowed -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `step_grounding_critic()`: remove `if critic_res.slop_found or critic_res.score < 3:`; dispatch scorecard unconditionally via `channel="lab"`.
+  - Dispatch Pinky initiating intuition banner via `channel="critic"`.
+  - Delete `BKM-094` ("Silent-Pass Contract") from `docs/Protocols.md` and ChromaDB.
+* **Anchor 4 (DNA Links):** `[FEAT-058]`, `[BKM-095]`, `[LOOP-005]`.
 * **Acceptance Criteria:**
   1. Critic evaluations emit discrete diagnostic telemetry cards (`Score: 5/5 | Slop: False`) to Crosstalk (`channel="lab"`).
   2. Pinky initiating intuition banner displays properly on Left Console.
   3. Rogue `BKM-094` is purged from documentation and memory.
-* **Test Plan:**
-  - Automated unit/replay test verifying that a 5/5 non-slop Critic output emits diagnostic packets to the WebSocket without being swallowed.
 
 ### 🎨 Story 108.28: Internal Maintenance / Refine Intent Queue Isolation & Live Telemetry Preservation (`[FEAT-455]`)
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Isolate background refinement and dream passes (`[INTERNAL] [REFINE]`, `[DREAM_PASS]`) from the interactive conversational queue (`QUEUE_FILE`), while preserving real-time visibility for operator inspection and debugging.
-* **Regression Context:** When `ignition/manager.py` triggered `refine_gem.py` after an idle reboot, the script sent `type: "text_input"` over WebSocket. `router.py` enqueued it to `foyer_queue.jsonl`, where `queue_drainer` repeatedly invoked `run_division_of_labor()`, waking Pinky into runaway conversational voice loops.
-* **Technical Strategy:**
-  1. Tag internal maintenance dispatches with an explicit internal flag (`"internal": true`).
-  2. Update `router.py` to route internal intents to out-of-band execution workers that bypass `foyer_queue.jsonl` and never invoke conversational voice stages (`run_division_of_labor()`).
-  3. Stream refinement progress directly to the diagnostic telemetry stream (`channel="lab"`) so Jason can watch refinement passes live in the Crosstalk panel without triggering conversational chat bubbles or audio.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:45-80`, `HomeLabAI/src/v5/foyer/queue_drainer.py:110-140`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_refine_queue_isolation.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `router.py`: `if payload.get("internal") or text.startswith("[INTERNAL]"): await handle_internal_pass(payload)` (bypassing `foyer_queue.jsonl`).
+  - Stream internal refinement progress to `channel="lab"` for live monitoring.
+* **Anchor 4 (DNA Links):** `[FEAT-455]`, `[BKM-086]`, `[BKM-028]`.
 * **Acceptance Criteria:**
   1. Internal refinement runs visibly in the Crosstalk / diagnostic console without enqueueing to `foyer_queue.jsonl`.
   2. Interactive turns conclude cleanly at Stage 5 without triggering recurring phantom prompts.
   3. Refinement execution does not depend solely on clock windows (e.g. 06:00 AM cutoff) for safety.
-* **Test Plan:**
-  - Automated integration test asserting that injecting an `[INTERNAL] [REFINE]` packet produces live lab telemetry dispatches without creating entries in `foyer_queue.jsonl` or calling Stage 5 voice synthesis.
 
 
 
