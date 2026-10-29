@@ -4001,6 +4001,14 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Tags:** `#continuation_hinting`, `#anaphora_detection`, `#prior_context_chunks`, `#single_pivot_invariant`, `[FEAT-356]`, `[FEAT-437]`, `[BKM-091]`
 **Code:** `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Eliminates single-turn amnesia by inferring `is_continuation: bool` from current turn prose (detecting anaphora, deixis, ellipsis, or correction) combined via inclusive OR with the single-pivot momentum invariant. Injects Turn $N-1$ from `round_table_memory` as `[CHUNK-PREV]` into Pinky's Tier 1 reflection (`resolve_hyde_vector`) for grounded search terms and into Brain's Stage 1 Evidential Moat for line-by-line relevance filtering.
+
+## [FEAT-677] Standard Turn-Based Message History & 3B Conversational Grounding
+**Sprint:** Sprint 108.0 (Phase 7)
+**Status:** ACTIVE
+**Tags:** `#turn_based_grounding`, `#multi_turn_history`, `#3b_turn_cohesion`, `#anti_greeting_reset`, `[FEAT-489]`, `[FEAT-676]`, `[BKM-087]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`
+**Logic:** Replaces custom pseudo-tags (`[YOUR_OPENING_REACTION]`) in multi-step waterfall handovers with standard multi-turn chat templates (`role: "user"` / `role: "assistant"` / `role: "system"`). Formulates the transition between Pinky Stage 2b Opening Take and Pinky Stage 5 Voice Delivery as a natural conversational assistant turn continuation. Enables 3B open-weights models to perceive multi-step pipeline handovers as authentic conversational dialogue, eliminating redundant greetings, amnesic restarts, and prompt prefix bleed.
+**Mechanism:** `build_two_mice_stage_prompt(2, ...)` accepts `prior_assistant_utterance` and compiles standard chat turn dicts for `_process_node_stream()`.
 **Rationale:** Solves coreference ambiguity ("check the thing") without bloating Triage with conversational memory, allowing Pinky to deliver authentic opening quips and grounded RAG search terms.
 
 
