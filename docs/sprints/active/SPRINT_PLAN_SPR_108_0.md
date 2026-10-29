@@ -1029,13 +1029,13 @@ The following canonical routing table governs all node emissions across the syst
 | Anchor ID | Tracked Topic & Origin Prompt | Aligned Resolution & Target Architecture | Sprint Story / Artifact | Status |
 |:---|:---|:---|:---|:---:|
 | `ANCHOR-00` | Protocol Meta-Governance (Prompts 8–10) | Codified BKM-096 (root-surgical edit), updated BKM-077 (sub-point continuity & integer roll-ups), updated BKM-084 (lettered ledger active scope exclusion), codified BKM-097 (Roll-Up Audit) | `HomeLabAI/docs/Protocols.md` (`5c2f639`, `66fcf31`) | ✅ DONE |
-| `ANCHOR-01` | RAG Accordion Missing GUI (Item 1, Prompts 6, 7, 8, 9) | Fix 24-space template indentation in `intercom_v2.js`, set `rawHtml` / bypass `marked.parse`, restore `<details class="rag-eval-card">` | Story 108.22 (`[FEAT-454]`) | 🟡 STAGED |
-| `ANCHOR-02` | Pinky Cutoff / Hard Token Clamp (Item 2, Prompts 6, 7, 8, 9) | Remove `min(150, int(dt_tokens * 0.10))` in `cognitive_hub.py:3467`; eliminate code clamps; enforce prompt stop tokens on full sentences with 200–250 token headroom | Story 108.23 (`[FEAT-523]`) | 🟡 STAGED |
-| `ANCHOR-03` | Turn Cohesion & 3B Grounding (Item 3, Prompts 6, 7, 8, 9) | Register FEAT-677; pass multi-turn chat message history `[{"role": "user", ...}, {"role": "assistant", ...}]` into Stage 5 prompt; A/B pipeline probe | Story 108.24 (`[FEAT-677]`) | 🟡 STAGED |
-| `ANCHOR-04A` | Brain Rich Chunk Evidence (Item 4.1, Prompts 6, 7, 8) | Revert commit `51ac897` in `cognitive_hub.py` Stage 1 prompt; restore verbose engineering rationales & raw chunks; harness probe | Story 108.25 (`[FEAT-671]`) | 🟡 STAGED |
-| `ANCHOR-04B` | Brain Right Console Accordion GUI (Item 4.2, Prompts 6, 7, 8) | Implement Right Console `[+] [CHUNKS]` accordion reusing `.rag-eval-card` CSS & `intercom_v2.js` logic; DOM Playwright test | Story 108.26 (`[FEAT-671]`) | 🟡 STAGED |
-| `ANCHOR-05` | Critic Swallowing & Persona Attribution (Item 5, Prompts 6, 7, 8, 9) | Revert silent-pass from `115a5df`; nuke rogue `BKM-094`; route Pinky intuition banner to Left Console and 5/5 scorecards to Crosstalk | Story 108.27 (`[FEAT-058]`) | 🟡 STAGED |
-| `ANCHOR-06` | Refine Gem Runaway Waterfall Loops (Item 6, Prompts 6, 7, 8, 9) | Architectural isolation: route internal/refine queries away from `foyer_queue.jsonl`; preserve real-time user visibility in diagnostic stream | Story 108.28 (`[FEAT-455]`) | 🟡 STAGED |
+| `ANCHOR-01` | RAG Accordion Missing GUI (Item 1, Prompts 6, 7, 8, 9) | Fix 24-space template indentation in `intercom_v2.js`, set `rawHtml` / bypass `marked.parse`, restore `<details class="rag-eval-card">` | Story 108.22 (`[FEAT-454]`) | ✅ DONE (`aa53985`, `3092501`) |
+| `ANCHOR-02` | Pinky Cutoff / Hard Token Clamp (Item 2, Prompts 6, 7, 8, 9) | Remove `min(150, int(dt_tokens * 0.10))` in `cognitive_hub.py:3467`; eliminate code clamps; enforce prompt stop tokens on full sentences with 200–250 token headroom | Story 108.23 (`[FEAT-523]`) | ✅ DONE (`3f6aa1f`) |
+| `ANCHOR-03` | Turn Cohesion & 3B Grounding (Item 3, Prompts 6, 7, 8, 9) | Register FEAT-677; pass multi-turn chat message history `[{"role": "user", ...}, {"role": "assistant", ...}]` into Stage 5 prompt; A/B pipeline probe | Story 108.24 (`[FEAT-677]`) | ✅ DONE (`3f6aa1f`) |
+| `ANCHOR-04A` | Brain Rich Chunk Evidence (Item 4.1, Prompts 6, 7, 8) | Revert commit `51ac897` in `cognitive_hub.py` Stage 1 prompt; restore verbose engineering rationales & raw chunks; harness probe | Story 108.25 (`[FEAT-671]`) | ✅ DONE (`3f6aa1f`) |
+| `ANCHOR-04B` | Brain Right Console Accordion GUI (Item 4.2, Prompts 6, 7, 8) | Implement Right Console `[+] [CHUNKS]` accordion reusing `.rag-eval-card` CSS & `intercom_v2.js` logic; DOM Playwright test | Story 108.26 (`[FEAT-671]`) | ✅ DONE (`c50a404`, `56eb246`) |
+| `ANCHOR-05` | Critic Swallowing & Persona Attribution (Item 5, Prompts 6, 7, 8, 9) | Revert silent-pass from `115a5df`; nuke rogue `BKM-094`; route Pinky intuition banner to Left Console and 5/5 scorecards to Crosstalk | Story 108.27 (`[FEAT-058]`) | ✅ DONE (`3f6aa1f`, `dceedb1`, `5601759`) |
+| `ANCHOR-06` | Refine Gem Runaway Waterfall Loops (Item 6, Prompts 6, 7, 8, 9) | Architectural isolation: route internal/refine queries away from `foyer_queue.jsonl`; preserve real-time user visibility in diagnostic stream | Story 108.28 (`[FEAT-455]`) | ✅ DONE (`1507d54`) |
 
 ### 🎨 Story 108.22: Restore RAG Accordion GUI Element & Markdown Indentation Fix (`[FEAT-454]`)
 * **Owner:** `[AGY:PRIMARY]`
@@ -1120,7 +1120,7 @@ The following canonical routing table governs all node emissions across the syst
 ### 🎨 Story 108.28: Internal Maintenance / Refine Intent Queue Isolation & Live Telemetry Preservation (`[FEAT-455]`)
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Isolate background refinement and dream passes (`[INTERNAL] [REFINE]`, `[DREAM_PASS]`) from the interactive conversational queue (`QUEUE_FILE`), while preserving real-time visibility for operator inspection and debugging.
-* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:45-80`, `HomeLabAI/src/v5/foyer/queue_drainer.py:110-140`.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:45-80, 4550-4570, 4800-4880, 5370-5410`.
 * **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_refine_queue_isolation.py -v`
 * **Anchor 3 (Verbatim Code Specs):**
   - In `router.py`: `if payload.get("internal") or text.startswith("[INTERNAL]"): await handle_internal_pass(payload)` (bypassing `foyer_queue.jsonl`).
@@ -1130,6 +1130,29 @@ The following canonical routing table governs all node emissions across the syst
   1. Internal refinement runs visibly in the Crosstalk / diagnostic console without enqueueing to `foyer_queue.jsonl`.
   2. Interactive turns conclude cleanly at Stage 5 without triggering recurring phantom prompts.
   3. Refinement execution does not depend solely on clock windows (e.g. 06:00 AM cutoff) for safety.
+* **Status:** ✅ COMPLETED & CERTIFIED (`HomeLabAI:1507d54`)
+
+---
+
+## 🏁 Phase 7 Certification & Verification Summary (`BKM-086 §4` / `BKM-082`)
+
+All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) have been executed, verified on active silicon, and committed across `HomeLabAI` and `Portfolio_Dev`.
+
+| Story | Focus | Implementation Files | Commit | Automated Test Verification |
+|:---|:---|:---|:---|:---|
+| **108.22** | RAG Accordion GUI & Indentation Fix | `field_notes/intercom_v2.js` | `aa53985`, `3092501` | `pytest test_live_playwright_accordion.py -k test_live_playwright_rag_accordion` (PASSED in 2.06s) |
+| **108.23** | Pinky Token Budget Unclamped (200–250 tokens) | `logic/cognitive_hub.py:3465-3475` | `3f6aa1f` | `pytest test_two_mice_handover.py -k test_pinky_turn_cohesion_and_generous_budget` (PASSED) |
+| **108.24** | Pinky Turn Cohesion / Standard 3B History Grounding | `logic/cognitive_hub.py:3450-3500` | `3f6aa1f` | `pytest test_two_mice_handover.py` (22 passed) |
+| **108.25** | Brain Rich Chunk Evidence Restoration | `logic/cognitive_hub.py:720-735` | `3f6aa1f` | `pytest test_multi_stage_replay_pipeline.py` (14 passed) |
+| **108.26** | Brain Right Console Collapsible Chunk Accordion | `field_notes/intercom_v2.js:435-445` | `c50a404`, `56eb246` | `pytest test_live_playwright_accordion.py -k test_live_playwright_brain_chunks_accordion` (PASSED in 2.06s) |
+| **108.27** | Un-swallow Coherence Critic Telemetry & Purge BKM-094 | `logic/cognitive_hub.py:2605`, `docs/Protocols.md` | `3f6aa1f`, `dceedb1`, `5601759` | `pytest test_two_mice_handover.py -k test_critic_telemetry_unswallowed_on_pass` (PASSED) |
+| **108.28** | Refine Intent Queue Isolation & Telemetry Preservation | `v5/foyer/router.py:4550-4570, 4800-4880, 5390-5410` | `1507d54` | `pytest test_refine_queue_isolation.py` (5 passed in 0.44s) |
+
+### 🚀 Live Attendant Silicon Synchronization
+- **Endpoint**: `http://localhost:8765/reload_residents`
+- **Result**: `{"status": "success", "message": "Resident nodes hot-reloaded successfully (commit: 1507d54). vLLM VRAM preserved.", "commit": "1507d54", "reconciled_silicon": true}`
+- **Daemon Liveness**: `lab-attendant.service` running at commit `1507d54` on port 8765, ChromaDB synced on port 8001 (82 BKM entries, rogue `BKM-094` permanently expunged).
+
 
 
 
