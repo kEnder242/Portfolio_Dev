@@ -1001,3 +1001,107 @@ The following canonical routing table governs all node emissions across the syst
   2. Renders on Pinky's side (Left Console) as a collapsible accordion with `+` click expanders, showing retrieved DNA types (`BKM`, `FEAT`, `PHL`, `DISC`, `INS`, `LOOP`, `GEMS`).
   3. Clicking doc references opens the document viewer cleanly without breaking dialogue layout.
 
+---
+
+## 🏛️ Phase 7: Interactive Regressions & Epistemic UI Realignment (Stories 108.22 – 108.28)
+
+### 📋 ANCHOR_TRACK Reconciliation Ledger (BKM-077 §2)
+| Anchor ID | Tracked Topic & Origin Prompt | Aligned Resolution & Target Architecture | Sprint Story / Artifact | Status |
+|:---|:---|:---|:---|:---:|
+| `ANCHOR-00` | Protocol Meta-Governance (Prompts 8–10) | Codified BKM-096 (root-surgical edit), updated BKM-077 (sub-point continuity & integer roll-ups), updated BKM-084 (lettered ledger active scope exclusion) | `HomeLabAI/docs/Protocols.md` (`5c2f639`) | ✅ DONE |
+| `ANCHOR-01` | RAG Accordion Missing GUI (Item 1, Prompts 6, 7, 8, 9) | Fix 24-space template indentation in `intercom_v2.js`, set `rawHtml` / bypass `marked.parse`, restore `<details class="rag-eval-card">` | Story 108.22 (`[FEAT-454]`) | 🟡 STAGED |
+| `ANCHOR-02` | Pinky Cutoff / Hard Token Clamp (Item 2, Prompts 6, 7, 8, 9) | Remove `min(150, int(dt_tokens * 0.10))` in `cognitive_hub.py:3467`; eliminate code clamps; enforce prompt stop tokens on full sentences with 200–250 token headroom | Story 108.23 (`[FEAT-523]`) | 🟡 STAGED |
+| `ANCHOR-03` | Turn Cohesion & 3B Grounding (Item 3, Prompts 6, 7, 8, 9) | Register FEAT-677; pass multi-turn chat message history `[{"role": "user", ...}, {"role": "assistant", ...}]` into Stage 5 prompt; A/B pipeline probe | Story 108.24 (`[FEAT-677]`) | 🟡 STAGED |
+| `ANCHOR-04A` | Brain Rich Chunk Evidence (Item 4.1, Prompts 6, 7, 8) | Revert commit `51ac897` in `cognitive_hub.py` Stage 1 prompt; restore verbose engineering rationales & raw chunks; harness probe | Story 108.25 (`[FEAT-671]`) | 🟡 STAGED |
+| `ANCHOR-04B` | Brain Right Console Accordion GUI (Item 4.2, Prompts 6, 7, 8) | Implement Right Console `[+] [CHUNKS]` accordion reusing `.rag-eval-card` CSS & `intercom_v2.js` logic; DOM Playwright test | Story 108.26 (`[FEAT-671]`) | 🟡 STAGED |
+| `ANCHOR-05` | Critic Swallowing & Persona Attribution (Item 5, Prompts 6, 7, 8, 9) | Revert silent-pass from `115a5df`; nuke rogue `BKM-094`; route Pinky intuition banner to Left Console and 5/5 scorecards to Crosstalk | Story 108.27 (`[FEAT-058]`) | 🟡 STAGED |
+| `ANCHOR-06` | Refine Gem Runaway Waterfall Loops (Item 6, Prompts 6, 7, 8, 9) | Architectural isolation: route internal/refine queries away from `foyer_queue.jsonl`; preserve real-time user visibility in diagnostic stream | Story 108.28 (`[FEAT-455]`) | 🟡 STAGED |
+
+### 🎨 Story 108.22: Restore RAG Accordion GUI Element & Markdown Indentation Fix (`[FEAT-454]`)
+* **Goal:** Fix the missing RAG accordion GUI element in `intercom_v2.js`. Prevent markdown parser (`marked.parse`) from treating 24-space indented HTML template literals as raw `<pre><code>` text blocks.
+* **Regression Context:** Originally functional in `intercom.html` (Sprint 88 / FEAT-454); during the Sprint 108 refactoring into `intercom_v2.js`, `cardHtml` was indented with 24 leading spaces inside a method, triggering CommonMark code-block escaping when passed to `marked.parse()`.
+* **Technical Strategy:**
+  1. Set `metadata.is_raw_html = true` (or `metadata.rawHtml = true`) on `rag_eval` dispatches so `appendMsg()` natively mounts the HTML directly into the DOM container without executing `marked.parse()`.
+  2. Strip extraneous leading template indentation from the `<details class="rag-eval-card">` HTML snippet.
+* **Acceptance Criteria:**
+  1. `rag_eval` DOM nodes render as active interactive `<details class="rag-eval-card">` HTML elements on the Left Console rather than unparsed plain text code blocks.
+  2. Clicking the `[+]` toggle expands and collapses the archive excerpt cleanly.
+* **Test Plan:**
+  - Automated Playwright browser test (`src/tests/test_live_playwright_accordion.py`) injecting a simulated `rag_eval` packet, asserting the DOM presence of `<details class="rag-eval-card">`, executing a click on `<summary>`, and asserting that the `open` attribute toggles to `true` and inner text is displayed.
+
+### 🎨 Story 108.23: Pinky Token Budget Dynamic Scaling & Anti-Truncation (`[FEAT-523]`)
+* **Goal:** Eliminate hard 60-token artificial truncation on Pinky's conversational voice delivery. Pacing ceilings must guide generation naturally without clipping sentences mid-token.
+* **Regression Context:** Line 3467 in `cognitive_hub.py` contains `pinky_budget = max(60, min(150, int(dt_tokens * 0.10))) if dt_tokens > 0 else ...`. When Deep Thought emitted 200 tokens, this formula clamped Pinky's budget to `min(150, 20) = 20`, which defaulted to `max(60, 20) = 60` tokens. This hard ceiling was passed as `max_tokens=60` to vLLM, causing mid-sentence truncation (`thermal`).
+* **Technical Strategy:**
+  1. Remove `min(150, int(dt_tokens * 0.10))` hard ratio clamp in `cognitive_hub.py:3467`.
+  2. Audit and remove any post-generation clamping code across the waterfall; confirm `FEAT-523` is purely an LLM prompt/pacing budget guardrail.
+  3. Provide generous generation headroom (200–250 tokens) and rely on prompt-level sentence stop directives to emit natural stop tokens on full sentences.
+* **Acceptance Criteria:**
+  1. Pinky's budget scales dynamically with synthesized content depth and interest, never forcing a premature cutoff mid-thought or mid-sentence.
+  2. LLM finishes with clean punctuation and standard terminal sentences.
+  3. No post-generation string slicing or token-truncation logic exists in the delivery pipeline.
+* **Test Plan:**
+  - Fast offline replay test (`test_multi_stage_replay_pipeline.py`) asserting that Pinky voice output generated against complex historical queries terminates with standard terminal punctuation (`.`, `!`, `?`) and zero trailing backticks or incomplete words.
+
+### 🎨 Story 108.24: Pinky Conversational Turn Cohesion & Standard 3B History Grounding (`[FEAT-677]`)
+* **Goal:** Give Pinky his own Stage 2 Opening Take context in the Stage 5 Voice prompt using standard turn-based chat message structure so he does not redundantly re-greet Jason or restart the conversation topic incoherently.
+* **Technical Strategy:**
+  1. Standardize on OpenAI/vLLM multi-turn chat format: pass the interaction history as standard roles (`[{"role": "user", "content": primer}, {"role": "assistant", "content": stage2_take}]`) instead of custom pseudo-tags like `[YOUR_OPENING_REACTION]`.
+  2. Blend the concept of conversational turn into the 3B model prompt so the LLM perceives its own prior utterance natively as its prior turn.
+* **Acceptance Criteria:**
+  1. `build_two_mice_stage_prompt(2, ...)` formats Pinky's Stage 2 opening take as a prior conversational turn in the prompt payload.
+  2. Pinky delivers a seamless, continuous dialogue that naturally acknowledges and builds upon his opening reaction without greeting resets ("Jason, let's dive into...").
+* **Test Plan:**
+  - Live A/B pipeline probe test comparing opening cohesion with and without turn history, asserting zero redundant re-greetings across the two stages.
+
+### 🎨 Story 108.25: Brain Rich Chunk Evidence Restoration (`[FEAT-671]`)
+* **Goal:** Restore the rich evidence "chunk vomit" preferred for deep grounding, reverting commit `51ac897`.
+* **Regression Context:** Commit `51ac897` modified `build_two_mice_stage_prompt(1, ...)` to instruct Brain to emit terse, single-line summaries, which stripped valuable engineering context and raw citations needed for verification.
+* **Technical Strategy:**
+  1. Revert prompt restriction in `cognitive_hub.py` Stage 1 back to pre-`51ac897`, instructing Brain to emit its full engineering rationale and preserve raw evidence chunks.
+* **Acceptance Criteria:**
+  1. Brain evidence filter provides rich engineering justifications and preserved raw evidence blocks rather than terse single-line summaries.
+* **Test Plan:**
+  - Empirical harness probe asserting that Brain's filter trace contains complete `<historical_record>` chunks, file paths, and citations.
+
+### 🎨 Story 108.26: Brain Right Console Collapsible Chunk Accordion GUI (`[FEAT-671]`)
+* **Goal:** Package Brain's verbose chunk evidence into a dedicated collapsible accordion element on Brain's Right Console.
+* **Technical Strategy:**
+  1. Reuse existing `.rag-eval-card` CSS styles and `intercom_v2.js` rendering logic, parameterized by console target (`chatConsole` vs `insightConsole`), ensuring zero code duplication.
+  2. Mount the collapsible `[+] [CHUNKS]` element inside the Right Console insight stream.
+* **Acceptance Criteria:**
+  1. Right Console renders a collapsible `[+] [CHUNKS]` accordion for inspecting full raw evidence on demand.
+  2. Clicking `[+]` expands the raw chunks without breaking column width or dialogue layout.
+* **Test Plan:**
+  - Playwright / DOM verification test asserting the rendering and toggle state of `[+] [CHUNKS]` on the Right Console.
+
+### 🎨 Story 108.27: Un-swallow Coherence Critic Telemetry & Eradicate Rogue BKM-094 (`[FEAT-058]`)
+* **Goal:** Un-swallow the Coherence Critic telemetry card on Left Console. Restore visibility of Pinky (Coherence Critic) and System score telemetry while preserving chat hygiene.
+* **Regression Context:** Commit `115a5df` introduced a rogue "Silent-Pass Contract" (`BKM-094`) with `if critic_res.slop_found or critic_res.score < 3: await execute_dispatch(...)`, accidentally silencing 5/5 score telemetry from the UI.
+* **Technical Strategy:**
+  1. Remove the silence condition; ensure the Critic **always** emits its diagnostic telemetry card.
+  2. Formally nuke rogue `BKM-094` from `docs/Protocols.md` and ChromaDB vector store.
+  3. Route the Pinky initiating intuition banner to the Left Console (`channel="critic"`) and the 4-key scorecard to Crosstalk (`channel="lab"`).
+* **Acceptance Criteria:**
+  1. Critic evaluations emit discrete diagnostic telemetry cards (`Score: 5/5 | Slop: False`) to Crosstalk (`channel="lab"`).
+  2. Pinky initiating intuition banner displays properly on Left Console.
+  3. Rogue `BKM-094` is purged from documentation and memory.
+* **Test Plan:**
+  - Automated unit/replay test verifying that a 5/5 non-slop Critic output emits diagnostic packets to the WebSocket without being swallowed.
+
+### 🎨 Story 108.28: Internal Maintenance / Refine Intent Queue Isolation & Live Telemetry Preservation (`[FEAT-455]`)
+* **Goal:** Isolate background refinement and dream passes (`[INTERNAL] [REFINE]`, `[DREAM_PASS]`) from the interactive conversational queue (`QUEUE_FILE`), while preserving real-time visibility for operator inspection and debugging.
+* **Regression Context:** When `ignition/manager.py` triggered `refine_gem.py` after an idle reboot, the script sent `type: "text_input"` over WebSocket. `router.py` enqueued it to `foyer_queue.jsonl`, where `queue_drainer` repeatedly invoked `run_division_of_labor()`, waking Pinky into runaway conversational voice loops.
+* **Technical Strategy:**
+  1. Tag internal maintenance dispatches with an explicit internal flag (`"internal": true`).
+  2. Update `router.py` to route internal intents to out-of-band execution workers that bypass `foyer_queue.jsonl` and never invoke conversational voice stages (`run_division_of_labor()`).
+  3. Stream refinement progress directly to the diagnostic telemetry stream (`channel="lab"`) so Jason can watch refinement passes live in the Crosstalk panel without triggering conversational chat bubbles or audio.
+* **Acceptance Criteria:**
+  1. Internal refinement runs visibly in the Crosstalk / diagnostic console without enqueueing to `foyer_queue.jsonl`.
+  2. Interactive turns conclude cleanly at Stage 5 without triggering recurring phantom prompts.
+  3. Refinement execution does not depend solely on clock windows (e.g. 06:00 AM cutoff) for safety.
+* **Test Plan:**
+  - Automated integration test asserting that injecting an `[INTERNAL] [REFINE]` packet produces live lab telemetry dispatches without creating entries in `foyer_queue.jsonl` or calling Stage 5 voice synthesis.
+
+
+
