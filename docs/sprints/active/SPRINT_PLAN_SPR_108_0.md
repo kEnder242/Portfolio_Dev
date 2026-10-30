@@ -1036,6 +1036,12 @@ The following canonical routing table governs all node emissions across the syst
 | `ANCHOR-04B` | Brain Right Console Accordion GUI (Item 4.2, Prompts 6, 7, 8) | Implement Right Console `[+] [CHUNKS]` accordion reusing `.rag-eval-card` CSS & `intercom_v2.js` logic; DOM Playwright test | Story 108.26 (`[FEAT-671]`) | ✅ DONE (`c50a404`, `56eb246`) |
 | `ANCHOR-05` | Critic Swallowing & Persona Attribution (Item 5, Prompts 6, 7, 8, 9) | Revert silent-pass from `115a5df`; nuke rogue `BKM-094`; route Pinky intuition banner to Left Console and 5/5 scorecards to Crosstalk | Story 108.27 (`[FEAT-058]`) | ✅ DONE (`3f6aa1f`, `dceedb1`, `5601759`) |
 | `ANCHOR-06` | Refine Gem Runaway Waterfall Loops (Item 6, Prompts 6, 7, 8, 9) | Architectural isolation: route internal/refine queries away from `foyer_queue.jsonl`; preserve real-time user visibility in diagnostic stream | Story 108.28 (`[FEAT-455]`) | ✅ DONE (`1507d54`) |
+| `ANCHOR-07` | Cognitive Hub Cancellation `contextlib` Crash | Add missing `import contextlib` at top of `cognitive_hub.py` to prevent stream drop on task cancel | Hotfix 108.29 (`[FEAT-404]`) | ✅ DONE (`2e5b1cc`) |
+| `ANCHOR-08` | Abolish `internal=True` / Enforce Emission Mapping (Item 1) | Codify BKM-098 & FEAT-678; replace `internal: bool` with explicit `stream_channel: PresentationChannel`; no token gagging | Story 108.30 (`[FEAT-678]`, `[BKM-098]`) | 🟡 STAGED (`[SWARM:LOCAL]`) |
+| `ANCHOR-09` | Decouple OPERATIONAL from Historical RAG (Item 2.1) | Surgical triage policy update setting `rag: null` for `OPERATIONAL`, preventing career slide retrieval for live metrics | Story 108.31 (`[FEAT-673]`) | 🟡 STAGED (`[SWARM:LOCAL]`) |
+| `ANCHOR-10` | M5 Air MLX Judge JSON Enforcement & Critique-First Schema (Items 4.1-4.3) | Critique-first schema order, OpenAI `response_format` JSON enforcement, hardcode 0.00 failure fallback (kill 0.95 green lie) | Story 108.32 (`[FEAT-443]`, `[BKM-062]`) | 🟡 STAGED (`[SWARM:LOCAL]`) |
+| `ANCHOR-11` | Live MCP Sensory Tool Pipeline for Operational Telemetry (Item 2.2) | Wire live FastMCP hardware prober directly to operational turns; return structured scarcity envelope on probe failure | Story 108.33 (`[FEAT-679]`) | 🟡 STAGED (`[SWARM:CLOUD]`) |
+| `ANCHOR-12` | Pre-Work DNA Governance & ChromaDB Sync | Mutate `FeatureTracker.md` and `Protocols.md`; run `sync_chroma_dna.py` (83 BKM entries) & `build_site.py` prior to delegation | Story 108.34 (`[FEAT-678]`, `[FEAT-679]`) | ✅ DONE (`AGY:PRIMARY`) |
 
 ### 🎨 Story 108.22: Restore RAG Accordion GUI Element & Markdown Indentation Fix (`[FEAT-454]`)
 * **Owner:** `[AGY:PRIMARY]`
@@ -1152,6 +1158,134 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 - **Endpoint**: `http://localhost:8765/reload_residents`
 - **Result**: `{"status": "success", "message": "Resident nodes hot-reloaded successfully (commit: 1507d54). vLLM VRAM preserved.", "commit": "1507d54", "reconciled_silicon": true}`
 - **Daemon Liveness**: `lab-attendant.service` running at commit `1507d54` on port 8765, ChromaDB synced on port 8001 (82 BKM entries, rogue `BKM-094` permanently expunged).
+
+---
+
+## 🛠️ Post-Phase 7 Hotfix Log
+
+### 🐛 Hotfix 108.29: Cognitive Hub Stream Cleanup `contextlib` Import Restored (`[FEAT-404]`)
+* **Owner:** `[AGY:PRIMARY]`
+* **Date:** `2026-10-30`
+* **Trigger:** Nightly forensics uncovered `NameError: name 'contextlib' is not defined` in `attendant.log` at 06:00:58 during morning accountability probe (`9b3536c5`), silently terminating Deep Thought's stream during task cancellation in the `finally:` block.
+* **Target File & Line:** `HomeLabAI/src/logic/cognitive_hub.py:2`
+* **Fix Applied:** Added missing `import contextlib` to module-level imports.
+* **Automated Verification:**
+  - `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py` (22/22 passed in 2.67s).
+  - `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_cognitive_hub_abort.py` (1 passed in 0.14s).
+* **Silicon Status:** Bytecode staged for daemon reload/restart per BKM-007.
+
+---
+
+## 🚀 Phase 8: Zero-Whispering Invariant, Live Telemetry Decoupling & Judge Realignment
+
+### 0.1 Pre-Flight Mistakes Avoided Ledger (`BKM-081` / `BKM-082`)
+1. **The Censorship Conflation Trap:** Avoided conflating console channel separation with token silencing. Abolished `internal=True` in favor of deterministic `stream_channel: PresentationChannel` mapping (`[BKM-098]`, `[FEAT-678]`).
+2. **The Archival Telemetry Trap:** Avoided routing live hardware sensor queries (GPU thermals, RAPL wattage) into 18-year career RAG archives. Decoupled `OPERATIONAL` to `rag: null` (`[FEAT-673]`).
+3. **The Autoregressive Score-First Trap:** Avoided forcing small models (Bonsai 27B / Qwen 32B) to output a numeric score before reasoning. Reordered schemas to generate `critique` / `reasoning` first, followed by `score`.
+4. **The False-Pass Fallback Trap (Green Lie):** Avoided initializing `score = 0.95` on regex failure. Defaulted unparsed output and refusals to `0.00` and flagged as `status="UNPARSED_REFUSAL"` (`[BKM-062]`).
+5. **The Across-the-Board Delegation Trap (`BKM-049`):** Avoided assigning all tasks to a single execution tier. Strictly differentiated roles based on architectural boundaries.
+
+### 0.2 Anti-"Across-the-Board" Delegation Matrix (`BKM-049` / `BKM-006`)
+
+| Story | Focus | Assigned Tier | Target Silicon / Worker | Concrete Assignment Rationale |
+| :--- | :--- | :--- | :--- | :--- |
+| **108.30** | Excision of `internal` Parameter & Presentation Channel Plumbing | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | High-volume surgical parameter plumbing across Python node signatures and dispatch calls. |
+| **108.31** | Triage OPERATIONAL Decoupling (`rag: null`) | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | Surgical JSON configuration change and policy loader pytest assertion. |
+| **108.32** | M5 Air MLX Judge JSON Enforcement & Critique-First Schema | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | Python schema reordering, OpenAI `response_format` payload injection, and 0.00 failure fallback. |
+| **108.33** | Live MCP Operational Sensory Tool Pipeline & Diagnostic Envelope | `[SWARM:CLOUD]` | Sisyphus / Nemotron | Multi-subsystem architectural design linking FastMCP hardware tools to Hub/Foyer pipelines. |
+| **108.34** | Epistemic Source-of-Record DNA Updates & ChromaDB Synchronization | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | Pre-flight architectural grounding: mutating `FeatureTracker.md` / `Protocols.md`, running `sync_chroma_dna.py` & `build_site.py`. |
+
+### 0.3 Phase 8 AFK Operational Checklist (`BKM-086 §1.1`)
+- [x] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
+  - [x] Pre-regression archaeology on `internal=True` (Sprint 26/32/100/101 forensics evaluated).
+  - [x] Pre-flight mistakes-avoided ledger compiled in §0.1.
+  - [x] Active daemon verification: `:8765` (Foyer), `:8001` (ChromaDB), `:8088` (vLLM), `:11434` (Ollama 4090) verified UP.
+- [x] **Pillar 2: 4-Anchor Master Story Specifications**
+  - [x] Stories 108.30 through 108.34 fully authored with 4 anchors (Files/Lines, Verification Command, Verbatim Code Specs, DNA Links).
+- [ ] **Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard**
+  - [x] Story 108.34 executed by `[AGY:PRIMARY]` (DNA updates & ChromaDB sync completed prior to delegation).
+  - [ ] Stories 108.30, 108.31, 108.32 dispatched to `[SWARM:LOCAL]` via `delegate.py`.
+  - [ ] Story 108.33 dispatched to `[SWARM:CLOUD]` via `delegate.py`.
+- [ ] **Pillar 4: Silicon Certification & Live is King (`BKM-007` + `BKM-024` + `INS-047`)**
+  - [ ] Unit and replay test suites pass 100% green without mocks.
+  - [ ] Hot-reload daemon via `POST /reload_residents` and restart `lab-attendant.service`.
+  - [ ] Live synthetic probe injection verifies zero unparsed judge pass and zero unmapped token emissions.
+
+---
+
+### 🎨 Story 108.30: Universal Emission-to-Presentation Mapping & Excision of `internal` Parameter (`[FEAT-678]`, `[BKM-098]`)
+* **Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090)
+* **Goal:** Completely eliminate `internal: bool` and `is_internal: bool` flags from code signatures, enforcing deterministic presentation channel routing for every token emitted.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3920-3935`, `HomeLabAI/src/logic/override_parser.py:90-105`, `HomeLabAI/src/nodes/loader.py:195-235`, `HomeLabAI/src/v5/foyer/router.py:4550-4575, 4800-4850, 5400-5415`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_loader_token_broadcasting.py /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_refine_queue_isolation.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `loader.py`: replace `internal: bool = False` with `stream_channel: str = "voice"`. If `response_format` is provided, default `stream_channel = "crosstalk"`.
+  - In `cognitive_hub.py` & `override_parser.py`: replace `internal=True` with `stream_channel="crosstalk"`.
+  - In `router.py`: replace `is_internal` checks with `payload.get("intent_type") == "background_maintenance"`. Direct maintenance tokens to `channel="maintenance"`.
+* **Anchor 4 (DNA Links):** `[FEAT-361]`, `[FEAT-678]`, `[BKM-098]`.
+* **Acceptance Criteria:**
+  1. Zero occurrences of `internal=True` in execution call sites.
+  2. Intermediate scratchpads stream visibly to `channel="crosstalk"`.
+  3. No token emission is silenced into `stream_source = None`.
+
+### 🎨 Story 108.31: Triage OPERATIONAL Decoupling (`rag: null`) & Surgical Policy Update (`[FEAT-673]`)
+* **Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090)
+* **Goal:** Decouple `OPERATIONAL` triage queries from static historical ChromaDB RAG, preventing retrieval of irrelevant historical career slides during live telemetry requests.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/config/triage_policy.json:74-92`, `HomeLabAI/src/tests/test_triage_policy_loader.py`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_triage_policy_loader.py /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_triage_engine.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `triage_policy.json` under `"OPERATIONAL"`: set `"rag": null` (matching `CASUAL` and `UNCLEAR`).
+  - Update `prompt_mo`: `"Urgent system telemetry requested; query live hardware state via MCP probes or report telemetry sensor scarcity. Do not retrieve historical archive documentation."`
+* **Anchor 4 (DNA Links):** `[FEAT-673]`, `[FEAT-679]`, `[BKM-089]`.
+* **Acceptance Criteria:**
+  1. `OPERATIONAL` queries yield `rag: null` in parsed triage payloads.
+  2. Brain Gatekeeper is bypassed for pure operational telemetry turns.
+
+### 🎨 Story 108.32: M5 Air MLX Judge JSON Enforcement, Critique-First Schema & 0.00 Hard Fallback (`[FEAT-443]`, `[BKM-062]`)
+* **Owner:** `[SWARM:LOCAL]` (Atlas on RTX 4090)
+* **Goal:** Prevent M5 Air judge conversational refusals by reordering schema to critique-first, enforcing OpenAI-compatible `response_format: {"type": "json_object"}`, and abolishing the hardcoded 0.95 green-lie fallback.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:90-145`, `HomeLabAI/src/nodes/pinky_critic_persona.py:130-145, 230-260`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_mlx_judge_node.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `mlx_judge_node.py`: inject `"response_format": {"type": "json_object"}` into the HTTP POST payload.
+  - In `mlx_judge_node.py:127`: initialize `score = 0.00`. If regex or JSON parsing fails, return `status = "UNPARSED_REFUSAL"`, `score = 0.00`, `score_source = "ERROR_FALLBACK"`.
+  - In `pinky_critic_persona.py:135`: reorder `output_schema` keys: 1) `"critique"` / `"reasoning"`, 2) `"score"`, 3) `"slop_found"`, 4) `"retort"`.
+* **Anchor 4 (DNA Links):** `[FEAT-443]`, `[BKM-062]`, `[LOOP-005]`.
+* **Acceptance Criteria:**
+  1. Schema mandates reasoning tokens prior to numeric scalar generation.
+  2. Model refusals or unstructured outputs result in `score = 0.00` and `DEGRADED` / `UNPARSED_REFUSAL`, never 0.95.
+
+### 🎨 Story 108.33: Live MCP Operational Sensory Tool Pipeline & Diagnostic Failure Envelope (`[FEAT-679]`)
+* **Owner:** `[SWARM:CLOUD]` (Sisyphus / Nemotron)
+* **Goal:** Wire live hardware sensor tools via FastMCP directly into operational turns when `rag: null`, providing live vitals and returning structured scarcity diagnostics on probe failure.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:1750-1820`, `HomeLabAI/src/debug/mcp_prober.py`, `HomeLabAI/src/infra/cumulative_telemetry.py`.
+* **Anchor 2 (Verification Command):** `pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_telemetry_grounding.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - When `vibe == "OPERATIONAL"`, invoke MCP hardware prober (`sys_metrics` / `peek_strategic_map`).
+  - Format output as `[LIVE_SENSORY_TELEMETRY]` for Pinky / Deep Thought.
+  - If MCP call raises or times out, return `[TELEMETRY_UNAVAILABLE: SENSOR_TOOL_UNLINKED]` to prevent hallucinated metrics.
+* **Anchor 4 (DNA Links):** `[FEAT-679]`, `[BKM-098]`, `[BKM-062]`.
+* **Acceptance Criteria:**
+  1. Live telemetry queries consume live hardware sensor probes rather than ChromaDB slides.
+  2. Probe outages trigger explicit sensor scarcity envelopes.
+
+### 🎨 Story 108.34: Epistemic Source-of-Record DNA Updates & ChromaDB Synchronization (`[FEAT-678]`, `[FEAT-679]`, `[BKM-098]`)
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Update epistemic governance documents (`FeatureTracker.md`, `Protocols.md`), synchronize ChromaDB collections, and compile static airlock site prior to swarm delegation.
+* **Anchor 1 (Target Files & Lines):** `Portfolio_Dev/FeatureTracker.md`, `HomeLabAI/docs/Protocols.md`, `Portfolio_Dev/sync_chroma_dna.py`, `Portfolio_Dev/field_notes/build_site.py`.
+* **Anchor 2 (Verification Command):** `python3 /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 /home/jallred/Dev_Lab/Portfolio_Dev/sync_chroma_dna.py && /home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python3 /home/jallred/Dev_Lab/Portfolio_Dev/field_notes/build_site.py --no-verify`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Append `[FEAT-678]` and `[FEAT-679]` to `FeatureTracker.md`.
+  - Update `[FEAT-673]` in `FeatureTracker.md`.
+  - Append `[BKM-098]` to `Protocols.md`.
+  - Ingest 83 BKM entries and 456 feature entries into ChromaDB collections on port 8001.
+* **Anchor 4 (DNA Links):** `[FEAT-678]`, `[FEAT-679]`, `[BKM-098]`, `[BKM-007]`.
+* **Acceptance Criteria:**
+  1. ChromaDB port 8001 heartbeat returns HTTP 200 with 83 BKM entries synced.
+  2. `build_site.py` completes with deployment integrity verified.
+* **Status:** ✅ COMPLETED & CERTIFIED (`2026-10-30T11:46:40-07:00`)
+
+
 
 
 

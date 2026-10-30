@@ -3972,12 +3972,12 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Rationale:** Eliminates the cognitive "tunnel vision" trap of linear Chain-of-Thought, where an early reasoning flaw corrupts all downstream tokens. Mirrors genuine human parallel subconscious deliberation.
 
 ## [FEAT-673] Declarative Triage Policy, WYWO Grounding & Decoupled Vibe/Domain Schema
-**Sprint:** Sprint 108.0 (Phase 2)
+**Sprint:** Sprint 108.0 (Phase 2 & Phase 8)
 **Status:** ACTIVE
-**Tags:** `#declarative_triage`, `#wywo_grounding`, `#contextual_prompts`, `#decoupled_schema`, `[BKM-085]`, `[BKM-089]`, `[BKM-015]`
+**Tags:** `#declarative_triage`, `#wywo_grounding`, `#contextual_prompts`, `#decoupled_schema`, `#operational_rag_decoupling`, `[BKM-085]`, `[BKM-089]`, `[BKM-015]`
 **Code:** `HomeLabAI/config/triage_policy.json`, `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/triage_policy_loader.py`
-**Logic:** Establishes decoupled declarative policy schema in `config/triage_policy.json` separating behavioral stance (12 vibe archetypes with frugal in-character contextual-prompts and out-of-band Prompt MOs) from retrieval routing (domains, traversal modes, allowed collections). Reconnects deterministic `_WYWO_RE` fast-path pre-filter in `triage_engine.py` and grounds `_build_triage_mode_context()` with explicit standup briefing rules.
-**Rationale:** Eliminates hardcoded keyword drift, fixes orphaned `WYWO` standup routing, and adheres strictly to BKM-089 (Prompts explain HOW, Prompt MO explains WHY).
+**Logic:** Establishes decoupled declarative policy schema in `config/triage_policy.json` separating behavioral stance (12 vibe archetypes with frugal in-character contextual-prompts and out-of-band Prompt MOs) from retrieval routing (domains, traversal modes, allowed collections). Reconnects deterministic `_WYWO_RE` fast-path pre-filter in `triage_engine.py` and grounds `_build_triage_mode_context()` with explicit standup briefing rules. In Phase 8, surgically decouples `OPERATIONAL` from static historical ChromaDB RAG retrieval (`rag: null`), preventing archival career slide retrieval when querying live system telemetry.
+**Rationale:** Eliminates hardcoded keyword drift, fixes orphaned `WYWO` standup routing, prevents historical slide hallucination on operational queries, and adheres strictly to BKM-089 (Prompts explain HOW, Prompt MO explains WHY).
 
 ## [FEAT-674] Universal [CHUNK-N] Serialization & Situational Pre-RAG Disk Hooking
 **Sprint:** Sprint 108.0 (Phase 2)
@@ -4010,6 +4010,23 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Logic:** Replaces custom pseudo-tags (`[YOUR_OPENING_REACTION]`) in multi-step waterfall handovers with standard multi-turn chat templates (`role: "user"` / `role: "assistant"` / `role: "system"`). Formulates the transition between Pinky Stage 2b Opening Take and Pinky Stage 5 Voice Delivery as a natural conversational assistant turn continuation. Enables 3B open-weights models to perceive multi-step pipeline handovers as authentic conversational dialogue, eliminating redundant greetings, amnesic restarts, and prompt prefix bleed.
 **Mechanism:** `build_two_mice_stage_prompt(2, ...)` accepts `prior_assistant_utterance` and compiles standard chat turn dicts for `_process_node_stream()`.
 **Rationale:** Solves coreference ambiguity ("check the thing") without bloating Triage with conversational memory, allowing Pinky to deliver authentic opening quips and grounded RAG search terms.
+
+## [FEAT-678] Universal Emission-to-Presentation Routing & Complete Excision of 'Internal' Flags
+**Sprint:** Sprint 108.0 (Phase 8)
+**Status:** ACTIVE
+**Tags:** `#zero_whispering`, `#presentation_mapping`, `#channel_routing`, `#no_internal`, `[FEAT-361]`, `[BKM-098]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/override_parser.py`
+**Logic:** Completely purges all occurrences of `internal: bool` and `is_internal: bool` parameter flags across the execution and dispatch pipeline. Implements strict, deterministic mapping from every LLM token emission to an observable external presentation channel (`channel="voice"`, `channel="lab"`, `channel="crosstalk"`, `channel="maintenance"`). Replaces legacy `internal=True` calls with `stream_channel="crosstalk"`. Refactors foyer router to process asynchronous non-conversational operations under explicit `intent_type="background_maintenance"` routing to `channel="maintenance"` without suppressing tokens or dropping audit traces.
+**Rationale:** Restores 100% adherence to `[FEAT-361]` (Zero Censorship / 100% Transparency), permanently eliminating the hidden text trap and ensuring every token generated across the federated lab is externally observable.
+
+## [FEAT-679] Live MCP Sensory Tool Pipeline for Operational Telemetry
+**Sprint:** Sprint 108.0 (Phase 8)
+**Status:** ACTIVE
+**Tags:** `#live_telemetry`, `#mcp_sensory`, `#operational_vitals`, `#anti_hallucination`, `[FEAT-673]`, `[BKM-098]`, `[BKM-062]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/mcp_prober.py`, `HomeLabAI/config/triage_policy.json`
+**Logic:** Establishes live sensory MCP tool execution for conversational queries classified under `OPERATIONAL` (such as GPU thermals, RAPL power envelopes, and system load). Replaces static vector RAG with live hardware prober queries (`peek_strategic_map`, `sys_metrics`, FastMCP hardware probes), formatting output as structured `[LIVE_SENSORY_TELEMETRY]` chunks. When sensor probes are offline, unreachable, or unlinked in the active environment, the hub emits a structured diagnostic envelope (`[TELEMETRY_UNAVAILABLE: SENSOR_TOOL_UNLINKED]`), enforcing that the conversational node reports telemetry scarcity honestly rather than hallucinating metrics.
+**Rationale:** Bridges conversational AI directly to physical hardware telemetry while enforcing strict green-lie prevention.
+
 
 
 
