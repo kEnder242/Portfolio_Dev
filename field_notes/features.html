@@ -19691,6 +19691,50 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Eliminates single-turn amnesia by inferring <code>is_continuation: bool</code> from current turn prose (detecting anaphora, deixis, ellipsis, or correction) combined via inclusive OR with the single-pivot momentum invariant. Injects Turn $N-1$ from <code>round_table_memory</code> as <code>[CHUNK-PREV]</code> into Pinky's Tier 1 reflection (<code>resolve_hyde_vector</code>) for grounded search terms and into Brain's Stage 1 Evidential Moat for line-by-line relevance filtering.</p>
                 </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-stable">PLANNED</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-677">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-677</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Standard Turn-Based Message History & 3B Conversational Grounding
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 (Phase 7)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#turn_based_grounding</code>, <code>#multi_turn_history</code>, <code>#3b_turn_cohesion</code>, <code>#anti_greeting_reset</code>, <code>[FEAT-489](#FEAT-489)</code>, <code>[FEAT-676](#FEAT-676)</code>, <code>[BKM-087]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_two_mice_handover.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces custom pseudo-tags (<code>[YOUR_OPENING_REACTION]</code>) in multi-step waterfall handovers with standard multi-turn chat templates (<code>role: "user"</code> / <code>role: "assistant"</code> / <code>role: "system"</code>). Formulates the transition between Pinky Stage 2b Opening Take and Pinky Stage 5 Voice Delivery as a natural conversational assistant turn continuation. Enables 3B open-weights models to perceive multi-step pipeline handovers as authentic conversational dialogue, eliminating redundant greetings, amnesic restarts, and prompt prefix bleed.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Mechanism</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>build_two_mice_stage_prompt(2, ...)</code> accepts <code>prior_assistant_utterance</code> and compiles standard chat turn dicts for <code>_process_node_stream()</code>.</p>
+                </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
@@ -19701,7 +19745,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                             </details>
                         </td>
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
-                            <span class="impact-badge impact-stable">PLANNED</span>
+                            <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
                     </tbody>
