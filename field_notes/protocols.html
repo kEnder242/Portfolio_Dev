@@ -122,8 +122,9 @@
                             <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
                                 <p><strong>Objective</strong>: Prevent state drift and unsolicited speculative mutations while preserving active sprint momentum.</p>
 <ol>
-<li><strong>Non-Invasive Diagnostic Scope</strong>: Treat "QQ: [Question]" as a non-perturbing informational inquiry. Use read-only tools (file reads, log queries, memory recall, system status) to answer factually and concisely.</li>
+<li><strong>Non-Invasive Diagnostic Scope</strong>: Treat "QQ: [Question]" as a non-perturbing informational inquiry. Use read-only tools (file reads, log queries, memory recall, system status) to answer factually and concisely, prioritizing readily available facts upfront before pursuing deeper investigation.</li>
 <li><strong>No Speculative Mutations</strong>: Never interpret a QQ as an implied work order or begin modifying code, configurations, or system state based on the question.</li>
+<li><strong>Inferred Intent as Follow-Up</strong>: Channel contextual engineering insight into actionable follow-up proposals at the conclusion of the response. Surface inferred next steps (such as live verification, reproduction tests, or remediations) as options for operator selection rather than executing them unprompted.</li>
 <li><strong>Sprint Decoupling (No Unintentional Halts)</strong>:<ul>
 <li><strong>During In-Flight Sprints (BKM-006 / BKM-049)</strong>: Answering a QQ is an out-of-band telemetry check. It does NOT abort, cancel, or stall the active sprint backlog. The agent answers the question and immediately continues executing pending sprint stories.</li>
 <li><strong>During Interactive Sessions</strong>: If no sprint or task queue is active, answering a QQ completes the turn and awaits the next user directive.</li>
@@ -1854,6 +1855,7 @@ git remote set-url --add --push origin &lt;secondary-mirror-url&gt;
 <li>Topics remain conversational anchors until verbally aligned and captured into a unified tabular ledger.</li>
 <li><strong>SPRINT CRYSTALLIZATION (The Planning Stage):</strong></li>
 <li>Once verbal consensus is reached, the anchors are mapped to sprint stories (<code>Story &lt;N&gt;.1</code>, <code>Story &lt;N&gt;.2</code>, ...).</li>
+<li>The roll-up from conversational dialogue into sprint stories is governed by <code>BKM-097</code> (Roll-Up Audit Protocol).</li>
 <li>The sprint plan MUST include the verbatim ANCHOR_TRACK ledger table reflecting the exact state (<code>DONE</code>, <code>STAGED</code>, <code>DROPPED</code>, <code>DEFERRED</code>).</li>
 <li><strong>HEADS DOWN EXECUTION (The Delivery Stage):</strong></li>
 <li>Execution proceeds under <code>BKM-006</code> and <code>BKM-007</code> with assigned owner tags (<code>[AGY:PRIMARY]</code> vs <code>[SWARM:LOCAL]</code>).</li>
@@ -1863,10 +1865,11 @@ git remote set-url --add --push origin &lt;secondary-mirror-url&gt;
 <ol>
 <li><strong>The Invariant Law:</strong></li>
 <li>Numbered dialogue items ($1 \dots N$) established during design alignment ARE the canonical, immutable swim lanes.</li>
-<li>Agents are <strong>strictly forbidden</strong> from merging, grouping, collapsing, or bunching multiple numbered items together (e.g. headers like "1 &amp; 2", "4, 5 &amp; 11", or "6 &amp; 7").</li>
+<li><strong>Sub-Point Continuity:</strong> Sub-indexed items (e.g. <code>1.1</code>, <code>1.2</code>, <code>2.3</code>) inherit the identical 1:1 immutable swim lane invariant. Agents must maintain discrete sub-lane headings without merging, grouping, collapsing, or bunching them together into compound headers (e.g., forbidding headers like "1.1 &amp; 1.2" or "2.1-2.3").</li>
+<li><strong>Integer Roll-Up Summaries:</strong> Parent integer headings (e.g., <code>### 2) Top-Level Topic</code>) are explicitly encouraged as high-level architectural syntheses, provided all active sub-points descend cleanly beneath them as individual headings.</li>
 <li><strong>Individual Lifetime:</strong></li>
-<li>Every single numbered item MUST be addressed in its own discrete, separate numbered section in responses and sprint plans.</li>
-<li>Swim lanes maintain their individual numbering until they naturally achieve full consensus, are certified, and peter out.</li>
+<li>Every single numbered and sub-pointed item MUST be addressed in its own discrete section in responses and sprint plans.</li>
+<li><strong>Operator-Only Drop Authority:</strong> Only the human operator has the authority to drop, dismiss, or merge items. Agents must carry every sub-point forward until explicitly closed.</li>
 </ol>
                             </div>
                         </td>
@@ -2119,7 +2122,8 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 <h3>1. The Dual-Namespace Architecture</h3>
 <p>To prevent confusion between active work and pending reminders:
 * <strong>Numbered Lanes ($1 \dots N$):</strong> Reserved exclusively for active, foreground conversational swim lanes under <code>BKM-064</code> / <code>BKM-077</code>.
-* <strong>Lettered Ledger ($A \dots Z$):</strong> Reserved exclusively for unaddressed findings, paused ideas, or bugs uncovered under QQ (<code>BKM-004</code>) that lack active follow-up.</p>
+* <strong>Lettered Ledger ($A \dots Z$):</strong> Reserved exclusively for out-of-band, incidental stray findings or unprompted bugs uncovered during read-only lookups (<code>BKM-004</code>) that lack active follow-up.
+* <strong>Active Scope Paved Path:</strong> Items actively tracked in current conversational lanes, work orders, or sprint plan phases are natively owned by those structures. Such items flow forward naturally through conversation roll-ups (<code>BKM-097</code>) and sprint backlogs, keeping the Lettered Ledger dedicated solely to out-of-band discoveries.</p>
 <h3>2. The Lookback Horizon &amp; Anti-Hijack Invariant</h3>
 <ol>
 <li><strong>The Lookback Horizon:</strong> Review the prior 2–4 turns (specifically turns $N-2$ through $N-4$). The immediate last turn ($N-1$) is active conversational context and is never treated as a dropped thread.</li>
@@ -2476,23 +2480,15 @@ Explicit labeling enables the model to properly attribute the work to past histo
                     <tr>
                         <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-094</td>
                         <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
-                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Sovereign Decoupled Entailment Auditing</div>
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">[DEPRECATED / PURGED] Rogue Silent-Pass Contract</div>
                             <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
-                                <p><strong>Feature Anchor:</strong> <code>[BKM-094]</code> / <code>[FEAT-058]</code> / <code>[BKM-089]</code><br />
-<strong>Colloquial Alias:</strong> "Silent 27B Entailment Gate"<br />
-<strong>Tags:</strong> <code>#heterogeneous_silicon</code>, <code>#entailment_audit</code>, <code>#silent_pass</code>, <code>#m5_air</code>, <code>#kender</code><br />
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-094]</code> / <code>[FEAT-058]</code> / <code>[BKM-097]</code><br />
+<strong>Colloquial Alias:</strong> "Purged Silent-Pass Contract"<br />
+<strong>Tags:</strong> <code>#deprecated</code>, <code>#purged</code>, <code>#anti_silent_pass</code>, <code>#critic_visibility</code><br />
 <strong>Domain:</strong> Multi-Node Silicon Allocation, Verification Architecture<br />
-<strong>Status:</strong> ACTIVE / MANDATORY (Sprint 108)  </p>
-<h3>1. The Silicon Allocation Boundary</h3>
-<ul>
-<li><strong>Edge Inference ($3\text{B}$)</strong>: Dedicated exclusively to low-latency conversational delivery and local fast-path filtering. Small models must <strong>never</strong> be tasked with out-of-band entailment verification of their own output.</li>
-<li><strong>Sovereign Silicon ($27\text{B}+$)</strong>: Dedicated to deep architectural synthesis and out-of-band entailment auditing.</li>
-</ul>
-<h3>2. The Silent-Pass Contract</h3>
-<p>When an out-of-band Entailment Audit executes:
-* If the generation is entailed (<code>VERDICT: PASS</code>), the audit completes in <strong>100% absolute silence</strong>—no UI messages, no tokens pushed to chat streams, no user interruption.
-* If a contradiction or cross-attribution is detected (<code>VERDICT: MISMATCH</code>), the system triggers Pinky's Intercom continuation (<code>CONT_SYS_V3</code>) to set the record straight conversationally.
-* If Sovereign silicon is offline or asleep, the entailment audit is skipped entirely; local $3\text{B}$ models must never substitute as judges ($0\%$ specificity).</p>
+<strong>Status:</strong> DEPRECATED / PURGED (Sprint 108 Phase 7)  </p>
+<h3>1. Deprecation &amp; Purge Invariant</h3>
+<p>The "Silent-Pass Contract" originally introduced in commit <code>115a5df</code> silenced 5/5 non-slop Coherence Critic telemetry from the UI. Under Sprint 108 Story 108.27, this rogue suppression rule is permanently abolished. Critic evaluations and telemetry cards are mandatory diagnostic artifacts that MUST ALWAYS emit visibly to Left Console diagnostic channels and Crosstalk. Silent suppression on pass is strictly forbidden.</p>
                             </div>
                         </td>
                     </tr>
@@ -2514,6 +2510,51 @@ Explicit labeling enables the model to properly attribute the work to past histo
 <li><strong>Single Spoken Delivery</strong>: Persona conversational text is extracted and dispatched <strong>once</strong> to Right Console chat channels as clean, human-readable prose. Unparsed intermediate JSON schemas or raw extraction dictionaries must never be routed to conversational bubbles.</li>
 <li><strong>100% Transparency Without Duplication</strong>: All thoughts, steps, and diagnostics remain completely visible to the operator across the two consoles without verbatim echoes or duplicate dispatches.</li>
 </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-096</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Root-Surgical Protocol Editing (Anti-Apology Standard)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-096]</code> / <code>[BKM-004]</code> / <code>[BKM-040]</code> / <code>[INS-047]</code><br />
+<strong>Colloquial Alias:</strong> "The Anti-Apology Root Surgical BKM Standard"<br />
+<strong>Tags:</strong> <code>#protocol_hygiene</code>, <code>#anti_apology</code>, <code>#root_cause</code>, <code>#positive_guidance</code>, <code>#surgical_edits</code><br />
+<strong>Domain:</strong> Protocol Governance, Meta-Engineering, Agent Behavioral Contracts<br />
+<strong>Status:</strong> ACTIVE / MANDATORY  </p>
+<h3>1. The Operational Invariant</h3>
+<p>When a behavioral protocol tension, rule slip, or process violation occurs, the agent is strictly prohibited from offering hollow apologies or defensive justifications. The agent must immediately pivot to root-cause diagnosis and execute an explicit 4-step surgical improvement cycle:</p>
+<ol>
+<li><strong>Anti-Apology Pivot</strong>: Acknowledge the empirical reality directly without self-flagellating boilerplate. Treat the friction as an objective protocol calibration opportunity.</li>
+<li><strong>Root Cause Identification</strong>: Locate the exact paragraph, sentence, or ambiguity in <code>docs/Protocols.md</code> where the directive broke down, conflicted with another mandate, or failed to anticipate operational reality.</li>
+<li><strong>Positive Guidance Construction</strong>: Draft the replacement rule using positive framing ("Do X because context Y guides this behavior"). Direct the agent toward a concrete operational pipeline rather than describing what not to do.</li>
+<li><strong>Surgical Diff Presentation</strong>: Present the minimal, contiguous <code>git diff</code> against <code>docs/Protocols.md</code> for explicit operator review and confirmation before committing locally per <code>BKM-040</code>.</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-097</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Roll-Up Audit Protocol (ROLLUP_AUDIT)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-097]</code> / <code>[BKM-077]</code> / <code>[BKM-084]</code> / <code>[BKM-096]</code><br />
+<strong>Colloquial Alias:</strong> "The Roll-Up Audit Protocol"<br />
+<strong>Tags:</strong> <code>#roll_up</code>, <code>#audit</code>, <code>#reconciliation</code>, <code>#anchor_track</code>, <code>#anti_drift</code>, <code>#ambient_hooks</code><br />
+<strong>Domain:</strong> Conversational Accountability, Sprint Reconciliation, Task Governance<br />
+<strong>Status:</strong> ACTIVE / MANDATORY  </p>
+<h3>1. The Operational Imperative</h3>
+<p>A "Roll-Up" is an active reconciliation audit, not a passive conversation summary. When a tracked conversation concludes or transitions into planning, the operator or agent triggers a roll-up to bridge conversational swim lanes (<code>BKM-077</code>) into the active sprint plan, satisfying the Active Scope Paved Path (<code>BKM-084 §1</code>) so no active topics degrade into ambiguous dropped threads.</p>
+<h3>2. Ambient Hook Dynamic Guidance</h3>
+<p>When the operator requests a "roll up", ambient hooks inject dynamic, context-specific execution directives directly into the session prompt. The agent must consume and strictly adhere to these injected hook instructions for the active turn.</p>
+<h3>3. Core Audit Requirements</h3>
+<ol>
+<li><strong>Adversarial Transcript Reconciliation</strong>: The agent reviews the conversational dialogue history against the target sprint plan artifact line-by-line.</li>
+<li><strong>Gap &amp; Drift Identification</strong>: The audit surfaces any unrepresented user requirements, dropped sub-points, bunched stories (violating <code>BKM-077 §4.1</code>), mislabeled feature tags, or accidental regressions in intent.</li>
+<li><strong>1:1 Story Parity</strong>: The sprint plan stories are updated to reflect the full fidelity of aligned dialogue decisions.</li>
+<li><strong>Authoritative ANCHOR_TRACK Generation</strong>: The sprint plan MUST receive an updated, verbatim <code>ANCHOR_TRACK</code> reconciliation table (<code>BKM-077 §2</code>) documenting origin prompts, agreed technical architecture, mapped sprint stories, and tracking status (<code>DONE</code>, <code>STAGED</code>, <code>DROPPED</code>, <code>DEFERRED</code>).</li>
+</ol>
                             </div>
                         </td>
                     </tr>
