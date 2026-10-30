@@ -192,7 +192,12 @@
 <li>Rollback Plan: Steps to revert changes if the system becomes unstable.</li>
 </ul>
 </li>
-<li><strong>Verification</strong>: Re-verify all services (Ollama, vLLM, Intercom) and run the full test suite before handing back control.</li>
+<li><strong>Verification &amp; Live Deployment Verification</strong>:<ul>
+<li>Re-verify all services (Ollama, vLLM, Intercom) and run the full test suite before handing back control.</li>
+<li><strong>Daemon Lifecycle &amp; Boot Commit</strong>: If backend server files (<code>router.py</code>, <code>acme_lab.py</code>, ignition, or resident loaders) were modified, explicitly state whether <code>systemctl restart lab-attendant.service</code> was executed, and report the live running PID, boot commit, and <code>/status</code> state.</li>
+<li><strong>Static Site Compilation (<code>build_site.py</code>)</strong>: If any frontend code, styles, HTML, or DNA documentation were touched (<code>.js</code>, <code>.css</code>, <code>.html</code>, <code>.md</code>), explicitly execute and report the status of <code>build_site.py</code>, including asset cache-busting hashes and public airlock (<code>www_deploy</code>) sync.</li>
+</ul>
+</li>
 </ol>
                             </div>
                         </td>
@@ -2554,6 +2559,31 @@ Explicit labeling enables the model to properly attribute the work to past histo
 <li><strong>Gap &amp; Drift Identification</strong>: The audit surfaces any unrepresented user requirements, dropped sub-points, bunched stories (violating <code>BKM-077 §4.1</code>), mislabeled feature tags, or accidental regressions in intent.</li>
 <li><strong>1:1 Story Parity</strong>: The sprint plan stories are updated to reflect the full fidelity of aligned dialogue decisions.</li>
 <li><strong>Authoritative ANCHOR_TRACK Generation</strong>: The sprint plan MUST receive an updated, verbatim <code>ANCHOR_TRACK</code> reconciliation table (<code>BKM-077 §2</code>) documenting origin prompts, agreed technical architecture, mapped sprint stories, and tracking status (<code>DONE</code>, <code>STAGED</code>, <code>DROPPED</code>, <code>DEFERRED</code>).</li>
+</ol>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">BKM-098</td>
+                        <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">Deterministic LLM Emission-to-Presentation Mapping (Zero Internal Whispering)</div>
+                            <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
+                                <p><strong>Feature Anchor:</strong> <code>[BKM-098]</code> / <code>[FEAT-361]</code> / <code>[FEAT-678]</code> / <code>[BKM-095]</code> / <code>[BKM-096]</code><br />
+<strong>Colloquial Alias:</strong> "The Zero-Whispering Invariant"<br />
+<strong>Tags:</strong> <code>#zero_whispering</code>, <code>#presentation_mapping</code>, <code>#channel_routing</code>, <code>#no_internal</code>, <code>#anti_censorship</code><br />
+<strong>Domain:</strong> LLM Token Dispatch, Multi-Channel UI Streaming, Observability &amp; Telemetry<br />
+<strong>Status:</strong> ACTIVE / MANDATORY  </p>
+<h3>1. Diagnostic (What Failed)</h3>
+<p>Introducing <code>internal: bool</code> or <code>is_internal: bool</code> flags historically created the "hidden text trap" (<code>[FEAT-361]</code>). It conflated <strong>channel multiplexing</strong> (keeping raw machine JSON off the human voice bubble) with <strong>silencing</strong> (<code>stream_source = None</code>), causing nodes to vanish into an unobservable black hole whenever routing logic suffered regressions.</p>
+<h3>2. Positive Guidance (The Mandate)</h3>
+<ol>
+<li><strong>No Token Silencing:</strong> Every byte and token emitted by any LLM MUST map deterministically to an externally observable presentation channel.</li>
+<li><strong>Explicit Channels:</strong> Abolish all <code>internal: bool</code> parameter flags in function signatures (<code>think()</code>, <code>_process_node_stream()</code>, <code>_broadcast_token()</code>, <code>handle_stream_chunk()</code>). Replace with explicit <code>stream_channel: PresentationChannel</code>:</li>
+<li><code>channel="voice"</code> / <code>"pinky"</code>: Human conversational voice delivery.</li>
+<li><code>channel="lab"</code>: Technical synthesis, bedrock evidence, and rich RAG chunks.</li>
+<li><code>channel="crosstalk"</code>: Real-time intermediate machine JSON scratchpads, HyDE query vectors, and Critic scorecards.</li>
+<li><code>channel="maintenance"</code>: Background refinement and autonomous dream cycles.</li>
+<li><strong>Fail-Loud Mapping:</strong> The UI and Foyer router render each channel in its designated viewport. No channel is silently dropped; unmapped token emissions fail loudly as an <code>UNMAPPED_EMISSION_ERROR</code>.</li>
 </ol>
                             </div>
                         </td>
