@@ -49,14 +49,14 @@
     "paper_order": 2,
     "origin": {
       "author": "jallred",
-      "text": "LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don’t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.",
+      "text": "LLMs are a prefrontal cortex, cloud models depend on massive short term memory but we don\u2019t need that what we need is to design a Hippocampus and connect it properly, RAG gets us half way there.",
       "source": "Intuition paper Sept 5 2026 (1JKo195tp_rdnhu-ka3n0og0UwrazG2ArFYzl4wQEyGY)",
       "immutable": true,
       "created_at": "2026-09-05T12:00:00Z"
     },
     "synthesis": {
       "title": "The Hippocampus & Prefrontal Cortex Architecture",
-      "narrative_context": "Large cloud models brute-force complex tasks through quadratic context windows, acting as isolated reasoning engines without episodic consolidation. Local intelligence requires an ambient hippocampus—a dedicated distillation and indexing layer that curates memories into high-density vector anchors for immediate prefrontal synthesis.",
+      "narrative_context": "Large cloud models brute-force complex tasks through quadratic context windows, acting as isolated reasoning engines without episodic consolidation. Local intelligence requires an ambient hippocampus\u2014a dedicated distillation and indexing layer that curates memories into high-density vector anchors for immediate prefrontal synthesis.",
       "lab_anchors": [
         "HomeLabAI/src/nodes/cognitive_hub.py",
         "FEAT-564",
@@ -189,7 +189,7 @@
     },
     "synthesis": {
       "title": "Token Golf over Token Maxing & Trust Ceilings",
-      "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'—minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
+      "narrative_context": "A model's reliability drops exponentially as prompt context balloons. Rather than celebrating 1M token windows, rigorous engineering practices 'Token Golf'\u2014minimizing input token payloads while maximizing prompt fidelity to keep attention razor-sharp.",
       "lab_anchors": [
         "HomeLabAI/docs/Protocols.md:BKM-051",
         "FEAT-526"
@@ -491,7 +491,7 @@
     },
     "synthesis": {
       "title": "The Slow Burn Corollary to the Mythical Man-Month",
-      "narrative_context": "Manic bursts of developer acceleration frequently introduce compounding architectural regressions. A disciplined, methodical 'slow burn'—characterized by incremental validation, strict schema checks, and constant stabilization—achieves exponentially higher net velocity over time.",
+      "narrative_context": "Manic bursts of developer acceleration frequently introduce compounding architectural regressions. A disciplined, methodical 'slow burn'\u2014characterized by incremental validation, strict schema checks, and constant stabilization\u2014achieves exponentially higher net velocity over time.",
       "lab_anchors": [
         "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_78_0.md",
         "BKM-020"
@@ -747,7 +747,7 @@
     },
     "synthesis": {
       "title": "Captured Insight & Trapping Lightning in a Bottle",
-      "narrative_context": "Creative engineering epiphanies are ephemeral. An intentional capture pipeline—logging raw unformatted fragments into transient scratchpads, followed by AI distillation and structural anchoring—transforms ephemeral intuition into permanent system architecture.",
+      "narrative_context": "Creative engineering epiphanies are ephemeral. An intentional capture pipeline\u2014logging raw unformatted fragments into transient scratchpads, followed by AI distillation and structural anchoring\u2014transforms ephemeral intuition into permanent system architecture.",
       "lab_anchors": [
         "Portfolio_Dev/papers/paper_jitc_intuition.json",
         "FEAT-581"
@@ -1123,7 +1123,7 @@
     "paper_order": 27,
     "origin": {
       "author": "jallred",
-      "text": "Code Archaeology: The ability to recover and modernize legacy codebases by identifying the 'beating heart'—the core structure—of the system.",
+      "text": "Code Archaeology: The ability to recover and modernize legacy codebases by identifying the 'beating heart'\u2014the core structure\u2014of the system.",
       "source": "Engineering Background & Philosophy (1YHtK0RkWq-cQdjruSQJmCa0KYyyCPjabfQxgssT3rZg)",
       "immutable": true,
       "created_at": "2024-05-01T12:00:00Z"
@@ -1259,7 +1259,7 @@
     },
     "synthesis": {
       "title": "The Dual-Engine Creative Process: Passive Cross-Domain Synthesis & Active Methodical Execution",
-      "narrative_context": "Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background—distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.",
+      "narrative_context": "Software development is fundamentally a creative discipline governed by two complementary cognitive modes. Passive Synthesis operates asynchronously in the background\u2014distilling subconscious 'shower thoughts' into high-impact, cross-domain insights by connecting disparate systems (e.g., hardware validation, distributed systems, vector memory). Active Execution is the deliberate, paced, and structured implementation phase where taking time to respond methodically prevents cognitive thrashing, clarifies interfaces, and translates creative vision into robust, defensive production architectures.",
       "lab_anchors": [
         "Portfolio_Dev/field_notes/career_notes.html",
         "HomeLabAI/docs/Protocols.md:BKM-005",
@@ -1440,14 +1440,14 @@
     "paper_order": 36,
     "origin": {
       "author": "jallred",
-      "text": "The 'Think in Chinese' story is a token saver. Our Wisdom/DNA service does this too! OpenAI's reasoning model sometimes thinks in Chinese — because Chinese characters encode more semantic density per token. That's exactly what our compressed DNA vector embeddings do: pack maximum meaning into minimum token budget.",
+      "text": "The 'Think in Chinese' story is a token saver. Our Wisdom/DNA service does this too! OpenAI's reasoning model sometimes thinks in Chinese \u2014 because Chinese characters encode more semantic density per token. That's exactly what our compressed DNA vector embeddings do: pack maximum meaning into minimum token budget.",
       "source": "https://techcrunch.com/2025/01/14/openais-ai-reasoning-model-thinks-in-chinese-sometimes-and-no-one-really-knows-why/",
       "immutable": true,
       "created_at": "2026-09-20T09:30:00Z"
     },
     "synthesis": {
       "title": "The Dense Token Hypothesis (Think in Chinese)",
-      "narrative_context": "When OpenAI's o1 reasoning model 'thinks in Chinese' during chain-of-thought, it is not a bug — it is emergent token golf. Chinese logographs encode richer semantic payload per token than alphabetic scripts, so the model naturally gravitates toward denser internal representations when optimizing its reasoning budget. This mirrors our own Federated Lab architecture: CLaRa-DNA compresses empirical wisdom into dense vector embeddings (384-dim MiniLM), and the JITC hook injects only the 2-3 most relevant anchors at inference time — achieving the same principle of maximum semantic density per token spent.",
+      "narrative_context": "When OpenAI's o1 reasoning model 'thinks in Chinese' during chain-of-thought, it is not a bug \u2014 it is emergent token golf. Chinese logographs encode richer semantic payload per token than alphabetic scripts, so the model naturally gravitates toward denser internal representations when optimizing its reasoning budget. This mirrors our own Federated Lab architecture: CLaRa-DNA compresses empirical wisdom into dense vector embeddings (384-dim MiniLM), and the JITC hook injects only the 2-3 most relevant anchors at inference time \u2014 achieving the same principle of maximum semantic density per token spent.",
       "lab_anchors": [
         "HomeLabAI/config/hooks/icm_hook.py",
         "BKM-046",
@@ -1488,7 +1488,7 @@
     "paper_order": 37,
     "origin": {
       "author": "jallred",
-      "text": "Cloud models can use cache as a database, but local models don’t have that luxury or capacity. With local models the context problem turns into a data retrieval problem. We have already solved data retrieval years ago. Modern tools like ClaraDB, grep, RAG, Infinite Context Memory, and Claude memory blend the solutions that worked for humans into something that LLM Agents can use. When buying more memory is not practical, I propose a move to the extreme other end by shrinking context. How far can we focus the context to only relevant information to answer those simple questions? What can we do with small models and limited kv cache on desktop hardware that normally need God tier cloud power to answer?",
+      "text": "Cloud models can use cache as a database, but local models don\u2019t have that luxury or capacity. With local models the context problem turns into a data retrieval problem. We have already solved data retrieval years ago. Modern tools like ClaraDB, grep, RAG, Infinite Context Memory, and Claude memory blend the solutions that worked for humans into something that LLM Agents can use. When buying more memory is not practical, I propose a move to the extreme other end by shrinking context. How far can we focus the context to only relevant information to answer those simple questions? What can we do with small models and limited kv cache on desktop hardware that normally need God tier cloud power to answer?",
       "source": "Engineering Notes (notes_2026_09_22.md)",
       "immutable": true,
       "created_at": "2026-09-22T13:00:00Z"
@@ -1547,14 +1547,14 @@
     "paper_order": 38,
     "origin": {
       "author": "jallred",
-      "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+      "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity\u2014it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
       "source": "Silicon Manageability, Framework Archaeology & Multi-Engine Triage",
       "immutable": true,
       "created_at": "2026-09-22T15:18:00Z"
     },
     "synthesis": {
       "title": "The Rug Bump Law (Conservation of System Complexity)",
-      "narrative_context": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+      "narrative_context": "Creating a clean architectural boundary or framework does not eliminate domain complexity\u2014it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
       "lab_anchors": [
         "Philosophy and Learnings (Frameworks vs Content)",
         "FEAT-586 (Triage Waffle Point & Deterministic Routing)",
@@ -1568,7 +1568,7 @@
         {
           "version": 1,
           "lens": "Original Verbatim",
-          "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity—it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
+          "text": "Creating a clean architectural boundary or framework does not eliminate domain complexity\u2014it merely pushes the bump under the rug into translation shims, raw packet bypasses, or validation harnesses. Robust engineering accepts the Law of Conservation of Complexity: instead of pretending an abstraction made the mess vanish, an architect explicitly designs for where the bump lands.",
           "certified_at": "2026-09-22T15:18:00Z"
         }
       ]
@@ -1603,7 +1603,7 @@
     "paper_order": 39,
     "origin": {
       "author": "jallred",
-      "text": "Loops birth complexity. The simplest non-linear equation, like the Logistic Map (x_{n+1} = r x_n (1 - x_n)), generates infinite fractal depth, period-doubling cascades, and deterministic chaos from trivial feedback. In systems architecture, autonomous agent swarms, and human knowledge refinement, complexity is not built by adding parts—it emerges spontaneously when outputs are looped back as inputs with back-pressure.",
+      "text": "Loops birth complexity. The simplest non-linear equation, like the Logistic Map (x_{n+1} = r x_n (1 - x_n)), generates infinite fractal depth, period-doubling cascades, and deterministic chaos from trivial feedback. In systems architecture, autonomous agent swarms, and human knowledge refinement, complexity is not built by adding parts\u2014it emerges spontaneously when outputs are looped back as inputs with back-pressure.",
       "source": "Sprint 90 Architectural Synthesis & Conversational Ledger",
       "immutable": true,
       "created_at": "2026-09-25T15:00:00Z"
@@ -1658,14 +1658,14 @@
     "paper_order": 40,
     "origin": {
       "author": "jallred",
-      "text": "Anxiety in autonomous systems is not a lack of compute; it is a lack of declared certainty. A model wanders only when it fears the world outside its prompt is required to satisfy it. When small or medium models face a blank canvas with ambiguous bounds, the human tension of procrastination manifests as exploratory anxiety—hyperactive searching, bashrc probing, and loop stalling. Psychological safety in AI swarms is created through explicit invariant contracts: declaring completeness, welcoming naive starts, and guaranteeing outer-loop repair.",
+      "text": "Anxiety in autonomous systems is not a lack of compute; it is a lack of declared certainty. A model wanders only when it fears the world outside its prompt is required to satisfy it. When small or medium models face a blank canvas with ambiguous bounds, the human tension of procrastination manifests as exploratory anxiety\u2014hyperactive searching, bashrc probing, and loop stalling. Psychological safety in AI swarms is created through explicit invariant contracts: declaring completeness, welcoming naive starts, and guaranteeing outer-loop repair.",
       "source": "Sprint 94 Post-Sprint Architectural Session & Tri-Loop Reflection",
       "immutable": true,
       "created_at": "2026-09-28T22:45:00Z"
     },
     "synthesis": {
       "title": "The Psychological Safety Invariant (Curing Exploratory Anxiety)",
-      "narrative_context": "Model exploratory anxiety occurs when workers fear missing environmental context. By embedding psychological safety into the delegation contract—providing in-memory scaffolding, explicit boundary declarations, and welcoming naive starts—local models execute with zero exploratory wandering, relying on outer-loop guardians for dialectic repair.",
+      "narrative_context": "Model exploratory anxiety occurs when workers fear missing environmental context. By embedding psychological safety into the delegation contract\u2014providing in-memory scaffolding, explicit boundary declarations, and welcoming naive starts\u2014local models execute with zero exploratory wandering, relying on outer-loop guardians for dialectic repair.",
       "lab_anchors": [
         "FEAT-624 (Psychological Safety & Cognitive Handover Contract)",
         "BKM-049 (Tri-Loop Story Delegation & Owner Tag Mandate)",
@@ -1715,7 +1715,7 @@
     "paper_order": 41,
     "origin": {
       "author": "jallred",
-      "text": "The spine of a book or paper is its invariant topological coordinate system. While wording, tone, stylistic lenses, and bullet revisions mutate continuously across iterations, the Spine—the ordered sequence of conceptual nodes—remains the unshakeable armature of the manuscript. Decoupling the spine index from node mutation histories transforms document editing from destructive string overwrites into deterministic coordinate traversal.",
+      "text": "The spine of a book or paper is its invariant topological coordinate system. While wording, tone, stylistic lenses, and bullet revisions mutate continuously across iterations, the Spine\u2014the ordered sequence of conceptual nodes\u2014remains the unshakeable armature of the manuscript. Decoupling the spine index from node mutation histories transforms document editing from destructive string overwrites into deterministic coordinate traversal.",
       "source": "Sprint 94/95 Architectural Synthesis & Document Spine Formulation",
       "immutable": true,
       "created_at": "2026-09-29T10:45:00Z"
@@ -1772,14 +1772,14 @@
     "paper_order": 42,
     "origin": {
       "author": "jallred",
-      "text": "Waffle points are documented friction areas in agentic development that lead to circular fixing—where agents endlessly tweak heuristic thresholds, string matches, prompt adjectives, and internal configs back and forth until they regress to the origin. Instead of hardcoded string matching or endless heuristic oscillations, systems must recognize waffle points, acknowledge complexity conservation (Rug Bump Law), and break circular traps with invariant structural anchors and grounded semantic judgment.",
+      "text": "Waffle points are documented friction areas in agentic development that lead to circular fixing\u2014where agents endlessly tweak heuristic thresholds, string matches, prompt adjectives, and internal configs back and forth until they regress to the origin. Instead of hardcoded string matching or endless heuristic oscillations, systems must recognize waffle points, acknowledge complexity conservation (Rug Bump Law), and break circular traps with invariant structural anchors and grounded semantic judgment.",
       "source": "Agentic Development Forensics & Sprint 13/97 Architectural Reflection",
       "immutable": true,
       "created_at": "2026-10-02T15:00:00Z"
     },
     "synthesis": {
       "title": "The Waffle Trap & Circular Fixing Traps (Agentic Oscillation)",
-      "narrative_context": "In agentic software development, unanchored agents fall into circular fixing traps—endlessly oscillating across prompt phrasing, heuristic thresholds, agent names, and regex assertions without making forward progress. Breaking the Waffle Trap requires recognizing where domain complexity is conserved (INS-038) and substituting brittle heuristic string matches with grounded semantic judgment (FEAT-190), deterministic engine lead windows (FEAT-586), and rigid Git ground-truth discipline (BKM-049/BKM-071).",
+      "narrative_context": "In agentic software development, unanchored agents fall into circular fixing traps\u2014endlessly oscillating across prompt phrasing, heuristic thresholds, agent names, and regex assertions without making forward progress. Breaking the Waffle Trap requires recognizing where domain complexity is conserved (INS-038) and substituting brittle heuristic string matches with grounded semantic judgment (FEAT-190), deterministic engine lead windows (FEAT-586), and rigid Git ground-truth discipline (BKM-049/BKM-071).",
       "lab_anchors": [
         "HomeLabAI/src/infra/cognitive_audit.py",
         "FEAT-190 (Cognitive Audit / The Judge)",
@@ -1845,7 +1845,7 @@
     },
     "synthesis": {
       "title": "The Asymmetry of Generation vs. Review (The Zero-Marginal Labor Law)",
-      "narrative_context": "In a federated AI lab, code generation (exploring, drafting, AST modifications, iterative testing) is computationally expensive and token-heavy, while code review and verification are precise, fast, and token-light. Leveraging sovereign local silicon (Node KENDER 4090 + Node Brain M5 Air) for overnight execution delivers zero-marginal-cost code production. The strategic frontier guardian (AGY) achieves maximum cognitive leverage not by typing raw lines from scratch, but by evaluating structured diffs, test outputs, and handover reflections—yielding frontier quality at sovereign local cost.",
+      "narrative_context": "In a federated AI lab, code generation (exploring, drafting, AST modifications, iterative testing) is computationally expensive and token-heavy, while code review and verification are precise, fast, and token-light. Leveraging sovereign local silicon (Node KENDER 4090 + Node Brain M5 Air) for overnight execution delivers zero-marginal-cost code production. The strategic frontier guardian (AGY) achieves maximum cognitive leverage not by typing raw lines from scratch, but by evaluating structured diffs, test outputs, and handover reflections\u2014yielding frontier quality at sovereign local cost.",
       "lab_anchors": [
         "BKM-049 (The Delegation Execution Rulebook)",
         "BKM-024 (Live Validation Mandate)",
@@ -1898,7 +1898,7 @@
     "paper_order": 44,
     "origin": {
       "author": "jallred",
-      "text": "Models are trained to be cautious, to scout out. When we do any of the work beforehand it’s accepted by the models with a huge grain of salt. No matter how much context is sent, and how much spoon feeding is done, the model will still try to find a ‘ground truth’. It’s like having a boss say 'Trust me bro, I already scouted ahead'.",
+      "text": "Models are trained to be cautious, to scout out. When we do any of the work beforehand it\u2019s accepted by the models with a huge grain of salt. No matter how much context is sent, and how much spoon feeding is done, the model will still try to find a \u2018ground truth\u2019. It\u2019s like having a boss say 'Trust me bro, I already scouted ahead'.",
       "source": "Tackling delegation Google Doc (1iBhb4dgJBS9NfnnA6o268J8ne_nAdnDNW_ih3C0RcIA)",
       "immutable": true,
       "created_at": "2026-10-03T22:45:00Z"
@@ -2060,7 +2060,7 @@
     },
     "synthesis": {
       "title": "Live is King, History is Queen",
-      "narrative_context": "The Sovereign Dyad of the Federated Lab. Live validation is King: fast unit tests and mocks verify isolated logic, but final task certification unconditionally requires verifying against the active running daemon (matching Git HEAD) and reachable physical silicon endpoints (BKM-024). History is Queen: sprints and DNA records are not passive human archives, but an active, curated state machine for autonomous agents (BKM-082). Live without History is blind—doomed to repeat historical anti-patterns, misdiagnose multi-hour log horizons, and strip hard-won physical sentinels. History without Live is toothless—producing theoretical plans that fail on physical silicon. The King executes sovereign authority on the physical floor; the Queen governs strategic memory and protects the realm from circular amnesia.",
+      "narrative_context": "The Sovereign Dyad of the Federated Lab. Live validation is King: fast unit tests and mocks verify isolated logic, but final task certification unconditionally requires verifying against the active running daemon (matching Git HEAD) and reachable physical silicon endpoints (BKM-024). History is Queen: sprints and DNA records are not passive human archives, but an active, curated state machine for autonomous agents (BKM-082). Live without History is blind\u2014doomed to repeat historical anti-patterns, misdiagnose multi-hour log horizons, and strip hard-won physical sentinels. History without Live is toothless\u2014producing theoretical plans that fail on physical silicon. The King executes sovereign authority on the physical floor; the Queen governs strategic memory and protects the realm from circular amnesia.",
       "lab_anchors": [
         "BKM-024",
         "BKM-082",
@@ -2173,7 +2173,7 @@
     },
     "synthesis": {
       "title": "Dam Building: The Law of Epistemic Hydraulics and Paved Flow",
-      "narrative_context": "The generative reasoning of Large Language Models behaves like a powerful hydraulic torrent: attempt to 'boil the ocean' with sprawling negative constraint prompts, exhaustive anti-inventories, or unbounded token sweeps, and the system dissipates enormous compute while leaking through subtle semantic fractures. Conversely, attempting to dam ALL the water—imposing rigid zero-entropy handcuffs or total blockage—creates severe backpressure that induces catastrophic hallucination, robotic paralysis, or sudden refusal. LLM logic works, but controlling its natural trajectory requires hydraulic engineering: shoring up the vulnerable earthen lines where prose leads astray into common pitfalls (BKM-081), while deliberately engineering a structured, paved spillway (the Paved Path per BKM-086) through which reasoning, tool orchestration, and positive intent can smoothly discharge. You do not stop the river; you construct the dam to shape, meter, and channel the flow.",
+      "narrative_context": "The generative reasoning of Large Language Models behaves like a powerful hydraulic torrent: attempt to 'boil the ocean' with sprawling negative constraint prompts, exhaustive anti-inventories, or unbounded token sweeps, and the system dissipates enormous compute while leaking through subtle semantic fractures. Conversely, attempting to dam ALL the water\u2014imposing rigid zero-entropy handcuffs or total blockage\u2014creates severe backpressure that induces catastrophic hallucination, robotic paralysis, or sudden refusal. LLM logic works, but controlling its natural trajectory requires hydraulic engineering: shoring up the vulnerable earthen lines where prose leads astray into common pitfalls (BKM-081), while deliberately engineering a structured, paved spillway (the Paved Path per BKM-086) through which reasoning, tool orchestration, and positive intent can smoothly discharge. You do not stop the river; you construct the dam to shape, meter, and channel the flow.",
       "lab_anchors": [
         "BKM-086",
         "BKM-015",
@@ -2265,6 +2265,58 @@
         "cognitive-accordion",
         "breathing-waterfall",
         "expansion-contraction-cadence"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
+  },
+  {
+    "id": "INS-051",
+    "theme": "Systems Architecture & Scheduling",
+    "paper_order": 51,
+    "origin": {
+      "author": "jallred",
+      "text": "Regarding file race conditions. I thought we solved this with scheduling. Concurrently running nightly tasks are not desired. Mucking with locks is an anti-pattern when tasks can be serialized by design.",
+      "source": "Federated Lab Sprint 108.0 Forensic Dialogue",
+      "immutable": true,
+      "created_at": "2026-11-01T11:28:47Z"
+    },
+    "synthesis": {
+      "title": "The Zero-Concurrency Conveyor-Belt Invariant (Schedule Over Locks)",
+      "narrative_context": "Mucking with multi-process file locks, flock timeouts, and in-place truncation recovery is a tactical concession to unintended concurrency. In a sovereign lab running discrete offline maintenance tasks, file race conditions must be solved by architectural serialization and schedule boundaries, never by adding locks to concurrent background tasks. Operations execute as a single-threaded conveyor belt: 02:00 LoRA Forge -> 02:30 Dreaming (consuming prior night gems) -> 03:00-05:00 Tail Mop-up (refining gems for tomorrow) -> 05:00-06:00 Quiescent Buffer -> 06:00 Morning Accountability Probe. Persistent 24/7 background daemons are strictly barred, and external batch scripts must never directly mutate or truncate files actively tailed by running daemons.",
+      "lab_anchors": [
+        "Portfolio_Dev/FeatureTracker.md:FEAT-416",
+        "Portfolio_Dev/FeatureTracker.md:FEAT-629",
+        "Portfolio_Dev/FeatureTracker.md:FEAT-681",
+        "HomeLabAI/docs/Protocols.md:BKM-099",
+        "HomeLabAI/docs/LAB_INFRASTRUCTURE.md:LAB-117"
+      ],
+      "review_notes": "Codifies the schedule-over-locks invariant: pure conveyor-belt serialization eliminates race conditions without multi-process file locks.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "zero-concurrency",
+        "conveyor-belt",
+        "schedule-over-locks",
+        "daemon-boundary",
+        "nightly-maintenance",
+        "systems-architecture"
+      ],
+      "explicit_links": [
+        "BKM-099",
+        "FEAT-416",
+        "FEAT-629",
+        "FEAT-681",
+        "LAB-117"
+      ],
+      "aliases": [
+        "schedule-over-locks",
+        "zero-concurrency-conveyor-belt",
+        "nightly-schedule-invariant"
       ],
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"

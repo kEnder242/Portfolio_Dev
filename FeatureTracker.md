@@ -3313,11 +3313,11 @@ Foyer Router also pre-checks `X-Client-Commit` header (rejects with HTTP 409 Con
 **Mechanism:** `nightly_forge.py` (`evaluate_nightly_accountability`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `daily_accountability_digest.json`, `status.html`, `foyer_stage_ledger.jsonl`.
 
 ## [FEAT-608] Synthetic Morning Round Table Accountability Probe Suite
-**Sprint:** SPR-88.0 / SPR-92.0
+**Sprint:** SPR-88.0 / SPR-92.0 / SPR-108.0
 **Status:** ACTIVE
 **Code:** [HomeLabAI/src/infra/probe_round_table_accountability.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py) — Synthetic Morning Round Table Accountability Probe Suite.
-**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky banter, Brain reasoning, Deep Thought synthesis, and MLX Judge Coherence Critic scoring). Grounded in physical truth: directly awaits stage completions in `foyer_stage_ledger.jsonl` and authoritative judge scores from `judge_backpressure.jsonl` (zero fabricated fallback scores). Indexed via `[BKM-062]`, `[BKM-067]` and extracted via `HomeLabAI/src/infra/read_roundtable_turn.py`.
-**Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks and eliminating synthetic green lies.
+**Logic:** Automated multi-resident verification suite executed live against active Foyer endpoints post-re-ignition at 06:00 AM. Runs "Hi Mice" greeting latency probe and full technical deliberation test (Triage routing, Pinky opening quip, Brain evidence filtering, Deep Thought synthesis, and Pinky voice delivery). Enforces a **Multi-Stage Evaluator Vector Schema**: distinguishes Stage 1 Archive Interest (which legitimately scores low, e.g. 0.40, on non-technical prompts per `[FEAT-523]` / `[BKM-087]`) from Stage 5 Terminal Spoken Entailment (scoring 0.95–1.00). Mandates that the watchdog extracts the terminal Stage 5 delivered response (`pinky_response >= 0.70`) as the authoritative health gate, eliminating false-alarm degradations caused by intermediate triage scores. Grounded in physical truth: directly awaits stage completions in `foyer_stage_ledger.jsonl` and authoritative judge scores from `judge_backpressure.jsonl` (zero fabricated fallback scores). Indexed via `[BKM-062]`, `[BKM-067]` and extracted via `HomeLabAI/src/infra/read_roundtable_turn.py`.
+**Rationale:** Guarantees that the entire conversational circuit is alive and coherent, detecting silent inference deadlocks while preventing false-alarm failures from conservative intermediate triage stages.
 **Mechanism:** `probe_round_table_accountability.py`, `read_roundtable_turn.py`, `mlx_judge_node.py`, Foyer `/inject` and `/status` REST endpoints.
 
 ## [FEAT-603] Tiered Progressive-Disclosure Synapse Graph Visual Model & 1-Hop Hover Promotion Engine
@@ -4026,6 +4026,30 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/mcp_prober.py`, `HomeLabAI/config/triage_policy.json`
 **Logic:** Establishes live sensory MCP tool execution for conversational queries classified under `OPERATIONAL` (such as GPU thermals, RAPL power envelopes, and system load). Replaces static vector RAG with live hardware prober queries (`peek_strategic_map`, `sys_metrics`, FastMCP hardware probes), formatting output as structured `[LIVE_SENSORY_TELEMETRY]` chunks. When sensor probes are offline, unreachable, or unlinked in the active environment, the hub emits a structured diagnostic envelope (`[TELEMETRY_UNAVAILABLE: SENSOR_TOOL_UNLINKED]`), enforcing that the conversational node reports telemetry scarcity honestly rather than hallucinating metrics.
 **Rationale:** Bridges conversational AI directly to physical hardware telemetry while enforcing strict green-lie prevention.
+
+## [LAB-117] M5 Air PQ2_0 Ternary Serving & Headroom Port Routing Standard
+**Sprint:** Sprint 108.0 (Phase 10)
+**Status:** ACTIVE
+**Tags:** `#m5_air`, `#omlx`, `#ternary_bonsai`, `#pq2_0`, `#headroom_proxy`, `[LAB-115]`, `[BKM-047]`
+**Code:** `M5-Local-oMLX/control_api.py`, `M5-Local-oMLX/omlx_service.sh`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Logic:** Standardizes Node Brain (Apple Silicon M5 Air 32GB) serving baseline on `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` in PQ2_0 (Power-of-Two 2-Bit Packing) format. Weights occupy ~7.21 GB RAM with 100% native SIMD32 Metal kernel alignment and 1-cycle GPU instruction bit-shift unpacking. Under `--memory-guard-gb 28`, M5 Air maintains $>20\text{ GB}$ of free unified memory. Tuned with `--initial-cache-blocks 2048`, `--hot-cache-max-size 2GB`, and 32GB NVMe SSD cache directory (`~/.cache/dflash/prefix_l2`) for L2 prefix cache spillover. Mandates that all internal orchestrators and judge nodes route requests to port `8002` (`http://192.168.1.46:8002/v1`) through `control_api.py` with transparent Headroom compression (`headroom.compress()`). Client-side context clipping is strictly barred; full 131,072 context is natively supported.
+**Rationale:** Eliminates false assumptions regarding memory ceilings on M5 Air, prevents premature prompt truncation, and guarantees optimal Metal GPU prefill throughput.
+
+## [FEAT-680] Hardware & Gateway Reasoning Lever Protocol (Transport-Layer Thinking Control)
+**Sprint:** Sprint 108.0 (Phase 10)
+**Status:** ACTIVE
+**Tags:** `#reasoning_lever`, `#thinking_suppression`, `#gateway_proxy`, `#litellm_kender`, `[BKM-079]`, `[FEAT-582]`, `[LAB-116]`
+**Code:** `HomeLabAI/config/litellm_kender.yaml`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Logic:** Codifies transport-layer reasoning control across local silicon, abolishing brittle prompt-level instructions (*"Do not think"*). For Node KENDER (Ollama 4090), routes all deterministic JSON and sovereign judge queries through the `litellm-kender.service` gateway on port `11435` (`http://127.0.0.1:11435/v1`) which translates requests to Ollama's native `/api/chat` with `extra_body.options.enable_thinking: false` and root `"think": false` per `loader.py:850`. For Node Brain (M5 Air oMLX), enforces thinking toggles via `control_api.py` sidecar on port `8002` (`POST /thinking` or `extra_body: {"enable_thinking": False}`).
+**Rationale:** Base reasoning models (Qwen 3.8 / DeepSeek R1) have reasoning priors baked into weights; prompt manipulation causes sampler probability conflicts and JSON payload cutoffs. Enforcing thinking suppression in the transport layer guarantees deterministic, sub-second JSON evaluations.
+
+## [FEAT-681] The Zero-Concurrency Conveyor-Belt Invariant (Schedule Over Locks)
+**Sprint:** Sprint 108.0 (Phase 10)
+**Status:** ACTIVE
+**Tags:** `#zero_concurrency`, `#conveyor_belt`, `#schedule_over_locks`, `#daemon_boundary`, `[INS-051]`, `[BKM-099]`, `[FEAT-416]`, `[FEAT-629]`
+**Code:** `HomeLabAI/src/infra/nightly_forge.py`, `field_notes/mass_scan.py`, `HomeLabAI/src/v5/foyer/router.py`
+**Logic:** Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge (quiesced VRAM) $\to$ 02:30–03:00 AM Subconscious Dreaming (consuming yesterday's refined gems) $\to$ 03:00–05:00 AM Tail Mop-up (`mass_scan.py` single-epoch batch refining gems for tomorrow per `[FEAT-416]`) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (`[FEAT-608]`). Bars 24/7 background scanning daemons (`field-notes-nibbler.service`) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (`foyer_queue.jsonl`).
+**Rationale:** Eliminates deadlocks, file truncation offset desyncs, and VRAM thrashing caused by concurrent background tasks running across maintenance windows.
 
 
 
