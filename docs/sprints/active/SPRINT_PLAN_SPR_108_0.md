@@ -1372,14 +1372,15 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 * **Status:** ✅ COMPLETE
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Prevent dead weight accumulation and queue bloat in `foyer_queue.jsonl` by implementing startup queue compaction and nightly stale record archival.
-* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:64-118,5416-5425`, `HomeLabAI/src/infra/nightly_forge.py:475-525,1250-1260`, `HomeLabAI/src/tests/test_queue_compaction.py`.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:64-118,5430-5440`, `HomeLabAI/src/infra/nightly_forge.py:475-525,1250-1260`, `HomeLabAI/src/tests/test_queue_compaction.py`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_queue_compaction.py -v`
 * **Anchor 3 (Verbatim Code Specs):**
   - In `router.py`: added `compact_foyer_queue()` archiving records older than 2 hours or completed to `foyer_queue.archive.jsonl`, atomically rewriting `foyer_queue.jsonl`. Invoked on startup inside `queue_drainer()`.
   - In `nightly_forge.py:STEP 2`: atomically compacts `foyer_queue.jsonl` during post-quiesce VRAM cooldown.
-  - Authored comprehensive test suite in `test_queue_compaction.py` (empty file, stale/completed purge, all-stale truncation).
+  - In `router.py:5433` (Story 108.38b Truncation Recovery): added offset reset check `if size < last_pos: last_pos = 0`. When maintenance compaction truncates `foyer_queue.jsonl`, the running drainer detects the size drop and immediately resets `last_pos` to 0, eliminating queue drainer deadlock.
+  - Authored comprehensive test suite in `test_queue_compaction.py` (empty file, stale/completed purge, all-stale truncation, and truncation recovery).
 * **Anchor 4 (DNA Links):** `[FEAT-283]`, `[FEAT-455]`, `[BKM-090]`.
-* **Verification Log:** Passed 4/4 tests in `test_queue_compaction.py` in 2.27s. Live queue compaction verified.
+* **Verification Log:** Passed 5/5 tests in `test_queue_compaction.py` in 2.37s. Restarted `lab-attendant.service` on commit `b795e9c`. Executed live `standalone_accountability_watchdog.py`: **8/8 checks passed (100% PASS)** with Synthetic Morning Round Table Probe score 1.00 and latency 1.14ms.
 
 ---
 
