@@ -1437,6 +1437,44 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 
 ---
 
+### 3. Phase 10 Pre-Flight Mistakes Avoided Ledger (`BKM-081` / `BKM-082`)
+1. **The Prompt-Persuasion Fallacy (`[FEAT-680]` / `[BKM-079]`)**: Avoided relying on prompt engineering (*"Do NOT think"*, `:nothink` tags) or standard OpenAI `/v1/` calls to suppress reasoning. Ollama's `/v1/` endpoint ignores `options: {enable_thinking: false}`. The true lever is gateway-level translation via LiteLLM port 11435 (`litellm-kender.service`) to Ollama native `/api/chat` with `think: false`.
+2. **The Artificial Context Lobotomy Trap (`[LAB-117]`)**: Avoided client-side prompt truncations (clamping to 32k/64k) based on outdated dense 18.73 GB memory assumptions. M5 Air runs Ternary Bonsai 2 in PQ2_0 format (~7.21 GB RAM) with $>20\text{ GB}$ free RAM and 2048 initial cache blocks. Routing to port 8002 engages Headroom compression, natively supporting full 131k context.
+3. **The Multi-Process File-Lock Concurrency Trap (`[BKM-099]` / `[INS-051]` / `[FEAT-681]`)**: Avoided solving file race conditions with complex file locks, flock timeouts, or atomic replace maneuvers across concurrent processes. Codified *Schedule Over Locks*: discrete maintenance operations execute sequentially along a single conveyor belt with strict daemon boundaries. External batch scripts must NEVER mutate files actively tailed by running daemons.
+4. **The Intermediate Triage False-Negative Trap (`[FEAT-608]`)**: Avoided grading end-to-end multi-resident conversational health by early pipeline stages. Stage 1 archive interest legitimately scores low on casual queries, while Stage 5 Pinky delivery scores high. The accountability probe must gate on terminal Stage 5 entailment.
+5. **The Unit-Test-Only Exit Escape Trap (`BKM-006` / `BKM-007` / `BKM-086`)**: Avoided closing Heads Down sprints based purely on passing offline `pytest` assertions. Enforced mandatory BKM-007 delivery and physical live probe injection against running daemons (`:8765`).
+
+### 4. Phase 10 Delegation Matrix & Owner Allocation (`BKM-049` / `BKM-086 §1 Pillar 3`)
+| Story ID | Description | Target Substrate | Engine / Model | Owner |
+|:---|:---|:---|:---|:---|
+| **108.41** | M5 Air oMLX Port 8002 Headroom Routing & Ternary PQ2_0 Calibration | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | `[AGY:PRIMARY]` |
+| **108.42** | Multi-Turn Round Table Probe Multi-Stage Vector Schema Hardening | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | `[AGY:PRIMARY]` |
+| **108.43** | KENDER LiteLLM Reasoning Lever Gateway & Deterministic JSON Routing | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | `[AGY:PRIMARY]` |
+| **108.44** | Foyer Queue Inode Invariant & Daemon File Process Boundary | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | `[AGY:PRIMARY]` |
+| **108.45** | Nightly Zero-Concurrency Conveyor Belt & Reignition Cooldown | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | `[AGY:PRIMARY]` |
+
+### 5. Phase 10 Digital AFK Operational Checklist (`BKM-086 §1.1`)
+- [x] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
+  - [x] Pre-flight mistakes-avoided ledger compiled in §3.
+  - [x] Physical reality grounded: M5 Air PQ2_0 ternary (~7.21 GB, 2048 initial cache blocks), LiteLLM port 11435 gateway, conveyor-belt single-thread schedule.
+  - [x] Strategic DNA codified in `FeatureTracker.md` (`FEAT-608`, `LAB-117`, `FEAT-680`, `FEAT-681`), `Protocols.md` (`BKM-099`, `BKM-007`), and `inspiration_data.json` (`INS-051`).
+  - [x] Active daemon verification: `:8765` (Foyer OPERATIONAL), `:11435` (LiteLLM UP), `:8001` (ChromaDB UP).
+- [x] **Pillar 2: 4-Anchor Master Story Specifications**
+  - [x] Stories 108.41 through 108.45 authored with full 4-anchor specifications (Files/Lines, Verification Command, Verbatim Code Specs, DNA Links).
+- [x] **Pillar 3: Structured Execution & Invariant Enforcement**
+  - [x] Story 108.41: Enforced port 8002 Headroom proxy routing and barred client-side prompt truncation in `mlx_judge_node.py`.
+  - [x] Story 108.42: Updated `probe_round_table_accountability.py` to extract terminal Stage 5 Pinky response entailment per `FEAT-608`.
+  - [x] Story 108.43: Standardized Node KENDER routing to LiteLLM Gateway port 11435 with `think: false` in `mlx_judge_node.py`.
+  - [x] Story 108.44: Hardened `foyer/router.py` queue drainer with inode tracking (`st_ino`) to detect external rotation safely.
+  - [x] Story 108.45: Verified synchronous conveyor belt execution sequence and enforced daemon boundaries in `nightly_forge.py`.
+- [x] **Pillar 4: Silicon Certification & Live is King (`BKM-007` + `BKM-024` + `INS-047`)**
+  - [x] Ran full pytest verification across judge, queue compaction, and shakedown suites (4/4 judge in 19.97s, 6/6 compaction in 2.07s, 6/6 shakedown in 26.46s).
+  - [x] Reloaded daemon and verified `GET /status?timeout=60` returns `state: OPERATIONAL`, `engine_up: true`, `vocal: true`.
+  - [x] Executed live synthetic probe against port 8765.
+  - [x] Delivered full BKM-007 Heads-Up Report with physical silicon telemetry.
+
+---
+
 ### 🎨 Candidate Backlog Stories (Phase 10 Catalog)
 
 ### 🎨 Story 108.40: BKM-006 / BKM-007 / BKM-086 Protocol Leak Closure & Mandatory Live Silicon Exit Gate
@@ -1455,8 +1493,8 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 ---
 
 ### 🎨 Story 108.41: M5 Air oMLX Port 8002 Headroom Routing & Ternary PQ2_0 Calibration (`[LAB-117]`, `[FEAT-439]`, `[FEAT-652]`, `[BKM-047]`)
-* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
-* **Owner:** `[SWARM:LOCAL]` (Atlas candidate)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Standardize Node Brain (Apple M5 Air 32GB) client routing through Headroom Proxy port 8002 with native ternary PQ2_0 serving, eliminating HTTP 400 prefill errors while strictly barring client-side prompt truncation.
 * **Anchor 1 (Target Files & Lines):** `M5-Local-oMLX/control_api.py`, `HomeLabAI/src/nodes/mlx_judge_node.py:80-140`.
 * **Anchor 2 (Verification Command):** Live python test to `http://192.168.1.46:8002/v1/chat/completions` with a full-context prompt.
@@ -1465,12 +1503,13 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - In `mlx_judge_node.py`: enforce routing to port `8002` (`http://192.168.1.46:8002/v1`) rather than raw port 8000. Port 8002 engages transparent Headroom compression (`headroom.compress()`).
   - **Anti-Truncation Standard**: Remove/bar arbitrary client-side prompt lobotomies (clamping to 32k/64k); leverage the full 131,072 context window natively supported by the PQ2_0 and Headroom stack.
 * **Anchor 4 (DNA Links):** `[LAB-117]`, `[LAB-115]`, `[FEAT-439]`, `[FEAT-652]`, `[BKM-047]`.
+* **Verification Log:** Verified `mlx_judge_node.py:57` defaults to port 8002; full evaluation test `test_mlx_judge_256k_evaluation` passed against M5 Air live.
 
 ---
 
 ### 🎨 Story 108.42: Multi-Turn Round Table Probe Multi-Stage Vector Schema Hardening (`[FEAT-608]`, `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`)
-* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
-* **Owner:** `[SWARM:LOCAL]`
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Eliminate false-negative accountability alerts by updating `probe_round_table_accountability.py` to evaluate the terminal Round Table synthesized response rather than intermediate triage scores.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/probe_round_table_accountability.py:80-160`, `HomeLabAI/src/infra/read_roundtable_turn.py`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python HomeLabAI/src/infra/probe_round_table_accountability.py`
@@ -1479,12 +1518,13 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - Parse `foyer_stage_ledger.jsonl` and `judge_backpressure.jsonl` matching probe correlation ID across all stages.
   - Mandate that the watchdog extracts the terminal Stage 5 delivered response (`pinky_response >= 0.70`) as the authoritative health gate, eliminating false-alarm degradations caused by intermediate triage scores.
 * **Anchor 4 (DNA Links):** `[FEAT-608]`, `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`.
+* **Verification Log:** Updated `extract_judge_score` to prioritize `[STAGE_5_PINKY]` terminal delivered responses; polling loop awaits Stage 5 completion rather than prematurely exiting on intermediate Stage 1 triage scores.
 
 ---
 
 ### 🎨 Story 108.43: KENDER LiteLLM Reasoning Lever Gateway & Deterministic JSON Routing (`[FEAT-680]`, `[LAB-116]`, `[BKM-079]`, `[FEAT-582]`)
-* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
-* **Owner:** `[SWARM:LOCAL]`
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Standardize reasoning suppression and JSON completion routing through the LiteLLM Kender Gateway (`127.0.0.1:11435`) to prevent reasoning deadlocks and token budget exhaustion on Node KENDER.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:120-160`, `HomeLabAI/src/logic/judge_evaluator.py`, `HomeLabAI/config/litellm_kender.yaml`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_mlx_judge_node.py -v`
@@ -1494,12 +1534,13 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - Prohibit prompt-level negative constraints (*"Do NOT think"*), enforcing the physical/gateway lever.
   - Maintain JSON schema extraction fallback (`r'\{.*\}'`) as defensive barrier.
 * **Anchor 4 (DNA Links):** `[FEAT-680]`, `[LAB-116]`, `[BKM-079]`, `[FEAT-582]`.
+* **Verification Log:** Added `KENDER_GATEWAY` targeting `http://127.0.0.1:11435` with `think: False` in `mlx_judge_node.py:62`. Live fallback test `test_mlx_judge_multi_seat_kender_fallback` completed in 3.98s (down from 25s+).
 
 ---
 
 ### 🎨 Story 108.44: Foyer Queue Inode Invariant & Daemon File Process Boundary (`[BKM-099]`, `[INS-051]`, `[FEAT-681]`, `[FEAT-283]`)
-* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
-* **Owner:** `[SWARM:LOCAL]`
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Enforce strict daemon process boundaries (external batch scripts must never truncate active daemon files) and harden `queue_drainer` with inode tracking to prevent silent log loss.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:5420-5450`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_queue_compaction.py -v`
@@ -1507,12 +1548,13 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - Codify invariant: `foyer_queue.jsonl` compaction must be managed in-process by Foyer during idle windows; external batch scripts are strictly barred from truncating or replacing files actively open and tailed by running daemons.
   - Defensive hardening in `router.py`: Store `current_inode = os.stat(path).st_ino` on file open. During tail loop, poll `os.stat(path).st_ino`. If file inode changes or file is unlinked, reopen file descriptor and reset `last_pos = 0`.
 * **Anchor 4 (DNA Links):** `[BKM-099]`, `[INS-051]`, `[FEAT-681]`, `[FEAT-283]`, `[BKM-090]`.
+* **Verification Log:** Added `current_inode` tracking in `router.py:5425-5437`; added `test_queue_tailing_recovers_on_inode_rotation` in `test_queue_compaction.py`. All 6 tests passed in 2.07s.
 
 ---
 
 ### 🎨 Story 108.45: Nightly Zero-Concurrency Conveyor Belt & Reignition Cooldown (`[BKM-099]`, `[INS-051]`, `[FEAT-416]`, `[FEAT-681]`, `[FEAT-136]`)
-* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
-* **Owner:** `[SWARM:LOCAL]`
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Codify and certify the single-threaded zero-concurrency nightly conveyor belt in `nightly_forge.py`, eliminating race conditions by strict schedule boundaries rather than file locks.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/nightly_forge.py:1240-1290`.
 * **Anchor 2 (Verification Command):** Shakedown dry-run simulation of conveyor belt execution sequence in `nightly_forge.py`.
@@ -1521,3 +1563,4 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - Verify persistent 24/7 background worker daemons (`field-notes-nibbler.service`) remain disabled; tail mop-up runs strictly within its bounded 03:00-05:00 window.
   - Verify that `nightly_forge.py` respects the 30-second socket stabilization barrier and `/status` polling before triggering dreaming.
 * **Anchor 4 (DNA Links):** `[BKM-099]`, `[INS-051]`, `[FEAT-416]`, `[FEAT-681]`, `[FEAT-136]`, `[BKM-062]`.
+* **Verification Log:** Verified `nightly_forge.py` sequential orchestration; ran `test_nightly_forge_shakedown.py` verifying all 6 shakedown flow tests passed in 26.46s.
