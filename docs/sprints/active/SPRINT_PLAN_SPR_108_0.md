@@ -1402,3 +1402,119 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 
 
 
+
+---
+
+## 🛡️ Phase 10: Protocol Leak Audit, Live Testing Side-Effects & Sovereign Stability Backlog
+
+### 1. Protocol Leak & Heads-Down Escape Retrospective
+* **Incident Analysis**: In Turn 5/6, an AFK "Heads Down" directive executed code fixes, ran unit tests (`pytest`), and concluded with a conversational summary rather than the mandatory **BKM-007 Heads-Up Report** and **Live Silicon Validation**.
+* **Root Causes Identified**:
+  1. *Asymmetric Protocol Splicing*: `BKM-006: Autonomous Work Protocol` referenced `BKM-007`, but `BKM-086: The Paved-Path Sprint Protocol` omitted Step 5 from its Operational Loop, allowing an agent to exit autonomous execution post-merge without delivering the structured Heads-Up handover.
+  2. *Nomenclature Drift*: `BKM-007` was titled `Work Completion Report`, masking its primary role as the canonical **Heads-Up Protocol**.
+  3. *Missing Physical Silicon Exit Gate in BKM-007*: Section 4 of `BKM-007` verified service reboots and test suites, but did NOT require executing an actual live synthetic probe against running daemons (`BKM-024` / `INS-010` / `INS-047`). As a consequence, offline `pytest` passes were erroneously treated as sufficient exit gates.
+* **Remediation Executed (Commit HEAD)**:
+  - Patched `HomeLabAI/docs/Protocols.md` (`BKM-006`, `BKM-007`, `BKM-086`):
+    - `BKM-006 §6`: Exiting Heads-Down strictly mandates delivering `BKM-007: The Heads-Up Protocol & Work Completion Report`.
+    - `BKM-007`: Formally retitled to `The Heads-Up Protocol & Work Completion Report`. Enforced Section 4 **Mandatory Live Deployment & Silicon Probe Gate (`BKM-024` / `INS-010` / `INS-047`)** requiring live daemon restart verification (`/status` OPERATIONAL), synthetic probe injection via port 8765, and hardware trace logging before control handover.
+    - `BKM-086 §2`: Added Step 5 requiring explicit Handover via `BKM-007` Heads-Up Report with live silicon probe metrics.
+
+### 2. Side-Effects & Friction Ledger (From Live Testing & Recent Fixes)
+1. **M5 Air oMLX Prefill Memory Exceeded (HTTP 400)**:
+   - *Observation*: M5 Air Headroom proxy on port 8002 refused large evaluation prompts with `400: prefill_memory_exceeded`.
+   - *Forensics*: Bonsai-27B requires 18.73 GB RAM. The 131k context window with TurboQuant 4-bit KV cache requires a 7.86 GB prefill buffer. Total: $18.73 + 7.86 = 26.59\text{ GB}$. The dynamic Metal ceiling on 32GB unified Apple Silicon is clamped at 24.96 GB. When context exceeds the available headroom, requests abort.
+   - *Impact*: Sovereign multi-seat fallback routed cleanly to KENDER (`qwen3.8:nothink`), but M5 Air requires context budgeting or prefill chunking to serve as primary judge.
+2. **Ollama / KENDER Reasoning Token Exhaustion**:
+   - *Observation*: Reasoning models (`qwen3.8:nothink`, R1 distillation) consume `completion_tokens` during their internal thinking trace.
+   - *Forensics*: At `max_tokens: 256`, the model emitted ~220 thinking tokens, leaving <36 tokens for the JSON evaluation body. The payload was truncated mid-string (`finish_reason: "length"`), causing `json.loads` parsing failures.
+   - *Impact*: Hotfixed in `mlx_judge_node.py` to `max_tokens: 512`, but requires ecosystem-wide token budgeting across all Ollama judge call sites.
+3. **Queue Drainer Deadlock Post-Compaction (Story 108.38b)**:
+   - *Observation*: When `nightly_forge.py` compacted `foyer_queue.jsonl` (truncating 9.7KB $\to$ 500B), the persistent Foyer process stopped tailing events because `size < last_pos`.
+   - *Fix Applied*: Added `if size < last_pos: last_pos = 0` in `router.py:5433` and certified with live probe 1.00.
+   - *Follow-up Risk*: If an external tool or logrotate swaps the file inode rather than truncating in-place, the process could tail a detached inode. Needs inode tracking.
+4. **Multi-Turn Probe Evaluator Selection Bias**:
+   - *Observation*: `probe_round_table_accountability.py` extracted the intermediate Stage 1 Brain archive score (0.40) instead of the final aggregated Pinky delivered response (0.95-1.00), creating false-positive watchdog alerts.
+
+---
+
+### 🎨 Candidate Backlog Stories (Phase 10 Catalog)
+
+### 🎨 Story 108.40: BKM-006 / BKM-007 / BKM-086 Protocol Leak Closure & Mandatory Live Silicon Exit Gate
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Eliminate protocol bypass paths allowing agents to exit "Heads Down" without delivering the BKM-007 Heads-Up Report and without certifying against live physical silicon.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/docs/Protocols.md:55-85,1680-1695`.
+* **Anchor 2 (Verification Command):** Inspection of `Protocols.md` and verification of BKM reference symmetry.
+* **Anchor 3 (Verbatim Code Specs):**
+  - Updated `BKM-006 §6` to declare ad-hoc summaries illegal and mandate formal `BKM-007` delivery.
+  - Retitled `BKM-007` to `The Heads-Up Protocol & Work Completion Report`. Added Section 4 Mandatory Live Deployment & Silicon Probe Gate (`BKM-024` / `INS-010` / `INS-047`).
+  - Added Step 5 to `BKM-086 §2` enforcing BKM-007 handover and live silicon probe metrics.
+* **Anchor 4 (DNA Links):** `[BKM-006]`, `[BKM-007]`, `[BKM-086]`, `[BKM-024]`, `[INS-010]`.
+* **Verification Log:** Updated `Protocols.md` in repository. Protocol definitions verified.
+
+---
+
+### 🎨 Story 108.41: M5 Air oMLX Prefill Memory Guard & Dynamic Context Budget Calibration (`[FEAT-439]`, `[FEAT-652]`)
+* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
+* **Owner:** `[SWARM:LOCAL]` (Atlas candidate)
+* **Goal:** Prevent HTTP 400 `prefill_memory_exceeded` errors on M5 Air (32GB) when evaluating long-context transcripts by dynamically budgeting prompt token lengths to fit within the 24.96 GB Metal memory ceiling.
+* **Anchor 1 (Target Files & Lines):** `M5-Local-oMLX/` Headroom proxy configuration, `HomeLabAI/src/nodes/mlx_judge_node.py:80-140`.
+* **Anchor 2 (Verification Command):** Live curl / python test to `http://192.168.1.46:8002/v1/chat/completions` with a 32k context prompt.
+* **Anchor 3 (Verbatim Code Specs):**
+  - Calculate maximum allowable prompt context based on Bonsai-27B weight footprint (18.73 GB) and Metal headroom ($24.96 - 18.73 = 6.23\text{ GB}$).
+  - In `mlx_judge_node.py`: enforce context sliding window / truncation before dispatching to M5 Air candidate, preserving system instructions and recent turns while dropping middle transcript overflow.
+* **Anchor 4 (DNA Links):** `[FEAT-439]`, `[FEAT-652]`, `[BKM-062]`.
+
+---
+
+### 🎨 Story 108.42: Multi-Turn Round Table Probe Evaluator Aggregator Hardening (`[FEAT-645]`, `[BKM-024]`)
+* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Eliminate false-negative accountability alerts by updating `probe_round_table_accountability.py` to evaluate the terminal Round Table synthesized response rather than intermediate triage scores.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/tests/probe_round_table_accountability.py:80-160`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python HomeLabAI/src/tests/probe_round_table_accountability.py`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Parse `foyer_queue.jsonl` and `journal_ledger.jsonl` matching probe correlation ID across all stages.
+  - Distinguish between Stage 1 archive interest score (which may legitimately be low for casual probes) and final Stage 5 synthesized response entailment score.
+  - Aggregate final turn score as primary health metric.
+* **Anchor 4 (DNA Links):** `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`.
+
+---
+
+### 🎨 Story 108.43: KENDER / Ollama Reasoning Token Budget & JSON Grammar Enforcement (`[FEAT-582]`, `[BKM-090]`)
+* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Standardize reasoning token completion budgets across all Ollama judge call sites to prevent truncated JSON payloads when reasoning models emit verbose internal thinking tokens.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:120-160`, `HomeLabAI/src/logic/judge_evaluator.py`, `HomeLabAI/src/v5/foyer/router.py`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_mlx_judge_node.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Standardize completion token limit (`max_tokens: 512` or dynamic budget) for all Ollama candidates.
+  - Set `format: "json"` in Ollama API payload options to constrain model output to valid JSON grammar.
+  - Implement JSON extraction regex fallback (`r'\{.*\}'`) to salvage valid JSON objects from reasoning outputs containing unclosed reasoning blocks.
+* **Anchor 4 (DNA Links):** `[FEAT-582]`, `[FEAT-439]`, `[BKM-090]`.
+
+---
+
+### 🎨 Story 108.44: Foyer Queue Inode Invariant & Atomic Compaction Inode Tracking (`[FEAT-283]`, `[BKM-090]`)
+* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Prevent silent log loss if external processes rotate or recreate `foyer_queue.jsonl` with a new inode while `queue_drainer` is running.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:5420-5450`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_queue_compaction.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - Store `current_inode = os.stat(path).st_ino` on file open.
+  - During tail loop, poll `os.stat(path).st_ino`. If file inode changes or file is unlinked, reopen file descriptor and reset `last_pos = 0`.
+* **Anchor 4 (DNA Links):** `[FEAT-283]`, `[BKM-090]`.
+
+---
+
+### 🎨 Story 108.45: Nightly Dream Cycle Post-Reignition Settling & Cooldown Hardening (`[FEAT-136]`, `[BKM-062]`)
+* **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Certify end-to-end stability of `run_dream_cycle()` across post-reignition socket stabilization barriers in `nightly_forge.py`.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/nightly_forge.py:1240-1290`.
+* **Anchor 2 (Verification Command):** Shakedown dry-run simulation of Step 4 and Step 5 in `nightly_forge.py`.
+* **Anchor 3 (Verbatim Code Specs):**
+  - Verify that `nightly_forge.py` respects the 30-second socket stabilization barrier and `/status` polling before triggering dreaming.
+  - Verify dream cycle releases VRAM cleanly before morning 06:00 AM probe.
+* **Anchor 4 (DNA Links):** `[FEAT-136]`, `[FEAT-067]`, `[BKM-062]`.
