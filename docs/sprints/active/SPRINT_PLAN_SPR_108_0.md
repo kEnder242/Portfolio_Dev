@@ -1454,67 +1454,70 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
 
 ---
 
-### 🎨 Story 108.41: M5 Air oMLX Prefill Memory Guard & Dynamic Context Budget Calibration (`[FEAT-439]`, `[FEAT-652]`)
+### 🎨 Story 108.41: M5 Air oMLX Port 8002 Headroom Routing & Ternary PQ2_0 Calibration (`[LAB-117]`, `[FEAT-439]`, `[FEAT-652]`, `[BKM-047]`)
 * **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
 * **Owner:** `[SWARM:LOCAL]` (Atlas candidate)
-* **Goal:** Prevent HTTP 400 `prefill_memory_exceeded` errors on M5 Air (32GB) when evaluating long-context transcripts by dynamically budgeting prompt token lengths to fit within the 24.96 GB Metal memory ceiling.
-* **Anchor 1 (Target Files & Lines):** `M5-Local-oMLX/` Headroom proxy configuration, `HomeLabAI/src/nodes/mlx_judge_node.py:80-140`.
-* **Anchor 2 (Verification Command):** Live curl / python test to `http://192.168.1.46:8002/v1/chat/completions` with a 32k context prompt.
+* **Goal:** Standardize Node Brain (Apple M5 Air 32GB) client routing through Headroom Proxy port 8002 with native ternary PQ2_0 serving, eliminating HTTP 400 prefill errors while strictly barring client-side prompt truncation.
+* **Anchor 1 (Target Files & Lines):** `M5-Local-oMLX/control_api.py`, `HomeLabAI/src/nodes/mlx_judge_node.py:80-140`.
+* **Anchor 2 (Verification Command):** Live python test to `http://192.168.1.46:8002/v1/chat/completions` with a full-context prompt.
 * **Anchor 3 (Verbatim Code Specs):**
-  - Calculate maximum allowable prompt context based on Bonsai-27B weight footprint (18.73 GB) and Metal headroom ($24.96 - 18.73 = 6.23\text{ GB}$).
-  - In `mlx_judge_node.py`: enforce context sliding window / truncation before dispatching to M5 Air candidate, preserving system instructions and recent turns while dropping middle transcript overflow.
-* **Anchor 4 (DNA Links):** `[FEAT-439]`, `[FEAT-652]`, `[BKM-062]`.
+  - Verify M5 Air runs `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` in PQ2_0 (~7.21 GB RAM, $>20\text{ GB}$ headroom under `--memory-guard-gb 28`, 2048 initial cache blocks, 2GB hot cache, NVMe prefix L2 offloading per commit `c54a69e`).
+  - In `mlx_judge_node.py`: enforce routing to port `8002` (`http://192.168.1.46:8002/v1`) rather than raw port 8000. Port 8002 engages transparent Headroom compression (`headroom.compress()`).
+  - **Anti-Truncation Standard**: Remove/bar arbitrary client-side prompt lobotomies (clamping to 32k/64k); leverage the full 131,072 context window natively supported by the PQ2_0 and Headroom stack.
+* **Anchor 4 (DNA Links):** `[LAB-117]`, `[LAB-115]`, `[FEAT-439]`, `[FEAT-652]`, `[BKM-047]`.
 
 ---
 
-### 🎨 Story 108.42: Multi-Turn Round Table Probe Evaluator Aggregator Hardening (`[FEAT-645]`, `[BKM-024]`)
+### 🎨 Story 108.42: Multi-Turn Round Table Probe Multi-Stage Vector Schema Hardening (`[FEAT-608]`, `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`)
 * **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
 * **Owner:** `[SWARM:LOCAL]`
 * **Goal:** Eliminate false-negative accountability alerts by updating `probe_round_table_accountability.py` to evaluate the terminal Round Table synthesized response rather than intermediate triage scores.
-* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/tests/probe_round_table_accountability.py:80-160`.
-* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python HomeLabAI/src/tests/probe_round_table_accountability.py`
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/probe_round_table_accountability.py:80-160`, `HomeLabAI/src/infra/read_roundtable_turn.py`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/python HomeLabAI/src/infra/probe_round_table_accountability.py`
 * **Anchor 3 (Verbatim Code Specs):**
-  - Parse `foyer_queue.jsonl` and `journal_ledger.jsonl` matching probe correlation ID across all stages.
-  - Distinguish between Stage 1 archive interest score (which may legitimately be low for casual probes) and final Stage 5 synthesized response entailment score.
-  - Aggregate final turn score as primary health metric.
-* **Anchor 4 (DNA Links):** `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`.
+  - Ground against the Multi-Stage Evaluator Vector Schema (`[FEAT-608]`): distinguish between Stage 1 archive interest score (which may legitimately score low, e.g. 0.40, for casual probes per `[FEAT-523]` / `[BKM-087]`) and final Stage 5 synthesized response entailment score.
+  - Parse `foyer_stage_ledger.jsonl` and `judge_backpressure.jsonl` matching probe correlation ID across all stages.
+  - Mandate that the watchdog extracts the terminal Stage 5 delivered response (`pinky_response >= 0.70`) as the authoritative health gate, eliminating false-alarm degradations caused by intermediate triage scores.
+* **Anchor 4 (DNA Links):** `[FEAT-608]`, `[FEAT-645]`, `[BKM-024]`, `[BKM-061]`.
 
 ---
 
-### 🎨 Story 108.43: KENDER / Ollama Reasoning Token Budget & JSON Grammar Enforcement (`[FEAT-582]`, `[BKM-090]`)
+### 🎨 Story 108.43: KENDER LiteLLM Reasoning Lever Gateway & Deterministic JSON Routing (`[FEAT-680]`, `[LAB-116]`, `[BKM-079]`, `[FEAT-582]`)
 * **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
 * **Owner:** `[SWARM:LOCAL]`
-* **Goal:** Standardize reasoning token completion budgets across all Ollama judge call sites to prevent truncated JSON payloads when reasoning models emit verbose internal thinking tokens.
-* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:120-160`, `HomeLabAI/src/logic/judge_evaluator.py`, `HomeLabAI/src/v5/foyer/router.py`.
+* **Goal:** Standardize reasoning suppression and JSON completion routing through the LiteLLM Kender Gateway (`127.0.0.1:11435`) to prevent reasoning deadlocks and token budget exhaustion on Node KENDER.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:120-160`, `HomeLabAI/src/logic/judge_evaluator.py`, `HomeLabAI/config/litellm_kender.yaml`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_mlx_judge_node.py -v`
 * **Anchor 3 (Verbatim Code Specs):**
-  - Standardize completion token limit (`max_tokens: 512` or dynamic budget) for all Ollama candidates.
-  - Set `format: "json"` in Ollama API payload options to constrain model output to valid JSON grammar.
-  - Implement JSON extraction regex fallback (`r'\{.*\}'`) to salvage valid JSON objects from reasoning outputs containing unclosed reasoning blocks.
-* **Anchor 4 (DNA Links):** `[FEAT-582]`, `[FEAT-439]`, `[BKM-090]`.
+  - Route all internal Python clients and sovereign judge callers querying Node KENDER to `http://127.0.0.1:11435/v1` (LiteLLM Gateway managed by `litellm-kender.service`) rather than raw port 11434.
+  - LiteLLM gateway translates `/v1/` calls to Ollama native `/api/chat` with `extra_body.options.enable_thinking: false` and root `"think": false`.
+  - Prohibit prompt-level negative constraints (*"Do NOT think"*), enforcing the physical/gateway lever.
+  - Maintain JSON schema extraction fallback (`r'\{.*\}'`) as defensive barrier.
+* **Anchor 4 (DNA Links):** `[FEAT-680]`, `[LAB-116]`, `[BKM-079]`, `[FEAT-582]`.
 
 ---
 
-### 🎨 Story 108.44: Foyer Queue Inode Invariant & Atomic Compaction Inode Tracking (`[FEAT-283]`, `[BKM-090]`)
+### 🎨 Story 108.44: Foyer Queue Inode Invariant & Daemon File Process Boundary (`[BKM-099]`, `[INS-051]`, `[FEAT-681]`, `[FEAT-283]`)
 * **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
 * **Owner:** `[SWARM:LOCAL]`
-* **Goal:** Prevent silent log loss if external processes rotate or recreate `foyer_queue.jsonl` with a new inode while `queue_drainer` is running.
+* **Goal:** Enforce strict daemon process boundaries (external batch scripts must never truncate active daemon files) and harden `queue_drainer` with inode tracking to prevent silent log loss.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:5420-5450`.
 * **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_queue_compaction.py -v`
 * **Anchor 3 (Verbatim Code Specs):**
-  - Store `current_inode = os.stat(path).st_ino` on file open.
-  - During tail loop, poll `os.stat(path).st_ino`. If file inode changes or file is unlinked, reopen file descriptor and reset `last_pos = 0`.
-* **Anchor 4 (DNA Links):** `[FEAT-283]`, `[BKM-090]`.
+  - Codify invariant: `foyer_queue.jsonl` compaction must be managed in-process by Foyer during idle windows; external batch scripts are strictly barred from truncating or replacing files actively open and tailed by running daemons.
+  - Defensive hardening in `router.py`: Store `current_inode = os.stat(path).st_ino` on file open. During tail loop, poll `os.stat(path).st_ino`. If file inode changes or file is unlinked, reopen file descriptor and reset `last_pos = 0`.
+* **Anchor 4 (DNA Links):** `[BKM-099]`, `[INS-051]`, `[FEAT-681]`, `[FEAT-283]`, `[BKM-090]`.
 
 ---
 
-### 🎨 Story 108.45: Nightly Dream Cycle Post-Reignition Settling & Cooldown Hardening (`[FEAT-136]`, `[BKM-062]`)
+### 🎨 Story 108.45: Nightly Zero-Concurrency Conveyor Belt & Reignition Cooldown (`[BKM-099]`, `[INS-051]`, `[FEAT-416]`, `[FEAT-681]`, `[FEAT-136]`)
 * **Status:** 📋 BACKLOG / READY FOR OPERATOR TRIAGE
 * **Owner:** `[SWARM:LOCAL]`
-* **Goal:** Certify end-to-end stability of `run_dream_cycle()` across post-reignition socket stabilization barriers in `nightly_forge.py`.
+* **Goal:** Codify and certify the single-threaded zero-concurrency nightly conveyor belt in `nightly_forge.py`, eliminating race conditions by strict schedule boundaries rather than file locks.
 * **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/nightly_forge.py:1240-1290`.
-* **Anchor 2 (Verification Command):** Shakedown dry-run simulation of Step 4 and Step 5 in `nightly_forge.py`.
+* **Anchor 2 (Verification Command):** Shakedown dry-run simulation of conveyor belt execution sequence in `nightly_forge.py`.
 * **Anchor 3 (Verbatim Code Specs):**
+  - Verify strictly sequential conveyor belt timing: 02:00 LoRA Forge (quiesce VRAM) -> 02:30 Dreaming (consuming prior night's gems) -> 03:00-05:00 Tail Mop-up (`mass_scan.py` single epoch per `FEAT-416`) -> 05:00-06:00 Quiescent Buffer -> 06:00 Morning Accountability Watchdog Probe (`FEAT-608`).
+  - Verify persistent 24/7 background worker daemons (`field-notes-nibbler.service`) remain disabled; tail mop-up runs strictly within its bounded 03:00-05:00 window.
   - Verify that `nightly_forge.py` respects the 30-second socket stabilization barrier and `/status` polling before triggering dreaming.
-  - Verify dream cycle releases VRAM cleanly before morning 06:00 AM probe.
-* **Anchor 4 (DNA Links):** `[FEAT-136]`, `[FEAT-067]`, `[BKM-062]`.
+* **Anchor 4 (DNA Links):** `[BKM-099]`, `[INS-051]`, `[FEAT-416]`, `[FEAT-681]`, `[FEAT-136]`, `[BKM-062]`.
