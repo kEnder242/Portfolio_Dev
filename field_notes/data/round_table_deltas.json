@@ -2316,46 +2316,46 @@
   },
   {
     "turn": 51,
-    "timestamp": 1793365261,
-    "time_str": "06:01:01",
+    "timestamp": 1793553720,
+    "time_str": "09:22:00",
     "topic": "EXP_TLM",
     "scope": "CONTEXT_SCOPE_LONG",
     "user_prompt": "[ACCOUNTABILITY_PROBE] Audit active silicon residency and memory topology.",
     "turn_mode": "FULL_ROUND_TABLE",
     "is_full_round_table": true,
     "checkpoints_elapsed_s": {
-      "triage": 7.273,
-      "pinky_stance": 12.437,
-      "brain_arch": 16.329,
-      "oracle": 36.332,
-      "pinky_judgment": 39.82
+      "triage": 4.24,
+      "pinky_stance": 8.649,
+      "brain_arch": 11.741,
+      "oracle": 31.744,
+      "pinky_judgment": 33.566
     },
     "deltas_elapsed_s": {
-      "triage": 7.273,
-      "pinky_stance": 5.164,
-      "brain_arch": 3.892,
+      "triage": 4.24,
+      "pinky_stance": 4.409,
+      "brain_arch": 3.092,
       "oracle": 20.003,
-      "pinky_judgment": 3.488
+      "pinky_judgment": 1.822
     },
     "cumulative": {
-      "triage": 7.273,
-      "pinky_stance": 12.437,
-      "brain_arch": 16.329,
-      "oracle": 36.332,
-      "pinky_judgment": 39.82
+      "triage": 4.24,
+      "pinky_stance": 8.649,
+      "brain_arch": 11.741,
+      "oracle": 31.744,
+      "pinky_judgment": 33.566
     },
     "deltas": {
-      "triage": 7.273,
-      "pinky_stance": 5.164,
-      "brain_arch": 3.892,
+      "triage": 4.24,
+      "pinky_stance": 4.409,
+      "brain_arch": 3.092,
       "oracle": 20.003,
-      "pinky_judgment": 3.488
+      "pinky_judgment": 1.822
     },
-    "total_elapsed_s": 39.82,
-    "total_s": 39.82,
+    "total_elapsed_s": 33.566,
+    "total_s": 33.566,
     "distillation_bullets": [
-      "PINKY: [Two-Mice TL;DR delivered to Jason (31 tokens)]",
-      "BRAIN: [ANALYSIS]\n- CHUNK-1: \"Validated multi-threaded MSR consistency and PECI register access via IPMI telemetry\" => KEEP\n- CHUNK-2: \"For Engineering Tool, Jason developed Stall Points (for bug fixing).pptx. Synopsis:\" => DROP (irrelevant context)\n\n[BEDROCK SELECTION]\n- CHUNK-1: KEEP"
+      "PINKY: Jason, I'll review the lab evidence to find the most recent update to our silicon residency tracking.",
+      "BRAIN: [ANALYSIS]\n- CHUNK-1: Historical Record shows GPU 0 (RTX 2080 Ti) status as \"Active Daemon Operational\", which aligns with Jason's query on audit active silicon residency and memory topology.\n- Anch\n[BEDROCK SELECTION]\n- CHUNK-1: KEEP"
     ],
     "consensus_1liner": "Consensus nominal."
   }
