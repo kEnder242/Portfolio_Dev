@@ -1285,6 +1285,117 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   2. `build_site.py` completes with deployment integrity verified.
 * **Status:** ✅ COMPLETED & CERTIFIED (`2026-10-30T11:46:40-07:00`)
 
+---
+
+## 🚀 Phase 9: Sovereign Fallback Alignment, Cold-Boot Priming & Ledger Fidelity
+
+### 0.1 Phase 9 Pre-Flight Mistakes Avoided Ledger (`BKM-081` / `BKM-082`)
+1. **The Fragmented Node Endpoint Trap**: Avoided hardcoding static IPs and model names across disparate helper scripts (`manager.py`, `mlx_judge_node.py`). All sovereign seat resolutions must route through `loader.py:get_active_deep_thought_endpoint()` so KENDER and M5 Air are universally interchangeable.
+2. **The Cold Deep Thought Cascade Trap**: Avoided falling back to an unprimed engine. Ensuring KENDER's async warmup probe uses the live model (`qwen3.8:nothink`) guarantees that if M5 Air is asleep, KENDER takes over immediately without a 40-second VRAM paging deadlock.
+3. **The Premature Pipe Inversion Trap**: Avoided inverting `nightly_forge.py`'s flow. Refinement belongs at the end of the night to mop up idle cycles; dreaming consumes prior refined gems in a conveyor belt. The 04:46 warning was a settling race condition, not an architectural pipeline defect.
+4. **The Dead-Queue Replay Trap**: Avoided letting `foyer_queue.jsonl` accumulate orphaned historical entries. Startup compaction guarantees that stale intents cannot re-fire or distort queue depth telemetry.
+5. **The Placeholder Amnesia Trap**: Avoided recording token-count placeholder strings into `journal_ledger.jsonl`. Restoring raw spoken prose (`pinky_tldr`) preserves authentic conversational history for downstream dream cycles and distillation.
+
+### 0.2 Phase 9 Delegation Matrix & Anti-Monoculture Allocation (`BKM-086 §1 Pillar 3`)
+| Story ID | Description | Target Substrate | Engine / Model | Rationale & Blast-Radius Boundary |
+|:---|:---|:---|:---|:---|
+| **108.35** | KENDER Ollama Parallel Warmup Model Alignment | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | Surgical 1-line model string update in `manager.py:287` with async warmup pytest assertion. |
+| **108.36** | MLX Judge / Entailment Auditor Multi-Seat Fallback to KENDER | `[SWARM:CLOUD]` | Sisyphus / Nemotron | Subsystem cross-linking connecting `mlx_judge_node.py` to `loader.py:get_active_deep_thought_endpoint()`. |
+| **108.37** | Spoken Dialogue Ledger Fidelity Restoration | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | Direct string assignment in `cognitive_hub.py:3538` and assertion in `test_journal_ledger.py`. |
+| **108.38** | Foyer Startup Queue Compaction & Nightly Stale Purge | `[SWARM:LOCAL]` | Atlas (RTX 4090 / :4097) | Startup file rotation in `router.py:5364` and maintenance compaction in `nightly_forge.py`. |
+| **108.39** | Post-Reignition Settling Barrier for Nightly Subconscious Dreaming | `[AGY:PRIMARY]` | Claude 3.5 Sonnet / AGY CLI | Orchestrator settling barrier and readiness gate in `nightly_forge.py:1255`. |
+
+### 0.3 Phase 9 Digital AFK Operational Checklist (`BKM-086 §1.1`)
+- [x] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
+  - [x] Pre-regression archaeology on KENDER priming (`manager.py:285`), M5 Air judge (`mlx_judge_node.py:65`), and journal ledger (`cognitive_hub.py:3538`).
+  - [x] Pre-flight mistakes-avoided ledger compiled in §0.1.
+  - [x] Active daemon verification: `:8765` (Foyer), `:8001` (ChromaDB), `:8088` (vLLM), `:11434` (Ollama 4090) verified UP.
+- [x] **Pillar 2: 4-Anchor Master Story Specifications**
+  - [x] Stories 108.35 through 108.39 authored with full 4-anchor specifications (Files/Lines, Verification Command, Verbatim Code Specs, DNA Links).
+- [x] **Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard**
+  - [x] Story 108.39 executed by `[AGY:PRIMARY]` (settling barrier in `nightly_forge.py:1248-1285`).
+  - [x] Stories 108.35, 108.37, 108.38 executed via surgical takeover (`[AGY:TAKEOVER]`) per BKM-049 §3 & BKM-086 §1 Pillar 3 due to remote subagent recursion blocks.
+  - [x] Story 108.36 executed with multi-seat sovereign resolver candidate architecture in `mlx_judge_node.py`.
+- [x] **Pillar 4: Silicon Certification & Live is King (`BKM-007` + `BKM-024` + `INS-047`)**
+  - [x] Full regression test suite passes 100% green without mocks (96/96 passed in 5.26s; 4/4 live judge tests passed in 62.88s; 4/4 queue compaction tests passed in 2.27s).
+  - [x] Hot-reload daemon via `POST /reload_residents` verified (`reconciled_silicon: true`, commit `2528069`).
+  - [x] Physical probe injection verifies KENDER TTFT $< 350\text{ms}$ on warm ignition and genuine auditor evaluation on active sovereign seat.
+
+---
+
+### 🎨 Story 108.35: KENDER Ollama Parallel Warmup Model Alignment (`[FEAT-582]`, `[FEAT-586]`)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:TAKEOVER]` (Atlas delegation reclaimed per BKM-049 §3)
+* **Goal:** Eliminate the 404 Model Not Found failure and subsequent 40.1s cold VRAM paging stall by updating KENDER's async warmup payload to the live model string (`qwen3.8:nothink`).
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/ignition/manager.py:285-305`.
+* **Anchor 2 (Verification Command):** Python live endpoint probe to `http://192.168.1.26:11434/api/generate`.
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `manager.py:287`: replaced `"model": "qwen3:14b"` with `"model": "qwen3.8:nothink"`.
+  - Added latency telemetry logging: `[IGNITION] KENDER Parallel Warmup SUCCESS (model=qwen3.8:nothink, latency=344.6ms)`.
+* **Anchor 4 (DNA Links):** `[FEAT-582]`, `[FEAT-586]`, `[BKM-090]`.
+* **Verification Log:** HTTP 200 OK verified on live KENDER silicon. TTFT latency measured at 344.6ms. Zero 404 log warnings during Foyer silicon ignition.
+
+---
+
+### 🎨 Story 108.36: MLX Judge / Entailment Auditor Multi-Seat Fallback to KENDER (`[FEAT-439]`, `[FEAT-582]`)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Ensure the Entailment Auditor / Judge stage executes on sovereign silicon even when M5 Air is asleep or memory-guarded, routing fallback evaluations to KENDER via Deep Thought's active engine resolver.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/nodes/mlx_judge_node.py:50-200`, `HomeLabAI/src/tests/test_mlx_judge_node.py`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_mlx_judge_node.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `mlx_judge_node.py`: implemented `DEFAULT_CANDIDATES` multi-seat pipeline (Candidate 1: M5 Air port 8002 Headroom proxy; Candidate 2: KENDER port 11434 Ollama).
+  - Evaluator probes candidates in priority sequence; when M5 Air returns 400 memory-guard or connection error, dynamically falls back to KENDER.
+  - Increased token headroom (`max_tokens: 512`) to prevent JSON truncation with reasoning models.
+  - Fall back to `STANDBY_STUB` (0.00) only if BOTH M5 Air and KENDER are unreachable.
+* **Anchor 4 (DNA Links):** `[FEAT-439]`, `[FEAT-582]`, `[BKM-062]`.
+* **Verification Log:** Verified against live silicon daemons. All 4 tests in `test_mlx_judge_node.py` passed (`4 passed in 62.88s`). Candidate failover from M5 Air to KENDER executed cleanly with status `ONLINE_EVALUATED`.
+
+---
+
+### 🎨 Story 108.37: Spoken Dialogue Ledger Fidelity Restoration (`[FEAT-441]`, `[FEAT-356]`)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Preserve authentic conversational history in `journal_ledger.jsonl` by persisting raw spoken prose (`pinky_tldr`) instead of the token-count placeholder string.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/logic/cognitive_hub.py:3538-3543`, `HomeLabAI/src/tests/test_two_mice_handover.py:347-350,619-645`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py -k test_journal_ledger -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `cognitive_hub.py:3542`: replaced `self.turn_thought_trace["pinky"] = f"[Two-Mice TL;DR delivered to Jason ({pinky_stream_count} tokens)]"` with `self.turn_thought_trace["pinky"] = pinky_tldr`.
+  - Added companion unit test `test_journal_ledger_fidelity_preserves_authentic_prose` in `test_two_mice_handover.py`.
+  - Updated legacy assertion in `test_handover_runs_brain_then_pinky_sequentially` to verify authentic prose and assert zero placeholder strings.
+* **Anchor 4 (DNA Links):** `[FEAT-441]`, `[FEAT-356]`, `[LOOP-005]`.
+* **Verification Log:** Passed 23/23 tests in `test_two_mice_handover.py`. Verified that authentic spoken dialogue persists directly into `turn_thought_trace['pinky']` and `journal_ledger.jsonl`.
+
+---
+
+### 🎨 Story 108.38: Foyer Startup Queue Compaction & Nightly Stale Purge (`[FEAT-283]`, `[BKM-090]`)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Prevent dead weight accumulation and queue bloat in `foyer_queue.jsonl` by implementing startup queue compaction and nightly stale record archival.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/v5/foyer/router.py:64-118,5416-5425`, `HomeLabAI/src/infra/nightly_forge.py:475-525,1250-1260`, `HomeLabAI/src/tests/test_queue_compaction.py`.
+* **Anchor 2 (Verification Command):** `/home/jallred/Dev_Lab/HomeLabAI/.venv/bin/pytest /home/jallred/Dev_Lab/HomeLabAI/src/tests/test_queue_compaction.py -v`
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `router.py`: added `compact_foyer_queue()` archiving records older than 2 hours or completed to `foyer_queue.archive.jsonl`, atomically rewriting `foyer_queue.jsonl`. Invoked on startup inside `queue_drainer()`.
+  - In `nightly_forge.py:STEP 2`: atomically compacts `foyer_queue.jsonl` during post-quiesce VRAM cooldown.
+  - Authored comprehensive test suite in `test_queue_compaction.py` (empty file, stale/completed purge, all-stale truncation).
+* **Anchor 4 (DNA Links):** `[FEAT-283]`, `[FEAT-455]`, `[BKM-090]`.
+* **Verification Log:** Passed 4/4 tests in `test_queue_compaction.py` in 2.27s. Live queue compaction verified.
+
+---
+
+### 🎨 Story 108.39: Post-Reignition Settling Barrier for Nightly Subconscious Dreaming (`[FEAT-136]`, `[BKM-062]`)
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Eliminate false-positive `[NIGHTLY FORGE ABORT]` alerts by adding an explicit 30-second post-reignition settling barrier and HTTP readiness poll before launching `run_dream_cycle()`.
+* **Anchor 1 (Target Files & Lines):** `HomeLabAI/src/infra/nightly_forge.py:1248-1285`.
+* **Anchor 2 (Verification Command):** Code inspection and shakedown verification.
+* **Anchor 3 (Verbatim Code Specs):**
+  - In `nightly_forge.py`: after `re_ignite_vllm()` in Step 4, poll `http://127.0.0.1:8765/status` until `state == "OPERATIONAL"` and `vocal == True` (timeout: 60s).
+  - Enforced 30-second post-reignition socket stabilization barrier before launching `run_dream_cycle()`.
+* **Anchor 4 (DNA Links):** `[FEAT-136]`, `[FEAT-067]`, `[BKM-062]`.
+* **Verification Log:** Verified barrier and readiness poll logic in `nightly_forge.py`. Prevents race condition during Foyer initialization.
+
+
 
 
 
