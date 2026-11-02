@@ -4056,3 +4056,24 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 
 
 
+
+
+## [FEAT-682] Density-Weighted Archive Queue Scheduler
+**Sprint:** Sprint 109.0 (Phase 1)
+**Status:** ACTIVE
+**Tags:** `#archive_queue`, `#slow_burn`, `#density_weighting`, `#gap_files`, `[BKM-089]`, `[FEAT-101]`
+**Code:** `Portfolio_Dev/field_notes/scan_queue.py`, `Portfolio_Dev/field_notes/scan_pinky.py`
+**Logic:** Replaces random file shuffling (`random.shuffle(note_files)`) in background Slow Burn scanning with an empirical density-weighted scheduling metric: $\text{Priority} = \frac{\text{Total File Lines}}{\text{Indexed Gems in Archive} + 1}$. Schedules files with extensive historical spans but low indexed gem counts (`notes_2005_SSPD.txt`, `notes_2007_LAD.txt`, `notes_2019_DPV.txt`) at the head of the ingestion queue, ensuring balanced historical representation.
+**Rationale:** Eliminates starvation of newly recovered or sparsely dated legacy notes corpora by heavily saturated contemporary log files (`notes_2024_PIAV.txt`).
+
+## [FEAT-683] 4-Tier Epistemic Memory Architecture (Bedrock, Focals, Gems, Raw Notes)
+**Sprint:** Sprint 109.0 (Phase 1)
+**Status:** ACTIVE
+**Tags:** `#4_tier_rag`, `#epistemic_memory`, `#career_compass`, `#focal_dna`, `#spatial_anchors`, `#ground_truth`, `[FEAT-405]`, `[FEAT-410]`, `[FEAT-437]`, `[FEAT-451]`, `[FEAT-540]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/field_notes/ingest_focals.py`, `Portfolio_Dev/field_notes/data/focal_mesh.json`
+**Logic:** Fully restores and formalizes the 4-tier epistemic memory hierarchy, superseding the flattened implementations of `FEAT-405`, `FEAT-410`, and `FEAT-437`:
+  - **Tier 1 (Career Bedrock)**: Verified work history and platform anchors loaded directly into system prompt triage under the Completeness of Era Bedrock Standard.
+  - **Tier 2 (Strategic Focals & Milestones)**: Annual performance reviews (`2008`–`2016`) ingested into `focal_mesh.json` and ChromaDB `focal_dna`, probed sub-20ms by `step_pre_triage` (`[FEAT-540]`) to supply gravitational `vector_hint` anchors for triage.
+  - **Tier 3 (Technical Scars & Gems)**: High-density distilled engineering gems carrying immutable `spatial_anchor` (`line_start`, `line_end`) and `temporal_anchor` metadata, indexed in `long_term_wisdom`.
+  - **Tier 4 (Physical Raw Notes Ground Truth)**: Un-embedded physical `.txt` files in `/home/jallred/knowledge_base/`, surgically hydrated on-demand into Deep Thought's prompt payload via automated Ripgrep (`[FEAT-451]`).
+**Rationale:** Prevents context window blowouts and prefill latency from raw note flooding while eliminating the loss of strategic career context caused by flat single-layer vector retrieval.

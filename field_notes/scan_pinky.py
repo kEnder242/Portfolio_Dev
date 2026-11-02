@@ -22,7 +22,7 @@ RAS_GLOB = "raw_notes/**/ras-*.txt"
 GAP_FILES = [
     "raw_notes/Performance review 2008-2018 .txt",
     "raw_notes/notes_2006_EPSD.txt",
-    "raw_notes/notes_2005.txt",
+    "raw_notes/notes_2005_SSPD.txt",
 ]
 
 DATA_DIR = "field_notes/data"
