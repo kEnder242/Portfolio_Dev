@@ -93,21 +93,118 @@ PLATFORM_ERA_MAP = {
 }
 
 
-def disentangle_chronology(raw_text: str, document_date_str: str) -> dict:
-    """[FEAT-067 / Story 106.8] Deterministic extraction of event_era independent of document_date."""
-    if not isinstance(raw_text, str):
-        raw_text = ""
-    doc_year = 2024
-    if document_date_str and isinstance(document_date_str, str):
-        try:
-            doc_year = int(document_date_str.split("-")[0])
-        except (ValueError, IndexError):
-            doc_year = 2024
+_MAP_CACHE = {}
 
-    # Stage 1: Explicit Date Pattern within the text (e.g. "8/29/2019", "2019-07-01", "07-15-2019")
-    m_full = re.search(r"\b(\d{1,2})[/.-](\d{1,2})[/.-](20\d{2})\b", raw_text)
-    if m_full:
-        month, day, year = int(m_full.group(1)), int(m_full.group(2)), int(m_full.group(3))
+
+def get_companion_map(source_file: str) -> dict | None:
+    """Load navigational companion map (.map.json) if available for a source notes file."""
+    if not source_file:
+        return None
+    from pathlib import Path
+    stem = Path(source_file).stem
+    if stem in _MAP_CACHE:
+        return _MAP_CACHE[stem]
+    map_path = os.path.join(DATA_DIR, f"{stem}.map.json")
+    if os.path.exists(map_path):
+        try:
+            with open(map_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                _MAP_CACHE[stem] = data
+                return data
+        except Exception:
+            pass
+    _MAP_CACHE[stem] = None
+    return None
+
+
+def resolve_gem_anchors(gem: dict, file_name: str = "") -> dict:
+    """
+    [FEAT-683 / Story 109.10] Resolves spatial and temporal anchors for a gem
+    without date-guessing defaults (06-01 or 2024).
+    """
+    src_file = gem.get("source_file") or file_name or ""
+    line_start = gem.get("line_start", 1)
+    line_end = gem.get("line_end", line_start)
+
+    spatial_anchor = {
+        "source_file": os.path.basename(src_file) if src_file else "unknown",
+        "line_start": line_start,
+        "line_end": line_end,
+    }
+
+    # Check companion map
+    comp_map = get_companion_map(src_file)
+    implied_era = None
+    if comp_map:
+        for sec in comp_map.get("sections", []):
+            if sec.get("line_start", 0) <= line_start <= sec.get("line_end", 0):
+                implied_era = sec.get("implied_era")
+                break
+
+    doc_date = gem.get("date") or gem.get("document_date") or ""
+
+    # Extract true year from doc_date or filename
+    year_match = re.search(r"(?<!\d)(20\d{2})(?!\d)", (str(doc_date) + " " + str(src_file)))
+    inferred_year = int(year_match.group(1)) if year_match else None
+
+    if implied_era:
+        event_era = implied_era
+        event_year = int(implied_era.split("-")[0]) if implied_era[:4].isdigit() else inferred_year
+        quarter = implied_era if "-Q" in implied_era else (f"{event_year}-Q1" if event_year else "Unknown")
+        precision = "QUARTER"
+    elif doc_date and len(str(doc_date)) >= 7 and "-" in str(doc_date):
+        doc_date_str = str(doc_date)
+        event_era = doc_date_str
+        event_year = inferred_year or (int(doc_date_str[:4]) if doc_date_str[:4].isdigit() else None)
+        try:
+            m = int(doc_date_str[5:7])
+            quarter = f"{event_year}-Q{(m - 1) // 3 + 1}"
+        except Exception:
+            quarter = f"{event_year}-Q1" if event_year else "Unknown"
+        precision = "EXACT" if len(doc_date_str) >= 10 else "MONTH"
+    elif inferred_year:
+        event_era = f"{inferred_year}"
+        event_year = inferred_year
+        quarter = f"{inferred_year}-Q1"
+        precision = "YEAR"
+    else:
+        event_era = "Unknown"
+        event_year = None
+        quarter = "Unknown"
+        precision = "UNKNOWN"
+
+    temporal_anchor = {
+        "era": event_era,
+        "year": event_year,
+        "quarter": quarter,
+        "precision": precision,
+    }
+
+    return {
+        "spatial_anchor": spatial_anchor,
+        "temporal_anchor": temporal_anchor,
+        "event_era": event_era,
+        "event_year": event_year,
+        "event_quarter": quarter,
+        "document_date": doc_date,
+        "temporal_confidence": 0.90 if precision in ("EXACT", "QUARTER") else 0.60,
+        "temporal_provenance": "companion_map" if implied_era else "document_date",
+    }
+
+
+def disentangle_chronology(raw_text: str = "", document_date_str: str = "") -> dict:
+    """
+    [FEAT-067 / FEAT-683] Disentangles event chronology from raw text and document date.
+    Maintains backwards compatibility for explicit dates, years, and platform heuristics
+    while eliminating arbitrary 2024 and 06-01 guessing defaults.
+    """
+    raw_text = raw_text or ""
+    document_date_str = str(document_date_str or "")
+
+    # Stage 1: Explicit Date (e.g. 8/29/2019 or 2019-08-29)
+    m_us = re.search(r"\b(\d{1,2})[/-](\d{1,2})[/-](20\d{2})\b", raw_text)
+    if m_us:
+        month, day, year = int(m_us.group(1)), int(m_us.group(2)), int(m_us.group(3))
         if 2005 <= year <= 2026 and 1 <= month <= 12 and 1 <= day <= 31:
             q = f"{year}-Q{(month - 1) // 3 + 1}"
             return {
@@ -118,6 +215,7 @@ def disentangle_chronology(raw_text: str, document_date_str: str) -> dict:
                 "temporal_confidence": 0.95,
                 "temporal_provenance": "explicit_incident_date",
             }
+
     m_iso = re.search(r"\b(20\d{2})[-/](\d{1,2})[-/](\d{1,2})\b", raw_text)
     if m_iso:
         year, month, day = int(m_iso.group(1)), int(m_iso.group(2)), int(m_iso.group(3))
@@ -155,7 +253,7 @@ def disentangle_chronology(raw_text: str, document_date_str: str) -> dict:
         if re.search(pattern, raw_text, re.IGNORECASE):
             return {
                 "document_date": document_date_str,
-                "event_era": f"{era_year:04d}-06-01",
+                "event_era": f"{era_year:04d}",
                 "event_year": era_year,
                 "event_quarter": era_q,
                 "temporal_confidence": 0.70,
@@ -164,8 +262,10 @@ def disentangle_chronology(raw_text: str, document_date_str: str) -> dict:
 
     # Stage 4: Retrospective Shift Detection (e.g. "10 years ago")
     m_rel = re.search(r"\b(\d{1,2})\s+years?\s+ago\b", raw_text, re.IGNORECASE)
-    if m_rel:
+    doc_year_m = re.search(r"(?<!\d)(20\d{2})(?!\d)", document_date_str)
+    if m_rel and doc_year_m:
         offset = int(m_rel.group(1))
+        doc_year = int(doc_year_m.group(1))
         calc_year = doc_year - offset
         if 2005 <= calc_year <= 2026:
             return {
@@ -177,24 +277,27 @@ def disentangle_chronology(raw_text: str, document_date_str: str) -> dict:
                 "temporal_provenance": "relative_offset",
             }
 
-    # Stage 5: Default Fallback to Document Date
-    fallback_year = doc_year
-    q_str = f"{fallback_year}-Q1"
-    if document_date_str and len(document_date_str) >= 7:
-        try:
-            m = int(document_date_str[5:7])
-            q_str = f"{fallback_year}-Q{(m - 1) // 3 + 1}"
-        except Exception:
-            pass
+    # Stage 5: Fallback to Document Date (only if date is validly present, no 2024 hallucination)
+    if doc_year_m:
+        fallback_year = int(doc_year_m.group(1))
+        q_str = f"{fallback_year}-Q1"
+        if len(document_date_str) >= 7 and "-" in document_date_str:
+            try:
+                m = int(document_date_str[5:7])
+                q_str = f"{fallback_year}-Q{(m - 1) // 3 + 1}"
+            except Exception:
+                pass
+        return {
+            "document_date": document_date_str,
+            "event_era": document_date_str,
+            "event_year": fallback_year,
+            "event_quarter": q_str,
+            "temporal_confidence": 0.50,
+            "temporal_provenance": "document_date_fallback",
+        }
 
-    return {
-        "document_date": document_date_str,
-        "event_era": document_date_str if document_date_str else f"{fallback_year}-01-01",
-        "event_year": fallback_year,
-        "event_quarter": q_str,
-        "temporal_confidence": 0.50,
-        "temporal_provenance": "document_date_fallback",
-    }
+    # Stage 6: Forward to spatial/temporal anchor resolver
+    return resolve_gem_anchors({"evidence": raw_text, "date": document_date_str})
 
 
 _COMPASS_CACHE = None
@@ -555,13 +658,10 @@ class RotationalRefinementEngine:
                 for idx, gem in enumerate(items):
                     if not isinstance(gem, dict):
                         continue
-                    # Ensure chronology & levels stamped
-                    if "event_era" not in gem or not gem.get("event_era"):
-                        chrono = disentangle_chronology(
-                            gem.get("evidence", "") + " " + gem.get("summary", ""),
-                            gem.get("date", ""),
-                        )
-                        gem.update(chrono)
+                    # Ensure spatial and temporal anchors stamped [FEAT-683 / Story 109.10]
+                    if "event_era" not in gem or not gem.get("event_era") or "spatial_anchor" not in gem:
+                        anchors_meta = resolve_gem_anchors(gem, fname)
+                        gem.update(anchors_meta)
                         file_modified = True
                     if "impact_level" not in gem or gem.get("impact_level") in ("unassigned", None):
                         gem["impact_level"] = classify_impact_level(
@@ -696,10 +796,31 @@ class RotationalRefinementEngine:
 
         # Check field completeness & generate minimal trigger context if missing
         updated_fields = 0
+
+        # [Story 109.11] Detect FOCAL_DRAFT candidates & prompt labeling
+        combined_text = (gem.get("summary", "") + " " + gem.get("evidence", "")).lower()
+        is_focal_candidate = any(
+            k in combined_text for k in ("performance review", "focal", "annual review", "self-assessment", "accomplishments", "delivered the", "career deliverable")
+        )
+        if is_focal_candidate and gem.get("chunk_type") != "FOCAL_DRAFT":
+            gem["chunk_type"] = "FOCAL_DRAFT"
+            updated_fields += 1
+
+        # [Story 109.7] Inject context_envelope if present in item or gem
+        envelope = gem.get("context_envelope") or item.get("context_envelope")
+        if envelope and isinstance(envelope, dict):
+            before_text = "\n".join(envelope.get("before", []))
+            after_text = "\n".join(envelope.get("after", []))
+            gem["envelope_context"] = f"\n[ENVELOPE_BEFORE]\n{before_text}\n[/ENVELOPE_BEFORE]\n[ENVELOPE_AFTER]\n{after_text}\n[/ENVELOPE_AFTER]"
+
         if not gem.get("trigger_context"):
             if engine:
                 try:
-                    prompt = f"Given event summary: '{gem.get('summary')}' and evidence: '{gem.get('evidence', '')[:200]}', provide a concise 1-sentence engineering trigger context: what debug condition or inquiry activates this knowledge? Output plain text only."
+                    focal_instruction = " If the text represents a retrospective career summary, self-assessment, or focal draft, label its type as FOCAL_DRAFT and identify the corresponding Tier 2 milestone."
+                    prompt = (
+                        f"Given event summary: '{gem.get('summary')}' and evidence: '{gem.get('evidence', '')[:200]}', "
+                        f"provide a concise 1-sentence engineering trigger context: what debug condition or inquiry activates this knowledge?{focal_instruction} Output plain text only."
+                    )
                     resp = engine.generate(prompt)
                     if resp and len(resp.strip()) > 10:
                         gem["trigger_context"] = resp.strip()
@@ -712,13 +833,10 @@ class RotationalRefinementEngine:
                 )
                 updated_fields += 1
 
-        # Stamp chronological disentanglement if missing
-        if "event_era" not in gem or not gem.get("event_era"):
-            chrono = disentangle_chronology(
-                gem.get("evidence", "") + " " + gem.get("summary", ""),
-                gem.get("date", ""),
-            )
-            gem.update(chrono)
+        # Stamp spatial and temporal anchors if missing [FEAT-683 / Story 109.10]
+        if "event_era" not in gem or not gem.get("event_era") or "spatial_anchor" not in gem:
+            anchors_meta = resolve_gem_anchors(gem, item.get("file_path", ""))
+            gem.update(anchors_meta)
             updated_fields += 1
 
         # Stamp impact_level if missing or unassigned

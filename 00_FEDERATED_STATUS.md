@@ -12,9 +12,10 @@
 *   **🧬 The DNA:** [FeatureTracker.md](./FeatureTracker.md)
 *   **🎼 The Conductor:** [Registry](./conductor/tracks.md) | [Product](./conductor/product.md) | [Workflow](./conductor/workflow.md)
 
-## 🏗️ Conductor: Active & Recent Tracks (Sprints 77–108)
+## 🏗️ Conductor: Active & Recent Tracks (Sprints 77–109)
 | ID | Phase | Feature Focus | Status |
 | :--- | :--- | :--- | :--- |
+| **spr-109-0-epistemic-memory-projection** | Phase 20 | 4-Tier Epistemic Memory Architecture, Density-Weighted Archive Queue Scheduler, Navigational Companion Mapping, Pre-Triage Focal Steering, Ripgrep Hydration Bridge, Always-Live Multi-Node Projection Studio (`FEAT-682`, `FEAT-683`, `FEAT-540`, `FEAT-451`, `FEAT-059`, `FEAT-673`, `BKM-100`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_109_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_109_0.md) |
 | **spr-108-0-cognitive-hydraulics** | Phase 20 | Cognitive Hydraulics, Node-Anchored Routing, Positive/Negative Evidential Moat, Empirical Step Judgment Micro-Harness, Decoupled Entailment Audit, Step-Trace Telemetry (`FEAT-058`, `FEAT-671`, `LOOP-005`, `BKM-088`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_108_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_108_0.md) |
 | **spr-107-0-kabal-staging** | Phase 20 | Active Kabal Staging, Bone Nomenclature Retirement, JITC Atomic Bundle Migration, AST Reconciliation Re-Anchoring (`FEAT-665`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_107_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_107_0.md) |
 | **spr-106-0-gem-epistemics** | Phase 20 | Two-Dimensional Gem Epistemics (L0–L3 vs Imp 1–4), Subconscious De-Starvation, Kabal & Spine Polymorphic Architecture (`FEAT-662`–`FEAT-664`) | **COMPLETED & CERTIFIED** [SPRINT_PLAN_SPR_106_0.md](./docs/sprints/active/SPRINT_PLAN_SPR_106_0.md) |

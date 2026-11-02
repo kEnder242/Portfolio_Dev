@@ -29,6 +29,96 @@ QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 STATE_FILE = os.path.join(DATA_DIR, "chunk_state.json")
 MANIFEST_FILE = os.path.join(DATA_DIR, "file_manifest.json")
 
+GAP_FILES = [
+    "notes_2005_SSPD.txt",
+    "notes_2005.txt",
+    "notes_2006_EPSD.txt",
+    "Performance review 2008-2018.txt",
+]
+
+
+def is_gap_file(filename: str) -> bool:
+    """Check if a file is an un-dated or sparse gap file requiring context envelope injection."""
+    return (
+        any(os.path.basename(g) == filename for g in GAP_FILES)
+        or "notes_2005" in filename
+        or "notes_2006" in filename
+    )
+
+
+def calculate_file_priorities(raw_notes_dir=RAW_NOTES_DIR, data_dir=DATA_DIR) -> list[dict]:
+    """
+    [FEAT-682] Density-Weighted Archive Queue Scheduling.
+    Computes priority metric: Priority = max(epsilon, Total Lines / (Indexed Gems + 1)).
+    """
+    epsilon = 0.001
+
+    state_file = os.path.join(data_dir, "chunk_state.json")
+    state = {}
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, "r", encoding="utf-8") as f:
+                state = json.load(f)
+        except Exception:
+            pass
+
+    gems_by_file = {}
+    gems_by_year = {}
+    for jf in glob.glob(os.path.join(data_dir, "20*.json")):
+        try:
+            with open(jf, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                y = os.path.basename(jf).split("_")[0].replace(".json", "")
+                gems_by_year[y] = gems_by_year.get(y, 0) + len(data)
+                for item in data:
+                    if isinstance(item, dict):
+                        src = item.get("source_file") or item.get("filename")
+                        if src:
+                            gems_by_file[src] = gems_by_file.get(src, 0) + 1
+        except Exception:
+            pass
+
+    pattern_txt = os.path.join(raw_notes_dir, "**/*.txt")
+    pattern_docx = os.path.join(raw_notes_dir, "**/*.docx")
+    files = sorted(set(glob.glob(pattern_txt, recursive=True) + glob.glob(pattern_docx, recursive=True)))
+
+    results = []
+    for filepath in files:
+        filename = os.path.basename(filepath)
+        if filename.startswith("."):
+            continue
+
+        try:
+            text = read_file(filepath)
+            lines = len(text.splitlines())
+        except Exception:
+            lines = 0
+
+        chunks_in_state = sum(1 for k in state if k.startswith(f"{filename}::"))
+        direct_gems = gems_by_file.get(filename, 0)
+
+        year_match = re.search(r"20\d{2}", filename)
+        year_gems = gems_by_year.get(year_match.group(0), 0) if year_match else 0
+
+        indexed_gems = max(chunks_in_state, direct_gems, year_gems)
+
+        if lines == 0:
+            priority = epsilon
+        else:
+            priority = max(epsilon, lines / (indexed_gems + 1))
+
+        results.append({
+            "filename": filename,
+            "filepath": filepath,
+            "lines": lines,
+            "gems": indexed_gems,
+            "priority": round(priority, 4),
+        })
+
+    results.sort(key=lambda x: x["priority"], reverse=True)
+    return results
+
 
 def should_yield() -> bool:
     """Check if Scan Queue should yield due to non-idle mode, memory pressure, or high load."""
@@ -83,59 +173,82 @@ def get_hash(text):
     return hashlib.md5(text.encode("utf-8")).hexdigest()
 
 
-def parse_chunks(text, filename, file_type="LOG", fallback_year=None):
+def parse_chunks(text, filename, file_type="LOG", fallback_year=None, return_envelopes=False):
     """
     Parses text into Month or Year buckets.
     Returns dict: {'YYYY-MM': 'content...'} or {'YYYY': 'content...'}
+    If return_envelopes=True, returns tuple: (chunks, envelopes)
+    where envelopes are scoped strictly to gap files ([FEAT-683] / [Story 109.7]).
     """
     if file_type == "META":
-        # Meta documents are processed as a single chunk for the year
         year = fallback_year or "Unknown"
-        return {str(year): text}
+        chunks = {str(year): text}
+        envelopes = {str(year): None}
+        return (chunks, envelopes) if return_envelopes else chunks
 
     date_pattern = r"^(\d{1,2})/(\d{1,2})/(\d{2,4})"
     chunks = {}
+    envelopes = {}
+    gap = is_gap_file(filename)
 
-    # [VIBE-007] Use manifest year as absolute fallback for archeology
     current_bucket = fallback_year or "Unknown"
     current_lines = []
+    bucket_start_idx = 0
+    all_lines = text.splitlines()
 
-    for line in text.splitlines():
+    for idx, line in enumerate(all_lines):
         match = re.match(date_pattern, line.strip())
         if match:
-            # New date found, determine bucket
             month, day, year = match.groups()
             if len(year) == 2:
-                year = "20" + year  # Assume 20xx
-
-            # Pad month
+                year = "20" + year
             month = month.zfill(2)
             new_bucket = f"{year}-{month}"
 
-            # Flush previous bucket if content exists
             if current_lines:
                 if current_bucket not in chunks:
                     chunks[current_bucket] = []
                 chunks[current_bucket].append("\n".join(current_lines))
+                if gap:
+                    envelopes[current_bucket] = {
+                        "before": all_lines[max(0, bucket_start_idx - 5):bucket_start_idx],
+                        "after": all_lines[idx:min(len(all_lines), idx + 5)],
+                    }
+                else:
+                    envelopes[current_bucket] = None
 
             current_bucket = new_bucket
             current_lines = [line]
+            bucket_start_idx = idx
         else:
             current_lines.append(line)
 
-    # Flush final
     if current_lines:
         if current_bucket not in chunks:
             chunks[current_bucket] = []
         chunks[current_bucket].append("\n".join(current_lines))
+        if gap:
+            envelopes[current_bucket] = {
+                "before": all_lines[max(0, bucket_start_idx - 5):bucket_start_idx],
+                "after": all_lines[len(all_lines):len(all_lines)],
+            }
+        else:
+            envelopes[current_bucket] = None
 
-    # Join lists into single strings
-    return {k: "\n".join(v) for k, v in chunks.items()}
+    joined_chunks = {k: "\n".join(v) for k, v in chunks.items()}
+    if return_envelopes:
+        return joined_chunks, envelopes
+    return joined_chunks
 
 
 def main():
-    print("--- Scan Queue Manager v2.1 (Hardened & Meta-Aware) ---")
+    print("--- Scan Queue Manager v2.2 (Density-Weighted & Gap-Envelope Aware) ---")
     ensure_dirs()
+
+    # [FEAT-682] Calculate Dynamic File Priorities
+    file_priorities = calculate_file_priorities()
+    prio_map = {p["filename"]: p["priority"] for p in file_priorities}
+    print(f"[PRIORITY] Computed density-weighted priorities for {len(file_priorities)} files.")
 
     # Load Manifest
     if os.path.exists(MANIFEST_FILE):
@@ -192,10 +305,13 @@ def main():
         if not text:
             continue
 
-        # Chunking
-        chunks = parse_chunks(
-            text, filename, file_type=file_type, fallback_year=year_guess
+        # Chunking with optional envelope for gap files
+        gap = is_gap_file(filename)
+        chunks, envelopes = parse_chunks(
+            text, filename, file_type=file_type, fallback_year=year_guess, return_envelopes=True
         )
+
+        file_prio = round(prio_map.get(filename, 10.0), 3)
 
         for bucket_id, content in chunks.items():
             content_hash = get_hash(content)
@@ -212,18 +328,21 @@ def main():
                     "filename": filename,
                     "bucket": bucket_id,
                     "type": file_type,
-                    "priority": 10 if file_type == "LOG" else 20,  # Prioritize strategy
+                    "priority": file_prio,
+                    "is_gap_file": gap,
                     "content": content,
                 }
+                if envelopes.get(bucket_id):
+                    task["context_envelope"] = envelopes[bucket_id]
 
                 # Deduplicate queue
                 if not any(t["id"] == chunk_id for t in queue):
                     queue.append(task)
                     tasks_added += 1
-                    print(f"Queueing {chunk_id} ({file_type})")
+                    print(f"Queueing {chunk_id} ({file_type}) - Priority: {file_prio}")
 
     # Sort queue by priority DESC
-    queue.sort(key=lambda x: x.get("priority", 10), reverse=True)
+    queue.sort(key=lambda x: x.get("priority", 10.0), reverse=True)
 
     with open(QUEUE_FILE, "w") as f:
         json.dump(queue, f, indent=2)
