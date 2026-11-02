@@ -377,6 +377,13 @@ def main(args):
 
     try:
         subprocess.run(
+            [sys.executable, os.path.join(BASE_DIR, "sync_dna_manifest.py")], check=True
+        )
+    except Exception as e:
+        print(f"⚠️ Warning: sync_dna_manifest.py failed: {e}")
+
+    try:
+        subprocess.run(
             [sys.executable, os.path.join(BASE_DIR, "dna_forge_build.py")], check=True
         )
     except Exception as e:
