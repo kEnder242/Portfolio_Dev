@@ -1234,8 +1234,9 @@
 <li><code>[SWARM:CLOUD]</code>: Story is assigned to cloud swarm burst via <code>delegate.py</code> directly, skipping local retries.</li>
 <li><code>[SWARM:ORACLE]</code>: Story is an architectural evaluation, pre-pass plan certification, or post-sprint regression audit executed via high-reasoning oracle nodes without mutating runtime codebase files.</li>
 <li><code>[AGY:PRIMARY]</code>: Story is architectural scaffolding, protocol governance, and schema bootstrap reserved for the primary orchestrator.</li>
-<li><strong>Anti-Bypass Invariant:</strong> When a story is tagged <code>[SWARM:*]</code>, the primary agent (AGY) is <strong>strictly forbidden from directly modifying the story's target codebase files</strong> without first executing delegation attempts via <code>delegate.py</code> (including all 3 local diagnostic rounds for <code>[SWARM:LOCAL]</code>).</li>
-<li><strong>Escalation Record Required:</strong> AGY direct code takeover (<code>[AGY:TAKEOVER]</code>) is only permissible after the assigned swarm tier (and its required diagnostic retries) has executed, failed, and logged an explicit diagnostic post-mortem in the sprint report. Direct coding on swarm-tagged stories without prior delegation attempts is a high-severity operational violation.</li>
+<li><strong>Local-First Default &amp; The 3-Attempt Invariant:</strong> Stories default to local silicon (<code>[SWARM:LOCAL]</code>) for targeted code surgery and unit testing. Under <code>[SWARM:LOCAL]</code>, AGY is strictly forbidden from directly modifying the target codebase files and must focus entirely on enabling delegation as L1 orchestrator across all 3 local attempts (Attempt 1a baseline, 1b diagnostic remediation, 1c harness/anchor calibration).</li>
+<li><strong>The Escalation Ladder &amp; Last-Resort Takeover:</strong> Only after local silicon exhausts all 3 diagnostic rounds does a story promote to Cloud Swarm (<code>[SWARM:CLOUD]</code>). Direct code takeover (<code>[AGY:TAKEOVER]</code>) is strictly the final last resort, permissible only after both local and cloud swarms have executed, failed, and logged an explicit diagnostic post-mortem in the sprint report.</li>
+<li><strong>Anti "Across-the-Board" Review Trigger:</strong> If 100% of the stories in a sprint phase share the identical assignment tag (e.g. all <code>[AGY:PRIMARY]</code>, all <code>[SWARM:LOCAL]</code>, or all <code>[SWARM:CLOUD]</code>), the orchestrator MUST pause during pre-flight planning to review the distribution. Confirm whether tasks were genuinely evaluated by scope or batched out of convenience.</li>
 </ol>
 <h4>4. Sovereign Local Silicon Topology Invariant (KENDER -&gt; Air)</h4>
 <ol>
@@ -2149,14 +2150,11 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 2. <strong>Documented:</strong> The item is formally recorded into a sprint backlog (<code>SPRINT_PLAN_*.md</code>), general project backlog, feature tracker (<code>FeatureTracker.md</code>), or DNA card.
 3. <strong>Integrated:</strong> The operator directs the item into an active numbered topic (e.g., <em>"Put A–C into #3"</em> $\rightarrow$ absorbed into Topic 3's scope).
 4. <strong>Explicitly Dismissed:</strong> The operator explicitly commands <em>"dismiss A"</em>, <em>"drop B"</em>, or <em>"not doing C"</em>. Operator silence or conversational pivots NEVER clear the ledger.</p>
-<h3>4.1 The Zero-Tombstone Pruning Law (No Completed Badges)</h3>
+<h3>4.1 Thread Graduation &amp; Affirmative Omission</h3>
 <ol>
-<li><strong>Strictly an Unresolved Queue:</strong> The lettered ledger is exclusively for pending, unaddressed friction. It is NOT a completion changelog or tombstone ledger. Sprints track completions; the ledger tracks unaddressed omissions.</li>
-<li><strong>Immediate Eviction:</strong> The moment an item satisfies an Exit Gate (Addressed, Documented, Integrated, or Dismissed), its letter is released and it is immediately pruned from the turn footer.</li>
-<li><strong>Forbidden Tombstone &amp; Tracking Badges:</strong> Agents are strictly forbidden from rendering exited items in the footer with status badges or cross-reference destinations (e.g. <code>- **A:** ... — *Addressed*</code>, <code>— *Certified*</code>, <code>(Tracked in Story 108.xx)</code>, or <code>(See Topic N)</code>). Any narrative reporting of completed or documented threads belongs exclusively in the response body or sprint plan.</li>
-<li><strong>Positive Pre-Emission Native Ownership Check:</strong> Prior to emitting the turn footer, perform a strict binary test: if every candidate thread is actively owned by an active conversational lane ($1 \dots N$), resolved in code, or formally recorded in <code>SPRINT_PLAN_*.md</code>, all items are <strong>Natively Owned</strong>. Under Native Ownership, the agent MUST suppress the <code>### Dropped Threads Ledger</code> heading completely and emit zero footer characters.</li>
-<li><strong>Instant Integration Dissolution:</strong> When the operator commands <em>"Put A into #1"</em> (or an item is absorbed into an active lane), the letter dissolves immediately and must not appear in the ledger footer on that turn.</li>
-<li><strong>Strict Header Omission:</strong> When 0 unresolved threads exist, omit the <code>### Dropped Threads Ledger</code> header completely. Never render placeholder text (e.g., <code>*(None)*</code>), as placeholder headers trigger prompt-continuation mimicry across turns.</li>
+<li><strong>Graduation Into Primary Scope:</strong> When an item satisfies an Exit Gate (addressed in code, documented into a sprint backlog, integrated into a numbered topic, or dismissed), its lifecycle in the reminder ledger is complete. Because its resolution is already reported in the response body or sprint plan, it graduates out of the ledger immediately.</li>
+<li><strong>Affirmative Permission to Omit:</strong> Omitting graduated items from the footer is the expected, correct behavior. The lettered footer is reserved solely for items that are currently pending and waiting for an exit path.</li>
+<li><strong>Clean Footer Suppression:</strong> When all active items have graduated (or no unaddressed stray findings exist), suppress the reminder header and footer entirely. Emitting no footer confirms that all conversational threads are natively owned by the active work.</li>
 </ol>
 <h3>5. Format Standard</h3>
 <p>When active pending threads exist, render the reminder at the very conclusion of the turn. Format each item using a capital letter with a colon followed by a concise, one-line description (e.g., <code>A: One-line description</code>). If no pending threads exist, omit the ledger entirely (do not print the header or placeholder text).</p>
@@ -2187,7 +2185,7 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 <h4>Phase 2: Git Archaeology (The Code / "What")</h4>
 <ol>
 <li><strong>Locate the Pre-Regression Code:</strong> Use <code>git log -S</code> and <code>git blame</code> to find the exact commit that introduced the divergent behavior.</li>
-<li><strong>Inspect Pre-Regression Baseline:</strong> Check out or inspect the commit immediately <em>prior</em> to the divergence (<code>HEAD~1</code> relative to the commit). Establish what was already in place, how data flowed, and what baseline contracts were functioning cleanly before the change.</li>
+<li><strong>Inspect Pre-Regression Baseline:</strong> Inspect the commit immediately <em>prior</em> to the divergence (using read-only inspection tools like <code>git show</code>). Establish what was already in place, how data flowed, and what baseline contracts were functioning cleanly before the change.</li>
 <li><strong>Evaluate the Regressing Commit With Merit:</strong> Inspect the commit that introduced the divergence. Do not dismiss it as a mere mistake—recognize the constraints, missing subsystems, or temporary scaffolding that existed at that specific moment in the project's evolution. Understand the big picture of why the author chose that specific mechanism at that time.</li>
 </ol>
 <h4>Phase 3: DNA Correlation (The Alignment / "How")</h4>
@@ -2219,7 +2217,7 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 <li><strong>Zero Speculative Editing:</strong> The agent MUST NOT guess or invent requirements. </li>
 <li><strong>The 3-Phase Excavation Mandate:</strong></li>
 <li><em>Phase 1 (Sprint Intent)</em>: Query <code>sprint_dna</code> to discover the original technical/business pressures before touching code.</li>
-<li><em>Phase 2 (Git Baseline &amp; Post-Commit Merit)</em>: Check out <code>HEAD~1</code> to inspect what worked cleanly before the divergence. Simultaneously, evaluate the regressing commit with merit to understand the historical constraints and temporary scaffolding that existed at that time.</li>
+<li><em>Phase 2 (Git Baseline &amp; Post-Commit Merit)</em>: Inspect the baseline commit immediately prior to the divergence to understand what worked cleanly before the change. Simultaneously, evaluate the regressing commit with merit to understand the historical constraints and temporary scaffolding that existed at that time.</li>
 <li><em>Phase 3 (DNA Invariant Alignment)</em>: Compare intent against <code>FeatureTracker.md</code> and <code>Protocols.md</code> to solve the original requirement using modern shared capabilities rather than ad-hoc bypasses.</li>
 </ul>
 <h4>Pillar 2: Deterministic 4-Anchor Planning &amp; Mistake Prevention (<code>BKM-030</code> + <code>BKM-043</code> + <code>BKM-081</code>)</h4>
@@ -2234,11 +2232,11 @@ This guarantees that lessons learned and harness calibrations from Phase $N$ imm
 <h4>Pillar 3: Structured Delegation &amp; The Strict Anti-Bypass Guard (<code>BKM-049</code> + <code>BKM-006</code>)</h4>
 <ul>
 <li><strong>Conscious Avoidance of the Self-Promotion Trap:</strong></li>
-<li><code>[SWARM:LOCAL]</code> (Atlas on RTX 4090 via port 4097): Preferred for targeted code surgery, parameter plumbing, and unit test assertions.</li>
-<li><code>[SWARM:CLOUD]</code> (Sisyphus / Nemotron / DeepSeek): Reserved for heavy cross-subsystem architectural refactoring.</li>
-<li><code>[AGY:PRIMARY]</code>: Strictly restricted to orchestrating git boundaries, hot-reloading daemons, and running live verification probes.</li>
-<li><strong>THE ANTI-BYPASS INVARIANT (Strictly Enforced):</strong>
-  When a story is tagged <code>[SWARM:LOCAL]</code> or <code>[SWARM:CLOUD]</code>, AGY:PRIMARY is <strong>STRICTLY FORBIDDEN from directly modifying the story's target codebase files using file-editing tools</strong>. Dispatch MUST execute through the delegation harness (<code>HomeLabAI/src/tests/delegate.py</code>). Direct code takeover (<code>[AGY:TAKEOVER]</code>) is only permissible after the assigned swarm tier has executed, failed its required diagnostic remediation rounds, and logged a diagnostic post-mortem.</li>
+<li><code>[SWARM:LOCAL]</code> (Atlas on RTX 4090 via port 4097): Preferred default for targeted code surgery, parameter plumbing, and unit test assertions. Under <code>[SWARM:LOCAL]</code>, AGY is strictly forbidden from taking over code authoring and must focus entirely on enabling delegation as L1 orchestrator across all 3 local attempts.</li>
+<li><code>[SWARM:CLOUD]</code> (Sisyphus / Nemotron / DeepSeek): Escalation tier when local silicon exhausts all 3 diagnostic remediation rounds, or for heavy cross-subsystem architectural refactoring.</li>
+<li><code>[L1 Orchestrator]</code>: Directs end-to-end task flow, authors 4-anchor specifications, provides diagnostic feedback to local/cloud workers, evaluates live verification probes, and manages daemon lifecycles.</li>
+<li><strong>THE ANTI-BYPASS INVARIANT &amp; ESCALATION LADDER (Strictly Enforced):</strong>
+  When a story is tagged <code>[SWARM:LOCAL]</code>, dispatch MUST execute through the delegation harness (<code>HomeLabAI/src/tests/delegate.py</code>). AGY enables the worker as L1 through 3 diagnosed attempts before promoting to <code>[SWARM:CLOUD]</code>. Direct code takeover (<code>[AGY:TAKEOVER]</code>) is strictly the final last resort, permissible only after both local and cloud swarm tiers have executed, failed their required diagnostic remediation rounds, and logged an explicit diagnostic post-mortem.</li>
 </ul>
 <h4>Pillar 4: Adversarial Audit &amp; Physical Silicon Certification (<code>BKM-007</code> + <code>BKM-024</code> + <code>INS-047</code>)</h4>
 <ul>
@@ -2544,7 +2542,7 @@ Explicit labeling enables the model to properly attribute the work to past histo
 <li><strong>Anti-Apology Pivot</strong>: Acknowledge the empirical reality directly without self-flagellating boilerplate. Treat the friction as an objective protocol calibration opportunity.</li>
 <li><strong>Root Cause Identification</strong>: Locate the exact paragraph, sentence, or ambiguity in <code>docs/Protocols.md</code> where the directive broke down, conflicted with another mandate, or failed to anticipate operational reality.</li>
 <li><strong>Positive Guidance Construction</strong>: Draft the replacement rule using positive framing ("Do X because context Y guides this behavior"). Direct the agent toward a concrete operational pipeline rather than describing what not to do.</li>
-<li><strong>Surgical Diff Presentation</strong>: Present the minimal, contiguous <code>git diff</code> against <code>docs/Protocols.md</code> for explicit operator review and confirmation before committing locally per <code>BKM-040</code>.</li>
+<li><strong>Surgical Delta Presentation</strong>: Present the minimal, contiguous changes (preferring sentence-level <code>[+]</code> additions and <code>[-]</code> deletions over verbose unified diff blocks) against <code>docs/Protocols.md</code> for explicit operator review and confirmation before committing locally per <code>BKM-040</code>.</li>
 </ol>
                             </div>
                         </td>
