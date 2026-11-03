@@ -1,5 +1,28 @@
 [
   {
+    "id": "SPR-109.0",
+    "title": "\ud83d\udcd1 SPRINT PLAN 109.0: Always-Live Multi-Node Projection Studio & 4-Tier Epistemic Memory Architecture",
+    "origin": {
+      "text": "Full Restoration of the 4-Tier Epistemic Memory Architecture (`FEAT-683`), Density-Weighted Archive Queue Scheduling (`FEAT-682`), Non-Destructive Navigational Companion Mapping (`.map.json`), Automated Ripgrep Ground Truth Hydration (`FEAT-451`), Pre-Triage Focal Gravitational Steering (`FEAT-540`), Excision of `disentangle_chronology()` Guessing ",
+      "source": "SPRINT_PLAN_SPR_109_0.md"
+    },
+    "synthesis": {
+      "narrative_context": "Full Restoration of the 4-Tier Epistemic Memory Architecture (`FEAT-683`), Density-Weighted Archive Queue Scheduling (`FEAT-682`), Non-Destructive Navigational Companion Mapping (`.map.json`), Automated Ripgrep Ground Truth Hydration (`FEAT-451`), Pre-Triage Focal Gravitational Steering (`FEAT-540`), Excision of `disentangle_chronology()` Guessing Fallbacks, and Always-Live Multi-Node Projection S",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_109_0.md"
+      ],
+      "review_notes": "Active sprint in execution."
+    },
+    "metadata": {
+      "tags": [
+        "sprint-109",
+        "sprint-plan"
+      ],
+      "status": "ACTIVE",
+      "bucket_id": "bucket_5_infra"
+    }
+  },
+  {
     "id": "SPR-108.0",
     "title": "\ud83d\udcd1 SPRINT PLAN 108.0: Cognitive Hydraulics, Node-Anchored Routing & The Empirical Step-Trace Flywheel",
     "origin": {
