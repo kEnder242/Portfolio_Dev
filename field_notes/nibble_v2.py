@@ -437,12 +437,25 @@ Return ONLY a valid JSON list of event objects in the following schema:
 
                 # Auto-assign bucket date if missing or invalid
                 if not clean_date:
-                    if "-" in task["bucket"]:
-                        parts = task["bucket"].split("-")
-                        clean_date = f"{parts[0]}-{parts[1]}-01"
+                    bucket_str = str(task.get("bucket", ""))
+                    if "-" in bucket_str:
+                        parts = bucket_str.split("-")
+                        if len(parts) >= 2 and len(parts[1]) == 4:
+                            clean_date = f"{parts[0]}-01-01"
+                        elif len(parts) >= 2 and len(parts[1]) <= 2:
+                            clean_date = f"{parts[0]}-{parts[1].zfill(2)}-01"
+                        else:
+                            clean_date = f"{parts[0]}-01-01"
+                    elif "_" in bucket_str:
+                        parts = bucket_str.split("_")
+                        if len(parts) >= 2 and len(parts[1]) == 4:
+                            clean_date = f"{parts[0]}-01-01"
+                        elif len(parts) >= 2 and len(parts[1]) <= 2:
+                            clean_date = f"{parts[0]}-{parts[1].zfill(2)}-01"
+                        else:
+                            clean_date = f"{parts[0]}-01-01"
                     else:
-                        # Year bucket (META)
-                        clean_date = f"{task['bucket']}-01-01"
+                        clean_date = f"{bucket_str[:4]}-01-01" if bucket_str[:4].isdigit() else "2024-01-01"
 
                 event["date"] = clean_date
 
