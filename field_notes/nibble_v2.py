@@ -243,14 +243,16 @@ def validate_date(date_str):
 def is_semantic_duplicate(new_event, existing_events, threshold=0.70):
     """
     [Story 109.14 / FEAT-454] Evidence-aware semantic duplicate checker.
-    Rejects duplicate extractions of the same raw snippet on the same date/chunk.
+    Rejects duplicate extractions of the same raw snippet on the same date/chunk/year.
     """
     if isinstance(new_event, str):
         new_summary = new_event
         new_evidence = ""
+        new_date = None
     else:
         new_summary = new_event.get("summary", "")
         new_evidence = new_event.get("evidence", "")
+        new_date = new_event.get("date") or new_event.get("event_date")
 
     norm_new_ev = re.sub(r"[^a-z0-9\s]", "", str(new_evidence).lower()).strip()
     norm_new_sum = str(new_summary).lower().strip()
@@ -258,9 +260,10 @@ def is_semantic_duplicate(new_event, existing_events, threshold=0.70):
     for ex in existing_events:
         ex_summary = str(ex.get("summary", "")).lower().strip()
         ex_evidence = ex.get("evidence", "")
+        ex_date = ex.get("date") or ex.get("event_date")
         norm_ex_ev = re.sub(r"[^a-z0-9\s]", "", str(ex_evidence).lower()).strip()
 
-        # 1. Evidence overlap check
+        # 1. Evidence overlap check (Raw quote provenance takes highest precedence)
         if norm_new_ev and norm_ex_ev:
             if norm_new_ev == norm_ex_ev:
                 return True
@@ -273,12 +276,14 @@ def is_semantic_duplicate(new_event, existing_events, threshold=0.70):
             if t1 and t2 and (len(t1 & t2) / len(t1 | t2)) > 0.60:
                 return True
 
-        # 2. Summary fuzzy & token check
-        if difflib.SequenceMatcher(None, norm_new_sum, ex_summary).ratio() > threshold:
-            return True
-        s1, s2 = set(norm_new_sum.split()), set(ex_summary.split())
-        if s1 and s2 and (len(s1 & s2) / len(s1 | s2)) > 0.55:
-            return True
+        # 2. Summary fuzzy & token check (scoped to same date or unanchored dates)
+        same_date = (new_date and ex_date and new_date == ex_date) or (not new_date or not ex_date)
+        if same_date:
+            if difflib.SequenceMatcher(None, norm_new_sum, ex_summary).ratio() > threshold:
+                return True
+            s1, s2 = set(norm_new_sum.split()), set(ex_summary.split())
+            if s1 and s2 and (len(s1 & s2) / len(s1 | s2)) > 0.55:
+                return True
 
     return False
 
@@ -605,11 +610,12 @@ Return ONLY a valid JSON list of event objects in the following schema:
                 
                 for event in events_to_add:
                     c_date = event.get("date")
-                    same_date_events = [
-                        e for e in existing_canonical_data if e.get("date") == c_date
+                    candidate_events = [
+                        e for e in existing_canonical_data
+                        if e.get("date") == c_date or (event.get("evidence") and e.get("evidence"))
                     ]
 
-                    if not is_semantic_duplicate(event, same_date_events):
+                    if not is_semantic_duplicate(event, candidate_events):
                         if event.get("sensitivity", "Public") == "Public":
                             event["sensitivity"] = "Public"
                             existing_canonical_data.append(event)
