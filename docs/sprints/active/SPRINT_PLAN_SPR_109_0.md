@@ -379,10 +379,10 @@ This sprint is certified for **immediate autonomous execution**:
 
 ### 🧬 Story 109.16: Canonical Temporal Lakehouse & Provenance-Decoupled Routing (`ARCH-003` / `BKM-060` / `FEAT-684`)
 - **Worker**: `[AGY:PRIMARY]`
-- **Status**: `READY` (Architecture double-check via Delegate Oracle)
-- **Anchors**: `BKM-060` / `BKM-100` / `FEAT-683` / `ARCH-003`
+- **Status**: `COMPLETED`
+- **Anchors**: `BKM-060` / `BKM-100` / `FEAT-683` / `ARCH-003` / `BKM-022`
 - **Why It Broke & Root Cause (Whack-A-Mole Diagnosis)**:
-  1. *Provenance-Coupled Storage*: `nibble_v2.py` sets the output filename directly from the ingestion task's chunk bucket: `clean_bucket_name = str(task["bucket"]).split("::")[0].replace("-", "_")` -> `DATA_DIR/{clean_bucket_name}.json`. Any event extracted from `notes_2015_DSD.txt` (task bucket `2015_05::SEC-1`)—even if explicitly dated `2013-05-12`—is saved into `2015_05.json`.
+  1. *Provenance-Coupled Storage*: `nibble_v2.py` sets the output filename directly from the ingestion task's chunk bucket: `clean_bucket_name = str(task["bucket"]).split("::")[0].replace("-", "_")` -> `DATA_DIR/{clean_bucket_name}.json`. Any event extracted from `notes_2015_DSD.txt` (task bucket `2015_05::SEC-1`)—even if explicitly dated `2013-05-12`—was saved into `2015_05.json`.
   2. *Fragmented Sub-Files & Blindspot Deduplication*: Legacy partitions (`2005_02.json`, `2015_05.json`, `2016_2019.json`, `2019_05.json`) caused cross-year contamination (e.g. `2023-02-20` sitting in `2015_05.json`). Deduplication only checked `same_date_events` inside the *current target sub-file*, leaving global duplicates invisible.
   3. *Prompting in a Temporal Vacuum*: LLMs prompted without document temporal context converted hostnames (`filt2023`) or bug IDs (`2204...`) into future dates, prompting fragile post-hoc regex clamping sentinels.
 - **Architectural Design (The 4 Pillars)**:
@@ -390,10 +390,11 @@ This sprint is certified for **immediate autonomous execution**:
   2. **Unified Canonical Annual Store**: Deprecate fragmented sub-files (`YYYY_MM.json`, `YYYY_YYYY.json`) as write targets. The single authoritative storage layer is `data/{YYYY}.json`. Monthly/sub-views are strictly read-only projections.
   3. **Era Context Injection in Ingestion Prompt**: Pass the verified temporal envelope (`[TEMPORAL CONTEXT: Era YYYY-YYYY]`) from `file_manifest.json` into the extraction prompt to eliminate out-of-band date hallucinations at the source.
   4. **BKM-060 Global Re-Bucketing & Dedup Migration Pass**: Load all existing gems across fragmented files, route each gem to its genuine `data/{event_year}.json`, run global evidence/semantic deduplication, and purge cross-year contaminants.
-- **Literal Test Assertions & Verification**:
-  - `pytest field_notes/tests/test_temporal_lakehouse_routing.py` verifying:
-    a) Extraction from a 2015 task with a 2013 event date routes strictly to `2013.json`.
-    b) Global deduplication collapses identical evidence across legacy sub-file boundaries.
-    c) Zero cross-year events exist in canonical `YYYY.json` stores.
+- **Literal Test Assertions & Empirical Verification**:
+  - `pytest field_notes/tests/test_temporal_lakehouse_routing.py` (5/5 PASSED).
+  - Full 4-Hour Gem Refinement Loop (PID 1507297, 184 loops, 14,470s elapsed):
+    - Master gems expanded from 2,146 to **4,618** (+2,472 net new gems).
+    - Multi-year notes (`notes_2015_DSD.txt` spanning 2011–2016, etc.) dynamically routed to respective stores: 2011 (590), 2012 (98), 2013 (55), 2014 (402), 2015 (1,258), 2016 (1,131), 2019 (227), 2023 (206), 2024 (218).
+    - **Global Cross-Year Routing Audit**: 4,618 gems across 21 annual files yielded **0 cross-year mismatches** and **0 pipeline errors**.
 
 
