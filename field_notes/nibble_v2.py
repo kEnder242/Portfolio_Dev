@@ -213,12 +213,28 @@ def extract_json_from_llm(text):
 def validate_date(date_str):
     if not date_str:
         return None
-    if re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
-        return date_str
-    match = re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", date_str)
+    date_str = str(date_str).strip()
+    # Check YYYY-MM-DD or YYYY-DD-MM
+    m_iso = re.match(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", date_str)
+    if m_iso:
+        y, m, d = int(m_iso.group(1)), int(m_iso.group(2)), int(m_iso.group(3))
+        if m > 12 and 1 <= d <= 12:
+            m, d = d, m
+        if 1 <= m <= 12 and 1 <= d <= 31:
+            return f"{y:04d}-{m:02d}-{d:02d}"
+        return None
+
+    # Check MM/DD/YYYY or DD/MM/YYYY
+    match = re.match(r"^(\d{1,2})/(\d{1,2})/(\d{4})$", date_str)
     if match:
-        m, d, y = match.groups()
-        return f"{y}-{m.zfill(2)}-{d.zfill(2)}"
+        p1, p2, y = int(match.group(1)), int(match.group(2)), int(match.group(3))
+        if p1 > 12 and 1 <= p2 <= 12:
+            m, d = p2, p1
+        elif 1 <= p1 <= 12 and 1 <= p2 <= 31:
+            m, d = p1, p2
+        else:
+            return None
+        return f"{y:04d}-{m:02d}-{d:02d}"
     return None
 
 
