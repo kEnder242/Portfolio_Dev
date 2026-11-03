@@ -235,11 +235,12 @@ def main():
     note_files = sorted(list(all_files))
     batches_processed_total = 0
 
-    # In Slow Burn mode, shuffle files to find work randomly
+    # In Slow Burn mode, sort by density-weighted priority (FEAT-682)
     if not target_filter:
-        import random
-
-        random.shuffle(note_files)
+        from scan_queue import calculate_file_priorities
+        prio_list = calculate_file_priorities()
+        prio_map = {item["filename"]: item["priority"] for item in prio_list}
+        note_files.sort(key=lambda f: prio_map.get(os.path.basename(f), 0.0), reverse=True)
 
     for note_file in note_files:
         # Check global limit for Slow Burn

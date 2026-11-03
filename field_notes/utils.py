@@ -15,13 +15,13 @@ logger = logging.getLogger(__name__)
 # --- PATH RESOLUTION (SINGLE SOURCE OF TRUTH) ---
 def find_lab_root():
     """Locates the absolute Lab root by searching upward for the bootstrap anchor."""
-    curr = os.path.dirname(os.path.abspath(__file__))
+    curr = os.path.dirname(os.path.realpath(__file__))
     for _ in range(5):  # Max 5 levels up
         if glob.glob(os.path.join(curr, "BOOTSTRAP_v*.md")):
             return curr
         curr = os.path.dirname(curr)
     # Fallback to current directory's parent if anchor not found
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 
 LAB_ROOT = find_lab_root()

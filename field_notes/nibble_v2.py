@@ -11,7 +11,7 @@ import time
 import psutil
 
 # Add current directory and HomeLabAI/src to path
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 LAB_ROOT = os.path.dirname(os.path.dirname(BASE_DIR))
 HOMELAB_SRC = os.path.join(LAB_ROOT, "HomeLabAI/src")
 for p in [BASE_DIR, HOMELAB_SRC]:

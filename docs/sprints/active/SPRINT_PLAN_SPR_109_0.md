@@ -322,3 +322,21 @@ This sprint is certified for **immediate autonomous execution**:
 4. **Batch 3 (Companion Maps & Ripgrep Bridge)**: Execute Stories 109.3, 109.7, 109.9, 109.10, 109.11.
 5. **Batch 4 (Live Projection Studio)**: Execute Story 109.12.
 6. **Sprint Certification**: Run full test battery and author `SPRINT_109_RETROSPECTIVE.md`.
+
+
+---
+
+## 📜 Sprint Append Ledger (Story 109.13: Multi-Year & Manifest Priority Bug Fixes)
+
+### 🧬 Story 109.13: Multi-Year Span Aggregation & Manifest Gating in Scan Priority (`FEAT-682`)
+* **Worker:** `[AGY:PRIMARY]`
+* **Anchors:** `ANCHOR-08` / `FEAT-682` / `BKM-081`
+* **Why It Broke & Root Cause**:
+  1. *Multi-Year Single-Regex Flaw*: `calculate_file_priorities()` used `re.search(r"20\d{2}", filename)` to look up `gems_by_year`. For multi-year journals like `notes_2015_DSD.txt` (`year: "2011-2016"`), it only checked `gems_by_year["2015"]` (3 gems), completely ignoring the 27+ gems produced for 2011–2014.
+  2. *Unfiltered Glob Hazard*: The scheduler globbed all `.txt` files in `knowledge_base/`, causing raw hardware trace dumps (e.g. `PECI_experiments_WW31.3_1.txt` with 83,254 lines) and prompt files (`prompt.txt`) to jump to Priority 83,254.0, drowning out real notes.
+* **Mechanism**:
+  1. Gated file discovery against `file_manifest.json`: included only files with `type in ("LOG", "META")` or matching `notes_*.txt` / `ras-*.txt`; excluded all `manual_review: true` entries.
+  2. Multi-year span aggregation: parsed `year` ranges (e.g. `"2011-2016"`) in `manifest` and summed `gems_by_year` across all covered years (`sum(gems_by_year[y] for y in span_years)`).
+* **Literal Test Assertions & Verification**:
+  - `pytest field_notes/tests/test_scan_queue_priority.py` passed (2/2).
+  - Live candidate queue verified: 100% pure engineering notes; `notes_2007_LAD.txt` (Priority 482.0), `notes_GIT.txt` (325.0), `notes_2016_MVE.txt` (307.0), `notes_2015_DSD.txt` (217.5), and `notes_2006_EPSD.txt` (197.2) now lead the queue. Zero raw hardware trace dumps.

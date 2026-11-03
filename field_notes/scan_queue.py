@@ -50,6 +50,7 @@ def calculate_file_priorities(raw_notes_dir=RAW_NOTES_DIR, data_dir=DATA_DIR) ->
     """
     [FEAT-682] Density-Weighted Archive Queue Scheduling.
     Computes priority metric: Priority = max(epsilon, Total Lines / (Indexed Gems + 1)).
+    Includes manifest gating (excluding raw hardware trace dumps) and multi-year gem aggregation.
     """
     epsilon = 0.001
 
@@ -59,6 +60,15 @@ def calculate_file_priorities(raw_notes_dir=RAW_NOTES_DIR, data_dir=DATA_DIR) ->
         try:
             with open(state_file, "r", encoding="utf-8") as f:
                 state = json.load(f)
+        except Exception:
+            pass
+
+    manifest_file = os.path.join(data_dir, "file_manifest.json")
+    manifest = {}
+    if os.path.exists(manifest_file):
+        try:
+            with open(manifest_file, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
         except Exception:
             pass
 
@@ -89,17 +99,36 @@ def calculate_file_priorities(raw_notes_dir=RAW_NOTES_DIR, data_dir=DATA_DIR) ->
         if filename.startswith("."):
             continue
 
+        # [Bug #2 Fix: Manifest Gating]
+        # Only index core engineering notes or manifest-approved logs; skip raw test dumps
+        m_entry = manifest.get(filename, {})
+        m_type = m_entry.get("type")
+        is_core_note = (
+            (filename.startswith("notes_") and filename.endswith(".txt"))
+            or (filename.startswith("ras-") and filename.endswith(".txt"))
+            or m_type in ("LOG", "META")
+        )
+        if not is_core_note or m_entry.get("manual_review") is True:
+            continue
+
         try:
-            text = read_file(filepath)
-            lines = len(text.splitlines())
+            with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+                lines = sum(1 for _ in f)
         except Exception:
             lines = 0
 
         chunks_in_state = sum(1 for k in state if k.startswith(f"{filename}::"))
         direct_gems = gems_by_file.get(filename, 0)
 
-        year_match = re.search(r"20\d{2}", filename)
-        year_gems = gems_by_year.get(year_match.group(0), 0) if year_match else 0
+        # [Bug #1 Fix: Multi-Year Gem Aggregation]
+        year_str = str(m_entry.get("year") or "")
+        if "-" in year_str and year_str.replace("-", "").isdigit():
+            p = year_str.split("-")
+            span_years = [str(y) for y in range(int(p[0]), int(p[1]) + 1)]
+            year_gems = sum(gems_by_year.get(y, 0) for y in span_years)
+        else:
+            year_match = re.search(r"20\d{2}", year_str or filename)
+            year_gems = gems_by_year.get(year_match.group(0), 0) if year_match else 0
 
         indexed_gems = max(chunks_in_state, direct_gems, year_gems)
 
