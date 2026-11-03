@@ -204,10 +204,11 @@ def get_hash(text):
 
 def parse_chunks(text, filename, file_type="LOG", fallback_year=None, return_envelopes=False):
     """
-    Parses text into Month or Year buckets.
-    Returns dict: {'YYYY-MM': 'content...'} or {'YYYY': 'content...'}
-    If return_envelopes=True, returns tuple: (chunks, envelopes)
-    where envelopes are scoped strictly to gap files ([FEAT-683] / [Story 109.7]).
+    [FEAT-683 / Story 109.15 / ARCH-002] Spatial Companion Map & Structural Slicing.
+    Retires line-initial date regexes. Slices text into spatial sections:
+    1. If <stem>.map.json exists, slices strictly by spatial section line boundaries [line_start:line_end].
+    2. Fallback: slices by structural paragraph / line-window blocks (60-100 lines on blank lines/dividers).
+    Returns dict: {'YYYY-MM::SEC-xxx' or 'YYYY::SEC-xxx': 'content...'}
     """
     if file_type == "META":
         year = fallback_year or "Unknown"
@@ -215,59 +216,84 @@ def parse_chunks(text, filename, file_type="LOG", fallback_year=None, return_env
         envelopes = {str(year): None}
         return (chunks, envelopes) if return_envelopes else chunks
 
-    date_pattern = r"^(\d{1,2})/(\d{1,2})/(\d{2,4})"
+    all_lines = text.splitlines()
     chunks = {}
     envelopes = {}
     gap = is_gap_file(filename)
 
-    current_bucket = fallback_year or "Unknown"
+    stem = os.path.splitext(filename)[0]
+    map_file = os.path.join(DATA_DIR, f"{stem}.map.json")
+
+    # 1. Companion Map Slicing (Spatial Anchoring)
+    if os.path.exists(map_file):
+        try:
+            with open(map_file, "r", encoding="utf-8") as mf:
+                map_data = json.load(mf)
+            sections = map_data.get("sections", [])
+            if sections:
+                for idx, sec in enumerate(sections):
+                    sec_id = sec.get("section_id", f"SEC-{idx+1:03d}")
+                    s_line = max(1, sec.get("line_start", 1))
+                    e_line = min(len(all_lines), sec.get("line_end", len(all_lines)))
+                    sec_lines = all_lines[s_line - 1 : e_line]
+                    sec_content = "\n".join(sec_lines).strip()
+                    if not sec_content:
+                        continue
+                    era = sec.get("implied_era") or fallback_year or "Unknown"
+                    bucket_key = f"{era}::{sec_id}"
+                    chunks[bucket_key] = sec_content
+                    if gap:
+                        envelopes[bucket_key] = {
+                            "before": all_lines[max(0, s_line - 6) : s_line - 1],
+                            "after": all_lines[e_line : min(len(all_lines), e_line + 5)],
+                        }
+                    else:
+                        envelopes[bucket_key] = None
+                if chunks:
+                    return (chunks, envelopes) if return_envelopes else chunks
+        except Exception as e:
+            print(f"Warning: error reading companion map {map_file}: {e}")
+
+    # 2. Structural Paragraph / Line-Window Slicing (Unmapped Fallback)
     current_lines = []
-    bucket_start_idx = 0
-    all_lines = text.splitlines()
+    chunk_idx = 0
+    start_idx = 0
 
     for idx, line in enumerate(all_lines):
-        match = re.match(date_pattern, line.strip())
-        if match:
-            month, day, year = match.groups()
-            if len(year) == 2:
-                year = "20" + year
-            month = month.zfill(2)
-            new_bucket = f"{year}-{month}"
-
-            if current_lines:
-                if current_bucket not in chunks:
-                    chunks[current_bucket] = []
-                chunks[current_bucket].append("\n".join(current_lines))
+        current_lines.append(line)
+        chunk_text = "\n".join(current_lines)
+        is_boundary = not line.strip() or line.startswith("---") or line.startswith("===")
+        if (len(current_lines) >= 60 or len(chunk_text) >= 2500) and is_boundary:
+            chunk_idx += 1
+            bucket_key = f"{fallback_year or 'Unknown'}::SEC-{chunk_idx:03d}"
+            clean_chunk = chunk_text.strip()
+            if clean_chunk:
+                chunks[bucket_key] = clean_chunk
                 if gap:
-                    envelopes[current_bucket] = {
-                        "before": all_lines[max(0, bucket_start_idx - 5):bucket_start_idx],
-                        "after": all_lines[idx:min(len(all_lines), idx + 5)],
+                    envelopes[bucket_key] = {
+                        "before": all_lines[max(0, start_idx - 5) : start_idx],
+                        "after": all_lines[idx : min(len(all_lines), idx + 5)],
                     }
                 else:
-                    envelopes[current_bucket] = None
-
-            current_bucket = new_bucket
-            current_lines = [line]
-            bucket_start_idx = idx
-        else:
-            current_lines.append(line)
+                    envelopes[bucket_key] = None
+            current_lines = []
+            start_idx = idx + 1
 
     if current_lines:
-        if current_bucket not in chunks:
-            chunks[current_bucket] = []
-        chunks[current_bucket].append("\n".join(current_lines))
-        if gap:
-            envelopes[current_bucket] = {
-                "before": all_lines[max(0, bucket_start_idx - 5):bucket_start_idx],
-                "after": all_lines[len(all_lines):len(all_lines)],
-            }
-        else:
-            envelopes[current_bucket] = None
+        chunk_idx += 1
+        bucket_key = f"{fallback_year or 'Unknown'}::SEC-{chunk_idx:03d}"
+        clean_chunk = "\n".join(current_lines).strip()
+        if clean_chunk:
+            chunks[bucket_key] = clean_chunk
+            if gap:
+                envelopes[bucket_key] = {
+                    "before": all_lines[max(0, start_idx - 5) : start_idx],
+                    "after": [],
+                }
+            else:
+                envelopes[bucket_key] = None
 
-    joined_chunks = {k: "\n".join(v) for k, v in chunks.items()}
-    if return_envelopes:
-        return joined_chunks, envelopes
-    return joined_chunks
+    return (chunks, envelopes) if return_envelopes else chunks
 
 
 def main():

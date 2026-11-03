@@ -21,6 +21,9 @@ STOP_LOCK = DATA_DIR / "stop_refinement.lock"
 TELEMETRY_FILE = DATA_DIR / "refinement_run_telemetry.json"
 LOG_FILE = BASE_DIR / "gem_refinement_runner.log"
 
+VENV_PYTHON = "/home/jallred/Portfolio_Dev/.venv/bin/python3"
+PYTHON_EXE = VENV_PYTHON if os.path.exists(VENV_PYTHON) else sys.executable
+
 MAX_RUN_SECONDS = 4 * 3600  # 4 hours
 
 
@@ -123,7 +126,7 @@ def main():
             log_msg("Queue low (<3 tasks). Repopulating via scan_queue.py...")
             update_telemetry(start_time, loop_count, "repopulating_queue", error_count)
             try:
-                subprocess.run([sys.executable, str(BASE_DIR / "scan_queue.py")], check=True, timeout=60)
+                subprocess.run([PYTHON_EXE, str(BASE_DIR / "scan_queue.py")], check=True, timeout=60)
             except Exception as e:
                 log_msg(f"scan_queue.py error: {e}")
                 error_count += 1
@@ -133,7 +136,7 @@ def main():
         update_telemetry(start_time, loop_count, "nibbling", error_count)
         try:
             res = subprocess.run(
-                [sys.executable, str(BASE_DIR / "nibble_v2.py"), "--force", "--fast", "--limit=3"],
+                [PYTHON_EXE, str(BASE_DIR / "nibble_v2.py"), "--force", "--fast", "--limit=3"],
                 capture_output=True,
                 text=True,
                 timeout=300,
@@ -152,7 +155,7 @@ def main():
         update_telemetry(start_time, loop_count, "refining_gems", error_count)
         try:
             res = subprocess.run(
-                [sys.executable, str(BASE_DIR / "refine_gem.py"), "--epochs=1", "--batch-size=5"],
+                [PYTHON_EXE, str(BASE_DIR / "refine_gem.py"), "--epochs=1", "--batch-size=5"],
                 capture_output=True,
                 text=True,
                 timeout=120,
@@ -169,7 +172,7 @@ def main():
         update_telemetry(start_time, loop_count, "aggregating_years", error_count)
         try:
             subprocess.run(
-                [sys.executable, str(BASE_DIR / "aggregate_years.py")],
+                [PYTHON_EXE, str(BASE_DIR / "aggregate_years.py")],
                 capture_output=True,
                 timeout=60,
             )
@@ -180,7 +183,7 @@ def main():
         # 5. Extract Latest Synthesis Gems
         try:
             subprocess.run(
-                [sys.executable, str(BASE_DIR / "extract_latest_gems.py")],
+                [PYTHON_EXE, str(BASE_DIR / "extract_latest_gems.py")],
                 capture_output=True,
                 timeout=30,
             )

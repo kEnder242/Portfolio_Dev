@@ -205,16 +205,46 @@ def validate_date(date_str):
     return None
 
 
-def is_semantic_duplicate(new_summary, existing_events, threshold=0.85):
-    """Checks if a summary is semantically similar to any existing event on the same date."""
-    for event in existing_events:
-        existing_summary = event.get("summary", "")
-        # Simple fuzzy ratio
-        ratio = difflib.SequenceMatcher(
-            None, new_summary.lower(), existing_summary.lower()
-        ).ratio()
-        if ratio > threshold:
+def is_semantic_duplicate(new_event, existing_events, threshold=0.70):
+    """
+    [Story 109.14 / FEAT-454] Evidence-aware semantic duplicate checker.
+    Rejects duplicate extractions of the same raw snippet on the same date/chunk.
+    """
+    if isinstance(new_event, str):
+        new_summary = new_event
+        new_evidence = ""
+    else:
+        new_summary = new_event.get("summary", "")
+        new_evidence = new_event.get("evidence", "")
+
+    norm_new_ev = re.sub(r"[^a-z0-9\s]", "", str(new_evidence).lower()).strip()
+    norm_new_sum = str(new_summary).lower().strip()
+
+    for ex in existing_events:
+        ex_summary = str(ex.get("summary", "")).lower().strip()
+        ex_evidence = ex.get("evidence", "")
+        norm_ex_ev = re.sub(r"[^a-z0-9\s]", "", str(ex_evidence).lower()).strip()
+
+        # 1. Evidence overlap check
+        if norm_new_ev and norm_ex_ev:
+            if norm_new_ev == norm_ex_ev:
+                return True
+            if len(norm_new_ev) >= 15 and len(norm_ex_ev) >= 15:
+                if norm_new_ev in norm_ex_ev or norm_ex_ev in norm_new_ev:
+                    return True
+            if difflib.SequenceMatcher(None, norm_new_ev, norm_ex_ev).ratio() > 0.75:
+                return True
+            t1, t2 = set(norm_new_ev.split()), set(norm_ex_ev.split())
+            if t1 and t2 and (len(t1 & t2) / len(t1 | t2)) > 0.60:
+                return True
+
+        # 2. Summary fuzzy & token check
+        if difflib.SequenceMatcher(None, norm_new_sum, ex_summary).ratio() > threshold:
             return True
+        s1, s2 = set(norm_new_sum.split()), set(ex_summary.split())
+        if s1 and s2 and (len(s1 & s2) / len(s1 | s2)) > 0.55:
+            return True
+
     return False
 
 
@@ -404,7 +434,8 @@ Return ONLY a valid JSON list of event objects in the following schema:
 ]
 """
 
-        bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json")
+        clean_bucket_name = str(task["bucket"]).split("::")[0].replace("-", "_")
+        bucket_file = os.path.join(DATA_DIR, f"{clean_bucket_name}.json")
         existing_data = load_json(bucket_file)
 
         try:
@@ -437,13 +468,16 @@ Return ONLY a valid JSON list of event objects in the following schema:
 
                 # Auto-assign bucket date if missing or invalid
                 if not clean_date:
-                    bucket_str = str(task.get("bucket", ""))
+                    bucket_str = str(task.get("bucket", "")).split("::")[0]
                     if "-" in bucket_str:
                         parts = bucket_str.split("-")
                         if len(parts) >= 2 and len(parts[1]) == 4:
                             clean_date = f"{parts[0]}-01-01"
                         elif len(parts) >= 2 and len(parts[1]) <= 2:
                             clean_date = f"{parts[0]}-{parts[1].zfill(2)}-01"
+                        elif len(parts) >= 2 and "Q" in parts[1]:
+                            q_month = {"Q1": "01", "Q2": "04", "Q3": "07", "Q4": "10"}.get(parts[1], "01")
+                            clean_date = f"{parts[0]}-{q_month}-01"
                         else:
                             clean_date = f"{parts[0]}-01-01"
                     elif "_" in bucket_str:
@@ -452,6 +486,9 @@ Return ONLY a valid JSON list of event objects in the following schema:
                             clean_date = f"{parts[0]}-01-01"
                         elif len(parts) >= 2 and len(parts[1]) <= 2:
                             clean_date = f"{parts[0]}-{parts[1].zfill(2)}-01"
+                        elif len(parts) >= 2 and "Q" in parts[1]:
+                            q_month = {"Q1": "01", "Q2": "04", "Q3": "07", "Q4": "10"}.get(parts[1], "01")
+                            clean_date = f"{parts[0]}-{q_month}-01"
                         else:
                             clean_date = f"{parts[0]}-01-01"
                     else:
@@ -483,7 +520,7 @@ Return ONLY a valid JSON list of event objects in the following schema:
                 ]
 
                 if not is_semantic_duplicate(
-                    event.get("summary", ""), same_date_events
+                    event, same_date_events
                 ):
                     if event.get("sensitivity", "Public") == "Public":
                         event["sensitivity"] = "Public"
