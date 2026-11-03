@@ -358,3 +358,21 @@ This sprint is certified for **immediate autonomous execution**:
 - **Literal Test Assertions & Verification**:
   - `pytest field_notes/tests/test_gem_deduplication.py` asserting redundant extractions from `2005_02.json` collapse from 5 to 1.
 
+---
+
+### 🧬 Story 109.15: Transition Scan Queue from Date Gates to Spatial Companion Map Offsets (`FEAT-683` / `ARCH-002`)
+- **Worker**: `[AGY:PRIMARY]`
+- **Status**: `READY` (Executing next)
+- **Anchors**: `ANCHOR-03` / `ANCHOR-10` / `FEAT-683` / `BKM-089`
+- **Why It Broke & Root Cause**:
+  `scan_queue.py:parse_chunks()` used line-initial regex `^(\d{1,2}/\d{1,2}/\d{2,4})` to slice note files into date buckets. This caused two severe failures:
+  1. Files with sparse dates (e.g. `notes_2005_SSPD.txt`) had 90%+ of their content trapped in `Unknown` or dropped.
+  2. Single date lines surrounded by sparse context became tiny 1-line chunks (like February 2005), prompting LLMs to over-extract redundant facets from a single sentence.
+- **Mechanism**:
+  1. **Companion Map Slicing**: If `<filename>.map.json` exists in `knowledge_base/` or `Portfolio_Dev/raw_notes/`, slice chunks directly by spatial sections: `lines[section['line_start']:section['line_end']]`, assigning task bucket to `section.get('implied_era')` or section title.
+  2. **Structural Paragraph Slicing (Unmapped Fallback)**: For files lacking a companion map, slice on paragraph breaks (`\n\n`) into cohesive spatial chunks of 2,500–3,500 characters, tracking chunk index and line boundaries.
+  3. **Zero Date-Gating**: Completely remove the line-initial date regex as a chunk partitioner. Dates within chunks are extracted by the LLM as event properties, not used to slice the file.
+- **Literal Test Assertions & Verification**:
+  - `pytest field_notes/tests/test_spatial_scan_queue.py` verifying companion map sections are queued as discrete spatial tasks with line boundaries and zero regex date dependence.
+
+
