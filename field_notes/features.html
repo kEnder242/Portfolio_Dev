@@ -19968,6 +19968,98 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                             <span class="impact-badge impact-live">ACTIVE</span>
                         </td>
                     </tr>
+                    <tr id="FEAT-682">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-682</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Density-Weighted Archive Queue Scheduler
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 109.0 (Phase 1)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#archive_queue</code>, <code>#slow_burn</code>, <code>#density_weighting</code>, <code>#gap_files</code>, <code>[BKM-089]</code>, <code>[FEAT-101](#FEAT-101)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>Portfolio_Dev/field_notes/scan_queue.py</code>, <code>Portfolio_Dev/field_notes/scan_pinky.py</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces random file shuffling (<code>random.shuffle(note_files)</code>) in background Slow Burn scanning with an empirical density-weighted scheduling metric: $\text{Priority} = \frac{\text{Total File Lines}}{\text{Indexed Gems in Archive} + 1}$. Schedules files with extensive historical spans but low indexed gem counts (<code>notes_2005_SSPD.txt</code>, <code>notes_2007_LAD.txt</code>, <code>notes_2019_DPV.txt</code>) at the head of the ingestion queue, ensuring balanced historical representation.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates starvation of newly recovered or sparsely dated legacy notes corpora by heavily saturated contemporary log files (<code>notes_2024_PIAV.txt</code>).</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-683">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-683</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    4-Tier Epistemic Memory Architecture (Bedrock, Focals, Gems, Raw Notes)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 109.0 (Phase 1)</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#4_tier_rag</code>, <code>#epistemic_memory</code>, <code>#career_compass</code>, <code>#focal_dna</code>, <code>#spatial_anchors</code>, <code>#ground_truth</code>, <code>[FEAT-405](#FEAT-405)</code>, <code>[FEAT-410](#FEAT-410)</code>, <code>[FEAT-437](#FEAT-437)</code>, <code>[FEAT-451](#FEAT-451)</code>, <code>[FEAT-540](#FEAT-540)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>Portfolio_Dev/field_notes/ingest_focals.py</code>, <code>Portfolio_Dev/field_notes/data/focal_mesh.json</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Fully restores and formalizes the 4-tier epistemic memory hierarchy, superseding the flattened implementations of <code>FEAT-405</code>, <code>FEAT-410</code>, and <code>FEAT-437</code>:
+  - <strong>Tier 1 (Career Bedrock)</strong>: Verified work history and platform anchors loaded directly into system prompt triage under the Completeness of Era Bedrock Standard.
+  - <strong>Tier 2 (Strategic Focals &amp; Milestones)</strong>: Annual performance reviews (<code>2008</code>–<code>2016</code>) ingested into <code>focal_mesh.json</code> and ChromaDB <code>focal_dna</code>, probed sub-20ms by <code>step_pre_triage</code> (<code>[FEAT-540](#FEAT-540)</code>) to supply gravitational <code>vector_hint</code> anchors for triage.
+  - <strong>Tier 3 (Technical Scars &amp; Gems)</strong>: High-density distilled engineering gems carrying immutable <code>spatial_anchor</code> (<code>line_start</code>, <code>line_end</code>) and <code>temporal_anchor</code> metadata, indexed in <code>long_term_wisdom</code>.
+  - <strong>Tier 4 (Physical Raw Notes Ground Truth)</strong>: Un-embedded physical <code>.txt</code> files in <code>/home/jallred/knowledge_base/</code>, surgically hydrated on-demand into Deep Thought's prompt payload via automated Ripgrep (<code>[FEAT-451](#FEAT-451)</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Prevents context window blowouts and prefill latency from raw note flooding while eliminating the loss of strategic career context caused by flat single-layer vector retrieval.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
                     </tbody>
             </table>
         </section>
