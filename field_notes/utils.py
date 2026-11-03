@@ -162,9 +162,45 @@ def can_burn(max_load=4.0, check_vram=True, vram_threshold=0.95, min_free_vram_g
     if 5 <= now.hour < 6:
         return False, "Quiet Hours (05:00-06:00 AM)"
 
-    # 1. Check for Active Session Lock
+    # 1. Check for Active Session Lock (BKM-099 / [INS-051] Self-Healing Lock Reaper)
     if os.path.exists(ROUND_TABLE_LOCK):
-        return False, "Active Intercom Session (Lock)"
+        try:
+            mtime = os.path.getmtime(ROUND_TABLE_LOCK)
+            lock_age_sec = time.time() - mtime
+            # Auto-reap locks older than 2 hours (7200s)
+            if lock_age_sec > 7200:
+                logger.warning(
+                    f"[BKM-099] Reaping expired round_table.lock (age: {lock_age_sec/3600:.1f}h > 2.0h)"
+                )
+                try:
+                    os.remove(ROUND_TABLE_LOCK)
+                except OSError:
+                    pass
+            else:
+                with open(ROUND_TABLE_LOCK, "r") as lf:
+                    raw_pid = lf.read().strip()
+                pid = int(raw_pid) if raw_pid.isdigit() else None
+                if pid:
+                    try:
+                        os.kill(pid, 0)
+                        # Process is genuinely alive
+                        return False, "Active Intercom Session (Lock)"
+                    except (ProcessLookupError, OSError):
+                        logger.warning(
+                            f"[BKM-099] Reaping stale round_table.lock: PID {pid} is dead"
+                        )
+                        try:
+                            os.remove(ROUND_TABLE_LOCK)
+                        except OSError:
+                            pass
+                else:
+                    # Unparseable / empty lock file
+                    try:
+                        os.remove(ROUND_TABLE_LOCK)
+                    except OSError:
+                        pass
+        except Exception as e:
+            logger.warning(f"[BKM-099] Error validating round_table.lock: {e}")
 
     # 2. Check Attendant Mutex API
     try:
