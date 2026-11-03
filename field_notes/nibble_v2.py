@@ -37,6 +37,23 @@ logging.basicConfig(
     handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler(sys.stdout)],
 )
 
+_MANIFEST_CACHE = None
+
+
+def get_file_manifest():
+    global _MANIFEST_CACHE
+    if _MANIFEST_CACHE is None:
+        manifest_path = os.path.join(DATA_DIR, "file_manifest.json")
+        if os.path.exists(manifest_path):
+            try:
+                with open(manifest_path, "r", encoding="utf-8") as f:
+                    _MANIFEST_CACHE = json.load(f)
+            except Exception:
+                _MANIFEST_CACHE = {}
+        else:
+            _MANIFEST_CACHE = {}
+    return _MANIFEST_CACHE
+
 
 def log(msg):
     logging.info(msg)
@@ -494,16 +511,37 @@ Return ONLY a valid JSON list of event objects in the following schema:
                     else:
                         clean_date = f"{bucket_str[:4]}-01-01" if bucket_str[:4].isdigit() else "2024-01-01"
 
-                # [Story 109.10] Year Drift Sentinel: clamp wild year drift against known task era
-                task_year_match = re.search(r"20\d{2}", str(task.get("bucket", "")))
-                if not task_year_match:
-                    task_year_match = re.search(r"20\d{2}", str(task.get("filename", "")))
-                if clean_date and task_year_match:
-                    expected_year = int(task_year_match.group(0))
+                # [Story 109.10] Span-Aware Year Drift Sentinel: clamp wild year drift against known task era / span
+                # Resolves user concern: multi-year files (e.g. notes_2015_DSD spanning 2011-2016)
+                # must NOT force 2013 into 2015!
+                fname = task.get("filename", "")
+                bucket_str = str(task.get("bucket", ""))
+                manifest = get_file_manifest()
+                manifest_entry = manifest.get(fname, {})
+                span_str = str(manifest_entry.get("year") or "")
+
+                min_year, max_year = None, None
+                for candidate in [span_str, bucket_str, fname]:
+                    span_match = re.search(r"(20\d{2})[-_](20\d{2})", candidate)
+                    if span_match:
+                        y1, y2 = int(span_match.group(1)), int(span_match.group(2))
+                        min_year, max_year = min(y1, y2), max(y1, y2)
+                        break
+
+                if min_year is None:
+                    single_match = re.search(r"20\d{2}", span_str) or re.search(r"20\d{2}", bucket_str) or re.search(r"20\d{2}", fname)
+                    if single_match:
+                        y = int(single_match.group(0))
+                        min_year, max_year = y, y
+
+                if clean_date and min_year is not None and max_year is not None:
                     try:
                         ext_year = int(clean_date[:4])
-                        if abs(ext_year - expected_year) > 1:
-                            clean_date = f"{expected_year}{clean_date[4:]}"
+                        # Allow 1-year margin beyond documented span boundaries
+                        if ext_year < min_year - 1:
+                            clean_date = f"{min_year}{clean_date[4:]}"
+                        elif ext_year > max_year + 1:
+                            clean_date = f"{max_year}{clean_date[4:]}"
                     except Exception:
                         pass
 
