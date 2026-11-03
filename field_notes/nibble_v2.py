@@ -400,6 +400,12 @@ def main():
         # [VIBE-008] Apply structural guillotine to all content
         scrubbed_content = scrub_input_buffer(task["content"])
 
+        fname = task.get("filename", "")
+        bucket_str = str(task.get("bucket", ""))
+        manifest = get_file_manifest()
+        manifest_entry = manifest.get(fname, {})
+        span_str = str(manifest_entry.get("year") or "")
+
         # [FEAT-128] Strategic Prompt selection
         file_type = task.get("type", "LOG")
         is_deep_connect = task.get("mode") == "DEEP_CONNECT"
