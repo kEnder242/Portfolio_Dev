@@ -284,7 +284,8 @@ def disentangle_chronology(raw_text: str = "", document_date_str: str = "") -> d
         if len(document_date_str) >= 7 and "-" in document_date_str:
             try:
                 m = int(document_date_str[5:7])
-                q_str = f"{fallback_year}-Q{(m - 1) // 3 + 1}"
+                if 1 <= m <= 12:
+                    q_str = f"{fallback_year}-Q{(m - 1) // 3 + 1}"
             except Exception:
                 pass
         return {
