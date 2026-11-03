@@ -494,6 +494,19 @@ Return ONLY a valid JSON list of event objects in the following schema:
                     else:
                         clean_date = f"{bucket_str[:4]}-01-01" if bucket_str[:4].isdigit() else "2024-01-01"
 
+                # [Story 109.10] Year Drift Sentinel: clamp wild year drift against known task era
+                task_year_match = re.search(r"20\d{2}", str(task.get("bucket", "")))
+                if not task_year_match:
+                    task_year_match = re.search(r"20\d{2}", str(task.get("filename", "")))
+                if clean_date and task_year_match:
+                    expected_year = int(task_year_match.group(0))
+                    try:
+                        ext_year = int(clean_date[:4])
+                        if abs(ext_year - expected_year) > 1:
+                            clean_date = f"{expected_year}{clean_date[4:]}"
+                    except Exception:
+                        pass
+
                 event["date"] = clean_date
 
                 # [FEAT-067 / Story 106.8] Chronological Disentanglement
