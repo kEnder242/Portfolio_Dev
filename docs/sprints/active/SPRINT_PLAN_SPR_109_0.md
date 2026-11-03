@@ -397,4 +397,20 @@ This sprint is certified for **immediate autonomous execution**:
     - Multi-year notes (`notes_2015_DSD.txt` spanning 2011–2016, etc.) dynamically routed to respective stores: 2011 (590), 2012 (98), 2013 (55), 2014 (402), 2015 (1,258), 2016 (1,131), 2019 (227), 2023 (206), 2024 (218).
     - **Global Cross-Year Routing Audit**: 4,618 gems across 21 annual files yielded **0 cross-year mismatches** and **0 pipeline errors**.
 
+---
+
+### 🧬 Story 109.17: Self-Healing Lock Reaper & Liveness Gating in `can_burn()` (`BKM-099` / `[INS-051]`)
+- **Worker**: `[AGY:PRIMARY]`
+- **Status**: `PLANNED`
+- **Anchors**: `BKM-099` / `[INS-051]` / `FEAT-681`
+- **Why It Broke & Root Cause**:
+  `field_notes/utils.py:can_burn()` performed naive file existence checks (`os.path.exists(ROUND_TABLE_LOCK)`) on `HomeLabAI/round_table.lock`. A stale lockfile containing dead PID `3656493` created on June 1st was never reaped, indefinitely stalling background processes (such as `scan_librarian.py`) in sleep loops. This violates `BKM-099` (Schedule Over Locks).
+- **Mechanism**:
+  1. **Liveness Validation & Auto-Reap**: When `os.path.exists(ROUND_TABLE_LOCK)` is true, parse the stored PID and check liveness via `os.kill(pid, 0)`. If the process is dead (or errno != EPERM), log a warning, reap the stale lock via `os.remove()`, and proceed.
+  2. **Max Lock Age TTL Sentinel**: Even if a process hangs, any lock file older than 2 hours is automatically treated as expired and reaped.
+  3. **Event-Driven Cataloging Policy**: Document that `scan_librarian.py` is an event-driven cataloger intended strictly for new document intake, not an autonomous infinite background loop.
+- **Literal Test Assertions & Verification**:
+  - `pytest field_notes/tests/test_lock_resilience.py` verifying dead PIDs and expired lockfiles are automatically reaped and return `(True, "Nominal")`.
+
+
 
