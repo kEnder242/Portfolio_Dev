@@ -89,11 +89,15 @@ def generate_trailers():
 def deploy_to_airlock(snapshots=False):
     print("--- DEPLOYING TO PUBLIC AIRLOCK (www_deploy) ---")
     # Resolve www_deploy at repository parent level: /home/jallred/Dev_Lab/www_deploy
-    repo_root = os.path.dirname(os.path.dirname(BASE_DIR))
+    # Resolve real path to handle symlinks (e.g. /home/jallred/Portfolio_Dev -> /home/jallred/Dev_Lab/Portfolio_Dev)
+    real_base = os.path.dirname(os.path.realpath(__file__))
+    repo_root = os.path.dirname(os.path.dirname(real_base))
     www_dir = os.path.join(repo_root, "www_deploy")
     if not os.path.exists(www_dir):
         # Fallback to adjacent directory if run from another structure
         www_dir = os.path.join(os.path.dirname(BASE_DIR), "www_deploy")
+    if not os.path.exists(www_dir):
+        www_dir = "/home/jallred/Dev_Lab/www_deploy"
 
     if os.path.exists(www_dir):
         # [FEAT-552] Auto-Sync Swarm Delegation Web Feed before airlock deployment

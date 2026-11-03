@@ -8,8 +8,10 @@ import re
 
 import markdown
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 SOURCE_MD = os.path.abspath(os.path.join(BASE_DIR, "../../HomeLabAI/docs/Protocols.md"))
+if not os.path.exists(SOURCE_MD):
+    SOURCE_MD = "/home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md"
 TEMPLATE_HTML = os.path.join(BASE_DIR, "protocols.html")
 OUTPUT_HTML = os.path.join(BASE_DIR, "protocols.html")
 REL_SOURCE_MD = "HomeLabAI/docs/Protocols.md"
