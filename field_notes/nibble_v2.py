@@ -151,8 +151,10 @@ def load_json(path):
 
 
 def save_json(path, data):
-    with open(path, "w") as f:
+    tmp_path = str(path) + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
+    os.replace(tmp_path, path)
 
 
 def extract_json_from_llm(text):
@@ -447,9 +449,16 @@ def main():
             ]
             """
         else:
+            # [Story 109.16 / Pillar 3] Era Context Injection: pass verified temporal context to prevent hallucinations
+            era_context_str = f"Document Era: {span_str}." if span_str else ""
             prompt = f"""[ROLE] You are an expert systems engineer and log investigator.
 [TASK] Extract all significant technical events, hardware milestones, register/MSR investigations, lab operations, and vendor tickets from this log.
 For each event, tag it with a 'domain' field from exactly one of: ['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations'].
+
+[TEMPORAL CONTEXT]
+Source Document: {fname}
+{era_context_str}
+Note: Events must be dated within or relative to this documented era. Do not convert hostnames, port numbers, or bug IDs into future dates.
 
 Log content:
 {scrubbed_content[:4000]}
@@ -466,10 +475,6 @@ Return ONLY a valid JSON list of event objects in the following schema:
   }}
 ]
 """
-
-        clean_bucket_name = str(task["bucket"]).split("::")[0].replace("-", "_")
-        bucket_file = os.path.join(DATA_DIR, f"{clean_bucket_name}.json")
-        existing_data = load_json(bucket_file)
 
         try:
             if file_type == "META":
@@ -488,9 +493,11 @@ Return ONLY a valid JSON list of event objects in the following schema:
             new_events = []
 
         if isinstance(new_events, list) and len(new_events) > 0:
-            final_events = existing_data
-
             added_count = 0
+            # [Story 109.16 / Pillar 1 & 2] Canonical Lakehouse Routing:
+            # Target storage is strictly DATA_DIR/{event_year}.json, completely decoupled from task bucket.
+            events_by_target_year: dict[str, list[dict]] = {}
+
             for event in new_events:
                 if not isinstance(event, dict):
                     continue
@@ -581,28 +588,37 @@ Return ONLY a valid JSON list of event objects in the following schema:
                     event["rank"] = 5
                     event["impact_level"] = 4
 
-                # Filter events for the same date to check for semantic duplicates
-                same_date_events = [
-                    e for e in final_events if e.get("date") == clean_date
-                ]
+                # [Story 109.16 / Pillar 1] Deterministic Target Year Resolution
+                target_year = clean_date[:4] if clean_date and clean_date[:4].isdigit() else "Unknown"
+                events_by_target_year.setdefault(target_year, []).append(event)
 
-                if not is_semantic_duplicate(
-                    event, same_date_events
-                ):
-                    if event.get("sensitivity", "Public") == "Public":
-                        event["sensitivity"] = "Public"
-                        final_events.append(event)
-                        added_count += 1
+            # Atomically commit events to their canonical annual lakehouse files
+            for t_year, events_to_add in events_by_target_year.items():
+                canonical_year_file = os.path.join(DATA_DIR, f"{t_year}.json")
+                existing_canonical_data = load_json(canonical_year_file)
+                
+                for event in events_to_add:
+                    c_date = event.get("date")
+                    same_date_events = [
+                        e for e in existing_canonical_data if e.get("date") == c_date
+                    ]
+
+                    if not is_semantic_duplicate(event, same_date_events):
+                        if event.get("sensitivity", "Public") == "Public":
+                            event["sensitivity"] = "Public"
+                            existing_canonical_data.append(event)
+                            added_count += 1
+                        else:
+                            with open(AUDIT_FILE, "a") as f:
+                                f.write(json.dumps(event) + "\n")
                     else:
-                        with open(AUDIT_FILE, "a") as f:
-                            f.write(json.dumps(event) + "\n")
-                else:
-                    log(
-                        f"   > Semantic Duplicate skipped: {event.get('summary')[:50]}..."
-                    )
+                        log(
+                            f"   > Semantic Duplicate skipped: {event.get('summary')[:50]}..."
+                        )
 
-            final_events.sort(key=lambda x: x.get("date", ""))
-            save_json(bucket_file, final_events)
+                existing_canonical_data.sort(key=lambda x: x.get("date", ""))
+                save_json(canonical_year_file, existing_canonical_data)
+
             update_status(
                 "ONLINE",
                 f"Processed {task['bucket']}",

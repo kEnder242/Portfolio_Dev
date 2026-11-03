@@ -147,12 +147,8 @@ def resolve_gem_anchors(gem: dict, file_name: str = "") -> dict:
     year_match = re.search(r"(?<!\d)(20\d{2})(?!\d)", (str(doc_date) + " " + str(src_file)))
     inferred_year = int(year_match.group(1)) if year_match else None
 
-    if implied_era:
-        event_era = implied_era
-        event_year = int(implied_era.split("-")[0]) if implied_era[:4].isdigit() else inferred_year
-        quarter = implied_era if "-Q" in implied_era else (f"{event_year}-Q1" if event_year else "Unknown")
-        precision = "QUARTER"
-    elif doc_date and len(str(doc_date)) >= 7 and "-" in str(doc_date):
+    # Exact document date takes precedence over coarse companion map implied_era
+    if doc_date and len(str(doc_date)) >= 7 and "-" in str(doc_date):
         doc_date_str = str(doc_date)
         event_era = doc_date_str
         event_year = inferred_year or (int(doc_date_str[:4]) if doc_date_str[:4].isdigit() else None)
@@ -162,6 +158,11 @@ def resolve_gem_anchors(gem: dict, file_name: str = "") -> dict:
         except Exception:
             quarter = f"{event_year}-Q1" if event_year else "Unknown"
         precision = "EXACT" if len(doc_date_str) >= 10 else "MONTH"
+    elif implied_era:
+        event_era = implied_era
+        event_year = int(implied_era.split("-")[0]) if implied_era[:4].isdigit() else inferred_year
+        quarter = implied_era if "-Q" in implied_era else (f"{event_year}-Q1" if event_year else "Unknown")
+        precision = "QUARTER"
     elif inferred_year:
         event_era = f"{inferred_year}"
         event_year = inferred_year
