@@ -340,3 +340,21 @@ This sprint is certified for **immediate autonomous execution**:
 * **Literal Test Assertions & Verification**:
   - `pytest field_notes/tests/test_scan_queue_priority.py` passed (2/2).
   - Live candidate queue verified: 100% pure engineering notes; `notes_2007_LAD.txt` (Priority 482.0), `notes_GIT.txt` (325.0), `notes_2016_MVE.txt` (307.0), `notes_2015_DSD.txt` (217.5), and `notes_2006_EPSD.txt` (197.2) now lead the queue. Zero raw hardware trace dumps.
+
+---
+
+### 🧬 Story 109.14: Evidence-Aware Semantic Deduplication & Environment Alignment (`FEAT-454` / `BUG-684`)
+- **Worker**: `[AGY:PRIMARY]`
+- **Status**: `PLANNED` (Scheduled for next implementation cycle)
+- **Anchors**: `ANCHOR-08` / `FEAT-454` / `LOOP-004`
+- **Why It Broke & Root Cause**:
+  1. `2005_02.json` accumulated 5 redundant gems for a single raw log line because `nibble_v2.py:is_semantic_duplicate` uses character-by-character `SequenceMatcher > 0.85` strictly on `summary`, completely ignoring raw `evidence` quotes. LLM summary rephrasings scored 0.15–0.66, bypassing the filter.
+  2. `gem_refinement_runner.py` invoked system `/usr/bin/python3` where `chromadb` and `sentence_transformers` are missing (they reside in `.venv`), causing `deduplicate_gems()` in `refine_gem.py` to silently abort without running semantic deduplication.
+  3. `clean_duplicates.py` uses an exact compound string key `date|summary|evidence`, failing to collapse rephrased extractions of identical evidence.
+- **Planned Mechanism**:
+  1. **Evidence-Based Ingestion Gate**: Update `nibble_v2.py:is_semantic_duplicate()` to check normalized `evidence` string overlap (>75% token overlap or identical normalized evidence) on the same date/chunk, suppressing redundant facets.
+  2. **Environment Alignment**: Configure `gem_refinement_runner.py` to explicitly execute `/home/jallred/Portfolio_Dev/.venv/bin/python3`, restoring live `chromadb` and `SentenceTransformer` vector deduplication.
+  3. **Evidence-Cluster Consolidator**: Enhance `clean_duplicates.py` to identify multiple gems referencing the exact same raw evidence block on the same date/spatial anchor, consolidating them into the highest-impact single gem.
+- **Literal Test Assertions & Verification**:
+  - `pytest field_notes/tests/test_gem_deduplication.py` asserting redundant extractions from `2005_02.json` collapse from 5 to 1.
+
