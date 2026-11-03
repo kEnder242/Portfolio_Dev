@@ -345,18 +345,19 @@ This sprint is certified for **immediate autonomous execution**:
 
 ### 🧬 Story 109.14: Evidence-Aware Semantic Deduplication & Environment Alignment (`FEAT-454` / `BUG-684`)
 - **Worker**: `[AGY:PRIMARY]`
-- **Status**: `PLANNED` (Scheduled for next implementation cycle)
+- **Status**: `COMPLETED`
 - **Anchors**: `ANCHOR-08` / `FEAT-454` / `LOOP-004`
 - **Why It Broke & Root Cause**:
   1. `2005_02.json` accumulated 5 redundant gems for a single raw log line because `nibble_v2.py:is_semantic_duplicate` uses character-by-character `SequenceMatcher > 0.85` strictly on `summary`, completely ignoring raw `evidence` quotes. LLM summary rephrasings scored 0.15–0.66, bypassing the filter.
   2. `gem_refinement_runner.py` invoked system `/usr/bin/python3` where `chromadb` and `sentence_transformers` are missing (they reside in `.venv`), causing `deduplicate_gems()` in `refine_gem.py` to silently abort without running semantic deduplication.
   3. `clean_duplicates.py` uses an exact compound string key `date|summary|evidence`, failing to collapse rephrased extractions of identical evidence.
-- **Planned Mechanism**:
-  1. **Evidence-Based Ingestion Gate**: Update `nibble_v2.py:is_semantic_duplicate()` to check normalized `evidence` string overlap (>75% token overlap or identical normalized evidence) on the same date/chunk, suppressing redundant facets.
-  2. **Environment Alignment**: Configure `gem_refinement_runner.py` to explicitly execute `/home/jallred/Portfolio_Dev/.venv/bin/python3`, restoring live `chromadb` and `SentenceTransformer` vector deduplication.
-  3. **Evidence-Cluster Consolidator**: Enhance `clean_duplicates.py` to identify multiple gems referencing the exact same raw evidence block on the same date/spatial anchor, consolidating them into the highest-impact single gem.
-- **Literal Test Assertions & Verification**:
-  - `pytest field_notes/tests/test_gem_deduplication.py` asserting redundant extractions from `2005_02.json` collapse from 5 to 1.
+- **Implemented Mechanism**:
+  1. **Evidence-Based Ingestion Gate**: Updated `nibble_v2.py:is_semantic_duplicate()` to check normalized `evidence` string overlap (>75% token overlap or identical normalized evidence) on the same date/chunk, suppressing redundant facets.
+  2. **Environment Alignment**: Configured `gem_refinement_runner.py` to execute `/home/jallred/Portfolio_Dev/.venv/bin/python3`, restoring live `chromadb` and `SentenceTransformer` vector deduplication.
+  3. **Evidence-Cluster Consolidator**: Enhanced `clean_duplicates.py` with fast $O(N \cdot K)$ date-bucketed indexing to identify multiple gems referencing the exact same raw evidence block, consolidating them into the highest-impact single gem with atomic `.tmp` + `os.replace` persistence.
+- **Literal Test Assertions & Empirical Verification**:
+  - `pytest field_notes/tests/test_gem_deduplication.py` passed (4/4).
+  - Executed `clean_duplicates.py` across live annual stores, pruning redundant duplicate facets and bringing total master gems to 4,606 with zero cross-year errors.
 
 ---
 
@@ -401,7 +402,7 @@ This sprint is certified for **immediate autonomous execution**:
 
 ### 🧬 Story 109.17: Self-Healing Lock Reaper & Liveness Gating in `can_burn()` (`BKM-099` / `[INS-051]`)
 - **Worker**: `[AGY:PRIMARY]`
-- **Status**: `PLANNED`
+- **Status**: `COMPLETED`
 - **Anchors**: `BKM-099` / `[INS-051]` / `FEAT-681`
 - **Why It Broke & Root Cause**:
   `field_notes/utils.py:can_burn()` performed naive file existence checks (`os.path.exists(ROUND_TABLE_LOCK)`) on `HomeLabAI/round_table.lock`. A stale lockfile containing dead PID `3656493` created on June 1st was never reaped, indefinitely stalling background processes (such as `scan_librarian.py`) in sleep loops. This violates `BKM-099` (Schedule Over Locks).
@@ -409,8 +410,9 @@ This sprint is certified for **immediate autonomous execution**:
   1. **Liveness Validation & Auto-Reap**: When `os.path.exists(ROUND_TABLE_LOCK)` is true, parse the stored PID and check liveness via `os.kill(pid, 0)`. If the process is dead (or errno != EPERM), log a warning, reap the stale lock via `os.remove()`, and proceed.
   2. **Max Lock Age TTL Sentinel**: Even if a process hangs, any lock file older than 2 hours is automatically treated as expired and reaped.
   3. **Event-Driven Cataloging Policy**: Document that `scan_librarian.py` is an event-driven cataloger intended strictly for new document intake, not an autonomous infinite background loop.
-- **Literal Test Assertions & Verification**:
-  - `pytest field_notes/tests/test_lock_resilience.py` verifying dead PIDs and expired lockfiles are automatically reaped and return `(True, "Nominal")`.
+- **Literal Test Assertions & Empirical Verification**:
+  - `pytest field_notes/tests/test_lock_resilience.py` passed (4/4).
+  - Stale `round_table.lock` reaped; `scan_librarian.py` unblocked and completed in 12s with exit code 0.
 
 
 
