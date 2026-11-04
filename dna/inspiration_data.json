@@ -2321,5 +2321,55 @@
       "status": "APPROVED",
       "bucket_id": "bucket_systems_architecture"
     }
+  },
+  {
+    "id": "INS-052",
+    "theme": "Systems Architecture & Trust Boundaries",
+    "paper_order": 52,
+    "origin": {
+      "author": "jallred",
+      "text": "Hiding easy hard coded answers provides good prompt verification and leak detection. Let's conceptually roll names, feedback, and secrets together so we can have a single layer of trust.",
+      "source": "Federated Lab Sprint 109.0 Forensic Dialogue",
+      "immutable": true,
+      "created_at": "2026-11-04T14:28:16Z"
+    },
+    "synthesis": {
+      "title": "The Litmus Leak Test & Unified Trust Boundary (Prompt Verification via Controlled Occlusion)",
+      "narrative_context": "Instead of treating regex sanitization as an isolated external band-aid, regex filters serve as an internal 'MO' (Method of Operations) litmus and probe verification harness. By deliberately maintaining known canary patterns (focal feedback fragments, real names, synthetic secret formats) inside evaluation prompts and historical corpora, the system measures whether LLM summarizers, extractors, and judges reliably respect boundaries and catch privacy violations. If a downstream pipeline leaks an easily matched string into a public ledger or deploy queue, the failure is immediately detected by deterministic probe assertions. Privacy filtering, focal feedback redaction, and credential protection coalesce into a single unified trust layer.",
+      "lab_anchors": [
+        "Portfolio_Dev/FeatureTracker.md:FEAT-600",
+        "Portfolio_Dev/FeatureTracker.md:FEAT-665",
+        "HomeLabAI/docs/Protocols.md:BKM-015",
+        "HomeLabAI/docs/LAB_INFRASTRUCTURE.md:LAB-120"
+      ],
+      "review_notes": "Codifies the single layer of trust: controlled occlusion of hardcoded secrets and focal feedback serves as a deterministic litmus test for LLM prompt adherence and leakage prevention.",
+      "last_refined_by": "AGY",
+      "refinement_version": 1,
+      "mutations": [],
+      "revisions": []
+    },
+    "metadata": {
+      "tags": [
+        "litmus-leak-test",
+        "unified-trust-boundary",
+        "controlled-occlusion",
+        "secret-guardrails",
+        "focal-privacy",
+        "prompt-verification"
+      ],
+      "explicit_links": [
+        "BKM-015",
+        "FEAT-600",
+        "FEAT-665",
+        "LAB-120"
+      ],
+      "aliases": [
+        "litmus-leak-test",
+        "unified-trust-layer",
+        "controlled-occlusion-anchor"
+      ],
+      "status": "APPROVED",
+      "bucket_id": "bucket_systems_architecture"
+    }
   }
 ]
