@@ -494,17 +494,24 @@ def main():
             ]
             """
         else:
-            # [Story 109.16 / Pillar 3] Era Context Injection: pass verified temporal context to prevent hallucinations
+            # [Story 109.16 / Story 110.1 / INS-052] Calibrated Confidentiality & Machine-Log Boundary
             era_context_str = f"Document Era: {span_str}." if span_str else ""
-            prompt = f"""[ROLE] You are an expert systems engineer and log investigator.
-[TASK] Extract all significant technical events, hardware milestones, register/MSR investigations, lab operations, and vendor tickets from this log.
-For each event, tag it with a 'domain' field from exactly one of: ['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations'].
+            prompt = f"""[ROLE] You are an automated systems engineering log parser.
+[TASK] Extract purely technical systems operations, CLI commands, hardware registers, and lab diagnostics.
+DO NOT extract human personnel notes, manager appraisals, performance reviews, or career feedback.
 
-[CREDENTIAL & SECRET BOUNDARY - BKM-015 / INS-052]
-Never extract or preserve private authentication tokens, API keys, bearer tokens, passwords, secrets, or hardware serial numbers in the summary or evidence. Redact or omit the credential itself, preserving only the underlying technical command or architectural milestone.
+[TAXONOMY DOMAINS]
+Allowed domains: ['hardware_debug', 'operations', 'logistics']
 
-[PERFORMANCE & FOCAL EXCLUSION - INS-052]
-Exclude all personal performance ratings, manager appraisals, focal feedback, self-assessment scoring, and compensation details. Focus exclusively on technical systems facts, architecture, and engineering execution.
+[SANITIZATION LAW - BKM-015 / INS-052]
+When copying commands or logs into 'evidence', strip all passwords, tokens, API keys, and device serial numbers. Replace any credential or serial value with "[REDACTED]".
+
+[EXAMPLES]
+Input: "curl -H 'Authorization: Bearer secret_token_123' https://api.internal/deploy"
+Output evidence: "curl -H 'Authorization: Bearer [REDACTED]' https://api.internal/deploy"
+
+Input: "Board check: SN: J83920-A in slot 1 confirmed"
+Output evidence: "Board check: SN: [REDACTED] in slot 1 confirmed"
 
 [TEMPORAL CONTEXT]
 Source Document: {fname}
@@ -515,18 +522,16 @@ Log content:
 {scrubbed_content[:4000]}
 
 [OUTPUT]
-Return ONLY a valid JSON list of event objects in the following schema:
+Return ONLY a valid JSON list of event objects:
 [
   {{
     "date": "YYYY-MM-DD",
-    "summary": "Concise summary of the event",
-    "evidence": "Specific log line, register, MSR, or technical evidence (with credentials redacted)",
+    "summary": "Technical summary",
+    "evidence": "Command or register line with credentials redacted",
     "domain": "hardware_debug",
     "tags": ["tag1", "tag2"]
   }}
 ]"""
-]
-"""
 
         try:
             if file_type == "META":
