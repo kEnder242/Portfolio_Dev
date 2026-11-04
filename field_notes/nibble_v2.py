@@ -500,6 +500,12 @@ def main():
 [TASK] Extract all significant technical events, hardware milestones, register/MSR investigations, lab operations, and vendor tickets from this log.
 For each event, tag it with a 'domain' field from exactly one of: ['hardware_debug', 'logistics', 'career_timeline', 'vendor_comm', 'operations'].
 
+[CREDENTIAL & SECRET BOUNDARY - BKM-015 / INS-052]
+Never extract or preserve private authentication tokens, API keys, bearer tokens, passwords, secrets, or hardware serial numbers in the summary or evidence. Redact or omit the credential itself, preserving only the underlying technical command or architectural milestone.
+
+[PERFORMANCE & FOCAL EXCLUSION - INS-052]
+Exclude all personal performance ratings, manager appraisals, focal feedback, self-assessment scoring, and compensation details. Focus exclusively on technical systems facts, architecture, and engineering execution.
+
 [TEMPORAL CONTEXT]
 Source Document: {fname}
 {era_context_str}
@@ -514,10 +520,11 @@ Return ONLY a valid JSON list of event objects in the following schema:
   {{
     "date": "YYYY-MM-DD",
     "summary": "Concise summary of the event",
-    "evidence": "Specific log line, register, MSR, or technical evidence",
+    "evidence": "Specific log line, register, MSR, or technical evidence (with credentials redacted)",
     "domain": "hardware_debug",
     "tags": ["tag1", "tag2"]
   }}
+]"""
 ]
 """
 
