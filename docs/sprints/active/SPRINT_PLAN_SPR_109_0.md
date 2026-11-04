@@ -414,5 +414,56 @@ This sprint is certified for **immediate autonomous execution**:
   - `pytest field_notes/tests/test_lock_resilience.py` passed (4/4).
   - Stale `round_table.lock` reaped; `scan_librarian.py` unblocked and completed in 12s with exit code 0.
 
+---
+
+## 🔬 Forensic Autopsy & Hardening Track: Xorg Crash Recovery, FD Starvation & RDP Re-Arming (`FEAT-685` / `LAB-118`)
+
+### 0.1 Incident Forensic Record (Nov 3, 2026 16:47:20 PST)
+- **Symptom**: Interactive desktop session terminated unexpectedly after 5 days, 8 hours, 44 minutes of continuous uptime. User dropped to GDM login greeter on `tty1`, and `gnome-remote-desktop` was terminated, disabling remote RDP access.
+- **Physical Memory State**:
+  - Available RAM: **8,103 MiB (51.08% free)**
+  - Free Swap: **11,963 MiB (75.99% free)**
+  - System Load: **0.52**
+  - **Verdict**: The `LAB-011` / `LAB-017` cgroup memory shields and swap protections performed as designed. This was **not** an OOM kill or disk-swap thrash.
+- **Root Cause (The Smoking Gun)**:
+  - Journal Log (`/usr/libexec/gdm-x-session[3462]`):
+    ```log
+    Failed to get prime fd for bo prime/546
+    DMA_BUF_IOCTL_EXPORT_SYNC_FILE ioctl failed (24)
+    ```
+  - Linux Errno 24 is `EMFILE` ("Too many open files").
+  - Xorg was launched with an unmanaged soft file descriptor limit (`RLIMIT_NOFILE`) of **1,024**.
+  - Over 5+ days of multi-head rendering, Steam (which consumed 4h 59m CPU time), Chromium, and hybrid PRIME GPU offload (Intel HD 4600 + RTX 2080 Ti), Xorg accumulated open file descriptors for client connections, window surfaces, and DMA-BUF sync objects until it hit FD #1024.
+  - Mesa's Gallium driver (`libgallium-25.2.8`) did not handle the allocation failure gracefully inside `driUnbindContext()`, asserted, called `abort()`, and raised `SIGABRT` (Signal 6).
+  - Xorg invoked `FatalError()`, generated `/var/crash/_usr_lib_xorg_Xorg.1000.crash`, and exited.
+  - GDM shut down `session-2.scope` and spawned the login greeter (`session c1 of user gdm`).
+
+---
+
+### 0.2 Architectural Problem Framing & Workstation Invariants (Sprint 109 Track)
+
+#### Lane 1: Crash-Resilient Auto-Login & RDP Availability (`FEAT-685`)
+- **The Issue**: By default, GDM's `AutomaticLoginEnable=True` is single-shot on initial boot. When an auto-logged-in session terminates (clean logout or crash), GDM displays the login greeter to avoid infinite logout loops. However, `gnome-remote-desktop` is a user-level service running inside `user@1000.service`. When GDM sits at the login greeter, RDP is dead, leaving the operator locked out remotely.
+- **Kid-Gloves Mandate**: The existing auto-login and RDP configuration was difficult to stabilize. Suggested mitigations must avoid disrupting existing PAM modules or creating login respawn storms.
+- **Candidate Mitigations (For Discussion)**:
+  1. *TimedLogin Fallback in GDM*: Configure `TimedLoginEnable=True`, `TimedLogin=jallred`, `TimedLoginDelay=10` in `/etc/gdm3/custom.conf`. This acts as an automated recovery net: after a crash or logout, GDM pauses for 10 seconds (allowing recovery or alternate login) and then automatically re-authenticates the session, re-arming RDP.
+  2. *Out-of-Band Systemd Recovery Watcher*: A lightweight root daemon monitoring GDM session state; if GDM remains on the greeter screen without user interaction for $>60\text{s}$, it signals GDM or resets the display manager.
+
+#### Lane 2: Raising the File Descriptor Ceiling (`LimitNOFILE`)
+- **The Issue**: Default systemd system and user limits set `DefaultLimitNOFILE=1024:524288`. The 1,024 soft limit is an archaic default incompatible with long-running, multi-GPU graphical workstations.
+- **Candidate Mitigation**:
+  1. Set `DefaultLimitNOFILE=65536:1048576` in `/etc/systemd/system.conf` and `/etc/systemd/user.conf`.
+  2. Provide a dedicated drop-in `/etc/systemd/system/gdm.service.d/override.conf` enforcing `LimitNOFILE=1048576`, guaranteeing that Xorg and all nested desktop processes inherit ample file descriptor headroom.
+
+#### Lane 3: Drop Wayland; Passive Leak Telemetry & Upstream Pipeline Tracking
+- **The Decision**: Wayland is formally **dropped** from proposals and is **not** a backlog item. The lab remains committed to the X11 display architecture for stability and tooling compatibility.
+- **Passive Leak Profiling**: Deploy a non-perturbing, zero-overhead telemetry probe (e.g., in `status.py` or daily digest) monitoring `ls -1 /proc/$(pgrep -u jallred Xorg)/fd | wc -l` to observe whether file descriptors accumulate linearly over days or spike during specific Steam/3D context releases.
+- **Upstream Pipeline Tracking**: Track Mesa Gallium 25.2.8 bug reports regarding `DMA_BUF_IOCTL_EXPORT_SYNC_FILE` handling under `modesetting_drv` and hybrid PRIME offload.
+
+#### Lane 4: Flexible Rendering Topology (Intel ARC / ReBAR Readiness)
+- **The Objective**: Preserve clean X recovery across reboots while accommodating future hardware changes (e.g. testing `rebarmod` to enable Intel ARC graphics alongside or in place of existing hardware).
+- **Invariants**: Avoid hardcoding static PCI bus IDs in `/etc/X11/xorg.conf`. Rely on flexible driver probe order (`modesetting` + dynamic DRM provider matching) so that display servers initialize cleanly regardless of which PCIe cards or onboard silicon are active at boot.
+
+
 
 
