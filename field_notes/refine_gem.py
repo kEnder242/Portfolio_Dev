@@ -971,7 +971,29 @@ def main():
         action="store_true",
         help="Pre-emptively scan and stamp all archive tables on disk",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Override daytime suppression and force execution outside nightly window",
+    )
     args = parser.parse_args()
+
+    # [FEAT-416 / Story 110.3] Strict Nightly Window Isolation (02:00 - 05:00 AM)
+    import datetime
+    now = datetime.datetime.now()
+    if not args.force and not (2 <= now.hour < 5):
+        logging.info(
+            f"[FEAT-416] Daytime suppression active ({now.strftime('%H:%M:%S')}). "
+            "Deep gem refinement is strictly quarantined to nightly window (02:00-05:00 AM). "
+            "Use --force to override."
+        )
+        return {
+            "status": "QUIESCENT",
+            "reason": "DAYTIME_SUPPRESSED",
+            "nightly_window": "02:00-05:00",
+            "epochs_run": 0,
+            "processed_gems": 0,
+        }
 
     logging.info(
         f"--- [LOOP-004] Epistemic Gem Refinement Rotation Loop (epochs={args.epochs}, batch_size={args.batch_size}) ---"

@@ -9,6 +9,7 @@ import sys
 import time
 
 import psutil
+import subprocess
 
 # Add current directory and HomeLabAI/src to path
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -74,10 +75,44 @@ ENGINE = get_engine_v2(mode=engine_mode)
 MAX_LOAD = float(os.environ.get("MAX_LOAD", 4.0))
 
 
+def check_foyer_intercom_active() -> bool:
+    """[Story 110.3 / BKM-086] Check if an interactive Foyer intercom/WebSocket session is active.
+    
+    Inspects established TCP sockets on port 8765 or existence of /tmp/foyer_intercom.lock.
+    Yields True if active, signaling Nibbler to immediately yield.
+    """
+    try:
+        res = subprocess.run(
+            ["ss", "-t", "state", "established", "( sport = :8765 or dport = :8765 )"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+        )
+        lines = [
+            line.strip()
+            for line in res.stdout.strip().split("\n")
+            if line.strip() and not line.startswith("Recv-Q")
+        ]
+        if len(lines) > 0:
+            return True
+    except Exception:
+        pass
+
+    if os.path.exists("/tmp/foyer_intercom.lock"):
+        return True
+
+    return False
+
+
 def should_yield() -> bool:
-    """Check if Nibbler should yield due to non-idle mode, memory pressure, or high load."""
+    """Check if Nibbler should yield due to non-idle mode, memory pressure, high load, or active intercom."""
     if FORCE_MODE:
         return False
+
+    # Check Foyer Intercom Preemption (Sprint 110.0 / Story 110.3)
+    if check_foyer_intercom_active():
+        log("[NIBBLER] Yielding: Active Foyer Intercom session detected on port 8765 / lock")
+        return True
 
     if FAST_MODE:
         ram_available_gb = psutil.virtual_memory().available / (1024**3)
@@ -344,22 +379,21 @@ def scrub_input_buffer(text):
 def main():
     log(f"--- Pinky Nibbler v2.1 (Reasoning: {REASONING_MODE}) ---")
 
-    # --- CLI FLAGS & DAYTIME SUPPRESSION (Story 105.9 / FEAT-416 / LAB-009) ---
-    limit = 999
+    # --- CLI FLAGS & SPARSE CADENCE (Story 110.3 / FEAT-416 / BKM-086) ---
+    # Default limit is 2 chunks per execution for balanced sparse ingestion
+    limit = 2
     if "--once" in sys.argv:
         limit = 1
+    elif "--all" in sys.argv:
+        limit = 999
     for arg in sys.argv:
         if arg.startswith("--limit="):
             limit = int(arg.split("=")[1])
 
-    force = "--force" in sys.argv
-    now = datetime.datetime.now()
-    if not force and 7 <= now.hour < 22:
-        log(
-            f"[POLITENESS] Daytime session active ({now.strftime('%H:%M:%S')}). "
-            "Background nibbling suppressed until nightly window (03:00-05:00 AM). Use --force to override."
-        )
-        update_status("IDLE", "Daytime suppression active (07:00-22:00).")
+    # Preemption check before queue loading
+    if should_yield():
+        log("[POLITENESS] Intake yielded to system conditions or active Foyer Intercom.")
+        update_status("IDLE", "Nibbler yielded (load or active intercom).")
         return
 
     if not os.path.exists(QUEUE_FILE):
