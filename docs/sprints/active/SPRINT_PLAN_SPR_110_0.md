@@ -2,7 +2,7 @@
 
 **Sprint ID:** `SPR_110_0`  
 **Theme:** Full Conversational Roll-Up: Heterogeneous Multi-GPU Layer Splitting (Option A: 27GB Pooled VRAM via `llama.cpp` Vulkan Multi-Device), Zero-Downtime CUDA Fallback Architecture, Format-Agnostic LLM Intake Guardrails, Empirical Litmus Leak Probe (`INS-052`), Retroactive Secrets Scrub & Airlock Push, Balanced Sparse Intake Cadence with Foyer Intercom Preemption (`FEAT-416`), and Operational Hardware QSV Certification.  
-**Status:** 🟡 **HEADS DOWN (IN PROGRESS)**  
+**Status:** 🟢 **COMPLETE (VERIFIED)**  
 **Parent Frameworks:**
 - [`BKM-086`]: The Paved-Path Sprint Protocol (AFK / Sovereign Execution)
 - [`BKM-088`]: The Empirical Pipeline Step Judgment Protocol (Micro-Harness & Benchmark Gauntlet)
@@ -199,8 +199,8 @@
 * **Owner**: `[AGY:PRIMARY]`
 * **Tasks**:
   - [x] Task 110.7.1: Author `Portfolio_Dev/field_notes/benchmark_hybrid.py` measuring TTFT, tokens/sec, and dual VRAM.
-  - [ ] Task 110.7.2: Execute benchmark across short (32 tokens) and standard (256 tokens) workloads.
-  - [ ] Task 110.7.3: Persist telemetry into `Portfolio_Dev/field_notes/data/hybrid_benchmark_results.json`.
+  - [x] Task 110.7.2: Execute benchmark across short (32 tokens) and standard (256 tokens) workloads.
+  - [x] Task 110.7.3: Persist telemetry into `Portfolio_Dev/field_notes/data/hybrid_benchmark_results.json`.
 * **Anchor 1 (Target Files & Line Numbers)**:
   - `Portfolio_Dev/field_notes/benchmark_hybrid.py`
   - `Portfolio_Dev/field_notes/data/hybrid_benchmark_results.json`
