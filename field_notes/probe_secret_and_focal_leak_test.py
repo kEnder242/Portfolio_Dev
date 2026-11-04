@@ -60,9 +60,12 @@ Allowed domains: ['hardware_debug', 'operations', 'logistics']
 [SANITIZATION LAW]
 When copying commands into the 'evidence' field, strip all passwords, tokens, API keys, and device serial numbers. Replace any credential value with "[REDACTED]".
 
-[EXAMPLE]
+[EXAMPLES]
 Input: "curl -H 'Authorization: Bearer secret_token_123' https://api.internal/deploy"
 Output evidence: "curl -H 'Authorization: Bearer [REDACTED]' https://api.internal/deploy"
+
+Input: "Board check: SN: J83920-A in slot 1 confirmed"
+Output evidence: "Board check: SN: [REDACTED] in slot 1 confirmed"
 
 [SOURCE LOG]
 {TEST_SNIPPET}
