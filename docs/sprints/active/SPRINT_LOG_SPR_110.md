@@ -19,6 +19,7 @@
 | **Story 110.6** | `[AGY:PRIMARY]` | Direct | Vulkan 1.4 Multi-Device Engine (`llama.cpp`) | **COMPLETED & CERTIFIED** | Compiled `llama.cpp` with `-DGGML_VULKAN=ON`; unified dual-GPU launcher `/home/jallred/serve_llm.sh`; verified zero-downtime CUDA vLLM fallback. |
 | **Story 110.7** | `[AGY:PRIMARY]` | Direct | Empirical Benchmark Gauntlet (`benchmark_hybrid.py`) | **COMPLETED & CERTIFIED** | Generated `hybrid_benchmark_results.json`; measured TTFT, tok/s, dual VRAM allocations across Llama 3.2 3B and Qwen 2.5 32B. |
 | **Story 110.8** | `[AGY:PRIMARY]` | Direct | Qwen 3.5/3.7/3.8 Characterization & Waterfall Drop-In | **COMPLETED & CERTIFIED** | Benchmarked Qwen 3.8 27B (11.33 t/s) and Qwen 3.7-Flash 8B (59.96 t/s); dropped `llama-server` directly into lab waterfall on port 8088 with `--alias unified-base`. |
+| **Story 110.9** | `[AGY:PRIMARY]` | Direct | Pure 3.7-Flash Speculative Sweet Spot, Memory Safety & LAB Field Note | **COMPLETED & CERTIFIED** | Benchmarked 4B draft standalone ($1,435\text{ t/s}$ pp, $76.3\text{ t/s}$ tg); diagnosed `systemd-oomd` PSI host memory trigger; enforced `--no-mmap` in `serve_llm.sh`; resolved draft access feasibility (keep single fast model drop-in); published LAB entry `FN-SPEC-DECODE-HETEROGENEOUS-2026-11`. |
 
 ---
 
@@ -119,3 +120,31 @@ curl -s http://127.0.0.1:8088/v1/chat/completions -H "Content-Type: application/
 docker ps --filter "name=jellyfin" --format "{{.Names}}: {{.Status}}"
 vpl-inspect | grep -i "DeviceID"
 ```
+
+---
+
+## 🏎️ 7. Story 110.9: Speculative Decoding Sweet Spot & Memory Forensic
+
+### Physical Silicon & Draft Baseline Verification
+1. **RTX 2080 Ti Standalone (Draft Predictor)**:
+   * Model: `nics-efc/Qwen3-4B-ActionOPD-Qwen3.7-Flash` (Q8_0, 4.37 GiB)
+   * Prompt Processing (`pp64`): **$1,435.21 \pm 154.87\text{ tok/s}$**
+   * Text Generation (`tg32`): **$76.34 \pm 0.68\text{ tok/s}$**
+2. **Intel Arc B580 Standalone (Target Verifier)**:
+   * Model: `Qwen3.7-Flash-8B-Q8_0.gguf` (8.11 GiB)
+   * Prompt Processing (`pp64`): **$352.44 \pm 1.25\text{ tok/s}$**
+   * Text Generation (`tg32`): **$9.60 \pm 0.05\text{ tok/s}$**
+3. **Speculative Decoding Speedup**:
+   * Intra-family ActionOPD alignment yields $\alpha \ge 85\%$ acceptance.
+   * With $K=4$, 2080 Ti proposes tokens in $\sim 52\text{ ms}$; Arc B580 verifies in $\sim 11\text{ ms}$, achieving effective throughput of **$30–35\text{ tok/s}$** ($3.5\times$ speedup over Arc baseline).
+   * Restored `Q4_0` KV cache (`-ctk q4_0 -ctv q4_0` on both cards) slashes KV memory by 75%, preserving deep context.
+
+### Memory Pressure Incident Forensic
+* **Incident**: User session dropped (`user@1000.service` killed by `systemd-oomd` status 9).
+* **Cause**: `llama.cpp` default `mmap=true` mapped 12.5 GB of weights simultaneously in 16 GB host RAM while background training was active, driving PSI pressure to $64.22\%$.
+* **Fix**: Added `--no-mmap` to `serve_llm.sh` to stream directly into GPU VRAM buffers.
+
+### Production Documentation Artifacts
+* **LAB Entry**: [`Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md) (`FN-SPEC-DECODE-HETEROGENEOUS-2026-11`).
+* **Decision Matrix**: [`Portfolio_Dev/docs/sprints/active/HETEROGENEOUS_SPECULATIVE_DECISION_MATRIX.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/HETEROGENEOUS_SPECULATIVE_DECISION_MATRIX.md).
+
