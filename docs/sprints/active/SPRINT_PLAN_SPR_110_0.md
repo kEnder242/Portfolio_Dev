@@ -261,3 +261,164 @@
   - Speculative Topology: Target 8B on Arc B580 (`Vulkan1`), Draft 4B on RTX 2080 Ti (`Vulkan0`), `--no-mmap`, `--spec-draft-n-max 4`, `-ctk q4_0 -ctv q4_0`
   - Drop-in Port: 8088 (`--alias unified-base`)
 * **Anchor 4 (DNA Links)**: `[BKM-079]`, `[BKM-086]`, `[FEAT-586]`, `[INS-047]`
+
+---
+
+## 🧭 Phase 2: Engine Thinking Suppression & Just-In-Time Bedrock Decoupling
+
+### 📖 Live Tracked Conversational Narrative Preamble (`[BKM-077]` / `[BKM-097]` / `[INS-047]`)
+
+> **Executive Context & Forensic Discovery (2026-11-05 Morning Accountability Gauntlet):**
+> During the synthetic 06:00 AM round table probe (`bff308bb`: *"Audit active silicon residency and memory topology"*), the M5 Air Bonsai-27B Judge slammed Pinky with a terminal **`0.0 / 1.0`** evaluation. Forensic investigation revealed a critical multi-layer failure chain that tracked back to two core architectural root causes:
+>
+> 1. **The "Turn Off Thinking" Engine Regression:**
+>    - *Incident:* Port 8088 (`llama-server` on RTX 2080 Ti running `Qwen3.7-Flash-8B-Q8_0.gguf`) returned an empty string (`""`, TTFT: 0.0ms) on local triage.
+>    - *Root Cause:* `_dispatch_vllm_triage()` bounded the call to `max_tokens: 128`. Because `llama-server` defaulted to auto-reasoning (`reasoning_format: deepseek`), Qwen3.7 spent all 128 tokens inside its `<think>` scratchpad (665 characters of thought) and reached `finish_reason: length` before emitting a single token of JSON `content`.
+>    - *Historical Lookback:* Across **SPR-100**, **SPR-103**, and **SPR-108 (`[FEAT-680]` / `[BKM-079]`)**, the lab repeatedly fought the "Prompt-Persuasion Fallacy" on reasoning models (discovering Ollama required root `"think": false`, OpenAI/oMLX required `extra_body: {"reasoning": 0, "enable_thinking": False}`, and LiteLLM required gateway-level parameter transformation). When `llama-server` was introduced in Sprint 110 as a "drop-in" vLLM replacement, we omitted `--reasoning off` / `--reasoning-budget 0` from `serve_llm.sh`. The DNA correctly flagged reasoning suppression in past sprints, but the new Vulkan engine CLI surface was not calibrated to match.
+>
+> 2. **Verification of Triage Backpressure:**
+>    - *Result:* `_is_valid_triage()` in `speculative_triage.py` properly rejected the empty local triage result, kept waiting, and safely fell back to Deep Thought on the M5 Air, which correctly classified the query as `vibe: OPERATIONAL`, `domain: exp_tlm`. Triage backpressure and fallback worked as designed.
+>
+> 3. **Career Bedrock Static Leak vs Just-In-Time Context (JITC):**
+>    - *Incident:* Even though the backup triage judged the query as `OPERATIONAL` and the Hub successfully blocked ChromaDB RAG (`[FEAT-657] Zero RAG: empty search terms`), the models hallucinated that our consumer Z87 Haswell motherboard was running Intel enterprise server BMC firmware, DCMI interfaces, and Purley RAS validation scripts.
+>    - *Root Cause:* In `src/nodes/loader.py`, `[CAREER_COMPASS_BEDROCK]` (Jason's 2005–2024 validation career timeline) is permanently baked into `self.IDENTITY_BEDROCK` on *every single node* during initialization. When `resolve_hyde_vector` invoked Pinky's Stage 2 reflex take, Pinky latched onto the BMC/DCMI text in the static system prompt. The Hub stamped this into `[PINKY_STANCE]` and passed it downstream to Brain and Deep Thought, completely circumventing the `OPERATIONAL` RAG barrier.
+>    - *Resolution:* Decouple `[CAREER_COMPASS_BEDROCK]` from the static node system prompt. Leverage the existing triage policy rules (`triage_policy.json` / `FEAT-673`) to inject career bedrock strictly as Just-In-Time Context (JITC) when `vibe == "HISTORICAL"` or `domain in ("work_history", "career", "lab_history")`. When `OPERATIONAL` or `CASUAL`, career history is completely omitted.
+
+#### 💬 Tracked Dialogue Reconciliation by Numbered Swim Lane (`[BKM-077] §4`)
+
+##### 1) Swim Lane 1: `llama-server` Native Reasoning Suppression & Live Micro-Harness
+* **User Directive**: Use historical sprint knowledge to architect an effective way to disable thinking natively on the engine, test it live rapidly, and avoid inventing unvetted solutions.
+* **Technical Agreement**: Pass native CLI flags `--reasoning off` and `--reasoning-budget 0` directly into `/home/jallred/serve_llm.sh`. Verify live on port 8088 using a curl/urllib micro-harness confirming non-empty triage JSON in $< 500\text{ms}$.
+
+##### 1.1) Swim Lane 1.1: Token Clamping vs Continuous Fuel Pacing (`[FEAT-523]`)
+* **User Directive**: Review how and why hard limits were removed for soft limits. Did we regress?
+* **Technical Agreement**: Yes, `max_tokens: 128` in `_dispatch_vllm_triage()` was an ad-hoc hardcoded guillotine clamp that regressed the principles of `[FEAT-523]` (Continuous Fuel Pacing). We will raise the safety token floor to 350 while maintaining prompt-driven soft pacing, allowing non-reasoning structured triage to complete cleanly without truncation.
+
+##### 1.2) Swim Lane 1.2: Strategic Oracle Review & Engine Architecture Fallback (`[BKM-079]` / `[INS-052]`)
+* **User Directive**: Consult the Strategic Delegation Oracle, connect its recommendations to documentation, and maintain the instant fallback to pure CUDA vLLM.
+* **Technical Agreement**: Consult Tier 1 Oracle (`ask_oracle`). Retain the dual-backend architecture in `serve_llm.sh` (`--fallback-cuda` / `systemctl restart vllm.service`). Anchor the suppression at the engine/gateway boundary, upholding `[BKM-079]`.
+
+##### 3) Swim Lane 3: Career Bedrock Decoupling into JITC with Byte-Parity Verification (`[FEAT-434]` / `[FEAT-075]` / `[BKM-023]`)
+* **User Directive**: Move `CAREER_COMPASS_BEDROCK` to conditional JITC. Include an explicit task confirming moved text is NOT paraphrased (anti-paraphrasing check via exact variable reuse or pre/post diff).
+* **Technical Agreement**: Remove `[CAREER_COMPASS_BEDROCK]` from static `self.IDENTITY_BEDROCK` in `src/nodes/loader.py`. Export it as an immutable constant and inject it strictly via `cognitive_hub.py` when triage domain/vibe matches historical career queries. Enforce a cryptographic/string byte-parity check (`assert new_bedrock == original_bedrock`) satisfying `[FEAT-075]` and `[BKM-023]`.
+
+##### 4 & 5) Swim Lane 4 & 5: Live Test Harness, Dirty Lab Gate (`[FEAT-524]`) & Antigravity MO Out-of-Band Judge (`[BKM-089]` / `[BKM-090]`)
+* **User Directive**: Mock has its place, but live tests are essential. Ground on dirty lab pre-flight failure gates (never test stale RAM). Antigravity must act as the out-of-band evaluator judging probe coherence against 'MO' (Modus Operandi) criteria for unknown regressions.
+* **Technical Agreement**: Author Story 110.12. Assert `dirty: false` on `http://127.0.0.1:8765/status` prior to live verification. If code changes, enforce `systemctl restart lab-attendant.service` before running live probes (`[FEAT-524]`). Antigravity evaluates probe outputs out-of-band against Prompt MO rubrics (`BKM-089` / `BKM-090`) to verify end-to-end semantic coherence.
+
+---
+
+### 🗺️ Authoritative `ANCHOR_TRACK` Reconciliation Table (`[BKM-097]` / `[BKM-077]`)
+
+| Anchor # | User Origin Prompt & Topic | Technical Architecture Agreed | Sprint Story / Target | Status |
+| :---: | :--- | :--- | :--- | :---: |
+| **1** | Turn off thinking natively on `llama-server` & rapid test | Pass `--reasoning off` / `--reasoning-budget 0` in `serve_llm.sh`; micro-harness verification | Story 110.10 | `DONE` |
+| **1.1** | Soft limits vs hard token clamps (`max_tokens: 128` regression) | Raise triage token floor to 350, align with `FEAT-523` continuous fuel pacing | Story 110.10 | `DONE` |
+| **1.2** | Consult Strategic Oracle, connect to docs, preserve vLLM fallback | Tier 1 Oracle review, engine-level suppression (`BKM-079`), instant CUDA fallback | Story 110.10 | `DONE` |
+| **3** | Decouple Career Bedrock into JITC with anti-paraphrasing check | Remove from static node init in `loader.py`; conditional JITC in `cognitive_hub.py`; 100% byte-parity test | Story 110.11 | `DONE` |
+| **4** | Live testing vs mocks; Dirty Lab Pre-Flight Gate (`FEAT-524`) | Pre-flight daemon check (`GET /status`), daemon restart on code edits, live silicon probe gate | Story 110.12 | `DONE` |
+| **5** | Antigravity judge role under 'MO' criteria for unknown regressions | Out-of-band semantic probe evaluation against Prompt MO rubrics (`BKM-089` / `BKM-090`) | Story 110.12 | `DONE` |
+
+---
+
+### 🛡️ Pre-Flight Mistakes Avoided Ledger (`[BKM-081]` / `[BKM-082]`)
+
+1. **Mistake Avoided: Prompt-Persuasion Fallacy (`[BKM-079]`)**: We will NOT attempt to disable thinking by adding `"Do not think"` to the triage system prompt. Reasoning suppression is enforced natively at the `llama-server` CLI boundary.
+2. **Mistake Avoided: The Green Lie Trap (`[BKM-070]` / `[BKM-088]`)**: We will NOT accept unit tests mocking the LLM as proof of reasoning suppression. Certification requires hitting the running `llama-server` on port 8088.
+3. **Mistake Avoided: The Dirty Lab Bytecode Trap (`[FEAT-524]`)**: We will NOT execute live probes against stale Python bytecode in daemon RAM. Any edits to `loader.py` or `cognitive_hub.py` mandate a clean `systemctl restart lab-attendant.service` before live probing.
+4. **Mistake Avoided: The Paraphrasing Drift (`[FEAT-075]` / `[BKM-023]`)**: We will NOT re-type, re-word, or summarize the `[CAREER_COMPASS_BEDROCK]` text during relocation. Exact string byte-equality will be enforced.
+5. **Mistake Avoided: The Prompt MO Asymmetry Trap (`[BKM-089]`)**: We will NOT bloat the runtime JITC prompt with meta-explanations of *why* the career bedrock was conditionally injected. The prompt explains HOW; the out-of-band MO harness evaluates WHY.
+
+---
+
+### 🛑 Pre-Flight Checklist Gate (`[BKM-086]` / AFK Sprint)
+
+- [x] **Pillar 1: Explicit Grounding & Pre-Regression Archaeology (`[BKM-082]`, `[BKM-085]`)**
+  - [x] Conducted 5-sprint historical lookback (SPR-100 Ollama `think: false`, SPR-103 oMLX `extra_body`, SPR-108 `[FEAT-680]` LiteLLM translation, SPR-109, SPR-110).
+  - [x] Documented Pre-Flight Mistakes Avoided Ledger (`BKM-081`).
+- [x] **Pillar 2: Deterministic 4-Anchor Planning & Parity Verification (`[BKM-030]`, `[BKM-043]`)**
+  - [x] Anchor 1: Target Files & Line Numbers specified for all stories.
+  - [x] Anchor 2: Concrete Verification Commands authored for all stories.
+  - [x] Anchor 3: Verbatim Code Specifications declared.
+  - [x] Anchor 4: Concrete DNA Links mapped.
+  - [x] Anti-Paraphrasing Byte-Parity Mandate verified (`FEAT-075` / `BKM-023` baseline hash `10bbbf8e107428a11d510be0bb637b9a0a65c58141f8ac773c7bf57adf27428b` captured).
+- [x] **Pillar 3: Structured Delegation & Anti-Bypass Guard (`[BKM-049]`, `[BKM-006]`)**
+  - [x] Evaluated Swarm Delegation: Systemd launcher scripts, daemon lifecycles, and core hub stage prompts assigned to `[AGY:PRIMARY]` with explicit architectural justification.
+- [x] **Pillar 4: Adversarial Audit & Silicon Certification (`[BKM-007]`, `[BKM-024]`, `[INS-047]`, `[INS-010]`)**
+  - [x] Run Pre-Flight Cloud Oracle adversarial audit via `delegate.py --oracle` (Completed in `ORACLE_REVIEW_SPRINT_110.md`).
+  - [x] Verify Dirty Lab Pre-Flight Gate (`FEAT-524`): Verified clean (`dirty: false`, `state: OPERATIONAL`, `boot_commit: ada017a`).
+  - [x] Live is King Physical Daemon Certification (`BKM-024`, `INS-047`): Synthetic accountability probe passed on physical silicon (Bonsai score 0.95 / 1.0).
+  - [x] Antigravity MO Out-of-Band Evaluation (`BKM-089`, `BKM-090`): Verified semantic coherence, zero BMC/DCMI hallucinations, pure NVML residency telemetry.
+
+---
+
+### Story 110.10: `llama-server` Native Reasoning Suppression & Triage Token Floor (`[BKM-079]` / `[FEAT-680]`)
+* **Objective**: Ensure the local `llama-server` engine on port 8088 suppresses reasoning tokens by default during fast structured utility calls, eliminating empty triage completions, aligning with `[FEAT-523]` continuous soft limits, and enforcing dual-layer suppression per Cloud Oracle review.
+* **Owner**: `[AGY:PRIMARY]`
+* **Tasks**:
+  - [x] Task 110.10.1: Update `/home/jallred/serve_llm.sh` launcher to pass `--reasoning off` and `--reasoning-budget 0` across devices by default, preventing unexpected `<think>` generation during API serving.
+  - [x] Task 110.10.2: Update `_dispatch_vllm_triage()` in `cognitive_hub.py` to raise `max_tokens` from 128 to 350 as a safety floor, and ensure `extra_body: {"reasoning": 0, "enable_thinking": False}` is forwarded (dual-layer defense).
+  - [x] Task 110.10.3: Execute direct micro-harness test verifying port 8088 returns non-empty structured JSON under `prereflection_triage_result` in $< 500\text{ms}$ with 0 `<think>` tags.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - `/home/jallred/serve_llm.sh#L52-L95`
+  - `HomeLabAI/src/logic/cognitive_hub.py#L1012-L1031`
+* **Anchor 2 (Verification Command)**:
+  ```bash
+  python3 -c "import urllib.request, json; req = urllib.request.Request('http://127.0.0.1:8088/v1/chat/completions', data=json.dumps({'model': 'unified-base', 'messages': [{'role': 'user', 'content': 'Audit silicon'}], 'max_tokens': 128}).encode(), headers={'Content-Type': 'application/json'}); res = json.loads(urllib.request.urlopen(req).read()); c = res['choices'][0]['message']['content']; assert len(c) > 0 and '<think>' not in c; print('PASS: non-empty triage without think tags')"
+  ```
+* **Anchor 3 (Verbatim Code Specs)**:
+  - CLI Flags: `--reasoning off --reasoning-budget 0`
+  - Safety Floor: `max_tokens: 350`
+  - Dual-Layer Payload: `extra_body: {"reasoning": 0, "enable_thinking": False}`
+  - Target Latency: $< 500\text{ ms}$
+* **Anchor 4 (DNA Links)**: `[BKM-079]`, `[FEAT-680]`, `[FEAT-523]`, `[SPR-108]`
+
+---
+
+### Story 110.11: Career Compass Bedrock Decoupling & JITC with Verbatim Byte-Parity Verification (`[FEAT-434]` / `[FEAT-075]` / `[BKM-023]`)
+* **Objective**: Decouple `[CAREER_COMPASS_BEDROCK]` from `BicameralNode.IDENTITY_BEDROCK` in `src/nodes/loader.py`, converting it into dynamically injected Just-In-Time Context (JITC) governed strictly by explicit triage vibe/domain allow/deny lists, with strict byte-parity verification against paraphrasing drift.
+* **Owner**: `[AGY:PRIMARY]`
+* **Tasks**:
+  - [x] Task 110.11.1: Refactor `src/nodes/loader.py` to remove `tier_1_bedrock` from static `self.IDENTITY_BEDROCK`, exposing standalone helper `get_career_compass_bedrock()`.
+  - [x] Task 110.11.2: Enforce Anti-Paraphrasing Byte-Parity: Execute a programmatic verification confirming that `get_career_compass_bedrock()` matches `SHA256: 10bbbf8e107428a11d510be0bb637b9a0a65c58141f8ac773c7bf57adf27428b`.
+  - [x] Task 110.11.3: Update `build_two_mice_stage_prompt` and `resolve_hyde_vector` in `cognitive_hub.py` to inject `[CAREER_COMPASS_BEDROCK]` conditionally:
+    * **STRICT ALLOW LIST**: `vibe in ("HISTORICAL", "CHRONICLE", "RETROSPECTIVE")` OR `domain in ("work_history", "career", "lab_history")` OR `"career_ledger" in target_domains`.
+    * **STRICT DENY LIST**: `vibe in ("OPERATIONAL", "CASUAL", "WYWO")` OR `domain in ("exp_tlm", "telemetry", "social")`.
+  - [x] Task 110.11.4: Run offline unit tests `test_career_compass_bedrock.py` confirming injection on historical vibes and omission on operational vibes.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - `HomeLabAI/src/nodes/loader.py#L117-L150`
+  - `HomeLabAI/src/logic/cognitive_hub.py#L647-L720`, `#L2770-L2830`
+* **Anchor 2 (Verification Command)**:
+  ```bash
+  pytest -v HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py
+  ```
+* **Anchor 3 (Verbatim Code Specs)**:
+  - Anti-Paraphrasing Assertion: `assert hashlib.sha256(new_bedrock.encode()).hexdigest() == '10bbbf8e107428a11d510be0bb637b9a0a65c58141f8ac773c7bf57adf27428b'`
+  - JITC Gate: `should_inject_career_bedrock(vibe: str, domain: str, target_domains: list) -> bool`
+* **Anchor 4 (DNA Links)**: `[FEAT-434]`, `[FEAT-075]`, `[FEAT-673]`, `[BKM-023]`, `[BKM-085]`, `[INS-052]`
+
+---
+
+### Story 110.12: Live Synthetic Probe Harness, Dirty Lab Pre-Flight Gate & Antigravity MO Out-of-Band Evaluation (`[BKM-024]` / `[FEAT-524]` / `[BKM-089]` / `[BKM-090]`)
+* **Objective**: Establish the live probe verification harness with a strict Dirty Lab Pre-Flight Gate, certifying execution against physical running daemons, and conduct out-of-band semantic judgment under Prompt MO rubrics.
+* **Owner**: `[AGY:PRIMARY]`
+* **Tasks**:
+  - [x] Task 110.12.1: Implement Dirty Lab Pre-Flight Gate check: Query `http://127.0.0.1:8765/status` to confirm `dirty: false` and `state: OPERATIONAL`. If backend code was edited, restart `lab-attendant.service` and verify boot commit matches Git HEAD (`[FEAT-524]`).
+  - [x] Task 110.12.2: Execute live synthetic round table probe replay (`bff308bb`: *"Audit active silicon residency and memory topology"*) against running daemon on port 8765.
+  - [x] Task 110.12.3: Verify operational query emits pure NVML hardware telemetry with zero BMC/DCMI/Purley hallucination and passes M5 Air Bonsai Judge with score $\ge 0.85$.
+  - [x] Task 110.12.4: Antigravity Out-of-Band Judgment: Evaluate probe response artifacts against Prompt MO rubrics (`BKM-089` / `BKM-090`) to certify epistemic coherence and catch any unknown regressions.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - `HomeLabAI/src/server.log`
+  - `HomeLabAI/src/tests/test_round_table_probe_unit.py`
+  - `HomeLabAI/src/tools/standalone_accountability_watchdog.py`
+* **Anchor 2 (Verification Command)**:
+  ```bash
+  python3 /home/jallred/Dev_Lab/HomeLabAI/src/tools/standalone_accountability_watchdog.py --single-probe "Audit active silicon residency and memory topology"
+  ```
+* **Anchor 3 (Verbatim Code Specs)**:
+  - Dirty Lab Gate: `assert status["dirty"] is False, "Dirty lab detected: restart daemon"`
+  - Bonsai Judge Metric: `score >= 0.85`
+  - Zero Leak Fencing: `0 occurrences of ("BMC", "DCMI", "Purley", "validation career")` in operational stance
+* **Anchor 4 (DNA Links)**: `[BKM-024]`, `[FEAT-524]`, `[BKM-089]`, `[BKM-090]`, `[INS-010]`, `[INS-047]`
+
+
