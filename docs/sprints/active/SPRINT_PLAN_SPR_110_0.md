@@ -212,3 +212,26 @@
 * **Anchor 3 (Verbatim Code Specs)**:
   - Metrics: `ttft_ms`, `tokens_per_second`, `cuda_vram_mb`, `arc_vram_mb`
 * **Anchor 4 (DNA Links)**: `[BKM-088]`, `[BKM-024]`
+
+---
+
+### Story 110.8: Cross-Card Speculative Decoding & Qwen 3.5 / 3.8 Characterization
+* **Objective**: Benchmark Qwen 3.8 27B across dual-GPU Vulkan layer-split, incorporate Qwen 3.5 Instruct lineage from M5 Air / Kender historical baselines, and evaluate Heterogeneous Speculative Decoding (Arc B580 Target + RTX 2080 Ti Fast Predictor).
+* **Owner**: `[AGY:PRIMARY]`
+* **Tasks**:
+  - [x] Task 110.8.1: Download and benchmark `Qwen3.8-27B-UD-Q4_K_M.gguf` under `Vulkan1/Vulkan0` (RTX 2080 Ti first).
+  - [x] Task 110.8.2: Compare 27B throughput directly against 32B (10.0 tok/s) and M5 Air / RTX 4090 historical baselines.
+  - [ ] Task 110.8.3: Formulate and benchmark Heterogeneous Speculative Decoding architecture (Arc B580 16GB Target + RTX 2080 Ti Draft Predictor).
+  - [x] Task 110.8.4: Persist speculative decoding and 27B telemetry to `hybrid_benchmark_results.json`.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - `/speedy/models/gguf/Qwen3.8-27B-UD-Q4_K_M.gguf`
+  - `Portfolio_Dev/field_notes/data/hybrid_benchmark_results.json`
+* **Anchor 2 (Verification Command)**:
+  ```bash
+  /home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-bench -m /speedy/models/gguf/Qwen3.8-27B-UD-Q4_K_M.gguf -dev Vulkan1/Vulkan0 -sm layer -ts 11/16 -ngl 99 -p 64 -n 32
+  ```
+  *(Expected: 100% VRAM offload, zero CPU layers, tok/s > 11.5)*
+* **Anchor 3 (Verbatim Code Specs)**:
+  - Model: `Qwen3.8-27B-UD-Q4_K_M.gguf` ($15.33\text{ GiB}$)
+  - Speculative Topology: Target on `Vulkan0` (Arc B580), Draft on `Vulkan1` (RTX 2080 Ti)
+* **Anchor 4 (DNA Links)**: `[BKM-088]`, `[FEAT-501]`, `[LAB-115]`, `[LAB-117]`
