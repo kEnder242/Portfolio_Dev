@@ -236,3 +236,28 @@
   - Model: `Qwen3.8-27B-UD-Q4_K_M.gguf` ($15.33\text{ GiB}$)
   - Speculative Topology: Target on `Vulkan0` (Arc B580), Draft on `Vulkan1` (RTX 2080 Ti)
 * **Anchor 4 (DNA Links)**: `[BKM-088]`, `[FEAT-501]`, `[LAB-115]`, `[LAB-117]`
+
+---
+
+### Story 110.9: Pure 3.7-Flash Speculative Sweet Spot, Memory Safety & LAB Field Note (`[BKM-079]`)
+* **Objective**: Codify the pure intra-family `Qwen 3.7-Flash` pairing (Target: 8B on Arc B580 Vulkan1 vs Draft Predictor: 4B on RTX 2080 Ti Vulkan0) with restored `Q4_0` KV cache, enforce host RAM protection via `--no-mmap` to defeat `systemd-oomd`, resolve feasibility of draft model deconstruction, and author production LAB entry `FN-SPEC-DECODE-HETEROGENEOUS-2026-11`.
+* **Owner**: `[AGY:PRIMARY]`
+* **Tasks**:
+  - [x] Task 110.9.1: Empirical benchmark of Qwen 3.7-Flash 4B draft model standalone on RTX 2080 Ti ($1,435.21\text{ t/s}$ prefill, $76.34\text{ t/s}$ generation).
+  - [x] Task 110.9.2: Complete root-cause forensic analysis of host RAM saturation under 16GB RAM during dual-model loading; resolve via `--no-mmap` in `/home/jallred/serve_llm.sh`.
+  - [x] Task 110.9.3: Assess feasibility of standalone predictor access during speculative serving; establish architectural decision to treat `llama-server` as a single, fast, opaque drop-in on port 8088.
+  - [x] Task 110.9.4: Author LAB entry `Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md` (`FN-SPEC-DECODE-HETEROGENEOUS-2026-11`).
+  - [x] Task 110.9.5: Codify Backlog item for PyTorch CUDA LoRA training offload to Kender (RTX 4090) vs local GGUF quantization.
+* **Anchor 1 (Target Files & Line Numbers)**:
+  - `/home/jallred/serve_llm.sh#L52-L89`
+  - `Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md`
+  - `HomeLabAI/config/infrastructure.json#L4-L28`
+* **Anchor 2 (Verification Command)**:
+  ```bash
+  /home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-bench -m /speedy/models/gguf/Qwen3.7-Flash-4B-Q8_0.gguf -dev Vulkan0 -ngl 99 -p 64 -n 32
+  ```
+  *(Expected: tg32 > 70 tok/s on RTX 2080 Ti, zero cross-card layer splitting)*
+* **Anchor 3 (Verbatim Code Specs)**:
+  - Speculative Topology: Target 8B on Arc B580 (`Vulkan1`), Draft 4B on RTX 2080 Ti (`Vulkan0`), `--no-mmap`, `--spec-draft-n-max 4`, `-ctk q4_0 -ctv q4_0`
+  - Drop-in Port: 8088 (`--alias unified-base`)
+* **Anchor 4 (DNA Links)**: `[BKM-079]`, `[BKM-086]`, `[FEAT-586]`, `[INS-047]`
