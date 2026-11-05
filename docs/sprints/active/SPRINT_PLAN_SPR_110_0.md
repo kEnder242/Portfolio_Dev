@@ -221,8 +221,9 @@
 * **Tasks**:
   - [x] Task 110.8.1: Download and benchmark `Qwen3.8-27B-UD-Q4_K_M.gguf` under `Vulkan1/Vulkan0` (RTX 2080 Ti first).
   - [x] Task 110.8.2: Compare 27B throughput directly against 32B (10.0 tok/s) and M5 Air / RTX 4090 historical baselines.
-  - [ ] Task 110.8.3: Formulate and benchmark Heterogeneous Speculative Decoding architecture (Arc B580 16GB Target + RTX 2080 Ti Draft Predictor).
+  - [x] Task 110.8.3: Formulate and benchmark Heterogeneous Speculative Decoding architecture (Arc B580 16GB Target + RTX 2080 Ti Draft Predictor).
   - [x] Task 110.8.4: Persist speculative decoding and 27B telemetry to `hybrid_benchmark_results.json`.
+  - [x] Task 110.8.5: Zero-Downtime Waterfall Drop-In: Deploy `llama-server` on port 8088 with `--alias unified-base`, verify live chat completions, and preserve instant CUDA fallback.
 * **Anchor 1 (Target Files & Line Numbers)**:
   - `/speedy/models/gguf/Qwen3.8-27B-UD-Q4_K_M.gguf`
   - `Portfolio_Dev/field_notes/data/hybrid_benchmark_results.json`
