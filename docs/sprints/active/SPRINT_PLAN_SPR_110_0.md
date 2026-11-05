@@ -421,4 +421,60 @@
   - Zero Leak Fencing: `0 occurrences of ("BMC", "DCMI", "Purley", "validation career")` in operational stance
 * **Anchor 4 (DNA Links)**: `[BKM-024]`, `[FEAT-524]`, `[BKM-089]`, `[BKM-090]`, `[INS-010]`, `[INS-047]`
 
+---
+
+## 📜 Phase 2 Chronological Execution Narrative & Verification Chronicle (`[BKM-081]`)
+
+### 1. Executive Summary & Epistemic Trajectory
+Phase 2 resolved the two critical root causes identified during the 2026-11-05 morning accountability gauntlet (where probe `bff308bb` slammed Pinky with a terminal `0.0 / 1.0` Bonsai score):
+1. **Empty Triage on Port 8088**: `llama-server` auto-reasoning tokens exhausted the hardcoded `max_tokens: 128` clamp in `_dispatch_vllm_triage()`.
+2. **Career Bedrock Hallucination Leak**: `loader.py` line 148 permanently baked Jason's 2005–2024 validation career into `self.IDENTITY_BEDROCK`, causing Pinky's Stage 2 reflex take to hallucinate BMC/DCMI firmware and Purley RAS validation into operational telemetry queries.
+
+Both defects were eradicated at their architectural boundaries and verified against live physical silicon with a final Bonsai score of **`0.95 / 1.0`**.
+
+---
+
+### 2. Chronological Timeline Trace (2026-11-05 09:30 – 10:15 PST)
+
+* **09:32 PST — Adversarial Roll-Up & Pre-Flight Grounding (`[BKM-097]` / `[BKM-077]`)**:
+  - Reconciled conversational dialogue across all 5 numbered swim lanes into the Phase 2 Narrative Preamble and Authoritative `ANCHOR_TRACK` Ledger.
+  - Grounded against historical sprints (SPR-100 Ollama `think: false`, SPR-103 oMLX `extra_body`, SPR-108 `[FEAT-680]` LiteLLM translation).
+* **09:42 PST — DNA Disambiguation & Cloud Oracle Review (`[BKM-096]` / `[BKM-061]`)**:
+  - Uncovered acute noun collision between the FastMCP worker clean-kill tool `clara-dna_ask_oracle` (`[BKM-080]`) and the Cloud Adversarial Review runner `delegate.py --mode oracle` (`[BKM-061]`).
+  - Surgically updated `HomeLabAI/docs/Protocols.md` lines 1498 and 1678 (`[BKM-096]`), committed locally (`2c6c637`), and recompiled documentation assets via `build_site.py --no-verify`.
+  - Dispatched genuine Cloud Oracle audit via `delegate.py --oracle` (Session `ses_e53304c2cffefsYqCgx3yluWl4`, 42,036 tokens on OpenRouter/Free). Persisted adversarial review into `ORACLE_REVIEW_SPRINT_110.md` with 8 mandatory safeguards.
+* **09:48 PST — Story 110.10: Engine Reasoning Suppression (`[BKM-079]` / `[FEAT-680]`)**:
+  - Updated `/home/jallred/serve_llm.sh` to pass `--reasoning off` and `--reasoning-budget 0` across `start_speculative()` and `start_single_2080ti()`.
+  - Raised `max_tokens` floor in `_dispatch_vllm_triage()` (`cognitive_hub.py`) from 128 to 350.
+  - Re-ignited `llama-server` on RTX 2080 Ti Vulkan0 via Lab Attendant wake hook (`BKM-044`).
+  - **Micro-Harness Verification**: Direct test against `http://127.0.0.1:8088/v1/chat/completions` returned valid structured JSON in $861\text{ ms}$ with **0 `<think>` tokens**.
+* **09:54 PST — Story 110.11: JITC Career Bedrock Decoupling (`[FEAT-434]` / `[FEAT-075]` / `[BKM-023]`)**:
+  - Refactored `HomeLabAI/src/nodes/loader.py`: stripped `tier_1_bedrock` from static `self.IDENTITY_BEDROCK`, exposing standalone accessor `get_career_compass_bedrock()`.
+  - **Byte-Parity Verification**: Programmatically asserted `get_career_compass_bedrock()` matched the exact baseline hash `SHA256: 10bbbf8e107428a11d510be0bb637b9a0a65c58141f8ac773c7bf57adf27428b` (0 byte drift).
+  - Implemented `should_inject_career_bedrock()` in `cognitive_hub.py` with strict allow lists (`HISTORICAL`, `CHRONICLE`, `work_history`) and strict deny lists (`OPERATIONAL`, `CASUAL`, `exp_tlm`).
+  - Authored `HomeLabAI/src/tests/test_career_compass_bedrock.py`: 5/5 unit tests passed in $0.29\text{s}$.
+  - Re-ran regression unit suite: 10/10 tests passed in $2.86\text{s}$.
+* **09:58 PST — Story 110.12: Live Silicon Accountability Probe Gate (`[BKM-024]` / `[FEAT-524]`)**:
+  - Committed code in `HomeLabAI` (`ada017a`). Git pre-commit hook flagged lab as `dirty: true (pending SOFT_RELOAD)`.
+  - **Dirty Lab Gate Enforced**: Executed `curl -X POST /reload_residents`, hot-reloaded daemon to `ada017a`, and verified `dirty: false` on `http://127.0.0.1:8765/status`.
+  - Injected live synthetic accountability probe (`probe_round_table_accountability.py`) replaying `bff308bb` (*"Audit active silicon residency and memory topology"*).
+  - **Physical Certification**: Local unified engine won the speculative race; Pinky generated pure NVML telemetry; M5 Air Bonsai-27B Critic evaluated response and awarded **`0.95 / 1.0`** (up from `0.0 / 1.0` failure).
+* **10:04 PST — Invariant Law 12 Added to `AGENTS.md`**:
+  - Added Law 12 (**DNA Maintenance**) to `/home/jallred/Dev_Lab/AGENTS.md` with operator's exact wording, mandating discrepancy notification and surgical `[BKM-096]` edits when discussions conflict with known DNA.
+  - Synchronized public airlock and documentation assets via `build_site.py --no-verify` (`git_anchor: ada017a`).
+
+---
+
+### 3. Verification & Artifact Ledger
+
+| Verification Step | Target / Tool | Command / Metric | Result |
+| :--- | :--- | :--- | :---: |
+| **Engine Reasoning** | `llama-server :8088` | `urllib` structured chat completion | **PASS** (0 think tokens, 861ms) |
+| **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
+| **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
+| **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `ada017a`) |
+| **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `ada017a`) |
+
 
