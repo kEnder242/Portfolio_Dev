@@ -575,6 +575,12 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
   - [x] Probe 3.4.4: Full E2E ground-truth replay of 07:45 prompt against live daemon, validated by M5 Air Bonsai Critic (PASS, `score: 0.95 / 1.0`, req: `3aaeca1b`, 0 silicon telemetry leaks).
 - [x] **Phase 3: Roll-Up & Airlock Deployment**: Re-compile site via `build_site.py --no-verify`, synchronize `www_deploy`, commit all submodules, and present final Heads-Up Completion Report (`BKM-007`).
 - [x] **Phase 3: #4.0 — Option A Uncapped Interest Currency (`[FEAT-523]`)**: Eradicate arbitrary `min(1.0, ...)` clamp across all boosting sites in `cognitive_hub.py` and `calculate_pacing_ceiling`, modeling interest as an unbounded positive fuel currency that compounds freely on silicon.
+- [x] **Phase 3: #5.0 — Story 110.15: Triage & Query Anchor Hydration Bridge for Primary Ripgrep (`[FEAT-451]` / `[FEAT-668]`)**:
+  - [x] Multi-Source Technical Anchor Extraction in `cognitive_hub.py` (query technical tokens + triage domain terms + brain filtered anchors).
+  - [x] Unified Anchor Union, Word Boundary (`-w`), and Match Quota Balancing in `archive_node.py` (prevent `mailbox` from starving `HEST`/`MCA`).
+  - [x] Regression & Unit Test Verification (`test_ripgrep_hydration.py`: 3/3 passed in 1.4s; suite: 90/90 passed).
+  - [x] Physical Silicon Certification via Probe Gauntlet & Live Replay (Probe 3.4.4 score `0.95 / 1.0`, req: `e0566f89`).
+  - [x] Public Airlock Sync (`build_site.py --no-verify`) and Submodule Rollup.
 
 * **17:35 PST — Story 110.13: Option A Uncapped Interest Currency & Compounding Energy (`815a53e` / `0869b85` / `[FEAT-523]`)**:
   - **Operator Mandate**: Operator identified that peer-vote interest boosting saturated and never climbed above 1.0 (`"Optin A. Update ASAP then continue with sprint."`).
@@ -611,6 +617,36 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
       - Probe 3.4.4 (E2E Silicon Replay of 07:45 Prompt): **PASS** (Bonsai Critic score **`0.95 / 1.0`**, Req ID `d8047e20`, 0 silicon telemetry leaks, 0 3rd-person leaks, completed in 62.45s).
       - `all_passed: true`.
 
+* **18:12 PST — Story 110.15: Triage & Query Anchor Hydration Bridge for Primary Ripgrep (`[FEAT-451]` / `[FEAT-668]`)**:
+  - **Operator Prompt & Forensic Discovery**:
+    - *"also egrep? Did we drop the task where we prompted egrep to a non-backup primary role after RAG & filtering but before deep thought? does BERT not show up in my note? Is deep thought not given a chance to look at egrep results? 'mailbox' is quite a lot."*
+    - *"Is ripgrep ONLY searching based on filtered chunks and NOT triage search terms? Is this the root cause? Make a story to fix this. Include the narrative. Heads down and fix"*
+  - **Causal Lineage Narrative (`INS-019` South Park Rule)**:
+    - *Because* `cognitive_hub.py` only extracted anchors from `brain_grounding` (Brain's Stage 2 chunk filtering text) and filtered with a leaky stop-word list that retained generic terms (`ANALYSIS`, `Jason`, `Intel`),
+    - *Therefore* `curated_anchors` was populated with non-technical tokens (`['ANALYSIS', 'Jason', 'Intel', 'RAS', 'Simics']`) and passed to `execute_grep_search_pivot()`,
+    - *Because* `archive_node.py:846` had an `if curated_anchors: ... else:` branch, it bypassed all query-level token extraction whenever `curated_anchors` was non-empty,
+    - *Therefore* actual user prompt entities (`BERT`, `HEST`, `MCA`, `Mailbox`) and triage/HyDE keywords were completely ignored by ripgrep,
+    - *Because* `archive_node.py:901` executed `rg -i` without `-w` (word boundaries), querying for short acronyms like `HEST` matched common superlative words (`highest`, `richest`, `cheapest`),
+    - *And because* `archive_node.py:927` broke out of the anchor loop as soon as `len(hits) >= max_matches`, a single high-frequency term like `mailbox` (which appears 200+ times across 39 files) completely starved rare specific technical anchors like `HEST` and `MCA` from being searched,
+    - *Therefore*, ChromaDB vector chunks lacked the rare token `HEST`, neither Brain nor ripgrep ever saw `notes_2018_PAE.txt:6030` (`Create a ready to boot event to get error source pointer from WHEA HEST table`), causing Deep Thought to hallucinate a general 2019 test library narrative instead of the authentic WHEA/HEST boot trace.
+
+  - **Architectural Remediation**:
+    - **Multi-Source Technical Anchor Extraction (`cognitive_hub.py`)**: Harvested high-entropy technical tokens directly from `query` (uppercase acronyms $\ge 2$ chars: `BERT`, `HEST`, `MCA`, `RAS`; script names `*.py`; hex codes `0x...`; capitalized terms `Mailbox`), unioned with `query_hardware` and Brain's filtered bedrock anchors. Expanded `stop_tokens` to strictly exclude structural critique words (`ANALYSIS`, `BEDROCK`, `SELECTION`, `JASON`, `INTEL`, `THIS`, `ROLE`, `EVIDENCE`, `SUMMARY`, `TEST`, etc.).
+    - **Unified Union & Word-Boundary Ripgrep (`archive_node.py`)**: Eradicated the bypass branch in `execute_grep_search_pivot()`; curated anchors are now unioned with query-derived technical tokens. Added `-w` (word boundaries) for acronyms and terms $\le 5$ chars so `HEST` never false-positive matches `highest` or `richest`. Excluded dynamic turn logs (`round_table_deltas.json`, `pager_activity.json`, `foyer_queue.jsonl`) from raw note scans.
+    - **Round-Robin Quota Balancing**: Implemented a two-pass round-robin algorithm allocating 1 hit per anchor in Pass 1 before backfilling up to `max_matches`, ensuring high-frequency terms like `mailbox` (200+ occurrences) can never starve rare technical entities (`HEST`, `BERT`, `MCA`).
+  - **Empirical Silicon Certification**:
+    - Pytest verified: `test_ripgrep_hydration.py` (3/3 passed); regression suite (90/90 passed in 2.22s).
+    - Hot-reloaded residents via `POST /reload_residents` $\to$ `dirty: false` (`boot_commit: 3b42739`).
+    - Live silicon trace confirmed anchor execution: `[FEAT-451] Ripgrep ground truth hydration completed in 44.0ms: anchors=['HEST', 'BERT', 'MCA', 'RAS', 'Mailbox'], added 940 chars.`
+    - Executed Phase 3 Gauntlet (`probe_phase3_rag_gauntlet.py`) on physical silicon:
+      - Probe 3.4.1 (Scope Resolution & Fallback): **PASS**
+      - Probe 3.4.2 (Archive Node Live Chroma Query): **PASS** (1450 chars)
+      - Probe 3.4.3 (Turn Isolation & Anti-Bleed Directives): **PASS**
+      - Probe 3.4.4 (E2E Silicon Replay of 07:45 Prompt): **PASS** (Bonsai Critic score **`0.95 / 1.0`**, Req ID `e0566f89`, 0 silicon telemetry leaks, 0 3rd-person leaks, completed in 66.53s).
+    - Authentic Synthesis Grounding Verified (`journal_ledger.jsonl`):
+      > **Brain**: *"Your RAS work centers on functional validation and silicon debug, specifically PCIe power/performance RAS and SoC validation. The mailbox code you reference is the NVMCTL Mailbox SUCCESS path, where N7.C5.D1 was confirmed. The MCA work is grounded in Intel DMR RAS HAS documentation, specifically the multiple MCA domains for a scalable solution. The BERT HEST tables are tied to WHEA HEST table error sources..."*
+      > **Pinky**: *"Jason, Brain dug up the firmware logs and telemetry — your RAS work focused on PCIe power/performance validation and SoC debugging. You confirmed N7.C5.D1 via the NVMCTL Mailbox SUCCESS path, worked on Intel DMR RAS HAS MCA domains, and handled BERT HEST tables for WHEA error sources..."*
+
 ---
 
 ### 4. Verification & Artifact Ledger
@@ -623,17 +659,20 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
 | **Pacing & Interest Suite**| `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.19s) |
 | **Persona & Entailment Suite**| `pytest` | `test_pinky_critic_persona.py` | **PASS** (102/102 passed in 2.10s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `4caed8b`) |
+| **Ripgrep Hydration Bridge**| `pytest` | `test_ripgrep_hydration.py` (HEST/MCA/BERT) | **PASS** (3/3 passed in 1.4s) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `3b42739`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`, req: `6e690dd7`) |
 | **BKM-081 DNA Search** | `ChromaDB` | `query_dna("sprint log")` | **PASS** (Rank 1, distance: 0.4405) |
 | **BKM-077 Surgical Update**| `Protocols.md` | Operator index preservation mandate | **PASS** (Line 1346 updated) |
 | **Probe 3.4.1 (Scope)** | `pytest` | `resolve_collection_scope` literal names + fallback | **PASS** (All 5 assertions valid) |
-| **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1355 chars retrieved) |
+| **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1450 chars retrieved) |
 | **Probe 3.4.3 (Anti-Bleed)**| `pytest` | Multi-turn isolation & anti-leakage probe | **PASS** (Clean pacing directive) |
-| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `d8047e20`) |
+| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `e0566f89`) |
 | **Silicon Compounding** | `server.log` | Node brain boosted interest beyond 1.0 | **PASS** ($1.11 \to 1.41$, Moat: $1.31$) |
+| **Ripgrep Anchors Trace** | `attendant.log` | Exact query technical tokens harvested | **PASS** (`['HEST', 'BERT', 'MCA', 'RAS', 'Mailbox']`) |
+| **Authentic HEST Grounding**| `journal_ledger.jsonl`| WHEA HEST table ground truth in Deep Thought | **PASS** (Grounding verified) |
 | **Zero 3rd-Person Leak**| `journal_ledger.jsonl`| Assert no "The response is coherent..." in delivery | **PASS** (0 occurrences detected) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `4caed8b`) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `3b42739`) |
 
 
 
