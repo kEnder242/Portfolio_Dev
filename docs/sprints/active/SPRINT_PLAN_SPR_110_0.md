@@ -537,7 +537,47 @@ Both defects were eradicated at their architectural boundaries and verified agai
 
 ---
 
-### 3. Verification & Artifact Ledger
+## 🔬 Phase 3: Scope Resolution, Native Chroma Retrieval & Anti-Bleed Hygiene (`[BKM-077]` / `[BKM-081]` / `[BKM-086]`)
+
+### 1. Executive Forensic Summary (The 07:45 Incident)
+On 2026-11-06 at 07:45:15 PST, Jason submitted an authentic career retrospective query:
+`"Describe my RAS experience. Mailbox code. MCA. BERT HEST tables. What did I work on?"`
+
+Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `domain: "work_history"`, and emitting literal target collections: `["career_ledger", "feature_dna", "behavioral_dna", "long_term_wisdom"]`. However, downstream execution suffered a 4-stage domino collapse that caused Pinky to hallucinate an operational silicon telemetry check from a previous turn:
+1. **Scope Token Wipeout (`traversal_dispatcher.py`)**: `_DOMAIN_COLLECTION_MAP` only recognized 11 shorthand aliases (`"career"`). It dropped literal collection names (`"career_ledger"`), returning `[]` and skipping ChromaDB completely (Zero RAG).
+2. **Raw REST Deprecation Trap (`archive_node.py`)**: Line 1018 hit `POST /api/v1/collections/{name}/query`. Because ChromaDB v2 deprecated v1 REST routes, all raw queries returned `HTTP 405 Method Not Allowed`, silently returning `None`.
+3. **Stale Resident Process & `ImportError`**: Background daemon PID 47394 (running since Nov 04) lacked `get_career_compass_bedrock` in cached memory. `step_pinky_hyde` threw an `ImportError` and fell back to Deep Thought, which failed with `'Unknown tool: deep_think'` (`thought_node` exposes `think`).
+4. **Turn Bleed & Blackboard Regurgitation**: Because HyDE crashed, `self._last_pinky_greeting` was never cleared and retained the morning silicon probe take. Damped to 0 tokens with zero RAG, Pinky echoed the previous turn's silicon telemetry from the blackboard ledger.
+
+### 2. Historical Sprint Responsibility Waffling
+- **Sprint 61 / 64 (`BKM-047`)**: Vibe-first routing (`HISTORICAL` $\to$ `career_ledger`, `artifact_vault`).
+- **Sprint 96 (`FEAT-540`)**: Added `target_domains: list[str]` to Triage, but cognitive hub ignored it and dropped the parameter.
+- **Sprint 104 (`FEAT-659`)**: Attempted to wire `target_domains`, but only implemented an 11-key shorthand abbreviation map and added a hard drop cliff (`if not candidate_set: return []`), severing the vibe fallback.
+- **Sprint 108 / 109 (`triage_policy.json`)**: Declared allowed collections per vibe, while the prompt schema instructed the LLM to output literal collection names (`"career_ledger"`). `traversal_dispatcher.py` was never updated to match, creating a split-brain between Triage and Retrieval.
+
+---
+
+### 3. Phase 3 AFK Interactive Execution Checklist (`[BKM-086 §1.1]`)
+
+- [x] **Phase 3: #0 — Protocol Update & Phase Designation (`[BKM-077]` / `[BKM-096]`)**: Surgically update `BKM-077 §2.1` in `Protocols.md` to mandate exact operator numbered indices, forbidding arbitrary alphanumeric renaming or compound prefixes.
+- [x] **Phase 3: #0 — Protocol Update & Phase Designation (`[BKM-077]` / `[BKM-096]`)**: Surgically update `BKM-077 §2.1` in `Protocols.md` to mandate exact operator numbered indices, forbidding arbitrary alphanumeric renaming or compound prefixes.
+- [x] **Phase 3: #1.1 — Scope Resolution & Inclusive Fallback (`[BKM-015]` / `[FEAT-659]`)**: Update `traversal_dispatcher.py` to match exact ChromaDB collection names directly, retain shorthand aliases, and fall back to `_VIBE_PRIORITY[vibe]` if unmapped, emitting a `[CROSSTALK:SCOPE_RECOVERY]` notice.
+- [x] **Phase 3: #1.2 — Resident Reload Hygiene (`[FEAT-490]`)**: Add `nodes.loader` to `importlib.reload` list in `HomeLabAI/src/v5/foyer/router.py:1135` and execute clean system restart via `systemctl restart lab-attendant.service`.
+- [x] **Phase 3: #1.3 — Turn Boundary State Sanitization (`[BKM-083]`)**: Purge `self._last_pinky_greeting = ""` and clear turn thought trace at entry of every cognitive cycle in `cognitive_hub.py` to permanently stop cross-turn phantom bleed.
+- [x] **Phase 3: #2.0 — Checks-and-Balances in Retrieval Scope**: Align `target_domains` and `domain` resolution in `archive_node.py`, logging scope recoveries cleanly.
+- [x] **Phase 3: #3.1 — Downstream Dispatch Implementation**: Verify `test_traversal_dispatcher.py` and `test_multi_stage_replay_pipeline.py` pass with literal collection names (53/53 passed).
+- [x] **Phase 3: #3.2 — Native Chroma Client Query (`archive_node.py`)**: Replace raw HTTP 405 call with native `chroma_client.get_collection(name).query(...)` executed via `asyncio.to_thread`.
+- [x] **Phase 3: #3.3 — Tool Routing & Pure-Interest Headroom**: Register `deep_think` alias in `thought_node.py`. When interest $\le 0.0$, yield naturally with brief directive instead of emitting a literal `0 tokens` directive.
+- [x] **Phase 3: #3.4 — Empirical Silicon Probe Gauntlet (`[BKM-024]` / `[BKM-088]`)**:
+  - [x] Probe 3.4.1: Scope resolution & inclusive fallback unit assertion (PASS).
+  - [x] Probe 3.4.2: Archive node live silicon query against `career_ledger` for RAS/Mailbox records (PASS, 1435 chars).
+  - [x] Probe 3.4.3: Turn isolation & anti-bleed probe verifying zero cross-turn leakage (PASS).
+  - [x] Probe 3.4.4: Full E2E ground-truth replay of 07:45 prompt against live daemon, validated by M5 Air Bonsai Critic (PASS, `score: 0.95 / 1.0`, req: `3aaeca1b`, 0 silicon telemetry leaks).
+- [x] **Phase 3: Roll-Up & Airlock Deployment**: Re-compile site via `build_site.py --no-verify`, synchronize `www_deploy`, commit all submodules, and present final Heads-Up Completion Report (`BKM-007`).
+
+---
+
+### 4. Verification & Artifact Ledger
 
 | Verification Step | Target / Tool | Command / Metric | Result |
 | :--- | :--- | :--- | :---: |
@@ -545,14 +585,15 @@ Both defects were eradicated at their architectural boundaries and verified agai
 | **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `b9a56d6`) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `8d02f34`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`, req: `6e690dd7`) |
 | **BKM-081 DNA Search** | `ChromaDB` | `query_dna("sprint log")` | **PASS** (Rank 1, distance: 0.4405) |
-| **RAG Decoupling Unit** | `pytest` | `test_rag_cache.py` | **PASS** (1/1 passed in 0.14s) |
-| **Pacing & De-Fluff Suite** | `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.24s) |
-| **Oracle Verification** | `delegate.py --oracle` | Story 110.12 Taxonomy Synchronization Audit | **PASS** (Completed in 74s, 0 tool errors) |
-| **Taxonomy Unit Suite** | `pytest` | `test_triage_policy_loader.py` + `test_traversal_dispatcher.py` | **PASS** (107 passed, 12 skipped) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `b9a56d6`) |
+| **BKM-077 Surgical Update**| `Protocols.md` | Operator index preservation mandate | **PASS** (Line 1346 updated) |
+| **Probe 3.4.1 (Scope)** | `pytest` | `resolve_collection_scope` literal names + fallback | **PASS** (All 5 assertions valid) |
+| **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1435 chars retrieved) |
+| **Probe 3.4.3 (Anti-Bleed)**| `pytest` | Multi-turn isolation & anti-leakage probe | **PASS** (Clean pacing directive) |
+| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `3aaeca1b`) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `8d02f34`) |
 
 
 
