@@ -62,6 +62,10 @@
   * **Direct Preference Optimization (DPO) Automatic Labeling:** Leverage Sovereign 27B Entailment Audit (`step_entailment_audit` Half A on M5 Air / KENDER) to automatically generate preference pairs: outputs passing `CLAIM_CHECK` / `VERDICT: PASS` become preferred completions ($y_w$), while outputs flagged with `MISMATCH` or rubric battery violations become hard negative rejections ($y_l$).
   * **Synthetic Triage Distillation:** Utilize the offline regex primer generators (`generate_greeting_primers()`, `generate_wywo_primers()`) to synthesize thousands of valid JSON schema classification records for `triage_v2`, enabling sub-150ms pure semantic triage on the local 3B model with zero regex fallbacks.
   * **Architectural Invariant (BKM-039 / BKM-015):** LoRA weights train strictly on tone, brevity, formatting compliance, Evidence-Before-Verdict structure, and single-turn boundaries. Factual data, hardware registers, and ephemeral lab state remain strictly partitioned inside ChromaDB RAG.
+* **`TODO-012` (LoRA Adapter Voice vs Base Persona Evaluation — `[BACKLOG-CLI-VOICE]`):**
+  Evaluate whether to keep, re-train, or retire the `cli_voice_v1` LoRA adapter on `local-unified-base`. On base model weights with unified prompt engineering, Pinky communicates with natural warmth and zero prompt bleed. The legacy `cli_voice_v1` adapter was trained on distribution data that tended to emit markdown section headers (`**TECHNICAL INTUITION**`) and exhibited role-slot quirks. Deferred from Sprint 108.0 (`#1.2.1`).
+* **`TODO-013` (Legacy `evaluate_grounding` Code Excision — `[BACKLOG-CRITIC-EXCISION]`):**
+  Complete the Python code excision of legacy `evaluate_grounding()` in `HomeLabAI/src/logic/cognitive_hub.py:2324-2498` and its corresponding `.round_table_evals.json` write logic. In Sprint 108, Stage 6 was calibrated to stay silent on `PASS`, but full physical removal of the legacy method was deferred to ensure clean Stage 6 routing strictly through the out-of-band Deep Thought Entailment Audit (`[FEAT-667]`) without dual UI broadcasts.
 
 ## 🏺 Conductor: Historical Tracks (Sprints 13–73)
 | ID | Phase | Feature Focus | Status |

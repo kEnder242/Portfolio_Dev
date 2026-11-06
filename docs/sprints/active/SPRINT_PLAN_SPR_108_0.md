@@ -73,23 +73,23 @@
 
 The execution of Sprint 108 adheres strictly to the Four Invariant Pillars of Paved Trust:
 
-- [ ] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
+- [x] **Pillar 1: Grounding & Archaeology (`BKM-082` + `BKM-085`)**
   - [x] **`BKM-085` Phase 1 (Sprint Intent)**: Excavated SPR-103 through SPR-107 pressures & design invariants.
   - [x] **`BKM-085` Phase 2 (Git Archaeology)**: Verified `FEAT-058` routing code invariants in `cognitive_hub.py` & `intercom_v2.js`.
   - [x] **`BKM-085` Phase 3 (DNA Alignment)**: Prior art & claims registered in `RESEARCH_SYNTHESIS.md`, `FeatureTracker.md` (`FEAT-672`), `vibe_data.json` (`VIBE-018`), and `LOOP_LEDGER.md` (`LOOP-005`).
   - [x] **`BKM-061` / `BKM-082` Gate 3 (Oracle Review)**: Adversarial architecture audit passed and committed to [`ORACLE_REVIEW_SPRINT_108.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_108.md).
   - [x] Active daemon verification: `:8765` (Foyer), `:8001` (ChromaDB), `:8088` (vLLM), `:11434` (Ollama 4090) verified UP.
-- [ ] **Pillar 2: 4-Anchor Plan & Anti-Drift**
-  - [ ] Every story specifies Anchor 1 (Files & Lines), Anchor 2 (Verification Command), Anchor 3 (Verbatim Code Specs), Anchor 4 (Silicon Invariants & DNA Links).
-  - [ ] Every story contains an explicit `BKM-015 Compliance Check` with approved regex tagging where applicable.
-- [ ] **Pillar 3: Swarm Delegation & Anti-Bypass Guard**
-  - [ ] Local code surgery stories assigned to `[SWARM:LOCAL]` (Atlas on 4090 via `delegate.py`).
-  - [ ] Risk assessment applied: High-blast-radius or large-file tasks evaluated for promotion from `LOCAL` to `CLOUD` (Story 108.2 $\to$ `[SWARM:CLOUD]`).
-  - [ ] AGY:PRIMARY strictly forbidden from bypassing swarm delegation on `[SWARM:*]` stories.
-- [ ] **Pillar 4: Silicon Certification & Live is King**
-  - [ ] Micro-harness offline test pass (`test_empirical_step_harness.py`).
-  - [ ] Interactive 2-Question Co-Pilot review loops executed with operator.
-  - [ ] Final live end-to-end multi-node probe certified against `lab-attendant.service` matching Git HEAD (`INS-047`).
+- [x] **Pillar 2: 4-Anchor Plan & Anti-Drift**
+  - [x] Every story specifies Anchor 1 (Files & Lines), Anchor 2 (Verification Command), Anchor 3 (Verbatim Code Specs), Anchor 4 (Silicon Invariants & DNA Links).
+  - [x] Every story contains an explicit `BKM-015 Compliance Check` with approved regex tagging where applicable.
+- [x] **Pillar 3: Swarm Delegation & Anti-Bypass Guard**
+  - [x] Local code surgery stories assigned to `[SWARM:LOCAL]` (Atlas on 4090 via `delegate.py`).
+  - [x] Risk assessment applied: High-blast-radius or large-file tasks evaluated for promotion from `LOCAL` to `CLOUD` (Story 108.2 $\to$ `[SWARM:CLOUD]`).
+  - [x] AGY:PRIMARY strictly forbidden from bypassing swarm delegation on `[SWARM:*]` stories.
+- [x] **Pillar 4: Silicon Certification & Live is King**
+  - [x] Micro-harness offline test pass (`test_empirical_step_harness.py`).
+  - [x] Interactive 2-Question Co-Pilot review loops executed with operator.
+  - [x] Final live end-to-end multi-node probe certified against `lab-attendant.service` matching Git HEAD (`INS-047`).
 
 ---
 
@@ -688,9 +688,9 @@ Phase 3 is **collaborative human-in-the-loop internal prompt engineering** acros
      - **`P3` (Prompt/MO Contract Only)**: `FA-10` Stage 6 Out-of-Band Entailment Audit & Adversarial Continuation prompt/MO rubric (`BKM-089 §3`).
 3. **The Interactive Co-Pilot Loop Checklist (Interactive Equivalent of `BKM-086` Heads-Down)**:
    - [x] **Step 0 — Pre-Loop Contract Alignment (`ask_question` + Vibe Flow Table)**: Locked `0-keep` Negative Moat $\to$ Stage 5 `ZERO_CONTEXT`, canonical 10-Vibe + Domain Lexiconic Flow Table (`STAGE_DEFERRED_PROBES_MATRIX.md`), `BKM-015` regex eviction into probe primer-generators, and modular `vibe_bedrock` (`current_date` on `CASUAL`/`WYWO`/`META`/`OPERATIONAL`).
-   - [ ] **Step 1 — Outer Loop: Top-Down Waterfall Reachability & Execution Pruning (`#2.1` + `#3.2`)**: Walk sequentially down `Invariant Layer` $\to$ `Stage 1 Triage` $\to$ `Stage 2 HyDE` $\to$ `Stage 3 Brain Filter` $\to$ `Stage 4 Deep Thought` $\to$ `Stage 5 Pinky Voice` $\to$ `Stage 6 Audit`. Save the calibrated output of Step $K$ as the reachable input state for Step $K+1$. Automatically prune unreachable downstream branches and auto-skip (with a 1-line receipt) any reachable vibe/stage that passes AGY screening + Stochastic Check cleanly on first contact.
-   - [ ] **Step 2 — Inner Loop: Verdictless Live Probe & `grill-me` Co-Pilot Review (`#2.2` / `BKM-090`)**: Execute live-silicon probes (`:8088` / `:8002` / `:11434`) with 100% `system`+`user` parity. Screen for **Prompt Bleed** and **Prompt MO Criteria Failure** (`BKM-089`). Engage Jason via `ask_question` (`grill-me` suggestion/question format) **strictly when backed by live probe traces**, presenting verbatim output, colliding prompt lines, and frugal `HOW` / rich `WHY` options.
-   - [ ] **Step 3 — Stochastic Stability Gate (`#2.3` — Key Player)**: Use $N=3\text{–}5$ multi-sample runs at production temperature (`0.7` Pinky / `0.2` Brain-DT) + minor primer phrasing jitter both to *expose* intermittent 1-in-3 bleeds during screening and to *certify* (`0/5` prompt bleeds, $\ge 4/5$ MO pass) every Jason-approved prompt mutation before locking it and advancing the Outer Loop.
+   - [x] **Step 1 — Outer Loop: Top-Down Waterfall Reachability & Execution Pruning (`#2.1` + `#3.2`)**: Walk sequentially down `Invariant Layer` $\to$ `Stage 1 Triage` $\to$ `Stage 2 HyDE` $\to$ `Stage 3 Brain Filter` $\to$ `Stage 4 Deep Thought` $\to$ `Stage 5 Pinky Voice` $\to$ `Stage 6 Audit`. Save the calibrated output of Step $K$ as the reachable input state for Step $K+1$. Automatically prune unreachable downstream branches and auto-skip (with a 1-line receipt) any reachable vibe/stage that passes AGY screening + Stochastic Check cleanly on first contact. *(CERTIFIED)*
+   - [x] **Step 2 — Inner Loop: Verdictless Live Probe & `grill-me` Co-Pilot Review (`#2.2` / `BKM-090`)**: Execute live-silicon probes (`:8088` / `:8002` / `:11434`) with 100% `system`+`user` parity. Screen for **Prompt Bleed** and **Prompt MO Criteria Failure** (`BKM-089`). Engage Jason via `ask_question` (`grill-me` suggestion/question format) **strictly when backed by live probe traces**, presenting verbatim output, colliding prompt lines, and frugal `HOW` / rich `WHY` options. *(CERTIFIED)*
+   - [x] **Step 3 — Stochastic Stability Gate (`#2.3` — Key Player)**: Use $N=3\text{–}5$ multi-sample runs at production temperature (`0.7` Pinky / `0.2` Brain-DT) + minor primer phrasing jitter both to *expose* intermittent 1-in-3 bleeds during screening and to *certify* (`0/5` prompt bleeds, $\ge 4/5$ MO pass) every Jason-approved prompt mutation before locking it and advancing the Outer Loop. *(CERTIFIED)*
 
 ---
 
@@ -915,8 +915,8 @@ During the empirical probing of Stages 0–6, several important discrepancies, b
 
 ## 🔮 Post-Sprint & Backlog Horizon
 * **`[FEAT-672]`**: Multi-Track Cognitive Deliberation & Forked KV-Cache Parallelism (`[VIBE-018]`). Exploring zero-copy RadixAttention branching for multi-hypothesis concurrent deliberation on oMLX / 4090.
-* **`[BACKLOG-CLI-VOICE]` (`cli_voice_v1` LoRA Adapter & CLI Voice Evaluation — `#1.2.1`)**: Evaluate whether to keep, re-train, or retire the `cli_voice_v1` LoRA adapter (investigating adapter-level training-distribution markdown header tendencies such as `**TECHNICAL INTUITION**` and `system`+`user` role-slot sensitivity independently from internal Waterfall prompt engineering).
-* **`[BACKLOG-CRITIC-EXCISION]` (Legacy `evaluate_grounding` `"Pinky (Coherence Critic)"` Code Excision — `BP-10`)**: Complete the Python plumbing excision of `evaluate_grounding()` in [`cognitive_hub.py#L2324-L2498`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2324-L2498) alongside Phase 5 `Story 108.15` (`step_trace_attribution`) so Stage 6 runs strictly through Deep Thought Entailment Audit without legacy UI chat broadcasts.
+* **`[BACKLOG-CLI-VOICE]` (`cli_voice_v1` LoRA Adapter & CLI Voice Evaluation — `#1.2.1`)** &mdash; **`[MOVED TO BACKLOG: TODO-012 in 00_FEDERATED_STATUS.md]`**: Evaluate whether to keep, re-train, or retire the `cli_voice_v1` LoRA adapter (investigating adapter-level training-distribution markdown header tendencies such as `**TECHNICAL INTUITION**` and `system`+`user` role-slot sensitivity independently from internal Waterfall prompt engineering).
+* **`[BACKLOG-CRITIC-EXCISION]` (Legacy `evaluate_grounding` `"Pinky (Coherence Critic)"` Code Excision — `BP-10`)** &mdash; **`[MOVED TO BACKLOG: TODO-013 in 00_FEDERATED_STATUS.md]`**: Complete the Python plumbing excision of `evaluate_grounding()` in [`cognitive_hub.py#L2324-L2498`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L2324-L2498) alongside Phase 5 `Story 108.15` (`step_trace_attribution`) so Stage 6 runs strictly through Deep Thought Entailment Audit without legacy UI chat broadcasts.
 
 ---
 
@@ -1202,14 +1202,14 @@ All 7 Phase 7 regression and realignment stories (`Stories 108.22 – 108.28`) h
   - [x] Active daemon verification: `:8765` (Foyer), `:8001` (ChromaDB), `:8088` (vLLM), `:11434` (Ollama 4090) verified UP.
 - [x] **Pillar 2: 4-Anchor Master Story Specifications**
   - [x] Stories 108.30 through 108.34 fully authored with 4 anchors (Files/Lines, Verification Command, Verbatim Code Specs, DNA Links).
-- [ ] **Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard**
+- [x] **Pillar 3: Structured Swarm Delegation & Anti-Bypass Guard**
   - [x] Story 108.34 executed by `[AGY:PRIMARY]` (DNA updates & ChromaDB sync completed prior to delegation).
-  - [ ] Stories 108.30, 108.31, 108.32 dispatched to `[SWARM:LOCAL]` via `delegate.py`.
-  - [ ] Story 108.33 dispatched to `[SWARM:CLOUD]` via `delegate.py`.
-- [ ] **Pillar 4: Silicon Certification & Live is King (`BKM-007` + `BKM-024` + `INS-047`)**
-  - [ ] Unit and replay test suites pass 100% green without mocks.
-  - [ ] Hot-reload daemon via `POST /reload_residents` and restart `lab-attendant.service`.
-  - [ ] Live synthetic probe injection verifies zero unparsed judge pass and zero unmapped token emissions.
+  - [x] Stories 108.30, 108.31, 108.32 dispatched to `[SWARM:LOCAL]` via `delegate.py`.
+  - [x] Story 108.33 dispatched to `[SWARM:CLOUD]` via `delegate.py`.
+- [x] **Pillar 4: Silicon Certification & Live is King (`BKM-007` + `BKM-024` + `INS-047`)**
+  - [x] Unit and replay test suites pass 100% green without mocks.
+  - [x] Hot-reload daemon via `POST /reload_residents` and restart `lab-attendant.service`.
+  - [x] Live synthetic probe injection verifies zero unparsed judge pass and zero unmapped token emissions.
 
 ---
 
