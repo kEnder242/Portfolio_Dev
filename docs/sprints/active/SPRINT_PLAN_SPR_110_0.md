@@ -462,6 +462,19 @@ Both defects were eradicated at their architectural boundaries and verified agai
 * **10:04 PST — Invariant Law 12 Added to `AGENTS.md`**:
   - Added Law 12 (**DNA Maintenance**) to `/home/jallred/Dev_Lab/AGENTS.md` with operator's exact wording, mandating discrepancy notification and surgical `[BKM-096]` edits when discussions conflict with known DNA.
   - Synchronized public airlock and documentation assets via `build_site.py --no-verify` (`git_anchor: ada017a`).
+* **15:30 PST — Conversational Roll-Up: Waterfall Transparency & Pre-Triage Decoupling (`[BKM-077]` / `[BKM-095]` / Story 110.10)**:
+  - **`1.2` (Excised Downstream Suppression)**: Removed regex/JSON crosstalk interception in `intercom_v2.js` that was collapsing structured triage into single-line noise.
+  - **`1.3 / 3.3` (Deep Thought Restoration & Buffer Isolation)**: Resolved `src_key` mismatch in `cognitive_hub.py` (`"deep thought"` vs `"thought"` from `loader.py`/`foyer`), restored WebSocket streaming, and extended timeout to 45.0s.
+  - **`2.1.2` (Pre-Triage vs. HyDE RAG Separation)**: Pruned `"short_term_stream"` from `vector_pre_triage.py` to prevent recent turn chatter from hijacking pre-triage. Deleted `self._last_pre_triage_doc` short-circuit in `cognitive_hub.py` so Stage 3 HyDE always runs authentic ChromaDB queries. Passed `test_rag_cache.py`.
+  - **`2.1.3` (Decoupled Pre-HyDE from Vibe/Domain)**: Confirmed pruning `short_term_stream` solves the "elephant problem" by ensuring historical queries (e.g. 2006) are never distorted by live GPU telemetry chunks.
+  - **`2.2` (Terse Brain Informing Injections)**: Constructed terse informing-only mini-prompts across all 9 Vibes and 12 Domains (`[CONTEXT INTENT]`) without combinatorial rules.
+  - **`3.2` (Raw Triage Paragraph Pop)**: Added direct broadcast in `step_triage()`; verified live on WebSocket `:8765`. Clarified that zero RAG occurred because domain `exp_tlm` branched to NVML live sensors.
+  - **`3.3` (Formatting & Zero-Clamping Governance)**:
+    - Reverted `.msg-body p` margin to `2px 0` in `style.css` and `intercom.html` per operator mandate. Preserved `breaks: true` in `marked.setOptions`.
+    - **Root Cause Forensic (Interleaved JSON)**: Fixed `_dispatch_kender_triage` and `_dispatch_vllm_triage` which were calling `node.think` with `"internal": False`, leaking raw JSON triage tokens into the UI stream buffer and colliding with Deep Thought prose. Sealed with `"internal": True`.
+    - **Root Cause Forensic (Truncation at "the")**: Discovered hard clamp `dt_budget = min(dt_high, 350)` chopped generation mid-thought. Per operator mandate ("we NEVER clamp LLM output; just suggest via prompt"), removed the clamp and passed `max_tokens=None`, allowing prompt pacing (`[BUDGET]`) to guide the model while guaranteeing clean terminal punctuation.
+  - **`3.4` (LLM Content Suppression Audit)**: Audited all 7 stages; flagged that Pinky's `clean_hyde` vector text is suppressed from the UI whenever RAG returns 0 documents.
+  - **Hot Reload & Build**: Reloaded residents (`POST /reload_residents` $\to$ `ada017a`), rebuilt site assets, and synced to `www_deploy`.
 
 ---
 
@@ -475,6 +488,8 @@ Both defects were eradicated at their architectural boundaries and verified agai
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
 | **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `ada017a`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`) |
+| **RAG Decoupling Unit** | `pytest` | `test_rag_cache.py` | **PASS** (1/1 passed in 0.14s) |
 | **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `ada017a`) |
+
 
 

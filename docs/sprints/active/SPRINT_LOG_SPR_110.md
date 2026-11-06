@@ -20,6 +20,7 @@
 | **Story 110.7** | `[AGY:PRIMARY]` | Direct | Empirical Benchmark Gauntlet (`benchmark_hybrid.py`) | **COMPLETED & CERTIFIED** | Generated `hybrid_benchmark_results.json`; measured TTFT, tok/s, dual VRAM allocations across Llama 3.2 3B and Qwen 2.5 32B. |
 | **Story 110.8** | `[AGY:PRIMARY]` | Direct | Qwen 3.5/3.7/3.8 Characterization & Waterfall Drop-In | **COMPLETED & CERTIFIED** | Benchmarked Qwen 3.8 27B (11.33 t/s) and Qwen 3.7-Flash 8B (59.96 t/s); dropped `llama-server` directly into lab waterfall on port 8088 with `--alias unified-base`. |
 | **Story 110.9** | `[AGY:PRIMARY]` | Direct | Pure 3.7-Flash Speculative Sweet Spot, Memory Safety & LAB Field Note | **COMPLETED & CERTIFIED** | Benchmarked 4B draft standalone ($1,435\text{ t/s}$ pp, $76.3\text{ t/s}$ tg); diagnosed `systemd-oomd` PSI host memory trigger; enforced `--no-mmap` in `serve_llm.sh`; resolved draft access feasibility (keep single fast model drop-in); published LAB entry `FN-SPEC-DECODE-HETEROGENEOUS-2026-11`. |
+| **Story 110.10** | `[AGY:PRIMARY]` | Direct | Pre-Triage RAG Decoupling & Waterfall Intercom Formatting | **COMPLETED & CERTIFIED** | Excised `short_term_stream` from pre-triage; removed RAG caching pre-seed short-circuit; configured GFM breaks and 0.6em paragraph spacing in intercom assets; live hot-reloaded daemon. |
 
 ---
 
@@ -147,4 +148,23 @@ vpl-inspect | grep -i "DeviceID"
 ### Production Documentation Artifacts
 * **LAB Entry**: [`Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/HETEROGENEOUS_SPECULATIVE_DECODING_SWEET_SPOT.md) (`FN-SPEC-DECODE-HETEROGENEOUS-2026-11`).
 * **Decision Matrix**: [`Portfolio_Dev/docs/sprints/active/HETEROGENEOUS_SPECULATIVE_DECISION_MATRIX.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/HETEROGENEOUS_SPECULATIVE_DECISION_MATRIX.md).
+
+---
+
+## 🛠️ 8. Story 110.10: Pre-Triage RAG Decoupling & Waterfall Intercom Formatting
+
+### Pre-Triage vs. HyDE RAG Separation (`2.1.2`)
+* **Root Cause**: `vector_pre_triage.py` probed `short_term_stream`, where recent conversation turns caused distance $< 0.55$, populating `_last_pre_triage_doc`. `_fetch_rag_context` in `cognitive_hub.py` short-circuited on this pre-seeded document, starving HyDE of authentic ChromaDB retrieval across target DNA collections.
+* **Remediation**:
+  1. Excised `"short_term_stream"` from `PRE_TRIAGE_COLLECTIONS` in `HomeLabAI/src/logic/vector_pre_triage.py`.
+  2. Deleted `self._last_pre_triage_doc` short-circuit in `CognitiveHub._fetch_rag_context()` and `step_pre_triage()`.
+  3. Re-aligned unit test in `HomeLabAI/src/tests/test_rag_cache.py` (verified green).
+  4. Hot-reloaded running daemon via `POST /reload_residents` on `:8765`.
+
+### Intercom Presentation, Stream Purity & Zero-Clamping Governance (`3.3`)
+* **Formatting Revert**: Preserved compact layout by reverting `.msg-body p` margin back to `2px 0` in `style.css` and `intercom.html`, while retaining `breaks: true` in `marked.setOptions` and resetting `whiteSpace = 'normal'`.
+* **Interleaved Triage JSON Root Cause & Fix**: `_dispatch_kender_triage` and `_dispatch_vllm_triage` had `internal: False`, streaming raw JSON tokens through the `thought` source channel into the active DOM stream element. Fixed by sealing both with `internal: True`.
+* **Truncation at "the" Root Cause & Fix**: Generation was artificially choked by hard clamp `dt_budget = min(dt_high, 350)`. Honoring the operator mandate ("we NEVER clamp LLM output; just suggest via prompt"), removed the clamp and passed `max_tokens=None`. Headroom pacing is governed strictly through prompt guidance (`[BUDGET]`), ensuring natural terminal sentence completion.
+* **Airlock Sync**: Rebuilt and deployed airlock assets via `build_site.py --no-verify`.
+
 
