@@ -17,10 +17,14 @@ COLLECTION_WISDOM = "wisdom_dna"
 COLLECTION_RDNA = "rdna"
 COLLECTION_VIBE = "vibe_dna"
 COLLECTION_LOOP = "loop_dna"
+COLLECTION_SCRIPT = "diagnostic_dna"
 FEATURE_TRACKER_PATH = os.path.expanduser("~/Dev_Lab/Portfolio_Dev/FeatureTracker.md")
 PROTOCOLS_PATH = os.path.expanduser("~/Dev_Lab/HomeLabAI/docs/Protocols.md")
 INFRASTRUCTURE_PATH = os.path.expanduser(
     "~/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md"
+)
+DIAGNOSTIC_SCRIPT_MAP_PATH = os.path.expanduser(
+    "~/Dev_Lab/HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md"
 )
 INSPIRATION_DATA_PATH = os.path.expanduser(
     "~/Dev_Lab/Portfolio_Dev/dna/inspiration_data.json"
@@ -127,6 +131,7 @@ SYNC_SOURCES = [
     (COLLECTION_RDNA, "rdna_questions.json", RDNA_QUESTIONS_PATH),
     (COLLECTION_VIBE, "vibe_data.json", VIBE_DATA_PATH),
     (COLLECTION_LOOP, "foyer_feedback_ledger.jsonl", FOYER_FEEDBACK_LEDGER_PATH),
+    (COLLECTION_SCRIPT, "DIAGNOSTIC_SCRIPT_MAP.md", DIAGNOSTIC_SCRIPT_MAP_PATH),
 ]
 
 
@@ -609,6 +614,46 @@ def parse_feedback_ledger(filepath):
     return items
 
 
+def parse_diagnostic_scripts(filepath):
+    """[FEAT-686] Parses DIAGNOSTIC_SCRIPT_MAP.md for SCRIPT DNA tools."""
+    if not os.path.exists(filepath):
+        logging.error(f"DIAGNOSTIC_SCRIPT_MAP.md not found at {filepath}")
+        return []
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    pattern = re.compile(
+        r"^\|\s*\*\*\[?(SCR-\d+)\]?\s*([^\*]+)\*\*\s*\|\s*`([^`]+)`\s*\|\s*\*\*([^\*]+)\*\*\s*\|\s*([^\|]+)\|",
+        re.MULTILINE,
+    )
+    items = []
+    for match in pattern.finditer(content):
+        scr_id, name, path, status, goal = match.groups()
+        scr_id = scr_id.strip()
+        name = name.strip()
+        path = path.strip()
+        status = status.strip()
+        goal = goal.strip()
+        doc_content = f"Tool: [{scr_id}] {name}\nPath: {path}\nStatus: {status}\nGoal: {goal}"
+        items.append(
+            {
+                "id": scr_id,
+                "document": doc_content,
+                "metadata": {
+                    "script_id": scr_id,
+                    "name": name,
+                    "path": path,
+                    "status": status,
+                    "goal": goal,
+                    "source": "DIAGNOSTIC_SCRIPT_MAP.md",
+                    "type": "SCRIPT",
+                },
+            }
+        )
+    return items
+
+
 def sync(force: bool = False, dry_run: bool = False):
     """Sync DNA source files into ChromaDB.
 
@@ -905,6 +950,29 @@ def sync(force: bool = False, dry_run: bool = False):
             logging.info("loop_dna sync complete.")
         else:
             logging.info("[FEAT-632] No feedback records parsed (ledger empty or missing).")
+
+    # 7. Sync diagnostic_dna from DIAGNOSTIC_SCRIPT_MAP.md [FEAT-686 / SCRIPT DNA]
+    if not to_sync[DIAGNOSTIC_SCRIPT_MAP_PATH]:
+        logging.info("[IDEMPOTENCY] Skipping diagnostic_dna: DIAGNOSTIC_SCRIPT_MAP.md checksum unchanged.")
+    else:
+        logging.info("Parsing DIAGNOSTIC_SCRIPT_MAP.md...")
+        script_items = parse_diagnostic_scripts(DIAGNOSTIC_SCRIPT_MAP_PATH)
+        if script_items:
+            collection_script = get_safe_collection(client, COLLECTION_SCRIPT, ef)
+            logging.info("Clearing existing entries from diagnostic_dna...")
+            try:
+                collection_script.delete(where={"source": "DIAGNOSTIC_SCRIPT_MAP.md"})
+            except Exception as e:
+                logging.warning(f"Could not clear diagnostic_dna entries: {e}")
+            ids = [x["id"] for x in script_items]
+            documents = [x["document"] for x in script_items]
+            metadatas = [x["metadata"] for x in script_items]
+            logging.info(f"Uploading {len(ids)} SCRIPT entries to diagnostic_dna...")
+            collection_script.add(ids=ids, documents=documents, metadatas=metadatas)
+            checksums[DIAGNOSTIC_SCRIPT_MAP_PATH] = _sha256_file(DIAGNOSTIC_SCRIPT_MAP_PATH)
+            logging.info("diagnostic_dna sync complete.")
+        else:
+            logging.warning("No script items parsed from DIAGNOSTIC_SCRIPT_MAP.md.")
 
     save_checksums(checksums)
 

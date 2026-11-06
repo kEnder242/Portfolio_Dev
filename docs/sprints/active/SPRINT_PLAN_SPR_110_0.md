@@ -714,3 +714,64 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
      - Established that naive hardcoding of acronym dictionaries in `FEAT-685` bends `BKM-015`, and derived the clean semantic/universal-regex compliance architecture.
 * **Anchor 4 (DNA Links):** `[BKM-081]`, `[BKM-015]`, `[BKM-086]`, `[FEAT-661]`, `[FEAT-666]`, `[FEAT-667]`, `[FEAT-668]`, `[FEAT-671]`, `[FEAT-684]`, `[FEAT-685]`, `[FEAT-686]`.
 * **Verification Log:** Verified zero unchecked checklist items in Sprint 107 and 108. All 5 missing features and the 14 rapid iteration features successfully registered in `FeatureTracker.md`.
+
+---
+
+### 🩺 Story 110.17: SCRIPT DNA, Physician's Ledger Ingestion & Universal Bucketed Ripgrep (`[FEAT-685]` / `[FEAT-686]` / `[BKM-015]` / `[BKM-081]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** 
+  1. Address `FEAT-685` anchor starvation: Upgrade the ripgrep hydration bridge from single-stream execution to an isolated per-anchor bucketed search engine with a 30-match budget, 2-match min cap per bucket, dynamic size split (`max(2, 30 // N)`), and overflow cascade. Eradicate all runtime hardcoded `HARDWARE_ACRONYMS` pursuant to `[BKM-015]`, replacing them with universal syntactic word boundary rules.
+  2. Implement `FEAT-686` SCRIPT DNA: Audit and tag the entire Physician's Ledger (`DIAGNOSTIC_SCRIPT_MAP.md`) with official `[SCR-xxx]` identifiers (incorporating modern Sprint 104–110 verification suites `SCR-097` through `SCR-105`), ingest into ChromaDB `:8001` under collection `diagnostic_dna`, and wire into the ambient recall sentinel (`ambient_recall.py`) so diagnostic instruments are ambiently surfaced in context when relevant symptoms arise.
+* **Anchor 1 (Target Files & Lines):**
+  - `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md:1-420`
+  - `Portfolio_Dev/sync_chroma_dna.py:48-260`
+  - `HomeLabAI/src/curator/ambient_recall.py:110-245`
+  - `HomeLabAI/src/nodes/archive_node.py:840-975`
+  - `HomeLabAI/src/logic/cognitive_hub.py:3880-3895`
+  - `HomeLabAI/src/tests/test_ripgrep_hydration.py`
+  - `Portfolio_Dev/FeatureTracker.md:4120-4148`
+* **Anchor 2 (Verification Command):**
+  - `PYTHONPATH=HomeLabAI HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_feedback_semantic_triage.py HomeLabAI/src/tests/test_agentic_r_retrieval.py` (18/18 passed in 1.56s).
+  - `HomeLabAI/.venv/bin/python3 Portfolio_Dev/sync_chroma_dna.py` (105 SCRIPT items synchronized into `diagnostic_dna`).
+  - `HomeLabAI/.venv/bin/python3 HomeLabAI/src/curator/ambient_recall.py "Apollo 11 VRAM burn"` (surfaces `[SCR-013]`).
+  - Hot-reload resident daemons: `curl -s -X POST http://127.0.0.1:8765/reload_residents`.
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. **Physician's Ledger Audit & Modernization (`DIAGNOSTIC_SCRIPT_MAP.md`)**:
+     - Systematically audited all 96 legacy diagnostic scripts and assigned canonical IDs `[SCR-001]` through `[SCR-096]`.
+     - Appended **Section 18: Modern Diagnostics & Verification Gauntlets (Sprints 104–110)** adding `[SCR-097]` through `[SCR-105]`:
+       - `[SCR-097]`: Ripgrep Hydration Bridge (`test_ripgrep_hydration.py`)
+       - `[SCR-098]`: Live FastMCP Prober (`mcp_prober.py`)
+       - `[SCR-099]`: Career Compass Bedrock Suite (`test_career_compass_bedrock.py`)
+       - `[SCR-100]`: FeatureTracker Gatekeeper (`test_feature_tracker_gatekeeper.py`)
+       - `[SCR-101]`: Pinky Critic Persona Suite (`test_pinky_critic_persona.py`)
+       - `[SCR-102]`: Feedback Semantic Triage Suite (`test_feedback_semantic_triage.py`)
+       - `[SCR-103]`: Round Table Probe Unit Suite (`test_round_table_probe_unit.py`)
+       - `[SCR-104]`: Cognitive Hub Pacing Suite (`test_cognitive_hub_pacing.py`)
+       - `[SCR-105]`: Censorship Memory Tri-Node Suite (`test_censorship_memory_tri_node.py`)
+  2. **SCRIPT DNA Ingestion in `sync_chroma_dna.py` (`[FEAT-686]`)**:
+     - Added `COLLECTION_SCRIPT = "diagnostic_dna"` and configured `DIAGNOSTIC_SCRIPT_MAP_PATH`.
+     - Created `parse_diagnostic_scripts()` parser extracting canonical tags, tool name, execution path, operational status (`ACTIVE`, `VERIFIED`, `STALE`, `DEPRECATED`), and verification goal into rich metadata (`type: SCRIPT`).
+     - Added `diagnostic_dna` to `SYNC_SOURCES` and verified live ingestion of all 105 SCRIPT cards into ChromaDB on port 8001.
+  3. **Ambient Recall Sentinel Integration (`ambient_recall.py`)**:
+     - Added `scr_ids` regex capture (`\b(SCR-\d{3})\b`) for instant explicit ID resolution.
+     - Added `"diagnostic_dna": 2` to semantic vector domain caps.
+     - Implemented ambient formatting block surfacing matched tools as:
+       `### [SCR-xxx] Name (Status)`  
+       `Path: ...`  
+       `Goal: ...`
+     - Verified CLI ambient recall query for Apollo 11 VRAM burn surfaces `[SCR-013]` and empirical step harness surfaces `[SCR-010]` / `[SCR-092]`.
+  4. **Universal Bucketed Ripgrep Engine (`archive_node.py` & `cognitive_hub.py` / `[FEAT-685]`)**:
+     - Upgraded total match quota to 30 matches with discrete per-anchor buckets (`bucket_allocation = max(2, max_matches // len(anchors))`).
+     - Strictly enforced `[BKM-015]` zero-hardcoding: Eradicated all static hardware acronym dictionaries at runtime, employing a universal syntactic word boundary rule (`re.match(r"^[A-Z0-9_\.]{2,6}$", anchor) or anchor.isupper() or len(anchor) <= 5`).
+     - Implemented Pass 1 independent isolated bucket queries and Pass 2 dynamic overflow cascade, allowing rare technical terms to safely utilize unused quota.
+     - Configured Deep Thought hydration payload budget to 30 matches (sub-50ms execution latency).
+  5. **Taxonomy & Empty-List Cleanups**:
+     - Aligned `test_feedback_semantic_triage.py` to match commit `5689cc5` (`META` $\to$ `lab_internal`, `SUPERVISORY` $\to$ `feedback`).
+     - Hardened `archive_node.py` with an empty curated anchors contract check and conversational stop-word exclusions (`"there"`, `"hello"`, `"today"`).
+* **Anchor 4 (DNA Links):** `[BKM-015]`, `[BKM-081]`, `[BKM-086]`, `[FEAT-451]`, `[FEAT-668]`, `[FEAT-685]`, `[FEAT-686]`.
+* **Verification Log:**
+  - 18/18 targeted tests passed (`test_ripgrep_hydration.py`, `test_feedback_semantic_triage.py`, `test_agentic_r_retrieval.py`).
+  - 105 SCRIPT cards live in ChromaDB `diagnostic_dna`.
+  - Ambient recall verified end-to-end.
+  - Subprocess ripgrep latency clocked at 48.73ms.
