@@ -588,6 +588,29 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
     - Verified live silicon compounding during Phase 3 probe replay: `[HUB] Council of Hemispheres: Node brain boosted interest from 1.11 to 1.41` and `[MOAT] Positive Moat: 1/4 chunks validated. Boosted interest: 1.31`.
     - Executed full probe gauntlet (`probe_phase3_rag_gauntlet.py`): All 4 probes PASSED with Bonsai-27B Critic awarding **`0.95 / 1.0`** (Req ID `1100ec48`, 0 silicon telemetry leaks, completed in 22.1s).
 
+* **17:58 PST — Story 110.14: Pinky Persona Canon Realignment & 3rd-Person Scorecard Demarcation (`8f57414` / `4caed8b` / `[FEAT-582]`)**:
+  - **Operator Mandate**:
+    - *"Pinky's 'The response is coherent and provides' feels off with, like '3rd person' or something."*
+    - *"It also avoids addressing deep thought as Brain."*
+    - *"Also it looks like Pinky is just parroting deep thought."*
+  - **Forensic Diagnosis & Root Cause**:
+    - Discovered `format_chat_delivery(cartoon_retort=critic_res.cartoon_retort, technical_summary=critic_res.reasoning)` in `evaluate_grounding()` was appending Pinky's internal diagnostic critique explanation directly into out-loud spoken user chat.
+    - Discovered `step_entailment_audit` was passing only Deep Thought's technical output (`text`) as `user_query` into `evaluate_grounding()`. Without Jason's authentic prompt, Pinky had no choice but to summarize/parrot Deep Thought.
+  - **Architectural Remediation**:
+    - **Scorecard Isolation**: Demarcated `critic_res.reasoning` strictly to internal `CROSSTALK` and `.round_table_evals.json`. Passed `technical_summary=""` to `format_chat_delivery`, permanently banning 3rd-person evaluation scorecards from chat delivery.
+    - **Authentic Grounding & Persona Canon**: Passed authentic `query` from `step_entailment_audit` into `evaluate_grounding(..., user_query=query)`. Updated prompt instructions and schema in `pinky_critic_persona.py`: Pinky explicitly recognizes Deep Thought as Brain's technical compute hemisphere, delivers authentic direct character banter with Brain and Jason, and never parroted technical output verbatim.
+    - **Headroom Timeout Expansion**: Expanded Deep Thought remote synthesis timeout from `45.0s` to `60.0s` (`cognitive_hub.py:3581`) to provide full runway for unbounded interest headroom ($> 1.0$) on local RTX 2080 Ti silicon.
+    - **Gauntlet Probe Hardening**: Hardened `probe_phase3_rag_gauntlet.py:probe_3_4_4_live_silicon_replay` to poll Bonsai async LAN judge scores directly (up to 120s) and asserted zero occurrences of 3rd-person diagnostic leakage.
+  - **Verification & Silicon Certification**:
+    - Pytest unit suite: 102/102 passed in 2.10s (`test_pinky_critic_persona.py`, `test_sprint61_integration.py`, `test_cognitive_hub_pacing.py`, `test_multi_stage_replay_pipeline.py`).
+    - Hot-reloaded residents via `POST /reload_residents` $\to$ `dirty: false` (`boot_commit: 4caed8b`).
+    - Executed Phase 3 Gauntlet (`probe_phase3_rag_gauntlet.py`) on live physical silicon:
+      - Probe 3.4.1 (Scope Resolution & Fallback): **PASS**
+      - Probe 3.4.2 (Archive Node Live Chroma Query): **PASS** (1355 chars)
+      - Probe 3.4.3 (Turn Isolation & Anti-Bleed Directives): **PASS**
+      - Probe 3.4.4 (E2E Silicon Replay of 07:45 Prompt): **PASS** (Bonsai Critic score **`0.95 / 1.0`**, Req ID `d8047e20`, 0 silicon telemetry leaks, 0 3rd-person leaks, completed in 62.45s).
+      - `all_passed: true`.
+
 ---
 
 ### 4. Verification & Artifact Ledger
@@ -599,16 +622,18 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
 | **Pacing & Interest Suite**| `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.19s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `0869b85`) |
+| **Persona & Entailment Suite**| `pytest` | `test_pinky_critic_persona.py` | **PASS** (102/102 passed in 2.10s) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `4caed8b`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`, req: `6e690dd7`) |
 | **BKM-081 DNA Search** | `ChromaDB` | `query_dna("sprint log")` | **PASS** (Rank 1, distance: 0.4405) |
 | **BKM-077 Surgical Update**| `Protocols.md` | Operator index preservation mandate | **PASS** (Line 1346 updated) |
 | **Probe 3.4.1 (Scope)** | `pytest` | `resolve_collection_scope` literal names + fallback | **PASS** (All 5 assertions valid) |
 | **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1355 chars retrieved) |
 | **Probe 3.4.3 (Anti-Bleed)**| `pytest` | Multi-turn isolation & anti-leakage probe | **PASS** (Clean pacing directive) |
-| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `1100ec48`) |
+| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `d8047e20`) |
 | **Silicon Compounding** | `server.log` | Node brain boosted interest beyond 1.0 | **PASS** ($1.11 \to 1.41$, Moat: $1.31$) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `0869b85`) |
+| **Zero 3rd-Person Leak**| `journal_ledger.jsonl`| Assert no "The response is coherent..." in delivery | **PASS** (0 occurrences detected) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `4caed8b`) |
 
 
 
