@@ -54,20 +54,20 @@ Sprint 107.0 completes the architectural evolution started in ADR-008 and formal
 ## 🚦 AFK Execution Checklist & Stories (`BKM-086`)
 
 ### Phase 1: External UI Refactoring (DNA Forge & Applied Writer)
-- [ ] **Story 107.1**: Card Button Renaming (`+ Rack` $\to$ `+ Stage`) across `dna_forge_build.py`, templates, and CSS.
-- [ ] **Story 107.2**: Rebrand Top Shelf in `dna_forge.html` to `📑 ACTIVE KABAL STAGING` with `dna_active_staging_shelf` migration and "Send to Writer" / "Export Kabal" actions.
-- [ ] **Story 107.3**: Tab 1 Drafting & Decomposition terminology alignment (`Decompose into Kabal Cards & Spine`).
-- [ ] **Story 107.4**: Applied Writer (`writer.html`) canvas cleanup (retire vestigial `.bone-*` classes, prioritize multi-corpus citation chips).
+- [x] **Story 107.1**: Card Button Renaming (`+ Rack` $\to$ `+ Stage`) across `dna_forge_build.py`, templates, and CSS. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.2**: Rebrand Top Shelf in `dna_forge.html` to `📑 ACTIVE KABAL STAGING` with `dna_active_staging_shelf` migration and "Send to Writer" / "Export Kabal" actions. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.3**: Tab 1 Drafting & Decomposition terminology alignment (`Decompose into Kabal Cards & Spine`). *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.4**: Applied Writer (`writer.html`) canvas cleanup (retire vestigial `.bone-*` classes, prioritize multi-corpus citation chips). *(COMPLETED & CERTIFIED under FEAT-665)*
 
 ### Phase 2: Internal Data & Paper Migration
-- [ ] **Story 107.5**: Migrate `notes_jitc_bones.json` and `paper_jitc_intuition.json` into canonical bundle: `Portfolio_Dev/papers/jitc_intuition/`.
-- [ ] **Story 107.6**: Archive legacy `field_notes/data/bones/` to `field_notes/data/archive/bones/` and deprecate `bone_collections.json`.
-- [ ] **Story 107.7**: Re-anchor `HomeLabAI/src/projection/bones.py` to `ast_reconciliation.py` with backwards-compatibility aliases, and retire obsolete `refine_bones.py`.
+- [x] **Story 107.5**: Migrate `notes_jitc_bones.json` and `paper_jitc_intuition.json` into canonical bundle: `Portfolio_Dev/papers/jitc_intuition/`. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.6**: Archive legacy `field_notes/data/bones/` to `field_notes/data/archive/bones/` and deprecate `bone_collections.json`. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.7**: Re-anchor `HomeLabAI/src/projection/bones.py` to `ast_reconciliation.py` with backwards-compatibility aliases, and retire obsolete `refine_bones.py`. *(COMPLETED & CERTIFIED under FEAT-665)*
 
 ### Phase 3: Silicon Gauntlet, Compilation & Deployment
-- [ ] **Story 107.8**: Recompile `dna_forge_build.py` and run `build_site.py --no-verify` to deploy to `www_deploy`.
-- [ ] **Story 107.9**: Execute complete test suite (HomeLabAI + Portfolio_Dev 24/24), hot-reload live daemons, verify live `:8765` health.
-- [ ] **Story 107.10**: Update `FeatureTracker.md`, register `SPR-107.0` in `sprint_data.json`, and certify sprint completion.
+- [x] **Story 107.8**: Recompile `dna_forge_build.py` and run `build_site.py --no-verify` to deploy to `www_deploy`. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.9**: Execute complete test suite (HomeLabAI + Portfolio_Dev 24/24), hot-reload live daemons, verify live `:8765` health. *(COMPLETED & CERTIFIED under FEAT-665)*
+- [x] **Story 107.10**: Update `FeatureTracker.md`, register `SPR-107.0` in `sprint_data.json`, and certify sprint completion. *(COMPLETED & CERTIFIED under FEAT-665)*
 
 ---
 

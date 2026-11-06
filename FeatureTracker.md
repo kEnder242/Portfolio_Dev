@@ -4084,3 +4084,105 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
   - **Tier 3 (Technical Scars & Gems)**: High-density distilled engineering gems carrying immutable `spatial_anchor` (`line_start`, `line_end`) and `temporal_anchor` metadata, indexed in `long_term_wisdom`.
   - **Tier 4 (Physical Raw Notes Ground Truth)**: Un-embedded physical `.txt` files in `/home/jallred/knowledge_base/`, surgically hydrated on-demand into Deep Thought's prompt payload via automated Ripgrep (`[FEAT-451]`).
 **Rationale:** Prevents context window blowouts and prefill latency from raw note flooding while eliminating the loss of strategic career context caused by flat single-layer vector retrieval.
+
+
+## [FEAT-661] Vibe-013 Persona & Reflex Harmonization
+**Sprint:** Sprint 108.0
+**Status:** ACTIVE
+**Tags:** `#thought_stream`, `#dual_console`, `#micro_telemetry`, `#intercom_v2`, `[BKM-007]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.build_dual_thought_packet`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
+**Logic:** Builds dual-console WebSocket `thought_stream` telemetry packets separating Left Console conversational reflex (Pinky spoken response) from Right Console epistemic deliberation (Brain/Deep Thought evidence and entailment). Injects inline micro-telemetry tokens (`[SID: ...] [PID: ...]`) to provide physical provenance without polluting conversational prose.
+**Rationale:** Decouples conversational voice from deep analytical reflection, allowing simultaneous low-latency chat delivery and detailed auditability.
+
+## [FEAT-666] Mechanical Evidential Moat (Evidence-Before-Verdict Gate)
+**Sprint:** Sprint 108.0
+**Status:** ACTIVE
+**Tags:** `#evidential_moat`, `#evidence_before_verdict`, `#bkm_015`, `#grounding_gate`, `[BKM-085]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._enforce_evidential_moat`, `HomeLabAI/src/nodes/archive_node.py`
+**Logic:** Enforces an explicit mechanical gate requiring evidence chunks to be harvested and loaded into the epistemic state BEFORE Deep Thought or Pinky can render a verdict. If no evidence chunks meet minimum relevance thresholds, the system is mechanically barred from issuing speculative assertions, forcing explicit scarcity reporting (`INSUFFICIENT_EVIDENCE`).
+**Rationale:** Mechanically eliminates conversational hallucination and "Green Lie" ungrounded claims by making lack of evidence a first-class control flow branch.
+
+## [FEAT-667] Out-of-band Entailment Audit on Deep Thought (Right Console)
+**Sprint:** Sprint 108.0
+**Status:** ACTIVE
+**Tags:** `#entailment_audit`, `#right_console`, `#out_of_band`, `#epistemic_verification`, `[BKM-090]`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.audit_entailment_stream`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Logic:** Dispatches an asynchronous out-of-band verification query to Node Brain (M5 Air Bonsai-27B via Headroom port 8002) evaluating whether Deep Thought's conclusion strictly follows from the retrieved chunk evidence. Emits audit verdicts (`PASS` / `MISMATCH`) directly to the Right Console (`insightConsole`) without stalling or polluting the user's primary conversational stream on the Left Console.
+**Rationale:** Provides independent judicial oversight on complex hardware reasoning without incurring serial turnaround latency.
+
+## [FEAT-668] Ripgrep Ground Truth Hydration Bridge & Balanced Anchor Quotas
+**Sprint:** Sprint 108.0 / Sprint 110.0
+**Status:** ACTIVE
+**Tags:** `#ripgrep_bridge`, `#ground_truth_hydration`, `#anchor_quotas`, `#starvation_prevention`, `[BKM-088]`, `[BKM-090]`
+**Code:** `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/test_empirical_step_harness.py`
+**Logic:** Establishes a fast ripgrep hydration pipeline that dynamically harvests search anchors across multiple prompt tiers (user entities, triage terms, and HyDE anchors), enforcing strict word boundaries (`-w`) and round-robin quota balancing across distinct terms. Prevents high-frequency anchors (`Mailbox`) from starving critical low-frequency hardware error table anchors (`BERT`, `HEST`, `MCA`, `RAS`). Hydrates matching raw note lines directly into Deep Thought's Stage 4 prompt payload within <50ms.
+**Rationale:** Guarantees that Deep Thought is grounded on raw physical text files (WHEA HEST error tables, register offsets) even when vector embeddings miss nuanced acronyms.
+
+## [FEAT-671] Brain Rich Chunk Evidence Restoration & Right Console Accordion GUI
+**Sprint:** Sprint 108.0
+**Status:** ACTIVE
+**Tags:** `#rich_chunks`, `#right_console`, `#accordion_gui`, `#bkm_091`, `#bkm_092`
+**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._format_rich_chunks`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
+**Logic:** Formats retrieved RAG and Ripgrep evidence into structured expandable accordion cards on the Right Console (`insightConsole`). Preserves spatial provenance (`[CHUNK-N]`, source file, line ranges, score, relevance badge) while giving operators 1-click drill-down into raw chunk text without cluttering conversational dialog.
+**Rationale:** Restores full evidential visibility for operators and prevents epistemic entanglement between raw citations and synthesized conclusions.
+
+---
+
+## 🏛️ Appendix: Bicameral Rapid Iteration Features (Sprints 60–75)
+*Documented for historical traceability and code comment alignment.*
+
+### [FEAT-503] Eager Resident Node Ignition
+**Sprint:** Sprint 68.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/v5/foyer/router.py:4184`  
+Pre-warms and launches all resident background daemon workers on Foyer startup to eliminate first-touch cold probe penalties.
+
+### [FEAT-504] Unified Telemetry Logger & Tier Allocation
+**Sprint:** Sprint 68.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/infra/cumulative_telemetry.py:33`  
+Computes physical execution tier allocation (`TIER_1_LOCAL_SOVEREIGN` vs `TIER_2_SWARM_BURST`) across multi-node telemetry streams.
+
+### [FEAT-512] Smart Heartbeat Polling & Live Telemetry Inspector
+**Sprint:** Sprint 69.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/tests/delegate.py:1991`  
+Provides non-blocking heartbeat inspection and token telemetry polling for delegated subagent and swarm sessions.
+
+### [FEAT-526] Unified Nested Ledger
+**Sprint:** Sprint 70.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/tests/test_unified_ledger_ui.py`  
+Verification suite and rendering pipeline for nested hierarchical sovereign execution ledgers.
+
+### [FEAT-527] Sanitized Public Benchmark Exporter
+**Sprint:** Sprint 70.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/tests/test_benchmark_sanitizer.py`  
+Sanitization pipeline stripping internal host paths and credentials before exporting benchmark datasets to `www_deploy`.
+
+### [FEAT-529] Physical Stopwatch & Atomic Delta Export Engine
+**Sprint:** Sprint 71.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/cognitive_hub.py:2050`, `HomeLabAI/src/memory/blackboard_ledger.py:2`  
+Per-stage nanosecond stopwatch recording physical inference elapsed durations and exporting atomic turn deltas to `round_table_deltas.json`.
+
+### [FEAT-531] Speculative Triage Engine Seats & Probe Calibration
+**Sprint:** Sprint 71.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/speculative_triage.py:15`  
+Dynamic latency calibration for speculative triage seats, enforcing 2x timeout thresholds on cold network probes.
+
+### [FEAT-533] Pure Prompt-Guided Semantic Triage Gatekeeper
+**Sprint:** Sprint 72.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/cognitive_hub.py:1919`  
+Enforces pure prompt-guided semantic triage pursuant to `[BKM-015-GUARD]`, barring regex string matching in user domain classification.
+
+### [FEAT-534] Speculative Triage Relay (Multi-Seat vs Local vLLM)
+**Sprint:** Sprint 72.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/cognitive_hub.py:1922`  
+Multi-seat speculative triage dispatcher evaluating latency and availability across local vLLM, M5 Air, and remote swarms.
+
+### [FEAT-558] Multi-Turn Reflection Stripper & Session Ledger Circuit Breaker
+**Sprint:** Sprint 76.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/cognitive_hub.py:147`  
+Strips internal reflection tokens (`<thought>...</thought>`) before persisting session history and broadcasting to client UI.
+
+### [FEAT-559] Pinky Domain Foil for Ambiguous Queries
+**Sprint:** Sprint 76.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/logic/cognitive_hub.py:2288`  
+Directs Pinky to provide exploratory associative framing when Stage 1 triage indicates high semantic ambiguity.
+
+### [FEAT-561] Wisdom Studio Direct Card In-Place Save
+**Sprint:** Sprint 77.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/v5/foyer/router.py:970`  
+REST endpoint and UI action enabling atomic, in-place card editing and disk persistence directly from Wisdom Studio.
+
+### [FEAT-562] Automated Nightly Wisdom Synthesis Refiner
+**Sprint:** Sprint 77.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/infra/nightly_forge.py:762`  
+Overnight batch refiner deduplicating and semantically clustering newly mined wisdom gems.
+
+### [FEAT-606] Words-First Inline DNA Citation & Lens Swapper
+**Sprint:** Sprint 87.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/v5/foyer/router.py:1062`  
+Provides interactive inline lens swapping (`/paper/swap_lens`) to substitute raw text passages with formal DNA citations.
