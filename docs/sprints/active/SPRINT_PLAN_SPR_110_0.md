@@ -492,6 +492,25 @@ Both defects were eradicated at their architectural boundaries and verified agai
     - Pytest verified: `test_cognitive_hub_pacing.py` (20/20 passed) and `test_rag_cache.py` (1/1 passed).
     - Committed `HomeLabAI` (`2e27771`), hot-reloaded daemon via `POST /reload_residents` (`commit: 2e27771`, VRAM preserved).
 
+* **16:36 PST — Story 110.12: Taxonomy Synchronization & Adversarial Oracle Review (`[BKM-077]` / `[BKM-080]` / `[BKM-015]`)**:
+  - **Adversarial Oracle Delegation**:
+    - Dispatched pre-flight audit via `python3 HomeLabAI/src/tests/delegate.py --sprint 110 --story 110.12 --title "Taxonomy Synchronization Audit" --oracle`.
+    - Cloud Oracle completed comprehensive review in 74s with ambient telemetry (`ICM Wake-up`, `Grounding Header: > 🧬 Grounding:`).
+  - **Comprehensive Taxonomy Alignment**:
+    - Synchronized `HomeLabAI/config/triage_policy.json`:
+      - `OPERATIONAL` $\to$ default domain `exp_tlm` (live telemetry & diagnostics).
+      - `FORENSIC` $\to$ default domain `forensics` (sanitized post-mortem & crash logs).
+      - `SOCRATIC` $\to$ default domain `dna` (CLaRa-DNA behavioral cards & philosophy).
+      - `META` $\to$ homelab environment, system architecture, resident runtime (`lab_internal`).
+      - `SUPERVISORY` $\to$ operational feedback about the lab itself (`feedback`).
+    - Aligned duplicate `triage_schema` in `cognitive_hub.py` (line 1946) to support `dna`, `forensics`, and legacy aliases.
+    - Added `dna`, `exp_dna`, and `forensics` keyword tables to `HomeLabAI/src/nodes/archive_node.py`.
+    - Synchronized `HomeLabAI/config/intent_anchors.json` and `HomeLabAI/src/data/hyde_domain_map.json`.
+  - **Verification & Hot-Reload**:
+    - Pytest test suite verified: 107 passed, 12 skipped in 0.62s (`test_triage_policy_loader.py`, `test_traversal_dispatcher.py`, `test_cognitive_hub_pacing.py`, `test_rag_cache.py`).
+    - Committed `HomeLabAI` (`5689cc5`).
+    - Hot-reloaded residents via `POST /reload_residents` $\to$ daemon verified clean on `http://127.0.0.1:8765/status?timeout=5` (`boot_commit: 5689cc5`, `dirty: false`).
+
 ---
 
 ### 3. Verification & Artifact Ledger
@@ -502,11 +521,13 @@ Both defects were eradicated at their architectural boundaries and verified agai
 | **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `2e27771`) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `5689cc5`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`) |
 | **RAG Decoupling Unit** | `pytest` | `test_rag_cache.py` | **PASS** (1/1 passed in 0.14s) |
 | **Pacing & De-Fluff Suite** | `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.24s) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `2e27771`) |
+| **Oracle Verification** | `delegate.py --oracle` | Story 110.12 Taxonomy Synchronization Audit | **PASS** (Completed in 74s, 0 tool errors) |
+| **Taxonomy Unit Suite** | `pytest` | `test_triage_policy_loader.py` + `test_traversal_dispatcher.py` | **PASS** (107 passed, 12 skipped) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `5689cc5`) |
 
 
 

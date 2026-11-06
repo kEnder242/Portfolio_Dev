@@ -13970,24 +13970,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Establishes a 4-tier anti-hang architecture:
-1. <strong>Kernel Auto-Reboot:</strong> <code>kernel.panic = 10</code>, <code>kernel.panic_on_oops = 1</code>, <code>kernel.hung_task_timeout_secs = 120</code>, and <code>kernel.hung_task_panic = 1</code> guarantee that any uninterruptible driver deadlock or oops automatically triggers a reboot in 10 seconds rather than freezing indefinitely.
-2. <strong>Native PyTorch Checkpointing:</strong> <code>use_gradient_checkpointing = True</code> eliminates custom Triton JIT kernel compilation on Turing SM 7.5.
-3. <strong>Single-Process DataLoader:</strong> <code>dataset_num_proc = 1</code>, <code>dataloader_num_workers = 0</code>, and <code>dataloader_pin_memory = False</code> eliminate multiprocessing IPC and pinned memory contention with the physical Xorg display server.
-4. <strong>Process Priority &amp; Cgroup Tuning:</strong> <code>field-notes-nightly.service</code> runs at <code>Nice=10</code> and <code>IOSchedulingClass=best-effort</code> to ensure GUI and kernel input subsystems retain priority.</p>
+                    <p>Whenever the operator or any agent says "sprint log", "log to the sprint", or "update the sprint log", it strictly and exclusively means appending a running chronological execution narrative and milestone verification trace directly to the bottom of the active sprint plan (<code>Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_*.md</code>). Absolutely forbids creating separate, detached <code>SPRINT_LOG_*.md</code> satellite files.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Prevents hard system lockups where NumLock freezes while ping remains responsive, ensuring the host is always self-healing.</p>
+                    <p>Prevents context fragmentation and cross-session amnesia by ensuring that planning specifications and chronological execution history reside in a single unified on-disk artifact.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>/etc/sysctl.d/99-homelab-watchdog.conf</code>, <code>HomeLabAI/src/forge/train_expert.py</code>, <code>HomeLabAI/config/systemd/field-notes-nightly.service</code>.</p>
-<h2>[SCAR-036] Xorg Display vs. Unsloth Triton CUDA Context Mutex Contention</h2>
+                    <p><code>HomeLabAI/docs/Protocols.md</code> (BKM-081), <code>Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_*.md</code>.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -14023,12 +14018,19 @@
 <li><strong>Synchronization Mandate:</strong> Whenever the playbook is updated or refined, Section 0 and BKM-071 must be synchronized.</li>
 <li><strong>Version Control Ground Truth:</strong> §8 of the index mandates <code>git log</code>/<code>git diff</code> audits before modifying any delegation configuration.</li>
 </ol>
+<h2>[BKM-081] The Sprint Append Ledger Protocol (The "Sprint Log")</h2>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Parent Anchors</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p><code>[FEAT-522](#FEAT-522)</code>, <code>[BKM-049]</code>, <code>[BKM-069]</code>, <code>[VIBE-009]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Colloquial Aliases</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>"Sprint Log", "The Sprint Log", "Update the Sprint Log", "Log to the Sprint", "Save as a Sprint Log", "Sprint Append"</p>
                 </div>
             </div>     </div>
                             </details>

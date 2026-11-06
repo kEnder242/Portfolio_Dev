@@ -186,5 +186,29 @@ vpl-inspect | grep -i "DeviceID"
 * **Dynamic Peer Boosting**: When verified evidence is discovered, Brain or Pinky emits `<boost_interest>` ($\Delta I = +0.20$), organically elevating turn fuel and expanding conversational headroom without hardcoding special cases.
 * **Configuration Truth**: Master parameters reside in [`HomeLabAI/config/infrastructure.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/infrastructure.json#L33-L37) (`"interest_pacing": {"token_multiplier": 150, "max_token_ceiling": 1500}`).
 
+---
+
+## 🛠️ 10. Story 110.12: Taxonomy Synchronization & Adversarial Oracle Verification
+
+### Residual Taxonomy Drift Remediation
+* **`config/triage_policy.json` Synchronized**:
+  - `OPERATIONAL` default domain switched to `exp_tlm` (live telemetry & diagnostics).
+  - `FORENSIC` default domain switched to `forensics` (crash logs and post-mortems).
+  - `SOCRATIC` default domain switched to `dna` (CLaRa-DNA behavioral cards & philosophy).
+  - `META` updated to describe lab environment, system architecture, and resident runtime (`lab_internal`).
+  - `SUPERVISORY` updated to operational feedback about the lab itself (`feedback`).
+* **`src/logic/cognitive_hub.py` Harmonized**:
+  - Aligned duplicate pre-reflection triage schema enum at line 1946 to include `dna`, `forensics`, and backward-compatible aliases.
+* **`src/nodes/archive_node.py` Keywords Added**:
+  - Added keyword mappings for `dna`, `exp_dna`, and `forensics` to prevent empty domain filtering.
+* **Auxiliary Mappings Aligned**:
+  - Updated `config/intent_anchors.json` and `src/data/hyde_domain_map.json` to canonical domains.
+
+### Adversarial Oracle Audit
+* Dispatched pre-flight audit via `python3 HomeLabAI/src/tests/delegate.py --sprint 110 --story 110.12 --title "Taxonomy Synchronization Audit" --oracle`.
+* Completed cleanly with verified ambient ICM telemetry, validating that the unified architecture enforces non-interference between telemetry, forensics, and wisdom retrieval.
+* All 107 tests green; daemon verified clean on `boot_commit: 5689cc5`.
+
+
 
 
