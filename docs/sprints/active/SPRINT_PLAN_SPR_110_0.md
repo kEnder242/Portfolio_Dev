@@ -574,6 +574,19 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
   - [x] Probe 3.4.3: Turn isolation & anti-bleed probe verifying zero cross-turn leakage (PASS).
   - [x] Probe 3.4.4: Full E2E ground-truth replay of 07:45 prompt against live daemon, validated by M5 Air Bonsai Critic (PASS, `score: 0.95 / 1.0`, req: `3aaeca1b`, 0 silicon telemetry leaks).
 - [x] **Phase 3: Roll-Up & Airlock Deployment**: Re-compile site via `build_site.py --no-verify`, synchronize `www_deploy`, commit all submodules, and present final Heads-Up Completion Report (`BKM-007`).
+- [x] **Phase 3: #4.0 — Option A Uncapped Interest Currency (`[FEAT-523]`)**: Eradicate arbitrary `min(1.0, ...)` clamp across all boosting sites in `cognitive_hub.py` and `calculate_pacing_ceiling`, modeling interest as an unbounded positive fuel currency that compounds freely on silicon.
+
+* **17:35 PST — Story 110.13: Option A Uncapped Interest Currency & Compounding Energy (`815a53e` / `0869b85` / `[FEAT-523]`)**:
+  - **Operator Mandate**: Operator identified that peer-vote interest boosting saturated and never climbed above 1.0 (`"Optin A. Update ASAP then continue with sprint."`).
+  - **Unbounded Currency Architecture**:
+    - Under `[FEAT-523]`, interest is the sole shape of the turn. Excised `min(1.0, ...)` across all 9 peer-voting, springboard, and moat calculation blocks in `HomeLabAI/src/logic/cognitive_hub.py` (lines 491, 1627, 1664, 1684, 2095, 2565, 2976, 3412, 3792, 3800).
+    - Interest is now an unbounded positive energy currency (`round(max(0.0, ...), 2)`), allowing multi-stage peer boosts (`+0.20`, `+0.30`) to compound naturally without an artificial 1.0 ceiling.
+    - Headroom scales proportionally: `ceiling = max(16, int(round(interest * 1000)))`. Interest of 1.20 yields 1,200 tokens; 1.50 yields 1,500 tokens. Negative moats and damping still subtract (`-0.25`), naturally pulling fuel down toward zero when evidence is lacking.
+  - **Verification & Live Silicon Trace**:
+    - Unit test suite `test_cognitive_hub_pacing.py` expanded with `test_interest_uncapped_above_1`: 20/20 passed in 0.19s.
+    - Hot-reloaded residents via `POST /reload_residents` (`commit: 815a53e` and `0869b85`, VRAM preserved).
+    - Verified live silicon compounding during Phase 3 probe replay: `[HUB] Council of Hemispheres: Node brain boosted interest from 1.11 to 1.41` and `[MOAT] Positive Moat: 1/4 chunks validated. Boosted interest: 1.31`.
+    - Executed full probe gauntlet (`probe_phase3_rag_gauntlet.py`): All 4 probes PASSED with Bonsai-27B Critic awarding **`0.95 / 1.0`** (Req ID `1100ec48`, 0 silicon telemetry leaks, completed in 22.1s).
 
 ---
 
@@ -585,15 +598,18 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
 | **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `8d02f34`) |
+| **Pacing & Interest Suite**| `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.19s) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `0869b85`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`, req: `6e690dd7`) |
 | **BKM-081 DNA Search** | `ChromaDB` | `query_dna("sprint log")` | **PASS** (Rank 1, distance: 0.4405) |
 | **BKM-077 Surgical Update**| `Protocols.md` | Operator index preservation mandate | **PASS** (Line 1346 updated) |
 | **Probe 3.4.1 (Scope)** | `pytest` | `resolve_collection_scope` literal names + fallback | **PASS** (All 5 assertions valid) |
-| **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1435 chars retrieved) |
+| **Probe 3.4.2 (Chroma SDK)**| `archive_node.py` | Query `career_ledger` for RAS/Mailbox via native SDK | **PASS** (1355 chars retrieved) |
 | **Probe 3.4.3 (Anti-Bleed)**| `pytest` | Multi-turn isolation & anti-leakage probe | **PASS** (Clean pacing directive) |
-| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `3aaeca1b`) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `8d02f34`) |
+| **Probe 3.4.4 (E2E Silicon)**| `M5 Air (Bonsai-27B)` | Replay 07:45 RAS prompt, score $\ge 0.85$ | **PASS** (`score: 0.95`, req: `1100ec48`) |
+| **Silicon Compounding** | `server.log` | Node brain boosted interest beyond 1.0 | **PASS** ($1.11 \to 1.41$, Moat: $1.31$) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `0869b85`) |
+
 
 
 
