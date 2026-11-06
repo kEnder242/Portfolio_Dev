@@ -20,7 +20,8 @@
 | **Story 110.7** | `[AGY:PRIMARY]` | Direct | Empirical Benchmark Gauntlet (`benchmark_hybrid.py`) | **COMPLETED & CERTIFIED** | Generated `hybrid_benchmark_results.json`; measured TTFT, tok/s, dual VRAM allocations across Llama 3.2 3B and Qwen 2.5 32B. |
 | **Story 110.8** | `[AGY:PRIMARY]` | Direct | Qwen 3.5/3.7/3.8 Characterization & Waterfall Drop-In | **COMPLETED & CERTIFIED** | Benchmarked Qwen 3.8 27B (11.33 t/s) and Qwen 3.7-Flash 8B (59.96 t/s); dropped `llama-server` directly into lab waterfall on port 8088 with `--alias unified-base`. |
 | **Story 110.9** | `[AGY:PRIMARY]` | Direct | Pure 3.7-Flash Speculative Sweet Spot, Memory Safety & LAB Field Note | **COMPLETED & CERTIFIED** | Benchmarked 4B draft standalone ($1,435\text{ t/s}$ pp, $76.3\text{ t/s}$ tg); diagnosed `systemd-oomd` PSI host memory trigger; enforced `--no-mmap` in `serve_llm.sh`; resolved draft access feasibility (keep single fast model drop-in); published LAB entry `FN-SPEC-DECODE-HETEROGENEOUS-2026-11`. |
-| **Story 110.10** | `[AGY:PRIMARY]` | Direct | Pre-Triage RAG Decoupling & Waterfall Intercom Formatting | **COMPLETED & CERTIFIED** | Excised `short_term_stream` from pre-triage; removed RAG caching pre-seed short-circuit; configured GFM breaks and 0.6em paragraph spacing in intercom assets; live hot-reloaded daemon. |
+| **Story 110.10** | `[AGY:PRIMARY]` | Direct | Pre-Triage RAG Decoupling & Waterfall Intercom Formatting | **COMPLETED & CERTIFIED** | Excised `short_term_stream` from pre-triage; removed RAG caching pre-seed short-circuit; configured GFM breaks in intercom assets; live hot-reloaded daemon. |
+| **Story 110.11** | `[AGY:PRIMARY]` | Direct | Eradication of Stealth Chops & Unified Universal Interest Pacing | **COMPLETED & CERTIFIED** | Decoupled task processing from conversational pacing; excised stealth clamp in `_process_node_stream()`; anchored unified interest currency & dynamic peer boosting (`FEAT-238`) in `infrastructure.json`. |
 
 ---
 
@@ -166,5 +167,24 @@ vpl-inspect | grep -i "DeviceID"
 * **Interleaved Triage JSON Root Cause & Fix**: `_dispatch_kender_triage` and `_dispatch_vllm_triage` had `internal: False`, streaming raw JSON tokens through the `thought` source channel into the active DOM stream element. Fixed by sealing both with `internal: True`.
 * **Truncation at "the" Root Cause & Fix**: Generation was artificially choked by hard clamp `dt_budget = min(dt_high, 350)`. Honoring the operator mandate ("we NEVER clamp LLM output; just suggest via prompt"), removed the clamp and passed `max_tokens=None`. Headroom pacing is governed strictly through prompt guidance (`[BUDGET]`), ensuring natural terminal sentence completion.
 * **Airlock Sync**: Rebuilt and deployed airlock assets via `build_site.py --no-verify`.
+
+---
+
+## 🛠️ 9. Story 110.11: Eradication of Stealth Chops & Unified Universal Interest Pacing
+
+### Decoupling Task Processing from Conversational Guidance
+* **The Principle**: Deterministic inspection tasks (Brain Gatekeeper chunk curation, Pinky HyDE extraction, Critic schema verification) require task-level headroom, NOT conversational throttling. Brain chunk curation must evaluate all candidate records without being chopped mid-citation.
+* **Conversational Target**: Pacing applies exclusively to conversational personas (Pinky spoken delivery, Deep Thought strategy).
+
+### Eradication of the Stealth API Chop
+* **Root Cause**: `_process_node_stream()` line 1586 defaulted unclamped calls to `token_budget = min(max_ceiling, int(current_interest * multiplier))`, secretly capping tool calls at 80–120 tokens on low/mid interest even when callers requested `max_tokens=None`.
+* **Fix**: Refactored line 1586 to `token_budget = max_tokens if max_tokens is not None else (128 if is_triage else max_ceiling)`. Unclamped calls now receive the full 1500-token physical context headroom (`max_ceiling`).
+* **Excised Artificial Floors**: Removed `max(200, ...)` from `step_pinky_voice()` and `max(brain_high, 100)` from `step_brain_gatekeeper()`. When interest drops below conversational floor, fuel naturally tapers to zero.
+
+### Unified Universal Interest & Peer Boosting (`FEAT-238`)
+* **Single Currency**: Rejected separate arbitrary node multipliers (e.g. Deep Thought 500 vs Pinky 200). Interest ($0.0 \dots 1.0$) is the sole universal currency across the lab.
+* **Dynamic Peer Boosting**: When verified evidence is discovered, Brain or Pinky emits `<boost_interest>` ($\Delta I = +0.20$), organically elevating turn fuel and expanding conversational headroom without hardcoding special cases.
+* **Configuration Truth**: Master parameters reside in [`HomeLabAI/config/infrastructure.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/infrastructure.json#L33-L37) (`"interest_pacing": {"token_multiplier": 150, "max_token_ceiling": 1500}`).
+
 
 
