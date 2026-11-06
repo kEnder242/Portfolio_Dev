@@ -511,6 +511,30 @@ Both defects were eradicated at their architectural boundaries and verified agai
     - Committed `HomeLabAI` (`5689cc5`).
     - Hot-reloaded residents via `POST /reload_residents` $\to$ daemon verified clean on `http://127.0.0.1:8765/status?timeout=5` (`boot_commit: 5689cc5`, `dirty: false`).
 
+* **16:48 PST — Story 110.11: Residual Conversational Hard Clamp Eradication (`b9a56d6` / `[BKM-015]`)**:
+  - **Identified Residual Clamp**: An exhaustive audit of `HomeLabAI/src/logic/cognitive_hub.py` revealed a remaining `max_tokens=250` in `step_casual_turn()` (line 3245).
+  - **Root-Cause Remediation**: Eradicated `max_tokens=250` and replaced with `max_tokens=None`. Headroom is governed purely by prompt budget guidance via `format_pacing_line("brain", current_interest)`.
+  - **Decoupled Task Floors Preserved**: Confirmed task-level deterministic inspection stages (`step_critic_evaluation` with `critic_budget = max(critic_high, 300)` and `step_pinky_hyde` with `pinky_budget = max(pinky_high, 250)`) remain appropriately decoupled to guarantee complete, valid JSON output payloads without mid-string token exhaustion.
+  - **Committed**: `HomeLabAI` (`b9a56d6`).
+
+* **16:51 PST — BKM-081 DNA Retrieval Enrichment & Anti-Hacking Resolution (`8e0d101` / `[Law 12]` / `[BKM-081]`)**:
+  - **Context**: Operator requested fixing DNA so that the query `"sprint log"` reliably surfaces in semantic search / ambient recall without Python regex hacks.
+  - **DNA Enrichment**:
+    - Updated [`HomeLabAI/docs/Protocols.md`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L1448-L1456) (`BKM-081`): Added explicit `**Objective**:`, `**Trigger / Aliases**:`, and `**Description**:`.
+    - Updated [`Portfolio_Dev/FeatureTracker.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/FeatureTracker.md#L2792-L2802): Added explicit `[BKM-081]` feature card under the BKM section.
+  - **ChromaDB Re-Indexing**:
+    - Re-indexed ChromaDB via `HomeLabAI/.venv/bin/python3 Portfolio_Dev/sync_chroma_dna.py --force`.
+    - Confirmed `query_dna("sprint log")` now retrieves `BKM-081` at rank #1 (distance `0.4405`).
+  - **Single-File Ground Truth Invariant (`BKM-081 §2`)**:
+    - Re-affirmed that "sprint log" strictly appends to the active sprint plan (`SPRINT_PLAN_SPR_110_0.md`), forbidding fragmented satellite files (`SPRINT_LOG_*.md`).
+    - Deprecated and removed detached satellite file `Portfolio_Dev/docs/sprints/active/SPRINT_LOG_SPR_110.md`.
+
+* **16:55 PST — Story 110.12: Live Physical Silicon Certification Probe (`b9a56d6`)**:
+  - **Hot Reload**: Reloaded residents via `POST http://127.0.0.1:8765/reload_residents` (`commit: b9a56d6`, VRAM preserved).
+  - **Verification**: Verified daemon status: `http://127.0.0.1:8765/status?timeout=5` returned `boot_commit: "b9a56d6"`, `dirty: false`, `status: "ONLINE"`, `state: "OPERATIONAL"`.
+  - **Live Probe Gauntlet**: Dispatched full synthetic morning round table accountability probe (`HomeLabAI/src/infra/probe_round_table_accountability.py`) replaying `bff308bb` (*"Audit active silicon residency and memory topology"*).
+  - **Physical Certification**: Status `PASS`, greeting latency 1.23ms, circuit latency 75.1s, triage routing `kender_online`, Bonsai Critic score `0.95 / 1.0` (Request ID `6e690dd7`, Brain score 0.95, Pinky score 0.95). 0 occurrences of Purley/BMC hallucinations.
+
 ---
 
 ### 3. Verification & Artifact Ledger
@@ -521,13 +545,14 @@ Both defects were eradicated at their architectural boundaries and verified agai
 | **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `5689cc5`) |
-| **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `b9a56d6`) |
+| **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`, req: `6e690dd7`) |
+| **BKM-081 DNA Search** | `ChromaDB` | `query_dna("sprint log")` | **PASS** (Rank 1, distance: 0.4405) |
 | **RAG Decoupling Unit** | `pytest` | `test_rag_cache.py` | **PASS** (1/1 passed in 0.14s) |
 | **Pacing & De-Fluff Suite** | `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.24s) |
 | **Oracle Verification** | `delegate.py --oracle` | Story 110.12 Taxonomy Synchronization Audit | **PASS** (Completed in 74s, 0 tool errors) |
 | **Taxonomy Unit Suite** | `pytest` | `test_triage_policy_loader.py` + `test_traversal_dispatcher.py` | **PASS** (107 passed, 12 skipped) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `5689cc5`) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `b9a56d6`) |
 
 
 
