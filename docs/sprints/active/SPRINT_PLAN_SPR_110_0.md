@@ -476,6 +476,22 @@ Both defects were eradicated at their architectural boundaries and verified agai
   - **`3.4` (LLM Content Suppression Audit)**: Audited all 7 stages; flagged that Pinky's `clean_hyde` vector text is suppressed from the UI whenever RAG returns 0 documents.
   - **Hot Reload & Build**: Reloaded residents (`POST /reload_residents` $\to$ `ada017a`), rebuilt site assets, and synced to `www_deploy`.
 
+* **16:25 PST — Story 110.11: Eradication of Stealth Chops & Unified Universal Interest Pacing (`[FEAT-523]` / `[FEAT-238]` / `[BKM-015]`)**:
+  - **Decoupled Task Processing from Conversational Pacing**:
+    - Identified that Brain Gatekeeper chunk filtering (`[ANALYSIS]` / `[BEDROCK SELECTION]`), Pinky HyDE extraction, and Critic schema validation are deterministic inspection tasks, NOT conversational banter.
+    - Decoupled Brain chunk filtering from conversational interest budgets, giving it full task-level headroom so it never drops citations or gets chopped mid-chunk.
+  - **Eradicated Stealth API Chops**:
+    - Discovered that `_process_node_stream()` line 1586 had a stealth clamp: `token_budget = max_tokens if max_tokens is not None else min(max_ceiling, int(current_interest * multiplier))`. On low/mid interest turns, this stealthily clamped engine generation at 80–120 tokens even when callers passed `max_tokens=None`.
+    - Refactored line 1586: `token_budget = max_tokens if max_tokens is not None else (128 if is_triage else max_ceiling)`. Callers requesting unclamped generation now receive the full 1500-token physical context headroom (`max_ceiling`).
+    - Excised artificial `max(200, ...)` and `max(brain_high, 100)` floors from `step_pinky_voice()` and `step_brain_gatekeeper()`.
+  - **Unified Universal Interest Currency & Peer Boosting (`[FEAT-238]`)**:
+    - Confirmed interest ($0.0 \dots 1.0$) is the sole universal currency across all personas.
+    - Rejected separate arbitrary node multipliers (e.g. Deep Thought 500 vs Pinky 200). Instead, the established Council of Hemispheres dynamic boost (`<boost_interest>` $\Delta I = +0.20$) organically elevates the turn's universal fuel whenever verified evidence is discovered.
+    - Pacing parameters reside in [`HomeLabAI/config/infrastructure.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/infrastructure.json#L33-L37) (`"interest_pacing"`).
+  - **Verification & Deployment**:
+    - Pytest verified: `test_cognitive_hub_pacing.py` (20/20 passed) and `test_rag_cache.py` (1/1 passed).
+    - Committed `HomeLabAI` (`2e27771`), hot-reloaded daemon via `POST /reload_residents` (`commit: 2e27771`, VRAM preserved).
+
 ---
 
 ### 3. Verification & Artifact Ledger
@@ -486,10 +502,12 @@ Both defects were eradicated at their architectural boundaries and verified agai
 | **Byte-Parity** | `loader.py` | `SHA256: 10bbbf8e...` string equality | **PASS** (0 bytes drifted) |
 | **Unit Test Suite** | `pytest` | `test_career_compass_bedrock.py` | **PASS** (5/5 passed in 0.29s) |
 | **Regression Suite** | `pytest` | `test_round_table_probe_unit.py` | **PASS** (10/10 passed in 2.86s) |
-| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `ada017a`) |
+| **Dirty Lab Gate** | `lab-attendant :8765` | `POST /reload_residents` $\to$ `dirty: false` | **PASS** (commit: `2e27771`) |
 | **Live Silicon Probe** | `M5 Air (Bonsai-27B)` | Synthetic Round Table Accountability Probe | **PASS** (`score: 0.95 / 1.0`) |
 | **RAG Decoupling Unit** | `pytest` | `test_rag_cache.py` | **PASS** (1/1 passed in 0.14s) |
-| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `ada017a`) |
+| **Pacing & De-Fluff Suite** | `pytest` | `test_cognitive_hub_pacing.py` | **PASS** (20/20 passed in 0.24s) |
+| **Frontend Airlock** | `www_deploy` | `build_site.py --no-verify` | **PASS** (commit: `2e27771`) |
+
 
 
 
