@@ -2789,6 +2789,13 @@
 2. **Synchronization Mandate:** Whenever the playbook is updated or refined, Section 0 and BKM-071 must be synchronized.
 3. **Version Control Ground Truth:** §8 of the index mandates `git log`/`git diff` audits before modifying any delegation configuration.
 
+## [BKM-081] The Sprint Append Ledger Protocol (The "Sprint Log")
+**Status:** ACTIVE
+**Colloquial Aliases:** "Sprint Log", "The Sprint Log", "Update the Sprint Log", "Log to the Sprint", "Save as a Sprint Log", "Sprint Append"
+**Logic:** Whenever the operator or any agent says "sprint log", "log to the sprint", or "update the sprint log", it strictly and exclusively means appending a running chronological execution narrative and milestone verification trace directly to the bottom of the active sprint plan (`Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_*.md`). Absolutely forbids creating separate, detached `SPRINT_LOG_*.md` satellite files.
+**Rationale:** Prevents context fragmentation and cross-session amnesia by ensuring that planning specifications and chronological execution history reside in a single unified on-disk artifact.
+**Mechanism:** `HomeLabAI/docs/Protocols.md` (BKM-081), `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_*.md`.
+
 ## [FEAT-493] Centralized Swarm Model Alias Registry
 **Sprint:** SPR-66.0
 **Status:** ACTIVE

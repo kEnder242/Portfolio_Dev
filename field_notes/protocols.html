@@ -1983,7 +1983,10 @@ The <code>BKM-080</code> protocol equips conductors with an authoritative psycho
                         <td style="vertical-align: top; padding: 12px 15px; border-bottom: 1px solid var(--border-color);">
                             <div style="font-weight: bold; color: var(--heading-color); font-size: 0.95rem; margin-bottom: 8px;">The Sprint Append Ledger Protocol (The "Sprint Log")</div>
                             <div class="protocol-body" style="font-size: 0.85rem; color: var(--text-color); line-height: 1.5;">
-                                <p><strong>Feature Anchor:</strong> <code>[BKM-081]</code> / <code>[BKM-020]</code> / <code>[BKM-023]</code> / <code>[BKM-077]</code><br />
+                                <p><strong>Objective</strong>: Prevent context fragmentation and multi-session amnesia by mandating that all sprint execution history, chronicles, and milestones are appended directly to the active sprint plan rather than detached files.
+<strong>Trigger / Aliases</strong>: "Sprint Log", "The Sprint Log", "Update the Sprint Log", "Log to the Sprint", "Save to Sprint Log", "Add to Sprint Log", "Roll up Sprint Log", "Sprint Append Ledger", "Active Plan Append Invariant".
+<strong>Description</strong>: Governs the single-file ground-truth lifecycle for active sprints. Whenever the operator or any agent says "sprint log", it strictly and exclusively mandates appending the running chronological execution narrative, friction points, breakthroughs, and verification evidence directly to the active <code>SPRINT_PLAN_SPR_*.md</code> file. Agents are strictly forbidden from creating separate, detached <code>SPRINT_LOG_*.md</code> satellite files.
+<strong>Feature Anchor:</strong> <code>[BKM-081]</code> / <code>[BKM-020]</code> / <code>[BKM-023]</code> / <code>[BKM-077]</code><br />
 <strong>Colloquial Alias:</strong> "The Sprint Log / Active Plan Append Invariant"<br />
 <strong>Domain:</strong> Sprint Documentation, Real-Time Ledgers, Intent Preservation, Unified Artifacts<br />
 <strong>Status:</strong> ACTIVE / MANDATORY  </p>
