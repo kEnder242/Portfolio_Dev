@@ -4126,6 +4126,22 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Logic:** Formats retrieved RAG and Ripgrep evidence into structured expandable accordion cards on the Right Console (`insightConsole`). Preserves spatial provenance (`[CHUNK-N]`, source file, line ranges, score, relevance badge) while giving operators 1-click drill-down into raw chunk text without cluttering conversational dialog.
 **Rationale:** Restores full evidential visibility for operators and prevents epistemic entanglement between raw citations and synthesized conclusions.
 
+## [FEAT-685] Universal Bucketed Ripgrep Engine & Syntactic Boundary Balancing
+**Sprint:** Sprint 110.0
+**Status:** ACTIVE
+**Tags:** `#ripgrep`, `#bucketed_search`, `#bkm_015`, `#anti_starvation`, `#syntactic_word_boundary`, `#ground_truth`, `[FEAT-451]`, `[FEAT-668]`
+**Code:** `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_ripgrep_hydration.py`
+**Logic:** Replaces naive single-process ripgrep execution with a discrete multi-bucket search engine. Each extracted anchor is allocated an isolated quota bucket (`bucket_allocation = max(2, max_matches // len(anchors))`) within a total budget (default 30 matches), followed by a dynamic overflow cascade to utilize spare headroom. Strictly complies with `[BKM-015]` by replacing hardcoded domain acronym lookup tables with a universal syntactic word boundary heuristic (`re.match(r"^[A-Z0-9_\.]{2,6}$", anchor) or anchor.isupper() or len(anchor) <= 5`).
+**Rationale:** Ripgrep compiles multiple `-e` patterns into a single automaton, allowing high-frequency terms like `Mailbox` (200+ matches) to exhaust quota budgets and completely starve rare hardware tables (`BERT`, `HEST`, `MCA`). Bucketed isolation guarantees zero-starvation recall while remaining fully domain-agnostic.
+
+## [FEAT-686] SCRIPT DNA Ledger, Ambient Diagnostic Sentinel & Physician's Catalog Ingestion
+**Sprint:** Sprint 110.0
+**Status:** ACTIVE
+**Tags:** `#script_dna`, `#ambient_recall`, `#diagnostic_ledger`, `#chromadb`, `#physicians_catalog`, `[BKM-081]`, `[BKM-086]`
+**Code:** `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md`, `Portfolio_Dev/sync_chroma_dna.py:parse_diagnostic_scripts`, `HomeLabAI/src/curator/ambient_recall.py`
+**Logic:** Creates a first-class `SCRIPT` DNA domain (`[SCR-xxx]`) cataloging all 105 active and historical diagnostic instruments from `DIAGNOSTIC_SCRIPT_MAP.md` (Section 1–18). Ingests tools into ChromaDB collection `diagnostic_dna` on port 8001 with structured metadata (`script_id`, `name`, `path`, `status`, `goal`, `source`, `type: SCRIPT`). Wires the ambient recall sentinel in `ambient_recall.py` to recognize `SCR-xxx` identifiers and query `diagnostic_dna` vectors during prompt construction, ambiently surfacing relevant diagnostic harnesses into context when matching operational or forensic symptoms occur.
+**Rationale:** Eliminates tool amnesia across sprints by elevating ad-hoc test scripts and diagnostic gauntlets to first-class, semantically searchable CLaRa-DNA behavioral cards.
+
 ---
 
 ## 🏛️ Appendix: Bicameral Rapid Iteration Features (Sprints 60–75)
