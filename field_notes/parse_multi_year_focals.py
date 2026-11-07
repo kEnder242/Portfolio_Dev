@@ -188,13 +188,13 @@ def parse_all_focal_anchors():
             "rank": 5,
         }
 
-        # 2021 Anchor: Montana Automation Framework Core & PyPI Distribution
+        # 2021 Anchor: Eagle Stream (Archer City) Manageability & PECI/MCTP Automation
         anchors_by_year["2021"] = {
             "date": "2021-12-31",
-            "summary": "[STRATEGIC_ANCHOR] Montana Platform Validation Framework Package Delivery: Packaged and released the Montana automation framework under XPIV devpi, instituting code review standards and multi-platform manageability tests.",
-            "evidence": "Insights 2021: Released Montana framework as a python package under XPIV devpi; Maintained quality in Montana code base by proactively engaging pull requests & code reviews.",
+            "summary": "[STRATEGIC_ANCHOR] Eagle Stream (Archer City) Manageability Architecture & PECI/MCTP Automation: Architected manageability validation for Eagle Stream / Sapphire Rapids on Archer City, authoring Redfish-PECI stress test suites, OOBMSM MCTP infrastructure, and leading MIV sprint planning.",
+            "evidence": "2021 Technical Notes & Presentations: Delivered 'Future of MCTP Infrastructure', OOBMSM MCTP Bus Owner architecture, Stressing Redfish PECI demo, and EGS/SPR manageability automation on Archer City reference systems.",
             "sensitivity": "Public",
-            "tags": ["Montana", "Devpi", "Automation", "Python", "Code_Review"],
+            "tags": ["Archer_City", "Eagle_Stream", "PECI", "MCTP", "Redfish", "Manageability"],
             "rank": 5,
         }
 
@@ -208,13 +208,13 @@ def parse_all_focal_anchors():
             "rank": 5,
         }
 
-        # 2023 Anchor: GNR/SRF MCTP 100-Cycle Endurance & Triage
+        # 2023 Anchor: Montana Devpi Packaging & Multi-Platform MCTP 100-Cycle Endurance
         anchors_by_year["2023"] = {
             "date": "2023-12-31",
-            "summary": "[STRATEGIC_ANCHOR] GNR/SRF/EMR Multi-Platform MCTP Cycle Validation & HSD Triage: Drove execution, debug, and triage of MCTP cycle tests to achieve 100 consecutive error-free cycles each on Granite Rapids (GNR) and Sierra Forest (SRF).",
-            "evidence": "Q4 2023 Insights: Driving execution, escalation, debug, and triage of MCTP cycle tests to reach 100 cycles each on GNR; Supported HSD triage with Montana code updates for PECI/NM/MCTP on GNR/SRF/EMR.",
+            "summary": "[STRATEGIC_ANCHOR] Montana Devpi Package Release & Multi-Platform MCTP 100-Cycle Validation: Packaged and released the Montana framework as an official Python package under XPIV devpi in Q4 2023; achieved 100 consecutive MCTP cycle test completions on Granite Rapids (GNR) and enabled Sierra Forest (SRF) / EMR.",
+            "evidence": "Q4 2023 Insights & Build Logs (11/13/2023): Released Montana framework as python package under XPIV devpi (pip install montana --extra-index-url devpi.intel.com/general/XPIV); Drove MCTP cycle tests to reach 100 cycles on GNR and kickstarted SRF enablement.",
             "sensitivity": "Public",
-            "tags": ["MCTP", "GNR", "SRF", "PECI", "Endurance"],
+            "tags": ["Montana", "Devpi", "Python_Package", "MCTP", "GNR", "SRF"],
             "rank": 5,
         }
 
