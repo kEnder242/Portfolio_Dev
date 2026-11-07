@@ -30,6 +30,7 @@
                 <li><a href="#visa-tool">The VISA Tool Engine</a></li>
                 <li><a href="#xslt-parsing">Automated Parsing (XSLT)</a></li>
                 <li><a href="#config-file">A Simple Config File</a></li>
+                <li><a href="#ltssm-fallback">PCIe LTSSM Fallback</a></li>
                 <li><a href="#fleet-scale">Flashing 100 Nodes</a></li>
                 <li><a href="#cygwin-wall">The Cygwin Wall</a></li>
                 <li><a href="#ti-basic">Reinventing TI Basic</a></li>
@@ -40,6 +41,7 @@
             <ul>
                 <li><a href="#reading-robot">Reading Like a Robot</a></li>
                 <li><a href="#rapl-matplotlib">RAPL & Matplotlib</a></li>
+                <li><a href="#harnessless-vr-power">Harness-less VR Power</a></li>
                 <li><a href="#grok-code">How to Grok Code</a></li>
                 <li><a href="#beating-heart">The Beating Heart</a></li>
                 <li><a href="#serial-fragments">Expect Fragments (Serial)</a></li>
@@ -58,6 +60,7 @@
                 <li><a href="#first-error">Always Fix the First Error</a></li>
                 <li><a href="#count-oks">Count the Ok's</a></li>
                 <li><a href="#conflict-management">The Conflict Management Lesson</a></li>
+                <li><a href="#rapid-a0-cache">The 'D' in RAPID</a></li>
                 <li><a href="#general-thoughts">General Thoughts & Philosophy</a></li>
             </ul>
 
@@ -140,6 +143,13 @@
                 <p>My manager quietly wrote it down and later surprised me by praising me for forward thinking in my yearly focal. Since then I’ve learned value does not always correspond to effort, and gave me respect for simple QOL improvements.</p>
             </article>
 
+            <article id="ltssm-fallback">
+                <h3>Proving JTAG via PCIe LTSSM Fallback (Haswell)</h3>
+                <div class="meta">Tag: Silicon Bring-Up | Impact: PCIe 3.0 Verification</div>
+                <p>To verify the signal integrity of VISA programming, our on-chip logic analyzers (OCLA) and scopes relied on pattern generators buried deep inside the IP blocks. During Haswell bring-up, we discovered these generators were either missing or forgotten in the silicon design.</p>
+                <p>Without them, standard validation was blocked. Instead of waiting for a workaround, I leveraged live PCIe 3.0 LTSSM (Link Training and Status State Machine) signals routed through VISA as a fallback to definitively prove the JTAG programming was functioning. This improvised routing became a cornerstone for our power-on checks and directly enabled the successful verification of PCIe 3.0 on Haswell processors.</p>
+            </article>
+
             <article id="fleet-scale">
                 <h3>Flashing 100 Nodes (Fleet Scale Operations)</h3>
                 <div class="meta">Tag: Operations | Impact: Scale</div>
@@ -184,6 +194,14 @@
                 <div class="meta">Tag: Data Science | Impact: Visualization</div>
                 <p>In early 2019 I took a machine learning course. Jupiter notebook and time series db exercises. A few python libraries stuck out at me as very useful at work: pandas and matplotlib. I had a decent amount of data collection when stressing Running average Power Limiting functionality. Reports would spit out but it was really hard to get a good picture on what was going on.</p>
                 <p>With the new tools in hand I was able to scrape current runs, even old logs, and bug reports, to provide clear graphs sweeping through request or expected vs actual power limiting results. An esoteric ‘10% below expected’ would turn into a graph that would cap out at 500W like a truncated pyramid - a clear indication that the part (or benchmark) wasn’t able to cause the system to draw that much power.</p>
+            </article>
+
+            <article id="harnessless-vr-power">
+                <h3>Harness-less VR Power Transient Characterization</h3>
+                <div class="meta">Tag: Telemetry & Power | Impact: Design Release Acceptance</div>
+                <p>We received a new motherboard revision with a critical keep-out violation: the processors fit, but a cluster of capacitors physically blocked our VR test harness. We needed to measure worst-case power transients, but we were flying blind without physical probes. Furthermore, we only had two nodes in existence, and the VRs could only be flashed about seven times before bricking.</p>
+                <p>Instead of waiting for a board spin, I collaborated with the benchmarking teams to artificially shape the CPU's power draw through software, forcing the exact transients we needed to measure. I wrote custom scripts to read and characterize this power draw dynamically.</p>
+                <p>We successfully achieved a Design Release Acceptance (DRA) for enabling power transient measurements entirely without a physical harness. Proving that out-of-band telemetry could replace physical lab equipment in a pinch became the catalyst for my long-term championing of PECI as a primary tool for customer-facing debug.</p>
             </article>
 
             <article id="grok-code">
@@ -279,6 +297,14 @@
                 <p>In fact, I’ve often "embraced the suck" and intentionally became a subject matter expert on the critical things others didn't want to touch—like ClearCase, DTAF, or the complexities of XML and RTL scraping. By mastering those "unpopular" parts of the stack, I was able to bridge the gaps and keep the validation pipeline moving. That said, I still maintain technical boundaries for the sake of the product; for example, I’ll advocate strongly against putting test-level code like Pytest into production logic to keep the architecture clean.</p>
             </article>
 
+            <article id="rapid-a0-cache">
+                <h3>The 'D' in RAPID: A0 Silicon Cache Routing</h3>
+                <div class="meta">Tag: Architectural Decision | Impact: Silicon Enablement</div>
+                <p>During early silicon bring-up, we discovered a severe defect: A0 cache lines were routed to the wrong IP block, drastically reducing available cache and tanking performance. The critical decision was whether to push forward with A0 for early enablement or halt and wait for a new stepping.</p>
+                <p>We used the RAPID decision-making framework, and I was assigned the 'D' (Decider). Initially, I felt this call was above my paygrade, but I quickly realized why I was in that seat: I sat perfectly in the middle of the ecosystem. I understood the engineers fighting the silicon bugs, the internal customers demanding performance, and the OEM partners relying on their value-add features.</p>
+                <p>I made the call to stay with A0. I balanced the immediate technical pain against the long-term enablement schedule, realizing that getting flawed silicon into the hands of software teams to begin their work was more valuable than waiting for perfect hardware. This taught me that architectural decisions aren't made by title; they are made by whoever has the clearest cross-functional visibility.</p>
+            </article>
+
             <article id="general-thoughts">
                 <h3>General Thoughts & Philosophy</h3>
                 <div class="meta">Tag: Philosophy</div>
@@ -300,7 +326,6 @@
             <ul class="tbd-list">
                 <li>[WIP] Polling RAPL Telemetry during stress - Defensive coding in recovery scripts</li>
                 <li>[WIP] Rolling window diff - Comparing BIOS logs</li>
-                <li>[WIP] DRA for enabling power transient measurements without a harness</li>
                 <li>[WIP] Meshtastic hobby (LoRa, 3d printing, ESP32 firmware)</li>
             </ul>
         </section>
