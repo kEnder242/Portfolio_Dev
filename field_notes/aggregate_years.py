@@ -28,6 +28,37 @@ def quarantine_record(source_file, raw_content, error):
     )
 
 
+def record_unresolved_date(source_file, event, reason):
+    """[INS-047 / BKM-015] Fail & Report: Records undated range items rather than broadcasting fake dates."""
+    unresolved_file = os.path.join(DATA_DIR, "unresolved_dates.json")
+    records = []
+    if os.path.exists(unresolved_file):
+        try:
+            with open(unresolved_file, "r") as f:
+                records = json.load(f)
+        except Exception:
+            records = []
+
+    # Check for duplicate entry
+    eid = event.get("id") or str(event.get("summary", ""))[:60]
+    if any(r.get("id") == eid for r in records):
+        return
+
+    entry = {
+        "id": eid,
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "source": os.path.basename(source_file),
+        "reason": reason,
+        "raw_date": str(event.get("date", "")),
+        "summary": event.get("summary", ""),
+    }
+    records.append(entry)
+    with open(unresolved_file + ".tmp", "w") as f:
+        json.dump(records, f, indent=2)
+    os.replace(unresolved_file + ".tmp", unresolved_file)
+    logging.warning(f"  [FAIL & REPORT] Quarantined undated event from {os.path.basename(source_file)}: {reason}")
+
+
 def get_year_range(year_str):
     """Parses 'YYYY', 'YYYY-YYYY', or 'YYYY_MM' into a list of years."""
     if not year_str:
@@ -169,28 +200,24 @@ def aggregate_years():
 
                         # Sanity: Does the event actually belong in this year?
                         # If the event has a specific date, we honor it.
-                        # If it's a range date (e.g. "Oct 2007 - Dec 2007") and we are distributing to 2012,
-                        # that is a mismatch.
-
                         raw_date = str(new_event.get("date", ""))
 
                         # Extract year from event date if possible
                         event_year_match = re.search(r"(\d{4})", raw_date)
                         if event_year_match:
                             event_year = event_year_match.group(1)
-                            # If event year is known and doesn't match target year, skip distribution
-                            # EXCEPT for anchors which we pin to the start of every year in the range
-                            if event_year != year and "[STRATEGIC_ANCHOR]" not in str(
-                                new_event.get("summary", "")
-                            ):
+                            # Strict [BKM-015]: If event year is known and doesn't match target year, skip!
+                            # Zero broadcasting of anchors or events across mismatched years.
+                            if event_year != year:
                                 continue
-
-                        # Pin anchors and fuzzy dates to the target year
-                        if (
-                            "[STRATEGIC_ANCHOR]" in str(new_event.get("summary", ""))
-                            or not event_year_match
-                        ):
-                            new_event["date"] = f"{year}-01-01"
+                        else:
+                            # [INS-047] Fail & Report: Do NOT invent a fake YYYY-01-01 date across multi-year targets
+                            record_unresolved_date(
+                                fpath,
+                                new_event,
+                                f"Event lacks identifiable 4-digit year (raw_date='{raw_date}') for target year {year}",
+                            )
+                            continue
 
                         yearly_buckets[year].append(new_event)
 
