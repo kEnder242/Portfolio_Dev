@@ -1145,3 +1145,47 @@ This anchor was duplicated across **eleven consecutive years: 2008 through 2018*
   - Lakehouse updated cleanly with zero synthetic dates.
   - 22/22 pytest regression tests passing.
   - Zero DDR3 memory spilling, residents hot-reloaded cleanly.
+
+---
+
+### 🌊 Story 110.28: Full Multi-Pillar Strategic Focal Extraction & Career Strategy Lakehouse Integration (`[FEAT-690]` / `[FEAT-557]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:**
+  1. Expand the single-anchor model to ingest the user's complete multi-pillar focal reviews without lossy compression.
+  2. Parse 52 authentic strategic pillars across 17 years (2005-2024), extracting Technical Deliverables, Architecture & Systems, and Cultural/Leadership pillars with full verbatim evidence and tags.
+  3. Filter out administrative noise (Workday URLs, employee IDs, rating scales).
+  4. Update `reconcile_lakehouse_anchors.py` to insert all authentic multi-pillar gems at `rank: 5` at the top of each annual JSON in `Portfolio_Dev/field_notes/data/` and `www_deploy/data/`.
+  5. Upgrade `career_notes.html` in both repositories to display `TAGS: [...]` alongside `EVIDENCE` and dynamic count indicators (e.g. `career_strategy.sector (4)`).
+  6. Execute live dual-probe physical silicon gauntlet on Foyer `:8765` and run the targeted pytest regression suite (22/22 passing).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `Portfolio_Dev/field_notes/parse_multi_year_focals.py:1-410`
+  - `Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py:1-95`
+  - `Portfolio_Dev/field_notes/career_notes.html:325-345`
+  - `www_deploy/career_notes.html:325-345`
+  - `www_deploy/data/20*.json`
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/parse_multi_year_focals.py`
+  - `python3 Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_feedback_semantic_triage.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/python3 HomeLabAI/scripts/probe_historical_reconciliation.py`
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. Enhanced `parse_multi_year_focals.py` to extract 52 distinct strategic pillars across 17 years from `Jason Allred resume 2000-2008.txt`, `Performance review 2008-2018.txt`, `11066402 Insights 2019-2024.txt`, and raw 2021/2024 notes.
+  2. Each pillar contains:
+     - High-impact active voice `summary` prefixed with `[STRATEGIC_ANCHOR]`.
+     - Verbatim excerpted `evidence` retaining exact technical metrics, bug numbers, and quotes.
+     - Domain-specific `tags`.
+     - Deterministic Gem ID (`GEM-xxxxxx`).
+  3. Reconciled lakehouse annual datasets across `Portfolio_Dev/field_notes/data/` and `www_deploy/data/`, sorting all `rank: 5` pillars chronologically at the top of each year.
+  4. Updated `career_notes.html` to render `TAGS: [...]` for strategic pillars in the terminal viewer.
+  5. Tested regression suite: **22/22 passed in 4.04s**.
+  6. Verified physical silicon Waterfall flow via Foyer `:8765`:
+     - Probe 1 (2021 Focus): 35.60s.
+     - Probe 2 (Kayak/Montana Timing): 34.46s.
+* **Anchor 4 (DNA Links):** `[FEAT-690]`, `[FEAT-557]`, `[BKM-024]`, `[INS-047]`.
+* **Verification Log:**
+  - 52 authentic strategic pillars extracted and verified across 17 years.
+  - Zero cross-year duplication or synthetic date fabrication.
+  - `career_strategy.sector` now renders complete multi-pillar dossiers in `career_notes.html`.
+  - 22/22 pytest regression tests passing.
+  - Lab verified operational on live physical dual-GPU silicon.
