@@ -22,7 +22,7 @@ for p in [BASE_DIR, HOMELAB_SRC]:
 from ai_engine_v2 import get_engine_v2
 from infra.status_model import StatusModel
 from refine_gem import classify_impact_level, disentangle_chronology
-from scrub_all_passwords import sanitize_text as sanitize_credentials
+from scrub_all_passwords import sanitize_text as sanitize_credentials, sanitize_with_tripwire
 from utils import DATA_DIR, can_burn, update_status
 
 # Config
@@ -570,7 +570,26 @@ Return ONLY a valid JSON list of event objects:
                 # [BKM-061 / INS-052] Deterministic Credentials Redaction
                 for fld in ["summary", "evidence", "trigger_context"]:
                     if fld in event and isinstance(event[fld], str):
-                        event[fld] = sanitize_credentials(event[fld])
+                        raw_val = event[fld]
+                        clean_val, escaped, rules = sanitize_with_tripwire(raw_val)
+                        if escaped:
+                            ledger_path = os.path.join(DATA_DIR, "sanitization_escape_ledger.jsonl")
+                            entry = {
+                                "timestamp": datetime.now().isoformat(),
+                                "file_source": task.get("file", "UNKNOWN"),
+                                "field": fld,
+                                "raw_snippet": raw_val,
+                                "redacted_snippet": clean_val,
+                                "matched_rules": rules,
+                                "loop_id": "LOOP-006",
+                            }
+                            try:
+                                with open(ledger_path, "a", encoding="utf-8") as lf:
+                                    lf.write(json.dumps(entry) + "\n")
+                            except Exception:
+                                pass
+                            log(f"[LOOP-006] Sanitization escape: field={fld} rules={rules}")
+                        event[fld] = clean_val
 
                 # Use provided date or fallback
                 raw_date = event.get("date", "")

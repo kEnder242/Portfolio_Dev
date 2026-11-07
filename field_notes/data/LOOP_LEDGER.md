@@ -51,4 +51,13 @@ This ledger dynamically tracks, categorizes, and audits active, emerging, and re
 * **Lifecycle State:** `STAGED`
 * **Description:** Closes the quality loop after Pinky's voice delivery without blocking streaming TTS. Deep Thought evaluates the turn using Chain-of-Evaluation (reasoning prose before scalar scoring), isolates stage failure origins via Step-Trace attribution, and auto-populates negative exemplars to permanently prevent recurrent hallucinations across turns.
 
+### `[LOOP-006]` Nibbler Prompt Sanitization Tripwire & Self-Hardening Feedback Loop
+* **Vibe Driver:** `VIBE-009` (Feedback Loops as Complexity Engines) / `INS-052` (Machine-Log Boundary / Calibrated Confidentiality)
+* **Governing Protocols:** `BKM-069`, `BKM-015`, `INS-052`, `VIBE-009`
+* **Signal Emitter (Source):** `sanitize_with_tripwire` in `nibble_v2.py` — per-extraction sanitization tripwire.
+* **Signal Consumer (Actuator / Gate):** `standalone_accountability_watchdog.py` and few-shot demonstration generator.
+* **Operational Horizon:** Per-extraction tripwire and daily accountability audit.
+* **Lifecycle State:** `ACTIVE`
+* **Description:** Converts silent regex sanitization into an active tripwire that logs forensic leak traces, flags unearned pass verdicts in watchdog, and auto-generates contrastive few-shot negative demonstrations for prompt self-hardening.
+
 ---
