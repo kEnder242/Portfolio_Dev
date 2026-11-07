@@ -38,11 +38,15 @@ def clean_and_update_year_file(filepath, year, anchor):
             continue
         cleaned_events.append(e)
 
-    # 2. Prepend authentic anchor if one exists for this year
+    # 2. Add authentic strategic pillars if they exist for this year
     if anchor:
-        cleaned_events.insert(0, anchor)
+        if isinstance(anchor, list):
+            for a in anchor:
+                cleaned_events.append(a)
+        else:
+            cleaned_events.append(anchor)
 
-    # 3. Sort: Anchor first, then chronological date
+    # 3. Sort: Anchor first (rank 5), then chronological date
     def sort_key(x):
         summary = str(x.get("summary", ""))
         is_anchor = 0 if "[STRATEGIC_ANCHOR]" in summary or x.get("rank") == 5 else 1
@@ -54,7 +58,8 @@ def clean_and_update_year_file(filepath, year, anchor):
     with open(filepath + ".tmp", "w", encoding="utf-8") as f:
         json.dump(cleaned_events, f, indent=2)
     os.replace(filepath + ".tmp", filepath)
-    print(f"  Updated {os.path.basename(filepath)} with {len(cleaned_events)} events (Anchor: {anchor['id'] if anchor else 'None'})")
+    anchor_count = len(anchor) if isinstance(anchor, list) else (1 if anchor else 0)
+    print(f"  Updated {os.path.basename(filepath)} with {len(cleaned_events)} events ({anchor_count} Strategic Pillars)")
 
 
 def main():
