@@ -4042,6 +4042,18 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Logic:** Standardizes Node Brain (Apple Silicon M5 Air 32GB) serving baseline on `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` in PQ2_0 (Power-of-Two 2-Bit Packing) format. Weights occupy ~7.21 GB RAM with 100% native SIMD32 Metal kernel alignment and 1-cycle GPU instruction bit-shift unpacking. Under `--memory-guard-gb 28`, M5 Air maintains $>20\text{ GB}$ of free unified memory. Tuned with `--initial-cache-blocks 2048`, `--hot-cache-max-size 2GB`, and 32GB NVMe SSD cache directory (`~/.cache/dflash/prefix_l2`) for L2 prefix cache spillover. Mandates that all internal orchestrators and judge nodes route requests to port `8002` (`http://192.168.1.46:8002/v1`) through `control_api.py` with transparent Headroom compression (`headroom.compress()`). Client-side context clipping is strictly barred; full 131,072 context is natively supported.
 **Rationale:** Eliminates false assumptions regarding memory ceilings on M5 Air, prevents premature prompt truncation, and guarantees optimal Metal GPU prefill throughput.
 
+## [LAB-122] Zero-Host-Allocation Hybrid Inference Topology & Direct VRAM Ingestion Standard
+**Sprint:** Sprint 111.0
+**Status:** ACTIVE
+**Tags:** `#hybrid_engine`, `#llama_cpp`, `#zero_host_allocation`, `#no_host`, `#load_mode`, `#mmap`, `#memory_leak_prevention`, `[LAB-121]`, `[BKM-054]`
+**Code:** `/home/jallred/serve_llm.sh`, `HomeLabAI/src/start_vllm.sh`, `HomeLabAI/config/infrastructure.json`
+**Logic:** Codifies host memory invariants for heterogeneous dual-GPU inference across NVIDIA CUDA (RTX 2080 Ti) and Intel Arc Vulkan (B580 via localhost loopback RPC port 50052):
+1. **Ban `-lm none`**: Forbids disabling memory mapping (`-lm none`). `-lm none` forces raw anonymous heap `malloc()` for offloaded layers, which Linux kernel memory management cannot discard and aggressively writes to disk swap under memory pressure (triggering a 6.5+ GB swap sink).
+2. **Mandate `-lm auto` / `mmap`**: Keeps NVMe-backed file mappings (`/speedy`) so unneeded host pages remain clean and are evicted instantly without disk swap allocation.
+3. **Enforce `--no-host` (`LLAMA_ARG_NO_HOST=1`)**: Bypasses secondary host-side fallback buffer allocation for layers residing in GPU `DEVICE_LOCAL` VRAM.
+4. **Enforce Port 8088 Liveness Gate**: Forbids launching secondary `llama-server` background instances during Foyer wake if port 8088 is already bound and responding.
+**Rationale:** Reclaims ~7.3 GB of disk swap, clamps host RSS below 1.2 GB, prevents thermal and memory collisions during nightly maintenance, and preserves 60+ tok/s CUDA prefill velocity.
+
 ## [FEAT-680] Hardware & Gateway Reasoning Lever Protocol (Transport-Layer Thinking Control)
 **Sprint:** Sprint 108.0 (Phase 10)
 **Status:** ACTIVE

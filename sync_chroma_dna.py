@@ -210,7 +210,8 @@ def parse_feature_tracker(filepath):
     # [FEAT-400] ROLE TOKEN (Multi‑LoRA Persona Switch)
     # ## [FEAT-030] Unity Pattern (Multi-LoRA Residency) [SCAR #5]
     # ### [VIBE-012] Hemispheric Independence
-    pattern = re.compile(r"^(#{2,4})\s+\[((?:FEAT|VIBE)-\d+)\]\s+(.*?)$", re.MULTILINE)
+    # ## [LAB-122] Zero-Host-Allocation Hybrid Inference Topology
+    pattern = re.compile(r"^(#{2,4})\s+\[((?:FEAT|VIBE|LAB)-\d+)\]\s+(.*?)$", re.MULTILINE)
 
     matches = list(pattern.finditer(content))
     features = []
@@ -274,7 +275,7 @@ def parse_feature_tracker(filepath):
                     "feature_id": feat_id,
                     "name": name,
                     "status": status,
-                    "type": "FEAT" if "FEAT" in feat_id else "VIBE",
+                    "type": "FEAT" if "FEAT" in feat_id else ("LAB" if "LAB" in feat_id else "VIBE"),
                     "source": "FeatureTracker.md",
                 },
             }
