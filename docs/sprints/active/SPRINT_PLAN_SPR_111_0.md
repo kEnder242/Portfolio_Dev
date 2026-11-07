@@ -2,7 +2,7 @@
 
 **Parent Frameworks:** `BKM-018` (Orchestrator-First Mandate), `BKM-044` (Lab Attendant Authority Gate), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-020` (High-Fidelity Sprint Intent Preservation), `BKM-060` (Canonical DNA Physical Source Map), `INS-047` ("Live is King, History is Queen"), `[LAB-122]` (Zero-Host Hybrid Inference Standard).  
 **Sprint Horizon:** November 7, 2026 – November 11, 2026  
-**Status:** 🚀 ACTIVE (Phase 1 Execution)  
+**Status:** 🚀 ACTIVE (Phase 2 Execution)  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
 **Tracking Mode:** In-Tree Append-Only Ledger (`BKM-081`)
 
@@ -51,6 +51,24 @@
 - [x] **Gate G.3: Sprint Documentation & DNA Sync**: Updated Sprint Log (`BKM-081`), Dropped Threads Ledger (`BKM-084`), and resynced `sprint_dna`.
 - [x] **Gate G.4: Git Rollup**: Cleanly committed changes across `HomeLabAI` and `Portfolio_Dev`.
 - [x] **Gate G.5: BKM-007 Heads-Up Report**: Formal Heads-Up Completion Report delivered to operator.
+
+### 🔬 Phase 2: Deliberation Circuit Quorum & Maintenance Swap Hygiene (`BKM-086 §1.1`)
+- [ ] **Story 111.20: Sovereign Quorum & Accountability Truth in Probe (`probe_round_table_accountability.py`)**:
+  - [ ] Task 111.20.1: Require $\ge$ 1 vocal sovereign judge seat (Pinky or Deep Thought) for a PASS verdict; reject STANDBY_STUB unconditionally.
+  - [ ] Task 111.20.2: Report genuine deliberation circuit latency rather than shallow reflex /health ping in probe summary.
+  - [ ] Task 111.20.3: Exit with non-zero exit code if sovereign quorum fails or judge score < 0.70.
+- [ ] **Story 111.21: Headroom Proxy Maintenance Swap Flush (`nightly_forge.py`)**:
+  - [ ] Task 111.21.1: Add scheduled restart of `headroom-proxy.service` during nightly maintenance quiescence in `nightly_forge.py` to flush accumulated swap residency.
+  - [ ] Task 111.21.2: Validate post-restart port 8787 responsiveness and swap clearance without touching desktop processes.
+- [ ] **Story 111.22: Nightly Maintenance Thermal Soak & Dormant LoRA Configuration (`infrastructure.json` / `nightly_forge.py`)**:
+  - [ ] Task 111.22.1: Enforce dormant Unsloth harness preservation (`lora_training_enabled: false`) in `infrastructure.json`.
+  - [ ] Task 111.22.2: Ensure 30-minute quiet thermal soak and memory settlement window executes prior to morning probes.
+
+### 🏁 Phase 2 Certification & Live Silicon Gate (`BKM-024` / `BKM-086 §2` / `INS-047`)
+- [ ] **Gate G.6: Swarm Delegation Verification**: Validate all Phase 2 stories executed via `delegate.py --mode local` (`[SWARM:LOCAL]` on port 4097) per `BKM-049`.
+- [ ] **Gate G.7: Probe Truth Verification**: Execute `probe_round_table_accountability.py` and verify genuine quorum validation and non-zero exit on stub failure.
+- [ ] **Gate G.8: Swap Flush & Thermal Soak Test**: Dry-run maintenance quiescence in `nightly_forge.py` verifying Headroom proxy bounce and dormant LoRA handling.
+- [ ] **Gate G.9: Git Rollup & Sprint Completion**: Clean commit rollup and sprint closure.
 
 ---
 
@@ -189,39 +207,74 @@ IgnitionManager (manager.py)
 
 ---
 
-## 📦 4. Special Sprint Backlog (Tracked for Phase 2 / Post-Grill-Me)
+## 📦 4. Phase 2 Detailed Story Specifications (`BKM-086 §1.1`)
 
-The following items are defined, scoped, and staged for collaborative alignment during our upcoming `/grill-me` session:
-
-### 📌 Backlog Item 1: Long-Term LoRA Mothballing vs. 30-Minute Quiet Thermal Soak Policy
-* **Context**: Current primary engine is Qwen3.6-35B-A3B (MoE architecture), which cannot load legacy Llama 3.2 3B Unsloth adapters. Running 2.5-hour nightly LoRA fine-tuning is currently moot.
-* **Proposed Architecture**: Keep `lora_training_enabled: false` in `infrastructure.json`. Replace the training step with a dedicated 30-minute quiet thermal soak and memory settlement window at 02:00 AM.
-* **Decision Needed at Grill-Me**: Confirm whether to formally deprecate Unsloth multi-adapter training or maintain the dormant harness for future Qwen LoRA fine-tuning.
-
-### 📌 Backlog Item 2: Eradicating the Morning Probe "0.95 PASS" Green Lie
-* **Context**: `daily_accountability_digest.json` marked the 06:00 AM Morning Round Table Probe as `PASS (0.95 Critic Score, 1.14ms latency)`. In reality, 1.14ms was just a status ping, both sovereign seats (Pinky and Deep Thought) returned `STANDBY_STUB`, and the live coherence critic scored the turn 2/5.
-* **Proposed Architecture**: In `probe_round_table_accountability.py`, fail immediately if sovereign seats return `STANDBY_STUB`. Forbid cherry-picking Node Brain's unverified self-assessment score when sovereign judges are offline. Measure true deliberation circuit latency rather than ping latency.
-* **Decision Needed at Grill-Me**: Align on sovereign quorum thresholds (whether at least 1 sovereign judge seat MUST be online for a PASS verdict).
-
-### 📌 Backlog Item 3: Desktop PRIME Process Memory Governance (Steam / `steamwebhelper`)
-* **Context**: Memory audit revealed PID 7515 (`steamwebhelper`) consuming 1,091 MB physical RAM, 429 MB disk swap, and 23% background CPU while idle.
-* **Proposed Architecture**: Deploy systemd user slice memory limits or an idle-detection cgroup policy (`MemoryHigh=500M`, `MemoryMax=1G`) for non-lab desktop background processes to prevent starvation of the 15GB DDR3 host pool.
-* **Decision Needed at Grill-Me**: Define boundaries for non-lab process management without interfering with operator desktop usage.
-
-### 📌 Backlog Item 4: Headroom Proxy NVSHMEM Swap Reclamation
-* **Context**: PID 3429 (`headroom-proxy.service` on port 8787) holds `libtorch_nvshmem.so` and retained 692 MB in disk swap.
-* **Proposed Architecture**: Audit Headroom proxy dependencies to determine if PyTorch NVSHMEM can be decoupled or lazy-loaded, reclaiming host memory.
-* **Decision Needed at Grill-Me**: Evaluate Headroom proxy token optimization trade-offs vs host memory overhead.
+The operator and agent aligned on the architectural decisions for Phase 2:
+1. **LoRA Fine-Tuning**: Keep dormant Unsloth harness in place without active execution; maintain 30-min quiet thermal soak & memory settlement window.
+2. **Accountability Probe**: Require $\ge$ 1 vocal sovereign judge seat (Pinky or Deep Thought) for a PASS verdict; fail immediately if all sovereign seats return `STANDBY_STUB`.
+3. **Desktop Governance Boundary**: Strict lab boundary: do not touch desktop processes (e.g. Steam/browser); restrict memory governance strictly to lab systemd services.
+4. **Headroom Proxy Swap Flush**: Add a scheduled maintenance restart of `headroom-proxy.service` during nightly quiescence to flush swap without code refactoring.
 
 ---
 
-## 🎯 5. Phase 1 Definition of Done (DoD)
+### 🛠️ Story 111.20: Sovereign Quorum Enforcement & Deliberation Circuit Truth
+* **Status:** ⏳ READY FOR DISPATCH
+* **Owner:** `[SWARM:LOCAL]` (Atlas via `delegate.py --mode local`)
+* **Goal:**
+  1. In `HomeLabAI/src/infra/probe_round_table_accountability.py`, eradicate the false green "PASS 0.95" by requiring $\ge$ 1 vocal sovereign judge seat (Pinky or Deep Thought) for a PASS verdict.
+  2. If both sovereign seats return `STANDBY_STUB` or time out, fail verdict immediately with `FAIL` status and non-zero exit code (`sys.exit(1)`).
+  3. Ensure reported latency reflects true end-to-end deliberation circuit latency rather than shallow reflex `/health` ping.
+* **Target Files:**
+  - `HomeLabAI/src/infra/probe_round_table_accountability.py`
+* **Verification Command:**
+  - `python3 -m py_compile HomeLabAI/src/infra/probe_round_table_accountability.py`
+  - `/home/jallred/AcmeLab/.venv/bin/python3 HomeLabAI/src/infra/probe_round_table_accountability.py`
+
+---
+
+### 🛠️ Story 111.21: Headroom Proxy Maintenance Swap Flush
+* **Status:** ⏳ READY FOR DISPATCH
+* **Owner:** `[SWARM:LOCAL]` (Atlas via `delegate.py --mode local`)
+* **Goal:**
+  1. In `HomeLabAI/src/infra/nightly_forge.py`, incorporate a scheduled restart of `headroom-proxy.service` (`systemctl restart headroom-proxy.service` or user unit check) during the nightly quiescence / maintenance window.
+  2. Verify post-restart responsiveness on port 8787 and verify swap flush without touching non-lab desktop processes.
+* **Target Files:**
+  - `HomeLabAI/src/infra/nightly_forge.py`
+* **Verification Command:**
+  - `python3 -m py_compile HomeLabAI/src/infra/nightly_forge.py`
+
+---
+
+### 🛠️ Story 111.22: Nightly Maintenance Thermal Soak & Dormant LoRA Configuration
+* **Status:** ⏳ READY FOR DISPATCH
+* **Owner:** `[SWARM:LOCAL]` (Atlas via `delegate.py --mode local`)
+* **Goal:**
+  1. Ensure `infrastructure.json` keeps `lora_training_enabled: false` preserving the dormant Unsloth harness in place without active execution.
+  2. In `nightly_forge.py`, ensure the 30-minute quiet thermal soak and memory settlement window executes cleanly during nightly maintenance prior to morning probes.
+* **Target Files:**
+  - `HomeLabAI/config/infrastructure.json`
+  - `HomeLabAI/src/infra/nightly_forge.py`
+* **Verification Command:**
+  - `python3 -m py_compile HomeLabAI/src/infra/nightly_forge.py`
+
+---
+
+## 🎯 5. Definition of Done (DoD)
+
+### Phase 1 DoD (Completed)
 1. [x] `/home/jallred/serve_llm.sh` is migrated into version-controlled `HomeLabAI/src/engine_ctl.sh` and replaced with deprecation shim.
 2. [x] `curl -X POST http://127.0.0.1:8765/sleep` drains physical VRAM to 208 MiB (< 500 MB) and cleanly stops both `llama-server` and `ggml-rpc-server`.
 3. [x] `curl -X POST http://127.0.0.1:8765/wake` boots `moe-cuda-rpc`, proves vocality via in-process cognitive probe, and reports `OPERATIONAL`.
 4. [x] `start_vllm.sh` is a clean wrapper delegating to `engine_ctl.sh`.
 5. [x] All custom `pkill` statements are eradicated from caller logic in `nightly_forge.py`.
 6. [x] Full regression test suite (`test_ignition_manager.py`) passes 100% green.
+
+### Phase 2 DoD
+1. [ ] All Phase 2 stories dispatched through `delegate.py --mode local` (`[SWARM:LOCAL]`).
+2. [ ] `probe_round_table_accountability.py` fails on `STANDBY_STUB` sovereign seats and reports genuine deliberation circuit metrics.
+3. [ ] `nightly_forge.py` restarts `headroom-proxy.service` during maintenance to reclaim swap.
+4. [ ] Dormant Unsloth harness remains intact while 30-minute quiet thermal soak is upheld.
+5. [ ] Non-lab desktop processes (e.g. Steam) left untouched per operator boundary mandate.
 
 ---
 
@@ -243,18 +296,21 @@ The following items are defined, scoped, and staged for collaborative alignment 
 * **2026-11-07 11:10 PST — Story 111.13 Backward-Compatibility Shim**:
   - Transformed `start_vllm.sh` into a thin wrapper delegating to `engine_ctl.sh start "$@"`.
   - Verified `./start_vllm.sh` blocks direct ignition per `BKM-044` authority gate; verified `./start_vllm.sh --force` delegates cleanly.
-* **2026-11-07 11:14 PST — Silicon Certification Gate**:
+* **2026-11-07 11:14 PST — Silicon Certification Gate (Phase 1)**:
   - Executed full `POST :8765/sleep` $\to$ VRAM drained to 208 MiB (100% engine VRAM evacuated, only desktop compositor remained).
   - Executed full `POST :8765/wake` $\to$ Cognitive probe passed, Foyer reported `OPERATIONAL`, `vocal: true`, `engine_vocal: true`.
   - Verified live chat completion: *"Respond with the exact word: OPERATIONAL"* $\to$ `"OPERATIONAL"` in 85ms.
   - Unit test suite `test_ignition_manager.py`: 6/6 passed in 0.17s.
+* **2026-11-07 11:48 PST — Phase 2 Interactive Alignment & Decisions**:
+  - Codified Waiver Scope Law (`BKM-086 §1.2`) and Pre-Flight Gate Item 6 (`BKM-082 §GATE`).
+  - Aligned on Phase 2 architectural decisions: dormant Unsloth preservation, sovereign probe quorum truth, strict desktop boundary, and nightly Headroom proxy swap flush.
 
 ---
 
 ## 🧭 7. Dropped Threads Ledger (`BKM-084`)
 
-* **A: Backlog Item 1 (LoRA Mothballing vs 30m Soak)**: Tracked in §4 for Phase 2 / Post-Grill-Me alignment.
-* **B: Backlog Item 2 (Morning Probe Green Lie)**: Tracked in §4 for Phase 2 / Post-Grill-Me alignment.
-* **C: Backlog Item 3 (Steam Desktop Memory Governance)**: Tracked in §4 for Phase 2 / Post-Grill-Me alignment.
-* **D: Backlog Item 4 (Headroom Proxy NVSHMEM Swap Reclamation)**: Tracked in §4 for Phase 2 / Post-Grill-Me alignment.
+* **A: Backlog Item 1 (LoRA Dormancy & 30m Soak)**: Resolved into Story 111.22 for Phase 2 local delegation.
+* **B: Backlog Item 2 (Morning Probe Sovereign Quorum)**: Resolved into Story 111.20 for Phase 2 local delegation.
+* **C: Backlog Item 3 (Steam Desktop Memory Governance)**: Resolved per operator mandate: Strict lab boundary maintained, non-lab desktop processes untouched.
+* **D: Backlog Item 4 (Headroom Proxy Maintenance Swap Flush)**: Resolved into Story 111.21 for Phase 2 local delegation.
 
