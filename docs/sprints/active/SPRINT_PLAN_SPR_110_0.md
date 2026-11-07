@@ -1105,4 +1105,43 @@ This anchor was duplicated across **eleven consecutive years: 2008 through 2018*
   - 100% of live silicon probes verified.
   - Brain's multi-chunk bedrock triage accurately distinguished 2021 from 2024.
   - Zero persona contamination, zero DDR3 spilling.
-* **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-658]`, `[BKM-088]`.
+
+---
+
+### 🌊 Story 110.27: Chronological Calibration of Montana Devpi Packaging (2021 -> Q4 2023) & Eagle Stream Validation Anchor (`[BKM-024]` / `[FEAT-557]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:**
+  1. Investigate user forensic query regarding packaging Montana under XPIV devpi (whether 2021 or later).
+  2. Pinpoint source truth in raw notes (`notes_2024_PIAV.txt:4236-4275` and `11066402 Insights 2019-2024.txt:33`).
+  3. Relocate devpi packaging anchor from 2021 to Q4 2023 (`2023-11-13`).
+  4. Restore 2021 authentic strategic anchor: Eagle Stream (Archer City / Sapphire Rapids) Manageability Architecture, PECI stress testing, OOBMSM MCTP infrastructure, and MIV sprint leadership.
+  5. Reconcile lakehouse JSON files across `Portfolio_Dev/field_notes/data/` and `www_deploy/data/`.
+  6. Execute live dual-probe silicon verification gauntlet (`probe_historical_reconciliation.py`) and pytest regression suite (22/22 passed).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `Portfolio_Dev/field_notes/parse_multi_year_focals.py:192-225`
+  - `Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py:1-90`
+  - `www_deploy/data/2021.json:1-17`
+  - `www_deploy/data/2023.json:1-17`
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/parse_multi_year_focals.py`
+  - `python3 Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_feedback_semantic_triage.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/python3 HomeLabAI/scripts/probe_historical_reconciliation.py`
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. Found exact packaging build in `notes_2024_PIAV.txt:4236-4275` dated `11/8/2023` (build wheel) and `11/13/2023` (`pip install montana --extra-index-url=https://devpi.intel.com/general/XPIV --upgrade`).
+  2. Confirmed Q4 2023 Insights item: *"Released Montana framework as a python package under XPIV devpi; Maintained quality in Montana code base by proactively engaging pull requests & code reviews."*
+  3. Calibrated `parse_multi_year_focals.py`:
+     - **2021**: `GEM-53ee58` - Eagle Stream (Archer City) Manageability Architecture & PECI/MCTP Automation.
+     - **2023**: `GEM-26f9ad` - Montana Devpi Package Release & Multi-Platform MCTP 100-Cycle Validation.
+  4. Executed `reconcile_lakehouse_anchors.py`: updated 21 yearly data files in `Portfolio_Dev/` and `www_deploy/`.
+  5. Re-verified pytest regression suite: **22/22 passed in 4.04s**.
+  6. Verified physical silicon Waterfall probes via Foyer `:8765`:
+     - Probe 1 (2021 Focus): 30.27s.
+     - Probe 2 (Kayak/Montana Timing): 34.54s.
+* **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-557]`, `[FEAT-658]`.
+* **Verification Log:**
+  - Forensic packaging date confirmed to November 2023 (Q4 2023).
+  - Lakehouse updated cleanly with zero synthetic dates.
+  - 22/22 pytest regression tests passing.
+  - Zero DDR3 memory spilling, residents hot-reloaded cleanly.
