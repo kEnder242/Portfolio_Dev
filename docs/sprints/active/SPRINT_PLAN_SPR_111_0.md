@@ -12,8 +12,9 @@
 - [x] **1. 5-Sprint Lookback**: Reviewed SPR-107 through SPR-110.30 for traps, sentinels, and regression vectors (`BKM-082 §2.1` in §2.1).
 - [x] **2. Mistakes-Avoided Ledger**: Enumerated 4 concrete historical mistakes avoided (`BKM-082 §2.4` in §2.2).
 - [x] **3. Oracle / Architectural Audit**: Validated macro-architectural contracts against `BKM-044` (API-First), `BKM-018` (Attendant Gateway), and `[LAB-122]` (Zero-Host Hybrid Inference). Verified that restoring Attendant sovereignty eliminates caller distrust without regressing multi-GPU inference.
-- [x] **4. Delegation Justification**: Evaluated per operator mandate: Phase 1 Attendant recovery is assigned to `[AGY:PRIMARY]` due to deep architectural interaction between systemd services, multi-GPU driver stacks (Vulkan/CUDA), and kernel memory cgroups.
+- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Dispatched to `[SWARM:LOCAL]` or `[SWARM:CLOUD]` via `delegate.py`. Direct `[AGY:PRIMARY]` authoring is strictly forbidden unless (A) explicitly commanded by the operator in the current prompt, or (B) 3 local and 1 cloud diagnostic rounds have failed in `delegation_ledger.jsonl`. *(Phase 1 executed directly as AGY; identified as bypass in post-mortem; Phase 2 strictly bound to delegation gate).*
 - [x] **5. Risk Assessment**: Evaluated blast radius of engine lifecycle teardown, process group detachment, host memory allocation, and backward compatibility. Concrete mitigations embedded in stories 111.10–111.13.
+- [x] **6. BKM Invariant & Anti-Bypass Audit**: Explicitly verified plan against core BKMs (`BKM-049` Anti-Bypass, `BKM-048` Harness Halt, `BKM-044` Attendant Authority, `BKM-018` Orchestrator Gate). Confirmed zero un-waived protocol violations. All operator waivers are strictly phase-scoped per the **Waiver Scope Law (`BKM-086 §1.2`)**; historical waivers from prior sprints or phases are completely void.
 
 ---
 
