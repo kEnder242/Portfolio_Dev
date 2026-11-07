@@ -775,3 +775,152 @@ Triage operated nominally, classifying the query into `vibe: "HISTORICAL"`, `dom
   - 105 SCRIPT cards live in ChromaDB `diagnostic_dna`.
   - Ambient recall verified end-to-end.
   - Subprocess ripgrep latency clocked at 48.73ms.
+
+
+---
+
+### 🌟 Story 110.18: Sparse MoE Dual-GPU Breakthrough & FreeToken Branch Evaluation (`[BKM-088]` / `[FEAT-687]` / `[FEAT-688]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]` & `[SWARM:CLOUD:ORACLE]`
+* **Goal:** 
+  1. Solve the 35B parameter silicon allocation challenge on the physical workstation (`z87-Linux`) avoiding slow DDR3-1600 host RAM. Target $\ge 15\text{ tok/s}$.
+  2. Evaluate and audit the active feature branches on `FlashML-org/FreeToken` (`feat/split-residency`, `feat/multi-gpu-select`, `feat/moe-slot-pools`, `perf/hybrid-route-split`, `feat/gguf-cpu-ggml`) via `delegate.py --mode oracle` to determine whether community offloading or elastic caching offers an architectural advantage over pure VRAM sharding.
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `HomeLabAI/config/infrastructure.json:5-16`
+  - `HomeLabAI/src/start_vllm.sh:60-68`
+  - `/home/jallred/serve_llm.sh:97-131`
+  - `Portfolio_Dev/field_notes/public_benchmarks.html:410-485`
+  - `/tmp/freetoken_git` (Bare-clone analysis)
+* **Anchor 2 (Verification Command):**
+  - Download and verify: `aria2c -x 16 -s 16 https://huggingface.co/Qwen/Qwen3.6-35B-A3B-GGUF/...` to `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB).
+  - Storage Audit: `df -h /speedy` confirms 30 GB free (81% capacity).
+  - Dual-Vulkan benchmark: `/home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-server -m /speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf -dev Vulkan0,Vulkan1 -sm layer -ts 11,12 -mg 0 -ngl 99 -c 4096 -ctk q4_0 -ctv q4_0 --port 8088`.
+  - Oracle branch dispatch: `python3 HomeLabAI/src/tests/delegate.py --mode oracle --sprint 110 --story 110.13 --title "FreeToken Heterogeneous Branch Evaluation" ...`.
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. **Dual-Vulkan MoE Execution (`moe-dual`)**:
+     - Configured layer split across Vulkan0 (RTX 2080 Ti 11GB) and Vulkan1 (Arc B580 12GB).
+     - Verified live inference throughput: **29.77 tok/s burst**, **25.81 tok/s sustained over 256 tokens** (Prompt prefill: 41.80 tok/s). 100% inside GPU VRAM, zero DDR3 spilling.
+     - Smashed user's 15 tok/s target by nearly 2x.
+  2. **FreeToken Branch Deep Dive (Story 110.13 Cloud Oracle Verdict)**:
+     - `feat/multi-gpu-select`: Confirmed it only adds single-GPU selection via NVML UUID (`--gpu`); does NOT support multi-GPU tensor or pipeline sharding.
+     - `feat/split-residency` & `feat/moe-slot-pools`: Analyzed host-bank pinning. On DDR3-1600 hosts (~8-10 GB/s real) with AVX2-only CPUs, cache misses hit an 8.3x performance cliff compared to pure VRAM.
+     - Contribution/Fork Runway: Authoring a CUDA-primary + Vulkan-secondary hybrid backend for FreeToken would require SPIR-V/Vulkan compute shaders, inter-GPU routing, and heterogeneous slot pools (3+ days large effort). Pure zero-DDR3 MoE slicing remains the optimal immediate solution.
+* **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-079]`, `[BKM-088]`, `[FEAT-687]`, `[FEAT-688]`.
+* **Verification Log:**
+  - 25.81 - 29.77 tok/s verified on live silicon.
+  - Zero DDR3 spilling verified via `nvidia-smi` and `top`.
+  - Story 110.13 Cloud Oracle report completed in 74.1s (`[LIVE_GATE: PASSED]`).
+
+---
+
+### ⚡ Story 110.19: Native CUDA FlashAttention + RPC Hybrid Engine Certification (`[BKM-079]` / `[FEAT-689]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** 
+  1. Compile native CUDA (`-DGGML_CUDA=ON`) and RPC (`-DGGML_RPC=ON`) runtime for NVIDIA RTX 2080 Ti (Compute Capability 75) and connect to `ggml-rpc-server` running on Intel Arc B580 (`Vulkan1` / `Vulkan0`) to unlock Turing Tensor Cores and FlashAttention prefill.
+  2. Update public benchmark telemetry with certified empirical throughput, scrub DDR3 spilling nomenclature in favor of "23GB Dedicated VRAM Pool", and align physical HDMI topology.
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `/home/jallred/hybrid_engine/llama.cpp/build_cuda/bin/llama-server`
+  - `/home/jallred/hybrid_engine/llama.cpp/build_cuda/bin/llama-bench`
+  - `/home/jallred/serve_llm.sh:27-75, 195-200`
+  - `HomeLabAI/config/infrastructure.json:5-17`
+  - `HomeLabAI/src/start_vllm.sh:60-68`
+  - `Portfolio_Dev/field_notes/public_benchmarks.html:305-325, 345-350, 503-515, 560-575`
+  - `Portfolio_Dev/field_notes/benchmarks_cache.json:54-76`
+* **Anchor 2 (Verification Command):**
+  - Build command: `cmake -B build_cuda -DGGML_CUDA=ON -DGGML_RPC=ON -DCMAKE_CUDA_ARCHITECTURES=75 && cmake --build build_cuda -t llama-server llama-bench -j 4`.
+  - Benchmark run: `llama-bench -m Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --rpc 127.0.0.1:50052 -dev CUDA0/RPC0 -sm layer -ts 10/12 -ngl 99 -ctk q4_0 -ctv q4_0 -p 512 -n 128 -r 1 --no-warmup`.
+  - Live query: `curl -s -X POST http://127.0.0.1:8088/v1/chat/completions ...`.
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. **CUDA + RPC Compilation & Benchmark Results**:
+     - Built `libggml-cuda.so` with FlashAttention-2 kernels and MMQ for Turing CC 75.
+     - Launched `ggml-rpc-server` on Intel Arc B580 and coupled with `CUDA0` on RTX 2080 Ti.
+     - **Prompt Prefill (`pp512`)**: **62.43 tok/s** (+49.4% boost over Dual-Vulkan 41.80 tok/s).
+     - **Generation Decode (`tg128`)**: **35.87 tok/s** (+25.8% boost over Dual-Vulkan 28.52 tok/s).
+     - Live end-to-end HTTP completions: **28.76 tok/s** (prose) and **33.11 tok/s** (algorithmic coding).
+     - Power efficiency: **0.326 Tok/J** at 110W combined GPU draw ($IVQ = 47.2$).
+  2. **Public Benchmarks Scrubbing & Certification**:
+     - Eradicated all references to "DDR3 Spilling" from `public_benchmarks.html` and `benchmarks_cache.json`.
+     - Certified Strategy 6 (CUDA + RPC Hybrid MoE Pool) and updated live seat cards. Deployed to `www_deploy` (`cf669bd` / `a23b99b`).
+  3. **HDMI Physical Swap & Resilient Device Enumeration**:
+     - Reconnected HDMI cable to Intel Arc B580 (`card0-HDMI-A-6`), freeing the RTX 2080 Ti to **100% headless CUDA** (`display_active: Disabled`).
+     - ReBAR verified 100% active with 16GB prefetchable BAR (`c00000000`, 15.49 GiB device-local memory).
+     - Handled Vulkan device index swap (`Vulkan0` = Arc B580, `Vulkan1` = RTX 2080 Ti) by adding dynamic device resolution (`B580_DEV`) in `serve_llm.sh`.
+     - Integrated `moe-cuda-rpc` mode into `infrastructure.json`, `serve_llm.sh`, and `start_vllm.sh`.
+* **Anchor 4 (DNA Links):** `[BKM-079]`, `[BKM-088]`, `[FEAT-680]`, `[FEAT-689]`.
+* **Verification Log:**
+  - 62.43 pp / 35.87 tg tok/s certified in `llama-bench`.
+  - 2080 Ti verified headless (`nvidia-smi` shows `display_active: Disabled`).
+  - Arc B580 verified primary display (`card0-HDMI-A-6: connected`).
+  - `public_benchmarks.html` synchronized with `www_deploy`.
+
+---
+
+## 🎯 Phase 4: Production Lab Integration, Quiescence Decoupling & Waterfall Certification
+
+### 🛠️ Story 110.20: Clean Quiescence, Nightly Systemd Decoupling & Lab Ignition (`moe-cuda-rpc`) (`[BKM-024]` / `[BKM-082]`)
+* **Status:** 🟡 HEADS DOWN (IN PROGRESS)
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** 
+  1. Quiesce the daytime LoRA fine-tuning sweep triggered on boot, clear `maintenance.lock`, and ensure `field-notes-nightly.service` is decoupled from daytime multi-user boot targets so it triggers exclusively at 2:00 AM via `field-notes-nightly.timer`.
+  2. Boot the certified `moe-cuda-rpc` inference engine on port 8088 (`unified-base`) using the RTX 2080 Ti (10.0GB headless CUDA) + Intel Arc B580 (12.0GB RPC :50052) with native reasoning suppression (`--reasoning off --reasoning-budget 0`).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `/etc/systemd/system/field-notes-nightly.service`
+  - `/home/jallred/Dev_Lab/HomeLabAI/run/maintenance.lock`
+  - `/home/jallred/serve_llm.sh:32-75`
+  - `HomeLabAI/config/infrastructure.json:5-17`
+* **Anchor 2 (Verification Command):**
+  - `sudo systemctl stop field-notes-nightly.service && sudo systemctl disable field-notes-nightly.service` (timer remains enabled).
+  - Remove stale locks: `rm -f /home/jallred/Dev_Lab/HomeLabAI/run/maintenance.lock /home/jallred/Dev_Lab/HomeLabAI/run/nightly_lora_training.lock`.
+  - Ignition: `/home/jallred/serve_llm.sh --mode=moe-cuda-rpc`.
+  - Verification: `curl -s http://127.0.0.1:8088/health` returns `{"status":"ok"}`.
+  - VRAM Verification: `nvidia-smi` confirms 2080 Ti allocated ~10.2GB pure compute, 0 MB display.
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  - Gracefully drain `train_expert.py` and ensure the lockfile is removed.
+  - Decouple `field-notes-nightly.service` from `multi-user.target.wants` to prevent reboot VRAM hijacking.
+  - Launch `ggml-rpc-server -d Vulkan0 -p 50052` in background and launch CUDA `llama-server`.
+* **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-082]`, `[FEAT-680]`.
+
+---
+
+### 🧩 Story 110.21: Nibbler Intake Pipeline Integration & Thinking Suppression Certification (`[BKM-079]` / `[FEAT-680]`)
+* **Status:** ⚪ PENDING
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** 
+  1. Verify the Nibbler pipeline (`field_notes/nibble.py` / `mass_scan.py`) against the running `unified-base` engine on `:8088`.
+  2. Formally certify that reasoning/thinking tokens are 100% suppressed across all API entrypoints (`/v1/chat/completions` and `/completion`) to ensure downstream JSON schemas and cognitive triage do not suffer parser failures.
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `Portfolio_Dev/field_notes/nibble.py:1-150`
+  - `HomeLabAI/src/logic/cognitive_hub.py:3300-3360`
+  - `HomeLabAI/config/triage_policy.json`
+* **Anchor 2 (Verification Command):**
+  - `python3 -c "import requests; r=requests.post('http://127.0.0.1:8088/v1/chat/completions', json={'model':'unified-base','messages':[{'role':'user','content':'Return JSON: {\"status\": \"ok\"}'}],'temperature':0.0}).json(); assert '<think>' not in r['choices'][0]['message']['content']; print('✅ REASONING SUPPRESSION CERTIFIED')"`
+  - `python3 Portfolio_Dev/field_notes/nibble.py --test-dry-run`
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  - Run synthetic probes against the engine with guided grammar and verify direct JSON returns without `<think>` pollution.
+  - Ensure `nibble.py` can communicate with `:8088` and extract timeline events smoothly.
+* **Anchor 4 (DNA Links):** `[BKM-079]`, `[FEAT-680]`, `[FEAT-478]`.
+
+---
+
+### 🌊 Story 110.22: Cognitive Waterfall End-to-End Validation & Comprehensive Lab Regression (`[FEAT-658]` / `[BKM-088]`)
+* **Status:** ⚪ PENDING
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** 
+  1. Execute full 5-stage Waterfall cognitive flow (`WYWO`, `TECHNICAL`, `HISTORICAL`, `SOCRATIC`, `OPERATIONAL`) via `probe_sprint105_waterfall.py` through Foyer `:8765` and `unified-base` `:8088`.
+  2. Run the core test regression suite (`HomeLabAI/src/tests/`) to certify all lab invariants, ambient recall, and triage logic are 100% functional on the new hybrid architecture.
+  3. Clear lab dirty state, update project status, and commit all submodules.
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `HomeLabAI/src/scripts/probe_sprint105_waterfall.py:1-120`
+  - `HomeLabAI/src/tests/test_ripgrep_hydration.py`
+  - `HomeLabAI/src/tests/test_career_compass_bedrock.py`
+  - `HomeLabAI/src/tests/test_round_table_probe_unit.py`
+  - `Portfolio_Dev/ProjectStatus.md`
+* **Anchor 2 (Verification Command):**
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/python3 HomeLabAI/src/scripts/probe_sprint105_waterfall.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_feedback_semantic_triage.py`
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  - Confirm the Two-Mice Handover (`Pinky` voice and `Brain` Deep Thought notes) operates with zero persona leakage.
+  - Validate that interest-pacing limits and token ceilings are respected on the 35B MoE model.
+  - Verify all test assertions pass cleanly.
+* **Anchor 4 (DNA Links):** `[FEAT-658]`, `[BKM-088]`, `[BKM-024]`.
