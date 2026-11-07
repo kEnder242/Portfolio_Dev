@@ -17,16 +17,16 @@ class CognitiveEngine:
         raise NotImplementedError("Subclasses must implement generate()")
 
 
-class UnifiedBaseClient(CognitiveEngine):
+class LocalEngineClient(CognitiveEngine):
     """
-    Direct Unified Engine client (llama-server on Port 8088).
+    Direct Local Engine client (llama-server on Port 8088).
     Connects directly to the sovereign dual-GPU MoE engine (35+ tok/s).
     """
 
     def __init__(
         self,
         url="http://127.0.0.1:8088/v1/chat/completions",
-        model="unified-base",
+        model="local",
     ):
         self.url = url
         self.model = model
@@ -45,8 +45,12 @@ class UnifiedBaseClient(CognitiveEngine):
             data = resp.json()
             return data["choices"][0]["message"]["content"]
         except Exception as e:
-            logging.error(f"UnifiedBaseClient error: {e}")
+            logging.error(f"LocalEngineClient error: {e}")
             return None
+
+
+# Backward-compatible alias
+UnifiedBaseClient = LocalEngineClient
 
 
 class OllamaClient(CognitiveEngine):
