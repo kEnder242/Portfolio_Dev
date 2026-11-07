@@ -17,6 +17,38 @@ class CognitiveEngine:
         raise NotImplementedError("Subclasses must implement generate()")
 
 
+class UnifiedBaseClient(CognitiveEngine):
+    """
+    Direct Unified Engine client (llama-server on Port 8088).
+    Connects directly to the sovereign dual-GPU MoE engine (35+ tok/s).
+    """
+
+    def __init__(
+        self,
+        url="http://127.0.0.1:8088/v1/chat/completions",
+        model="unified-base",
+    ):
+        self.url = url
+        self.model = model
+
+    def generate(self, prompt, context="", options=None):
+        full_prompt = f"{context}\n\n{prompt}" if context else prompt
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": full_prompt}],
+            "temperature": (options or {}).get("temperature", 0.1),
+            "max_tokens": 2048,
+        }
+        try:
+            resp = requests.post(self.url, json=payload, timeout=90)
+            resp.raise_for_status()
+            data = resp.json()
+            return data["choices"][0]["message"]["content"]
+        except Exception as e:
+            logging.error(f"UnifiedBaseClient error: {e}")
+            return None
+
+
 class OllamaClient(CognitiveEngine):
     """
     Direct Model Access (DMA) client.
@@ -141,8 +173,17 @@ class AcmeLabClient(CognitiveEngine):
 # --- FACTORY ---
 def get_engine(mode="LOCAL"):
     if mode == "LOCAL":
+        # Check if unified-base on port 8088 is available
+        try:
+            r = requests.get("http://127.0.0.1:8088/health", timeout=1)
+            if r.status_code == 200:
+                return UnifiedBaseClient()
+        except Exception:
+            pass
         return OllamaClient()
     elif mode == "LAB":
         return AcmeLabClient()
+    elif mode == "UNIFIED":
+        return UnifiedBaseClient()
     else:
         raise ValueError(f"Unknown engine mode: {mode}")
