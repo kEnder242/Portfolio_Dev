@@ -8014,7 +8014,7 @@
     "origin": {
       "author": "jallred",
       "text": "[STRATEGIC_ANCHOR] Successfully integrated Kayak and Montana platforms, enabling native execution of PECI+MCTP tests and supporting BA team with platform enablement for CWF and DMR.",
-      "source": "Historical Journal Ledger (2019-01-01)",
+      "source": "Historical Insights (2024-06-13)",
       "evidence": "Historical telemetry evidence.",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.386910+00:00"
@@ -8057,7 +8057,7 @@
     "origin": {
       "author": "jallred",
       "text": "Montana tool experiencing issues establishing IPMI v2/RMCP+ sessions",
-      "source": "Historical Journal Ledger (2019-01-01)",
+      "source": "Historical Insights (2024-06-13)",
       "evidence": "['Unable to send RAW command', 'Error: Unable to establish IPMI v2 / RMCP+ session', 'Close Session command failed', 'Get Device ID command failed', 'Set Session Privilege Level to ADMINISTRATOR failed']",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.387017+00:00"
@@ -8100,7 +8100,7 @@
     "origin": {
       "author": "jallred",
       "text": "Maximum number of retries for Get Device ID command not specified",
-      "source": "Historical Journal Ledger (2019-01-01)",
+      "source": "Historical Insights (2024-06-13)",
       "evidence": "['Multiple attempts to send Get Device ID command']",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.387122+00:00"
@@ -8143,7 +8143,7 @@
     "origin": {
       "author": "jallred",
       "text": "Invalid command response (0xAB) when attempting to read data from specific PCI device spaces.",
-      "source": "Historical Journal Ledger (2019-01-01)",
+      "source": "Historical Insights (2024-06-13)",
       "evidence": "RAW LOGS: Error code 0xAB (Wrong command code) for PeciPCIConfigRead, PeciPackageConfigRead, and cpuPackageConfigurationRead commands.",
       "immutable": false,
       "created_at": "2026-09-18T18:21:45.387222+00:00"
