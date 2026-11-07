@@ -1189,3 +1189,40 @@ This anchor was duplicated across **eleven consecutive years: 2008 through 2018*
   - `career_strategy.sector` now renders complete multi-pillar dossiers in `career_notes.html`.
   - 22/22 pytest regression tests passing.
   - Lab verified operational on live physical dual-GPU silicon.
+
+---
+
+### 🌊 Story 110.29: Unlimited Density Strategic Focal Extraction & Epistemic Privacy Hardening (`[FEAT-690]` / `[VIBE-008]`)
+* **Status:** ✅ COMPLETE & CERTIFIED
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:**
+  1. Abolish all artificial compression ceilings and quotas (e.g. 4-pillar cap) to capture 100% of the authentic focal deliverables across 18 years (2005–2024).
+  2. Implement strict Privacy Filter (`[VIBE-008]`): exclude internal HR managerial critique, performance ratings bureaucracy, salary/grade discussions, and administrative task links.
+  3. Eliminate redundancy: ensure overlapping notes within each period are cleanly consolidated without duplicating milestones.
+  4. Preserve Jason's active engineering voice and dense technical context (metrics, platform codenames, bug counts, toolchains).
+  5. Reconcile lakehouse datasets in `Portfolio_Dev/field_notes/data/` and `www_deploy/data/`, bringing total strategic gems to 97 across 18 years.
+  6. Verify lab integrity via the targeted regression test suite (22/22 passing).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `Portfolio_Dev/field_notes/parse_multi_year_focals.py:1-490`
+  - `Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py:1-95`
+  - `www_deploy/data/20*.json`
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/parse_multi_year_focals.py`
+  - `python3 Portfolio_Dev/field_notes/reconcile_lakehouse_anchors.py`
+  - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_feedback_semantic_triage.py`
+* **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
+  1. Upgraded `parse_multi_year_focals.py` to extract 97 unconstrained strategic gems across 18 years (2005–2024).
+  2. Unrolled dense multi-project years:
+     - **2008** expanded from 4 to 7 gems (DCMI DCTS, Bensley/Thurley ciphers, Red Dog PoC, Microsoft SOL API, Asset Tag, EPSD emergency merge, Yahoo BMC provisioning).
+     - **2009** expanded from 3 to 6 gems (SOL performance tool, DCTS multi-session, smoke test suite, Westerlee FAS packet-reuse, DCMI over HECI / DoH, SEL & PCC).
+     - **2010** expanded from 2 to 6 gems (Primary build coverage, BVT/NTE debug, Lab KVM/networking/DHCP, RAKP+/RMCP+ LAN defects, SOL on Linux, DCTS 1.0 recovery).
+     - **2011–2014** unrolled Haswell VISA topology, Orange VISA VCU patch reduction, SKL power-on in IDC, NPK Google Test on TeamCity, and FPGA PTI nibble-order bug.
+     - **2018** expanded to 8 gems (KNL thermal automation, cluster stress BKM, 20+ node recovery, Lenovo 8S Purley-R, 8-core DAL halting bug, AEP viral state RAS, mailbox APIs, AEP format BKM).
+     - **2023** expanded to 7 gems (Blackbox recorder, negative BDF/MSR scans, MCTP stress suite, Tiger team SCRUM, Montana devpi packaging, GNR/SRF 100 cycles, multi-platform PO exits).
+  3. All 97 gems reconciled and chronologically sorted at `rank: 5` at the top of each annual JSON file.
+  4. Ran regression suite: **22/22 passed in 4.07s**.
+* **Anchor 4 (DNA Links):** `[FEAT-690]`, `[VIBE-008]`, `[BKM-100]`, `[FEAT-557]`.
+* **Verification Log:**
+  - 97 distinct strategic gems generated with zero artificial reduction.
+  - Zero private HR evaluation text leaked (`[VIBE-008]` certified).
+  - 22/22 pytest regression tests passing.
