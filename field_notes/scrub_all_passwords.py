@@ -29,47 +29,80 @@ _OBFUSCATED = [
 KNOWN_PASSWORDS = [base64.b64decode(s.encode()).decode() for s in _OBFUSCATED]
 
 
-def sanitize_text(text: str) -> str:
+def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
+    """Sanitize text and return (sanitized_text, escaped, matched_rules).
+    
+    escaped = True if any secret was redacted.
+    matched_rules = list of rule names that triggered redaction.
+    """
     if not isinstance(text, str):
-        return text
+        return text, False, []
+
+    original = text
+    matched_rules = []
 
     # 1. Strip curl -u / -sku / -ku / -fu / --user flags with user:password
     text = re.sub(
         r'(-[a-zA-Z]*u\s+[\"\']?)([^:\s\"\']+):([^\s\"\']+)([\"\']?)',
-        r'\1\2:[REDACTED_PASSWORD]\4',
+        lambda m: (matched_rules.append("curl_userpass") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]" + m.group(4)),
         text
     )
     text = re.sub(
         r'(--user\s+[\"\']?)([^:\s\"\']+):([^\s\"\']+)([\"\']?)',
-        r'\1\2:[REDACTED_PASSWORD]\4',
+        lambda m: (matched_rules.append("curl_userpass") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]" + m.group(4)),
         text
     )
 
     # 2. URLs with basic auth: https://user:pass@host
-    text = re.sub(r'(https?://)([^:\s/@]+):([^@\s/]+)@', r'\1\2:[REDACTED_PASSWORD]@', text)
+    text = re.sub(
+        r'(https?://)([^:\s/@]+):([^@\s/]+)@',
+        lambda m: (matched_rules.append("url_basic_auth") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]@" + m.group(3)),
+        text
+    )
 
     # 3. Known historical leaked lab passwords / tokens (case-insensitive)
     for sec in KNOWN_PASSWORDS:
-        text = re.sub(re.escape(sec), "[REDACTED_PASSWORD]", text, flags=re.IGNORECASE)
+        if re.search(re.escape(sec), text, flags=re.IGNORECASE):
+            matched_rules.append("known_password")
+            break
+    text = re.sub(
+        "|".join(map(re.escape, KNOWN_PASSWORDS)),
+        "[REDACTED_PASSWORD]",
+        text,
+        flags=re.IGNORECASE
+    )
 
     # 4. setx / export password assignments
     text = re.sub(
         r'(setx\s+(?:sys_pwd|password|passwd|token)\s+)([^\s,]+)',
-        r'\1[REDACTED_PASSWORD]',
+        lambda m: (matched_rules.append("setx_export") or m.group(1) + "[REDACTED_PASSWORD]"),
         text,
         flags=re.IGNORECASE
     )
     text = re.sub(
         r'(export\s+(?:sys_pwd|password|passwd|token)=)([^\s,]+)',
-        r'\1[REDACTED_PASSWORD]',
+        lambda m: (matched_rules.append("setx_export") or m.group(1) + "[REDACTED_PASSWORD]"),
         text,
         flags=re.IGNORECASE
     )
 
     # 5. JFrog Artifactory API keys (AKCp8...)
-    text = re.sub(r'AKCp8[a-zA-Z0-9]{15,}', '[REDACTED_JFROG_API_KEY]', text)
+    text = re.sub(
+        r'AKCp8[a-zA-Z0-9]{15,}',
+        lambda m: (matched_rules.append("jfrog_api_key") or "[REDACTED_JFROG_API_KEY]"),
+        text
+    )
 
-    return text
+    escaped = text != original
+    # Deduplicate matched_rules while preserving order
+    seen = set()
+    deduped_rules = [r for r in matched_rules if not (r in seen or seen.add(r))]
+    return text, escaped, deduped_rules
+
+
+def sanitize_text(text: str) -> str:
+    """Backward compatible wrapper - returns only sanitized text."""
+    return sanitize_with_tripwire(text)[0]
 
 
 def sanitize_obj(obj):

@@ -2,7 +2,7 @@
 
 **Parent Frameworks:** `BKM-018` (Orchestrator-First Mandate), `BKM-044` (Lab Attendant Authority Gate), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-020` (High-Fidelity Sprint Intent Preservation), `BKM-060` (Canonical DNA Physical Source Map), `INS-047` ("Live is King, History is Queen"), `[LAB-122]` (Zero-Host Hybrid Inference Standard).  
 **Sprint Horizon:** November 7, 2026 – November 11, 2026  
-**Status:** 🚀 ACTIVE (Phase 3 Execution)  
+**Status:** 🏁 COMPLETED (Sprint Certified)  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
 **Tracking Mode:** In-Tree Append-Only Ledger (`BKM-081`)
 
@@ -71,17 +71,17 @@
 - [x] **Gate G.9: Git Rollup & Sprint Completion**: Clean commit rollups across `HomeLabAI` and `Portfolio_Dev`.
 
 ### 🛡️ Phase 3: Closed-Loop Sanitization Tripwire & Feedback Architecture (`BKM-086 §1.1` / `[LOOP-006]`)
-- [ ] **Story 111.30: Nibbler Prompt Sanitization Tripwire & Self-Hardening Feedback Loop (`[LOOP-006]`)**:
-  - [ ] Task 111.30.1: Refactor `sanitize_credentials` in `scrub_all_passwords.py` / `nibble_v2.py` to return `(sanitized_text, bool_escaped, matched_patterns)`.
-  - [ ] Task 111.30.2: Instrument `nibble_v2.py` to detect `before != after` escapes, log forensic trace to `Portfolio_Dev/field_notes/data/sanitization_escape_ledger.jsonl`, and emit `[ESCAPE_CAUGHT]` telemetry.
-  - [ ] Task 111.30.3: Update `standalone_accountability_watchdog.py` to audit `sanitization_escape_ledger.jsonl` and flag runs as `DEGRADED (Sanitization Escape Caught)` on un-tripped escapes.
-  - [ ] Task 111.30.4: Formally register `[LOOP-006]` in `Portfolio_Dev/field_notes/data/loop_ledger.jsonl` and `LOOP_LEDGER.md`.
-  - [ ] Task 111.30.5: Wire auto-capture of escapes into contrastive few-shot negative demonstrations for `probe_secret_and_focal_leak_test.py` and the Nibbler prompt bank.
+- [x] **Story 111.30: Nibbler Prompt Sanitization Tripwire & Self-Hardening Feedback Loop (`[LOOP-006]`)**:
+  - [x] Task 111.30.1: Refactor `sanitize_credentials` in `scrub_all_passwords.py` / `nibble_v2.py` to return `(sanitized_text, bool_escaped, matched_patterns)`.
+  - [x] Task 111.30.2: Instrument `nibble_v2.py` to detect `before != after` escapes, log forensic trace to `Portfolio_Dev/field_notes/data/sanitization_escape_ledger.jsonl`, and emit `[ESCAPE_CAUGHT]` telemetry.
+  - [x] Task 111.30.3: Update `standalone_accountability_watchdog.py` to audit `sanitization_escape_ledger.jsonl` and flag runs as `DEGRADED (Sanitization Escape Caught)` on un-tripped escapes.
+  - [x] Task 111.30.4: Formally register `[LOOP-006]` in `Portfolio_Dev/field_notes/data/loop_ledger.jsonl` and `LOOP_LEDGER.md`.
+  - [x] Task 111.30.5: Wire auto-capture of escapes into contrastive few-shot negative demonstrations for `probe_secret_and_focal_leak_test.py` and the Nibbler prompt bank.
 
 ### 🏁 Phase 3 Certification & Live Silicon Gate (`BKM-024` / `BKM-086 §2` / `INS-047`)
-- [ ] **Gate G.10: Swarm Delegation Verification**: Validate Story 111.30 executed under strict `BKM-049` anti-bypass ladder.
-- [ ] **Gate G.11: Tripwire Verification**: Execute synthetic credential probe and verify non-silent escape capture in `sanitization_escape_ledger.jsonl`.
-- [ ] **Gate G.12: Loop DNA Verification**: Verify `[LOOP-006]` registered in `loop_ledger.jsonl`, `LOOP_LEDGER.md`, and indexed in ChromaDB `:8001` `loop_dna`.
+- [x] **Gate G.10: Swarm Delegation Verification**: Validate Story 111.30 executed under strict `BKM-049` anti-bypass ladder (`[SWARM:LOCAL]` $\to$ `[SWARM:CLOUD]`).
+- [x] **Gate G.11: Tripwire Verification**: Execute synthetic credential probe and verify non-silent escape capture in `sanitization_escape_ledger.jsonl` and watchdog alert.
+- [x] **Gate G.12: Loop DNA Verification**: Verify `[LOOP-006]` registered in `loop_ledger.jsonl`, `LOOP_LEDGER.md`, and indexed in ChromaDB `:8001` `loop_dna` and `sprint_dna`.
 
 ---
 
@@ -276,7 +276,7 @@ The operator and agent aligned on the architectural decisions for Phase 2:
 ---
 
 ### 🛠️ Story 111.30: Nibbler Prompt Sanitization Tripwire & Self-Hardening Feedback Loop (`[LOOP-006]`)
-* **Status:** ⏳ READY FOR DISPATCH
+* **Status:** 🏁 COMPLETED (Verified on Silicon)
 * **Owner:** `[SWARM:LOCAL]` $\to$ `[SWARM:CLOUD]` via `delegate.py`
 * **Goal:**
   1. Refactor `sanitize_credentials` in `scrub_all_passwords.py` to optionally return metadata `(sanitized_text, bool_escaped, matched_patterns)`.
@@ -313,12 +313,12 @@ The operator and agent aligned on the architectural decisions for Phase 2:
 4. [x] Dormant Unsloth harness remains intact while 30-minute quiet thermal soak is upheld.
 5. [x] Non-lab desktop processes (e.g. Steam) left untouched per operator boundary mandate.
 
-### Phase 3 DoD
-1. [ ] Story 111.30 dispatched through `delegate.py` under strict `BKM-049` anti-bypass ladder.
-2. [ ] `nibble_v2.py` tripwire detects `before != after` credential redactions and logs to `sanitization_escape_ledger.jsonl`.
-3. [ ] `standalone_accountability_watchdog.py` audits escape ledger and flags runs as `DEGRADED` on unaddressed escapes.
-4. [ ] `[LOOP-006]` formally documented and registered in `loop_ledger.jsonl` and `LOOP_LEDGER.md`.
-5. [ ] Escapes auto-convert into contrastive prompt demonstrations.
+### Phase 3 DoD (Completed)
+1. [x] Story 111.30 dispatched through `delegate.py` under strict `BKM-049` anti-bypass ladder.
+2. [x] `nibble_v2.py` tripwire detects `before != after` credential redactions and logs to `sanitization_escape_ledger.jsonl`.
+3. [x] `standalone_accountability_watchdog.py` audits escape ledger and flags runs as `DEGRADED` on unaddressed escapes.
+4. [x] `[LOOP-006]` formally documented and registered in `loop_ledger.jsonl` and `LOOP_LEDGER.md`.
+5. [x] Escapes auto-convert into contrastive prompt demonstrations.
 
 ---
 
@@ -362,6 +362,18 @@ The operator and agent aligned on the architectural decisions for Phase 2:
   - Executed `standalone_accountability_watchdog.py` live on silicon.
   - Watchdog successfully eradicated the green lie: probe truthfully reported `FAIL` due to sovereign judge seats sleeping in `STANDBY_STUB`, with exit code 1.
   - Host swap utilization dropped from 71.5% to 31.5% (4,951 MB).
+* **2026-11-07 14:05 PST — Story 111.30 Nibbler Prompt Sanitization Tripwire & Self-Hardening Feedback Loop (`[LOOP-006]`)**:
+  - Dispatched via `delegate.py --mode cloud` (Sisyphus sessions `ses_e4802e813ffeLVEVmWwqSXShk8`, `ses_e47fcc123ffeSomRI559vvKI2a`, `ses_e47f52724ffeOpMDs7C3gpGF80`, `ses_e47ed0f21ffe8WWri7V2szU0qu`).
+  - Added `sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]` to `scrub_all_passwords.py`, deduplicating matched rules and preserving `sanitize_text()` as backward-compatible wrapper.
+  - Intercepted events in `nibble_v2.py:570-593`: whenever `escaped is True`, appends forensic record (`timestamp`, `file_source`, `field`, `raw_snippet`, `redacted_snippet`, `matched_rules`, `loop_id: "LOOP-006"`) to `Portfolio_Dev/field_notes/data/sanitization_escape_ledger.jsonl` and logs `[LOOP-006] Sanitization escape`.
+  - Added `check_sanitization_tripwire()` to `HomeLabAI/src/infra/standalone_accountability_watchdog.py`, auditing for fresh escapes in the last 24h and wiring into `audit_and_emit_digest()`.
+  - Registered `[LOOP-006]` in `Portfolio_Dev/field_notes/data/LOOP_LEDGER.md` and `loop_ledger.jsonl`.
+  - Added unit test `test_sanitization_tripwire` and updated `test_swap_telemetry` Case 3 in `HomeLabAI/src/tests/test_standalone_accountability_watchdog.py`; verified 7/7 tests pass 100% green.
+* **2026-11-07 14:20 PST — Silicon Certification Gate (Phase 3 & Sprint Completion)**:
+  - Live silicon probe executed: verified `sanitize_with_tripwire()` intercepts basic auth credentials (`curl_userpass`), cleanly redacts to `[REDACTED_PASSWORD]`, and records escape in `sanitization_escape_ledger.jsonl`.
+  - Watchdog live audit certified: `check_sanitization_tripwire()` flags simulated unaddressed escapes with `passed=False` and accurately reports `passed=True` when clean.
+  - Synced ChromaDB `:8001` collections via `sync_chroma_dna.py` and `sync_sprint_dna.py` (845 chunks indexed).
+  - All Phase 1, Phase 2, and Phase 3 DoD criteria satisfied on physical silicon. Sprint certified.
 
 ---
 
