@@ -22,6 +22,7 @@ for p in [BASE_DIR, HOMELAB_SRC]:
 from ai_engine_v2 import get_engine_v2
 from infra.status_model import StatusModel
 from refine_gem import classify_impact_level, disentangle_chronology
+from scrub_all_passwords import sanitize_text as sanitize_credentials
 from utils import DATA_DIR, can_burn, update_status
 
 # Config
@@ -504,9 +505,16 @@ DO NOT extract human personnel notes, manager appraisals, performance reviews, o
 Allowed domains: ['hardware_debug', 'operations', 'logistics']
 
 [SANITIZATION LAW - BKM-015 / INS-052]
-When copying commands or logs into 'evidence', strip all passwords, tokens, API keys, and device serial numbers. Replace any credential or serial value with "[REDACTED]".
+When copying commands or logs into 'evidence', strip all passwords, tokens, API keys, basic auth credentials, and device serial numbers. Replace any credential or serial value with "[REDACTED]" or "[REDACTED_PASSWORD]".
+NEVER include passwords in curl commands (-u, -sku, --user, or basic auth URLs).
 
 [EXAMPLES]
+Input: "curl -f -u sys_admin:P@ssw0rd99! https://artifactory.corp/builds"
+Output evidence: "curl -f -u sys_admin:[REDACTED_PASSWORD] https://artifactory.corp/builds"
+
+Input: "curl -k -u 'debuguser:0penBmc1' https://localhost:5443/redfish"
+Output evidence: "curl -k -u 'debuguser:[REDACTED_PASSWORD]' https://localhost:5443/redfish"
+
 Input: "curl -H 'Authorization: Bearer secret_token_123' https://api.internal/deploy"
 Output evidence: "curl -H 'Authorization: Bearer [REDACTED]' https://api.internal/deploy"
 
@@ -558,6 +566,11 @@ Return ONLY a valid JSON list of event objects:
             for event in new_events:
                 if not isinstance(event, dict):
                     continue
+
+                # [BKM-061 / INS-052] Deterministic Credentials Redaction
+                for fld in ["summary", "evidence", "trigger_context"]:
+                    if fld in event and isinstance(event[fld], str):
+                        event[fld] = sanitize_credentials(event[fld])
 
                 # Use provided date or fallback
                 raw_date = event.get("date", "")
