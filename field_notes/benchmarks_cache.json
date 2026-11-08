@@ -27,12 +27,12 @@
       "status": "online"
     },
     {
-      "model": "Qwen2.5-Coder-32B-Instruct",
+      "model": "Qwen3.8-27B",
       "engine": "Ollama (CUDA)",
       "seat_id": "kender_4090",
       "display_name": "Windows 4090RTX (Port 11434)",
       "architecture": "24GB GDDR6X PCIe (1,008 GB/s)",
-      "role": "High-Throughput Autonomous Coding (Qwen 32B)",
+      "role": "High-Throughput Autonomous Coding (Qwen 3.8 27B)",
       "context_window": "32k",
       "cold_ttft_ms": 320.0,
       "warm_ttft_ms": 320.0,
@@ -75,7 +75,7 @@
       "status": "online"
     },
     {
-      "model": "Qwen-2.5-72B / Llama-3.3-70B",
+      "model": "Llama-3.3-70B / Qwen-72B",
       "engine": "Oracle Cloud Swarm",
       "seat_id": "cloud_swarm",
       "display_name": "Oracle Cloud Swarm (Free Tier)",
