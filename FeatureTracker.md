@@ -4054,6 +4054,23 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 4. **Enforce Port 8088 Liveness Gate**: Forbids launching secondary `llama-server` background instances during Foyer wake if port 8088 is already bound and responding.
 **Rationale:** Reclaims ~7.3 GB of disk swap, clamps host RSS below 1.2 GB, prevents thermal and memory collisions during nightly maintenance, and preserves 60+ tok/s CUDA prefill velocity.
 
+## [LAB-123] Heterogeneous Silicon Media Isolation & Dynamic DRM Alignment Standard
+**Sprint:** Sprint 111.0
+**Status:** ACTIVE
+**Tags:** `#heterogeneous_silicon`, `#arc_b580`, `#intel_qsv`, `#jellyfin`, `#drm_node_enumeration`, `#vram_isolation`, `#zero_vram_impact`, `[LAB-122]`, `[FEAT-069]`, `[FEAT-427]`, `[BKM-024]`
+**Code:** `Portfolio_Dev/field_notes/jellyfin_autotune.py`, `/var/lib/jellyfin-data/config/config/encoding.xml`, `Dev_Lab/jellyfin_resolution.md`
+**Logic:** Codifies the architectural boundary and boot-time hardware synchronization for multi-GPU media isolation between dedicated AI compute (NVIDIA RTX 2080 Ti) and hardware-accelerated media transcoding (Intel Arc B580):
+1. **Zero-VRAM NVIDIA Isolation**: 100% of the NVIDIA RTX 2080 Ti (11GB CUDA) VRAM is reserved for local LLM inference (vLLM / llama.cpp / Foyer on port 8088/8765). Media server processes (Jellyfin) are strictly barred from initializing CUDA or NVENC, maintaining 0 MB VRAM overhead.
+2. **Dedicated Arc B580 QSV Pipeline**: Media transcoding is exclusively routed to the Intel Arc B580 (PCI `0000:03:00.0`, Battlemage G21) using Intel QuickSync (`qsv`) with modern codec acceleration (AV1 encode/decode, HEVC 10-bit, VP9, H.264) and VPP tonemapping.
+3. **Dynamic DRM Node Alignment (The Enumeration Trap)**: Linux kernel DRM render node numbers (`/dev/dri/renderD*`) are non-deterministic across reboots and driver unbind/rescan cycles (`renderD128` Haswell iGPU, `renderD129` RTX 2080 Ti, `renderD130` Arc B580). Pinning static node numbers in `encoding.xml` causes severe transcode failure (Intel `iHD` driver failing on NVIDIA GPU during subtitle burning). `jellyfin_autotune.py` resolves the immutable PCI bus token `/dev/dri/by-path/pci-0000:03:00.0-render` to its active `renderD*` node dynamically via `os.path.realpath()`.
+4. **Current State**: `encoding.xml` is actively aligned to `/dev/dri/renderD130` (Arc B580 QSV). Subtitle burning transcode runs at 16.1x realtime with 0 MB NVIDIA VRAM allocation. `jellyfin_autotune.py` has been modernized to enforce this invariant idempotently.
+5. **Next Actions / Target Trajectory**:
+   - Install a systemd oneshot boot service (`jellyfin-drm-sync.service` or via `lab-boot-sentinel.service`) executing `jellyfin_autotune.py` before Jellyfin accepts client playback requests on system boot.
+   - Author `/etc/udev/rules.d/92-jellyfin-arc.rules` to create a permanent `/dev/dri/arc_render` symlink from PCI `0000:03:00.0`.
+   - Maintain multi-tenancy testing to ensure 4K AV1 subtitle transcoding coexists transparently with 35B MoE dual-GPU inference.
+**Rationale:** Eliminates silent subtitle playback crashes in Jellyfin, prevents GPU driver deadlocks between `iHD` and `nvidia`, and guarantees compute availability for the AI Foyer.
+
+
 ## [FEAT-680] Hardware & Gateway Reasoning Lever Protocol (Transport-Layer Thinking Control)
 **Sprint:** Sprint 108.0 (Phase 10)
 **Status:** ACTIVE
