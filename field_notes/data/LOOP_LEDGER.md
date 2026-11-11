@@ -41,6 +41,7 @@ This ledger dynamically tracks, categorizes, and audits active, emerging, and re
 * **Operational Horizon:** Multi-night epoch rotation (Gems stay on active rotation until consensus saturation).
 * **Lifecycle State:** `ACTIVE`
 * **Description:** Eliminates the monolithic single-pass refinement trap by decomposing consolidation into iterative, focused connection passes. Unrefined gems remain on rotation across nightly cycles; each pass increments refinement level, evaluates cross-references, updates topological edge density, and gates promotion into Level 3 (quiescent saturation) based on loop consensus.
+* **Operational Hardening (Epoch 170 / Nov 10, 2026):** Resolved 32-epoch deadlock caused by orphaned pre-Sprint 109 monthly file pointers in `refinement_rotation_queue.json`. Implemented self-healing auto-eviction (`ORPHAN_PURGED`) and automatic queue replenishment from canonical annual lakehouse files (`len(queue) < 15`). Verified live convergence at Epoch 170 (`delta: 24`, `status: CONVERGING`).
 
 ### `[LOOP-005]` Post-Turn Scorecard & Step-Trace Telemetry Loop
 * **Vibe Driver:** `VIBE-009` (Feedback Loops as Complexity Engines) / `PHL-008` (Self-Learning Memory Accumulation)
