@@ -435,6 +435,20 @@ The operator and agent aligned on the architectural decisions for Phase 2:
   - **Auto-Purge & Lakehouse Replenishment (`Portfolio_Dev` Commit `5967fa1`)**: Updated `_load_queue()` and `advance_gem_pass()` in `refine_gem.py` to immediately purge non-existent target files and out-of-bounds indices as `ORPHAN_PURGED` (`refinement_level: 3`). Added auto-replenishment (`len(queue) < 15`) from archive files. Verified live: Epoch 170 processed 5 real gems (`2006.json`, `2013.json`), recording `delta=24` and `status=CONVERGING` in `loop_ledger.jsonl`.
   - **Dynamic Probe Topic Rotation (`HomeLabAI` Commit `7ee3cdc`)**: Implemented `resolve_probe_topic()` in `probe_round_table_accountability.py`, rotating probes between operational telemetry and freshly distilled Rank 5 gems from `latest_synthesis_gems.json`, with fallback rotation across 5 canonical domain archetypes.
   - Re-indexed ChromaDB and hot-reloaded Foyer daemons (`boot_commit: 7ee3cdc`, `dirty: false`).
+* **2026-11-11 08:48 PST — Track 1, 4 & 5: Live Shakedown, Timeout Centralization, BKM-101 & Pointed Formatting (`HomeLabAI` / `Portfolio_Dev`)**:
+  - **Live Shakedown Verification (`BKM-101`)**: Executed full-fidelity live shakedown of `probe_round_table_accountability.py` and `standalone_accountability_watchdog.py` via `.venv/bin/python3`. Fixed `from pathlib import Path` import miss in probe and unlocked watchdog stderr visibility on non-zero exit codes. Certified 9/9 checks PASS with zero discrepancies (`daily_accountability_digest.json`).
+  - **Centralized & Characterized Timeouts**: Established canonical timeout management in `HomeLabAI/config/lab_accountability_thresholds.json` under `timeouts`:
+    - `round_table_deliberation_max_wait_sec`: 120.0s (Round table multi-stage pipeline completion headroom)
+    - `watchdog_probe_subprocess_timeout_sec`: 140.0s (Watchdog execution buffer)
+    - `engine_warmup_timeout_sec`: 90.0s (Extended from 60s in `loader.py` to prevent cold-start timeouts during engine reloads)
+    - `foyer_greeting_probe_timeout_sec`: 5.0s
+    - `foyer_inject_timeout_sec`: 10.0s
+    - `foyer_status_timeout_sec`: 5.0s
+    Refactored `probe_round_table_accountability.py`, `standalone_accountability_watchdog.py`, and `src/nodes/loader.py` to import from this single centralized configuration.
+  - **Judicial Grounding Data Flow Analysis (Track 2.3)**: Forensically traced the Stage 5 evaluation gap: `_mlx_judge.evaluate_256k_context(tt, cw)` received only 293 characters of context (`QUERY`, `DOMAIN`, `INTENT`). Brain's retrieved archival chunks (`[BRAIN_NOTES]`) and Deep Thought's citations were omitted from the judge's context window, leading the Sovereign Critic to false-positive hallucination scores (0.0 - 0.2) when Pinky referenced genuine archive findings. Established the grounding injection path (feeding RAG Bedrock chunks and Deep Thought provenance into Stage 5 evaluation context).
+  - **Overnight 60s Warmup Timeout Forensics (Track 3)**: Identified turn failures at 02:17 AM in `judge_backpressure.jsonl` where nightly maintenance quiescence caused 60s warmup timeouts and 0.1 scores. Addressed via 90s warmup headroom in `loader.py` and maintenance state detection.
+  - **Pointed Formatting Governance (Track 4)**: Updated `Dev_Lab/AGENTS.md` (Law 9) and `HomeLabAI/AGENTS.md` per operator directive to emit `"1) 1.1) 1.1.1)"` pointed conversation formatting in untracked reports for frictionless adoption into tracked conversation lanes.
+  - **BKM-101 Formalization (Track 5)**: Authored and indexed `## BKM-101: The Post-Modification Live Shakedown Protocol (First-Run Verification Mandate)` in `HomeLabAI/docs/Protocols.md`.
 
 ---
 
