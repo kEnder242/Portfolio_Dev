@@ -13,7 +13,6 @@ from utils import update_status
 # Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-logging.basicConfig(level=logging.INFO, format="[REFINE] %(message)s")
 
 
 def cosine_similarity(a, b):
@@ -943,6 +942,7 @@ class RotationalRefinementEngine:
 
 
 def main():
+    logging.basicConfig(level=logging.INFO, format="[REFINE] %(message)s")
     import argparse
 
     parser = argparse.ArgumentParser(
