@@ -412,6 +412,23 @@ The operator and agent aligned on the architectural decisions for Phase 2:
   - Executed `probe_round_table_accountability.py` live on physical silicon: achieved `PASS` with `critic_score: 1.0`, `greeting_latency_ms: 1.78ms`, and sovereign quorum verified.
   - Ran `standalone_accountability_watchdog.py`: all 9/9 checks passed (`overall_status: PASS`), writing certified `daily_accountability_digest.json`.
   - Sovereign Critic on Node kEnder confirmed dual-lane accuracy: accurately awarded 1.0 to Brain and Pinky, while penalizing Deep Thought for ungrounded sprint plan hallucinations. Fully certified.
+* **2026-11-10 18:25 PST — Ripgrep Hallucination Gate on Operational Turns (`HomeLabAI` Commit `7fa41f9`)**:
+  - Gated `execute_grep_search_pivot` in `src/logic/cognitive_hub.py:3897` strictly to `vibe_now == "HISTORICAL" and boosted_interest >= 0.35`, removing TECHNICAL and eliminating Deep Thought's sprint plan hallucination during operational silicon telemetry probes.
+  - Verified live on silicon: Sovereign Critic on Node 2 (`kEnder` via `qwen3.8:nothink`) evaluated Brain at `0.95` and Deep Thought at `0.85`, with `<ground_truth_exhaust>` and ungrounded sprint references completely eradicated from Deep Thought's turn.
+* **2026-11-10 19:00 PST — Legacy Nibbler Fork Excised & FEAT Retargeting (`Portfolio_Dev` Commit `df52bfe`)**:
+  - Excised legacy `field_notes/nibble.py` via `git rm`, preserving all historical git commits.
+  - Retargeted `[FEAT-176]` and `[FEAT-177]` in `Portfolio_Dev/FeatureTracker.md` and `Portfolio_Dev/README.md` to canonical `field_notes/nibble_v2.py`.
+  - Re-indexed ChromaDB feature and behavioral DNA collections via post-commit hooks.
+* **2026-11-10 19:16 PST — Nibbler Logger Hijacking Fix, Headroom Normalization & Log Unification (`Portfolio_Dev` Commit `8f4e21d`)**:
+  - Root-cause forensics on "October 17 dormancy illusion": Discovered that commit `95e242e4` (Oct 18) imported `refine_gem.py` into `nibble_v2.py`. Because `refine_gem.py` executed `logging.basicConfig(level=logging.INFO, format="[REFINE] %(message)s")` at module load time, Python silently ignored subsequent `logging.basicConfig()` calls in `nibble_v2.py`, diverting file logs to stdout and freezing `pinky_v2.log` at Oct 17 even while intake steadily processed 1,111 chunks in `chunk_state.json` and updated `2024.json` (Nov 8).
+  - Moved `logging.basicConfig` in `refine_gem.py` inside `main()`, added `force=True` to `logging.basicConfig` in `nibble_v2.py`, normalized target log to canonical `pinky.log`, and established backward-compatibility symlink `pinky_v2.log -> pinky.log`.
+  - Tuned RAM headroom check in `should_yield()` to 0.8 GB to align with `--fast` mode.
+  - Repaired legacy `nibble.py` imports in `field_notes/force_feed.py` and `field_notes/debug_2024.py`.
+  - Live silicon verification: `nibble_v2.py --once` successfully processed chunk `SEC-343`, extracted 4 gems, verified real-time logging to `pinky.log`, and cleanly exited after silicon cooling.
+* **2026-11-10 19:16 PST — LAB-009 Sparse Cadence & Zero-Host 35B Memory Residency (`HomeLabAI` Commit `4d219d9`)**:
+  - Updated `LAB-009` in `HomeLabAI/docs/LAB_INFRASTRUCTURE.md` and `docs/Protocols.md` to document the Sprint 110.4 sparse daytime intake cadence (`limit=2` chunks per invocation outside nightly) and Foyer intercom socket preemption (`check_foyer_intercom_active()` checking established TCP sockets on `:8765` and `/tmp/foyer_intercom.lock`).
+  - Documented physical 35B parameter memory allocation: zero host DDR3 RAM spilling (`--no-host` over the 23GB dedicated dual-GPU pool: RTX 2080 Ti 10GB CUDA + Intel Arc B580 12GB RPC).
+  - Hot-reloaded live Foyer resident daemons via `POST /reload_residents` (`boot_commit: 4d219d9`, `dirty: false`).
 
 ---
 
