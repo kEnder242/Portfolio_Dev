@@ -589,7 +589,14 @@ class RotationalRefinementEngine:
         if os.path.exists(QUEUE_FILE):
             try:
                 with open(QUEUE_FILE, "r") as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Filter out dead pointers and saturated items
+                    data["queue"] = [
+                        it for it in data.get("queue", [])
+                        if os.path.exists(os.path.join(DATA_DIR, it.get("file_path", "")))
+                        and it.get("refinement_level", 0) < 3
+                    ]
+                    return data
             except Exception as e:
                 logging.warning(f"Could not load {QUEUE_FILE}: {e}")
         return {
@@ -749,14 +756,20 @@ class RotationalRefinementEngine:
     def advance_gem_pass(self, item: dict, engine=None) -> dict:
         target_path = os.path.join(DATA_DIR, item["file_path"])
         if not os.path.exists(target_path):
-            return {"gem_id": item["gem_id"], "delta": 0, "is_saturated": False}
+            logging.warning(f"Purging orphan queue item: target file {target_path} does not exist.")
+            item["refinement_level"] = 3
+            item["status"] = "ORPHAN_PURGED"
+            return {"gem_id": item["gem_id"], "delta": 0, "is_saturated": True}
 
         with open(target_path, "r") as f:
             file_data = json.load(f)
 
         idx = item["index"]
         if idx >= len(file_data) or not isinstance(file_data[idx], dict):
-            return {"gem_id": item["gem_id"], "delta": 0, "is_saturated": False}
+            logging.warning(f"Purging orphan queue item: index {idx} out of range in {target_path}.")
+            item["refinement_level"] = 3
+            item["status"] = "ORPHAN_PURGED"
+            return {"gem_id": item["gem_id"], "delta": 0, "is_saturated": True}
 
         gem = file_data[idx]
         anchors = gem.get("anchors") or item.get("anchors") or []
@@ -890,7 +903,7 @@ class RotationalRefinementEngine:
         }
 
     def run_rotation_epoch(self, batch_size: int = 5, engine=None) -> dict:
-        if not self.queue_data.get("queue"):
+        if len(self.queue_data.get("queue", [])) < 15:
             self.populate_queue_from_archive()
 
         batch = self.pick_batch(batch_size=batch_size)
