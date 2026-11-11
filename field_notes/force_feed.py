@@ -6,7 +6,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LIBRARIAN = os.path.join(BASE_DIR, "scan_librarian.py")
 QUEUE_MGR = os.path.join(BASE_DIR, "scan_queue.py")
-NIBBLER = os.path.join(BASE_DIR, "nibble.py")
+NIBBLER = os.path.join(BASE_DIR, "nibble_v2.py")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 QUEUE_FILE = os.path.join(DATA_DIR, "queue.json")
 
@@ -61,7 +61,7 @@ def main():
         # time.sleep(1)
 
     # Final Status Update
-    from nibble import get_total_events, update_status
+    from utils import get_total_events, update_status
 
     total = get_total_events()
     update_status("IDLE", f"Archives synced. Total records: {total}")
