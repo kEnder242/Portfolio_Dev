@@ -4238,4 +4238,10 @@ First-run execution mandate requiring immediate end-to-end execution of modified
 
 ### [FEAT-685] Centralized Timeout Management & Headroom Governance
 **Sprint:** Sprint 111.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/config/lab_accountability_thresholds.json:timeouts`  
-Single canonical configuration home and interface for all system timeouts (round table deliberation, watchdog subprocess, engine warm-up, and foyer probes) eliminating scattered magic-number literals and enabling ambient hooks to locate and update headroom.
+**Tags:** `[LAB-119]`, `[BKM-101]`, `[BKM-024]`, `[BKM-062]`, `[FEAT-619]`, `[FEAT-608]`, `[FEAT-462]`  
+**Pointers:**
+- **Canonical Configuration:** [`HomeLabAI/config/lab_accountability_thresholds.json:timeouts`](file:///home/jallred/Dev_Lab/HomeLabAI/config/lab_accountability_thresholds.json#L21-L28)
+- **Infrastructure Architecture:** [`HomeLabAI/docs/LAB_INFRASTRUCTURE.md:LAB-119`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md)
+- **Operational Verification Protocols:** [`HomeLabAI/docs/Protocols.md:BKM-101`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2078) (Shakedown), `BKM-024` (Live Verification), `BKM-062` (Ground Truth)
+- **Governed Subsystems:** `probe_round_table_accountability.py` (`[FEAT-608]`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `src/nodes/loader.py` (`[FEAT-462]`)
+**Rationale:** Single canonical configuration home and interface for all system timeouts (round table deliberation, watchdog subprocess, engine warm-up, and foyer probes). Prevents doc-duplication by using structured pointers to generic config documentation and features so ambient hooks can directly discover and tune headroom without copying narrative text blocks.
