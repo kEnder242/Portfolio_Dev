@@ -5,7 +5,7 @@ import sys
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_engine import get_engine
-from nibble import extract_json_from_llm
+from nibble_v2 import extract_json_from_llm
 
 ENGINE = get_engine(mode="LOCAL")
 FILE_PATH = "raw_notes/notes_2024_PIAV.txt"

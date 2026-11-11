@@ -32,11 +32,12 @@ AUDIT_FILE = os.path.join(DATA_DIR, "privacy_audit.jsonl")
 STATUS_FILE = os.path.join(DATA_DIR, "status.json")
 
 # Setup Logging
-LOG_FILE = os.path.join(DATA_DIR, "pinky_v2.log")
+LOG_FILE = os.path.join(DATA_DIR, "pinky.log")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler(sys.stdout)],
+    force=True,
 )
 
 _MANIFEST_CACHE = None
@@ -125,11 +126,11 @@ def should_yield() -> bool:
         log("[NIBBLER] Yielding: Non-IDLE mode detected")
         return True
 
-    # Check RAM (Nibbler footprint is ~30MB; 1.5GB available provides 50x safety headroom)
+    # Check RAM (Nibbler footprint is ~30MB; 0.8GB available provides 25x safety headroom)
     ram_available_gb = psutil.virtual_memory().available / (1024**3)
-    if ram_available_gb < 1.5:
+    if ram_available_gb < 0.8:
         log(
-            f"[NIBBLER] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB < 1.5 GB)"
+            f"[NIBBLER] Yielding: Memory Pressure (Available RAM: {ram_available_gb:.1f} GB < 0.8 GB)"
         )
         return True
 
