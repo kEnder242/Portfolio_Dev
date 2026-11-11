@@ -2113,15 +2113,15 @@
 
 ## [FEAT-176] Deep-Connect Mode Detection
 **Status:** ACTIVE
-**Code:** [field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L154) — Deep-Connect Mode Detection.
-**Logic:** [FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get("mode") == "DEEP_CONNECT bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json") existing_data = []
-**Mechanism:** `field_notes/nibble.py` at line 154.
+**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — Deep-Connect Mode Detection.
+**Logic:** [FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get("mode") == "DEEP_CONNECT" bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json") existing_data = []
+**Mechanism:** `field_notes/nibble_v2.py`
 
 ## [FEAT-177] DNA Uplink: Harvest for Expert Forge
 **Status:** ACTIVE
-**Code:** [field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L263) — DNA Uplink: Harvest for Expert Forge.
+**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — DNA Uplink: Harvest for Expert Forge.
 **Logic:** [FEAT-177] DNA Uplink: Harvest for Expert Forge if is_deep_connect: try: os.makedirs(EXPERTISE_DIR, exist_ok=True)
-**Mechanism:** `field_notes/nibble.py` at line 263.
+**Mechanism:** `field_notes/nibble_v2.py`
 
 ## [FEAT-179] Targeted scan for the Hallway Protocol.
 **Status:** ACTIVE
