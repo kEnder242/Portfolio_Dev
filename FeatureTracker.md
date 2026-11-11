@@ -4231,3 +4231,11 @@ Overnight batch refiner deduplicating and semantically clustering newly mined wi
 ### [FEAT-606] Words-First Inline DNA Citation & Lens Swapper
 **Sprint:** Sprint 87.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/v5/foyer/router.py:1062`  
 Provides interactive inline lens swapping (`/paper/swap_lens`) to substitute raw text passages with formal DNA citations.
+
+### [FEAT-684] Post-Modification Live Shakedown Protocol
+**Sprint:** Sprint 111.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/docs/Protocols.md:BKM-101`  
+First-run execution mandate requiring immediate end-to-end execution of modified scripts in the live target environment to eradicate import misses, syntax errors, and suppressed stderr failures before declaring task victory.
+
+### [FEAT-685] Centralized Timeout Management & Headroom Governance
+**Sprint:** Sprint 111.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/config/lab_accountability_thresholds.json:timeouts`  
+Single canonical configuration home and interface for all system timeouts (round table deliberation, watchdog subprocess, engine warm-up, and foyer probes) eliminating scattered magic-number literals and enabling ambient hooks to locate and update headroom.

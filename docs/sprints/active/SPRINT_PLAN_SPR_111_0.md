@@ -84,20 +84,31 @@
 - [x] **Gate G.12: Loop DNA Verification**: Verify `[LOOP-006]` registered in `loop_ledger.jsonl`, `LOOP_LEDGER.md`, and indexed in ChromaDB `:8001` `loop_dna` and `sprint_dna`.
 
 ### ⚖️ Phase 4: Sovereign Judicial Coherence & Functional Prompt Engineering (`BKM-015` / `BKM-088` / `BKM-090` / `FEAT-665`)
-- [ ] **Story 111.40: Upstream Context Dispatch & Lab Map Re-Use (`router.py` / `mlx_judge_node.py`)**:
-  - [ ] Task 111.40.1: Update `context_window` in `src/v5/foyer/router.py` to format `QUERY: {user_query}\nINTENT: {inferred_intent}`.
-  - [ ] Task 111.40.2: Dynamically inject cluster topology from `node.infra` into `MLX_SYSTEM_PROMPT` in `mlx_judge_node.py`.
-- [ ] **Story 111.41: 2-Part Audit Stage Matrix in Sovereign Critic (`mlx_judge_node.py`)**:
-  - [ ] Task 111.41.1: Refactor judge prompt and JSON response schema to output `triage_critique`, `grounding_critique`, `score`, and `retort`.
-  - [ ] Task 111.41.2: Update response parsing in `mlx_judge_node.py` to handle 2-part critique fields.
-- [ ] **Story 111.42: Pure Functional Directives & Stage-Specific Telemetry Guardrail (`cognitive_hub.py`)**:
-  - [ ] Task 111.42.1: In Brain Stage 1, remove `<rich engineering justification...>` bracketed placeholder and replace with pure functional instruction.
-  - [ ] Task 111.42.2: In Pinky Stage 2, remove static string exemplars and replace with pure functional instruction.
-  - [ ] Task 111.42.3: Inject `[PHYSICAL_REALITY_GUARDRAIL]` dynamically on `("exp_tlm", "infra", "telemetry")` domain turns.
-- [ ] **Story 111.43: AGY Empirical Evaluation & Live Sovereign Verification**:
-  - [ ] Task 111.43.1: Execute `test_empirical_step_harness.py` across all 6 vibes and perform AGY Layer 1 evaluation.
-  - [ ] Task 111.43.2: Execute `probe_round_table_accountability.py` against physical silicon to verify the 2-part sovereign critique.
-  - [ ] Task 111.43.3: Verify all unit tests pass (`pytest src/tests/test_vllm_adapter_swap.py`).
+- [x] **Story 111.40: Upstream Context Dispatch & Lab Map Re-Use (`router.py` / `mlx_judge_node.py`)**:
+  - [x] Task 111.40.1: Update `context_window` in `src/v5/foyer/router.py` to format `QUERY: {user_query}\nINTENT: {inferred_intent}`.
+  - [x] Task 111.40.2: Dynamically inject cluster topology from `node.infra` into `MLX_SYSTEM_PROMPT` in `mlx_judge_node.py`.
+- [x] **Story 111.41: 2-Part Audit Stage Matrix in Sovereign Critic (`mlx_judge_node.py`)**:
+  - [x] Task 111.41.1: Refactor judge prompt and JSON response schema to output `triage_critique`, `grounding_critique`, `score`, and `retort`.
+  - [x] Task 111.41.2: Update response parsing in `mlx_judge_node.py` to handle 2-part critique fields.
+- [x] **Story 111.42: Pure Functional Directives & Stage-Specific Telemetry Guardrail (`cognitive_hub.py`)**:
+  - [x] Task 111.42.1: In Brain Stage 1, remove `<rich engineering justification...>` bracketed placeholder and replace with pure functional instruction.
+  - [x] Task 111.42.2: In Pinky Stage 2, remove static string exemplars and replace with pure functional instruction.
+  - [x] Task 111.42.3: Inject `[PHYSICAL_REALITY_GUARDRAIL]` dynamically on `("exp_tlm", "infra", "telemetry")` domain turns.
+- [x] **Story 111.43: AGY Empirical Evaluation & Live Sovereign Verification**:
+  - [x] Task 111.43.1: Execute `test_empirical_step_harness.py` across all 6 vibes and perform AGY Layer 1 evaluation.
+  - [x] Task 111.43.2: Execute `probe_round_table_accountability.py` against physical silicon to verify the 2-part sovereign critique.
+  - [x] Task 111.43.3: Verify all unit tests pass (`pytest src/tests/test_vllm_adapter_swap.py`).
+
+### ⏱️ Phase 5: Live Shakedown Protocol, Timeout Centralization & Intent Alignment (`[FEAT-684]` / `[FEAT-685]` / `BKM-101`)
+- [x] **Story 111.50: Live Shakedown Protocol & Centralized Timeout Management (`[FEAT-684]` / `[FEAT-685]` / `BKM-101`)**:
+  - [x] Task 111.50.1: Establish canonical timeout configuration in `HomeLabAI/config/lab_accountability_thresholds.json:timeouts`.
+  - [x] Task 111.50.2: Refactor `probe_round_table_accountability.py`, `standalone_accountability_watchdog.py`, and `loader.py` to source timeouts dynamically from central config.
+  - [x] Task 111.50.3: Formalize `BKM-101` in `HomeLabAI/docs/Protocols.md` requiring immediate physical shakedown across all code modifications.
+  - [x] Task 111.50.4: Update `Dev_Lab/AGENTS.md` and `HomeLabAI/AGENTS.md` with pointed conversation formatting (`1) 1.1) 1.1.1)`).
+- [ ] **Story 111.51: Judicial Realignment — Prime Prompt Intent Alignment over Adversarial Overreach (`FEAT-665` / `FEAT-683`)**:
+  - [ ] Task 111.51.1: Refocus Sovereign Critic rubrics in `mlx_judge_node.py` around Prime Prompt Intent Alignment: "Did the conversation directly address the prime prompt?"
+  - [ ] Task 111.51.2: Eliminate false-negative grounding penalties by distinguishing between operational cluster hardware queries and archival/conversational topics.
+  - [ ] Task 111.51.3: Inject Stage 3/4 Bedrock context into Stage 5 critique context window when domain requires factual archival verification.
 
 ---
 
