@@ -31237,14 +31237,14 @@
       "title": "Deep-Connect Mode Detection",
       "origin": {
         "author": "Federated Lab",
-        "text": "[FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get(\"mode\") == \"DEEP_CONNECT bucket_file = os.path.join(DATA_DIR, f\"{task['bucket'].replace('-', '_')}.json\") existing_data = []",
+        "text": "[FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get(\"mode\") == \"DEEP_CONNECT\" bucket_file = os.path.join(DATA_DIR, f\"{task['bucket'].replace('-', '_')}.json\") existing_data = []",
         "source": "FeatureTracker.md",
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "[FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get(\"mode\") == \"DEEP_CONNECT bucket_file = os.path.join(DATA_DIR, f\"{task['bucket'].replace('-', '_')}.json\") existing_data = []\n\n`field_notes/nibble.py` at line 154.",
+        "narrative_context": "[FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get(\"mode\") == \"DEEP_CONNECT\" bucket_file = os.path.join(DATA_DIR, f\"{task['bucket'].replace('-', '_')}.json\") existing_data = []\n\n`field_notes/nibble_v2.py`.",
         "lab_anchors": [
-          "[field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L154) \u2014 Deep-Connect Mode Detection."
+          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — Deep-Connect Mode Detection."
         ],
         "review_notes": "Status: ACTIVE",
         "refinement_version": 1
@@ -31269,9 +31269,9 @@
         "immutable": true
       },
       "synthesis": {
-        "narrative_context": "[FEAT-177] DNA Uplink: Harvest for Expert Forge if is_deep_connect: try: os.makedirs(EXPERTISE_DIR, exist_ok=True)\n\n`field_notes/nibble.py` at line 263.",
+        "narrative_context": "[FEAT-177] DNA Uplink: Harvest for Expert Forge if is_deep_connect: try: os.makedirs(EXPERTISE_DIR, exist_ok=True)\n\n`field_notes/nibble_v2.py`.",
         "lab_anchors": [
-          "[field_notes/nibble.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L263) \u2014 DNA Uplink: Harvest for Expert Forge."
+          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — DNA Uplink: Harvest for Expert Forge."
         ],
         "review_notes": "Status: ACTIVE",
         "refinement_version": 1

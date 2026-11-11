@@ -44,7 +44,7 @@ graph TD
 
 ### Core Architecture Components
 1.  **The Librarian (`scan_librarian.py`):** Classifies raw text files in the `knowledge_base` into type categories (Logs, References, or Strategic Context) and builds the file manifest.
-2.  **Timeline Processor (`nibble.py`):** A background worker for the **Timeline**. It processes log archives in month/year chunks, sending them to the local LLM endpoint to extract technical events and redact private info.
+2.  **Timeline Processor (`nibble_v2.py`):** A background worker for the **Timeline**. It processes log archives in month/year chunks, sending them to the local LLM endpoint to extract technical events and redact private info.
 3.  **The Curator (`scan_artifacts.py`):** A specialized scanner for the **Artifact Map**. It analyzes files (PDFs, Scripts, Decks) to assign a "Showcase Rank" (0-4) and synopsis. High-value items ("4-Star") are hardcoded with expert descriptions and direct links.
 4.  **The Dashboard (`index.html`, `timeline.html`, `files.html`):** A "System Admin" style interface featuring persistent navigation components (using custom Web Components), content-aware search filtering, and custom terminal animation effects.
 
@@ -79,7 +79,7 @@ python3 field_notes/scan_librarian.py
 python3 field_notes/scan_queue.py
 
 # Run a Single Queue Item Processing Step (Nibbler)
-python3 field_notes/nibble.py
+python3 field_notes/nibble_v2.py --once
 
 # Clean Artifact Data Cache
 python3 field_notes/clean_artifacts.py
