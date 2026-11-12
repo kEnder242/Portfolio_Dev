@@ -82,10 +82,10 @@
   - [x] Task 112.60.3: Update `standalone_accountability_watchdog.py` to evaluate probe traces against the MO expectation vector, verifying `permissible_outcome: "REFUSAL_MANDATORY"` (Conditional Pass) vs flagging `LAZY_REFUSAL_DEFECT`.
 
 ### 🌐 Track 3: Conversational Continuity & Untangling Directives (`src/nodes/` & `src/logic/`)
-- [ ] **Story 112.70: CONTINUITY_VECTOR Tagging & Deep Thought Hydration**:
-  - [ ] Task 112.70.1: Implement `CONTINUITY_VECTOR` emission in Brain (`THREAD_CONTINUATION` vs `TOPIC_PIVOT`) based on trailing turns.
-  - [ ] Task 112.70.2: Hydrate Deep Thought's Stage 3 prompt with the untangling directive upon `TOPIC_PIVOT`, instructing Pinky to shift gears cleanly without hallucinatory bleed or false omissions.
-  - [ ] Task 112.70.3: Author multi-turn probe test harness in `src/tests/test_round_table_continuity.py` verifying both pivot and continuation paths.
+- [x] **Story 112.70: CONTINUITY_VECTOR Tagging & Deep Thought Hydration**:
+  - [x] Task 112.70.1: Implement `CONTINUITY_VECTOR` emission in Brain (`THREAD_CONTINUATION` vs `TOPIC_PIVOT`) based on trailing turns.
+  - [x] Task 112.70.2: Hydrate Deep Thought's Stage 3 prompt with the untangling directive upon `TOPIC_PIVOT`, instructing Pinky to shift gears cleanly without hallucinatory bleed or false omissions.
+  - [x] Task 112.70.3: Author multi-turn probe test harness in `src/tests/test_round_table_continuity.py` verifying both pivot and continuation paths.
 
 ### 🏁 Track 4: Live Silicon Shakedown & Certification (`BKM-101` / `BKM-024`)
 - [ ] **Story 112.80: Live Multi-Turn Gauntlet & Watchdog Re-Ignition Verification**:
@@ -220,6 +220,7 @@
 | 2026-11-12T11:00 | AFK_CHECKLIST | Formulated AFK Execution Checklist across Tracks 1–4 | `SPRINT_PLAN_SPR_112_1.md §2` | ✅ READY |
 | 2026-11-12T11:08 | SWARM_EXEC | Story 112.50 executed via `[SWARM:LOCAL]` (Atlas on Kender 4090): 39 pytest passed | `traversal_dispatcher.py`, `career_compass.json` | ✅ VERIFIED |
 | 2026-11-12T13:02 | SWARM_EXEC | Story 112.60 executed via `[SWARM:CLOUD]` (Sisyphus on openrouter/free): MO ledger initialized & watchdog evaluation wired | `mo_expectations_ledger.jsonl`, `standalone_accountability_watchdog.py` | ✅ VERIFIED |
+| 2026-11-12T13:20 | SWARM_EXEC | Story 112.70 executed via `[SWARM:CLOUD]` (Sisyphus on openrouter/free): continuity extraction & Deep Thought untangling | `cognitive_hub.py`, `test_round_table_continuity.py` | ✅ VERIFIED |
 
 ---
 
