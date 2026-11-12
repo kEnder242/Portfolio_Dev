@@ -24,25 +24,30 @@
 
 ## 🚦 Interactive Execution Checklist (`BKM-086 §1.1`)
 
-### 🧭 Phase 1: JIT Context Hydration & Domain-Specific Context Dispatch
-- [ ] **Story 112.10: Domain-Specific Context Dispatch in Foyer (`src/v5/foyer/router.py`)**:
-  - [ ] Task 112.10.1: Instrument Foyer Stage 5 dispatch to capture Brain's finalized Bedrock chunks (`[BEDROCK SELECTION]`) and Deep Thought's citations for the active `request_id`.
-  - [ ] Task 112.10.2: For historical/archival queries (`historical`, `work_history`, `recruiter_synergy`), inject JIT Bedrock evidence into `context_window` sent to `_mlx_judge`.
-  - [ ] Task 112.10.3: For operational queries (`exp_tlm`, `infra`, `telemetry`), inject JIT cluster hardware topology.
-  - [ ] Task 112.10.4: For casual/banter queries (`casual`, `greeting`), inject minimal conversational context with zero external bloat.
+### 🧭 Track 1: Core Plumbing & Asynchronous Stream Safety (`src/v5/foyer/router.py`)
+- [ ] **Story 112.10: Decoupled Stream Completion & Uncoupled Judicial Dispatch**:
+  - [ ] Task 112.10.1: Decouple `node_stream_complete` (per-node streaming) from `waterfall_pipeline_complete` (terminal Pinky response) in `router.py:waterfall_drainer`, eliminating 3x redundant judge invocations.
+  - [ ] Task 112.10.2: Make judicial execution an uncoupled, non-blocking async task (`asyncio.create_task`) that broadcasts directly to the Left Console (`channel="insight"` / `"diagnostic"`) and appends a minimal JSON record to `judge_backpressure.jsonl` (removing semaphore locks and artificial stage progression).
+  - [ ] Task 112.10.3: Implement schema dual-write in `mlx_judge_node.py` and `router.py` (`prime_prompt_critique`, `epistemic_critique`, `score`, `retort`), aliasing legacy keys for probe compatibility.
+  - [ ] Task 112.10.4: Add cohesive `session` configuration in `lab_accountability_thresholds.json` (`max_history_turns: 10`, `idle_timeout_seconds: 900.0`) and bound Foyer's turn tracking to the rolling 10-turn window.
 
-### ⚖️ Phase 2: Reframed Judicial Schema & Prime Prompt Responsiveness
-- [ ] **Story 112.20: Sovereign Critic Prompt & Schema Re-Architecture (`src/nodes/mlx_judge_node.py`)**:
-  - [ ] Task 112.20.1: Refactor Sovereign Judge prompt to center on Prime Prompt Responsiveness: "Did the conversation directly address the prime prompt?"
-  - [ ] Task 112.20.2: Update JSON response schema to output `prime_prompt_critique`, `epistemic_critique`, `score`, and `retort`.
-  - [ ] Task 112.20.3: Reward honest boundary statements (admitting absence of unlogged records) as high epistemic integrity rather than penalizing as hallucinations.
-  - [ ] Task 112.20.4: Update response parsing in `mlx_judge_node.py` to handle reframed critique schema with full backward-compatibility for legacy fields.
+### ⚖️ Track 2: Epistemic Bounds & Voice Tuning (`src/nodes/mlx_judge_node.py`)
+- [ ] **Story 112.20: Lean Responsiveness Prompting & Epistemic Honesty**:
+  - [ ] Task 112.20.1: Plain English absence notification in judge prompt: `"Bedrock Evidence: No archival records matched this query."` (zero bracket token bleed).
+  - [ ] Task 112.20.2: Lean qualitative anti-parroting guidance in the judge prompt: verify Pinky synthesizes and directly addresses the user's prompt rather than merely echoing Deep Thought's raw reasoning.
+  - [ ] Task 112.20.3: Preserve full 45s M5 Air patience (failover to Kender only on hard connection failure).
 
-### 🏁 Phase 3: Live Silicon Shakedown & Certification (`BKM-101` / `BKM-024`)
-- [ ] **Story 112.30: Multi-Domain Gauntlet & Live Silicon Quorum Certification**:
-  - [ ] Task 112.30.1: Execute `probe_round_table_accountability.py` across both operational (`exp_tlm`) and archival (`work_history`) topics.
-  - [ ] Task 112.30.2: Verify that archival probes achieve `score >= 0.85` without false-positive hardware mismatch penalties.
-  - [ ] Task 112.30.3: Execute full `standalone_accountability_watchdog.py` shakedown and verify 9/9 PASS in `daily_accountability_digest.json`.
+### 🌐 Track 3: Context Routing & Domain Isolation (`src/v5/foyer/router.py` & `src/logic/cognitive_hub.py`)
+- [ ] **Story 112.30: JIT Context Hydration & Domain Context Isolation**:
+  - [ ] Task 112.30.1: Hydrate cluster hardware topology *only* when triage domain indicates infrastructure/hardware (`operational`, `meta`, `forensic`, `infra`, `telemetry`, `hardware`).
+  - [ ] Task 112.30.2: Forward Deep Thought's cited references to Foyer's Stage 5 Judge context to verify factual fidelity without raw document bloat.
+  - [ ] Task 112.30.3: Isolate request domain inside `request_context[request_id]["domain"]` for internal routing, keeping `status.active_domain` strictly for the ambient dashboard display (`status.html`).
+
+### 🏁 Track 4: Live Silicon Shakedown & Certification (`BKM-101` / `BKM-024`)
+- [ ] **Story 112.40: Multi-Domain Gauntlet & Live Silicon Quorum Certification**:
+  - [ ] Task 112.40.1: Execute `probe_round_table_accountability.py` across both operational (`exp_tlm`) and archival (`work_history`) topics.
+  - [ ] Task 112.40.2: Verify that archival probes achieve `score >= 0.85` without false-positive hardware mismatch penalties.
+  - [ ] Task 112.40.3: Execute full `standalone_accountability_watchdog.py` shakedown and verify 9/9 PASS in `daily_accountability_digest.json`.
 
 ---
 
@@ -220,3 +225,14 @@ flowchart TD
 * **A: Story 112.10 & 112.20 Execution**: Grounding of the Sovereign Judge transitioning from Dropped Thread #A into primary sprint execution.
 * **B: Foyer Maintenance Quiescence Gate**: Ready to gate Foyer `/inject` with HTTP 503 when `maintenance.lock` is active to prevent overnight 02:00–05:00 AM warmup failures.
 * **C: Git Push Invariant**: All local commits remain strictly unpushed per Law 0.
+
+---
+
+## 🔮 8. 00 Backlog Ideas
+
+* **`[BACKLOG-001]` LLM Director & Dynamic MCP Tool Curation**:
+  - *Concept*: Replace rigid, hardcoded triage rails with an autonomous **LLM Director**. Instead of Foyer pre-deciding and pushing context down the pipeline, the Council (or a Director agent) receives the prompt and dynamically pulls tools via MCP as needed, letting the model decide what context is relevant rather than heuristic scripts pre-guessing.
+  - *Context*: Explored during Sprint 112 planning alignment; staged as an architectural exploration candidate for future cognitive engine refinement.
+* **`[BACKLOG-002]` Pipeline Fusion & Chunked Cascading Waterfall**:
+  - *Concept*: Investigate orchestrator-level prefix chaining and multi-stage batching for single-user latency optimization, keeping execution local on Z87 (dual GPU).
+  - *Context*: Research verified that while native engine Prompt DAGs (e.g. SGLang / RadixAttention) are incompatible with our heterogeneous dual-vendor Vulkan/RPC split (RTX 2080 Ti + Intel Arc B580), pipeline fusion at the Foyer orchestrator layer provides substantial batching and latency gains without engine-level DAG primitives.
