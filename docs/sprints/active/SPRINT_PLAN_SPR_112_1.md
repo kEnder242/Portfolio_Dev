@@ -70,10 +70,10 @@
 ## 🚦 2. Interactive AFK Execution Checklist (`BKM-086 §1.1`)
 
 ### 🧭 Track 1: Decoupled ClaraDB Grounding (`src/logic/traversal_dispatcher.py` & `src/rag/`)
-- [ ] **Story 112.50: Layer 2 Connective Scope Expansion & Anti-Censorship Routing**:
-  - [ ] Task 112.50.1: Update `traversal_dispatcher.py` so mapping `career_ledger` acts as an entry index rather than a solitary censor, automatically fanning search into underlying ground-truth collections (`artifact_vault`, `lab_journal`, `discovery`).
-  - [ ] Task 112.50.2: Expand `career_compass.json` Tier 2 keyword mesh and ClaraDB topic anchors to include historical platform codenames (`Kayak`, `Montana`, `CWF`, `DMR`, `Whitley`, `Purley`).
-  - [ ] Task 112.50.3: Verify Brain filter decoupling: dropping an uninformative L2 abstract chunk never blocks or short-circuits the flow of low-level engineering evidence.
+- [x] **Story 112.50: Layer 2 Connective Scope Expansion & Anti-Censorship Routing**:
+  - [x] Task 112.50.1: Update `traversal_dispatcher.py` so mapping `career_ledger` acts as an entry index rather than a solitary censor, automatically fanning search into underlying ground-truth collections (`artifact_vault`, `lab_journal`, `discovery`).
+  - [x] Task 112.50.2: Expand `career_compass.json` Tier 2 keyword mesh and ClaraDB topic anchors to include historical platform codenames (`Kayak`, `Montana`, `CWF`, `DMR`, `Whitley`, `Purley`).
+  - [x] Task 112.50.3: Verify Brain filter decoupling: dropping an uninformative L2 abstract chunk never blocks or short-circuits the flow of low-level engineering evidence.
 
 ### ⚖️ Track 2: The Modus Operandi (MO) Standard & Watchdog Audit (`src/infra/` & `data/`)
 - [ ] **Story 112.60: Out-of-Band MO Expectation Standard & Automated Watchdog Audit**:
@@ -218,6 +218,7 @@
 | 2026-11-12T10:45 | SPRINT_INIT | Codified narrative roll-up for SPR-112.1 | `SPRINT_PLAN_SPR_112_1.md §1` | ✅ DONE |
 | 2026-11-12T10:55 | BKM_CODIFICATION | Codified BKM-088 Section 3 (MO & Expectations Standard) | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
 | 2026-11-12T11:00 | AFK_CHECKLIST | Formulated AFK Execution Checklist across Tracks 1–4 | `SPRINT_PLAN_SPR_112_1.md §2` | ✅ READY |
+| 2026-11-12T11:08 | SWARM_EXEC | Story 112.50 executed via `[SWARM:LOCAL]` (Atlas on Kender 4090): 39 pytest passed | `traversal_dispatcher.py`, `career_compass.json` | ✅ VERIFIED |
 
 ---
 
