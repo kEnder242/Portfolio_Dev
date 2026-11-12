@@ -64,3 +64,49 @@
 
 ### 4) Infrastructure Timeout Governance (`FEAT-685`)
 * Centralized `engine_reignition_probe_timeout_sec: 240.0` in [`lab_accountability_thresholds.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/lab_accountability_thresholds.json) and dynamically wired into [`nightly_forge.py:_v1_models_blocking_probe()`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/nightly_forge.py), eliminating the 180s false-alarm re-ignition warning during cold dual-GPU model loads.
+
+---
+
+## 🚦 2. Interactive AFK Execution Checklist (`BKM-086 §1.1`)
+
+### 🧭 Track 1: Decoupled ClaraDB Grounding (`src/logic/traversal_dispatcher.py` & `src/rag/`)
+- [ ] **Story 112.50: Layer 2 Connective Scope Expansion & Anti-Censorship Routing**:
+  - [ ] Task 112.50.1: Update `traversal_dispatcher.py` so mapping `career_ledger` acts as an entry index rather than a solitary censor, automatically fanning search into underlying ground-truth collections (`artifact_vault`, `lab_journal`, `discovery`).
+  - [ ] Task 112.50.2: Expand `career_compass.json` Tier 2 keyword mesh and ClaraDB topic anchors to include historical platform codenames (`Kayak`, `Montana`, `CWF`, `DMR`, `Whitley`, `Purley`).
+  - [ ] Task 112.50.3: Verify Brain filter decoupling: dropping an uninformative L2 abstract chunk never blocks or short-circuits the flow of low-level engineering evidence.
+
+### ⚖️ Track 2: The Modus Operandi (MO) Standard & Watchdog Audit (`src/infra/` & `data/`)
+- [ ] **Story 112.60: Out-of-Band MO Expectation Standard & Automated Watchdog Audit**:
+  - [ ] Task 112.60.1: Codify the canonical schema and initialize [`Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl).
+  - [ ] Task 112.60.2: Implement the ABCD expectation sources (`Test Probe`, `Nightly AGY`, `Nightly Oracle`, `Human`), strictly enforcing 100% runtime blindness for Pinky, Brain, Deep Thought, and the Judge.
+  - [ ] Task 112.60.3: Update `standalone_accountability_watchdog.py` to evaluate probe traces against the MO expectation vector, verifying `permissible_outcome: "REFUSAL_MANDATORY"` (Conditional Pass) vs flagging `LAZY_REFUSAL_DEFECT`.
+
+### 🌐 Track 3: Conversational Continuity & Untangling Directives (`src/nodes/` & `src/logic/`)
+- [ ] **Story 112.70: CONTINUITY_VECTOR Tagging & Deep Thought Hydration**:
+  - [ ] Task 112.70.1: Implement `CONTINUITY_VECTOR` emission in Brain (`THREAD_CONTINUATION` vs `TOPIC_PIVOT`) based on trailing turns.
+  - [ ] Task 112.70.2: Hydrate Deep Thought's Stage 3 prompt with the untangling directive upon `TOPIC_PIVOT`, instructing Pinky to shift gears cleanly without hallucinatory bleed or false omissions.
+  - [ ] Task 112.70.3: Author multi-turn probe test harness in `src/tests/test_round_table_continuity.py` verifying both pivot and continuation paths.
+
+### 🏁 Track 4: Live Silicon Shakedown & Certification (`BKM-101` / `BKM-024`)
+- [ ] **Story 112.80: Live Multi-Turn Gauntlet & Watchdog Re-Ignition Verification**:
+  - [ ] Task 112.80.1: Execute live multi-turn continuity probes against Foyer on port 8765.
+  - [ ] Task 112.80.2: Execute `probe_round_table_accountability.py` on Kayak/Montana platform query and verify retrieval of underlying work history chunks without refusal.
+  - [ ] Task 112.80.3: Execute `standalone_accountability_watchdog.py` to certify 9/9 PASS with automated MO evaluation.
+
+---
+
+## 📝 3. Sprint Execution Ledger (`BKM-081`)
+
+| Timestamp | Phase / Story | Action / Event | Artifact / Target | Status |
+|---|---|---|---|:---:|
+| 2026-11-12T10:45 | SPRINT_INIT | Codified narrative roll-up for SPR-112.1 | `SPRINT_PLAN_SPR_112_1.md §1` | ✅ DONE |
+| 2026-11-12T10:55 | BKM_CODIFICATION | Codified BKM-088 Section 3 (MO & Expectations Standard) | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
+| 2026-11-12T11:00 | AFK_CHECKLIST | Formulated AFK Execution Checklist across Tracks 1–4 | `SPRINT_PLAN_SPR_112_1.md §2` | ✅ READY |
+
+---
+
+## 🧭 4. Dropped Threads Ledger (`BKM-084`)
+
+* **A: Story 112.50–112.70 Ownership Allocation**: Must decompose into `[SWARM:LOCAL]` and `[SWARM:CLOUD]` per `BKM-049 §3` / Pre-Flight Item 4.1 to avoid sole-owner bypass.
+* **B: Foyer Maintenance Quiescence Gate**: Ready to gate Foyer `/inject` with HTTP 503 during active `maintenance.lock`.
+* **C: Git Push Invariant**: All local commits remain strictly unpushed per Law 0.
