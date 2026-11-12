@@ -17,8 +17,8 @@
   - *Mistake 4 (Wisdom Pigeonholing)*: Avoided mischaracterizing low-level datacenter platform engineering collateral (PECI, Simics, transition plans) as philosophical "wisdom gems".
   - *Mistake 5 (Hardcoded Re-Ignition Timeouts)*: Centralized `engine_reignition_probe_timeout_sec` (240s) in `lab_accountability_thresholds.json` under `[FEAT-685]`.
 - [x] **3. Oracle Review**: Pre-flight review completed and aligned with operator in tracked conversation.
-- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Stories 112.50, 112.60, 112.70 assigned to `[SWARM:LOCAL]`; Story 112.80 assigned to `[AGY:PRIMARY]` for physical daemon certification.
-- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire (`BKM-049 §3.4` / `BKM-086 §Pillar 3`)**: Confirmed non-homogeneous allocation: 75% `[SWARM:LOCAL]`, 25% `[AGY:PRIMARY]`. Zero-delegation tripwire passed.
+- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story 112.50 executed via `[SWARM:LOCAL]`; Stories 112.60 and 112.70 promoted to `[SWARM:CLOUD]` per operator directive (cross-module & schema complexity); Story 112.80 assigned to `[AGY:PRIMARY]` for physical daemon certification.
+- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire (`BKM-049 §3.4` / `BKM-086 §Pillar 3`)**: Confirmed non-homogeneous allocation: 25% `[SWARM:LOCAL]`, 50% `[SWARM:CLOUD]`, 25% `[AGY:PRIMARY]`. Zero-delegation tripwire passed.
 - [x] **5. Risk Assessment**: Evaluated blast radius of modifying `traversal_dispatcher.py` collection expansion, Brain continuity tagging, and watchdog MO evaluation.
 - [x] **6. BKM Invariant & Anti-Bypass Audit**: Verified plan against `BKM-101` (Live Shakedown), `BKM-024` (Live Silicon Gate), `BKM-044` (Attendant Authority), and `BKM-084` (Dropped Threads Governance).
 
@@ -125,7 +125,7 @@
 ---
 
 ### ⚖️ Story 112.60: Out-of-Band MO Expectation Standard & Automated Watchdog Audit
-**Assigned Owner:** `[SWARM:LOCAL]`  
+**Assigned Owner:** `[SWARM:CLOUD]`  
 **DNA Tags:** `[BKM-088]`, `[BKM-089]`, `[BKM-090]`, `[FEAT-619]`
 
 > [!NOTE]
@@ -160,7 +160,7 @@
 ---
 
 ### 🌐 Story 112.70: CONTINUITY_VECTOR Tagging & Deep Thought Hydration
-**Assigned Owner:** `[SWARM:LOCAL]`  
+**Assigned Owner:** `[SWARM:CLOUD]`  
 **DNA Tags:** `[BKM-087]`, `[FEAT-657]`, `[FEAT-658]`
 
 > [!NOTE]
