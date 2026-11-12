@@ -31244,7 +31244,7 @@
       "synthesis": {
         "narrative_context": "[FEAT-176] Deep-Connect Mode Detection is_deep_connect = task.get(\"mode\") == \"DEEP_CONNECT\" bucket_file = os.path.join(DATA_DIR, f\"{task['bucket'].replace('-', '_')}.json\") existing_data = []\n\n`field_notes/nibble_v2.py`.",
         "lab_anchors": [
-          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — Deep-Connect Mode Detection."
+          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) \u2014 Deep-Connect Mode Detection."
         ],
         "review_notes": "Status: ACTIVE",
         "refinement_version": 1
@@ -31271,7 +31271,7 @@
       "synthesis": {
         "narrative_context": "[FEAT-177] DNA Uplink: Harvest for Expert Forge if is_deep_connect: try: os.makedirs(EXPERTISE_DIR, exist_ok=True)\n\n`field_notes/nibble_v2.py`.",
         "lab_anchors": [
-          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) — DNA Uplink: Harvest for Expert Forge."
+          "[field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py) \u2014 DNA Uplink: Harvest for Expert Forge."
         ],
         "review_notes": "Status: ACTIVE",
         "refinement_version": 1
@@ -39731,6 +39731,29 @@
     }
   ],
   "sprint": [
+    {
+      "id": "SPR-112.0",
+      "title": "\ud83d\udccb SPRINT PLAN 112.0: JITC Realignment of the Sovereign Coherency Judge",
+      "origin": {
+        "text": "**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Verification), `BKM-062` (Ground Truth Verification), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Cognitive Prompt Governance), `BKM-090` (Layer 1 Orchestrator",
+        "source": "SPRINT_PLAN_SPR_112_0.md"
+      },
+      "synthesis": {
+        "narrative_context": "**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Verification), `BKM-062` (Ground Truth Verification), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Cognitive Prompt Governance), `BKM-090` (Layer 1 Orchestrator Governance), `BKM-101` (Live Shakedown Protocol),",
+        "lab_anchors": [
+          "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_112_0.md"
+        ],
+        "review_notes": "Active sprint in execution."
+      },
+      "metadata": {
+        "tags": [
+          "sprint-112",
+          "sprint-plan"
+        ],
+        "status": "ACTIVE",
+        "bucket_id": "bucket_5_infra"
+      }
+    },
     {
       "id": "SPR-111.0",
       "title": "\ud83d\udccb SPRINT PLAN 111.0: Attendant Sovereignty Restoration & Symmetric Silicon Lifecycle",
