@@ -220,6 +220,45 @@ flowchart TD
 
 ---
 
+## 📜 3. The Rolled-Up Narrative: Tracked Conversation Consensus
+
+Through interactive operator pairing and adversarial oracle auditing, we refined our architectural understanding and stripped away theoretical over-engineering. This section establishes our **new active source of narrative truth**, standing on the shoulders of Section 1 (Initial Narrative) and Section 2 (Grand Oracle Session Report).
+
+---
+
+### 3.1) The Diagnostic Realignment: Plumbing, Streams & The Two-Sided Room
+1. **The Streaming vs. Turn Conflation**:  
+   We uncovered a fundamental naming and lifecycle defect in [`router.py:5194-5275`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L5194-L5275). The boolean `final: True` indicated *that a specific node finished streaming tokens* (`node_stream_complete`), not *that the round-table conversation was finished* (`waterfall_pipeline_complete`). Because Brain, Deep Thought, and Pinky each emitted `final: True`, Foyer marked Stage 5 complete on Brain's turn and dispatched the MLX Judge 3 separate times per request.  
+   *Resolution*: Replace ambiguous `final` with `node_stream_complete`, and trigger Stage 5 completion and judicial dispatch strictly upon `waterfall_pipeline_complete` (`is_node_stream_complete and "pinky" in source.lower()`).
+2. **Excision of the Synchronous State Machine**:  
+   There is no complex voice stream—the Foyer Intercom is a duplex chat room with a Left Console (diagnostic, archive, telemetry) and a Right Console (conversational speech). The Judge does not belong inside an artificial, synchronous state machine with semaphore bottlenecks (`_judge_semaphore = asyncio.Semaphore(2)`).  
+   *Resolution*: When `waterfall_pipeline_complete` fires, Foyer launches a clean, uncoupled `asyncio.create_task(_run_mlx_judge(...))`. When done, it broadcasts directly to the Left Console (`channel="insight"` / `"diagnostic"`) and appends an entry to `judge_backpressure.jsonl` so offline verification probes can read it.
+3. **Session Horizons & Bounded Memory**:  
+   Arbitrary 1,000-turn buffers are detached from homelab reality. Human interaction lives in focused sessions of 3–5 dialogue turns.  
+   *Resolution*: Establish a cohesive 10-turn rolling session history in [`lab_accountability_thresholds.json`](file:///home/jallred/Dev_Lab/HomeLabAI/config/lab_accountability_thresholds.json) (`session.max_history_turns = 10`, `session.idle_timeout_seconds = 900.0`), aligning Foyer's memory footprint with the AFK quiet window.
+4. **Separation of Dashboard Domain vs. Execution Domain**:  
+   `self.status.active_domain` is retained exclusively as the ambient visual indicator for `status.html`. Internal execution routing uses `request_context[request_id]["domain"]`, preventing background probes from clobbering active human sessions.
+
+---
+
+### 3.2) Epistemic Balance: The Lean "Second Turn"
+1. **Upstream Curation Over Downstream Negative Guard Rails**:  
+   We rejected downstream "Physical Lab Boundary" clauses in the judge prompt. Under true JITC, the judge only needs hardware topology if the query is operational or infrastructure-focused. If the topic is career, code, or history, hardware topology is omitted upstream.
+2. **The "Hypocrisy" Resolved (Deep Thought Cites Its Sources)**:  
+   If the judge is fed the identical raw ChromaDB document dump as the generator, it risks becoming an echo chamber rather than an independent evaluator. By relying on Deep Thought citing its sources in its reasoning trace, the Judge does not receive multi-kilobyte document dumps. It simply acts as a lean **second turn reviewer**:  
+   - *Did Pinky directly answer Jason's prime prompt?*  
+   - *Did Pinky faithfully reflect what Deep Thought cited, without hallucinating metrics outside those citations?*
+3. **Absence as Epistemic Honesty Without Token Bleed**:  
+   When archives have no relevant records, pass clean, unadorned English:  
+   `"Bedrock Evidence: No archival records matched this query."`  
+   Eliminates bracket pseudo-tag echo/bleed in 3B models while explicitly instructing the judge to reward honest boundary statements.
+4. **Lean Anti-Parroting Guidance**:  
+   Avoid arbitrary numeric score penalties (`0.4`). Instead, provide qualitative guidance in the judge rubric: verify Pinky synthesizes and addresses Jason's query rather than merely echoing Deep Thought's raw reasoning.
+5. **Respecting M5 Air Silicon Latency**:  
+   Preserve the hard-won 45s candidate timeout for M5 Air. The backup seat on Kender is reserved for hard connection/socket unreachability, never for rushing sovereign Metal inference.
+
+---
+
 ## 🧭 7. Dropped Threads Ledger (`BKM-084`)
 
 * **A: Story 112.10 & 112.20 Execution**: Grounding of the Sovereign Judge transitioning from Dropped Thread #A into primary sprint execution.
