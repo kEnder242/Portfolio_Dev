@@ -15,8 +15,10 @@
   - *Mistake 2 (The Green Lie / Unverified Stubs)*: Avoided falling back to unverified stubs or non-vocal passes (`BKM-062`), preserving strict sovereign quorum.
   - *Mistake 3 (Import Misses on Un-shaken Code)*: Enforced `BKM-101` Live Shakedown on all modified scripts in the authentic virtualenv before declaring certification.
   - *Mistake 4 (Documentation Duplication)*: Avoided duplicating narrative timeout blocks across supporting files, establishing structured pointers (`[FEAT-685]` / `LAB-119`).
+  - *Mistake 5 (The 100% AGY:PRIMARY Delegation Bypass)*: Avoided in future sprints by codifying Pre-Flight Checklist Item 4.1 (`BKM-049 §3.4` / `BKM-086 §Pillar 3`). In SPR-112.0, assigning 100% of stories to `[AGY:PRIMARY]` with zero swarm delegation bypassed the Delegation Gate via prose rationalization; formally captured and codified into `Protocols.md`.
 - [x] **3. Oracle / Architectural Audit**: Validated JITC context boundaries against `BKM-088` and `BKM-090`. Grounding must flow just-in-time from the appropriate tier rather than flooding prompts or starving critics.
 - [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story assignments declared for `[AGY:PRIMARY]` pairing with fast, unblocked execution across Tracks 1–4.
+- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire (`BKM-049 §3.4` / `BKM-086 §Pillar 3`)**: Codified in SPR-112.0 retrospective. Verified AGY is NOT the sole owner across 100% of sprint stories and zero delegation was assigned. If 100% of stories are tagged `[AGY:PRIMARY]` without an explicit, in-prompt operator waiver, HALT planning immediately.
 - [x] **5. Risk Assessment**: Evaluated blast radius of modifying Foyer Stage 5 context dispatch and Sovereign Judge response parsing. Mitigated by maintaining backward-compatible fallback fields and non-blocking asynchronous execution.
 - [x] **6. BKM Invariant & Anti-Bypass Audit**: Verified plan against `BKM-101` (Live Shakedown), `BKM-024` (Live Silicon Gate), `BKM-044` (Attendant Authority), and `BKM-084` (Dropped Threads Governance).
 
