@@ -2,7 +2,7 @@
 
 **Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Verification), `BKM-062` (Ground Truth Verification), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Cognitive Prompt Governance), `BKM-090` (Layer 1 Orchestrator Governance), `BKM-101` (Live Shakedown Protocol), `[FEAT-665]` (Sovereign Critic Architecture), `[FEAT-683]` (Epistemic Memory Architecture), `[FEAT-685]` (Centralized Timeout Management).  
 **Sprint Horizon:** November 11, 2026 – November 15, 2026  
-**Status:** 🚀 ACTIVE (In Planning / Execution)  
+**Status:** 🏁 COMPLETED  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
 **Tracking Mode:** In-Tree Append-Only Ledger (`BKM-081`)
 
@@ -25,29 +25,29 @@
 ## 🚦 Interactive Execution Checklist (`BKM-086 §1.1`)
 
 ### 🧭 Track 1: Core Plumbing & Asynchronous Stream Safety (`src/v5/foyer/router.py`)
-- [ ] **Story 112.10: Decoupled Stream Completion & Uncoupled Judicial Dispatch**:
-  - [ ] Task 112.10.1: Decouple `node_stream_complete` (per-node streaming) from `waterfall_pipeline_complete` (terminal Pinky response) in `router.py:waterfall_drainer`, eliminating 3x redundant judge invocations.
-  - [ ] Task 112.10.2: Make judicial execution an uncoupled, non-blocking async task (`asyncio.create_task`) that broadcasts directly to the Left Console (`channel="insight"` / `"diagnostic"`) and appends a minimal JSON record to `judge_backpressure.jsonl` (removing semaphore locks and artificial stage progression).
-  - [ ] Task 112.10.3: Implement schema dual-write in `mlx_judge_node.py` and `router.py` (`prime_prompt_critique`, `epistemic_critique`, `score`, `retort`), aliasing legacy keys for probe compatibility.
-  - [ ] Task 112.10.4: Add cohesive `session` configuration in `lab_accountability_thresholds.json` (`max_history_turns: 10`, `idle_timeout_seconds: 900.0`) and bound Foyer's turn tracking to the rolling 10-turn window.
+- [x] **Story 112.10: Decoupled Stream Completion & Uncoupled Judicial Dispatch**:
+  - [x] Task 112.10.1: Decouple `node_stream_complete` (per-node streaming) from `waterfall_pipeline_complete` (terminal Pinky response) in `router.py:waterfall_drainer`, eliminating 3x redundant judge invocations.
+  - [x] Task 112.10.2: Make judicial execution an uncoupled, non-blocking async task (`asyncio.create_task`) that broadcasts directly to the Left Console (`channel="insight"` / `"diagnostic"`) and appends a minimal JSON record to `judge_backpressure.jsonl` (removing semaphore locks and artificial stage progression).
+  - [x] Task 112.10.3: Implement schema dual-write in `mlx_judge_node.py` and `router.py` (`prime_prompt_critique`, `epistemic_critique`, `score`, `retort`), aliasing legacy keys for probe compatibility.
+  - [x] Task 112.10.4: Add cohesive `session` configuration in `lab_accountability_thresholds.json` (`max_history_turns: 10`, `idle_timeout_seconds: 900.0`) and bound Foyer's turn tracking to the rolling 10-turn window.
 
 ### ⚖️ Track 2: Epistemic Bounds & Voice Tuning (`src/nodes/mlx_judge_node.py`)
-- [ ] **Story 112.20: Lean Responsiveness Prompting & Epistemic Honesty**:
-  - [ ] Task 112.20.1: Plain English absence notification in judge prompt: `"Bedrock Evidence: No archival records matched this query."` (zero bracket token bleed).
-  - [ ] Task 112.20.2: Lean qualitative anti-parroting guidance in the judge prompt: verify Pinky synthesizes and directly addresses the user's prompt rather than merely echoing Deep Thought's raw reasoning.
-  - [ ] Task 112.20.3: Preserve full 45s M5 Air patience (failover to Kender only on hard connection failure).
+- [x] **Story 112.20: Lean Responsiveness Prompting & Epistemic Honesty**:
+  - [x] Task 112.20.1: Plain English absence notification in judge prompt: `"Bedrock Evidence: No archival records matched this query."` (zero bracket token bleed).
+  - [x] Task 112.20.2: Lean qualitative anti-parroting guidance in the judge prompt: verify Pinky synthesizes and directly addresses the user's prompt rather than merely echoing Deep Thought's raw reasoning.
+  - [x] Task 112.20.3: Preserve full 45s M5 Air patience (failover to Kender only on hard connection failure).
 
 ### 🌐 Track 3: Context Routing & Domain Isolation (`src/v5/foyer/router.py` & `src/logic/cognitive_hub.py`)
-- [ ] **Story 112.30: JIT Context Hydration & Domain Context Isolation**:
-  - [ ] Task 112.30.1: Hydrate cluster hardware topology *only* when triage domain indicates infrastructure/hardware (`operational`, `meta`, `forensic`, `infra`, `telemetry`, `hardware`).
-  - [ ] Task 112.30.2: Forward Deep Thought's cited references to Foyer's Stage 5 Judge context to verify factual fidelity without raw document bloat.
-  - [ ] Task 112.30.3: Isolate request domain inside `request_context[request_id]["domain"]` for internal routing, keeping `status.active_domain` strictly for the ambient dashboard display (`status.html`).
+- [x] **Story 112.30: JIT Context Hydration & Domain Context Isolation**:
+  - [x] Task 112.30.1: Hydrate cluster hardware topology *only* when triage domain indicates infrastructure/hardware (`operational`, `meta`, `forensic`, `infra`, `telemetry`, `hardware`).
+  - [x] Task 112.30.2: Forward Deep Thought's cited references to Foyer's Stage 5 Judge context to verify factual fidelity without raw document bloat.
+  - [x] Task 112.30.3: Isolate request domain inside `request_context[request_id]["domain"]` for internal routing, keeping `status.active_domain` strictly for the ambient dashboard display (`status.html`).
 
 ### 🏁 Track 4: Live Silicon Shakedown & Certification (`BKM-101` / `BKM-024`)
-- [ ] **Story 112.40: Multi-Domain Gauntlet & Live Silicon Quorum Certification**:
-  - [ ] Task 112.40.1: Execute `probe_round_table_accountability.py` across both operational (`exp_tlm`) and archival (`work_history`) topics.
-  - [ ] Task 112.40.2: Verify that archival probes achieve `score >= 0.85` without false-positive hardware mismatch penalties.
-  - [ ] Task 112.40.3: Execute full `standalone_accountability_watchdog.py` shakedown and verify 9/9 PASS in `daily_accountability_digest.json`.
+- [x] **Story 112.40: Multi-Domain Gauntlet & Live Silicon Quorum Certification**:
+  - [x] Task 112.40.1: Execute `probe_round_table_accountability.py` across both operational (`exp_tlm`) and archival (`work_history`) topics.
+  - [x] Task 112.40.2: Verify that archival probes achieve `score >= 0.85` without false-positive hardware mismatch penalties.
+  - [x] Task 112.40.3: Execute full `standalone_accountability_watchdog.py` shakedown and verify 9/9 PASS in `daily_accountability_digest.json`.
 
 ---
 
@@ -431,12 +431,17 @@ Through interactive operator pairing and adversarial oracle auditing, we refined
 | 2026-11-11T17:25 | NARRATIVE_ROLLUP | Tracked conversation consensus rolled up into Section 3 | `SPRINT_PLAN_SPR_112_0.md §3` | ✅ DONE |
 | 2026-11-11T17:35 | LIVE_BENCHMARK | Empirical test of Kender Ollama: 128k context verified, 5k tokens in 2.03s | `192.168.1.26:11434` | ✅ VERIFIED |
 | 2026-11-11T17:40 | AFK_PLANNING | Codified 4-Anchor specifications for Tracks 1–4 per `BKM-086` | `SPRINT_PLAN_SPR_112_0.md §4` | ✅ READY |
+| 2026-11-11T17:45 | CODE_IMPL | Executed Tracks 1–3: decoupled streams, uncoupled judge, JITC hydration, dual-write | `HomeLabAI` commit `6a53264` | ✅ COMMITTED |
+| 2026-11-11T17:48 | DAEMON_RELOAD | Hot-restarted `lab-attendant.service` matching HEAD; verified clean boot | `lab-attendant.service` | ✅ ONLINE |
+| 2026-11-11T17:51 | LIVE_SHAKEDOWN | Operational probe (`exp_tlm`) passed: score 1.0, single Pinky evaluation | `judge_backpressure.jsonl` | ✅ VERIFIED |
+| 2026-11-11T17:52 | ARCHIVAL_SHAKEDOWN | Archival probe (`work_history`) passed: score 1.0, zero hardware hallucinations | `judge_backpressure.jsonl` | ✅ VERIFIED |
+| 2026-11-11T17:55 | WATCHDOG_AUDIT | Standalone morning watchdog executed: 9/9 checks PASS (Score 1.0, Quorum True) | `daily_accountability_digest.json` | ✅ CERTIFIED |
 
 ---
 
 ## 🧭 7. Dropped Threads Ledger (`BKM-084`)
 
-* **A: Story 112.10 & 112.20 Execution**: Grounding of the Sovereign Judge transitioning from Dropped Thread #A into primary sprint execution.
+* **A: Story 112.10 & 112.20 Execution**: Grounding of the Sovereign Judge transitioning from Dropped Thread #A into primary sprint execution — **RESOLVED & CERTIFIED** in SPR-112.0.
 * **B: Foyer Maintenance Quiescence Gate**: Ready to gate Foyer `/inject` with HTTP 503 when `maintenance.lock` is active to prevent overnight 02:00–05:00 AM warmup failures.
 * **C: Git Push Invariant**: All local commits remain strictly unpushed per Law 0.
 
