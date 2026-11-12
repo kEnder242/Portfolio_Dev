@@ -2316,46 +2316,46 @@
   },
   {
     "turn": 51,
-    "timestamp": 1794344765,
-    "time_str": "13:06:05",
+    "timestamp": 1794492027,
+    "time_str": "06:00:27",
     "topic": "EXP_TLM",
     "scope": "CONTEXT_SCOPE_LONG",
-    "user_prompt": "[ACCOUNTABILITY_PROBE] Audit active silicon residency and memory topology.",
+    "user_prompt": "[ACCOUNTABILITY_PROBE] Examine the Kayak and Montana platform transition and native PECI execution.",
     "turn_mode": "FULL_ROUND_TABLE",
     "is_full_round_table": true,
     "checkpoints_elapsed_s": {
-      "triage": 5.081,
-      "pinky_stance": 14.307,
-      "brain_arch": 32.536,
-      "oracle": 84.167,
-      "pinky_judgment": 107.282
+      "triage": 7.945,
+      "pinky_stance": 19.837,
+      "brain_arch": 36.777,
+      "oracle": 84.431,
+      "pinky_judgment": 105.361
     },
     "deltas_elapsed_s": {
-      "triage": 5.081,
-      "pinky_stance": 9.226,
-      "brain_arch": 18.229,
-      "oracle": 51.631,
-      "pinky_judgment": 23.115
+      "triage": 7.945,
+      "pinky_stance": 11.892,
+      "brain_arch": 16.94,
+      "oracle": 47.654,
+      "pinky_judgment": 20.93
     },
     "cumulative": {
-      "triage": 5.081,
-      "pinky_stance": 14.307,
-      "brain_arch": 32.536,
-      "oracle": 84.167,
-      "pinky_judgment": 107.282
+      "triage": 7.945,
+      "pinky_stance": 19.837,
+      "brain_arch": 36.777,
+      "oracle": 84.431,
+      "pinky_judgment": 105.361
     },
     "deltas": {
-      "triage": 5.081,
-      "pinky_stance": 9.226,
-      "brain_arch": 18.229,
-      "oracle": 51.631,
-      "pinky_judgment": 23.115
+      "triage": 7.945,
+      "pinky_stance": 11.892,
+      "brain_arch": 16.94,
+      "oracle": 47.654,
+      "pinky_judgment": 20.93
     },
-    "total_elapsed_s": 107.282,
-    "total_s": 107.282,
+    "total_elapsed_s": 105.361,
+    "total_s": 105.361,
     "distillation_bullets": [
-      "PINKY: Jason, the archives contain no specific records for your detailed topology query, so I can't verify the exact memory layout or residency details you're asking for. I'll have to yield on this one as the evidence simply isn't there.",
-      "BRAIN: [ANALYSIS]\n- CHUNK-1: Reports GPU 0 Temp: 30\u00b0C. **Violation**: The [PHYSICAL_REALITY_GUARDRAIL] explicitly forbids citing ambient temperatures (<= 30\u00b0C) for active GPUs under load. 30\u00b0C is physically implausible for a Turing GPU under 64.1W load without active liquid cooling or extreme ambient conditions, which are not stated. This data is suspect and violates the \"Never invent... hardware telemetry\" directive. => DROP\n- CHUNK-2: Reports GPU 0 Temp: 32\u00b0C, Power: 65.5W. **Violation**: Same thermal impossibility. 32\u00b0C is too low for a 65W load on an air-cooled 2080 Ti in a standard lab environment. Furthermore, the text is truncated (\"indicating no active compu\"), rendering it incomplete and unusable for a definitive audit. => DROP\n\n[BEDROCK SELECTION]\n- CHUNK-1: DROP\n- CHUNK-2: DROP"
+      "PINKY: I checked the Kayak-to-Montana transition logs to see how native PECI execution held up during that platform handoff, but the archives have no record of that specific workgroup or transition. Since we can't verify those details from the lab data, we'll have to take your word on that piece.",
+      "BRAIN: [ANALYSIS]\n- CHUNK-1: Evidence is empty metadata (\"Triage Situation: Triage Hints:\"). No factual content. => DROP\n- CHUNK-2: Evidence is \"RAW LOGS\" with no actual data, only tags. No verifiable facts. => DROP\n\n[BEDROCK SELECTION]\n- CHUNK-1: DROP"
     ],
     "consensus_1liner": "Consensus nominal."
   }
