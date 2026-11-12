@@ -76,10 +76,10 @@
   - [x] Task 112.50.3: Verify Brain filter decoupling: dropping an uninformative L2 abstract chunk never blocks or short-circuits the flow of low-level engineering evidence.
 
 ### ⚖️ Track 2: The Modus Operandi (MO) Standard & Watchdog Audit (`src/infra/` & `data/`)
-- [ ] **Story 112.60: Out-of-Band MO Expectation Standard & Automated Watchdog Audit**:
-  - [ ] Task 112.60.1: Codify the canonical schema and initialize [`Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl).
-  - [ ] Task 112.60.2: Implement the ABCD expectation sources (`Test Probe`, `Nightly AGY`, `Nightly Oracle`, `Human`), strictly enforcing 100% runtime blindness for Pinky, Brain, Deep Thought, and the Judge.
-  - [ ] Task 112.60.3: Update `standalone_accountability_watchdog.py` to evaluate probe traces against the MO expectation vector, verifying `permissible_outcome: "REFUSAL_MANDATORY"` (Conditional Pass) vs flagging `LAZY_REFUSAL_DEFECT`.
+- [x] **Story 112.60: Out-of-Band MO Expectation Standard & Automated Watchdog Audit**:
+  - [x] Task 112.60.1: Codify the canonical schema and initialize [`Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/mo_expectations_ledger.jsonl).
+  - [x] Task 112.60.2: Implement the ABCD expectation sources (`Test Probe`, `Nightly AGY`, `Nightly Oracle`, `Human`), strictly enforcing 100% runtime blindness for Pinky, Brain, Deep Thought, and the Judge.
+  - [x] Task 112.60.3: Update `standalone_accountability_watchdog.py` to evaluate probe traces against the MO expectation vector, verifying `permissible_outcome: "REFUSAL_MANDATORY"` (Conditional Pass) vs flagging `LAZY_REFUSAL_DEFECT`.
 
 ### 🌐 Track 3: Conversational Continuity & Untangling Directives (`src/nodes/` & `src/logic/`)
 - [ ] **Story 112.70: CONTINUITY_VECTOR Tagging & Deep Thought Hydration**:
@@ -219,6 +219,7 @@
 | 2026-11-12T10:55 | BKM_CODIFICATION | Codified BKM-088 Section 3 (MO & Expectations Standard) | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
 | 2026-11-12T11:00 | AFK_CHECKLIST | Formulated AFK Execution Checklist across Tracks 1–4 | `SPRINT_PLAN_SPR_112_1.md §2` | ✅ READY |
 | 2026-11-12T11:08 | SWARM_EXEC | Story 112.50 executed via `[SWARM:LOCAL]` (Atlas on Kender 4090): 39 pytest passed | `traversal_dispatcher.py`, `career_compass.json` | ✅ VERIFIED |
+| 2026-11-12T13:02 | SWARM_EXEC | Story 112.60 executed via `[SWARM:CLOUD]` (Sisyphus on openrouter/free): MO ledger initialized & watchdog evaluation wired | `mo_expectations_ledger.jsonl`, `standalone_accountability_watchdog.py` | ✅ VERIFIED |
 
 ---
 

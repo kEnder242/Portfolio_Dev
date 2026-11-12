@@ -2316,46 +2316,45 @@
   },
   {
     "turn": 51,
-    "timestamp": 1794492027,
-    "time_str": "06:00:27",
-    "topic": "EXP_TLM",
+    "timestamp": 1794517064,
+    "time_str": "12:57:44",
+    "topic": "UNKNOWN",
     "scope": "CONTEXT_SCOPE_LONG",
     "user_prompt": "[ACCOUNTABILITY_PROBE] Examine the Kayak and Montana platform transition and native PECI execution.",
     "turn_mode": "FULL_ROUND_TABLE",
     "is_full_round_table": true,
     "checkpoints_elapsed_s": {
-      "triage": 7.945,
-      "pinky_stance": 19.837,
-      "brain_arch": 36.777,
-      "oracle": 84.431,
-      "pinky_judgment": 105.361
+      "triage": 31.54,
+      "pinky_stance": 31.54,
+      "brain_arch": 31.549,
+      "oracle": 31.549,
+      "pinky_judgment": 31.549
     },
     "deltas_elapsed_s": {
-      "triage": 7.945,
-      "pinky_stance": 11.892,
-      "brain_arch": 16.94,
-      "oracle": 47.654,
-      "pinky_judgment": 20.93
+      "triage": 31.54,
+      "pinky_stance": 0.001,
+      "brain_arch": 0.009,
+      "oracle": 0.001,
+      "pinky_judgment": 0.001
     },
     "cumulative": {
-      "triage": 7.945,
-      "pinky_stance": 19.837,
-      "brain_arch": 36.777,
-      "oracle": 84.431,
-      "pinky_judgment": 105.361
+      "triage": 31.54,
+      "pinky_stance": 31.54,
+      "brain_arch": 31.549,
+      "oracle": 31.549,
+      "pinky_judgment": 31.549
     },
     "deltas": {
-      "triage": 7.945,
-      "pinky_stance": 11.892,
-      "brain_arch": 16.94,
-      "oracle": 47.654,
-      "pinky_judgment": 20.93
+      "triage": 31.54,
+      "pinky_stance": 0.001,
+      "brain_arch": 0.009,
+      "oracle": 0.001,
+      "pinky_judgment": 0.001
     },
-    "total_elapsed_s": 105.361,
-    "total_s": 105.361,
+    "total_elapsed_s": 31.549,
+    "total_s": 31.549,
     "distillation_bullets": [
-      "PINKY: I checked the Kayak-to-Montana transition logs to see how native PECI execution held up during that platform handoff, but the archives have no record of that specific workgroup or transition. Since we can't verify those details from the lab data, we'll have to take your word on that piece.",
-      "BRAIN: [ANALYSIS]\n- CHUNK-1: Evidence is empty metadata (\"Triage Situation: Triage Hints:\"). No factual content. => DROP\n- CHUNK-2: Evidence is \"RAW LOGS\" with no actual data, only tags. No verifiable facts. => DROP\n\n[BEDROCK SELECTION]\n- CHUNK-1: DROP"
+      "Live turn registered."
     ],
     "consensus_1liner": "Consensus nominal."
   }
