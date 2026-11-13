@@ -93,6 +93,14 @@
   - [x] Task 112.80.2: Execute `probe_round_table_accountability.py` on Kayak/Montana platform query and verify retrieval of underlying work history chunks without refusal.
   - [x] Task 112.80.3: Execute `standalone_accountability_watchdog.py` to certify 9/9 PASS with automated MO evaluation.
 
+### 🧬 Track 5: Orthogonal Triage & Additive Hydration (`VIBE-020` / `FEAT-434` / `FEAT-679`)
+- [x] **Story 112.90: VIBE-020 Codification & Inclusive-OR Hydration Implementation**:
+  - [x] Task 112.90.1: Codify `VIBE-020` in `HomeLabAI/docs/Protocols.md` establishing the Orthogonality Axiom, Positive Flags Law, and Classification-Bounded Token Budgeting.
+  - [x] Task 112.90.2: Abolish negative deny lists in `should_inject_career_bedrock` (`cognitive_hub.py`), enabling positive trigger evaluation across orthogonal vibes and domains.
+  - [x] Task 112.90.3: Replace `elif` mutual exclusion in HyDE directive injection (`cognitive_hub.py`) with independent sequential `if` flags to allow multi-domain additive prompt stacking.
+  - [x] Task 112.90.4: Wire additive RAG stacking into operational telemetry path (`cognitive_hub.py`) so target domain vector hits stack alongside live GPU metrics.
+  - [x] Task 112.90.5: Author inclusive-OR regression tests in `test_career_compass_bedrock.py` and verify all tests pass.
+
 ---
 
 ## 🛠️ 3. Story Specifications (4-Anchor Standard per `BKM-043` / `BKM-086`)
@@ -222,6 +230,8 @@
 | 2026-11-12T13:02 | SWARM_EXEC | Story 112.60 executed via `[SWARM:CLOUD]` (Sisyphus on openrouter/free): MO ledger initialized & watchdog evaluation wired | `mo_expectations_ledger.jsonl`, `standalone_accountability_watchdog.py` | ✅ VERIFIED |
 | 2026-11-12T13:20 | SWARM_EXEC | Story 112.70 executed via `[SWARM:CLOUD]` (Sisyphus on openrouter/free): continuity extraction & Deep Thought untangling | `cognitive_hub.py`, `test_round_table_continuity.py` | ✅ VERIFIED |
 | 2026-11-12T13:41 | SHAKEDOWN | Story 112.80 executed via `[AGY:PRIMARY]`: live multi-turn continuity verified, Kayak/Montana RAG unblocked, watchdog certified 9/9 PASS | `probe_round_table_accountability.py`, `standalone_accountability_watchdog.py` | ✅ CERTIFIED |
+| 2026-11-12T16:50 | VIBE_CODIFICATION | Codified VIBE-020 (Orthogonal Triage & Additive Hydration) in Protocols.md | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
+| 2026-11-12T16:53 | CODE_REFACTOR | Story 112.90: Abolished negative deny lists & `elif` mutual exclusion; wired additive RAG stacking | `cognitive_hub.py`, `test_career_compass_bedrock.py` | ✅ VERIFIED |
 
 ---
 
