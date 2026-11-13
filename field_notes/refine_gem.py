@@ -386,12 +386,13 @@ def _get_career_bedrock_anchor(gem: dict) -> str:
     if not anchors:
         return ""
 
-    # Match best anchor by keyword overlap
+    # Match best anchor by keyword overlap (excluding common English stopwords)
+    STOPWORDS = {"and", "the", "for", "with", "using", "from", "that", "this", "are", "was", "were", "into", "over"}
     text = (str(gem.get("summary", "")) + " " + str(gem.get("evidence", ""))).lower()
     best_anchor = anchors[0]
     best_score = 0
     for a in anchors:
-        words = set(re.findall(r"\b\w{3,}\b", a.lower()))
+        words = set(re.findall(r"\b\w{3,}\b", a.lower())) - STOPWORDS
         score = sum(1 for w in words if w in text)
         if score > best_score:
             best_score = score
