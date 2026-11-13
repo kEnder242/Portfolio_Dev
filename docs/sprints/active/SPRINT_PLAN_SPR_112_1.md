@@ -280,6 +280,7 @@
 | 2026-11-12T18:05 | CODE_REFACTOR | Story 112.95: Unified ChromaDB routing & purged post-retrieval censorship in lab_dna_router | `lab_dna_router.py`, `test_lab_dna_router.py` | ✅ VERIFIED |
 | 2026-11-12T18:50 | CODE_REFACTOR | Story 112.100: Decommissioned LigerEngine, converged CurriculumEngine on port 8088 VLLMClient, harmonized mass_scan.py, and unblocked queue with live test | `ai_engine_v2.py`, `mass_scan.py`, `2005.json` | ✅ VERIFIED |
 | 2026-11-12T19:25 | CODE_REFACTOR | Story 112.110: Implemented Document Header & Boundary Envelope injection in nibble_v2.py; wired L1/L2 Bedrock anchor grounding in refine_gem.py; certified live extraction & trigger synthesis | `nibble_v2.py`, `refine_gem.py`, `2005.json` | ✅ VERIFIED |
+| 2026-11-12T19:35 | DATA_REFACTOR | Story 112.115: Executed batch refinement pass across 2005–2010 legacy shards; grounded 236/236 gems with authentic L1 Career Bedrock Anchors | `2005.json`–`2010.json`, `refine_gem.py` | ✅ VERIFIED |
 
 ---
 
