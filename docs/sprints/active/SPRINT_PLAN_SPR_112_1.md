@@ -100,6 +100,10 @@
   - [x] Task 112.90.3: Replace `elif` mutual exclusion in HyDE directive injection (`cognitive_hub.py`) with independent sequential `if` flags to allow multi-domain additive prompt stacking.
   - [x] Task 112.90.4: Wire additive RAG stacking into operational telemetry path (`cognitive_hub.py`) so target domain vector hits stack alongside live GPU metrics.
   - [x] Task 112.90.5: Author inclusive-OR regression tests in `test_career_compass_bedrock.py` and verify all tests pass.
+- [x] **Story 112.95: ChromaDB Routing Unification & Post-Retrieval Censorship Removal**:
+  - [x] Task 112.95.1: Abolish `_SUPPRESSED_FOR_LIVE_OPS` negative drop list in `lab_dna_router.py` per VIBE-020.
+  - [x] Task 112.95.2: Streamline `filter_candidate_context()` into a pure Zero-Context distance gate without negative collection drops.
+  - [x] Task 112.95.3: Update regression tests in `test_lab_dna_router.py` and `test_sprint61_integration.py` to assert VIBE-020 candidate retention; verify 70/70 passing tests.
 
 ---
 
@@ -232,6 +236,7 @@
 | 2026-11-12T13:41 | SHAKEDOWN | Story 112.80 executed via `[AGY:PRIMARY]`: live multi-turn continuity verified, Kayak/Montana RAG unblocked, watchdog certified 9/9 PASS | `probe_round_table_accountability.py`, `standalone_accountability_watchdog.py` | ✅ CERTIFIED |
 | 2026-11-12T16:50 | VIBE_CODIFICATION | Codified VIBE-020 (Orthogonal Triage & Additive Hydration) in Protocols.md | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
 | 2026-11-12T16:53 | CODE_REFACTOR | Story 112.90: Abolished negative deny lists & `elif` mutual exclusion; wired additive RAG stacking | `cognitive_hub.py`, `test_career_compass_bedrock.py` | ✅ VERIFIED |
+| 2026-11-12T18:05 | CODE_REFACTOR | Story 112.95: Unified ChromaDB routing & purged post-retrieval censorship in lab_dna_router | `lab_dna_router.py`, `test_lab_dna_router.py` | ✅ VERIFIED |
 
 ---
 
