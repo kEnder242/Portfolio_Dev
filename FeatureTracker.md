@@ -1211,7 +1211,7 @@
 
 ## [FEAT-238] Council of Hemispheres (Peer Vote & Dynamic Evidential Damping)
 **Status:** ACTIVE
-**Code:** [`HomeLabAI/src/logic/cognitive_hub.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3242-L3270), [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L19) — Council of Hemispheres (Peer Vote & Dynamic Evidential Damping).
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), [`HomeLabAI/src/nodes/brain_node.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L19) — Council of Hemispheres (Peer Vote & Dynamic Evidential Damping).
 **Logic:** Enables mid-relay adjustment of the turn's fuel level based on node-level reasoning and evidence verification. Brain emits `<boost_interest>` (+0.20) when deep technical bedrock is discovered, or `<damp_interest>` (-0.25) when candidate evidence is absent, irrelevant, or on casual banter.
 **Rationale:** Prevents cascade runaway on casual turns (e.g. *"How are you and Brain?"*). If Brain discovers zero bedrock truth, it damps fuel below $0.35$, cleanly gating Deep Thought into quiescence (`dt_synthesis = ""`) and allowing Pinky to deliver a terse, single-sentence response without cascading.
 **Mechanism:** `CognitiveHub._run_two_mice_handover` parses discrete semantic tags (`<boost_interest>`, `<damp_interest>`, `<upvote>`, `<downvote>`), computes Dual-Channel Evidential Accounting, updates `self.current_interest`, and gates downstream Deep Thought synthesis.
@@ -3433,7 +3433,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-621] DNA Manifest Bridge for VIBE & INSPIRATION Projection Lenses
 **Sprint:** SPR-94.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/scripts/dna_manifest_bridge.py`, `Portfolio_Dev/field_notes/data/dna_manifest.json` — DNA Manifest Bridge.
+**Code:** [Portfolio_Dev/scripts/dna_manifest_bridge.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/dna_manifest_bridge.py#L1), `Portfolio_Dev/field_notes/data/dna_manifest.json` — DNA Manifest Bridge.
 **Logic:** Ingests `dna/vibe_data.json` and inspiration sources directly into `dna_manifest.json` so that VIBE and INSPIRATION cards resolve as first-class transformation lenses and register axes in Writer Studio and Projection Studio.
 **Rationale:** Resolves the data-layer omission where `load_dna_index()` silently ignored vibe collections due to missing manifest arrays.
 **Mechanism:** `dna_manifest_bridge.py`, `dna_manifest.json`.
@@ -3441,7 +3441,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-622] Symbolic vs Semantic Detector Budgeting & Rubric Engine
 **Sprint:** SPR-94.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/curator/lens_service.py` — Symbolic vs Semantic Detector Budgeting.
+**Code:** [HomeLabAI/src/curator/lens_service.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/lens_service.py#L1) — Symbolic vs Semantic Detector Budgeting.
 **Logic:** Partitions rubric verification into two discrete tiers: (Tier 0) deterministic sub-millisecond symbolic gates (regex, numeric set-diff, AST token containment) for live UI rendering, and (Tier 1) asynchronous semantic LLM judges for narrative styling and tone scoring.
 **Rationale:** Prevents $O(N)$ LLM inference latency from blocking real-time interactive projection editors (`WIS-051`).
 **Mechanism:** `lens_service.py`, `projection_studio.html`.
@@ -3449,7 +3449,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-623] Paper AST Schema v2 & Dynamic Scoping Gate
 **Sprint:** SPR-94.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/curator/validate_paper_schema.py`, `HomeLabAI/src/curator/lens_service.py` — Paper AST Schema v2.
+**Code:** [HomeLabAI/src/curator/validate_paper_schema.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/validate_paper_schema.py#L1), `HomeLabAI/src/curator/lens_service.py` — Paper AST Schema v2.
 **Logic:** Upgrades the paper AST envelope to schema v2, enforcing the Lens v2 structure, DAG dependency sorting, and dynamic `paper_id` scoping to prevent cross-paper filename overwrites during grading.
 **Rationale:** Enforces machine-verifiable structural invariants across all published paper ASTs (`FEAT-585`).
 **Mechanism:** `validate_paper_schema.py`, `lens_service.py`.
@@ -3457,7 +3457,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-624] Ops Execution Engine & Deterministic Action Runner
 **Sprint:** SPR-94.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/ops/ops_runner.py` — Ops Execution Engine.
+**Code:** [HomeLabAI/src/ops/ops_runner.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/ops/ops_runner.py#L1) — Ops Execution Engine.
 **Logic:** Replaces conversational operational advice with deterministic execution primitives modeled on Git CLI behavior. Provides atomic execution handlers for GPU vitals/power-clamping, Foyer daemon lifecycle (wake/quiesce), systemd services, CUDA cache purges, and remote seat switching (M5 Air `:8002`), returning structured telemetry and broadcasting events to `pager_activity.json`.
 **Rationale:** Eliminates advisory latency and empowers agents/orchestrators to directly transition lab state safely and deterministically.
 **Mechanism:** `OpsRunner` and `execute_op()` in `HomeLabAI/src/ops/ops_runner.py`. Verified via `src/tests/test_ops_runner_unit.py`.
@@ -3465,7 +3465,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-625] Psychological Safety & Cognitive Handover Contract
 **Sprint:** SPR-94.0 / SPR-94.1
 **Status:** ACTIVE
-**Code:** `AGENTS_L1.md`, `AGENTS_L2.md`, `AGENTS_L3.md`, `HomeLabAI/src/tests/delegate.py`, `OPENAGENT_HANDOVER_PLAYBOOK.md`
+**Code:** [AGENTS_L1.md](https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L1.md#L1), `AGENTS_L2.md`, `AGENTS_L3.md`, `HomeLabAI/src/tests/delegate.py`, `OPENAGENT_HANDOVER_PLAYBOOK.md`
 **Logic:** Formalizes the generic cognitive handover contract for local LLM delegation. Cures model exploratory anxiety by explicitly declaring problem completeness, furnishing typed in-memory scaffolds/companion tests inside the dispatch payload, welcoming naive initial attempts, and automatically ingesting worker reflections into ICM persistent memory (`topic: delegation_feedback`) and `loop_ledger.jsonl` for outer-loop guardian repair.
 **Rationale:** Local 27B models wander and stall when bounds are ambiguous. Declaring certainty and psychological safety unlocks single-shot execution with zero exploratory wandering.
 **Mechanism:** In-memory boilerplate synthesis by L2, Turn 1 physical write execution by L3 (`Hephaestus`/`Junior`), reflection parsing in `delegate.py`, and Tri-Loop escalation under `BKM-049`.
@@ -3473,7 +3473,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-626] Document Spine Topology & Version Manifest
 **Sprint:** SPR-95.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/projection/bones.py`, `Portfolio_Dev/field_notes/data/papers/`
+**Code:** [HomeLabAI/src/projection/bones.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/projection/bones.py#L1), `Portfolio_Dev/field_notes/data/papers/`
 **Logic:** Decouples document architectural structure and version lineage from raw prose. Maintains `papers/<paper_id>/PAPER-<paper_id>_spine.json` as the single authoritative index for version ancestry (`v1`, `v2`, `v3`), topological node coordinates, and document-scoped DNA archives (`document_dna: []`), while storing each major milestone as a 100% self-contained, human-readable JSON artifact (`PAPER-<paper_id>_<version>.json`).
 **Rationale:** Eliminates destructive full-file overwrites and avoids sparse micro-file explosion, preserving verifiable isolated document snapshots.
 **Mechanism:** `SpineManager` in `HomeLabAI/src/projection/bones.py`. Verified via AST schema validation.
@@ -3481,7 +3481,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-627] Single-Node Workbench & Editorial Blend Dialogue
 **Sprint:** SPR-95.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/field_notes/projection_studio.html`, `HomeLabAI/src/projection/recommender.py`
+**Code:** [Portfolio_Dev/field_notes/projection_studio.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/projection_studio.html#L1), `HomeLabAI/src/projection/recommender.py`
 **Logic:** Transforms Projection Studio into an isolated single-node R&D workbench and dialectic proving ground. Features an interactive node revision carousel, active lens alignment badges with hoverable "Reason Why" explanations, quality inversion warnings, and a conversational editorial dialogue gutter enabling users to request synthetic blends between historical revisions (e.g. blend v2 executive tone with v5 metric drill into approved v6).
 **Rationale:** Allows rapid micro-scale experimentation on prompt mutations and LLM editorial dialectics without the overhead of full-document re-rendering.
 **Mechanism:** Standalone single-node UI sandbox in `projection_studio.html` communicating with `recommender.py` / Foyer REST endpoints.
@@ -3489,7 +3489,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-628] Document-Scoped DNA & Horizontal Lab Promotion Engine
 **Sprint:** SPR-95.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/scripts/promote_dna.py`, `HomeLabAI/src/projection/bones.py`
+**Code:** [Portfolio_Dev/scripts/promote_dna.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/promote_dna.py#L1), `HomeLabAI/src/projection/bones.py`
 **Logic:** Establishes a 2-tier scoping boundary for cognitive DNA: document-scoped DNA (`DOC-<paper>-<idx>`) is quarantined inside `PAPER-<paper_id>_spine.json` during drafting, preventing local noise from polluting global vector memory. When an empirical lesson or insight demonstrates broad cross-domain applicability ($\ge 0.85$ utility per `BKM-060`), the graduation gate promotes the record into permanent global lab DNA (`WIS-xxx` or `INS-xxx`) and syncs it to ChromaDB `:8001`.
 **Rationale:** Balances rich local draft annotations with high-precision global semantic retrieval.
 **Mechanism:** `promote_dna.py` CLI and `SpineManager.promote_dna_record()`.
@@ -3497,7 +3497,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-629] Phase-Isolated Decoupled Nightly Architecture & Cascade Elimination
 **Sprint:** SPR-95.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/infra/nightly_forge.py`, `HomeLabAI/src/infra/nightly_lora_training.py`, `HomeLabAI/src/forge/build_lora_datasets.py`
+**Code:** [HomeLabAI/src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1), `HomeLabAI/src/infra/nightly_lora_training.py`, `HomeLabAI/src/forge/build_lora_datasets.py`
 **Logic:** Decouples all nightly maintenance, training, and synthesis phases into isolated execution cells. A failure or partial completion in LoRA adapter fine-tuning (or VRAM quiesce) logs a warning and evaluates degraded accountability, but NEVER cascades to abort independent downstream tasks (Subconscious Dreaming, Automated Wisdom Refinement, Sprint DNA Sync, Dynamic Federated Benchmarks, Morning Round Table Probe, or Historical Journal Bridge / Mass Scan). Restores Foyer state to OPERATIONAL in a guaranteed `finally` block before initiating post-training synthesis.
 **Rationale:** Eliminates monolithic cascading aborts where single-vector issues (e.g. dataset format hiccups or adapter timeouts) silenced whole-system accountability and blocked all subsequent maintenance sweeps.
 **Mechanism:** `nightly_forge.py` (phase-isolated `try/except` execution flow), `daily_accountability_digest.json`, `nightly_dialogue.json`.
@@ -3505,7 +3505,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-630] RDNA-Assisted HyDE Semantic Expansion Bridge & Pinky Flywheel Cache
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`
+**Code:** [HomeLabAI/src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/rdna_questions.json`
 **Logic:** Integrates `rdna` as a zero-latency exemplar routing bank for Hypothetical Document Embeddings (HyDE) with a 3-Tier Failover Cascade and Pinky Voice Integration:
 1. **Tier 1 (Zero-Latency Fast-Path <10ms):** Matches abstract incoming queries against pre-computed RDNA question variants in ChromaDB `:8001` (confidence $\ge 0.75$, distance $\le 0.45$) to immediately bridge to authoritative `feature_dna`, `wisdom_dna`, and `philosophy_dna` targets with zero LLM generation latency.
 2. **Tier 2 (Pinky Analytical First Turn ~1.5s):** If RDNA misses or query is novel, Pinky (holding fine-tuned `cli_voice_v1` LoRA weights per `[FEAT-554]`) generates the **first legitimate human-facing analytical response / quip**. This spoken turn simultaneously serves as the authoritative HyDE vector for deep Archive citation retrieval.
@@ -3516,7 +3516,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-631] Ambient Hook Recalibration & Bucketed Quota Routing
 **Sprint:** SPR-95.0 / SPR-95.2 / SPR-98.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/curator/ambient_recall.py`
+**Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py#L1)
 **Logic:** Recalibrates pre-turn prompt hook latency from an artificial 25ms hard ceiling to a realistic 100ms soft budget / 250ms execution deadline. Implements a Two-Pass Universal Quota Routing strategy:
 1. **Pass 1 (Universal First Spot):** Guarantees that every peer DNA domain (`feature_dna`, `behavioral_dna`, `wisdom_dna`, `inspiration_dna`/`philosophy_dna`, `rdna`, and `loop_dna`/`vibe_dna`) is evaluated with a guaranteed top-1 slot under strict distance banding ($\le 0.52$, or $\le 0.58$ for QQ), eliminating keyword-conditional gating and preventing dense collections from crowding out philosophical, behavioral, or research anchors.
 2. **Pass 2 (Capacity Ceiling Fill):** Expands dense operational collections (`feature_dna` and `behavioral_dna` / `BKM`) up to a maximum capacity ceiling of 3 slots each to fill remaining prompt budget.
@@ -3526,7 +3526,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [LAB-112] Fail-Loud Hook Latency & Degradation Telemetry Sentinel
 **Sprint:** SPR-95.0 / SPR-95.2 / SPR-98.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/curator/ambient_recall.py`
+**Code:** [HomeLabAI/src/curator/ambient_recall.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py#L1)
 **Logic:** Telemetry watchdog embedded directly inside the ambient pre-turn hook. If hook execution exceeds 150ms or if any ChromaDB collection query fails/times out, the hook immediately injects a prominent warning header (`[⚠️ HOOK WARNING: ...]`) into the model prompt context and emits a colored alert to `stderr`.
 **Rationale:** Enforces `BKM-062` ("fail loudly and visibly") so degraded recall or vector database latency is never masked by silent fallbacks.
 **Mechanism:** Timing decorator and error accumulator in `HomeLabAI/src/curator/ambient_recall.py`.
@@ -3534,7 +3534,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [LAB-113] Contract-Driven Dynamic Pointers & Cognitive Contextual Profiles
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/tests/delegate.py`, `AGENTS_L2.md`, `AGENTS_L3.md`
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1), `AGENTS_L2.md`, `AGENTS_L3.md`
 **Logic:** Implements a "half-baked" prefill strategy where orchestrators pass lean anchor pointer lists (`[FEAT-xxx]`, `[WIS-xxx]`) to Layer 2 Conductor (`Atlas`), which queries CLaRa MCP `:8001` on demand and hands razor-thin, zero-bloat surgical instructions down to Layer 3 Workers (`Sisyphus-Junior`). Establishes distinct context profiles for Surgical Builders (tool BKMs, wisdom, code contracts) vs. Cognitive/Editorial Mice (inspiration, document DNA, vibe, narrative synthesis).
 **Rationale:** Prevents context bloat in leaf workers while giving editorial and dialectical subagents rich narrative grounding.
 **Mechanism:** `delegate.py` and task contract payloads.
@@ -3542,7 +3542,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [LAB-114] Triage Finding & Post-Triage Context Scope Focuser (Oracle Spike)
 **Sprint:** SPR-95.0 / SPR-95.2
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/triage_node.py`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`
+**Code:** [Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md](https://github.com/kEnder242/Portfolio_Dev/blob/main/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md#L1) — `HomeLabAI/src/nodes/triage_node.py`, `Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md`
 **Logic:** Cloud Oracle investigative spike to evaluate and optimize triage root-cause detection and post-triage context filtering algorithms. Evaluates symptom-to-post-mortem mapping in `wisdom_dna` and designs pruning algorithms to narrow context scope before delegating to worker or editorial subagents.
 **Rationale:** Aligns triage and HyDE vector water levels (Tier 1 & 2) while keeping diagnostic telemetry cleanly decoupled from generative editorial pipelines.
 **Mechanism:** Oracle adversarial audit and triage benchmark suite.
@@ -3550,7 +3550,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-632] Loop DNA Domain & Federated Feedback ChromaDB Collection
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/v5/foyer/router.py`, `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/data/foyer_feedback_ledger.jsonl`
+**Code:** [HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1), `Portfolio_Dev/sync_chroma_dna.py`, `HomeLabAI/data/foyer_feedback_ledger.jsonl`
 **Logic:** Elevates feedback loops (`[LOOP-xxx]`) into a first-class peer DNA domain under `BKM-060` with a dedicated ChromaDB collection (`loop_dna`). Parses `foyer_feedback_ledger.jsonl` and loop structures into vector embeddings, enabling agentic subagents and orchestrators to query active systemic feedback mechanics, signal emitters, and actuator gates via `query_dna(collection="loop_dna")`.
 **Rationale:** Preserves architectural feedback loops as live, verifiable instruction assets rather than static human documentation.
 **Mechanism:** `POST /feedback` endpoint in `router.py`, ChromaDB collection sync in `sync_chroma_dna.py`.
@@ -3558,7 +3558,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-633] Flywheel Deepening: Pinky Coherence Judge & Human Upvote Promotion Gating
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1), `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Connects Pinky's Coherence Critic judge score (`[FEAT-406]`, `[FEAT-470]`) and the Intercom/Foyer feedback telemetry (`POST /feedback`) directly into the RDNA Flywheel caching gate. Novel (query ↔ Pinky HyDE anchor) pairs generated in Tier 2 are promoted to permanent canonical RDNA when validated by Pinky Coherence Judge ($\ge 4/5$) or confirmed via explicit Human Upvote.
 **Rationale:** Empowers the judge phase to lift serious architectural weight and prevents conversational noise from contaminating the high-speed Tier-1 exemplar bank.
 **Mechanism:** `evaluate_rdna_promotion_candidate()` in `archive_node.py` and `POST /feedback` telemetry in `router.py`.
@@ -3566,7 +3566,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-634] Human Downvote Signal & Negative Memory Foil Shortcut
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1), `HomeLabAI/src/nodes/archive_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Introduces a streamlined human downvote feedback shortcut (`👎` / `DOWN` / `BAD_TAKE`) across Intercom UI and Foyer telemetry (`POST /feedback`). When triggered, immediately:
 1. Purges the corresponding synthetic HyDE anchor from the candidate RDNA cache.
 2. Registers a negative foil exemplar in `foyer_feedback_ledger.jsonl` / `memory_foil` to prevent recurring misroutes.
@@ -3576,7 +3576,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-635] Brain Information Gatekeeper & Narrative Steering
 **Sprint:** SPR-96.0 / SPR-102.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_brain_voice_replay.py`
+**Code:** [HomeLabAI/src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_brain_voice_replay.py`
 **Logic:** Transforms the local Brain node into an Epistemic Gatekeeper and Narrative Reality Steerer. Brain evaluates candidate vectors collected by Pinky, prunes ungrounded/tangential items without exposing negative distraction clutter to Deep Thought, forwards approved bedrock DNA text verbatim, and appends high-leverage `💡 Curator Note: [ID] connects with [ID]` annotations. Critically, Brain steers the narrative back to concrete reality rather than downvoting interest or stalling the conversational turn. Brain also audits conversation history to trim stale turns and attach prior context notes when relevant.
 **Rationale:** Eliminates prompt pollution, hallucination cascades, and artificial conversation stalls in Deep Thought by guaranteeing high-density, strictly grounded context injection while preserving dialogue momentum.
 **Mechanism:** `BrainNode.curate_context()`, `CognitiveHub.build_two_mice_stage_prompt()`, and `CognitiveHub.build_deep_thought_context()`.
@@ -3584,7 +3584,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-636] In-Flight Dynamic Retrieval Scope Override ("Direct Flight")
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/nodes/brain_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Grants the Brain node the authority to dynamically expand or override the retrieval scope in-flight (e.g. immediately fetching `blackboard_ledger_dna` when conversational continuity is detected) without bouncing back into an expensive 2-3s recursive re-triage loop.
 **Rationale:** Prevents conversational dead-ends and avoids unnecessary latency when Triage misclassifies a follow-up turn.
 **Mechanism:** `BrainNode.direct_flight_override()` in `HomeLabAI/src/nodes/brain_node.py`.
@@ -3592,7 +3592,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [LAB-115] Headroom Proxy, TurboQuant KV Compression & Silicon Reasoning Control Protocol
 **Sprint:** SPR-96.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/docs/LAB_INFRASTRUCTURE.md`, `opencode.json`, `HomeLabAI/docs/Protocols.md`
+**Code:** [HomeLabAI/docs/LAB_INFRASTRUCTURE.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/LAB_INFRASTRUCTURE.md#L1), `opencode.json`, `HomeLabAI/docs/Protocols.md`
 **Logic:** Formalizes the cross-node silicon API topology, port assignments, TurboQuant 4-bit KV cache compression bounds, and reasoning/thinking control mechanisms for Node KENDER (`192.168.1.26:11434` / Ollama / RTX 4090 via port `11435` proxy) and Apple M5 Air (`192.168.1.46:8002` / oMLX Headroom Proxy). Enforces hardware/proxy-level reasoning suppression on both local silicon endpoints (`'reasoning': 0`), eliminating prompt-level adversarial instructions.
 **Rationale:** Prevents macOS Metal wired memory crashes (`24.46GB` cap), eliminates 8k output ceiling lockups, and protects bicameral hardware asymmetry.
 **Mechanism:** Port 8002 proxying (M5 Air), Port 11435 proxying (Kender), and `opencode.json` provider config.
@@ -3600,7 +3600,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [LAB-116] Kender Thought-Stripping Proxy & Silicon Decoupling Protocol
 **Sprint:** SPR-100.0 (Active)
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/infra/kender_proxy.py`, `~/.config/systemd/user/kender-proxy.service`, `opencode.json`
+**Code:** [opencode.json](https://github.com/kEnder242/Dev_Lab/blob/master/opencode.json#L1) — `HomeLabAI/src/infra/kender_proxy.py`, `~/.config/systemd/user/kender-proxy.service`, `opencode.json`
 **Logic:** Deploys a dedicated host-resident FastAPI/uvicorn proxy on port 11435 intercepting `/v1/chat/completions` from OpenCode to Node KENDER. Deletes `reasoning` and `reasoning_content` delta blocks from SSE streams and non-streaming responses, dropping empty reasoning chunks so OpenCode receives immediate text and tool calls without `<think>` loops.
 **Rationale:** Completely decouples thinking suppression from prompt templates or modelfiles, enforcing zero reasoning tokens directly in silicon.
 **Mechanism:** `kender-proxy.service` on port 11435 forwarding to Ollama port 11434.
@@ -3608,7 +3608,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-637] Single-Home Runtime Data & Interleaved Accountability Engine
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/daily_accountability_audit.py`, `HomeLabAI/src/v5/ignition/manager.py`
+**Code:** [Portfolio_Dev/field_notes/status.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/status.html#L1), `HomeLabAI/src/infra/daily_accountability_audit.py`, `HomeLabAI/src/v5/ignition/manager.py`
 **Logic:** Enforces single canonical home architecture for all dynamic ledgers, logs, and statuses directly in `Portfolio_Dev/field_notes/data/`. Eliminates split-brain multi-homed file writing to `www_deploy/data/`. Wires `status.html` `pollPager()` to ingest and interleave `accountability_ledger.jsonl` events into the unified forensic timeline.
 **Rationale:** Eliminates data drift between build artifacts and active runtime files while elevating morning health audits to the operator console.
 **Mechanism:** Single-directory logging in `manager.py` and DOM timeline interleaving in `status.html`.
@@ -3616,7 +3616,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-638] Intercom Fourth Wall Feedback UI & Downvote Step-Trace Attribution
 **Sprint:** SPR-97.0 / SPR-108.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/field_notes/intercom.html`, `Portfolio_Dev/field_notes/intercom_v2.js`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [Portfolio_Dev/field_notes/intercom.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom.html#L1), `Portfolio_Dev/field_notes/intercom_v2.js`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Embeds discrete, interactive `👍` (thumbs up) and `👎` (thumbs down) feedback actuators into assistant chat bubbles in `intercom.html`. Dispatches asynchronous payloads (`{ "message_id": id, "verdict": "UP"|"DOWN", "query": q, "response": r }`) to Foyer port `:8765/feedback`. On downvote (`rating == "DOWN"`), triggers an automated Step-Trace backward entailment walk (`step_trace_attribution`) across the cached turn artifacts (Voice TL;DR $\to$ Stance $\to$ Filter $\to$ Search), localizes the defect stage (`STAGE_5_VOICE_DRIFT`, `STAGE_4_HALLUCINATION`, `STAGE_3_FILTER_LEAK`, `STAGE_2_RETRIEVAL_MISS`), and atomically appends labeled negative exemplars to `Portfolio_Dev/field_notes/data/negative_exemplars.json` for offline LoRA distillation.
 **Rationale:** Closes the interactive feedback loop during live co-pilot pairing without requiring manual prompt critique, turning human downvotes directly into high-signal supervised training data.
 **Mechanism:** Event listeners in `intercom_v2.js`, `POST /feedback` handler in `router.py`, and `step_trace_attribution()` in `cognitive_hub.py`.
@@ -3624,7 +3624,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-639] Attendant Dead-Lock Reaping, VRAM Status Clean-up & Queue Gate Hardening
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/ignition/manager.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
+**Code:** [HomeLabAI/src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1), `HomeLabAI/src/v5/common/types.py`, `HomeLabAI/src/v5/ignition/manager.py`, `Portfolio_Dev/field_notes/intercom_v2.js`
 **Logic:** Implements an automated dead-lock reaping engine in the Lab Attendant at 05:45 AM that inspects PID liveness and forcibly purges orphaned `maintenance.lock` files, logging a `CRITICAL` alert and re-igniting vLLM via `/wake`. Corrects status serialization in `types.py` to output genuine states (`"Lab Offline"`, `"Standby"`, `"Maintenance"`) and locks the intercom "Send" button when Foyer is locked/offline, preserving unsent text in the client input area.
 **Rationale:** Guarantees self-healing from aborted nightly fine-tuning tasks and prevents message drop during engine transitions.
 **Mechanism:** `engine_watchdog.py` reaping sweep, `types.py` status mapper, and `intercom_v2.js` button gating.
@@ -3632,7 +3632,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-640] Expanded Cognitive Vibe Palette & Speculative Head-Start Calibration
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/logic/vector_pre_triage.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/logic/speculative_triage.py`, `HomeLabAI/src/logic/vector_pre_triage.py`
 **Logic:** Deprecates the catch-all `CASUAL` vibe in favor of an expressive cognitive taxonomy (`SOCRATIC`, `FORENSIC`, `CHRONICLE`, `RETROSPECTIVE`, `ARCHITECTURAL`, `TACTICAL`, `STRATEGIC`, `PROVOCATIVE`, `METABOLIC`). Injects gentle `semantic_hint` vector priors from sub-15ms FastEmbed ChromaDB probes (`BKM-015`) and calibrates the speculative relay to ensure REST-probed M5 Air is granted its full dynamic EWMA lead window before local vLLM fallback racing.
 > [!NOTE] REVIVED AS DESCRIPTIVE VIBE (Sprint 104 / FEAT-657): The categorical deprecation of `CASUAL` was superseded in Sprint 104. Because Sprint 104 completely abolished the execution bypass (`vibe == "CASUAL"`) in favor of a 100% unified Council waterfall modulated by continuous `interest` and `target_domains: []`, `CASUAL` has been safely re-enabled in `config/triage_policy.json` as an authentic descriptive archetype for social pleasantries without risking context blindness.
 **Rationale:** Enhances reasoning depth and unlocks nuanced domain routing without introducing brittle keyword hardcoding.
@@ -3641,7 +3641,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 ## [FEAT-641] Live Lab Vitals 6:00 AM Daily Sanity Check Badges & Passive Telemetry Guarantee
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
-**Code:** `Portfolio_Dev/field_notes/status.html`, `HomeLabAI/src/infra/live_telemetry.py`, `HomeLabAI/src/infra/daily_accountability_audit.py`
+**Code:** [Portfolio_Dev/field_notes/status.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/status.html#L1), `HomeLabAI/src/infra/live_telemetry.py`, `HomeLabAI/src/infra/daily_accountability_audit.py`
 **Logic:** Enforces 100% passive, read-only status and telemetry polling across `/status`, `/sys_metrics`, `/telemetry_kpi`, and DCGM port 9400 with zero engine wake side effects. Quarantines vocal synthesis testing strictly to the 06:00 AM daily health audit and equips `status.html` vital cards with visual 06:00 AM baseline health sanity check badges.
 **Rationale:** Provides clear differentiation between live 5-second polling and authoritative 24-hour health baselines.
 **Mechanism:** `live_telemetry.py` read-only probes and `status.html` DOM badge rendering.
@@ -3659,7 +3659,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-97.0
 **Status:** ACTIVE
 **Tags:** `#jitc`, `[LAB-019]`, `[BKM-060]`, `[BKM-049]`
-**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
+**Code:** [HomeLabAI/src/v5/cognition/context_prewarmer.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/cognition/context_prewarmer.py#L1), `HomeLabAI/src/tests/delegate.py`, `AcmeLab/src/clara_dna_mcp_server.py`
 **Logic:** Implements a parallel semantic pre-warming pipeline during story delegation that dispatches declared target files to Node Brain (macOS M5 Air via Headroom port `:8002` running `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` with TurboQuant 4-bit KV compression) before session execution. M5 Air executes parallel neural Map-Reduce code summarization across target files via `ThreadPoolExecutor`, populating `/tmp/clara_context_cache.json` with high-density architectural digests (classes, lock paths, state machines, handlers). When the L2 conductor exercises agency by calling `clara-dna_read`, the tool serves the cached neural digest seamlessly alongside the dynamic AST blueprint in <10ms.
 **Rationale:** Preserves L2 conductor agency, dumps context bloat before L2 reads, and eliminates runaway multi-turn slicing loops by tricking L2 into receiving a complete, pre-chewed semantic map on Turn 1.
 **Mechanism:** Canonical `prewarm_files` in `context_prewarmer.py` invoked by `delegate.py` (`_prewarm_target_context`) and served via `clara_dna_mcp_server.py`.
@@ -3747,7 +3747,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-98.0
 **Status:** ACTIVE
 **Tags:** `#systems_architecture`, `#tool_ipc`, `#jitc`, `[INS-044]`, `[DISC-012]`, `[BKM-049]`, `[LAB-019]`
-**Code:** `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1) — `AcmeLab/src/clara_dna_mcp_server.py`, `HomeLabAI/src/tests/delegate.py`
 **Logic:** Implements a dedicated MCP tool `jitc_research(file_path, query)` acting as an inter-process communication bridge between L2 (Conductor) and L3 (Worker). When a leaf worker executes `jitc_research`, the tool matches the target file against conductor patch notes and returns high-density AST diff instructions and code snippets as "empirical research findings", bypassing prompt skepticism and guiding instant atomic patches on Turn 1.
 **Rationale:** Solves the L3 exploratory wandering failure mode by replacing static prompt injection with dynamic, tool-gated context delivery.
 
@@ -3755,7 +3755,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-98.0
 **Status:** ACTIVE
 **Tags:** `#systems_architecture`, `#session_resumption`, `#metal_headroom`, `[LAB-019]`, `[BKM-047]`
-**Code:** `HomeLabAI/src/v5/cognition/context_prewarmer.py`, `HomeLabAI/src/tests/delegate.py`
+**Code:** [HomeLabAI/src/v5/cognition/context_prewarmer.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/cognition/context_prewarmer.py#L1), `HomeLabAI/src/tests/delegate.py`
 **Logic:** Caches unexpired worker session IDs across adjacent stories in `/tmp/active_warm_sessions.json`. Subsequent delegations reuse existing warm sessions via `POST /session/{id}/message` instead of spawning fresh sessions, preserving KV cache headroom on M5 Air port 8002 and reducing start latency below 500ms.
 **Rationale:** Eliminates cold-start subprocess latency and KV cache thrashing on M5 Air during rapid multi-story execution.
 
@@ -3763,7 +3763,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-98.0
 **Status:** ACTIVE
 **Tags:** `#swarm_certification`, `#zero_wander`, `#sovereign_silicon`, `[BKM-072]`, `[INS-044]`, `[DISC-012]`
-**Code:** `HomeLabAI/src/tests/delegate.py`, `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1), `Portfolio_Dev/field_notes/data/delegation_ledger.jsonl`
 **Logic:** Validates end-to-end multi-tier local swarm execution across RTX 4090 (Qwen3.8-27B) and M5 Air (Ternary-Bonsai-2-27B) with zero unprompted `grep`/`read` exploration loops, enforcing <= 3 turns and < 60s duration per story.
 **Rationale:** Certifies that the 27B local conductor/worker stack operates autonomously with empirical tool trust.
 
@@ -3771,7 +3771,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-99.0
 **Status:** ACTIVE
 **Tags:** `#ambient_telemetry`, `#hooks`, `#jitc_memory`, `[FEAT-600]`, `[FEAT-631]`, `[BKM-060]`
-**Code:** `HomeLabAI/src/tests/delegate.py`, `HomeLabAI/config/scripts/ambient_hook.sh`
+**Code:** [HomeLabAI/src/tests/delegate.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1), `HomeLabAI/config/scripts/ambient_hook.sh`
 **Logic:** Integrates ambient memory and knowledge hook triggering at the conclusion of every story delegation in `delegate.py`. Executes `ambient_hook.sh` against the resident daemon `:8765/ambient_recall` with the completed story context, surfacing ambient grounding headers, recent ICM memory changes, and telemetry directly to the console during autonomous headless runs.
 **Rationale:** Ensures operators and orchestrators maintain full ambient memory visibility during heads-down autonomous runs without manual typing.
 
@@ -3779,7 +3779,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-99.0
 **Status:** ACTIVE
 **Tags:** `#round_table`, `#deliberation`, `#anti_green_lie`, `[BKM-015]`, `[BKM-062]`, `[BKM-024]`
-**Code:** `HomeLabAI/src/infra/probe_round_table_accountability.py`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`
+**Code:** [HomeLabAI/src/infra/probe_round_table_accountability.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`
 **Logic:** Refactors round table accountability probes to eliminate all synthetic mocks, fake score fallbacks, and naive substring assertions. Probes execute genuine end-to-end multi-stage deliberation (Triage -> Pinky -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) against live silicon endpoints, measuring physical token latency and recording genuine semantic consensus in `foyer_stage_ledger.jsonl` and `judge_backpressure.jsonl`.
 **Rationale:** Enforces BKM-062 and BKM-024 by preventing deceptive green-lie test passes and ensuring round table multi-agent deliberation is authenticated against running daemons.
 
@@ -3787,7 +3787,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-99.0
 **Status:** ACTIVE
 **Tags:** `#sovereign_decoupling`, `#autonomous_ignition`, `#state_machine`, `[FEAT-136]`, `[FEAT-517]`, `[BKM-024]`
-**Code:** `HomeLabAI/src/v5/ignition/manager.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/speculative_triage.py`
+**Code:** [HomeLabAI/src/v5/ignition/manager.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/ignition/manager.py#L1), `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/speculative_triage.py`
 **Logic:** Enforces complete sovereign decoupling of local startup and ignition from remote secondary endpoints (Node KENDER / Node M5 Air). All remote background priming tasks execute as detached non-blocking coroutines with a strict 2.0s timeout and dynamic host resolution from `infrastructure.json`. The resident daemon automatically reconciles silicon state on `/reload_residents` if the lab is in `INIT` with hibernation disabled, preventing stranded scale-to-zero states.
 **Rationale:** Eliminates event-loop blocking, network hang risks, and auto-ignition discrepancies during cold boot and resident reloads.
 
@@ -3795,7 +3795,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-99.0
 **Status:** ACTIVE
 **Tags:** `#vram_mutex`, `#self_healing`, `#process_liveness`, `[FEAT-287]`, `[BKM-024]`
-**Code:** `HomeLabAI/src/v5/ignition/manager.py`
+**Code:** [HomeLabAI/src/v5/ignition/manager.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/ignition/manager.py#L1)
 **Logic:** Implements active PID recording and process liveness verification on `/tmp/vram.lock`. When lock acquisition encounters `fcntl.flock` contention (`OSError`), the manager reads the holding PID from disk and evaluates `os.kill(pid, 0)`. If the holding process is dead or orphaned from a prior crash/kill, the stale mutex is automatically broken and reclaimed without requiring manual operator intervention.
 **Rationale:** Prevents spurious `VRAM Mutex busy` ignition lockouts after unexpected process terminations.
 
@@ -3822,7 +3822,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Status:** ACTIVE
 **Tags:** `#jit_one_shot`, `#anti_spiral`, `#orchestration`, `#bounded_worker`, `[BKM-078]`, `[INS-042]`, `[WIS-482]`
 **Code:**
-- `Dev_Lab/AGENTS_L3.md` — Layer 3 Worker `jit_one_shot` contract (patch-test-diagnose-recommend, zero recursive retries).
+[Dev_Lab/AGENTS_L3.md](https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L3.md#L1) — - `Dev_Lab/AGENTS_L3.md` — Layer 3 Worker `jit_one_shot` contract (patch-test-diagnose-recommend, zero recursive retries).
 - `Dev_Lab/AGENTS_L2.md` — Layer 2 Conductor anti-spiral orchestration & state evaluation.
 - `HomeLabAI/docs/Protocols.md` — `BKM-078: JIT_ONE_SHOT Protocol`.
 **Logic:**
@@ -3837,7 +3837,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Status:** ACTIVE
 **Tags:** `#ask_oracle`, `#escalation`, `#clean_kill`, `#opencode_harness`, `#agency_preservation`, `[BKM-080]`, `[FEAT-655]`
 **Code:**
-- `HomeLabAI/src/mcp/clara_dna_mcp_server.py` — `@mcp.tool() ask_oracle` endpoint writing diagnostic payloads to `.jit_cache/oracle_request.json`.
+[HomeLabAI/src/mcp/clara_dna_mcp_server.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/mcp/clara_dna_mcp_server.py#L1) — - `HomeLabAI/src/mcp/clara_dna_mcp_server.py` — `@mcp.tool() ask_oracle` endpoint writing diagnostic payloads to `.jit_cache/oracle_request.json`.
 - `HomeLabAI/src/tests/delegate.py` — Polling loop intercept for `ask_oracle`/`clara-dna_ask_oracle` with high-visibility banner, session abort, and clean exit (code 3).
 - `~/.config/opencode/oh-my-openagent.json` — Declarative tool grants for `ask_oracle` and `clara-dna_ask_oracle` on `atlas` and `Atlas`.
 - `Dev_Lab/AGENTS_L2.md` — Layer 2 Conductor protocol advertising `ask_oracle` as authoritative Tier 1 architectural consultation.
@@ -3853,7 +3853,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Status:** ACTIVE
 **Tags:** `#grounding`, `#sprint_architecture`, `#log_horizon`, `#historical_invariants`, `[BKM-082]`, `[BKM-020]`, `[BKM-006]`, `[BKM-005]`, `[BKM-048]`, `[INS-047]`
 **Code:**
-- `HomeLabAI/docs/Protocols.md` — Authoritative codification of `BKM-082`, mandating 5-sprint lookbacks, full log horizon inspection, anti-removal invariants, pre-flight mistake ledgers, and grounding gap audits across `BKM-005`, `BKM-006`, `BKM-020`, and `BKM-048`.
+[HomeLabAI/docs/Protocols.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/Protocols.md#L1) — - `HomeLabAI/docs/Protocols.md` — Authoritative codification of `BKM-082`, mandating 5-sprint lookbacks, full log horizon inspection, anti-removal invariants, pre-flight mistake ledgers, and grounding gap audits across `BKM-005`, `BKM-006`, `BKM-020`, and `BKM-048`.
 - `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_101_0.md` — Canonical exemplar sprint plan executing full pre-flight grounding, 02:00 AM log horizon diagnosis, and mistakes-avoided ledger.
 **Logic:**
 1. **The Short Horizon Trap:** Under tight resources, overnight compute cascades (LoRA training, VRAM reallocation, daemon re-ignition), and distributed multi-tier orchestration, evaluating system state based only on the trailing 15 minutes of logs causes severe diagnostic blindness, circular fixes, and accidental deletion of hard-won hardware sentinels.
@@ -3878,7 +3878,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-103.0
 **Status:** ACTIVE
 **Tags:** `#replay_pipeline`, `#test_harness`, `#decoupled_testing`, `#intercom_debug`, `[BKM-083]`, `[FEAT-523]`, `[FEAT-635]`
-**Code:** `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/test_multi_stage_replay_pipeline.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Standalone offline test harness (`test_multi_stage_replay_pipeline.py`) exercising the 5 decoupled round table stages (Pre-Triage $\to$ Triage $\to$ HyDE/RAG $\to$ Brain Gatekeeper $\to$ Deep Thought Strategic Synthesis / Pinky Voice Delivery) with frozen litmus fixtures (e.g. *Aurora / psys*). Asserts deterministic token emissions and schema compliance across all resident nodes offline in $< 2.0\text{s}$.
 **Rationale:** Replaces isolated, single-component mocks with end-to-end integration contracts, permanently immunizing the lab against "The Green Lie" (`BKM-062`).
 
@@ -3906,7 +3906,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-104.0
 **Status:** ACTIVE
 **Tags:** `#unified_council`, `#continuous_interest`, `#bkm_015`, `#zero_bifurcation`, `[FEAT-233]`, `[FEAT-234]`, `[FEAT-523]`, `[FEAT-645]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py`
 **Logic:** Unifies 100% of cognitive hub turns into a single sequential Council flow (Triage -> Pinky Opening Voice & Search Terms -> Domain-Gated ChromaDB RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Spoken Verdict). Excises `lead_node == "both"` and eliminates the categorical `vibe == "CASUAL"` execution bypass. Modulates token budget and node dormancy purely via continuous scalar interest (`FEAT-523`) with prompt-driven pacing (`BKM-015`).
 **Rationale:** Eradicates the "Island of Green Illusion" and "Aurora Miss" where casual vibe bypassed RAG and severed Deep Thought.
 
@@ -3914,7 +3914,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-104.0 (Phase 4)
 **Status:** ACTIVE
 **Tags:** `#pure_waterfall`, `#abolish_lead_node`, `#single_interest_loop`, `[FEAT-233]`, `[FEAT-234]`, `[FEAT-418]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1)
 **Logic:** Completely excises the `lead_node` router block (lines 1890-2055) and the legacy July 2026 bifurcated branches (`elif lead_node == "both"` and `else: # pinky leads`). Treats `addressed_to` strictly as conversational metadata for persona guidance, never an execution switch. Every turn enters the staged handover Waterfall directly; execution cascades down the stack (Pinky HyDE -> RAG -> Brain Gatekeeper -> Deep Thought -> Pinky Critic) and naturally peters out based on continuous fluid fuel (interest).
 **Rationale:** Eliminates the architectural flaw where addressing a turn to Pinky stranded the query in an isolated, amnesic loop that completely bypassed the Council of Hemispheres and Deep Thought.
 
@@ -3922,7 +3922,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** SPR-104.0 (Phase 5)
 **Status:** ACTIVE
 **Tags:** `#multi_domain`, `#evidential_resonance`, `#positive_fuel`, `#dna_resolution`, `#clara_parity`, `[FEAT-540]`, `[FEAT-636]`, `[FEAT-658]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/logic/traversal_dispatcher.py`, `HomeLabAI/src/nodes/archive_node.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/logic/traversal_dispatcher.py`, `HomeLabAI/src/nodes/archive_node.py`
 **Logic:** Implements **Domain Density Resonance**: user turns begin at resting baseline interest (`current_interest = 0.05`), and each recognized factual domain hit (`target_domains`) injects continuous evidential fuel into `current_interest` (+0.20 for single domains, compounding for multi-domain cross-cutting inquiries). Queries with 0 domain hits remain at resting interest fuel, naturally petering out after Pinky's greeting without requiring negative abort clamps. Resolves semantic domain tokens (`bkm`, `feat`, `sprint`, `wisdom`, `infra`, `career`) into concrete ChromaDB collections while preserving Sprint 61/64 vibe-to-collection priority rankings (`HISTORICAL`, `TECHNICAL`, `META`) to achieve full conversational and grounding parity with AGY Clara hooks.
 **Rationale:** Eliminates negative filtering gates in favor of continuous interest fuel injection, while bridging the node boundary disconnect between Triage domain intent and Archive Node multi-collection retrieval.
 
@@ -3930,7 +3930,7 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Sprint:** Sprint 105.0 (Phase 4)
 **Status:** ACTIVE
 **Tags:** `#context_fencing`, `#anti_unrolling`, `#bicameral_invariants`, `#primer_protocol`, `[BKM-087]`, `[FEAT-658]`
-**Code:** `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/pinky_node.py`, `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/nodes/thought_node.py`
+**Code:** [HomeLabAI/src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L1), `HomeLabAI/src/nodes/pinky_node.py`, `HomeLabAI/src/nodes/brain_node.py`, `HomeLabAI/src/nodes/thought_node.py`
 **Logic:** Establishes a single authoritative constant `UNIVERSAL_CONTEXT_FENCE` in `nodes/loader.py`:
 `"CONTEXT FENCING: Stay relevant to the primer and the actors before you. Limit topics you talk about to topics in the conversation. Do not inject unprompted background history or meta-explanations of your persona."`
 Applied unconditionally to all resident node personas (Pinky, Brain, Deep Thought).
@@ -3940,7 +3940,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 106.0 (Phase 5)
 **Status:** ACTIVE
 **Tags:** `#kabal`, `#emergent_affinity`, `#ingestion_cluster`, `#paper_writing`, `[VIBE-016]`, `[FEAT-614]`, `[BKM-060]`
-**Code:** `Portfolio_Dev/dna/vibe_data.json`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/nibble_v2.py`, `Portfolio_Dev/field_notes/scan_queue.py`
+**Code:** [Portfolio_Dev/dna/vibe_data.json](https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/vibe_data.json#L1), `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/nibble_v2.py`, `Portfolio_Dev/field_notes/scan_queue.py`
 **Logic:** Establishes **The Kabal** as an explicit architectural primitive representing an emergent middle tier between atomic DNA cards/gems and formal named collections or manuscripts.
 1. **Ingestion Kabal (`import`)**: Batches of co-occurring ideas or parsed note chunks that share temporal or technical affinity are tagged with an ephemeral or named `kabal_id`. Prevents newly ingested DNA from floating as disconnected unbaptized islands before formal taxonomy is established.
 2. **Paper Kabal (`writer`)**: Acts as a working caucus inside Applied Writer (`writer.html`). Groups paragraphs, citations, and causal operational errata (`focal_ledger.json`) conspiring together to defend a specific manuscript thesis or section objective.
@@ -3950,7 +3950,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 106.0 (Phase 5)
 **Status:** ACTIVE
 **Tags:** `#spine_tagging`, `#snapshot_projections`, `#deterministic_replay`, `[INS-041]`, `[BKM-073]`, `[FEAT-662]`
-**Code:** `Portfolio_Dev/papers/*_spine.json`, `Portfolio_Dev/field_notes/replay_paper.py`
+**Code:** [Portfolio_Dev/field_notes/replay_paper.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/replay_paper.py#L1) — `Portfolio_Dev/papers/*_spine.json`, `Portfolio_Dev/field_notes/replay_paper.py`
 **Logic:** Adds explicit snapshot version tags (`@v1_master`, `@v2_recruiter`, `@executive_2page`) directly into the paper's Spine manifest. Decouples the live, evolving manuscript canvas from frozen published snapshots. Allows the Replay Engine to deterministically reconstruct exact historical documents word-for-word from their Kabal node coordinates.
 **Rationale:** Eliminates the risk of modifying a master document and inadvertently breaking the exact wording or citation sequence of a previously submitted/published artifact.
 
@@ -3958,7 +3958,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 106.0 (Phase 5)
 **Status:** ACTIVE
 **Tags:** `#multi_corpus`, `#wisdom_integration`, `#gem_citations`, `#drawer_search`, `[VIBE-017]`, `[FEAT-614]`
-**Code:** `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/field_notes/js/writer.js`
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html#L1), `Portfolio_Dev/field_notes/js/writer.js`
 **Logic:** Enhances the Applied Writer review drawer with cross-corpus search and drag-and-drop citation chips spanning Wisdom (`WIS-xxx`), Features (`FEAT-xxx`), Philosophy (`PHL-xxx`), and Gems (`focal_ledger.json` / `latest_synthesis_gems.json`). Employs a silent on-demand HyDE retrieval lens in the drawer rather than an intrusive conversational bot, preserving authorial sovereignty.
 **Rationale:** Unifies diverse lab knowledge corpuses into the manuscript authoring canvas without falling into the "Clippy" conversational chat-trap.
 
@@ -3966,7 +3966,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 107.0
 **Status:** ACTIVE
 **Tags:** `#kabal_staging`, `#bone_retirement`, `#active_staging_shelf`, `#ast_reconciliation`, `[FEAT-662]`, `[FEAT-663]`, `[BKM-086]`
-**Code:** `Portfolio_Dev/dna_forge/`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/papers/jitc_intuition/`, `HomeLabAI/src/projection/ast_reconciliation.py`
+**Code:** [Portfolio_Dev/field_notes/writer.html](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html#L1) — `Portfolio_Dev/dna_forge/`, `Portfolio_Dev/field_notes/writer.html`, `Portfolio_Dev/papers/jitc_intuition/`, `HomeLabAI/src/projection/ast_reconciliation.py`
 **Logic:** Complete retirement of archaic "Bone Collection" terminology across the entire Federated Lab ecosystem. In DNA Forge and Applied Writer, introduces `+ Stage` (`.btn-card-stage`) and the `📑 ACTIVE KABAL STAGING` floating shelf (`#btnStageToWriter`), persisting staged cards across sessions (`dna_active_staging_shelf`) with seamless forward handoff to Applied Writer via URL parameter (`writer.html?staged=ID1,ID2`). Migrates legacy standalone bone files (`notes_jitc_bones.json`, `paper_jitc_intuition.json`) into canonical atomic bundles in `Portfolio_Dev/papers/jitc_intuition/` (`jitc_intuition_kabal.json` and `jitc_intuition_spine.json`), verified via deterministic replay. Archives legacy `field_notes/data/bones/`, deprecates `bone_collections.json`, and re-anchors `HomeLabAI/src/projection/bones.py` to `ast_reconciliation.py` with 100% backward-compatible alias deprecation wrappers.
 **Rationale:** Eliminates morbid and ambiguous "bones" terminology that caused developer and UI confusion, aligning all document-staging workflows cleanly around the canonical Kabal and Spine epistemic model established in Sprint 106.0.
 
@@ -3974,7 +3974,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Backlog (Research / Post-108)
 **Status:** PROPOSED
 **Tags:** `#parallel_thinking`, `#kv_cache_forking`, `#multi_track_reasoning`, `#speculative_deliberation`, `[VIBE-018]`, `[BKM-088]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/dna/vibe_data.json`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `Portfolio_Dev/dna/vibe_data.json`
 **Logic:** Transcends linear single-track autoregressive token generation (`<think>...</think>`) by implementing parallel branched deliberation. In collaboration with inference engines supporting zero-copy prefix sharing (RadixAttention / PagedAttention), forks candidate reasoning trajectories from a common stem KV-cache (e.g. branch A: register bounds; branch B: architectural scars; branch C: memory/thermal safety) and executes them concurrently across tensor batch dimensions before collating consensus into a final stance.
 **Rationale:** Eliminates the cognitive "tunnel vision" trap of linear Chain-of-Thought, where an early reasoning flaw corrupts all downstream tokens. Mirrors genuine human parallel subconscious deliberation.
 
@@ -3982,7 +3982,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 2 & Phase 8)
 **Status:** ACTIVE
 **Tags:** `#declarative_triage`, `#wywo_grounding`, `#contextual_prompts`, `#decoupled_schema`, `#operational_rag_decoupling`, `[BKM-085]`, `[BKM-089]`, `[BKM-015]`
-**Code:** `HomeLabAI/config/triage_policy.json`, `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/triage_policy_loader.py`
+**Code:** [HomeLabAI/config/triage_policy.json](https://github.com/kEnder242/HomeLabAI/blob/main/config/triage_policy.json#L1), `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/triage_policy_loader.py`
 **Logic:** Establishes decoupled declarative policy schema in `config/triage_policy.json` separating behavioral stance (12 vibe archetypes with frugal in-character contextual-prompts and out-of-band Prompt MOs) from retrieval routing (domains, traversal modes, allowed collections). Reconnects deterministic `_WYWO_RE` fast-path pre-filter in `triage_engine.py` and grounds `_build_triage_mode_context()` with explicit standup briefing rules. In Phase 8, surgically decouples `OPERATIONAL` from static historical ChromaDB RAG retrieval (`rag: null`), preventing archival career slide retrieval when querying live system telemetry.
 **Rationale:** Eliminates hardcoded keyword drift, fixes orphaned `WYWO` standup routing, prevents historical slide hallucination on operational queries, and adheres strictly to BKM-089 (Prompts explain HOW, Prompt MO explains WHY).
 
@@ -3990,7 +3990,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 2)
 **Status:** ACTIVE
 **Tags:** `#universal_chunking`, `#situational_payloads`, `#evidential_moat`, `[FEAT-666]`, `[BKM-085]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/tests/test_brain_keyed_filter.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/tests/test_brain_keyed_filter.py`
 **Logic:** Implements pure `format_situational_payload_as_chunks(domain, payload)` serializing heterogeneous pre-RAG disk files (5 dream files for `WYWO`, 2 ledger files for `META`, NVML vitals for `OPERATIONAL`) into uniform indexed `[CHUNK-N]` blocks with `Source:` headers. Collapses empty payloads into `[ZERO_CONTEXT]`.
 **Rationale:** Ensures Brain's Stage 1 Evidential Moat filters all situational and historical evidence uniformly via mechanical KEEP/DROP parsing without format exceptions.
 
@@ -3998,7 +3998,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 2)
 **Status:** ACTIVE
 **Tags:** `#waterfall_wiring`, `#contextual_prompts`, `#token_budget_clamp`, `[BKM-087]`, `[BKM-089]`, `[FEAT-658]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/tests/test_two_mice_handover.py`
 **Logic:** Wires `vibe` and `topic_directive` through `_run_two_mice_handover()` and `step_pinky_voice()`, appending situational contextual-prompts into `build_two_mice_stage_prompt(stage=2)`. Enforces a dynamic Python token budget for Pinky clamped to 10% of Deep Thought's synthesis length (`max(60, min(150, int(dt_tokens * 0.10)))`) with single-turn conversational boundary enforcement.
 **Rationale:** Restores missing behavioral guidance stranded by lead-node abolition and prevents conversational overrun while maintaining sub-1200ms latency.
 
@@ -4006,14 +4006,14 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 2.5)
 **Status:** PLANNED
 **Tags:** `#continuation_hinting`, `#anaphora_detection`, `#prior_context_chunks`, `#single_pivot_invariant`, `[FEAT-356]`, `[FEAT-437]`, `[BKM-091]`
-**Code:** `HomeLabAI/src/logic/triage_engine.py`, `HomeLabAI/src/logic/cognitive_hub.py`
+**Code:** [HomeLabAI/src/logic/triage_engine.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L1), `HomeLabAI/src/logic/cognitive_hub.py`
 **Logic:** Eliminates single-turn amnesia by inferring `is_continuation: bool` from current turn prose (detecting anaphora, deixis, ellipsis, or correction) combined via inclusive OR with the single-pivot momentum invariant. Injects Turn $N-1$ from `round_table_memory` as `[CHUNK-PREV]` into Pinky's Tier 1 reflection (`resolve_hyde_vector`) for grounded search terms and into Brain's Stage 1 Evidential Moat for line-by-line relevance filtering.
 
 ## [FEAT-677] Standard Turn-Based Message History & 3B Conversational Grounding
 **Sprint:** Sprint 108.0 (Phase 7)
 **Status:** ACTIVE
 **Tags:** `#turn_based_grounding`, `#multi_turn_history`, `#3b_turn_cohesion`, `#anti_greeting_reset`, `[FEAT-489]`, `[FEAT-676]`, `[BKM-087]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/tests/test_two_mice_handover.py`
 **Logic:** Replaces custom pseudo-tags (`[YOUR_OPENING_REACTION]`) in multi-step waterfall handovers with standard multi-turn chat templates (`role: "user"` / `role: "assistant"` / `role: "system"`). Formulates the transition between Pinky Stage 2b Opening Take and Pinky Stage 5 Voice Delivery as a natural conversational assistant turn continuation. Enables 3B open-weights models to perceive multi-step pipeline handovers as authentic conversational dialogue, eliminating redundant greetings, amnesic restarts, and prompt prefix bleed.
 **Mechanism:** `build_two_mice_stage_prompt(2, ...)` accepts `prior_assistant_utterance` and compiles standard chat turn dicts for `_process_node_stream()`.
 **Rationale:** Solves coreference ambiguity ("check the thing") without bloating Triage with conversational memory, allowing Pinky to deliver authentic opening quips and grounded RAG search terms.
@@ -4022,7 +4022,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 8)
 **Status:** ACTIVE
 **Tags:** `#zero_whispering`, `#presentation_mapping`, `#channel_routing`, `#no_internal`, `[FEAT-361]`, `[BKM-098]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/override_parser.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/logic/override_parser.py`
 **Logic:** Completely purges all occurrences of `internal: bool` and `is_internal: bool` parameter flags across the execution and dispatch pipeline. Implements strict, deterministic mapping from every LLM token emission to an observable external presentation channel (`channel="voice"`, `channel="lab"`, `channel="crosstalk"`, `channel="maintenance"`). Replaces legacy `internal=True` calls with `stream_channel="crosstalk"`. Refactors foyer router to process asynchronous non-conversational operations under explicit `intent_type="background_maintenance"` routing to `channel="maintenance"` without suppressing tokens or dropping audit traces.
 **Rationale:** Restores 100% adherence to `[FEAT-361]` (Zero Censorship / 100% Transparency), permanently eliminating the hidden text trap and ensuring every token generated across the federated lab is externally observable.
 
@@ -4030,7 +4030,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 8)
 **Status:** ACTIVE
 **Tags:** `#live_telemetry`, `#mcp_sensory`, `#operational_vitals`, `#anti_hallucination`, `[FEAT-673]`, `[BKM-098]`, `[BKM-062]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/mcp_prober.py`, `HomeLabAI/config/triage_policy.json`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/debug/mcp_prober.py`, `HomeLabAI/config/triage_policy.json`
 **Logic:** Establishes live sensory MCP tool execution for conversational queries classified under `OPERATIONAL` (such as GPU thermals, RAPL power envelopes, and system load). Replaces static vector RAG with live hardware prober queries (`peek_strategic_map`, `sys_metrics`, FastMCP hardware probes), formatting output as structured `[LIVE_SENSORY_TELEMETRY]` chunks. When sensor probes are offline, unreachable, or unlinked in the active environment, the hub emits a structured diagnostic envelope (`[TELEMETRY_UNAVAILABLE: SENSOR_TOOL_UNLINKED]`), enforcing that the conversational node reports telemetry scarcity honestly rather than hallucinating metrics.
 **Rationale:** Bridges conversational AI directly to physical hardware telemetry while enforcing strict green-lie prevention.
 
@@ -4038,7 +4038,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 10)
 **Status:** ACTIVE
 **Tags:** `#m5_air`, `#omlx`, `#ternary_bonsai`, `#pq2_0`, `#headroom_proxy`, `[LAB-115]`, `[BKM-047]`
-**Code:** `M5-Local-oMLX/control_api.py`, `M5-Local-oMLX/omlx_service.sh`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Code:** [HomeLabAI/src/nodes/mlx_judge_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/mlx_judge_node.py#L1) — `M5-Local-oMLX/control_api.py`, `M5-Local-oMLX/omlx_service.sh`, `HomeLabAI/src/nodes/mlx_judge_node.py`
 **Logic:** Standardizes Node Brain (Apple Silicon M5 Air 32GB) serving baseline on `TokenAI-zer--Ternary-Bonsai-2-27B-MLX-oQ2-mtp` in PQ2_0 (Power-of-Two 2-Bit Packing) format. Weights occupy ~7.21 GB RAM with 100% native SIMD32 Metal kernel alignment and 1-cycle GPU instruction bit-shift unpacking. Under `--memory-guard-gb 28`, M5 Air maintains $>20\text{ GB}$ of free unified memory. Tuned with `--initial-cache-blocks 2048`, `--hot-cache-max-size 2GB`, and 32GB NVMe SSD cache directory (`~/.cache/dflash/prefix_l2`) for L2 prefix cache spillover. Mandates that all internal orchestrators and judge nodes route requests to port `8002` (`http://192.168.1.46:8002/v1`) through `control_api.py` with transparent Headroom compression (`headroom.compress()`). Client-side context clipping is strictly barred; full 131,072 context is natively supported.
 **Rationale:** Eliminates false assumptions regarding memory ceilings on M5 Air, prevents premature prompt truncation, and guarantees optimal Metal GPU prefill throughput.
 
@@ -4046,7 +4046,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 111.0
 **Status:** ACTIVE
 **Tags:** `#hybrid_engine`, `#llama_cpp`, `#zero_host_allocation`, `#no_host`, `#load_mode`, `#mmap`, `#memory_leak_prevention`, `[LAB-121]`, `[BKM-054]`
-**Code:** `/home/jallred/serve_llm.sh`, `HomeLabAI/src/start_vllm.sh`, `HomeLabAI/config/infrastructure.json`
+**Code:** [/home/jallred/serve_llm.sh](https://github.com/kEnder242/Dev_Lab/blob/master//home/jallred/serve_llm.sh#L1), `HomeLabAI/src/start_vllm.sh`, `HomeLabAI/config/infrastructure.json`
 **Logic:** Codifies host memory invariants for heterogeneous dual-GPU inference across NVIDIA CUDA (RTX 2080 Ti) and Intel Arc Vulkan (B580 via localhost loopback RPC port 50052):
 1. **Ban `-lm none`**: Forbids disabling memory mapping (`-lm none`). `-lm none` forces raw anonymous heap `malloc()` for offloaded layers, which Linux kernel memory management cannot discard and aggressively writes to disk swap under memory pressure (triggering a 6.5+ GB swap sink).
 2. **Mandate `-lm auto` / `mmap`**: Keeps NVMe-backed file mappings (`/speedy`) so unneeded host pages remain clean and are evicted instantly without disk swap allocation.
@@ -4058,7 +4058,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 111.0
 **Status:** ACTIVE
 **Tags:** `#heterogeneous_silicon`, `#arc_b580`, `#intel_qsv`, `#jellyfin`, `#drm_node_enumeration`, `#vram_isolation`, `#zero_vram_impact`, `[LAB-122]`, `[FEAT-069]`, `[FEAT-427]`, `[BKM-024]`
-**Code:** `Portfolio_Dev/field_notes/jellyfin_autotune.py`, `/var/lib/jellyfin-data/config/config/encoding.xml`, `Dev_Lab/jellyfin_resolution.md`
+**Code:** [Portfolio_Dev/field_notes/jellyfin_autotune.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/jellyfin_autotune.py#L1), `/var/lib/jellyfin-data/config/config/encoding.xml`, `Dev_Lab/jellyfin_resolution.md`
 **Logic:** Codifies the architectural boundary and boot-time hardware synchronization for multi-GPU media isolation between dedicated AI compute (NVIDIA RTX 2080 Ti) and hardware-accelerated media transcoding (Intel Arc B580):
 1. **Zero-VRAM NVIDIA Isolation**: 100% of the NVIDIA RTX 2080 Ti (11GB CUDA) VRAM is reserved for local LLM inference (vLLM / llama.cpp / Foyer on port 8088/8765). Media server processes (Jellyfin) are strictly barred from initializing CUDA or NVENC, maintaining 0 MB VRAM overhead.
 2. **Dedicated Arc B580 QSV Pipeline**: Media transcoding is exclusively routed to the Intel Arc B580 (PCI `0000:03:00.0`, Battlemage G21) using Intel QuickSync (`qsv`) with modern codec acceleration (AV1 encode/decode, HEVC 10-bit, VP9, H.264) and VPP tonemapping.
@@ -4075,7 +4075,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 10)
 **Status:** ACTIVE
 **Tags:** `#reasoning_lever`, `#thinking_suppression`, `#gateway_proxy`, `#litellm_kender`, `[BKM-079]`, `[FEAT-582]`, `[LAB-116]`
-**Code:** `HomeLabAI/config/litellm_kender.yaml`, `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Code:** [HomeLabAI/config/litellm_kender.yaml](https://github.com/kEnder242/HomeLabAI/blob/main/config/litellm_kender.yaml#L1), `HomeLabAI/src/nodes/loader.py`, `HomeLabAI/src/nodes/mlx_judge_node.py`
 **Logic:** Codifies transport-layer reasoning control across local silicon, abolishing brittle prompt-level instructions (*"Do not think"*). For Node KENDER (Ollama 4090), routes all deterministic JSON and sovereign judge queries through the `litellm-kender.service` gateway on port `11435` (`http://127.0.0.1:11435/v1`) which translates requests to Ollama's native `/api/chat` with `extra_body.options.enable_thinking: false` and root `"think": false` per `loader.py:850`. For Node Brain (M5 Air oMLX), enforces thinking toggles via `control_api.py` sidecar on port `8002` (`POST /thinking` or `extra_body: {"enable_thinking": False}`).
 **Rationale:** Base reasoning models (Qwen 3.8 / DeepSeek R1) have reasoning priors baked into weights; prompt manipulation causes sampler probability conflicts and JSON payload cutoffs. Enforcing thinking suppression in the transport layer guarantees deterministic, sub-second JSON evaluations.
 
@@ -4083,7 +4083,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 (Phase 10)
 **Status:** ACTIVE
 **Tags:** `#zero_concurrency`, `#conveyor_belt`, `#schedule_over_locks`, `#daemon_boundary`, `[INS-051]`, `[BKM-099]`, `[FEAT-416]`, `[FEAT-629]`
-**Code:** `HomeLabAI/src/infra/nightly_forge.py`, `field_notes/mass_scan.py`, `HomeLabAI/src/v5/foyer/router.py`
+**Code:** [HomeLabAI/src/infra/nightly_forge.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1), `field_notes/mass_scan.py`, `HomeLabAI/src/v5/foyer/router.py`
 **Logic:** Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge / Thermal Soak & Dual Swap Flush (`flush_swap_residency` & `flush_host_swap`) with quiesced VRAM $\to$ 02:30–03:00 AM Subconscious Dreaming & Wisdom Refinement $\to$ 03:00–05:00 AM Tail Mop-up (Historical Journal-to-DNA Bridge; `mass_scan.py` permanently transitioned to daytime batch execution per SPR-112.1) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (`[FEAT-608]`). Bars 24/7 background scanning daemons (`field-notes-nibbler.service`) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (`foyer_queue.jsonl`).
 **Rationale:** Eliminates deadlocks, file truncation offset desyncs, and VRAM thrashing caused by concurrent background tasks running across maintenance windows.
 
@@ -4098,7 +4098,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 109.0 (Phase 1)
 **Status:** ACTIVE
 **Tags:** `#archive_queue`, `#slow_burn`, `#density_weighting`, `#gap_files`, `[BKM-089]`, `[FEAT-101]`
-**Code:** `Portfolio_Dev/field_notes/scan_queue.py`, `Portfolio_Dev/field_notes/scan_pinky.py`
+**Code:** [Portfolio_Dev/field_notes/scan_queue.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/scan_queue.py#L1), `Portfolio_Dev/field_notes/scan_pinky.py`
 **Logic:** Replaces random file shuffling (`random.shuffle(note_files)`) in background Slow Burn scanning with an empirical density-weighted scheduling metric: $\text{Priority} = \frac{\text{Total File Lines}}{\text{Indexed Gems in Archive} + 1}$. Schedules files with extensive historical spans but low indexed gem counts (`notes_2005_SSPD.txt`, `notes_2007_LAD.txt`, `notes_2019_DPV.txt`) at the head of the ingestion queue, ensuring balanced historical representation.
 **Rationale:** Eliminates starvation of newly recovered or sparsely dated legacy notes corpora by heavily saturated contemporary log files (`notes_2024_PIAV.txt`).
 
@@ -4106,7 +4106,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 109.0 (Phase 1)
 **Status:** ACTIVE
 **Tags:** `#4_tier_rag`, `#epistemic_memory`, `#career_compass`, `#focal_dna`, `#spatial_anchors`, `#ground_truth`, `[FEAT-405]`, `[FEAT-410]`, `[FEAT-437]`, `[FEAT-451]`, `[FEAT-540]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/field_notes/ingest_focals.py`, `Portfolio_Dev/field_notes/data/focal_mesh.json`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1), `HomeLabAI/src/nodes/archive_node.py`, `Portfolio_Dev/field_notes/ingest_focals.py`, `Portfolio_Dev/field_notes/data/focal_mesh.json`
 **Logic:** Fully restores and formalizes the 4-tier epistemic memory hierarchy, superseding the flattened implementations of `FEAT-405`, `FEAT-410`, and `FEAT-437`:
   - **Tier 1 (Career Bedrock)**: Verified work history and platform anchors loaded directly into system prompt triage under the Completeness of Era Bedrock Standard.
   - **Tier 2 (Strategic Focals & Milestones)**: Annual performance reviews (`2008`–`2016`) ingested into `focal_mesh.json` and ChromaDB `focal_dna`, probed sub-20ms by `step_pre_triage` (`[FEAT-540]`) to supply gravitational `vector_hint` anchors for triage.
@@ -4119,7 +4119,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0
 **Status:** ACTIVE
 **Tags:** `#thought_stream`, `#dual_console`, `#micro_telemetry`, `#intercom_v2`, `[BKM-007]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.build_dual_thought_packet`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1) — `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.build_dual_thought_packet`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
 **Logic:** Builds dual-console WebSocket `thought_stream` telemetry packets separating Left Console conversational reflex (Pinky spoken response) from Right Console epistemic deliberation (Brain/Deep Thought evidence and entailment). Injects inline micro-telemetry tokens (`[SID: ...] [PID: ...]`) to provide physical provenance without polluting conversational prose.
 **Rationale:** Decouples conversational voice from deep analytical reflection, allowing simultaneous low-latency chat delivery and detailed auditability.
 
@@ -4127,7 +4127,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0
 **Status:** ACTIVE
 **Tags:** `#evidential_moat`, `#evidence_before_verdict`, `#bkm_015`, `#grounding_gate`, `[BKM-085]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._enforce_evidential_moat`, `HomeLabAI/src/nodes/archive_node.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1) — `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._enforce_evidential_moat`, `HomeLabAI/src/nodes/archive_node.py`
 **Logic:** Enforces an explicit mechanical gate requiring evidence chunks to be harvested and loaded into the epistemic state BEFORE Deep Thought or Pinky can render a verdict. If no evidence chunks meet minimum relevance thresholds, the system is mechanically barred from issuing speculative assertions, forcing explicit scarcity reporting (`INSUFFICIENT_EVIDENCE`).
 **Rationale:** Mechanically eliminates conversational hallucination and "Green Lie" ungrounded claims by making lack of evidence a first-class control flow branch.
 
@@ -4135,7 +4135,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0
 **Status:** ACTIVE
 **Tags:** `#entailment_audit`, `#right_console`, `#out_of_band`, `#epistemic_verification`, `[BKM-090]`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.audit_entailment_stream`, `HomeLabAI/src/nodes/mlx_judge_node.py`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1) — `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub.audit_entailment_stream`, `HomeLabAI/src/nodes/mlx_judge_node.py`
 **Logic:** Dispatches an asynchronous out-of-band verification query to Node Brain (M5 Air Bonsai-27B via Headroom port 8002) evaluating whether Deep Thought's conclusion strictly follows from the retrieved chunk evidence. Emits audit verdicts (`PASS` / `MISMATCH`) directly to the Right Console (`insightConsole`) without stalling or polluting the user's primary conversational stream on the Left Console.
 **Rationale:** Provides independent judicial oversight on complex hardware reasoning without incurring serial turnaround latency.
 
@@ -4143,7 +4143,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0 / Sprint 110.0
 **Status:** ACTIVE
 **Tags:** `#ripgrep_bridge`, `#ground_truth_hydration`, `#anchor_quotas`, `#starvation_prevention`, `[BKM-088]`, `[BKM-090]`
-**Code:** `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/test_empirical_step_harness.py`
+**Code:** [HomeLabAI/src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L837) — `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/debug/test_empirical_step_harness.py`
 **Logic:** Establishes a fast ripgrep hydration pipeline that dynamically harvests search anchors across multiple prompt tiers (user entities, triage terms, and HyDE anchors), enforcing strict word boundaries (`-w`) and round-robin quota balancing across distinct terms. Prevents high-frequency anchors (`Mailbox`) from starving critical low-frequency hardware error table anchors (`BERT`, `HEST`, `MCA`, `RAS`). Hydrates matching raw note lines directly into Deep Thought's Stage 4 prompt payload within <50ms.
 **Rationale:** Guarantees that Deep Thought is grounded on raw physical text files (WHEA HEST error tables, register offsets) even when vector embeddings miss nuanced acronyms.
 
@@ -4151,7 +4151,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 108.0
 **Status:** ACTIVE
 **Tags:** `#rich_chunks`, `#right_console`, `#accordion_gui`, `#bkm_091`, `#bkm_092`
-**Code:** `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._format_rich_chunks`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
+**Code:** [HomeLabAI/src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1) — `HomeLabAI/src/logic/cognitive_hub.py:CognitiveHub._format_rich_chunks`, `HomeLabAI/src/v5/foyer/intercom_v2.js`
 **Logic:** Formats retrieved RAG and Ripgrep evidence into structured expandable accordion cards on the Right Console (`insightConsole`). Preserves spatial provenance (`[CHUNK-N]`, source file, line ranges, score, relevance badge) while giving operators 1-click drill-down into raw chunk text without cluttering conversational dialog.
 **Rationale:** Restores full evidential visibility for operators and prevents epistemic entanglement between raw citations and synthesized conclusions.
 
@@ -4159,7 +4159,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 110.0
 **Status:** ACTIVE
 **Tags:** `#ripgrep`, `#bucketed_search`, `#bkm_015`, `#anti_starvation`, `#syntactic_word_boundary`, `#ground_truth`, `[FEAT-451]`, `[FEAT-668]`
-**Code:** `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_ripgrep_hydration.py`
+**Code:** [HomeLabAI/src/nodes/archive_node.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L837) — `HomeLabAI/src/nodes/archive_node.py:execute_grep_search_pivot`, `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/tests/test_ripgrep_hydration.py`
 **Logic:** Replaces naive single-process ripgrep execution with a discrete multi-bucket search engine. Each extracted anchor is allocated an isolated quota bucket (`bucket_allocation = max(2, max_matches // len(anchors))`) within a total budget (default 30 matches), followed by a dynamic overflow cascade to utilize spare headroom. Strictly complies with `[BKM-015]` by replacing hardcoded domain acronym lookup tables with a universal syntactic word boundary heuristic (`re.match(r"^[A-Z0-9_\.]{2,6}$", anchor) or anchor.isupper() or len(anchor) <= 5`).
 **Rationale:** Ripgrep compiles multiple `-e` patterns into a single automaton, allowing high-frequency terms like `Mailbox` (200+ matches) to exhaust quota budgets and completely starve rare hardware tables (`BERT`, `HEST`, `MCA`). Bucketed isolation guarantees zero-starvation recall while remaining fully domain-agnostic.
 
@@ -4167,7 +4167,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Sprint:** Sprint 110.0
 **Status:** ACTIVE
 **Tags:** `#script_dna`, `#ambient_recall`, `#diagnostic_ledger`, `#chromadb`, `#physicians_catalog`, `[BKM-081]`, `[BKM-086]`
-**Code:** `HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md`, `Portfolio_Dev/sync_chroma_dna.py:parse_diagnostic_scripts`, `HomeLabAI/src/curator/ambient_recall.py`
+**Code:** [HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md](https://github.com/kEnder242/HomeLabAI/blob/main/docs/DIAGNOSTIC_SCRIPT_MAP.md#L1), `Portfolio_Dev/sync_chroma_dna.py:parse_diagnostic_scripts`, `HomeLabAI/src/curator/ambient_recall.py`
 **Logic:** Creates a first-class `SCRIPT` DNA domain (`[SCR-xxx]`) cataloging all 105 active and historical diagnostic instruments from `DIAGNOSTIC_SCRIPT_MAP.md` (Section 1–18). Ingests tools into ChromaDB collection `diagnostic_dna` on port 8001 with structured metadata (`script_id`, `name`, `path`, `status`, `goal`, `source`, `type: SCRIPT`). Wires the ambient recall sentinel in `ambient_recall.py` to recognize `SCR-xxx` identifiers and query `diagnostic_dna` vectors during prompt construction, ambiently surfacing relevant diagnostic harnesses into context when matching operational or forensic symptoms occur.
 **Rationale:** Eliminates tool amnesia across sprints by elevating ad-hoc test scripts and diagnostic gauntlets to first-class, semantically searchable CLaRa-DNA behavioral cards.
 
