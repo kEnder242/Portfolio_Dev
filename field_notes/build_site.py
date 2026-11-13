@@ -124,7 +124,10 @@ def deploy_to_airlock(snapshots=False):
             os.makedirs(dst_data, exist_ok=True)
             import shutil
 
+            AIRLOCK_DATA_EXCLUDE = {"queue.json", "refinement_rotation_queue.json"}
             for item in os.listdir(src_data):
+                if item in AIRLOCK_DATA_EXCLUDE or item.endswith(".tmp"):
+                    continue
                 s = os.path.join(src_data, item)
                 d = os.path.join(dst_data, item)
                 if os.path.isfile(s):
