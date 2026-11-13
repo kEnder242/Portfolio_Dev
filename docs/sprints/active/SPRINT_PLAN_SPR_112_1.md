@@ -281,6 +281,7 @@
 | 2026-11-12T18:50 | CODE_REFACTOR | Story 112.100: Decommissioned LigerEngine, converged CurriculumEngine on port 8088 VLLMClient, harmonized mass_scan.py, and unblocked queue with live test | `ai_engine_v2.py`, `mass_scan.py`, `2005.json` | ✅ VERIFIED |
 | 2026-11-12T19:25 | CODE_REFACTOR | Story 112.110: Implemented Document Header & Boundary Envelope injection in nibble_v2.py; wired L1/L2 Bedrock anchor grounding in refine_gem.py; certified live extraction & trigger synthesis | `nibble_v2.py`, `refine_gem.py`, `2005.json` | ✅ VERIFIED |
 | 2026-11-12T19:35 | DATA_REFACTOR | Story 112.115: Executed batch refinement pass across 2005–2010 legacy shards; grounded 236/236 gems with authentic L1 Career Bedrock Anchors | `2005.json`–`2010.json`, `refine_gem.py` | ✅ VERIFIED |
+| 2026-11-12T19:55 | DATA_REFACTOR | Story 112.120: Executed modern batch refinement pass across 2011–2025 shards; grounded 4,843/4,843 gems; achieved 100.00% universal lakehouse bedrock coverage (5,079/5,079 gems) | `2011.json`–`2025.json`, `career_compass.json` | ✅ VERIFIED |
 
 ---
 
