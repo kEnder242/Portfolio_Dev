@@ -1604,12 +1604,12 @@
 **Rationale:** Prevents the main event loop from freezing when checking remote compute node health (e.g. KENDER over Tailscale/LAN). Without executor offloading, network timeouts block all local WebSocket and HTTP handling.
 **Mechanism:** `loop.run_in_executor` HTTP check in `loader.py` (`ping_engine`), non-blocking health caching with 15s failure TTL.
 
-## [FEAT-416] Single-Epoch Nightly Refinement Sweeper
+## [FEAT-416] Single-Epoch Nightly Refinement Sweeper & Daytime Ingestion Transition
 **Status:** ACTIVE
-**Code:** [field_notes/mass_scan.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L375) — Single-Epoch Nightly Refinement Sweeper.
-**Logic:** Executes a single bounded epoch of note nibbling, gem refinement (2:00 AM – 5:00 AM window), de-duplication, and yearly aggregation during the nightly maintenance sweep. At 05:00 AM, the refinement loop yields cleanly, ensuring a full 1-hour buffer (until 06:00 AM) for archive aggregation, de-duplication, and trailing tasks.
-**Rationale:** Replaces continuous 24/7 scanning with bounded midnight execution, allowing the lab to remain in Lean Sleep during the day while refining up to ~150 gems nightly.
-**Mechanism:** `--once` flag in `field_notes/mass_scan.py`, 05:00 AM cutoff check, oneshot service `field-notes-nightly.service` (4-hour `TimeoutStartSec=14400`), and `field-notes-nightly.timer` systemd unit.
+**Code:** [field_notes/mass_scan.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/mass_scan.py#L375) — Single-Epoch Refinement Sweeper; `HomeLabAI/src/infra/nightly_forge.py`.
+**Logic:** Executes note nibbling and gem refinement in daytime bounded batches (`nibble_v2.py --once` / `--limit 2`), permanently retiring continuous scanning daemons and excising `mass_scan.py` from overnight maintenance per SPR-112.1. The overnight forge preserves a 30-minute quiet thermal soak and memory settlement window (02:00–02:30 AM) with dual swap flushing (`flush_swap_residency` and `flush_host_swap`), leaving the 03:00–06:00 AM window clean for subconscious dreaming, wisdom refinement, and morning watchdog verification.
+**Rationale:** Prevents background mass scanning from thrashing host memory or conflicting with early morning interactive lab usage, shifting chunk ingestion to explicit daytime batches while maintaining clean host memory.
+**Mechanism:** Daytime batch invocations of `nibble_v2.py`, oneshot service `field-notes-nightly.service`, `flush_host_swap()`, and `field-notes-nightly.timer` systemd unit.
 
 ## [FEAT-417] Consolidated Universal Error Trap & Live System Console Stream (`#sys-console`)
 **Status:** ACTIVE
@@ -4084,7 +4084,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
 **Status:** ACTIVE
 **Tags:** `#zero_concurrency`, `#conveyor_belt`, `#schedule_over_locks`, `#daemon_boundary`, `[INS-051]`, `[BKM-099]`, `[FEAT-416]`, `[FEAT-629]`
 **Code:** `HomeLabAI/src/infra/nightly_forge.py`, `field_notes/mass_scan.py`, `HomeLabAI/src/v5/foyer/router.py`
-**Logic:** Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge (quiesced VRAM) $\to$ 02:30–03:00 AM Subconscious Dreaming (consuming yesterday's refined gems) $\to$ 03:00–05:00 AM Tail Mop-up (`mass_scan.py` single-epoch batch refining gems for tomorrow per `[FEAT-416]`) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (`[FEAT-608]`). Bars 24/7 background scanning daemons (`field-notes-nibbler.service`) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (`foyer_queue.jsonl`).
+**Logic:** Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge / Thermal Soak & Dual Swap Flush (`flush_swap_residency` & `flush_host_swap`) with quiesced VRAM $\to$ 02:30–03:00 AM Subconscious Dreaming & Wisdom Refinement $\to$ 03:00–05:00 AM Tail Mop-up (Historical Journal-to-DNA Bridge; `mass_scan.py` permanently transitioned to daytime batch execution per SPR-112.1) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (`[FEAT-608]`). Bars 24/7 background scanning daemons (`field-notes-nibbler.service`) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (`foyer_queue.jsonl`).
 **Rationale:** Eliminates deadlocks, file truncation offset desyncs, and VRAM thrashing caused by concurrent background tasks running across maintenance windows.
 
 
