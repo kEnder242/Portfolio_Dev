@@ -6034,7 +6034,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><a href="file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3242-L3270"><code>HomeLabAI/src/logic/cognitive_hub.py</code></a>, <a href="file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/brain_node.py#L19"><code>HomeLabAI/src/nodes/brain_node.py</code></a> — Council of Hemispheres (Peer Vote &amp; Dynamic Evidential Damping).</p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -8065,7 +8065,7 @@
                         <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
                             <details class="feature-details">
                                 <summary>
-                                    Single-Epoch Nightly Refinement Sweeper
+                                    Single-Epoch Nightly Refinement Sweeper & Daytime Ingestion Transition
                                 </summary>
                                 <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
             <div style="margin-bottom: 6px;">
@@ -8077,19 +8077,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Executes a single bounded epoch of note nibbling, gem refinement (2:00 AM – 5:00 AM window), de-duplication, and yearly aggregation during the nightly maintenance sweep. At 05:00 AM, the refinement loop yields cleanly, ensuring a full 1-hour buffer (until 06:00 AM) for archive aggregation, de-duplication, and trailing tasks.</p>
+                    <p>Executes note nibbling and gem refinement in daytime bounded batches (<code>nibble_v2.py --once</code> / <code>--limit 2</code>), permanently retiring continuous scanning daemons and excising <code>mass_scan.py</code> from overnight maintenance per SPR-112.1. The overnight forge preserves a 30-minute quiet thermal soak and memory settlement window (02:00–02:30 AM) with dual swap flushing (<code>flush_swap_residency</code> and <code>flush_host_swap</code>), leaving the 03:00–06:00 AM window clean for subconscious dreaming, wisdom refinement, and morning watchdog verification.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Replaces continuous 24/7 scanning with bounded midnight execution, allowing the lab to remain in Lean Sleep during the day while refining up to ~150 gems nightly.</p>
+                    <p>Prevents background mass scanning from thrashing host memory or conflicting with early morning interactive lab usage, shifting chunk ingestion to explicit daytime batches while maintaining clean host memory.</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>--once</code> flag in <code>field_notes/mass_scan.py</code>, 05:00 AM cutoff check, oneshot service <code>field-notes-nightly.service</code> (4-hour <code>TimeoutStartSec=14400</code>), and <code>field-notes-nightly.timer</code> systemd unit.</p>
+                    <p>Daytime batch invocations of <code>nibble_v2.py</code>, oneshot service <code>field-notes-nightly.service</code>, <code>flush_host_swap()</code>, and <code>field-notes-nightly.timer</code> systemd unit.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -10751,19 +10751,19 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L154" style="color:var(--accent-color); text-decoration:none;">field_notes/nibble.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py" style="color:var(--accent-color); text-decoration:none;">field_notes/nibble_v2.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><a href="#FEAT-176">FEAT-176</a> Deep-Connect Mode Detection is_deep_connect = task.get("mode") == "DEEP_CONNECT bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json") existing_data = []</p>
+                    <p><a href="#FEAT-176">FEAT-176</a> Deep-Connect Mode Detection is_deep_connect = task.get("mode") == "DEEP_CONNECT" bucket_file = os.path.join(DATA_DIR, f"{task['bucket'].replace('-', '_')}.json") existing_data = []</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>field_notes/nibble.py</code> at line 154.</p>
+                    <p><code>field_notes/nibble_v2.py</code></p>
                 </div>
             </div>     </div>
                             </details>
@@ -10783,7 +10783,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble.py#L263" style="color:var(--accent-color); text-decoration:none;">field_notes/nibble.py</a>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py" style="color:var(--accent-color); text-decoration:none;">field_notes/nibble_v2.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -10795,7 +10795,7 @@
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Mechanism</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>field_notes/nibble.py</code> at line 263.</p>
+                    <p><code>field_notes/nibble_v2.py</code></p>
                 </div>
             </div>     </div>
                             </details>
@@ -17353,7 +17353,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/scripts/dna_manifest_bridge.py</code>, <code>Portfolio_Dev/field_notes/data/dna_manifest.json</code> — DNA Manifest Bridge.</p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/dna_manifest_bridge.py#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/scripts/dna_manifest_bridge.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17397,7 +17397,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/curator/lens_service.py</code> — Symbolic vs Semantic Detector Budgeting.</p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/lens_service.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/curator/lens_service.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17441,7 +17441,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/curator/validate_paper_schema.py</code>, <code>HomeLabAI/src/curator/lens_service.py</code> — Paper AST Schema v2.</p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/validate_paper_schema.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/curator/validate_paper_schema.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17485,7 +17485,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/ops/ops_runner.py</code> — Ops Execution Engine.</p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/ops/ops_runner.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/ops/ops_runner.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17529,7 +17529,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>AGENTS_L1.md</code>, <code>AGENTS_L2.md</code>, <code>AGENTS_L3.md</code>, <code>HomeLabAI/src/tests/delegate.py</code>, <code>OPENAGENT_HANDOVER_PLAYBOOK.md</code></p>
+                    <a href="https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L1.md#L1" style="color:var(--accent-color); text-decoration:none;">AGENTS_L1.md</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17573,7 +17573,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/projection/bones.py</code>, <code>Portfolio_Dev/field_notes/data/papers/</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/projection/bones.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/projection/bones.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17617,7 +17617,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/projection_studio.html</code>, <code>HomeLabAI/src/projection/recommender.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/projection_studio.html#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/projection_studio.html</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17661,7 +17661,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/scripts/promote_dna.py</code>, <code>HomeLabAI/src/projection/bones.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/scripts/promote_dna.py#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/scripts/promote_dna.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17705,7 +17705,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/infra/nightly_forge.py</code>, <code>HomeLabAI/src/infra/nightly_lora_training.py</code>, <code>HomeLabAI/src/forge/build_lora_datasets.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/nightly_forge.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17749,7 +17749,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>Portfolio_Dev/dna/rdna_questions.json</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/archive_node.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17796,7 +17796,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/curator/ambient_recall.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/curator/ambient_recall.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17842,7 +17842,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/curator/ambient_recall.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/curator/ambient_recall.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/curator/ambient_recall.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17886,7 +17886,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>AGENTS_L2.md</code>, <code>AGENTS_L3.md</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/tests/delegate.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17930,7 +17930,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/triage_node.py</code>, <code>Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_95.md</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -17974,7 +17974,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>Portfolio_Dev/sync_chroma_dna.py</code>, <code>HomeLabAI/data/foyer_feedback_ledger.jsonl</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18018,7 +18018,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18062,7 +18062,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18109,7 +18109,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_brain_voice_replay.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/brain_node.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18153,7 +18153,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/brain_node.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/brain_node.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18197,7 +18197,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/docs/LAB_INFRASTRUCTURE.md</code>, <code>opencode.json</code>, <code>HomeLabAI/docs/Protocols.md</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/docs/LAB_INFRASTRUCTURE.md#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/docs/LAB_INFRASTRUCTURE.md</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18241,7 +18241,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/infra/kender_proxy.py</code>, <code>~/.config/systemd/user/kender-proxy.service</code>, <code>opencode.json</code></p>
+                    <a href="https://github.com/kEnder242/Dev_Lab/blob/master/opencode.json#L1" style="color:var(--accent-color); text-decoration:none;">opencode.json</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18285,7 +18285,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/status.html</code>, <code>HomeLabAI/src/infra/daily_accountability_audit.py</code>, <code>HomeLabAI/src/v5/ignition/manager.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/status.html#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/status.html</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18329,7 +18329,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/intercom.html</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/intercom.html#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/intercom.html</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18373,7 +18373,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/v5/common/types.py</code>, <code>HomeLabAI/src/v5/ignition/manager.py</code>, <code>Portfolio_Dev/field_notes/intercom_v2.js</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/foyer/router.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18417,7 +18417,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code>, <code>HomeLabAI/src/logic/vector_pre_triage.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18583,7 +18583,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>AcmeLab/src/clara_dna_mcp_server.py</code>, <code>HomeLabAI/src/tests/delegate.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/tests/delegate.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18627,7 +18627,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/cognition/context_prewarmer.py</code>, <code>HomeLabAI/src/tests/delegate.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/cognition/context_prewarmer.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/cognition/context_prewarmer.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18671,7 +18671,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>Portfolio_Dev/field_notes/data/delegation_ledger.jsonl</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/tests/delegate.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18715,7 +18715,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/tests/delegate.py</code>, <code>HomeLabAI/config/scripts/ambient_hook.sh</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/tests/delegate.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/tests/delegate.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18759,7 +18759,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/infra/probe_round_table_accountability.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/probe_round_table_accountability.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/probe_round_table_accountability.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18803,7 +18803,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/ignition/manager.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/logic/speculative_triage.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/ignition/manager.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/ignition/manager.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18847,7 +18847,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/v5/ignition/manager.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/ignition/manager.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/v5/ignition/manager.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18939,11 +18939,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <ul>
-<li><code>Dev_Lab/AGENTS_L3.md</code> — Layer 3 Worker <code>jit_one_shot</code> contract (patch-test-diagnose-recommend, zero recursive retries).</li>
-<li><code>Dev_Lab/AGENTS_L2.md</code> — Layer 2 Conductor anti-spiral orchestration &amp; state evaluation.</li>
-<li><code>HomeLabAI/docs/Protocols.md</code> — <code>BKM-078: JIT_ONE_SHOT Protocol</code>.</li>
-</ul>
+                    <a href="https://github.com/kEnder242/Dev_Lab/blob/master/AGENTS_L3.md#L1" style="color:var(--accent-color); text-decoration:none;">Dev_Lab/AGENTS_L3.md</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -18992,12 +18988,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <ul>
-<li><code>HomeLabAI/src/mcp/clara_dna_mcp_server.py</code> — <code>@mcp.tool() ask_oracle</code> endpoint writing diagnostic payloads to <code>.jit_cache/oracle_request.json</code>.</li>
-<li><code>HomeLabAI/src/tests/delegate.py</code> — Polling loop intercept for <code>ask_oracle</code>/<code>clara-dna_ask_oracle</code> with high-visibility banner, session abort, and clean exit (code 3).</li>
-<li><code>~/.config/opencode/oh-my-openagent.json</code> — Declarative tool grants for <code>ask_oracle</code> and <code>clara-dna_ask_oracle</code> on <code>atlas</code> and <code>Atlas</code>.</li>
-<li><code>Dev_Lab/AGENTS_L2.md</code> — Layer 2 Conductor protocol advertising <code>ask_oracle</code> as authoritative Tier 1 architectural consultation.</li>
-</ul>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/mcp/clara_dna_mcp_server.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/mcp/clara_dna_mcp_server.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19153,7 +19144,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_multi_stage_replay_pipeline.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19197,7 +19188,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19241,7 +19232,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/logic/traversal_dispatcher.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19285,7 +19276,7 @@ Emits authoritative <code>daily_accountability_digest.json</code> using atomic t
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/nodes/loader.py</code>, <code>HomeLabAI/src/nodes/pinky_node.py</code>, <code>HomeLabAI/src/nodes/brain_node.py</code>, <code>HomeLabAI/src/nodes/thought_node.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/loader.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19331,7 +19322,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/dna/vibe_data.json</code>, <code>Portfolio_Dev/field_notes/writer.html</code>, <code>Portfolio_Dev/field_notes/nibble_v2.py</code>, <code>Portfolio_Dev/field_notes/scan_queue.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/dna/vibe_data.json#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/dna/vibe_data.json</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19377,7 +19368,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/papers/*_spine.json</code>, <code>Portfolio_Dev/field_notes/replay_paper.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/replay_paper.py#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/replay_paper.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19421,7 +19412,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/writer.html</code>, <code>Portfolio_Dev/field_notes/js/writer.js</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19465,7 +19456,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/dna_forge/</code>, <code>Portfolio_Dev/field_notes/writer.html</code>, <code>Portfolio_Dev/papers/jitc_intuition/</code>, <code>HomeLabAI/src/projection/ast_reconciliation.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/writer.html#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/writer.html</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19509,7 +19500,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>Portfolio_Dev/dna/vibe_data.json</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19553,7 +19544,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/triage_policy.json</code>, <code>HomeLabAI/src/logic/triage_engine.py</code>, <code>HomeLabAI/src/logic/triage_policy_loader.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/config/triage_policy.json#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/config/triage_policy.json</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19597,7 +19588,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/tests/test_brain_keyed_filter.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19641,7 +19632,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_two_mice_handover.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19685,7 +19676,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/triage_engine.py</code>, <code>HomeLabAI/src/logic/cognitive_hub.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/triage_engine.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/triage_engine.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19723,7 +19714,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/tests/test_two_mice_handover.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19773,7 +19764,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/loader.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code>, <code>HomeLabAI/src/logic/override_parser.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19817,7 +19808,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/debug/mcp_prober.py</code>, <code>HomeLabAI/config/triage_policy.json</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19861,7 +19852,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>M5-Local-oMLX/control_api.py</code>, <code>M5-Local-oMLX/omlx_service.sh</code>, <code>HomeLabAI/src/nodes/mlx_judge_node.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/mlx_judge_node.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/mlx_judge_node.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19874,6 +19865,106 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Eliminates false assumptions regarding memory ceilings on M5 Air, prevents premature prompt truncation, and guarantees optimal Metal GPU prefill throughput.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-122">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-122</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Zero-Host-Allocation Hybrid Inference Topology & Direct VRAM Ingestion Standard
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 111.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#hybrid_engine</code>, <code>#llama_cpp</code>, <code>#zero_host_allocation</code>, <code>#no_host</code>, <code>#load_mode</code>, <code>#mmap</code>, <code>#memory_leak_prevention</code>, <code>[LAB-121]</code>, <code>[BKM-054]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Dev_Lab/blob/master//home/jallred/serve_llm.sh#L1" style="color:var(--accent-color); text-decoration:none;">/home/jallred/serve_llm.sh</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Codifies host memory invariants for heterogeneous dual-GPU inference across NVIDIA CUDA (RTX 2080 Ti) and Intel Arc Vulkan (B580 via localhost loopback RPC port 50052):
+1. <strong>Ban <code>-lm none</code></strong>: Forbids disabling memory mapping (<code>-lm none</code>). <code>-lm none</code> forces raw anonymous heap <code>malloc()</code> for offloaded layers, which Linux kernel memory management cannot discard and aggressively writes to disk swap under memory pressure (triggering a 6.5+ GB swap sink).
+2. <strong>Mandate <code>-lm auto</code> / <code>mmap</code></strong>: Keeps NVMe-backed file mappings (<code>/speedy</code>) so unneeded host pages remain clean and are evicted instantly without disk swap allocation.
+3. <strong>Enforce <code>--no-host</code> (<code>LLAMA_ARG_NO_HOST=1</code>)</strong>: Bypasses secondary host-side fallback buffer allocation for layers residing in GPU <code>DEVICE_LOCAL</code> VRAM.
+4. <strong>Enforce Port 8088 Liveness Gate</strong>: Forbids launching secondary <code>llama-server</code> background instances during Foyer wake if port 8088 is already bound and responding.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Reclaims ~7.3 GB of disk swap, clamps host RSS below 1.2 GB, prevents thermal and memory collisions during nightly maintenance, and preserves 60+ tok/s CUDA prefill velocity.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="LAB-123">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">LAB-123</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Heterogeneous Silicon Media Isolation & Dynamic DRM Alignment Standard
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 111.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#heterogeneous_silicon</code>, <code>#arc_b580</code>, <code>#intel_qsv</code>, <code>#jellyfin</code>, <code>#drm_node_enumeration</code>, <code>#vram_isolation</code>, <code>#zero_vram_impact</code>, <code>[LAB-122]</code>, <code>[FEAT-069](#FEAT-069)</code>, <code>[FEAT-427](#FEAT-427)</code>, <code>[BKM-024]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/jellyfin_autotune.py#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/jellyfin_autotune.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Codifies the architectural boundary and boot-time hardware synchronization for multi-GPU media isolation between dedicated AI compute (NVIDIA RTX 2080 Ti) and hardware-accelerated media transcoding (Intel Arc B580):
+1. <strong>Zero-VRAM NVIDIA Isolation</strong>: 100% of the NVIDIA RTX 2080 Ti (11GB CUDA) VRAM is reserved for local LLM inference (vLLM / llama.cpp / Foyer on port 8088/8765). Media server processes (Jellyfin) are strictly barred from initializing CUDA or NVENC, maintaining 0 MB VRAM overhead.
+2. <strong>Dedicated Arc B580 QSV Pipeline</strong>: Media transcoding is exclusively routed to the Intel Arc B580 (PCI <code>0000:03:00.0</code>, Battlemage G21) using Intel QuickSync (<code>qsv</code>) with modern codec acceleration (AV1 encode/decode, HEVC 10-bit, VP9, H.264) and VPP tonemapping.
+3. <strong>Dynamic DRM Node Alignment (The Enumeration Trap)</strong>: Linux kernel DRM render node numbers (<code>/dev/dri/renderD*</code>) are non-deterministic across reboots and driver unbind/rescan cycles (<code>renderD128</code> Haswell iGPU, <code>renderD129</code> RTX 2080 Ti, <code>renderD130</code> Arc B580). Pinning static node numbers in <code>encoding.xml</code> causes severe transcode failure (Intel <code>iHD</code> driver failing on NVIDIA GPU during subtitle burning). <code>jellyfin_autotune.py</code> resolves the immutable PCI bus token <code>/dev/dri/by-path/pci-0000:03:00.0-render</code> to its active <code>renderD*</code> node dynamically via <code>os.path.realpath()</code>.
+4. <strong>Current State</strong>: <code>encoding.xml</code> is actively aligned to <code>/dev/dri/renderD130</code> (Arc B580 QSV). Subtitle burning transcode runs at 16.1x realtime with 0 MB NVIDIA VRAM allocation. <code>jellyfin_autotune.py</code> has been modernized to enforce this invariant idempotently.
+5. <strong>Next Actions / Target Trajectory</strong>:
+   - Install a systemd oneshot boot service (<code>jellyfin-drm-sync.service</code> or via <code>lab-boot-sentinel.service</code>) executing <code>jellyfin_autotune.py</code> before Jellyfin accepts client playback requests on system boot.
+   - Author <code>/etc/udev/rules.d/92-jellyfin-arc.rules</code> to create a permanent <code>/dev/dri/arc_render</code> symlink from PCI <code>0000:03:00.0</code>.
+   - Maintain multi-tenancy testing to ensure 4K AV1 subtitle transcoding coexists transparently with 35B MoE dual-GPU inference.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Eliminates silent subtitle playback crashes in Jellyfin, prevents GPU driver deadlocks between <code>iHD</code> and <code>nvidia</code>, and guarantees compute availability for the AI Foyer.</p>
                 </div>
             </div>     </div>
                             </details>
@@ -19905,7 +19996,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/config/litellm_kender.yaml</code>, <code>HomeLabAI/src/nodes/loader.py</code>, <code>HomeLabAI/src/nodes/mlx_judge_node.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/config/litellm_kender.yaml#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/config/litellm_kender.yaml</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19949,13 +20040,13 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/infra/nightly_forge.py</code>, <code>field_notes/mass_scan.py</code>, <code>HomeLabAI/src/v5/foyer/router.py</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/infra/nightly_forge.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/infra/nightly_forge.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Logic</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p>Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge (quiesced VRAM) $\to$ 02:30–03:00 AM Subconscious Dreaming (consuming yesterday's refined gems) $\to$ 03:00–05:00 AM Tail Mop-up (<code>mass_scan.py</code> single-epoch batch refining gems for tomorrow per <code>[FEAT-416](#FEAT-416)</code>) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (<code>[FEAT-608](#FEAT-608)</code>). Bars 24/7 background scanning daemons (<code>field-notes-nibbler.service</code>) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (<code>foyer_queue.jsonl</code>).</p>
+                    <p>Enforces strict temporal serialization for all overnight maintenance operations, establishing that file race conditions must be resolved by schedule design rather than multi-process file locks. Operations execute as a single-threaded conveyor belt: 02:00–02:30 AM LoRA Forge / Thermal Soak &amp; Dual Swap Flush (<code>flush_swap_residency</code> &amp; <code>flush_host_swap</code>) with quiesced VRAM $\to$ 02:30–03:00 AM Subconscious Dreaming &amp; Wisdom Refinement $\to$ 03:00–05:00 AM Tail Mop-up (Historical Journal-to-DNA Bridge; <code>mass_scan.py</code> permanently transitioned to daytime batch execution per SPR-112.1) $\to$ 05:00–06:00 AM Quiescent Buffer (zero jobs) $\to$ 06:00 AM Morning Probe Watchdog (<code>[FEAT-608](#FEAT-608)</code>). Bars 24/7 background scanning daemons (<code>field-notes-nibbler.service</code>) and forbids external batch scripts from directly mutating or truncating files actively tailed by running daemons (<code>foyer_queue.jsonl</code>).</p>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -19993,7 +20084,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>Portfolio_Dev/field_notes/scan_queue.py</code>, <code>Portfolio_Dev/field_notes/scan_pinky.py</code></p>
+                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/scan_queue.py#L1" style="color:var(--accent-color); text-decoration:none;">Portfolio_Dev/field_notes/scan_queue.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -20037,7 +20128,7 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
             <div style="margin-bottom: 6px;">
                 <span class="field-label">Code</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
-                    <p><code>HomeLabAI/src/logic/cognitive_hub.py</code>, <code>HomeLabAI/src/nodes/archive_node.py</code>, <code>Portfolio_Dev/field_notes/ingest_focals.py</code>, <code>Portfolio_Dev/field_notes/data/focal_mesh.json</code></p>
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
                 </div>
             </div>
             <div style="margin-bottom: 6px;">
@@ -20054,6 +20145,325 @@ Applied unconditionally to all resident node personas (Pinky, Brain, Deep Though
                 <span class="field-label">Rationale</span>
                 <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
                     <p>Prevents context window blowouts and prefill latency from raw note flooding while eliminating the loss of strategic career context caused by flat single-layer vector retrieval.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-661">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-661</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Vibe-013 Persona & Reflex Harmonization
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#thought_stream</code>, <code>#dual_console</code>, <code>#micro_telemetry</code>, <code>#intercom_v2</code>, <code>[BKM-007]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Builds dual-console WebSocket <code>thought_stream</code> telemetry packets separating Left Console conversational reflex (Pinky spoken response) from Right Console epistemic deliberation (Brain/Deep Thought evidence and entailment). Injects inline micro-telemetry tokens (<code>[SID: ...] [PID: ...]</code>) to provide physical provenance without polluting conversational prose.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Decouples conversational voice from deep analytical reflection, allowing simultaneous low-latency chat delivery and detailed auditability.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-666">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-666</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Mechanical Evidential Moat (Evidence-Before-Verdict Gate)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#evidential_moat</code>, <code>#evidence_before_verdict</code>, <code>#bkm_015</code>, <code>#grounding_gate</code>, <code>[BKM-085]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Enforces an explicit mechanical gate requiring evidence chunks to be harvested and loaded into the epistemic state BEFORE Deep Thought or Pinky can render a verdict. If no evidence chunks meet minimum relevance thresholds, the system is mechanically barred from issuing speculative assertions, forcing explicit scarcity reporting (<code>INSUFFICIENT_EVIDENCE</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Mechanically eliminates conversational hallucination and "Green Lie" ungrounded claims by making lack of evidence a first-class control flow branch.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-667">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-667</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Out-of-band Entailment Audit on Deep Thought (Right Console)
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#entailment_audit</code>, <code>#right_console</code>, <code>#out_of_band</code>, <code>#epistemic_verification</code>, <code>[BKM-090]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Dispatches an asynchronous out-of-band verification query to Node Brain (M5 Air Bonsai-27B via Headroom port 8002) evaluating whether Deep Thought's conclusion strictly follows from the retrieved chunk evidence. Emits audit verdicts (<code>PASS</code> / <code>MISMATCH</code>) directly to the Right Console (<code>insightConsole</code>) without stalling or polluting the user's primary conversational stream on the Left Console.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Provides independent judicial oversight on complex hardware reasoning without incurring serial turnaround latency.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-668">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-668</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Ripgrep Ground Truth Hydration Bridge & Balanced Anchor Quotas
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0 / Sprint 110.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#ripgrep_bridge</code>, <code>#ground_truth_hydration</code>, <code>#anchor_quotas</code>, <code>#starvation_prevention</code>, <code>[BKM-088]</code>, <code>[BKM-090]</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L837" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/archive_node.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Establishes a fast ripgrep hydration pipeline that dynamically harvests search anchors across multiple prompt tiers (user entities, triage terms, and HyDE anchors), enforcing strict word boundaries (<code>-w</code>) and round-robin quota balancing across distinct terms. Prevents high-frequency anchors (<code>Mailbox</code>) from starving critical low-frequency hardware error table anchors (<code>BERT</code>, <code>HEST</code>, <code>MCA</code>, <code>RAS</code>). Hydrates matching raw note lines directly into Deep Thought's Stage 4 prompt payload within &lt;50ms.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Guarantees that Deep Thought is grounded on raw physical text files (WHEA HEST error tables, register offsets) even when vector embeddings miss nuanced acronyms.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-671">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-671</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Brain Rich Chunk Evidence Restoration & Right Console Accordion GUI
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 108.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#rich_chunks</code>, <code>#right_console</code>, <code>#accordion_gui</code>, <code>#bkm_091</code>, <code>#bkm_092</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/logic/cognitive_hub.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Formats retrieved RAG and Ripgrep evidence into structured expandable accordion cards on the Right Console (<code>insightConsole</code>). Preserves spatial provenance (<code>[CHUNK-N]</code>, source file, line ranges, score, relevance badge) while giving operators 1-click drill-down into raw chunk text without cluttering conversational dialog.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Restores full evidential visibility for operators and prevents epistemic entanglement between raw citations and synthesized conclusions.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-685">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-685</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    Universal Bucketed Ripgrep Engine & Syntactic Boundary Balancing
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 110.0</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>#ripgrep</code>, <code>#bucketed_search</code>, <code>#bkm_015</code>, <code>#anti_starvation</code>, <code>#syntactic_word_boundary</code>, <code>#ground_truth</code>, <code>[FEAT-451](#FEAT-451)</code>, <code>[FEAT-668](#FEAT-668)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/archive_node.py#L837" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/src/nodes/archive_node.py</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Replaces naive single-process ripgrep execution with a discrete multi-bucket search engine. Each extracted anchor is allocated an isolated quota bucket (<code>bucket_allocation = max(2, max_matches // len(anchors))</code>) within a total budget (default 30 matches), followed by a dynamic overflow cascade to utilize spare headroom. Strictly complies with <code>[BKM-015]</code> by replacing hardcoded domain acronym lookup tables with a universal syntactic word boundary heuristic (<code>re.match(r"^[A-Z0-9_\.]{2,6}$", anchor) or anchor.isupper() or len(anchor) &lt;= 5</code>).</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Ripgrep compiles multiple <code>-e</code> patterns into a single automaton, allowing high-frequency terms like <code>Mailbox</code> (200+ matches) to exhaust quota budgets and completely starve rare hardware tables (<code>BERT</code>, <code>HEST</code>, <code>MCA</code>). Bucketed isolation guarantees zero-starvation recall while remaining fully domain-agnostic.</p>
+                </div>
+            </div>     </div>
+                            </details>
+                        </td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <span class="impact-badge impact-live">ACTIVE</span>
+                        </td>
+                    </tr>
+                    <tr id="FEAT-686">
+                        <td style="font-weight: bold; color: var(--accent-color); font-family: var(--font-stack); vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">FEAT-686</td>
+                        <td style="vertical-align: top; padding: 4px 8px; border-bottom: 1px solid var(--border-color);">
+                            <details class="feature-details">
+                                <summary>
+                                    SCRIPT DNA Ledger, Ambient Diagnostic Sentinel & Physician's Catalog Ingestion
+                                </summary>
+                                <div style="margin-top: 6px; border-left: 2px solid var(--accent-dim); padding-left: 12px; padding-top: 2px; padding-bottom: 2px;">
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Sprint</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Sprint 111.0 | <strong>Status:</strong> ACTIVE | <strong>Code:</strong> <code>HomeLabAI/config/lab_accountability_thresholds.json:timeouts</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Tags</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p><code>[LAB-119]</code>, <code>[BKM-101]</code>, <code>[BKM-024]</code>, <code>[BKM-062]</code>, <code>[FEAT-619](#FEAT-619)</code>, <code>[FEAT-608](#FEAT-608)</code>, <code>[FEAT-462](#FEAT-462)</code></p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Code</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <a href="https://github.com/kEnder242/HomeLabAI/blob/main/docs/DIAGNOSTIC_SCRIPT_MAP.md#L1" style="color:var(--accent-color); text-decoration:none;">HomeLabAI/docs/DIAGNOSTIC_SCRIPT_MAP.md</a>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Logic</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Creates a first-class <code>SCRIPT</code> DNA domain (<code>[SCR-xxx]</code>) cataloging all 105 active and historical diagnostic instruments from <code>DIAGNOSTIC_SCRIPT_MAP.md</code> (Section 1–18). Ingests tools into ChromaDB collection <code>diagnostic_dna</code> on port 8001 with structured metadata (<code>script_id</code>, <code>name</code>, <code>path</code>, <code>status</code>, <code>goal</code>, <code>source</code>, <code>type: SCRIPT</code>). Wires the ambient recall sentinel in <code>ambient_recall.py</code> to recognize <code>SCR-xxx</code> identifiers and query <code>diagnostic_dna</code> vectors during prompt construction, ambiently surfacing relevant diagnostic harnesses into context when matching operational or forensic symptoms occur.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Rationale</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <p>Single canonical configuration home and interface for all system timeouts (round table deliberation, watchdog subprocess, engine warm-up, and foyer probes). Prevents doc-duplication by using structured pointers to generic config documentation and features so ambient hooks can directly discover and tune headroom without copying narrative text blocks.</p>
+                </div>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <span class="field-label">Pointers</span>
+                <div class="feature-body" style="font-size: 0.8rem; color: var(--text-color); line-height: 1.3; margin-left: 10px; margin-top: 2px;">
+                    <ul>
+<li><strong>Canonical Configuration:</strong> <a href="file:///home/jallred/Dev_Lab/HomeLabAI/config/lab_accountability_thresholds.json#L21-L28"><code>HomeLabAI/config/lab_accountability_thresholds.json:timeouts</code></a></li>
+<li><strong>Infrastructure Architecture:</strong> <a href="file:///home/jallred/Dev_Lab/HomeLabAI/docs/LAB_INFRASTRUCTURE.md"><code>HomeLabAI/docs/LAB_INFRASTRUCTURE.md:LAB-119</code></a></li>
+<li><strong>Operational Verification Protocols:</strong> <a href="file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2078"><code>HomeLabAI/docs/Protocols.md:BKM-101</code></a> (Shakedown), <code>BKM-024</code> (Live Verification), <code>BKM-062</code> (Ground Truth)</li>
+<li><strong>Governed Subsystems:</strong> <code>probe_round_table_accountability.py</code> (<code>[FEAT-608](#FEAT-608)</code>), <code>standalone_accountability_watchdog.py</code> (<code>[FEAT-619](#FEAT-619)</code>), <code>src/nodes/loader.py</code> (<code>[FEAT-462](#FEAT-462)</code>)</li>
+</ul>
                 </div>
             </div>     </div>
                             </details>

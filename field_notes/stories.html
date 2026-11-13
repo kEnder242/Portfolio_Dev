@@ -42,6 +42,7 @@
                 <li><a href="#reading-robot">Reading Like a Robot</a></li>
                 <li><a href="#rapl-matplotlib">RAPL & Matplotlib</a></li>
                 <li><a href="#harnessless-vr-power">Harness-less VR Power</a></li>
+                <li><a href="#bmc-validation-engine">BMC As a Validation Engine (Aurora)</a></li>
                 <li><a href="#grok-code">How to Grok Code</a></li>
                 <li><a href="#beating-heart">The Beating Heart</a></li>
                 <li><a href="#serial-fragments">Expect Fragments (Serial)</a></li>
@@ -202,6 +203,13 @@
                 <p>We received a new motherboard revision with a critical keep-out violation: the processors fit, but a cluster of capacitors physically blocked our VR test harness. We needed to measure worst-case power transients, but we were flying blind without physical probes. Furthermore, we only had two nodes in existence, and the VRs could only be flashed about seven times before bricking.</p>
                 <p>Instead of waiting for a board spin, I collaborated with the benchmarking teams to artificially shape the CPU's power draw through software, forcing the exact transients we needed to measure. I wrote custom scripts to read and characterize this power draw dynamically.</p>
                 <p>We successfully achieved a Design Release Acceptance (DRA) for enabling power transient measurements entirely without a physical harness. Proving that out-of-band telemetry could replace physical lab equipment in a pinch became the catalyst for my long-term championing of PECI as a primary tool for customer-facing debug.</p>
+            </article>
+
+            <article id="bmc-validation-engine">
+                <h3>BMC As a Validation Engine (Aurora Supercomputer)</h3>
+                <div class="meta">Tag: OOB Telemetry & Scale | Impact: 100% Remote Execution & Pre-Silicon Influence</div>
+                <p>Aurora was a project that had somehow fallen through the validation planning cracks. When our team swept in to support it, I realized standard in-band tools wouldn't scale. Instead, I leveraged the out-of-band (OOB) BMC interfaces to run 100% remote tests by configuring a few proxy rules.</p>
+                <p>I adapted my existing tests to target GPU endpoints and collect OOB telemetry (validating RAPL and Psys power envelopes) during active workloads. Because of the purely OOB nature of the architecture, I was the first to achieve 100% execution and automation on the platform. We formalized this as the 'BMC As a Validation Engine' initiative, and its simplicity heavily influenced how we approached next-gen pre-silicon execution in Simics.</p>
             </article>
 
             <article id="grok-code">
