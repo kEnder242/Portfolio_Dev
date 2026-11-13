@@ -328,6 +328,78 @@ def _get_compass_keywords() -> set:
     return keywords
 
 
+_COMPASS_ANCHORS_CACHE = None
+
+
+def _get_career_bedrock_anchor(gem: dict) -> str:
+    """[Story 112.110] Correlate gem with Tier 1 Bedrock anchor from career_compass.json based on event year/era."""
+    global _COMPASS_ANCHORS_CACHE
+    if _COMPASS_ANCHORS_CACHE is None:
+        compass_file = os.path.join(DATA_DIR, "career_compass.json")
+        if os.path.exists(compass_file):
+            try:
+                with open(compass_file, "r") as f:
+                    cdata = json.load(f)
+                    _COMPASS_ANCHORS_CACHE = cdata.get("tier_1_anchor_map", {})
+            except Exception:
+                _COMPASS_ANCHORS_CACHE = {}
+        else:
+            _COMPASS_ANCHORS_CACHE = {}
+
+    if not _COMPASS_ANCHORS_CACHE:
+        return ""
+
+    # Determine year
+    year = gem.get("event_year")
+    if not year:
+        date_str = str(gem.get("date", "") or gem.get("event_era", ""))
+        m = re.search(r"\b(19\d\d|20\d\d)\b", date_str)
+        if m:
+            try:
+                year = int(m.group(1))
+            except ValueError:
+                year = None
+
+    if not year:
+        return ""
+
+    target_era = None
+    if 2005 <= year <= 2008:
+        target_era = "era_2005_2008"
+    elif 2009 <= year <= 2010:
+        target_era = "era_2008_2010"
+    elif 2011 <= year <= 2015:
+        target_era = "era_2011_2015"
+    elif year == 2016:
+        target_era = "era_2016_2016"
+    elif 2017 <= year <= 2019:
+        target_era = "era_2016_2019"
+    elif 2020 <= year <= 2024:
+        target_era = "era_2019_2024"
+    elif year >= 2025:
+        target_era = "era_2024_2026"
+
+    if not target_era or target_era not in _COMPASS_ANCHORS_CACHE:
+        return ""
+
+    anchors = _COMPASS_ANCHORS_CACHE[target_era]
+    if not anchors:
+        return ""
+
+    # Match best anchor by keyword overlap
+    text = (str(gem.get("summary", "")) + " " + str(gem.get("evidence", ""))).lower()
+    best_anchor = anchors[0]
+    best_score = 0
+    for a in anchors:
+        words = set(re.findall(r"\b\w{3,}\b", a.lower()))
+        score = sum(1 for w in words if w in text)
+        if score > best_score:
+            best_score = score
+            best_anchor = a
+
+    return best_anchor
+
+
 def classify_impact_level(gem: dict, graph_data: list = None) -> int:
     """[FEAT-454 / Story 106.6] Classify gem into discrete impact levels (1 to 4):
 
@@ -827,12 +899,20 @@ class RotationalRefinementEngine:
             after_text = "\n".join(envelope.get("after", []))
             gem["envelope_context"] = f"\n[ENVELOPE_BEFORE]\n{before_text}\n[/ENVELOPE_BEFORE]\n[ENVELOPE_AFTER]\n{after_text}\n[/ENVELOPE_AFTER]"
 
+        # [Story 112.110] Stamp Tier 1 Bedrock anchor if missing
+        if not gem.get("career_bedrock_anchor"):
+            bedrock_anchor = _get_career_bedrock_anchor(gem)
+            if bedrock_anchor:
+                gem["career_bedrock_anchor"] = bedrock_anchor
+                updated_fields += 1
+
         if not gem.get("trigger_context"):
             if engine:
                 try:
                     focal_instruction = " If the text represents a retrospective career summary, self-assessment, or focal draft, label its type as FOCAL_DRAFT and identify the corresponding Tier 2 milestone."
+                    bedrock_hint = f" Career Bedrock Anchor: '{gem.get('career_bedrock_anchor')}'." if gem.get('career_bedrock_anchor') else ""
                     prompt = (
-                        f"Given event summary: '{gem.get('summary')}' and evidence: '{gem.get('evidence', '')[:200]}', "
+                        f"Given event summary: '{gem.get('summary')}' and evidence: '{gem.get('evidence', '')[:200]}'.{bedrock_hint} "
                         f"provide a concise 1-sentence engineering trigger context: what debug condition or inquiry activates this knowledge?{focal_instruction} Output plain text only."
                     )
                     resp = engine.generate(prompt)
@@ -842,8 +922,9 @@ class RotationalRefinementEngine:
                 except Exception:
                     pass
             if not gem.get("trigger_context"):
+                bedrock_suffix = f" ({gem.get('career_bedrock_anchor')})" if gem.get('career_bedrock_anchor') else ""
                 gem["trigger_context"] = (
-                    f"Triggered during platform validation of {', '.join(anchors[:3]) if anchors else 'subsystem'}."
+                    f"Triggered during platform validation of {', '.join(anchors[:3]) if anchors else 'subsystem'}{bedrock_suffix}."
                 )
                 updated_fields += 1
 

@@ -243,6 +243,25 @@
   - `mass_scan.py`: Stripped `--reasoning` / `--hybrid` overrides in favor of bounded single-pass execution.
 * **Anchor 4 (DNA Links):** `[BKM-005]`, `[BKM-024]`, `[FEAT-416]`, `[FEAT-680]`.
 
+#### 🛠️ Story 112.110: Provenance Injection & Epistemic L1/L2 Career Grounding
+**Assigned Owner:** `[AGY:PRIMARY]`  
+**DNA Tags:** `[BKM-005]`, `[BKM-015]`, `[BKM-024]`, `[FEAT-209]`, `[FEAT-438]`, `[FEAT-454]`
+
+> [!NOTE]
+> **Why It Broke & Root Cause (`BKM-020 §5`):**  
+> Isolated chunking caused "header blindness," stripping parent platform context (e.g. Harwich/Sahalee) from chunks. Surrounding context envelopes were ignored during extraction, causing split commands to lose coherence. Additionally, tactical gems were decoupled from high-level L1 Bedrock and L2 Focal milestones, causing historical notes to lack strategic grounding.
+
+* **Anchor 1 (Target Files & Line Ranges):**
+  - [`Portfolio_Dev/field_notes/nibble_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/nibble_v2.py)
+  - [`Portfolio_Dev/field_notes/refine_gem.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/refine_gem.py)
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/nibble_v2.py --once`
+  - `python3 -c "from refine_gem import _get_career_bedrock_anchor; print(_get_career_bedrock_anchor({'date':'2005-02-04'}))"`
+* **Anchor 3 (Verbatim Code Specs & Schemas):**
+  - `nibble_v2.py`: `get_document_header()` injects leading metadata lines; `context_envelope` (`before` / `after` lines) unpacked into extraction prompt; operational agenda/tracker items retained under `operations` / `logistics`.
+  - `refine_gem.py`: `_get_career_bedrock_anchor()` maps era to `career_compass.json` `tier_1_anchor_map`; stamps `career_bedrock_anchor` on gem; feeds bedrock anchor into `trigger_context` synthesis prompt.
+* **Anchor 4 (DNA Links):** `[FEAT-209]`, `[FEAT-438]`, `[BKM-015]`.
+
 ---
 
 ## 📝 3. Sprint Execution Ledger (`BKM-081`)
@@ -260,6 +279,7 @@
 | 2026-11-12T16:53 | CODE_REFACTOR | Story 112.90: Abolished negative deny lists & `elif` mutual exclusion; wired additive RAG stacking | `cognitive_hub.py`, `test_career_compass_bedrock.py` | ✅ VERIFIED |
 | 2026-11-12T18:05 | CODE_REFACTOR | Story 112.95: Unified ChromaDB routing & purged post-retrieval censorship in lab_dna_router | `lab_dna_router.py`, `test_lab_dna_router.py` | ✅ VERIFIED |
 | 2026-11-12T18:50 | CODE_REFACTOR | Story 112.100: Decommissioned LigerEngine, converged CurriculumEngine on port 8088 VLLMClient, harmonized mass_scan.py, and unblocked queue with live test | `ai_engine_v2.py`, `mass_scan.py`, `2005.json` | ✅ VERIFIED |
+| 2026-11-12T19:25 | CODE_REFACTOR | Story 112.110: Implemented Document Header & Boundary Envelope injection in nibble_v2.py; wired L1/L2 Bedrock anchor grounding in refine_gem.py; certified live extraction & trigger synthesis | `nibble_v2.py`, `refine_gem.py`, `2005.json` | ✅ VERIFIED |
 
 ---
 
