@@ -41,6 +41,33 @@ logging.basicConfig(
 )
 
 _MANIFEST_CACHE = None
+_DOC_HEADER_CACHE = {}
+
+
+def get_document_header(filename: str, max_lines: int = 10) -> str:
+    """[Story 112.110] Retrieve the leading header lines (up to max_lines) of a parent raw document to preserve provenance context."""
+    if not filename:
+        return ""
+    if filename in _DOC_HEADER_CACHE:
+        return _DOC_HEADER_CACHE[filename]
+
+    raw_dir = os.path.join(os.path.dirname(BASE_DIR), "raw_notes")
+    filepath = os.path.join(raw_dir, filename)
+    header = ""
+    if os.path.exists(filepath) and os.path.isfile(filepath):
+        try:
+            with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+                lines = []
+                for _ in range(max_lines):
+                    line = f.readline()
+                    if not line:
+                        break
+                    lines.append(line.rstrip())
+                header = "\n".join(lines).strip()
+        except Exception:
+            header = ""
+    _DOC_HEADER_CACHE[filename] = header
+    return header
 
 
 def get_file_manifest():
@@ -447,6 +474,19 @@ def main():
         manifest_entry = manifest.get(fname, {})
         span_str = str(manifest_entry.get("year") or "")
 
+        # [Story 112.110] Document Provenance Header and Boundary Envelope Context
+        doc_header = get_document_header(fname)
+        doc_header_str = f"\n[PARENT DOCUMENT PROVENANCE / HEADER]:\n{doc_header}\n" if doc_header else ""
+
+        envelope = task.get("context_envelope") or {}
+        before_lines = envelope.get("before", [])
+        after_lines = envelope.get("after", [])
+        envelope_context_str = ""
+        if before_lines:
+            envelope_context_str += f"\n[PRECEDING CONTEXT - 5 LINES BEFORE CHUNK]:\n" + "\n".join(before_lines[-5:]) + "\n"
+        if after_lines:
+            envelope_context_str += f"\n[SUCCEEDING CONTEXT - 5 LINES AFTER CHUNK]:\n" + "\n".join(after_lines[:5]) + "\n"
+
         # [FEAT-128] Strategic Prompt selection
         file_type = task.get("type", "LOG")
         is_deep_connect = task.get("mode") == "DEEP_CONNECT"
@@ -496,14 +536,15 @@ def main():
             ]
             """
         else:
-            # [Story 109.16 / Story 110.1 / INS-052] Calibrated Confidentiality & Machine-Log Boundary
+            # [Story 109.16 / Story 110.1 / INS-052 / Story 112.110] Calibrated Confidentiality & Provenance Injection
             era_context_str = f"Document Era: {span_str}." if span_str else ""
             prompt = f"""[ROLE] You are an automated systems engineering log parser.
-[TASK] Extract purely technical systems operations, CLI commands, hardware registers, and lab diagnostics.
-DO NOT extract human personnel notes, manager appraisals, performance reviews, or career feedback.
+[TASK] Extract technical systems operations, CLI commands, hardware registers, lab diagnostics, agenda items, tool releases, and defect tracker records.
+DO NOT extract human personnel notes, manager appraisals, performance reviews, or personal career feedback.
 
 [TAXONOMY DOMAINS]
 Allowed domains: ['hardware_debug', 'operations', 'logistics']
+Note: Agenda items, tracker IDs (e.g. tracker 38099), tool milestones, and test matrix notes are valid technical artifacts—tag their domain as 'operations' or 'logistics'.
 
 [SANITIZATION LAW - BKM-015 / INS-052]
 When copying commands or logs into 'evidence', strip all passwords, tokens, API keys, basic auth credentials, and device serial numbers. Replace any credential or serial value with "[REDACTED]" or "[REDACTED_PASSWORD]".
@@ -522,9 +563,9 @@ Output evidence: "curl -H 'Authorization: Bearer [REDACTED]' https://api.interna
 Input: "Board check: SN: J83920-A in slot 1 confirmed"
 Output evidence: "Board check: SN: [REDACTED] in slot 1 confirmed"
 
-[TEMPORAL CONTEXT]
+[TEMPORAL & PLATFORM CONTEXT]
 Source Document: {fname}
-{era_context_str}
+{era_context_str}{doc_header_str}{envelope_context_str}
 Note: Events must be dated within or relative to this documented era. Do not convert hostnames, port numbers, or bug IDs into future dates.
 
 Log content:
@@ -536,7 +577,7 @@ Return ONLY a valid JSON list of event objects:
   {{
     "date": "YYYY-MM-DD",
     "summary": "Technical summary",
-    "evidence": "Command or register line with credentials redacted",
+    "evidence": "Command, register line, or tracker text with credentials redacted",
     "domain": "hardware_debug",
     "tags": ["tag1", "tag2"]
   }}
