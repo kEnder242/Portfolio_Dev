@@ -223,6 +223,28 @@
 
 ---
 
+### 💎 Track 6: Nibbler & Gem Lifecycle Engine Unification & Daytime Harmonization
+
+#### 🛠️ Story 112.100: Sovereign Engine Convergence & Liger Decommissioning
+**Assigned Owner:** `[AGY:PRIMARY]`  
+**DNA Tags:** `[BKM-005]`, `[BKM-015]`, `[BKM-024]`, `[FEAT-416]`, `[FEAT-680]`, `[FEAT-101]`
+
+> [!NOTE]
+> **Why It Broke & Root Cause (`BKM-020 §5`):**  
+> `nibble_v2.py` and `mass_scan.py` hardcoded `--reasoning`, which routed to `CurriculumEngine` with a legacy dependency on `LigerEngine` (AWQ) and Ollama on port 11434. Because dual RTX 2080 Ti GPUs are dedicated to the sovereign `llama-server` (Qwen 35B) on port 8088, Ollama failed with CUDA OOM, causing Nibbler to loop indefinitely and stall the 755-chunk queue.
+
+* **Anchor 1 (Target Files & Line Ranges):**
+  - [`Portfolio_Dev/field_notes/ai_engine_v2.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/ai_engine_v2.py)
+  - [`Portfolio_Dev/field_notes/mass_scan.py`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/mass_scan.py)
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/nibble_v2.py --once`
+* **Anchor 3 (Verbatim Code Specs & Schemas):**
+  - `ai_engine_v2.py`: `CurriculumEngine` and `get_engine_v2` route directly to `VLLMClient` on port 8088 (or Foyer WS `McpClient`). `LigerEngine` deprecated to a safe compatibility shim.
+  - `mass_scan.py`: Stripped `--reasoning` / `--hybrid` overrides in favor of bounded single-pass execution.
+* **Anchor 4 (DNA Links):** `[BKM-005]`, `[BKM-024]`, `[FEAT-416]`, `[FEAT-680]`.
+
+---
+
 ## 📝 3. Sprint Execution Ledger (`BKM-081`)
 
 | Timestamp | Phase / Story | Action / Event | Artifact / Target | Status |
@@ -237,6 +259,7 @@
 | 2026-11-12T16:50 | VIBE_CODIFICATION | Codified VIBE-020 (Orthogonal Triage & Additive Hydration) in Protocols.md | `HomeLabAI/docs/Protocols.md` | ✅ DONE |
 | 2026-11-12T16:53 | CODE_REFACTOR | Story 112.90: Abolished negative deny lists & `elif` mutual exclusion; wired additive RAG stacking | `cognitive_hub.py`, `test_career_compass_bedrock.py` | ✅ VERIFIED |
 | 2026-11-12T18:05 | CODE_REFACTOR | Story 112.95: Unified ChromaDB routing & purged post-retrieval censorship in lab_dna_router | `lab_dna_router.py`, `test_lab_dna_router.py` | ✅ VERIFIED |
+| 2026-11-12T18:50 | CODE_REFACTOR | Story 112.100: Decommissioned LigerEngine, converged CurriculumEngine on port 8088 VLLMClient, harmonized mass_scan.py, and unblocked queue with live test | `ai_engine_v2.py`, `mass_scan.py`, `2005.json` | ✅ VERIFIED |
 
 ---
 
