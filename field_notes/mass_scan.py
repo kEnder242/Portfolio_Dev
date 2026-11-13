@@ -257,8 +257,8 @@ def hallway_protocol(keyword):
         for f in target_files:
             rel_path = os.path.relpath(f, RAW_NOTES_DIR)
             logging.info(f"Deep Harvesting: {rel_path}")
-            # We use --reasoning mode for high-fidelity extraction
-            run_task([NIBBLER, "--reasoning", "--file", f])
+            # [Story 112.100] Sovereign local engine: Nibbler with standard bounded single-pass
+            run_task([NIBBLER, "--file", f, "--once"])
 
     except Exception as e:
         logging.error(f"Hallway Protocol failed: {e}")
@@ -611,10 +611,8 @@ def main():
                     progress_pct=progress,
                 )
 
-                use_hybrid = "2024" in task["bucket"] or "PIAV" in task["filename"]
-                flag = "--hybrid" if use_hybrid else "--reasoning"
-
-                if run_task([NIBBLER, flag]):
+                # [Story 112.100] Sovereign local engine: Nibbler with standard bounded single-pass
+                if run_task([NIBBLER, "--once"]):
                     time.sleep(SLEEP_INTERVAL)
                 else:
                     time.sleep(60)

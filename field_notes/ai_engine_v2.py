@@ -7,15 +7,8 @@ import re
 import requests
 from ai_engine import CognitiveEngine, OllamaClient, get_engine
 
-# Try to import Liger/Transformers for DMA mode
-try:
-    import torch
-    from liger_kernel.transformers import apply_liger_kernel_to_llama
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-
-    HAS_LIGER = True
-except ImportError:
-    HAS_LIGER = False
+# [Story 112.100] Sovereign local engine convergence: Liger/DMA excised in favor of port 8088
+HAS_LIGER = False
 
 # --- CONFIGURATION ---
 DEFAULT_MODEL = "llama3.2:1b"
@@ -194,56 +187,18 @@ class McpClient(OllamaClient):
             return ""
 
 
-class LigerEngine(OllamaClient):
+class LigerEngine(CognitiveEngine):
     """
-    Direct Model Access (DMA) with Liger-Kernel optimization.
-    Provides ~80% VRAM reduction on Turing GPUs.
+    [Story 112.100] Deprecated: Direct Model Access (DMA) Liger-Kernel engine.
+    Unified with VLLMClient on port 8088 to eliminate multi-model VRAM contention
+    and autoawq dependency crashes.
     """
 
-    def __init__(self, model_path=DMA_MODEL_PATH):
-        super().__init__()
-        self.model_path = model_path
-        self.model = None
-        self.tokenizer = None
-        self._initialized = False
-
-    def _initialize(self):
-        if self._initialized:
-            return
-        logging.info(f"Initializing LigerEngine with {self.model_path}...")
-        try:
-            # Llama 2, 3, 3.1, and 3.2 share the same base architecture in Liger
-            apply_liger_kernel_to_llama()
-            self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
-            self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_path, torch_dtype=torch.float16, device_map="auto"
-            )
-            self._initialized = True
-            logging.info("LigerEngine initialized successfully.")
-        except Exception as e:
-            logging.error(
-                f"Failed to initialize LigerEngine: {e}. Falling back to Ollama."
-            )
-            self._initialized = False
+    def __init__(self, model_path=None):
+        self.client = VLLMClient()
 
     def generate(self, prompt, context="", options=None):
-        if not self._initialized:
-            self._initialize()
-
-        if not self._initialized:
-            return super().generate(prompt, context, options)
-
-        full_prompt = f"{context}\n\n{prompt}" if context else prompt
-        inputs = self.tokenizer(full_prompt, return_tensors="pt").to(self.model.device)
-
-        with torch.no_grad():
-            outputs = self.model.generate(
-                **inputs,
-                max_new_tokens=options.get("num_predict", 512) if options else 512,
-                temperature=options.get("temperature", 0.1) if options else 0.1,
-            )
-
-        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return self.client.generate(prompt, context, options)
 
 
 # --- DOCUMENT TIERS (The 'QQ' Mapping) ---
@@ -411,12 +366,16 @@ class CurriculumEngine(CognitiveEngine):
     """
 
     def __init__(self, backend=None):
-        # Prefer DMA/Liger for local reasoning to save VRAM
+        # [Story 112.100] Sovereign local engine convergence: connect to active local engine on 8088 (VLLMClient), fallback to McpClient
         if not backend:
-            if HAS_LIGER:
-                self.local_backend = LigerEngine()
-            else:
-                self.local_backend = OllamaClient()
+            try:
+                r = requests.get("http://localhost:8088/v1/models", timeout=1.0)
+                if r.status_code == 200:
+                    self.local_backend = VLLMClient()
+                else:
+                    self.local_backend = McpClient()
+            except Exception:
+                self.local_backend = McpClient()
         else:
             self.local_backend = backend
 
@@ -514,16 +473,19 @@ def get_engine_v2(mode="LOCAL"):
             pass
         if mode == "VLLM":
             return VLLMClient()
-        return get_engine(mode)
+        return McpClient()
     elif mode == "REASONING":
         return CurriculumEngine()
-    elif mode == "DMA":
-        return LigerEngine()
+    elif mode in ("DMA", "HYBRID"):
+        # [Story 112.100] Sovereign local engine harmonization: use local 8088 engine or McpClient
+        try:
+            r = requests.get("http://localhost:8088/v1/models", timeout=1.0)
+            if r.status_code == 200:
+                return CurriculumEngine(backend=VLLMClient())
+        except Exception:
+            pass
+        return CurriculumEngine(backend=McpClient())
     elif mode == "LAB":
         # [FEAT-330] Use unified MCP client for resource coordination
         return McpClient()
-    elif mode == "HYBRID":
-        # [FEAT-330] Use unified MCP client as reasoning backend
-        brain = McpClient()
-        return CurriculumEngine(backend=brain)
     return get_engine(mode)
