@@ -21,7 +21,7 @@ from utils import DATA_DIR, RAW_NOTES_DIR
 
 # Config
 # Absolute GLOB paths using utils single-source-of-truth
-NOTES_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.txt")
+NOTES_GLOB = os.path.join(RAW_NOTES_DIR, "notes*.txt")
 DOCX_GLOB = os.path.join(RAW_NOTES_DIR, "**/*.docx")
 RAS_GLOB = os.path.join(RAW_NOTES_DIR, "**/ras-*.txt")
 
@@ -89,9 +89,9 @@ def calculate_file_priorities(raw_notes_dir=RAW_NOTES_DIR, data_dir=DATA_DIR) ->
         except Exception:
             pass
 
-    pattern_txt = os.path.join(raw_notes_dir, "**/*.txt")
+    pattern_txt = os.path.join(raw_notes_dir, "notes*.txt")
     pattern_docx = os.path.join(raw_notes_dir, "**/*.docx")
-    files = sorted(set(glob.glob(pattern_txt, recursive=True) + glob.glob(pattern_docx, recursive=True)))
+    files = sorted(set(glob.glob(pattern_txt) + glob.glob(pattern_docx, recursive=True)))
 
     results = []
     for filepath in files:
