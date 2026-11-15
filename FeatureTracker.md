@@ -3715,27 +3715,6 @@ Emits authoritative `daily_accountability_digest.json` using atomic temporary wr
 **Origin Quote:** "Cramming substance and vertebrae into bones.json forced paragraph reordering to mutate source evidence. To scale writing, spine order must be decoupled from atomic cards."
 **Synthesis:** Conflating atomic evidence (cards, quotes) with narrative ordering (chapter spines) causes structural refactoring to corrupt underlying facts. Separating immutable atomic substance from fluid topological spines (Kabal Spines + AST Reconciliation) allows arbitrary narrative experimentation without evidence destruction.
 
-## [DISC-017] Causal Evidence-Before-Verdict Token Order Inversion
-**Sprint:** SPR-108.0
-**Status:** APPROVED
-**Tags:** `#causal_ordering`, `#llm_epistemics`, `#gatekeeping`, `[BKM-091]`, `[FEAT-671]`, `[BKM-088]`
-**Origin Quote:** "When a causal model emits KEEP first, it immediately confabulates fake evidence to justify the choice. Inverting the token order to evaluate evidence before the verdict forced deterministic truth."
-**Synthesis:** In causal autoregressive models, prompting for a verdict first (`- CHUNK-1: KEEP/DROP — reason`) causes small models to commit to `KEEP` and post-hoc confabulate evidence. Inverting output token order to Evidence-Before-Verdict (`Anchor Match: <terms>; Anchor Missing: <terms> => KEEP|DROP`) constrains causal attention to attend over missing facts before generating the verdict token, guaranteeing deterministic conjunction rejection.
-
-## [DISC-018] The Out-of-Band Entailment Capability Cliff
-**Sprint:** SPR-108.0
-**Status:** APPROVED
-**Tags:** `#heterogeneous_silicon`, `#entailment_cliff`, `#decoupled_audit`, `[BKM-094]`, `[FEAT-058]`, `[BKM-089]`
-**Origin Quote:** "Small local models cannot evaluate their own grounding out-of-band. They collapse into pedantic false alarms or blind confirmation. Entailment auditing belongs exclusively to warm 27B silicon."
-**Synthesis:** Small edge models ($3\text{B}$) suffer $0\%$ specificity when acting as out-of-band entailment judges, collapsing into continuous false alarms. In contrast, sovereign high-parameter models ($27\text{B}+$) achieve $100\%$ precision/recall. Silicon roles must be decoupled: $3\text{B}$ generates low-latency responses, while $27\text{B}$ executes out-of-band entailment audits in complete silence on passing turns.
-
-## [DISC-019] Temporal Epistemic Disentanglement (Excavated Memory vs. Live Runtime)
-**Sprint:** SPR-108.0
-**Status:** APPROVED
-**Tags:** `#temporal_grounding`, `#wywo`, `#epistemic_disentanglement`, `[BKM-092]`, `[FEAT-671]`
-**Origin Quote:** "Without explicit temporal labeling, 27B refused to answer because 2021 was not overnight, while 3B claimed we built 2021 hardware yesterday. Framing it as an excavated archive indexed last night solved both."
-**Synthesis:** Presenting historical archives during real-time status queries provokes model abstentions or time-travel confabulations. Explicitly framing archival evidence as excavated past memories indexed during nightly idle cycles resolves chronological contradictions across both large and small models.
-
 ## [DISC-020] Step-Trace Backward Fault Localization
 **Sprint:** SPR-108.0
 **Status:** APPROVED
