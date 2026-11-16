@@ -93,6 +93,21 @@ def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
         text
     )
 
+    # 6. [BKM-015:APPROVED_REGEX] Generic CLI Option Secrets (--password val, --password=val, --token val, etc.)
+    def _scrub_cli_option(m):
+        val = m.group(2)
+        if val.startswith("[REDACTED"):
+            return m.group(0)
+        matched_rules.append("cli_option_secret")
+        return m.group(1) + "[REDACTED_PASSWORD]" + m.group(3)
+
+    text = re.sub(
+        r'((?:^|\s)--?(?:password|passwd|pwd|token|api[-_]?key|secret|access[-_]?token|auth[-_]?token)(?:=|\s+)[\"\']?)([^\s\"\']+)([\"\']?)',
+        _scrub_cli_option,
+        text,
+        flags=re.IGNORECASE,
+    )
+
     escaped = text != original
     # Deduplicate matched_rules while preserving order
     seen = set()
