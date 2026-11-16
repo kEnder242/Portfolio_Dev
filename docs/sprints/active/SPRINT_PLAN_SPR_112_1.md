@@ -290,3 +290,42 @@
 * **A: Story 112.50–112.70 Ownership Allocation**: Must decompose into `[SWARM:LOCAL]` and `[SWARM:CLOUD]` per `BKM-049 §3` / Pre-Flight Item 4.1 to avoid sole-owner bypass.
 * **B: Foyer Maintenance Quiescence Gate**: Ready to gate Foyer `/inject` with HTTP 503 during active `maintenance.lock`.
 * **C: Git Push Invariant**: All local commits remain strictly unpushed per Law 0.
+
+
+---
+
+## 🛡️ 5. Post-112 Remediation & Security Hardening Plan (2026-11-15)
+
+### ✅ Completed Baseline Actions (2026-11-13 → 2026-11-15)
+* `Portfolio_Dev @ ac09641, 62cf658, 8183ca1, 8b32f4d`: Scoped `scan_queue.py` to `notes*.txt`, fixed `status.html` historical accountability rendering & green `PASS` styling, matured Bucket 1 discoveries in `timeline_data.json` / `timeline.html`, and removed `DISC-017..019`.
+* `HomeLabAI @ 9069781, d1c7c39, ed14bae`: Resolved active model from `infrastructure.json`, added HTTP `503` `/inject` quiescence gate during `maintenance.lock`, and patched `nightly_forge.py` to refresh `nightly_dialogue.json` on `PASS`.
+* `Host / Jellyfin [LAB-123]`: Installed & enabled `/etc/systemd/system/jellyfin-drm-sync.service` running `jellyfin_autotune.py` for Intel Arc B580 QSV (`/dev/dri/renderD128`).
+* `Security [LOOP-006 / BKM-015]`: Added `cli_option_secret` + fixed `url_basic_auth` in `scrub_all_passwords.py` (`11a4127`), added `test_nibbler_escape_tripwire.py`, upgraded `nibble_v2.py` prompt to `P5_Hybrid_Semantic_Syntactic` (`de96f58`), scrubbed `2016.json` (`9b7dacc` in `www_deploy`), and externalized `KNOWN_PASSWORDS` to `~/.config/homelab/known_passwords.json` (`a5d386d`).
+
+### 🎯 Execution Roadmap (Ordered per Human Priority)
+
+1. **Story 112.130 — Track 1 (ASAP): Purge Non-`data/` Credentials & `filter-repo` Non-`data/` History**
+   * **Assigned Owner:** `[AGY:PRIMARY]` (security/git history)
+   * Scrub `azdrr...` from `HomeLabAI/src/debug/keep_sync.py` (move to env var / `~/.config/homelab/`).
+   * Replace `[REDACTED_PASSWORD]` in `Portfolio_Dev/field_notes/probe_secret_and_focal_leak_test.py` with a synthetic canary.
+   * Rebuild `dna_forge.html` / `wisdom.html` so old `nibble_v2` `[REDACTED_PASSWORD]` prompt examples are purged from `www_deploy` HTML.
+   * Execute `git-filter-repo` on non-`data/` secret-bearing commits (`keep_sync.py`, `scrub_all_passwords.py` pre-`a5d386d`, `probe_secret_and_focal_leak_test.py`, `SPRINT_PLAN_SPR_110_0.md` if included) after backup and explicit Law 0 push approval.
+
+2. **Story 112.140 — Track 2 (Prep + Batched Run): `P5_Hybrid_Semantic_Syntactic` Read-Only Escape Sweep (`data/`)**
+   * **Assigned Owner:** `[SWARM:LOCAL]` / `[AGY:PRIMARY]`
+   * Package `P5` read-only escape detector (`~25m` across `5,106` `evidence` items, zero in-place LLM mutation) + `sanitize_with_tripwire()` (`<1s`) into a resumable sweep script.
+   * Review & surgically scrub flagged hits (`2022.json`, `2023.json`, `public_benchmarks.json`, etc.).
+   * Decide/retire `nibble_v2.py` `scrub_input_buffer()` (`[VIBE-008]`) hardcoded header guillotine per `[BKM-015]`.
+
+3. **Story 112.150 — Track 3 (After Batched Run): `www_deploy/data/` `git-filter-repo` Purge**
+   * **Assigned Owner:** `[AGY:PRIMARY]`
+   * Backup `www_deploy` + verified clean `data/` (excluding `queue.json`).
+   * Run `git filter-repo --invert-paths --path data/ --force` in `www_deploy` (keeping all HTML/JS/CSS history above `data/` intact).
+   * Restore clean `data/` at `HEAD`, re-add `origin`, and `git push --force` only with explicit Law 0 permission.
+
+4. **Story 112.160 — Track 4: Nightly Forge, Chroma Meta-Tensor, Thought Leak & Judge Fidelity (`K1`–`K4`)**
+   * **Assigned Owner:** `[SWARM:CLOUD]` (`K2`–`K4` + `K1` implementation) / `[AGY:PRIMARY]` (verification)
+   * **`K2`**: Restore `adapter_name = data.get("adapter")` in `router.py:3939` + mothball short-circuit in `handle_trigger_task`.
+   * **`K3`**: Swap `behavioral_dna` in `sync_chroma_dna.py:705` to `DefaultEmbeddingFunction` + `--force` re-sync.
+   * **`K4`**: Fix `step_deep_thought` fallback prompt/prefix leak (`TARGET_DOMAINS": [...]`) with tripwire logging.
+   * **`K1`**: Pass Brain's raw `KEEP` chunks (`bedrock_payload`) into Judge `REFERENCES:`, add vibe-aware Judge criteria, and retire `triage_critique`/`grounding_critique` dual-writes & stub fields.
