@@ -547,21 +547,9 @@ Allowed domains: ['hardware_debug', 'operations', 'logistics']
 Note: Agenda items, tracker IDs (e.g. tracker 38099), tool milestones, and test matrix notes are valid technical artifacts—tag their domain as 'operations' or 'logistics'.
 
 [SANITIZATION LAW - BKM-015 / INS-052]
-When copying commands or logs into 'evidence', strip all passwords, tokens, API keys, basic auth credentials, and device serial numbers. Replace any credential or serial value with "[REDACTED]" or "[REDACTED_PASSWORD]".
-NEVER include passwords in curl commands (-u, -sku, --user, or basic auth URLs).
-
-[EXAMPLES]
-Input: "curl -f -u sys_admin:P@ssw0rd99! https://artifactory.corp/builds"
-Output evidence: "curl -f -u sys_admin:[REDACTED_PASSWORD] https://artifactory.corp/builds"
-
-Input: "curl -k -u 'debuguser:[REDACTED_PASSWORD]' https://localhost:5443/redfish"
-Output evidence: "curl -k -u 'debuguser:[REDACTED_PASSWORD]' https://localhost:5443/redfish"
-
-Input: "curl -H 'Authorization: Bearer secret_token_123' https://api.internal/deploy"
-Output evidence: "curl -H 'Authorization: Bearer [REDACTED]' https://api.internal/deploy"
-
-Input: "Board check: SN: J83920-A in slot 1 confirmed"
-Output evidence: "Board check: SN: [REDACTED] in slot 1 confirmed"
+Extract technical command evidence with zero credential or device-serial leaks.
+Use semantic judgment (high-entropy strings, password-like tokens, credential pairs, device serial numbers) AND structural cues (user:secret, scheme://user:secret@, --password/--token/--api-key/--secret <val> or =<val>, -p'<val>', Authorization/API-key headers, key prefixes).
+Audit your draft before output and replace every secret value with "[REDACTED_PASSWORD]" (and serials with "[REDACTED]"), while preserving technical identifiers like TCP ports (-p 8088), IP addresses, and PCI hex registers.
 
 [TEMPORAL & PLATFORM CONTEXT]
 Source Document: {fname}
