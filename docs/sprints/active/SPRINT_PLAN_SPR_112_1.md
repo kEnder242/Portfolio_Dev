@@ -319,13 +319,28 @@
 
 3. **Story 112.150 — Track 3 (After Batched Run): `www_deploy/data/` `git-filter-repo` Purge**
    * **Assigned Owner:** `[AGY:PRIMARY]`
-   * Backup `www_deploy` + verified clean `data/` (excluding `queue.json`).
-   * Run `git filter-repo --invert-paths --path data/ --force` in `www_deploy` (keeping all HTML/JS/CSS history above `data/` intact).
-   * Restore clean `data/` at `HEAD`, re-add `origin`, and `git push --force` only with explicit Law 0 permission.
+   * **Status:** [x] COMPLETED (599163f force-pushed clean history after surgical scrub).
 
 4. **Story 112.160 — Track 4: Nightly Forge, Chroma Meta-Tensor, Thought Leak & Judge Fidelity (`K1`–`K4`)**
-   * **Assigned Owner:** `[SWARM:CLOUD]` (`K2`–`K4` + `K1` implementation) / `[AGY:PRIMARY]` (verification)
-   * **`K2`**: Restore `adapter_name = data.get("adapter")` in `router.py:3939` + mothball short-circuit in `handle_trigger_task`.
-   * **`K3`**: Swap `behavioral_dna` in `sync_chroma_dna.py:705` to `DefaultEmbeddingFunction` + `--force` re-sync.
-   * **`K4`**: Fix `step_deep_thought` fallback prompt/prefix leak (`TARGET_DOMAINS": [...]`) with tripwire logging.
-   * **`K1`**: Pass Brain's raw `KEEP` chunks (`bedrock_payload`) into Judge `REFERENCES:`, add vibe-aware Judge criteria, and retire `triage_critique`/`grounding_critique` dual-writes & stub fields.
+   * **Assigned Owner:** `[SWARM:CLOUD]` / `[AGY:PRIMARY]`
+   * **Status:** [x] COMPLETED (K1 Judge payload hydration, K2 adapter_name, K3 DefaultEF, K4 thought leak tripwire).
+
+5. **Story 112.170 — Track 5: Targeted Focal/Coaching Draft Mapping & Precision Drift Excision (`[VIBE-008]` / `[LOOP-006]` / `[FEAT-683]`)**
+   * **Assigned Owner:** `[AGY:PRIMARY]`
+   * **Status:** [x] COMPLETED / CERTIFIED (Clean 100% pass across `test_nibbler_escape_tripwire.py` and `probe_secret_and_focal_leak_test.py`; ClaraDB stubs deleted; `focal_draft_mapping.json` generated; `nibble_v2.py` modernized).
+   * **Context & Human Directive:** Replace the full-lakehouse 5,106-record blind sweep with an inverted, targeted focal mapping strategy. Formal annual reviews are compact (~12 documents, <2 MB) and complete across career eras (2007–2024). Instead of brute-force scanning, leverage authoritative focal documents to locate rough self-assessment drafts inside raw notes at the gem level, recording them into `focal_draft_mapping.json`.
+   * **Dual-Bucket Anchor Architecture (Human Mandate):**
+     - **Positive Anchors (Preserve & Amplify):** Authoritative engineering deliverables and technical milestones extracted from `Key Accomplishments` (2007–2018) and `Results Feedback` / `Behaviors Feedback` (2019–2024), e.g. DCMI conformance API, Willowbrook iBMC, PDT VISA/GTPO panels, Kayak+Montana transition, MCTP cycle debug on GNR. These feed Tier 2 Strategic Anchors and Impact Level 4 milestones.
+     - **Negative Anchors (Tripwire Sentinel & Scrub):** Private developmental feedback, managerial critique, and coaching directives extracted from `AREAS FOR IMPROVEMENT/DEVELOPMENT` (2007–2018) and `Results Coaching` / `Behaviors Coaching` (2019–2024). Specific personal critique quotes and feedback patterns are externalized to untracked `~/.config/homelab/focal_negative_anchors.json` (`0600`) per LAB-125 / BKM-061, with source code and plans maintaining 100% privacy blindness. These define our tripwire sentinels and targeted excision targets.
+   * **Cross-Era Windowing Invariant:** Focal self-assessments consistently review prior feedback windows alongside upcoming goals (e.g. 2016 draft reviewing 2015 feedback and projecting 2017 deliverables). Mapping windows must model this old/new pattern spanning months or years across chronological boundaries.
+   * **Heads-Down Pre-Flight Design Alignment (/grill-me Certified):**
+     - **Scrub Disposition Invariant:** Hybrid — Drop the entire gem if predominantly appraisal/coaching verbiage; surgically excise only the coaching phrase if substantive technical command/register evidence is present.
+     - **Provenance Boundary:** Read-Only Provenance — `/home/jallred/knowledge_base/` is strictly immutable; mutations restricted to derived lakehouse datasets (`data/YYYY.json`, `www_deploy/data/`, ChromaDB).
+     - **ClaraDB Sentinel Integration:** Vector proximity matches (distance $< 0.35$) populate `focal_draft_mapping.json` for surgical scrub review alongside keyword hits.
+     - **2017 Gap Resolution:** Tripwire Fallback Only — rely solely on post-LLM coaching escape tripwire for 2017 extractions without synthetic mapping.
+   * **Task Breakdown:**
+     - [x] **Task 112.170.1 (Focal Audit & Inventory):** Audited review documents in `/home/jallred/knowledge_base/` (2007–2024), cataloging 37 Positive Anchors and 10 Negative Anchors into structured datasets.
+     - [x] **Task 112.170.2 (Dual-Bucket Draft Mapping at Gem Level):** Generated `Portfolio_Dev/field_notes/data/focal_draft_mapping.json` tracking source files, gem IDs, cross-year feedback spans, and bucket tags (`PRESERVE_POSITIVE_ANCHOR` vs `negative_coaching_exposure`).
+     - [x] **Task 112.170.3 (Precision Targeted Scrub):** Executed targeted hybrid scrub strictly over mapped high-risk windows/gems, excising negative coaching, managerial critique, and HR rating verbiage while preserving positive technical scars.
+     - [x] **Task 112.170.4 (Tripwire Modernization in `nibble_v2.py`):** Retired `scrub_input_buffer()` pre-LLM guillotine per `[BKM-015]`. Implemented `audit_focal_coaching_tripwire()` on generated output, logging any leaks to `sanitization_escape_ledger.jsonl` under `[VIBE-008] / [LOOP-006]` and quarantining leaked events.
+     - [x] **Task 112.170.5 (ClaraDB Zero-Scan Semantic Sentinel):** Queried ChromaDB collections with negative coaching vectors, surfaced and excised leaked rating/appraisal stubs (`artifact_f65be94cca...`, `artifact_fcbf193a...`, `artifact_e4d4136b...`, `artifact_70798286...`) from `long_term_wisdom`. All checks verified green.

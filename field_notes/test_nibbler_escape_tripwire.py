@@ -23,6 +23,7 @@ sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, "../../HomeLabAI/src")))
 
 from scrub_all_passwords import sanitize_with_tripwire  # noqa: E402
+from nibble_v2 import audit_focal_coaching_tripwire  # noqa: E402
 from infra import standalone_accountability_watchdog as watchdog  # noqa: E402
 
 
@@ -87,6 +88,50 @@ def run_tripwire_watch() -> bool:
     return True
 
 
+def run_focal_coaching_tripwire_test() -> bool:
+    print("=== [3] TESTING FOCAL / COACHING ESCAPE TRIPWIRE [VIBE-008] ===")
+    
+    # 1. Pure coaching / appraisal -> DROP
+    pure_coaching_event = {
+        "summary": "Annual review performance rating notes",
+        "evidence": "AREAS FOR IMPROVEMENT: CanaryUser performance appraisal feedback notes. Rated Successful.",
+        "domain": "operations"
+    }
+    clean_ev, escaped, rules, disp = audit_focal_coaching_tripwire(pure_coaching_event)
+    print(f"  [pure_coaching] escaped={escaped} disp={disp} rules={rules}")
+    assert escaped, "Expected pure coaching event to be caught"
+    assert disp == "DROP", f"Expected DROP disposition, got {disp}"
+    assert "areas_for_improvement" in rules or "rated_successful" in rules
+
+    # 2. Hybrid event with technical registers/commands -> SURGICAL_SUTURE
+    hybrid_event = {
+        "summary": "PCIe ReBAR Configuration on Haswell Host",
+        "evidence": "setpci -s 03:00.0 428.L=00000D02 forced ReBAR to 8GB. Results Coaching: In Q1 CanaryUser should complete migration milestone.",
+        "domain": "hardware_debug"
+    }
+    clean_ev2, escaped2, rules2, disp2 = audit_focal_coaching_tripwire(hybrid_event)
+    print(f"  [hybrid_tech] escaped={escaped2} disp={disp2} rules={rules2}")
+    print(f"    cleaned evidence: {clean_ev2['evidence']}")
+    assert escaped2, "Expected hybrid event to be caught"
+    assert disp2 == "SURGICAL_SUTURE", f"Expected SURGICAL_SUTURE, got {disp2}"
+    assert "setpci -s 03:00.0 428.L=00000D02 forced ReBAR to 8GB." in clean_ev2["evidence"]
+    assert "Results Coaching" not in clean_ev2["evidence"]
+
+    # 3. Clean technical message with word-boundary safety -> CLEAN
+    clean_msg_event = {
+        "summary": "PlatformConfig.xml generated successfully",
+        "evidence": "/nfs/site/disks/svtools/gfxplatform generate --device cnl.3x8.a0 --ofile PlatformConfig_amber.xml",
+        "domain": "hardware_debug"
+    }
+    clean_ev3, escaped3, rules3, disp3 = audit_focal_coaching_tripwire(clean_msg_event)
+    print(f"  [clean_tech_word_boundary] escaped={escaped3} disp={disp3} rules={rules3}")
+    assert not escaped3, f"False positive on generated successfully: {rules3}"
+    assert disp3 == "CLEAN"
+
+    print("  ✅ All Focal Coaching Tripwire checks certified.")
+    return True
+
+
 def run_live_llm_canary():
     from ai_engine_v2 import get_engine_v2
 
@@ -118,6 +163,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     run_tripwire_watch()
+    run_focal_coaching_tripwire_test()
     if args.live:
         run_live_llm_canary()
     print("✅ ALL NIBBLER ESCAPE TRIPWIRE CHECKS PASSED")
