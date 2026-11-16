@@ -56,7 +56,7 @@ def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
     # 2. URLs with basic auth: https://user:pass@host
     text = re.sub(
         r'(https?://)([^:\s/@]+):([^@\s/]+)@',
-        lambda m: (matched_rules.append("url_basic_auth") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]@" + m.group(3)),
+        lambda m: (matched_rules.append("url_basic_auth") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]@"),
         text
     )
 
@@ -102,10 +102,15 @@ def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
         return m.group(1) + "[REDACTED_PASSWORD]" + m.group(3)
 
     text = re.sub(
-        r'((?:^|\s)--?(?:password|passwd|pwd|token|api[-_]?key|secret|access[-_]?token|auth[-_]?token)(?:=|\s+)[\"\']?)([^\s\"\']+)([\"\']?)',
+        r'((?:^|\s)--?(?:password|passwd|pwd|pass|token|api[-_]?key|secret|access[-_]?token|auth[-_]?token)(?:=|\s+)[\"\']?)([^\s\"\']+)([\"\']?)',
         _scrub_cli_option,
         text,
         flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'((?:^|\s)-p[\"\'])([^\"\']+)([\"\'])',
+        _scrub_cli_option,
+        text,
     )
 
     escaped = text != original
