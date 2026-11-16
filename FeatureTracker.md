@@ -812,16 +812,15 @@
 **Logic:** Mandates the "Trigger-Poll-Observe" pattern for all logic tests.
 **Behavior**: Pulse the Lab state (via Attendant), poll the registers (Heartbeat), and observe the evidence (Trace Delta). Never block inside a trigger.
 
-### [VIBE-008] Performance Verbiage (The Privacy Filter)
-**Status:** ACTIVE (Modernization Planned Sprint 31)
-**Logic:** Automatic redaction of 'Coaching' verbiage from archive synthesis.
-**Context:** High-fidelity career documents (Reviews, Insights) contain feedback that should not appear in the technical timeline.
-**Refactor Strategy:** Modernize into a high-fidelity "Sanitization Pipeline." It must accurately redact coaching verbiage (e.g., "Jason needs to...") without stripping the technical "Scars" that prove engineering impact. Move beyond basic regex to a robust semantic filter.
-**Keywords:**
-- **Legacy Headers:** `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `Evaluation: Areas for Development`, `IMPROVEMENT/DEVELOPMENT AREAS`.
-- **Modern Headers:** `Results Coaching`, `Behaviors Coaching`, `Coach`, `Growth`, `Behaviors Feedback`, `Priorities for [YYYY]`.
-- **Grammatical Patterns:** `Jason should`, `Jason needs to`, `Should have been communicated`, `missed on this opportunity`.
-**Rule:** Synthesis engines MUST treat text following these markers as **Private/Instructional** and exclude it from the public `YYYY.json` event stream.
+### [VIBE-008] Performance Verbiage & Coaching Escape Sentinel (The Privacy Filter)
+**Status:** ACTIVE (Modernized Sprint 112 / Story 112.170)
+**Logic:** Automatic detection, tripwire capture, and surgical excision of manager feedback and coaching verbiage from archive synthesis.
+**Context:** High-fidelity career documents (Reviews, Insights) and raw note self-assessment drafts contain personal feedback, ratings, and development goals that must not appear in the public technical timeline.
+**Refactor Strategy:** Excised legacy pre-LLM guillotine in favor of a dual-bucket, dual-layer approach per [BKM-015]: (1) Dual-bucket focal draft mapping (`focal_draft_mapping.json`) at the gem level to distinguish Positive Anchors (technical deliverables to preserve & amplify) from Negative Anchors (managerial critique/coaching to excise), and (2) Post-LLM tripwire (`audit_focal_coaching_tripwire()`) that intercepts leaks into `sanitization_escape_ledger.jsonl` under [LOOP-006], backed by ClaraDB semantic similarity audits.
+**Keywords & Structural Anchors:**
+- **Positive Anchors (Preserve):** `Key Accomplishments`, `Key Deliverables`, `Results Feedback`, `Evaluation: Strengths`, `Inclusion`, `Results Orientation`.
+- **Negative Anchors (Scrub):** Structural appraisal headers: `AREAS FOR IMPROVEMENT/DEVELOPMENT`, `EVALUATION: DEVELOPMENT AREAS`, `Results Coaching`, `Behaviors Coaching`, `Performance Summary with Rating`, `Rating:\s*(?:Successful|Needs Improvement)`. (Specific personal critique phrases and feedback patterns are externalized to untracked `~/.config/homelab/focal_negative_anchors.json` per LAB-125 / BKM-061).
+**Rule:** Synthesis engines MUST preserve Positive technical anchors in public `YYYY.json` event streams while strictly excluding Negative coaching/appraisal text and quarantining escapes.
 
 ### [VIBE-007] The "Validation Journal" Pattern
 **Structure:**
@@ -2658,12 +2657,12 @@
 **Rationale:** Prevents chronological misplacement in the 18-year timeline.
 **Mechanism:** `field_notes/scan_queue.py`.
 
-## [VIBE-008] Structural Preamble Guillotine
-**Status:** ACTIVE
-**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py#L181) — Structural Preamble Guillotine.
-**Logic:** Trims conversational filler and meta-commentary from local model responses before saving distilled timeline events.
-**Rationale:** Enforces Class 1 clean data standards and prevents chat drift in the knowledge base.
-**Mechanism:** `field_notes/nibble_v2.py`.
+## [VIBE-008] Focal / Coaching Escape Tripwire & Sentinel
+**Status:** ACTIVE (Modernized Sprint 112 / Story 112.170)
+**Code:** [field_notes/nibble_v2.py](https://github.com/kEnder242/Portfolio_Dev/blob/main/field_notes/nibble_v2.py#L355) — Post-LLM Coaching Tripwire.
+**Logic:** Intercepts managerial coaching and appraisal escapes in model output, records incidents to `sanitization_escape_ledger.jsonl` under [LOOP-006], and quarantines offending events.
+**Rationale:** Replaces brittle pre-LLM string guillotines with non-destructive prompt boundaries and post-generation audit tripwires per [BKM-015].
+**Mechanism:** `field_notes/nibble_v2.py` & `focal_draft_mapping.json`.
 
 ## [VIBE-012] Hemispheric Independence Vector Partitioning
 **Status:** ACTIVE

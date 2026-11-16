@@ -352,57 +352,85 @@ def is_semantic_duplicate(new_event, existing_events, threshold=0.70):
     return False
 
 
+# [VIBE-008 / LOOP-006 / LAB-125] Generic Structural Coaching & Appraisal Sentinels
+# Specific personal critique phrases are externalized to untracked ~/.config/homelab/focal_negative_anchors.json
+GENERIC_FOCAL_COACHING_RULES = [
+    (r"\bAREAS FOR IMPROVEMENT\b", "areas_for_improvement"),
+    (r"\bAREAS FOR DEVELOPMENT\b", "areas_for_development"),
+    (r"\bImprovement/Development Areas\b", "improvement_dev_areas"),
+    (r"\bEVALUATION:\s*DEVELOPMENT AREAS\b", "eval_dev_areas"),
+    (r"\bResults Coaching\b", "results_coaching"),
+    (r"\bBehaviors Coaching\b", "behaviors_coaching"),
+    (r"\bPerformance Summary with Rating\b", "perf_summary_rating"),
+    (r"\bSuccessful performance rating\b", "successful_perf_rating"),
+    (r"\brated\s+successful\b", "rated_successful"),
+    (r"\bRating:\s*(?:Successful|Needs Improvement|Exceeds)\b", "rating_header"),
+]
+
+
+def _get_focal_coaching_rules() -> list[tuple[str, str]]:
+    """Loads generic structural rules and merges external private sentinels if present (LAB-125)."""
+    rules = list(GENERIC_FOCAL_COACHING_RULES)
+    ext_path = os.path.expanduser("~/.config/homelab/focal_negative_anchors.json")
+    if os.path.exists(ext_path):
+        try:
+            with open(ext_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                patterns = data.get("negative_patterns", [])
+                for idx, pat in enumerate(patterns):
+                    rule_tag = f"ext_negative_pattern_{idx}"
+                    rules.append((pat if pat.startswith(r"\b") else rf"\b{pat}\b", rule_tag))
+        except Exception:
+            pass
+    return rules
+
+
+def audit_focal_coaching_tripwire(event: dict) -> tuple[dict, bool, list[str], str]:
+    """
+    [VIBE-008 / LOOP-006] Post-LLM Tripwire Sentinel for Coaching/Appraisal Escapes.
+    Returns: (cleaned_event, escaped, matched_rules, disposition)
+    disposition is either 'CLEAN', 'SURGICAL_SUTURE', or 'DROP'.
+    """
+    summary = str(event.get("summary", ""))
+    evidence = str(event.get("evidence", ""))
+    full_text = f"{summary} {evidence}"
+
+    rules = _get_focal_coaching_rules()
+    matched_rules = []
+    for pat, rule_tag in rules:
+        if re.search(pat, full_text, re.IGNORECASE):
+            # Guard against false positives like "generated successfully"
+            if rule_tag == "rated_successful" and not re.search(r"\brated\s+successful\b", full_text, re.IGNORECASE):
+                continue
+            matched_rules.append(rule_tag)
+
+    if not matched_rules:
+        return event, False, [], "CLEAN"
+
+    # Determine disposition: if substantive technical command/register scars exist, suture; else drop
+    has_tech_scars = bool(re.search(r"\b(?:curl|python|pci|setpci|0x[0-9a-f]+|mctp|peci|ipmi|simics|reg|cfg|itp)\b", full_text, re.IGNORECASE))
+    disposition = "SURGICAL_SUTURE" if has_tech_scars else "DROP"
+
+    cleaned_event = dict(event)
+    if disposition == "SURGICAL_SUTURE":
+        for fld in ["summary", "evidence"]:
+            if fld in cleaned_event and isinstance(cleaned_event[fld], str):
+                cleaned = cleaned_event[fld]
+                for pat, _ in rules:
+                    cleaned = re.sub(pat, "", cleaned, flags=re.IGNORECASE)
+                cleaned_event[fld] = re.sub(r"\s+", " ", cleaned).strip()
+
+    return cleaned_event, True, matched_rules, disposition
+
+
 def scrub_input_buffer(text):
     """
-    [VIBE-008] Structural Guillotine.
-    Drops forbidden sections based on headers.
+    [VIBE-008] Non-Destructive Buffer Passthrough (Modernized Sprint 112 per BKM-015).
+    Pre-LLM structural guillotines have been excised to prevent accidental amputation
+    of technical scars. Primary filtering is governed by prompt taxonomy and verified
+    post-LLM by audit_focal_coaching_tripwire().
     """
-    FORBIDDEN_HEADERS = [
-        r"AREAS FOR IMPROVEMENT",
-        r"AREAS FOR DEVELOPMENT",
-        r"Results Coaching",
-        r"Behaviors Coaching",
-        r"Behaviors Feedback",
-        r"Coach\b",
-        r"Growth Feedback",
-    ]
-
-    SAFE_HEADERS = [
-        r"Next Year's Technical Strategy",
-        r"Future Goals",
-        r"Technical Strategy",
-        r"Strategic Focal Points",
-        r"Architecture Plans",
-    ]
-
-    lines = text.splitlines()
-    clean_lines = []
-    is_dropped = False
-
-    for line in lines:
-        # Check if we should drop
-        if any(
-            re.search(pattern, line, re.IGNORECASE) for pattern in FORBIDDEN_HEADERS
-        ):
-            logging.info(
-                f"   [GUILLOTINE] Dropping section starting at: {line.strip()[:50]}..."
-            )
-            is_dropped = True
-            continue
-
-        # Check if we should resume
-        if is_dropped and any(
-            re.search(pattern, line, re.IGNORECASE) for pattern in SAFE_HEADERS
-        ):
-            logging.info(
-                f"   [GUILLOTINE] Resuming at safe header: {line.strip()[:50]}..."
-            )
-            is_dropped = False
-
-        if not is_dropped:
-            clean_lines.append(line)
-
-    return "\n".join(clean_lines)
+    return text
 
 
 def main():
@@ -620,6 +648,32 @@ Return ONLY a valid JSON list of event objects:
                                 pass
                             log(f"[LOOP-006] Sanitization escape: field={fld} rules={rules}")
                         event[fld] = clean_val
+
+                # [VIBE-008 / LOOP-006] Post-LLM Focal & Coaching Escape Tripwire
+                clean_event, focal_escaped, focal_rules, focal_disp = audit_focal_coaching_tripwire(event)
+                if focal_escaped:
+                    ledger_path = os.path.join(DATA_DIR, "sanitization_escape_ledger.jsonl")
+                    entry = {
+                        "timestamp": datetime.datetime.now().isoformat(),
+                        "file_source": task.get("file", "UNKNOWN"),
+                        "field": "focal_coaching",
+                        "raw_snippet": f"{event.get('summary', '')} | {event.get('evidence', '')}",
+                        "redacted_snippet": f"{clean_event.get('summary', '')} | {clean_event.get('evidence', '')}",
+                        "matched_rules": focal_rules,
+                        "disposition": focal_disp,
+                        "loop_id": "VIBE-008",
+                    }
+                    try:
+                        with open(ledger_path, "a", encoding="utf-8") as lf:
+                            lf.write(json.dumps(entry) + "\n")
+                    except Exception:
+                        pass
+                    log(f"[VIBE-008] Focal coaching escape caught: disposition={focal_disp} rules={focal_rules}")
+
+                    if focal_disp == "DROP":
+                        log(f"[VIBE-008] Dropping pure coaching/appraisal event: {event.get('summary', '')[:60]}")
+                        continue
+                    event = clean_event
 
                 # Use provided date or fallback
                 raw_date = event.get("date", "")
