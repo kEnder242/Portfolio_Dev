@@ -16,17 +16,25 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PORTFOLIO_DATA = os.path.join(BASE_DIR, "data")
 DEPLOY_DATA = os.path.abspath(os.path.join(BASE_DIR, "../../www_deploy/data"))
 
-# Obfuscated historical leaked credentials to prevent scanner alerts on this script
-_OBFUSCATED = [
-    "[REDACTED_B64_PASSWORD]",  # zaq1...
-    "[REDACTED_B64_PASSWORD]",                  # 0pen...
-    "[REDACTED_B64_PASSWORD]",                  # init...
-    "[REDACTED_B64_PASSWORD]",                  # inte...
-    "[REDACTED_B64_PASSWORD]",              # Yxsb...
-    "[REDACTED_B64_PASSWORD]",              # Pear...
-    "[REDACTED_B64_PASSWORD]",          # hiti...
-]
-KNOWN_PASSWORDS = [base64.b64decode(s.encode()).decode() for s in _OBFUSCATED]
+KNOWN_PASSWORDS_FILE = os.environ.get(
+    "HOMELAB_KNOWN_PASSWORDS_FILE",
+    os.path.expanduser("~/.config/homelab/known_passwords.json"),
+)
+
+
+def _load_known_passwords() -> list[str]:
+    if not os.path.exists(KNOWN_PASSWORDS_FILE):
+        return []
+    try:
+        with open(KNOWN_PASSWORDS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        items = data.get("known_passwords", []) if isinstance(data, dict) else data
+        return sorted({str(x) for x in items if isinstance(x, str) and x}, key=len, reverse=True)
+    except Exception:
+        return []
+
+
+KNOWN_PASSWORDS = _load_known_passwords()
 
 
 def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
@@ -60,17 +68,18 @@ def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
         text
     )
 
-    # 3. Known historical leaked lab passwords / tokens (case-insensitive)
-    for sec in KNOWN_PASSWORDS:
-        if re.search(re.escape(sec), text, flags=re.IGNORECASE):
-            matched_rules.append("known_password")
-            break
-    text = re.sub(
-        "|".join(map(re.escape, KNOWN_PASSWORDS)),
-        "[REDACTED_PASSWORD]",
-        text,
-        flags=re.IGNORECASE
-    )
+    # 3. Known historical leaked lab passwords / tokens (loaded from external secret file)
+    if KNOWN_PASSWORDS:
+        for sec in KNOWN_PASSWORDS:
+            if re.search(re.escape(sec), text, flags=re.IGNORECASE):
+                matched_rules.append("known_password")
+                break
+        text = re.sub(
+            "|".join(map(re.escape, KNOWN_PASSWORDS)),
+            "[REDACTED_PASSWORD]",
+            text,
+            flags=re.IGNORECASE,
+        )
 
     # 4. setx / export password assignments
     text = re.sub(
