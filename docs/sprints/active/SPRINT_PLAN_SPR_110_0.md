@@ -1233,7 +1233,7 @@ This anchor was duplicated across **eleven consecutive years: 2008 through 2018*
 * **Status:** ✅ COMPLETE & CERTIFIED
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:**
-  1. Scrub all exposed basic auth credentials, curl passwords, and legacy lab credentials (`[REDACTED_PASSWORD]`, `[REDACTED_PASSWORD]`, `[REDACTED_PASSWORD]`, `[REDACTED_PASSWORD]`, etc.) across all lakehouse JSON datasets in `Portfolio_Dev` and `www_deploy`.
+  1. Scrub all exposed basic auth credentials, curl passwords, and legacy lab credentials (`[REDACTED_PASSWORD]`, etc.) across all lakehouse JSON datasets in `Portfolio_Dev` and `www_deploy`.
   2. Harden the LLM extraction prompt in `nibble_v2.py` and `probe_secret_and_focal_leak_test.py` with explicit contrastive instructions and demonstrations targeting `curl -u`, `curl --user`, and Basic Auth URLs.
   3. Implement deterministic Python regex sanitization in `nibble_v2.py` post-extraction to guarantee zero password leakage even on LLM hallucination.
   4. Author authoritative `scrub_all_passwords.py` utilizing obfuscated sentinels to prevent false-positive scanner alerts on the codebase.
@@ -1250,7 +1250,7 @@ This anchor was duplicated across **eleven consecutive years: 2008 through 2018*
   - `PYTHONPATH=HomeLabAI/src HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_ripgrep_hydration.py HomeLabAI/src/tests/test_career_compass_bedrock.py HomeLabAI/src/tests/test_round_table_probe_unit.py HomeLabAI/src/tests/test_feedback_semantic_triage.py`
 * **Anchor 3 (Verbatim Code Specs & Implementation Ledger):**
   1. Authoritative scrubber `scrub_all_passwords.py` executed across 46 JSON files in `Portfolio_Dev` and `www_deploy`.
-  2. All occurrences of `sys_degsi1:zaq1@...`, `curl -u debuguser:[REDACTED_PASSWORD]`, and `curl -sku admin:[REDACTED_PASSWORD]` neutralized to `[REDACTED_PASSWORD]`.
+  2. All occurrences of `sys_degsi1:[REDACTED_PASSWORD]`, `curl -u debuguser:[REDACTED_PASSWORD]`, and `curl -sku admin:[REDACTED_PASSWORD]` neutralized to `[REDACTED_PASSWORD]`.
   3. LLM system prompt in `nibble_v2.py` and `probe_secret_and_focal_leak_test.py` updated with explicit contrastive curl credential rules.
   4. Ran empirical LLM probe on `moe-cuda-rpc` (`probe_secret_and_focal_leak_test.py`): passed with zero credential leaks.
   5. Audit scan confirmed 0 leaked passwords/tokens across all datasets in `Dev_Lab`.
