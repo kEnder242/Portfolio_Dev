@@ -702,9 +702,7 @@ def sync(force: bool = False, dry_run: bool = False):
     logging.info(f"Connecting to ChromaDB at {DB_PATH}...")
     client = get_chroma_client()
 
-    ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    ef = embedding_functions.DefaultEmbeddingFunction()
 
     # 1. Sync feature_dna
     if not to_sync[FEATURE_TRACKER_PATH]:

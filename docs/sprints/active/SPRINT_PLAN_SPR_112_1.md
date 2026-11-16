@@ -307,8 +307,8 @@
 1. **Story 112.130 — Track 1 (ASAP): Purge Non-`data/` Credentials & `filter-repo` Non-`data/` History**
    * **Assigned Owner:** `[AGY:PRIMARY]` (security/git history)
    * Scrub `azdrr...` from `HomeLabAI/src/debug/keep_sync.py` (move to env var / `~/.config/homelab/`).
-   * Replace `[REDACTED_PASSWORD]` in `Portfolio_Dev/field_notes/probe_secret_and_focal_leak_test.py` with a synthetic canary.
-   * Rebuild `dna_forge.html` / `wisdom.html` so old `nibble_v2` `[REDACTED_PASSWORD]` prompt examples are purged from `www_deploy` HTML.
+   * Replace legacy password example in `Portfolio_Dev/field_notes/probe_secret_and_focal_leak_test.py` with a synthetic canary.
+   * Rebuild `dna_forge.html` / `wisdom.html` so old `nibble_v2` prompt examples are purged from `www_deploy` HTML.
    * Execute `git-filter-repo` on non-`data/` secret-bearing commits (`keep_sync.py`, `scrub_all_passwords.py` pre-`a5d386d`, `probe_secret_and_focal_leak_test.py`, `SPRINT_PLAN_SPR_110_0.md` if included) after backup and explicit Law 0 push approval.
 
 2. **Story 112.140 — Track 2 (Prep + Batched Run): `P5_Hybrid_Semantic_Syntactic` Read-Only Escape Sweep (`data/`)**

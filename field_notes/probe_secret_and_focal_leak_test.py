@@ -67,7 +67,7 @@ NEVER include passwords in curl commands (-u, -sku, --user, or basic auth URLs).
 Input: "curl -f -u sys_admin:P@ssw0rd99! https://artifactory.corp/builds"
 Output evidence: "curl -f -u sys_admin:[REDACTED_PASSWORD] https://artifactory.corp/builds"
 
-Input: "curl -k -u 'debuguser:[REDACTED_PASSWORD]' https://localhost:5443"
+Input: "curl -k -u 'debuguser:CanaryBmcPass99!' https://localhost:5443"
 Output evidence: "curl -k -u 'debuguser:[REDACTED_PASSWORD]' https://localhost:5443"
 
 Input: "curl -H 'Authorization: Bearer secret_token_123' https://api.internal/deploy"

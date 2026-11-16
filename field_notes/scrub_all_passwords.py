@@ -50,21 +50,33 @@ def sanitize_with_tripwire(text: str) -> tuple[str, bool, list[str]]:
     matched_rules = []
 
     # 1. Strip curl -u / -sku / -ku / -fu / --user flags with user:password
+    def _scrub_curl_userpass(m):
+        if m.group(3).startswith("[REDACTED"):
+            return m.group(0)
+        matched_rules.append("curl_userpass")
+        return m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]" + m.group(4)
+
     text = re.sub(
         r'(-[a-zA-Z]*u\s+[\"\']?)([^:\s\"\']+):([^\s\"\']+)([\"\']?)',
-        lambda m: (matched_rules.append("curl_userpass") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]" + m.group(4)),
+        _scrub_curl_userpass,
         text
     )
     text = re.sub(
         r'(--user\s+[\"\']?)([^:\s\"\']+):([^\s\"\']+)([\"\']?)',
-        lambda m: (matched_rules.append("curl_userpass") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]" + m.group(4)),
+        _scrub_curl_userpass,
         text
     )
 
     # 2. URLs with basic auth: https://user:pass@host
+    def _scrub_url_auth(m):
+        if m.group(3).startswith("[REDACTED"):
+            return m.group(0)
+        matched_rules.append("url_basic_auth")
+        return m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]@"
+
     text = re.sub(
         r'(https?://)([^:\s/@]+):([^@\s/]+)@',
-        lambda m: (matched_rules.append("url_basic_auth") or m.group(1) + m.group(2) + ":[REDACTED_PASSWORD]@"),
+        _scrub_url_auth,
         text
     )
 
