@@ -344,3 +344,33 @@
      - [x] **Task 112.170.3 (Precision Targeted Scrub):** Executed targeted hybrid scrub strictly over mapped high-risk windows/gems, excising negative coaching, managerial critique, and HR rating verbiage while preserving positive technical scars.
      - [x] **Task 112.170.4 (Tripwire Modernization in `nibble_v2.py`):** Retired `scrub_input_buffer()` pre-LLM guillotine per `[BKM-015]`. Implemented `audit_focal_coaching_tripwire()` on generated output, logging any leaks to `sanitization_escape_ledger.jsonl` under `[VIBE-008] / [LOOP-006]` and quarantining leaked events.
      - [x] **Task 112.170.5 (ClaraDB Zero-Scan Semantic Sentinel):** Queried ChromaDB collections with negative coaching vectors, surfaced and excised leaked rating/appraisal stubs (`artifact_f65be94cca...`, `artifact_fcbf193a...`, `artifact_e4d4136b...`, `artifact_70798286...`) from `long_term_wisdom`. All checks verified green.
+
+---
+
+## 🔬 6. Tabled Tracks & Architectural Backlog
+
+### 🛠️ Story 112.180: Live Hydration Stimulations & Behavioral Guardrails (`[FEAT-680]` / `[FEAT-608]`)
+* **Context**: Live probe testing exposed two distinct behavioral failure modes in Pinky Voice when responding to hydrated technical queries:
+  1. **Lazy Refusal**: When presented with complex metric claims (e.g. 21 libraries, 29 test cases), Pinky dismissed the query with a blanket *"no records in archives"*, ignoring the physical hardware cluster topology and feasibility context (`Score: 0.30`).
+  2. **Hallucinatory Evasion**: When asked to review technical collateral without matching bedrock chunks, Pinky fabricated archival backing (*"archives confirm we delivered 8 test deltas"*) and pivoted to vague calls to action (*"check SharePoint"*), tripping the Sovereign Judge's `factual_drift_detected: true` sentinel (`Score: 0.10`).
+* **Actionable Work Items**:
+  - [ ] **Task 112.180.1 (Pinky System Prompt Calibration)**: Add an explicit directive in `nodes/pinky_node.py` prohibiting claiming *"archives confirm"* unless matching anchors exist in `RAW_KEEP_CHUNKS` or `REFERENCES`. Instruct Pinky to reason over hardware feasibility when specific historical files are absent.
+  - [ ] **Task 112.180.2 (Pre-Delivery Bedrock Tripwire)**: Implement a lightweight post-LLM validation gate in `cognitive_hub.py` checking whether phrases like *"archives confirm"* are backed by positive chunk citations.
+  - [ ] **Task 112.180.3 (Continuous AGY-as-Judge Probe Harness)**: Automate multi-topic probe testing with diverse hydration densities to certify both lazy refusal and hallucination rates remain $< 5\%$.
+
+### ⚡ Story 112.190: Speculative Pipeline & Pre-Streaming Waterfall Investigation (`[FEAT-684]`)
+* **Context**: Deep Thought on `M5_AIR` suffers from a **68.0s Time-To-First-Token (TTFT)** and **120.5s duration** on complex queries. Because the waterfall currently waits sequentially for Stage 3 (Brain Query / ChromaDB filter) to finish before Stage 4 (Deep Thought) begins, the M5 Air sits idle for 30–45s and then forces the entire deliberation to wait an additional 120s.
+* **Proposed Architecture**:
+  - **Early Pre-Fill Streaming**: Stream static context (system prompt, session history, cluster topology, and raw candidate chunks) into Deep Thought's KV cache concurrently while Brain evaluates the keep/drop filter.
+  - **Negative Delta Signaling ("Drop Reminders")**: When Brain concludes which chunks are dropped, instead of re-sending the whole prompt, emit a lightweight control token / delta (e.g. `[DROPPED: CHUNK-2, CHUNK-4]`) or trigger speculative rollback.
+  - **Compute vs. Latency Trade-Off**: Quantify whether the prefill FLOPs wasted on unselected chunks are justified by eliminating the 68s TTFT pause.
+* **Actionable Work Items**:
+  - [ ] **Task 112.190.1**: Prototype concurrent prefill dispatch in `router.py` during Stage 2/3.
+  - [ ] **Task 112.190.2**: Measure KV cache reuse and TTFT reduction on M5 Air via `/v1/chat/completions` prompt caching.
+
+### 🚀 Story 112.200: Dual-GPU Engine Exploration & Split-Mode Benchmarking (`[FEAT-685]`)
+* **Context**: Investigate modern dense/linear-attention architectures (`Qwen3.8-27B` and `Qwen3.8-27B-pi-adapted`) as high-efficiency replacements for the external M5 Air node, evaluating split modes and the October community optimizations (register-pinned dequant lookup tables and MTP self-speculation).
+* **Actionable Work Items**:
+  - [ ] **Task 112.200.1 (Empirical Baseline Split-Mode Benchmark)**: Run `llama-bench` on `z87-Linux` comparing `-sm layer` vs. `-sm tensor` across `Vulkan0,Vulkan1` to measure the exact inter-GPU PCIe sync tax.
+  - [ ] **Task 112.200.2 (SSD Staging & Quant Sizing)**: Verify `/speedy` disk space (54 GB free) and pull `Qwen3.8-27B-Q4_K_M.gguf` (~17 GB).
+  - [ ] **Task 112.200.3 (Native MTP Self-Speculation Trial)**: Test `--spec-type mtp` with thinking disabled (`--chat-template-kwargs '{"enable_thinking": false}'`) to verify whether MTP speculation unlocks 40+ tok/s on local silicon.
