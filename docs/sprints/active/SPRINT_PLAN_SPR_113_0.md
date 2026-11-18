@@ -32,14 +32,14 @@
 ## 🚦 Interactive Execution Checklist (`BKM-086 §1.1`)
 
 ### 🧭 Track 1: Edge Egress Decoupling & Unit Test Correction
-- [ ] **Story 113.10: Surgical Unit Test Realignment & Egress Filtering (`[BKM-095]` / `[FEAT-361]`)**:
-  - **Assigned Owner:** `[SWARM:LOCAL]`
+- [x] **Story 113.10: Surgical Unit Test Realignment & Egress Filtering (`[BKM-095]` / `[FEAT-361]`)**:
+  - **Assigned Owner:** `[SWARM:LOCAL]` (promoted to `[SWARM:CLOUD]` per `BKM-049 §3` after local timeout, Session `ses_e0f0664fcffezxnhk29HO7AIVx`; verified by `[AGY:PRIMARY]`)
   - **DNA Tags:** `[BKM-095]`, `[FEAT-361]`, `[FEAT-233]`, `[BKM-102]`
   - *Anchor 1 (Target Files & Line Ranges):*
     - [`HomeLabAI/src/tests/test_two_mice_handover.py:528-563`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L528-L563) (`test_zero_ui_streaming_and_no_raw_json_echo`)
     - [`HomeLabAI/src/v5/foyer/router.py:5250-5285`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L5250-L5285) (`is_handover_persona` WebSocket egress filtering)
   - *Anchor 2 (Verification Command):*
-    - `python3 -m pytest HomeLabAI/src/tests/test_two_mice_handover.py -k test_zero_ui_streaming_and_no_raw_json_echo -v`
+    - `/home/jallred/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS)
   - *Anchor 3 (Verbatim Code Specs & Schemas):*
     - In `test_two_mice_handover.py:550-551`:
       ```python
@@ -50,8 +50,9 @@
       ]
       assert len(user_token_packets) == 0, f"Expected 0 user token packets, found {len(user_token_packets)}"
       ```
-    - In `v5/foyer/router.py`: Ensure suppression applies strictly to conversational channels (`chat`, `pinky`, `voice`), while internal/diagnostic streams (`insight`, `crosstalk`, `thought_stream`) remain uninhibited.
+    - In `v5/foyer/router.py`: Egress filter scoped to `conversational_channels = ("chat", "pinky", "voice")`, freeing diagnostic channels (`insight`, `crosstalk`).
   - *Anchor 4 (DNA Links):* `[BKM-095]`, `[FEAT-361]`, `[FEAT-233]`, `[BKM-102]`.
+  - *Commit*: `HomeLabAI @ 5be7949`.
 
 ### ⚡ Track 2: Inter-Node Waterfall Streaming Restoration
 - [ ] **Story 113.20: Pipelined Relay from Deep Thought to Pinky (`[FEAT-233.2]` / `[FEAT-489]`)**:
