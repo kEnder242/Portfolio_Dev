@@ -412,3 +412,11 @@
     * **Status**: `PASS` (`greeting_latency_ms: 1.52`, `circuit_latency_ms: 134414.49`, `triage_routing: kender_online`).
     * **Judicial Score**: `critic_score: 0.90` (Sovereign Quorum certified: `true`, zero errors).
     * **Repository State**: `HomeLabAI @ e16b3ed` (clean), `Portfolio_Dev @ 5627d21` (clean). Complete physical lab restored per `[BKM-024]`.
+  - [x] **Task 112.200.5 (Heavy Speculative Decoding & Draft Characterization)**:
+    * Executed 5 iterative heavy prompt/decode sweeps (~655 prompt tokens extracted from synthesized lab gems `[GEM-b57ca0]`, `[GEM-fc325b]`, `[GEM-f01521]`, `[GEM-f60dfb]`, generating 501 tokens) exploring `--spec-type ngram-simple` and `ngram-mod` under bounded cgroup scope:
+      - **Baseline Target Decode (Tensor Split, Qwen 27B)**: Prompt Eval **66.70 tok/s** | Decode **9.20 tok/s** (501 / 501 forward runs).
+      - **Iteration 2 (`ngram-simple n=4, m=16`, Tensor Split)**: Prompt Eval **159.19 tok/s** | Decode **7.022 tok/s** (208/208 drafted, 100.0% acceptance, 250 forward runs, 40.85s verification overhead).
+      - **Iteration 3 (`ngram-mod n-match=4, n-min=8, n-max=16`, Tensor Split)**: Prompt Eval **159.29 tok/s** | Decode **7.789 tok/s** (153/153 drafted, 100.0% acceptance, 315 forward runs, 29.27s verification overhead).
+      - **Iteration 4 (`ngram-mod`, Layer Split)**: Initial Prompt Eval **818.59 tok/s** | Decode **7.322 tok/s** (178/178 drafted, 100.0% acceptance, 288 forward runs, 26.84s verification overhead).
+    * **Architectural Ground Truth**: Technical homelab prompts with structured domain entity repetition achieve a flawless **100.0% draft acceptance rate**. However, because Vulkan lacks native partial sequence rollbacks across the asymmetric PCIe Gen3 x16/x4 bus, chunk verification introduces 26–41s of prompt eval overhead. Unassisted Tensor Split (**9.2–9.6 tok/s**) remains the fastest dual-GPU local engine.
+    * **Port Alignment (`[FEAT-685]` / `[LAB-125]`)**: Hardened M5 Air Headroom proxy port to **8002** across `speculative_triage.py`, `recommender.py`, and `mlx_judge_node.py`.
