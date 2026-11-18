@@ -359,14 +359,16 @@
   - [ ] **Task 112.180.3 (Continuous AGY-as-Judge Probe Harness)**: Automate multi-topic probe testing with diverse hydration densities to certify both lazy refusal and hallucination rates remain $< 5\%$.
 
 ### ⚡ Story 112.190: Speculative Pipeline & Pre-Streaming Waterfall Investigation (`[FEAT-684]`)
-* **Context**: Deep Thought on `M5_AIR` suffers from a **68.0s Time-To-First-Token (TTFT)** and **120.5s duration** on complex queries. Because the waterfall currently waits sequentially for Stage 3 (Brain Query / ChromaDB filter) to finish before Stage 4 (Deep Thought) begins, the M5 Air sits idle for 30–45s and then forces the entire deliberation to wait an additional 120s.
-* **Proposed Architecture**:
-  - **Early Pre-Fill Streaming**: Stream static context (system prompt, session history, cluster topology, and raw candidate chunks) into Deep Thought's KV cache concurrently while Brain evaluates the keep/drop filter.
-  - **Negative Delta Signaling ("Drop Reminders")**: When Brain concludes which chunks are dropped, instead of re-sending the whole prompt, emit a lightweight control token / delta (e.g. `[DROPPED: CHUNK-2, CHUNK-4]`) or trigger speculative rollback.
-  - **Compute vs. Latency Trade-Off**: Quantify whether the prefill FLOPs wasted on unselected chunks are justified by eliminating the 68s TTFT pause.
+* **Context**: Deep Thought on `M5_AIR` suffers from a **32.8s–68.0s Time-To-First-Token (TTFT)** on complex multi-turn deliberations. Because the waterfall currently waits sequentially for Stage 3 (Brain Query / ChromaDB filter) to finish before Stage 4 (Deep Thought) begins, the M5 Air sits idle for 15–30s and then forces the entire deliberation to wait.
+* **UI Delivery Invariant (`[BKM-095]`)**: UI streaming is strictly prohibited. The waterfall drainer adheres to the Single Delivery Authority Pop mandate—UI bubbles consume only atomic, finalized payloads. Inter-node pre-streaming exists purely to collapse internal compute latency before terminal Pinky delivery.
+* **Proposed Architecture & Test Roadmap**:
+  - **Test 1 (Static Anchor Pre-Warming)**: Concurrently dispatch static context (system prompt, session history, cluster topology, query metadata: ~2,500 tokens) to M5 Air's KV cache at $t=0$ during Stage 1 Triage. Because this prefix is invariant, it carries 0% risk of attention pollution or cache invalidation.
+  - **Test 2 (Prompt-Cached Negative Delta / Drop Reminders)**: Stream raw candidate chunks into Deep Thought during Stage 2/3. When Brain concludes keep/drop filtering, append a lightweight steering delta (`[SUPERSEDED: Disregard Chunk 2, Chunk 5]`) to preserve the established KV cache.
+  - **Test 3 (KV Cache Invalidation vs. Baseline Disregard)**: Benchmark epistemic fidelity and Sovereign Judge scores comparing strict KV cache rollback (truncating back to the last valid chunk) versus negative delta steering (leaving unselected chunks in context with negative instructions) to quantify attention bleed and hallucination risk.
 * **Actionable Work Items**:
-  - [ ] **Task 112.190.1**: Prototype concurrent prefill dispatch in `router.py` during Stage 2/3.
-  - [ ] **Task 112.190.2**: Measure KV cache reuse and TTFT reduction on M5 Air via `/v1/chat/completions` prompt caching.
+  - [ ] **Task 112.190.1 (Test 1 Prototype)**: Implement concurrent Stage 1 static anchor pre-fill dispatch in `cognitive_hub.py` and `router.py`.
+  - [ ] **Task 112.190.2 (Test 2 Prototype)**: Measure KV cache hit rate and token generation latency on M5 Air via `/v1/chat/completions` with prompt prefix caching.
+  - [ ] **Task 112.190.3 (Test 3 Benchmark)**: Run multi-topic judicial evaluation comparing cache invalidation vs. negative delta steering against the Sovereign Judge harness.
 
 ### 🚀 Story 112.200: Dual-GPU Engine Exploration & Split-Mode Benchmarking (`[FEAT-685]`)
 * **Context**: Investigate modern dense/linear-attention architectures (`Qwen3.8-27B` and `Qwen3.8-27B-pi-adapted`) as high-efficiency replacements for the external M5 Air node, evaluating split modes and the October community optimizations (register-pinned dequant lookup tables and MTP self-speculation).
