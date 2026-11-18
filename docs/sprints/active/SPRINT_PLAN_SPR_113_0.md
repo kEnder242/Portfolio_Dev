@@ -73,26 +73,29 @@
 
 ## 📜 1. The Narrative: Forensic Archaeology of the Streaming Regression
 
-### 1.1 The Stated Intent vs. The Blunder
-During Sprint 108, the Federated Lab addressed a major cosmetic defect: user conversational chat bubbles were displaying partial token typewriter stuttering and raw JSON schema fragments leaking from internal triage probes.
+### 1) Forensic Autopsy: The Sprint 108 Regression (`commit 3048aaa`)
 
-To fix this, **`[BKM-095]` (UI Atomic Turn Dispatch)** was codified in `Protocols.md` with explicit language protecting internal backend streaming:
-> *"UI Chat Bubbles Consume Only Completed, Atomic Payload Dispatches... Inter-Node Token Waterfalls Are Internal Only: Waterfall token streaming (`FEAT-233`) exists exclusively between backend processing nodes. Tokens must never leak mid-flight to public UI websockets."*
+You are 100% right. This is an authentic regression where we threw away hard-won streaming architecture because of confusion over UI boundaries. 
 
-However, in the implementation commit **`3048aaa` (Oct 26, 2026)**, the unit test in [test_two_mice_handover.py:547](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L547) was authored with a fatal over-generalization:
-```python
-# 1. Assert ZERO live streaming token packets were sent
-token_packets = [p for p in packets if p.get("type") == "token"]
-assert len(token_packets) == 0, f"Expected 0 token-streaming packets, found {len(token_packets)}"
-```
-Instead of asserting that streaming tokens were suppressed specifically from user chat channels (`channel in ("chat", "pinky", "voice")`), the test asserted a **global ban on token-streaming packets everywhere in the system**.
+The exact failure point has been uncovered in git history: **[HomeLabAI commit 3048aaa](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L525-L558)**, authored on October 26, 2026, during **Sprint 108 (Story 108.20)**.
 
-### 1.2 The Cascade of Destructive "Fixes"
-To make that flawed test pass, code across three core files was mutilated:
-1. **The Router Guillotine (`v5/foyer/router.py:4930`)**:  
-   A blanket suppress filter was applied to every single persona (`"brain (archive)"`, `"pinky (voice)"`, `"deep thought"`, `"pinky (triage)"`, `"pinky"`), muting all live stream broadcasts across the board.
-2. **The Monolithic String Accumulator Trap (`cognitive_hub.py:3887-4140`)**:  
-   `_run_two_mice_handover` was refactored into three sequential, blocking `await` statements:
+#### 1.1) The Intent vs. The Blunder
+- **The Stated Intent ([Protocols.md: BKM-095](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L1910-L1930))**:  
+  BKM-095 was written with explicit language to protect internal streaming:
+  > *"UI Chat Bubbles Consume Only Completed, Atomic Payload Dispatches... Inter-Node Token Waterfalls Are Internal Only: Waterfall token streaming (`FEAT-233`) exists exclusively between backend processing nodes. Tokens must never leak mid-flight to public UI websockets."*
+- **Where We Messed Up (The Trap in `test_two_mice_handover.py`)**:  
+  In [test_two_mice_handover.py:547](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L547), the unit test for Story 108.20 was written as:
+  ```python
+  # 1. Assert ZERO live streaming token packets were sent
+  token_packets = [p for p in packets if p.get("type") == "token"]
+  assert len(token_packets) == 0, f"Expected 0 token-streaming packets, found {len(token_packets)}"
+  ```
+  Instead of asserting that tokens were suppressed from **`channel in ("chat", "pinky", "voice")`**, the test enforced a **global ban on token-streaming packets everywhere in the system**.
+
+#### 1.2) The Cascade of Destructive "Fixes"
+To make that over-reaching test pass:
+1. **The Router Guillotine**: In [router.py:4930](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L4930), a blanket suppress filter was slapped on every single persona (`"brain (archive)"`, `"pinky (voice)"`, `"deep thought"`, `"pinky (triage)"`, `"pinky"`), completely killing streaming broadcasts.
+2. **The Sequential String Accumulator Trap**: In [cognitive_hub.py:3887-4140](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3887-L4140), `_run_two_mice_handover` was refactored into three sequential, blocking `await` statements:
    ```python
    brain_grounding = await self.step_brain_gatekeeper(...)  # Monolithic wait
    dt_synthesis = await self.step_deep_thought(...)         # Monolithic wait (30-45s)
@@ -100,36 +103,44 @@ To make that flawed test pass, code across three core files was mutilated:
    ```
    Each step consumed its async generator into a local string (`brain_grounding += token`, `dt_synthesis += token`), waiting until complete EOF before passing a single static string to the next step.
 
-### 1.3 What Hard-Won Design Was Thrown Away
-This regression dismantled three critical milestones of earlier engineering:
+---
+
+### 2) What Hard-Won Design Work We Threw Away
+
 1. **`[FEAT-233.2]` & `[FEAT-233.4]` (The Live Hearing Pipe & Overhearing Buffer)**:  
-   Developed across Sprints 15–31 specifically so that downstream nodes could begin evaluating upstream tokens *while generation was in flight*, eliminating idle turnaround latency.
+   Developed across Sprints 15–31 specifically so that downstream nodes could begin evaluating upstream tokens *while generation was in flight*, cutting idle turnaround latency.
 2. **`[FEAT-457]` (Speculative Context Pre-fetch)**:  
-   Developed in Sprint 104 (`commit 7a5db0f6`), where Brain launched RAG context retrieval immediately in the background while Pinky spoke.
+   Developed in Sprint 104 ([commit 7a5db0f6](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_104_0.md#L33)), where Brain launched RAG context retrieval immediately in the background while Pinky spoke.
 3. **Inter-Node Silicon Concurrency**:  
-   While Deep Thought was deliberating on M5 Air/Kender for 35–45 seconds, the dual-GPU local engine (RTX 2080 Ti + Arc B580) sat **100% idle**, waiting for an EOF delimiter rather than pre-filling Pinky's response or pre-hydrating the Critic's rubric.
+   We threw away hardware parallelism. While Deep Thought was deliberating on M5 Air/Kender for 35–45 seconds, the dual-GPU local engine (RTX 2080 Ti + Arc B580) sat **100% idle**, waiting for an EOF delimiter rather than pre-filling Pinky's response or pre-hydrating the Critic's rubric.
 
-### 1.4 The Recovery Strategy: Leveraging Existing Foundations
-We do **not** need to reinvent streaming:
-1. **`_process_node_stream()` (`cognitive_hub.py:1575-1750`)**:  
+---
+
+### 3) How Old Code Can Be Leveraged to Restore It
+
+We do **not** need to invent new streaming primitives—the code is already in place:
+1. **`_process_node_stream()` ([cognitive_hub.py:1575-1750](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L1575-L1750))**:  
    Already implements async generator polling from `self.session_buffers[buf_key]` with delta token yielding (`yield new_tokens`).
-2. **`BicameralNode.prewarm()` (`loader.py:270`)**:  
-   Proved in Story 112.190 that non-blocking concurrent dispatches eliminate 65s of latency without memory issues.
+2. **`BicameralNode.prewarm()` ([loader.py:270](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py#L270))**:  
+   We just proved today in Story 112.190 that non-blocking concurrent dispatches eliminate 65s of latency without destabilizing memory.
 3. **The Simple Architectural Fix**:
-   - In `cognitive_hub.py`, pipe `self._process_node_stream("thought", ...)` into an internal queue (`asyncio.Queue`) that Pinky's `step_pinky_voice` consumes as it arrives.
+   - In `cognitive_hub.py`, pipe the output of `self._process_node_stream("thought", ...)` into an internal queue (`asyncio.Queue`) that Pinky's `step_pinky_voice` consumes as it arrives.
    - Dispatch the Critic's context pre-fill task immediately upon Stage 3 onset.
-   - **Fix the Broken Test**: Update `test_two_mice_handover.py:547` to assert zero tokens *only* on user-facing channels.
+   - **Fix the Broken Test**: Update [test_two_mice_handover.py:547](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L547) from `assert len(token_packets) == 0` to assert `assert len([p for p in packets if p.get("channel") in ("chat", "pinky") and p.get("type") == "token"]) == 0`.
 
-### 1.5 Permanent Invariants & Tag Guardrails
-To permanently protect this boundary from recurring:
+---
 
-#### Codified Invariant: `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)`
+### 4) Permanent Invariants & Tag Guardrails to Prevent Future Relapse
+
+To permanently protect this boundary from being broken a 5th time, we will codify:
+
+#### 4.1) New Invariant Law: `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)`
 > **The Edge-Only Mute Mandate:**  
-> The Single Delivery Authority Pop rule (`BKM-095`) is strictly an **Edge Gateway Invariant**, NOT a Node-to-Node Invariant.  
+> The Single Delivery Authority Pop rule (`BKM-095`) is an **Edge Gateway Invariant**, NOT a Node-to-Node Invariant.  
 > 1. Nodes MUST communicate via streaming async generators or queues (`FEAT-233`).
 > 2. Suppression of live tokens applies **strictly and exclusively at the WebSocket egress layer** (`v5/foyer/router.py`) when target channel is conversational (`channel in ("chat", "pinky", "voice")`).
 > 3. Any unit test asserting `len(token_packets) == 0` globally without channel filtering is an architectural violation and must fail linting.
 
-#### Code Comment Guardrails
-All inter-node streaming pipes in `cognitive_hub.py` and `loader.py` are to be marked with:
+#### 4.2) Guardrail Comment Tags
+All inter-node streaming pipes in `cognitive_hub.py` and `loader.py` will be marked with:
 `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING. Internal streaming only; UI pop enforced at WebSocket boundary.`
