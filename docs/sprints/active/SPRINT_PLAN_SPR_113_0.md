@@ -20,11 +20,12 @@
   - *Mistake 2 (The Monolithic Await String Accumulator Trap)*: Accumulating generators into `full_text += token` before returning forces downstream accelerator silicon to sit 100% idle. Guardrail: Forward async generator deltas directly into consumer queues.
   - *Mistake 3 (The Green Lie / Premature Optimization Metric)*: Avoided reporting raw decode rate (34 tok/s) without honest prefill latency (TTFT), keeping the live telemetry ledger authentic.
   - *Mistake 4 (The Inadvertent Phase-Append Trap)*: Avoided burying fundamental architectural regressions inside prior sprint sub-phases; dedicated a full, sovereign sprint (SPR-113.0) with clean archeology and DNA codification.
-- [x] **3. Oracle / Architectural Audit**: Pre-flight review completed and certified with zero blockers by Cloud Oracle (`ses_e0f316788ffeSQjEBGquvHnI9I` in [`Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_113.md`](file:///home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints/active/ORACLE_REVIEW_SPRINT_113.md)). Validated decoupling boundaries against `BKM-095`, `BKM-102`, `FEAT-233`, and `FEAT-361`. Inter-node backend streaming and user-facing atomic balloon delivery are orthogonal concerns that must never be conflated.
-- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story assignments declared: Leaf plumbing and unit test assertions assigned to `[SWARM:LOCAL]`; cross-module routing and protocol codification assigned to `[SWARM:CLOUD]`; physical silicon certification and daemon lifecycle assigned to `[AGY:PRIMARY]`.
-- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire (`BKM-049 §3.4` / `BKM-086 §Pillar 3`)**: Verified non-homogeneous allocation across stories. AGY is NOT sole owner across 100% of tasks.
+  - *Mistake 5 (The Synthetic Satellite Review File Anti-Pattern)*: Oracle reviews belong exclusively in `HomeLabAI/data/delegation_ledger.jsonl` via `delegate.py --mode oracle`, never in synthetic ad-hoc markdown files (`BKM-049` / `BKM-007`).
+- [x] **3. Oracle / Architectural Audit**: Pre-flight review completed and certified with zero blockers by Cloud Oracle via active `delegate.py --mode oracle` dispatch (`ses_e0f25f2acffeTYUCp8uIzu291o` recorded in canonical [`HomeLabAI/data/delegation_ledger.jsonl`](file:///home/jallred/Dev_Lab/HomeLabAI/data/delegation_ledger.jsonl)). Validated decoupling boundaries against `BKM-095`, `BKM-102`, `FEAT-233`, and `FEAT-361`. Ambiguities in anchor line numbers (`router.py:5266` and `cognitive_hub.py:814`) aligned with HEAD.
+- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story assignments declared: Leaf plumbing and unit test assertions assigned to `[SWARM:LOCAL]`; cross-module routing and pipelining assigned to `[SWARM:CLOUD]`; physical silicon certification and daemon lifecycle assigned to `[AGY:PRIMARY]`.
+- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire (`BKM-049 §3.4` / `BKM-086 §Pillar 3`)**: Verified non-homogeneous allocation across stories. AGY is NOT sole owner across 100% of tasks (4 of 6 stories allocated to `[SWARM:LOCAL]` and `[SWARM:CLOUD]`).
 - [x] **5. Risk Assessment**: Evaluated blast radius of modifying `_run_two_mice_handover` token pipes and Foyer WebSocket egress filtering. Zero risk to database schemas or GPU hardware topology; fully verified via unit test mocks and live accountability probes.
-- [x] **6. BKM Invariant & Anti-Bypass Audit**: Verified plan against `BKM-095` (Edge Pop), `BKM-101` (Live Shakedown), `BKM-024` (Live Silicon Gate), and `BKM-084` (Dropped Threads Governance).
+- [x] **6. BKM Invariant & Anti-Bypass Audit**: Verified plan against `BKM-095` (Edge Pop), `BKM-101` (Live Shakedown), `BKM-024` (Live Silicon Gate), and `BKM-084` (Dropped Threads Governance). All operator waivers are strictly phase-scoped per `BKM-086 §1.2`.
 
 ---
 
@@ -33,41 +34,85 @@
 ### 🧭 Track 1: Edge Egress Decoupling & Unit Test Correction
 - [ ] **Story 113.10: Surgical Unit Test Realignment & Egress Filtering (`[BKM-095]` / `[FEAT-361]`)**:
   - **Assigned Owner:** `[SWARM:LOCAL]`
-  - [ ] Task 113.10.1: Refactor `HomeLabAI/src/tests/test_two_mice_handover.py:547`: replace global `assert len(token_packets) == 0` with channel-scoped assertion asserting zero streaming tokens on user-facing channels (`channel in ("chat", "pinky", "voice")`).
-  - [ ] Task 113.10.2: Update `v5/foyer/router.py`: enforce `BKM-095` atomic pop suppression strictly at the WebSocket egress layer for conversational bubbles, while allowing diagnostic and internal channels (`"internal_stream"`, `"insight"`, `"crosstalk"`) to stream freely.
-  - [ ] Task 113.10.3: Verify test suite runs 100% green with streaming enabled internally.
+  - **DNA Tags:** `[BKM-095]`, `[FEAT-361]`, `[FEAT-233]`, `[BKM-102]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/tests/test_two_mice_handover.py:528-563`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_two_mice_handover.py#L528-L563) (`test_zero_ui_streaming_and_no_raw_json_echo`)
+    - [`HomeLabAI/src/v5/foyer/router.py:5250-5285`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L5250-L5285) (`is_handover_persona` WebSocket egress filtering)
+  - *Anchor 2 (Verification Command):*
+    - `python3 -m pytest HomeLabAI/src/tests/test_two_mice_handover.py -k test_zero_ui_streaming_and_no_raw_json_echo -v`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - In `test_two_mice_handover.py:550-551`:
+      ```python
+      # 1. Assert ZERO live streaming token packets were sent on user conversational channels
+      user_token_packets = [
+          p for p in packets
+          if p.get("type") == "token" and p.get("channel") in ("chat", "pinky", "voice")
+      ]
+      assert len(user_token_packets) == 0, f"Expected 0 user token packets, found {len(user_token_packets)}"
+      ```
+    - In `v5/foyer/router.py`: Ensure suppression applies strictly to conversational channels (`chat`, `pinky`, `voice`), while internal/diagnostic streams (`insight`, `crosstalk`, `thought_stream`) remain uninhibited.
+  - *Anchor 4 (DNA Links):* `[BKM-095]`, `[FEAT-361]`, `[FEAT-233]`, `[BKM-102]`.
 
 ### ⚡ Track 2: Inter-Node Waterfall Streaming Restoration
 - [ ] **Story 113.20: Pipelined Relay from Deep Thought to Pinky (`[FEAT-233.2]` / `[FEAT-489]`)**:
   - **Assigned Owner:** `[SWARM:CLOUD]`
-  - [ ] Task 113.20.1: In `cognitive_hub.py:3887-4140`, replace monolithic `await self.step_deep_thought()` with a pipelined async generator / queue.
-  - [ ] Task 113.20.2: Connect Pinky's `step_pinky_voice()` prefill buffer to consume Deep Thought's token stream incrementally as chunks arrive from Kender/M5 Air.
-  - [ ] Task 113.20.3: Verify Pinky begins prompt evaluation before Deep Thought finishes generating, collapsing 5–10s of trailing circuit turnaround latency.
+  - **DNA Tags:** `[FEAT-233.2]`, `[FEAT-489]`, `[FEAT-684]`, `[BKM-102]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/logic/cognitive_hub.py:3980-4050`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3980-L4050) (`step_deep_thought` & `step_pinky_voice` in `_run_two_mice_handover`)
+  - *Anchor 2 (Verification Command):*
+    - `python3 -m pytest HomeLabAI/src/tests/test_two_mice_handover.py -v`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - Refactor `step_deep_thought` to yield streaming tokens through an `asyncio.Queue` or generator consumed by Pinky's prompt evaluation pipeline, cutting sequential await lag.
+  - *Anchor 4 (DNA Links):* `[FEAT-233.2]`, `[FEAT-489]`, `[BKM-102]`.
 
 - [ ] **Story 113.30: Concurrent Pre-Hydration of the Sovereign Critic (`[FEAT-439]` / `[FEAT-608]`)**:
   - **Assigned Owner:** `[SWARM:CLOUD]`
-  - [ ] Task 113.30.1: In `cognitive_hub.py:4140`, decouple `step_entailment_audit` from post-Pinky execution; trigger judicial context pre-warming on M5 Air concurrently during Stage 3/5 generation.
-  - [ ] Task 113.30.2: Forward query, Brain's `RAW_KEEP_CHUNKS`, and Deep Thought synthesis to the Critic to pre-fill its KV cache before Pinky speaks.
-  - [ ] Task 113.30.3: Benchmark post-turn Quorum evaluation latency, verifying reduction to < 1.0 second.
+  - **DNA Tags:** `[FEAT-439]`, `[FEAT-608]`, `[BKM-024]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/logic/cognitive_hub.py:4040-4100`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L4040-L4100) (`step_entailment_audit` scheduling)
+  - *Anchor 2 (Verification Command):*
+    - `python3 -m pytest HomeLabAI/src/tests/test_round_table_continuity.py -v`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - Trigger Critic context pre-warming on M5 Air concurrently during Stage 3/5 generation, pre-filling candidate RAG chunks and query before Pinky delivers the spoken response.
+  - *Anchor 4 (DNA Links):* `[FEAT-439]`, `[FEAT-608]`, `[BKM-024]`.
 
 - [ ] **Story 113.40: Shared Root Prefix Standardization for Local Slot-0 KV Cache Reuse (`[LAB-122]`)**:
   - **Assigned Owner:** `[SWARM:LOCAL]`
-  - [ ] Task 113.40.1: Standardize a static 500-token `<cluster_root>` prefix identical across Pinky and Brain system prompts.
-  - [ ] Task 113.40.2: Probe `http://127.0.0.1:8088/slots` during handover, verifying `n_prompt_tokens_cache > 0` and `f_keep > 0.50` on slot 0.
+  - **DNA Tags:** `[LAB-122]`, `[FEAT-684]`, `[BKM-015]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/logic/cognitive_hub.py:814-870`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L814-L870) (`build_two_mice_stage_prompt`)
+  - *Anchor 2 (Verification Command):*
+    - `curl -s http://127.0.0.1:8088/slots | grep -o '"n_prompt_tokens_cache":[0-9]*'`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - Standardize a static 500-token `<cluster_root>` prefix identical across Pinky and Brain system prompts to ensure KV cache hit on slot 0 (`n_prompt_tokens_cache > 0`).
+  - *Anchor 4 (DNA Links):* `[LAB-122]`, `[FEAT-684]`.
 
 ### 🛡️ Track 3: Permanent DNA Codification & Guardrails
 - [ ] **Story 113.50: Codification of BKM-102 & Code Comment Annotation**:
   - **Assigned Owner:** `[AGY:PRIMARY]`
-  - [ ] Task 113.50.1: Codify `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)` into `HomeLabAI/docs/Protocols.md`.
-  - [ ] Task 113.50.2: Annotate all internal streaming pipes in `cognitive_hub.py`, `loader.py`, and `router.py` with `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING.`
-  - [ ] Task 113.50.3: Update `FeatureTracker.md` registering `FEAT-233.8` as ACTIVE.
+  - **DNA Tags:** `[BKM-102]`, `[FEAT-233.8]`, `[BKM-095]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/docs/Protocols.md:2000-2050`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2000-L2050)
+    - [`HomeLabAI/src/logic/cognitive_hub.py:3887-4140`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3887-L4140)
+  - *Anchor 2 (Verification Command):*
+    - `git diff HomeLabAI/docs/Protocols.md`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - Codify `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)` into `Protocols.md`.
+    - Tag code with `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING.`
+  - *Anchor 4 (DNA Links):* `[BKM-102]`, `[FEAT-233.8]`.
 
 ### 🏁 Track 4: Live Silicon Certification & Gauntlet
 - [ ] **Story 113.60: Multi-Topic Silicon Shakedown & Quorum Certification (`[BKM-024]` / `[BKM-101]`)**:
   - **Assigned Owner:** `[AGY:PRIMARY]`
-  - [ ] Task 113.60.1: Execute `probe_round_table_accountability.py` on active physical silicon.
-  - [ ] Task 113.60.2: Verify end-to-end circuit latency improvement below the 60.0s floor while certifying `sovereign_quorum: true` and `critic_score >= 0.90`.
-  - [ ] Task 113.60.3: Run `standalone_accountability_watchdog.py` certifying 9/9 PASS.
+  - **DNA Tags:** `[BKM-024]`, `[BKM-101]`, `[BKM-062]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/infra/probe_round_table_accountability.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/probe_round_table_accountability.py)
+    - [`HomeLabAI/src/infra/standalone_accountability_watchdog.py`](file:///home/jallred/Dev_Lab/HomeLabAI/src/infra/standalone_accountability_watchdog.py)
+  - *Anchor 2 (Verification Command):*
+    - `python3 HomeLabAI/src/infra/probe_round_table_accountability.py`
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - `status == "PASS"`, `sovereign_quorum == True`, `critic_score >= 0.90`, end-to-end circuit latency $< 60.0\text{s}$.
+  - *Anchor 4 (DNA Links):* `[BKM-024]`, `[BKM-101]`.
 
 ---
 
