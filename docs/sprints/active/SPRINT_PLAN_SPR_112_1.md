@@ -370,7 +370,30 @@
 
 ### 🚀 Story 112.200: Dual-GPU Engine Exploration & Split-Mode Benchmarking (`[FEAT-685]`)
 * **Context**: Investigate modern dense/linear-attention architectures (`Qwen3.8-27B` and `Qwen3.8-27B-pi-adapted`) as high-efficiency replacements for the external M5 Air node, evaluating split modes and the October community optimizations (register-pinned dequant lookup tables and MTP self-speculation).
-* **Actionable Work Items**:
-  - [ ] **Task 112.200.1 (Empirical Baseline Split-Mode Benchmark)**: Run `llama-bench` on `z87-Linux` comparing `-sm layer` vs. `-sm tensor` across `Vulkan0,Vulkan1` to measure the exact inter-GPU PCIe sync tax.
-  - [ ] **Task 112.200.2 (SSD Staging & Quant Sizing)**: Verify `/speedy` disk space (54 GB free) and pull `Qwen3.8-27B-Q4_K_M.gguf` (~17 GB).
-  - [ ] **Task 112.200.3 (Native MTP Self-Speculation Trial)**: Test `--spec-type mtp` with thinking disabled (`--chat-template-kwargs '{"enable_thinking": false}'`) to verify whether MTP speculation unlocks 40+ tok/s on local silicon.
+* **Assigned Owner**: `[AGY:PRIMARY]` (physical silicon daemon control, GPU driver/Vulkan manipulation per `BKM-006` / `BKM-024`)
+* **BKM-086 Pre-Flight Checklist**:
+  - [x] **Pillar 1 (Archaeology & Grounding)**: Grounded in `[FEAT-685]`, `[LAB-115]`, `[LAB-122]`. Reviewed Nov 4–6 Vulkan/RPC benchmarks. Verified dense 27B architecture vs MoE.
+  - [x] **Pillar 2 (4-Anchor Planning)**: Formally specified with explicit binary targets, test flags, metrics capture, and DNA links below.
+  - [x] **Pillar 3 (Delegation Governance)**: Assigned to `[AGY:PRIMARY]`. Subagents lack direct hardware Vulkan access, systemd daemon lifecycle control, and GPU thermal monitoring.
+  - [x] **Pillar 4 (Physical Silicon Certification)**: Mandatory execution against real `Vulkan0,Vulkan1` silicon with post-experiment daemon restoration and live probe certification.
+* **4-Anchor Specification**:
+  - **Anchor 1 (Target Files & Binaries)**:
+    - Base Model: `/speedy/models/gguf/Qwen3.8-27B-Q4_K_M.gguf` (18.07 GB)
+    - LoRA Adapter: `/speedy/models/gguf/Qwen3.8-27B-pi-lora-F16.gguf` (305 MB)
+    - Benchmarking Tool: `/home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-bench`
+    - Attendant Service: `/etc/systemd/system/lab-attendant.service`
+  - **Anchor 2 (Verification Commands)**:
+    - `sudo systemctl stop lab-attendant.service`
+    - `/home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-bench -m /speedy/models/gguf/Qwen3.8-27B-Q4_K_M.gguf -sm layer -dev Vulkan0,Vulkan1 -p 512,1024 -n 128 -ngl 99`
+    - `/home/jallred/hybrid_engine/llama.cpp/build_vulkan/bin/llama-bench -m /speedy/models/gguf/Qwen3.8-27B-Q4_K_M.gguf -sm tensor -dev Vulkan0,Vulkan1 -p 512,1024 -n 128 -ngl 99`
+    - `sudo systemctl restart lab-attendant.service`
+  - **Anchor 3 (Verbatim Specs & Metrics)**:
+    - Evaluate Prompt Processing (PP tok/s) and Generation (TG tok/s).
+    - Measure PCIe sync penalties across asymmetric PCIe Gen3 x16 (RTX 2080 Ti) vs. Gen3 x4 (Arc B580).
+    - Record peak VRAM utilization on GPU 0 and GPU 1 via `nvidia-smi` and sysfs.
+  - **Anchor 4 (DNA Links)**: `[FEAT-685]`, `[BKM-086]`, `[BKM-082]`, `[BKM-024]`, `[BKM-006]`, `[BKM-007]`, `[LAB-115]`, `[LAB-122]`.
+* **Task Breakdown**:
+  - [ ] **Task 112.200.1 (Lab Quiescence & Baseline Calibration)**: Stop `lab-attendant.service` to release VRAM. Inspect device topology.
+  - [ ] **Task 112.200.2 (Baseline Split-Mode Benchmark)**: Run `llama-bench` comparing `-sm layer` vs. `-sm tensor` across `Vulkan0,Vulkan1` on clean base `Qwen3.8-27B-Q4_K_M.gguf`.
+  - [ ] **Task 112.200.3 (LoRA Overhead & Memory Footprint Evaluation)**: Benchmark with `--lora /speedy/models/gguf/Qwen3.8-27B-pi-lora-F16.gguf` to measure exact VRAM delta and decode speed impact.
+  - [ ] **Task 112.200.4 (Lab Restoration & Live Silicon Certification)**: Restart `lab-attendant.service`, verify `boot_commit == current_head`, verify `dirty == false`, and run live probe per `BKM-024`.
