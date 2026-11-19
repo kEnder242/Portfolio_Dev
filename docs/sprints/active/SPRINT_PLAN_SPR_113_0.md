@@ -199,6 +199,47 @@
   - *Anchor 4 (DNA Links):* `[FEAT-403]`, `[FEAT-525]`, `[BKM-102]`, `[FEAT-687]`.
   - *Commit*: `HomeLabAI @ 622ba96`.
 
+### 📊 Track 6: Telemetry UI Modernization, Monotonic Ledger Governance & Speculative Invariant
+- [x] **Story 113.80: Unique Monotonic Turn IDs in Rolling Blackboard Ledger (`[FEAT-525]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-525]`, `[BKM-024]`
+  - *Anchor 1 (Target Files):* `HomeLabAI/src/memory/blackboard_ledger.py`, `HomeLabAI/src/tests/test_blackboard_dna.py`
+  - *Anchor 2 (Verification Command):* `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_blackboard_dna.py -v` (4/4 PASS)
+  - *Anchor 3 (Code Specs):* Replaced `monotonic_turn = len(records) + 1` with `highest_turn = max((r.get('turn', 0) for r in records), default=0) + 1`, eliminating the 50-item cap turn-51 overwrite loop while preserving unique sequential turn IDs in the 50-item rolling window.
+  - *Anchor 4 (DNA Links):* `[FEAT-525]`.
+
+- [ ] **Story 113.81: Stage Terminology & Sequential Waterfall Alignment in `benchmarks.html` / `benchmarks.js` (`[FEAT-494]` / `[FEAT-525]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-494]`, `[FEAT-525]`, `[FEAT-489]`
+  - *Anchor 1 (Target Files):* `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`
+  - *Anchor 2 (Verification Command):* Code review & browser test of `benchmarks.html`
+  - *Anchor 3 (Code Specs):* Renamed legacy `oracle` and `pinky_judgment` to active 5-stage names: Triage (Kender), Brain Gatekeeper (Moat RAG), Deep Thought (Synthesis), Pinky Voice (Delivery Pop), and Sovereign Critic (Entailment Audit) across canvas legends and Blackboard Ledger drawers.
+  - *Anchor 4 (DNA Links):* `[FEAT-494]`, `[FEAT-525]`.
+
+- [ ] **Story 113.82: Model Throughput Realignment: Backdate Post-Prefill Decode tok/s, 10-08 Timeline Clamp, and Pure Scatter Plot (`[FEAT-496]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-496]`, `[FEAT-494]`, `[BKM-024]`
+  - *Anchor 1 (Target Files):* `Portfolio_Dev/field_notes/benchmarks.js`, `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`
+  - *Anchor 2 (Verification Command):* Verify 97.2% TTFT backdate correlation from `telemetry_ledger.jsonl` to `live_usage_stream.jsonl`.
+  - *Anchor 3 (Code Specs):* Clamped timeline floor to `2026-10-08`, excised multi-point line connecting strokes in favor of clean scatter points with seat color-coding, and re-mapped seat name to `Hybrid GPU (2080 Ti + Arc B580)`.
+  - *Anchor 4 (DNA Links):* `[FEAT-496]`.
+
+- [ ] **Story 113.83: Output Tokens vs. Wall-Minus-TTFT Decode Curve Graph (`[FEAT-494]` / `[FEAT-496]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-494]`, `[FEAT-496]`
+  - *Anchor 1 (Target Files):* `Portfolio_Dev/field_notes/benchmarks.html`, `Portfolio_Dev/field_notes/benchmarks.js`
+  - *Anchor 2 (Verification Command):* Browser inspection of `id="decode-efficiency-chart"`.
+  - *Anchor 3 (Code Specs):* Added second canvas chart plotting Output Tokens ($Y$-axis) vs Net Decode Duration $(t_{\text{wall}} - t_{\text{TTFT}})$ ($X$-axis) to visualize pure post-prefill generation curves.
+  - *Anchor 4 (DNA Links):* `[FEAT-494]`, `[FEAT-496]`.
+
+- [ ] **Story 113.84: Archaeology & Regression BKM: Deep Thought vs. Local Speculative Relay Invariant (`[FEAT-531]` / `[FEAT-586]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-531]`, `[FEAT-586]`, `[BKM-103]`
+  - *Anchor 1 (Target Files):* `HomeLabAI/docs/Protocols.md`, `Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_113_0.md`, `HomeLabAI/src/logic/speculative_triage.py`
+  - *Anchor 2 (Verification Command):* Audit git history (commit `89ff3959` / Sprint 100/101) and document regression invariant.
+  - *Anchor 3 (Code Specs):* Codify `BKM-103`: Primary reasoning seats (M5 Air / Deep Thought) are protected authorities; local engines are strictly standby fallbacks and must NEVER cancel Deep Thought when Deep Thought is alive and reachable.
+  - *Anchor 4 (DNA Links):* `[FEAT-531]`, `[FEAT-586]`.
+
 ---
 
 ## 📜 1. The Narrative: Forensic Archaeology of the Streaming Regression
@@ -326,3 +367,48 @@ All inter-node streaming pipes in `cognitive_hub.py` and `loader.py` will be mar
   - Regression check: `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS).
   - Registered `[FEAT-687]` in `Portfolio_Dev/FeatureTracker.md`.
 * **Status**: ✅ Certified & Locked. Multi-actor subconscious dream deliberation restored to the Round Table telemetry pipeline.
+
+---
+
+## 🚀 Track 6: Live Telemetry Alignment, Post-Prefill Decode Curves & Protected Relay Authority
+
+### Objective
+Resolve UI regressions, backdate throughput metrics to post-prefill generation decode speed, add generation efficiency curve charts, fix Turn 51 monotonic indexing in `blackboard_ledger.py`, and codify `BKM-103` on Deep Thought protected authority over standby local runners.
+
+### Stories
+* **Story 113.80: Monotonic Turn ID Fix Beyond 50-Item Cap in `blackboard_ledger.py`**
+  - Fix `monotonic_turn` calculation in `HomeLabAI/src/memory/blackboard_ledger.py`: change from `len(records) + 1` to `max((r.get('turn', 0) for r in records), default=0) + 1`.
+  - Maintain unique, strictly increasing integer Turn IDs across the rolling window.
+  - Verify with unit tests in `HomeLabAI/src/tests/test_blackboard_dna.py` (4/4 PASS).
+* **Story 113.81: Stage Terminology & Waterfall Sequence Alignment in `benchmarks.html` / `benchmarks.js`**
+  - Align Delta-T legend pills and chart series from legacy labels to active 5-stage names:
+    - `Δt1: Triage (Kender)`
+    - `Δt2: Brain Gatekeeper (Moat RAG)`
+    - `Δt3: Deep Thought (Synthesis)`
+    - `Δt4: Pinky Voice (Delivery Pop)`
+    - `Δt5: Sovereign Critic (Entailment Audit)`
+  - Update `renderBlackboardLedger` drawer labels in `benchmarks.js`.
+* **Story 113.82: Post-Prefill Decode Throughput Backdate & Chart Scatter Polish**
+  - Backdate `data/live_usage_stream.jsonl` by correlating 6,181 records against `telemetry_ledger.jsonl` (97.2% matching physical TTFT).
+  - Compute true generation decode speed $R_{\text{decode}} = \frac{N_{\text{tokens}}}{t_{\text{duration}} - t_{\text{TTFT}}}$.
+  - Rename `"Linux 2080ti"` seat to `"Hybrid GPU (2080 Ti + Arc B580)"`.
+  - Clamp universal timeline starting floor to `2026-10-08 00:00:00` UTC (`1791417600`).
+  - Convert dense line graph into pure scatter plot with color-coded dot clusters.
+* **Story 113.83: Output Tokens vs. Wall-Minus-TTFT Generation Curve Chart**
+  - Add `<canvas id="decode-efficiency-chart" ...>` to Tab 2 (`tab-arena`) in `benchmarks.html`.
+  - Implement `renderDecodeEfficiencyChart(records)` in `benchmarks.js`: $X$-axis = Net Decode Duration $(t_{\text{wall}} - t_{\text{TTFT}})$, $Y$-axis = Output Tokens.
+  - Overlay theoretical slope guide rays (35 tok/s for 4090, 24 tok/s for Hybrid GPU, 16 tok/s for M5 Air).
+* **Story 113.84: Archaeology & Codification of `[BKM-103]` (Deep Thought Protected Relay Race vs. Standby Local Invariant)**
+  - Document `[BKM-103]` in `HomeLabAI/docs/Protocols.md`.
+  - Root cause regression: Sprint 67/100 (`FEAT-586`, commit `89ff3959`) cut-throat `asyncio.wait(return_when=FIRST_COMPLETED)` with 180ms lead window prematurely cancelled M5 Air mid-flight from localhost dual-GPU.
+  - Codify invariant: Deep Thought is protected authority when reachable (`AUTHORITATIVE_ALIVE`); local standby never preempts or cancels Deep Thought on early completion.
+
+### Entry 2026-11-19 01:30:00 PST - Track 6 Execution & Certification
+* **Action**:
+  - Modified `HomeLabAI/src/memory/blackboard_ledger.py` (monotonic turn fix).
+  - Certified `HomeLabAI/src/tests/test_blackboard_dna.py` (4/4 PASS).
+  - Updated `Portfolio_Dev/field_notes/benchmarks.html` and `benchmarks.js` (5-stage naming, pure scatter plot, generation efficiency curve chart).
+  - Synchronized `benchmarks.html` and `benchmarks.js` to `www_deploy/`.
+  - Backdated 6,181 records in `live_usage_stream.jsonl` with 97.2% matching physical TTFT and renamed seat to `Hybrid GPU (2080 Ti + Arc B580)`.
+  - Codified `[BKM-103]` in `HomeLabAI/docs/Protocols.md`.
+* **Status**: ✅ Certified & Locked. Track 6 complete.
