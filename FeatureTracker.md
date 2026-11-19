@@ -2188,6 +2188,13 @@
 **Logic:** async def handle_stream_ingest(self, request): [FEAT-233.7] Real-time token ingestion from decoupled nodes. try: data = await request.json()
 **Mechanism:** `src/v5/foyer/router.py` at line 1204.
 
+## [FEAT-233.8] Internal Pipe vs. Edge Pop Invariant (Decoupled Waterfall)
+**Status:** ACTIVE
+**Parent:** `[FEAT-233]`, `[BKM-102]`, `[BKM-095]`
+**Code:** [src/v5/foyer/router.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/v5/foyer/router.py#L5260), [src/logic/cognitive_hub.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/logic/cognitive_hub.py#L3748)
+**Logic:** Establishes that BKM-095 Single Delivery Authority Pop is strictly an Edge WebSocket Egress Invariant for conversational channels (`chat`, `pinky`, `voice`). Inter-node backend streaming between accelerator nodes operates freely via async generators and queues, eliminating monolithic string accumulation.
+**Mechanism:** `src/v5/foyer/router.py:5260` and `src/logic/cognitive_hub.py:3748,4108`.
+
 ## [FEAT-240.2] The Relay Pattern: Standard-compliant 'Thinking' turn.
 **Status:** ACTIVE
 **Code:** [src/nodes/loader.py](https://github.com/kEnder242/HomeLabAI/blob/main/src/nodes/loader.py#L151) — The Relay Pattern: Standard-compliant 'Thinking' turn..
