@@ -2316,46 +2316,46 @@
   },
   {
     "turn": 51,
-    "timestamp": 1795038188,
-    "time_str": "13:43:08",
+    "timestamp": 1795048604,
+    "time_str": "16:36:44",
     "topic": "EXP_TLM",
     "scope": "CONTEXT_SCOPE_LONG",
     "user_prompt": "[ACCOUNTABILITY_PROBE] Review Clearwater Forest (CWF) and Diamond Rapids (DMR) manageability and Redfish test collateral.",
     "turn_mode": "FULL_ROUND_TABLE",
     "is_full_round_table": true,
     "checkpoints_elapsed_s": {
-      "triage": 9.518,
-      "pinky_stance": 14.324,
-      "brain_arch": 28.61,
-      "oracle": 28.61,
-      "pinky_judgment": 46.939
+      "triage": 16.588,
+      "pinky_stance": 37.933,
+      "brain_arch": 70.716,
+      "oracle": 147.981,
+      "pinky_judgment": 185.961
     },
     "deltas_elapsed_s": {
-      "triage": 9.518,
-      "pinky_stance": 4.806,
-      "brain_arch": 14.286,
-      "oracle": 0.001,
-      "pinky_judgment": 18.329
+      "triage": 16.588,
+      "pinky_stance": 21.345,
+      "brain_arch": 32.783,
+      "oracle": 77.265,
+      "pinky_judgment": 37.98
     },
     "cumulative": {
-      "triage": 9.518,
-      "pinky_stance": 14.324,
-      "brain_arch": 28.61,
-      "oracle": 28.61,
-      "pinky_judgment": 46.939
+      "triage": 16.588,
+      "pinky_stance": 37.933,
+      "brain_arch": 70.716,
+      "oracle": 147.981,
+      "pinky_judgment": 185.961
     },
     "deltas": {
-      "triage": 9.518,
-      "pinky_stance": 4.806,
-      "brain_arch": 14.286,
-      "oracle": 0.001,
-      "pinky_judgment": 18.329
+      "triage": 16.588,
+      "pinky_stance": 21.345,
+      "brain_arch": 32.783,
+      "oracle": 77.265,
+      "pinky_judgment": 37.98
     },
-    "total_elapsed_s": 46.939,
-    "total_s": 46.939,
+    "total_elapsed_s": 185.961,
+    "total_s": 185.961,
     "distillation_bullets": [
-      "PINKY: I\u2019ve double-checked the archives, but there is no actual data on Clearwater Forest or Diamond Rapids manageability or Redfish collateral to review. We simply cannot validate those systems as they are not in our record.",
-      "BRAIN: [ANALYSIS]\n- CHUNK-1: [Evidence quotes: \"Lab/Feature Taxonomy Separation Protocol\", \"Scope Division\", \"Safe Scalpel Usage\"] => DROP. This chunk defines internal software engineering governance (commit prefixes, linting gates) for the Acme Lab environment. It contains zero technical data regarding Clearwater Forest (CWF) or Diamond Rapids (DMR) manageability, Redfish schemas, or DMTF conformance. It is structural noise relative to the hardware validation query.\n- CHUNK-2: [Evidence quotes: \"Supported Montana for CWF and DMR\", \"FEAT-588\", \"Context-Aware Water-Level DNA Palette\"] => DROP. While the header mentions \"Supported Montana for CWF and DMR,\" the body details FEAT-588, a \"Context-Aware Water-Level DNA Palette\" for a writing tool (`writer.html`). This is a UI/UX feature for a document editor, completely unrelated to server manageability stacks, Redfish compliance, or sensor data mapping. The mention of CWF/DMR in the header is likely a mislabeled or tangential reference to a different project context, not the technical collateral requested.\n- CHUNK-3: [Evidence quotes: \"Pre-Silicon VISA Legacy Channel Emulation Gap Resolution\", \"Skylake emulation power-on\"] => DROP. This record pertains to Skylake-era pre-silicon VISA (Virtual Interface Specification Architecture) channel emulation. It is historically irrelevant to the CWF/DMR generations and provides no insight into modern Redfish schema compliance or manageability test collateral.\n\n[BEDROCK SELECTION]\n- CHUNK-1: DROP\n- CHUNK-2: DROP\n- CHUNK-3: DROP"
+      "PINKY: Brain is right that the archives contain no specific records for that query, so we have no evidence to review. I cannot confirm any collateral for CWF or DMR manageability.",
+      "BRAIN: [ANALYSIS]\n- CHUNK-1: [BKM-035] defines Lab/Feature taxonomy separation and commit prefixes. Zero mention of CWF, DMR, Redfish, or manageability test collateral. Irrelevant infrastructure governance doc. => DROP\n- CHUNK-2: [FEAT-585] is a \"Multi-Tier Paper JSON Schema & Invariant Validator\" for manuscript datasets (`papers/*.json`). The \"Recursive Refinement\" header mentions enabling Montana for CWF/DMR, but the chunk body details paper validation logic, UUIDs, and citations. It does not contain the actual Redfish test collateral or manageability logs requested. The header is a metadata tag, not the evidence itself. => DROP\n- CHUNK-3: [DISCOVERY Anchor: 2013-06-30] discusses \"Pre-Silicon VISA Legacy Channel Emulation Gap Resolution\" during Skylake emulation. This is a legacy silicon debug record from 2013, unrelated to the modern CWF/DMR Redfish manageability stacks. => DROP\n\n[BEDROCK SELECTION]\n- None"
     ],
     "consensus_1liner": "Consensus nominal."
   }
