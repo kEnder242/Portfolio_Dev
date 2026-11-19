@@ -55,52 +55,60 @@
   - *Commit*: `HomeLabAI @ 5be7949`.
 
 ### ⚡ Track 2: Inter-Node Waterfall Streaming Restoration
-- [ ] **Story 113.20: Pipelined Relay from Deep Thought to Pinky (`[FEAT-233.2]` / `[FEAT-489]`)**:
-  - **Assigned Owner:** `[SWARM:CLOUD]`
+- [x] **Story 113.20: Pipelined Relay from Deep Thought to Pinky (`[FEAT-233.2]` / `[FEAT-489]`)**:
+  - **Assigned Owner:** `[SWARM:CLOUD]` (Sisyphus, Session `ses_e0f014e5affekjpf8Q8b2OKMaP`)
   - **DNA Tags:** `[FEAT-233.2]`, `[FEAT-489]`, `[FEAT-684]`, `[BKM-102]`
   - *Anchor 1 (Target Files & Line Ranges):*
-    - [`HomeLabAI/src/logic/cognitive_hub.py:3980-4050`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3980-L4050) (`step_deep_thought` & `step_pinky_voice` in `_run_two_mice_handover`)
+    - [`HomeLabAI/src/logic/cognitive_hub.py:3748-3755,4108-4148`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3748-L3755) (`step_deep_thought` & `_run_two_mice_handover`)
   - *Anchor 2 (Verification Command):*
-    - `python3 -m pytest HomeLabAI/src/tests/test_two_mice_handover.py -v`
+    - `/home/jallred/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS)
   - *Anchor 3 (Verbatim Code Specs & Schemas):*
-    - Refactor `step_deep_thought` to yield streaming tokens through an `asyncio.Queue` or generator consumed by Pinky's prompt evaluation pipeline, cutting sequential await lag.
+    - `step_deep_thought` accepts `relay_queue: asyncio.Queue | None = None` and puts streaming tokens in real time.
+    - `_run_two_mice_handover` runs `_pinky_prefill_consumer` concurrently with `step_deep_thought`, storing `_deep_thought_prefill_buffer` to eliminate sequential waiting.
   - *Anchor 4 (DNA Links):* `[FEAT-233.2]`, `[FEAT-489]`, `[BKM-102]`.
+  - *Commit*: `HomeLabAI @ 1667428`.
 
-- [ ] **Story 113.30: Concurrent Pre-Hydration of the Sovereign Critic (`[FEAT-439]` / `[FEAT-608]`)**:
-  - **Assigned Owner:** `[SWARM:CLOUD]`
+- [x] **Story 113.30: Concurrent Pre-Hydration of the Sovereign Critic (`[FEAT-439]` / `[FEAT-608]`)**:
+  - **Assigned Owner:** `[SWARM:CLOUD]` (Sisyphus, Session `ses_e0ef6c036ffe6Wf8wyrlV7wzqK`)
   - **DNA Tags:** `[FEAT-439]`, `[FEAT-608]`, `[BKM-024]`
   - *Anchor 1 (Target Files & Line Ranges):*
-    - [`HomeLabAI/src/logic/cognitive_hub.py:4040-4100`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L4040-L4100) (`step_entailment_audit` scheduling)
+    - [`HomeLabAI/src/logic/cognitive_hub.py:4170-4200`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L4170-L4200) (`step_entailment_audit` scheduling in `_run_two_mice_handover`)
   - *Anchor 2 (Verification Command):*
-    - `python3 -m pytest HomeLabAI/src/tests/test_round_table_continuity.py -v`
+    - `/home/jallred/.venv/bin/pytest HomeLabAI/src/tests/test_round_table_continuity.py -v` (11/11 PASS)
   - *Anchor 3 (Verbatim Code Specs & Schemas):*
-    - Trigger Critic context pre-warming on M5 Air concurrently during Stage 3/5 generation, pre-filling candidate RAG chunks and query before Pinky delivers the spoken response.
+    - Scheduled `step_entailment_audit` via `asyncio.create_task` BEFORE `step_pinky_voice` so judicial context pre-warming runs concurrently on M5 Air during Pinky's delivery.
   - *Anchor 4 (DNA Links):* `[FEAT-439]`, `[FEAT-608]`, `[BKM-024]`.
+  - *Commit*: `HomeLabAI @ f620252`.
 
-- [ ] **Story 113.40: Shared Root Prefix Standardization for Local Slot-0 KV Cache Reuse (`[LAB-122]`)**:
-  - **Assigned Owner:** `[SWARM:LOCAL]`
+- [x] **Story 113.40: Shared Root Prefix Standardization for Local Slot-0 KV Cache Reuse (`[LAB-122]`)**:
+  - **Assigned Owner:** `[SWARM:LOCAL]` (promoted to `[SWARM:CLOUD]` per `BKM-049 §3` after local timeout, Session `ses_e0ed2dd8dffewikQolCkgfwFL2`; verified by `[AGY:PRIMARY]`)
   - **DNA Tags:** `[LAB-122]`, `[FEAT-684]`, `[BKM-015]`
   - *Anchor 1 (Target Files & Line Ranges):*
-    - [`HomeLabAI/src/logic/cognitive_hub.py:814-870`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L814-L870) (`build_two_mice_stage_prompt`)
+    - [`HomeLabAI/src/logic/cognitive_hub.py:883-892`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L883-L892) (`build_two_mice_stage_prompt`)
   - *Anchor 2 (Verification Command):*
-    - `curl -s http://127.0.0.1:8088/slots | grep -o '"n_prompt_tokens_cache":[0-9]*'`
+    - `/home/jallred/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS)
   - *Anchor 3 (Verbatim Code Specs & Schemas):*
-    - Standardize a static 500-token `<cluster_root>` prefix identical across Pinky and Brain system prompts to ensure KV cache hit on slot 0 (`n_prompt_tokens_cache > 0`).
+    - Wrapped `TWO_MICE_BEDROCK_FOUNDATION` in `<cluster_root>` prefix tags at the prompt head for Stage 1 and Stage 2, enabling slot-0 KV cache reuse (`n_prompt_tokens_cache > 0`) on port 8088.
   - *Anchor 4 (DNA Links):* `[LAB-122]`, `[FEAT-684]`.
+  - *Commit*: `HomeLabAI @ a8d8cda`.
 
 ### 🛡️ Track 3: Permanent DNA Codification & Guardrails
-- [ ] **Story 113.50: Codification of BKM-102 & Code Comment Annotation**:
+- [x] **Story 113.50: Codification of BKM-102 & Code Comment Annotation**:
   - **Assigned Owner:** `[AGY:PRIMARY]`
   - **DNA Tags:** `[BKM-102]`, `[FEAT-233.8]`, `[BKM-095]`
   - *Anchor 1 (Target Files & Line Ranges):*
-    - [`HomeLabAI/docs/Protocols.md:2000-2050`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2000-L2050)
-    - [`HomeLabAI/src/logic/cognitive_hub.py:3887-4140`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L3887-L4140)
+    - [`HomeLabAI/docs/Protocols.md:2193-2214`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2193-L2214)
+    - [`HomeLabAI/src/logic/cognitive_hub.py:4113`](file:///home/jallred/Dev_Lab/HomeLabAI/src/logic/cognitive_hub.py#L4113)
+    - [`HomeLabAI/src/v5/foyer/router.py:5263`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L5263)
+    - [`HomeLabAI/src/nodes/loader.py:231`](file:///home/jallred/Dev_Lab/HomeLabAI/src/nodes/loader.py#L231)
   - *Anchor 2 (Verification Command):*
-    - `git diff HomeLabAI/docs/Protocols.md`
+    - `git log -n 1 -p HomeLabAI/docs/Protocols.md`
   - *Anchor 3 (Verbatim Code Specs & Schemas):*
-    - Codify `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)` into `Protocols.md`.
-    - Tag code with `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING.`
+    - Codified `[BKM-102] / [FEAT-233.8] (Internal Pipe vs. Edge Pop Invariant)` into `Protocols.md:2193-2214`.
+    - Tagged code with `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING. Internal streaming only; UI pop enforced at WebSocket boundary.` in `cognitive_hub.py`, `router.py`, and `loader.py`.
+    - Registered `[FEAT-233.8]` in `Portfolio_Dev/FeatureTracker.md`.
   - *Anchor 4 (DNA Links):* `[BKM-102]`, `[FEAT-233.8]`.
+  - *Commit*: `HomeLabAI @ c9c1580`, `Portfolio_Dev @ ec78eea`.
 
 ### 🏁 Track 4: Live Silicon Certification & Gauntlet
 - [ ] **Story 113.60: Multi-Topic Silicon Shakedown & Quorum Certification (`[BKM-024]` / `[BKM-101]`)**:
