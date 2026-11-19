@@ -1,8 +1,8 @@
 # 📋 SPRINT PLAN 113.0: Inter-Node Waterfall Streaming Restoration & Decoupled Edge Pop Governance
 
-**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Verification), `BKM-062` (Ground Truth Verification), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-095` (UI Atomic Turn Dispatch), `BKM-102` (Internal Pipe vs. Edge Pop Invariant), `[FEAT-233]` (Inter-Node Token Waterfall & Live Hearing Pipe), `[FEAT-361]` (Token Transparency Mandate), `[FEAT-439]` (Async Sanity Judge Protocol), `[FEAT-457]` (Speculative Context Pre-fetch), `[FEAT-489]` (Two-Mice Sequential Handover), `[FEAT-684]` (Pre-Streaming Waterfall Routing).  
+**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Verification), `BKM-062` (Ground Truth Verification), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-095` (UI Atomic Turn Dispatch), `BKM-102` (Internal Pipe vs. Edge Pop Invariant), `[FEAT-233]` (Inter-Node Token Waterfall & Live Hearing Pipe), `[FEAT-361]` (Token Transparency Mandate), `[FEAT-403]` (Dream Pass Synthesis), `[FEAT-439]` (Async Sanity Judge Protocol), `[FEAT-457]` (Speculative Context Pre-fetch), `[FEAT-489]` (Two-Mice Sequential Handover), `[FEAT-525]` (Round Table Delta-T Telemetry), `[FEAT-684]` (Pre-Streaming Waterfall Routing), `[FEAT-687]` (Subconscious Dream Round Table Deliberation).  
 **Sprint Horizon:** November 18, 2026 – November 22, 2026  
-**Status:** ✅ COMPLETED & CERTIFIED  
+**Status:** ✅ COMPLETED & CERTIFIED (Tracks 1 - 5 Certified)  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
 **Tracking Mode:** In-Tree Append-Only Ledger (`BKM-081`)
 
@@ -154,6 +154,51 @@
       ```
   - *Anchor 4 (DNA Links):* `[BKM-024]`, `[BKM-101]`.
 
+### 🔄 Track 5: Post-Certification Archival, Probe Realignment & Dream Pass Restoration
+- [x] **Story 113.55: Single-Delivery Pop Invariant Realignment & Complexity Rollback (`commit 0854ee0`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[BKM-095]`, `[FEAT-233]`, `[BKM-102]`
+  - *Anchor 1 (Target Files):* `HomeLabAI/src/logic/cognitive_hub.py`, `HomeLabAI/src/v5/foyer/router.py`, `HomeLabAI/src/tests/test_two_mice_handover.py`
+  - *Anchor 2 (Verification Command):* `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS)
+  - *Anchor 3 (Code Specs):* Eradicated duplicate bubble emission complexity by asserting `is_handover_persona` check on egress broadcasts while leaving internal streaming queues intact.
+  - *Anchor 4 (DNA Links):* `[BKM-095]`, `[FEAT-233.8]`.
+  - *Commit*: `HomeLabAI @ 0854ee0`.
+
+- [x] **Story 113.65: Centralized Seat-Specific Node Vocal Probe Timeouts (`[LAB-119]` / `[FEAT-685]` / `commit a0b0cc7`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[LAB-119]`, `[FEAT-685]`, `[LAB-125]`, `[BKM-024]`
+  - *Anchor 1 (Target Files):* `HomeLabAI/config/infrastructure.json`, `HomeLabAI/config/lab_accountability_thresholds.json`, `HomeLabAI/src/nodes/loader.py`
+  - *Anchor 2 (Verification Command):* `git -C HomeLabAI show --stat a0b0cc7`
+  - *Anchor 3 (Code Specs):* Standardized M5 Air Headroom proxy port to 8002 and dynamically resolved per-node vocal probe timeouts from `infrastructure.json` with fallback to `lab_accountability_thresholds.json`, resolving the 4s timeout regression.
+  - *Anchor 4 (DNA Links):* `[LAB-119]`, `[FEAT-685]`.
+  - *Commit*: `HomeLabAI @ a0b0cc7`.
+
+- [x] **Story 113.68: Multi-Topic Live Silicon Moat Deliberations (Turns 50 & 51)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[BKM-024]`, `[BKM-062]`, `[FEAT-525]`
+  - *Anchor 1 (Target Files):* `Portfolio_Dev/field_notes/data/round_table_deltas.json`
+  - *Anchor 2 (Verification Command):* Tail `round_table_deltas.json` entries for Turns 50 and 51.
+  - *Anchor 3 (Code Specs / Results):*
+    - Turn 50: DMR MMIO register adaptation -> Negative Moat (0/5 chunks validated, dropped all, Two-Mice handover, Critic: 0.95, Elapsed: 48.31s).
+    - Turn 51: PECI metrics & thermal stress -> Positive Moat (4/7 chunks validated, Deep Thought on M5 Air, Critic: 1.00, Elapsed: 66.44s).
+  - *Anchor 4 (DNA Links):* `[FEAT-525]`, `[BKM-024]`.
+
+- [x] **Story 113.70: Un-gag `[DREAM_PASS]` in Foyer Router & Restore Subconscious Round Table Deliberation (`[FEAT-403]` / `[FEAT-525]` / `[BKM-102]` / `[FEAT-687]`)**:
+  - **Assigned Owner:** `[AGY:PRIMARY]`
+  - **DNA Tags:** `[FEAT-403]`, `[FEAT-525]`, `[BKM-102]`, `[FEAT-687]`
+  - *Anchor 1 (Target Files & Line Ranges):*
+    - [`HomeLabAI/src/v5/foyer/router.py:4791-4798,5766-5777`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L4791-L4798)
+    - [`HomeLabAI/src/tests/test_refine_queue_isolation.py:108-146,170-193`](file:///home/jallred/Dev_Lab/HomeLabAI/src/tests/test_refine_queue_isolation.py#L108-L146)
+  - *Anchor 2 (Verification Command):*
+    - `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_refine_queue_isolation.py -v` (5/5 PASS)
+    - `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS)
+  - *Anchor 3 (Verbatim Code Specs & Schemas):*
+    - Excised `or query.startswith("[DREAM_PASS]")` from `router.py:4796` and `or event.query.startswith("[DREAM_PASS]")` from `router.py:5770`.
+    - Allowed subconscious dream intents to enter `foyer_queue.jsonl` and drain via `_dispatch_buffered_intent` -> `run_division_of_labor()`, executing the full Two-Mice Handover and appending telemetry deltas to `round_table_deltas.json`.
+    - Updated `test_refine_queue_isolation.py` so that `[DREAM_PASS]` is verified as a full multi-actor division-of-labor pass while `[INTERNAL]` and `[REFINE]` remain isolated.
+  - *Anchor 4 (DNA Links):* `[FEAT-403]`, `[FEAT-525]`, `[BKM-102]`, `[FEAT-687]`.
+  - *Commit*: `HomeLabAI @ 622ba96`.
+
 ---
 
 ## 📜 1. The Narrative: Forensic Archaeology of the Streaming Regression
@@ -229,3 +274,55 @@ To permanently protect this boundary from being broken a 5th time, we will codif
 #### 4.2) Guardrail Comment Tags
 All inter-node streaming pipes in `cognitive_hub.py` and `loader.py` will be marked with:
 `# [PROTECTED_PIPE: FEAT-233 / BKM-102] DO NOT BUFFER INTO MONOLITHIC STRING. Internal streaming only; UI pop enforced at WebSocket boundary.`
+
+---
+
+## 📝 5. Running Sprint Execution Log (`BKM-081` In-Tree Append Ledger)
+
+### Entry 2026-11-18 17:23:43 PST - Story 113.55: Egress Pop Re-unification & Dual-Bubble Complexity Rollback
+* **Context**: After initial Story 113.10 and 113.50 implementation, an edge-case inspection of WebSocket client delivery surfaced residual complexity in `cognitive_hub.py` and `router.py` around conversational channel classification.
+* **Action**: Authored `commit 0854ee0` (`refactor(stream): eradicate Sprint 113 complexity deviation and restore clean single-delivery pop invariant`).
+  - Streamlined egress check in `router.py:5260-5280` to evaluate `is_handover_persona` on outgoing chat broadcast packets while leaving underlying async queues intact.
+  - Aligned `test_two_mice_handover.py` (23/23 PASS).
+* **Commit**: `HomeLabAI @ 0854ee0`.
+
+### Entry 2026-11-18 19:38:54 PST - Story 113.65: Seat-Specific Node Probe Timeout Centralization
+* **Context**: Operator identified node vocal probe timeouts falling back to a default 4-second timeout during offline or pre-warming transitions, alongside ambiguity between Headroom port 8000 vs 8002.
+* **Forensic Diagnosis**:
+  - Investigated `config/infrastructure.json` and `config/lab_accountability_thresholds.json`. Port 8002 is the designated Headroom proxy port for M5 Air (8000 was legacy direct proxy).
+  - Probe logic in `src/nodes/loader.py` had a rigid 4-second fallback rather than reading seat-specific timeouts defined in infrastructure config.
+* **Action**: Authored `commit a0b0cc7` (`feat(infra): centralize seat-specific node vocal probe timeouts per LAB-119 / FEAT-685`).
+  - Updated `loader.py:270-305` to dynamically resolve seat timeouts from `infrastructure.json["nodes"][node_name]["timeout"]` with fallback to `lab_accountability_thresholds.json`.
+  - Enforced calibrated 15s - 30s budgets for M5 Air and local engines.
+* **Commit**: `HomeLabAI @ a0b0cc7`.
+
+### Entry 2026-11-18 20:45:00 PST - Story 113.68: Multi-Topic Live Silicon Moat Deliberations
+* **Context**: Executed live conversational queries across multi-actor topology to evaluate Moat validation behavior, Two-Mice handover, and latency accounting in `round_table_deltas.json`.
+* **Empirical Results**:
+  1. **Topic 1 (Turn 50)**: *DMR MMIO register adaptation*:
+     - Moat Filter: Evaluated 5 candidate chunks; 0/5 validated against ground truth (Negative Moat trigger).
+     - Execution: Dropped all low-conviction chunks, engaged pure Two-Mice Handover with local dual-GPU + M5 Air.
+     - Telemetry: Critic score 0.95, Total circuit elapsed 48.31s.
+  2. **Topic 2 (Turn 51)**: *PECI metrics & thermal stress under platform load*:
+     - Moat Filter: Evaluated 7 candidate chunks; 4/7 validated (Positive Moat trigger).
+     - Execution: Deep Thought deliberated on M5 Air with verified Moat context; Pinky performed atomic pop.
+     - Telemetry: Critic score 1.00, Total circuit elapsed 66.44s logged to `Portfolio_Dev/field_notes/data/round_table_deltas.json`.
+
+### Entry 2026-11-18 23:55:00 PST - Story 113.70: Un-gag [DREAM_PASS] in Foyer Router & Restore Deliberation
+* **Context**: Operator requested root-cause analysis for missing nightly dreams in the Round Table ledger (`round_table_deltas.json`). Forensic audit revealed:
+  1. *The Live Speaker Myth*: Disproved the hallucinated assumption of physical speakers. The lab has zero audio hardware; Foyer's "voice waterfall" is purely a WebSocket text streaming abstraction.
+  2. *Story 108.28 Gag Filter*: In Sprint 108, Story 108.28 erroneously added `[DREAM_PASS]` to `router.py:4796` and `router.py:5770` bypass filters, causing all dream cycles emitted by `dream_cycle.py` (`payload = {"query": "[DREAM_PASS]: ..."}`) to be swallowed and dropped by the queue drainer before reaching `run_division_of_labor()`.
+  3. *Missing Discrete FEAT*: Identified that while `FEAT-525` mandated round-table logging for full multi-actor deliberations, no discrete FEAT protected subconscious dreams from being severed. Registered `[FEAT-687]` to codify this invariant.
+* **Implementation Plan**:
+  - Remove `or query.startswith("[DREAM_PASS]")` from `router.py:4796`.
+  - Remove `or event.query.startswith("[DREAM_PASS]")` from `router.py:5770`.
+  - Retain `[INTERNAL]` and `[REFINE]` queue isolation for lightweight internal maintenance while restoring `[DREAM_PASS]` to full division of labor and round table telemetry logging.
+  - Update unit tests in `test_refine_queue_isolation.py`.
+* **Verification & Evidence**:
+  - Authored commit `HomeLabAI @ 622ba96`:
+    - `src/v5/foyer/router.py`: Excised `or query.startswith("[DREAM_PASS]")` (line 4796) and `or event.query.startswith("[DREAM_PASS]")` (line 5770).
+    - `src/tests/test_refine_queue_isolation.py`: Verified `[INTERNAL]` and `[REFINE]` remain isolated from conversational queue while `[DREAM_PASS]` dispatches to `run_division_of_labor()`.
+  - Ran unit test suite: `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_refine_queue_isolation.py -v` (5/5 PASS).
+  - Regression check: `HomeLabAI/.venv/bin/pytest HomeLabAI/src/tests/test_two_mice_handover.py -v` (23/23 PASS).
+  - Registered `[FEAT-687]` in `Portfolio_Dev/FeatureTracker.md`.
+* **Status**: ✅ Certified & Locked. Multi-actor subconscious dream deliberation restored to the Round Table telemetry pipeline.

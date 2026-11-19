@@ -4230,3 +4230,12 @@ First-run execution mandate requiring immediate end-to-end execution of modified
 - **Operational Verification Protocols:** [`HomeLabAI/docs/Protocols.md:BKM-101`](file:///home/jallred/Dev_Lab/HomeLabAI/docs/Protocols.md#L2078) (Shakedown), `BKM-024` (Live Verification), `BKM-062` (Ground Truth)
 - **Governed Subsystems:** `probe_round_table_accountability.py` (`[FEAT-608]`), `standalone_accountability_watchdog.py` (`[FEAT-619]`), `src/nodes/loader.py` (`[FEAT-462]`)
 **Rationale:** Single canonical configuration home and interface for all system timeouts (round table deliberation, watchdog subprocess, engine warm-up, and foyer probes). Prevents doc-duplication by using structured pointers to generic config documentation and features so ambient hooks can directly discover and tune headroom without copying narrative text blocks.
+
+### [FEAT-687] Subconscious Dream Round Table Deliberation & Ledger Telemetry
+**Sprint:** Sprint 113.0 | **Status:** ACTIVE | **Code:** `HomeLabAI/src/v5/foyer/router.py:5770`  
+**Tags:** `[FEAT-403]`, `[FEAT-525]`, `[BKM-102]`, `[BKM-095]`, `[BKM-024]`  
+**Pointers:**
+- **Foyer Router Queue Drainer:** [`HomeLabAI/src/v5/foyer/router.py:5766-5777`](file:///home/jallred/Dev_Lab/HomeLabAI/src/v5/foyer/router.py#L5766-L5777)
+- **Subconscious Dream Engine:** [`HomeLabAI/src/dream_cycle.py:81-99`](file:///home/jallred/Dev_Lab/HomeLabAI/src/dream_cycle.py#L81-L99)
+- **Round Table Delta Ledger:** [`Portfolio_Dev/field_notes/data/round_table_deltas.json`](file:///home/jallred/Dev_Lab/Portfolio_Dev/field_notes/data/round_table_deltas.json)
+**Rationale:** Subconscious dream passes (`[DREAM_PASS]`) emitted during nightly synthesis execute full multi-actor division of labor across Brain, Deep Thought, Pinky, and the Sovereign Critic. While `[INTERNAL]` and `[REFINE]` passes are isolated from conversational queues to avoid loops, `[DREAM_PASS]` is explicitly protected and un-gagged in the Foyer router queue drainer, guaranteeing that overnight synthesis deliberations are evaluated across the full actor cluster and recorded in the permanent Round Table latency ledger.
