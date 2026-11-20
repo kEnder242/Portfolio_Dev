@@ -170,7 +170,11 @@
               "group": "A",
               "mode": "normal"
             },
-            "axisLabel": "Seconds"
+            "axisLabel": "Seconds",
+            "spanNulls": true,
+            "drawStyle": "line",
+            "pointSize": 4,
+            "lineWidth": 2
           },
           "unit": "s"
         }
@@ -184,7 +188,7 @@
       "id": 5,
       "targets": [
         {
-          "expr": "moe_stage_duration_seconds{stage!=\"total_pipeline\"}",
+          "expr": "last_over_time(moe_stage_duration_seconds{stage!=\"total_pipeline\"}[14d])",
           "legendFormat": "{{stage}}",
           "refId": "A"
         }
@@ -230,10 +234,11 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "Seconds",
-            "drawStyle": "points",
-            "pointSize": 5,
+            "drawStyle": "line",
+            "pointSize": 4,
             "fillOpacity": 100,
-            "spanNulls": true
+            "spanNulls": true,
+            "lineWidth": 2
           },
           "unit": "s"
         }
@@ -247,12 +252,12 @@
       "id": 7,
       "targets": [
         {
-          "expr": "moe_model_ttft_seconds",
+          "expr": "last_over_time(moe_model_ttft_seconds[7d])",
           "legendFormat": "TTFT - {{node}}",
           "refId": "A"
         },
         {
-          "expr": "moe_model_itl_seconds",
+          "expr": "last_over_time(moe_model_itl_seconds[7d])",
           "legendFormat": "ITL - {{node}}",
           "refId": "B"
         }
@@ -271,10 +276,11 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "Tokens / Second (tok/s)",
-            "drawStyle": "points",
+            "drawStyle": "line",
             "pointSize": 5,
-            "fillOpacity": 100,
-            "spanNulls": true
+            "fillOpacity": 10,
+            "spanNulls": true,
+            "lineWidth": 2
           },
           "unit": "toks"
         }
@@ -288,9 +294,14 @@
       "id": 10,
       "targets": [
         {
-          "expr": "moe_model_throughput_tok_s",
-          "legendFormat": "{{node}}",
+          "expr": "last_over_time(moe_model_throughput_tok_s[7d])",
+          "legendFormat": "{{node}} (receipts)",
           "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(moe_model_throughput_tok_s[14d])",
+          "legendFormat": "{{node}} (trend)",
+          "refId": "B"
         }
       ],
       "title": "\u26a1 Live Model Throughput Trajectory (Post-Prefill Decode tok/s)",
@@ -325,7 +336,7 @@
       "id": 8,
       "targets": [
         {
-          "expr": "moe_model_throughput_tok_s",
+          "expr": "last_over_time(moe_model_throughput_tok_s[7d])",
           "legendFormat": "Velocity - {{node}}",
           "refId": "A"
         }
@@ -344,9 +355,11 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "Tokens Generated",
-            "drawStyle": "bars",
-            "fillOpacity": 40,
-            "lineWidth": 1
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "lineWidth": 2,
+            "spanNulls": true,
+            "pointSize": 5
           },
           "unit": "short"
         }
@@ -360,7 +373,7 @@
       "id": 9,
       "targets": [
         {
-          "expr": "moe_swarm_tokens_total",
+          "expr": "max_over_time(moe_swarm_tokens_total[14d])",
           "legendFormat": "{{tier}}",
           "refId": "A"
         }
@@ -394,5 +407,5 @@
   "timezone": "browser",
   "title": "Federated Silicon Benchmarks & Swarm Telemetry",
   "uid": "federated-benchmarks-01",
-  "version": 2
+  "version": 3
 }
