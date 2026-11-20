@@ -21,7 +21,9 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
@@ -34,7 +36,12 @@
           "unit": "percent"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
       "id": 1,
       "targets": [
         {
@@ -43,14 +50,16 @@
           "refId": "A"
         }
       ],
-      "title": "⚡ Physical Silicon Utilization under Load (DCGM)",
+      "title": "\u26a1 Physical Silicon Utilization under Load (DCGM)",
       "type": "timeseries"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
@@ -62,7 +71,12 @@
           "unit": "watt"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
       "id": 2,
       "targets": [
         {
@@ -71,14 +85,16 @@
           "refId": "A"
         }
       ],
-      "title": "🔌 Real-Time Silicon Power Draw (Watts)",
+      "title": "\ud83d\udd0c Real-Time Silicon Power Draw (Watts)",
       "type": "timeseries"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
@@ -90,7 +106,12 @@
           "unit": "decmbytes"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
       "id": 3,
       "targets": [
         {
@@ -99,18 +120,20 @@
           "refId": "A"
         }
       ],
-      "title": "🧠 Physical VRAM Memory Footprint (DCGM FB Used)",
+      "title": "\ud83e\udde0 Physical VRAM Memory Footprint (DCGM FB Used)",
       "type": "timeseries"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "°C",
+            "axisLabel": "\u00b0C",
             "drawStyle": "line",
             "fillOpacity": 10,
             "lineWidth": 2
@@ -118,7 +141,12 @@
           "unit": "celsius"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
       "id": 4,
       "targets": [
         {
@@ -127,22 +155,32 @@
           "refId": "A"
         }
       ],
-      "title": "🌡️ Silicon Thermal Profile (°C)",
+      "title": "\ud83c\udf21\ufe0f Silicon Thermal Profile (\u00b0C)",
       "type": "timeseries"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
-            "stacking": { "group": "A", "mode": "normal" },
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
             "axisLabel": "Seconds"
           },
           "unit": "s"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
       "id": 5,
       "targets": [
         {
@@ -151,18 +189,25 @@
           "refId": "A"
         }
       ],
-      "title": "⏱️ Deliberation & Round Table Stage Durations",
+      "title": "\u23f1\ufe0f Deliberation & Round Table Stage Durations",
       "type": "timeseries"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "unit": "s"
         }
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
       "id": 6,
       "targets": [
         {
@@ -171,33 +216,157 @@
           "refId": "A"
         }
       ],
-      "title": "🧭 Intent Routing & Triage Latency Heatmap",
+      "title": "\ud83e\udded Intent Routing & Triage Latency Heatmap",
       "type": "heatmap"
     },
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Seconds",
+            "drawStyle": "points",
+            "pointSize": 5,
+            "fillOpacity": 100,
+            "spanNulls": true
+          },
           "unit": "s"
         }
       },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
       "id": 7,
       "targets": [
         {
           "expr": "moe_model_ttft_seconds",
-          "legendFormat": "TTFT (Time to First Token)",
+          "legendFormat": "TTFT - {{node}}",
           "refId": "A"
         },
         {
           "expr": "moe_model_itl_seconds",
-          "legendFormat": "ITL (Inter-Token Latency)",
+          "legendFormat": "ITL - {{node}}",
           "refId": "B"
         }
       ],
-      "title": "📊 Time to First Token (TTFT) vs Inter-Token Latency (ITL)",
-      "type": "boxplot"
+      "title": "\ud83d\udcca Time to First Token (TTFT) vs Inter-Token Latency (ITL)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Tokens / Second (tok/s)",
+            "drawStyle": "points",
+            "pointSize": 5,
+            "fillOpacity": 100,
+            "spanNulls": true
+          },
+          "unit": "toks"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "id": 10,
+      "targets": [
+        {
+          "expr": "moe_model_throughput_tok_s",
+          "legendFormat": "{{node}}",
+          "refId": "A"
+        }
+      ],
+      "title": "\u26a1 Live Model Throughput Trajectory (Post-Prefill Decode tok/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Generation Velocity (tok/s)",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "fillOpacity": 15,
+            "spanNulls": true
+          },
+          "unit": "toks"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "id": 8,
+      "targets": [
+        {
+          "expr": "moe_model_throughput_tok_s",
+          "legendFormat": "Velocity - {{node}}",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcc8 Decode Generation Efficiency: Effective Generation Velocity (tok/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Tokens Generated",
+            "drawStyle": "bars",
+            "fillOpacity": 40,
+            "lineWidth": 1
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "id": 9,
+      "targets": [
+        {
+          "expr": "moe_swarm_tokens_total",
+          "legendFormat": "{{tier}}",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udc1d Sovereign Swarm Token Trajectory (Tokens per Sprint)",
+      "type": "timeseries"
     }
   ],
   "refresh": "5s",
@@ -225,5 +394,5 @@
   "timezone": "browser",
   "title": "Federated Silicon Benchmarks & Swarm Telemetry",
   "uid": "federated-benchmarks-01",
-  "version": 1
+  "version": 2
 }

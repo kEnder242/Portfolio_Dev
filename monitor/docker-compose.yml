@@ -10,7 +10,8 @@ services:
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention.time=15d'
+      - '--storage.tsdb.retention.time=120d'
+      - '--web.enable-lifecycle'
     restart: unless-stopped
 
   grafana:
