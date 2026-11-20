@@ -28,8 +28,8 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_SECURITY_ALLOW_EMBEDDING=true
       - GF_SECURITY_COOKIE_SAMESITE=none
-      - GF_SECURITY_COOKIE_SECURE=true
-      - GF_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS=https://*.jason-lab.dev https://jason-lab.dev localhost:*
+      - GF_SECURITY_COOKIE_SECURE=false
+      - GF_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS=*
     restart: unless-stopped
 
   node-exporter:
