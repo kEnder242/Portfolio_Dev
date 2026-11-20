@@ -166,15 +166,13 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "axisLabel": "Seconds",
-            "spanNulls": true,
-            "drawStyle": "line",
-            "pointSize": 4,
-            "lineWidth": 2
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Stage Duration (Seconds)",
+            "drawStyle": "points",
+            "pointSize": 6,
+            "fillOpacity": 100,
+            "spanNulls": true
           },
           "unit": "s"
         }
@@ -188,7 +186,7 @@
       "id": 5,
       "targets": [
         {
-          "expr": "last_over_time(moe_stage_duration_seconds{stage!=\"total_pipeline\"}[14d])",
+          "expr": "moe_stage_duration_seconds{stage!=\"total_pipeline\"}",
           "legendFormat": "{{stage}}",
           "refId": "A"
         }
@@ -234,11 +232,10 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "Seconds",
-            "drawStyle": "line",
-            "pointSize": 4,
+            "drawStyle": "points",
+            "pointSize": 5,
             "fillOpacity": 100,
-            "spanNulls": true,
-            "lineWidth": 2
+            "spanNulls": true
           },
           "unit": "s"
         }
@@ -252,12 +249,12 @@
       "id": 7,
       "targets": [
         {
-          "expr": "last_over_time(moe_model_ttft_seconds[7d])",
+          "expr": "moe_model_ttft_seconds",
           "legendFormat": "TTFT - {{node}}",
           "refId": "A"
         },
         {
-          "expr": "last_over_time(moe_model_itl_seconds[7d])",
+          "expr": "moe_model_itl_seconds",
           "legendFormat": "ITL - {{node}}",
           "refId": "B"
         }
@@ -276,11 +273,10 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "Tokens / Second (tok/s)",
-            "drawStyle": "line",
+            "drawStyle": "points",
             "pointSize": 5,
-            "fillOpacity": 10,
-            "spanNulls": true,
-            "lineWidth": 2
+            "fillOpacity": 100,
+            "spanNulls": true
           },
           "unit": "toks"
         }
@@ -294,14 +290,9 @@
       "id": 10,
       "targets": [
         {
-          "expr": "last_over_time(moe_model_throughput_tok_s[7d])",
-          "legendFormat": "{{node}} (receipts)",
+          "expr": "moe_model_throughput_tok_s",
+          "legendFormat": "{{node}}",
           "refId": "A"
-        },
-        {
-          "expr": "avg_over_time(moe_model_throughput_tok_s[14d])",
-          "legendFormat": "{{node}} (trend)",
-          "refId": "B"
         }
       ],
       "title": "\u26a1 Live Model Throughput Trajectory (Post-Prefill Decode tok/s)",
@@ -311,20 +302,13 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Generation Velocity (tok/s)",
-            "drawStyle": "line",
-            "lineWidth": 2,
-            "pointSize": 4,
-            "fillOpacity": 15,
-            "spanNulls": true
+            "show": "points",
+            "pointSize": {
+              "fixed": 5
+            }
           },
-          "unit": "toks"
+          "unit": "short"
         }
       },
       "gridPos": {
@@ -336,13 +320,25 @@
       "id": 8,
       "targets": [
         {
-          "expr": "last_over_time(moe_model_throughput_tok_s[7d])",
-          "legendFormat": "Velocity - {{node}}",
+          "expr": "moe_model_decode_duration_seconds",
+          "legendFormat": "Duration - {{node}}",
           "refId": "A"
+        },
+        {
+          "expr": "moe_model_decode_tokens",
+          "legendFormat": "Tokens - {{node}}",
+          "refId": "B"
         }
       ],
-      "title": "\ud83d\udcc8 Decode Generation Efficiency: Effective Generation Velocity (tok/s)",
-      "type": "timeseries"
+      "title": "\ud83d\udcc8 Decode Generation Efficiency: Output Tokens vs Net Duration (t_wall - t_TTFT)",
+      "type": "xychart",
+      "options": {
+        "seriesMapping": "auto",
+        "dims": {
+          "x": "Duration",
+          "y": "Tokens"
+        }
+      }
     },
     {
       "datasource": "Prometheus",
@@ -407,5 +403,5 @@
   "timezone": "browser",
   "title": "Federated Silicon Benchmarks & Swarm Telemetry",
   "uid": "federated-benchmarks-01",
-  "version": 3
+  "version": 4
 }
