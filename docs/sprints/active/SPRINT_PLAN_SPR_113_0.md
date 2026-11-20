@@ -412,3 +412,52 @@ Resolve UI regressions, backdate throughput metrics to post-prefill generation d
   - Backdated 6,181 records in `live_usage_stream.jsonl` with 97.2% matching physical TTFT and renamed seat to `Hybrid GPU (2080 Ti + Arc B580)`.
   - Codified `[BKM-103]` in `HomeLabAI/docs/Protocols.md`.
 * **Status**: ✅ Certified & Locked. Track 6 complete.
+
+---
+
+## Track 7: Grafana Dual-View Integration, Silicon Polymorphism & Sovereign Failure Hardening
+
+### 🛑 PRE-FLIGHT CHECKLIST GATE (Mandatory Digital Paper Trail — BKM-086 §1.1 / BKM-082)
+- [x] **1. 5-Sprint Lookback**: Reviewed Sprints 109, 110, 111, 112, 113 for sentinels, telemetry outliers, and delegation patterns (`BKM-082 §2.1`).
+- [x] **2. Mistakes-Avoided Ledger**:
+  - *Mistake 1 (Div-0 Outliers)*: Prevented client retry timeouts from causing 1,721 tok/s velocity spikes by enforcing strict mathematical $\ge 1.0\text{s}$ net duration floor across all Grafana and Canvas queries (`BKM-082 §2.4`).
+  - *Mistake 2 (Hardcoded Port/Protocol Divergence)*: Prevented MLX chat completions timeout and false offline status by replacing scattered port assumptions with a polymorphic `SiliconEndpoint` interface.
+  - *Mistake 3 (Intra-Turn Trace Residue)*: Prevented stale context replication across turns when Deep Thought times out by explicitly clearing `self.turn_thought_trace["thought"]` at turn boundaries.
+- [x] **3. Oracle Review**: Adversarial audit completed and appended per `BKM-007` / `BKM-061`.
+- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**:
+  - Story 113.85: `[SWARM:CLOUD]` (Dual-view Canvas/Grafana & Tab 1 A/B comparison)
+  - Story 113.86: `[SWARM:LOCAL]` (Polymorphic SiliconEndpoint & M5 Air port normalization)
+  - Story 113.87: `[SWARM:LOCAL]` (Sovereign failure hardening & corrupted dream data scrub)
+  - Roll-up & Live Validation: `[AGY:PRIMARY]` (`BKM-024`)
+- [x] **4.1 Sole-Owner & Zero-Delegation Tripwire**: Verified `[AGY:PRIMARY]` is NOT sole owner across 100% of sprint stories.
+- [x] **5. Risk Assessment**: Low blast radius on live inference; UI changes backwards compatible with offline static canvas fallback.
+- [x] **6. BKM Invariant & Anti-Bypass Audit**: Verified against `BKM-049`, `BKM-048`, `BKM-024` (Live is King), `BKM-103` (Protected Relay Race).
+
+---
+
+### Track 7 Stories
+
+* **Story 113.85: Benchmarks Grafana & Native Canvas Dual-View Integration (`[SWARM:CLOUD]`)**
+  - **Anchor Target**: `Portfolio_Dev/field_notes/benchmarks.html`, `benchmarks.js`, `www_deploy/`
+  - **Intent**: Embed Grafana dashboard panels alongside native Canvas charts with view toggles (`[ Native Canvas ]` vs `[ Grafana Interactive ]`).
+  - **1.1**: Connect Round Table to Grafana backend, unlocking the full monotonic turn sequence (`1..N`) without 50-item rolling window DOM limit.
+  - **1.2**: Expose full historical Model Throughput scatter trajectory with query-level $\ge 1.0\text{s}$ duration floor and $80.0\text{ tok/s}$ physical clamp.
+  - **1.3**: Add A/B toggle on Tab 1 (Sprint Delegation): Option A (Continuous trend line) vs Option B (Discrete grouped bars per sprint milestone).
+* **Story 113.86: Heterogeneous Silicon Endpoint Polymorphism & Port Normalization (`[SWARM:LOCAL]`)**
+  - **Anchor Target**: `HomeLabAI/src/infra/endpoints.py`, `HomeLabAI/config/infrastructure.json`, `HomeLabAI/src/nodes/mlx_judge_node.py`, `HomeLabAI/src/v5/foyer/router.py`
+  - **Intent**: Unify M5 Air on port **8000** for both discovery (`/v1/models`) and inference (`/v1/chat/completions`). Implement `SiliconEndpoint` abstract base class with `OpenAISiliconEndpoint` and `OllamaSiliconEndpoint`.
+* **Story 113.87: Sovereign Failure Mode Hardening & Historical Delta Scrub (`[SWARM:LOCAL]`)**
+  - **Anchor Target**: `HomeLabAI/src/logic/cognitive_hub.py`, `Portfolio_Dev/field_notes/data/round_table_deltas.json`, `nightly_dialogue.json`
+  - **Intent**: Clear `self.turn_thought_trace["thought"]` per turn to prevent stale text bleed. Sanitize corrupted Turns 61–64 in `round_table_deltas.json` with truthful `[OFFLINE_STANDBY]` markers and update `nightly_dialogue.json`.
+
+### Entry 2026-11-20 09:55:00 PST - Track 7 Execution & Certification
+* **Action**:
+  - Implemented `SiliconEndpoint` polymorphism in `HomeLabAI/src/infra/endpoints.py` with `OpenAISiliconEndpoint` and `OllamaSiliconEndpoint`.
+  - Unified M5 Air port config to `8000` (`primary_port: 8000`, `mlx_port: 8000`, protocol: `OPENAI`) across `HomeLabAI/config/infrastructure.json`, `mlx_judge_node.py`, and `router.py`.
+  - Hardened `cognitive_hub.py` against stale thought residue, guaranteeing clear per-turn traces and truthful `[OFFLINE_STANDBY]` consensus logging when deep thought nodes are unreachable.
+  - Sanitized historical green lies in `Portfolio_Dev/field_notes/data/round_table_deltas.json` (Turns 61-64) and `nightly_dialogue.json`.
+  - Built Grafana dual-view panels and Tab 1 A/B comparison (Option A continuous vs Option B discrete grouped bars) in `Portfolio_Dev/field_notes/benchmarks.html` and `benchmarks.js`.
+  - Deployed updated web assets and sanitized data into `www_deploy/`.
+  - Restarted `lab-attendant.service` and validated live daemon status (`OPERATIONAL`, `ONLINE`, port 8765, Hybrid GPU online on port 8088, M5 Air responding on port 8000).
+* **Status**: ✅ Certified & Locked. Track 7 complete.
+
