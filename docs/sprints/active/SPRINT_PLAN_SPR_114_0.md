@@ -218,8 +218,8 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### 📈 Story 114.7: RPC Empirical Benchmarking & Comparative Head-to-Head
-* **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:CLOUD]`
+* **Status:** ✅ COMPLETE
+* **Owner:** `[AGY:TAKEOVER]` (Escalated after single Cloud attempt timeout; Anti-Bleeding Invariant respected)
 * **Goal:** Benchmark the CUDA+RPC disjoint MoE configuration against Phase 1's Dual-Vulkan results and the canonical `moe-cuda-rpc` pipeline baseline (35.87 tok/s).
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/bench_strata.py`
