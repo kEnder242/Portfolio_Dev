@@ -178,7 +178,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### 📊 Story 114.5: Vulkan Empirical Benchmarking, Profiling & Analysis
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Execute rigorous empirical benchmarks (TTFT, tokens/sec generation over 128/256/512 tokens, inter-GPU sync overhead) under the Vulkan backend and record baseline metrics.
 * **Anchor 1 (Target Files & Line Numbers):**
