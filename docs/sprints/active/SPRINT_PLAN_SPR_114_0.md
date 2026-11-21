@@ -23,7 +23,7 @@
   - *Mistake 5 (The Telemetry Amnesia Trap)*: Running benchmarks in scratch logs without flowing receipts into `benchmarks_cache.json` and `benchmarks.html`. Guardrail: Enforce Phase 3 public benchmark synchronization as a core sprint story.
   - *Mistake 6 (The Re-Quantization Tax)*: Re-downloading or re-quantizing models when proven GGUFs already exist on local high-speed NVMe. Guardrail: Ingest `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB) directly into Strata.
 - [ ] **3. Oracle / Architectural Audit**: Pre-flight review of Strata decoupled attention/expert layout vs. monolithic pipeline splits.
-- [ ] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story assignments distributed across `[SWARM:LOCAL]`, `[SWARM:CLOUD]`, and `[AGY:PRIMARY]` to ensure zero sole-owner tripwires.
+- [ ] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Per human operator directive, leaf and plumbing stories formerly targeted to `[SWARM:LOCAL]` are promoted directly to `[SWARM:CLOUD]` (Stories 114.2, 114.3, 114.5, 114.7, 114.8). `[AGY:PRIMARY]` is strictly reserved for physical silicon lifecycle (Story 114.1 quiescence, Story 114.4 config authoring, Story 114.6 CUDA bridge, Story 114.9 restoration). Under `BKM-049` / `delegate.py`, each Cloud story receives a single dispatch attempt; if Cloud fails for that specific story, that story alone may be escalated to `[AGY:PRIMARY]` while subsequent stories continue to target `[SWARM:CLOUD]`. Zero blanket self-promotion.
 - [ ] **5. Risk Assessment**: Modifying inference backends is isolated to experimental directories (`/home/jallred/strata_exp/`). Zero impact to production git state or databases.
 
 ---
@@ -86,7 +86,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 
 ### ⚙️ Story 114.2: Strata Engine Toolchain Setup & Vulkan Backend Compilation
 * **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:LOCAL]`
+* **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Clone `Niko1221/Strata` into an isolated workspace (`/home/jallred/strata_exp/Strata`), audit dependencies, and compile/build the Vulkan inference backend (`STRATA_ENGINE_BACKEND=vulkan`) to enable cross-vendor device enumeration across NVIDIA and Intel.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/Strata/`
@@ -179,7 +179,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 
 ### 📊 Story 114.5: Vulkan Empirical Benchmarking, Profiling & Analysis
 * **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:LOCAL]` & `[AGY:PRIMARY]`
+* **Owner:** `[SWARM:CLOUD]` & `[AGY:PRIMARY]`
 * **Goal:** Execute rigorous empirical benchmarks (TTFT, tokens/sec generation over 128/256/512 tokens, inter-GPU sync overhead) under the Vulkan backend and record baseline metrics.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/bench_strata.py`
@@ -219,7 +219,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 
 ### 📈 Story 114.7: RPC Empirical Benchmarking & Comparative Head-to-Head
 * **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:LOCAL]`
+* **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Benchmark the CUDA+RPC disjoint MoE configuration against Phase 1's Dual-Vulkan results and the canonical `moe-cuda-rpc` pipeline baseline (35.87 tok/s).
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/bench_strata.py`
@@ -239,7 +239,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 
 ### 🌐 Story 114.8: Public Benchmarks Telemetry & Cache Integration
 * **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:LOCAL]`
+* **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Ingest the certified empirical receipts from Phase 1 and Phase 2 into `benchmarks_cache.json`, `live_usage_stream.jsonl`, and the public benchmark generator docs, updating the Hardware Dashboard cards and Prometheus exporter.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `Portfolio_Dev/field_notes/benchmarks_cache.json:54-76`
