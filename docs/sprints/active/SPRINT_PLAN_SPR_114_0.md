@@ -238,7 +238,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ## Phase 3: Public Benchmarks Integration & Production Restoration
 
 ### 🌐 Story 114.8: Public Benchmarks Telemetry & Cache Integration
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Ingest the certified empirical receipts from Phase 1 and Phase 2 into `benchmarks_cache.json`, `live_usage_stream.jsonl`, and the public benchmark generator docs, updating the Hardware Dashboard cards and Prometheus exporter.
 * **Anchor 1 (Target Files & Line Numbers):**

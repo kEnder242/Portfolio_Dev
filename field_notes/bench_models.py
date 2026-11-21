@@ -439,7 +439,89 @@ def run_sweep():
     print(f"✅ Atomically updated {CACHE_FILE} with live sweep results!")
 
 
+def update_cache():
+    """[Story 114.8] Update benchmarks_cache.json with Strata disjoint MoE entries."""
+
+    strata_entries = [
+        {
+            "model": "Qwen3.6-35B-A3B (Strata Dual-Vulkan Disjoint MoE)",
+            "engine": "llama.cpp (Vulkan Disjoint MoE)",
+            "seat_id": "z87_2080ti",
+            "display_name": "Linux Dual-Pool 2080Ti+B580 (Strata Vulkan Disjoint)",
+            "architecture": "23GB Combined VRAM (Dual-Vulkan Disjoint MoE)",
+            "role": "Strata Dual-Vulkan Disjoint MoE Benchmark",
+            "context_window": "32k",
+            "cold_ttft_ms": 738.29,
+            "warm_ttft_ms": 738.29,
+            "ttft_ms": 738.29,
+            "raw_throughput": 24.24,
+            "effective_throughput": 24.24,
+            "throughput": 24.24,
+            "itl_ms": 41.2,
+            "vram_gb": 22.2,
+            "power_watts": 110.0,
+            "tokens_per_joule": 0.220,
+            "electricity_cost_per_1m": 0.21,
+            "cloud_multiplier": 20.1,
+            "cloud_savings_pct": 95.0,
+            "reasoning_token_ratio": 0.50,
+            "status": "online",
+        },
+        {
+            "model": "Qwen3.6-35B-A3B (Strata CUDA+RPC Disjoint MoE)",
+            "engine": "llama.cpp (CUDA+RPC Disjoint MoE)",
+            "seat_id": "z87_2080ti",
+            "display_name": "Linux Dual-Pool 2080Ti+B580 (Strata CUDA+RPC Disjoint)",
+            "architecture": "23GB Combined VRAM (CUDA+RPC Disjoint MoE)",
+            "role": "Strata CUDA+RPC Disjoint MoE Benchmark",
+            "context_window": "32k",
+            "cold_ttft_ms": 736.22,
+            "warm_ttft_ms": 736.22,
+            "ttft_ms": 736.22,
+            "raw_throughput": 35.87,
+            "effective_throughput": 35.87,
+            "throughput": 35.87,
+            "itl_ms": 27.9,
+            "vram_gb": 22.2,
+            "power_watts": 110.0,
+            "tokens_per_joule": 0.326,
+            "electricity_cost_per_1m": 0.14,
+            "cloud_multiplier": 30.2,
+            "cloud_savings_pct": 96.8,
+            "reasoning_token_ratio": 0.50,
+            "status": "online",
+        },
+    ]
+
+    # Load existing cache
+    try:
+        with open(CACHE_FILE, "r") as f:
+            cache = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        cache = {"timestamp": 0, "date_str": "", "results": []}
+
+    # Remove any existing Strata entries to avoid duplicates on re-run
+    strata_models = {e["model"] for e in strata_entries}
+    cache["results"] = [r for r in cache.get("results", []) if r.get("model") not in strata_models]
+
+    # Append new Strata entries
+    cache.setdefault("results", []).extend(strata_entries)
+    cache["timestamp"] = time.time()
+    cache["date_str"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    # Atomic write
+    tmp_path = CACHE_FILE + ".tmp"
+    with open(tmp_path, "w") as f:
+        json.dump(cache, f, indent=2)
+    os.replace(tmp_path, CACHE_FILE)
+    print(f"✅ [Story 114.8] Updated {CACHE_FILE} with {len(strata_entries)} Strata disjoint MoE entries")
+
+
 def main():
+    if "--update-cache" in sys.argv:
+        update_cache()
+        return
+
     if "--no-serve" not in sys.argv:
         try:
             start_http_server(8011)
