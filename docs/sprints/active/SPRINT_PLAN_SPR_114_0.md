@@ -1,6 +1,6 @@
-# 📋 SPRINT PLAN 114.0: Disjoint Heterogeneous MoE Sharding & Strata Engine Exploration
+# 📋 SPRINT PLAN 114.0: Disjoint Heterogeneous MoE Sharding, Strata Exploration, & Public Telemetry
 
-**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Silicon Verification), `BKM-062` (Ground Truth Verification), `BKM-079` (Hybrid Silicon Topology), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Sparse MoE Dual-GPU Optimization), `[FEAT-687]` (Sparse MoE Silicon Sharding), `[FEAT-689]` (Heterogeneous Dual-GPU Engine Integration), `[REF-SPEC-DYNAMIC-01]` (Heterogeneous Speculative Decision Matrix).  
+**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Silicon Verification), `BKM-062` (Ground Truth Verification), `BKM-079` (Hybrid Silicon Topology), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Sparse MoE Dual-GPU Optimization), `[FEAT-525]` (Hardware Telemetry Workbench), `[FEAT-687]` (Sparse MoE Silicon Sharding), `[FEAT-689]` (Heterogeneous Dual-GPU Engine Integration), `[REF-SPEC-DYNAMIC-01]` (Heterogeneous Speculative Decision Matrix).  
 **Sprint Horizon:** November 21, 2026 – November 25, 2026  
 **Status:** 🏗️ PROPOSED / READY FOR REVIEW  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
@@ -10,16 +10,18 @@
 
 ## 🛑 Pre-Flight Checklist Gate (`BKM-082 §GATE` / `BKM-086 §1.1`)
 - [ ] **1. 5-Sprint Lookback**: Reviewed SPR-109 through SPR-113.0 for traps, sentinels, and regression vectors (`BKM-082 §2.1`).
-  - *SPR-110 (Story 110.18 & 110.19)*: Achieved 25.8–29.8 tok/s under `moe-dual` (Dual-Vulkan) and 35.87 tok/s under `moe-cuda-rpc`. Smashed the 15 tok/s target by ensuring 100% in-VRAM residency across the combined 23GB pool.
-  - *SPR-110 (Story 110.13 Oracle Audit)*: Audited `FlashML-org/FreeToken`. Proved that falling back to host RAM on DDR3-1600 (~8-10 GB/s) incurs an 8.3x performance penalty. Reaffirmed: **Zero DDR3 model caching is mandatory.**
-  - *SPR-111 (Story 111.10)*: Consolidated engine control into `HomeLabAI/src/engine_ctl.sh` with 5 standardized operational modes (`moe-cuda-rpc`, `moe-dual`, `speculative`, `single-2080ti`, `vllm`).
-  - *SPR-112.1 (Story 112.190)*: Certified waterfall pre-streaming daemon via `probe_round_table_accountability.py`. Local `Qwen3.6-35B-A3B` acts as the verified bedrock engine for Brain, Pinky, and Triage.
-  - *SPR-113.0 (Streaming & Decoupling)*: Certified decoupled edge pop governance and true live token stream pipes without UI bleed.
+  - *SPR-110 (Story 110.18 & 110.19)*: Proved that 100% VRAM sharding across the 23GB pool yields 25.8–29.8 tok/s under Dual-Vulkan and 35.87 tok/s under CUDA+RPC.
+  - *SPR-110 (Story 110.13 Oracle Audit)*: Audited `FlashML-org/FreeToken`. Proved falling back to host RAM on DDR3-1600 (~8-10 GB/s) incurs an 8.3x performance cliff. Reaffirmed: **Zero DDR3 model caching / light host RAM touch is mandatory.**
+  - *SPR-111 (Story 111.10)*: Consolidated engine control into `HomeLabAI/src/engine_ctl.sh` across all 5 operational modes.
+  - *SPR-112.1 (Story 112.190)*: Certified waterfall pre-streaming daemon via `probe_round_table_accountability.py`. Local `Qwen3.6-35B-A3B` acts as the verified sovereign bedrock engine.
+  - *SPR-113.0 (Streaming & Benchmarks)*: Certified canvas/grafana dual-view telemetry workbench and live workload stream pipelines.
 - [ ] **2. Mistakes-Avoided Ledger (`BKM-082 §2.4`)**:
-  - *Mistake 1 (The DDR3 Host Cache Cliff)*: Avoid letting MoE runtimes default to "system RAM caching." With DDR3-1600, cold expert paging causes severe stalls. Guardrail: Enforce strict VRAM budget limits (`--resident-budget-gib` / `--expert-cache vram`) so all weights remain inside the 23GB physical GPU pool.
-  - *Mistake 2 (The Multi-Driver Compiler Collision)*: Attempting to build mixed CUDA + Intel oneAPI/SYCL runtimes on host Ubuntu results in GCC/NVCC/ICPX symbol collisions. Guardrail: **Prioritize Vulkan 1.4 (`STRATA_ENGINE_BACKEND=vulkan`)**, which natively enumerates both NVIDIA and Intel GPUs cleanly.
-  - *Mistake 3 (The Lab Port Contention / Dirty State Trap)*: Running experimental inference engines while `lab-attendant.service` or `llama-server` is bound to ports 8088/8000 causes OOM crashes and port collision. Guardrail: Plan full lab quiescence (`engine_ctl.sh stop`, `systemctl stop lab-attendant.service`) prior to any experiment.
-  - *Mistake 4 (The Re-Quantization Tax)*: Re-downloading or re-quantizing models when proven GGUFs already exist on local high-speed NVMe. Guardrail: Ingest `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB) directly into Strata.
+  - *Mistake 1 (The DDR3 Host Cache Cliff)*: Avoid letting MoE runtimes default to "system RAM caching." With DDR3-1600, cold expert paging causes severe stalls. Guardrail: Enforce strict VRAM budget limits (`--resident-budget-gib` / `--expert-cache vram` / `system_ram_cache_gib: 0.0`) so 100% of weights remain inside the 23GB physical GPU pool.
+  - *Mistake 2 (The Multi-Driver Compiler Collision)*: Attempting to build mixed CUDA + Intel oneAPI/SYCL runtimes on host Ubuntu results in GCC/NVCC/ICPX symbol collisions. Guardrail: **Prioritize Vulkan 1.4 (`STRATA_ENGINE_BACKEND=vulkan`) in Phase 1**, which natively enumerates both NVIDIA and Intel GPUs cleanly.
+  - *Mistake 3 (The Premature RPC Pivot)*: Jumping to RPC before proving the basic Vulkan multi-device baseline. Guardrail: Prove the Vulkan disjoint sharding baseline first (Phase 1); once certified, move to the CUDA+RPC method (Phase 2).
+  - *Mistake 4 (The Lab Port Contention / Dirty State Trap)*: Running experimental inference engines while `lab-attendant.service` or `llama-server` is bound to ports 8088/8000 causes OOM crashes and port collision. Guardrail: Plan full lab quiescence (`engine_ctl.sh stop`, `systemctl stop lab-attendant.service`) prior to any experiment.
+  - *Mistake 5 (The Telemetry Amnesia Trap)*: Running benchmarks in scratch logs without flowing receipts into `benchmarks_cache.json` and `benchmarks.html`. Guardrail: Enforce Phase 3 public benchmark synchronization as a core sprint story.
+  - *Mistake 6 (The Re-Quantization Tax)*: Re-downloading or re-quantizing models when proven GGUFs already exist on local high-speed NVMe. Guardrail: Ingest `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB) directly into Strata.
 - [ ] **3. Oracle / Architectural Audit**: Pre-flight review of Strata decoupled attention/expert layout vs. monolithic pipeline splits.
 - [ ] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Story assignments distributed across `[SWARM:LOCAL]`, `[SWARM:CLOUD]`, and `[AGY:PRIMARY]` to ensure zero sole-owner tripwires.
 - [ ] **5. Risk Assessment**: Modifying inference backends is isolated to experimental directories (`/home/jallred/strata_exp/`). Zero impact to production git state or databases.
@@ -29,25 +31,39 @@
 ## 🗺️ Sprint Track Architecture
 
 ```
-Track 1: Lab Quiescence & VRAM Clean-Room Prep (Story 114.1)
-   │
-   ▼
-Track 2: Strata Engine Toolchain & Vulkan Provisioning (Story 114.2)
-   │
-   ▼
-Track 3: GGUF Model Ingestion & Verification (Story 114.3)
-   │
-   ▼
-Track 4: Strata Multi-GPU Configuration Authoring (Story 114.4)
-   │
-   ▼
-Track 5: Empirical Benchmarking & Comparative Profile (Story 114.5)
-   │
-   ▼
-Track 6: Restoration & Clean Quiescence / Production Handoff (Story 114.6)
+PHASE 1: DUAL-VULKAN DISJOINT MOE EXPLORATION
+   Track 1: Lab Quiescence & VRAM Clean-Room Prep (Story 114.1)
+      │
+      ▼
+   Track 2: Strata Engine Toolchain & Vulkan Provisioning (Story 114.2)
+      │
+      ▼
+   Track 3: GGUF Model Ingestion & Verification (Story 114.3)
+      │
+      ▼
+   Track 4: Strata Multi-GPU Configuration Authoring (Story 114.4)
+      │
+      ▼
+   Track 5: Vulkan Empirical Benchmarking & Profiling (Story 114.5)
+      │
+      ▼
+PHASE 2: POST-VULKAN RPC METHOD EXPLORATION
+   Track 6: Native CUDA FlashAttention + RPC Bridge Setup (Story 114.6)
+      │
+      ▼
+   Track 7: RPC Empirical Benchmarking & Comparative Profile (Story 114.7)
+      │
+      ▼
+PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
+   Track 8: Public Benchmarks & Telemetry Generator Sync (Story 114.8)
+      │
+      ▼
+   Track 9: Restoration, Quiescence Exit, & Accountability Quorum (Story 114.9)
 ```
 
 ---
+
+## Phase 1: Dual-Vulkan Disjoint MoE Exploration
 
 ### 🛡️ Story 114.1: Lab Quiescence & Dual-GPU VRAM Reclamation Protocol
 * **Status:** ⏳ PENDING
@@ -60,7 +76,7 @@ Track 6: Restoration & Clean Quiescence / Production Handoff (Story 114.6)
   - `/home/jallred/Dev_Lab/HomeLabAI/src/engine_ctl.sh stop`
   - `sudo systemctl stop lab-attendant.service`
   - `nvidia-smi --query-gpu=memory.used,memory.free --format=csv` (verifies $\le 300\text{ MB}$ used on 2080 Ti)
-  - `xpu-smi` / `vulkaninfo | grep -E "Vulkan0|Vulkan1"` (verifies Arc B580 clean)
+  - `vulkaninfo | grep -E "Vulkan0|Vulkan1"` (verifies Arc B580 clean)
 * **Anchor 3 (Verbatim Specs & Implementation Ledger):**
   - Verify zero lingering processes on port 8088, 8000, or 8765 via `ss -tulpn`.
   - Capture pre-experiment snapshot of lab vitals to ensure 100% clean recovery at sprint conclusion.
@@ -161,13 +177,13 @@ Track 6: Restoration & Clean Quiescence / Production Handoff (Story 114.6)
 
 ---
 
-### 📊 Story 114.5: Empirical Benchmarking, Profiling & Comparative Analysis
+### 📊 Story 114.5: Vulkan Empirical Benchmarking, Profiling & Analysis
 * **Status:** ⏳ PENDING
 * **Owner:** `[SWARM:LOCAL]` & `[AGY:PRIMARY]`
-* **Goal:** Execute rigorous empirical benchmarks (TTFT, tokens/sec generation over 128/256/512 tokens, inter-GPU sync overhead) and compare directly against our certified `moe-cuda-rpc` baseline (35.87 tok/s).
+* **Goal:** Execute rigorous empirical benchmarks (TTFT, tokens/sec generation over 128/256/512 tokens, inter-GPU sync overhead) under the Vulkan backend and record baseline metrics.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/bench_strata.py`
-  - `/home/jallred/strata_exp/results/strata_benchmark_results.json`
+  - `/home/jallred/strata_exp/results/strata_vulkan_results.json`
 * **Anchor 2 (Verification Command):**
   - `python3 /home/jallred/strata_exp/bench_strata.py --port 8099 --prompt-len 512 --gen-len 128 --runs 3`
   - Record: Warm TTFT (ms), Sustained decode throughput (tok/s), Peak VRAM usage on both GPUs (`nvidia-smi`, `xpu-smi`).
@@ -176,17 +192,77 @@ Track 6: Restoration & Clean Quiescence / Production Handoff (Story 114.6)
     1. Warm Time-to-First-Token (TTFT) across 512-token prompts.
     2. Generation speed (tok/s) across 128, 256, and 512 generated tokens.
     3. Host system RAM delta during inference (assert zero DDR3 thrashing).
-    4. PCIe inter-GPU bus utilization.
-  - Compile Comparative Scorecard:
-    - Baseline `moe-cuda-rpc` (Layer Pipeline) vs. Strata (Disjoint Expert Partitioning).
+    4. Inter-GPU synchronization latency over Vulkan.
 * **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-088]`.
 
 ---
 
-### 🔄 Story 114.6: Lab State Restoration & Clean Quiescence / Production Standby
+## Phase 2: Post-Vulkan RPC Heterogeneous Method Exploration
+
+### ⚡ Story 114.6: Native CUDA FlashAttention + RPC Bridge Setup
 * **Status:** ⏳ PENDING
 * **Owner:** `[AGY:PRIMARY]`
-* **Goal:** Safely terminate experimental Strata processes, restore the canonical lab runtime (`engine_ctl.sh start moe-cuda-rpc`), verify `lab-attendant.service`, and prove live cognitive health via accountability probe.
+* **Goal:** Once Phase 1 is proven, move beyond Vulkan to explore the **RPC Method**: compile native CUDA with FlashAttention for the RTX 2080 Ti (hosting Attention + Router + Expert slice 0–2), and bridge to an RPC daemon on the Intel Arc B580 (hosting Expert slice 3–7).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `/home/jallred/strata_exp/build_cuda_rpc.sh`
+  - `/home/jallred/strata_exp/strata-rpc.json`
+* **Anchor 2 (Verification Command):**
+  - Build command: native CUDA Turing CC75 flags with RPC client/server support.
+  - Launch Arc B580 RPC server daemon: `strata-rpc-server --dev Vulkan0 --port 50053`
+  - Test loopback uplink: `curl -sf http://127.0.0.1:50053/health`
+* **Anchor 3 (Verbatim Specs & Implementation Ledger):**
+  - Author `/home/jallred/strata_exp/strata-rpc.json` with `backend: "cuda"` for local device (RTX 2080 Ti) and `remote_endpoint: "127.0.0.1:50053"` for remote expert slice.
+  - Unlock Turing Tensor Core FlashAttention-2 prefill on the 2080 Ti while keeping the Arc B580 unencumbered as an external expert worker.
+* **Anchor 4 (DNA Links):** `[BKM-079]`, `[FEAT-689]`.
+
+---
+
+### 📈 Story 114.7: RPC Empirical Benchmarking & Comparative Head-to-Head
+* **Status:** ⏳ PENDING
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Benchmark the CUDA+RPC disjoint MoE configuration against Phase 1's Dual-Vulkan results and the canonical `moe-cuda-rpc` pipeline baseline (35.87 tok/s).
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `/home/jallred/strata_exp/bench_strata.py`
+  - `/home/jallred/strata_exp/results/strata_rpc_results.json`
+  - `/home/jallred/strata_exp/results/moe_architecture_comparison.json`
+* **Anchor 2 (Verification Command):**
+  - `python3 /home/jallred/strata_exp/bench_strata.py --port 8099 --prompt-len 512 --gen-len 128 --runs 3`
+  - Output side-by-side scorecard: Dual-Vulkan vs. CUDA+RPC vs. Canonical Pipeline.
+* **Anchor 3 (Verbatim Specs & Implementation Ledger):**
+  - Compare TTFT prefill boost (evaluating whether CUDA FlashAttention yields the same +49% prefill speedup seen in Sprint 110).
+  - Profile loopback TCP/socket latency vs. Vulkan semaphore latency for inter-GPU expert vector dispatch.
+* **Anchor 4 (DNA Links):** `[BKM-024]`, `[BKM-088]`.
+
+---
+
+## Phase 3: Public Benchmarks Integration & Production Restoration
+
+### 🌐 Story 114.8: Public Benchmarks Telemetry & Cache Integration
+* **Status:** ⏳ PENDING
+* **Owner:** `[SWARM:LOCAL]`
+* **Goal:** Ingest the certified empirical receipts from Phase 1 and Phase 2 into `benchmarks_cache.json`, `live_usage_stream.jsonl`, and the public benchmark generator docs, updating the Hardware Dashboard cards and Prometheus exporter.
+* **Anchor 1 (Target Files & Line Numbers):**
+  - `Portfolio_Dev/field_notes/benchmarks_cache.json:54-76`
+  - `Portfolio_Dev/field_notes/data/live_usage_stream.jsonl`
+  - `Portfolio_Dev/field_notes/benchmarks.html`
+  - `Portfolio_Dev/field_notes/bench_models.py`
+* **Anchor 2 (Verification Command):**
+  - `python3 Portfolio_Dev/field_notes/bench_models.py --update-cache`
+  - `curl -s http://z87-linux:9001/benchmarks_cache.json | jq '.results[] | select(.display_name | contains("Strata"))'`
+* **Anchor 3 (Verbatim Specs & Implementation Ledger):**
+  - Add new hardware configuration receipts:
+    - `Hybrid MoE (Strata Dual-Vulkan Disjoint)`
+    - `Hybrid MoE (Strata CUDA+RPC Disjoint)`
+  - Populate: Throughput (tok/s), Warm TTFT (ms), Tokens/Joule efficiency, and VRAM memory footprint.
+  - Deploy updated cache to `www_deploy/`.
+* **Anchor 4 (DNA Links):** `[BKM-024]`, `[FEAT-525]`.
+
+---
+
+### 🔄 Story 114.9: Lab State Restoration, Quiescence Exit, & Accountability Quorum
+* **Status:** ⏳ PENDING
+* **Owner:** `[AGY:PRIMARY]`
+* **Goal:** Safely terminate experimental Strata processes, restore canonical production runtime (`engine_ctl.sh start moe-cuda-rpc`), restart `lab-attendant.service`, and certify live cognitive health via accountability probe.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/Dev_Lab/HomeLabAI/src/engine_ctl.sh`
   - `/home/jallred/Dev_Lab/HomeLabAI/src/tests/probe_round_table_accountability.py`
@@ -206,7 +282,9 @@ Track 6: Restoration & Clean Quiescence / Production Handoff (Story 114.6)
 | Risk Factor | Historical Trap | Mitigation Invariant in SPRINT 114 |
 | :--- | :--- | :--- |
 | **DDR3 Host Spilling** | MoE runtimes default to host memory paging when VRAM feels constrained, causing an 8.3x performance collapse on DDR3-1600. | Set `system_ram_cache_gib: 0.0` and pin 100% of weights across the 23 GB VRAM pool. |
-| **Compiler / Driver Clashes** | Mixing CUDA and oneAPI compilers corrupts Linux system libraries. | Use **Vulkan 1.4** as the primary backend, enumerating both GPUs in unified user space. |
+| **Compiler / Driver Clashes** | Mixing CUDA and oneAPI compilers corrupts Linux system libraries. | Use **Vulkan 1.4** as the primary Phase 1 backend, enumerating both GPUs in unified user space. |
+| **Premature RPC Complexity** | Debugging RPC sockets before validating basic tensor sharding creates multi-variable diagnostic fog. | Complete and certify Phase 1 (Dual-Vulkan) before attempting Phase 2 (CUDA+RPC). |
 | **Model Ingestion Waste** | Downloading duplicates of 20GB+ models exhausts speedy drive storage. | Point Strata directly to existing `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf`. |
 | **Service Interference** | Testing inference on active lab ports (8088/8000) causes port conflicts and crashes. | Quiesce the lab before experimenting; run Strata on isolated port `8099`. |
-| **Recovery Amnesia** | Experimental scripts leave dangling GPU memory or unstarted production daemons. | Enforce mandatory Story 114.6 restoration with `probe_round_table_accountability.py` certification. |
+| **Telemetry Siloing** | Benchmark results remain buried in local scratch logs without public visibility. | Ingest certified receipts into `benchmarks_cache.json` and `benchmarks.html` via Story 114.8. |
+| **Recovery Amnesia** | Experimental scripts leave dangling GPU memory or unstarted production daemons. | Enforce mandatory Story 114.9 restoration with `probe_round_table_accountability.py` certification. |
