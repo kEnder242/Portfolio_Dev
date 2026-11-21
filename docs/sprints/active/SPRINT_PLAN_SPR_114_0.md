@@ -105,7 +105,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### 📦 Story 114.3: Model Ingestion & GGUF Compatibility Verification
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Validate that our production model `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB) loads directly into Strata's tensor layout without re-quantization or architectural mismatches.
 * **Anchor 1 (Target Files & Line Numbers):**
