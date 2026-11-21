@@ -9,22 +9,22 @@
 ---
 
 ## 🛑 Pre-Flight Checklist Gate (`BKM-082 §GATE` / `BKM-086 §1.1`)
-- [ ] **1. 5-Sprint Lookback**: Reviewed SPR-109 through SPR-113.0 for traps, sentinels, and regression vectors (`BKM-082 §2.1`).
+- [x] **1. 5-Sprint Lookback**: Reviewed SPR-109 through SPR-113.0 for traps, sentinels, and regression vectors (`BKM-082 §2.1`).
   - *SPR-110 (Story 110.18 & 110.19)*: Proved that 100% VRAM sharding across the 23GB pool yields 25.8–29.8 tok/s under Dual-Vulkan and 35.87 tok/s under CUDA+RPC.
   - *SPR-110 (Story 110.13 Oracle Audit)*: Audited `FlashML-org/FreeToken`. Proved falling back to host RAM on DDR3-1600 (~8-10 GB/s) incurs an 8.3x performance cliff. Reaffirmed: **Zero DDR3 model caching / light host RAM touch is mandatory.**
   - *SPR-111 (Story 111.10)*: Consolidated engine control into `HomeLabAI/src/engine_ctl.sh` across all 5 operational modes.
   - *SPR-112.1 (Story 112.190)*: Certified waterfall pre-streaming daemon via `probe_round_table_accountability.py`. Local `Qwen3.6-35B-A3B` acts as the verified sovereign bedrock engine.
   - *SPR-113.0 (Streaming & Benchmarks)*: Certified canvas/grafana dual-view telemetry workbench and live workload stream pipelines.
-- [ ] **2. Mistakes-Avoided Ledger (`BKM-082 §2.4`)**:
+- [x] **2. Mistakes-Avoided Ledger (`BKM-082 §2.4`)**:
   - *Mistake 1 (The DDR3 Host Cache Cliff)*: Avoid letting MoE runtimes default to "system RAM caching." With DDR3-1600, cold expert paging causes severe stalls. Guardrail: Enforce strict VRAM budget limits (`--resident-budget-gib` / `--expert-cache vram` / `system_ram_cache_gib: 0.0`) so 100% of weights remain inside the 23GB physical GPU pool.
   - *Mistake 2 (The Multi-Driver Compiler Collision)*: Attempting to build mixed CUDA + Intel oneAPI/SYCL runtimes on host Ubuntu results in GCC/NVCC/ICPX symbol collisions. Guardrail: **Prioritize Vulkan 1.4 (`STRATA_ENGINE_BACKEND=vulkan`) in Phase 1**, which natively enumerates both NVIDIA and Intel GPUs cleanly.
   - *Mistake 3 (The Premature RPC Pivot)*: Jumping to RPC before proving the basic Vulkan multi-device baseline. Guardrail: Prove the Vulkan disjoint sharding baseline first (Phase 1); once certified, move to the CUDA+RPC method (Phase 2).
   - *Mistake 4 (The Lab Port Contention / Dirty State Trap)*: Running experimental inference engines while `lab-attendant.service` or `llama-server` is bound to ports 8088/8000 causes OOM crashes and port collision. Guardrail: Plan full lab quiescence (`engine_ctl.sh stop`, `systemctl stop lab-attendant.service`) prior to any experiment.
   - *Mistake 5 (The Telemetry Amnesia Trap)*: Running benchmarks in scratch logs without flowing receipts into `benchmarks_cache.json` and `benchmarks.html`. Guardrail: Enforce Phase 3 public benchmark synchronization as a core sprint story.
   - *Mistake 6 (The Re-Quantization Tax)*: Re-downloading or re-quantizing models when proven GGUFs already exist on local high-speed NVMe. Guardrail: Ingest `/speedy/models/gguf/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf` (20.61 GB) directly into Strata.
-- [ ] **3. Oracle / Architectural Audit**: Pre-flight review of Strata decoupled attention/expert layout vs. monolithic pipeline splits.
-- [ ] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Per human operator directive, leaf and plumbing stories formerly targeted to `[SWARM:LOCAL]` are promoted directly to `[SWARM:CLOUD]` (Stories 114.2, 114.3, 114.5, 114.7, 114.8). `[AGY:PRIMARY]` is strictly reserved for physical silicon lifecycle (Story 114.1 quiescence, Story 114.4 config authoring, Story 114.6 CUDA bridge, Story 114.9 restoration). Under `BKM-049` / `delegate.py`, each Cloud story receives a single dispatch attempt; if Cloud fails for that specific story, that story alone may be escalated to `[AGY:PRIMARY]` while subsequent stories continue to target `[SWARM:CLOUD]`. Zero blanket self-promotion.
-- [ ] **5. Risk Assessment**: Modifying inference backends is isolated to experimental directories (`/home/jallred/strata_exp/`). Zero impact to production git state or databases.
+- [x] **3. Oracle / Architectural Audit**: Pre-flight review completed via `delegate.py --mode oracle` (`ses_e00696892ffePX7bJWeOnC5wpJ`). Verdict: Plan coherent and guarded. Verified disjoint attention/expert layout, zero DDR3 host cache enforcement (`system_ram_cache_gib: 0.0`), Vulkan-first progression, and isolated `strata_exp/` blast radius.
+- [x] **4. Delegation Gate (`BKM-049` / `BKM-086 §Pillar 3`)**: Per human operator directive, leaf and plumbing stories formerly targeted to `[SWARM:LOCAL]` are promoted directly to `[SWARM:CLOUD]` (Stories 114.2, 114.3, 114.5, 114.7, 114.8). `[AGY:PRIMARY]` is strictly reserved for physical silicon lifecycle (Story 114.1 quiescence, Story 114.4 config authoring, Story 114.6 CUDA bridge, Story 114.9 restoration). Under `BKM-049` / `delegate.py`, each Cloud story receives a single dispatch attempt; if Cloud fails for that specific story, that story alone may be escalated to `[AGY:PRIMARY]` while subsequent stories continue to target `[SWARM:CLOUD]`. Zero blanket self-promotion.
+- [x] **5. Risk Assessment**: Modifying inference backends is isolated to experimental directories (`/home/jallred/strata_exp/`). Zero impact to production git state or databases.
 
 ---
 
@@ -179,7 +179,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 
 ### 📊 Story 114.5: Vulkan Empirical Benchmarking, Profiling & Analysis
 * **Status:** ⏳ PENDING
-* **Owner:** `[SWARM:CLOUD]` & `[AGY:PRIMARY]`
+* **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Execute rigorous empirical benchmarks (TTFT, tokens/sec generation over 128/256/512 tokens, inter-GPU sync overhead) under the Vulkan backend and record baseline metrics.
 * **Anchor 1 (Target Files & Line Numbers):**
   - `/home/jallred/strata_exp/bench_strata.py`
