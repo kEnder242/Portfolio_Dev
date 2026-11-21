@@ -200,7 +200,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ## Phase 2: Post-Vulkan RPC Heterogeneous Method Exploration
 
 ### ⚡ Story 114.6: Native CUDA FlashAttention + RPC Bridge Setup
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Once Phase 1 is proven, move beyond Vulkan to explore the **RPC Method**: compile native CUDA with FlashAttention for the RTX 2080 Ti (hosting Attention + Router + Expert slice 0–2), and bridge to an RPC daemon on the Intel Arc B580 (hosting Expert slice 3–7).
 * **Anchor 1 (Target Files & Line Numbers):**
