@@ -122,7 +122,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### 🧩 Story 114.4: Strata Heterogeneous Multi-GPU Configuration Authoring
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Translate our disjoint split architecture into a validated Strata configuration file (`strata-hetero.json`), strictly enforcing **Light System RAM Touch** (zero DDR3 model caching) and asymmetric device roles.
 * **Anchor 1 (Target Files & Line Numbers):**
