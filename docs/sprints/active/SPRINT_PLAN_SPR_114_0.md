@@ -2,7 +2,7 @@
 
 **Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Silicon Verification), `BKM-062` (Ground Truth Verification), `BKM-079` (Hybrid Silicon Topology), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Sparse MoE Dual-GPU Optimization), `[FEAT-525]` (Hardware Telemetry Workbench), `[FEAT-687]` (Sparse MoE Silicon Sharding), `[FEAT-689]` (Heterogeneous Dual-GPU Engine Integration), `[REF-SPEC-DYNAMIC-01]` (Heterogeneous Speculative Decision Matrix).  
 **Sprint Horizon:** November 21, 2026 – November 25, 2026  
-**Status:** 🏗️ PROPOSED / READY FOR REVIEW  
+**Status:** 🏁 CERTIFIED / READY FOR ARCHIVE  
 **Sprint Lead:** `[AGY:PRIMARY]` (Antigravity Autonomous Pair)  
 **Tracking Mode:** In-Tree Append-Only Ledger (`BKM-081`)
 
@@ -260,7 +260,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### 🔄 Story 114.9: Lab State Restoration, Quiescence Exit, & Accountability Quorum
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Safely terminate experimental Strata processes, restore canonical production runtime (`engine_ctl.sh start moe-cuda-rpc`), restart `lab-attendant.service`, and certify live cognitive health via accountability probe.
 * **Anchor 1 (Target Files & Line Numbers):**
