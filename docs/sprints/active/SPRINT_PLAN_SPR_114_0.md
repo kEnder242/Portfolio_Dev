@@ -66,7 +66,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ## Phase 1: Dual-Vulkan Disjoint MoE Exploration
 
 ### 🛡️ Story 114.1: Lab Quiescence & Dual-GPU VRAM Reclamation Protocol
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[AGY:PRIMARY]`
 * **Goal:** Gracefully quiesce the active lab services (`lab-attendant.service`, `vllm`/`llama-server` on port 8088/8000, Foyer WebSocket) to free 100% of GPU VRAM on both the RTX 2080 Ti (11GB) and Intel Arc B580 (12GB heap).
 * **Anchor 1 (Target Files & Line Numbers):**
@@ -85,7 +85,7 @@ PHASE 3: PUBLIC BENCHMARKS INTEGRATION & PRODUCTION RESTORATION
 ---
 
 ### ⚙️ Story 114.2: Strata Engine Toolchain Setup & Vulkan Backend Compilation
-* **Status:** ⏳ PENDING
+* **Status:** ✅ COMPLETE
 * **Owner:** `[SWARM:CLOUD]`
 * **Goal:** Clone `Niko1221/Strata` into an isolated workspace (`/home/jallred/strata_exp/Strata`), audit dependencies, and compile/build the Vulkan inference backend (`STRATA_ENGINE_BACKEND=vulkan`) to enable cross-vendor device enumeration across NVIDIA and Intel.
 * **Anchor 1 (Target Files & Line Numbers):**
