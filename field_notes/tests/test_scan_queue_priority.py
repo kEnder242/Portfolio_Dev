@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-682] / [Story 109.8] Unit Tests for Density-Weighted Archive Queue Scheduler.
 

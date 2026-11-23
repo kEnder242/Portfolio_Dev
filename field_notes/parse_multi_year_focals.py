@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-690] Multi-Year Focal Section Parser & In-Memory Chronological Attribution
 Reads authoritative multi-year career reviews without modifying source files on disk.

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [ARCH-003 / Story 109.16] Unit tests for Canonical Temporal Lakehouse Routing.
 Verifies that:

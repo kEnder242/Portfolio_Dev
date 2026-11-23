@@ -1,3 +1,5 @@
+// Copyright 2025-2026 Jason Allred
+// SPDX-License-Identifier: Apache-2.0
 // =============================================================
 // DNA FORGE STUDIO CLIENT ENGINE [FEAT-582 / FEAT-597 / FEAT-598]
 // Tab Switching, Drafting Decomposition, Bone Rack, & Review Grid

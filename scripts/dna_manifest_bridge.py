@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-601 / Sprint 94 Story 94.1] DNA Manifest Bridge for VIBE & INSPIRATION Domains
 

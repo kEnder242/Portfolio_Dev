@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 import argparse
 import json
 import os

@@ -1,3 +1,5 @@
+// Copyright 2025-2026 Jason Allred
+// SPDX-License-Identifier: Apache-2.0
 /**
  * [FEAT-059 / FEAT-673 / Story 109.12] Always-Live Multi-Node Projection Studio
  * 

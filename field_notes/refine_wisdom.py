@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # refine_wisdom.py [v1.0]
 # [FEAT-562 / FEAT-563] Story 77.2 & 77.3: Automated Nightly Wisdom Synthesis Refiner & Deduplication Pass
 # Target Silicon: macOS M5 Air (oMLX port 8000 / Headroom port 8002)

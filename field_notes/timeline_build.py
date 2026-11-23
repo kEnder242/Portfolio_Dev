@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # timeline_build.py [v1.0]
 # [FEAT-566] Story 77.6: Novel Ideas Evolutionary Timeline Compiler
 # Generates Portfolio_Dev/field_notes/timeline.html from timeline_data.json,
@@ -618,6 +620,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             margin-top: 10px;
         }
     </style>
+    <style id="option-b-viewport-fix">
+        html, body { height: auto !important; min-height: 100vh !important; overflow-y: auto !important; overflow-x: hidden; }
+        main { max-width: none !important; height: auto !important; min-height: 100vh; overflow-y: visible !important; flex: 1 1 auto; min-width: 0; }
+        footer.apache-copyright-footer { width: 100%; box-sizing: border-box; flex-shrink: 0; }
+    </style>
 </head>
 <body>
 
@@ -706,6 +713,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 <!-- Populated dynamically via JS -->
             </div>
         </section>
+
+        <footer class="apache-copyright-footer" style="text-align: center; padding: 20px 16px; margin-top: 28px; border-top: 1px solid var(--border-dim); color: var(--text-dim); font-size: 0.78rem; font-family: var(--font-mono);">
+            Copyright 2025–2026 Jason Allred
+        </footer>
     </main>
 
     <script src="mission-control.js?v=16cf2268"></script>
@@ -819,19 +830,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             const filtered = getFilteredDiscoveries();
 
             const minTime = new Date('2025-10-15T00:00:00Z').getTime();
-            const maxTime = new Date('2026-04-15T00:00:00Z').getTime();
+            const maxTime = new Date('2026-11-22T00:00:00Z').getTime();
             const totalDuration = maxTime - minTime;
 
             const activeLanes = LANES.filter(l => currentLaneFilter === 'all' || currentLaneFilter === l.id);
-            const laneHeight = 64;
-            const headerHeight = 36;
-            const svgWidth = Math.max(920, document.getElementById('gantt-container').clientWidth);
-            const leftMargin = 190;
-            const chartWidth = svgWidth - leftMargin - 30;
-            const svgHeight = headerHeight + (activeLanes.length * laneHeight);
-
-            svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
-            svg.setAttribute('height', svgHeight);
+            const rowHeight = 28;
+            const lanePadY = 14;
+            const headerHeight = 40;
+            const svgWidth = Math.max(960, document.getElementById('gantt-container').clientWidth);
+            const leftMargin = 195;
+            const rightMargin = 40;
+            const chartWidth = svgWidth - leftMargin - rightMargin;
 
             function getX(dateStr) {
                 const t = new Date(dateStr + 'T00:00:00Z').getTime();
@@ -839,15 +848,66 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 return leftMargin + (ratio * chartWidth);
             }
 
+            // Compute dynamic lane heights based on number of items so horizontal lines never overlap
+            const laneLayouts = [];
+            let currentY = headerHeight;
+            activeLanes.forEach(lane => {
+                const laneItems = filtered
+                    .filter(d => d.bucket_id === lane.id)
+                    .sort((a, b) => a.conception_date.localeCompare(b.conception_date));
+                const laneH = Math.max(54, (laneItems.length * rowHeight) + (lanePadY * 2));
+                laneLayouts.push({ lane, items: laneItems, y: currentY, height: laneH });
+                currentY += laneH;
+            });
+            const svgHeight = currentY + 12;
+
+            svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+            svg.setAttribute('height', svgHeight);
+
             const months = [
-                { label: "Nov 2025", date: "2025-11-01" },
-                { label: "Dec 2025", date: "2025-12-01" },
-                { label: "Jan 2026", date: "2026-01-01" },
-                { label: "Feb 2026", date: "2026-02-01" },
-                { label: "Mar 2026", date: "2026-03-01" },
-                { label: "Apr 2026", date: "2026-04-01" }
+                { label: "Nov '25", date: "2025-11-01" },
+                { label: "Dec '25", date: "2025-12-01" },
+                { label: "Jan '26", date: "2026-01-01" },
+                { label: "Feb '26", date: "2026-02-01" },
+                { label: "Mar '26", date: "2026-03-01" },
+                { label: "Apr '26", date: "2026-04-01" },
+                { label: "May '26", date: "2026-05-01" },
+                { label: "Jun '26", date: "2026-06-01" },
+                { label: "Jul '26", date: "2026-07-01" },
+                { label: "Aug '26", date: "2026-08-01" },
+                { label: "Sep '26", date: "2026-09-01" },
+                { label: "Oct '26", date: "2026-10-01" },
+                { label: "Nov '26", date: "2026-11-01" }
             ];
 
+            // Draw lane backgrounds first
+            laneLayouts.forEach(({ lane, y, height }) => {
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', 0);
+                rect.setAttribute('y', y);
+                rect.setAttribute('width', svgWidth);
+                rect.setAttribute('height', height);
+                rect.setAttribute('class', 'gantt-lane-band');
+                svg.appendChild(rect);
+
+                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                marker.setAttribute('x', 6);
+                marker.setAttribute('y', y + 10);
+                marker.setAttribute('width', 4);
+                marker.setAttribute('height', height - 20);
+                marker.setAttribute('fill', lane.color);
+                marker.setAttribute('rx', 2);
+                svg.appendChild(marker);
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', 18);
+                label.setAttribute('y', y + (height / 2) + 4);
+                label.setAttribute('class', 'gantt-lane-label');
+                label.textContent = lane.short;
+                svg.appendChild(label);
+            });
+
+            // Draw monthly vertical grid lines
             months.forEach(m => {
                 const x = getX(m.date);
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -860,103 +920,106 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', x);
-                text.setAttribute('y', 22);
+                text.setAttribute('y', 24);
                 text.setAttribute('class', 'gantt-month-label');
                 text.textContent = m.label;
                 svg.appendChild(text);
             });
+            const freezeX = getX('2026-11-22');
 
-            activeLanes.forEach((lane, idx) => {
-                const y = headerHeight + (idx * laneHeight);
-
-                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                rect.setAttribute('x', 0);
-                rect.setAttribute('y', y);
-                rect.setAttribute('width', svgWidth);
-                rect.setAttribute('height', laneHeight);
-                rect.setAttribute('class', 'gantt-lane-band');
-                svg.appendChild(rect);
-
-                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                marker.setAttribute('x', 6);
-                marker.setAttribute('y', y + 14);
-                marker.setAttribute('width', 4);
-                marker.setAttribute('height', laneHeight - 28);
-                marker.setAttribute('fill', lane.color);
-                marker.setAttribute('rx', 2);
-                svg.appendChild(marker);
-
-                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                label.setAttribute('x', 18);
-                label.setAttribute('y', y + (laneHeight / 2) + 4);
-                label.setAttribute('class', 'gantt-lane-label');
-                label.textContent = lane.short;
-                svg.appendChild(label);
-
-                const laneItems = filtered.filter(d => d.bucket_id === lane.id);
-                laneItems.forEach(item => {
+            // Draw horizontal evolution lines + vertical revision ticks per item
+            laneLayouts.forEach(({ lane, items, y }) => {
+                items.forEach((item, rowIdx) => {
+                    const endDate = item.implementation_date;
                     const xStart = getX(item.conception_date);
-                    const xEnd = getX(item.implementation_date);
-                    const barWidth = Math.max(14, xEnd - xStart);
-                    const itemY = y + 16;
-                    const itemH = 32;
+                    const xImpl = getX(item.implementation_date);
+                    const xEnd = Math.max(xStart + 10, getX(endDate));
+                    const lineY = y + lanePadY + (rowIdx * rowHeight) + (rowHeight / 2);
+                    const isSelected = selectedId === item.id;
 
-                    const bar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                    bar.setAttribute('x', xStart);
-                    bar.setAttribute('y', itemY);
-                    bar.setAttribute('width', barWidth);
-                    bar.setAttribute('height', itemH);
-                    bar.setAttribute('fill', lane.color);
-                    bar.setAttribute('opacity', selectedId === item.id ? '1.0' : '0.85');
-                    bar.setAttribute('class', 'gantt-bar');
-                    if (selectedId === item.id) {
-                        bar.setAttribute('stroke', '#ffffff');
-                        bar.setAttribute('stroke-width', '2');
-                    }
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    group.style.cursor = 'pointer';
 
-                    const cCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    cCircle.setAttribute('cx', xStart);
-                    cCircle.setAttribute('cy', itemY + (itemH / 2));
-                    cCircle.setAttribute('r', 5);
-                    cCircle.setAttribute('fill', '#ffffff');
-                    cCircle.setAttribute('stroke', lane.color);
-                    cCircle.setAttribute('stroke-width', '2');
-                    cCircle.setAttribute('class', 'gantt-node-conception');
+                    // Horizontal evolution line
+                    const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    hLine.setAttribute('x1', xStart);
+                    hLine.setAttribute('y1', lineY);
+                    hLine.setAttribute('x2', xEnd);
+                    hLine.setAttribute('y2', lineY);
+                    hLine.setAttribute('stroke', lane.color);
+                    hLine.setAttribute('stroke-width', isSelected ? '4.5' : '3');
+                    hLine.setAttribute('stroke-linecap', 'round');
+                    hLine.setAttribute('opacity', isSelected ? '1.0' : '0.88');
+                    group.appendChild(hLine);
 
-                    const diamond = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                    const dSize = 6;
-                    const dy = itemY + (itemH / 2);
-                    diamond.setAttribute('points', `${xEnd},${dy - dSize} ${xEnd + dSize},${dy} ${xEnd},${dy + dSize} ${xEnd - dSize},${dy}`);
-                    diamond.setAttribute('fill', '#ffffff');
-                    diamond.setAttribute('stroke', lane.color);
-                    diamond.setAttribute('stroke-width', '2');
-                    diamond.setAttribute('class', 'gantt-node-impl');
+                    // Collect vertical revision ticks (conception, implementation, and any explicit revisions)
+                    const tickDates = new Set([item.conception_date, item.implementation_date]);
+                    // Keep ticks crisp at conception & implementation on the graph; full git history is linked on each card
 
-                    const barText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    barText.setAttribute('x', xStart + 8);
-                    barText.setAttribute('y', itemY + 20);
-                    barText.setAttribute('class', 'gantt-item-text');
-                    const maxChars = Math.max(3, Math.floor(barWidth / 8));
-                    barText.textContent = item.title.length > maxChars ? item.title.slice(0, maxChars - 2) + '…' : item.title;
+                    tickDates.forEach(dStr => {
+                        const tx = getX(dStr);
+                        const isOrigin = dStr === item.conception_date;
+                        const tickH = isOrigin ? 8 : 6;
+                        const vTick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        vTick.setAttribute('x1', tx);
+                        vTick.setAttribute('y1', lineY - tickH);
+                        vTick.setAttribute('x2', tx);
+                        vTick.setAttribute('y2', lineY + tickH);
+                        vTick.setAttribute('stroke', isSelected ? '#ffffff' : lane.color);
+                        vTick.setAttribute('stroke-width', isOrigin ? '3' : '2');
+                        vTick.setAttribute('stroke-linecap', 'round');
+                        group.appendChild(vTick);
+                    });
+
+                    // Inline label placed to the right (or left if near freeze edge)
+                    const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    const placeLeft = (freezeX - xEnd) < 165;
+                    labelText.setAttribute('x', placeLeft ? (xStart - 8) : (xEnd + 8));
+                    labelText.setAttribute('y', lineY + 3.5);
+                    labelText.setAttribute('text-anchor', placeLeft ? 'end' : 'start');
+                    labelText.setAttribute('fill', isSelected ? '#ffffff' : '#c9d1d9');
+                    labelText.setAttribute('font-size', '11');
+                    labelText.setAttribute('font-family', 'var(--font-mono)');
+                    const shortTitle = item.title.length > 32 ? item.title.slice(0, 30) + '…' : item.title;
+                    labelText.textContent = `${item.id}: ${shortTitle}`;
+                    group.appendChild(labelText);
+
+                    // Wide invisible hit target for easy hover/click
+                    const hitLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    hitLine.setAttribute('x1', xStart - 6);
+                    hitLine.setAttribute('y1', lineY);
+                    hitLine.setAttribute('x2', xEnd + 6);
+                    hitLine.setAttribute('y2', lineY);
+                    hitLine.setAttribute('stroke', 'transparent');
+                    hitLine.setAttribute('stroke-width', '18');
+                    group.appendChild(hitLine);
 
                     const showTip = (e) => {
                         const rectBox = document.getElementById('gantt-container').getBoundingClientRect();
                         const clientX = e.clientX || (e.touches && e.touches[0].clientX);
                         const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                        tooltip.style.left = (clientX - rectBox.left + 15) + 'px';
+                        const tipX = Math.min(rectBox.width - 320, Math.max(10, clientX - rectBox.left + 15));
+                        tooltip.style.left = tipX + 'px';
                         tooltip.style.top = (clientY - rectBox.top + 15) + 'px';
+                        const revHtml = (Array.isArray(item.revisions) && item.revisions.length)
+                            ? `<div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 4px;">Revisions: ${item.revisions.map(r => `${r.date} (${r.label})`).join(' • ')}</div>`
+                            : '';
+                        const evolvedHtml = item.last_evolved_date
+                            ? `<br>Last Evolved: <strong style="color: var(--text-bright);">${item.last_evolved_date}</strong>`
+                            : '';
                         tooltip.innerHTML = `
                             <div style="font-family: var(--font-mono); color: ${lane.color}; font-weight: bold; margin-bottom: 4px;">
                                 [${item.id}] ${item.title}
                             </div>
                             <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">
                                 Conception: <strong style="color: var(--text-bright);">${item.conception_date}</strong><br>
-                                Implementation: <strong style="color: var(--text-bright);">${item.implementation_date}</strong>
+                                First Build: <strong style="color: var(--text-bright);">${item.implementation_date}</strong>${evolvedHtml}
                             </div>
                             <div style="font-size: 0.8rem; color: var(--text-main); margin-bottom: 6px;">
                                 ${item.summary}
                             </div>
-                            <div style="font-size: 0.7rem; color: var(--accent-gold); font-family: var(--font-mono);">
+                            ${revHtml}
+                            <div style="font-size: 0.7rem; color: var(--accent-gold); font-family: var(--font-mono); margin-top: 4px;">
                                 Sprint: ${item.sprint_ref}
                             </div>
                         `;
@@ -977,19 +1040,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         }
                     };
 
-                    [bar, cCircle, diamond].forEach(el => {
-                        el.addEventListener('mouseenter', showTip);
-                        el.addEventListener('mousemove', showTip);
-                        el.addEventListener('mouseleave', hideTip);
-                        el.addEventListener('click', clickItem);
-                    });
+                    group.addEventListener('mouseenter', showTip);
+                    group.addEventListener('mousemove', showTip);
+                    group.addEventListener('mouseleave', hideTip);
+                    group.addEventListener('click', clickItem);
 
-                    svg.appendChild(bar);
-                    svg.appendChild(cCircle);
-                    svg.appendChild(diamond);
-                    if (barWidth > 45) {
-                        svg.appendChild(barText);
-                    }
+                    svg.appendChild(group);
                 });
             });
         }
@@ -1030,9 +1086,41 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 const durationDays = calculateDurationDays(item.conception_date, item.implementation_date);
                 const isSelected = selectedId === item.id;
 
-                const codeAnchorsHtml = (item.code_anchors || []).map(a => `
-                    <span class="anchor-tag"><code>${a}</code></span>
-                `).join('');
+                const codeAnchorsHtml = (item.code_anchors || []).map(a => {
+                    if (a.startsWith('HomeLabAI/')) {
+                        const rel = a.slice('HomeLabAI/'.length);
+                        const blobUrl = `https://github.com/kEnder242/HomeLabAI/blob/main/${rel}`;
+                        const histUrl = `https://github.com/kEnder242/HomeLabAI/commits/main/${rel}`;
+                        return `<span class="anchor-tag"><a href="${blobUrl}" target="_blank" onclick="event.stopPropagation()" style="color: inherit; text-decoration: none;"><code>${a}</code></a> <a href="${histUrl}" target="_blank" onclick="event.stopPropagation()" title="View Git commit history" style="text-decoration: none; opacity: 0.75;">⏱</a></span>`;
+                    }
+                    if (a.startsWith('Portfolio_Dev/')) {
+                        const rel = a.slice('Portfolio_Dev/'.length);
+                        const blobUrl = `https://github.com/kEnder242/Portfolio_Dev/blob/main/${rel}`;
+                        const histUrl = `https://github.com/kEnder242/Portfolio_Dev/commits/main/${rel}`;
+                        return `<span class="anchor-tag"><a href="${blobUrl}" target="_blank" onclick="event.stopPropagation()" style="color: inherit; text-decoration: none;"><code>${a}</code></a> <a href="${histUrl}" target="_blank" onclick="event.stopPropagation()" title="View Git commit history" style="text-decoration: none; opacity: 0.75;">⏱</a></span>`;
+                    }
+                    return `<span class="anchor-tag" title="Private workspace file"><code>${a}</code> <span style="opacity:0.6; font-size:0.65rem;">[private]</span></span>`;
+                }).join('');
+
+                const sprintLinksHtml = (item.sprint_links && item.sprint_links.length)
+                    ? item.sprint_links.map(sl => sl.url
+                        ? `<a href="${sl.url}" target="_blank" onclick="event.stopPropagation()">${sl.label} ↗</a>`
+                        : `<span>${sl.label}</span>`
+                    ).join(' &nbsp;/&nbsp; ')
+                    : `<span>${item.sprint_ref}</span>`;
+
+                const fmtCommit = (c, prefix) => {
+                    if (!c || !c.sha) return '';
+                    if (c.repo === 'HomeLabAI' || c.repo === 'Portfolio_Dev') {
+                        const url = `https://github.com/kEnder242/${c.repo}/commit/${c.sha}`;
+                        return `${prefix}: <a href="${url}" target="_blank" onclick="event.stopPropagation()" style="font-family: var(--font-mono);">${c.sha}</a> <span style="opacity:0.7;">(${c.date})</span>`;
+                    }
+                    return `${prefix}: <code>${c.sha}</code> <span style="opacity:0.7;">(${c.date})</span>`;
+                };
+                const gitRowParts = [fmtCommit(item.first_commit, 'First'), fmtCommit(item.last_commit, 'Latest')].filter(Boolean);
+                const gitRowHtml = gitRowParts.length
+                    ? `<div class="meta-row"><span class="meta-key">Git:</span><span class="meta-val" style="font-size:0.75rem;">${gitRowParts.join(' &nbsp;•&nbsp; ')}</span></div>`
+                    : '';
 
                 const tagsHtml = (item.tags || []).map(t => `
                     <span class="tag-pill">#${t}</span>
@@ -1057,8 +1145,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                             </div>
                             <span class="date-span-pill">⏱️ ${durationDays} days span</span>
                             <div class="date-node" style="text-align: right;">
-                                <span class="date-label">◆ Implementation</span>
-                                <span class="date-val">${item.implementation_date}</span>
+                                <span class="date-label">◆ ${item.last_evolved_date ? 'Last Evolved' : 'Implementation'}</span>
+                                <span class="date-val">${item.last_evolved_date || item.implementation_date}</span>
                             </div>
                         </div>
 
@@ -1073,12 +1161,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                             </div>
                             <div class="meta-row">
                                 <span class="meta-key">Sprint:</span>
-                                <span class="meta-val">
-                                    <a href="https://github.com/kEnder242/Portfolio_Dev/blob/main/docs/sprints/archive/${item.sprint_ref}" target="_blank">
-                                        ${item.sprint_ref} ↗
-                                    </a>
-                                </span>
+                                <span class="meta-val">${sprintLinksHtml}</span>
                             </div>
+                            ${gitRowHtml}
                             ${item.arxiv_inspiration ? `
                                 <div class="meta-row">
                                     <span class="meta-key">ArXiv:</span>
@@ -1122,11 +1207,45 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
+def resolve_sprint_links(sprint_ref: str):
+    import re
+    sprints_root = Path("/home/jallred/Dev_Lab/Portfolio_Dev/docs/sprints")
+    parts = [p.strip() for p in (sprint_ref or "").split("/") if p.strip()]
+    resolved = []
+    for part in parts:
+        candidates = [part]
+        m = re.match(r"SPR-(\d+)(?:\.(\d+))?", part)
+        if m:
+            major, minor = m.group(1), m.group(2) or "0"
+            candidates.append(f"SPRINT_PLAN_SPR_{major}_{minor}.md")
+            candidates.append(f"SPRINT_PLAN_SPR_{major}_0.md")
+        found_url = None
+        found_label = part
+        for cand in candidates:
+            for folder in ("active", "archive"):
+                if (sprints_root / folder / cand).exists():
+                    found_url = f"https://github.com/kEnder242/Portfolio_Dev/blob/main/docs/sprints/{folder}/{cand}"
+                    found_label = cand
+                    break
+            if found_url:
+                break
+        resolved.append({"label": found_label, "url": found_url})
+    return resolved
+
+
 def build_timeline_html():
     print("--- COMPILING NOVEL IDEAS TIMELINE ---")
     discoveries = load_json(TIMELINE_DATA_PATH, [])
     outliers = load_json(OUTLIERS_DATA_PATH, [])
     buckets = load_json(BUCKETS_DATA_PATH, [])
+
+    unresolved_sprints = []
+    for d in discoveries:
+        links = resolve_sprint_links(d.get("sprint_ref", ""))
+        d["sprint_links"] = links
+        for lk in links:
+            if not lk["url"]:
+                unresolved_sprints.append((d["id"], lk["label"]))
 
     discoveries.sort(
         key=lambda x: (x.get("conception_date", ""), x.get("implementation_date", ""))
@@ -1139,13 +1258,12 @@ def build_timeline_html():
 
     all_dates = []
     for d in discoveries:
-        if d.get("conception_date"):
-            all_dates.append(d["conception_date"])
-        if d.get("implementation_date"):
-            all_dates.append(d["implementation_date"])
+        for k in ("conception_date", "implementation_date", "last_evolved_date"):
+            if d.get(k):
+                all_dates.append(d[k])
 
     min_date_str = min(all_dates) if all_dates else "2025-10-01"
-    max_date_str = max(all_dates) if all_dates else "2026-04-01"
+    max_date_str = max(all_dates) if all_dates else "2026-11-22"
 
     outlier_color = "var(--accent-gold)" if outlier_count > 0 else "var(--text-dim)"
 
@@ -1163,8 +1281,10 @@ def build_timeline_html():
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
     print(
-        f"✅ Generated {OUTPUT_HTML.name} ({len(html)} bytes, {total_discoveries} discoveries)"
+        f"✅ Generated {OUTPUT_HTML.name} ({len(html)} bytes, {total_discoveries} discoveries, unresolved_sprints={len(unresolved_sprints)})"
     )
+    if unresolved_sprints:
+        print("⚠️ Unresolved sprint refs:", unresolved_sprints)
 
 
 if __name__ == "__main__":

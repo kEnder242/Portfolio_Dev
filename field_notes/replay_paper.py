@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[FEAT-663 / BKM-085 / ADR-008] Deterministic Spine Replay Engine.
 
 Reconstructs complete manuscript markdown or plaintext deterministically by joining

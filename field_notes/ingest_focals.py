@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-683] / [Story 109.5] Ingest Annual Performance Reviews into focal_mesh.json and ChromaDB focal_dna.
 

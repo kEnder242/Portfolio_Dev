@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [BKM-061 / Story 110.30] Global Deterministic Secrets and Credentials Scrubber.
 Scans and scrubs sensitive credentials (curl -u, passwords, Artifactory tokens, basic auth)

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 Build pipeline for philosophy.html and philosophy_data.json.
 Compiles wisdom_data.json into web presentation artifacts.

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 compile_manuscript_2.py [v1.0]
 [FEAT-594 / Sprint 85 Story 85.4]

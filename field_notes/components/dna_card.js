@@ -1,3 +1,5 @@
+// Copyright 2025-2026 Jason Allred
+// SPDX-License-Identifier: Apache-2.0
 /**
  * DNA Card Core Component [FEAT-588 / FEAT-582]
  * Unified, polymorphic rendering for Federated Lab DNA cards across

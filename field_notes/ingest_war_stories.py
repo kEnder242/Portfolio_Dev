@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [Story 83.9 / FEAT-582] Ingest War Stories from stories.html into WIS Cards
 Extracts the 29 empirical war stories from Portfolio_Dev/field_notes/stories.html

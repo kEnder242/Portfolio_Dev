@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[LOOP-006 / BKM-015 / INS-052] Nibbler Escape & Backup Tripwire Test.
 
 Demonstrates and verifies the end-to-end backup tripwire:

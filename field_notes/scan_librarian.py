@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # [FEAT-100] Librarian Heuristic File Classification
 import glob
 import json

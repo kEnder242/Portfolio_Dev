@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-595] Round-Trip Resume AST Decomposer & DNA Extractor
 Parses raw text resume into:

@@ -1,5 +1,51 @@
 [
   {
+    "id": "SPR-115.0",
+    "title": "Sprint 115: IP Mothball & Personal IP Protection Plan",
+    "origin": {
+      "text": "**Status:** ACTIVE (Heads-Up Planning & Iterative Execution) **Target Cutoff Date:** `2026-11-22` (Signing Date: `2026-11-23`) **Owner:** Jason Allred **Format:** Narrative Sprint Document (BKM-081 Unified Plan & Running Log)",
+      "source": "SPRINT_PLAN_SPR_115_0.md"
+    },
+    "synthesis": {
+      "narrative_context": "**Status:** ACTIVE (Heads-Up Planning & Iterative Execution) **Target Cutoff Date:** `2026-11-22` (Signing Date: `2026-11-23`) **Owner:** Jason Allred **Format:** Narrative Sprint Document (BKM-081 Unified Plan & Running Log)",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_115_0.md"
+      ],
+      "review_notes": "Active sprint in execution."
+    },
+    "metadata": {
+      "tags": [
+        "sprint-115",
+        "sprint-plan"
+      ],
+      "status": "ACTIVE",
+      "bucket_id": "bucket_5_infra"
+    }
+  },
+  {
+    "id": "SPR-114.0",
+    "title": "\ud83d\udccb SPRINT PLAN 114.0: Disjoint Heterogeneous MoE Sharding, Strata Exploration, & Public Telemetry",
+    "origin": {
+      "text": "**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Silicon Verification), `BKM-062` (Ground Truth Verification), `BKM-079` (Hybrid Silicon Topology), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol ",
+      "source": "SPRINT_PLAN_SPR_114_0.md"
+    },
+    "synthesis": {
+      "narrative_context": "**Parent Frameworks:** `BKM-015` (Prompt Engineering & Formatting), `BKM-018` (Orchestrator-First Mandate), `BKM-024` (Live Silicon Verification), `BKM-062` (Ground Truth Verification), `BKM-079` (Hybrid Silicon Topology), `BKM-081` (In-Tree Append Ledger), `BKM-082` (Historical Grounding & 5-Sprint Lookback), `BKM-086` (Paved-Path Sprint Protocol / AFK), `BKM-088` (Sparse MoE Dual-GPU Optimizatio",
+      "lab_anchors": [
+        "Portfolio_Dev/docs/sprints/active/SPRINT_PLAN_SPR_114_0.md"
+      ],
+      "review_notes": "Active sprint in execution."
+    },
+    "metadata": {
+      "tags": [
+        "sprint-114",
+        "sprint-plan"
+      ],
+      "status": "ACTIVE",
+      "bucket_id": "bucket_5_infra"
+    }
+  },
+  {
     "id": "SPR-113.0",
     "title": "\ud83d\udccb SPRINT PLAN 113.0: Inter-Node Waterfall Streaming Restoration & Decoupled Edge Pop Governance",
     "origin": {

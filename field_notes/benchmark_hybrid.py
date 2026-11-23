@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[Story 110.6 / BKM-088] Empirical Throughput & Latency Benchmark Gauntlet.
 
 Benchmarks pure CUDA vs heterogeneous hybrid pooled VRAM execution.

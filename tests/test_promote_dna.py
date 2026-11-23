@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 Unit tests for Document-Scoped DNA Promotion Gate (promote_dna.py).
 """

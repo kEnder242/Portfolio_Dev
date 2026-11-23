@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 generate_connections_graph.py [v1.0]
 [FEAT-596 / Sprint 85 Story 85.1]

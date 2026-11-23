@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # research_build.py [v3.0]
 # [FEAT-095] Public Research Ledger (Static Airlock)
 # Purpose: Generate research.html from standard-schema RESEARCH_SYNTHESIS.md.

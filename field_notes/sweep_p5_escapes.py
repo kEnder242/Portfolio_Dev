@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[Story 112.140 / LOOP-006 / BKM-015] Resumable Read-Only P5 Escape Sweep.
 
 Runs deterministic `sanitize_with_tripwire()` (<1s) plus batched read-only

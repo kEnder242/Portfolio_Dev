@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-683] / [Story 109.11] AGY Verification Probe for FOCAL_DRAFT Detection.
 

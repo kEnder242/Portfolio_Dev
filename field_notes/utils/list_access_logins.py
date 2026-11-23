@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-089 / LAB-020] List Unique Logins & Cloudflare Zero Trust Access Audit
 Scans local session ledgers (journal_ledger.jsonl, foyer_queue.jsonl) and

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # wisdom_build.py [v4.0]
 # [FEAT-559 / FEAT-568 / FEAT-569] Story 77.0: Multi-DNA In-Place Wisdom Studio & Single-Card REST Save
 # Purpose: Generate wisdom.html from data/wisdom_data.json and data/dna_manifest.json

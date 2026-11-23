@@ -21,6 +21,43 @@
       "nightly-forge",
       "latent-associations",
       "pearls"
+    ],
+    "first_commit": {
+      "sha": "1a3deffd",
+      "date": "2026-02-07",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "8d05f1d",
+      "date": "2026-11-15",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-15",
+    "revisions": [
+      {
+        "date": "2026-02-07",
+        "label": "Engine v2.2: Continuous Research loop with\u2026",
+        "sha": "1a3deffd",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-05-06",
+        "label": "feat(governor): [SPR-27.0] Enable signal-b\u2026",
+        "sha": "bd58d8d3",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-08-04",
+        "label": "feat(notes): update scanner resilience and\u2026",
+        "sha": "bf2cee3f",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-10-01",
+        "label": "[FEAT-632/633/634] Sprint 96.5/96.7: Foyer\u2026",
+        "sha": "b4988aa",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -45,6 +82,43 @@
       "operational-law",
       "silence",
       "governance"
+    ],
+    "first_commit": {
+      "sha": "e6144fb",
+      "date": "2026-01-08",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "d2a045d",
+      "date": "2026-11-21",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-21",
+    "revisions": [
+      {
+        "date": "2026-01-08",
+        "label": "feat(round-table): implement agentic facil\u2026",
+        "sha": "e6144fb",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-03-01",
+        "label": "[PROTOCOL] Phase 2: Finalized behavioral r\u2026",
+        "sha": "7a075ea",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-05-10",
+        "label": "Human updating Protocols",
+        "sha": "3dad9a3",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-07-02",
+        "label": "docs(protocols): add BKM-034 detailing Ope\u2026",
+        "sha": "230de88",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -69,6 +143,43 @@
       "chromadb",
       "icm",
       "retrieval"
+    ],
+    "first_commit": {
+      "sha": "add938a",
+      "date": "2026-08-25",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "91f1bcd",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-08-25",
+        "label": "feat(router): deliver Lab DNA Router satel\u2026",
+        "sha": "add938a",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-09-08",
+        "label": "feat(curator): implement sync_sprint_dna.p\u2026",
+        "sha": "b112209",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-10-04",
+        "label": "feat(ambient): canonical ambient_recall en\u2026",
+        "sha": "9e39325",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-11-12",
+        "label": "feat(vibe-020): abolish post-retrieval col\u2026",
+        "sha": "91f1bcd",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -92,6 +203,31 @@
       "context-scoping",
       "dual-channel-memory",
       "attention-dilution"
+    ],
+    "first_commit": {
+      "sha": "b112209",
+      "date": "2026-09-08",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "9e39325",
+      "date": "2026-10-04",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-10-04",
+    "revisions": [
+      {
+        "date": "2026-09-08",
+        "label": "feat(curator): implement sync_sprint_dna.p\u2026",
+        "sha": "b112209",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-10-04",
+        "label": "feat(ambient): canonical ambient_recall en\u2026",
+        "sha": "9e39325",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -115,6 +251,43 @@
       "prompt-budget",
       "subagent-scoping",
       "efficiency"
+    ],
+    "first_commit": {
+      "sha": "e6144fb",
+      "date": "2026-01-08",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "d2a045d",
+      "date": "2026-11-21",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-21",
+    "revisions": [
+      {
+        "date": "2026-03-01",
+        "label": "[PROTOCOL] Phase 2: Finalized behavioral r\u2026",
+        "sha": "7a075ea",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-05-10",
+        "label": "Human updating Protocols",
+        "sha": "3dad9a3",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-07-02",
+        "label": "docs(protocols): add BKM-034 detailing Ope\u2026",
+        "sha": "230de88",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-09-01",
+        "label": "[FEAT-515] Story 69.6: Delegation Harness \u2026",
+        "sha": "7bcb4bf",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -138,6 +311,43 @@
       "refinement",
       "diamond-ranking",
       "wisdom-synthesis"
+    ],
+    "first_commit": {
+      "sha": "bd345771",
+      "date": "2026-02-09",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "915a14ab",
+      "date": "2026-11-12",
+      "repo": "Portfolio_Dev"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-07-02",
+        "label": "feat(field_notes): complete Sprint 36 Phas\u2026",
+        "sha": "83be0638",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-08-21",
+        "label": "feat(refine): upgrade to Tri-Field Gem Sch\u2026",
+        "sha": "cf074e16",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-09-11",
+        "label": "[WISDOM] Multi-DNA Workbench, REST disk pe\u2026",
+        "sha": "cb1d7cba",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-10-08",
+        "label": "feat(wisdom): resolve canonical wisdom_dat\u2026",
+        "sha": "227a7674",
+        "repo": "Portfolio_Dev"
+      }
     ]
   },
   {
@@ -162,6 +372,43 @@
       "m5-air",
       "rtx-4090",
       "orchestration"
+    ],
+    "first_commit": {
+      "sha": "819a793",
+      "date": "2026-02-11",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b1508f3",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-05-26",
+        "label": "feat: stabilize Sprint 30 Gold Master base\u2026",
+        "sha": "2bd0e97",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-06-17",
+        "label": "saving 6-17 work",
+        "sha": "b74e0cf",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-07-29",
+        "label": "feat(rag): SPR-48 Story 5 \u2014 End-to-End RAG\u2026",
+        "sha": "fc22810",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-08-04",
+        "label": "feat(hyde): implement multi-voice HyDE eng\u2026",
+        "sha": "8326355",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -184,6 +431,43 @@
       "backpressure",
       "feedback-loops",
       "prompt-drift"
+    ],
+    "first_commit": {
+      "sha": "fc22810",
+      "date": "2026-07-29",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b1508f3",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-07-29",
+        "label": "feat(rag): SPR-48 Story 5 \u2014 End-to-End RAG\u2026",
+        "sha": "fc22810",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-08-04",
+        "label": "feat(hyde): implement multi-voice HyDE eng\u2026",
+        "sha": "8326355",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-09-01",
+        "label": "[FEAT-515] Story 69.6: Delegation Harness \u2026",
+        "sha": "7bcb4bf",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-10-01",
+        "label": "chore(delegate): prune redundant 1500-toke\u2026",
+        "sha": "9b0c98c",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -208,6 +492,31 @@
       "whitepaper",
       "manifest",
       "latex"
+    ],
+    "first_commit": {
+      "sha": "8c3dbdea",
+      "date": "2026-09-08",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "4c7b43da",
+      "date": "2026-10-25",
+      "repo": "Portfolio_Dev"
+    },
+    "last_evolved_date": "2026-10-25",
+    "revisions": [
+      {
+        "date": "2026-09-08",
+        "label": "feat(whitepaper): build dual-view paper.ht\u2026",
+        "sha": "8c3dbdea",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-10-18",
+        "label": "feat(kabal): implement Phase 5 polymorphic\u2026",
+        "sha": "5c9e1be7",
+        "repo": "Portfolio_Dev"
+      }
     ]
   },
   {
@@ -231,6 +540,43 @@
       "diagnostics",
       "bkm-049",
       "escalation"
+    ],
+    "first_commit": {
+      "sha": "fc22810",
+      "date": "2026-07-29",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b1508f3",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-07-29",
+        "label": "feat(rag): SPR-48 Story 5 \u2014 End-to-End RAG\u2026",
+        "sha": "fc22810",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-08-04",
+        "label": "feat(hyde): implement multi-voice HyDE eng\u2026",
+        "sha": "8326355",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-09-01",
+        "label": "[FEAT-515] Story 69.6: Delegation Harness \u2026",
+        "sha": "7bcb4bf",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-10-01",
+        "label": "chore(delegate): prune redundant 1500-toke\u2026",
+        "sha": "9b0c98c",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -239,7 +585,7 @@
     "conception_date": "2026-09-17",
     "implementation_date": "2026-10-08",
     "bucket_id": "llm_kernel",
-    "lane": "LLM Kernel (Context · Attention · Reply)",
+    "lane": "LLM Kernel (Context \u00b7 Attention \u00b7 Reply)",
     "origin_artifact": "FEAT-642 / FEAT-643 / BKM-049 / BKM-060 / LAB-019",
     "sprint_ref": "SPR-97.0",
     "code_anchors": [
@@ -256,6 +602,25 @@
       "ast-blueprint",
       "swarm-governance",
       "context-budget"
+    ],
+    "first_commit": {
+      "sha": "fc22810",
+      "date": "2026-07-29",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b1508f3",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-11-02",
+        "label": "feat(epistemic-memory): restore 4-tier epi\u2026",
+        "sha": "f6d247a",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -264,7 +629,7 @@
     "conception_date": "2026-10-03",
     "implementation_date": "2026-10-08",
     "bucket_id": "llm_kernel",
-    "lane": "LLM Kernel (Context · Attention · Reply)",
+    "lane": "LLM Kernel (Context \u00b7 Attention \u00b7 Reply)",
     "origin_artifact": "INS-044 / FEAT-647 / BKM-072 / BKM-049",
     "sprint_ref": "SPR-97.0 / SPR-98.0",
     "code_anchors": [
@@ -279,6 +644,25 @@
       "jitc-research",
       "grounding-skepticism",
       "swarm-governance"
+    ],
+    "first_commit": {
+      "sha": "fc22810",
+      "date": "2026-07-29",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b1508f3",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-11-02",
+        "label": "feat(epistemic-memory): restore 4-tier epi\u2026",
+        "sha": "f6d247a",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -302,6 +686,25 @@
       "judicial-assertion",
       "accountability-watchdog",
       "live-validation"
+    ],
+    "first_commit": {
+      "sha": "ce8335a",
+      "date": "2026-09-23",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "f08044a",
+      "date": "2026-11-17",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-17",
+    "revisions": [
+      {
+        "date": "2026-11-01",
+        "label": "feat(judge,router,probe): implement Storie\u2026",
+        "sha": "5c8d6ba",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -324,6 +727,25 @@
       "hydraulic-pacing",
       "zero-bifurcation",
       "cognitive-flow"
+    ],
+    "first_commit": {
+      "sha": "43d71ca",
+      "date": "2026-03-03",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b282541",
+      "date": "2026-11-20",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-20",
+    "revisions": [
+      {
+        "date": "2026-11-02",
+        "label": "fix(import): add src.nodes fallback for ar\u2026",
+        "sha": "366c224",
+        "repo": "HomeLabAI"
+      }
     ]
   },
   {
@@ -347,7 +769,19 @@
       "kabal",
       "subconscious-dreaming",
       "refinement"
-    ]
+    ],
+    "first_commit": {
+      "sha": "bd345771",
+      "date": "2026-02-09",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "915a14ab",
+      "date": "2026-11-12",
+      "repo": "Portfolio_Dev"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": []
   },
   {
     "id": "DISC-016",
@@ -370,7 +804,19 @@
       "ast-reconciliation",
       "writer-studio",
       "atomic-substance"
-    ]
+    ],
+    "first_commit": {
+      "sha": "8c3dbdea",
+      "date": "2026-09-08",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "4c7b43da",
+      "date": "2026-10-25",
+      "repo": "Portfolio_Dev"
+    },
+    "last_evolved_date": "2026-10-25",
+    "revisions": []
   },
   {
     "id": "DISC-020",
@@ -394,6 +840,420 @@
       "fault-localization",
       "feedback-flywheel",
       "telemetry"
+    ],
+    "first_commit": {
+      "sha": "43d71ca",
+      "date": "2026-03-03",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b282541",
+      "date": "2026-11-20",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-20",
+    "revisions": [
+      {
+        "date": "2026-11-01",
+        "label": "feat(judge,router,probe): implement Storie\u2026",
+        "sha": "5c8d6ba",
+        "repo": "HomeLabAI"
+      }
     ]
+  },
+  {
+    "id": "DISC-021",
+    "title": "Waterfall & Multi-LoRA Feedback Streaming",
+    "conception_date": "2026-03-03",
+    "implementation_date": "2026-04-07",
+    "bucket_id": "triage",
+    "lane": "Triage & Classification",
+    "origin_artifact": "FEAT-226 / FEAT-523 / BKM-035",
+    "sprint_ref": "SPRINT_PLAN_SPR_59_0.md",
+    "code_anchors": [
+      "HomeLabAI/src/logic/cognitive_hub.py",
+      "HomeLabAI/src/v5/foyer/router.py"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Cascading multi-tier model routing with live LoRA adapter switching and fourth-wall feedback streaming so fast local tiers respond immediately while heavy reasoning tiers refine in parallel.",
+    "status": "MATURE",
+    "tags": [
+      "waterfall",
+      "multi-lora",
+      "streaming",
+      "feedback-loop"
+    ],
+    "first_commit": {
+      "sha": "43d71ca",
+      "date": "2026-03-03",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "b282541",
+      "date": "2026-11-20",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-20",
+    "revisions": [
+      {
+        "date": "2026-05-05",
+        "label": "human: save mid sprint",
+        "sha": "326e961",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-06-01",
+        "label": "feat(sprint-31): promote V5 router and man\u2026",
+        "sha": "537b98f",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-07-02",
+        "label": "feat(brain): implement handle_workspace_sa\u2026",
+        "sha": "b3499cd",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-08-04",
+        "label": "feat(hyde): implement multi-voice HyDE eng\u2026",
+        "sha": "8326355",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-022",
+    "title": "Living Cognitive DNA & Morphology Architecture",
+    "conception_date": "2026-01-15",
+    "implementation_date": "2026-03-18",
+    "bucket_id": "storage",
+    "lane": "Memory & Substrate Storage",
+    "origin_artifact": "BKM-060 / FEAT-582 / FEAT-585",
+    "sprint_ref": "SPRINT_PLAN_SPR_78_0.md",
+    "code_anchors": [
+      "HomeLabAI/src/mcp/clara_dna_mcp_server.py",
+      "HomeLabAI/src/curator/sync_chroma_dna.py"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Peer-level federated DNA taxonomy (INS/WIS/BKM/LAB/FEAT/VIBE/DISC/LOOP) synchronized into ChromaDB and exposed via MCP (clara-dna), giving autonomous agents a living, curated cognitive morphology.",
+    "status": "MATURE",
+    "tags": [
+      "dna",
+      "morphology",
+      "clara-dna",
+      "mcp",
+      "chromadb"
+    ],
+    "first_commit": {
+      "sha": "8502da6",
+      "date": "2026-10-06",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "5404f20",
+      "date": "2026-10-25",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-10-25",
+    "revisions": [
+      {
+        "date": "2026-10-06",
+        "label": "feat(mcp): [BKM-041] Canonicalize clara_dn\u2026",
+        "sha": "8502da6",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-023",
+    "title": "Ambient Hooks & Sub-600ms Grounding Transparency",
+    "conception_date": "2026-05-12",
+    "implementation_date": "2026-08-25",
+    "bucket_id": "ambient_hooks",
+    "lane": "Ambient Hooks & Monitors",
+    "origin_artifact": "FEAT-600 / BKM-076 / BKM-046",
+    "sprint_ref": "SPRINT_PLAN_SPR_92_0.md",
+    "code_anchors": [
+      "HomeLabAI/config/hooks/icm_hook.py",
+      "HomeLabAI/src/nodes/lab_dna_router.py"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Ephemeral pre-turn ambient hooks that inject targeted DNA vectors in under 600ms and emit compact single-line grounding badges with latency guardrails for full auditability.",
+    "status": "MATURE",
+    "tags": [
+      "ambient-hooks",
+      "grounding-transparency",
+      "feat-600",
+      "latency-budget"
+    ],
+    "first_commit": {
+      "sha": "add938a",
+      "date": "2026-08-25",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "91f1bcd",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-09-08",
+        "label": "feat(curator): implement sync_sprint_dna.p\u2026",
+        "sha": "b112209",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-10-04",
+        "label": "feat(ambient): canonical ambient_recall en\u2026",
+        "sha": "9e39325",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-11-12",
+        "label": "feat(vibe-020): abolish post-retrieval col\u2026",
+        "sha": "91f1bcd",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-024",
+    "title": "Heterogeneous Cross-Vendor GPU VRAM Pooling",
+    "conception_date": "2026-06-18",
+    "implementation_date": "2026-10-25",
+    "bucket_id": "llm_kernel",
+    "lane": "LLM Kernel (Context \u00b7 Attention \u00b7 Reply)",
+    "origin_artifact": "LAB-122 / SPR-110.0 / FEAT-499",
+    "sprint_ref": "SPRINT_PLAN_SPR_110_0.md",
+    "code_anchors": [
+      "HomeLabAI/docs/LAB_INFRASTRUCTURE.md",
+      "HomeLabAI/src/infra/engine_ctl.sh"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Pooling heterogeneous NVIDIA Turing (RTX 2080 Ti CUDA) and Intel Battlemage (Arc B580 Vulkan/ReBAR) GPUs via local llama.cpp RPC alongside Apple Silicon (M5 oMLX) without DDR3 swap thrashing.",
+    "status": "MATURE",
+    "tags": [
+      "heterogeneous-computing",
+      "vram-pooling",
+      "cuda-vulkan-rpc",
+      "rebar"
+    ],
+    "first_commit": {
+      "sha": "59d12ad",
+      "date": "2026-02-23",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "827e824",
+      "date": "2026-11-16",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-16",
+    "revisions": [
+      {
+        "date": "2026-11-01",
+        "label": "docs(dna): update LAB-115, LAB-116, add LA\u2026",
+        "sha": "d643375",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-025",
+    "title": "Automated Benchmark Gauntlet & Nightly Watchdog",
+    "conception_date": "2026-02-20",
+    "implementation_date": "2026-05-26",
+    "bucket_id": "ambient_hooks",
+    "lane": "Ambient Hooks & Monitors",
+    "origin_artifact": "FEAT-454 / BKM-024 / BKM-029",
+    "sprint_ref": "SPRINT_PLAN_SPR_59_0.md",
+    "code_anchors": [
+      "HomeLabAI/src/infra/standalone_accountability_watchdog.py",
+      "Portfolio_Dev/field_notes/export_public_benchmarks.py"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Deterministic multi-model benchmark gauntlets (uber_5x5) paired with nightly live accountability watchdogs and automated telemetry digests verifying running silicon endpoints.",
+    "status": "MATURE",
+    "tags": [
+      "benchmarks",
+      "nightly-runs",
+      "watchdog",
+      "telemetry"
+    ],
+    "first_commit": {
+      "sha": "ffdf62af",
+      "date": "2026-09-02",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "9011698",
+      "date": "2026-11-12",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-12",
+    "revisions": [
+      {
+        "date": "2026-09-02",
+        "label": "feat(benchmarks): add sanitized public ben\u2026",
+        "sha": "ffdf62af",
+        "repo": "Portfolio_Dev"
+      },
+      {
+        "date": "2026-10-02",
+        "label": "feat(infra): [Story 971] single-home accou\u2026",
+        "sha": "b964240",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-11-07",
+        "label": "feat(watchdog): add sanitization tripwire \u2026",
+        "sha": "2c8673c",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-026",
+    "title": "Tracked Conversational Lanes & Dropped Threads Ledger",
+    "conception_date": "2026-07-10",
+    "implementation_date": "2026-09-20",
+    "bucket_id": "triage",
+    "lane": "Triage & Classification",
+    "origin_artifact": "BKM-064 / BKM-077 / BKM-084 / BKM-097",
+    "sprint_ref": "SPRINT_PLAN_SPR_102_0.md",
+    "code_anchors": [
+      "AGENTS.md",
+      "HomeLabAI/docs/Protocols.md"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Numerical conversational lane governance paired with a persistent lettered Dropped Threads Ledger (A:, B:, C:) and Roll-Up Audit reconciliation ensuring no engineering insight vanishes across turns.",
+    "status": "MATURE",
+    "tags": [
+      "tracked-conversations",
+      "dropped-threads",
+      "bkm-084",
+      "rollup-audit"
+    ],
+    "first_commit": {
+      "sha": "e6144fb",
+      "date": "2026-01-08",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "d2a045d",
+      "date": "2026-11-21",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-21",
+    "revisions": [
+      {
+        "date": "2026-10-01",
+        "label": "docs(agents): update heads down directives\u2026",
+        "sha": "3397547",
+        "repo": "Dev_Lab"
+      },
+      {
+        "date": "2026-11-01",
+        "label": "docs(protocols): harmonize BKM-049/084/085\u2026",
+        "sha": "c60089f",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-027",
+    "title": "Heads-Up / Heads-Down (AFK) Swarm Governance",
+    "conception_date": "2026-04-14",
+    "implementation_date": "2026-07-22",
+    "bucket_id": "ambient_hooks",
+    "lane": "Ambient Hooks & Monitors",
+    "origin_artifact": "BKM-006 / BKM-007 / BKM-082 / BKM-086",
+    "sprint_ref": "SPRINT_PLAN_SPR_100_0.md",
+    "code_anchors": [
+      "AGENTS.md",
+      "HomeLabAI/docs/Protocols.md"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Strict modal separation between breadth-first Heads-Up consultation and authorized Heads-Down AFK sprint execution gated by pre-flight checklists and multi-tier delegation assignments.",
+    "status": "MATURE",
+    "tags": [
+      "heads-down",
+      "afk-governance",
+      "sprint-planning",
+      "swarm"
+    ],
+    "first_commit": {
+      "sha": "e6144fb",
+      "date": "2026-01-08",
+      "repo": "HomeLabAI"
+    },
+    "last_commit": {
+      "sha": "d2a045d",
+      "date": "2026-11-21",
+      "repo": "HomeLabAI"
+    },
+    "last_evolved_date": "2026-11-21",
+    "revisions": [
+      {
+        "date": "2026-08-02",
+        "label": "docs(bkm-034): resolve delegation root cau\u2026",
+        "sha": "2986509",
+        "repo": "HomeLabAI"
+      },
+      {
+        "date": "2026-09-01",
+        "label": "feat(swarm): streamline AGENTS.md, disable\u2026",
+        "sha": "4f2f33a",
+        "repo": "Dev_Lab"
+      },
+      {
+        "date": "2026-10-01",
+        "label": "docs(agents): update heads down directives\u2026",
+        "sha": "3397547",
+        "repo": "Dev_Lab"
+      },
+      {
+        "date": "2026-11-01",
+        "label": "docs(protocols): harmonize BKM-049/084/085\u2026",
+        "sha": "c60089f",
+        "repo": "HomeLabAI"
+      }
+    ]
+  },
+  {
+    "id": "DISC-028",
+    "title": "Dynamic Multi-View Paper Projection & Drift Engine",
+    "conception_date": "2026-08-18",
+    "implementation_date": "2026-09-28",
+    "bucket_id": "distillation",
+    "lane": "Distillation & Synthesis",
+    "origin_artifact": "FEAT-616 / FEAT-665 / PAPER-001",
+    "sprint_ref": "SPRINT_PLAN_SPR_94_0.md",
+    "code_anchors": [
+      "Portfolio_Dev/scripts/publish_paper.py",
+      "Portfolio_Dev/papers/paper_jitc_intuition.json"
+    ],
+    "arxiv_inspiration": null,
+    "summary": "Offline multi-view technical paper publishing engine projecting immutable atomic claims across executive, academic, and narrative views with automated consistency drift heuristics.",
+    "status": "MATURE",
+    "tags": [
+      "papers",
+      "multi-view-projection",
+      "drift-heuristic",
+      "jitc-paper"
+    ],
+    "first_commit": {
+      "sha": "5a8b054f",
+      "date": "2026-09-12",
+      "repo": "Portfolio_Dev"
+    },
+    "last_commit": {
+      "sha": "de31bba0",
+      "date": "2026-09-28",
+      "repo": "Portfolio_Dev"
+    },
+    "revisions": []
   }
 ]

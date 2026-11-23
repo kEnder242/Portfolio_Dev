@@ -112,3 +112,16 @@ This project was developed with assistance from **Google Gemini CLI**.
 
 ---
 *Status: Live & Operational.*
+
+---
+
+## License, Authorship & Intellectual Property Notice
+
+**Copyright 2025–2026 Jason Allred.**
+
+Source code and build scripts in this repository are licensed under the **Apache License, Version 2.0** (the "License"); you may not use this repository except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+*   **Sole Author & Copyright Holder:** Jason Allred
+*   **IP Snapshot Date:** `2026-11-22` (Tag: `v2026.11.22-ip-snapshot`)
+*   **Attribution & Alternative Licensing:** Attribution to **Jason Allred** must be preserved in accordance with the Apache 2.0 `NOTICE` and license terms. As sole copyright holder, Jason Allred retains all rights to offer this software, its architectures, and derivative works under alternative or commercial licenses.
+*   **Written Content & Prose:** Written prose, career logs, whitepapers, and personal engineering stories remain **Copyright 2025–2026 Jason Allred. All rights reserved.**

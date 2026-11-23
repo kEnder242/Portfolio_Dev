@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # verify_feature_links.py [v1.0]
 # [SPR-55 / FEAT Code Mapping] Hard-gate link verifier for FeatureTracker.md **Code:** fields.
 # Parses every **Code:** field, resolves the git link against the local repo checkout,

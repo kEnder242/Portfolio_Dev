@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # [FEAT-582] Story 78.2: Cross-Collection DNA Citation Engine & Multi-Paper Compiler
 # Purpose: Read discrete paper dataset from Portfolio_Dev/papers/, resolve cross-collection
 #          DNA citation pointers (PHL, WIS, DISC, FEAT, ArXiv), weave cached word collections

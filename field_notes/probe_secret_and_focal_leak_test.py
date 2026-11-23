@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[Story 110.1 / INS-052 / BKM-015] Empirical Secrets and Focal Leak Probe.
 
 Refines prompt architecture using:

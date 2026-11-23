@@ -1,3 +1,5 @@
+// Copyright 2025-2026 Jason Allred
+// SPDX-License-Identifier: Apache-2.0
 // =============================================================
 // SYNAPSE KNOWLEDGE GRAPH ENGINE [FEAT-596 / FEAT-603]
 // Tiered Progressive-Disclosure Dynamic Constellation Canvas

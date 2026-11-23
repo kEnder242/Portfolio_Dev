@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-595] Round-Trip Resume Exporter
 Compiles Paper AST (PAPER-RESUME_v1.json) and style schema into:

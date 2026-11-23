@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-628 / BKM-060 / BKM-071] Document-Scoped DNA Promotion Gate & Sync Pipeline
 

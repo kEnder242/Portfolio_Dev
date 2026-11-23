@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [SPR-86 Story 8612] WIS and PHL Schema Backfill Migration
 Addresses SPRINT_86_DEEP_DIVE_DEFICIENCY_REPORT.md Finding 15:

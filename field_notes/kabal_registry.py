@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[FEAT-662 / BKM-085 / ADR-008] Polymorphic Kabal DNA Registry & Variable Namespace Resolver.
 
 Manages polymorphic Kabal manuscript collections stored in Portfolio_Dev/papers/<slug>/<slug>_kabal.json.

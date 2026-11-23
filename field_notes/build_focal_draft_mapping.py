@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [Story 112.170 / VIBE-008 / LOOP-006 / FEAT-683]
 Targeted Focal/Coaching Draft Mapping & Precision Drift Excision Engine.

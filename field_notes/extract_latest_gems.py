@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-454/FEAT-458] Extract Latest Distilled Gems for Status Dashboard
 Parses the most recently synthesized year archive (e.g. 2024.json) and extracts

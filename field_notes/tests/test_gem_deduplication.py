@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [Story 109.14 / FEAT-454] Unit Tests for Evidence-Aware Semantic Deduplication.
 Verifies:

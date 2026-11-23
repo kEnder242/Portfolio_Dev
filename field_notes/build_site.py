@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # [FEAT-064] Static Site Synthesis (build_site.py)
 import argparse
 import hashlib
@@ -24,16 +26,15 @@ PUBLIC_AIRLOCK_HTML = [
     "protocols.html",
     "research.html",
     "public_benchmarks.html",
+    "timeline.html",
 ]
 INTERNAL_HTML = [
     "index.html",
-    "timeline.html",
     "files.html",
     "status.html",
     "features.html",
     "intercom.html",
     "benchmarks.html",
-    "wisdom.html",
     "dna_forge.html",
     "writer.html",
 ]
@@ -157,7 +158,7 @@ def deploy_to_airlock(snapshots=False):
                         shutil.copy2(s, d)
 
         # Sync standalone compiled HTML pages to public airlock
-        for html_name in ["dna_forge.html", "wisdom.html"]:
+        for html_name in ["dna_forge.html"]:
             s_html = os.path.join(BASE_DIR, html_name)
             d_html = os.path.join(www_dir, html_name)
             if os.path.exists(s_html) and (

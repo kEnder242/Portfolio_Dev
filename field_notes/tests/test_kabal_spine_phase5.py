@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[FEAT-662 / FEAT-663 / FEAT-664 / BKM-085] Comprehensive Phase 5 Unit Tests.
 
 Verifies:

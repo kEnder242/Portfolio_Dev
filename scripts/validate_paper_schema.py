@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-585] [FEAT-581] Story 79.1: Multi-Tier Paper JSON Schema & Invariant Validator
 Validates paper datasets in Portfolio_Dev/papers/ against strict architectural invariants:

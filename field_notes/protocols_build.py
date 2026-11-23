@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # protocols_build.py [v1.0]
 # Purpose: Generate protocols.html from docs/Protocols.md.
 # Mandate: Parse BKMs, convert relative URLs to absolute GitHub paths, and render using markdown library.

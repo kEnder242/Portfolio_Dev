@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-582 / FEAT-603] DNA Forge Build System (Modular Architecture)
 Compiles Sovereign 3-Tab Architecture (Drafting, Synapse Graph, Review) from templates and modular JS/CSS assets.

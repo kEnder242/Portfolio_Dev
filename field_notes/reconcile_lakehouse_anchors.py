@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-557] Reconciles lakehouse annual JSON files in Portfolio_Dev and www_deploy.
 - Purges duplicated cloned anchors across 2008-2018 and 2019-2024.

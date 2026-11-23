@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 # [FEAT-616 / VIBE-008] Multi-View Offline Paper Publisher & Drift Heuristic Engine
 # Purpose: Compiles paper ASTs into standalone offline HTML with 3 baked-in projected views
 #          (Formal Academic, Executive Brief, Story Narrative), paper switching, and cross-view drift evaluation.

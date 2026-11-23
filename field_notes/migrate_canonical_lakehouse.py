@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [ARCH-003 / Story 109.16] Canonical Temporal Lakehouse Migration.
 Collapses legacy fragmented sub-files (YYYY_MM.json, YYYY_YYYY.json, Unknown.json)

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [BKM-099] / [Story 109.17] Unit Tests for Self-Healing Lock Reaper in can_burn().
 Verifies:

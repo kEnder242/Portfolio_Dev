@@ -1,3 +1,5 @@
+// Copyright 2025-2026 Jason Allred
+// SPDX-License-Identifier: Apache-2.0
 class MissionControl extends HTMLElement {
     connectedCallback() {
         const currentPath = window.location.pathname;

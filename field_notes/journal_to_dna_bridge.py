@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """
 [FEAT-592] Historical Journal to DNA Manifest Ingestion Bridge (journal_to_dna_bridge.py)
 Purpose: Scans data/journal_ledger.jsonl and historical gem archives for Rank 4/5 entries,

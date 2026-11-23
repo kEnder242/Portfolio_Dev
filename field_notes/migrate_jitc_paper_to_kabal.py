@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2025-2026 Jason Allred
+# SPDX-License-Identifier: Apache-2.0
 """[FEAT-662 / FEAT-665] Migrate legacy paper_jitc_intuition.json and notes_jitc_bones.json
 into the canonical atomic bundle: Portfolio_Dev/papers/jitc_intuition/
   - jitc_kabal.json
